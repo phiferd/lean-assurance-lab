@@ -4,6 +4,9 @@ This repository tracks a mechanical testing project for Lean proof checkers.
 The initial target is mutation testing against one checker implementation,
 then using surviving mutants to drive adversarial exported-artifact generation.
 
+The project is governed by `CONSTITUTION.md`. The current execution plan lives
+in `docs/PROJECT_PLAN.md`.
+
 The core success condition is always executable:
 
 ```text
