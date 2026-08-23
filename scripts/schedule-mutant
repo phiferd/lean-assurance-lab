@@ -14,6 +14,7 @@ ROOT = Path(__file__).resolve().parents[1]
 ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
 MUTATIONS = ROOT / "mutations"
 REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -82,6 +83,7 @@ def main() -> int:
         )
 
     records = {row["test"]: row for row in read_jsonl(args.coverage_dir / "coverage.jsonl")}
+    baseline = {row["test"]: row for row in read_jsonl(BASELINE)}
     line_to_tests = json.loads(
         (args.coverage_dir / "line-to-tests.json").read_text(encoding="utf-8")
     )
@@ -97,7 +99,7 @@ def main() -> int:
             selected.update(names)
     tests = sorted(
         selected,
-        key=lambda name: (records[name]["wall_time"], name),
+        key=lambda name: (baseline[name].get("wall_time") or float("inf"), name),
     )
     schedule = {
         "mutant_id": args.mutant_id,
@@ -109,12 +111,13 @@ def main() -> int:
         "coverage_stale": stale,
         "coverage_test_count": manifest["test_count"],
         "selected_test_count": len(tests),
-        "estimated_seconds": sum(records[name]["wall_time"] for name in tests),
+        "estimated_seconds": sum((baseline[name].get("wall_time") or 0) for name in tests),
         "tests": [
             {
                 "test": name,
                 "baseline_outcome": records[name]["outcome"],
                 "coverage_wall_time": records[name]["wall_time"],
+                "baseline_wall_time": baseline[name].get("wall_time"),
             }
             for name in tests
         ],

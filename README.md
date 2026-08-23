@@ -56,13 +56,18 @@ corpus/
   generated/
   minimized/
 scripts/
+  collect-coverage
   compare
   generate
   minimize
   mutate
   normalize-arena-results
+  reindex-coverage
   report
   run-arena
+  run-mutant
+  run-mutant-scheduled
+  schedule-mutant
   setup-arena
 ```
 
@@ -120,3 +125,37 @@ side of the run so normalized outcomes cannot accidentally include stale result
 JSON from a previous broader run. Full runs also require the normalized test
 identities to match the materialized `*.stats.json` corpus exactly; duplicate,
 missing, unexpected, or malformed result records fail the run before comparison.
+
+## Coverage-Guided Mutant Loop
+
+Collect exact per-test Rust line coverage for the materialized nanoda corpus:
+
+```sh
+scripts/collect-coverage --timeout 7200 --checker-threads 1
+```
+
+The collector uses an isolated instrumented binary under `target-coverage`,
+checks every instrumented outcome against the cached baseline, checkpoints each
+test, and writes forward and reverse indexes under `results/coverage/nanoda/`.
+Interrupted runs can continue with `--resume --reuse-build`, provided the saved
+source digest and collection configuration still match.
+
+Inspect or persist the fastest-first covering-test schedule for a mutant:
+
+```sh
+scripts/schedule-mutant nanoda-0001
+scripts/schedule-mutant nanoda-0001 \
+  --output results/mutants/nanoda-0001/schedule.json
+```
+
+Run the mutation mechanically against that schedule:
+
+```sh
+scripts/run-mutant-scheduled nanoda-0001
+```
+
+The scheduled runner validates the coverage/source digest, applies and builds
+the mutant, runs covering tests in normal baseline wall-time order, stops on the
+first normalized difference, and restores the baseline source and binary. A
+survivor must exhaust every covering test. A source span with no covering tests
+is reported explicitly as `UNCOVERED`.

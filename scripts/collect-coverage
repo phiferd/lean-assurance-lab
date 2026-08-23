@@ -158,6 +158,25 @@ def main() -> int:
     config = output_dir / "config.json"
     config.write_text(json.dumps(base_config, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     source_paths = sorted((CHECKER_ROOT / "src").rglob("*.rs"))
+    current_source_digest = source_digest(source_paths)
+    state_path = output_dir / "collection-state.json"
+    collection_state = {
+        "checker": args.checker,
+        "checker_threads": args.checker_threads,
+        "source_sha256": current_source_digest,
+        "test_pattern": args.test,
+    }
+    if args.resume and state_path.exists():
+        saved_state = json.loads(state_path.read_text(encoding="utf-8"))
+        if saved_state != collection_state:
+            raise SystemExit(
+                f"resume state mismatch: saved={saved_state} current={collection_state}"
+            )
+    else:
+        state_path.write_text(
+            json.dumps(collection_state, indent=2, sort_keys=True) + "\n",
+            encoding="utf-8",
+        )
     tests = load_tests(args.test)
     baseline = {row["test"]: row["outcome"] for row in read_jsonl(BASELINE)}
     if not tests:
@@ -273,7 +292,7 @@ def main() -> int:
         "test_count": len(ordered),
         "source_file_count": len(source_paths),
         "covered_location_count": len(line_to_tests),
-        "source_sha256": source_digest(source_paths),
+        "source_sha256": current_source_digest,
         "binary": str(binary),
         "build_seconds": build_seconds,
         "run_seconds": sum(record["wall_time"] for record in ordered),

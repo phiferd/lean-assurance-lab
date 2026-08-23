@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Canonicalize and validate a per-test coverage JSONL artifact."""
+
+from __future__ import annotations
+
+import argparse
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--coverage-dir", type=Path, default=ROOT / "results" / "coverage" / "nanoda"
+    )
+    parser.add_argument("--append-from", type=Path, action="append", default=[])
+    args = parser.parse_args()
+
+    records_path = args.coverage_dir / "coverage.jsonl"
+    rows = read_jsonl(records_path)
+    for path in args.append_from:
+        rows.extend(read_jsonl(path))
+    merged = {row["test"]: row for row in rows}
+    baseline_rows = read_jsonl(BASELINE)
+    baseline = {row["test"]: row for row in baseline_rows}
+    missing = sorted(set(baseline) - set(merged))
+    unexpected = sorted(set(merged) - set(baseline))
+    mismatched = sorted(
+        name for name in baseline if name in merged and baseline[name]["outcome"] != merged[name]["outcome"]
+    )
+    if missing or unexpected or mismatched:
+        raise SystemExit(
+            f"coverage validation failed: missing={missing} unexpected={unexpected} "
+            f"outcome_mismatches={mismatched}"
+        )
+
+    ordered = [merged[row["test"]] for row in baseline_rows]
+    records_path.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in ordered),
+        encoding="utf-8",
+    )
+    test_to_lines = {row["test"]: row["covered"] for row in ordered}
+    wall_times = {row["test"]: row["wall_time"] for row in ordered}
+    line_to_tests: dict[str, list[str]] = {}
+    for test_name, locations in test_to_lines.items():
+        for location in locations:
+            line_to_tests.setdefault(location, []).append(test_name)
+    for names in line_to_tests.values():
+        names.sort(key=lambda name: (wall_times[name], name))
+    (args.coverage_dir / "test-to-lines.json").write_text(
+        json.dumps(test_to_lines, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    (args.coverage_dir / "line-to-tests.json").write_text(
+        json.dumps(line_to_tests, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    manifest_path = args.coverage_dir / "manifest.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    manifest.update(
+        {
+            "test_count": len(ordered),
+            "covered_location_count": len(line_to_tests),
+            "run_seconds": sum(wall_times.values()),
+            "reindexed_at": datetime.now(timezone.utc).isoformat(),
+        }
+    )
+    manifest_path.write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(
+        json.dumps(
+            {
+                "test_count": len(ordered),
+                "covered_location_count": len(line_to_tests),
+                "run_seconds": manifest["run_seconds"],
+            },
+            indent=2,
+            sort_keys=True,
+        )
+    )
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

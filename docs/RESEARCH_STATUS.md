@@ -42,6 +42,17 @@ Last updated: 2026-08-23
 - Generated a nine-line NDJSON witness outside the current corpus that baseline
   nanoda rejects and `nanoda-0003` accepts, proving the survivor is not an
   equivalent mutation.
+- Added a native LLVM 22 per-test Rust coverage collector with resumable,
+  source-digest-checked collection state and mechanical baseline-outcome
+  validation.
+- Collected coverage for all 197 materialized nanoda tests across 20 Rust source
+  files and built forward/reverse indexes for 3,884 covered source locations.
+- Added `scripts/schedule-mutant` and `scripts/run-mutant-scheduled` for
+  fastest-first coverage-guided mutation execution with early kill and baseline
+  restoration.
+- Verified the scheduler reproduces `nanoda-0001`'s kill after executing 7 of
+  67 covering tests, and exhausts all 120 covering tests for surviving
+  `nanoda-0003`.
 
 ## Command Log
 
@@ -80,6 +91,14 @@ target/release/nanoda_bin config.json < /Users/danphifer/Documents/ChatGPT/LeanV
 cd /Users/danphifer/Documents/ChatGPT/LeanVerifier
 scripts/mutate status nanoda-0003 SURVIVED MEANINGFUL_SEMANTIC "Survived all 197 current Arena tests with zero normalized differences; generated witness is rejected by baseline and accepted by mutant"
 scripts/report
+scripts/collect-coverage --reuse-build --resume --timeout 7200 --checker-threads 1
+scripts/reindex-coverage --append-from /tmp/nanoda-coverage-bogus1/coverage.jsonl
+scripts/schedule-mutant nanoda-0001 --output results/mutants/nanoda-0001/schedule.json
+scripts/schedule-mutant nanoda-0002 --output results/mutants/nanoda-0002/schedule.json
+scripts/schedule-mutant nanoda-0003 --output results/mutants/nanoda-0003/schedule.json
+scripts/schedule-mutant nanoda-0004 --output results/mutants/nanoda-0004/schedule.json
+scripts/run-mutant-scheduled nanoda-0001
+scripts/run-mutant-scheduled nanoda-0003
 ```
 
 Notes:
@@ -100,6 +119,18 @@ Notes:
   the new exact-inventory check confirmed the identity sets match. The earlier
   note that an Arena summary reported 198 was historical and is not a current
   dropped-record condition.
+- Per-test coverage is stored under `results/coverage/nanoda/` and occupies
+  about 26 MB. Valid instrumented checker time was 5,114 seconds (85.2 minutes):
+  mathlib 3,949.5 seconds, cslib 639.7 seconds, cedar 220.2 seconds, and std
+  161.3 seconds. Single-thread checking was fastest because multi-threaded
+  coverage counters caused severe contention.
+- The reverse coverage index selected 67 tests for `nanoda-0001`, 167 for
+  `nanoda-0002`, 120 for `nanoda-0003`, and 112 for `nanoda-0004`. It included
+  all 20 historical killing relationships across the first two mutants.
+- Coverage-guided `nanoda-0001` took about 22 seconds including two builds and
+  stopped at `tutorial/012_nonPropThm`; the prior full loop took about nine
+  minutes. Coverage-guided `nanoda-0003` took about 489 seconds because its
+  central line is covered by every large library export.
 
 ## Current Metrics
 
@@ -185,9 +216,11 @@ arena_regression_candidates: 0
 
 ## Next Concrete Experiment
 
-1. Promote the `nanoda-0003` witness into a proposed Arena regression test and
-   validate its expected rejection with other available kernels.
-2. Add the witness to a controlled augmented corpus and verify that rerunning
-   mutation analysis kills `nanoda-0003` without changing baseline outcomes.
-3. Continue the batch with `nanoda-0004` after preserving this first corpus
-   improvement candidate.
+1. Run `nanoda-0004` through `scripts/run-mutant-scheduled` and continue a
+   mechanically generated mutation batch.
+2. Add an AST-aware source mutation generator so mutation creation and
+   registration no longer require LLM or manual edits.
+3. Promote the `nanoda-0003` witness into a proposed Arena regression test and
+   verify that an augmented-corpus schedule kills it.
+4. Periodically compare scheduled results with full-corpus runs to audit the
+   coverage exclusion invariant.

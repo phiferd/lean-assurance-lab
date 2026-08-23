@@ -54,7 +54,7 @@ when they are mechanically grounded and clearly reported.
 
 ## Current Baseline
 
-Current durable state:
+Current measured state, distinguishing tracked artifacts from local evidence:
 
 - The project has a constitution and initial design documents.
 - The project has a private GitHub repository and an initial committed
@@ -66,8 +66,20 @@ Current durable state:
 - `nanoda-0003` survived the current 197-test materialized corpus.
 - A generated witness distinguishes baseline `nanoda` from `nanoda-0003`.
 - `nanoda-0004` is registered but not yet evaluated.
-- Coverage collection exists in script form, but the current coverage artifact
-  set is incomplete and must not yet be treated as an assurance input.
+- Per-test coverage collection completed for all 197 materialized `nanoda`
+  tests, with exact instrumented-versus-baseline outcome agreement.
+- The local coverage indexes contain 3,884 covered source locations across 20
+  Rust source files. They are excluded from Git under the current artifact
+  storage policy, so they are reproducible local evidence but not yet durable
+  repository artifacts.
+- Coverage-guided execution reproduced the `nanoda-0001` kill after 7 of 67
+  covering tests and exhausted all 120 covering tests for `nanoda-0003`
+  without a difference.
+- Coverage schedules have been produced for all four registered mutants.
+- Mutation application, coverage scheduling, execution, normalized comparison,
+  status recording, and source restoration are mechanical once a mutation spec
+  exists. Mutation-site generation is still manual and is the next automation
+  boundary.
 
 ## Milestone 0: Reproducible Project Foundation
 
@@ -102,36 +114,53 @@ Exit criteria:
 
 Goal: demonstrate the machinery for a closed mechanical loop for `nanoda`.
 
+Status: in progress. Coverage collection and integrity validation are complete;
+coverage-guided execution has been validated on one killed mutant and one
+survivor. Mutation generation, `nanoda-0004`, witness confirmation, and the
+augmented-corpus rerun remain.
+
 This is the first critical project milestone. It should demonstrate that the
 project can mechanically classify a modeled semantic fault and, when a
 confirmed corpus gap exists, move from that gap to a regression candidate.
 
-Tasks:
+Completed:
 
-1. Complete full per-test coverage for `nanoda` over the materialized Arena
-   corpus.
-2. Produce durable coverage artifacts:
+1. Collected full per-test coverage for `nanoda` over all 197 tests in the
+   materialized Arena corpus.
+2. Produced the local coverage artifact set:
    - `coverage.jsonl`
    - `manifest.json`
    - `test-to-lines.json`
    - `line-to-tests.json`
-3. Validate coverage artifact integrity:
+3. Validated coverage artifact integrity:
    - exact test inventory matches baseline outcomes;
    - instrumented outcomes match uninstrumented baseline outcomes;
    - source digest matches the validator source used for scheduling;
    - coverage records are complete for every selected test.
-4. Use coverage to schedule known mutants and compare coverage-guided results
-   against prior full-corpus results.
-5. Run `nanoda-0004` through the mutation loop.
-6. Promote the `nanoda-0003` witness to a candidate regression only after its
+4. Added mechanical coverage scheduling and execution with source-digest
+   validation, fastest-first ordering, early kill, complete survivor execution,
+   status recording, and baseline restoration.
+5. Reproduced the prior full-corpus conclusions for `nanoda-0001` and
+   `nanoda-0003` through coverage-guided execution.
+
+Remaining:
+
+1. Decide and implement a durable storage policy for coverage manifests and
+   indexes, or record enough identity to regenerate and verify them exactly.
+2. Run `nanoda-0002` through coverage-guided execution to complete the known
+   killed-mutant scheduler audit.
+3. Run `nanoda-0004` through the mutation loop.
+4. Automate deterministic semantic mutation-site generation so the normal
+   mutation loop no longer depends on manual or LLM-authored source edits.
+5. Promote the `nanoda-0003` witness to a candidate regression only after its
    expected semantics are mechanically confirmed.
-7. Add confirmed candidate regressions to a controlled augmented corpus when
+6. Add confirmed candidate regressions to a controlled augmented corpus when
    such candidates exist.
-8. Rerun the source mutant when an augmented-corpus candidate exists and record
+7. Rerun the source mutant when an augmented-corpus candidate exists and record
    whether the augmented corpus kills it.
-9. Verify baseline validator behavior remains consistent on the augmented
+8. Verify baseline validator behavior remains consistent on the augmented
    corpus.
-10. Record all outputs as durable artifacts.
+9. Record all outputs as durable artifacts.
 
 Exit criteria:
 
@@ -401,22 +430,24 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Add artifact identity fields to existing result metadata where practical.
-2. Finish the interrupted `nanoda` coverage collection and produce complete
-   coverage indexes.
-3. Validate coverage completeness against the 197-test materialized corpus.
-4. Run coverage scheduling for `nanoda-0001`, `nanoda-0002`, and `nanoda-0003`
-   and compare conclusions with prior full-corpus results.
-5. Run `nanoda-0004`.
-6. Mechanically confirm the expected semantics of the `nanoda-0003` witness
+1. Resolve coverage artifact storage and add exact identity fields to the
+   compact tracked metadata needed to reproduce or validate the current local
+   coverage set.
+2. Run `nanoda-0002` and `nanoda-0004` through
+   `scripts/run-mutant-scheduled`.
+3. Add deterministic, syntax-aware semantic mutation generation and automatic
+   registration for an initial bounded `nanoda` mutation batch.
+4. Run the generated batch mechanically using coverage schedules, with periodic
+   full-corpus audits of the coverage exclusion invariant.
+5. Mechanically confirm the expected semantics of the `nanoda-0003` witness
    with compatible validators or a reference path.
-7. If confirmation succeeds, convert the witness into a controlled
+6. If confirmation succeeds, convert the witness into a controlled
    augmented-corpus test.
-8. Rerun `nanoda-0003` against the augmented corpus if one is produced, and
+7. Rerun `nanoda-0003` against the augmented corpus if one is produced, and
    record the measured result.
-9. Update `docs/RESEARCH_STATUS.md` and produce the first local assurance
+8. Update `docs/RESEARCH_STATUS.md` and produce the first local assurance
    snapshot draft.
-10. Commit and push after each coherent artifact-producing step.
+9. Commit and push after each coherent artifact-producing step.
 
 ## Decision Rules
 

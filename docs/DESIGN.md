@@ -43,6 +43,33 @@ versions should add a lower-level executor that can run a selected checker
 binary directly against a selected NDJSON artifact and emit normalized JSONL
 without going through the whole Arena runner.
 
+### Coverage Index And Scheduler
+
+`scripts/collect-coverage` builds nanoda with Rust source coverage in an
+isolated `target-coverage` directory and runs every materialized Arena test
+separately. Each profile is accepted only when the instrumented normalized
+outcome matches the cached baseline. Collection state includes a source digest,
+thread count, and test pattern so incompatible interrupted runs cannot be
+silently merged.
+
+The coverage collector produces these local artifacts:
+
+```text
+results/coverage/<checker>/coverage.jsonl
+results/coverage/<checker>/test-to-lines.json
+results/coverage/<checker>/line-to-tests.json
+results/coverage/<checker>/manifest.json
+```
+
+`scripts/schedule-mutant` maps the registered mutant source span through the
+reverse index and orders covering tests by uninstrumented baseline wall time.
+`scripts/run-mutant-scheduled` executes that schedule directly against nanoda.
+Killed mutants stop at the first normalized difference; surviving mutants must
+exhaust every covering test. Mutants on uncovered locations are labeled
+`UNCOVERED`, not silently treated as normally tested survivors. Coverage is an
+execution optimization only: periodic full-corpus audits remain a control for
+source-mapping or instrumentation mistakes.
+
 ### Mutant Generator
 
 `scripts/mutate` is a placeholder interface for creating, listing, and building
@@ -132,11 +159,17 @@ The first implementation should produce these files when data exists:
 results/baseline/runs/<stamp>/metadata.json
 results/baseline/runs/<stamp>/raw.log
 results/baseline/outcomes/<checker>.jsonl
+results/coverage/<checker>/coverage.jsonl
+results/coverage/<checker>/test-to-lines.json
+results/coverage/<checker>/line-to-tests.json
+results/coverage/<checker>/manifest.json
 results/mutants/registry.jsonl
 results/mutants/<mutant-id>/build.json
 results/mutants/<mutant-id>/outcomes.jsonl
 results/mutants/<mutant-id>/comparison.json
 results/mutants/<mutant-id>/runs/<stamp>/*.log
+results/mutants/<mutant-id>/scheduled-runs/<stamp>/schedule.json
+results/mutants/<mutant-id>/scheduled-runs/<stamp>/comparison.json
 results/survivors/inventory.jsonl
 results/witnesses/<witness-id>/metadata.json
 corpus/generated/<witness-id>.ndjson

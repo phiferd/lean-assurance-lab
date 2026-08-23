@@ -18,10 +18,19 @@ CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
 TEST_ROOT = ARENA_ROOT / "_build" / "tests"
 MUTATIONS = ROOT / "mutations"
 BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
 
 
 def read_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def mutant_classification(mutant_id: str) -> str:
+    merged = {}
+    for row in read_jsonl(REGISTRY):
+        if row.get("id") == mutant_id:
+            merged.update(row)
+    return merged.get("classification", "UNKNOWN_EQUIVALENCE")
 
 
 def set_source_state(spec: dict, state: str) -> str:
@@ -190,13 +199,16 @@ def main() -> int:
             f"Coverage-guided run: {reason}; scheduled={schedule['selected_test_count']} "
             f"executed={len(records)} coverage_corpus={schedule['coverage_test_count']}"
         )
+        classification = (
+            "MEANINGFUL_SEMANTIC" if status == "KILLED" else mutant_classification(args.mutant_id)
+        )
         subprocess.run(
             [
                 str(ROOT / "scripts" / "mutate"),
                 "status",
                 args.mutant_id,
                 status,
-                "UNKNOWN_EQUIVALENCE" if status == "SURVIVED" else "MEANINGFUL_SEMANTIC",
+                classification,
                 note,
             ],
             cwd=ROOT,
