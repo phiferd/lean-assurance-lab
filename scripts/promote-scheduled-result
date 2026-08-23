@@ -1,0 +1,59 @@
+#!/usr/bin/env python3
+"""Promote an ignored scheduled run into a compact, identity-bound result."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mutant_id")
+    parser.add_argument("--run", type=Path)
+    args = parser.parse_args()
+    mutant_dir = ROOT / "results" / "mutants" / args.mutant_id
+    run_dir = args.run
+    if run_dir is None:
+        runs = sorted((mutant_dir / "scheduled-runs").iterdir())
+        if not runs:
+            raise SystemExit(f"no scheduled runs found for {args.mutant_id}")
+        run_dir = runs[-1]
+    old_schedule = json.loads((run_dir / "schedule.json").read_text(encoding="utf-8"))
+    current_schedule_path = mutant_dir / "schedule.json"
+    current_schedule = json.loads(current_schedule_path.read_text(encoding="utf-8"))
+    if [row["test"] for row in old_schedule["tests"]] != [
+        row["test"] for row in current_schedule["tests"]
+    ]:
+        raise SystemExit("current identity-bound schedule differs from the executed schedule")
+    comparison = json.loads((run_dir / "comparison.json").read_text(encoding="utf-8"))
+    run_summary = json.loads((run_dir / "run.json").read_text(encoding="utf-8"))
+    comparison.update(
+        {
+            "source_sha256": current_schedule["current_source_sha256"],
+            "mutation_spec_sha256": current_schedule["mutation_spec_sha256"],
+            "coverage_manifest_sha256": current_schedule["coverage_manifest_sha256"],
+            "coverage_index_sha256": current_schedule["coverage_index_sha256"],
+            "baseline_outcomes_sha256": current_schedule["baseline_outcomes_sha256"],
+            "schedule_sha256": sha256_file(current_schedule_path),
+            "recorded_at": run_summary["finished_at"],
+            "promoted_from": str(run_dir.relative_to(ROOT)),
+        }
+    )
+    output = mutant_dir / "scheduled-comparison.json"
+    output.write_text(json.dumps(comparison, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

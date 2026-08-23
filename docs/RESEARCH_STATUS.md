@@ -53,6 +53,24 @@ Last updated: 2026-08-23
 - Verified the scheduler reproduces `nanoda-0001`'s kill after executing 7 of
   67 covering tests, and exhausts all 120 covering tests for surviving
   `nanoda-0003`.
+- Reproduced `nanoda-0002`'s kill after 8 of 167 covering tests and classified
+  `nanoda-0004` as survived without witness after all 112 covering tests.
+- Added a tracked coverage identity snapshot binding all local coverage files,
+  197 corpus inputs totaling 9,506,646,641 bytes, baseline outcomes, checker
+  source, Arena revision, configuration, and producer scripts by SHA-256.
+- Added a `syn`-based Rust mutation parser plus deterministic generation,
+  registration, isolated build validation, exact occurrence replacement, and
+  resumable coverage-guided batch execution.
+- Completed active batch `nanoda-syntax-0003`: 12 of 12 mutants built, 1 was
+  killed, and 11 survived after executing 611 of 685 scheduled test-mutant
+  pairs in 5,356.7 seconds.
+- Confirmed the `nanoda-0003` witness with Arena's unmodified official Lean
+  4.33 checker: the witness was rejected for an undefined universe parameter,
+  while the declared-universe positive control was accepted.
+- Promoted that witness into the controlled augmented corpus and verified that
+  baseline nanoda rejects it while `nanoda-0003` accepts it.
+- Produced `results/assurance/milestone-1.json`; all eight Milestone 1 checks
+  pass.
 
 ## Command Log
 
@@ -99,6 +117,19 @@ scripts/schedule-mutant nanoda-0003 --output results/mutants/nanoda-0003/schedul
 scripts/schedule-mutant nanoda-0004 --output results/mutants/nanoda-0004/schedule.json
 scripts/run-mutant-scheduled nanoda-0001
 scripts/run-mutant-scheduled nanoda-0003
+scripts/run-mutant-scheduled nanoda-0002
+scripts/run-mutant-scheduled nanoda-0004
+scripts/snapshot-coverage
+scripts/snapshot-coverage --verify
+scripts/generate-mutations --limit 12 --batch-id nanoda-syntax-0003 --write --register
+scripts/validate-mutation-batch nanoda-syntax-0003
+scripts/run-mutation-batch nanoda-syntax-0003
+cd external/lean-kernel-arena
+../../.venv-arena/bin/python ./lka.py build-checker official
+cd /Users/danphifer/Documents/ChatGPT/LeanVerifier
+scripts/confirm-witness nanoda-0003-undeclared-const-universe --checker official --control corpus/controls/nanoda-0003-declared-const-universe.ndjson
+scripts/run-mutant-input nanoda-0003 corpus/generated/nanoda-0003-undeclared-const-universe.ndjson --output results/mutants/nanoda-0003/augmented-comparison.json
+scripts/assurance-snapshot
 ```
 
 Notes:
@@ -131,22 +162,42 @@ Notes:
   stopped at `tutorial/012_nonPropThm`; the prior full loop took about nine
   minutes. Coverage-guided `nanoda-0003` took about 489 seconds because its
   central line is covered by every large library export.
+- The first generated candidate set was superseded because AST-discovered
+  `assert!` statements included configuration guards and internal invariants.
+  A second partial batch established one survivor before being narrowed again.
+  These attempts remain classified in durable manifests instead of being
+  omitted from the record.
+- Generated source replacements originally exposed a restoration bug because
+  `if false { original }` still contains the original text. All source-state
+  transitions now check the full mutant first, repeated statements carry an
+  exact occurrence index, and batch validation proves the baseline source
+  digest before and after isolated builds.
+- The active 12-mutant batch ran from 21:31:34Z to 23:00:51Z. The only kill was
+  `nanoda-gen-1c536a57344e`; `proj-of-prop` changed from `REJECT` to `ACCEPT`
+  after 73 of 147 covering tests. The other 11 mutants exhausted their full
+  schedules and are classified `SURVIVED_WITHOUT_WITNESS`.
 
 ## Current Metrics
 
 ```yaml
-mutation_score: 0.6666666666666666
-generated_mutants: 4
-killed_mutants: 2
-surviving_mutants: 1
+mutation_score: 0.75
+generated_mutants: 30
+evaluated_mutants: 17
+killed_mutants: 3
+surviving_mutants: 14
+build_failed_mutants: 0
+superseded_mutants: 13
+unevaluated_mutants: 0
 classified_equivalent: 0
 classified_unreachable: 0
 classified_performance_only: 0
+classified_non_semantic: 10
 meaningful_survivors: 1
-unknown_equivalence: 1
+survived_without_witness: 13
+unknown_equivalence: 3
 witnesses_found: 1
 minimized_witnesses: 0
-arena_regression_candidates: 0
+arena_regression_candidates: 1
 ```
 
 ## First Mutation Result
@@ -207,20 +258,23 @@ arena_regression_candidates: 0
 
 ## Unresolved Problems
 
-- `nanoda-0004` is registered but has not been run because `nanoda-0003`
-  satisfied the immediate survivor-search objective.
-- The current automated loop supports exact text replacement specs, not bulk
-  source-to-source mutation generation.
+- Eleven mutants in active batch `nanoda-syntax-0003`, one earlier generated
+  mutant, and `nanoda-0004` survived without witnesses. They are not claimed
+  equivalent.
+- Coverage payloads remain ignored local files; their complete identities and
+  corpus inputs are tracked and mechanically verified, but remote payload
+  storage is not yet implemented.
+- Only statement-level validation-call mutations are generated automatically;
+  broader semantic operator families remain future work.
 - Large corpus files are expensive: `mathlib.ndjson` is about 5.2 GB,
   `cslib.ndjson` about 2.0 GB, and `cedar.ndjson` about 790 MB.
 
 ## Next Concrete Experiment
 
-1. Run `nanoda-0004` through `scripts/run-mutant-scheduled` and continue a
-   mechanically generated mutation batch.
-2. Add an AST-aware source mutation generator so mutation creation and
-   registration no longer require LLM or manual edits.
-3. Promote the `nanoda-0003` witness into a proposed Arena regression test and
-   verify that an augmented-corpus schedule kills it.
-4. Periodically compare scheduled results with full-corpus runs to audit the
-   coverage exclusion invariant.
+1. Define the common artifact graph and implement repository-wide staleness and
+   invalidation reporting for Milestone 2.
+2. Run a sampled full-corpus audit for one killed and one surviving generated
+   mutant.
+3. Begin mechanical witness search for the six quotient-validation survivors.
+4. Prepare a second independent validator for direct compatibility and
+   confirmation runs.

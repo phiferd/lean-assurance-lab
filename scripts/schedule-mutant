@@ -21,6 +21,10 @@ def read_jsonl(path: Path) -> list[dict]:
     return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
 
 
+def file_digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
 def latest_registry_record(mutant_id: str) -> dict:
     merged = {}
     for row in read_jsonl(REGISTRY):
@@ -109,7 +113,13 @@ def main() -> int:
         "locations": locations,
         "covered_locations": covered_locations,
         "coverage_stale": stale,
+        "current_source_sha256": current_digest,
+        "coverage_source_sha256": manifest["source_sha256"],
         "coverage_test_count": manifest["test_count"],
+        "coverage_manifest_sha256": file_digest(args.coverage_dir / "manifest.json"),
+        "coverage_index_sha256": file_digest(args.coverage_dir / "line-to-tests.json"),
+        "baseline_outcomes_sha256": file_digest(BASELINE),
+        "mutation_spec_sha256": file_digest(spec_path),
         "selected_test_count": len(tests),
         "estimated_seconds": sum((baseline[name].get("wall_time") or 0) for name in tests),
         "tests": [

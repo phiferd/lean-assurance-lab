@@ -72,9 +72,18 @@ source-mapping or instrumentation mistakes.
 
 ### Mutant Generator
 
-`scripts/mutate` is a placeholder interface for creating, listing, and building
-mutants. The initial implementation should support manually registered mutants
-before adding bulk source-to-source mutation.
+`tools/nanoda-mutator` parses Rust with `syn` and emits statement-level semantic
+validation candidates. `scripts/generate-mutations` filters candidates through
+the coverage index and controlled mutation catalog, excludes manually modeled
+sites, assigns deterministic source-location-bound identities, and writes and
+registers a bounded batch. Repeated source text is disambiguated by an explicit
+replacement occurrence.
+
+`scripts/validate-mutation-batch` restores every batch mutation before checking
+the baseline source digest, compiles each mutation in isolation, records build
+failures separately, and rebuilds baseline source at the end. The resumable
+`scripts/run-mutation-batch` drives each compiling mutant through
+`scripts/run-mutant-scheduled` without LLM involvement.
 
 `scripts/run-mutant` is the current one-mutant orchestrator. It reads a
 registered mutant and its exact replacement spec from `mutations/<id>.json`,
@@ -84,6 +93,25 @@ outcomes, appends registry status, and restores the checker source and binary to
 baseline. It clears stale Arena `_results/<checker>_*.json` files before each
 checker run so scoped runs cannot inherit records from earlier full runs. Full
 runs enable the normalizer's exact built-corpus inventory check.
+
+Every source-state transition checks the complete mutated replacement before
+the original substring. This matters for generated wrappers such as
+`if false { original_statement }`, where the original text remains a substring
+of the mutant.
+
+### Coverage Identity And Assurance Gate
+
+`scripts/snapshot-coverage` hashes every local coverage artifact, all 197
+materialized NDJSON inputs, baseline outcomes, checker source, Arena revision,
+checker definition, collection configuration, and producer scripts into a
+compact tracked manifest. Its `--verify` mode fails when any bound input or
+output changes.
+
+`scripts/assurance-snapshot` is the Milestone 1 gate. It requires current
+coverage identity, identity-bound conclusions for all four controlled mutants,
+a complete generated mutation batch, independent expected-outcome confirmation
+for the promoted witness, and a measured augmented-corpus kill of the source
+mutant.
 
 Each mutant record should include:
 

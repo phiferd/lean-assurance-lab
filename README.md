@@ -56,19 +56,27 @@ corpus/
   generated/
   minimized/
 scripts/
+  assurance-snapshot
   collect-coverage
   compare
+  confirm-witness
   generate
+  generate-mutations
   minimize
   mutate
   normalize-arena-results
+  promote-scheduled-result
   reindex-coverage
   report
   run-arena
+  run-mutation-batch
   run-mutant
+  run-mutant-input
   run-mutant-scheduled
   schedule-mutant
   setup-arena
+  snapshot-coverage
+  validate-mutation-batch
 ```
 
 The upstream Lean Kernel Arena checkout is expected at `external/lean-kernel-arena`
@@ -159,3 +167,27 @@ the mutant, runs covering tests in normal baseline wall-time order, stops on the
 first normalized difference, and restores the baseline source and binary. A
 survivor must exhaust every covering test. A source span with no covering tests
 is reported explicitly as `UNCOVERED`.
+
+Create, build-check, and execute a deterministic syntax-aware mutation batch:
+
+```sh
+scripts/generate-mutations --limit 12 --batch-id nanoda-syntax-0003 \
+  --write --register
+scripts/validate-mutation-batch nanoda-syntax-0003
+scripts/run-mutation-batch nanoda-syntax-0003
+```
+
+The Rust parser under `tools/nanoda-mutator` selects statement-level semantic
+validation calls. The wrapper excludes uncovered and already controlled sites,
+assigns source-location-bound identities, and records exact replacement
+occurrences. Batch validation compiles every mutant in isolation and proves the
+checker source has returned to its baseline digest.
+
+Bind ignored local coverage payloads to a compact tracked identity artifact and
+verify the Milestone 1 gate with:
+
+```sh
+scripts/snapshot-coverage
+scripts/snapshot-coverage --verify
+scripts/assurance-snapshot
+```

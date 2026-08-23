@@ -1,0 +1,165 @@
+#!/usr/bin/env python3
+"""Build every mutation in a generated batch and restore the baseline checker."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+
+
+def replace_nth(text: str, old: str, new: str, occurrence: int) -> str | None:
+    offset = 0
+    for _ in range(occurrence + 1):
+        index = text.find(old, offset)
+        if index < 0:
+            return None
+        offset = index + len(old)
+    return text[:index] + new + text[index + len(old):]
+
+
+def set_state(spec: dict, state: str) -> str:
+    path = CHECKER_ROOT / spec["source_file"]
+    original = spec["original"]
+    mutated = spec["mutated"]
+    text = path.read_text(encoding="utf-8")
+    if state == "baseline":
+        if mutated in text:
+            path.write_text(text.replace(mutated, original, 1), encoding="utf-8")
+            return "changed"
+        if original in text:
+            return "already"
+    elif state == "mutant":
+        if mutated in text:
+            return "already"
+        replaced = replace_nth(text, original, mutated, spec.get("replace_occurrence", 0))
+        if replaced is not None:
+            path.write_text(replaced, encoding="utf-8")
+            return "changed"
+    else:
+        raise ValueError(f"unknown source state: {state}")
+    raise RuntimeError(f"{path}: neither expected source state was found")
+
+
+def source_digest() -> str:
+    digest = hashlib.sha256()
+    for path in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
+        digest.update(str(path.relative_to(CHECKER_ROOT)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def build() -> tuple[int, float, str]:
+    started = time.time()
+    proc = subprocess.run(
+        ["cargo", "build", "--release"],
+        cwd=CHECKER_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    return proc.returncode, time.time() - started, proc.stdout
+
+
+def append_status(mutant_id: str, status: str, notes: str) -> None:
+    with REGISTRY.open("a", encoding="utf-8") as handle:
+        handle.write(
+            json.dumps(
+                {
+                    "id": mutant_id,
+                    "status": status,
+                    "classification": "UNKNOWN_EQUIVALENCE",
+                    "notes": notes,
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                },
+                sort_keys=True,
+            )
+            + "\n"
+        )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("batch_id")
+    parser.add_argument("--restore-only", action="store_true")
+    args = parser.parse_args()
+    manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
+    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    specs = [
+        json.loads((ROOT / "mutations" / f"{entry['id']}.json").read_text(encoding="utf-8"))
+        for entry in manifest["mutants"]
+    ]
+    for spec in specs:
+        set_state(spec, "baseline")
+    if source_digest() != manifest["source_sha256"]:
+        raise SystemExit("restored checker source does not match the batch baseline digest")
+    if args.restore_only:
+        returncode, seconds, output = build()
+        restore_log = ROOT / "results" / "mutation-batches" / "logs" / args.batch_id / "baseline-restore.log"
+        restore_log.parent.mkdir(parents=True, exist_ok=True)
+        restore_log.write_text(output, encoding="utf-8")
+        print(json.dumps({"status": "RESTORED", "returncode": returncode, "seconds": seconds}))
+        return returncode
+    results = []
+    active_spec = None
+    try:
+        for entry, spec in zip(manifest["mutants"], specs, strict=True):
+            set_state(spec, "baseline")
+            set_state(spec, "mutant")
+            active_spec = spec
+            returncode, seconds, output = build()
+            result_dir = ROOT / "results" / "mutation-batches" / "logs" / args.batch_id
+            result_dir.mkdir(parents=True, exist_ok=True)
+            log_path = result_dir / f"{entry['id']}.log"
+            log_path.write_text(output, encoding="utf-8")
+            status = "BUILT" if returncode == 0 else "BUILD_FAILED"
+            result = {
+                "mutant_id": entry["id"],
+                "status": status,
+                "returncode": returncode,
+                "seconds": seconds,
+                "log": str(log_path.relative_to(ROOT)),
+            }
+            results.append(result)
+            append_status(
+                entry["id"],
+                status,
+                f"Generated batch {args.batch_id} build returned {returncode}",
+            )
+            set_state(spec, "baseline")
+            active_spec = None
+    finally:
+        if active_spec is not None:
+            set_state(active_spec, "baseline")
+        for spec in specs:
+            set_state(spec, "baseline")
+        returncode, seconds, output = build()
+        restore_log = ROOT / "results" / "mutation-batches" / "logs" / args.batch_id / "baseline-restore.log"
+        restore_log.parent.mkdir(parents=True, exist_ok=True)
+        restore_log.write_text(output, encoding="utf-8")
+        if returncode != 0:
+            raise SystemExit(f"baseline restore build failed: {restore_log}")
+
+    manifest["build_validation"] = {
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "baseline_restore_seconds": seconds,
+        "results": results,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(manifest["build_validation"], indent=2, sort_keys=True))
+    return 1 if any(row["status"] == "BUILD_FAILED" for row in results) else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

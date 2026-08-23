@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Produce and gate the current Milestone 1 assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+INITIAL_MUTANTS = [f"nanoda-{index:04d}" for index in range(1, 5)]
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "results" / "assurance" / "milestone-1.json",
+    )
+    args = parser.parse_args()
+    coverage_verify = subprocess.run(
+        [str(ROOT / "scripts" / "snapshot-coverage"), "--verify"],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    registry = {}
+    for row in read_jsonl(ROOT / "results" / "mutants" / "registry.jsonl"):
+        registry.setdefault(row["id"], {}).update(row)
+
+    initial_results = {}
+    missing_results = []
+    for mutant_id in INITIAL_MUTANTS:
+        path = ROOT / "results" / "mutants" / mutant_id / "scheduled-comparison.json"
+        if path.exists():
+            initial_results[mutant_id] = json.loads(path.read_text(encoding="utf-8"))
+        else:
+            missing_results.append(mutant_id)
+
+    confirmation_path = (
+        ROOT
+        / "results"
+        / "witnesses"
+        / "nanoda-0003-undeclared-const-universe"
+        / "confirmation.json"
+    )
+    augmented_path = ROOT / "results" / "mutants" / "nanoda-0003" / "augmented-comparison.json"
+    confirmation = json.loads(confirmation_path.read_text(encoding="utf-8"))
+    augmented = json.loads(augmented_path.read_text(encoding="utf-8"))
+    active_batch_path = ROOT / "results" / "mutation-batches" / "nanoda-syntax-0003.json"
+    active_batch = json.loads(active_batch_path.read_text(encoding="utf-8"))
+    batch_execution = active_batch.get("execution", {})
+
+    checks = {
+        "coverage_snapshot_current": coverage_verify.returncode == 0,
+        "initial_mutant_results_complete": not missing_results,
+        "initial_mutants_classified": all(
+            registry.get(mutant_id, {}).get("status") in {"KILLED", "SURVIVED"}
+            for mutant_id in INITIAL_MUTANTS
+        ),
+        "generated_batch_builds_complete": all(
+            row["status"] == "BUILT"
+            for row in active_batch.get("build_validation", {}).get("results", [])
+        )
+        and len(active_batch.get("build_validation", {}).get("results", []))
+        == active_batch["generated_count"],
+        "generated_batch_execution_complete": batch_execution.get("status") == "COMPLETE"
+        and len(batch_execution.get("results", [])) == active_batch["generated_count"],
+        "witness_expected_outcome_confirmed": confirmation["status"]
+        == "CONFIRMED_EXPECTED_REJECTION",
+        "augmented_corpus_kills_source_mutant": augmented["status"] == "KILLED"
+        and augmented["different"] is True,
+        "augmented_baseline_matches_expected": augmented["baseline"]["normalized_outcome"]
+        == "REJECT",
+    }
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-1",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "missing_initial_results": missing_results,
+        "coverage_identity": "results/manifests/coverage-nanoda.json",
+        "initial_mutants": initial_results,
+        "generated_batch": "results/mutation-batches/nanoda-syntax-0003.json",
+        "witness_confirmation": str(confirmation_path.relative_to(ROOT)),
+        "augmented_comparison": str(augmented_path.relative_to(ROOT)),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

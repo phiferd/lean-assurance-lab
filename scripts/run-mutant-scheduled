@@ -4,6 +4,7 @@
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
 import subprocess
 import sys
@@ -33,19 +34,37 @@ def mutant_classification(mutant_id: str) -> str:
     return merged.get("classification", "UNKNOWN_EQUIVALENCE")
 
 
+def replace_nth(text: str, old: str, new: str, occurrence: int) -> str | None:
+    offset = 0
+    for _ in range(occurrence + 1):
+        index = text.find(old, offset)
+        if index < 0:
+            return None
+        offset = index + len(old)
+    return text[:index] + new + text[index + len(old):]
+
+
 def set_source_state(spec: dict, state: str) -> str:
     path = CHECKER_ROOT / spec["source_file"]
     original = spec["original"]
     mutated = spec["mutated"]
     text = path.read_text(encoding="utf-8")
-    target = original if state == "baseline" else mutated
-    other = mutated if state == "baseline" else original
-    if target in text:
-        return "already"
-    if other not in text:
-        raise SystemExit(f"{path}: neither expected source state was found")
-    path.write_text(text.replace(other, target, 1), encoding="utf-8")
-    return "changed"
+    if state == "baseline":
+        if mutated in text:
+            path.write_text(text.replace(mutated, original, 1), encoding="utf-8")
+            return "changed"
+        if original in text:
+            return "already"
+    elif state == "mutant":
+        if mutated in text:
+            return "already"
+        replaced = replace_nth(text, original, mutated, spec.get("replace_occurrence", 0))
+        if replaced is not None:
+            path.write_text(replaced, encoding="utf-8")
+            return "changed"
+    else:
+        raise ValueError(f"unknown source state: {state}")
+    raise SystemExit(f"{path}: neither expected source state was found")
 
 
 def build(log_path: Path) -> float:
@@ -191,8 +210,19 @@ def main() -> int:
             "difference_count": int(difference is not None),
             "first_difference": difference,
             "all_covering_tests_exhausted": difference is None,
+            "source_sha256": schedule["current_source_sha256"],
+            "mutation_spec_sha256": schedule["mutation_spec_sha256"],
+            "coverage_manifest_sha256": schedule["coverage_manifest_sha256"],
+            "coverage_index_sha256": schedule["coverage_index_sha256"],
+            "baseline_outcomes_sha256": schedule["baseline_outcomes_sha256"],
+            "schedule_sha256": hashlib.sha256(schedule_path.read_bytes()).hexdigest(),
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
         }
         comparison_path.write_text(
+            json.dumps(comparison, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        durable_comparison = result_dir / "scheduled-comparison.json"
+        durable_comparison.write_text(
             json.dumps(comparison, indent=2, sort_keys=True) + "\n", encoding="utf-8"
         )
         note = (
@@ -202,6 +232,8 @@ def main() -> int:
         classification = (
             "MEANINGFUL_SEMANTIC" if status == "KILLED" else mutant_classification(args.mutant_id)
         )
+        if status == "SURVIVED" and classification == "UNKNOWN_EQUIVALENCE":
+            classification = "SURVIVED_WITHOUT_WITNESS"
         subprocess.run(
             [
                 str(ROOT / "scripts" / "mutate"),

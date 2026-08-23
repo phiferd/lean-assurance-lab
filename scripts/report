@@ -38,11 +38,17 @@ def latest_by_id(records: list[dict]) -> dict[str, dict]:
 
 
 def comparison_killed(results_root: Path, mutant_id: str) -> bool | None:
-    path = results_root / "mutants" / mutant_id / "comparison.json"
-    if not path.exists():
+    paths = [
+        results_root / "mutants" / mutant_id / "scheduled-comparison.json",
+        results_root / "mutants" / mutant_id / "comparison.json",
+    ]
+    path = next((candidate for candidate in paths if candidate.exists()), None)
+    if path is None:
         return None
     with path.open("r", encoding="utf-8") as handle:
         report = json.load(handle)
+    if report.get("status") in {"KILLED", "SURVIVED"}:
+        return report["status"] == "KILLED"
     return bool(report.get("killed"))
 
 
@@ -63,16 +69,28 @@ def main() -> int:
     classified_equivalent = 0
     classified_unreachable = 0
     classified_performance_only = 0
+    classified_non_semantic = 0
     meaningful_survivors = 0
+    survived_without_witness = 0
     unknown_equivalence = 0
+    build_failed = 0
+    superseded = 0
+    unevaluated = 0
 
     for mutant_id, record in mutants.items():
         classification = record.get("classification", "UNKNOWN_EQUIVALENCE")
+        status = record.get("status")
         killed_state = comparison_killed(args.results_root, mutant_id)
         if killed_state is True:
             killed += 1
         elif killed_state is False:
             surviving += 1
+        elif status == "BUILD_FAILED":
+            build_failed += 1
+        elif status == "SUPERSEDED":
+            superseded += 1
+        else:
+            unevaluated += 1
 
         if classification == "EQUIVALENT":
             classified_equivalent += 1
@@ -80,10 +98,14 @@ def main() -> int:
             classified_unreachable += 1
         elif classification == "PERFORMANCE_ONLY":
             classified_performance_only += 1
+        elif classification == "NON_SEMANTIC":
+            classified_non_semantic += 1
         elif classification == "MEANINGFUL_SEMANTIC":
             meaningful_tested += killed_state is not None
             meaningful_killed += killed_state is True
             meaningful_survivors += killed_state is False
+        elif classification == "SURVIVED_WITHOUT_WITNESS":
+            survived_without_witness += 1
         else:
             unknown_equivalence += 1
 
@@ -98,7 +120,12 @@ def main() -> int:
                 metadata = json.loads(path.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
                 continue
-            if metadata.get("status") in {"DISTINGUISHING_FOUND", "MINIMIZED", "ARENA_CANDIDATE"}:
+            if metadata.get("status") in {
+                "DISTINGUISHING_FOUND",
+                "MINIMIZED",
+                "ARENA_CANDIDATE",
+                "CONFIRMED_REGRESSION_CANDIDATE",
+            }:
                 witnesses_found += 1
     minimized = list(Path("corpus/minimized").glob("*-min.*"))
     arena_candidates = 0
@@ -108,17 +135,26 @@ def main() -> int:
                 metadata = json.loads(path.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
                 continue
-            arena_candidates += metadata.get("status") == "ARENA_CANDIDATE"
+            arena_candidates += metadata.get("status") in {
+                "ARENA_CANDIDATE",
+                "CONFIRMED_REGRESSION_CANDIDATE",
+            }
 
     report = {
         "mutation_score": score,
         "generated_mutants": generated,
         "killed_mutants": killed,
         "surviving_mutants": surviving,
+        "evaluated_mutants": killed + surviving,
+        "build_failed_mutants": build_failed,
+        "superseded_mutants": superseded,
+        "unevaluated_mutants": unevaluated,
         "classified_equivalent": classified_equivalent,
         "classified_unreachable": classified_unreachable,
         "classified_performance_only": classified_performance_only,
+        "classified_non_semantic": classified_non_semantic,
         "meaningful_survivors": meaningful_survivors,
+        "survived_without_witness": survived_without_witness,
         "unknown_equivalence": unknown_equivalence,
         "witnesses_found": witnesses_found,
         "minimized_witnesses": len(minimized),

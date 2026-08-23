@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Compare baseline and one nanoda mutant on an exact NDJSON input."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def replace_nth(text: str, old: str, new: str, occurrence: int) -> str | None:
+    offset = 0
+    for _ in range(occurrence + 1):
+        index = text.find(old, offset)
+        if index < 0:
+            return None
+        offset = index + len(old)
+    return text[:index] + new + text[index + len(old):]
+
+
+def set_state(spec: dict, state: str) -> str:
+    path = CHECKER_ROOT / spec["source_file"]
+    original = spec["original"]
+    mutated = spec["mutated"]
+    text = path.read_text(encoding="utf-8")
+    if state == "baseline":
+        if mutated in text:
+            path.write_text(text.replace(mutated, original, 1), encoding="utf-8")
+            return "changed"
+        if original in text:
+            return "already"
+    elif state == "mutant":
+        if mutated in text:
+            return "already"
+        replaced = replace_nth(text, original, mutated, spec.get("replace_occurrence", 0))
+        if replaced is not None:
+            path.write_text(replaced, encoding="utf-8")
+            return "changed"
+    else:
+        raise ValueError(f"unknown source state: {state}")
+    raise SystemExit(f"{path}: neither expected source state was found")
+
+
+def build() -> float:
+    started = time.time()
+    subprocess.run(["cargo", "build", "--release"], cwd=CHECKER_ROOT, check=True)
+    return time.time() - started
+
+
+def run_input(artifact: Path) -> dict:
+    binary = CHECKER_ROOT / "target" / "release" / "nanoda_bin"
+    config = CHECKER_ROOT / "config.json"
+    started = time.time()
+    with artifact.open("rb") as handle:
+        proc = subprocess.run(
+            [str(binary), str(config)],
+            cwd=CHECKER_ROOT,
+            stdin=handle,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    return {
+        "exit_code": proc.returncode,
+        "normalized_outcome": "ACCEPT" if proc.returncode == 0 else "REJECT",
+        "seconds": time.time() - started,
+        "stdout_sha256": hashlib.sha256(proc.stdout).hexdigest(),
+        "stderr_sha256": hashlib.sha256(proc.stderr).hexdigest(),
+        "stderr": proc.stderr.decode(errors="replace")[-2000:],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mutant_id")
+    parser.add_argument("artifact", type=Path)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    artifact = args.artifact.resolve()
+    spec_path = ROOT / "mutations" / f"{args.mutant_id}.json"
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    active = False
+    result = {
+        "schema_version": 1,
+        "mutant_id": args.mutant_id,
+        "artifact": {
+            "path": str(artifact.relative_to(ROOT)),
+            "sha256": sha256_file(artifact),
+        },
+        "mutation_spec_sha256": sha256_file(spec_path),
+        "started_at": datetime.now(timezone.utc).isoformat(),
+    }
+    try:
+        result["restore_before"] = set_state(spec, "baseline")
+        result["baseline_build_seconds"] = build()
+        result["baseline"] = run_input(artifact)
+        result["apply_mutant"] = set_state(spec, "mutant")
+        active = True
+        result["mutant_build_seconds"] = build()
+        result["mutant"] = run_input(artifact)
+        result["different"] = (
+            result["baseline"]["normalized_outcome"]
+            != result["mutant"]["normalized_outcome"]
+        )
+        result["status"] = "KILLED" if result["different"] else "SURVIVED"
+    finally:
+        if active:
+            result["restore_after"] = set_state(spec, "baseline")
+            result["restored_build_seconds"] = build()
+        result["finished_at"] = datetime.now(timezone.utc).isoformat()
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result.get("different") else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

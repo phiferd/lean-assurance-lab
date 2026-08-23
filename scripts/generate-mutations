@@ -1,0 +1,227 @@
+#!/usr/bin/env python3
+"""Generate and register a deterministic, syntax-aware nanoda mutant batch."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+MUTATIONS = ROOT / "mutations"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+COVERAGE = ROOT / "results" / "coverage" / "nanoda" / "line-to-tests.json"
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+TOOL_MANIFEST = ROOT / "tools" / "nanoda-mutator" / "Cargo.toml"
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    return sha256_bytes(path.read_bytes())
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def source_digest() -> str:
+    digest = hashlib.sha256()
+    for path in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
+        digest.update(str(path.relative_to(CHECKER_ROOT)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def parse_candidates(source: Path) -> list[dict]:
+    proc = subprocess.run(
+        [
+            "cargo",
+            "run",
+            "--quiet",
+            "--manifest-path",
+            str(TOOL_MANIFEST),
+            "--",
+            str(source),
+        ],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    )
+    return json.loads(proc.stdout)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--limit", type=int, default=12)
+    parser.add_argument("--batch-id", default="nanoda-syntax-0001")
+    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--register", action="store_true")
+    args = parser.parse_args()
+    if args.limit < 1:
+        raise SystemExit("--limit must be positive")
+    if args.register and not args.write:
+        raise SystemExit("--register requires --write")
+
+    line_to_tests = json.loads(COVERAGE.read_text(encoding="utf-8"))
+    baseline_times = {
+        row["test"]: row.get("wall_time") or 0 for row in read_jsonl(BASELINE)
+    }
+    existing_specs = [
+        json.loads(path.read_text(encoding="utf-8")) for path in sorted(MUTATIONS.glob("*.json"))
+    ]
+    existing_by_site = {
+        (spec.get("source_file"), spec.get("source_span"), spec.get("original")): spec
+        for spec in existing_specs
+    }
+    manual_locations = {
+        (spec.get("source_file"), spec.get("source_span"))
+        for spec in existing_specs
+        if not spec.get("id", "").startswith("nanoda-gen-")
+    }
+    manual_locations.update(
+        (row.get("source_file"), row.get("source_span"))
+        for row in read_jsonl(REGISTRY)
+        if not row.get("id", "").startswith("nanoda-gen-")
+        and row.get("source_file")
+        and row.get("source_span")
+    )
+    selected = []
+    candidates = []
+    for source in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
+        source_file = str(source.relative_to(CHECKER_ROOT))
+        for candidate in parse_candidates(source):
+            candidate["source_file"] = source_file
+            candidates.append(candidate)
+    candidates.sort(
+        key=lambda row: (row["source_file"], row["line_start"], row["column_start"])
+    )
+
+    for candidate in candidates:
+        source_file = candidate["source_file"]
+        if candidate["original"].lstrip().startswith("assert!"):
+            continue
+        if source_file == "src/inductive.rs" and candidate["line_start"] >= 1200:
+            continue
+        locations = [
+            f"{source_file}:{line}"
+            for line in range(candidate["line_start"], candidate["line_end"] + 1)
+        ]
+        covering_tests = sorted(
+            {test for location in locations for test in line_to_tests.get(location, [])}
+        )
+        if not covering_tests:
+            continue
+        source_span = (
+            str(candidate["line_start"])
+            if candidate["line_start"] == candidate["line_end"]
+            else f"{candidate['line_start']}-{candidate['line_end']}"
+        )
+        if (source_file, source_span) in manual_locations:
+            continue
+        existing = existing_by_site.get((source_file, source_span, candidate["original"]))
+        if existing and not existing.get("id", "").startswith("nanoda-gen-"):
+            continue
+        identity = "\0".join(
+            [source_file, source_span, candidate["operator"], candidate["original"]]
+        ).encode()
+        mutant_id = existing["id"] if existing else f"nanoda-gen-{sha256_bytes(identity)[:12]}"
+        source_text = (CHECKER_ROOT / source_file).read_text(encoding="utf-8")
+        line_offset = sum(
+            len(line) for line in source_text.splitlines(keepends=True)[: candidate["line_start"] - 1]
+        ) + candidate["column_start"]
+        replace_occurrence = source_text[:line_offset].count(candidate["original"])
+        selected.append(
+            {
+                "id": mutant_id,
+                "checker": "nanoda",
+                "source_file": source_file,
+                "source_span": source_span,
+                "replace_occurrence": replace_occurrence,
+                "original": candidate["original"],
+                "mutated": candidate["mutated"],
+                "mutation_operator": candidate["operator"],
+                "subsystem": candidate["subsystem"],
+                "covering_test_count": len(covering_tests),
+                "estimated_seconds": sum(baseline_times[test] for test in covering_tests),
+                "generator": "tools/nanoda-mutator",
+            }
+        )
+
+    selected.sort(
+        key=lambda row: (row["estimated_seconds"], row["source_file"], row["source_span"])
+    )
+    selected = selected[: args.limit]
+
+    if len(selected) < args.limit:
+        raise SystemExit(f"only {len(selected)} covered, non-duplicate candidates found")
+
+    manifest = {
+        "schema_version": 1,
+        "batch_id": args.batch_id,
+        "checker": "nanoda",
+        "source_sha256": source_digest(),
+        "generator": {
+            "cargo_manifest_sha256": sha256_file(TOOL_MANIFEST),
+            "rust_source_sha256": sha256_file(ROOT / "tools" / "nanoda-mutator" / "src" / "main.rs"),
+            "wrapper_sha256": sha256_file(Path(__file__)),
+        },
+        "requested_count": args.limit,
+        "generated_count": len(selected),
+        "mutants": selected,
+    }
+    if not args.write:
+        print(json.dumps(manifest, indent=2, sort_keys=True))
+        return 0
+
+    for spec in selected:
+        spec_path = MUTATIONS / f"{spec['id']}.json"
+        spec_path.write_text(json.dumps(spec, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    manifest["created_at"] = datetime.now(timezone.utc).isoformat()
+    manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
+    manifest_path.parent.mkdir(parents=True, exist_ok=True)
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    if args.register:
+        registered = {row["id"] for row in read_jsonl(REGISTRY)}
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            for spec in selected:
+                if spec["id"] in registered:
+                    continue
+                handle.write(
+                    json.dumps(
+                        {
+                            "id": spec["id"],
+                            "checker": spec["checker"],
+                            "source_file": spec["source_file"],
+                            "source_span": spec["source_span"],
+                            "mutation_operator": spec["mutation_operator"],
+                            "subsystem": spec["subsystem"],
+                            "status": "REGISTERED",
+                            "classification": "UNKNOWN_EQUIVALENCE",
+                            "notes": f"Generated by batch {args.batch_id}",
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                        },
+                        sort_keys=True,
+                    )
+                    + "\n"
+                )
+    print(json.dumps({"manifest": str(manifest_path), "mutants": [row["id"] for row in selected]}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

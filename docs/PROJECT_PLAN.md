@@ -61,25 +61,35 @@ Current measured state, distinguishing tracked artifacts from local evidence:
   scaffold.
 - Lean Kernel Arena is used as the current source of validators and tests.
 - `nanoda` is the first controlled validator target.
-- Four `nanoda` mutants are registered.
+- Four hand-authored `nanoda` mutants and a mechanically generated mutation
+  population are registered.
 - `nanoda-0001` and `nanoda-0002` are killed by the current Arena corpus.
 - `nanoda-0003` survived the current 197-test materialized corpus.
-- A generated witness distinguishes baseline `nanoda` from `nanoda-0003`.
-- `nanoda-0004` is registered but not yet evaluated.
+- `nanoda-0004` survived all 112 coverage-selected tests without a witness.
+- The official Lean 4.33 checker mechanically confirmed the expected rejection
+  of the `nanoda-0003` witness while accepting its declared-universe control.
+- The confirmed witness is in a controlled augmented corpus; baseline nanoda
+  rejects it and `nanoda-0003` accepts it.
 - Per-test coverage collection completed for all 197 materialized `nanoda`
   tests, with exact instrumented-versus-baseline outcome agreement.
 - The local coverage indexes contain 3,884 covered source locations across 20
   Rust source files. They are excluded from Git under the current artifact
   storage policy, so they are reproducible local evidence but not yet durable
-  repository artifacts.
+  repository artifacts. A tracked identity snapshot binds every local coverage
+  file and all 9.5 GB of materialized corpus inputs by SHA-256.
 - Coverage-guided execution reproduced the `nanoda-0001` kill after 7 of 67
   covering tests and exhausted all 120 covering tests for `nanoda-0003`
   without a difference.
-- Coverage schedules have been produced for all four registered mutants.
+- Coverage schedules and identity-bound comparisons exist for all four
+  hand-authored mutants.
 - Mutation application, coverage scheduling, execution, normalized comparison,
-  status recording, and source restoration are mechanical once a mutation spec
-  exists. Mutation-site generation is still manual and is the next automation
-  boundary.
+  status recording, and source restoration are mechanical.
+- Syntax-aware Rust mutation discovery, covered-site filtering, deterministic
+  identity, exact occurrence replacement, registration, isolated build
+  validation, and resumable batch execution are mechanical and require no LLM.
+- The first active generated batch contains 12 compiling mutants: 1 was killed
+  and 11 survived complete coverage-selected schedules.
+- `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
 
 ## Milestone 0: Reproducible Project Foundation
 
@@ -114,10 +124,9 @@ Exit criteria:
 
 Goal: demonstrate the machinery for a closed mechanical loop for `nanoda`.
 
-Status: in progress. Coverage collection and integrity validation are complete;
-coverage-guided execution has been validated on one killed mutant and one
-survivor. Mutation generation, `nanoda-0004`, witness confirmation, and the
-augmented-corpus rerun remain.
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-1.json`, with every required check recorded as
+`true`.
 
 This is the first critical project milestone. It should demonstrate that the
 project can mechanically classify a modeled semantic fault and, when a
@@ -142,25 +151,22 @@ Completed:
    status recording, and baseline restoration.
 5. Reproduced the prior full-corpus conclusions for `nanoda-0001` and
    `nanoda-0003` through coverage-guided execution.
-
-Remaining:
-
-1. Decide and implement a durable storage policy for coverage manifests and
-   indexes, or record enough identity to regenerate and verify them exactly.
-2. Run `nanoda-0002` through coverage-guided execution to complete the known
-   killed-mutant scheduler audit.
-3. Run `nanoda-0004` through the mutation loop.
-4. Automate deterministic semantic mutation-site generation so the normal
-   mutation loop no longer depends on manual or LLM-authored source edits.
-5. Promote the `nanoda-0003` witness to a candidate regression only after its
-   expected semantics are mechanically confirmed.
-6. Add confirmed candidate regressions to a controlled augmented corpus when
-   such candidates exist.
-7. Rerun the source mutant when an augmented-corpus candidate exists and record
-   whether the augmented corpus kills it.
-8. Verify baseline validator behavior remains consistent on the augmented
-   corpus.
-9. Record all outputs as durable artifacts.
+6. Reproduced `nanoda-0002`'s kill and classified `nanoda-0004` as survived
+   without witness through coverage-guided execution.
+7. Added a compact tracked coverage identity snapshot with a mechanical verifier
+   for ignored local payloads and all materialized corpus inputs.
+8. Added deterministic syntax-aware semantic mutation generation, automatic
+   registration, isolated build validation, and resumable batch execution.
+9. Built and executed a 12-mutant validation-call batch: all 12 compiled in
+   isolation, 1 was killed, and 11 exhausted their covering tests and survived.
+10. Confirmed the `nanoda-0003` witness's expected rejection with the unmodified
+    official Lean checker and a positive control.
+11. Added the confirmed witness to a controlled augmented corpus and reran
+    baseline and mutant nanoda; baseline remained `REJECT` and the mutant was
+    killed by changing to `ACCEPT`.
+12. Recorded compact schedules, comparisons, manifests, classifications,
+    confirmation evidence, and the passing assurance snapshot as tracked
+    artifacts.
 
 Exit criteria:
 
@@ -430,24 +436,21 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Resolve coverage artifact storage and add exact identity fields to the
-   compact tracked metadata needed to reproduce or validate the current local
-   coverage set.
-2. Run `nanoda-0002` and `nanoda-0004` through
-   `scripts/run-mutant-scheduled`.
-3. Add deterministic, syntax-aware semantic mutation generation and automatic
-   registration for an initial bounded `nanoda` mutation batch.
-4. Run the generated batch mechanically using coverage schedules, with periodic
-   full-corpus audits of the coverage exclusion invariant.
-5. Mechanically confirm the expected semantics of the `nanoda-0003` witness
-   with compatible validators or a reference path.
-6. If confirmation succeeds, convert the witness into a controlled
-   augmented-corpus test.
-7. Rerun `nanoda-0003` against the augmented corpus if one is produced, and
-   record the measured result.
-8. Update `docs/RESEARCH_STATUS.md` and produce the first local assurance
-   snapshot draft.
-9. Commit and push after each coherent artifact-producing step.
+1. Begin Milestone 2 by defining common schemas and dependency edges for
+   validators, corpora, mutation batches, coverage, comparisons, witnesses, and
+   assurance snapshots.
+2. Add a repository-wide status command that reports current, stale, missing,
+   superseded, and incompatible artifacts.
+3. Run a sampled full-corpus audit for one killed and one surviving generated
+   mutant to continue testing the coverage exclusion invariant.
+4. Prioritize witness search for the 11 active generated survivors and
+   `nanoda-0004`, beginning with the six quotient-validation survivors.
+5. Expand the semantic operator catalog beyond statement-level
+   `SKIP_VALIDATION` while preserving deterministic identities and build-failure
+   classification.
+6. Prepare direct execution and compatibility metadata for a second independent
+   validator.
+7. Commit and push after each coherent artifact-producing step.
 
 ## Decision Rules
 

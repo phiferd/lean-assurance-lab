@@ -103,21 +103,37 @@ def source_path(spec: dict) -> Path:
     return source_root(spec["checker"]) / spec["source_file"]
 
 
+def replace_nth(text: str, old: str, new: str, occurrence: int) -> str | None:
+    offset = 0
+    for _ in range(occurrence + 1):
+        index = text.find(old, offset)
+        if index < 0:
+            return None
+        offset = index + len(old)
+    return text[:index] + new + text[index + len(old):]
+
+
 def set_source_state(spec: dict, state: str) -> str:
     path = source_path(spec)
     original = spec["original"]
     mutated = spec["mutated"]
     text = path.read_text(encoding="utf-8")
-    target = original if state == "baseline" else mutated
-    other = mutated if state == "baseline" else original
-    if target in text:
-        return "already"
-    if other not in text:
-        raise SystemExit(
-            f"{path}: could not find either mutation text while setting {state}"
-        )
-    path.write_text(text.replace(other, target, 1), encoding="utf-8")
-    return "changed"
+    if state == "baseline":
+        if mutated in text:
+            path.write_text(text.replace(mutated, original, 1), encoding="utf-8")
+            return "changed"
+        if original in text:
+            return "already"
+    elif state == "mutant":
+        if mutated in text:
+            return "already"
+        replaced = replace_nth(text, original, mutated, spec.get("replace_occurrence", 0))
+        if replaced is not None:
+            path.write_text(replaced, encoding="utf-8")
+            return "changed"
+    else:
+        raise ValueError(f"unknown source state: {state}")
+    raise SystemExit(f"{path}: could not find either mutation text while setting {state}")
 
 
 def clear_arena_results(checker: str) -> int:

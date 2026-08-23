@@ -33,10 +33,10 @@ The first batch should be manually reviewed and intentionally small. Prefer
 mutations in code paths tied to kernel semantics rather than parser plumbing or
 performance-only paths.
 
-## Manual Mutant Registry
+## Mutant Registry
 
-Before introducing a bulk mutation framework, every controlled mutant is
-registered in `results/mutants/registry.jsonl`. A record has this shape:
+Every controlled or generated mutant is registered in
+`results/mutants/registry.jsonl`. A record has this shape:
 
 ```json
 {
@@ -55,6 +55,11 @@ registered in `results/mutants/registry.jsonl`. A record has this shape:
 The registry is append-only during exploratory work. If a mutant is superseded,
 append a later record with the same `id` and a newer `status` rather than
 rewriting historical entries.
+
+Automated specs add `replace_occurrence`, generator provenance, and deterministic
+IDs derived from source path, source span, operator, and original statement.
+The initial generator parses Rust statements with `syn`; it does not discover
+sites through text or regular-expression matching.
 
 ## Subsystem Labels
 
@@ -102,6 +107,12 @@ The mutation plausibly changes accepted or rejected proof artifacts, but the
 current corpus does not expose the difference.
 
 This category drives witness generation.
+
+### Survived Without Witness
+
+Every selected covering test matched baseline, but no distinguishing witness is
+currently attached. This is an unresolved semantic state, not evidence of
+equivalence, and it remains eligible for later witness search.
 
 ## Soundness and Completeness Direction
 

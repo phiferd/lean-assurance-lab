@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""Create or verify a compact, tracked identity snapshot for local coverage."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+TEST_ROOT = ARENA_ROOT / "_build" / "tests"
+CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+COVERAGE_DIR = ROOT / "results" / "coverage" / "nanoda"
+DEFAULT_OUTPUT = ROOT / "results" / "manifests" / "coverage-nanoda.json"
+COVERAGE_FILES = (
+    "collection-state.json",
+    "config.json",
+    "coverage.jsonl",
+    "line-to-tests.json",
+    "manifest.json",
+    "test-to-lines.json",
+)
+INPUT_SCRIPTS = (
+    "scripts/collect-coverage",
+    "scripts/reindex-coverage",
+    "scripts/schedule-mutant",
+)
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def sha256_source_tree() -> str:
+    digest = hashlib.sha256()
+    for path in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
+        digest.update(str(path.relative_to(CHECKER_ROOT)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def git_output(*args: str) -> str:
+    return subprocess.run(
+        ["git", *args],
+        cwd=ARENA_ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def corpus_inventory() -> list[dict]:
+    inventory = []
+    for stats_path in sorted(TEST_ROOT.rglob("*.stats.json")):
+        stats = json.loads(stats_path.read_text(encoding="utf-8"))
+        ndjson = stats_path.with_name(stats_path.name.replace(".stats.json", ".ndjson"))
+        if not ndjson.is_file():
+            raise SystemExit(f"missing corpus input for {stats['name']}: {ndjson}")
+        inventory.append(
+            {
+                "name": stats["name"],
+                "path": str(ndjson.relative_to(ARENA_ROOT)),
+                "bytes": ndjson.stat().st_size,
+                "sha256": sha256_file(ndjson),
+            }
+        )
+    return sorted(inventory, key=lambda row: row["name"])
+
+
+def snapshot() -> dict:
+    coverage_manifest = json.loads(
+        (COVERAGE_DIR / "manifest.json").read_text(encoding="utf-8")
+    )
+    coverage_rows = read_jsonl(COVERAGE_DIR / "coverage.jsonl")
+    baseline_rows = read_jsonl(BASELINE)
+    coverage_outcomes = {row["test"]: row["outcome"] for row in coverage_rows}
+    baseline_outcomes = {row["test"]: row["outcome"] for row in baseline_rows}
+    if len(coverage_rows) != len(coverage_outcomes):
+        raise SystemExit("coverage contains duplicate test identities")
+    if len(baseline_rows) != len(baseline_outcomes):
+        raise SystemExit("baseline contains duplicate test identities")
+    if coverage_outcomes != baseline_outcomes:
+        raise SystemExit("coverage outcomes do not exactly match baseline outcomes")
+
+    source_sha256 = sha256_source_tree()
+    if coverage_manifest["source_sha256"] != source_sha256:
+        raise SystemExit("coverage manifest does not match current checker source")
+    inventory = corpus_inventory()
+    inventory_names = [row["name"] for row in inventory]
+    if inventory_names != sorted(baseline_outcomes):
+        raise SystemExit("materialized corpus inventory does not match baseline outcomes")
+
+    return {
+        "schema_version": 1,
+        "artifact_type": "coverage-identity-snapshot",
+        "checker": "nanoda",
+        "arena": {
+            "revision": git_output("rev-parse", "HEAD"),
+            "checker_definition": {
+                "path": "checkers/nanoda.yaml",
+                "sha256": sha256_file(ARENA_ROOT / "checkers" / "nanoda.yaml"),
+            },
+        },
+        "checker_source_sha256": source_sha256,
+        "baseline": {
+            "path": str(BASELINE.relative_to(ROOT)),
+            "sha256": sha256_file(BASELINE),
+            "test_count": len(baseline_rows),
+        },
+        "corpus": {
+            "test_count": len(inventory),
+            "total_bytes": sum(row["bytes"] for row in inventory),
+            "files": inventory,
+        },
+        "coverage": {
+            "manifest": coverage_manifest,
+            "files": {
+                name: {
+                    "bytes": (COVERAGE_DIR / name).stat().st_size,
+                    "sha256": sha256_file(COVERAGE_DIR / name),
+                }
+                for name in COVERAGE_FILES
+            },
+        },
+        "producer_inputs": {
+            name: sha256_file(ROOT / name) for name in INPUT_SCRIPTS
+        },
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--verify", action="store_true")
+    args = parser.parse_args()
+
+    current = snapshot()
+    if args.verify:
+        saved = json.loads(args.output.read_text(encoding="utf-8"))
+        saved.pop("created_at", None)
+        if saved != current:
+            changed = sorted(
+                key for key in set(saved) | set(current) if saved.get(key) != current.get(key)
+            )
+            raise SystemExit(f"coverage snapshot is stale; changed sections: {changed}")
+        print(f"coverage snapshot verified: {args.output}")
+        return 0
+
+    current["created_at"] = datetime.now(timezone.utc).isoformat()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(current, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(f"coverage snapshot written: {args.output}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
