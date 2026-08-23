@@ -1,0 +1,99 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/phiferd/LeanVerifier/schemas/artifact-graph.schema.json",
+  "title": "LeanVerifier Artifact Graph",
+  "type": "object",
+  "required": ["schema_version", "generated_at", "provenance", "nodes"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "provenance": {
+      "type": "object",
+      "required": [
+        "repository_revision",
+        "arena_revision",
+        "validator_source_sha256",
+        "lean_versions",
+        "mutation_specs_sha256",
+        "corpus_inventory_sha256",
+        "scripts_sha256",
+        "configurations_sha256"
+      ],
+      "additionalProperties": true
+    },
+    "nodes": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/node"}
+    }
+  },
+  "$defs": {
+    "dependency": {
+      "type": "object",
+      "required": ["id", "expected_sha256"],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "locator": {
+      "type": "object",
+      "required": ["kind"],
+      "additionalProperties": false,
+      "properties": {
+        "kind": {"enum": ["file", "file_set", "git_revision"]},
+        "path": {"type": "string"},
+        "root": {"type": "string"},
+        "include": {"type": "array", "items": {"type": "string"}},
+        "exclude": {"type": "array", "items": {"type": "string"}}
+      }
+    },
+    "node": {
+      "type": "object",
+      "required": [
+        "id",
+        "artifact_type",
+        "lifecycle",
+        "required_for_current_claims",
+        "expected_sha256",
+        "dependencies"
+      ],
+      "additionalProperties": false,
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "artifact_type": {
+          "enum": [
+            "repository",
+            "validator",
+            "toolchain",
+            "configuration",
+            "script",
+            "corpus",
+            "mutation-model",
+            "mutation-spec",
+            "coverage",
+            "run",
+            "comparison",
+            "witness",
+            "classification",
+            "report"
+          ]
+        },
+        "lifecycle": {"enum": ["current", "historical", "superseded"]},
+        "required_for_current_claims": {"type": "boolean"},
+        "expected_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "locator": {"$ref": "#/$defs/locator"},
+        "dependencies": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/dependency"}
+        },
+        "notes": {"type": "string"},
+        "compatibility": {
+          "type": "object",
+          "additionalProperties": {"type": ["string", "number", "boolean"]}
+        }
+      }
+    }
+  }
+}

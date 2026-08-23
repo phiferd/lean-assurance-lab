@@ -71,6 +71,17 @@ Last updated: 2026-08-23
   baseline nanoda rejects it while `nanoda-0003` accepts it.
 - Produced `results/assurance/milestone-1.json`; all eight Milestone 1 checks
   pass.
+- Defined a versioned artifact graph schema and attested 29 nodes spanning
+  repositories, validators, toolchains, configuration, scripts, corpora,
+  mutation definitions, coverage, runs, comparisons, witnesses,
+  classifications, and reports.
+- Added recursive current/stale/missing evaluation, historical and superseded
+  lifecycle states, dependency-digest explanations, and report gates that
+  reject stale inputs.
+- Mechanically simulated validator-source, corpus, mutation-model, and
+  expected-semantics changes; every required descendant became stale.
+- Produced `results/assurance/milestone-2.json`; all nine Milestone 2 checks
+  pass.
 
 ## Command Log
 
@@ -130,6 +141,14 @@ cd /Users/danphifer/Documents/ChatGPT/LeanVerifier
 scripts/confirm-witness nanoda-0003-undeclared-const-universe --checker official --control corpus/controls/nanoda-0003-declared-const-universe.ndjson
 scripts/run-mutant-input nanoda-0003 corpus/generated/nanoda-0003-undeclared-const-universe.ndjson --output results/mutants/nanoda-0003/augmented-comparison.json
 scripts/assurance-snapshot
+scripts/report --output results/assurance/milestone-1-report.json
+scripts/build-artifact-graph
+scripts/artifact-status --require-current --output results/artifacts/status.json
+.venv-arena/bin/python -c 'import json, jsonschema; from pathlib import Path; jsonschema.Draft202012Validator(json.loads(Path("schemas/artifact-graph.schema.json").read_text()), format_checker=jsonschema.FormatChecker()).validate(json.loads(Path("results/artifacts/graph.json").read_text()))'
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+scripts/milestone-2-assurance
+scripts/artifact-status --simulate-change validator:nanoda
+scripts/artifact-status --simulate-missing corpus:arena-materialized
 ```
 
 Notes:
@@ -198,6 +217,11 @@ unknown_equivalence: 3
 witnesses_found: 1
 minimized_witnesses: 0
 arena_regression_candidates: 1
+artifact_nodes: 29
+current_artifacts: 26
+historical_artifacts: 1
+superseded_artifacts: 2
+milestone_2_checks_passing: 9
 ```
 
 ## First Mutation Result
@@ -268,13 +292,17 @@ arena_regression_candidates: 1
   broader semantic operator families remain future work.
 - Large corpus files are expensive: `mathlib.ndjson` is about 5.2 GB,
   `cslib.ndjson` about 2.0 GB, and `cedar.ndjson` about 790 MB.
+- The repository revision recorded by an attestation becomes historical after
+  the attestation commit. Current claims depend on content digests and the exact
+  upstream Arena revision, avoiding a self-referential commit hash while
+  preserving the producing repository revision for audit.
 
 ## Next Concrete Experiment
 
-1. Define the common artifact graph and implement repository-wide staleness and
-   invalidation reporting for Milestone 2.
-2. Run a sampled full-corpus audit for one killed and one surviving generated
+1. Run a sampled full-corpus audit for one killed and one surviving generated
    mutant.
-3. Begin mechanical witness search for the six quotient-validation survivors.
+2. Begin mechanical witness search for the six quotient-validation survivors.
+3. Expand the semantic mutation catalog beyond statement-level skipped
+   validation calls.
 4. Prepare a second independent validator for direct compatibility and
    confirmation runs.

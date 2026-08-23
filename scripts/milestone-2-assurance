@@ -1,0 +1,150 @@
+#!/usr/bin/env python3
+"""Produce and gate the Milestone 2 artifact-invalidation assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import evaluate_graph, load_graph, require_current  # noqa: E402
+
+
+INVALIDATION_CONTRACTS = {
+    "validator:nanoda": {
+        "coverage:local-payload",
+        "coverage:identity-snapshot",
+        "comparison:controlled-mutants",
+        "run:mutation-batch-0003",
+        "comparison:generated-mutants",
+        "classification:registry",
+        "report:mutation-summary",
+        "report:milestone1-assurance",
+    },
+    "corpus:arena-materialized": {
+        "coverage:local-payload",
+        "coverage:identity-snapshot",
+        "comparison:controlled-mutants",
+        "run:mutation-batch-0003",
+        "report:mutation-summary",
+        "report:milestone1-assurance",
+    },
+    "mutation-model:nanoda": {
+        "mutation-spec:catalog",
+        "comparison:controlled-mutants",
+        "run:mutation-batch-0003",
+        "comparison:generated-mutants",
+        "classification:registry",
+        "report:mutation-summary",
+        "report:milestone1-assurance",
+    },
+    "input:expected-semantics-0003": {
+        "comparison:witness-reference",
+        "classification:regression-0003",
+        "run:augmented-0003",
+        "report:mutation-summary",
+        "report:milestone1-assurance",
+    },
+}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--graph",
+        type=Path,
+        default=ROOT / "results" / "artifacts" / "graph.json",
+    )
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "results" / "assurance" / "milestone-2.json",
+    )
+    args = parser.parse_args()
+    graph = load_graph(args.graph)
+    nodes = {node["id"]: node for node in graph["nodes"]}
+    statuses = evaluate_graph(graph, ROOT)
+
+    invalidation = {}
+    for changed, required_stale in INVALIDATION_CONTRACTS.items():
+        override = hashlib.sha256(f"simulated:{changed}".encode()).hexdigest()
+        simulated = evaluate_graph(graph, ROOT, {changed: override})
+        affected = {
+            node_id
+            for node_id, status in simulated.items()
+            if status["lifecycle"] == "current" and status["effective_state"] != "CURRENT"
+        }
+        invalidation[changed] = {
+            "status": "PASS" if required_stale <= affected else "FAIL",
+            "required_stale": sorted(required_stale),
+            "affected_current_nodes": sorted(affected),
+            "missing_expected": sorted(required_stale - affected),
+        }
+
+    try:
+        require_current(graph, ROOT)
+        current_gate = True
+        gate_error = None
+    except RuntimeError as error:
+        current_gate = False
+        gate_error = str(error)
+
+    artifact_types = {node["artifact_type"] for node in graph["nodes"]}
+    required_types = {
+        "validator", "corpus", "mutation-spec", "coverage", "run",
+        "comparison", "witness", "classification", "report",
+    }
+    historical = {
+        node_id: statuses[node_id]["state"]
+        for node_id, node in nodes.items()
+        if node["lifecycle"] != "current"
+    }
+    checks = {
+        "all_required_artifacts_current": current_gate,
+        "required_artifact_types_present": required_types <= artifact_types,
+        "all_dependencies_content_pinned": all(
+            len(dependency["expected_sha256"]) == 64
+            for node in graph["nodes"]
+            for dependency in node["dependencies"]
+        ),
+        "source_change_invalidates_derivatives": invalidation["validator:nanoda"]["status"] == "PASS",
+        "corpus_change_invalidates_derivatives": invalidation["corpus:arena-materialized"]["status"] == "PASS",
+        "mutation_model_change_invalidates_population": invalidation["mutation-model:nanoda"]["status"] == "PASS",
+        "expected_semantics_change_invalidates_regression": invalidation["input:expected-semantics-0003"]["status"] == "PASS",
+        "historical_results_preserved": {
+            "run:mutation-batch-0001", "run:mutation-batch-0002"
+        } <= set(historical),
+        "report_inputs_are_graph_gated": {
+            "script:artifact-system", "script:reporting"
+        } <= {dependency["id"] for dependency in nodes["report:mutation-summary"]["dependencies"]},
+    }
+    existing = {}
+    if args.output.exists():
+        existing = json.loads(args.output.read_text(encoding="utf-8"))
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-2",
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "current_gate_error": gate_error,
+        "artifact_graph": str(args.graph.relative_to(ROOT)),
+        "artifact_count": len(graph["nodes"]),
+        "historical_artifacts": historical,
+        "invalidation_simulations": invalidation,
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

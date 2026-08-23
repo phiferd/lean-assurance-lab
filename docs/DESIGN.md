@@ -113,6 +113,29 @@ a complete generated mutation batch, independent expected-outcome confirmation
 for the promoted witness, and a measured augmented-corpus kill of the source
 mutant.
 
+### Artifact Graph And Invalidation
+
+`results/artifacts/graph.json` is the content-addressed dependency graph for
+current assurance claims. Its schema is `schemas/artifact-graph.schema.json`.
+Each node records an artifact type, lifecycle, locator, expected SHA-256, and
+the exact digest expected for every dependency. Git revision locators bind this
+repository and Arena; file and file-set locators bind validator sources,
+toolchains, configurations, mutation definitions, corpora, scripts, outcomes,
+comparisons, witnesses, classifications, and reports.
+
+`scripts/build-artifact-graph` attests the current graph.
+`scripts/artifact-status` recomputes every locator and recursively reports
+`CURRENT`, `STALE`, or `MISSING`; retained nodes are displayed as `HISTORICAL`
+or `SUPERSEDED` without becoming current claims. A dependency digest mismatch
+propagates staleness through every derived node, which prevents artifacts from
+incompatible revisions or configurations from being silently combined.
+
+`scripts/report` and `scripts/assurance-snapshot` require their graph
+dependencies to be current whenever an attested graph exists. Their explicit
+`--allow-stale-artifacts` option is diagnostic only. The Milestone 2 gate
+simulates validator-source, corpus, mutation-model, and expected-semantics
+changes and requires each to invalidate the intended descendants.
+
 Each mutant record should include:
 
 ```yaml

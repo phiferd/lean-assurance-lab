@@ -1,0 +1,442 @@
+#!/usr/bin/env python3
+"""Attest the current LeanVerifier artifact dependency graph."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import composite_digest, locator_digest, validate_graph  # noqa: E402
+
+
+def node(
+    node_id: str,
+    artifact_type: str,
+    *,
+    locator: dict | None = None,
+    dependencies: list[str] | None = None,
+    lifecycle: str = "current",
+    required: bool = False,
+    notes: str = "",
+    compatibility: dict | None = None,
+) -> dict:
+    result = {
+        "id": node_id,
+        "artifact_type": artifact_type,
+        "lifecycle": lifecycle,
+        "required_for_current_claims": required,
+        "dependencies": dependencies or [],
+        "notes": notes,
+    }
+    if locator:
+        result["locator"] = locator
+    if compatibility:
+        result["compatibility"] = compatibility
+    return result
+
+
+def file(path: str) -> dict:
+    return {"kind": "file", "path": path}
+
+
+def files(root: str, *patterns: str) -> dict:
+    return {"kind": "file_set", "root": root, "include": list(patterns), "exclude": []}
+
+
+def revision(path: str) -> dict:
+    return {"kind": "git_revision", "path": path}
+
+
+def git_revision(path: Path) -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=path,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
+def catalog() -> list[dict]:
+    controlled_files = []
+    for mutant_id in [f"nanoda-{index:04d}" for index in range(1, 5)]:
+        controlled_files.extend(
+            [
+                f"{mutant_id}/schedule.json",
+                f"{mutant_id}/scheduled-comparison.json",
+            ]
+        )
+    return [
+        node(
+            "input:repository-revision",
+            "repository",
+            locator=revision("."),
+            lifecycle="historical",
+            notes="Exact repository revision at graph attestation; content dependencies use file hashes to avoid self-reference.",
+        ),
+        node("input:arena-revision", "repository", locator=revision("external/lean-kernel-arena"), required=True),
+        node(
+            "validator:nanoda",
+            "validator",
+            locator=files(
+                "external/lean-kernel-arena/_build/checkers/nanoda/src",
+                "Cargo.toml",
+                "Cargo.lock",
+                "config.json",
+                "src/**/*.rs",
+            ),
+            dependencies=["input:arena-revision"],
+            required=True,
+        ),
+        node(
+            "validator:official",
+            "validator",
+            locator=files(
+                "external/lean-kernel-arena/checkers/official-v4.33.0",
+                "lakefile.toml",
+                "lean-toolchain",
+                "lake-manifest.json",
+                "*.lean",
+            ),
+            dependencies=["input:arena-revision"],
+            required=True,
+            compatibility={"lean4export_format": "3.1.0", "lean_version": "4.33.0"},
+        ),
+        node(
+            "toolchain:lean-and-rust",
+            "toolchain",
+            locator=files(
+                ".",
+                "external/lean-kernel-arena/checkers/official.yaml",
+                "external/lean-kernel-arena/checkers/nanoda.yaml",
+                "tools/nanoda-mutator/Cargo.lock",
+            ),
+            required=True,
+            compatibility={"witness_lean_version": "4.29.1", "official_lean_version": "4.33.0"},
+        ),
+        node(
+            "configuration:nanoda",
+            "configuration",
+            locator=files(
+                ".",
+                "results/coverage/nanoda/config.json",
+                "results/coverage/nanoda/collection-state.json",
+                "external/lean-kernel-arena/checkers/nanoda.yaml",
+            ),
+            required=True,
+        ),
+        node(
+            "script:coverage",
+            "script",
+            locator=files(".", "scripts/collect-coverage", "scripts/reindex-coverage", "scripts/snapshot-coverage"),
+            required=True,
+        ),
+        node(
+            "script:mutation-execution",
+            "script",
+            locator=files(
+                ".",
+                "scripts/schedule-mutant",
+                "scripts/run-mutant",
+                "scripts/run-mutant-scheduled",
+                "scripts/run-mutant-input",
+                "scripts/run-mutation-batch",
+                "scripts/validate-mutation-batch",
+                "scripts/mutate",
+            ),
+            required=True,
+        ),
+        node(
+            "script:reporting",
+            "script",
+            locator=files(".", "scripts/report", "scripts/assurance-snapshot"),
+            required=True,
+        ),
+        node(
+            "script:artifact-system",
+            "script",
+            locator=files(
+                ".",
+                "lib/artifact_graph.py",
+                "schemas/artifact-graph.schema.json",
+                "scripts/artifact-status",
+                "scripts/build-artifact-graph",
+                "scripts/milestone-2-assurance",
+                "tests/test_artifact_graph.py",
+            ),
+            required=True,
+        ),
+        node(
+            "mutation-model:nanoda",
+            "mutation-model",
+            locator=files(
+                ".",
+                "docs/MUTATION_MODEL.md",
+                "scripts/generate-mutations",
+                "tools/nanoda-mutator/Cargo.toml",
+                "tools/nanoda-mutator/Cargo.lock",
+                "tools/nanoda-mutator/src/**/*.rs",
+            ),
+            required=True,
+        ),
+        node(
+            "mutation-spec:catalog",
+            "mutation-spec",
+            locator=files("mutations", "*.json"),
+            dependencies=["mutation-model:nanoda"],
+            required=True,
+        ),
+        node(
+            "corpus:arena-materialized",
+            "corpus",
+            locator=files("external/lean-kernel-arena/_build/tests", "**/*.ndjson"),
+            dependencies=["input:arena-revision"],
+            required=True,
+            compatibility={"lean4export_format": "3.1.0", "test_count": 197},
+        ),
+        node(
+            "corpus:baseline-outcomes",
+            "run",
+            locator=file("results/baseline/outcomes/nanoda-full.jsonl"),
+            dependencies=["validator:nanoda", "corpus:arena-materialized", "configuration:nanoda"],
+            required=True,
+        ),
+        node(
+            "coverage:local-payload",
+            "coverage",
+            locator=files("results/coverage/nanoda", "*.json", "*.jsonl"),
+            dependencies=[
+                "validator:nanoda",
+                "corpus:arena-materialized",
+                "corpus:baseline-outcomes",
+                "configuration:nanoda",
+                "script:coverage",
+            ],
+            required=True,
+        ),
+        node(
+            "coverage:identity-snapshot",
+            "coverage",
+            locator=file("results/manifests/coverage-nanoda.json"),
+            dependencies=["coverage:local-payload"],
+            required=True,
+        ),
+        node(
+            "comparison:controlled-mutants",
+            "comparison",
+            locator={
+                "kind": "file_set",
+                "root": "results/mutants",
+                "include": controlled_files,
+                "exclude": [],
+            },
+            dependencies=[
+                "coverage:identity-snapshot",
+                "mutation-spec:catalog",
+                "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "run:mutation-batch-0001",
+            "run",
+            locator=file("results/mutation-batches/nanoda-syntax-0001.json"),
+            dependencies=["mutation-model:nanoda", "mutation-spec:catalog", "coverage:identity-snapshot"],
+            lifecycle="superseded",
+        ),
+        node(
+            "run:mutation-batch-0002",
+            "run",
+            locator=file("results/mutation-batches/nanoda-syntax-0002.json"),
+            dependencies=["mutation-model:nanoda", "mutation-spec:catalog", "coverage:identity-snapshot"],
+            lifecycle="superseded",
+        ),
+        node(
+            "run:mutation-batch-0003",
+            "run",
+            locator=file("results/mutation-batches/nanoda-syntax-0003.json"),
+            dependencies=[
+                "validator:nanoda",
+                "corpus:arena-materialized",
+                "mutation-model:nanoda",
+                "mutation-spec:catalog",
+                "coverage:identity-snapshot",
+                "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:generated-mutants",
+            "comparison",
+            locator=files("results/mutants", "nanoda-gen-*/scheduled-comparison.json"),
+            dependencies=["run:mutation-batch-0003"],
+            required=True,
+        ),
+        node(
+            "classification:registry",
+            "classification",
+            locator=file("results/mutants/registry.jsonl"),
+            dependencies=["comparison:controlled-mutants", "comparison:generated-mutants"],
+            required=True,
+        ),
+        node(
+            "witness:nanoda-0003",
+            "witness",
+            locator=files(
+                ".",
+                "corpus/generated/nanoda-0003-undeclared-const-universe.ndjson",
+                "results/witnesses/nanoda-0003-undeclared-const-universe/metadata.json",
+            ),
+            dependencies=["comparison:controlled-mutants", "mutation-spec:catalog"],
+            required=True,
+        ),
+        node(
+            "input:expected-semantics-0003",
+            "configuration",
+            locator=files(
+                ".",
+                "corpus/expected/nanoda-0003-undeclared-const-universe.json",
+                "corpus/controls/nanoda-0003-declared-const-universe.ndjson",
+            ),
+            required=True,
+        ),
+        node(
+            "comparison:witness-reference",
+            "comparison",
+            locator=file("results/witnesses/nanoda-0003-undeclared-const-universe/confirmation.json"),
+            dependencies=["witness:nanoda-0003", "input:expected-semantics-0003", "validator:official"],
+            required=True,
+        ),
+        node(
+            "classification:regression-0003",
+            "classification",
+            locator=file("corpus/augmented/manifest.json"),
+            dependencies=["comparison:witness-reference", "input:expected-semantics-0003"],
+            required=True,
+        ),
+        node(
+            "run:augmented-0003",
+            "run",
+            locator=file("results/mutants/nanoda-0003/augmented-comparison.json"),
+            dependencies=[
+                "validator:nanoda",
+                "mutation-spec:catalog",
+                "witness:nanoda-0003",
+                "classification:regression-0003",
+                "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "report:mutation-summary",
+            "report",
+            locator=file("results/assurance/milestone-1-report.json"),
+            dependencies=[
+                "classification:registry",
+                "comparison:controlled-mutants",
+                "comparison:generated-mutants",
+                "classification:regression-0003",
+                "script:reporting",
+                "script:artifact-system",
+            ],
+            required=True,
+        ),
+        node(
+            "report:milestone1-assurance",
+            "report",
+            locator=file("results/assurance/milestone-1.json"),
+            dependencies=[
+                "coverage:identity-snapshot",
+                "comparison:controlled-mutants",
+                "run:mutation-batch-0003",
+                "comparison:witness-reference",
+                "run:augmented-0003",
+                "report:mutation-summary",
+                "script:reporting",
+                "script:artifact-system",
+            ],
+            required=True,
+        ),
+    ]
+
+
+def attest(nodes: list[dict]) -> list[dict]:
+    expected: dict[str, str | None] = {}
+    pending = {draft["id"]: draft for draft in nodes}
+    output = []
+    while pending:
+        progressed = False
+        for node_id, draft in list(pending.items()):
+            dependency_ids = draft["dependencies"]
+            if any(dependency_id not in expected for dependency_id in dependency_ids):
+                continue
+            dependencies = [
+                {"id": dependency_id, "expected_sha256": expected[dependency_id]}
+                for dependency_id in dependency_ids
+            ]
+            if "locator" in draft:
+                digest, _ = locator_digest(ROOT, draft["locator"])
+            else:
+                digest = composite_digest(dependencies, expected)
+            if digest is None:
+                raise SystemExit(f"cannot attest missing artifact: {node_id}")
+            final = {**draft, "dependencies": dependencies, "expected_sha256": digest}
+            output.append(final)
+            expected[node_id] = digest
+            del pending[node_id]
+            progressed = True
+        if not progressed:
+            raise SystemExit(f"artifact dependency cycle: {sorted(pending)}")
+    return output
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "results" / "artifacts" / "graph.json",
+    )
+    args = parser.parse_args()
+    nodes = attest(catalog())
+    by_id = {item["id"]: item for item in nodes}
+    coverage_manifest = json.loads(
+        (ROOT / "results" / "coverage" / "nanoda" / "manifest.json").read_text(encoding="utf-8")
+    )
+    graph = {
+        "schema_version": 1,
+        "generated_at": datetime.now(timezone.utc).isoformat(),
+        "provenance": {
+            "repository_revision": git_revision(ROOT),
+            "arena_revision": git_revision(ROOT / "external" / "lean-kernel-arena"),
+            "validator_source_sha256": by_id["validator:nanoda"]["expected_sha256"],
+            "lean_versions": {
+                "witness": "4.29.1",
+                "official_reference": "4.33.0",
+                "lean4export": "3.1.0",
+                "rustc": coverage_manifest["rustc"],
+            },
+            "mutation_specs_sha256": by_id["mutation-spec:catalog"]["expected_sha256"],
+            "corpus_inventory_sha256": by_id["corpus:arena-materialized"]["expected_sha256"],
+            "scripts_sha256": by_id["script:mutation-execution"]["expected_sha256"],
+            "configurations_sha256": by_id["configuration:nanoda"]["expected_sha256"],
+        },
+        "nodes": nodes,
+    }
+    validate_graph(graph)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(graph, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

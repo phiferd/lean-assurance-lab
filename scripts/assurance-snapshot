@@ -6,11 +6,16 @@ from __future__ import annotations
 import argparse
 import json
 import subprocess
+import sys
 from datetime import datetime, timezone
 from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+
 INITIAL_MUTANTS = [f"nanoda-{index:04d}" for index in range(1, 5)]
 
 
@@ -25,7 +30,19 @@ def main() -> int:
         type=Path,
         default=ROOT / "results" / "assurance" / "milestone-1.json",
     )
+    parser.add_argument(
+        "--allow-stale-artifacts",
+        action="store_true",
+        help="emit a diagnostic snapshot without enforcing the artifact graph",
+    )
     args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        graph = load_graph(graph_path)
+        try:
+            require_current(graph, ROOT, ["report:milestone1-assurance"], dependencies_only=True)
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
     coverage_verify = subprocess.run(
         [str(ROOT / "scripts" / "snapshot-coverage"), "--verify"],
         cwd=ROOT,
@@ -82,10 +99,13 @@ def main() -> int:
         "augmented_baseline_matches_expected": augmented["baseline"]["normalized_outcome"]
         == "REJECT",
     }
+    existing = {}
+    if args.output.exists():
+        existing = json.loads(args.output.read_text(encoding="utf-8"))
     snapshot = {
         "schema_version": 1,
         "snapshot": "milestone-1",
-        "created_at": datetime.now(timezone.utc).isoformat(),
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
         "status": "PASS" if all(checks.values()) else "FAIL",
         "checks": checks,
         "missing_initial_results": missing_results,

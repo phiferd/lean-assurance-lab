@@ -28,17 +28,12 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestone 1 is deliberately small:
-
-1. Use Lean Kernel Arena locally.
-2. Select `nanoda` as the first mutation target unless investigation shows a
-   better small checker.
-3. Build one manually introduced semantic mutation.
-4. Run the Arena corpus against baseline and mutant.
-5. Record distinguishing tests.
-6. Automate the workflow.
-7. Add a small controlled mutation batch.
-8. Produce the first mutation-survival report.
+Milestones 1 and 2 are complete. The project has a closed mechanical mutation
+loop for `nanoda` and a content-addressed artifact graph that expires derived
+claims when validator source, corpus inputs, mutation definitions, expected
+semantics, scripts, or configuration change. Current work begins Milestone 3:
+expanding the documented semantic mutation model and auditing coverage-guided
+execution against sampled full-corpus runs.
 
 ## Repository Layout
 
@@ -56,13 +51,16 @@ corpus/
   generated/
   minimized/
 scripts/
+  artifact-status
   assurance-snapshot
+  build-artifact-graph
   collect-coverage
   compare
   confirm-witness
   generate
   generate-mutations
   minimize
+  milestone-2-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -191,3 +189,16 @@ scripts/snapshot-coverage
 scripts/snapshot-coverage --verify
 scripts/assurance-snapshot
 ```
+
+Attest and inspect the repository-wide dependency graph with:
+
+```sh
+scripts/build-artifact-graph
+scripts/artifact-status --require-current
+scripts/milestone-2-assurance
+```
+
+The status command reports current, stale, missing, historical, and superseded
+artifacts. Use `--simulate-change ARTIFACT_ID` or
+`--simulate-missing ARTIFACT_ID` to inspect invalidation without modifying an
+input. Normal report commands refuse stale dependencies once the graph exists.

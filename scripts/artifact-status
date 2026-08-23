@@ -1,0 +1,82 @@
+#!/usr/bin/env python3
+"""Report current, stale, missing, historical, and superseded artifacts."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import evaluate_graph, load_graph, require_current  # noqa: E402
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--graph", type=Path, default=ROOT / "results" / "artifacts" / "graph.json"
+    )
+    parser.add_argument("--require-current", action="store_true")
+    parser.add_argument("--require-dependencies")
+    parser.add_argument("--simulate-change", action="append", default=[])
+    parser.add_argument("--simulate-missing", action="append", default=[])
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    graph = load_graph(args.graph)
+    node_ids = {node["id"] for node in graph["nodes"]}
+    unknown = (set(args.simulate_change) | set(args.simulate_missing)) - node_ids
+    if unknown:
+        raise SystemExit(f"unknown artifact ids: {sorted(unknown)}")
+    overrides = {
+        node_id: hashlib.sha256(f"simulated:{node_id}".encode()).hexdigest()
+        for node_id in args.simulate_change
+    }
+    overrides.update({node_id: None for node_id in args.simulate_missing})
+    statuses = evaluate_graph(graph, ROOT, overrides)
+    counts: dict[str, int] = {}
+    for status in statuses.values():
+        counts[status["state"]] = counts.get(status["state"], 0) + 1
+    affected = [
+        node_id
+        for node_id, status in statuses.items()
+        if status["effective_state"] != "CURRENT"
+        and status["lifecycle"] == "current"
+    ]
+    report = {
+        "schema_version": 1,
+        "graph": str(args.graph.relative_to(ROOT)),
+        "counts": dict(sorted(counts.items())),
+        "current_claims_valid": not any(
+            status["required_for_current_claims"]
+            and status["effective_state"] != "CURRENT"
+            for status in statuses.values()
+        ),
+        "simulated_changes": sorted(args.simulate_change),
+        "simulated_missing": sorted(args.simulate_missing),
+        "affected_current_nodes": sorted(affected),
+        "artifacts": [statuses[node_id] for node_id in sorted(statuses)],
+    }
+    rendered = json.dumps(report, indent=2, sort_keys=True) + "\n"
+    if args.output:
+        args.output.parent.mkdir(parents=True, exist_ok=True)
+        args.output.write_text(rendered, encoding="utf-8")
+    else:
+        print(rendered, end="")
+    try:
+        if args.require_current:
+            require_current(graph, ROOT)
+        if args.require_dependencies:
+            require_current(graph, ROOT, [args.require_dependencies], dependencies_only=True)
+    except RuntimeError as error:
+        print(str(error), file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

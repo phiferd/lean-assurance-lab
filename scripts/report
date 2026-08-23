@@ -9,7 +9,13 @@ from __future__ import annotations
 
 import argparse
 import json
+import sys
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
 
 
 def read_jsonl(path: Path) -> list[dict]:
@@ -56,7 +62,20 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results-root", type=Path, default=Path("results"))
     parser.add_argument("--output", type=Path)
+    parser.add_argument(
+        "--allow-stale-artifacts",
+        action="store_true",
+        help="emit a diagnostic report without enforcing the artifact graph",
+    )
     args = parser.parse_args()
+
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        graph = load_graph(graph_path)
+        try:
+            require_current(graph, ROOT, ["report:mutation-summary"], dependencies_only=True)
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
 
     registry = read_jsonl(args.results_root / "mutants" / "registry.jsonl")
     mutants = latest_by_id(registry)

@@ -90,12 +90,18 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - The first active generated batch contains 12 compiling mutants: 1 was killed
   and 11 survived complete coverage-selected schedules.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
+- `results/artifacts/graph.json` content-addresses 29 input and derived
+  artifacts; 26 current artifacts pass, with one historical repository
+  attestation and two superseded mutation batches retained.
+- `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
+  mechanically verifies all four required invalidation paths.
 
 ## Milestone 0: Reproducible Project Foundation
 
 Goal: make the project state durable, versioned, and inspectable.
 
-Status: mostly complete, with remaining artifact-identity work.
+Status: complete as of 2026-08-23. Artifact identity and repository-wide
+consistency checks are implemented by the Milestone 2 graph.
 
 Tasks:
 
@@ -192,7 +198,10 @@ optional augmented corpus -> measured rerun result
 
 Goal: make assurance state expire correctly when inputs change.
 
-Tasks:
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-2.json`, with all nine checks passing.
+
+Completed:
 
 1. Define an artifact schema for validators, corpora, mutation specs, coverage,
    runs, comparisons, witnesses, classifications, and reports.
@@ -436,21 +445,18 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Begin Milestone 2 by defining common schemas and dependency edges for
-   validators, corpora, mutation batches, coverage, comparisons, witnesses, and
-   assurance snapshots.
-2. Add a repository-wide status command that reports current, stale, missing,
-   superseded, and incompatible artifacts.
-3. Run a sampled full-corpus audit for one killed and one surviving generated
+1. Run a sampled full-corpus audit for one killed and one surviving generated
    mutant to continue testing the coverage exclusion invariant.
-4. Prioritize witness search for the 11 active generated survivors and
+2. Prioritize witness search for the 11 active generated survivors and
    `nanoda-0004`, beginning with the six quotient-validation survivors.
-5. Expand the semantic operator catalog beyond statement-level
+3. Expand the semantic operator catalog beyond statement-level
    `SKIP_VALIDATION` while preserving deterministic identities and build-failure
    classification.
-6. Prepare direct execution and compatibility metadata for a second independent
+4. Prepare direct execution and compatibility metadata for a second independent
    validator.
-7. Commit and push after each coherent artifact-producing step.
+5. Define durable remote storage for ignored coverage and materialized-corpus
+   payloads while retaining content-addressed local verification.
+6. Commit and push after each coherent artifact-producing step.
 
 ## Decision Rules
 
