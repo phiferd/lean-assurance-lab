@@ -24,10 +24,10 @@ The project is working toward these durable outcomes:
    corpora.
 2. A mechanical artifact graph that records inputs, revisions, assumptions,
    results, and unresolved states.
-3. A process for discovering validation gaps and turning confirmed gaps into
-   shared regression tests.
+3. A process for searching for validation gaps, classifying the result, and
+   turning confirmed gaps into shared regression tests when they exist.
 4. Evidence about whether generated tests improve the ecosystem generally,
-   rather than only one validator implementation.
+   have no measurable effect, regress, or remain unresolved.
 5. Reports that make strengths, weaknesses, costs, disagreements, and unknowns
    visible to the Lean community.
 
@@ -45,6 +45,12 @@ models, a measured assurance condition currently holds or fails.
 The near-term strategy uses semantic mutation testing, coverage-guided
 execution, witness generation, minimization, and cross-validator confirmation.
 Those methods are implementation strategy, not constitutional identity.
+
+Milestones succeed by producing scoped measurements, classifications, and
+reports. They must not depend on finding a flaw, proving a theorem, producing a
+positive transfer result, or improving a metric. "None found," "no measurable
+change," "inconclusive," "incompatible," and "unresolved" are valid outputs
+when they are mechanically grounded and clearly reported.
 
 ## Current Baseline
 
@@ -94,10 +100,11 @@ Exit criteria:
 
 ## Milestone 1: Complete the Single-Validator Hardening Loop
 
-Goal: demonstrate one closed mechanical loop for `nanoda`.
+Goal: demonstrate the machinery for a closed mechanical loop for `nanoda`.
 
-This is the first critical project milestone. It should prove that the project
-can move from a modeled semantic fault to a confirmed corpus improvement.
+This is the first critical project milestone. It should demonstrate that the
+project can mechanically classify a modeled semantic fault and, when a
+confirmed corpus gap exists, move from that gap to a regression candidate.
 
 Tasks:
 
@@ -118,26 +125,32 @@ Tasks:
 5. Run `nanoda-0004` through the mutation loop.
 6. Promote the `nanoda-0003` witness to a candidate regression only after its
    expected semantics are mechanically confirmed.
-7. Add confirmed candidate regressions to a controlled augmented corpus.
-8. Rerun the source mutant and verify the augmented corpus kills it.
+7. Add confirmed candidate regressions to a controlled augmented corpus when
+   such candidates exist.
+8. Rerun the source mutant when an augmented-corpus candidate exists and record
+   whether the augmented corpus kills it.
 9. Verify baseline validator behavior remains consistent on the augmented
    corpus.
 10. Record all outputs as durable artifacts.
 
 Exit criteria:
 
-- At least one semantic survivor is converted into a confirmed regression
-  candidate.
-- The augmented corpus kills the source mutant that originally survived.
-- The expected outcome of the generated test is mechanically established.
+- The system classifies evaluated mutants as killed, survived with witness,
+  survived without witness, equivalent or unreachable with evidence,
+  disagreement, or unresolved.
+- If a generated witness is promoted to a regression candidate, its expected
+  outcome is mechanically established.
+- If an augmented corpus is produced, the source mutant is rerun and the result
+  is recorded, whether killed or not.
 - Coverage-guided execution is shown to preserve mutation conclusions for
   tested mutants, or its limitations are documented.
 
 Primary artifact:
 
 ```text
-semantic mutant -> existing corpus gap -> generated witness ->
-confirmed regression -> augmented corpus -> source mutant killed
+semantic mutant -> existing corpus evaluation -> survivor classification ->
+optional generated witness -> optional confirmed regression ->
+optional augmented corpus -> measured rerun result
 ```
 
 ## Milestone 2: Improve Artifact Graph and Invalidation
@@ -176,14 +189,14 @@ Exit criteria:
 
 ## Milestone 3: Expand Semantic Mutation Coverage
 
-Goal: build a meaningful semantic fault model beyond a few manual mutants.
+Goal: build a documented semantic fault model beyond a few manual mutants.
 
 Tasks:
 
 1. Convert current manual mutation specs into a more structured mutation
    catalog.
 2. Define mutation operator families by semantic subsystem.
-3. Generate a modest batch of compiling semantic mutants for `nanoda`.
+3. Attempt to generate a modest batch of semantic mutants for `nanoda`.
 4. Record deterministic mutant identities and provenance.
 5. Classify build failures separately from semantic survivors.
 6. Track mutation score by subsystem and operator.
@@ -194,14 +207,17 @@ Exit criteria:
 
 - The project has a documented semantic mutation model with deterministic
   mutant identities.
-- At least one subsystem has enough mutants to produce useful subsystem-level
-  metrics.
+- Mutation attempts are classified as compiling semantic mutants, build
+  failures, duplicates, unsupported mutation sites, or rejected non-semantic
+  changes.
+- Subsystem-level metrics are reported where the sample is large enough, and
+  explicitly marked insufficient where it is not.
 - Survivors are classified into durable states rather than treated as generic
   failures.
 
 ## Milestone 4: Automate Witness Search and Minimization
 
-Goal: reduce manual effort in turning meaningful survivors into evidence.
+Goal: reduce manual effort in classifying meaningful survivors.
 
 Tasks:
 
@@ -227,16 +243,17 @@ Tasks:
 
 Exit criteria:
 
-- At least one survivor witness is generated and minimized by an automated
-  process.
-- The generated witness has durable metadata sufficient to reproduce the
+- The witness system can execute a search strategy against a survivor and
+  produce a durable classification.
+- If a witness is found, it has durable metadata sufficient to reproduce the
   search or audit its result.
-- Failures to find witnesses produce useful unresolved-state artifacts.
+- If no witness is found, the failed search produces useful unresolved-state
+  artifacts rather than disappearing into logs.
 
 ## Milestone 5: Cross-Validator Confirmation
 
-Goal: ensure generated tests improve shared Lean validation rather than only
-one implementation.
+Goal: classify generated tests against independent validators so ecosystem
+relevance is visible.
 
 Tasks:
 
@@ -252,14 +269,16 @@ Tasks:
 
 Exit criteria:
 
-- At least one generated witness has cross-validator confirmation.
+- Generated witnesses are evaluated against compatible validators and
+  classified as confirmed, disagreement, declined, incompatible, crashed,
+  timed out, or unresolved.
 - Any disagreement is preserved as a durable unresolved artifact.
 - Regression candidates include expected outcome evidence, not just a source
   mutant distinction.
 
 ## Milestone 6: First Generalization Experiment
 
-Goal: show that generated tests can transfer across independent validators.
+Goal: run the first explicit transfer experiment across independent validators.
 
 Tasks:
 
@@ -270,17 +289,19 @@ Tasks:
 4. Freeze the generated corpus.
 5. Evaluate whether the generated corpus detects the independently introduced
    fault.
-6. Record whether the result supports cross-implementation generalization.
+6. Record whether the result supports transfer, shows no transfer, regresses,
+   is inconclusive, or is blocked by incompatibility.
 
 Exit criteria:
 
-- A test generated from one validator detects an independently introduced
-  analogous semantic fault in another validator, or the failed attempt is
-  documented with enough detail to guide the next strategy change.
+- The experiment is run and produces a durable transfer classification:
+  positive, neutral, negative, inconclusive, incompatible, or unresolved.
+- The result is documented with enough detail to guide the next strategy
+  decision.
 
 ## Milestone 7: Rotating Held-Out Evaluation
 
-Goal: measure whether corpus improvements generalize across validator
+Goal: measure whether corpus changes generalize across validator
 implementations.
 
 Tasks:
@@ -292,15 +313,17 @@ Tasks:
    - generate or select augmented tests without using that validator's mutants;
    - evaluate original corpus against held-out mutants;
    - evaluate augmented corpus against held-out mutants;
-   - compute score improvement.
-4. Report per-validator improvement, regressions, unresolved states, and costs.
+   - compute score change.
+4. Report per-validator improvement, no-change results, regressions,
+   unresolved states, and costs.
 5. Keep fold data separate so held-out results cannot influence generation.
 
 Exit criteria:
 
-- The project can produce a rotating held-out report.
-- The report distinguishes general semantic improvement from
-  implementation-specific overfitting.
+- The project can produce a rotating held-out report with positive, neutral,
+  negative, inconclusive, and unresolved fold outcomes.
+- The report distinguishes general semantic improvement, lack of measurable
+  transfer, regressions, and implementation-specific overfitting risk.
 
 ## Milestone 8: Assurance Snapshot and Gate
 
@@ -387,9 +410,10 @@ These are the next concrete tasks, in order:
 5. Run `nanoda-0004`.
 6. Mechanically confirm the expected semantics of the `nanoda-0003` witness
    with compatible validators or a reference path.
-7. Convert the confirmed witness into a controlled augmented-corpus test.
-8. Rerun `nanoda-0003` against the augmented corpus and record the closed-loop
-   result.
+7. If confirmation succeeds, convert the witness into a controlled
+   augmented-corpus test.
+8. Rerun `nanoda-0003` against the augmented corpus if one is produced, and
+   record the measured result.
 9. Update `docs/RESEARCH_STATUS.md` and produce the first local assurance
    snapshot draft.
 10. Commit and push after each coherent artifact-producing step.
