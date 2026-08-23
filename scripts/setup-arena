@@ -1,0 +1,37 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+EXTERNAL_DIR="${ROOT}/external"
+LKA_ROOT="${LKA_ROOT:-${EXTERNAL_DIR}/lean-kernel-arena}"
+LKA_REPO="${LKA_REPO:-https://github.com/leanprover/lean-kernel-arena.git}"
+
+mkdir -p "${EXTERNAL_DIR}" \
+  "${ROOT}/results/baseline" \
+  "${ROOT}/results/mutants" \
+  "${ROOT}/results/survivors" \
+  "${ROOT}/results/witnesses" \
+  "${ROOT}/corpus/generated" \
+  "${ROOT}/corpus/minimized"
+
+echo "Dependency check:"
+for tool in git python3 cargo rustc elan uv; do
+  if command -v "${tool}" >/dev/null 2>&1; then
+    printf '  %-8s %s\n' "${tool}" "$(command -v "${tool}")"
+  else
+    printf '  %-8s MISSING\n' "${tool}"
+  fi
+done
+if [[ -x "${ROOT}/.venv-arena/bin/python" ]]; then
+  printf '  %-8s %s\n' "arena-py" "${ROOT}/.venv-arena/bin/python"
+fi
+
+if [[ -d "${LKA_ROOT}/.git" ]]; then
+  echo "Arena checkout already exists: ${LKA_ROOT}"
+  git -C "${LKA_ROOT}" status --short
+else
+  echo "Cloning Lean Kernel Arena into ${LKA_ROOT}"
+  git clone "${LKA_REPO}" "${LKA_ROOT}"
+fi
+
+echo "Arena root: ${LKA_ROOT}"

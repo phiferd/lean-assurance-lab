@@ -1,0 +1,111 @@
+#!/usr/bin/env python3
+"""Line-oriented delta minimizer for exported witness artifacts.
+
+This first minimizer treats each non-empty line as a declaration-sized unit and
+preserves an externally supplied predicate. It is intentionally simple, but it
+already enforces the core rule: keep only reductions where the checker
+distinction still holds.
+"""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+def run_predicate(command: str, candidate: Path) -> bool:
+    candidate_text = str(candidate)
+    if "{candidate}" in command:
+        rendered = command.replace("{candidate}", candidate_text)
+    else:
+        rendered = f"{command} {candidate_text}"
+    result = subprocess.run(rendered, shell=True)
+    return result.returncode == 0
+
+
+def write_candidate(path: Path, lines: list[str]) -> None:
+    path.write_text("".join(lines), encoding="utf-8")
+
+
+def ddmin(lines: list[str], candidate_path: Path, predicate: str) -> list[str]:
+    if not lines:
+        return lines
+
+    current = lines[:]
+    granularity = 2
+    while len(current) >= 2:
+        chunk_size = max(1, len(current) // granularity)
+        reduced = False
+
+        for start in range(0, len(current), chunk_size):
+            complement = current[:start] + current[start + chunk_size :]
+            if not complement:
+                continue
+            write_candidate(candidate_path, complement)
+            if run_predicate(predicate, candidate_path):
+                current = complement
+                granularity = max(2, granularity - 1)
+                reduced = True
+                break
+
+        if not reduced:
+            if granularity >= len(current):
+                break
+            granularity = min(len(current), granularity * 2)
+
+    return current
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("artifact", type=Path)
+    parser.add_argument("--witness-id", required=True)
+    parser.add_argument(
+        "--predicate",
+        required=True,
+        help="Command that returns 0 iff distinction remains. Use {candidate} as the artifact placeholder.",
+    )
+    parser.add_argument("--output-dir", type=Path, default=Path("corpus/minimized"))
+    parser.add_argument("--metadata-dir", type=Path, default=Path("results/witnesses"))
+    args = parser.parse_args()
+
+    if not args.artifact.exists():
+        raise SystemExit(f"artifact not found: {args.artifact}")
+
+    args.output_dir.mkdir(parents=True, exist_ok=True)
+    output = args.output_dir / f"{args.witness_id}-min{args.artifact.suffix}"
+    scratch = args.output_dir / f".{args.witness_id}.candidate{args.artifact.suffix}"
+
+    original_lines = args.artifact.read_text(encoding="utf-8").splitlines(keepends=True)
+    write_candidate(scratch, original_lines)
+    if not run_predicate(args.predicate, scratch):
+        scratch.unlink(missing_ok=True)
+        raise SystemExit("predicate does not hold for the original artifact")
+
+    minimized_lines = ddmin(original_lines, scratch, args.predicate)
+    write_candidate(output, minimized_lines)
+    scratch.unlink(missing_ok=True)
+
+    metadata_path = args.metadata_dir / args.witness_id / "minimization.json"
+    metadata_path.parent.mkdir(parents=True, exist_ok=True)
+    metadata = {
+        "witness_id": args.witness_id,
+        "input_artifact": str(args.artifact),
+        "output_artifact": str(output),
+        "predicate": args.predicate,
+        "status": "MINIMIZED" if len(minimized_lines) < len(original_lines) else "IRREDUCIBLE_BY_LINE_DDMIN",
+        "original_units": len(original_lines),
+        "minimized_units": len(minimized_lines),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "next_steps": ["apply structure-aware expression/declaration-field reduction"],
+    }
+    metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

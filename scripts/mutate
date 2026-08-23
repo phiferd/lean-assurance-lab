@@ -1,0 +1,89 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REGISTRY="${ROOT}/results/mutants/registry.jsonl"
+
+usage() {
+  cat <<'USAGE'
+usage:
+  scripts/mutate list
+  scripts/mutate register MUTANT_ID CHECKER SOURCE_FILE SOURCE_SPAN OPERATOR SUBSYSTEM [NOTES]
+  scripts/mutate status MUTANT_ID STATUS [CLASSIFICATION] [NOTES]
+
+This is the initial manually controlled mutant registry. Bulk mutation should be
+added after one semantic mutation has been built and run end to end.
+USAGE
+}
+
+cmd="${1:-}"
+case "${cmd}" in
+  list)
+    if [[ -f "${REGISTRY}" ]]; then
+      cat "${REGISTRY}"
+    fi
+    ;;
+  register)
+    shift
+    if [[ $# -lt 6 || $# -gt 7 ]]; then
+      usage >&2
+      exit 2
+    fi
+    mkdir -p "$(dirname "${REGISTRY}")"
+    python3 - "$@" >> "${REGISTRY}" <<'PY'
+import json
+import sys
+from datetime import datetime, timezone
+
+mutant_id, checker, source_file, source_span, operator, subsystem = sys.argv[1:7]
+notes = sys.argv[7] if len(sys.argv) > 7 else ""
+print(json.dumps({
+    "id": mutant_id,
+    "checker": checker,
+    "source_file": source_file,
+    "source_span": source_span,
+    "mutation_operator": operator,
+    "subsystem": subsystem,
+    "status": "REGISTERED",
+    "classification": "UNKNOWN_EQUIVALENCE",
+    "notes": notes,
+    "updated_at": datetime.now(timezone.utc).isoformat(),
+}, sort_keys=True))
+PY
+    ;;
+  status)
+    shift
+    if [[ $# -lt 2 || $# -gt 4 ]]; then
+      usage >&2
+      exit 2
+    fi
+    mkdir -p "$(dirname "${REGISTRY}")"
+    python3 - "$@" >> "${REGISTRY}" <<'PY'
+import json
+import sys
+from datetime import datetime, timezone
+
+mutant_id = sys.argv[1]
+status = sys.argv[2]
+classification = sys.argv[3] if len(sys.argv) > 3 else None
+notes = sys.argv[4] if len(sys.argv) > 4 else ""
+record = {
+    "id": mutant_id,
+    "status": status,
+    "notes": notes,
+    "updated_at": datetime.now(timezone.utc).isoformat(),
+}
+if classification:
+    record["classification"] = classification
+print(json.dumps(record, sort_keys=True))
+PY
+    ;;
+  -h|--help|"")
+    usage
+    ;;
+  *)
+    echo "unknown command: ${cmd}" >&2
+    usage >&2
+    exit 2
+    ;;
+esac

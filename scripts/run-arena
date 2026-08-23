@@ -1,0 +1,115 @@
+#!/usr/bin/env bash
+set -euo pipefail
+
+ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+LKA_ROOT="${LKA_ROOT:-${ROOT}/external/lean-kernel-arena}"
+CHECKER=""
+STAMP="$(date -u +%Y%m%dT%H%M%SZ)"
+RUN_DIR="${ROOT}/results/baseline/runs/${STAMP}"
+OUTCOME_DIR="${ROOT}/results/baseline/outcomes"
+
+usage() {
+  cat <<'USAGE'
+usage: scripts/run-arena [--checker CHECKER] [--test TEST] [--skip-build-tests]
+
+Runs Lean Kernel Arena locally and records logs under results/baseline/runs/.
+USAGE
+}
+
+SKIP_BUILD_TESTS=0
+TEST=""
+while [[ $# -gt 0 ]]; do
+  case "$1" in
+    --checker)
+      CHECKER="${2:?missing checker name}"
+      shift 2
+      ;;
+    --test)
+      TEST="${2:?missing test name/pattern}"
+      shift 2
+      ;;
+    --skip-build-tests)
+      SKIP_BUILD_TESTS=1
+      shift
+      ;;
+    -h|--help)
+      usage
+      exit 0
+      ;;
+    *)
+      echo "unknown argument: $1" >&2
+      usage >&2
+      exit 2
+      ;;
+  esac
+done
+
+if [[ ! -f "${LKA_ROOT}/lka.py" ]]; then
+  echo "Lean Kernel Arena not found at ${LKA_ROOT}" >&2
+  echo "Run scripts/setup-arena or set LKA_ROOT." >&2
+  exit 1
+fi
+
+mkdir -p "${RUN_DIR}" "${OUTCOME_DIR}"
+
+python3 - "${RUN_DIR}/metadata.json" "${STAMP}" "${LKA_ROOT}" "${CHECKER:-all}" "${TEST:-all}" "${SKIP_BUILD_TESTS}" <<'PY'
+import json
+import sys
+
+path, stamp, lka_root, checker, test, skip_build_tests = sys.argv[1:]
+metadata = {
+    "timestamp": stamp,
+    "lka_root": lka_root,
+    "checker": checker,
+    "test": test,
+    "skip_build_tests": skip_build_tests == "1",
+    "normalized_outcomes": None,
+    "notes": "Raw Arena logs are recorded in this directory. Outcome extraction is checker/Arena-version dependent.",
+}
+with open(path, "w", encoding="utf-8") as handle:
+    json.dump(metadata, handle, indent=2, sort_keys=True)
+    handle.write("\n")
+PY
+
+run_lka() {
+  local log_name="$1"
+  shift
+  echo "+ $*" | tee "${RUN_DIR}/${log_name}.log"
+  (
+    cd "${LKA_ROOT}"
+    "$@"
+  ) 2>&1 | tee -a "${RUN_DIR}/${log_name}.log"
+}
+
+if [[ -x "${ROOT}/.venv-arena/bin/python" ]]; then
+  LKA=("${ROOT}/.venv-arena/bin/python" ./lka.py)
+elif command -v uv >/dev/null 2>&1; then
+  LKA=(uv run ./lka.py)
+else
+  LKA=(./lka.py)
+fi
+
+if [[ "${SKIP_BUILD_TESTS}" -eq 0 ]]; then
+  if [[ -n "${TEST}" ]]; then
+    run_lka build-test "${LKA[@]}" build-test "${TEST}"
+  else
+    run_lka build-test "${LKA[@]}" build-test
+  fi
+fi
+
+if [[ -n "${CHECKER}" ]]; then
+  run_lka build-checker "${LKA[@]}" build-checker "${CHECKER}"
+  RUN_ARGS=(run --checker "${CHECKER}")
+else
+  run_lka build-checker "${LKA[@]}" build-checker
+  RUN_ARGS=(run)
+fi
+
+if [[ -n "${TEST}" ]]; then
+  RUN_ARGS+=(--test "${TEST}")
+fi
+
+run_lka run "${LKA[@]}" "${RUN_ARGS[@]}"
+
+echo "Recorded run: ${RUN_DIR}"
+echo "Normalize outcomes, when available, under: ${OUTCOME_DIR}"

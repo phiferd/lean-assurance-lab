@@ -1,0 +1,389 @@
+#!/usr/bin/env python3
+"""Run one registered mutant through the Arena differential loop."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import shutil
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+MUTATIONS = ROOT / "mutations"
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    records = []
+    with path.open("r", encoding="utf-8") as handle:
+        for line_no, line in enumerate(handle, 1):
+            if not line.strip():
+                continue
+            try:
+                records.append(json.loads(line))
+            except json.JSONDecodeError as exc:
+                raise SystemExit(f"{path}:{line_no}: invalid JSON: {exc}") from exc
+    return records
+
+
+def registry_record(mutant_id: str) -> dict:
+    merged: dict = {}
+    for record in read_jsonl(REGISTRY):
+        if record.get("id") == mutant_id:
+            merged = {**merged, **record}
+    if not merged:
+        raise SystemExit(f"mutant not found in registry: {mutant_id}")
+    return merged
+
+
+def load_spec(mutant_id: str) -> dict:
+    path = MUTATIONS / f"{mutant_id}.json"
+    if not path.exists():
+        raise SystemExit(f"mutation spec not found: {path}")
+    spec = json.loads(path.read_text(encoding="utf-8"))
+    if spec.get("id") != mutant_id:
+        raise SystemExit(f"{path}: id does not match {mutant_id}")
+    for key in ("checker", "source_file", "original", "mutated"):
+        if not spec.get(key):
+            raise SystemExit(f"{path}: missing {key!r}")
+    return spec
+
+
+def slug(value: str) -> str:
+    keep = []
+    for char in value:
+        if char.isalnum() or char in "-_.":
+            keep.append(char)
+        else:
+            keep.append("_")
+    return "".join(keep).strip("_") or "full"
+
+
+def run(
+    cmd: list[str],
+    *,
+    cwd: Path = ROOT,
+    log_path: Path | None = None,
+    check: bool = True,
+) -> subprocess.CompletedProcess[str]:
+    started = time.time()
+    proc = subprocess.run(
+        cmd,
+        cwd=cwd,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    elapsed = time.time() - started
+    text = proc.stdout
+    if log_path:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        rendered = f"+ {' '.join(cmd)}\n# cwd: {cwd}\n# elapsed_seconds: {elapsed:.3f}\n{text}"
+        log_path.write_text(rendered, encoding="utf-8")
+    if check and proc.returncode != 0:
+        if text:
+            print(text, end="")
+        raise SystemExit(f"command failed with exit {proc.returncode}: {' '.join(cmd)}")
+    return proc
+
+
+def source_root(checker: str) -> Path:
+    return ARENA_ROOT / "_build" / "checkers" / checker / "src"
+
+
+def source_path(spec: dict) -> Path:
+    return source_root(spec["checker"]) / spec["source_file"]
+
+
+def set_source_state(spec: dict, state: str) -> str:
+    path = source_path(spec)
+    original = spec["original"]
+    mutated = spec["mutated"]
+    text = path.read_text(encoding="utf-8")
+    target = original if state == "baseline" else mutated
+    other = mutated if state == "baseline" else original
+    if target in text:
+        return "already"
+    if other not in text:
+        raise SystemExit(
+            f"{path}: could not find either mutation text while setting {state}"
+        )
+    path.write_text(text.replace(other, target, 1), encoding="utf-8")
+    return "changed"
+
+
+def clear_arena_results(checker: str) -> int:
+    results_dir = ARENA_ROOT / "_results"
+    results_dir.mkdir(parents=True, exist_ok=True)
+    count = 0
+    for path in results_dir.glob(f"{checker}_*.json"):
+        path.unlink()
+        count += 1
+    return count
+
+
+def copy_raw_results(checker: str, raw_dir: Path) -> int:
+    raw_dir.mkdir(parents=True, exist_ok=True)
+    count = 0
+    for path in sorted((ARENA_ROOT / "_results").glob(f"{checker}_*.json")):
+        shutil.copy2(path, raw_dir / path.name)
+        count += 1
+    return count
+
+
+def arena_python() -> str:
+    candidate = ROOT / ".venv-arena" / "bin" / "python"
+    return str(candidate) if candidate.exists() else sys.executable
+
+
+def run_checker(
+    *,
+    checker: str,
+    test: str | None,
+    label: str,
+    outcomes: Path,
+    log_dir: Path,
+) -> dict:
+    removed = clear_arena_results(checker)
+    cmd = [arena_python(), "./lka.py", "run", "--checker", checker]
+    if test:
+        cmd.extend(["--test", test])
+    proc = run(cmd, cwd=ARENA_ROOT, log_path=log_dir / f"arena-{label}.log")
+    normalize_cmd = [
+        str(ROOT / "scripts" / "normalize-arena-results"),
+        "--checker",
+        checker,
+        "--results-dir",
+        str(ARENA_ROOT / "_results"),
+        "--output",
+        str(outcomes),
+    ]
+    if test is None:
+        normalize_cmd.extend(
+            ["--expected-tests-dir", str(ARENA_ROOT / "_build" / "tests")]
+        )
+    norm = run(
+        normalize_cmd,
+        cwd=ROOT,
+        log_path=log_dir / f"normalize-{label}.log",
+    )
+    raw_count = copy_raw_results(checker, log_dir / f"raw-{label}")
+    return {
+        "arena_returncode": proc.returncode,
+        "cleared_stale_results": removed,
+        "normalize_returncode": norm.returncode,
+        "outcomes": str(outcomes),
+        "raw_result_count": raw_count,
+    }
+
+
+def build_checker(checker: str, label: str, log_dir: Path) -> dict:
+    proc = run(
+        ["cargo", "build", "--release"],
+        cwd=source_root(checker),
+        log_path=log_dir / f"build-{label}.log",
+    )
+    return {"returncode": proc.returncode}
+
+
+def count_jsonl(path: Path) -> int:
+    if not path.exists():
+        return 0
+    with path.open("r", encoding="utf-8") as handle:
+        return sum(1 for line in handle if line.strip())
+
+
+def append_status(mutant_id: str, status: str, classification: str, notes: str) -> None:
+    run(
+        [
+            str(ROOT / "scripts" / "mutate"),
+            "status",
+            mutant_id,
+            status,
+            classification,
+            notes,
+        ],
+        cwd=ROOT,
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mutant_id")
+    parser.add_argument("--test", help="Arena test name or glob to run")
+    parser.add_argument(
+        "--reuse-baseline",
+        action="store_true",
+        help="reuse the baseline outcome file when it already exists",
+    )
+    parser.add_argument(
+        "--classification",
+        default=None,
+        help="classification to record; defaults to MEANINGFUL_SEMANTIC if killed, otherwise UNKNOWN_EQUIVALENCE",
+    )
+    parser.add_argument(
+        "--keep-mutant",
+        action="store_true",
+        help="leave checker source and build artifact in the mutant state",
+    )
+    args = parser.parse_args()
+
+    registry = registry_record(args.mutant_id)
+    spec = load_spec(args.mutant_id)
+    checker = spec["checker"]
+    if registry.get("checker") and registry["checker"] != checker:
+        raise SystemExit(
+            f"registry checker {registry['checker']!r} does not match spec checker {checker!r}"
+        )
+
+    scope = slug(args.test) if args.test else "full"
+    result_dir = ROOT / "results" / "mutants" / args.mutant_id
+    log_dir = result_dir / "runs" / datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    baseline_out = ROOT / "results" / "baseline" / "outcomes" / f"{checker}-{scope}.jsonl"
+    mutant_out = result_dir / ("outcomes.jsonl" if scope == "full" else f"outcomes-{scope}.jsonl")
+    comparison = result_dir / ("comparison.json" if scope == "full" else f"comparison-{scope}.json")
+    build_json = result_dir / "build.json"
+
+    summary: dict = {
+        "mutant_id": args.mutant_id,
+        "checker": checker,
+        "scope": scope,
+        "test": args.test,
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "source_file": str(source_path(spec)),
+        "logs": str(log_dir),
+        "steps": {},
+    }
+
+    source_mutated = False
+    active_step = "initialize"
+    try:
+        active_step = "restore_before_baseline"
+        summary["steps"]["restore_before_baseline"] = set_source_state(spec, "baseline")
+        active_step = "build_baseline"
+        summary["steps"]["build_baseline"] = build_checker(checker, "baseline", log_dir)
+        if args.reuse_baseline and baseline_out.exists():
+            summary["steps"]["baseline"] = {
+                "reused": True,
+                "outcomes": str(baseline_out),
+                "record_count": count_jsonl(baseline_out),
+            }
+        else:
+            active_step = "run_baseline"
+            summary["steps"]["baseline"] = run_checker(
+                checker=checker,
+                test=args.test,
+                label="baseline",
+                outcomes=baseline_out,
+                log_dir=log_dir,
+            )
+            summary["steps"]["baseline"]["record_count"] = count_jsonl(baseline_out)
+
+        active_step = "apply_mutant"
+        summary["steps"]["apply_mutant"] = set_source_state(spec, "mutant")
+        source_mutated = True
+        active_step = "build_mutant"
+        summary["steps"]["build_mutant"] = build_checker(checker, "mutant", log_dir)
+        active_step = "run_mutant"
+        summary["steps"]["mutant"] = run_checker(
+            checker=checker,
+            test=args.test,
+            label="mutant",
+            outcomes=mutant_out,
+            log_dir=log_dir,
+        )
+        summary["steps"]["mutant"]["record_count"] = count_jsonl(mutant_out)
+
+        active_step = "compare"
+        proc = run(
+            [
+                str(ROOT / "scripts" / "compare"),
+                str(baseline_out),
+                str(mutant_out),
+                "--mutant-id",
+                args.mutant_id,
+                "--baseline-id",
+                f"{checker}-baseline-{scope}",
+                "--candidate-id",
+                f"{args.mutant_id}-{scope}",
+                "--output",
+                str(comparison),
+            ],
+            cwd=ROOT,
+            log_path=log_dir / "compare.log",
+            check=False,
+        )
+        if proc.returncode not in (0, 1):
+            if proc.stdout:
+                print(proc.stdout, end="")
+            raise SystemExit(f"compare failed with exit {proc.returncode}")
+        report = json.loads(comparison.read_text(encoding="utf-8"))
+        killed = bool(report.get("killed"))
+        status = "KILLED" if killed else "SURVIVED"
+        classification = args.classification or (
+            "MEANINGFUL_SEMANTIC" if killed else "UNKNOWN_EQUIVALENCE"
+        )
+        notes = (
+            f"Automated mutant loop {scope}: "
+            f"{report.get('difference_count', 0)} normalized outcome differences"
+        )
+        if killed and report.get("differences"):
+            first = report["differences"][0]
+            notes += (
+                f"; first {first['test']} {first['baseline']}->{first['candidate']}"
+            )
+        append_status(args.mutant_id, status, classification, notes)
+        summary["steps"]["compare"] = {
+            "returncode": proc.returncode,
+            "comparison": str(comparison),
+            "killed": killed,
+            "difference_count": report.get("difference_count", 0),
+        }
+        summary["status"] = status
+        summary["classification"] = classification
+    except SystemExit as exc:
+        failure_status = "BUILD_FAILED" if active_step == "build_mutant" else "TEST_FAILED"
+        summary["status"] = "FAILED"
+        summary["failure_status"] = failure_status
+        summary["failed_step"] = active_step
+        summary["error"] = str(exc)
+        if active_step not in {"initialize", "restore_before_baseline", "build_baseline", "run_baseline"}:
+            try:
+                append_status(
+                    args.mutant_id,
+                    failure_status,
+                    "UNKNOWN_EQUIVALENCE",
+                    f"Automated mutant loop {scope} failed during {active_step}: {exc}",
+                )
+            except Exception as status_exc:  # noqa: BLE001
+                summary["status_update_error"] = str(status_exc)
+        raise
+    finally:
+        if source_mutated and not args.keep_mutant:
+            try:
+                summary["steps"]["restore_after_mutant"] = set_source_state(spec, "baseline")
+                summary["steps"]["build_restored_baseline"] = build_checker(
+                    checker, "restored-baseline", log_dir
+                )
+            except Exception as exc:  # noqa: BLE001
+                summary["restore_error"] = str(exc)
+        elif source_mutated:
+            summary["left_mutated"] = True
+        summary["finished_at"] = datetime.now(timezone.utc).isoformat()
+        build_json.parent.mkdir(parents=True, exist_ok=True)
+        build_json.write_text(json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

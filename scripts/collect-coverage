@@ -1,0 +1,292 @@
+#!/usr/bin/env python3
+"""Collect per-Arena-test Rust line coverage for a checker binary."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import os
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
+TEST_ROOT = ARENA_ROOT / "_build" / "tests"
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+COUNT_RE = re.compile(r"^\s*(\d+)\|\s*([^|]*)\|")
+
+
+def find_llvm_tool(name: str) -> str:
+    candidates = [
+        shutil.which(name),
+        f"/opt/homebrew/opt/llvm@22/bin/{name}",
+        f"/opt/homebrew/Cellar/llvm@22/22.1.8/bin/{name}",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    raise SystemExit(f"matching LLVM tool not found: {name}")
+
+
+def run(cmd: list[str], **kwargs) -> subprocess.CompletedProcess:
+    proc = subprocess.run(cmd, text=True, **kwargs)
+    if proc.returncode != 0:
+        output = (proc.stdout or "") + (proc.stderr or "")
+        raise SystemExit(f"command failed ({proc.returncode}): {' '.join(cmd)}\n{output}")
+    return proc
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    if not path.exists():
+        return []
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def load_tests(pattern: str | None) -> list[dict]:
+    import fnmatch
+
+    tests = []
+    for stats_path in sorted(TEST_ROOT.rglob("*.stats.json")):
+        data = json.loads(stats_path.read_text(encoding="utf-8"))
+        if pattern and not fnmatch.fnmatch(data["name"], pattern):
+            continue
+        ndjson = stats_path.with_name(stats_path.name.replace(".stats.json", ".ndjson"))
+        if not ndjson.exists():
+            raise SystemExit(f"built test has no NDJSON input: {data['name']} ({ndjson})")
+        data["file"] = str(ndjson)
+        tests.append(data)
+    return tests
+
+
+def source_digest(paths: list[Path]) -> str:
+    digest = hashlib.sha256()
+    for path in paths:
+        digest.update(str(path.relative_to(CHECKER_ROOT)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def normalize_exit(exit_code: int) -> str:
+    if exit_code == 0:
+        return "ACCEPT"
+    if exit_code == 2:
+        return "DECLINE"
+    return "REJECT"
+
+
+def parse_show_output(text: str, checker_root: Path) -> list[str]:
+    current: str | None = None
+    covered: list[str] = []
+    prefix = str(checker_root.resolve()) + "/"
+    for raw_line in text.splitlines():
+        if raw_line.startswith(prefix) and raw_line.endswith(":"):
+            current = raw_line[len(prefix):-1]
+            continue
+        if current is None:
+            continue
+        match = COUNT_RE.match(raw_line)
+        if not match:
+            continue
+        count = match.group(2).strip()
+        if count and count != "0":
+            covered.append(f"{current}:{int(match.group(1))}")
+    return sorted(set(covered))
+
+
+def build_instrumented(binary: Path, log_path: Path) -> float:
+    env = os.environ.copy()
+    env.update(
+        {
+            "CARGO_TARGET_DIR": str(binary.parents[1]),
+            "CARGO_PROFILE_RELEASE_LTO": "false",
+            "LLVM_PROFILE_FILE": "/tmp/nanoda-coverage-build-%p-%m.profraw",
+            "RUSTFLAGS": "-C instrument-coverage",
+        }
+    )
+    started = time.time()
+    proc = subprocess.run(
+        ["cargo", "build", "--release"],
+        cwd=CHECKER_ROOT,
+        env=env,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    elapsed = time.time() - started
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text(proc.stdout, encoding="utf-8")
+    if proc.returncode != 0:
+        raise SystemExit(f"instrumented build failed; see {log_path}")
+    return elapsed
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--checker", default="nanoda", choices=["nanoda"])
+    parser.add_argument("--test", help="optional Arena test glob")
+    parser.add_argument("--reuse-build", action="store_true")
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--timeout", type=float, default=1800.0)
+    parser.add_argument(
+        "--checker-threads",
+        type=int,
+        default=8,
+        help="nanoda declaration-checking threads used only for coverage collection",
+    )
+    parser.add_argument(
+        "--output-dir", type=Path, default=ROOT / "results" / "coverage" / "nanoda"
+    )
+    args = parser.parse_args()
+
+    output_dir = args.output_dir.resolve()
+    output_dir.mkdir(parents=True, exist_ok=True)
+    records_path = output_dir / "coverage.jsonl"
+    binary = CHECKER_ROOT / "target-coverage" / "release" / "nanoda_bin"
+    base_config = json.loads((CHECKER_ROOT / "config.json").read_text(encoding="utf-8"))
+    base_config["num_threads"] = args.checker_threads
+    config = output_dir / "config.json"
+    config.write_text(json.dumps(base_config, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    source_paths = sorted((CHECKER_ROOT / "src").rglob("*.rs"))
+    tests = load_tests(args.test)
+    baseline = {row["test"]: row["outcome"] for row in read_jsonl(BASELINE)}
+    if not tests:
+        raise SystemExit("no built tests selected")
+    missing_baseline = sorted(test["name"] for test in tests if test["name"] not in baseline)
+    if missing_baseline:
+        raise SystemExit(f"tests missing from baseline outcomes: {missing_baseline}")
+
+    llvm_profdata = find_llvm_tool("llvm-profdata")
+    llvm_cov = find_llvm_tool("llvm-cov")
+    build_seconds = 0.0
+    if not args.reuse_build or not binary.exists():
+        build_seconds = build_instrumented(binary, output_dir / "build.log")
+
+    existing = {row["test"]: row for row in read_jsonl(records_path)} if args.resume else {}
+    if records_path.exists() and not args.resume:
+        records_path.unlink()
+    completed = dict(existing)
+
+    with tempfile.TemporaryDirectory(prefix="nanoda-coverage-") as temp_name:
+        temp = Path(temp_name)
+        for index, test in enumerate(tests, 1):
+            name = test["name"]
+            if name in completed:
+                print(f"[{index}/{len(tests)}] reuse {name}", flush=True)
+                continue
+            safe_name = re.sub(r"[^A-Za-z0-9_.-]+", "_", name)
+            profile_pattern = temp / f"{safe_name}-%p.profraw"
+            env = os.environ.copy()
+            env["LLVM_PROFILE_FILE"] = str(profile_pattern)
+            started = time.time()
+            with Path(test["file"]).open("rb") as input_handle:
+                try:
+                    proc = subprocess.run(
+                        [str(binary), str(config)],
+                        cwd=CHECKER_ROOT,
+                        env=env,
+                        stdin=input_handle,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        timeout=args.timeout,
+                    )
+                except subprocess.TimeoutExpired as exc:
+                    raise SystemExit(f"coverage run timed out for {name}: {exc}") from exc
+            run_seconds = time.time() - started
+            outcome = normalize_exit(proc.returncode)
+            if outcome != baseline[name]:
+                raise SystemExit(
+                    f"instrumented outcome mismatch for {name}: "
+                    f"baseline={baseline[name]} instrumented={outcome} exit={proc.returncode}"
+                )
+
+            raw_profiles = sorted(temp.glob(f"{safe_name}-*.profraw"))
+            if not raw_profiles:
+                raise SystemExit(f"instrumented checker emitted no profile for {name}")
+            profdata = temp / f"{safe_name}.profdata"
+            run(
+                [llvm_profdata, "merge", "-sparse", *map(str, raw_profiles), "-o", str(profdata)],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            show = run(
+                [
+                    llvm_cov,
+                    "show",
+                    str(binary),
+                    f"--instr-profile={profdata}",
+                    "--show-line-counts",
+                    *map(str, source_paths),
+                ],
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+            )
+            record = {
+                "test": name,
+                "outcome": outcome,
+                "exit_code": proc.returncode,
+                "wall_time": run_seconds,
+                "covered": parse_show_output(show.stdout, CHECKER_ROOT),
+            }
+            with records_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(record, sort_keys=True) + "\n")
+            completed[name] = record
+            for path in [*raw_profiles, profdata]:
+                path.unlink(missing_ok=True)
+            print(
+                f"[{index}/{len(tests)}] {name}: {len(record['covered'])} lines "
+                f"in {run_seconds:.3f}s",
+                flush=True,
+            )
+
+    ordered = [completed[test["name"]] for test in tests]
+    test_to_lines = {record["test"]: record["covered"] for record in ordered}
+    line_to_tests: dict[str, list[str]] = {}
+    wall_times = {record["test"]: record["wall_time"] for record in ordered}
+    for test_name, locations in test_to_lines.items():
+        for location in locations:
+            line_to_tests.setdefault(location, []).append(test_name)
+    for location, names in line_to_tests.items():
+        names.sort(key=lambda name: (wall_times[name], name))
+
+    (output_dir / "test-to-lines.json").write_text(
+        json.dumps(test_to_lines, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    (output_dir / "line-to-tests.json").write_text(
+        json.dumps(line_to_tests, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    manifest = {
+        "checker": args.checker,
+        "checker_threads": args.checker_threads,
+        "collected_at": datetime.now(timezone.utc).isoformat(),
+        "test_pattern": args.test,
+        "test_count": len(ordered),
+        "source_file_count": len(source_paths),
+        "covered_location_count": len(line_to_tests),
+        "source_sha256": source_digest(source_paths),
+        "binary": str(binary),
+        "build_seconds": build_seconds,
+        "run_seconds": sum(record["wall_time"] for record in ordered),
+        "llvm_profdata": llvm_profdata,
+        "llvm_cov": llvm_cov,
+        "rustc": subprocess.check_output(["rustc", "--version"], text=True).strip(),
+    }
+    (output_dir / "manifest.json").write_text(
+        json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(json.dumps(manifest, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,226 @@
+#!/usr/bin/env python3
+"""Run one nanoda mutant against only tests covering its source span."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
+TEST_ROOT = ARENA_ROOT / "_build" / "tests"
+MUTATIONS = ROOT / "mutations"
+BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line.strip()]
+
+
+def set_source_state(spec: dict, state: str) -> str:
+    path = CHECKER_ROOT / spec["source_file"]
+    original = spec["original"]
+    mutated = spec["mutated"]
+    text = path.read_text(encoding="utf-8")
+    target = original if state == "baseline" else mutated
+    other = mutated if state == "baseline" else original
+    if target in text:
+        return "already"
+    if other not in text:
+        raise SystemExit(f"{path}: neither expected source state was found")
+    path.write_text(text.replace(other, target, 1), encoding="utf-8")
+    return "changed"
+
+
+def build(log_path: Path) -> float:
+    started = time.time()
+    proc = subprocess.run(
+        ["cargo", "build", "--release"],
+        cwd=CHECKER_ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    elapsed = time.time() - started
+    log_path.parent.mkdir(parents=True, exist_ok=True)
+    log_path.write_text(proc.stdout, encoding="utf-8")
+    if proc.returncode != 0:
+        raise SystemExit(f"build failed; see {log_path}")
+    return elapsed
+
+
+def built_tests() -> dict[str, Path]:
+    tests = {}
+    for stats_path in TEST_ROOT.rglob("*.stats.json"):
+        data = json.loads(stats_path.read_text(encoding="utf-8"))
+        ndjson = stats_path.with_name(stats_path.name.replace(".stats.json", ".ndjson"))
+        tests[data["name"]] = ndjson
+    return tests
+
+
+def normalize_exit(exit_code: int) -> str:
+    if exit_code == 0:
+        return "ACCEPT"
+    if exit_code == 2:
+        return "DECLINE"
+    return "REJECT"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mutant_id")
+    parser.add_argument(
+        "--coverage-dir", type=Path, default=ROOT / "results" / "coverage" / "nanoda"
+    )
+    parser.add_argument("--timeout", type=float, default=1800.0)
+    parser.add_argument("--keep-mutant", action="store_true")
+    args = parser.parse_args()
+
+    spec_path = MUTATIONS / f"{args.mutant_id}.json"
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    if spec["checker"] != "nanoda":
+        raise SystemExit("scheduled execution currently supports nanoda only")
+
+    result_dir = ROOT / "results" / "mutants" / args.mutant_id
+    stamp = datetime.now(timezone.utc).strftime("%Y%m%dT%H%M%SZ")
+    run_dir = result_dir / "scheduled-runs" / stamp
+    run_dir.mkdir(parents=True, exist_ok=True)
+    schedule_path = run_dir / "schedule.json"
+    schedule_proc = subprocess.run(
+        [
+            str(ROOT / "scripts" / "schedule-mutant"),
+            args.mutant_id,
+            "--coverage-dir",
+            str(args.coverage_dir),
+            "--output",
+            str(schedule_path),
+        ],
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+    if schedule_proc.returncode != 0:
+        raise SystemExit(schedule_proc.stdout)
+    schedule = json.loads(schedule_path.read_text(encoding="utf-8"))
+    baseline = {row["test"]: row["outcome"] for row in read_jsonl(BASELINE)}
+    tests = built_tests()
+    binary = CHECKER_ROOT / "target" / "release" / "nanoda_bin"
+    config = CHECKER_ROOT / "config.json"
+    outcomes_path = run_dir / "outcomes.jsonl"
+    comparison_path = run_dir / "comparison.json"
+    summary_path = run_dir / "run.json"
+    records = []
+    difference = None
+    source_mutated = False
+    summary = {
+        "mutant_id": args.mutant_id,
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "schedule": str(schedule_path),
+        "scheduled_test_count": schedule["selected_test_count"],
+        "coverage_test_count": schedule["coverage_test_count"],
+        "steps": {},
+    }
+
+    try:
+        summary["steps"]["restore_before"] = set_source_state(spec, "baseline")
+        summary["steps"]["apply_mutant"] = set_source_state(spec, "mutant")
+        source_mutated = True
+        summary["steps"]["build_mutant_seconds"] = build(run_dir / "build-mutant.log")
+        for item in schedule["tests"]:
+            name = item["test"]
+            if name not in tests or not tests[name].exists():
+                raise SystemExit(f"scheduled test input not found: {name}")
+            started = time.time()
+            with tests[name].open("rb") as input_handle:
+                try:
+                    proc = subprocess.run(
+                        [str(binary), str(config)],
+                        cwd=CHECKER_ROOT,
+                        stdin=input_handle,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        timeout=args.timeout,
+                    )
+                    outcome = normalize_exit(proc.returncode)
+                    exit_code = proc.returncode
+                except subprocess.TimeoutExpired:
+                    outcome = "TIMEOUT"
+                    exit_code = None
+            record = {
+                "test": name,
+                "baseline": baseline[name],
+                "candidate": outcome,
+                "exit_code": exit_code,
+                "wall_time": time.time() - started,
+            }
+            records.append(record)
+            with outcomes_path.open("a", encoding="utf-8") as handle:
+                handle.write(json.dumps(record, sort_keys=True) + "\n")
+            if outcome != baseline[name]:
+                difference = record
+                break
+
+        status = "KILLED" if difference else "SURVIVED"
+        reason = "DIFFERENCE" if difference else (
+            "UNCOVERED" if not schedule["tests"] else "ALL_COVERING_TESTS_MATCH"
+        )
+        comparison = {
+            "mutant_id": args.mutant_id,
+            "status": status,
+            "reason": reason,
+            "coverage_test_count": schedule["coverage_test_count"],
+            "scheduled_test_count": schedule["selected_test_count"],
+            "executed_test_count": len(records),
+            "difference_count": int(difference is not None),
+            "first_difference": difference,
+            "all_covering_tests_exhausted": difference is None,
+        }
+        comparison_path.write_text(
+            json.dumps(comparison, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+        note = (
+            f"Coverage-guided run: {reason}; scheduled={schedule['selected_test_count']} "
+            f"executed={len(records)} coverage_corpus={schedule['coverage_test_count']}"
+        )
+        subprocess.run(
+            [
+                str(ROOT / "scripts" / "mutate"),
+                "status",
+                args.mutant_id,
+                status,
+                "UNKNOWN_EQUIVALENCE" if status == "SURVIVED" else "MEANINGFUL_SEMANTIC",
+                note,
+            ],
+            cwd=ROOT,
+            check=True,
+        )
+        summary["status"] = status
+        summary["reason"] = reason
+        summary["comparison"] = str(comparison_path)
+    finally:
+        if source_mutated and not args.keep_mutant:
+            summary["steps"]["restore_after"] = set_source_state(spec, "baseline")
+            summary["steps"]["build_restored_seconds"] = build(
+                run_dir / "build-restored-baseline.log"
+            )
+        elif source_mutated:
+            summary["left_mutated"] = True
+        summary["finished_at"] = datetime.now(timezone.utc).isoformat()
+        summary_path.write_text(
+            json.dumps(summary, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+        )
+
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
