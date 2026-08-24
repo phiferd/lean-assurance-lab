@@ -241,6 +241,30 @@ Any compatible `ACCEPT` / `REJECT` difference is exceptional and unresolved,
 even if other checkers agree. A regression candidate must carry exact expected
 outcome evidence; checker disagreement remains attached to that candidate.
 
+### Held-Out Transfer Experiments
+
+Milestone 6 separates generation from evaluation with a content-addressed
+freeze boundary. `scripts/freeze-transfer-experiment` declares the analogous
+held-out fault, generates candidate and control artifacts from the source
+validator's model, verifies the source-validator distinction, establishes the
+reference outcome, and writes a freeze manifest while the held-out mutation is
+unapplied. The manifest explicitly excludes held-out mutant outcomes and logs
+from generation inputs.
+
+`scripts/run-transfer-experiment` accepts only the exact frozen corpus and
+manifest SHA. It builds baseline and mutant held-out binaries, evaluates the
+candidate and control, restores the source and binary, and classifies:
+
+```text
+POSITIVE_TRANSFER NEUTRAL_TRANSFER NEGATIVE_TRANSFER
+INCONCLUSIVE INCOMPATIBLE UNRESOLVED
+```
+
+Positive transfer requires the held-out baseline to match the reference,
+the analogous mutant to change the candidate outcome in the modeled direction,
+and both checker states to accept the positive control. A held-out result can
+never retroactively alter the frozen generation artifact.
+
 ## Data Flow
 
 ```text
@@ -284,6 +308,9 @@ corpus/minimized/<witness-id>-min.ndjson
 results/expected-outcomes/<case-id>.json
 results/cross-validation/<case-id>/results.json
 corpus/regression-candidates/milestone-5.json
+results/transfer/milestone-6/freeze.json
+results/transfer/milestone-6/evaluation.json
+corpus/transfer/milestone-6/*.ndjson
 ```
 
 The exact upstream Arena output format may change; raw logs and metadata are

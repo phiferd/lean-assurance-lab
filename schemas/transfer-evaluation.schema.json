@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version", "experiment_id", "status", "classification", "started_at",
+    "completed_at", "frozen_manifest", "candidate_evaluation", "control_evaluation",
+    "held_out_preparation", "source_restored", "feedback_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"const": "COMPLETE"},
+    "classification": {
+      "enum": [
+        "POSITIVE_TRANSFER", "NEUTRAL_TRANSFER", "NEGATIVE_TRANSFER",
+        "INCONCLUSIVE", "INCOMPATIBLE", "UNRESOLVED"
+      ]
+    },
+    "source_restored": {"const": true},
+    "feedback_boundary": {
+      "type": "object",
+      "properties": {
+        "held_out_mutant_results_used_for_generation": {"const": false},
+        "frozen_before_evaluation": {"const": true}
+      },
+      "required": ["held_out_mutant_results_used_for_generation", "frozen_before_evaluation"]
+    }
+  },
+  "additionalProperties": true
+}

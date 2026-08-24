@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version", "experiment_id", "held_out_validator", "source_validator",
+    "source_mutant", "fault_model", "mutation", "held_out_source", "generation"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "held_out_validator": {"const": "kiota"},
+    "source_validator": {"const": "nanoda"},
+    "source_mutant": {"type": "string", "minLength": 1},
+    "fault_model": {"type": "string", "minLength": 1},
+    "mutation": {
+      "type": "object",
+      "required": ["id", "operator", "subsystem", "source_file", "original", "mutated", "semantic_rationale"]
+    },
+    "held_out_source": {
+      "type": "object",
+      "required": ["expected_revision", "baseline_source_sha256"]
+    },
+    "generation": {
+      "type": "object",
+      "required": ["seed", "strategy", "candidate_name", "control_name"]
+    }
+  },
+  "additionalProperties": false
+}

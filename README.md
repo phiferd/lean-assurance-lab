@@ -28,13 +28,14 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 through 5 are complete. The project has a closed mechanical
+Milestones 1 through 6 are complete. The project has a closed mechanical
 mutation loop for `nanoda`, content-addressed invalidation, and a structured
 semantic model spanning validation elision, predicate negation, relational
 boundaries, and equality discrimination. Witness search and structure-aware
 minimization are executable and auditable. Cross-validator execution preserves
-semantic and parse disagreements without majority voting. Current work begins
-Milestone 6: the first generalization experiment.
+semantic and parse disagreements without majority voting. The first frozen,
+held-out transfer experiment is positive. Current work begins Milestone 7:
+rotating held-out evaluation.
 
 ## Repository Layout
 
@@ -65,6 +66,7 @@ scripts/
   confirm-witness
   cross-validate
   establish-expected-outcome
+  freeze-transfer-experiment
   generate
   generate-mutations
   minimize
@@ -72,6 +74,7 @@ scripts/
   milestone-3-assurance
   milestone-4-assurance
   milestone-5-assurance
+  milestone-6-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -82,6 +85,7 @@ scripts/
   run-mutant
   run-mutant-input
   run-mutant-scheduled
+  run-transfer-experiment
   schedule-mutant
   setup-arena
   snapshot-coverage
@@ -237,6 +241,19 @@ scripts/cross-validate nanoda-0003-original \
 an unresolved difference for success. Results retain raw exit behavior,
 compatibility evidence, parse behavior, exact checker identities, and the
 no-majority-vote policy.
+
+The Milestone 6 transfer protocol is deliberately two-phase:
+
+```sh
+scripts/freeze-transfer-experiment
+scripts/run-transfer-experiment
+scripts/milestone-6-assurance
+```
+
+The freeze command generates the corpus from the nanoda fault model, confirms
+it with nanoda and official Lean, and records that no held-out mutant outcome
+was used. The evaluation command refuses to overwrite prior results and binds
+its Kiota run to the exact frozen-manifest SHA.
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

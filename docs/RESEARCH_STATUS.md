@@ -134,6 +134,22 @@ Last updated: 2026-08-23
   official Lean exits successfully after accepting zero declarations, while
   Kiota reports `PARSE_ERROR`.
 - Produced `results/assurance/milestone-5.json`; all 15 Milestone 5 checks pass.
+- Declared the first held-out transfer experiment before mutation execution:
+  source model `nanoda-0001`, held-out validator Kiota, and an independent
+  `SKIP_VALIDATION` mutation at Kiota `src/tc.rs:1172-1174`.
+- Generated a renamed 438-byte non-`Prop` theorem candidate and a definition-form
+  positive control from Arena's `tutorial/012_nonPropThm` seed. Nanoda baseline
+  rejects while `nanoda-0001` accepts; both accept the control.
+- Official Lean established exact expected rejection for the generated
+  candidate and accepted the control before the held-out mutation was applied.
+- Froze the corpus and generation boundary at manifest SHA-256
+  `5f4776240cd8db4265d27e1f5bc21dbe474368c099a7de2d027727f59236a555`.
+  The manifest excludes Kiota mutant outcomes and logs from generation inputs.
+- Evaluated the exact frozen SHA against baseline and independently mutated
+  Kiota. The candidate changed from `REJECT` to `ACCEPT`; the control remained
+  `ACCEPT` in both states. Kiota source was restored to its exact baseline hash.
+- Classified the first generalization experiment `POSITIVE_TRANSFER`.
+- Produced `results/assurance/milestone-6.json`; all 16 Milestone 6 checks pass.
 
 ## Command Log
 
@@ -228,6 +244,10 @@ scripts/cross-validate malformed-object-probe corpus/probes/malformed-object.ndj
 scripts/build-regression-candidates
 scripts/report --allow-stale-artifacts --output results/assurance/milestone-5-report.json
 scripts/milestone-5-assurance --allow-stale-artifacts
+scripts/freeze-transfer-experiment
+scripts/run-transfer-experiment
+scripts/report --allow-stale-artifacts --output results/assurance/milestone-6-report.json
+scripts/milestone-6-assurance --allow-stale-artifacts
 ```
 
 Notes:
@@ -303,9 +323,9 @@ confirmed_witness_semantics: 1
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 0
 arena_regression_candidates: 1
-artifact_nodes: 51
-current_artifacts: 42
-historical_artifacts: 5
+artifact_nodes: 59
+current_artifacts: 49
+historical_artifacts: 6
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
 milestone_3_checks_passing: 13
@@ -316,6 +336,14 @@ cross_validation_checker_disagreements: 3
 expected_outcomes_established: 2
 regression_candidates_with_unresolved_disagreement: 2
 milestone_5_checks_passing: 15
+transfer_experiments: 1
+positive_transfer: 1
+neutral_transfer: 0
+negative_transfer: 0
+inconclusive_transfer: 0
+incompatible_transfer: 0
+unresolved_transfer: 0
+milestone_6_checks_passing: 16
 ```
 
 ## First Mutation Result
@@ -405,13 +433,19 @@ milestone_5_checks_passing: 15
 - Official Lean's direct checker accepts the malformed-object probe as zero
   declarations while Kiota reports a JSON parse error. The probe is diagnostic,
   not a regression candidate.
+- The positive transfer result covers one fault family, one small generated
+  candidate, and one held-out validator. It demonstrates the protocol and one
+  transfer event; it does not establish a general transfer rate.
+- The first candidate is structurally derived from an existing Arena test by a
+  deterministic rename and control conversion. Later rotating experiments
+  should include less direct generators and different semantic subsystems.
 
 ## Next Concrete Experiment
 
-1. Begin Milestone 6 by selecting and introducing an analogous semantic fault
-   independently in Kiota without consulting held-out mutant outcomes during
-   test generation.
-2. Freeze the generated corpus, evaluate the held-out Kiota mutant, and record
-   the transfer result even if it is neutral, inconclusive, or incompatible.
+1. Begin Milestone 7 by selecting another compatible implementation family and
+   a different semantic subsystem before generation.
+2. Reuse the cryptographic freeze boundary while rotating held-out validators,
+   source validators, and mutation families; publish neutral and negative cases
+   as readily as positive ones.
 3. Investigate the universe-ownership disagreement separately and prepare an
    upstream report with the exact original witness and checker identities.

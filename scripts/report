@@ -256,6 +256,16 @@ def main() -> int:
                 expected_outcomes_established += json.loads(path.read_text(encoding="utf-8")).get("status") == "ESTABLISHED"
             except json.JSONDecodeError:
                 continue
+    transfer_classifications: dict[str, int] = {}
+    transfer_root = args.results_root / "transfer"
+    if transfer_root.exists():
+        for path in transfer_root.glob("*/evaluation.json"):
+            try:
+                transfer = json.loads(path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+            classification = transfer.get("classification", "UNRESOLVED")
+            transfer_classifications[classification] = transfer_classifications.get(classification, 0) + 1
 
     report = {
         "mutation_score": score,
@@ -288,6 +298,8 @@ def main() -> int:
         "cross_validation_classifications": cross_validation_counts,
         "expected_outcomes_established": expected_outcomes_established,
         "regression_candidates_with_unresolved_disagreement": regression_candidates_with_disagreement,
+        "transfer_experiments": sum(transfer_classifications.values()),
+        "transfer_classifications": transfer_classifications,
         "stratified_metrics": {
             "minimum_sample": minimum_sample,
             "by_subsystem": stratified_metrics(

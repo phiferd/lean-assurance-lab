@@ -98,8 +98,8 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Full-corpus controls for one killed and one surviving generated mutant
   reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 51 input and derived
-  artifacts; 42 current artifacts pass, with five historical reports or
+- `results/artifacts/graph.json` content-addresses 59 input and derived
+  artifacts; 49 current artifacts pass, with six historical reports or
   attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
@@ -127,6 +127,16 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Exact expected-rejection evidence and accepted positive controls bind both
   witness artifacts as regression candidates with unresolved disagreements.
 - `results/assurance/milestone-5.json` records a passing 15-check Milestone 5
+  gate.
+- The first held-out transfer experiment froze a 438-byte non-`Prop` theorem
+  candidate before any Kiota mutant evaluation, with nanoda `REJECT` / `ACCEPT`
+  source-model evidence and official expected-rejection evidence.
+- The analogous independently introduced Kiota theorem-validation mutant was
+  killed by the frozen candidate: baseline `REJECT`, mutant `ACCEPT`. Both
+  checker states accepted the definition-form control.
+- The experiment is classified `POSITIVE_TRANSFER`; its evaluation binds the
+  exact pre-evaluation freeze SHA and records exact source restoration.
+- `results/assurance/milestone-6.json` records a passing 16-check Milestone 6
   gate.
 
 ## Milestone 0: Reproducible Project Foundation
@@ -366,7 +376,11 @@ Exit criteria:
 
 Goal: run the first explicit transfer experiment across independent validators.
 
-Tasks:
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-6.json`, with all 16 checks passing. The measured
+classification is `POSITIVE_TRANSFER`.
+
+Completed:
 
 1. Select a second validator with enough overlap to support a meaningful
    experiment.
@@ -487,13 +501,12 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Begin Milestone 6 with an independently introduced Kiota mutation selected
-   without consulting its mutant outcomes during test generation.
-2. Freeze a generated corpus before evaluating the held-out Kiota mutant and
-   record positive, neutral, negative, inconclusive, incompatible, or unresolved
-   transfer.
-3. Investigate the official/Kiota universe-ownership disagreement as a separate
-   durable issue without letting it determine the held-out transfer experiment.
+1. Begin Milestone 7 by rotating the held-out validator and fault subsystem so
+   Kiota is no longer the only transfer target.
+2. Require each experiment to publish its spec, frozen corpus SHA, generation
+   exclusions, expected-outcome evidence, and evaluation only after freeze.
+3. Keep the official/Kiota universe-ownership disagreement separate from held-out
+   scoring and prepare it for upstream investigation.
 4. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
 5. Commit and push after each coherent artifact-producing step.

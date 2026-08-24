@@ -1,0 +1,168 @@
+#!/usr/bin/env python3
+"""Produce and gate the Milestone 6 held-out transfer assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+
+KIOTA_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "kiota" / "src"
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def bound(record: dict) -> bool:
+    path = ROOT / record["path"]
+    return path.exists() and digest(path) == record["sha256"]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "assurance" / "milestone-6.json",
+    )
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        try:
+            require_current(
+                load_graph(graph_path), ROOT, ["report:milestone6-assurance"],
+                dependencies_only=True,
+            )
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
+
+    spec_path = ROOT / "experiments" / "milestone-6" / "spec.json"
+    freeze_path = ROOT / "results" / "transfer" / "milestone-6" / "freeze.json"
+    evaluation_path = ROOT / "results" / "transfer" / "milestone-6" / "evaluation.json"
+    spec = load(spec_path)
+    freeze = load(freeze_path)
+    evaluation = load(evaluation_path)
+    reference = load(ROOT / freeze["reference_evidence"]["path"])
+    inventory = load(ROOT / "results" / "cross-validation" / "validator-inventory.json")
+    m5 = load(ROOT / "results" / "assurance" / "milestone-5.json")
+    mutation_catalog = load(ROOT / "mutation-model" / "catalog.json")
+    manual = {row["id"]: row for row in mutation_catalog["manual_mutants"]}
+    spec_schema = load(ROOT / "schemas" / "transfer-spec.schema.json")
+    freeze_schema = load(ROOT / "schemas" / "transfer-freeze.schema.json")
+    evaluation_schema = load(ROOT / "schemas" / "transfer-evaluation.schema.json")
+    candidate = freeze["frozen_corpus"]["candidate"]
+    control = freeze["frozen_corpus"]["positive_control"]
+    source_candidate = freeze["source_validator_evidence"]["candidate"]
+    source_control = freeze["source_validator_evidence"]["positive_control"]
+    held_candidate = evaluation["candidate_evaluation"]
+    held_control = evaluation["control_evaluation"]
+    kiota_identity = next(row for row in inventory["validators"] if row["id"] == "kiota")
+    kiota_clean = not subprocess.run(
+        ["git", "status", "--porcelain"], cwd=KIOTA_ROOT, check=True, text=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+    frozen_time = datetime.fromisoformat(freeze["frozen_at"])
+    evaluation_time = datetime.fromisoformat(evaluation["started_at"])
+    composite = hashlib.sha256((candidate["sha256"] + "\0" + control["sha256"]).encode()).hexdigest()
+    classification_states = {
+        "POSITIVE_TRANSFER", "NEUTRAL_TRANSFER", "NEGATIVE_TRANSFER",
+        "INCONCLUSIVE", "INCOMPATIBLE", "UNRESOLVED",
+    }
+    evaluation_schema_text = json.dumps(evaluation_schema, sort_keys=True)
+
+    checks = {
+        "transfer_artifacts_conform_to_schemas": jsonschema.Draft202012Validator(spec_schema).is_valid(spec)
+        and jsonschema.Draft202012Validator(freeze_schema).is_valid(freeze)
+        and jsonschema.Draft202012Validator(evaluation_schema).is_valid(evaluation),
+        "held_out_validator_is_independent_and_pinned": spec["held_out_validator"] == "kiota"
+        and kiota_identity["independent_from_nanoda"]
+        and kiota_identity["source_revision"] == spec["held_out_source"]["expected_revision"]
+        and kiota_identity["source_clean"],
+        "fault_is_analogous_to_source_model": spec["source_mutant"] == "nanoda-0001"
+        and spec["mutation"]["operator"] == manual["nanoda-0001"]["operator"]
+        and spec["mutation"]["subsystem"] == manual["nanoda-0001"]["subsystem"],
+        "generation_uses_no_held_out_mutant_feedback": freeze["protocol"]["held_out_mutant_results_used_for_generation"] is False
+        and freeze["protocol"]["held_out_mutant_execution_permitted_before_freeze"] is False
+        and "Kiota mutant outcomes" in freeze["protocol"]["excluded_generation_inputs"],
+        "source_validator_distinction_is_mechanical": source_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and source_candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+        and source_candidate["different"]
+        and source_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and source_control["mutant"]["normalized_outcome"] == "ACCEPT"
+        and not source_control["different"],
+        "reference_expected_rejection_is_mechanical": bound(freeze["reference_evidence"])
+        and reference["status"] == "ESTABLISHED" and reference["expected_outcome"] == "REJECT"
+        and reference["artifact"]["sha256"] == candidate["sha256"]
+        and reference["positive_control"]["result"]["normalized_outcome"] == "ACCEPT",
+        "frozen_corpus_is_current_and_content_addressed": bound(candidate) and bound(control)
+        and freeze["frozen_corpus"]["composite_sha256"] == composite,
+        "freeze_precedes_and_binds_evaluation": frozen_time < evaluation_time
+        and evaluation["frozen_manifest"]["sha256"] == digest(freeze_path)
+        and evaluation["feedback_boundary"]["freeze_sha256_evaluated_verbatim"] == digest(freeze_path)
+        and evaluation["feedback_boundary"]["frozen_before_evaluation"],
+        "held_out_mutation_was_declared_at_freeze": freeze["held_out_boundary"]["mutation_declared_but_not_applied"]
+        and freeze["held_out_boundary"]["mutation_id"] == spec["mutation"]["id"]
+        and freeze["experiment_spec"]["sha256"] == digest(spec_path),
+        "frozen_corpus_kills_held_out_mutant": held_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and held_candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+        and held_candidate["different"],
+        "held_out_positive_control_does_not_regress": held_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and held_control["mutant"]["normalized_outcome"] == "ACCEPT"
+        and not held_control["different"],
+        "transfer_classification_is_positive": evaluation["classification"] == "POSITIVE_TRANSFER"
+        and evaluation["reason"] == "FROZEN_CORPUS_KILLS_ANALOGOUS_HELD_OUT_MUTANT",
+        "held_out_source_is_exactly_restored": evaluation["source_restored"]
+        and evaluation["held_out_preparation"]["restored_source_sha256"] == spec["held_out_source"]["baseline_source_sha256"]
+        and kiota_clean,
+        "producer_and_input_hashes_are_current": bound(freeze["generator"])
+        and bound(freeze["experiment_spec"])
+        and bound(evaluation["producer"])
+        and evaluation["producer"]["library_sha256"] == digest(ROOT / "lib" / "kiota_differential.py"),
+        "all_transfer_classifications_are_modeled": all(state in evaluation_schema_text for state in classification_states),
+        "milestone5_remains_valid": m5["status"] == "PASS" and all(m5["checks"].values()),
+    }
+    existing = load(args.output) if args.output.exists() else {}
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-6",
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": evaluation["classification"],
+        "checks": checks,
+        "experiment_spec": str(spec_path.relative_to(ROOT)),
+        "freeze": str(freeze_path.relative_to(ROOT)),
+        "evaluation": str(evaluation_path.relative_to(ROOT)),
+        "measurements": {
+            "frozen_candidate_bytes": candidate["bytes"],
+            "held_out_checker_runs": evaluation["costs"]["checker_runs"],
+            "held_out_checker_seconds": evaluation["costs"]["checker_seconds"],
+            "freeze_to_evaluation_seconds": (evaluation_time - frozen_time).total_seconds(),
+            "source_validator_difference": source_candidate["different"],
+            "held_out_validator_difference": held_candidate["different"],
+            "control_regression": held_control["different"],
+        },
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

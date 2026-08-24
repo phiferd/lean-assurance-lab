@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""Evaluate the frozen Milestone 6 corpus against a held-out Kiota mutant."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from kiota_differential import (  # noqa: E402
+    KIOTA_ROOT, KiotaDifferentialSession, classify_transfer, sha256_file,
+)
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def validate_bound_file(record: dict) -> Path:
+    path = ROOT / record["path"]
+    if not path.exists() or sha256_file(path) != record["sha256"]:
+        raise SystemExit(f"frozen input is missing or stale: {record['path']}")
+    return path
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--freeze", type=Path,
+        default=ROOT / "results" / "transfer" / "milestone-6" / "freeze.json",
+    )
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "transfer" / "milestone-6" / "evaluation.json",
+    )
+    parser.add_argument("--timeout", type=float, default=60.0)
+    args = parser.parse_args()
+    if args.output.exists():
+        raise SystemExit("held-out evaluation already exists and cannot be overwritten")
+    started_at = datetime.now(timezone.utc)
+    freeze = load(args.freeze)
+    if freeze["status"] != "FROZEN_BEFORE_HELD_OUT_EVALUATION":
+        raise SystemExit("experiment corpus is not frozen")
+    frozen_at = datetime.fromisoformat(freeze["frozen_at"])
+    if not frozen_at < started_at:
+        raise SystemExit("freeze timestamp is not earlier than evaluation")
+    if freeze["protocol"]["held_out_mutant_results_used_for_generation"]:
+        raise SystemExit("held-out mutant feedback contaminated generation")
+    candidate_path = validate_bound_file(freeze["frozen_corpus"]["candidate"])
+    control_path = validate_bound_file(freeze["frozen_corpus"]["positive_control"])
+    spec_path = validate_bound_file(freeze["experiment_spec"])
+    reference_path = validate_bound_file(freeze["reference_evidence"])
+    generator_path = validate_bound_file(freeze["generator"])
+    reference = load(reference_path)
+    if (
+        reference["status"] != "ESTABLISHED"
+        or reference["artifact"]["sha256"] != freeze["frozen_corpus"]["candidate"]["sha256"]
+        or reference["expected_outcome"] != freeze["reference_evidence"]["expected_outcome"]
+    ):
+        raise SystemExit("reference evidence does not bind the frozen candidate")
+
+    with KiotaDifferentialSession(spec_path, args.timeout) as session:
+        candidate = session.evaluate(candidate_path)
+        control = session.evaluate(control_path)
+        preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+    classification, reason = classify_transfer(candidate, control, reference["expected_outcome"])
+    source_clean = not subprocess.run(
+        ["git", "status", "--porcelain"], cwd=KIOTA_ROOT, check=True, text=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+    source_restored = bool(preparation["source_restored"] and source_clean)
+    if not source_restored:
+        raise RuntimeError("held-out Kiota source was not restored exactly")
+
+    result = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "COMPLETE",
+        "classification": classification,
+        "reason": reason,
+        "started_at": started_at.isoformat(),
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "frozen_manifest": {"path": relative(args.freeze), "sha256": sha256_file(args.freeze)},
+        "experiment_spec": {"path": relative(spec_path), "sha256": sha256_file(spec_path)},
+        "candidate_evaluation": candidate,
+        "control_evaluation": control,
+        "expected_outcome": reference["expected_outcome"],
+        "reference_evidence": {"path": relative(reference_path), "sha256": sha256_file(reference_path)},
+        "held_out_preparation": preparation,
+        "source_restored": source_restored,
+        "costs": {"checker_runs": checker_runs, "checker_seconds": checker_seconds},
+        "feedback_boundary": {
+            "held_out_mutant_results_used_for_generation": False,
+            "frozen_before_evaluation": frozen_at < started_at,
+            "freeze_sha256_evaluated_verbatim": sha256_file(args.freeze),
+        },
+        "producer": {
+            "path": relative(Path(__file__)),
+            "sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+            "library_sha256": sha256_file(ROOT / "lib" / "kiota_differential.py"),
+        },
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

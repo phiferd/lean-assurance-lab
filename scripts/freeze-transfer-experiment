@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""Generate and freeze the Milestone 6 corpus before held-out evaluation."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import subprocess
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from nanoda_differential import DifferentialSession, sha256_file  # noqa: E402
+from witness_search import canonical_ndjson, read_ndjson  # noqa: E402
+
+SPEC = ROOT / "experiments" / "milestone-6" / "spec.json"
+KIOTA_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "kiota" / "src"
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def git_output(*args: str, cwd: Path) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=cwd, check=True, text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
+def artifact_record(path: Path) -> dict:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "transfer" / "milestone-6" / "freeze.json",
+    )
+    args = parser.parse_args()
+    evaluation = args.output.parent / "evaluation.json"
+    if args.output.exists() or evaluation.exists():
+        raise SystemExit("freeze/evaluation artifact already exists; held-out boundary cannot be rewritten")
+
+    spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    seed = ROOT / spec["generation"]["seed"]
+    records = read_ndjson(seed)
+    candidate = copy.deepcopy(records)
+    changed = 0
+    for row in candidate:
+        string = row.get("str")
+        if isinstance(string, dict) and string.get("str") == "nonPropThm":
+            string["str"] = spec["generation"]["candidate_name"]
+            changed += 1
+    if changed != 1 or "thm" not in candidate[-1]:
+        raise SystemExit("seed no longer has the expected non-Prop theorem shape")
+    control = copy.deepcopy(candidate)
+    for row in control:
+        string = row.get("str")
+        if isinstance(string, dict) and string.get("str") == spec["generation"]["candidate_name"]:
+            string["str"] = spec["generation"]["control_name"]
+    theorem = control[-1].pop("thm")
+    theorem.update({"hints": "opaque", "safety": "safe"})
+    control[-1]["def"] = theorem
+
+    corpus_dir = ROOT / "corpus" / "transfer" / "milestone-6"
+    corpus_dir.mkdir(parents=True, exist_ok=True)
+    candidate_path = corpus_dir / "nonprop-theorem.ndjson"
+    control_path = corpus_dir / "nonprop-definition-control.ndjson"
+    candidate_path.write_bytes(canonical_ndjson(candidate))
+    control_path.write_bytes(canonical_ndjson(control))
+
+    with DifferentialSession(spec["source_mutant"], timeout=60.0) as session:
+        source_candidate = session.evaluate(candidate_path)
+        source_control = session.evaluate(control_path)
+        source_preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+    if not (
+        source_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and source_candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+        and source_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and source_control["mutant"]["normalized_outcome"] == "ACCEPT"
+    ):
+        raise SystemExit("generated corpus does not isolate the nanoda source fault")
+
+    evidence_path = ROOT / "results" / "expected-outcomes" / "m6-nonprop-theorem.json"
+    expected_proc = subprocess.run(
+        [
+            str(ROOT / "scripts" / "establish-expected-outcome"), "m6-nonprop-theorem",
+            str(candidate_path), "--control", str(control_path), "--reference", "official",
+            "--rationale", "theorem declaration type is not a Prop",
+            "--output", str(evidence_path),
+        ],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    )
+    if expected_proc.returncode:
+        raise SystemExit(expected_proc.stdout)
+    reference = json.loads(evidence_path.read_text(encoding="utf-8"))
+    if reference["status"] != "ESTABLISHED" or reference["expected_outcome"] != "REJECT":
+        raise SystemExit("official reference did not establish expected rejection")
+
+    held_out_source = KIOTA_ROOT / spec["mutation"]["source_file"]
+    held_out_text = held_out_source.read_text(encoding="utf-8")
+    source_clean = not git_output("status", "--porcelain", cwd=KIOTA_ROOT)
+    held_out = spec["held_out_source"]
+    if not (
+        git_output("rev-parse", "HEAD", cwd=KIOTA_ROOT) == held_out["expected_revision"]
+        and sha256_file(held_out_source) == held_out["baseline_source_sha256"]
+        and source_clean
+        and spec["mutation"]["original"] in held_out_text
+        and spec["mutation"]["mutated"] not in held_out_text
+    ):
+        raise SystemExit("held-out Kiota source is not pristine at the declared boundary")
+
+    candidate_record = artifact_record(candidate_path)
+    control_record = artifact_record(control_path)
+    composite = hashlib.sha256(
+        (candidate_record["sha256"] + "\0" + control_record["sha256"]).encode()
+    ).hexdigest()
+    manifest = {
+        "schema_version": 1,
+        "experiment_id": spec["experiment_id"],
+        "status": "FROZEN_BEFORE_HELD_OUT_EVALUATION",
+        "frozen_at": datetime.now(timezone.utc).isoformat(),
+        "protocol": {
+            "held_out_mutant_results_used_for_generation": False,
+            "held_out_mutant_execution_permitted_before_freeze": False,
+            "generation_inputs": ["nanoda mutation model", "Arena seed", "official reference"],
+            "excluded_generation_inputs": ["Kiota mutant outcomes", "Kiota mutant logs"],
+        },
+        "experiment_spec": {"path": relative(SPEC), "sha256": sha256_file(SPEC)},
+        "generator": {
+            "path": relative(Path(__file__)), "sha256": sha256_file(Path(__file__)),
+            "strategy": spec["generation"]["strategy"],
+            "seed": artifact_record(seed),
+        },
+        "frozen_corpus": {
+            "candidate": candidate_record,
+            "positive_control": control_record,
+            "composite_sha256": composite,
+        },
+        "source_validator_evidence": {
+            "validator": "nanoda", "mutant_id": spec["source_mutant"],
+            "mutation_spec_sha256": sha256_file(ROOT / "mutations" / f"{spec['source_mutant']}.json"),
+            "candidate": source_candidate, "positive_control": source_control,
+            "preparation": source_preparation, "checker_runs": checker_runs,
+            "checker_seconds": checker_seconds,
+        },
+        "reference_evidence": {
+            "path": relative(evidence_path), "sha256": sha256_file(evidence_path),
+            "expected_outcome": reference["expected_outcome"],
+            "reference_checker": reference["reference_checker"]["id"],
+        },
+        "held_out_boundary": {
+            "validator": spec["held_out_validator"],
+            "source_revision": held_out["expected_revision"],
+            "source_sha256": held_out["baseline_source_sha256"],
+            "source_clean": source_clean,
+            "mutation_declared_but_not_applied": True,
+            "mutation_id": spec["mutation"]["id"],
+        },
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
