@@ -156,6 +156,32 @@ def main() -> int:
         "baseline_restore_seconds": seconds,
         "results": results,
     }
+    build_by_id = {row["mutant_id"]: row for row in results}
+    for attempt in manifest.get("attempts", []):
+        build_result = build_by_id.get(attempt["id"])
+        if build_result:
+            attempt["attempt_status"] = (
+                "COMPILING_SEMANTIC_MUTANT"
+                if build_result["status"] == "BUILT"
+                else "BUILD_FAILURE"
+            )
+            attempt["attempt_reason"] = (
+                "ISOLATED_RELEASE_BUILD_PASSED"
+                if build_result["status"] == "BUILT"
+                else "ISOLATED_RELEASE_BUILD_FAILED"
+            )
+    if "attempts" in manifest:
+        statuses = (
+            "COMPILING_SEMANTIC_MUTANT",
+            "BUILD_FAILURE",
+            "DUPLICATE",
+            "UNSUPPORTED_MUTATION_SITE",
+            "REJECTED_NON_SEMANTIC",
+        )
+        manifest["attempt_summary"] = {
+            status: sum(row["attempt_status"] == status for row in manifest["attempts"])
+            for status in statuses
+        }
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps(manifest["build_validation"], indent=2, sort_keys=True))
     return 1 if any(row["status"] == "BUILD_FAILED" for row in results) else 0

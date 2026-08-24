@@ -87,14 +87,24 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Syntax-aware Rust mutation discovery, covered-site filtering, deterministic
   identity, exact occurrence replacement, registration, isolated build
   validation, and resumable batch execution are mechanical and require no LLM.
-- The first active generated batch contains 12 compiling mutants: 1 was killed
-  and 11 survived complete coverage-selected schedules.
+- The first generated batch is retained as superseded evidence: 1 of its 12
+  compiling mutants was killed and 11 survived coverage-selected schedules.
+- The active bounded semantic batch contains 12 compiling mutants across four
+  operator families and seven subsystems: 6 were killed and 6 survived complete
+  coverage-selected schedules without witnesses.
+- The active attempt inventory classifies 12 compiling semantic mutants, 0
+  build failures, 29 duplicates, 115 unsupported sites, and 324 rejected
+  non-semantic candidates.
+- Full-corpus controls for one killed and one surviving generated mutant
+  reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 29 input and derived
-  artifacts; 26 current artifacts pass, with one historical repository
-  attestation and two superseded mutation batches retained.
+- `results/artifacts/graph.json` content-addresses 35 input and derived
+  artifacts; 28 current artifacts pass, with three historical reports or
+  attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
+- `results/assurance/milestone-3.json` records a passing 13-check Milestone 3
+  gate.
 
 ## Milestone 0: Reproducible Project Foundation
 
@@ -235,7 +245,10 @@ Exit criteria:
 
 Goal: build a documented semantic fault model beyond a few manual mutants.
 
-Tasks:
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-3.json`, with all 13 checks passing.
+
+Completed:
 
 1. Convert current manual mutation specs into a more structured mutation
    catalog.
@@ -445,18 +458,15 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Run a sampled full-corpus audit for one killed and one surviving generated
-   mutant to continue testing the coverage exclusion invariant.
-2. Prioritize witness search for the 11 active generated survivors and
-   `nanoda-0004`, beginning with the six quotient-validation survivors.
-3. Expand the semantic operator catalog beyond statement-level
-   `SKIP_VALIDATION` while preserving deterministic identities and build-failure
-   classification.
-4. Prepare direct execution and compatibility metadata for a second independent
+1. Begin Milestone 4 with mechanical witness search for active semantic
+   survivors, prioritizing universe-boundary and quotient-validation mutants.
+2. Add structure-aware NDJSON transformations and automatic minimization for
+   found distinctions.
+3. Prepare direct execution and compatibility metadata for a second independent
    validator.
-5. Define durable remote storage for ignored coverage and materialized-corpus
+4. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
-6. Commit and push after each coherent artifact-producing step.
+5. Commit and push after each coherent artifact-producing step.
 
 ## Decision Rules
 

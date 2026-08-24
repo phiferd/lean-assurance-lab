@@ -67,13 +67,30 @@ def git_revision(path: Path) -> str:
 
 def catalog() -> list[dict]:
     controlled_files = []
+    controlled_specs = []
     for mutant_id in [f"nanoda-{index:04d}" for index in range(1, 5)]:
+        controlled_specs.append(f"{mutant_id}.json")
         controlled_files.extend(
             [
                 f"{mutant_id}/schedule.json",
                 f"{mutant_id}/scheduled-comparison.json",
             ]
         )
+    milestone1_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-syntax-0003.json").read_text(encoding="utf-8")
+    )
+    milestone3_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-semantic-0001.json").read_text(encoding="utf-8")
+    )
+    milestone1_comparisons = [
+        f"{row['id']}/scheduled-comparison.json" for row in milestone1_batch["mutants"]
+    ]
+    milestone3_comparisons = [
+        f"{row['id']}/scheduled-comparison.json" for row in milestone3_batch["mutants"]
+    ] + [
+        "nanoda-gen-34b1a4c65d39/comparison.json",
+        "nanoda-gen-4238224977cc/comparison.json",
+    ]
     return [
         node(
             "input:repository-revision",
@@ -170,7 +187,11 @@ def catalog() -> list[dict]:
                 "scripts/artifact-status",
                 "scripts/build-artifact-graph",
                 "scripts/milestone-2-assurance",
+                "scripts/milestone-3-assurance",
+                "scripts/audit-coverage-guidance",
+                "schemas/mutation-catalog.schema.json",
                 "tests/test_artifact_graph.py",
+                "tests/test_mutation_model.py",
             ),
             required=True,
         ),
@@ -180,6 +201,8 @@ def catalog() -> list[dict]:
             locator=files(
                 ".",
                 "docs/MUTATION_MODEL.md",
+                "mutation-model/catalog.json",
+                "schemas/mutation-catalog.schema.json",
                 "scripts/generate-mutations",
                 "tools/nanoda-mutator/Cargo.toml",
                 "tools/nanoda-mutator/Cargo.lock",
@@ -193,6 +216,18 @@ def catalog() -> list[dict]:
             locator=files("mutations", "*.json"),
             dependencies=["mutation-model:nanoda"],
             required=True,
+        ),
+        node(
+            "mutation-spec:controlled",
+            "mutation-spec",
+            locator={
+                "kind": "file_set",
+                "root": "mutations",
+                "include": controlled_specs,
+                "exclude": [],
+            },
+            required=True,
+            notes="Exact unchanged specs for the four controlled Milestone 1 mutants.",
         ),
         node(
             "corpus:arena-materialized",
@@ -240,7 +275,7 @@ def catalog() -> list[dict]:
             },
             dependencies=[
                 "coverage:identity-snapshot",
-                "mutation-spec:catalog",
+                "mutation-spec:controlled",
                 "script:mutation-execution",
             ],
             required=True,
@@ -271,20 +306,66 @@ def catalog() -> list[dict]:
                 "coverage:identity-snapshot",
                 "script:mutation-execution",
             ],
+            lifecycle="superseded",
+        ),
+        node(
+            "comparison:generated-mutants-m1",
+            "comparison",
+            locator={
+                "kind": "file_set",
+                "root": "results/mutants",
+                "include": milestone1_comparisons,
+                "exclude": [],
+            },
+            dependencies=["run:mutation-batch-0003"],
+            lifecycle="superseded",
+        ),
+        node(
+            "run:mutation-batch-semantic-0001",
+            "run",
+            locator=file("results/mutation-batches/nanoda-semantic-0001.json"),
+            dependencies=[
+                "validator:nanoda",
+                "corpus:arena-materialized",
+                "mutation-model:nanoda",
+                "mutation-spec:catalog",
+                "coverage:identity-snapshot",
+                "script:mutation-execution",
+            ],
             required=True,
         ),
         node(
-            "comparison:generated-mutants",
+            "comparison:semantic-mutants-m3",
             "comparison",
-            locator=files("results/mutants", "nanoda-gen-*/scheduled-comparison.json"),
-            dependencies=["run:mutation-batch-0003"],
+            locator={
+                "kind": "file_set",
+                "root": "results/mutants",
+                "include": milestone3_comparisons,
+                "exclude": [],
+            },
+            dependencies=["run:mutation-batch-semantic-0001"],
+            required=True,
+        ),
+        node(
+            "comparison:coverage-guidance-audit-m3",
+            "comparison",
+            locator=file("results/audits/coverage-guidance-milestone-3.json"),
+            dependencies=[
+                "comparison:semantic-mutants-m3",
+                "corpus:arena-materialized",
+                "corpus:baseline-outcomes",
+            ],
             required=True,
         ),
         node(
             "classification:registry",
             "classification",
             locator=file("results/mutants/registry.jsonl"),
-            dependencies=["comparison:controlled-mutants", "comparison:generated-mutants"],
+            dependencies=[
+                "comparison:controlled-mutants",
+                "comparison:generated-mutants-m1",
+                "comparison:semantic-mutants-m3",
+            ],
             required=True,
         ),
         node(
@@ -295,7 +376,7 @@ def catalog() -> list[dict]:
                 "corpus/generated/nanoda-0003-undeclared-const-universe.ndjson",
                 "results/witnesses/nanoda-0003-undeclared-const-universe/metadata.json",
             ),
-            dependencies=["comparison:controlled-mutants", "mutation-spec:catalog"],
+            dependencies=["comparison:controlled-mutants", "mutation-spec:controlled"],
             required=True,
         ),
         node(
@@ -328,7 +409,7 @@ def catalog() -> list[dict]:
             locator=file("results/mutants/nanoda-0003/augmented-comparison.json"),
             dependencies=[
                 "validator:nanoda",
-                "mutation-spec:catalog",
+                "mutation-spec:controlled",
                 "witness:nanoda-0003",
                 "classification:regression-0003",
                 "script:mutation-execution",
@@ -338,11 +419,12 @@ def catalog() -> list[dict]:
         node(
             "report:mutation-summary",
             "report",
-            locator=file("results/assurance/milestone-1-report.json"),
+            locator=file("results/assurance/milestone-3-report.json"),
             dependencies=[
                 "classification:registry",
                 "comparison:controlled-mutants",
-                "comparison:generated-mutants",
+                "comparison:generated-mutants-m1",
+                "comparison:semantic-mutants-m3",
                 "classification:regression-0003",
                 "script:reporting",
                 "script:artifact-system",
@@ -359,6 +441,27 @@ def catalog() -> list[dict]:
                 "run:mutation-batch-0003",
                 "comparison:witness-reference",
                 "run:augmented-0003",
+                "script:reporting",
+                "script:artifact-system",
+            ],
+            lifecycle="historical",
+        ),
+        node(
+            "report:milestone2-assurance",
+            "report",
+            locator=file("results/assurance/milestone-2.json"),
+            dependencies=["script:artifact-system"],
+            lifecycle="historical",
+        ),
+        node(
+            "report:milestone3-assurance",
+            "report",
+            locator=file("results/assurance/milestone-3.json"),
+            dependencies=[
+                "run:mutation-batch-semantic-0001",
+                "comparison:semantic-mutants-m3",
+                "comparison:coverage-guidance-audit-m3",
+                "classification:registry",
                 "report:mutation-summary",
                 "script:reporting",
                 "script:artifact-system",

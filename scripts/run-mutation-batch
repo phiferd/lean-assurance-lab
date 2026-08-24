@@ -26,6 +26,12 @@ def main() -> int:
     args = parser.parse_args()
     manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+    build_status = {
+        row["mutant_id"]: row["status"]
+        for row in manifest.get("build_validation", {}).get("results", [])
+    }
+    if not build_status:
+        raise SystemExit("batch has no build validation; run scripts/validate-mutation-batch first")
     execution = manifest.setdefault(
         "execution",
         {
@@ -40,6 +46,17 @@ def main() -> int:
 
     for entry in manifest["mutants"]:
         mutant_id = entry["id"]
+        if build_status.get(mutant_id) != "BUILT":
+            if mutant_id not in completed:
+                execution["results"].append(
+                    {
+                        "mutant_id": mutant_id,
+                        "status": "SKIPPED_BUILD_FAILURE",
+                        "completed_at": datetime.now(timezone.utc).isoformat(),
+                    }
+                )
+                save(manifest_path, manifest)
+            continue
         if mutant_id in completed:
             continue
         comparison_path = ROOT / "results" / "mutants" / mutant_id / "scheduled-comparison.json"

@@ -82,6 +82,25 @@ Last updated: 2026-08-23
   expected-semantics changes; every required descendant became stale.
 - Produced `results/assurance/milestone-2.json`; all nine Milestone 2 checks
   pass.
+- Added a schema-validated mutation catalog binding all four manual specs and
+  defining validation-elision, predicate-negation, relational-boundary, and
+  equality-discrimination operator families across semantic subsystems.
+- Extended the `syn` mutator to discover Boolean guard and comparison-boundary
+  mutations with function, source-column, semantic rationale, and deterministic
+  content identity.
+- Classified all 480 discovered candidates in active batch
+  `nanoda-semantic-0001`: 12 compiling semantic mutants, 0 build failures, 29
+  duplicates, 115 unsupported sites, and 324 rejected non-semantic changes.
+- Executed the 12-mutant bounded batch from 23:36:11Z to 00:26:56Z: 6 were
+  killed and 6 exhausted their covering schedules and survived without
+  witnesses.
+- Added mutation score strata by operator, operator family, and subsystem with
+  a three-mutant sufficiency threshold. Under-sampled strata retain counts and
+  report `INSUFFICIENT_SAMPLE` instead of a score.
+- Full-corpus audited generated killed mutant `nanoda-gen-34b1a4c65d39` and
+  survivor `nanoda-gen-4238224977cc`; both coverage-guided conclusions matched
+  after complete 197-test runs.
+- Produced `results/assurance/milestone-3.json`; all 13 Milestone 3 checks pass.
 
 ## Command Log
 
@@ -149,6 +168,18 @@ python3 -m unittest discover -s tests -p 'test_*.py' -v
 scripts/milestone-2-assurance
 scripts/artifact-status --simulate-change validator:nanoda
 scripts/artifact-status --simulate-missing corpus:arena-materialized
+scripts/generate-mutations --limit 12 --batch-id nanoda-semantic-0001 --write --register
+scripts/validate-mutation-batch nanoda-semantic-0001
+scripts/run-mutation-batch nanoda-semantic-0001
+scripts/report --allow-stale-artifacts --output results/assurance/milestone-3-report.json
+scripts/audit-coverage-guidance nanoda-gen-34b1a4c65d39 nanoda-gen-4238224977cc
+scripts/generate-mutations --limit 12 --batch-id nanoda-semantic-0001 --write --refresh
+.venv-arena/bin/python -c 'import json,jsonschema; from pathlib import Path; jsonschema.Draft202012Validator(json.loads(Path("schemas/mutation-catalog.schema.json").read_text())).validate(json.loads(Path("mutation-model/catalog.json").read_text()))'
+scripts/milestone-3-assurance --allow-stale-artifacts
+scripts/build-artifact-graph
+scripts/artifact-status --require-current --output results/artifacts/status.json
+python3 -m unittest discover -s tests -p 'test_*.py' -v
+scripts/milestone-3-assurance
 ```
 
 Notes:
@@ -199,11 +230,14 @@ Notes:
 ## Current Metrics
 
 ```yaml
-mutation_score: 0.75
-generated_mutants: 30
-evaluated_mutants: 17
-killed_mutants: 3
-surviving_mutants: 14
+mutation_score: 0.9
+mutation_score_scope: explicit MEANINGFUL_SEMANTIC classifications only
+modeled_mutation_score: 0.3103448275862069
+modeled_mutation_score_denominator: 29
+generated_mutants: 42
+evaluated_mutants: 29
+killed_mutants: 9
+surviving_mutants: 20
 build_failed_mutants: 0
 superseded_mutants: 13
 unevaluated_mutants: 0
@@ -212,16 +246,17 @@ classified_unreachable: 0
 classified_performance_only: 0
 classified_non_semantic: 10
 meaningful_survivors: 1
-survived_without_witness: 13
+survived_without_witness: 19
 unknown_equivalence: 3
 witnesses_found: 1
 minimized_witnesses: 0
 arena_regression_candidates: 1
-artifact_nodes: 29
-current_artifacts: 26
-historical_artifacts: 1
-superseded_artifacts: 2
+artifact_nodes: 35
+current_artifacts: 28
+historical_artifacts: 3
+superseded_artifacts: 4
 milestone_2_checks_passing: 9
+milestone_3_checks_passing: 13
 ```
 
 ## First Mutation Result
@@ -282,14 +317,15 @@ milestone_2_checks_passing: 9
 
 ## Unresolved Problems
 
-- Eleven mutants in active batch `nanoda-syntax-0003`, one earlier generated
-  mutant, and `nanoda-0004` survived without witnesses. They are not claimed
-  equivalent.
+- Six mutants in active batch `nanoda-semantic-0001`, eleven mutants in the
+  superseded first batch, one earlier generated mutant, and `nanoda-0004`
+  survived without witnesses. They are not claimed equivalent.
 - Coverage payloads remain ignored local files; their complete identities and
   corpus inputs are tracked and mechanically verified, but remote payload
   storage is not yet implemented.
-- Only statement-level validation-call mutations are generated automatically;
-  broader semantic operator families remain future work.
+- The current four operator families remain a narrow source-level semantic
+  model; match-arm, substitution/lifting, and richer reduction mutations remain
+  future work.
 - Large corpus files are expensive: `mathlib.ndjson` is about 5.2 GB,
   `cslib.ndjson` about 2.0 GB, and `cedar.ndjson` about 790 MB.
 - The repository revision recorded by an attestation becomes historical after
@@ -299,10 +335,9 @@ milestone_2_checks_passing: 9
 
 ## Next Concrete Experiment
 
-1. Run a sampled full-corpus audit for one killed and one surviving generated
-   mutant.
-2. Begin mechanical witness search for the six quotient-validation survivors.
-3. Expand the semantic mutation catalog beyond statement-level skipped
-   validation calls.
-4. Prepare a second independent validator for direct compatibility and
+1. Begin mechanical witness search for the two active universe-boundary
+   survivors and the six superseded quotient-validation survivors.
+2. Add structure-aware NDJSON transformations and automatic witness
+   minimization.
+3. Prepare a second independent validator for direct compatibility and
    confirmation runs.

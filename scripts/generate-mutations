@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Generate and register a deterministic, syntax-aware nanoda mutant batch."""
+"""Discover, classify, and register a bounded semantic nanoda mutant batch."""
 
 from __future__ import annotations
 
@@ -7,6 +7,7 @@ import argparse
 import hashlib
 import json
 import subprocess
+from collections import defaultdict, deque
 from datetime import datetime, timezone
 from pathlib import Path
 
@@ -18,6 +19,18 @@ REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
 COVERAGE = ROOT / "results" / "coverage" / "nanoda" / "line-to-tests.json"
 BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
 TOOL_MANIFEST = ROOT / "tools" / "nanoda-mutator" / "Cargo.toml"
+MODEL = ROOT / "mutation-model" / "catalog.json"
+NON_SEMANTIC_FILES = {
+    "src/debug_printer.rs", "src/main.rs", "src/parser.rs", "src/pretty_printer.rs",
+    "src/tests.rs", "src/union_find.rs", "src/unique_hasher.rs", "src/util.rs",
+}
+FINAL_ATTEMPT_STATUSES = (
+    "COMPILING_SEMANTIC_MUTANT",
+    "BUILD_FAILURE",
+    "DUPLICATE",
+    "UNSUPPORTED_MUTATION_SITE",
+    "REJECTED_NON_SEMANTIC",
+)
 
 
 def sha256_bytes(data: bytes) -> str:
@@ -46,15 +59,7 @@ def source_digest() -> str:
 
 def parse_candidates(source: Path) -> list[dict]:
     proc = subprocess.run(
-        [
-            "cargo",
-            "run",
-            "--quiet",
-            "--manifest-path",
-            str(TOOL_MANIFEST),
-            "--",
-            str(source),
-        ],
+        ["cargo", "run", "--quiet", "--manifest-path", str(TOOL_MANIFEST), "--", str(source)],
         cwd=ROOT,
         check=True,
         text=True,
@@ -63,163 +68,314 @@ def parse_candidates(source: Path) -> list[dict]:
     return json.loads(proc.stdout)
 
 
+def infer_subsystem(source_file: str, function: str | None, fallback: str) -> str:
+    function = function or ""
+    if fallback not in {"unknown", "serialized-input-validation"}:
+        return "quotients" if source_file == "src/quot.rs" else fallback
+    if source_file == "src/level.rs":
+        return "universes"
+    if source_file == "src/quot.rs":
+        return "quotients"
+    if source_file == "src/inductive.rs":
+        if "ctor" in function:
+            return "constructors"
+        if "recursor" in function:
+            return "recursors"
+        return "inductive-declarations"
+    if source_file == "src/expr.rs":
+        if any(term in function for term in ("lift", "subst", "instantiate")):
+            return "substitution-lifting"
+        if any(term in function for term in ("bvar", "loose")):
+            return "bound-variables"
+        return "unknown"
+    if source_file == "src/tc.rs":
+        if "def_eq" in function:
+            return "definitional-equality"
+        if any(term in function for term in ("whnf", "reduce")):
+            return "expression-reduction"
+        if any(term in function for term in ("check", "infer")):
+            return "declaration-validation"
+    if source_file == "src/env.rs":
+        return "declaration-validation"
+    return "unknown"
+
+
+def is_modeled_function(source_file: str, function: str | None) -> bool:
+    function = function or ""
+    if source_file == "src/tc.rs":
+        return any(term in function for term in ("check", "infer", "def_eq", "whnf", "reduce"))
+    if source_file in {"src/inductive.rs", "src/quot.rs"}:
+        return "check" in function
+    if source_file == "src/level.rs":
+        return any(term in function for term in ("level", "is_", "dec_", "normalize", "imax", "leq"))
+    if source_file == "src/expr.rs":
+        return any(term in function for term in ("lift", "subst", "instantiate", "bvar", "loose"))
+    if source_file == "src/env.rs":
+        return any(term in function for term in ("check", "declar", "insert"))
+    return False
+
+
+def source_span(candidate: dict) -> str:
+    start = candidate["line_start"]
+    end = candidate["line_end"]
+    return str(start) if start == end else f"{start}-{end}"
+
+
+def identity_payload(candidate: dict) -> bytes:
+    return "\0".join(
+        [
+            candidate["source_file"],
+            str(candidate["line_start"]),
+            str(candidate["column_start"]),
+            candidate["operator"],
+            candidate["original"],
+            candidate["mutated"],
+        ]
+    ).encode()
+
+
+def select_balanced(eligible: list[dict], limit: int) -> list[dict]:
+    queues: dict[str, deque[dict]] = {}
+    for family, rows in sorted(
+        ((family, list(items)) for family, items in _group_by(eligible, "family").items()),
+        key=lambda item: item[0],
+    ):
+        rows.sort(key=lambda row: (row["estimated_seconds"], row["source_file"], row["line_start"], row["column_start"]))
+        queues[family] = deque(rows)
+    selected = []
+    while len(selected) < limit and any(queues.values()):
+        for family in sorted(queues):
+            if queues[family] and len(selected) < limit:
+                selected.append(queues[family].popleft())
+    return selected
+
+
+def _group_by(rows: list[dict], key: str) -> dict[str, list[dict]]:
+    grouped: dict[str, list[dict]] = defaultdict(list)
+    for row in rows:
+        grouped[row[key]].append(row)
+    return grouped
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=12)
-    parser.add_argument("--batch-id", default="nanoda-syntax-0001")
+    parser.add_argument("--batch-id", default="nanoda-semantic-0001")
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--register", action="store_true")
+    parser.add_argument(
+        "--refresh",
+        action="store_true",
+        help="recompute an existing batch while preserving compatible build and execution evidence",
+    )
     args = parser.parse_args()
-    if args.limit < 1:
-        raise SystemExit("--limit must be positive")
+    if not 1 <= args.limit <= 25:
+        raise SystemExit("--limit must be between 1 and 25")
     if args.register and not args.write:
         raise SystemExit("--register requires --write")
 
-    line_to_tests = json.loads(COVERAGE.read_text(encoding="utf-8"))
-    baseline_times = {
-        row["test"]: row.get("wall_time") or 0 for row in read_jsonl(BASELINE)
+    manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
+    existing_manifest = None
+    refresh_ids: set[str] = set()
+    if manifest_path.exists():
+        existing_manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        if args.write and not args.refresh:
+            raise SystemExit(f"batch already exists: {manifest_path}; pass --refresh to reproduce it")
+        if args.refresh:
+            refresh_ids = {row["id"] for row in existing_manifest["mutants"]}
+
+    model = json.loads(MODEL.read_text(encoding="utf-8"))
+    operators = {
+        operator: family["id"]
+        for family in model["operator_families"]
+        for operator in family["operators"]
     }
+    line_to_tests = json.loads(COVERAGE.read_text(encoding="utf-8"))
+    baseline_times = {row["test"]: row.get("wall_time") or 0 for row in read_jsonl(BASELINE)}
     existing_specs = [
-        json.loads(path.read_text(encoding="utf-8")) for path in sorted(MUTATIONS.glob("*.json"))
+        spec
+        for path in sorted(MUTATIONS.glob("*.json"))
+        if (spec := json.loads(path.read_text(encoding="utf-8"))).get("id") not in refresh_ids
     ]
-    existing_by_site = {
-        (spec.get("source_file"), spec.get("source_span"), spec.get("original")): spec
+    existing_sites = {
+        (spec.get("source_file"), str(spec.get("source_span", "")), spec.get("original"), spec.get("mutation_operator"))
         for spec in existing_specs
     }
     manual_locations = {
-        (spec.get("source_file"), spec.get("source_span"))
-        for spec in existing_specs
-        if not spec.get("id", "").startswith("nanoda-gen-")
-    }
-    manual_locations.update(
-        (row.get("source_file"), row.get("source_span"))
+        (row.get("source_file"), str(row.get("source_span")))
         for row in read_jsonl(REGISTRY)
-        if not row.get("id", "").startswith("nanoda-gen-")
-        and row.get("source_file")
-        and row.get("source_span")
-    )
-    selected = []
+        if not row.get("id", "").startswith("nanoda-gen-") and row.get("source_file")
+    }
+
     candidates = []
     for source in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
         source_file = str(source.relative_to(CHECKER_ROOT))
+        source_text = source.read_text(encoding="utf-8")
         for candidate in parse_candidates(source):
             candidate["source_file"] = source_file
+            candidate["source_span"] = source_span(candidate)
+            candidate["subsystem"] = infer_subsystem(source_file, candidate.get("function"), candidate["subsystem"])
+            locations = [f"{source_file}:{line}" for line in range(candidate["line_start"], candidate["line_end"] + 1)]
+            covering = sorted({test for location in locations for test in line_to_tests.get(location, [])})
+            candidate["covering_test_count"] = len(covering)
+            candidate["estimated_seconds"] = sum(baseline_times[test] for test in covering)
+            payload = identity_payload(candidate)
+            candidate["identity_sha256"] = sha256_bytes(payload)
+            candidate["id"] = f"nanoda-gen-{candidate['identity_sha256'][:12]}"
+            line_offset = sum(len(line) for line in source_text.splitlines(keepends=True)[: candidate["line_start"] - 1]) + candidate["column_start"]
+            candidate["replace_occurrence"] = source_text[:line_offset].count(candidate["original"])
+            candidate["attempt_status"] = "PENDING_POLICY"
+            candidate["attempt_reason"] = ""
             candidates.append(candidate)
-    candidates.sort(
-        key=lambda row: (row["source_file"], row["line_start"], row["column_start"])
-    )
 
+    candidates.sort(key=lambda row: (row["source_file"], row["line_start"], row["column_start"], row["operator"]))
+    eligible = []
     for candidate in candidates:
-        source_file = candidate["source_file"]
-        if candidate["original"].lstrip().startswith("assert!"):
-            continue
-        if source_file == "src/inductive.rs" and candidate["line_start"] >= 1200:
-            continue
-        locations = [
-            f"{source_file}:{line}"
-            for line in range(candidate["line_start"], candidate["line_end"] + 1)
-        ]
-        covering_tests = sorted(
-            {test for location in locations for test in line_to_tests.get(location, [])}
-        )
-        if not covering_tests:
-            continue
-        source_span = (
-            str(candidate["line_start"])
-            if candidate["line_start"] == candidate["line_end"]
-            else f"{candidate['line_start']}-{candidate['line_end']}"
-        )
-        if (source_file, source_span) in manual_locations:
-            continue
-        existing = existing_by_site.get((source_file, source_span, candidate["original"]))
-        if existing and not existing.get("id", "").startswith("nanoda-gen-"):
-            continue
-        identity = "\0".join(
-            [source_file, source_span, candidate["operator"], candidate["original"]]
-        ).encode()
-        mutant_id = existing["id"] if existing else f"nanoda-gen-{sha256_bytes(identity)[:12]}"
-        source_text = (CHECKER_ROOT / source_file).read_text(encoding="utf-8")
-        line_offset = sum(
-            len(line) for line in source_text.splitlines(keepends=True)[: candidate["line_start"] - 1]
-        ) + candidate["column_start"]
-        replace_occurrence = source_text[:line_offset].count(candidate["original"])
-        selected.append(
+        site = (candidate["source_file"], candidate["source_span"], candidate["original"], candidate["operator"])
+        if (candidate["source_file"], candidate["source_span"]) in manual_locations or site in existing_sites:
+            candidate.update(attempt_status="DUPLICATE", attempt_reason="MATCHES_EXISTING_CONTROLLED_OR_GENERATED_SPEC")
+        elif candidate["source_file"] in NON_SEMANTIC_FILES:
+            candidate.update(attempt_status="REJECTED_NON_SEMANTIC", attempt_reason="PARSER_DIAGNOSTIC_TEST_OR_INFRASTRUCTURE_PATH")
+        elif candidate["operator"] not in operators:
+            candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="OPERATOR_NOT_IN_CATALOG")
+        elif candidate["subsystem"] == "unknown" or not is_modeled_function(candidate["source_file"], candidate.get("function")):
+            candidate.update(attempt_status="REJECTED_NON_SEMANTIC", attempt_reason="NOT_IN_A_MODELED_SEMANTIC_FUNCTION")
+        elif not candidate["covering_test_count"]:
+            candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="UNCOVERED_SOURCE_LOCATION")
+        else:
+            eligible.append(candidate)
+
+    selected = select_balanced(eligible, args.limit)
+    selected_ids = {row["id"] for row in selected}
+    for candidate in eligible:
+        if candidate["id"] in selected_ids:
+            candidate.update(attempt_status="PENDING_BUILD", attempt_reason="SELECTED_FOR_BOUNDED_BATCH")
+        else:
+            candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="OUTSIDE_BOUNDED_BATCH_LIMIT")
+
+    if len(selected) < args.limit:
+        raise SystemExit(f"only {len(selected)} covered, semantic, non-duplicate candidates found")
+
+    catalog_sha = sha256_file(MODEL)
+    specs = []
+    for candidate in selected:
+        specs.append(
             {
-                "id": mutant_id,
+                "schema_version": 2,
+                "id": candidate["id"],
                 "checker": "nanoda",
-                "source_file": source_file,
-                "source_span": source_span,
-                "replace_occurrence": replace_occurrence,
+                "source_file": candidate["source_file"],
+                "source_span": candidate["source_span"],
+                "source_column": candidate["column_start"],
+                "function": candidate.get("function"),
+                "replace_occurrence": candidate["replace_occurrence"],
                 "original": candidate["original"],
                 "mutated": candidate["mutated"],
                 "mutation_operator": candidate["operator"],
+                "operator_family": candidate["family"],
                 "subsystem": candidate["subsystem"],
-                "covering_test_count": len(covering_tests),
-                "estimated_seconds": sum(baseline_times[test] for test in covering_tests),
-                "generator": "tools/nanoda-mutator",
+                "semantic_rationale": candidate["rationale"],
+                "covering_test_count": candidate["covering_test_count"],
+                "estimated_seconds": candidate["estimated_seconds"],
+                "identity": {
+                    "algorithm": "sha256(source-file,NUL,line,NUL,column,NUL,operator,NUL,original,NUL,mutated)",
+                    "sha256": candidate["identity_sha256"],
+                },
+                "generator": {
+                    "name": "tools/nanoda-mutator",
+                    "mutation_catalog_sha256": catalog_sha,
+                },
             }
         )
 
-    selected.sort(
-        key=lambda row: (row["estimated_seconds"], row["source_file"], row["source_span"])
-    )
-    selected = selected[: args.limit]
-
-    if len(selected) < args.limit:
-        raise SystemExit(f"only {len(selected)} covered, non-duplicate candidates found")
-
     manifest = {
-        "schema_version": 1,
+        "schema_version": 2,
         "batch_id": args.batch_id,
         "checker": "nanoda",
         "source_sha256": source_digest(),
+        "mutation_catalog": str(MODEL.relative_to(ROOT)),
+        "mutation_catalog_sha256": catalog_sha,
         "generator": {
             "cargo_manifest_sha256": sha256_file(TOOL_MANIFEST),
             "rust_source_sha256": sha256_file(ROOT / "tools" / "nanoda-mutator" / "src" / "main.rs"),
             "wrapper_sha256": sha256_file(Path(__file__)),
+            "selection": "estimated-runtime order, round-robin by operator family",
         },
         "requested_count": args.limit,
-        "generated_count": len(selected),
-        "mutants": selected,
+        "generated_count": len(specs),
+        "attempt_summary": {
+            status: sum(row["attempt_status"] == status for row in candidates)
+            for status in (*FINAL_ATTEMPT_STATUSES, "PENDING_BUILD")
+        },
+        "attempts": [
+            {
+                key: row.get(key)
+                for key in (
+                    "id", "source_file", "source_span", "column_start", "function", "operator",
+                    "family", "subsystem", "identity_sha256", "covering_test_count",
+                    "attempt_status", "attempt_reason", "rationale",
+                )
+            }
+            for row in candidates
+        ],
+        "mutants": specs,
     }
     if not args.write:
         print(json.dumps(manifest, indent=2, sort_keys=True))
         return 0
 
-    for spec in selected:
-        spec_path = MUTATIONS / f"{spec['id']}.json"
-        spec_path.write_text(json.dumps(spec, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-
-    manifest["created_at"] = datetime.now(timezone.utc).isoformat()
-    manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
+    for spec in specs:
+        (MUTATIONS / f"{spec['id']}.json").write_text(json.dumps(spec, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if existing_manifest:
+        old_ids = [row["id"] for row in existing_manifest["mutants"]]
+        new_ids = [row["id"] for row in specs]
+        if old_ids != new_ids:
+            raise SystemExit("refreshed batch population differs from existing evidence")
+        manifest["created_at"] = existing_manifest["created_at"]
+        for key in ("build_validation", "execution"):
+            if key in existing_manifest:
+                manifest[key] = existing_manifest[key]
+        build_by_id = {
+            row["mutant_id"]: row["status"]
+            for row in manifest.get("build_validation", {}).get("results", [])
+        }
+        for attempt in manifest["attempts"]:
+            if attempt["id"] in build_by_id:
+                attempt["attempt_status"] = (
+                    "COMPILING_SEMANTIC_MUTANT"
+                    if build_by_id[attempt["id"]] == "BUILT"
+                    else "BUILD_FAILURE"
+                )
+                attempt["attempt_reason"] = (
+                    "ISOLATED_RELEASE_BUILD_PASSED"
+                    if build_by_id[attempt["id"]] == "BUILT"
+                    else "ISOLATED_RELEASE_BUILD_FAILED"
+                )
+        manifest["attempt_summary"] = {
+            status: sum(row["attempt_status"] == status for row in manifest["attempts"])
+            for status in FINAL_ATTEMPT_STATUSES
+        }
+    else:
+        manifest["created_at"] = datetime.now(timezone.utc).isoformat()
     manifest_path.parent.mkdir(parents=True, exist_ok=True)
     manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
 
     if args.register:
         registered = {row["id"] for row in read_jsonl(REGISTRY)}
         with REGISTRY.open("a", encoding="utf-8") as handle:
-            for spec in selected:
+            for spec in specs:
                 if spec["id"] in registered:
                     continue
-                handle.write(
-                    json.dumps(
-                        {
-                            "id": spec["id"],
-                            "checker": spec["checker"],
-                            "source_file": spec["source_file"],
-                            "source_span": spec["source_span"],
-                            "mutation_operator": spec["mutation_operator"],
-                            "subsystem": spec["subsystem"],
-                            "status": "REGISTERED",
-                            "classification": "UNKNOWN_EQUIVALENCE",
-                            "notes": f"Generated by batch {args.batch_id}",
-                            "updated_at": datetime.now(timezone.utc).isoformat(),
-                        },
-                        sort_keys=True,
-                    )
-                    + "\n"
-                )
-    print(json.dumps({"manifest": str(manifest_path), "mutants": [row["id"] for row in selected]}, indent=2))
+                handle.write(json.dumps({
+                    "id": spec["id"], "checker": spec["checker"], "source_file": spec["source_file"],
+                    "source_span": spec["source_span"], "source_column": spec["source_column"],
+                    "function": spec["function"], "mutation_operator": spec["mutation_operator"],
+                    "operator_family": spec["operator_family"], "subsystem": spec["subsystem"],
+                    "status": "REGISTERED", "classification": "UNKNOWN_EQUIVALENCE",
+                    "notes": f"Generated by bounded semantic batch {args.batch_id}",
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                }, sort_keys=True) + "\n")
+    print(json.dumps({"manifest": str(manifest_path), "mutants": [row["id"] for row in specs], "attempt_summary": manifest["attempt_summary"]}, indent=2))
     return 0
 
 

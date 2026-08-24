@@ -58,6 +58,44 @@ def comparison_killed(results_root: Path, mutant_id: str) -> bool | None:
     return bool(report.get("killed"))
 
 
+def stratified_metrics(
+    mutants: dict[str, dict],
+    results_root: Path,
+    dimension: str,
+    minimum_sample: int,
+    operator_families: dict[str, str],
+) -> dict[str, dict]:
+    groups: dict[str, list[tuple[dict, bool | None]]] = {}
+    excluded = {"EQUIVALENT", "UNREACHABLE", "PERFORMANCE_ONLY", "NON_SEMANTIC"}
+    for mutant_id, record in mutants.items():
+        if record.get("status") == "SUPERSEDED" or record.get("classification") in excluded:
+            continue
+        if dimension == "operator_family":
+            value = record.get(dimension) or operator_families.get(record.get("mutation_operator"))
+        else:
+            value = record.get(dimension)
+        if not value:
+            value = "unknown"
+        groups.setdefault(value, []).append((record, comparison_killed(results_root, mutant_id)))
+    output = {}
+    for value, entries in sorted(groups.items()):
+        evaluated = [killed for _, killed in entries if killed is not None]
+        killed = sum(result is True for result in evaluated)
+        sample = len(evaluated)
+        sufficient = sample >= minimum_sample
+        output[value] = {
+            "population": len(entries),
+            "evaluated": sample,
+            "killed": killed,
+            "survived": sum(result is False for result in evaluated),
+            "build_failed": sum(record.get("status") == "BUILD_FAILED" for record, _ in entries),
+            "mutation_score": killed / sample if sufficient else None,
+            "evidence": "MEASURED" if sufficient else "INSUFFICIENT_SAMPLE",
+            "minimum_sample": minimum_sample,
+        }
+    return output
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--results-root", type=Path, default=Path("results"))
@@ -69,6 +107,14 @@ def main() -> int:
     )
     args = parser.parse_args()
 
+    catalog = json.loads((ROOT / "mutation-model" / "catalog.json").read_text(encoding="utf-8"))
+    minimum_sample = catalog["minimum_stratum_sample"]
+    operator_families = {
+        operator: family["id"]
+        for family in catalog["operator_families"]
+        for operator in family["operators"]
+    }
+
     graph_path = ROOT / "results" / "artifacts" / "graph.json"
     if graph_path.exists() and not args.allow_stale_artifacts:
         graph = load_graph(graph_path)
@@ -79,6 +125,14 @@ def main() -> int:
 
     registry = read_jsonl(args.results_root / "mutants" / "registry.jsonl")
     mutants = latest_by_id(registry)
+    manual_catalog = {row["id"]: row for row in catalog["manual_mutants"]}
+    for mutant_id, metadata in manual_catalog.items():
+        if mutant_id in mutants:
+            mutants[mutant_id].update(
+                mutation_operator=metadata["operator"],
+                operator_family=metadata["family"],
+                subsystem=metadata["subsystem"],
+            )
 
     generated = len(mutants)
     killed = 0
@@ -90,6 +144,8 @@ def main() -> int:
     classified_performance_only = 0
     classified_non_semantic = 0
     meaningful_survivors = 0
+    modeled_tested = 0
+    modeled_killed = 0
     survived_without_witness = 0
     unknown_equivalence = 0
     build_failed = 0
@@ -128,6 +184,14 @@ def main() -> int:
         else:
             unknown_equivalence += 1
 
+        if (
+            killed_state is not None
+            and status != "SUPERSEDED"
+            and classification not in {"EQUIVALENT", "UNREACHABLE", "PERFORMANCE_ONLY", "NON_SEMANTIC"}
+        ):
+            modeled_tested += 1
+            modeled_killed += killed_state is True
+
     score = None
     if meaningful_tested:
         score = meaningful_killed / meaningful_tested
@@ -161,6 +225,9 @@ def main() -> int:
 
     report = {
         "mutation_score": score,
+        "mutation_score_scope": "explicit MEANINGFUL_SEMANTIC classifications only",
+        "modeled_mutation_score": modeled_killed / modeled_tested if modeled_tested else None,
+        "modeled_mutation_score_denominator": modeled_tested,
         "generated_mutants": generated,
         "killed_mutants": killed,
         "surviving_mutants": surviving,
@@ -178,6 +245,18 @@ def main() -> int:
         "witnesses_found": witnesses_found,
         "minimized_witnesses": len(minimized),
         "arena_regression_candidates": arena_candidates,
+        "stratified_metrics": {
+            "minimum_sample": minimum_sample,
+            "by_subsystem": stratified_metrics(
+                mutants, args.results_root, "subsystem", minimum_sample, operator_families
+            ),
+            "by_operator": stratified_metrics(
+                mutants, args.results_root, "mutation_operator", minimum_sample, operator_families
+            ),
+            "by_operator_family": stratified_metrics(
+                mutants, args.results_root, "operator_family", minimum_sample, operator_families
+            ),
+        },
     }
 
     text = json.dumps(report, indent=2, sort_keys=True) + "\n"

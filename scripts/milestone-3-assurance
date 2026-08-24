@@ -1,0 +1,194 @@
+#!/usr/bin/env python3
+"""Produce and gate the Milestone 3 semantic-mutation assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+
+CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+FINAL_ATTEMPT_STATUSES = {
+    "COMPILING_SEMANTIC_MUTANT", "BUILD_FAILURE", "DUPLICATE",
+    "UNSUPPORTED_MUTATION_SITE", "REJECTED_NON_SEMANTIC",
+}
+DURABLE_SURVIVOR_CLASSIFICATIONS = {
+    "SURVIVED_WITHOUT_WITNESS", "MEANINGFUL_SEMANTIC", "EQUIVALENT",
+    "UNREACHABLE", "PERFORMANCE_ONLY",
+}
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def source_digest() -> str:
+    digest = hashlib.sha256()
+    for path in sorted((CHECKER_ROOT / "src").rglob("*.rs")):
+        digest.update(str(path.relative_to(CHECKER_ROOT)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def latest_registry() -> dict[str, dict]:
+    latest: dict[str, dict] = {}
+    for row in read_jsonl(ROOT / "results" / "mutants" / "registry.jsonl"):
+        if row.get("id"):
+            latest[row["id"]] = {**latest.get(row["id"], {}), **row}
+    return latest
+
+
+def identity_sha256(spec: dict) -> str:
+    line_start = spec["source_span"].split("-")[0]
+    payload = "\0".join(
+        [
+            spec["source_file"], line_start, str(spec["source_column"]),
+            spec["mutation_operator"], spec["original"], spec["mutated"],
+        ]
+    ).encode()
+    return hashlib.sha256(payload).hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--batch-id", default="nanoda-semantic-0001")
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "assurance" / "milestone-3.json",
+    )
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        graph = load_graph(graph_path)
+        try:
+            require_current(graph, ROOT, ["report:milestone3-assurance"], dependencies_only=True)
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
+    batch_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
+    batch = json.loads(batch_path.read_text(encoding="utf-8"))
+    catalog_path = ROOT / batch["mutation_catalog"]
+    catalog = json.loads(catalog_path.read_text(encoding="utf-8"))
+    report_path = ROOT / "results" / "assurance" / "milestone-3-report.json"
+    report = json.loads(report_path.read_text(encoding="utf-8"))
+    audit_path = ROOT / "results" / "audits" / "coverage-guidance-milestone-3.json"
+    audit = json.loads(audit_path.read_text(encoding="utf-8"))
+    registry = latest_registry()
+    mutants = batch["mutants"]
+    mutant_ids = {row["id"] for row in mutants}
+    build_results = batch.get("build_validation", {}).get("results", [])
+    execution_results = batch.get("execution", {}).get("results", [])
+    operator_to_family = {
+        operator: family["id"]
+        for family in catalog["operator_families"]
+        for operator in family["operators"]
+    }
+    subsystems = {row["id"] for row in catalog["subsystems"]}
+
+    attempt_counts = {
+        status: sum(row["attempt_status"] == status for row in batch["attempts"])
+        for status in FINAL_ATTEMPT_STATUSES
+    }
+    manual_hashes_current = all(
+        sha256_file(ROOT / row["spec"]) == row["spec_sha256"]
+        for row in catalog["manual_mutants"]
+    )
+    identities_current = all(
+        identity_sha256(spec) == spec["identity"]["sha256"]
+        and spec["id"] == f"nanoda-gen-{spec['identity']['sha256'][:12]}"
+        for spec in mutants
+    )
+    producer_hashes_current = (
+        batch["mutation_catalog_sha256"] == sha256_file(catalog_path)
+        and batch["generator"]["cargo_manifest_sha256"]
+        == sha256_file(ROOT / "tools" / "nanoda-mutator" / "Cargo.toml")
+        and batch["generator"]["rust_source_sha256"]
+        == sha256_file(ROOT / "tools" / "nanoda-mutator" / "src" / "main.rs")
+        and batch["generator"]["wrapper_sha256"]
+        == sha256_file(ROOT / "scripts" / "generate-mutations")
+    )
+    strata = report["stratified_metrics"]
+    strata_consistent = all(
+        (row["evidence"] == "MEASURED" and row["evaluated"] >= strata["minimum_sample"] and row["mutation_score"] is not None)
+        or (row["evidence"] == "INSUFFICIENT_SAMPLE" and row["evaluated"] < strata["minimum_sample"] and row["mutation_score"] is None)
+        for dimension in ("by_subsystem", "by_operator", "by_operator_family")
+        for row in strata[dimension].values()
+    )
+    survivors = [row for row in execution_results if row.get("comparison", {}).get("status") == "SURVIVED"]
+    checks = {
+        "structured_catalog_complete": len(catalog["operator_families"]) >= 2
+        and len(catalog["manual_mutants"]) == 4 and manual_hashes_current,
+        "bounded_population_is_modest": 10 <= batch["generated_count"] <= 25
+        and batch["generated_count"] == len(mutants),
+        "multiple_operator_families_attempted": len({row["operator_family"] for row in mutants}) >= 3,
+        "modeled_semantic_sites_only": all(
+            operator_to_family.get(row["mutation_operator"]) == row["operator_family"]
+            and row["subsystem"] in subsystems
+            and bool(row["semantic_rationale"])
+            for row in mutants
+        ),
+        "deterministic_identities_current": identities_current,
+        "producer_provenance_current": producer_hashes_current,
+        "attempt_taxonomy_complete": set(batch["attempt_summary"]) == FINAL_ATTEMPT_STATUSES
+        and batch["attempt_summary"] == attempt_counts
+        and all(row["attempt_status"] in FINAL_ATTEMPT_STATUSES for row in batch["attempts"]),
+        "build_failures_classified_separately": len(build_results) == len(mutants)
+        and all(row["status"] in {"BUILT", "BUILD_FAILED"} for row in build_results)
+        and attempt_counts["BUILD_FAILURE"] == sum(row["status"] == "BUILD_FAILED" for row in build_results),
+        "execution_complete_for_compiling_mutants": batch.get("execution", {}).get("status") == "COMPLETE"
+        and {row["mutant_id"] for row in execution_results} == mutant_ids,
+        "survivors_have_durable_classifications": bool(survivors)
+        and all(registry[row["mutant_id"]].get("classification") in DURABLE_SURVIVOR_CLASSIFICATIONS for row in survivors),
+        "stratified_metrics_have_sufficiency_labels": strata_consistent
+        and all(dimension in strata for dimension in ("by_subsystem", "by_operator", "by_operator_family")),
+        "coverage_guidance_full_corpus_audit_passes": audit["status"] == "PASS"
+        and all(audit["checks"].values()),
+        "checker_source_restored": source_digest() == batch["source_sha256"],
+    }
+    existing = {}
+    if args.output.exists():
+        existing = json.loads(args.output.read_text(encoding="utf-8"))
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-3",
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "mutation_catalog": str(catalog_path.relative_to(ROOT)),
+        "batch": str(batch_path.relative_to(ROOT)),
+        "report": str(report_path.relative_to(ROOT)),
+        "coverage_guidance_audit": str(audit_path.relative_to(ROOT)),
+        "population": {
+            "selected": len(mutants),
+            "built": sum(row["status"] == "BUILT" for row in build_results),
+            "build_failed": sum(row["status"] == "BUILD_FAILED" for row in build_results),
+            "killed": sum(row.get("comparison", {}).get("status") == "KILLED" for row in execution_results),
+            "survived": len(survivors),
+            "operator_families": sorted({row["operator_family"] for row in mutants}),
+            "subsystems": sorted({row["subsystem"] for row in mutants}),
+        },
+        "attempt_summary": batch["attempt_summary"],
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

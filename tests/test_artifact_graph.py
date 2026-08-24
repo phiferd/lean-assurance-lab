@@ -98,9 +98,9 @@ class ArtifactGraphTests(unittest.TestCase):
             self.skipTest("project artifact graph has not been attested")
         graph = load_graph(path)
         cases = {
-            "validator:nanoda": {"coverage:local-payload", "run:mutation-batch-0003", "report:milestone1-assurance"},
-            "corpus:arena-materialized": {"coverage:local-payload", "run:mutation-batch-0003", "report:milestone1-assurance"},
-            "mutation-model:nanoda": {"mutation-spec:catalog", "run:mutation-batch-0003", "report:mutation-summary"},
+            "validator:nanoda": {"coverage:local-payload", "run:mutation-batch-semantic-0001", "report:milestone3-assurance"},
+            "corpus:arena-materialized": {"coverage:local-payload", "run:mutation-batch-semantic-0001", "report:milestone3-assurance"},
+            "mutation-model:nanoda": {"mutation-spec:catalog", "run:mutation-batch-semantic-0001", "report:mutation-summary"},
             "input:expected-semantics-0003": {"classification:regression-0003", "run:augmented-0003", "report:milestone1-assurance"},
         }
         for changed, expected in cases.items():

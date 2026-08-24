@@ -28,12 +28,11 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 and 2 are complete. The project has a closed mechanical mutation
-loop for `nanoda` and a content-addressed artifact graph that expires derived
-claims when validator source, corpus inputs, mutation definitions, expected
-semantics, scripts, or configuration change. Current work begins Milestone 3:
-expanding the documented semantic mutation model and auditing coverage-guided
-execution against sampled full-corpus runs.
+Milestones 1 through 3 are complete. The project has a closed mechanical
+mutation loop for `nanoda`, content-addressed invalidation, and a structured
+semantic model spanning validation elision, predicate negation, relational
+boundaries, and equality discrimination. Current work begins Milestone 4:
+mechanical witness search and minimization for semantic survivors.
 
 ## Repository Layout
 
@@ -54,6 +53,7 @@ scripts/
   artifact-status
   assurance-snapshot
   build-artifact-graph
+  audit-coverage-guidance
   collect-coverage
   compare
   confirm-witness
@@ -61,6 +61,7 @@ scripts/
   generate-mutations
   minimize
   milestone-2-assurance
+  milestone-3-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -169,17 +170,29 @@ is reported explicitly as `UNCOVERED`.
 Create, build-check, and execute a deterministic syntax-aware mutation batch:
 
 ```sh
-scripts/generate-mutations --limit 12 --batch-id nanoda-syntax-0003 \
+scripts/generate-mutations --limit 12 --batch-id nanoda-semantic-0001 \
   --write --register
-scripts/validate-mutation-batch nanoda-syntax-0003
-scripts/run-mutation-batch nanoda-syntax-0003
+scripts/validate-mutation-batch nanoda-semantic-0001
+scripts/run-mutation-batch nanoda-semantic-0001
 ```
 
-The Rust parser under `tools/nanoda-mutator` selects statement-level semantic
-validation calls. The wrapper excludes uncovered and already controlled sites,
-assigns source-location-bound identities, and records exact replacement
-occurrences. Batch validation compiles every mutant in isolation and proves the
-checker source has returned to its baseline digest.
+The Rust parser under `tools/nanoda-mutator` discovers syntax-aware candidates
+from the catalog at `mutation-model/catalog.json`. The wrapper classifies every
+candidate as compiling, build-failed, duplicate, unsupported, or rejected
+non-semantic; selects a bounded family-balanced population; assigns
+content-deterministic identities; and records exact provenance. Batch
+validation compiles every mutant in isolation and proves the checker source has
+returned to its baseline digest.
+
+Reproduce the selected population without discarding compatible evidence and
+run the Milestone 3 gate with:
+
+```sh
+scripts/generate-mutations --limit 12 --batch-id nanoda-semantic-0001 \
+  --write --refresh
+scripts/report --output results/assurance/milestone-3-report.json
+scripts/milestone-3-assurance
+```
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

@@ -8,30 +8,32 @@ implementation and small enough for controlled mutation experiments.
 This can change if local investigation shows another Arena checker has a simpler
 build path or cleaner mutation surface.
 
-## Mutation Operators
+## Mutation Catalog
 
-Initial source-level operators:
+`mutation-model/catalog.json` is the machine-readable catalog. Its schema is
+`schemas/mutation-catalog.schema.json`. It binds the four manual mutation specs
+by content digest and defines the minimum sample size used for stratified
+metrics.
+
+The active syntax-aware operator families are:
 
 ```text
-BOOL_NEGATE
-REL_LT_TO_LE
-REL_LE_TO_LT
-REL_EQ_TO_NE
-REL_NE_TO_EQ
-RETURN_EARLY_ACCEPT
-RETURN_EARLY_REJECT
-SKIP_VALIDATION
-REMOVE_MATCH_ARM
-CHANGE_REDUCTION_CONDITION
-WEAKEN_UNIVERSE_CHECK
-WEAKEN_INDEX_BOUNDS_CHECK
-WEAKEN_SUBSTITUTION_OR_LIFTING
-WEAKEN_DECLARATION_VALIDATION
+validation-elision
+  SKIP_VALIDATION
+predicate-negation
+  BOOL_NEGATE
+relational-boundary
+  REL_LT_TO_LE, REL_LE_TO_LT, REL_GT_TO_GE, REL_GE_TO_GT
+equality-discrimination
+  REL_EQ_TO_NE, REL_NE_TO_EQ
 ```
 
-The first batch should be manually reviewed and intentionally small. Prefer
-mutations in code paths tied to kernel semantics rather than parser plumbing or
-performance-only paths.
+These operators model omitted checks, inverted guards, endpoint errors, and
+confusion between equality and inequality. They are emitted only inside
+modeled semantic functions and mapped to an explicit subsystem. Parser,
+diagnostic, test, formatting, and infrastructure paths are rejected by policy.
+The catalog is intentionally narrower than the list of all source edits one
+could mechanically perform.
 
 ## Mutant Registry
 
@@ -57,9 +59,11 @@ append a later record with the same `id` and a newer `status` rather than
 rewriting historical entries.
 
 Automated specs add `replace_occurrence`, generator provenance, and deterministic
-IDs derived from source path, source span, operator, and original statement.
-The initial generator parses Rust statements with `syn`; it does not discover
-sites through text or regular-expression matching.
+IDs derived from source path, line, column, operator, original syntax, and
+mutated syntax. The generator parses Rust with `syn`; it does not discover sites
+through text or regular-expression matching. `scripts/generate-mutations
+--refresh` reproduces an existing bounded population and refuses to reuse build
+or execution evidence if the deterministic identities differ.
 
 ## Subsystem Labels
 
@@ -81,6 +85,20 @@ unknown
 ```
 
 ## Result Categories
+
+Every discovered mutation candidate has one durable attempt status:
+
+```text
+COMPILING_SEMANTIC_MUTANT
+BUILD_FAILURE
+DUPLICATE
+UNSUPPORTED_MUTATION_SITE
+REJECTED_NON_SEMANTIC
+```
+
+The batch manifest retains rejected and unsupported candidates rather than
+reporting only successful builds. `BUILD_FAILURE` is separate from checker
+outcomes and survivor classification.
 
 ### Killed
 
@@ -156,3 +174,18 @@ required_metadata:
   - mutant outcome file
   - comparison report
 ```
+
+Selection is deterministic, ordered by estimated covering-test runtime, and
+round-robin by operator family. A batch is capped at 25 selected mutants.
+Mutation scores are reported by operator, operator family, and subsystem. A
+stratum with fewer than three evaluated mutants is labeled
+`INSUFFICIENT_SAMPLE` and has no score, while its raw killed/survived counts
+remain visible.
+
+The report preserves two explicitly scoped aggregate views. `mutation_score`
+uses only mutants classified `MEANINGFUL_SEMANTIC`, matching the original
+conservative policy. `modeled_mutation_score` includes every evaluated mutant
+accepted by the semantic model until later evidence classifies it equivalent,
+unreachable, performance-only, or non-semantic. Stratified scores use this
+modeled-population scope so unresolved survivors remain visible in the
+denominator.

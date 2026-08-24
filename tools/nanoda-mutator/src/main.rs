@@ -1,7 +1,7 @@
 use proc_macro2::{LineColumn, Span};
 use serde::Serialize;
 use std::{env, fs, path::PathBuf};
-use syn::{spanned::Spanned, visit::Visit, Expr, Stmt};
+use syn::{spanned::Spanned, visit::Visit, BinOp, Expr, ImplItemFn, ItemFn, Stmt};
 
 #[derive(Serialize)]
 struct Candidate {
@@ -9,7 +9,10 @@ struct Candidate {
     line_end: usize,
     column_start: usize,
     operator: &'static str,
+    family: &'static str,
     subsystem: &'static str,
+    function: Option<String>,
+    rationale: &'static str,
     original: String,
     mutated: String,
 }
@@ -18,6 +21,7 @@ struct Collector<'a> {
     source: &'a str,
     line_offsets: Vec<usize>,
     candidates: Vec<Candidate>,
+    current_function: Option<String>,
 }
 
 impl<'a> Collector<'a> {
@@ -25,23 +29,66 @@ impl<'a> Collector<'a> {
         self.line_offsets[position.line - 1] + position.column
     }
 
-    fn add(&mut self, span: Span, operator: &'static str, subsystem: &'static str) {
+    fn text(&self, span: Span) -> String {
         let start = span.start();
         let end = span.end();
-        let original = self.source[self.offset(start)..self.offset(end)].to_string();
+        self.source[self.offset(start)..self.offset(end)].to_string()
+    }
+
+    fn add(
+        &mut self,
+        span: Span,
+        operator: &'static str,
+        family: &'static str,
+        subsystem: &'static str,
+        rationale: &'static str,
+        original: String,
+        mutated: String,
+    ) {
+        let start = span.start();
+        let end = span.end();
         self.candidates.push(Candidate {
             line_start: start.line,
             line_end: end.line,
             column_start: start.column,
             operator,
+            family,
             subsystem,
-            mutated: format!("if false {{ {original} }}"),
+            function: self.current_function.clone(),
+            rationale,
             original,
+            mutated,
         });
+    }
+
+    fn add_skip_validation(&mut self, span: Span, subsystem: &'static str) {
+        let original = self.text(span);
+        let mutated = format!("if false {{ {original} }}");
+        self.add(
+            span,
+            "SKIP_VALIDATION",
+            "validation-elision",
+            subsystem,
+            "Models omission of a semantic validation call.",
+            original,
+            mutated,
+        );
     }
 }
 
 impl<'ast> Visit<'ast> for Collector<'_> {
+    fn visit_item_fn(&mut self, node: &'ast ItemFn) {
+        let previous = self.current_function.replace(node.sig.ident.to_string());
+        syn::visit::visit_item_fn(self, node);
+        self.current_function = previous;
+    }
+
+    fn visit_impl_item_fn(&mut self, node: &'ast ImplItemFn) {
+        let previous = self.current_function.replace(node.sig.ident.to_string());
+        syn::visit::visit_impl_item_fn(self, node);
+        self.current_function = previous;
+    }
+
     fn visit_stmt(&mut self, stmt: &'ast Stmt) {
         if let Stmt::Macro(stmt_macro) = stmt {
             if stmt_macro.mac.path.is_ident("assert") {
@@ -51,7 +98,7 @@ impl<'ast> Visit<'ast> for Collector<'_> {
                 } else {
                     "serialized-input-validation"
                 };
-                self.add(stmt.span(), "SKIP_VALIDATION", subsystem);
+                self.add_skip_validation(stmt.span(), subsystem);
             }
         }
         if let Stmt::Expr(expr, Some(_)) = stmt {
@@ -67,7 +114,8 @@ impl<'ast> Visit<'ast> for Collector<'_> {
                         _ => None,
                     };
                     if let Some((operator, subsystem)) = classification {
-                        self.add(stmt.span(), operator, subsystem);
+                        debug_assert_eq!(operator, "SKIP_VALIDATION");
+                        self.add_skip_validation(stmt.span(), subsystem);
                     }
                 }
                 Expr::Macro(expr_macro) if expr_macro.mac.path.is_ident("assert") => {
@@ -77,12 +125,61 @@ impl<'ast> Visit<'ast> for Collector<'_> {
                     } else {
                         "serialized-input-validation"
                     };
-                    self.add(stmt.span(), "SKIP_VALIDATION", subsystem);
+                    self.add_skip_validation(stmt.span(), subsystem);
                 }
                 _ => {}
             }
         }
         syn::visit::visit_stmt(self, stmt);
+    }
+
+    fn visit_expr_if(&mut self, expr_if: &'ast syn::ExprIf) {
+        if !matches!(&*expr_if.cond, Expr::Let(_) | Expr::Lit(_)) {
+            let span = expr_if.cond.span();
+            let original = self.text(span);
+            let mutated = format!("!({original})");
+            self.add(
+                span,
+                "BOOL_NEGATE",
+                "predicate-negation",
+                "unknown",
+                "Models an inverted semantic guard or validation predicate.",
+                original,
+                mutated,
+            );
+        }
+        syn::visit::visit_expr_if(self, expr_if);
+    }
+
+    fn visit_expr_binary(&mut self, binary: &'ast syn::ExprBinary) {
+        let mutation = match binary.op {
+            BinOp::Eq(_) => Some(("REL_EQ_TO_NE", "!=", "equality-discrimination")),
+            BinOp::Ne(_) => Some(("REL_NE_TO_EQ", "==", "equality-discrimination")),
+            BinOp::Lt(_) => Some(("REL_LT_TO_LE", "<=", "relational-boundary")),
+            BinOp::Le(_) => Some(("REL_LE_TO_LT", "<", "relational-boundary")),
+            BinOp::Gt(_) => Some(("REL_GT_TO_GE", ">=", "relational-boundary")),
+            BinOp::Ge(_) => Some(("REL_GE_TO_GT", ">", "relational-boundary")),
+            _ => None,
+        };
+        if let Some((operator, replacement, family)) = mutation {
+            let span = binary.span();
+            let original = self.text(span);
+            let op_start = self.offset(binary.op.span().start()) - self.offset(span.start());
+            let op_end = self.offset(binary.op.span().end()) - self.offset(span.start());
+            let mut changed = original.clone();
+            changed.replace_range(op_start..op_end, replacement);
+            let mutated = format!("({changed})");
+            self.add(
+                span,
+                operator,
+                family,
+                "unknown",
+                "Models an equality or boundary-check error in semantic validation.",
+                original,
+                mutated,
+            );
+        }
+        syn::visit::visit_expr_binary(self, binary);
     }
 }
 
@@ -109,6 +206,7 @@ fn main() {
         source: &source,
         line_offsets,
         candidates: Vec::new(),
+        current_function: None,
     };
     collector.visit_file(&syntax);
     collector

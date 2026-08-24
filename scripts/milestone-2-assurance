@@ -22,35 +22,34 @@ INVALIDATION_CONTRACTS = {
         "coverage:local-payload",
         "coverage:identity-snapshot",
         "comparison:controlled-mutants",
-        "run:mutation-batch-0003",
-        "comparison:generated-mutants",
+        "run:mutation-batch-semantic-0001",
+        "comparison:semantic-mutants-m3",
         "classification:registry",
         "report:mutation-summary",
-        "report:milestone1-assurance",
+        "report:milestone3-assurance",
     },
     "corpus:arena-materialized": {
         "coverage:local-payload",
         "coverage:identity-snapshot",
         "comparison:controlled-mutants",
-        "run:mutation-batch-0003",
+        "run:mutation-batch-semantic-0001",
         "report:mutation-summary",
-        "report:milestone1-assurance",
+        "report:milestone3-assurance",
     },
     "mutation-model:nanoda": {
         "mutation-spec:catalog",
-        "comparison:controlled-mutants",
-        "run:mutation-batch-0003",
-        "comparison:generated-mutants",
+        "run:mutation-batch-semantic-0001",
+        "comparison:semantic-mutants-m3",
         "classification:registry",
         "report:mutation-summary",
-        "report:milestone1-assurance",
+        "report:milestone3-assurance",
     },
     "input:expected-semantics-0003": {
         "comparison:witness-reference",
         "classification:regression-0003",
         "run:augmented-0003",
         "report:mutation-summary",
-        "report:milestone1-assurance",
+        "report:milestone3-assurance",
     },
 }
 
@@ -119,7 +118,7 @@ def main() -> int:
         "mutation_model_change_invalidates_population": invalidation["mutation-model:nanoda"]["status"] == "PASS",
         "expected_semantics_change_invalidates_regression": invalidation["input:expected-semantics-0003"]["status"] == "PASS",
         "historical_results_preserved": {
-            "run:mutation-batch-0001", "run:mutation-batch-0002"
+            "run:mutation-batch-0001", "run:mutation-batch-0002", "run:mutation-batch-0003"
         } <= set(historical),
         "report_inputs_are_graph_gated": {
             "script:artifact-system", "script:reporting"

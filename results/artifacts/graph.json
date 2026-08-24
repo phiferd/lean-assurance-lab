@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-23T23:19:13.496258+00:00",
+  "generated_at": "2026-08-24T00:48:51.237506+00:00",
   "nodes": [
     {
       "artifact_type": "repository",
       "dependencies": [],
-      "expected_sha256": "805785a3bddd2eaa1a45bc5873c46db134b208bd39f1e850aa98e2151688284b",
+      "expected_sha256": "174b9010027ee18fd88e812d780021b437fd7b9583afc51a3e46cdd82005a7c8",
       "id": "input:repository-revision",
       "lifecycle": "historical",
       "locator": {
@@ -145,7 +145,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "d6cc83ea19929e513c2d338ecb90ce9283b7dae62f3f0808c98402cd846ce6fd",
+      "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
       "id": "script:mutation-execution",
       "lifecycle": "current",
       "locator": {
@@ -168,7 +168,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "66cf20336fcf555d1faa432d5a810a1e3fda30130446ef9057a82c9867a45f4a",
+      "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
       "id": "script:reporting",
       "lifecycle": "current",
       "locator": {
@@ -186,7 +186,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "af44afbf0150ad1878aac9b67dda376caef992664d794b9e013a9376abca795c",
+      "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
       "id": "script:artifact-system",
       "lifecycle": "current",
       "locator": {
@@ -197,7 +197,11 @@
           "scripts/artifact-status",
           "scripts/build-artifact-graph",
           "scripts/milestone-2-assurance",
-          "tests/test_artifact_graph.py"
+          "scripts/milestone-3-assurance",
+          "scripts/audit-coverage-guidance",
+          "schemas/mutation-catalog.schema.json",
+          "tests/test_artifact_graph.py",
+          "tests/test_mutation_model.py"
         ],
         "kind": "file_set",
         "root": "."
@@ -208,13 +212,15 @@
     {
       "artifact_type": "mutation-model",
       "dependencies": [],
-      "expected_sha256": "355867b6bf45d439679510e3dd2b592fbb46c55e1b9978503616b2a1f7e7c605",
+      "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
       "id": "mutation-model:nanoda",
       "lifecycle": "current",
       "locator": {
         "exclude": [],
         "include": [
           "docs/MUTATION_MODEL.md",
+          "mutation-model/catalog.json",
+          "schemas/mutation-catalog.schema.json",
           "scripts/generate-mutations",
           "tools/nanoda-mutator/Cargo.toml",
           "tools/nanoda-mutator/Cargo.lock",
@@ -230,11 +236,11 @@
       "artifact_type": "mutation-spec",
       "dependencies": [
         {
-          "expected_sha256": "355867b6bf45d439679510e3dd2b592fbb46c55e1b9978503616b2a1f7e7c605",
+          "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
           "id": "mutation-model:nanoda"
         }
       ],
-      "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
+      "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
       "id": "mutation-spec:catalog",
       "lifecycle": "current",
       "locator": {
@@ -246,6 +252,26 @@
         "root": "mutations"
       },
       "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "mutation-spec",
+      "dependencies": [],
+      "expected_sha256": "c864051b51097ac34c8d864d521f032ec15ca1905488d9204b748276f284f125",
+      "id": "mutation-spec:controlled",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "nanoda-0001.json",
+          "nanoda-0002.json",
+          "nanoda-0003.json",
+          "nanoda-0004.json"
+        ],
+        "kind": "file_set",
+        "root": "mutations"
+      },
+      "notes": "Exact unchanged specs for the four controlled Milestone 1 mutants.",
       "required_for_current_claims": true
     },
     {
@@ -365,11 +391,11 @@
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
-          "id": "mutation-spec:catalog"
+          "expected_sha256": "c864051b51097ac34c8d864d521f032ec15ca1905488d9204b748276f284f125",
+          "id": "mutation-spec:controlled"
         },
         {
-          "expected_sha256": "d6cc83ea19929e513c2d338ecb90ce9283b7dae62f3f0808c98402cd846ce6fd",
+          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
           "id": "script:mutation-execution"
         }
       ],
@@ -398,11 +424,11 @@
       "artifact_type": "run",
       "dependencies": [
         {
-          "expected_sha256": "355867b6bf45d439679510e3dd2b592fbb46c55e1b9978503616b2a1f7e7c605",
+          "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
           "id": "mutation-model:nanoda"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
+          "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
           "id": "mutation-spec:catalog"
         },
         {
@@ -424,11 +450,11 @@
       "artifact_type": "run",
       "dependencies": [
         {
-          "expected_sha256": "355867b6bf45d439679510e3dd2b592fbb46c55e1b9978503616b2a1f7e7c605",
+          "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
           "id": "mutation-model:nanoda"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
+          "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
           "id": "mutation-spec:catalog"
         },
         {
@@ -458,11 +484,11 @@
           "id": "corpus:arena-materialized"
         },
         {
-          "expected_sha256": "355867b6bf45d439679510e3dd2b592fbb46c55e1b9978503616b2a1f7e7c605",
+          "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
           "id": "mutation-model:nanoda"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
+          "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
           "id": "mutation-spec:catalog"
         },
         {
@@ -470,19 +496,19 @@
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "d6cc83ea19929e513c2d338ecb90ce9283b7dae62f3f0808c98402cd846ce6fd",
+          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
           "id": "script:mutation-execution"
         }
       ],
       "expected_sha256": "7194ea289fb59df6789eb2a17a37165248092d1205a9777a3e816ec390ee422a",
       "id": "run:mutation-batch-0003",
-      "lifecycle": "current",
+      "lifecycle": "superseded",
       "locator": {
         "kind": "file",
         "path": "results/mutation-batches/nanoda-syntax-0003.json"
       },
       "notes": "",
-      "required_for_current_claims": true
+      "required_for_current_claims": false
     },
     {
       "artifact_type": "comparison",
@@ -492,16 +518,126 @@
           "id": "run:mutation-batch-0003"
         }
       ],
-      "expected_sha256": "ca3cc1d05d9a7fdc0bb4b5dceb483b713e065a27293055ca2c60306c10d2842e",
-      "id": "comparison:generated-mutants",
+      "expected_sha256": "36e5e012870726e0ea9a647045ba0f6c7fa3b0ab063bac62e7185632c40bcaa4",
+      "id": "comparison:generated-mutants-m1",
+      "lifecycle": "superseded",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "nanoda-gen-cd41c71bc814/scheduled-comparison.json",
+          "nanoda-gen-7b386d7135bb/scheduled-comparison.json",
+          "nanoda-gen-962509604870/scheduled-comparison.json",
+          "nanoda-gen-5dd8a3776055/scheduled-comparison.json",
+          "nanoda-gen-cdebd265971c/scheduled-comparison.json",
+          "nanoda-gen-d39c873fbcb7/scheduled-comparison.json",
+          "nanoda-gen-9a8edf073073/scheduled-comparison.json",
+          "nanoda-gen-e551a17020ce/scheduled-comparison.json",
+          "nanoda-gen-da679d93da63/scheduled-comparison.json",
+          "nanoda-gen-96211e002bfd/scheduled-comparison.json",
+          "nanoda-gen-1c536a57344e/scheduled-comparison.json",
+          "nanoda-gen-1dedcb13793f/scheduled-comparison.json"
+        ],
+        "kind": "file_set",
+        "root": "results/mutants"
+      },
+      "notes": "",
+      "required_for_current_claims": false
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613",
+          "id": "validator:nanoda"
+        },
+        {
+          "expected_sha256": "57a8e14fe625bebb5fbb029ca051d2de07f742d9fe77ce18553f4bf900c8563f",
+          "id": "corpus:arena-materialized"
+        },
+        {
+          "expected_sha256": "8aafcbadab5eb58e264058074a3906681ef2dcf53d7e114e6ff30534f9562f43",
+          "id": "mutation-model:nanoda"
+        },
+        {
+          "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
+          "id": "mutation-spec:catalog"
+        },
+        {
+          "expected_sha256": "398d9675ae62f4904c96d3a642fedf57c0eb25c47eccba459e15c0d635af3a6b",
+          "id": "coverage:identity-snapshot"
+        },
+        {
+          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+          "id": "script:mutation-execution"
+        }
+      ],
+      "expected_sha256": "a124626bfb89bebb507d34180e4ec9d42e1e27539079beacdeb292b2048a763d",
+      "id": "run:mutation-batch-semantic-0001",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/mutation-batches/nanoda-semantic-0001.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "comparison",
+      "dependencies": [
+        {
+          "expected_sha256": "a124626bfb89bebb507d34180e4ec9d42e1e27539079beacdeb292b2048a763d",
+          "id": "run:mutation-batch-semantic-0001"
+        }
+      ],
+      "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+      "id": "comparison:semantic-mutants-m3",
       "lifecycle": "current",
       "locator": {
         "exclude": [],
         "include": [
-          "nanoda-gen-*/scheduled-comparison.json"
+          "nanoda-gen-34b1a4c65d39/scheduled-comparison.json",
+          "nanoda-gen-5d79e6ae582f/scheduled-comparison.json",
+          "nanoda-gen-17c51158500d/scheduled-comparison.json",
+          "nanoda-gen-4238224977cc/scheduled-comparison.json",
+          "nanoda-gen-674f3a33bb73/scheduled-comparison.json",
+          "nanoda-gen-03366e34c5bd/scheduled-comparison.json",
+          "nanoda-gen-ca8565ff512e/scheduled-comparison.json",
+          "nanoda-gen-8237cd6d3cb2/scheduled-comparison.json",
+          "nanoda-gen-6a117abf02b4/scheduled-comparison.json",
+          "nanoda-gen-701a664f39e5/scheduled-comparison.json",
+          "nanoda-gen-7447f6511962/scheduled-comparison.json",
+          "nanoda-gen-a59d7fa2cfb3/scheduled-comparison.json",
+          "nanoda-gen-34b1a4c65d39/comparison.json",
+          "nanoda-gen-4238224977cc/comparison.json"
         ],
         "kind": "file_set",
         "root": "results/mutants"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "comparison",
+      "dependencies": [
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
+        },
+        {
+          "expected_sha256": "57a8e14fe625bebb5fbb029ca051d2de07f742d9fe77ce18553f4bf900c8563f",
+          "id": "corpus:arena-materialized"
+        },
+        {
+          "expected_sha256": "efc4c5c99be2abe319f9cfa06c3042c077b7113ac794304161f09d8a08fbb485",
+          "id": "corpus:baseline-outcomes"
+        }
+      ],
+      "expected_sha256": "a744af25c0cfc90f4dd0d9d9e57fdc7e687035b65bb0e6b3a84a7b9469087c5c",
+      "id": "comparison:coverage-guidance-audit-m3",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/audits/coverage-guidance-milestone-3.json"
       },
       "notes": "",
       "required_for_current_claims": true
@@ -514,11 +650,15 @@
           "id": "comparison:controlled-mutants"
         },
         {
-          "expected_sha256": "ca3cc1d05d9a7fdc0bb4b5dceb483b713e065a27293055ca2c60306c10d2842e",
-          "id": "comparison:generated-mutants"
+          "expected_sha256": "36e5e012870726e0ea9a647045ba0f6c7fa3b0ab063bac62e7185632c40bcaa4",
+          "id": "comparison:generated-mutants-m1"
+        },
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
         }
       ],
-      "expected_sha256": "2b4c3e343fe7b1cf338ea45f2693b44fcb7c0e913522526e4ad82065f7c80d1f",
+      "expected_sha256": "b70235c7e27804ac869c2eaadd8e08c9656cfabceabf9b7f7fc59a995c712134",
       "id": "classification:registry",
       "lifecycle": "current",
       "locator": {
@@ -536,8 +676,8 @@
           "id": "comparison:controlled-mutants"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
-          "id": "mutation-spec:catalog"
+          "expected_sha256": "c864051b51097ac34c8d864d521f032ec15ca1905488d9204b748276f284f125",
+          "id": "mutation-spec:controlled"
         }
       ],
       "expected_sha256": "6600be964f60f1df766a822e7c64048c794bc8f032d9b847234aafa9533f7591",
@@ -629,8 +769,8 @@
           "id": "validator:nanoda"
         },
         {
-          "expected_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
-          "id": "mutation-spec:catalog"
+          "expected_sha256": "c864051b51097ac34c8d864d521f032ec15ca1905488d9204b748276f284f125",
+          "id": "mutation-spec:controlled"
         },
         {
           "expected_sha256": "6600be964f60f1df766a822e7c64048c794bc8f032d9b847234aafa9533f7591",
@@ -641,7 +781,7 @@
           "id": "classification:regression-0003"
         },
         {
-          "expected_sha256": "d6cc83ea19929e513c2d338ecb90ce9283b7dae62f3f0808c98402cd846ce6fd",
+          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
           "id": "script:mutation-execution"
         }
       ],
@@ -659,7 +799,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "2b4c3e343fe7b1cf338ea45f2693b44fcb7c0e913522526e4ad82065f7c80d1f",
+          "expected_sha256": "b70235c7e27804ac869c2eaadd8e08c9656cfabceabf9b7f7fc59a995c712134",
           "id": "classification:registry"
         },
         {
@@ -667,28 +807,32 @@
           "id": "comparison:controlled-mutants"
         },
         {
-          "expected_sha256": "ca3cc1d05d9a7fdc0bb4b5dceb483b713e065a27293055ca2c60306c10d2842e",
-          "id": "comparison:generated-mutants"
+          "expected_sha256": "36e5e012870726e0ea9a647045ba0f6c7fa3b0ab063bac62e7185632c40bcaa4",
+          "id": "comparison:generated-mutants-m1"
+        },
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
         },
         {
           "expected_sha256": "cb906b22db6342de46fd248d6e9a9ceceae8fbfc7b303dd499eb1eed9ec02844",
           "id": "classification:regression-0003"
         },
         {
-          "expected_sha256": "66cf20336fcf555d1faa432d5a810a1e3fda30130446ef9057a82c9867a45f4a",
+          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "af44afbf0150ad1878aac9b67dda376caef992664d794b9e013a9376abca795c",
+          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "5fc7b99b2d9a3719bd1d85742a6a2ebd650fb886ccd2d2899a135c2b3b855ae5",
+      "expected_sha256": "e32b8396a8f7286cae58d606e8bcfa34b8078c083de446518da7a14f73fb715e",
       "id": "report:mutation-summary",
       "lifecycle": "current",
       "locator": {
         "kind": "file",
-        "path": "results/assurance/milestone-1-report.json"
+        "path": "results/assurance/milestone-3-report.json"
       },
       "notes": "",
       "required_for_current_claims": true
@@ -717,24 +861,80 @@
           "id": "run:augmented-0003"
         },
         {
-          "expected_sha256": "5fc7b99b2d9a3719bd1d85742a6a2ebd650fb886ccd2d2899a135c2b3b855ae5",
-          "id": "report:mutation-summary"
-        },
-        {
-          "expected_sha256": "66cf20336fcf555d1faa432d5a810a1e3fda30130446ef9057a82c9867a45f4a",
+          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "af44afbf0150ad1878aac9b67dda376caef992664d794b9e013a9376abca795c",
+          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
           "id": "script:artifact-system"
         }
       ],
       "expected_sha256": "576dfbd1399f429b49e1d4cb7f2575d4e48b4433b829766795667773d165cf67",
       "id": "report:milestone1-assurance",
-      "lifecycle": "current",
+      "lifecycle": "historical",
       "locator": {
         "kind": "file",
         "path": "results/assurance/milestone-1.json"
+      },
+      "notes": "",
+      "required_for_current_claims": false
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "id": "script:artifact-system"
+        }
+      ],
+      "expected_sha256": "efdc56824376a778bf8e98a06f79b4bb6d5594a2bd16dad9e5908247bfc4b948",
+      "id": "report:milestone2-assurance",
+      "lifecycle": "historical",
+      "locator": {
+        "kind": "file",
+        "path": "results/assurance/milestone-2.json"
+      },
+      "notes": "",
+      "required_for_current_claims": false
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "a124626bfb89bebb507d34180e4ec9d42e1e27539079beacdeb292b2048a763d",
+          "id": "run:mutation-batch-semantic-0001"
+        },
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
+        },
+        {
+          "expected_sha256": "a744af25c0cfc90f4dd0d9d9e57fdc7e687035b65bb0e6b3a84a7b9469087c5c",
+          "id": "comparison:coverage-guidance-audit-m3"
+        },
+        {
+          "expected_sha256": "b70235c7e27804ac869c2eaadd8e08c9656cfabceabf9b7f7fc59a995c712134",
+          "id": "classification:registry"
+        },
+        {
+          "expected_sha256": "e32b8396a8f7286cae58d606e8bcfa34b8078c083de446518da7a14f73fb715e",
+          "id": "report:mutation-summary"
+        },
+        {
+          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
+          "id": "script:reporting"
+        },
+        {
+          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "id": "script:artifact-system"
+        }
+      ],
+      "expected_sha256": "2a5d5627328aaf0f3473ebd3384c91d811160381f950185d288e6c2e97a46448",
+      "id": "report:milestone3-assurance",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/assurance/milestone-3.json"
       },
       "notes": "",
       "required_for_current_claims": true
@@ -750,9 +950,9 @@
       "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
       "witness": "4.29.1"
     },
-    "mutation_specs_sha256": "61af6e4541451598da498cc6143ce97fff04cd30dbf690605734eef2ab142f6b",
-    "repository_revision": "13ba42533450b1af9ab0c675e5ef353e2538f2de",
-    "scripts_sha256": "d6cc83ea19929e513c2d338ecb90ce9283b7dae62f3f0808c98402cd846ce6fd",
+    "mutation_specs_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
+    "repository_revision": "6dedadf8f3b0ef5ebd3e7535578435f4cf646f8c",
+    "scripts_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
     "validator_source_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613"
   },
   "schema_version": 1

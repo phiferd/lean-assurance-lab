@@ -1,0 +1,100 @@
+#!/usr/bin/env python3
+"""Compare coverage-guided conclusions with full-corpus mutation runs."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def count_jsonl(path: Path) -> int:
+    return sum(1 for line in path.read_text(encoding="utf-8").splitlines() if line)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("mutant_ids", nargs="+")
+    parser.add_argument(
+        "--output",
+        type=Path,
+        default=ROOT / "results" / "audits" / "coverage-guidance-milestone-3.json",
+    )
+    args = parser.parse_args()
+    if len(args.mutant_ids) < 2:
+        raise SystemExit("provide at least one killed and one surviving mutant")
+
+    results = []
+    for mutant_id in args.mutant_ids:
+        result_dir = ROOT / "results" / "mutants" / mutant_id
+        scheduled_path = result_dir / "scheduled-comparison.json"
+        scheduled = json.loads(scheduled_path.read_text(encoding="utf-8"))
+        classification = (
+            "MEANINGFUL_SEMANTIC"
+            if scheduled["status"] == "KILLED"
+            else "SURVIVED_WITHOUT_WITNESS"
+        )
+        proc = subprocess.run(
+            [
+                str(ROOT / "scripts" / "run-mutant"),
+                mutant_id,
+                "--reuse-baseline",
+                "--classification",
+                classification,
+            ],
+            cwd=ROOT,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        comparison_path = result_dir / "comparison.json"
+        full = json.loads(comparison_path.read_text(encoding="utf-8")) if comparison_path.exists() else None
+        full_status = None
+        if full:
+            full_status = "KILLED" if full.get("killed") else "SURVIVED"
+        results.append(
+            {
+                "mutant_id": mutant_id,
+                "runner_returncode": proc.returncode,
+                "scheduled_comparison": str(scheduled_path.relative_to(ROOT)),
+                "scheduled_status": scheduled["status"],
+                "scheduled_test_count": scheduled["scheduled_test_count"],
+                "scheduled_executed_test_count": scheduled["executed_test_count"],
+                "full_comparison": str(comparison_path.relative_to(ROOT)),
+                "full_status": full_status,
+                "full_test_count": count_jsonl(result_dir / "outcomes.jsonl") if full else 0,
+                "conclusion_matches": full_status == scheduled["status"],
+                "runner_output_tail": proc.stdout[-2000:] if proc.returncode else "",
+            }
+        )
+
+    observed_statuses = {row["scheduled_status"] for row in results}
+    checks = {
+        "includes_killed_and_surviving_controls": {"KILLED", "SURVIVED"} <= observed_statuses,
+        "all_full_runs_succeeded": all(row["runner_returncode"] == 0 for row in results),
+        "all_full_inventories_complete": all(row["full_test_count"] == 197 for row in results),
+        "all_conclusions_match": all(row["conclusion_matches"] for row in results),
+    }
+    existing = {}
+    if args.output.exists():
+        existing = json.loads(args.output.read_text(encoding="utf-8"))
+    report = {
+        "schema_version": 1,
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "results": results,
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

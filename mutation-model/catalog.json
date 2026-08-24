@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "checker": "nanoda",
+  "minimum_stratum_sample": 3,
+  "operator_families": [
+    {
+      "id": "validation-elision",
+      "description": "Suppress a validation call or assertion while leaving surrounding execution intact.",
+      "semantic_fault": "A required kernel-side well-formedness or equality check is omitted.",
+      "operators": ["SKIP_VALIDATION"]
+    },
+    {
+      "id": "predicate-negation",
+      "description": "Invert a Boolean guard that controls a semantic branch.",
+      "semantic_fault": "A validator takes the accepting and rejecting branch under opposite conditions.",
+      "operators": ["BOOL_NEGATE"]
+    },
+    {
+      "id": "relational-boundary",
+      "description": "Move a strict/non-strict relational boundary by one case.",
+      "semantic_fault": "An index, arity, universe, or reduction boundary admits or rejects its endpoint incorrectly.",
+      "operators": ["REL_LT_TO_LE", "REL_LE_TO_LT", "REL_GT_TO_GE", "REL_GE_TO_GT"]
+    },
+    {
+      "id": "equality-discrimination",
+      "description": "Swap equality and inequality in a semantic decision.",
+      "semantic_fault": "A validator confuses matching and non-matching semantic objects or tags.",
+      "operators": ["REL_EQ_TO_NE", "REL_NE_TO_EQ"]
+    }
+  ],
+  "subsystems": [
+    {"id": "universes", "scope": "Universe levels, parameters, and level comparison."},
+    {"id": "definitional-equality", "scope": "Definitional equality and type compatibility."},
+    {"id": "expression-reduction", "scope": "Weak-head normalization and reduction selection."},
+    {"id": "inductive-declarations", "scope": "Inductive declaration validation and positivity."},
+    {"id": "constructors", "scope": "Constructor arity, type, and ownership validation."},
+    {"id": "recursors", "scope": "Recursor shape, motive, and rule validation."},
+    {"id": "quotients", "scope": "Quotient declaration and primitive validation."},
+    {"id": "substitution-lifting", "scope": "Bound-variable substitution, lifting, and instantiation."},
+    {"id": "bound-variables", "scope": "De Bruijn indices and local-context bounds."},
+    {"id": "declaration-validation", "scope": "Declaration typing and expression well-formedness."}
+  ],
+  "manual_mutants": [
+    {
+      "id": "nanoda-0001",
+      "spec": "mutations/nanoda-0001.json",
+      "spec_sha256": "396ff47ad9cd41e14443258c66d094c25fb6fee07dd1a6c89fbe9b5b17c9f982",
+      "operator": "SKIP_VALIDATION",
+      "family": "validation-elision",
+      "subsystem": "declaration-validation",
+      "semantic_fault": "Permit theorem declarations whose type is not a proposition.",
+      "expected_direction": "REJECT_TO_ACCEPT"
+    },
+    {
+      "id": "nanoda-0002",
+      "spec": "mutations/nanoda-0002.json",
+      "spec_sha256": "a632ff0a6fe049c2f57e459675e675d0636f694973b5e1b7a2efaf31611e6b97",
+      "operator": "SKIP_VALIDATION",
+      "family": "validation-elision",
+      "subsystem": "definitional-equality",
+      "semantic_fault": "Permit a declaration body whose inferred type differs from its declared type.",
+      "expected_direction": "REJECT_TO_ACCEPT"
+    },
+    {
+      "id": "nanoda-0003",
+      "spec": "mutations/nanoda-0003.json",
+      "spec_sha256": "23ad055566f9a22d742a29f817d5ba4c8436ba3966d8e1a79a45c454dc054645",
+      "operator": "SKIP_VALIDATION",
+      "family": "validation-elision",
+      "subsystem": "universes",
+      "semantic_fault": "Permit a declaration to reference an undeclared universe parameter.",
+      "expected_direction": "REJECT_TO_ACCEPT"
+    },
+    {
+      "id": "nanoda-0004",
+      "spec": "mutations/nanoda-0004.json",
+      "spec_sha256": "e7892e06de7021d2c1ae578cf5613df8ebc003adc1e4f7c4e78f3198b5d5fa34",
+      "operator": "SKIP_VALIDATION",
+      "family": "validation-elision",
+      "subsystem": "declaration-validation",
+      "semantic_fault": "Permit a lambda binder whose type is not a well-formed sort.",
+      "expected_direction": "REJECT_TO_ACCEPT"
+    }
+  ]
+}

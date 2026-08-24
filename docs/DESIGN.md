@@ -72,18 +72,26 @@ source-mapping or instrumentation mistakes.
 
 ### Mutant Generator
 
-`tools/nanoda-mutator` parses Rust with `syn` and emits statement-level semantic
-validation candidates. `scripts/generate-mutations` filters candidates through
-the coverage index and controlled mutation catalog, excludes manually modeled
-sites, assigns deterministic source-location-bound identities, and writes and
-registers a bounded batch. Repeated source text is disambiguated by an explicit
-replacement occurrence.
+`tools/nanoda-mutator` parses Rust with `syn` and emits validation-elision,
+predicate-negation, relational-boundary, and equality-discrimination
+candidates. `scripts/generate-mutations` maps candidates to the structured
+operator/subsystem catalog, classifies duplicates, unsupported sites, and
+rejected non-semantic changes, filters through exact coverage, and selects a
+bounded family-balanced population. Identities bind source file, line, column,
+operator, original syntax, and mutated syntax. Repeated source text is
+disambiguated by an explicit replacement occurrence.
 
 `scripts/validate-mutation-batch` restores every batch mutation before checking
 the baseline source digest, compiles each mutation in isolation, records build
 failures separately, and rebuilds baseline source at the end. The resumable
 `scripts/run-mutation-batch` drives each compiling mutant through
 `scripts/run-mutant-scheduled` without LLM involvement.
+
+`scripts/report` emits mutation counts and score strata by operator, operator
+family, and semantic subsystem. Strata below the catalog's minimum sample retain
+raw counts but are explicitly `INSUFFICIENT_SAMPLE`. The Milestone 3 assurance
+gate also requires one killed and one surviving coverage-guided conclusion to
+match full 197-test corpus runs.
 
 `scripts/run-mutant` is the current one-mutant orchestrator. It reads a
 registered mutant and its exact replacement spec from `mutations/<id>.json`,

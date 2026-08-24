@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/phiferd/LeanVerifier/schemas/mutation-catalog.schema.json",
+  "title": "LeanVerifier Semantic Mutation Catalog",
+  "type": "object",
+  "required": ["schema_version", "checker", "minimum_stratum_sample", "operator_families", "subsystems", "manual_mutants"],
+  "additionalProperties": false,
+  "properties": {
+    "schema_version": {"const": 1},
+    "checker": {"const": "nanoda"},
+    "minimum_stratum_sample": {"type": "integer", "minimum": 2},
+    "operator_families": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "description", "semantic_fault", "operators"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "description": {"type": "string", "minLength": 1},
+          "semantic_fault": {"type": "string", "minLength": 1},
+          "operators": {"type": "array", "minItems": 1, "items": {"type": "string"}, "uniqueItems": true}
+        }
+      }
+    },
+    "subsystems": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["id", "scope"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "scope": {"type": "string", "minLength": 1}
+        }
+      }
+    },
+    "manual_mutants": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "spec", "spec_sha256", "operator", "family", "subsystem", "semantic_fault", "expected_direction"],
+        "additionalProperties": false,
+        "properties": {
+          "id": {"type": "string"},
+          "spec": {"type": "string"},
+          "spec_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+          "operator": {"type": "string"},
+          "family": {"type": "string"},
+          "subsystem": {"type": "string"},
+          "semantic_fault": {"type": "string"},
+          "expected_direction": {"enum": ["ACCEPT_TO_REJECT", "REJECT_TO_ACCEPT", "EITHER"]}
+        }
+      }
+    }
+  }
+}
