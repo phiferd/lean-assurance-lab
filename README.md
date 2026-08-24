@@ -1,11 +1,11 @@
-# Lean Kernel Arena Mutation & Differential Testing
+# Lean Assurance Lab
 
 **New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](docs/INTRODUCTION.md). For a real kernel failure and
 an honest assessment of this project's limits, read the
 [2026 Collatz incident case study](docs/CASE_STUDY_COLLATZ.md).**
 
-This repository tracks a mechanical testing project for Lean proof checkers.
+Lean Assurance Lab is a mechanical testing project for Lean proof checkers.
 The initial target is mutation testing against one checker implementation,
 then using surviving mutants to drive adversarial exported-artifact generation.
 

@@ -1,4 +1,4 @@
-# Project Plan
+# Lean Assurance Lab Project Plan
 
 ## Planning Frame
 

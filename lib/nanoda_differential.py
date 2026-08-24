@@ -100,7 +100,7 @@ class DifferentialSession:
     def prepare(self) -> None:
         if self._temp is not None:
             return
-        self._temp = tempfile.TemporaryDirectory(prefix=f"leanverifier-{self.mutant_id}-")
+        self._temp = tempfile.TemporaryDirectory(prefix=f"lean-assurance-lab-{self.mutant_id}-")
         temp_root = Path(self._temp.name)
         active = False
         baseline_source = None

@@ -3,7 +3,7 @@
 This case study examines a real Lean kernel soundness failure and asks the
 question most relevant to this project:
 
-> Would LeanVerifier's mutation and differential testing approach have
+> Would Lean Assurance Lab's mutation and differential testing approach have
 > prevented it?
 
 ## Bottom Line
@@ -145,9 +145,9 @@ generated the test before the bug became public.
 | Does the current mutation model prove it would generate this witness? | No. | The campaign has not mechanically evaluated an exact phantom-parameter or wrong-projection-structure mutant with a held-out version of this witness. |
 | Could this architecture prevent a future release containing a similar defect? | Conditionally. | It must generate or already contain a distinguishing input, compare against a checker or expected outcome that rejects it, and be enforced as a release gate. |
 
-LeanVerifier is assurance infrastructure, not a runtime shield around every Lean
-proof. A testing signal prevents a release only when a release process runs it
-and treats the result as blocking.
+Lean Assurance Lab is assurance infrastructure, not a runtime shield around
+every Lean proof. A testing signal prevents a release only when a release
+process runs it and treats the result as blocking.
 
 ## The Next Honest Experiment
 

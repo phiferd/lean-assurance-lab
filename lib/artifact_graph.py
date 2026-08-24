@@ -1,4 +1,4 @@
-"""Content-addressed artifact graph evaluation for LeanVerifier."""
+"""Content-addressed artifact graph evaluation for Lean Assurance Lab."""
 
 from __future__ import annotations
 

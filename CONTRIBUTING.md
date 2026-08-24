@@ -1,9 +1,10 @@
-# Contributing
+# Contributing to Lean Assurance Lab
 
-LeanVerifier welcomes contributions that improve the measured assurance state
-of the Lean ecosystem. `CONSTITUTION.md` governs acceptance. A contribution is
-reviewed by whether it adds scoped, durable, mechanically reproducible evidence,
-not by whether it produces a favorable metric or confirms an expected result.
+Lean Assurance Lab welcomes contributions that improve the measured assurance
+state of the Lean ecosystem. `CONSTITUTION.md` governs acceptance. A
+contribution is reviewed by whether it adds scoped, durable evidence that is
+mechanically reproducible, not by whether it produces a favorable metric or
+confirms an expected result.
 
 ## Start Here
 

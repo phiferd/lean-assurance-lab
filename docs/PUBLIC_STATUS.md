@@ -1,4 +1,4 @@
-# Public Status
+# Lean Assurance Lab: Public Status
 
 This page is generated from `results/assurance/current.json` by
 `scripts/render-public-status`.
@@ -6,7 +6,7 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `ba04979003d4a6f7e5c13e5636573b6bb2403b418bf95abb2effd83db5f0ef93`
+Snapshot SHA-256: `c0792d51b4a1c73668c0de904afa056881a34d9472c9afbadd13728ad91a0fff`
 
 ## Current Gate: FAIL
 

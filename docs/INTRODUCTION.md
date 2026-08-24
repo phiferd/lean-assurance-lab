@@ -18,7 +18,7 @@ make trust disappear. If the kernel accidentally accepts an invalid proof
 object, downstream users can receive a theorem marked as proved even though the
 required logical justification was not present.
 
-LeanVerifier measures how well tests detect plausible mistakes in proof
+Lean Assurance Lab measures how well tests detect plausible mistakes in proof
 checkers. It deliberately introduces faults into checker copies, runs the same
 test corpus against the original and faulty versions, and compares normalized
 outcomes. Surviving faults guide the search for new distinguishing tests.
@@ -78,8 +78,8 @@ The funnel narrows the trusted core, but several kinds of trust remain:
 - inputs and outputs must be interpreted without silently changing their
   meaning.
 
-LeanVerifier focuses on measurable checker behavior. It is one assurance layer,
-not a solution to every part of the trusted computing base.
+Lean Assurance Lab focuses on measurable checker behavior. It is one assurance
+layer, not a solution to every part of the trusted computing base.
 
 In this repository, **checker** and **validator** are broader operational terms
 for programs that validate exported Lean declarations. Some are intended as
@@ -120,10 +120,10 @@ and adapters for running multiple proof checkers. Rather than asking each
 implementation to understand Lean source syntax, the Arena materializes
 structured artifacts that describe declarations for a checker to validate.
 
-LeanVerifier uses that corpus as experimental input. It builds checker states,
-runs the same artifacts through them, normalizes implementation-specific process
-behavior into a shared outcome vocabulary, and stores content-addressed
-comparisons.
+Lean Assurance Lab uses that corpus as experimental input. It builds checker
+states, runs the same artifacts through them, normalizes
+implementation-specific process behavior into a shared outcome vocabulary, and
+stores content-addressed comparisons.
 
 This boundary matters. A result can depend on the exporter version, artifact
 format, parser behavior, checker configuration, and Lean version as well as the
@@ -243,10 +243,10 @@ outcomes would not have raised a difference.
 
 The exact regression is now in Lean Kernel Arena and current `nanoda` rejects
 it. That is retrospective protection against the known exploit, not proof that
-LeanVerifier would have discovered or prevented it before disclosure. Read the
-[Collatz incident case study](CASE_STUDY_COLLATZ.md) for the technical cause,
-primary sources, current mechanical evidence, and the experiment needed to test
-that counterfactual honestly.
+Lean Assurance Lab would have discovered or prevented it before disclosure.
+Read the [Collatz incident case study](CASE_STUDY_COLLATZ.md) for the technical
+cause, primary sources, current mechanical evidence, and the experiment needed
+to test that counterfactual honestly.
 
 ## One Concrete Project Example
 
@@ -284,8 +284,8 @@ compatible independent checkers can increase confidence that a result is not an
 artifact of one implementation.
 
 Independence is not magic. Implementations may share ambiguities, exported input
-formats may be incompatible, and agreement can still be wrong. LeanVerifier
-therefore records exact versions, implementation families, controls, raw
+formats may be incompatible, and agreement can still be wrong. Lean Assurance
+Lab therefore records exact versions, implementation families, controls, raw
 behavior, and compatibility evidence. It preserves exceptional outcomes such as
 crashes, timeouts, declines, and parse failures instead of collapsing everything
 into pass or fail.

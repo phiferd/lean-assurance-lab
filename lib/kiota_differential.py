@@ -102,7 +102,7 @@ class KiotaDifferentialSession:
         expected = self.spec["held_out_source"]
         if git_revision() != expected["expected_revision"]:
             raise RuntimeError("Kiota revision differs from frozen experiment spec")
-        self._temp = tempfile.TemporaryDirectory(prefix="leanverifier-m6-kiota-")
+        self._temp = tempfile.TemporaryDirectory(prefix="lean-assurance-lab-m6-kiota-")
         temp_root = Path(self._temp.name)
         active = False
         try:

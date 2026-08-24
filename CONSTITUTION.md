@@ -1,4 +1,4 @@
-# Constitution
+# Lean Assurance Lab Constitution
 
 ## Purpose
 
