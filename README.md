@@ -28,12 +28,13 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 through 4 are complete. The project has a closed mechanical
+Milestones 1 through 5 are complete. The project has a closed mechanical
 mutation loop for `nanoda`, content-addressed invalidation, and a structured
 semantic model spanning validation elision, predicate negation, relational
 boundaries, and equality discrimination. Witness search and structure-aware
-minimization are executable and auditable. Current work begins Milestone 5:
-cross-validator confirmation.
+minimization are executable and auditable. Cross-validator execution preserves
+semantic and parse disagreements without majority voting. Current work begins
+Milestone 6: the first generalization experiment.
 
 ## Repository Layout
 
@@ -44,12 +45,15 @@ docs/
   RESEARCH_STATUS.md
 results/
   baseline/
+  cross-validation/
+  expected-outcomes/
   mutants/
   survivors/
   witnesses/
 corpus/
   generated/
   minimized/
+  regression-candidates/
 scripts/
   artifact-status
   assurance-snapshot
@@ -59,12 +63,15 @@ scripts/
   compare
   check-distinction
   confirm-witness
+  cross-validate
+  establish-expected-outcome
   generate
   generate-mutations
   minimize
   milestone-2-assurance
   milestone-3-assurance
   milestone-4-assurance
+  milestone-5-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -79,6 +86,7 @@ scripts/
   setup-arena
   snapshot-coverage
   validate-mutation-batch
+  validator-inventory
 ```
 
 The upstream Lean Kernel Arena checkout is expected at `external/lean-kernel-arena`
@@ -211,6 +219,24 @@ Every candidate is checked by the direct normalized predicate
 hashes whether they find a witness or exhaust their budget. Found witnesses are
 minimized automatically while retaining both artifacts and final predicate
 checks.
+
+Establish an exact expected outcome and run compatible unmodified validators:
+
+```sh
+scripts/validator-inventory
+scripts/establish-expected-outcome nanoda-0003-original \
+  corpus/generated/nanoda-0003-auto-universe.ndjson \
+  --control corpus/controls/nanoda-0003-declared-const-universe.ndjson
+scripts/cross-validate nanoda-0003-original \
+  corpus/generated/nanoda-0003-auto-universe.ndjson \
+  --control corpus/controls/nanoda-0003-declared-const-universe.ndjson \
+  --expected-evidence results/expected-outcomes/nanoda-0003-original.json
+```
+
+`cross-validate` exits 2 for a checker disagreement so automation cannot mistake
+an unresolved difference for success. Results retain raw exit behavior,
+compatibility evidence, parse behavior, exact checker identities, and the
+no-majority-vote policy.
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

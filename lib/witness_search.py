@@ -161,6 +161,8 @@ def generate_candidates(
 
 def _structural_reductions(records: list[dict[str, Any]]) -> Iterable[list[dict[str, Any]]]:
     for record_index, record in enumerate(records):
+        if "meta" in record:
+            continue
         for path, value in _walk(record):
             if not path:
                 continue
@@ -184,10 +186,13 @@ def minimize_witness(
     max_checks: int = 200,
 ) -> tuple[list[dict[str, Any]], dict[str, Any]]:
     checks = 0
+    metadata_records = [row for row in records if "meta" in row]
 
     def holds(candidate: list[dict[str, Any]]) -> bool:
         nonlocal checks
         if checks >= max_checks or not candidate:
+            return False
+        if metadata_records and not all(row in candidate for row in metadata_records):
             return False
         scratch.write_bytes(canonical_ndjson(candidate))
         checks += 1

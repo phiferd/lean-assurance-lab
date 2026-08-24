@@ -47,6 +47,13 @@ class WitnessSearchTests(unittest.TestCase):
         self.assertTrue(result[0]["keep"])
         self.assertGreater(stats["predicate_checks"], 0)
 
+    def test_minimizer_preserves_export_metadata(self):
+        metadata = {"meta": {"format": {"version": "3.1.0"}}}
+        records = [metadata, {"keep": True}, {"noise": 1}]
+        with tempfile.TemporaryDirectory() as temp:
+            result, _ = minimize_witness(records, Path(temp) / "candidate.ndjson", FakeSession())
+        self.assertIn(metadata, result)
+
     def test_semantic_states_are_distinct(self):
         self.assertEqual(
             semantic_classification("REJECT", "abc", None, None)["status"],

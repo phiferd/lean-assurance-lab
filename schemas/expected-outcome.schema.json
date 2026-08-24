@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version", "case_id", "status", "artifact", "expected_outcome",
+    "reference_checker", "positive_control", "mechanical_predicate", "created_at"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["ESTABLISHED", "UNRESOLVED"]},
+    "expected_outcome": {"enum": ["ACCEPT", "REJECT", null]},
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256", "result"],
+      "properties": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+    },
+    "mechanical_predicate": {
+      "const": "reference(control) == ACCEPT and reference(artifact) in {ACCEPT, REJECT}"
+    }
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,83 @@
+#!/usr/bin/env python3
+"""Build a regression-candidate manifest only from exact expected evidence."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_CASES = ("nanoda-0003-original", "nanoda-0003-minimized")
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--case", action="append", default=[])
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "corpus" / "regression-candidates" / "milestone-5.json",
+    )
+    args = parser.parse_args()
+    candidates = []
+    for case_id in args.case or DEFAULT_CASES:
+        result_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        result = json.loads(result_path.read_text(encoding="utf-8"))
+        evidence_path = ROOT / result["expected_evidence"]["path"]
+        evidence = json.loads(evidence_path.read_text(encoding="utf-8"))
+        artifact_path = ROOT / result["artifact"]["path"]
+        valid = (
+            result["regression_candidate"]
+            and result["expected_outcome"] in {"ACCEPT", "REJECT"}
+            and result["expected_evidence"]["sha256"] == sha256_file(evidence_path)
+            and evidence["status"] == "ESTABLISHED"
+            and evidence["expected_outcome"] == result["expected_outcome"]
+            and evidence["artifact"]["sha256"] == result["artifact"]["sha256"]
+            and sha256_file(artifact_path) == result["artifact"]["sha256"]
+        )
+        if not valid:
+            raise SystemExit(f"candidate lacks current exact expected-outcome evidence: {case_id}")
+        candidates.append(
+            {
+                "case_id": case_id,
+                "artifact": {
+                    "path": result["artifact"]["path"],
+                    "sha256": result["artifact"]["sha256"],
+                },
+                "expected_outcome": result["expected_outcome"],
+                "expected_evidence": {
+                    "path": result["expected_evidence"]["path"],
+                    "sha256": result["expected_evidence"]["sha256"],
+                },
+                "cross_validation": {
+                    "path": str(result_path.relative_to(ROOT)),
+                    "sha256": sha256_file(result_path),
+                    "classification": result["classification"],
+                },
+                "status": result["regression_status"],
+            }
+        )
+    existing = json.loads(args.output.read_text(encoding="utf-8")) if args.output.exists() else {}
+    manifest = {
+        "schema_version": 1,
+        "status": "READY" if candidates else "EMPTY",
+        "majority_vote_used": False,
+        "candidates": candidates,
+        "producer": "scripts/build-regression-candidates",
+        "producer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

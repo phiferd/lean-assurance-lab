@@ -232,6 +232,31 @@ def main() -> int:
                 "CONFIRMED_REGRESSION_CANDIDATE",
             }
 
+    cross_validation_counts: dict[str, int] = {}
+    cross_validator_ids = set()
+    regression_candidates_with_disagreement = 0
+    cross_validation_root = args.results_root / "cross-validation"
+    if cross_validation_root.exists():
+        for path in cross_validation_root.glob("*/results.json"):
+            try:
+                result = json.loads(path.read_text(encoding="utf-8"))
+            except json.JSONDecodeError:
+                continue
+            classification = result.get("classification", "UNRESOLVED")
+            cross_validation_counts[classification] = cross_validation_counts.get(classification, 0) + 1
+            cross_validator_ids.update(row.get("checker") for row in result.get("validators", []))
+            regression_candidates_with_disagreement += bool(
+                result.get("regression_candidate") and classification == "CHECKER_DISAGREEMENT"
+            )
+    expected_outcomes_established = 0
+    expected_root = args.results_root / "expected-outcomes"
+    if expected_root.exists():
+        for path in expected_root.glob("*.json"):
+            try:
+                expected_outcomes_established += json.loads(path.read_text(encoding="utf-8")).get("status") == "ESTABLISHED"
+            except json.JSONDecodeError:
+                continue
+
     report = {
         "mutation_score": score,
         "mutation_score_scope": "explicit MEANINGFUL_SEMANTIC classifications only",
@@ -258,6 +283,11 @@ def main() -> int:
         "confirmed_witness_semantics": confirmed_witness_semantics,
         "minimized_witnesses": len(minimized),
         "arena_regression_candidates": arena_candidates,
+        "cross_validators": len(cross_validator_ids),
+        "cross_validation_cases": sum(cross_validation_counts.values()),
+        "cross_validation_classifications": cross_validation_counts,
+        "expected_outcomes_established": expected_outcomes_established,
+        "regression_candidates_with_unresolved_disagreement": regression_candidates_with_disagreement,
         "stratified_metrics": {
             "minimum_sample": minimum_sample,
             "by_subsystem": stratified_metrics(

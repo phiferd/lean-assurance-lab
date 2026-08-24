@@ -98,8 +98,8 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Full-corpus controls for one killed and one surviving generated mutant
   reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 40 input and derived
-  artifacts; 32 current artifacts pass, with four historical reports or
+- `results/artifacts/graph.json` content-addresses 51 input and derived
+  artifacts; 42 current artifacts pass, with five historical reports or
   attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
@@ -108,12 +108,25 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Executable structure-aware witness search now records every candidate,
   normalized outcome pair, seed, transformation, input digest, and cost.
 - A mechanical search rediscovered the confirmed `nanoda-0003` witness on its
-  first attempt and automatically reduced it from 9 to 8 NDJSON records while
-  preserving the baseline `REJECT` / mutant `ACCEPT` distinction.
+  first attempt and automatically reduced it from 522 to 512 bytes while
+  preserving all 9 NDJSON records, export metadata, and the baseline `REJECT` /
+  mutant `ACCEPT` distinction.
 - A 60-attempt bounded search over a 143-candidate universe-focused population
   found no witness for `nanoda-gen-ca8565ff512e` and durably records the result
   as unresolved rather than equivalent.
 - `results/assurance/milestone-4.json` records a passing 11-check Milestone 4
+  gate.
+- Direct cross-validator execution is configured for official Lean 4.33 and
+  pinned unmodified Kiota across two distinct implementation families.
+- Official Lean rejects both the original and minimized universe witnesses;
+  Kiota accepts both. These semantic disagreements are durable exceptional
+  unresolved artifacts, not majority-vote results.
+- A malformed-object probe records official Lean accepting zero declarations
+  while Kiota returns `PARSE_ERROR`, preserving parser behavior separately from
+  semantic validation.
+- Exact expected-rejection evidence and accepted positive controls bind both
+  witness artifacts as regression candidates with unresolved disagreements.
+- `results/assurance/milestone-5.json` records a passing 15-check Milestone 5
   gate.
 
 ## Milestone 0: Reproducible Project Foundation
@@ -325,7 +338,10 @@ Exit criteria:
 Goal: classify generated tests against independent validators so ecosystem
 relevance is visible.
 
-Tasks:
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-5.json`, with all 15 checks passing.
+
+Completed:
 
 1. Add direct execution support for compatible independent validators.
 2. Normalize outcomes across validators without hiding meaningful differences.
@@ -471,12 +487,13 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Begin Milestone 4 with mechanical witness search for active semantic
-   survivors, prioritizing universe-boundary and quotient-validation mutants.
-2. Add structure-aware NDJSON transformations and automatic minimization for
-   found distinctions.
-3. Prepare direct execution and compatibility metadata for a second independent
-   validator.
+1. Begin Milestone 6 with an independently introduced Kiota mutation selected
+   without consulting its mutant outcomes during test generation.
+2. Freeze a generated corpus before evaluating the held-out Kiota mutant and
+   record positive, neutral, negative, inconclusive, incompatible, or unresolved
+   transfer.
+3. Investigate the official/Kiota universe-ownership disagreement as a separate
+   durable issue without letting it determine the held-out transfer experiment.
 4. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
 5. Commit and push after each coherent artifact-producing step.

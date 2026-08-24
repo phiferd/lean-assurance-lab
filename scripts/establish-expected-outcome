@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""Bind an expected outcome to an exact artifact using a designated reference."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from cross_validation import (  # noqa: E402
+    CATALOG_PATH,
+    checker_identity,
+    inspect_export,
+    load_catalog,
+    profiles_by_id,
+    relative,
+    run_validator,
+    sha256_file,
+    static_compatibility,
+)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("case_id")
+    parser.add_argument("artifact", type=Path)
+    parser.add_argument("--control", type=Path, required=True)
+    parser.add_argument("--reference", default="official")
+    parser.add_argument("--rationale")
+    parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+
+    artifact = args.artifact.resolve()
+    control = args.control.resolve()
+    catalog = load_catalog()
+    profiles = profiles_by_id(catalog)
+    if args.reference not in profiles:
+        parser.error(f"unknown reference checker: {args.reference}")
+    profile = profiles[args.reference]
+    if profile["role"] != "REFERENCE":
+        parser.error(f"checker is not designated REFERENCE: {args.reference}")
+    compatibility = static_compatibility(profile, inspect_export(artifact))
+    control_compatibility = static_compatibility(profile, inspect_export(control))
+    artifact_result = None
+    control_result = None
+    if compatibility["status"] == "COMPATIBLE" and control_compatibility["status"] == "COMPATIBLE":
+        control_result = run_validator(profile, control, args.timeout)
+        artifact_result = run_validator(profile, artifact, args.timeout)
+    established = bool(
+        control_result
+        and artifact_result
+        and control_result["normalized_outcome"] == "ACCEPT"
+        and artifact_result["normalized_outcome"] in {"ACCEPT", "REJECT"}
+    )
+    result = {
+        "schema_version": 1,
+        "case_id": args.case_id,
+        "status": "ESTABLISHED" if established else "UNRESOLVED",
+        "expected_outcome": artifact_result["normalized_outcome"] if established else None,
+        "artifact": {
+            "path": relative(artifact), "sha256": sha256_file(artifact),
+            "metadata": inspect_export(artifact), "result": artifact_result,
+        },
+        "reference_checker": {
+            **checker_identity(profile), "compatibility": compatibility,
+        },
+        "positive_control": {
+            "path": relative(control), "sha256": sha256_file(control),
+            "compatibility": control_compatibility, "result": control_result,
+        },
+        "rationale": args.rationale,
+        "mechanical_predicate": "reference(control) == ACCEPT and reference(artifact) in {ACCEPT, REJECT}",
+        "policy": {
+            "designated_reference": args.reference,
+            "majority_vote_used": False,
+            "catalog": relative(CATALOG_PATH),
+            "catalog_sha256": sha256_file(CATALOG_PATH),
+            "library_sha256": sha256_file(ROOT / "lib" / "cross_validation.py"),
+            "producer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        },
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    output = args.output or ROOT / "results" / "expected-outcomes" / f"{args.case_id}.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 0 if established else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

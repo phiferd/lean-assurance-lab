@@ -1,0 +1,53 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version", "case_id", "artifact", "expected_outcome", "expected_evidence",
+    "validators", "classification", "semantic_status", "majority_vote_used", "created_at"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "case_id": {"type": "string", "minLength": 1},
+    "artifact": {
+      "type": "object",
+      "required": ["path", "sha256", "metadata"],
+      "properties": {"sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}}
+    },
+    "expected_outcome": {"enum": ["ACCEPT", "REJECT", null]},
+    "expected_evidence": {"type": ["object", "null"]},
+    "validators": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["checker", "role", "compatibility", "result", "classification", "exceptional_unresolved"],
+        "properties": {
+          "result": {
+            "type": ["object", "null"],
+            "properties": {
+              "normalized_outcome": {
+                "enum": ["ACCEPT", "REJECT", "DECLINE", "CRASH", "TIMEOUT", "PARSE_ERROR", "UNKNOWN"]
+              }
+            },
+            "required": ["normalized_outcome"]
+          },
+          "classification": {
+            "enum": [
+              "CONFIRMED", "CHECKER_DISAGREEMENT", "DECLINED", "INCOMPATIBLE",
+              "CRASHED", "TIMED_OUT", "PARSE_ERROR", "UNRESOLVED"
+            ]
+          }
+        }
+      }
+    },
+    "classification": {
+      "enum": [
+        "CONFIRMED", "CHECKER_DISAGREEMENT", "DECLINED", "INCOMPATIBLE", "CRASHED",
+        "TIMED_OUT", "PARSE_ERROR", "UNRESOLVED"
+      ]
+    },
+    "semantic_status": {"enum": ["ESTABLISHED", "UNRESOLVED", "NOT_APPLICABLE"]},
+    "majority_vote_used": {"const": false}
+  },
+  "additionalProperties": true
+}

@@ -1,0 +1,33 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "policy", "validators"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "policy": {
+      "type": "object",
+      "required": ["expected_outcome_rule", "majority_vote", "required_metadata"],
+      "properties": {"majority_vote": {"const": false}}
+    },
+    "validators": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": [
+          "id", "adapter", "role", "implementation_family", "independent_from_nanoda",
+          "arena_definition", "binary", "command", "version", "compatible_export_formats",
+          "compatible_exporter_versions", "empirically_compatible_lean_versions", "declines"
+        ],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "role": {"enum": ["REFERENCE", "INDEPENDENT"]},
+          "independent_from_nanoda": {"type": "boolean"},
+          "command": {"type": "array", "minItems": 2, "items": {"type": "string"}}
+        },
+        "additionalProperties": true
+      }
+    }
+  },
+  "additionalProperties": false
+}

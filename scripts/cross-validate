@@ -1,0 +1,160 @@
+#!/usr/bin/env python3
+"""Run an artifact across compatible validators and preserve disagreements."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from cross_validation import (  # noqa: E402
+    CATALOG_PATH,
+    aggregate_classification,
+    inspect_export,
+    load_catalog,
+    profiles_by_id,
+    relative,
+    result_classification,
+    run_validator,
+    sha256_file,
+    static_compatibility,
+)
+
+
+def load_evidence(path: Path | None, artifact_sha256: str) -> tuple[str | None, dict | None]:
+    if path is None:
+        return None, None
+    evidence = json.loads(path.read_text(encoding="utf-8"))
+    if evidence.get("status") != "ESTABLISHED":
+        raise SystemExit("expected-outcome evidence is not established")
+    if evidence.get("artifact", {}).get("sha256") != artifact_sha256:
+        raise SystemExit("expected-outcome evidence binds a different artifact")
+    return evidence["expected_outcome"], {
+        "path": relative(path), "sha256": sha256_file(path),
+        "reference_checker": evidence["reference_checker"]["id"],
+        "mechanical_predicate": evidence["mechanical_predicate"],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("case_id")
+    parser.add_argument("artifact", type=Path)
+    parser.add_argument("--control", type=Path)
+    parser.add_argument("--expected-evidence", type=Path)
+    parser.add_argument("--checker", action="append", default=[])
+    parser.add_argument("--probe-mode", action="store_true")
+    parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument("--output", type=Path)
+    args = parser.parse_args()
+    if not args.probe_mode and args.control is None:
+        parser.error("--control is required outside --probe-mode")
+
+    artifact = args.artifact.resolve()
+    artifact_sha = sha256_file(artifact)
+    metadata = inspect_export(artifact)
+    expected_outcome, evidence_ref = load_evidence(args.expected_evidence, artifact_sha)
+    catalog = load_catalog()
+    profiles = profiles_by_id(catalog)
+    selected = args.checker or list(profiles)
+    unknown = sorted(set(selected) - set(profiles))
+    if unknown:
+        parser.error(f"unknown checkers: {', '.join(unknown)}")
+
+    validator_results = []
+    for checker_id in selected:
+        profile = profiles[checker_id]
+        compatibility = static_compatibility(profile, metadata)
+        control_record = None
+        blocked_classification = "INCOMPATIBLE"
+        may_run = compatibility["status"] == "COMPATIBLE"
+        if args.probe_mode:
+            compatibility["status"] = "PROBE_ONLY"
+            compatibility["reasons"] = ["COMPATIBILITY_RULES_BYPASSED_FOR_PARSE_PROBE"]
+            may_run = compatibility["checker_identity"]["binary_sha256"] is not None
+        elif may_run and args.control:
+            control = args.control.resolve()
+            control_static = static_compatibility(profile, inspect_export(control))
+            control_result = run_validator(profile, control, args.timeout) if control_static["status"] == "COMPATIBLE" else None
+            control_record = {
+                "path": relative(control), "sha256": sha256_file(control),
+                "static_compatibility": control_static, "result": control_result,
+            }
+            if not control_result or control_result["normalized_outcome"] != "ACCEPT":
+                control_outcome = control_result["normalized_outcome"] if control_result else "UNKNOWN"
+                blocked_classification = {
+                    "DECLINE": "DECLINED", "CRASH": "CRASHED", "TIMEOUT": "TIMED_OUT",
+                    "PARSE_ERROR": "PARSE_ERROR", "UNKNOWN": "UNRESOLVED",
+                }.get(control_outcome, "INCOMPATIBLE")
+                compatibility["status"] = blocked_classification
+                compatibility["reasons"].append("POSITIVE_CONTROL_NOT_ACCEPTED")
+                may_run = False
+        result = run_validator(profile, artifact, args.timeout) if may_run else None
+        if not may_run:
+            classification = blocked_classification
+        else:
+            classification = result_classification(result["normalized_outcome"], expected_outcome)
+        validator_results.append(
+            {
+                "checker": checker_id,
+                "role": profile["role"],
+                "implementation_family": profile["implementation_family"],
+                "compatibility": compatibility,
+                "positive_control": control_record,
+                "result": result,
+                "classification": classification,
+                "exceptional_unresolved": classification == "CHECKER_DISAGREEMENT",
+            }
+        )
+
+    classification = aggregate_classification(validator_results, expected_outcome)
+    regression_candidate = expected_outcome in {"ACCEPT", "REJECT"} and evidence_ref is not None
+    result = {
+        "schema_version": 1,
+        "case_id": args.case_id,
+        "artifact": {"path": relative(artifact), "sha256": artifact_sha, "metadata": metadata},
+        "expected_outcome": expected_outcome,
+        "expected_evidence": evidence_ref,
+        "validators": validator_results,
+        "classification": classification,
+        "semantic_status": (
+            "NOT_APPLICABLE" if args.probe_mode
+            else "UNRESOLVED" if classification == "CHECKER_DISAGREEMENT"
+            else "ESTABLISHED" if expected_outcome is not None
+            else "UNRESOLVED"
+        ),
+        "exceptional_unresolved": classification == "CHECKER_DISAGREEMENT",
+        "disagreement_kind": "PARSE_BEHAVIOR" if args.probe_mode and classification == "CHECKER_DISAGREEMENT" else "SEMANTIC_OUTCOME" if classification == "CHECKER_DISAGREEMENT" else None,
+        "regression_candidate": regression_candidate,
+        "regression_status": (
+            "EXPECTED_OUTCOME_ESTABLISHED_WITH_UNRESOLVED_DISAGREEMENT"
+            if regression_candidate and classification == "CHECKER_DISAGREEMENT"
+            else "EXPECTED_OUTCOME_ESTABLISHED"
+            if regression_candidate
+            else "NOT_ELIGIBLE"
+        ),
+        "majority_vote_used": False,
+        "policy": {
+            "rule": "preserve every compatible checker outcome; any difference is exceptional and unresolved",
+            "catalog": relative(CATALOG_PATH),
+            "catalog_sha256": sha256_file(CATALOG_PATH),
+            "library_sha256": sha256_file(ROOT / "lib" / "cross_validation.py"),
+            "producer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        },
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    output = args.output or ROOT / "results" / "cross-validation" / args.case_id / "results.json"
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 2 if classification == "CHECKER_DISAGREEMENT" else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+"""Snapshot exact identities of configured cross-validation checkers."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from cross_validation import CATALOG_PATH, checker_identity, load_catalog, sha256_file  # noqa: E402
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "cross-validation" / "validator-inventory.json",
+    )
+    args = parser.parse_args()
+    catalog = load_catalog()
+    validators = [checker_identity(profile) for profile in catalog["validators"]]
+    snapshot = {
+        "schema_version": 1,
+        "status": "READY" if all(row["binary_sha256"] for row in validators) else "INCOMPLETE",
+        "catalog": str(CATALOG_PATH.relative_to(ROOT)),
+        "catalog_sha256": sha256_file(CATALOG_PATH),
+        "producer_sha256": hashlib.sha256(Path(__file__).read_bytes()).hexdigest(),
+        "library_sha256": sha256_file(ROOT / "lib" / "cross_validation.py"),
+        "validators": validators,
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0 if snapshot["status"] == "READY" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

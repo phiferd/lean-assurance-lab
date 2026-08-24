@@ -105,9 +105,9 @@ Last updated: 2026-08-23
   deterministic subsystem templates, structure-aware NDJSON transformations,
   per-attempt JSONL records, content-bound inputs, and cost accounting.
 - Mechanically rediscovered the confirmed `nanoda-0003` universe-ownership
-  witness on attempt 1 and automatically minimized it from 9 records / 522
-  bytes to 8 records / 339 bytes over 66 additional predicate checks. Both
-  artifacts preserve baseline `REJECT` versus mutant `ACCEPT`.
+  witness on attempt 1 and automatically minimized it from 522 to 512 bytes
+  over 63 additional predicate checks. All 9 records and exact export metadata
+  are preserved; both artifacts retain baseline `REJECT` versus mutant `ACCEPT`.
 - Executed 60 of 143 deterministic universe-focused candidates against active
   survivor `nanoda-gen-ca8565ff512e`. No candidate distinguished baseline from
   mutant, so the bounded result is durably classified `UNRESOLVED` with reason
@@ -115,6 +115,25 @@ Last updated: 2026-08-23
 - Added explicit states for witness found, minimized witness found, no witness,
   ambiguous semantics, and reference-checker disagreement.
 - Produced `results/assurance/milestone-4.json`; all 11 Milestone 4 checks pass.
+- Built unmodified Kiota at Arena-pinned revision
+  `58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a` and content-bound its clean source,
+  binary, Arena definition, and implementation family alongside official Lean
+  4.33.
+- Added validator-neutral direct execution, exact export compatibility rules,
+  positive-control checks, raw process evidence, parse behavior, and explicit
+  normalized states for accept, reject, decline, crash, timeout, parse error,
+  and unknown behavior.
+- Established exact expected `REJECT` outcomes for the original and minimized
+  `nanoda-0003` witnesses using official Lean plus the accepted declared-universe
+  control. Evidence is bound to each artifact SHA-256 without majority voting.
+- Cross-validation found durable semantic disagreements for both artifacts:
+  official Lean rejects and Kiota accepts. Both remain regression candidates
+  with mechanically established expected outcomes and exceptional unresolved
+  cross-validator status.
+- A malformed-object probe found a separate parse-behavior disagreement:
+  official Lean exits successfully after accepting zero declarations, while
+  Kiota reports `PARSE_ERROR`.
+- Produced `results/assurance/milestone-5.json`; all 15 Milestone 5 checks pass.
 
 ## Command Log
 
@@ -197,6 +216,18 @@ scripts/milestone-3-assurance
 scripts/generate --mutant-id nanoda-0003 --subsystem universes --random-seed 4103 --max-attempts 20 --max-minimization-checks 200 --expected-outcome REJECT --expected-evidence results/witnesses/nanoda-0003-undeclared-const-universe/confirmation.json --witness-id nanoda-0003-auto-universe
 scripts/generate --mutant-id nanoda-gen-ca8565ff512e --subsystem universes --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/013_levelComp1.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/016_levelParams.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/020_imax1.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/level-imax-leq.ndjson --random-seed 4104 --max-attempts 60 --witness-id nanoda-gen-ca8565ff512e-search-0001
 scripts/milestone-4-assurance --allow-stale-artifacts
+cd external/lean-kernel-arena
+../../.venv-arena/bin/python ./lka.py build-checker kiota
+cd /Users/danphifer/Documents/ChatGPT/LeanVerifier
+scripts/validator-inventory
+scripts/establish-expected-outcome nanoda-0003-original corpus/generated/nanoda-0003-auto-universe.ndjson --control corpus/controls/nanoda-0003-declared-const-universe.ndjson --reference official --rationale 'undefined universe parameter references must be rejected'
+scripts/establish-expected-outcome nanoda-0003-minimized corpus/minimized/nanoda-0003-auto-universe-min.ndjson --control corpus/controls/nanoda-0003-declared-const-universe.ndjson --reference official --rationale 'structurally minimized distinguishing artifact must be rejected'
+scripts/cross-validate nanoda-0003-original corpus/generated/nanoda-0003-auto-universe.ndjson --control corpus/controls/nanoda-0003-declared-const-universe.ndjson --expected-evidence results/expected-outcomes/nanoda-0003-original.json --checker official --checker kiota
+scripts/cross-validate nanoda-0003-minimized corpus/minimized/nanoda-0003-auto-universe-min.ndjson --control corpus/controls/nanoda-0003-declared-const-universe.ndjson --expected-evidence results/expected-outcomes/nanoda-0003-minimized.json --checker official --checker kiota
+scripts/cross-validate malformed-object-probe corpus/probes/malformed-object.ndjson --probe-mode --checker official --checker kiota
+scripts/build-regression-candidates
+scripts/report --allow-stale-artifacts --output results/assurance/milestone-5-report.json
+scripts/milestone-5-assurance --allow-stale-artifacts
 ```
 
 Notes:
@@ -272,13 +303,19 @@ confirmed_witness_semantics: 1
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 0
 arena_regression_candidates: 1
-artifact_nodes: 40
-current_artifacts: 32
-historical_artifacts: 4
+artifact_nodes: 51
+current_artifacts: 42
+historical_artifacts: 5
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
 milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
+cross_validators: 2
+cross_validation_cases: 3
+cross_validation_checker_disagreements: 3
+expected_outcomes_established: 2
+regression_candidates_with_unresolved_disagreement: 2
+milestone_5_checks_passing: 15
 ```
 
 ## First Mutation Result
@@ -357,12 +394,24 @@ milestone_4_checks_passing: 11
 - The first automated negative witness search was deliberately bounded at 60
   attempts out of 143 generated candidates. It establishes only that those 60
   candidates did not distinguish the checkers; the survivor remains unresolved.
+- Kiota accepts both universe-ownership witnesses that official Lean and
+  baseline nanoda reject. This is preserved as an unresolved semantic checker
+  disagreement and needs upstream investigation; no majority or implementation
+  count is used to decide semantics.
+- The minimized witness preserves export metadata but official Lean rejects it
+  at `defnInfo invalid`, earlier than the original undefined-universe error.
+  Its expected rejection is established, but its explanatory semantics are not
+  claimed identical to the original witness.
+- Official Lean's direct checker accepts the malformed-object probe as zero
+  declarations while Kiota reports a JSON parse error. The probe is diagnostic,
+  not a regression candidate.
 
 ## Next Concrete Experiment
 
-1. Begin Milestone 5 by adding a validator-neutral direct runner and explicit
-   export-format/toolchain compatibility records.
-2. Run the original and minimized `nanoda-0003` witnesses through the official
-   checker using the new cross-validator result schema.
-3. Extend confirmation to another compatible independent checker, preserving
-   declines, incompatibilities, crashes, timeouts, and disagreements directly.
+1. Begin Milestone 6 by selecting and introducing an analogous semantic fault
+   independently in Kiota without consulting held-out mutant outcomes during
+   test generation.
+2. Freeze the generated corpus, evaluate the held-out Kiota mutant, and record
+   the transfer result even if it is neutral, inconclusive, or incompatible.
+3. Investigate the universe-ownership disagreement separately and prepare an
+   upstream report with the exact original witness and checker identities.

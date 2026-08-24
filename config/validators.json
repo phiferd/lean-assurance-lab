@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "policy": {
+    "expected_outcome_rule": "A designated reference checker plus an accepted positive control binds an expected outcome to an exact artifact SHA-256.",
+    "majority_vote": false,
+    "required_metadata": ["format.version", "exporter.version", "lean.version"],
+    "regression_candidate_rule": "An exact artifact SHA-256 must have ESTABLISHED expected-outcome evidence; any checker disagreement remains attached."
+  },
+  "validators": [
+    {
+      "id": "official",
+      "display_name": "Official Lean kernel 4.33.0",
+      "adapter": "official",
+      "role": "REFERENCE",
+      "implementation_family": "lean4-official",
+      "independent_from_nanoda": true,
+      "arena_definition": "external/lean-kernel-arena/checkers/official.yaml",
+      "source_template": "external/lean-kernel-arena/checkers/official-v4.33.0",
+      "source_checkout": "external/lean-kernel-arena/_build/checkers/official/src",
+      "source_files": ["Main.lean", "kernel.lean", "lakefile.toml", "lake-manifest.json"],
+      "expected_built_toolchain": "leanprover/lean4:v4.33.0",
+      "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+      "command": ["{binary}", "{artifact}"],
+      "version": "4.33.0",
+      "compatible_export_formats": ["3.1.0"],
+      "compatible_exporter_versions": ["3.1.0"],
+      "empirically_compatible_lean_versions": ["4.29.1"],
+      "declines": []
+    },
+    {
+      "id": "kiota",
+      "display_name": "Kiota 0.1.0",
+      "adapter": "kiota",
+      "role": "INDEPENDENT",
+      "implementation_family": "kiota-rust",
+      "independent_from_nanoda": true,
+      "arena_definition": "external/lean-kernel-arena/checkers/kiota.yaml",
+      "binary": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+      "command": ["{binary}", "{artifact}"],
+      "version": "0.1.0",
+      "expected_source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "source_checkout": "external/lean-kernel-arena/_build/checkers/kiota/src",
+      "compatible_export_formats": ["3.1.0"],
+      "compatible_exporter_versions": ["3.1.0"],
+      "empirically_compatible_lean_versions": ["4.29.1"],
+      "declines": []
+    }
+  ]
+}

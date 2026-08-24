@@ -206,7 +206,40 @@ The minimizer first delta-debugs declaration records, then removes list elements
 and non-identity object fields structurally. It invokes the prepared baseline
 and mutant binaries directly rather than accepting an arbitrary shell predicate.
 Both the original and minimized artifacts are retained, and both receive final
-differential checks.
+differential checks. Export metadata is a structural invariant and cannot be
+deleted during minimization.
+
+### Cross-Validator Confirmation
+
+`config/validators.json` defines exact checker commands, implementation
+families, roles, source identities, and empirically tested export compatibility.
+Compatibility requires matching export, exporter, and Lean producer versions;
+a pinned and unmodified checker build; and acceptance of a positive control.
+Unsupported metadata or a failed control is recorded instead of being coerced
+into a semantic result.
+
+`scripts/establish-expected-outcome` uses one designated reference checker and
+an accepted positive control to bind `ACCEPT` or `REJECT` to an exact artifact
+SHA-256. This is expected-outcome evidence, not a vote. `scripts/cross-validate`
+runs every selected compatible checker and retains exit codes, signals,
+timeouts, output hashes and tails, parse behavior, and normalized outcomes.
+
+The normalized vocabulary is:
+
+```text
+ACCEPT REJECT DECLINE CRASH TIMEOUT PARSE_ERROR UNKNOWN
+```
+
+Cross-validator classifications are:
+
+```text
+CONFIRMED CHECKER_DISAGREEMENT DECLINED INCOMPATIBLE CRASHED
+TIMED_OUT PARSE_ERROR UNRESOLVED
+```
+
+Any compatible `ACCEPT` / `REJECT` difference is exceptional and unresolved,
+even if other checkers agree. A regression candidate must carry exact expected
+outcome evidence; checker disagreement remains attached to that candidate.
 
 ## Data Flow
 
@@ -220,6 +253,9 @@ Arena corpus
   -> minimized witness
   -> candidate Arena regression
   -> rerun mutation analysis
+  -> expected-outcome evidence
+  -> compatible independent validators
+  -> confirmation or durable disagreement
 ```
 
 ## Durable Result Files
@@ -245,6 +281,9 @@ results/survivors/inventory.jsonl
 results/witnesses/<witness-id>/metadata.json
 corpus/generated/<witness-id>.ndjson
 corpus/minimized/<witness-id>-min.ndjson
+results/expected-outcomes/<case-id>.json
+results/cross-validation/<case-id>/results.json
+corpus/regression-candidates/milestone-5.json
 ```
 
 The exact upstream Arena output format may change; raw logs and metadata are
