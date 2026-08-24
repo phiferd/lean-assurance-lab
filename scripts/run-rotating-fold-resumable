@@ -1,0 +1,376 @@
+#!/usr/bin/env python3
+"""Evaluate a frozen Lean4Lean fold with durable per-checker checkpoints."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from lean4lean_differential import (  # noqa: E402
+    Lean4LeanDifferentialSession, classify_fold, sha256_file,
+)
+from rotating_checkpoint import (  # noqa: E402
+    CheckpointError, RotatingCheckpoint, atomic_write_json,
+)
+
+DEFAULT_FREEZE = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds" / "lean4lean-freeze.json"
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def binding(path: Path) -> dict[str, str]:
+    return {"path": relative(path), "sha256": sha256_file(path)}
+
+
+def bound_path(record: dict) -> Path:
+    path = ROOT / record["path"]
+    if not path.exists() or sha256_file(path) != record["sha256"]:
+        raise SystemExit(f"bound input missing or stale: {record['path']}")
+    return path
+
+
+def compact(result: dict) -> dict:
+    return {
+        "normalized_outcome": result["normalized_outcome"],
+        "exit_code": result["exit_code"],
+        "seconds": result["seconds"],
+        "stdout_sha256": result["stdout_sha256"],
+        "stderr_sha256": result["stderr_sha256"],
+    }
+
+
+def run_unit(
+    checkpoint: RotatingCheckpoint,
+    session: Lean4LeanDifferentialSession,
+    *,
+    kind: str,
+    key: str,
+    artifact: Path,
+    artifact_sha256: str,
+    compact_results: bool,
+) -> dict:
+    size = artifact.stat().st_size
+    if checkpoint.data["inflight"] is None:
+        checkpoint.begin_unit(kind, key, artifact_sha256, size)
+        checkpoint.save()
+    else:
+        checkpoint.require_unit(kind, key, artifact_sha256, size)
+    assert session.baseline_binary is not None and session.mutant_binary is not None
+    binaries = {"baseline": session.baseline_binary, "mutant": session.mutant_binary}
+    while (side := checkpoint.next_side()) is not None:
+        checkpoint.begin_attempt(side)
+        checkpoint.save()
+        result = session.run_one(binaries[side], artifact)
+        checkpoint.finish_attempt(side, result)
+        checkpoint.save()
+    inflight = checkpoint.data["inflight"]
+    assert inflight is not None
+    baseline = inflight["baseline"]
+    mutant = inflight["mutant"]
+    evaluation = {
+        "artifact_sha256": artifact_sha256,
+        "artifact_bytes": size,
+        "baseline": compact(baseline) if compact_results else baseline,
+        "mutant": compact(mutant) if compact_results else mutant,
+        "different": baseline["normalized_outcome"] != mutant["normalized_outcome"],
+    }
+    if kind == "original":
+        evaluation = {
+            "name": key,
+            "artifact_sha256": artifact_sha256,
+            "bytes": size,
+            "baseline": evaluation["baseline"],
+            "mutant": evaluation["mutant"],
+            "different": evaluation["different"],
+        }
+    checkpoint.complete_unit(evaluation)
+    checkpoint.save()
+    return evaluation
+
+
+def build_result(
+    checkpoint: RotatingCheckpoint,
+    freeze_path: Path,
+    freeze: dict,
+    spec_path: Path,
+    reference_path: Path,
+    original_manifest_path: Path,
+    generator_path: Path,
+) -> dict:
+    candidate = checkpoint.data["candidate_evaluation"]
+    control = checkpoint.data["control_evaluation"]
+    original_rows = checkpoint.data["original_tests"]
+    reference = load(reference_path)
+    exceptional = {"CRASH", "TIMEOUT", "UNKNOWN"}
+    unresolved = sum(
+        bool({row["baseline"]["normalized_outcome"], row["mutant"]["normalized_outcome"]} & exceptional)
+        for row in original_rows
+    )
+    original_killed = int(any(row["different"] for row in original_rows))
+    candidate_kills = int(
+        candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+    )
+    augmented_killed = max(original_killed, candidate_kills)
+    classification, reason = classify_fold(
+        original_killed, augmented_killed, candidate, control, reference["expected_outcome"]
+    )
+    if unresolved and not original_killed:
+        classification, reason = "INCONCLUSIVE", "ORIGINAL_CORPUS_HAS_UNRESOLVED_HELD_OUT_RUNS"
+    preparations = [row["preparation"] for row in checkpoint.data["sessions"] if row["preparation"]]
+    source_restored = bool(preparations and all(row["source_restored"] for row in preparations))
+    costs = checkpoint.data["costs"]
+    return {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "fold_id": freeze["fold_id"],
+        "status": "COMPLETE",
+        "classification": classification,
+        "reason": reason,
+        "source_validator": "kiota",
+        "held_out_validator": "lean4lean",
+        "held_out_mutant": load(spec_path)["held_out_mutation"]["id"],
+        "fault_subsystem": load(spec_path)["held_out_mutation"]["subsystem"],
+        "started_at": checkpoint.data["started_at"],
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "frozen_manifest": binding(freeze_path),
+        "experiment_spec": binding(spec_path),
+        "original_corpus_evaluation": {
+            "identity_manifest": binding(original_manifest_path),
+            "test_count": len(original_rows),
+            "unresolved_test_count": unresolved,
+            "difference_count": sum(row["different"] for row in original_rows),
+            "first_difference": next((row["name"] for row in original_rows if row["different"]), None),
+            "tests": original_rows,
+        },
+        "augmented_corpus_evaluation": {
+            "original_test_count": len(original_rows),
+            "added_test_count": 1,
+            "candidate_sha256": candidate["artifact_sha256"],
+            "candidate_kills_mutant": bool(candidate_kills),
+        },
+        "candidate_evaluation": candidate,
+        "control_evaluation": control,
+        "expected_outcome": reference["expected_outcome"],
+        "reference_evidence": binding(reference_path),
+        "score": {
+            "mutant_count": 1,
+            "original_killed": original_killed,
+            "augmented_killed": augmented_killed,
+            "original_score": float(original_killed),
+            "augmented_score": float(augmented_killed),
+            "score_change": float(augmented_killed - original_killed),
+        },
+        "held_out_preparation": {
+            "resumable": True,
+            "session_count": len(checkpoint.data["sessions"]),
+            "sessions": checkpoint.data["sessions"],
+            "source_restored": source_restored,
+        },
+        "source_restored": source_restored,
+        "costs": {
+            "checker_runs": costs["checker_results_recorded"],
+            "checker_seconds": costs["checker_seconds_recorded"],
+            **costs,
+            "execution_sessions": len(checkpoint.data["sessions"]),
+        },
+        "feedback_boundary": {
+            "held_out_mutant_results_used_for_generation": False,
+            "frozen_before_evaluation": datetime.fromisoformat(freeze["frozen_at"]) < datetime.fromisoformat(checkpoint.data["started_at"]),
+            "freeze_sha256_evaluated_verbatim": sha256_file(freeze_path),
+        },
+        "producer": {
+            "path": relative(Path(__file__)),
+            "sha256": sha256_file(Path(__file__)),
+            "library_sha256": sha256_file(ROOT / "lib" / "lean4lean_differential.py"),
+            "checkpoint_library_sha256": sha256_file(ROOT / "lib" / "rotating_checkpoint.py"),
+            "generator_sha256": sha256_file(generator_path),
+        },
+    }
+
+
+def completed_output_matches(
+    output: Path,
+    checkpoint: RotatingCheckpoint,
+    bindings: dict,
+    freeze: dict,
+    files: list[dict],
+) -> bool:
+    try:
+        result = load(output)
+    except (OSError, json.JSONDecodeError):
+        return False
+    producer = result.get("producer", {})
+    return (
+        result.get("status") == "COMPLETE"
+        and result.get("experiment_id") == freeze["experiment_id"]
+        and result.get("fold_id") == freeze["fold_id"]
+        and result.get("frozen_manifest", {}).get("sha256") == bindings["frozen_manifest"]["sha256"]
+        and result.get("original_corpus_evaluation", {}).get("test_count") == len(files)
+        and result.get("candidate_evaluation", {}).get("artifact_sha256") == bindings["candidate"]["sha256"]
+        and result.get("control_evaluation", {}).get("artifact_sha256") == bindings["positive_control"]["sha256"]
+        and producer.get("sha256") == bindings["runner"]["sha256"]
+        and producer.get("library_sha256") == bindings["differential_library"]["sha256"]
+        and producer.get("checkpoint_library_sha256") == bindings["checkpoint_library"]["sha256"]
+        and len(checkpoint.data["original_tests"]) == len(files)
+        and checkpoint.data["candidate_evaluation"] is not None
+        and checkpoint.data["control_evaluation"] is not None
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--freeze", type=Path, default=DEFAULT_FREEZE)
+    parser.add_argument("--output", type=Path)
+    parser.add_argument("--checkpoint", type=Path)
+    parser.add_argument("--resume", action="store_true")
+    parser.add_argument("--timeout", type=float, default=3600.0)
+    args = parser.parse_args()
+    freeze_path = args.freeze.resolve()
+    output = (args.output or freeze_path.with_name("lean4lean-evaluation.json")).resolve()
+    checkpoint_path = (args.checkpoint or output.with_name(f"{output.stem}.checkpoint.json")).resolve()
+    freeze = load(freeze_path)
+    started_at = datetime.now(timezone.utc)
+    frozen_at = datetime.fromisoformat(freeze["frozen_at"])
+    if freeze["status"] != "FROZEN_BEFORE_HELD_OUT_MUTANT_EVALUATION" or not frozen_at < started_at:
+        raise SystemExit("held-out evaluation requires an earlier immutable freeze")
+    if freeze["protocol"]["held_out_mutant_results_used_for_generation"]:
+        raise SystemExit("held-out mutant feedback contaminated generation")
+    candidate_path = bound_path(freeze["frozen_corpus"]["candidate"])
+    control_path = bound_path(freeze["frozen_corpus"]["positive_control"])
+    spec_path = bound_path(freeze["experiment_spec"])
+    reference_path = bound_path(freeze["reference_evidence"])
+    generator_path = bound_path(freeze["generator"])
+    original_manifest_path = bound_path(freeze["original_corpus"]["identity_manifest"])
+    original_manifest = load(original_manifest_path)
+    files = sorted(original_manifest["corpus"]["files"], key=lambda row: (row["bytes"], row["name"]))
+    if len(files) != freeze["original_corpus"]["test_count"]:
+        raise SystemExit("frozen original corpus inventory changed")
+    for row in files:
+        artifact = ROOT / "external" / "lean-kernel-arena" / row["path"]
+        if sha256_file(artifact) != row["sha256"]:
+            raise SystemExit(f"original corpus hash changed: {row['name']}")
+    bindings = {
+        "frozen_manifest": binding(freeze_path),
+        "experiment_spec": binding(spec_path),
+        "reference_evidence": binding(reference_path),
+        "original_identity_manifest": binding(original_manifest_path),
+        "candidate": binding(candidate_path),
+        "positive_control": binding(control_path),
+        "generator": binding(generator_path),
+        "runner": binding(Path(__file__)),
+        "differential_library": binding(ROOT / "lib" / "lean4lean_differential.py"),
+        "checkpoint_library": binding(ROOT / "lib" / "rotating_checkpoint.py"),
+    }
+    if output.exists() and not args.resume:
+        raise SystemExit(f"held-out fold evaluation already exists and cannot be overwritten: {output}")
+    if output.exists() and not checkpoint_path.exists():
+        raise SystemExit(f"output exists but its checkpoint is missing: {checkpoint_path}")
+    if output.exists() and args.resume:
+        raw_checkpoint = load(checkpoint_path)
+        if raw_checkpoint.get("bindings") != bindings:
+            raise SystemExit("completed output checkpoint bindings differ from the current inputs or runner")
+        if raw_checkpoint.get("status") == "COMPLETE":
+            expected = raw_checkpoint.get("final_output", {})
+            if expected != binding(output):
+                raise SystemExit("completed output differs from its checkpoint binding")
+            print(output)
+            return 0
+    try:
+        if args.resume:
+            if not checkpoint_path.exists():
+                raise SystemExit(f"resume requested but checkpoint does not exist: {checkpoint_path}")
+            checkpoint = RotatingCheckpoint.resume(checkpoint_path, bindings=bindings, files=files)
+        else:
+            if checkpoint_path.exists():
+                raise SystemExit(f"checkpoint already exists; pass --resume: {checkpoint_path}")
+            checkpoint = RotatingCheckpoint.create(
+                checkpoint_path,
+                experiment_id=freeze["experiment_id"],
+                fold_id=freeze["fold_id"],
+                bindings=bindings,
+                files=files,
+                started_at=started_at.isoformat(),
+            )
+    except CheckpointError as error:
+        raise SystemExit(str(error)) from error
+
+    if output.exists():
+        if not completed_output_matches(output, checkpoint, bindings, freeze, files):
+            raise SystemExit("existing output does not match the recoverable completed checkpoint state")
+        checkpoint.mark_complete(binding(output))
+        checkpoint.save()
+        print(output)
+        return 0
+
+    needs_runs = (
+        checkpoint.data["candidate_evaluation"] is None
+        or checkpoint.data["control_evaluation"] is None
+        or len(checkpoint.data["original_tests"]) < len(files)
+        or checkpoint.data["inflight"] is not None
+    )
+    if needs_runs:
+        checkpoint.start_session()
+        checkpoint.save()
+        try:
+            with Lean4LeanDifferentialSession(spec_path, timeout=args.timeout) as session:
+                checkpoint.set_preparation(session.preparation)
+                checkpoint.save()
+                if checkpoint.data["candidate_evaluation"] is None:
+                    run_unit(
+                        checkpoint, session, kind="candidate", key="candidate",
+                        artifact=candidate_path, artifact_sha256=sha256_file(candidate_path),
+                        compact_results=False,
+                    )
+                if checkpoint.data["control_evaluation"] is None:
+                    run_unit(
+                        checkpoint, session, kind="control", key="positive-control",
+                        artifact=control_path, artifact_sha256=sha256_file(control_path),
+                        compact_results=False,
+                    )
+                start_index = len(checkpoint.data["original_tests"])
+                for index in range(start_index, len(files)):
+                    row = files[index]
+                    artifact = ROOT / "external" / "lean-kernel-arena" / row["path"]
+                    run_unit(
+                        checkpoint, session, kind="original", key=row["name"], artifact=artifact,
+                        artifact_sha256=row["sha256"], compact_results=True,
+                    )
+                    print(f"[{index + 1}/{len(files)}] {row['name']}", flush=True)
+            checkpoint.end_session("COMPLETE")
+            checkpoint.save()
+        except KeyboardInterrupt:
+            checkpoint.end_session("INTERRUPTED", "KEYBOARD_INTERRUPT")
+            checkpoint.save()
+            print(f"interrupted; resume with --resume using {checkpoint_path}", file=sys.stderr)
+            return 130
+        except Exception as error:
+            checkpoint.end_session("FAILED", type(error).__name__)
+            checkpoint.save()
+            raise
+
+    result = build_result(
+        checkpoint, freeze_path, freeze, spec_path, reference_path,
+        original_manifest_path, generator_path,
+    )
+    atomic_write_json(output, result)
+    checkpoint.mark_complete(binding(output))
+    checkpoint.save()
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

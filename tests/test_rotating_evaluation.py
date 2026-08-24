@@ -50,6 +50,7 @@ class RotatingEvaluationTests(unittest.TestCase):
             "rotating-fold-spec.schema.json",
             "rotating-fold-freeze.schema.json",
             "rotating-fold-evaluation.schema.json",
+            "rotating-fold-checkpoint.schema.json",
             "rotating-heldout-report.schema.json",
         ):
             schema = json.loads((ROOT / "schemas" / name).read_text())

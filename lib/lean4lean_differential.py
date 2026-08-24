@@ -108,7 +108,7 @@ class Lean4LeanDifferentialSession:
         expected = self.spec["held_out_source"]
         if self.git_output("rev-parse", "HEAD") != expected["expected_revision"]:
             raise RuntimeError("Lean4Lean revision differs from experiment spec")
-        self._temp = tempfile.TemporaryDirectory(prefix="lean-assurance-lab-m7-lean4lean-")
+        self._temp = tempfile.TemporaryDirectory(prefix="leanverifier-m7-lean4lean-")
         temp_root = Path(self._temp.name)
         active = False
         try:

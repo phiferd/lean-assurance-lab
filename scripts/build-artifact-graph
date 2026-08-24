@@ -214,6 +214,7 @@ def catalog() -> list[dict]:
                 "schemas/rotating-fold-spec.schema.json",
                 "schemas/rotating-fold-freeze.schema.json",
                 "schemas/rotating-fold-evaluation.schema.json",
+                "schemas/rotating-fold-checkpoint.schema.json",
                 "schemas/rotating-heldout-report.schema.json",
             ),
             dependencies=["configuration:transfer-m6", "configuration:cross-validation"],
@@ -342,6 +343,33 @@ def catalog() -> list[dict]:
             "script:reporting",
             "script",
             locator=files(".", "scripts/report", "scripts/assurance-snapshot"),
+            required=True,
+        ),
+        node(
+            "script:rotating-heldout-resumable",
+            "script",
+            locator=files(
+                ".",
+                "lib/rotating_checkpoint.py",
+                "scripts/run-rotating-fold-resumable",
+                "schemas/rotating-fold-checkpoint.schema.json",
+                "tests/test_rotating_checkpoint.py",
+            ),
+            dependencies=[
+                "configuration:rotating-m7", "script:rotating-heldout",
+            ],
+            required=True,
+            notes="Versioned successor; the original Milestone 7 producer remains content-bound and unchanged.",
+        ),
+        node(
+            "script:validator-investigations",
+            "script",
+            locator=files(
+                ".",
+                "scripts/reproduce-kiota-universe-ownership",
+                "schemas/validator-investigation-result.schema.json",
+            ),
+            dependencies=["script:cross-validation"],
             required=True,
         ),
         node(
@@ -716,6 +744,23 @@ def catalog() -> list[dict]:
                 "configuration:cross-validation", "script:cross-validation",
             ],
             required=True,
+        ),
+        node(
+            "investigation:kiota-universe-ownership",
+            "report",
+            locator=files(
+                ".",
+                "docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md",
+                "investigations/kiota-universe-ownership/manifest.json",
+                "results/investigations/kiota-universe-ownership/upstream-main.json",
+            ),
+            dependencies=[
+                "comparison:cross-validator-witnesses",
+                "input:expected-outcomes-m5",
+                "script:validator-investigations",
+            ],
+            required=True,
+            notes="Current upstream disagreement is reproduced and report-ready; maintainer adjudication remains unresolved.",
         ),
         node(
             "corpus:transfer-m6",

@@ -117,6 +117,7 @@ scripts/
   run-mutant-input
   run-mutant-scheduled
   run-rotating-fold
+  run-rotating-fold-resumable
   run-transfer-experiment
   schedule-mutant
   setup-arena
@@ -307,6 +308,31 @@ classification is mechanical and distinguishes `POSITIVE`, `NEUTRAL`,
 `NEGATIVE`, `INCONCLUSIVE`, `INCOMPATIBLE`, and `UNRESOLVED`. These experiments
 exercise intentionally injected faults; they are not claims of bugs in the
 unmodified validators.
+
+`scripts/run-rotating-fold` is retained verbatim as the content-bound producer
+of the completed Milestone 7 result. New full-corpus folds use its versioned
+successor:
+
+```sh
+scripts/run-rotating-fold-resumable \
+  --freeze results/rotating-heldout/NEXT/folds/lean4lean-freeze.json \
+  --output results/rotating-heldout/NEXT/folds/lean4lean-evaluation.json
+
+# After an interruption, with the same frozen inputs and runner revision:
+scripts/run-rotating-fold-resumable \
+  --freeze results/rotating-heldout/NEXT/folds/lean4lean-freeze.json \
+  --output results/rotating-heldout/NEXT/folds/lean4lean-evaluation.json \
+  --resume
+```
+
+The successor atomically checkpoints each baseline and mutant checker result,
+binds the checkpoint to every frozen input and producer hash, resumes only the
+exact sorted corpus prefix, and records abandoned in-flight attempts instead
+of silently dropping them from execution accounting.
+
+The current official Lean/Kiota universe-ownership disagreement has an
+[upstream-ready investigation report](docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md)
+and a schema-validated reproduction against Kiota's current upstream `main`.
 
 Produce the current assurance and public status artifacts with:
 

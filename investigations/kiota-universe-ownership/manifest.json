@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "contribution_type": "bug-investigation",
+  "title": "Kiota undeclared universe ownership acceptance",
+  "summary": "Current upstream Kiota accepts a minimized definition value containing an undeclared universe parameter that the compatible official Lean reference rejects; both validators accept the declared-universe control.",
+  "scope": {
+    "exact_revisions": {
+      "lean-kernel-arena": "f0fe3b379dbce91537417b529140d0ca250f271c",
+      "official-lean": "4.33.0",
+      "kiota-arena-pin": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "kiota-upstream-main": "686063c13b22ce379c05dfe7fc03656655ac60e5"
+    },
+    "configurations": [
+      "Lean export format 3.1.0 from lean4export 3.1.0",
+      "official Lean is the designated expected-semantics reference",
+      "Kiota release profile built from a clean source checkout"
+    ],
+    "assumptions": [
+      "accept and reject exit-code adapters match config/validators.json",
+      "the declared-universe artifact is a valid positive compatibility control"
+    ],
+    "non_claims": [
+      "not a claim of a defect in Lean",
+      "not a claim that arbitrary false propositions can be proved through Kiota",
+      "not a general Kiota soundness assessment"
+    ]
+  },
+  "artifacts": [
+    {
+      "path": "docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md",
+      "sha256": "edcea1599d4f44bbde1ec00254e2ea756677a3079e9513cc246e35a33e70aa66",
+      "role": "upstream-ready report"
+    },
+    {
+      "path": "corpus/minimized/nanoda-0003-auto-universe-min.ndjson",
+      "sha256": "6743315bd44cd3ada0eb4a23336f73eca909ecbb6202c3fff3a8068bf0df101a",
+      "role": "exact minimized reproducer"
+    },
+    {
+      "path": "corpus/controls/nanoda-0003-declared-const-universe.ndjson",
+      "sha256": "94530b9892930781b8f91bb8eb5017e444ef564084ed2b6cfd3ce0eb858faab9",
+      "role": "declared-universe positive control"
+    },
+    {
+      "path": "results/cross-validation/nanoda-0003-minimized/results.json",
+      "sha256": "ad914b95d1a4c32aa8b0cd0e538a3c81192b1022153f6f2ed6e5b2ca99a00f50",
+      "role": "pinned-validator compatibility and outcome evidence"
+    },
+    {
+      "path": "results/expected-outcomes/nanoda-0003-minimized.json",
+      "sha256": "e46e9466ba7842d0198bd620304dae7eeb97485bf2cf22bdbcc72238471f5358",
+      "role": "mechanically established expected semantics"
+    }
+  ],
+  "evidence": [
+    {
+      "command": "scripts/reproduce-kiota-universe-ownership --kiota-checkout /tmp/kiota --expected-kiota-revision 686063c13b22ce379c05dfe7fc03656655ac60e5",
+      "result": {
+        "path": "results/investigations/kiota-universe-ownership/upstream-main.json",
+        "sha256": "1164b49adaa76dc9a078c6a20d880788366205855b3d3aa5dca3a63846d07983",
+        "role": "schema-validated current-upstream reproduction"
+      },
+      "mechanical_condition": "official rejects the malformed artifact, official accepts the control, and current upstream Kiota accepts both"
+    },
+    {
+      "command": "scripts/cross-validate --case-id nanoda-0003-minimized --artifact corpus/minimized/nanoda-0003-auto-universe-min.ndjson --control corpus/controls/nanoda-0003-declared-const-universe.ndjson --expected-evidence results/expected-outcomes/nanoda-0003-minimized.json --output results/cross-validation/nanoda-0003-minimized/results.json",
+      "result": {
+        "path": "results/cross-validation/nanoda-0003-minimized/results.json",
+        "sha256": "ad914b95d1a4c32aa8b0cd0e538a3c81192b1022153f6f2ed6e5b2ca99a00f50",
+        "role": "pinned-validator disagreement"
+      },
+      "mechanical_condition": "the compatible designated reference rejects while pinned Kiota accepts, and both controls accept"
+    }
+  ],
+  "unresolved_states": [
+    "Kiota upstream has not adjudicated the report",
+    "the current assurance hard gate remains FAIL until the disagreement is resolved or policy is explicitly changed",
+    "the suspected missing level-ownership traversal is a source hypothesis, not a mechanically proven root cause"
+  ],
+  "type_metadata": {
+    "case_id": "kiota-undeclared-universe-ownership",
+    "affected_versions": [
+      "Kiota 0.1.0 at 58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "Kiota 0.1.0 at 686063c13b22ce379c05dfe7fc03656655ac60e5"
+    ],
+    "reproduction_artifact": "corpus/minimized/nanoda-0003-auto-universe-min.ndjson",
+    "observed_outcomes": "official=REJECT, kiota=ACCEPT, official-control=ACCEPT, kiota-control=ACCEPT",
+    "expected_semantics_status": "ESTABLISHED_BY_DESIGNATED_REFERENCE_WITHOUT_MAJORITY_VOTE",
+    "disclosure_status": "READY_FOR_UPSTREAM_REPORT_NOT_SUBMITTED"
+  }
+}

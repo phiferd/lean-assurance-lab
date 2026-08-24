@@ -512,9 +512,13 @@ milestone_9_checks_passing: 25
   attempts out of 143 generated candidates. It establishes only that those 60
   candidates did not distinguish the checkers; the survivor remains unresolved.
 - Kiota accepts both universe-ownership witnesses that official Lean and
-  baseline nanoda reject. This is preserved as an unresolved semantic checker
-  disagreement and needs upstream investigation; no majority or implementation
-  count is used to decide semantics.
+  baseline nanoda reject. The minimized case was reproduced against current
+  upstream Kiota revision `686063c13b22ce379c05dfe7fc03656655ac60e5` with a
+  passing positive control. The schema-validated record is
+  `results/investigations/kiota-universe-ownership/upstream-main.json`, and the
+  upstream-ready report is `docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md`.
+  The disagreement remains unresolved until upstream adjudication; no majority
+  or implementation count is used to decide semantics.
 - The minimized witness preserves export metadata but official Lean rejects it
   at `defnInfo invalid`, earlier than the original undefined-universe error.
   Its expected rejection is established, but its explanatory semantics are not
@@ -534,8 +538,11 @@ milestone_9_checks_passing: 25
   out implementation-specific overfitting.
 - The Lean4Lean fold required 6,917.90 checker-seconds because both checker
   states processed every original test and the large `mathlib` export dominated
-  the tail. The runner should gain durable checkpoints before this protocol is
-  scaled to more validators and mutants.
+  the tail. Future folds use `scripts/run-rotating-fold-resumable`, which
+  atomically saves every baseline and mutant result, resumes only against exact
+  bound inputs and runner hashes, validates the completed corpus prefix, and
+  reports abandoned in-flight attempts. The original Milestone 7 runner remains
+  unchanged because its content hash is part of the completed evidence.
 - The current assurance hard gate remains `FAIL` until the two semantic
   official Lean/Kiota disagreements are adjudicated or the policy changes with
   an explicit rationale. The two regression artifacts are therefore not marked
@@ -544,11 +551,11 @@ milestone_9_checks_passing: 25
 
 ## Next Concrete Experiment
 
-1. Investigate the universe-ownership disagreement and prepare an upstream
-   report with exact artifacts, controls, checker identities, and unresolved
-   status. This is the only current hard-gate blocker.
-2. Add checkpoint/resume support for full rotating-fold corpus execution before
-   scaling the fold population.
+1. Freeze and execute the pre-disclosure Collatz retrospective protocol in
+   `docs/CASE_STUDY_COLLATZ.md`. Do not expose the published witness or regression
+   to generation before the freeze.
+2. Submit the prepared Kiota universe-ownership report upstream and preserve the
+   local hard-gate failure until the disagreement is adjudicated.
 3. Define remote storage for ignored coverage and materialized-corpus payloads,
    then keep the current assurance and public status artifacts synchronized as
    evidence changes.

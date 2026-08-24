@@ -1,0 +1,38 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": [
+    "schema_version", "status", "experiment_id", "fold_id", "started_at",
+    "updated_at", "bindings", "progress", "candidate_evaluation",
+    "control_evaluation", "original_tests", "inflight", "sessions", "costs"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"enum": ["IN_PROGRESS", "COMPLETE"]},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "fold_id": {"type": "string", "minLength": 1},
+    "started_at": {"type": "string", "format": "date-time"},
+    "updated_at": {"type": "string", "format": "date-time"},
+    "bindings": {"type": "object", "minProperties": 10},
+    "progress": {
+      "type": "object",
+      "required": ["total_original_tests", "completed_original_tests"],
+      "properties": {
+        "total_original_tests": {"type": "integer", "minimum": 0},
+        "completed_original_tests": {"type": "integer", "minimum": 0}
+      }
+    },
+    "candidate_evaluation": {"type": ["object", "null"]},
+    "control_evaluation": {"type": ["object", "null"]},
+    "original_tests": {"type": "array", "items": {"type": "object"}},
+    "inflight": {"type": ["object", "null"]},
+    "sessions": {"type": "array", "items": {"type": "object"}},
+    "costs": {
+      "type": "object",
+      "required": [
+        "checker_attempts_started", "checker_results_recorded",
+        "checker_seconds_recorded", "abandoned_checker_attempts"
+      ]
+    }
+  }
+}

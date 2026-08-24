@@ -1,0 +1,106 @@
+{
+  "artifact": {
+    "bytes": 512,
+    "path": "corpus/minimized/nanoda-0003-auto-universe-min.ndjson",
+    "sha256": "6743315bd44cd3ada0eb4a23336f73eca909ecbb6202c3fff3a8068bf0df101a"
+  },
+  "case_id": "kiota-undeclared-universe-ownership",
+  "classification": "CURRENT_UPSTREAM_DISAGREEMENT",
+  "created_at": "2026-08-24T16:22:31.271620+00:00",
+  "expected_semantics": {
+    "evidence_path": "results/expected-outcomes/nanoda-0003-minimized.json",
+    "expected_outcome": "REJECT",
+    "majority_vote_used": false,
+    "status": "ESTABLISHED_BY_DESIGNATED_REFERENCE"
+  },
+  "mechanical_predicate": {
+    "expression": "official(artifact)=REJECT and official(control)=ACCEPT and kiota(artifact)=ACCEPT and kiota(control)=ACCEPT",
+    "satisfied": true
+  },
+  "positive_control": {
+    "bytes": 524,
+    "path": "corpus/controls/nanoda-0003-declared-const-universe.ndjson",
+    "sha256": "94530b9892930781b8f91bb8eb5017e444ef564084ed2b6cfd3ce0eb858faab9"
+  },
+  "producer": {
+    "path": "scripts/reproduce-kiota-universe-ownership",
+    "sha256": "a11a5e2652f78819083d4cdf1149e9ef53ebffe682cbd28c0d3b9f91b6ca6b7d"
+  },
+  "schema_version": 1,
+  "scope": {
+    "artifact_lean_version": "4.29.1",
+    "export_format": "3.1.0",
+    "exporter_version": "3.1.0",
+    "non_claim": "This result does not establish a defect in Lean or general Kiota unsoundness."
+  },
+  "status": "CONFIRMED",
+  "validators": [
+    {
+      "artifact_result": {
+        "command": [
+          "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+          "corpus/minimized/nanoda-0003-auto-universe-min.ndjson"
+        ],
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.13240637502167374,
+        "stderr_sha256": "de1bdc1f774d7d2d5b70fb6864c2af625d433075c6c933c0be28c13a51fde33a",
+        "stderr_tail": "uncaught exception: defnInfo invalid\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "control_result": {
+        "command": [
+          "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+          "corpus/controls/nanoda-0003-declared-const-universe.ndjson"
+        ],
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.02631641598418355,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "d7b70d7ca4bc132416372b1be92990c8499737f5a355b1d6c4fcf693d2cf5f6d",
+        "stdout_tail": "Accepted 2 declarations.\n"
+      },
+      "display_name": "Official Lean kernel 4.33.0",
+      "id": "official",
+      "revision": "f0fe3b379dbce91537417b529140d0ca250f271c"
+    },
+    {
+      "artifact_result": {
+        "command": [
+          "/private/tmp/lean-assurance-kiota-upstream/target/release/kiota",
+          "corpus/minimized/nanoda-0003-auto-universe-min.ndjson"
+        ],
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0033369999146088958,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "binary_sha256": "9810d9615cbe8e2ed8c8324ef0192dc58fbc38e7e26289e7e9a6aee60ad9fc87",
+      "control_result": {
+        "command": [
+          "/private/tmp/lean-assurance-kiota-upstream/target/release/kiota",
+          "corpus/controls/nanoda-0003-declared-const-universe.ndjson"
+        ],
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0029328330419957638,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "display_name": "Kiota 0.1.0 upstream main",
+      "id": "kiota-upstream-main",
+      "remote": "https://github.com/sankalpsthakur/kiota.git",
+      "revision": "686063c13b22ce379c05dfe7fc03656655ac60e5",
+      "source_clean": true,
+      "tc_source_sha256": "dad9c3ee2a1ccba9e49acce8795bd374c86516ba1585c628072e0c1a63320dfc"
+    }
+  ]
+}

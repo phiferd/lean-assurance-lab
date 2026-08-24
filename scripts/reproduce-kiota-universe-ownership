@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""Reproduce the official Lean/Kiota universe-ownership disagreement."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+ARTIFACT = ROOT / "corpus" / "minimized" / "nanoda-0003-auto-universe-min.ndjson"
+CONTROL = ROOT / "corpus" / "controls" / "nanoda-0003-declared-const-universe.ndjson"
+OFFICIAL = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "official" / "src" / ".lake" / "build" / "bin" / "kernel"
+DEFAULT_OUTPUT = ROOT / "results" / "investigations" / "kiota-universe-ownership" / "upstream-main.json"
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path.resolve())
+
+
+def git(checkout: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=checkout, check=True, text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
+def run(binary: Path, artifact: Path, *, decline_code: int | None = None) -> dict:
+    started = time.monotonic()
+    proc = subprocess.run([str(binary), str(artifact)], stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode == 0:
+        outcome = "ACCEPT"
+    elif decline_code is not None and proc.returncode == decline_code:
+        outcome = "DECLINE"
+    elif proc.returncode == 1:
+        outcome = "REJECT"
+    elif proc.returncode < 0:
+        outcome = "CRASH"
+    else:
+        outcome = "UNKNOWN"
+    return {
+        "command": [str(binary), relative(artifact)],
+        "exit_code": proc.returncode,
+        "normalized_outcome": outcome,
+        "seconds": time.monotonic() - started,
+        "stdout_sha256": hashlib.sha256(proc.stdout).hexdigest(),
+        "stderr_sha256": hashlib.sha256(proc.stderr).hexdigest(),
+        "stdout_tail": proc.stdout.decode(errors="replace")[-1000:],
+        "stderr_tail": proc.stderr.decode(errors="replace")[-1000:],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--kiota-checkout", type=Path, required=True)
+    parser.add_argument("--expected-kiota-revision", required=True)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    checkout = args.kiota_checkout.resolve()
+    revision = git(checkout, "rev-parse", "HEAD")
+    if revision != args.expected_kiota_revision:
+        raise SystemExit(f"Kiota revision {revision} != expected {args.expected_kiota_revision}")
+    if git(checkout, "status", "--porcelain"):
+        raise SystemExit("Kiota source checkout is not clean")
+    kiota = checkout / "target" / "release" / "kiota"
+    for path in (ARTIFACT, CONTROL, OFFICIAL, kiota, checkout / "src" / "tc.rs"):
+        if not path.is_file():
+            raise SystemExit(f"required file missing: {path}")
+    official_artifact = run(OFFICIAL, ARTIFACT)
+    official_control = run(OFFICIAL, CONTROL)
+    kiota_artifact = run(kiota, ARTIFACT, decline_code=2)
+    kiota_control = run(kiota, CONTROL, decline_code=2)
+    satisfied = (
+        official_artifact["normalized_outcome"] == "REJECT"
+        and official_control["normalized_outcome"] == "ACCEPT"
+        and kiota_artifact["normalized_outcome"] == "ACCEPT"
+        and kiota_control["normalized_outcome"] == "ACCEPT"
+    )
+    result = {
+        "schema_version": 1,
+        "case_id": "kiota-undeclared-universe-ownership",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "status": "CONFIRMED" if satisfied else "NOT_REPRODUCED",
+        "classification": "CURRENT_UPSTREAM_DISAGREEMENT" if satisfied else "NO_CURRENT_DISAGREEMENT",
+        "artifact": {"path": relative(ARTIFACT), "sha256": digest(ARTIFACT), "bytes": ARTIFACT.stat().st_size},
+        "positive_control": {"path": relative(CONTROL), "sha256": digest(CONTROL), "bytes": CONTROL.stat().st_size},
+        "validators": [
+            {
+                "id": "official",
+                "display_name": "Official Lean kernel 4.33.0",
+                "revision": git(ROOT / "external" / "lean-kernel-arena", "rev-parse", "HEAD"),
+                "binary_sha256": digest(OFFICIAL),
+                "artifact_result": official_artifact,
+                "control_result": official_control,
+            },
+            {
+                "id": "kiota-upstream-main",
+                "display_name": "Kiota 0.1.0 upstream main",
+                "revision": revision,
+                "remote": git(checkout, "remote", "get-url", "origin"),
+                "source_clean": True,
+                "tc_source_sha256": digest(checkout / "src" / "tc.rs"),
+                "binary_sha256": digest(kiota),
+                "artifact_result": kiota_artifact,
+                "control_result": kiota_control,
+            },
+        ],
+        "mechanical_predicate": {
+            "expression": "official(artifact)=REJECT and official(control)=ACCEPT and kiota(artifact)=ACCEPT and kiota(control)=ACCEPT",
+            "satisfied": satisfied,
+        },
+        "expected_semantics": {
+            "status": "ESTABLISHED_BY_DESIGNATED_REFERENCE",
+            "expected_outcome": "REJECT",
+            "evidence_path": "results/expected-outcomes/nanoda-0003-minimized.json",
+            "majority_vote_used": False,
+        },
+        "scope": {
+            "export_format": "3.1.0",
+            "exporter_version": "3.1.0",
+            "artifact_lean_version": "4.29.1",
+            "non_claim": "This result does not establish a defect in Lean or general Kiota unsoundness.",
+        },
+        "producer": {"path": relative(Path(__file__)), "sha256": digest(Path(__file__))},
+    }
+    schema = json.loads((ROOT / "schemas" / "validator-investigation-result.schema.json").read_text())
+    jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker()).validate(result)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": relative(args.output), "status": result["status"], "satisfied": satisfied}, indent=2))
+    return 0 if satisfied else 2
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

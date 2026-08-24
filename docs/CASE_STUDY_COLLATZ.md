@@ -151,6 +151,11 @@ process runs it and treats the result as blocking.
 
 ## The Next Honest Experiment
 
+Prerequisite status as of 2026-08-24: **ready to freeze**. The current
+official/Kiota disagreement has a mechanically reproduced, upstream-ready
+report, and new rotating full-corpus executions have durable checkpoint/resume
+support. Neither prerequisite is evidence that the retrospective will succeed.
+
 A useful retrospective experiment would test capability without feeding the
 known witness directly into generation:
 

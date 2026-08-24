@@ -548,12 +548,24 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Investigate the official/Kiota universe-ownership disagreement and prepare
-   an upstream report with exact artifacts, checker identities, controls, and
-   preserved uncertainty. This is the only current hard-gate blocker.
-2. Make large rotating-fold execution resumable and checkpointed before adding
-   more full-corpus folds; the Lean4Lean fold's large-library tail consumed most
-   of its 6,917.90 checker-seconds.
+Completed prerequisites on 2026-08-24:
+
+- The official/Kiota universe-ownership disagreement now has a
+  schema-validated reproduction against current upstream Kiota `main` and an
+  upstream-ready report with exact artifacts, controls, identities, expected
+  semantics, and explicit non-claims.
+- `scripts/run-rotating-fold-resumable` now provides atomically persisted,
+  content-bound, per-checker checkpoint/resume behavior. The original
+  Milestone 7 runner remains unchanged because its hash is part of that
+  completed experiment's evidence.
+
+Next:
+
+1. Freeze and run the pre-disclosure Collatz retrospective described in
+   `docs/CASE_STUDY_COLLATZ.md`; preserve a failure to rediscover the bug class
+   just as carefully as a success.
+2. Submit the prepared Kiota report upstream and track maintainer adjudication
+   without changing the local disagreement status prematurely.
 3. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
 4. Expand rotating evidence with additional validator-specific mutants and
