@@ -175,6 +175,28 @@ Last updated: 2026-08-24
   The aggregate classification is `MIXED_WITH_POSITIVE_GAIN`. All faults in
   these folds were deliberately injected mutants, not bugs found in the
   unmodified validators.
+- Defined and schema-validated a versioned assurance policy and current
+  snapshot. The snapshot covers three validator identities, the exact 197-test
+  corpus, 29 modeled semantic mutants, subsystem scores, witness synthesis,
+  generated regressions, disagreements, held-out results, coverage, and cost.
+- The current assurance gate reports `FAIL` with four of five hard checks
+  passing. Its sole failure is `semantic_checker_disagreements`: the two
+  official Lean/Kiota semantic disagreements exceed the configured maximum of
+  zero. This is preserved as the measured result rather than converted into a
+  favorable milestone claim.
+- Recorded 859 checker runs and 12,034.0801 checker-seconds across the
+  non-overlapping measured components, with active mutation-batch and build
+  wall time labeled separately. Mutation and coverage thresholds remain
+  configurable contextual trends rather than enabled gates.
+- Produced `results/assurance/milestone-8.json`; all 24 Milestone 8
+  implementation checks pass.
+- Defined seven machine-readable contribution paths with common and
+  type-specific metadata, content-bound evidence validation, constitution-
+  aligned guidance, a pull request checklist, and five issue forms.
+- Generated `docs/PUBLIC_STATUS.md` from the exact current snapshot SHA-256,
+  clearly separating injected faults from potential bugs and preserving the
+  unresolved hard-gate failure.
+- Produced `results/assurance/milestone-9.json`; all 25 Milestone 9 checks pass.
 
 ## Command Log
 
@@ -282,6 +304,15 @@ scripts/milestone-7-assurance --allow-stale-artifacts
 scripts/build-artifact-graph
 scripts/artifact-status --require-current --output results/artifacts/status.json
 scripts/milestone-7-assurance
+scripts/current-assurance-snapshot
+scripts/milestone-8-assurance --allow-stale-artifacts
+scripts/render-public-status
+scripts/validate-contribution --check-catalog
+scripts/milestone-9-assurance --allow-stale-artifacts
+scripts/build-artifact-graph
+scripts/artifact-status --require-current --output results/artifacts/status.json
+scripts/milestone-8-assurance
+scripts/milestone-9-assurance
 ```
 
 Notes:
@@ -357,8 +388,8 @@ confirmed_witness_semantics: 1
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 0
 arena_regression_candidates: 1
-artifact_nodes: 70
-current_artifacts: 59
+artifact_nodes: 78
+current_artifacts: 67
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -390,6 +421,18 @@ rotating_score_change: 0.5
 rotating_checker_runs: 400
 rotating_checker_seconds: 6918.154678831925
 milestone_7_checks_passing: 22
+current_assurance_status: FAIL
+current_hard_gates_passing: 4
+current_hard_gates_failing: 1
+current_failure_reason: semantic_checker_disagreements
+current_semantic_disagreements: 2
+current_parse_behavior_disagreements: 1
+current_recorded_checker_runs: 859
+current_recorded_checker_seconds: 12034.080104356399
+milestone_8_checks_passing: 24
+contribution_paths: 7
+community_issue_forms: 5
+milestone_9_checks_passing: 25
 ```
 
 ## First Mutation Result
@@ -493,12 +536,19 @@ milestone_7_checks_passing: 22
   states processed every original test and the large `mathlib` export dominated
   the tail. The runner should gain durable checkpoints before this protocol is
   scaled to more validators and mutants.
+- The current assurance hard gate remains `FAIL` until the two semantic
+  official Lean/Kiota disagreements are adjudicated or the policy changes with
+  an explicit rationale. The two regression artifacts are therefore not marked
+  ready for upstream adoption even though their official expected `REJECT`
+  outcomes are mechanically established.
 
 ## Next Concrete Experiment
 
-1. Begin Milestone 8 by defining a reproducible assurance snapshot schema and
-   separating hard gates from trend metrics.
+1. Investigate the universe-ownership disagreement and prepare an upstream
+   report with exact artifacts, controls, checker identities, and unresolved
+   status. This is the only current hard-gate blocker.
 2. Add checkpoint/resume support for full rotating-fold corpus execution before
    scaling the fold population.
-3. Investigate the universe-ownership disagreement separately and prepare an
-   upstream report with the exact original witness and checker identities.
+3. Define remote storage for ignored coverage and materialized-corpus payloads,
+   then keep the current assurance and public status artifacts synchronized as
+   evidence changes.

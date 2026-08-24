@@ -1,0 +1,48 @@
+name: Stale artifact or reproduction failure
+description: Report stale evidence, missing payloads, baseline drift, or a failed reproduction.
+title: "[reproduction] "
+labels: ["reproducibility"]
+body:
+  - type: input
+    id: artifact
+    attributes:
+      label: Artifact or graph node
+    validations:
+      required: true
+  - type: textarea
+    id: identity
+    attributes:
+      label: Repository, Arena, validator, and toolchain identities
+    validations:
+      required: true
+  - type: textarea
+    id: command
+    attributes:
+      label: Exact command and environment
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected result or digest
+    validations:
+      required: true
+  - type: textarea
+    id: observed
+    attributes:
+      label: Observed result, digest, and logs
+    validations:
+      required: true
+  - type: dropdown
+    id: category
+    attributes:
+      label: Failure category
+      options: [STALE, MISSING, BASELINE_CHANGED, INVENTORY_INCOMPLETE, NETWORK_OR_DEPENDENCY, IRREPRODUCIBLE, UNKNOWN]
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Affected current claims and unresolved impact
+    validations:
+      required: true

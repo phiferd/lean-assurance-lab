@@ -5,7 +5,8 @@ The initial target is mutation testing against one checker implementation,
 then using surviving mutants to drive adversarial exported-artifact generation.
 
 The project is governed by `CONSTITUTION.md`. The current execution plan lives
-in `docs/PROJECT_PLAN.md`.
+in `docs/PROJECT_PLAN.md`. The public assurance state is in
+`docs/PUBLIC_STATUS.md`, and contribution requirements are in `CONTRIBUTING.md`.
 
 The core success condition is always executable:
 
@@ -28,7 +29,7 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 through 7 are complete. The project has a closed mechanical
+Milestones 1 through 9 are complete. The project has a closed mechanical
 mutation loop for `nanoda`, content-addressed invalidation, and a structured
 semantic model spanning validation elision, predicate negation, relational
 boundaries, and equality discrimination. Witness search and structure-aware
@@ -36,15 +37,26 @@ minimization are executable and auditable. Cross-validator execution preserves
 semantic and parse disagreements without majority voting. Rotating held-out
 evaluation now covers pinned Kiota and Lean4Lean folds in different semantic
 subsystems. The measured aggregate is one positive fold and one neutral fold,
-improving the modeled held-out score from 0.5 to 1.0. Current work begins
-Milestone 8: a reproducible assurance snapshot and gate.
+improving the modeled held-out score from 0.5 to 1.0.
+
+The versioned current assurance snapshot reports `FAIL`: four of five hard
+checks pass, while two unresolved semantic disagreements between official Lean
+and Kiota fail the configured disagreement check. This is the intended honest
+result, not a failed milestone implementation. The Milestone 8 implementation
+gate passes all 24 checks, and the Milestone 9 community-workflow gate passes
+all 25 checks.
 
 ## Repository Layout
 
 ```text
+.github/
+config/
+  assurance-policy.json
+  contribution-types.json
 docs/
   DESIGN.md
   MUTATION_MODEL.md
+  PUBLIC_STATUS.md
   RESEARCH_STATUS.md
 results/
   baseline/
@@ -70,6 +82,7 @@ scripts/
   check-distinction
   confirm-witness
   cross-validate
+  current-assurance-snapshot
   establish-expected-outcome
   evaluate-m6-rotating-fold
   freeze-rotating-fold
@@ -83,11 +96,14 @@ scripts/
   milestone-5-assurance
   milestone-6-assurance
   milestone-7-assurance
+  milestone-8-assurance
+  milestone-9-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
   reindex-coverage
   report
+  render-public-status
   run-arena
   run-mutation-batch
   run-mutant
@@ -99,6 +115,7 @@ scripts/
   setup-arena
   snapshot-coverage
   validate-mutation-batch
+  validate-contribution
   validator-inventory
 ```
 
@@ -283,6 +300,33 @@ classification is mechanical and distinguishes `POSITIVE`, `NEUTRAL`,
 `NEGATIVE`, `INCONCLUSIVE`, `INCOMPATIBLE`, and `UNRESOLVED`. These experiments
 exercise intentionally injected faults; they are not claims of bugs in the
 unmodified validators.
+
+Produce the current assurance and public status artifacts with:
+
+```sh
+scripts/current-assurance-snapshot
+scripts/milestone-8-assurance
+scripts/render-public-status
+scripts/milestone-9-assurance
+```
+
+Snapshot production succeeds when it can faithfully compute the report, even
+when the report's own hard gate is `FAIL`. Inspect
+`results/assurance/current.json` for the gate result, failure reasons, exact
+evidence, contextual trend metrics, and execution costs. Mutation-score and
+coverage thresholds are policy-controlled trends rather than hard gates by
+default.
+
+Validate the contribution catalog or a proposed content-bound contribution
+manifest with:
+
+```sh
+scripts/validate-contribution --check-catalog
+scripts/validate-contribution path/to/contribution.json
+```
+
+The seven supported contribution paths, required metadata, review standards,
+and responsible-disclosure boundary are documented in `CONTRIBUTING.md`.
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

@@ -1,0 +1,46 @@
+#!/usr/bin/env python3
+"""Generate the reproducible current-state assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from current_assurance import build_snapshot, load  # noqa: E402
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--policy", type=Path, default=ROOT / "config" / "assurance-policy.json")
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "assurance" / "current.json")
+    args = parser.parse_args()
+    policy = load(args.policy)
+    policy_schema = load(ROOT / "schemas" / "assurance-policy.schema.json")
+    jsonschema.Draft202012Validator(policy_schema).validate(policy)
+    existing = load(args.output) if args.output.exists() else {}
+    created_at = existing.get("created_at", datetime.now(timezone.utc).isoformat())
+    snapshot = build_snapshot(ROOT, policy, created_at)
+    snapshot_schema = load(ROOT / "schemas" / "current-assurance-snapshot.schema.json")
+    jsonschema.Draft202012Validator(
+        snapshot_schema, format_checker=jsonschema.FormatChecker()
+    ).validate(snapshot)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "output": str(args.output.relative_to(ROOT)),
+        "gate": snapshot["gate"]["status"],
+        "failure_reasons": snapshot["gate"]["failure_reasons"],
+    }, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

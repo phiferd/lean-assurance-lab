@@ -1,0 +1,43 @@
+name: Assurance report issue
+description: Challenge a current snapshot claim, gate, trend, cost, or scope statement.
+title: "[assurance-report] "
+labels: ["assurance-report"]
+body:
+  - type: input
+    id: snapshot
+    attributes:
+      label: Snapshot path and SHA-256
+    validations:
+      required: true
+  - type: input
+    id: field
+    attributes:
+      label: Report field or hard gate
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Contradicting or missing mechanical evidence
+      description: Include exact paths, revisions, commands, and observed results.
+    validations:
+      required: true
+  - type: dropdown
+    id: issue_kind
+    attributes:
+      label: Issue kind
+      options: [INCORRECT_VALUE, STALE_INPUT, MISSING_INVENTORY, HIDDEN_UNCERTAINTY, GATE_POLICY, TREND_CONTEXT, COST_ACCOUNTING, OVERSTATED_SCOPE]
+    validations:
+      required: true
+  - type: textarea
+    id: impact
+    attributes:
+      label: Impact on current claims
+    validations:
+      required: true
+  - type: textarea
+    id: correction
+    attributes:
+      label: Proposed mechanical correction or explicit unresolved state
+    validations:
+      required: true

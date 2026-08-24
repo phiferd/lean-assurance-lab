@@ -1,0 +1,49 @@
+name: Validator disagreement
+description: Record a semantic or parser disagreement between pinned unmodified validators.
+title: "[disagreement] "
+labels: ["validator-disagreement"]
+body:
+  - type: markdown
+    attributes:
+      value: Do not decide expected semantics by majority vote. Preserve unresolved outcomes.
+  - type: input
+    id: artifact
+    attributes:
+      label: Reproducer artifact
+      description: Repository path and SHA-256 of the smallest current reproducer.
+    validations:
+      required: true
+  - type: textarea
+    id: validators
+    attributes:
+      label: Validator identities
+      description: Exact versions, source revisions, configurations, and binary hashes.
+    validations:
+      required: true
+  - type: textarea
+    id: outcomes
+    attributes:
+      label: Raw and normalized outcomes
+      description: Include commands, exit behavior, and ACCEPT/REJECT/DECLINE/CRASH/TIMEOUT/PARSE_ERROR/UNKNOWN results.
+    validations:
+      required: true
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected-semantics evidence
+      description: Link mechanical evidence or explicitly state UNRESOLVED.
+    validations:
+      required: true
+  - type: textarea
+    id: control
+    attributes:
+      label: Positive control and compatibility
+      description: Show that each validator can process a compatible valid artifact.
+    validations:
+      required: true
+  - type: textarea
+    id: scope
+    attributes:
+      label: Scope, assumptions, and non-claims
+    validations:
+      required: true

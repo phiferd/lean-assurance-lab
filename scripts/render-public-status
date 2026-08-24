@@ -1,0 +1,89 @@
+#!/usr/bin/env python3
+"""Render public-facing project status from the current assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--snapshot", type=Path, default=ROOT / "results" / "assurance" / "current.json")
+    parser.add_argument("--output", type=Path, default=ROOT / "docs" / "PUBLIC_STATUS.md")
+    args = parser.parse_args()
+    snapshot_bytes = args.snapshot.read_bytes()
+    snapshot = json.loads(snapshot_bytes)
+    digest = hashlib.sha256(snapshot_bytes).hexdigest()
+    gate = snapshot["gate"]
+    failures = ", ".join(f"`{name}`" for name in gate["failure_reasons"]) or "none"
+    mutation = snapshot["mutation_testing"]
+    held_out = snapshot["held_out_evaluation"]
+    disagreement = snapshot["cross_validator_disagreements"]
+    content = f"""# Public Status
+
+This page is generated from `results/assurance/current.json` by
+`scripts/render-public-status`.
+
+Snapshot SHA-256: `{digest}`
+
+## Current Gate: {gate['status']}
+
+The current assurance gate has {gate['passing']} passing hard checks and
+{gate['failing']} failing hard check. Failure reason: {failures}.
+
+The failure is intentional and informative: official Lean rejects two
+universe-ownership artifacts that Kiota accepts. Their expected outcome is
+mechanically established as `REJECT`, but the independent checker disagreement
+remains unresolved. The project does not use implementation counts or majority
+vote to erase that state.
+
+## Measured State
+
+- Validators: {len(snapshot['validators'])} pinned implementation families.
+- Corpus: {snapshot['corpus']['test_count']} materialized tests,
+  {snapshot['corpus']['total_bytes']} content-addressed bytes.
+- Modeled semantic mutants: {mutation['total_semantic_mutants']} evaluated,
+  {mutation['killed_by_existing_corpus']} killed by the existing corpus,
+  {mutation['killed_by_generated_corpus']} additional source mutant killed by a
+  generated witness, and {mutation['unresolved_mutants']} surviving without a
+  witness.
+- Witness synthesis: {snapshot['witness_synthesis']['witnesses_found']} of
+  {snapshot['witness_synthesis']['searches']} bounded searches found a witness.
+- Rotating held-out evaluation: score {held_out['original_score']} to
+  {held_out['augmented_score']} across {held_out['fold_count']} one-mutant folds;
+  classification `{held_out['classification']}`.
+- Unresolved disagreements: {disagreement['semantic_unresolved_count']} semantic
+  and {disagreement['parse_behavior_count']} parse-behavior case.
+- Recorded execution: {snapshot['execution_cost']['recorded_checker_runs']}
+  checker runs and {snapshot['execution_cost']['recorded_checker_seconds']:.2f}
+  checker-seconds across the non-overlapping components listed in the snapshot.
+
+## What This Means
+
+These measurements apply only to the exact revisions, configurations, corpora,
+mutation models, and policies bound by the snapshot. They do not prove Lean is
+correct or that the corpus is sufficient. The validator mutations are
+deliberately injected fault models, not bugs discovered in the unmodified
+validators. Mutation scores and coverage are contextual trend metrics, not hard
+quality gates.
+
+## Participate
+
+`CONTRIBUTING.md` defines seven contribution paths, required metadata,
+mechanical evidence standards, review criteria, and issue forms. Neutral,
+negative, incompatible, and unresolved results are useful when reproducible and
+honestly scoped.
+"""
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(content, encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

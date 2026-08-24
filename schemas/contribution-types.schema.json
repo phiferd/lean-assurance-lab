@@ -1,0 +1,29 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "catalog_id", "constitution", "decision_rule", "contribution_types"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "catalog_id": {"type": "string", "minLength": 1},
+    "constitution": {"const": "CONSTITUTION.md"},
+    "decision_rule": {"type": "string", "minLength": 1},
+    "contribution_types": {
+      "type": "array",
+      "minItems": 7,
+      "uniqueItems": true,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["id", "title", "required_type_metadata", "required_evidence", "review_checks"],
+        "properties": {
+          "id": {"enum": ["validator", "corpus-test", "mutation-operator", "witness-generator", "report", "bug-investigation", "documentation"]},
+          "title": {"type": "string", "minLength": 1},
+          "required_type_metadata": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+          "required_evidence": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}},
+          "review_checks": {"type": "array", "minItems": 3, "items": {"type": "string", "minLength": 1}}
+        }
+      }
+    }
+  }
+}

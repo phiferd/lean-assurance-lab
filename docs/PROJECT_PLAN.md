@@ -98,8 +98,8 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Full-corpus controls for one killed and one surviving generated mutant
   reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 70 input and derived
-  artifacts; 59 current artifacts pass, with seven historical reports or
+- `results/artifacts/graph.json` content-addresses 78 input and derived
+  artifacts; 67 current artifacts pass, with seven historical reports or
   attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
@@ -155,6 +155,20 @@ Current measured state, distinguishing tracked artifacts from local evidence:
   intentionally injected faults, not discovered validator bugs.
 - `results/assurance/milestone-7.json` records a passing 22-check Milestone 7
   gate.
+- The versioned current assurance snapshot records all required Milestone 8
+  dimensions. Its hard gate reports `FAIL`: four of five checks pass, while two
+  unresolved official Lean/Kiota semantic disagreements exceed the configured
+  maximum of zero. Mutation score and coverage remain explicit contextual
+  trends rather than implicit hard gates.
+- `results/assurance/milestone-8.json` records a passing 24-check implementation
+  gate and verifies that the current-state failure is visible, evidence-backed,
+  and caused only by `semantic_checker_disagreements`.
+- A machine-readable catalog and manifest validator define seven contribution
+  paths. Constitution-aligned guidance, a pull request checklist, five issue
+  forms, and a snapshot-bound public status report expose the same requirements
+  without private context.
+- `results/assurance/milestone-9.json` records a passing 25-check community
+  workflow gate.
 
 ## Milestone 0: Reproducible Project Foundation
 
@@ -453,7 +467,13 @@ Exit criteria:
 
 Goal: publish a reproducible current-state report.
 
-Tasks:
+Status: complete as of 2026-08-24. The mechanical completion gate is
+`results/assurance/milestone-8.json`, with all 24 checks passing. The separately
+measured current assurance gate correctly reports `FAIL` because two semantic
+checker disagreements remain unresolved; a truthful unfavorable measurement
+does not make the implementation milestone incomplete.
+
+Completed:
 
 1. Define the assurance snapshot format.
 2. Report at least:
@@ -493,7 +513,10 @@ Exit criteria:
 
 Goal: make external participation useful without weakening standards.
 
-Tasks:
+Status: complete as of 2026-08-24. The mechanical completion gate is
+`results/assurance/milestone-9.json`, with all 25 checks passing.
+
+Completed:
 
 1. Write contribution guidance aligned with the constitution.
 2. Define how to contribute:
@@ -525,17 +548,18 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Begin Milestone 8 by defining the assurance snapshot schema and separating
-   hard gates from contextual trend metrics.
+1. Investigate the official/Kiota universe-ownership disagreement and prepare
+   an upstream report with exact artifacts, checker identities, controls, and
+   preserved uncertainty. This is the only current hard-gate blocker.
 2. Make large rotating-fold execution resumable and checkpointed before adding
    more full-corpus folds; the Lean4Lean fold's large-library tail consumed most
    of its 6,917.90 checker-seconds.
-3. Keep the official/Kiota universe-ownership disagreement separate from held-out
-   scoring and prepare it for upstream investigation.
-4. Define durable remote storage for ignored coverage and materialized-corpus
+3. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
-5. Expand rotating evidence with additional validator-specific mutants and
+4. Expand rotating evidence with additional validator-specific mutants and
    semantic subsystems without using held-out feedback during generation.
+5. Regenerate the assurance snapshot and public status whenever a bound input
+   changes, preserving unfavorable or unresolved results as current evidence.
 
 ## Decision Rules
 
@@ -568,6 +592,7 @@ These questions should remain explicit until answered by evidence:
 3. Which semantic subsystems need the first structured mutation batches?
 4. What artifact storage policy should preserve reproducibility without
    committing multi-gigabyte generated files?
-5. What is the smallest useful public assurance snapshot?
+5. What evidence would adjudicate the official/Kiota universe-ownership
+   disagreement without treating validator count as a vote?
 6. Which parts of Lean Kernel Arena should remain upstream dependencies, and
    which project-specific executors should live here?

@@ -1,0 +1,172 @@
+#!/usr/bin/env python3
+"""Verify the constitution-aligned community contribution workflow."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+from contribution_validation import load, sha256_file, validate_catalog, validate_manifest  # noqa: E402
+
+
+EXPECTED_TYPES = {
+    "validator", "corpus-test", "mutation-operator", "witness-generator",
+    "report", "bug-investigation", "documentation",
+}
+EXPECTED_FORMS = {
+    "validator-disagreement.yml", "proposed-regression.yml", "mutation-operator.yml",
+    "reproduction-failure.yml", "assurance-report.yml",
+}
+
+
+def fixture(catalog: dict, contribution_type: str) -> dict:
+    row = next(item for item in catalog["contribution_types"] if item["id"] == contribution_type)
+    return {
+        "schema_version": 1,
+        "contribution_type": contribution_type,
+        "title": "Milestone 9 contract fixture",
+        "summary": "Mechanically exercises one contribution path.",
+        "scope": {
+            "exact_revisions": {"repository": "fixture"},
+            "configurations": ["fixture"],
+            "assumptions": ["fixture"],
+            "non_claims": ["fixture is not assurance evidence"],
+        },
+        "artifacts": [{"path": "CONSTITUTION.md", "sha256": sha256_file(ROOT / "CONSTITUTION.md"), "role": "governing standard"}],
+        "evidence": [{
+            "command": "scripts/milestone-9-assurance",
+            "result": {"path": "results/assurance/current.json", "sha256": sha256_file(ROOT / "results" / "assurance" / "current.json"), "role": "current status"},
+            "mechanical_condition": "manifest validates",
+        }],
+        "unresolved_states": ["fixture only"],
+        "type_metadata": {name: "fixture" for name in row["required_type_metadata"]},
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "assurance" / "milestone-9.json")
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        graph = load_graph(graph_path)
+        if any(node["id"] == "report:milestone9-assurance" for node in graph["nodes"]):
+            try:
+                require_current(graph, ROOT, ["report:milestone9-assurance"], dependencies_only=True)
+            except RuntimeError as error:
+                raise SystemExit(str(error)) from error
+
+    catalog = load(ROOT / "config" / "contribution-types.json")
+    catalog_schema = load(ROOT / "schemas" / "contribution-types.schema.json")
+    manifest_schema = load(ROOT / "schemas" / "contribution-manifest.schema.json")
+    snapshot_path = ROOT / "results" / "assurance" / "current.json"
+    snapshot = load(snapshot_path)
+    snapshot_sha = sha256_file(snapshot_path)
+    m8 = load(ROOT / "results" / "assurance" / "milestone-8.json")
+    constitution = (ROOT / "CONSTITUTION.md").read_text(encoding="utf-8")
+    guide = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+    public = (ROOT / "docs" / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
+    readme = (ROOT / "README.md").read_text(encoding="utf-8")
+    pr_template = (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
+    forms_dir = ROOT / ".github" / "ISSUE_TEMPLATE"
+    form_paths = [forms_dir / name for name in sorted(EXPECTED_FORMS)]
+    forms = {path.name: yaml.safe_load(path.read_text(encoding="utf-8")) for path in form_paths}
+    type_ids = {row["id"] for row in catalog["contribution_types"]}
+    fixture_errors = {
+        contribution_type: validate_manifest(ROOT, fixture(catalog, contribution_type), manifest_schema, catalog)
+        for contribution_type in EXPECTED_TYPES
+    }
+    required_form_fields = all(
+        len([row for row in form["body"] if row.get("validations", {}).get("required")]) >= 5
+        for form in forms.values()
+    )
+    guide_sections = ["### Validators", "### Corpus Tests", "### Mutation Operators", "### Witness Generators", "### Reports", "### Bug Investigations", "### Documentation"]
+
+    checks = {
+        "constitution_governs_contribution_decisions": catalog["constitution"] == "CONSTITUTION.md"
+        and "mechanically reproducible" in guide
+        and "personal preference" in guide
+        and "Community Participation With Standards" in constitution,
+        "contribution_catalog_conforms_to_schema": validate_catalog(catalog, catalog_schema) == [],
+        "all_seven_contribution_paths_are_defined": type_ids == EXPECTED_TYPES
+        and all(section in guide for section in guide_sections),
+        "required_metadata_is_machine_readable": all(len(row["required_type_metadata"]) >= 4 for row in catalog["contribution_types"])
+        and "exact_revisions" in json.dumps(manifest_schema)
+        and "assumptions" in json.dumps(manifest_schema)
+        and "non_claims" in json.dumps(manifest_schema),
+        "every_contribution_type_validates_mechanically": all(not errors for errors in fixture_errors.values()),
+        "content_hashes_are_required_and_checked": "^[0-9a-f]{64}$" in json.dumps(manifest_schema)
+        and "bound file hash mismatch" in (ROOT / "lib" / "contribution_validation.py").read_text(encoding="utf-8"),
+        "reproduction_commands_and_conditions_are_required": "mechanical_condition" in manifest_schema["properties"]["evidence"]["items"]["required"]
+        and "command" in manifest_schema["properties"]["evidence"]["items"]["required"],
+        "unresolved_states_are_required": "unresolved_states" in manifest_schema["required"]
+        and "UNRESOLVED" in guide,
+        "review_checklist_covers_mechanical_evidence": pr_template.count("- [ ]") >= 15
+        and "human or LLM judgment" in pr_template
+        and "Raw exceptional outcomes" in pr_template,
+        "review_checklist_covers_scoped_claims": "Injected mutants" in pr_template
+        and "Public status language" in pr_template
+        and "hard gates" in pr_template.lower(),
+        "review_checklist_covers_expected_semantics": "majority vote" in pr_template
+        and "expected-outcome evidence" in pr_template,
+        "all_required_issue_forms_exist": {path.name for path in form_paths if path.is_file()} == EXPECTED_FORMS,
+        "issue_forms_are_structured_and_require_evidence": all(form.get("name") and form.get("description") and form.get("body") for form in forms.values())
+        and required_form_fields,
+        "validator_disagreement_form_preserves_uncertainty": {row.get("id") for row in forms["validator-disagreement.yml"]["body"]} >= {"artifact", "validators", "outcomes", "expected", "control", "scope"},
+        "regression_form_requires_expected_outcome_evidence": {row.get("id") for row in forms["proposed-regression.yml"]["body"]} >= {"artifact", "outcome", "evidence", "control", "target", "disagreement"},
+        "mutation_operator_form_requires_semantic_model": {row.get("id") for row in forms["mutation-operator.yml"]["body"]} >= {"operator", "rationale", "discovery", "exclusions", "validation", "scope"},
+        "reproduction_form_records_identity_and_impact": {row.get("id") for row in forms["reproduction-failure.yml"]["body"]} >= {"artifact", "identity", "command", "expected", "observed", "category", "impact"},
+        "assurance_report_form_can_challenge_gate_or_scope": {row.get("id") for row in forms["assurance-report.yml"]["body"]} >= {"snapshot", "field", "evidence", "issue_kind", "impact", "correction"},
+        "public_status_is_generated_and_snapshot_bound": f"Snapshot SHA-256: `{snapshot_sha}`" in public
+        and "scripts/render-public-status" in public,
+        "public_status_matches_current_gate": f"## Current Gate: {snapshot['gate']['status']}" in public
+        and "`semantic_checker_disagreements`" in public
+        and "two\nuniverse-ownership artifacts" in public,
+        "public_language_explains_goal_limits_and_state": "do not prove Lean is\ncorrect" in public
+        and "deliberately injected fault models" in public
+        and "## Participate" in public,
+        "readme_exposes_public_entry_points": "CONTRIBUTING.md" in readme and "docs/PUBLIC_STATUS.md" in readme,
+        "responsible_bug_investigation_is_defined": "responsible disclosure" in guide
+        and "injected mutants are not presented as bugs" in json.dumps(catalog),
+        "negative_and_unresolved_results_are_welcome": "negative, neutral, incompatible, or unresolved result is welcome" in guide,
+        "milestone8_remains_valid": m8["status"] == "PASS" and all(m8["checks"].values())
+        and m8["current_assurance_gate"] == "FAIL",
+    }
+    existing = load(args.output) if args.output.exists() else {}
+    result = {
+        "schema_version": 1,
+        "snapshot": "milestone-9",
+        "created_at": existing.get("created_at", datetime.now().astimezone().isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "measurements": {
+            "checks_passing": sum(checks.values()),
+            "checks_total": len(checks),
+            "contribution_types": len(type_ids),
+            "issue_forms": len(forms),
+            "current_public_gate": snapshot["gate"]["status"],
+        },
+        "contribution_catalog": "config/contribution-types.json",
+        "contribution_guide": "CONTRIBUTING.md",
+        "public_status": "docs/PUBLIC_STATUS.md",
+        "public_status_snapshot_sha256": snapshot_sha,
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

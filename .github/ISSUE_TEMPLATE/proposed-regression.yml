@@ -1,0 +1,46 @@
+name: Proposed regression
+description: Propose a corpus test with mechanically established expected behavior.
+title: "[regression] "
+labels: ["regression-candidate"]
+body:
+  - type: input
+    id: artifact
+    attributes:
+      label: Candidate artifact
+      description: Repository path, export format, byte size, and SHA-256.
+    validations:
+      required: true
+  - type: dropdown
+    id: outcome
+    attributes:
+      label: Expected normalized outcome
+      options: [ACCEPT, REJECT]
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Expected-outcome evidence
+      description: Reference checker identity, command, result artifact, and mechanical rationale. Majority vote is not evidence.
+    validations:
+      required: true
+  - type: textarea
+    id: control
+    attributes:
+      label: Positive control
+      description: Path, SHA-256, and validator outcomes for the compatible control.
+    validations:
+      required: true
+  - type: textarea
+    id: target
+    attributes:
+      label: Targeted subsystem and gap
+    validations:
+      required: true
+  - type: textarea
+    id: disagreement
+    attributes:
+      label: Validator disagreement or unresolved state
+      description: Preserve any disagreement attached to the candidate.
+    validations:
+      required: true

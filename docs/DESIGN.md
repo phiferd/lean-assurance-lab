@@ -294,6 +294,49 @@ interpretation remains scoped because two folds with one mutant each cannot
 establish a general transfer rate or rule out implementation-specific
 overfitting.
 
+### Current Assurance Snapshot
+
+`config/assurance-policy.json` defines the versioned Milestone 8 policy.
+`scripts/current-assurance-snapshot` validates that policy, consumes the
+content-bound evidence already produced by Milestones 1 through 7, and writes
+`results/assurance/current.json` against
+`schemas/current-assurance-snapshot.schema.json`. The snapshot records exact
+validator identities and configurations, corpus identity, semantic mutation
+counts and subsystem scores, witness outcomes, generated regressions,
+cross-validator disagreements, held-out folds, coverage, and execution cost.
+
+Hard gates and contextual trends are distinct. Baseline identity, inventory
+completeness, unresolved semantic disagreement, expected-outcome evidence, and
+artifact freshness are hard checks. Mutation score and coverage thresholds are
+configurable trends and become gates only through an explicit policy change.
+Snapshot production is successful when the report is reproducibly computed;
+the report itself can truthfully say `FAIL`. The current report fails only the
+semantic-disagreement gate because two official Lean/Kiota outcomes remain
+unresolved. `scripts/milestone-8-assurance` verifies both the report machinery
+and that failure explanation rather than requiring a favorable measurement.
+
+The snapshot does not bind the artifact graph's own file digest, avoiding a
+content-addressing cycle. It evaluates the graph's dependencies and records the
+graph path as gate evidence; the graph then binds the finished snapshot and
+Milestone 8 report.
+
+### Community Workflow
+
+Milestone 9 turns the constitutional standards into machine-checkable
+contribution paths. `config/contribution-types.json` defines validator, corpus
+test, mutation operator, witness generator, report, bug investigation, and
+documentation contributions. `schemas/contribution-manifest.schema.json` and
+`scripts/validate-contribution` require scoped claims, exact revisions and
+configurations, assumptions and nonclaims, content digests, mechanical evidence,
+and unresolved-state preservation, plus type-specific metadata.
+
+`CONTRIBUTING.md`, the pull request checklist, and five issue forms expose the
+same standards to contributors. `scripts/render-public-status` derives
+`docs/PUBLIC_STATUS.md` from the exact current snapshot hash so public language
+cannot silently drift from measured evidence. `scripts/milestone-9-assurance`
+checks all seven contribution paths, all issue forms, review language, the
+public snapshot binding, and continued Milestone 8 validity.
+
 ## Data Flow
 
 ```text
@@ -346,6 +389,12 @@ results/rotating-heldout/milestone-7/folds/lean4lean-evaluation.json
 results/rotating-heldout/milestone-7/folds/kiota-evaluation.json
 results/rotating-heldout/milestone-7/report.json
 corpus/transfer/milestone-7/*.ndjson
+config/assurance-policy.json
+results/assurance/current.json
+results/assurance/milestone-8.json
+config/contribution-types.json
+docs/PUBLIC_STATUS.md
+results/assurance/milestone-9.json
 ```
 
 The exact upstream Arena output format may change; raw logs and metadata are

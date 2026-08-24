@@ -1,0 +1,148 @@
+#!/usr/bin/env python3
+"""Verify the Milestone 8 current-assurance snapshot and hard gate."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+from current_assurance import load, sha256_file, trend  # noqa: E402
+
+
+def bound(record: dict) -> bool:
+    path = ROOT / record["path"]
+    return path.is_file() and sha256_file(path) == record["sha256"] and path.stat().st_size == record["bytes"]
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "assurance" / "milestone-8.json")
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        graph = load_graph(graph_path)
+        if any(node["id"] == "report:milestone8-assurance" for node in graph["nodes"]):
+            try:
+                require_current(graph, ROOT, ["report:milestone8-assurance"], dependencies_only=True)
+            except RuntimeError as error:
+                raise SystemExit(str(error)) from error
+
+    snapshot_path = ROOT / "results" / "assurance" / "current.json"
+    policy_path = ROOT / "config" / "assurance-policy.json"
+    snapshot, policy = load(snapshot_path), load(policy_path)
+    snapshot_schema = load(ROOT / "schemas" / "current-assurance-snapshot.schema.json")
+    policy_schema = load(ROOT / "schemas" / "assurance-policy.schema.json")
+    mutation_report = load(ROOT / "results" / "assurance" / "milestone-7-report.json")
+    m4 = load(ROOT / "results" / "assurance" / "milestone-4.json")
+    rotating = load(ROOT / "results" / "rotating-heldout" / "milestone-7" / "report.json")
+    gate_checks = snapshot["gate"]["checks"]
+    required_sections = {
+        "identity", "validators", "corpus", "mutation_testing", "witness_synthesis",
+        "generated_regressions", "cross_validator_disagreements", "held_out_evaluation",
+        "coverage", "execution_cost", "gate", "trend_metrics",
+    }
+    threshold_probe = dict(policy["trend_thresholds"]["modeled_mutation_score"])
+    threshold_probe["minimum"] = 1.0
+    threshold_result = trend(snapshot["mutation_testing"]["modeled_mutation_score"], threshold_probe)
+
+    checks = {
+        "snapshot_and_policy_conform_to_schemas": jsonschema.Draft202012Validator(
+            snapshot_schema, format_checker=jsonschema.FormatChecker()
+        ).is_valid(snapshot) and jsonschema.Draft202012Validator(policy_schema).is_valid(policy),
+        "all_required_report_sections_exist": required_sections <= set(snapshot),
+        "exact_revisions_and_configurations_are_bound": len(snapshot["identity"]["producing_repository_revision"]) == 40
+        and len(snapshot["identity"]["arena_revision"]) == 40
+        and len(snapshot["identity"]["configurations"]) >= 5
+        and all(bound(row) for row in snapshot["identity"]["configurations"]),
+        "validator_inventory_is_complete_and_pinned": len(snapshot["validators"]) == 3
+        and {row["id"] for row in snapshot["validators"]} == {"official", "kiota", "lean4lean"}
+        and all(len(row["binary_sha256"]) == 64 for row in snapshot["validators"]),
+        "corpus_inventory_is_exact": snapshot["corpus"]["test_count"] == 197
+        and snapshot["corpus"]["total_bytes"] == 9506646641
+        and len(snapshot["corpus"]["identity_manifest_sha256"]) == 64,
+        "semantic_mutant_population_reconciles": snapshot["mutation_testing"]["total_semantic_mutants"] == 29
+        and snapshot["mutation_testing"]["killed_by_existing_corpus"] == mutation_report["killed_mutants"]
+        and snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["surviving_mutants"]
+        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["surviving_mutants"] == 29,
+        "generated_corpus_kill_is_reported": snapshot["mutation_testing"]["killed_by_generated_corpus"] == 1,
+        "survivor_and_equivalence_states_are_reported": snapshot["mutation_testing"]["meaningful_survivors"] == 1
+        and snapshot["mutation_testing"]["equivalent_mutants"] == 0
+        and snapshot["mutation_testing"]["unreachable_mutants"] == 0
+        and snapshot["mutation_testing"]["unresolved_mutants"] == 19,
+        "subsystem_scores_are_complete": snapshot["mutation_testing"]["subsystem_scores"] == mutation_report["stratified_metrics"]["by_subsystem"],
+        "witness_success_rate_is_mechanical": snapshot["witness_synthesis"]["searches"] == m4["measurements"]["searches"]
+        and snapshot["witness_synthesis"]["witnesses_found"] == m4["measurements"]["witnesses_found"]
+        and snapshot["witness_synthesis"]["success_rate"] == 0.5,
+        "generated_regressions_and_evidence_are_visible": snapshot["generated_regressions"]["artifact_count"] == 2
+        and snapshot["generated_regressions"]["semantic_case_count"] == 1
+        and all("UNRESOLVED_DISAGREEMENT" in row["status"] for row in snapshot["generated_regressions"]["candidates"]),
+        "cross_validator_disagreements_are_not_hidden": snapshot["cross_validator_disagreements"]["semantic_unresolved_count"] == 2
+        and snapshot["cross_validator_disagreements"]["parse_behavior_count"] == 1
+        and snapshot["cross_validator_disagreements"]["majority_vote_used"] is False,
+        "held_out_scores_and_scope_are_reported": snapshot["held_out_evaluation"]["score_change"] == 0.5
+        and snapshot["held_out_evaluation"]["classification"] == rotating["classification"]
+        and "not a general transfer-rate estimate" in snapshot["held_out_evaluation"]["scope"],
+        "coverage_statistics_and_storage_limit_are_visible": snapshot["coverage"]["covered_source_locations"] == 3884
+        and snapshot["coverage"]["source_file_count"] == 20
+        and snapshot["coverage"]["payload_tracked_in_git"] is False,
+        "execution_cost_has_scoped_components": snapshot["execution_cost"]["recorded_checker_runs"] == 859
+        and snapshot["execution_cost"]["recorded_checker_seconds"] > 12000
+        and len(snapshot["execution_cost"]["components"]) >= 7
+        and "not reconstructed" in snapshot["execution_cost"]["scope"],
+        "hard_gates_are_separate_from_trends": set(gate_checks) == set(policy["hard_gates"])
+        and all(not row["enabled_as_gate"] for row in snapshot["trend_metrics"].values()),
+        "unexplained_baseline_changes_fail_hard": gate_checks["baseline_identity"]["status"] == "PASS"
+        and gate_checks["baseline_identity"]["observed"]["sha256"] == policy["hard_gates"]["baseline_identity"]["expected_outcomes_sha256"],
+        "incomplete_inventories_fail_hard": gate_checks["complete_result_inventories"]["status"] == "PASS"
+        and gate_checks["complete_result_inventories"]["observed"]["selected"] == gate_checks["complete_result_inventories"]["observed"]["executed"],
+        "semantic_disagreement_fails_current_gate": gate_checks["semantic_checker_disagreements"]["status"] == "FAIL"
+        and snapshot["gate"]["status"] == "FAIL"
+        and snapshot["gate"]["failure_reasons"] == ["semantic_checker_disagreements"],
+        "regressions_without_expected_outcomes_fail_hard": gate_checks["regression_expected_outcomes"]["status"] == "PASS"
+        and gate_checks["regression_expected_outcomes"]["observed"] == {"candidates": 2, "established": 2},
+        "stale_claim_evidence_fails_hard": gate_checks["artifact_freshness"]["status"] == "PASS"
+        and gate_checks["artifact_freshness"]["observed"]["stale_nodes"] == [],
+        "thresholds_are_configurable_and_contextual": threshold_result["assessment"] == "BELOW_CONTEXT_THRESHOLD"
+        and threshold_result["enabled_as_gate"] is False
+        and all("context" in row for row in policy["trend_thresholds"].values()),
+        "claims_are_constitutionally_scoped": snapshot["scope"]["injected_faults_are_not_discovered_bugs"] is True
+        and "Lean is correct" in snapshot["scope"]["non_claims"],
+        "all_snapshot_evidence_is_content_bound": all(bound(row) for row in snapshot["evidence"].values())
+        and snapshot["producer"]["policy_sha256"] == sha256_file(policy_path),
+    }
+    existing = load(args.output) if args.output.exists() else {}
+    result = {
+        "schema_version": 1,
+        "snapshot": "milestone-8",
+        "created_at": existing.get("created_at", datetime.now().astimezone().isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "current_assurance_gate": snapshot["gate"]["status"],
+        "checks": checks,
+        "measurements": {
+            "checks_passing": sum(checks.values()),
+            "checks_total": len(checks),
+            "hard_gates_passing": snapshot["gate"]["passing"],
+            "hard_gates_failing": snapshot["gate"]["failing"],
+            "semantic_disagreements": snapshot["cross_validator_disagreements"]["semantic_unresolved_count"],
+        },
+        "current_snapshot": "results/assurance/current.json",
+        "policy": "config/assurance-policy.json",
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(result, indent=2, sort_keys=True))
+    return 0 if result["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

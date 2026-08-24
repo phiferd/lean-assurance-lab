@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "catalog_id": "leanverifier-contributions-v1",
+  "constitution": "CONSTITUTION.md",
+  "decision_rule": "Accept contributions when their scoped, content-bound mechanical evidence advances Lean ecosystem assurance without hiding uncertainty.",
+  "contribution_types": [
+    {
+      "id": "validator",
+      "title": "Validator",
+      "required_type_metadata": ["validator_id", "implementation_family", "source_revision", "build_command", "run_command", "compatibility_profile", "independence_statement"],
+      "required_evidence": ["pinned source identity", "reproducible build", "positive-control acceptance", "normalized outcome adapter"],
+      "review_checks": ["implementation family is explicit", "compatibility limits are recorded", "declines and exceptional outcomes are preserved"]
+    },
+    {
+      "id": "corpus-test",
+      "title": "Corpus test",
+      "required_type_metadata": ["test_id", "export_format", "expected_outcome", "expected_outcome_evidence", "positive_control", "targeted_subsystem"],
+      "required_evidence": ["content-addressed artifact", "mechanically established expected outcome", "positive control", "validator results"],
+      "review_checks": ["expected behavior is not decided by majority vote", "artifact is minimal enough to audit", "regression scope is explicit"]
+    },
+    {
+      "id": "mutation-operator",
+      "title": "Mutation operator",
+      "required_type_metadata": ["operator_id", "operator_family", "language", "semantic_rationale", "discovery_rule", "exclusion_rule", "build_validation"],
+      "required_evidence": ["structured discovery output", "deterministic identity", "isolated build validation", "non-semantic exclusion examples"],
+      "review_checks": ["operator models a plausible semantic fault", "selection bias is visible", "build failures remain separate"]
+    },
+    {
+      "id": "witness-generator",
+      "title": "Witness generator",
+      "required_type_metadata": ["generator_id", "supported_subsystems", "deterministic_seed_policy", "success_predicate", "attempt_budget", "minimization_policy"],
+      "required_evidence": ["recorded candidate sequence", "direct normalized checker outcomes", "bounded no-witness result", "content-bound minimized artifact when found"],
+      "review_checks": ["success is executable", "randomness is reproducible", "no-witness does not claim equivalence"]
+    },
+    {
+      "id": "report",
+      "title": "Assurance report",
+      "required_type_metadata": ["report_id", "schema_path", "input_artifacts", "aggregation_rules", "uncertainty_fields"],
+      "required_evidence": ["schema validation", "content-bound inputs", "reproduction command", "stale-input gate"],
+      "review_checks": ["hard gates are separate from trends", "costs and unresolved states are visible", "claims match measured scope"]
+    },
+    {
+      "id": "bug-investigation",
+      "title": "Bug investigation",
+      "required_type_metadata": ["case_id", "affected_versions", "reproduction_artifact", "observed_outcomes", "expected_semantics_status", "disclosure_status"],
+      "required_evidence": ["exact reproducer", "unmodified validator identities", "raw and normalized outcomes", "expected-semantics evidence or explicit unresolved status"],
+      "review_checks": ["injected mutants are not presented as bugs", "disagreement is preserved", "security-sensitive details follow responsible disclosure"]
+    },
+    {
+      "id": "documentation",
+      "title": "Documentation",
+      "required_type_metadata": ["document_paths", "audience", "claims_changed", "evidence_links"],
+      "required_evidence": ["claim-to-evidence links", "commands checked against current interfaces", "scope and limitations"],
+      "review_checks": ["language follows the constitution", "no assurance claim depends on conversational memory", "status language matches the current snapshot"]
+    }
+  ]
+}

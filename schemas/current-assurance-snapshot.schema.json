@@ -1,0 +1,46 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "snapshot_id", "status", "created_at", "scope", "identity", "validators", "corpus", "mutation_testing", "witness_synthesis", "generated_regressions", "cross_validator_disagreements", "held_out_evaluation", "coverage", "execution_cost", "gate", "trend_metrics", "evidence", "producer"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "snapshot_id": {"const": "current-assurance"},
+    "status": {"const": "COMPLETE"},
+    "created_at": {"type": "string", "format": "date-time"},
+    "scope": {
+      "type": "object",
+      "required": ["claim", "non_claims", "injected_faults_are_not_discovered_bugs"]
+    },
+    "identity": {
+      "type": "object",
+      "required": ["producing_repository_revision", "arena_revision", "configurations"]
+    },
+    "validators": {"type": "array", "minItems": 3},
+    "corpus": {"type": "object", "required": ["test_count", "total_bytes", "identity_manifest_sha256"]},
+    "mutation_testing": {
+      "type": "object",
+      "required": ["total_semantic_mutants", "killed_by_existing_corpus", "killed_by_generated_corpus", "surviving_mutants", "meaningful_survivors", "equivalent_mutants", "unreachable_mutants", "unresolved_mutants", "subsystem_scores"]
+    },
+    "witness_synthesis": {"type": "object", "required": ["searches", "witnesses_found", "success_rate"]},
+    "generated_regressions": {"type": "object", "required": ["artifact_count", "semantic_case_count", "candidates"]},
+    "cross_validator_disagreements": {"type": "object", "required": ["semantic_unresolved_count", "parse_behavior_count", "cases"]},
+    "held_out_evaluation": {"type": "object", "required": ["fold_count", "original_score", "augmented_score", "score_change", "classification"]},
+    "coverage": {"type": "object", "required": ["test_count", "covered_source_locations", "source_file_count", "collection_seconds"]},
+    "execution_cost": {"type": "object", "required": ["recorded_checker_runs", "recorded_checker_seconds", "components", "scope"]},
+    "gate": {
+      "type": "object",
+      "required": ["status", "checks", "failure_reasons", "passing", "failing"],
+      "properties": {
+        "status": {"enum": ["PASS", "FAIL"]},
+        "checks": {"type": "object", "minProperties": 5},
+        "failure_reasons": {"type": "array", "items": {"type": "string"}},
+        "passing": {"type": "integer", "minimum": 0},
+        "failing": {"type": "integer", "minimum": 0}
+      }
+    },
+    "trend_metrics": {"type": "object", "minProperties": 4},
+    "evidence": {"type": "object", "minProperties": 8},
+    "producer": {"type": "object", "required": ["path", "sha256", "library_sha256", "policy_sha256"]}
+  }
+}

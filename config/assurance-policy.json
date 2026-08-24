@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "policy_id": "leanverifier-current-assurance-v1",
+  "description": "Hard safety gates are independent from contextual research metrics.",
+  "hard_gates": {
+    "baseline_identity": {
+      "enabled": true,
+      "checker": "nanoda",
+      "expected_outcomes_sha256": "efc4c5c99be2abe319f9cfa06c3042c077b7113ac794304161f09d8a08fbb485",
+      "expected_test_count": 197
+    },
+    "complete_result_inventories": {
+      "enabled": true,
+      "active_batch": "nanoda-semantic-0001",
+      "required_milestones": [1, 2, 3, 4, 5, 6, 7]
+    },
+    "semantic_checker_disagreements": {
+      "enabled": true,
+      "maximum_unresolved": 0,
+      "parse_behavior_is_separate": true
+    },
+    "regression_expected_outcomes": {
+      "enabled": true,
+      "required_status": "ESTABLISHED"
+    },
+    "artifact_freshness": {
+      "enabled": true,
+      "require_all_evidence_dependencies_current": true
+    }
+  },
+  "trend_thresholds": {
+    "modeled_mutation_score": {
+      "enabled_as_gate": false,
+      "minimum": null,
+      "context": "Report the bounded modeled population; do not turn it into a universal quality threshold."
+    },
+    "meaningful_mutation_score": {
+      "enabled_as_gate": false,
+      "minimum": null,
+      "context": "This score uses only explicit MEANINGFUL_SEMANTIC classifications and has a small denominator."
+    },
+    "covered_source_locations": {
+      "enabled_as_gate": false,
+      "minimum": null,
+      "context": "Line coverage guides execution and is not a semantic adequacy claim."
+    },
+    "held_out_score_change": {
+      "enabled_as_gate": false,
+      "minimum": null,
+      "context": "Two one-mutant folds are evidence, not a general transfer-rate estimate."
+    }
+  }
+}
