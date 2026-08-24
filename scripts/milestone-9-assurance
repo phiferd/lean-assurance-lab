@@ -76,6 +76,7 @@ def main() -> int:
     m8 = load(ROOT / "results" / "assurance" / "milestone-8.json")
     constitution = (ROOT / "CONSTITUTION.md").read_text(encoding="utf-8")
     guide = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+    collatz_case_study = (ROOT / "docs" / "CASE_STUDY_COLLATZ.md").read_text(encoding="utf-8")
     introduction = (ROOT / "docs" / "INTRODUCTION.md").read_text(encoding="utf-8")
     public = (ROOT / "docs" / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
@@ -139,14 +140,21 @@ def main() -> int:
         and "## Participate" in public,
         "readme_exposes_public_entry_points": "CONTRIBUTING.md" in readme
         and "docs/PUBLIC_STATUS.md" in readme
+        and "docs/CASE_STUDY_COLLATZ.md" in readme
         and "docs/INTRODUCTION.md" in readme
+        and "CASE_STUDY_COLLATZ.md" in introduction
         and "INTRODUCTION.md" in public
         and introduction.count("```mermaid") == 2
         and "does not prove that Lean is correct" in introduction
         and "A **mutant** is a deliberately modified checker" in introduction
         and "baseline_checker(input) != mutated_checker(input)" in introduction
         and "does not call\nthe injected mutant a discovered bug" in introduction
-        and "## Questions Worth Asking" in introduction,
+        and "## Questions Worth Asking" in introduction
+        and "leanprover/lean4/issues/14576" in collatz_case_study
+        and "leanprover/lean4/pull/14577" in collatz_case_study
+        and collatz_case_study.count("```mermaid") == 2
+        and "This is a retrospective case study, not evidence of prospective discovery." in collatz_case_study
+        and "Comparing only those two normalized outcomes would" in collatz_case_study,
         "responsible_bug_investigation_is_defined": "responsible disclosure" in guide
         and "injected mutants are not presented as bugs" in json.dumps(catalog),
         "negative_and_unresolved_results_are_welcome": "negative, neutral, incompatible, or unresolved result is welcome" in guide,

@@ -225,6 +225,29 @@ A mutation score describes only the selected mutation model and corpus. A score
 of 100 percent would not prove the absence of unmodeled mistakes. A lower score
 can be useful because it identifies specific assurance work to do next.
 
+## A Real Incident: The 2026 Collatz False-Proof
+
+In July 2026, an affected Lean kernel accepted a `sorry`-free development that
+claimed a nonterminating Collatz orbit. Reviewers reduced it to an axiom-free
+proof of `False`: the result was not a mathematical disproof of Collatz, but a
+real kernel implementation bug. Lean's
+[official postmortem](https://leodemoura.github.io/blog/2026-8-1-postmortem-for-kernel-soundness-bug-14576/),
+[issue #14576](https://github.com/leanprover/lean4/issues/14576), and
+[fix #14577](https://github.com/leanprover/lean4/pull/14577) document the
+incident.
+
+This example also exposes a limit of simple differential checking: the affected
+official Lean checker and the then-current `nanoda` both accepted the original
+artifact because of different bugs. Comparing only those two accept/reject
+outcomes would not have raised a difference.
+
+The exact regression is now in Lean Kernel Arena and current `nanoda` rejects
+it. That is retrospective protection against the known exploit, not proof that
+LeanVerifier would have discovered or prevented it before disclosure. Read the
+[Collatz incident case study](CASE_STUDY_COLLATZ.md) for the technical cause,
+primary sources, current mechanical evidence, and the experiment needed to test
+that counterfactual honestly.
+
 ## One Concrete Project Example
 
 The current project includes a deliberately introduced `nanoda` mutant that
