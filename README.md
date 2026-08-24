@@ -1,5 +1,8 @@
 # Lean Kernel Arena Mutation & Differential Testing
 
+**New to Lean, proof kernels, or mutation testing? Start with
+[Why Test a Proof Kernel?](docs/INTRODUCTION.md).**
+
 This repository tracks a mechanical testing project for Lean proof checkers.
 The initial target is mutation testing against one checker implementation,
 then using surviving mutants to drive adversarial exported-artifact generation.
@@ -55,6 +58,7 @@ config/
   contribution-types.json
 docs/
   DESIGN.md
+  INTRODUCTION.md
   MUTATION_MODEL.md
   PUBLIC_STATUS.md
   RESEARCH_STATUS.md

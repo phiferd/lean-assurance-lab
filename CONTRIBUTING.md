@@ -7,13 +7,16 @@ not by whether it produces a favorable metric or confirms an expected result.
 
 ## Start Here
 
-1. Read `CONSTITUTION.md`, `docs/PUBLIC_STATUS.md`, and the relevant design
-   section in `docs/DESIGN.md`.
-2. Open the matching issue form for substantial work so assumptions and expected
+1. If the domain is new to you, begin with the
+   [Introduction](docs/INTRODUCTION.md).
+2. Read the [Constitution](CONSTITUTION.md),
+   [Public Status](docs/PUBLIC_STATUS.md), and the relevant section of the
+   [Design](docs/DESIGN.md).
+3. Open the matching issue form for substantial work so assumptions and expected
    evidence are visible before expensive execution.
-3. Pin every source revision, configuration, corpus input, and random seed.
-4. Preserve raw exceptional outcomes and unresolved states.
-5. Run the repository tests and current assurance commands before submitting.
+4. Pin every source revision, configuration, corpus input, and random seed.
+5. Preserve raw exceptional outcomes and unresolved states.
+6. Run the repository tests and current assurance commands before submitting.
 
 The normal validation commands are:
 
