@@ -1,0 +1,12 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "fold_id", "status", "frozen_at", "protocol", "experiment_spec", "frozen_corpus", "original_corpus", "source_validator_evidence", "reference_evidence", "held_out_boundary"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"const": "FROZEN_BEFORE_HELD_OUT_MUTANT_EVALUATION"},
+    "protocol": {"type": "object", "required": ["held_out_mutant_results_used_for_generation", "held_out_mutant_execution_permitted_before_freeze"]},
+    "frozen_corpus": {"type": "object", "required": ["candidate", "positive_control", "composite_sha256"]},
+    "held_out_boundary": {"type": "object", "required": ["validator", "source_revision", "source_sha256", "source_clean", "mutation_declared_but_not_applied"]}
+  }
+}

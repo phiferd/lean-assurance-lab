@@ -28,14 +28,16 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 through 6 are complete. The project has a closed mechanical
+Milestones 1 through 7 are complete. The project has a closed mechanical
 mutation loop for `nanoda`, content-addressed invalidation, and a structured
 semantic model spanning validation elision, predicate negation, relational
 boundaries, and equality discrimination. Witness search and structure-aware
 minimization are executable and auditable. Cross-validator execution preserves
-semantic and parse disagreements without majority voting. The first frozen,
-held-out transfer experiment is positive. Current work begins Milestone 7:
-rotating held-out evaluation.
+semantic and parse disagreements without majority voting. Rotating held-out
+evaluation now covers pinned Kiota and Lean4Lean folds in different semantic
+subsystems. The measured aggregate is one positive fold and one neutral fold,
+improving the modeled held-out score from 0.5 to 1.0. Current work begins
+Milestone 8: a reproducible assurance snapshot and gate.
 
 ## Repository Layout
 
@@ -49,16 +51,19 @@ results/
   cross-validation/
   expected-outcomes/
   mutants/
+  rotating-heldout/
   survivors/
   witnesses/
 corpus/
   generated/
   minimized/
   regression-candidates/
+  transfer/
 scripts/
   artifact-status
   assurance-snapshot
   build-artifact-graph
+  build-rotating-heldout-report
   audit-coverage-guidance
   collect-coverage
   compare
@@ -66,6 +71,8 @@ scripts/
   confirm-witness
   cross-validate
   establish-expected-outcome
+  evaluate-m6-rotating-fold
+  freeze-rotating-fold
   freeze-transfer-experiment
   generate
   generate-mutations
@@ -75,6 +82,7 @@ scripts/
   milestone-4-assurance
   milestone-5-assurance
   milestone-6-assurance
+  milestone-7-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -85,6 +93,7 @@ scripts/
   run-mutant
   run-mutant-input
   run-mutant-scheduled
+  run-rotating-fold
   run-transfer-experiment
   schedule-mutant
   setup-arena
@@ -254,6 +263,26 @@ The freeze command generates the corpus from the nanoda fault model, confirms
 it with nanoda and official Lean, and records that no held-out mutant outcome
 was used. The evaluation command refuses to overwrite prior results and binds
 its Kiota run to the exact frozen-manifest SHA.
+
+Milestone 7 rotates both the held-out implementation and fault subsystem, then
+aggregates separately stored folds:
+
+```sh
+scripts/freeze-rotating-fold
+scripts/run-rotating-fold
+scripts/evaluate-m6-rotating-fold
+scripts/build-rotating-heldout-report
+scripts/report --output results/assurance/milestone-7-report.json
+scripts/milestone-7-assurance
+```
+
+The fresh Lean4Lean fold evaluates all 197 original corpus tests before adding
+the frozen let-value/type mismatch candidate. The retrospective Kiota fold
+measures the Milestone 6 candidate against its original corpus baseline. Fold
+classification is mechanical and distinguishes `POSITIVE`, `NEUTRAL`,
+`NEGATIVE`, `INCONCLUSIVE`, `INCOMPATIBLE`, and `UNRESOLVED`. These experiments
+exercise intentionally injected faults; they are not claims of bugs in the
+unmodified validators.
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

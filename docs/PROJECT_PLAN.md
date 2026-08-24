@@ -98,8 +98,8 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Full-corpus controls for one killed and one surviving generated mutant
   reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 59 input and derived
-  artifacts; 49 current artifacts pass, with six historical reports or
+- `results/artifacts/graph.json` content-addresses 70 input and derived
+  artifacts; 59 current artifacts pass, with seven historical reports or
   attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
@@ -116,8 +116,10 @@ Current measured state, distinguishing tracked artifacts from local evidence:
   as unresolved rather than equivalent.
 - `results/assurance/milestone-4.json` records a passing 11-check Milestone 4
   gate.
-- Direct cross-validator execution is configured for official Lean 4.33 and
-  pinned unmodified Kiota across two distinct implementation families.
+- The validator inventory contains official Lean 4.33, pinned unmodified Kiota,
+  and pinned unmodified Lean4Lean across three distinct implementation families.
+  Direct cross-validation currently exercises official Lean and Kiota, while
+  rotating held-out evaluation also exercises Lean4Lean.
 - Official Lean rejects both the original and minimized universe witnesses;
   Kiota accepts both. These semantic disagreements are durable exceptional
   unresolved artifacts, not majority-vote results.
@@ -137,6 +139,21 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - The experiment is classified `POSITIVE_TRANSFER`; its evaluation binds the
   exact pre-evaluation freeze SHA and records exact source restoration.
 - `results/assurance/milestone-6.json` records a passing 16-check Milestone 6
+  gate.
+- Milestone 7 rotates the held-out implementation from Kiota to Lean4Lean and
+  the fault subsystem from declaration validation to definitional equality.
+- The fresh Lean4Lean fold was frozen before held-out mutation feedback, scored
+  all 197 original corpus tests, and improved from 0 of 1 to 1 of 1 modeled
+  mutants after adding the let-value/type mismatch candidate. Its control was
+  accepted by both checker states and the original source was exactly restored.
+- A separately stored retrospective Kiota fold shows no score change because
+  `tutorial/012_nonPropThm` already kills its modeled theorem-validation mutant.
+- The two-fold rotating report is `MIXED_WITH_POSITIVE_GAIN`: original score
+  1/2, augmented score 2/2, change +0.5, with one positive fold, one neutral
+  fold, no regressions, no unresolved tests, 400 checker runs, and 6,918.15
+  checker-seconds. This is not a general transfer-rate estimate and describes
+  intentionally injected faults, not discovered validator bugs.
+- `results/assurance/milestone-7.json` records a passing 22-check Milestone 7
   gate.
 
 ## Milestone 0: Reproducible Project Foundation
@@ -404,7 +421,12 @@ Exit criteria:
 Goal: measure whether corpus changes generalize across validator
 implementations.
 
-Tasks:
+Status: complete as of 2026-08-24. The mechanical completion gate is
+`results/assurance/milestone-7.json`, with all 22 checks passing. The measured
+report contains one `POSITIVE` and one `NEUTRAL` fold and is classified
+`MIXED_WITH_POSITIVE_GAIN`.
+
+Completed:
 
 1. Add support for multiple validators and validator-specific mutation models.
 2. Implement leave-one-validator-out evaluation.
@@ -420,8 +442,10 @@ Tasks:
 
 Exit criteria:
 
-- The project can produce a rotating held-out report with positive, neutral,
-  negative, inconclusive, and unresolved fold outcomes.
+- The project produces a rotating held-out report whose outcome model includes
+  positive, neutral, negative, inconclusive, incompatible, and unresolved folds.
+  The current observations are positive and neutral; unobserved states remain
+  valid modeled results rather than required favorable outcomes.
 - The report distinguishes general semantic improvement, lack of measurable
   transfer, regressions, and implementation-specific overfitting risk.
 
@@ -501,15 +525,17 @@ Exit criteria:
 
 These are the next concrete tasks, in order:
 
-1. Begin Milestone 7 by rotating the held-out validator and fault subsystem so
-   Kiota is no longer the only transfer target.
-2. Require each experiment to publish its spec, frozen corpus SHA, generation
-   exclusions, expected-outcome evidence, and evaluation only after freeze.
+1. Begin Milestone 8 by defining the assurance snapshot schema and separating
+   hard gates from contextual trend metrics.
+2. Make large rotating-fold execution resumable and checkpointed before adding
+   more full-corpus folds; the Lean4Lean fold's large-library tail consumed most
+   of its 6,917.90 checker-seconds.
 3. Keep the official/Kiota universe-ownership disagreement separate from held-out
    scoring and prepare it for upstream investigation.
 4. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
-5. Commit and push after each coherent artifact-producing step.
+5. Expand rotating evidence with additional validator-specific mutants and
+   semantic subsystems without using held-out feedback during generation.
 
 ## Decision Rules
 

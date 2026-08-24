@@ -94,7 +94,7 @@ def main() -> int:
         and identities["official"]["built_toolchain"] == identities["official"]["expected_built_toolchain"]
         and identities["kiota"]["source_clean"]
         and identities["kiota"]["source_revision"] == identities["kiota"]["expected_source_revision"],
-        "independent_implementation_families_are_present": len({row["implementation_family"] for row in inventory["validators"]}) == 2
+        "independent_implementation_families_are_present": len({row["implementation_family"] for row in inventory["validators"]}) >= 2
         and all(row["independent_from_nanoda"] for row in inventory["validators"]),
         "direct_results_retain_raw_behavior": all(
             RESULT_FIELDS <= set(validator["result"])

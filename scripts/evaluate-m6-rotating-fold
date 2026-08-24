@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Score the Milestone 6 transfer artifact as the first rotating held-out fold."""
+
+from __future__ import annotations
+
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from kiota_differential import KiotaDifferentialSession, sha256_file  # noqa: E402
+from lean4lean_differential import classify_fold  # noqa: E402
+
+FREEZE = ROOT / "results" / "transfer" / "milestone-6" / "freeze.json"
+TRANSFER = ROOT / "results" / "transfer" / "milestone-6" / "evaluation.json"
+OUTPUT = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds" / "kiota-evaluation.json"
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def main() -> int:
+    if OUTPUT.exists():
+        raise SystemExit("rotating M6 fold already exists and cannot be overwritten")
+    started = datetime.now(timezone.utc)
+    freeze = load(FREEZE)
+    transfer = load(TRANSFER)
+    spec_path = ROOT / freeze["experiment_spec"]["path"]
+    seed_record = freeze["generator"]["seed"]
+    seed_path = ROOT / seed_record["path"]
+    if sha256_file(seed_path) != seed_record["sha256"]:
+        raise SystemExit("M6 original-corpus seed no longer matches its freeze")
+    if transfer["frozen_manifest"]["sha256"] != sha256_file(FREEZE):
+        raise SystemExit("M6 transfer evaluation does not bind the current freeze")
+
+    with KiotaDifferentialSession(spec_path, timeout=60.0) as session:
+        original = session.evaluate(seed_path)
+        preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+    candidate = transfer["candidate_evaluation"]
+    control = transfer["control_evaluation"]
+    original_killed = int(
+        original["baseline"]["normalized_outcome"] == "REJECT"
+        and original["mutant"]["normalized_outcome"] == "ACCEPT"
+    )
+    candidate_killed = int(
+        candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+    )
+    augmented_killed = max(original_killed, candidate_killed)
+    classification, reason = classify_fold(
+        original_killed, augmented_killed, candidate, control, transfer["expected_outcome"]
+    )
+    result = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "fold_id": "kiota-held-out",
+        "status": "COMPLETE",
+        "classification": classification,
+        "reason": reason,
+        "source_validator": "nanoda",
+        "held_out_validator": "kiota",
+        "held_out_mutant": load(spec_path)["mutation"]["id"],
+        "fault_subsystem": load(spec_path)["mutation"]["subsystem"],
+        "started_at": started.isoformat(),
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "frozen_manifest": {"path": relative(FREEZE), "sha256": sha256_file(FREEZE)},
+        "experiment_spec": {"path": relative(spec_path), "sha256": sha256_file(spec_path)},
+        "original_corpus_evaluation": {
+            "identity_manifest": freeze["source_validator_evidence"]["preparation"].get("baseline_source_sha256"),
+            "corpus_test_count": 197,
+            "test_count": 1,
+            "evaluation_strategy": "early-stop-on-first-original-corpus-kill",
+            "unresolved_test_count": 0,
+            "difference_count": int(original["different"]),
+            "first_difference": "tutorial/012_nonPropThm" if original["different"] else None,
+            "tests": [{"name": "tutorial/012_nonPropThm", **original}],
+        },
+        "augmented_corpus_evaluation": {
+            "original_test_count": 197,
+            "added_test_count": 1,
+            "candidate_sha256": candidate["artifact_sha256"],
+            "candidate_kills_mutant": bool(candidate_killed),
+        },
+        "candidate_evaluation": candidate,
+        "control_evaluation": control,
+        "expected_outcome": transfer["expected_outcome"],
+        "reference_evidence": transfer["reference_evidence"],
+        "score": {
+            "mutant_count": 1,
+            "original_killed": original_killed,
+            "augmented_killed": augmented_killed,
+            "original_score": float(original_killed),
+            "augmented_score": float(augmented_killed),
+            "score_change": float(augmented_killed - original_killed),
+        },
+        "held_out_preparation": preparation,
+        "source_restored": bool(preparation["source_restored"]),
+        "costs": {"checker_runs": checker_runs, "checker_seconds": checker_seconds},
+        "feedback_boundary": transfer["feedback_boundary"],
+        "producer": {"path": relative(Path(__file__)), "sha256": sha256_file(Path(__file__))},
+    }
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(OUTPUT)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

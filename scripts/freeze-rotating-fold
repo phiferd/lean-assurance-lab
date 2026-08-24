@@ -1,0 +1,207 @@
+#!/usr/bin/env python3
+"""Generate and freeze the Milestone 7 fold before held-out mutant evaluation."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+import tempfile
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from kiota_differential import KiotaDifferentialSession, sha256_file  # noqa: E402
+from witness_search import canonical_ndjson  # noqa: E402
+
+SPEC = ROOT / "experiments" / "milestone-7" / "spec.json"
+KIOTA_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "kiota" / "src"
+LEAN4LEAN_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "lean4lean" / "src"
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def git_output(*args: str, cwd: Path) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=cwd, check=True, text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+
+
+def artifact_record(path: Path) -> dict:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def template_records(candidate_name: str, valid: bool) -> list[dict]:
+    meta = {
+        "meta": {
+            "exporter": {"name": "lean4export", "version": "3.1.0"},
+            "format": {"version": "3.1.0"},
+            "lean": {
+                "githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+                "version": "4.29.1",
+            },
+        }
+    }
+    rows = [
+        meta,
+        {"in": 1, "str": {"pre": 0, "str": candidate_name}},
+        {"il": 1, "succ": 0},
+        {"ie": 0, "sort": 1},
+        {"ie": 1, "sort": 0},
+    ]
+    if valid:
+        rows.extend([
+            {"in": 2, "str": {"pre": 0, "str": "p"}},
+            {"bvar": 0, "ie": 2},
+            {"forallE": {"binderInfo": "default", "body": 2, "name": 2, "type": 1}, "ie": 3},
+            {"in": 3, "str": {"pre": 0, "str": "x"}},
+            {"ie": 4, "letE": {"body": 1, "name": 3, "nondep": True, "type": 1, "value": 3}},
+            {"def": {"all": [1], "hints": "opaque", "levelParams": [], "name": 1,
+                     "safety": "safe", "type": 0, "value": 4}},
+        ])
+    else:
+        rows.extend([
+            {"in": 2, "str": {"pre": 0, "str": "x"}},
+            {"ie": 2, "letE": {"body": 1, "name": 2, "nondep": True, "type": 1, "value": 1}},
+            {"def": {"all": [1], "hints": "opaque", "levelParams": [], "name": 1,
+                     "safety": "safe", "type": 0, "value": 2}},
+        ])
+    return rows
+
+
+def main() -> int:
+    output = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds" / "lean4lean-freeze.json"
+    evaluation = output.with_name("lean4lean-evaluation.json")
+    if output.exists() or evaluation.exists():
+        raise SystemExit("freeze/evaluation already exists; held-out boundary cannot be rewritten")
+    spec = json.loads(SPEC.read_text(encoding="utf-8"))
+    if spec["generation"]["uses_held_out_mutant_feedback"]:
+        raise SystemExit("experiment spec declares held-out mutant feedback")
+
+    corpus_dir = ROOT / "corpus" / "transfer" / "milestone-7"
+    corpus_dir.mkdir(parents=True, exist_ok=True)
+    candidate_path = corpus_dir / "let-value-type-mismatch.ndjson"
+    control_path = corpus_dir / "let-value-type-control.ndjson"
+    candidate_path.write_bytes(canonical_ndjson(template_records(spec["generation"]["candidate_name"], False)))
+    control_path.write_bytes(canonical_ndjson(template_records(spec["generation"]["control_name"], True)))
+
+    compatibility_spec = {
+        "mutation": spec["source_mutation"],
+        "held_out_source": spec["source_validator_source"],
+    }
+    with tempfile.NamedTemporaryFile("w", suffix=".json", encoding="utf-8") as handle:
+        json.dump(compatibility_spec, handle)
+        handle.flush()
+        with KiotaDifferentialSession(Path(handle.name), timeout=60.0) as session:
+            source_candidate = session.evaluate(candidate_path)
+            source_control = session.evaluate(control_path)
+            source_preparation = session.preparation
+            source_runs = session.checker_runs
+            source_seconds = session.checker_seconds
+    if not (
+        source_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and source_candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+        and source_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and source_control["mutant"]["normalized_outcome"] == "ACCEPT"
+    ):
+        raise SystemExit("generated corpus does not isolate the Kiota source fault")
+
+    evidence_path = ROOT / "results" / "expected-outcomes" / "m7-let-value-type.json"
+    proc = subprocess.run(
+        [
+            str(ROOT / "scripts" / "establish-expected-outcome"), "m7-let-value-type",
+            str(candidate_path), "--control", str(control_path), "--reference", "official",
+            "--rationale", "let-bound value type differs from its declared binder type",
+            "--output", str(evidence_path),
+        ],
+        cwd=ROOT, text=True, stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+    )
+    if proc.returncode:
+        raise SystemExit(proc.stdout)
+    reference = json.loads(evidence_path.read_text(encoding="utf-8"))
+    if reference["status"] != "ESTABLISHED" or reference["expected_outcome"] != "REJECT":
+        raise SystemExit("official reference did not establish expected rejection")
+
+    held_out = spec["held_out_source"]
+    held_source = LEAN4LEAN_ROOT / spec["held_out_mutation"]["source_file"]
+    held_text = held_source.read_text(encoding="utf-8")
+    held_clean = not git_output("status", "--porcelain", cwd=LEAN4LEAN_ROOT)
+    if not (
+        git_output("rev-parse", "HEAD", cwd=LEAN4LEAN_ROOT) == held_out["expected_revision"]
+        and sha256_file(held_source) == held_out["baseline_source_sha256"]
+        and held_clean
+        and spec["held_out_mutation"]["original"] in held_text
+        and spec["held_out_mutation"]["mutated"] not in held_text
+    ):
+        raise SystemExit("held-out Lean4Lean source is not pristine")
+
+    original_manifest_path = ROOT / spec["original_corpus"]["identity_manifest"]
+    original_manifest = json.loads(original_manifest_path.read_text(encoding="utf-8"))
+    files = original_manifest["corpus"]["files"]
+    if len(files) != spec["original_corpus"]["test_count"]:
+        raise SystemExit("original corpus inventory count changed")
+    for row in files:
+        path = ROOT / "external" / "lean-kernel-arena" / row["path"]
+        if not path.exists() or path.stat().st_size != row["bytes"]:
+            raise SystemExit(f"original corpus input missing or wrong size: {row['name']}")
+
+    candidate = artifact_record(candidate_path)
+    control = artifact_record(control_path)
+    composite = hashlib.sha256((candidate["sha256"] + "\0" + control["sha256"]).encode()).hexdigest()
+    manifest = {
+        "schema_version": 1,
+        "experiment_id": spec["experiment_id"],
+        "fold_id": spec["fold_id"],
+        "status": "FROZEN_BEFORE_HELD_OUT_MUTANT_EVALUATION",
+        "frozen_at": datetime.now(timezone.utc).isoformat(),
+        "protocol": {
+            "held_out_mutant_results_used_for_generation": False,
+            "held_out_mutant_execution_permitted_before_freeze": False,
+            "held_out_baseline_compatibility_permitted_before_freeze": True,
+            "generation_inputs": ["Kiota semantic mutation model", "deterministic NDJSON template", "official reference"],
+            "excluded_generation_inputs": ["Lean4Lean mutant outcomes", "Lean4Lean mutant logs"],
+        },
+        "experiment_spec": artifact_record(SPEC),
+        "generator": {"path": relative(Path(__file__)), "sha256": sha256_file(Path(__file__)),
+                      "strategy": spec["generation"]["strategy"]},
+        "frozen_corpus": {"candidate": candidate, "positive_control": control, "composite_sha256": composite},
+        "original_corpus": {
+            "identity_manifest": artifact_record(original_manifest_path),
+            "test_count": len(files),
+            "total_bytes": original_manifest["corpus"]["total_bytes"],
+            "evaluation_order": spec["original_corpus"]["evaluation_order"],
+            "early_stop": spec["original_corpus"]["early_stop"],
+        },
+        "source_validator_evidence": {
+            "validator": "kiota", "mutation_id": spec["source_mutation"]["id"],
+            "candidate": source_candidate, "positive_control": source_control,
+            "preparation": source_preparation, "checker_runs": source_runs,
+            "checker_seconds": source_seconds,
+        },
+        "reference_evidence": {
+            "path": relative(evidence_path), "sha256": sha256_file(evidence_path),
+            "expected_outcome": reference["expected_outcome"],
+            "reference_checker": reference["reference_checker"]["id"],
+        },
+        "held_out_boundary": {
+            "validator": spec["held_out_validator"],
+            "source_revision": held_out["expected_revision"],
+            "source_sha256": held_out["baseline_source_sha256"],
+            "source_clean": held_clean,
+            "mutation_declared_but_not_applied": True,
+            "mutation_id": spec["held_out_mutation"]["id"],
+        },
+    }
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

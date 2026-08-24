@@ -1,0 +1,164 @@
+#!/usr/bin/env python3
+"""Evaluate the frozen Milestone 7 fold against held-out Lean4Lean."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from lean4lean_differential import (  # noqa: E402
+    Lean4LeanDifferentialSession, classify_fold, sha256_file,
+)
+
+FREEZE = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds" / "lean4lean-freeze.json"
+OUTPUT = FREEZE.with_name("lean4lean-evaluation.json")
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def bound_path(record: dict) -> Path:
+    path = ROOT / record["path"]
+    if not path.exists() or sha256_file(path) != record["sha256"]:
+        raise SystemExit(f"bound input missing or stale: {record['path']}")
+    return path
+
+
+def compact(result: dict) -> dict:
+    return {
+        "normalized_outcome": result["normalized_outcome"],
+        "exit_code": result["exit_code"],
+        "seconds": result["seconds"],
+        "stdout_sha256": result["stdout_sha256"],
+        "stderr_sha256": result["stderr_sha256"],
+    }
+
+
+def main() -> int:
+    if OUTPUT.exists():
+        raise SystemExit("held-out fold evaluation already exists and cannot be overwritten")
+    started_at = datetime.now(timezone.utc)
+    freeze = load(FREEZE)
+    frozen_at = datetime.fromisoformat(freeze["frozen_at"])
+    if freeze["status"] != "FROZEN_BEFORE_HELD_OUT_MUTANT_EVALUATION" or not frozen_at < started_at:
+        raise SystemExit("held-out evaluation requires an earlier immutable freeze")
+    if freeze["protocol"]["held_out_mutant_results_used_for_generation"]:
+        raise SystemExit("held-out mutant feedback contaminated generation")
+
+    candidate_path = bound_path(freeze["frozen_corpus"]["candidate"])
+    control_path = bound_path(freeze["frozen_corpus"]["positive_control"])
+    spec_path = bound_path(freeze["experiment_spec"])
+    reference_path = bound_path(freeze["reference_evidence"])
+    generator_path = bound_path(freeze["generator"])
+    original_manifest_path = bound_path(freeze["original_corpus"]["identity_manifest"])
+    reference = load(reference_path)
+    original_manifest = load(original_manifest_path)
+    files = sorted(original_manifest["corpus"]["files"], key=lambda row: (row["bytes"], row["name"]))
+    if len(files) != freeze["original_corpus"]["test_count"]:
+        raise SystemExit("frozen original corpus inventory changed")
+
+    original_rows = []
+    with Lean4LeanDifferentialSession(spec_path, timeout=3600.0) as session:
+        candidate = session.evaluate(candidate_path)
+        control = session.evaluate(control_path)
+        assert session.baseline_binary is not None and session.mutant_binary is not None
+        for index, row in enumerate(files, start=1):
+            artifact = ROOT / "external" / "lean-kernel-arena" / row["path"]
+            if sha256_file(artifact) != row["sha256"]:
+                raise RuntimeError(f"original corpus hash changed: {row['name']}")
+            baseline = session.run_one(session.baseline_binary, artifact)
+            mutant = session.run_one(session.mutant_binary, artifact)
+            original_rows.append({
+                "name": row["name"], "artifact_sha256": row["sha256"], "bytes": row["bytes"],
+                "baseline": compact(baseline), "mutant": compact(mutant),
+                "different": baseline["normalized_outcome"] != mutant["normalized_outcome"],
+            })
+            print(f"[{index}/{len(files)}] {row['name']}", flush=True)
+        preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+
+    exceptional = {"CRASH", "TIMEOUT", "UNKNOWN"}
+    unresolved = sum(
+        bool({row["baseline"]["normalized_outcome"], row["mutant"]["normalized_outcome"]} & exceptional)
+        for row in original_rows
+    )
+    original_killed = int(any(row["different"] for row in original_rows))
+    candidate_kills = int(
+        candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and candidate["mutant"]["normalized_outcome"] == "ACCEPT"
+    )
+    augmented_killed = max(original_killed, candidate_kills)
+    classification, reason = classify_fold(
+        original_killed, augmented_killed, candidate, control, reference["expected_outcome"]
+    )
+    if unresolved and not original_killed:
+        classification, reason = "INCONCLUSIVE", "ORIGINAL_CORPUS_HAS_UNRESOLVED_HELD_OUT_RUNS"
+
+    result = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "fold_id": freeze["fold_id"],
+        "status": "COMPLETE",
+        "classification": classification,
+        "reason": reason,
+        "source_validator": "kiota",
+        "held_out_validator": "lean4lean",
+        "held_out_mutant": load(spec_path)["held_out_mutation"]["id"],
+        "fault_subsystem": load(spec_path)["held_out_mutation"]["subsystem"],
+        "started_at": started_at.isoformat(),
+        "completed_at": datetime.now(timezone.utc).isoformat(),
+        "frozen_manifest": {"path": relative(FREEZE), "sha256": sha256_file(FREEZE)},
+        "experiment_spec": {"path": relative(spec_path), "sha256": sha256_file(spec_path)},
+        "original_corpus_evaluation": {
+            "identity_manifest": {"path": relative(original_manifest_path), "sha256": sha256_file(original_manifest_path)},
+            "test_count": len(original_rows), "unresolved_test_count": unresolved,
+            "difference_count": sum(row["different"] for row in original_rows),
+            "first_difference": next((row["name"] for row in original_rows if row["different"]), None),
+            "tests": original_rows,
+        },
+        "augmented_corpus_evaluation": {
+            "original_test_count": len(original_rows), "added_test_count": 1,
+            "candidate_sha256": candidate["artifact_sha256"], "candidate_kills_mutant": bool(candidate_kills),
+        },
+        "candidate_evaluation": candidate,
+        "control_evaluation": control,
+        "expected_outcome": reference["expected_outcome"],
+        "reference_evidence": {"path": relative(reference_path), "sha256": sha256_file(reference_path)},
+        "score": {
+            "mutant_count": 1, "original_killed": original_killed, "augmented_killed": augmented_killed,
+            "original_score": float(original_killed), "augmented_score": float(augmented_killed),
+            "score_change": float(augmented_killed - original_killed),
+        },
+        "held_out_preparation": preparation,
+        "source_restored": bool(preparation["source_restored"]),
+        "costs": {"checker_runs": checker_runs, "checker_seconds": checker_seconds},
+        "feedback_boundary": {
+            "held_out_mutant_results_used_for_generation": False,
+            "frozen_before_evaluation": frozen_at < started_at,
+            "freeze_sha256_evaluated_verbatim": sha256_file(FREEZE),
+        },
+        "producer": {
+            "path": relative(Path(__file__)), "sha256": sha256_file(Path(__file__)),
+            "library_sha256": sha256_file(ROOT / "lib" / "lean4lean_differential.py"),
+            "generator_sha256": sha256_file(generator_path),
+        },
+    }
+    OUTPUT.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(OUTPUT)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-23
+Last updated: 2026-08-24
 
 ## Attempted
 
@@ -150,6 +150,31 @@ Last updated: 2026-08-23
   `ACCEPT` in both states. Kiota source was restored to its exact baseline hash.
 - Classified the first generalization experiment `POSITIVE_TRANSFER`.
 - Produced `results/assurance/milestone-6.json`; all 16 Milestone 6 checks pass.
+- Added pinned Lean4Lean at revision
+  `ecb3b6661c14f8147be1069b126c629114baf4a8` as a third implementation
+  family and defined an analogous Kiota/Lean4Lean fault model for let-bound
+  value/type compatibility.
+- Froze the fresh Lean4Lean fold before applying or executing its held-out
+  mutant. Kiota baseline rejected the 476-byte malformed-let candidate while
+  its source mutant accepted it; both accepted the 599-byte control. Official
+  Lean independently established candidate `REJECT` and control `ACCEPT`.
+- Exhaustively evaluated baseline and mutated Lean4Lean over all 197 original
+  corpus tests. The original corpus killed 0 of 1 modeled mutants; the frozen
+  candidate changed Lean4Lean from `REJECT` to `ACCEPT`, increasing the
+  augmented score to 1 of 1. The control remained `ACCEPT` in both states and
+  the held-out source was restored to its exact baseline hash.
+- Recast the Milestone 6 Kiota experiment as a separate rotating fold. Its
+  original corpus already killed the modeled mutant at
+  `tutorial/012_nonPropThm`, so its score remained 1 of 1 after augmentation and
+  the fold is `NEUTRAL`.
+- Produced the two-fold rotating report with aggregate original score 0.5,
+  augmented score 1.0, change +0.5, one `POSITIVE` fold, one `NEUTRAL` fold,
+  no regressions, and no unresolved tests. Total measured cost was 400 checker
+  runs and 6,918.1547 checker-seconds.
+- Produced `results/assurance/milestone-7.json`; all 22 Milestone 7 checks pass.
+  The aggregate classification is `MIXED_WITH_POSITIVE_GAIN`. All faults in
+  these folds were deliberately injected mutants, not bugs found in the
+  unmodified validators.
 
 ## Command Log
 
@@ -248,6 +273,15 @@ scripts/freeze-transfer-experiment
 scripts/run-transfer-experiment
 scripts/report --allow-stale-artifacts --output results/assurance/milestone-6-report.json
 scripts/milestone-6-assurance --allow-stale-artifacts
+scripts/freeze-rotating-fold
+scripts/run-rotating-fold
+scripts/evaluate-m6-rotating-fold
+scripts/build-rotating-heldout-report
+scripts/report --allow-stale-artifacts --output results/assurance/milestone-7-report.json
+scripts/milestone-7-assurance --allow-stale-artifacts
+scripts/build-artifact-graph
+scripts/artifact-status --require-current --output results/artifacts/status.json
+scripts/milestone-7-assurance
 ```
 
 Notes:
@@ -323,17 +357,18 @@ confirmed_witness_semantics: 1
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 0
 arena_regression_candidates: 1
-artifact_nodes: 59
-current_artifacts: 49
-historical_artifacts: 6
+artifact_nodes: 70
+current_artifacts: 59
+historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
 milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
 cross_validators: 2
+configured_validators: 3
 cross_validation_cases: 3
 cross_validation_checker_disagreements: 3
-expected_outcomes_established: 2
+expected_outcomes_established: 4
 regression_candidates_with_unresolved_disagreement: 2
 milestone_5_checks_passing: 15
 transfer_experiments: 1
@@ -344,6 +379,17 @@ inconclusive_transfer: 0
 incompatible_transfer: 0
 unresolved_transfer: 0
 milestone_6_checks_passing: 16
+rotating_held_out_folds: 2
+rotating_positive_folds: 1
+rotating_neutral_folds: 1
+rotating_negative_folds: 0
+rotating_unresolved_folds: 0
+rotating_original_score: 0.5
+rotating_augmented_score: 1.0
+rotating_score_change: 0.5
+rotating_checker_runs: 400
+rotating_checker_seconds: 6918.154678831925
+milestone_7_checks_passing: 22
 ```
 
 ## First Mutation Result
@@ -439,13 +485,20 @@ milestone_6_checks_passing: 16
 - The first candidate is structurally derived from an existing Arena test by a
   deterministic rename and control conversion. Later rotating experiments
   should include less direct generators and different semantic subsystems.
+- The rotating report contains only two folds and one independently introduced
+  mutant per held-out validator. Its positive aggregate change is real for those
+  exact models, but it is not a general transfer-rate estimate and cannot rule
+  out implementation-specific overfitting.
+- The Lean4Lean fold required 6,917.90 checker-seconds because both checker
+  states processed every original test and the large `mathlib` export dominated
+  the tail. The runner should gain durable checkpoints before this protocol is
+  scaled to more validators and mutants.
 
 ## Next Concrete Experiment
 
-1. Begin Milestone 7 by selecting another compatible implementation family and
-   a different semantic subsystem before generation.
-2. Reuse the cryptographic freeze boundary while rotating held-out validators,
-   source validators, and mutation families; publish neutral and negative cases
-   as readily as positive ones.
+1. Begin Milestone 8 by defining a reproducible assurance snapshot schema and
+   separating hard gates from trend metrics.
+2. Add checkpoint/resume support for full rotating-fold corpus execution before
+   scaling the fold population.
 3. Investigate the universe-ownership disagreement separately and prepare an
    upstream report with the exact original witness and checker identities.

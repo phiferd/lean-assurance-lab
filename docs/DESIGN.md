@@ -265,6 +265,35 @@ the analogous mutant to change the candidate outcome in the modeled direction,
 and both checker states to accept the positive control. A held-out result can
 never retroactively alter the frozen generation artifact.
 
+Milestone 7 generalizes this protocol into separate rotating folds.
+`scripts/freeze-rotating-fold` records the source validator's mechanical
+distinction, official expected-outcome evidence, exact candidate and control
+hashes, pinned held-out source, mutation model, original corpus identity, and a
+declaration that no held-out mutant feedback was used. `scripts/run-rotating-fold`
+then evaluates the exact freeze against baseline and mutated Lean4Lean, including
+all 197 original corpus tests. The held-out mutation is applied only after the
+freeze and its source is restored exactly after evaluation.
+
+`scripts/evaluate-m6-rotating-fold` represents the earlier Kiota experiment in
+the same fold schema and measures whether its original corpus already killed the
+held-out mutant. `scripts/build-rotating-heldout-report` aggregates fold scores
+without merging their generation inputs or evaluation evidence. Each fold
+records original and augmented kills, mutation scores, score change, unresolved
+tests, checker runs, and checker time. Fold outcomes are:
+
+```text
+POSITIVE NEUTRAL NEGATIVE INCONCLUSIVE INCOMPATIBLE UNRESOLVED
+```
+
+`POSITIVE` means the augmented corpus kills an additional modeled mutant;
+`NEUTRAL` means it does not change the held-out score; and `NEGATIVE` means the
+augmented score regresses. The remaining states preserve insufficient evidence,
+compatibility failures, and unresolved execution separately. These labels refer
+to intentionally injected faults, not bugs in unmodified validators. Aggregate
+interpretation remains scoped because two folds with one mutant each cannot
+establish a general transfer rate or rule out implementation-specific
+overfitting.
+
 ## Data Flow
 
 ```text
@@ -311,6 +340,12 @@ corpus/regression-candidates/milestone-5.json
 results/transfer/milestone-6/freeze.json
 results/transfer/milestone-6/evaluation.json
 corpus/transfer/milestone-6/*.ndjson
+experiments/milestone-7/spec.json
+results/rotating-heldout/milestone-7/folds/lean4lean-freeze.json
+results/rotating-heldout/milestone-7/folds/lean4lean-evaluation.json
+results/rotating-heldout/milestone-7/folds/kiota-evaluation.json
+results/rotating-heldout/milestone-7/report.json
+corpus/transfer/milestone-7/*.ndjson
 ```
 
 The exact upstream Arena output format may change; raw logs and metadata are

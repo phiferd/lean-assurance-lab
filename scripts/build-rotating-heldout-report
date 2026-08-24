@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Aggregate isolated held-out folds into the Milestone 7 report."""
+
+from __future__ import annotations
+
+import json
+from collections import Counter
+from datetime import datetime, timezone
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+FOLD_DIR = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds"
+OUTPUT = ROOT / "results" / "rotating-heldout" / "milestone-7" / "report.json"
+FOLD_PATHS = [FOLD_DIR / "kiota-evaluation.json", FOLD_DIR / "lean4lean-evaluation.json"]
+OUTCOME_MODEL = ["POSITIVE", "NEUTRAL", "NEGATIVE", "INCONCLUSIVE", "INCOMPATIBLE", "UNRESOLVED"]
+
+
+def sha256_file(path: Path) -> str:
+    import hashlib
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def main() -> int:
+    folds = [json.loads(path.read_text(encoding="utf-8")) for path in FOLD_PATHS]
+    if len({fold["fold_id"] for fold in folds}) != len(folds):
+        raise SystemExit("fold ids are not unique")
+    if len({fold["held_out_validator"] for fold in folds}) != len(folds):
+        raise SystemExit("held-out validators did not rotate")
+    if any(fold["status"] != "COMPLETE" or not fold["source_restored"] for fold in folds):
+        raise SystemExit("fold is incomplete or did not restore its held-out source")
+
+    mutant_count = sum(fold["score"]["mutant_count"] for fold in folds)
+    original_killed = sum(fold["score"]["original_killed"] for fold in folds)
+    augmented_killed = sum(fold["score"]["augmented_killed"] for fold in folds)
+    counts = Counter(fold["classification"] for fold in folds)
+    if counts["NEGATIVE"]:
+        classification = "REGRESSION"
+    elif counts["INCONCLUSIVE"]:
+        classification = "INCONCLUSIVE"
+    elif counts["UNRESOLVED"] or counts["INCOMPATIBLE"]:
+        classification = "UNRESOLVED"
+    elif augmented_killed > original_killed and counts["NEUTRAL"]:
+        classification = "MIXED_WITH_POSITIVE_GAIN"
+    elif augmented_killed > original_killed:
+        classification = "POSITIVE_GAIN"
+    else:
+        classification = "NO_MEASURABLE_GAIN"
+
+    fold_summaries = []
+    for path, fold in zip(FOLD_PATHS, folds):
+        fold_summaries.append({
+            "fold_id": fold["fold_id"],
+            "source_validator": fold["source_validator"],
+            "held_out_validator": fold["held_out_validator"],
+            "held_out_mutant": fold["held_out_mutant"],
+            "fault_subsystem": fold["fault_subsystem"],
+            "classification": fold["classification"],
+            "reason": fold["reason"],
+            "score": fold["score"],
+            "original_corpus": {
+                "test_count": fold["original_corpus_evaluation"].get("corpus_test_count", fold["original_corpus_evaluation"]["test_count"]),
+                "executed_test_count": fold["original_corpus_evaluation"]["test_count"],
+                "difference_count": fold["original_corpus_evaluation"]["difference_count"],
+                "unresolved_test_count": fold["original_corpus_evaluation"]["unresolved_test_count"],
+            },
+            "candidate_outcomes": {
+                "baseline": fold["candidate_evaluation"]["baseline"]["normalized_outcome"],
+                "mutant": fold["candidate_evaluation"]["mutant"]["normalized_outcome"],
+            },
+            "control_outcomes": {
+                "baseline": fold["control_evaluation"]["baseline"]["normalized_outcome"],
+                "mutant": fold["control_evaluation"]["mutant"]["normalized_outcome"],
+            },
+            "costs": fold["costs"],
+            "freeze_sha256": fold["frozen_manifest"]["sha256"],
+            "evaluation": {"path": relative(path), "sha256": sha256_file(path)},
+        })
+
+    report = {
+        "schema_version": 1,
+        "report_id": "milestone-7-rotating-held-out",
+        "status": "COMPLETE",
+        "created_at": datetime.now(timezone.utc).isoformat(),
+        "classification": classification,
+        "fold_count": len(folds),
+        "folds": fold_summaries,
+        "aggregate_score": {
+            "mutant_count": mutant_count,
+            "original_killed": original_killed,
+            "augmented_killed": augmented_killed,
+            "original_score": original_killed / mutant_count,
+            "augmented_score": augmented_killed / mutant_count,
+            "score_change": (augmented_killed - original_killed) / mutant_count,
+        },
+        "classification_counts": {name: counts[name] for name in OUTCOME_MODEL},
+        "costs": {
+            "checker_runs": sum(fold["costs"]["checker_runs"] for fold in folds),
+            "checker_seconds": sum(fold["costs"]["checker_seconds"] for fold in folds),
+        },
+        "outcome_model": OUTCOME_MODEL,
+        "isolation": {
+            "unique_held_out_validators": True,
+            "fold_results_stored_separately": True,
+            "held_out_mutant_feedback_used_for_generation": False,
+            "all_folds_frozen_before_held_out_evaluation": True,
+        },
+        "interpretation": {
+            "general_semantic_improvement": augmented_killed > original_killed,
+            "no_change_observed": counts["NEUTRAL"] > 0,
+            "regression_observed": counts["NEGATIVE"] > 0,
+            "implementation_specific_overfitting_risk": "REMAINS_WITH_TWO_FOLDS_AND_ONE_MUTANT_PER_VALIDATOR",
+            "scope": "Two validators, two independently introduced semantic faults, and exact pinned corpus artifacts; not a general transfer-rate estimate.",
+        },
+        "producer": {"path": relative(Path(__file__)), "sha256": sha256_file(Path(__file__))},
+    }
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(OUTPUT)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

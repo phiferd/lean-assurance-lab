@@ -1,0 +1,22 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "experiment_id", "fold_id", "source_validator", "held_out_validator", "fault_model", "source_mutation", "held_out_mutation", "held_out_source", "generation", "original_corpus"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "fold_id": {"type": "string", "minLength": 1},
+    "source_validator": {"type": "string", "minLength": 1},
+    "held_out_validator": {"type": "string", "minLength": 1},
+    "fault_model": {"type": "string", "minLength": 1},
+    "source_mutation": {"$ref": "#/$defs/mutation"},
+    "held_out_mutation": {"$ref": "#/$defs/mutation"},
+    "held_out_source": {"$ref": "#/$defs/source"},
+    "generation": {"type": "object", "required": ["strategy", "uses_held_out_mutant_feedback"]},
+    "original_corpus": {"type": "object", "required": ["identity_manifest", "test_count", "early_stop"]}
+  },
+  "$defs": {
+    "mutation": {"type": "object", "required": ["id", "operator", "subsystem", "source_file", "source_span", "original", "mutated", "semantic_rationale"]},
+    "source": {"type": "object", "required": ["expected_revision", "baseline_source_sha256"]}
+  }
+}

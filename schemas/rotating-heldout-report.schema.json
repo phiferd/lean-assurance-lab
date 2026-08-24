@@ -1,0 +1,19 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "required": ["schema_version", "report_id", "status", "classification", "folds", "aggregate_score", "classification_counts", "costs", "interpretation", "outcome_model"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "status": {"const": "COMPLETE"},
+    "classification": {"enum": ["POSITIVE_GAIN", "MIXED_WITH_POSITIVE_GAIN", "NO_MEASURABLE_GAIN", "REGRESSION", "INCONCLUSIVE", "UNRESOLVED"]},
+    "folds": {"type": "array", "minItems": 2},
+    "aggregate_score": {"type": "object", "required": ["mutant_count", "original_killed", "augmented_killed", "original_score", "augmented_score", "score_change"]},
+    "classification_counts": {"type": "object"},
+    "outcome_model": {
+      "type": "array",
+      "items": {"enum": ["POSITIVE", "NEUTRAL", "NEGATIVE", "INCONCLUSIVE", "INCOMPATIBLE", "UNRESOLVED"]},
+      "minItems": 6,
+      "uniqueItems": true
+    }
+  }
+}

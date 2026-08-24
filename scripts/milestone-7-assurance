@@ -1,0 +1,182 @@
+#!/usr/bin/env python3
+"""Produce and gate the Milestone 7 rotating held-out assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import sys
+from datetime import datetime
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+
+KIOTA_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "kiota" / "src"
+LEAN4LEAN_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "lean4lean" / "src"
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def bound(record: dict) -> bool:
+    path = ROOT / record["path"]
+    return path.exists() and digest(path) == record["sha256"]
+
+
+def git_clean(path: Path) -> bool:
+    return not subprocess.run(
+        ["git", "status", "--porcelain"], cwd=path, check=True, text=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=ROOT / "results" / "assurance" / "milestone-7.json")
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        try:
+            require_current(load_graph(graph_path), ROOT, ["report:milestone7-assurance"], dependencies_only=True)
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
+
+    spec_path = ROOT / "experiments" / "milestone-7" / "spec.json"
+    freeze_path = ROOT / "results" / "rotating-heldout" / "milestone-7" / "folds" / "lean4lean-freeze.json"
+    lean_fold_path = freeze_path.with_name("lean4lean-evaluation.json")
+    kiota_fold_path = freeze_path.with_name("kiota-evaluation.json")
+    report_path = freeze_path.parent.parent / "report.json"
+    spec, freeze = load(spec_path), load(freeze_path)
+    lean_fold, kiota_fold, report = load(lean_fold_path), load(kiota_fold_path), load(report_path)
+    reference = load(ROOT / freeze["reference_evidence"]["path"])
+    m6 = load(ROOT / "results" / "assurance" / "milestone-6.json")
+    inventory = load(ROOT / "results" / "cross-validation" / "validator-inventory.json")
+    identities = {row["id"]: row for row in inventory["validators"]}
+    schemas = {
+        "spec": load(ROOT / "schemas" / "rotating-fold-spec.schema.json"),
+        "freeze": load(ROOT / "schemas" / "rotating-fold-freeze.schema.json"),
+        "evaluation": load(ROOT / "schemas" / "rotating-fold-evaluation.schema.json"),
+        "report": load(ROOT / "schemas" / "rotating-heldout-report.schema.json"),
+    }
+    candidate, control = freeze["frozen_corpus"]["candidate"], freeze["frozen_corpus"]["positive_control"]
+    source_candidate = freeze["source_validator_evidence"]["candidate"]
+    source_control = freeze["source_validator_evidence"]["positive_control"]
+    held_candidate, held_control = lean_fold["candidate_evaluation"], lean_fold["control_evaluation"]
+    folds = {row["fold_id"]: row for row in report["folds"]}
+    frozen_time = datetime.fromisoformat(freeze["frozen_at"])
+    eval_time = datetime.fromisoformat(lean_fold["started_at"])
+    composite = hashlib.sha256((candidate["sha256"] + "\0" + control["sha256"]).encode()).hexdigest()
+    outcome_model = {"POSITIVE", "NEUTRAL", "NEGATIVE", "INCONCLUSIVE", "INCOMPATIBLE", "UNRESOLVED"}
+
+    checks = {
+        "rotating_artifacts_conform_to_schemas": jsonschema.Draft202012Validator(schemas["spec"]).is_valid(spec)
+        and jsonschema.Draft202012Validator(schemas["freeze"]).is_valid(freeze)
+        and jsonschema.Draft202012Validator(schemas["evaluation"]).is_valid(lean_fold)
+        and jsonschema.Draft202012Validator(schemas["evaluation"]).is_valid(kiota_fold)
+        and jsonschema.Draft202012Validator(schemas["report"]).is_valid(report),
+        "multiple_validator_specific_mutation_models_exist": spec["source_validator"] == "kiota"
+        and spec["held_out_validator"] == "lean4lean"
+        and spec["source_mutation"]["source_file"] != spec["held_out_mutation"]["source_file"]
+        and spec["source_mutation"]["operator"] == spec["held_out_mutation"]["operator"],
+        "held_out_validator_rotates_and_is_pinned": set(identities) >= {"official", "kiota", "lean4lean"}
+        and identities["lean4lean"]["source_revision"] == spec["held_out_source"]["expected_revision"]
+        and identities["lean4lean"]["source_clean"]
+        and len({fold["held_out_validator"] for fold in report["folds"]}) == 2,
+        "fault_subsystem_rotates": folds["kiota-held-out"]["fault_subsystem"] == "declaration-validation"
+        and folds["lean4lean-held-out"]["fault_subsystem"] == "definitional-equality",
+        "generation_uses_no_held_out_mutant_feedback": freeze["protocol"]["held_out_mutant_results_used_for_generation"] is False
+        and freeze["protocol"]["held_out_mutant_execution_permitted_before_freeze"] is False
+        and "Lean4Lean mutant outcomes" in freeze["protocol"]["excluded_generation_inputs"],
+        "source_validator_distinction_is_mechanical": source_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and source_candidate["mutant"]["normalized_outcome"] == "ACCEPT" and source_candidate["different"]
+        and source_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and source_control["mutant"]["normalized_outcome"] == "ACCEPT" and not source_control["different"],
+        "official_reference_binds_expected_rejection": bound(freeze["reference_evidence"])
+        and reference["status"] == "ESTABLISHED" and reference["expected_outcome"] == "REJECT"
+        and reference["artifact"]["sha256"] == candidate["sha256"]
+        and reference["positive_control"]["result"]["normalized_outcome"] == "ACCEPT",
+        "frozen_corpus_is_current_and_content_addressed": bound(candidate) and bound(control)
+        and freeze["frozen_corpus"]["composite_sha256"] == composite,
+        "freeze_precedes_and_binds_held_out_evaluation": frozen_time < eval_time
+        and lean_fold["frozen_manifest"]["sha256"] == digest(freeze_path)
+        and lean_fold["feedback_boundary"]["freeze_sha256_evaluated_verbatim"] == digest(freeze_path),
+        "held_out_mutation_was_declared_before_application": freeze["held_out_boundary"]["mutation_declared_but_not_applied"]
+        and freeze["held_out_boundary"]["mutation_id"] == spec["held_out_mutation"]["id"],
+        "lean4lean_original_corpus_is_exhaustively_scored": lean_fold["original_corpus_evaluation"]["test_count"] == 197
+        and lean_fold["original_corpus_evaluation"]["unresolved_test_count"] == 0
+        and lean_fold["original_corpus_evaluation"]["difference_count"] == 0,
+        "lean4lean_augmented_corpus_improves_score": held_candidate["baseline"]["normalized_outcome"] == "REJECT"
+        and held_candidate["mutant"]["normalized_outcome"] == "ACCEPT" and held_candidate["different"]
+        and lean_fold["score"] == {"mutant_count": 1, "original_killed": 0, "augmented_killed": 1,
+                                     "original_score": 0.0, "augmented_score": 1.0, "score_change": 1.0}
+        and lean_fold["classification"] == "POSITIVE",
+        "positive_control_has_no_regression": held_control["baseline"]["normalized_outcome"] == "ACCEPT"
+        and held_control["mutant"]["normalized_outcome"] == "ACCEPT" and not held_control["different"],
+        "kiota_fold_records_no_change": kiota_fold["original_corpus_evaluation"]["difference_count"] == 1
+        and kiota_fold["score"]["original_killed"] == 1 and kiota_fold["score"]["augmented_killed"] == 1
+        and kiota_fold["score"]["score_change"] == 0.0 and kiota_fold["classification"] == "NEUTRAL",
+        "aggregate_report_computes_score_change": report["aggregate_score"] == {
+            "mutant_count": 2, "original_killed": 1, "augmented_killed": 2,
+            "original_score": 0.5, "augmented_score": 1.0, "score_change": 0.5,
+        } and report["classification"] == "MIXED_WITH_POSITIVE_GAIN",
+        "fold_data_and_feedback_boundaries_are_separate": report["isolation"]["fold_results_stored_separately"]
+        and report["isolation"]["held_out_mutant_feedback_used_for_generation"] is False
+        and kiota_fold_path != lean_fold_path,
+        "all_fold_outcomes_are_modeled": set(report["outcome_model"]) == outcome_model,
+        "costs_are_reported_without_hiding_large_tail": report["costs"]["checker_runs"] == 400
+        and report["costs"]["checker_seconds"] > 6900
+        and next(row for row in lean_fold["original_corpus_evaluation"]["tests"] if row["name"] == "mathlib")["baseline"]["seconds"] > 2700,
+        "held_out_sources_are_exactly_restored": lean_fold["source_restored"] and kiota_fold["source_restored"]
+        and git_clean(LEAN4LEAN_ROOT) and git_clean(KIOTA_ROOT)
+        and digest(LEAN4LEAN_ROOT / spec["held_out_mutation"]["source_file"]) == spec["held_out_source"]["baseline_source_sha256"],
+        "producer_and_input_hashes_are_current": bound(freeze["generator"]) and bound(freeze["experiment_spec"])
+        and lean_fold["producer"]["sha256"] == digest(ROOT / lean_fold["producer"]["path"])
+        and lean_fold["producer"]["library_sha256"] == digest(ROOT / "lib" / "lean4lean_differential.py")
+        and report["producer"]["sha256"] == digest(ROOT / report["producer"]["path"]),
+        "claims_remain_explicitly_scoped": "not a general transfer-rate estimate" in report["interpretation"]["scope"]
+        and "TWO_FOLDS" in report["interpretation"]["implementation_specific_overfitting_risk"],
+        "milestone6_remains_valid": m6["status"] == "PASS" and all(m6["checks"].values()),
+    }
+    existing = load(args.output) if args.output.exists() else {}
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-7",
+        "created_at": existing.get("created_at", datetime.now().astimezone().isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": report["classification"],
+        "checks": checks,
+        "report": str(report_path.relative_to(ROOT)),
+        "folds": [str(kiota_fold_path.relative_to(ROOT)), str(lean_fold_path.relative_to(ROOT))],
+        "measurements": {
+            "fold_count": report["fold_count"],
+            "original_score": report["aggregate_score"]["original_score"],
+            "augmented_score": report["aggregate_score"]["augmented_score"],
+            "score_change": report["aggregate_score"]["score_change"],
+            "positive_folds": report["classification_counts"]["POSITIVE"],
+            "neutral_folds": report["classification_counts"]["NEUTRAL"],
+            "regression_folds": report["classification_counts"]["NEGATIVE"],
+            "checker_runs": report["costs"]["checker_runs"],
+            "checker_seconds": report["costs"]["checker_seconds"],
+        },
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

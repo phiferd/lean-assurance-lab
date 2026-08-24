@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "experiment_id": "m7-lean4lean-let-type",
+  "fold_id": "lean4lean-held-out",
+  "source_validator": "kiota",
+  "held_out_validator": "lean4lean",
+  "fault_model": "let-bound values must match their declared binder types",
+  "source_mutation": {
+    "id": "kiota-m7-skip-let-value-validation",
+    "operator": "SKIP_VALIDATION",
+    "subsystem": "definitional-equality",
+    "source_file": "src/tc.rs",
+    "source_span": "1338-1340",
+    "original": "if !self.is_def_eq(ctx, &vt, ty)? {",
+    "mutated": "if false && !self.is_def_eq(ctx, &vt, ty)? {",
+    "semantic_rationale": "Models omission of let-bound value type compatibility in Kiota."
+  },
+  "source_validator_source": {
+    "expected_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+    "baseline_source_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393"
+  },
+  "held_out_mutation": {
+    "id": "lean4lean-m7-skip-let-value-validation",
+    "operator": "SKIP_VALIDATION",
+    "subsystem": "definitional-equality",
+    "source_file": "Lean4Lean/TypeChecker.lean",
+    "source_span": "208-209",
+    "original": "      if !(← isDefEq valType type) then",
+    "mutated": "      if false then",
+    "semantic_rationale": "Models omission of the analogous let-bound value type compatibility check in Lean4Lean."
+  },
+  "held_out_source": {
+    "expected_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+    "baseline_source_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1"
+  },
+  "generation": {
+    "strategy": "construct-minimal-malformed-let-and-valid-control",
+    "candidate_name": "m7LetMismatch",
+    "control_name": "m7LetControl",
+    "uses_held_out_mutant_feedback": false
+  },
+  "original_corpus": {
+    "identity_manifest": "results/manifests/coverage-nanoda.json",
+    "test_count": 197,
+    "evaluation_order": "ascending-input-bytes-then-name",
+    "early_stop": false
+  }
+}

@@ -266,6 +266,13 @@ def main() -> int:
                 continue
             classification = transfer.get("classification", "UNRESOLVED")
             transfer_classifications[classification] = transfer_classifications.get(classification, 0) + 1
+    rotating_report = None
+    rotating_path = args.results_root / "rotating-heldout" / "milestone-7" / "report.json"
+    if rotating_path.exists():
+        try:
+            rotating_report = json.loads(rotating_path.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            rotating_report = None
 
     report = {
         "mutation_score": score,
@@ -300,6 +307,13 @@ def main() -> int:
         "regression_candidates_with_unresolved_disagreement": regression_candidates_with_disagreement,
         "transfer_experiments": sum(transfer_classifications.values()),
         "transfer_classifications": transfer_classifications,
+        "rotating_held_out": {
+            "classification": rotating_report.get("classification"),
+            "fold_count": rotating_report.get("fold_count"),
+            "aggregate_score": rotating_report.get("aggregate_score"),
+            "classification_counts": rotating_report.get("classification_counts"),
+            "costs": rotating_report.get("costs"),
+        } if rotating_report else None,
         "stratified_metrics": {
             "minimum_sample": minimum_sample,
             "by_subsystem": stratified_metrics(
