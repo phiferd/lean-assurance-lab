@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-24T00:48:51.237506+00:00",
+  "generated_at": "2026-08-24T01:20:26.942983+00:00",
   "nodes": [
     {
       "artifact_type": "repository",
       "dependencies": [],
-      "expected_sha256": "174b9010027ee18fd88e812d780021b437fd7b9583afc51a3e46cdd82005a7c8",
+      "expected_sha256": "22c10d18f2d1b04cdfe1695c86e2548a67c4d9618ad859f61c5e3ed44292c494",
       "id": "input:repository-revision",
       "lifecycle": "historical",
       "locator": {
@@ -168,7 +168,31 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
+      "expected_sha256": "83adf2908e7fe45ab2198497b99f535a16112c290b7ddc50fb7881e82aa41e65",
+      "id": "script:witness-search",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "lib/nanoda_differential.py",
+          "lib/witness_search.py",
+          "schemas/witness-search.schema.json",
+          "scripts/check-distinction",
+          "scripts/generate",
+          "scripts/minimize",
+          "scripts/milestone-4-assurance",
+          "tests/test_witness_search.py"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "script",
+      "dependencies": [],
+      "expected_sha256": "6d730b3932b54f82a6799f5b1e0e3d9fe517578d52a0c6f1e8c7de750bee7d41",
       "id": "script:reporting",
       "lifecycle": "current",
       "locator": {
@@ -186,7 +210,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+      "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
       "id": "script:artifact-system",
       "lifecycle": "current",
       "locator": {
@@ -198,6 +222,7 @@
           "scripts/build-artifact-graph",
           "scripts/milestone-2-assurance",
           "scripts/milestone-3-assurance",
+          "scripts/milestone-4-assurance",
           "scripts/audit-coverage-guidance",
           "schemas/mutation-catalog.schema.json",
           "tests/test_artifact_graph.py",
@@ -796,6 +821,82 @@
       "required_for_current_claims": true
     },
     {
+      "artifact_type": "witness",
+      "dependencies": [
+        {
+          "expected_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613",
+          "id": "validator:nanoda"
+        },
+        {
+          "expected_sha256": "c864051b51097ac34c8d864d521f032ec15ca1905488d9204b748276f284f125",
+          "id": "mutation-spec:controlled"
+        },
+        {
+          "expected_sha256": "11f46f3d4fd631080d6cc479b332e57a9820c59e78156320b2d51b1b4503d68d",
+          "id": "comparison:witness-reference"
+        },
+        {
+          "expected_sha256": "83adf2908e7fe45ab2198497b99f535a16112c290b7ddc50fb7881e82aa41e65",
+          "id": "script:witness-search"
+        }
+      ],
+      "expected_sha256": "72d0cfb1ae36edd4791ab28614dcc0be8b0b5bc4fb1858bc95ba931dbf41dd09",
+      "id": "witness-search:nanoda-0003-auto",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "corpus/generated/nanoda-0003-auto-universe.ndjson",
+          "corpus/minimized/nanoda-0003-auto-universe-min.ndjson",
+          "results/witnesses/nanoda-0003-auto-universe/*.json",
+          "results/witnesses/nanoda-0003-auto-universe/*.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "classification",
+      "dependencies": [
+        {
+          "expected_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613",
+          "id": "validator:nanoda"
+        },
+        {
+          "expected_sha256": "57a8e14fe625bebb5fbb029ca051d2de07f742d9fe77ce18553f4bf900c8563f",
+          "id": "corpus:arena-materialized"
+        },
+        {
+          "expected_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
+          "id": "mutation-spec:catalog"
+        },
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
+        },
+        {
+          "expected_sha256": "83adf2908e7fe45ab2198497b99f535a16112c290b7ddc50fb7881e82aa41e65",
+          "id": "script:witness-search"
+        }
+      ],
+      "expected_sha256": "75708224e8abc5e27ee4efbfff24eb11e0da076ec506067fbe7a6cdf43a185e4",
+      "id": "witness-search:universe-boundary-unresolved",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "results/witnesses/nanoda-gen-ca8565ff512e-search-0001/*.json",
+          "results/witnesses/nanoda-gen-ca8565ff512e-search-0001/*.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
       "artifact_type": "report",
       "dependencies": [
         {
@@ -819,20 +920,70 @@
           "id": "classification:regression-0003"
         },
         {
-          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
+          "expected_sha256": "6d730b3932b54f82a6799f5b1e0e3d9fe517578d52a0c6f1e8c7de750bee7d41",
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
           "id": "script:artifact-system"
         }
       ],
       "expected_sha256": "e32b8396a8f7286cae58d606e8bcfa34b8078c083de446518da7a14f73fb715e",
+      "id": "report:mutation-summary-m3",
+      "lifecycle": "historical",
+      "locator": {
+        "kind": "file",
+        "path": "results/assurance/milestone-3-report.json"
+      },
+      "notes": "",
+      "required_for_current_claims": false
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "b70235c7e27804ac869c2eaadd8e08c9656cfabceabf9b7f7fc59a995c712134",
+          "id": "classification:registry"
+        },
+        {
+          "expected_sha256": "f61c54378e43e2ffb6d3ed9236c1c1d0c975c0b6ea20e970e579068088dd160c",
+          "id": "comparison:controlled-mutants"
+        },
+        {
+          "expected_sha256": "511f3930151c289f43f08e331bcebe308f8bf73c16f812b7a43ec95660955d5b",
+          "id": "comparison:semantic-mutants-m3"
+        },
+        {
+          "expected_sha256": "cb906b22db6342de46fd248d6e9a9ceceae8fbfc7b303dd499eb1eed9ec02844",
+          "id": "classification:regression-0003"
+        },
+        {
+          "expected_sha256": "72d0cfb1ae36edd4791ab28614dcc0be8b0b5bc4fb1858bc95ba931dbf41dd09",
+          "id": "witness-search:nanoda-0003-auto"
+        },
+        {
+          "expected_sha256": "75708224e8abc5e27ee4efbfff24eb11e0da076ec506067fbe7a6cdf43a185e4",
+          "id": "witness-search:universe-boundary-unresolved"
+        },
+        {
+          "expected_sha256": "6d730b3932b54f82a6799f5b1e0e3d9fe517578d52a0c6f1e8c7de750bee7d41",
+          "id": "script:reporting"
+        },
+        {
+          "expected_sha256": "83adf2908e7fe45ab2198497b99f535a16112c290b7ddc50fb7881e82aa41e65",
+          "id": "script:witness-search"
+        },
+        {
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
+          "id": "script:artifact-system"
+        }
+      ],
+      "expected_sha256": "9e391dfd09de0ce9e9035105447af94cf471c7321a22f00edf9f683e1bd7afac",
       "id": "report:mutation-summary",
       "lifecycle": "current",
       "locator": {
         "kind": "file",
-        "path": "results/assurance/milestone-3-report.json"
+        "path": "results/assurance/milestone-4-report.json"
       },
       "notes": "",
       "required_for_current_claims": true
@@ -861,11 +1012,11 @@
           "id": "run:augmented-0003"
         },
         {
-          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
+          "expected_sha256": "6d730b3932b54f82a6799f5b1e0e3d9fe517578d52a0c6f1e8c7de750bee7d41",
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
           "id": "script:artifact-system"
         }
       ],
@@ -883,7 +1034,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
           "id": "script:artifact-system"
         }
       ],
@@ -918,14 +1069,14 @@
         },
         {
           "expected_sha256": "e32b8396a8f7286cae58d606e8bcfa34b8078c083de446518da7a14f73fb715e",
-          "id": "report:mutation-summary"
+          "id": "report:mutation-summary-m3"
         },
         {
-          "expected_sha256": "1e408b7b6db1a32ec3162c2aafedc0db82e8a04b0fcc12f150adffd89e8b26ee",
+          "expected_sha256": "6d730b3932b54f82a6799f5b1e0e3d9fe517578d52a0c6f1e8c7de750bee7d41",
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "38a29eae7a2cbc03acd61ecf3fcfaaf5329408806ac6e560ba5f754abbedcd9f",
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
           "id": "script:artifact-system"
         }
       ],
@@ -935,6 +1086,40 @@
       "locator": {
         "kind": "file",
         "path": "results/assurance/milestone-3.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "72d0cfb1ae36edd4791ab28614dcc0be8b0b5bc4fb1858bc95ba931dbf41dd09",
+          "id": "witness-search:nanoda-0003-auto"
+        },
+        {
+          "expected_sha256": "75708224e8abc5e27ee4efbfff24eb11e0da076ec506067fbe7a6cdf43a185e4",
+          "id": "witness-search:universe-boundary-unresolved"
+        },
+        {
+          "expected_sha256": "9e391dfd09de0ce9e9035105447af94cf471c7321a22f00edf9f683e1bd7afac",
+          "id": "report:mutation-summary"
+        },
+        {
+          "expected_sha256": "83adf2908e7fe45ab2198497b99f535a16112c290b7ddc50fb7881e82aa41e65",
+          "id": "script:witness-search"
+        },
+        {
+          "expected_sha256": "e5eaaeb700ee1234a39ffccaadb5f105c290d6865577509ce7e9b9c5e1d3ac0b",
+          "id": "script:artifact-system"
+        }
+      ],
+      "expected_sha256": "c5eb9d06d6fc608cda7be906c24b27bd95b1addf75e074cab2699b9c2fbfea69",
+      "id": "report:milestone4-assurance",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/assurance/milestone-4.json"
       },
       "notes": "",
       "required_for_current_claims": true
@@ -951,7 +1136,7 @@
       "witness": "4.29.1"
     },
     "mutation_specs_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
-    "repository_revision": "6dedadf8f3b0ef5ebd3e7535578435f4cf646f8c",
+    "repository_revision": "c2cad7a33ca485845a698758188acb20e031663a",
     "scripts_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
     "validator_source_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613"
   },

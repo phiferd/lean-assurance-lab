@@ -177,24 +177,36 @@ only when the opposite side has a concrete different outcome.
 
 ### Witness Generator
 
-`scripts/generate` is the replaceable search component. Initial strategies should
-prefer structure-aware mutations of existing exported artifacts over byte-level
-corruption.
+`scripts/generate` executes bounded, deterministic witness searches. It prepares
+baseline and mutant binaries once, runs each candidate directly against both,
+and records normalized outcomes in `attempts.jsonl`. Candidate generation uses
+subsystem templates and structure-aware mutations of existing NDJSON exports;
+random seeds only control a recorded deterministic candidate order.
 
-### Minimizer
-
-`scripts/minimize` preserves the predicate:
+Search success is exactly:
 
 ```text
 baseline(input) != mutant(input)
 ```
 
-The first version can use delta debugging over declaration sequences. Later
-versions should reduce expression trees and declaration metadata structurally.
+Found artifacts are classified independently from their semantic meaning. A
+distinction may have confirmed expected semantics, ambiguous semantics, or a
+reference-checker disagreement. A bounded search without a distinction remains
+an explicit unresolved result, never evidence of equivalence.
 
-The current minimizer is line-oriented and treats each non-empty exported line
-as a removable unit. It requires a predicate command that exits with status 0
-when the distinction still holds.
+### Minimizer
+
+`scripts/minimize` and the automatic post-search minimizer preserve the predicate:
+
+```text
+baseline(input) != mutant(input)
+```
+
+The minimizer first delta-debugs declaration records, then removes list elements
+and non-identity object fields structurally. It invokes the prepared baseline
+and mutant binaries directly rather than accepting an arbitrary shell predicate.
+Both the original and minimized artifacts are retained, and both receive final
+differential checks.
 
 ## Data Flow
 

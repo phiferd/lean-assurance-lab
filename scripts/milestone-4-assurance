@@ -1,0 +1,167 @@
+#!/usr/bin/env python3
+"""Produce and gate the Milestone 4 witness-search assurance snapshot."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from artifact_graph import load_graph, require_current  # noqa: E402
+
+FOUND_ID = "nanoda-0003-auto-universe"
+EXHAUSTED_ID = "nanoda-gen-ca8565ff512e-search-0001"
+ATTEMPT_FIELDS = {
+    "attempt", "strategy", "transformation", "seed_artifact", "random_seed",
+    "candidate_sha256", "candidate_bytes", "baseline_outcome", "mutant_outcome",
+    "different", "seconds",
+}
+
+
+def load(path: Path) -> dict:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_jsonl(path: Path) -> list[dict]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def inputs_current(metadata: dict) -> bool:
+    inputs = metadata["inputs"]
+    spec = ROOT / inputs["mutation_spec"]
+    evidence = inputs.get("expected_evidence")
+    return (
+        spec.exists()
+        and digest(spec) == inputs["mutation_spec_sha256"]
+        and digest(ROOT / "lib" / "witness_search.py") == inputs["generator_sha256"]
+        and digest(ROOT / "scripts" / "generate") == inputs["search_script_sha256"]
+        and (
+            evidence is None
+            or ((ROOT / evidence["path"]).exists() and digest(ROOT / evidence["path"]) == evidence["sha256"])
+        )
+        and all(
+            (ROOT / row["path"]).exists() and digest(ROOT / row["path"]) == row["sha256"]
+            for row in inputs["seed_artifacts"]
+        )
+    )
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--output", type=Path,
+        default=ROOT / "results" / "assurance" / "milestone-4.json",
+    )
+    parser.add_argument("--allow-stale-artifacts", action="store_true")
+    args = parser.parse_args()
+    graph_path = ROOT / "results" / "artifacts" / "graph.json"
+    if graph_path.exists() and not args.allow_stale_artifacts:
+        try:
+            require_current(
+                load_graph(graph_path), ROOT, ["report:milestone4-assurance"],
+                dependencies_only=True,
+            )
+        except RuntimeError as error:
+            raise SystemExit(str(error)) from error
+
+    found_dir = ROOT / "results" / "witnesses" / FOUND_ID
+    exhausted_dir = ROOT / "results" / "witnesses" / EXHAUSTED_ID
+    found = load(found_dir / "metadata.json")
+    exhausted = load(exhausted_dir / "metadata.json")
+    found_attempts = read_jsonl(found_dir / "attempts.jsonl")
+    exhausted_attempts = read_jsonl(exhausted_dir / "attempts.jsonl")
+    original = ROOT / found["original_witness"]["path"]
+    minimized = ROOT / found["minimized_witness"]["path"]
+    expected_source_sha256 = load(
+        ROOT / "results" / "mutation-batches" / "nanoda-semantic-0001.json"
+    )["source_sha256"]
+    schema_text = (ROOT / "schemas" / "witness-search.schema.json").read_text(encoding="utf-8")
+    schema = json.loads(schema_text)
+    validator = jsonschema.Draft202012Validator(schema)
+    required_semantic_states = {
+        "UNRESOLVED", "AMBIGUOUS_SEMANTICS", "CHECKER_DISAGREEMENT",
+        "CONFIRMED_EXPECTED_OUTCOME",
+    }
+
+    all_attempts = [*found_attempts, *exhausted_attempts]
+    final_checks = found["final_predicate_checks"]
+    checks = {
+        "executable_search_replaced_planning_stub": found["status"] == "MINIMIZED_WITNESS_FOUND"
+        and exhausted["status"] == "NO_WITNESS_FOUND",
+        "attempt_records_are_complete": bool(all_attempts)
+        and all(ATTEMPT_FIELDS <= set(row) and row["attempt"] >= 1 and row["seconds"] >= 0 for row in all_attempts)
+        and len(found_attempts) == found["attempts"]
+        and len(exhausted_attempts) == exhausted["attempts"],
+        "search_inputs_are_content_bound": inputs_current(found) and inputs_current(exhausted),
+        "found_witness_is_preserved": original.exists()
+        and digest(original) == found["original_witness"]["sha256"],
+        "minimized_witness_is_preserved": minimized.exists()
+        and digest(minimized) == found["minimized_witness"]["sha256"]
+        and found["minimization_status"] == "MINIMIZED"
+        and found["minimization"]["predicate_checks"] > 0,
+        "final_distinction_checks_pass": len(final_checks) == 2
+        and all(row["different"] for row in final_checks)
+        and all(
+            row["baseline"]["normalized_outcome"] != row["mutant"]["normalized_outcome"]
+            for row in final_checks
+        ),
+        "found_witness_semantics_confirmed": found["semantic_status"] == "CONFIRMED_EXPECTED_OUTCOME"
+        and found["semantic_classification"]["reference_outcome"]
+        == final_checks[0]["baseline"]["normalized_outcome"],
+        "negative_search_is_durable": exhausted["attempts"] == exhausted["max_attempts"]
+        and exhausted["attempts"] > 0
+        and exhausted["semantic_status"] == "UNRESOLVED"
+        and exhausted["unresolved_reason"] == "ATTEMPT_BUDGET_EXHAUSTED"
+        and not any(row["different"] for row in exhausted_attempts),
+        "required_classification_states_are_modeled": all(state in schema_text for state in required_semantic_states)
+        and all(state in schema_text for state in ("NO_WITNESS_FOUND", "WITNESS_FOUND", "MINIMIZED_WITNESS_FOUND")),
+        "search_results_conform_to_schema": validator.is_valid(found) and validator.is_valid(exhausted),
+        "checker_source_restored": found["costs"]["preparation"]["source_restored"]
+        and exhausted["costs"]["preparation"]["source_restored"]
+        and found["costs"]["preparation"]["baseline_source_sha256"]
+        == found["costs"]["preparation"]["restored_source_sha256"]
+        and exhausted["costs"]["preparation"]["baseline_source_sha256"]
+        == exhausted["costs"]["preparation"]["restored_source_sha256"]
+        and found["costs"]["preparation"]["restored_source_sha256"] == expected_source_sha256
+        and exhausted["costs"]["preparation"]["restored_source_sha256"] == expected_source_sha256,
+    }
+    existing = load(args.output) if args.output.exists() else {}
+    snapshot = {
+        "schema_version": 1,
+        "snapshot": "milestone-4",
+        "created_at": existing.get("created_at", datetime.now(timezone.utc).isoformat()),
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "found_search": str((found_dir / "metadata.json").relative_to(ROOT)),
+        "unresolved_search": str((exhausted_dir / "metadata.json").relative_to(ROOT)),
+        "measurements": {
+            "searches": 2,
+            "attempts": len(all_attempts),
+            "witnesses_found": 1,
+            "witnesses_minimized": 1,
+            "bounded_searches_without_witness": 1,
+            "minimization_predicate_checks": found["minimization"]["predicate_checks"],
+            "checker_runs": found["costs"]["checker_runs"] + exhausted["costs"]["checker_runs"],
+            "checker_seconds": found["costs"]["checker_seconds"] + exhausted["costs"]["checker_seconds"],
+        },
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(snapshot, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(snapshot, indent=2, sort_keys=True))
+    return 0 if snapshot["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

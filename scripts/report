@@ -197,6 +197,10 @@ def main() -> int:
         score = meaningful_killed / meaningful_tested
 
     witnesses_found = 0
+    witness_searches_without_result = 0
+    ambiguous_witness_semantics = 0
+    witness_checker_disagreements = 0
+    confirmed_witness_semantics = 0
     if (args.results_root / "witnesses").exists():
         for path in (args.results_root / "witnesses").glob("*/metadata.json"):
             try:
@@ -206,10 +210,15 @@ def main() -> int:
             if metadata.get("status") in {
                 "DISTINGUISHING_FOUND",
                 "MINIMIZED",
+                "MINIMIZED_WITNESS_FOUND",
                 "ARENA_CANDIDATE",
                 "CONFIRMED_REGRESSION_CANDIDATE",
             }:
                 witnesses_found += 1
+            witness_searches_without_result += metadata.get("search_status") == "NO_WITNESS_FOUND"
+            ambiguous_witness_semantics += metadata.get("semantic_status") == "AMBIGUOUS_SEMANTICS"
+            witness_checker_disagreements += metadata.get("semantic_status") == "CHECKER_DISAGREEMENT"
+            confirmed_witness_semantics += metadata.get("semantic_status") == "CONFIRMED_EXPECTED_OUTCOME"
     minimized = list(Path("corpus/minimized").glob("*-min.*"))
     arena_candidates = 0
     if (args.results_root / "witnesses").exists():
@@ -243,6 +252,10 @@ def main() -> int:
         "survived_without_witness": survived_without_witness,
         "unknown_equivalence": unknown_equivalence,
         "witnesses_found": witnesses_found,
+        "witness_searches_without_result": witness_searches_without_result,
+        "ambiguous_witness_semantics": ambiguous_witness_semantics,
+        "witness_checker_disagreements": witness_checker_disagreements,
+        "confirmed_witness_semantics": confirmed_witness_semantics,
         "minimized_witnesses": len(minimized),
         "arena_regression_candidates": arena_candidates,
         "stratified_metrics": {

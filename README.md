@@ -28,11 +28,12 @@ unknown disagreements among independently implemented Lean proof checkers.
 
 ## Current Milestone
 
-Milestones 1 through 3 are complete. The project has a closed mechanical
+Milestones 1 through 4 are complete. The project has a closed mechanical
 mutation loop for `nanoda`, content-addressed invalidation, and a structured
 semantic model spanning validation elision, predicate negation, relational
-boundaries, and equality discrimination. Current work begins Milestone 4:
-mechanical witness search and minimization for semantic survivors.
+boundaries, and equality discrimination. Witness search and structure-aware
+minimization are executable and auditable. Current work begins Milestone 5:
+cross-validator confirmation.
 
 ## Repository Layout
 
@@ -56,12 +57,14 @@ scripts/
   audit-coverage-guidance
   collect-coverage
   compare
+  check-distinction
   confirm-witness
   generate
   generate-mutations
   minimize
   milestone-2-assurance
   milestone-3-assurance
+  milestone-4-assurance
   mutate
   normalize-arena-results
   promote-scheduled-result
@@ -193,6 +196,21 @@ scripts/generate-mutations --limit 12 --batch-id nanoda-semantic-0001 \
 scripts/report --output results/assurance/milestone-3-report.json
 scripts/milestone-3-assurance
 ```
+
+Execute a bounded witness search and its automatic minimizer with:
+
+```sh
+scripts/generate --mutant-id nanoda-gen-ca8565ff512e --subsystem universes \
+  --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/016_levelParams.ndjson \
+  --random-seed 4104 --max-attempts 60
+scripts/milestone-4-assurance
+```
+
+Every candidate is checked by the direct normalized predicate
+`baseline(input) != mutant(input)`. Searches preserve an attempt log and input
+hashes whether they find a witness or exhaust their budget. Found witnesses are
+minimized automatically while retaining both artifacts and final predicate
+checks.
 
 Bind ignored local coverage payloads to a compact tracked identity artifact and
 verify the Milestone 1 gate with:

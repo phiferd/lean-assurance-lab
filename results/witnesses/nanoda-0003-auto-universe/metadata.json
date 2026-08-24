@@ -1,0 +1,128 @@
+{
+  "attempt_log": "results/witnesses/nanoda-0003-auto-universe/attempts.jsonl",
+  "attempts": 1,
+  "candidate_population": 1,
+  "costs": {
+    "checker_runs": 138,
+    "checker_seconds": 0.6211038015317172,
+    "preparation": {
+      "apply_mutant": "changed",
+      "baseline_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 0.039396457956172526
+      },
+      "baseline_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+      "mutant_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 10.710788666969165
+      },
+      "restore_after": "changed",
+      "restore_before": "already",
+      "restored_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 10.838053042069077
+      },
+      "restored_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+      "source_restored": true
+    },
+    "wall_seconds": 22.23692395898979
+  },
+  "created_at": "2026-08-24T01:19:45.167672+00:00",
+  "final_predicate_checks": [
+    {
+      "artifact_bytes": 522,
+      "artifact_sha256": "5f49dd739c4e909a0147b7fc5a8bee4e2eb06ca0f4ad7c87ef20ba871ff7fff3",
+      "baseline": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.002826874959282577,
+        "stderr_sha256": "dc0544f5ad5331068adffe97c75352bcbfb7579ec10468bd47170f69dbc7ca14",
+        "stderr_tail": "\nthread 'thread_0' (26126243) panicked at src/tc.rs:191:21:\nassertion failed: self.ctx.all_uparams_defined(c_uparam, this_declar_info.uparams)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'main' (26126242) panicked at src/tc.rs:139:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "different": true,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0028775830287486315,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "artifact_bytes": 339,
+      "artifact_sha256": "0b852cc46170e6cea81b1807e430cb054f0663c9d6bdb1caeee0de72b452ca12",
+      "baseline": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.0030460830312222242,
+        "stderr_sha256": "ee65806a5c758cbbb8c3435327d82796541ea1100e64340e5dfd6478d0d4a4b9",
+        "stderr_tail": "\nthread 'thread_1' (26126256) panicked at src/tc.rs:191:21:\nassertion failed: self.ctx.all_uparams_defined(c_uparam, this_declar_info.uparams)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'main' (26126254) panicked at src/tc.rs:139:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "different": true,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0030146250501275063,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  ],
+  "found_at_attempt": 1,
+  "found_by": {
+    "seed_artifact": null,
+    "strategy": "universe-ownership-template",
+    "transformation": "reference-constant-with-undeclared-universe"
+  },
+  "inputs": {
+    "expected_evidence": {
+      "path": "results/witnesses/nanoda-0003-undeclared-const-universe/confirmation.json",
+      "sha256": "11f46f3d4fd631080d6cc479b332e57a9820c59e78156320b2d51b1b4503d68d"
+    },
+    "generator_sha256": "b5c79b5a97b234c156c5171b0ef984f1dff1fa73563b391ae64e3302d0fb184d",
+    "mutation_spec": "mutations/nanoda-0003.json",
+    "mutation_spec_sha256": "23ad055566f9a22d742a29f817d5ba4c8436ba3966d8e1a79a45c454dc054645",
+    "search_script_sha256": "e2eafbddcbeae30e6932172ee95117f1764db88c58a75c1304c30d3f82abf29d",
+    "seed_artifacts": []
+  },
+  "max_attempts": 20,
+  "minimization": {
+    "max_checks": 200,
+    "predicate_checks": 66
+  },
+  "minimization_status": "MINIMIZED",
+  "minimized_witness": {
+    "bytes": 339,
+    "path": "corpus/minimized/nanoda-0003-auto-universe-min.ndjson",
+    "records": 8,
+    "sha256": "0b852cc46170e6cea81b1807e430cb054f0663c9d6bdb1caeee0de72b452ca12"
+  },
+  "mutant_id": "nanoda-0003",
+  "original_witness": {
+    "bytes": 522,
+    "path": "corpus/generated/nanoda-0003-auto-universe.ndjson",
+    "records": 9,
+    "sha256": "5f49dd739c4e909a0147b7fc5a8bee4e2eb06ca0f4ad7c87ef20ba871ff7fff3"
+  },
+  "random_seed": 4103,
+  "schema_version": 1,
+  "search_status": "WITNESS_FOUND",
+  "semantic_classification": {
+    "reason": "REFERENCE_EVIDENCE_MATCHES_ARTIFACT_AND_BASELINE",
+    "reference_outcome": "REJECT",
+    "status": "CONFIRMED_EXPECTED_OUTCOME"
+  },
+  "semantic_status": "CONFIRMED_EXPECTED_OUTCOME",
+  "status": "MINIMIZED_WITNESS_FOUND",
+  "strategy": "structure-aware-ndjson-mutation",
+  "subsystem": "universes",
+  "success_predicate": "baseline(input) != mutant(input)",
+  "witness_id": "nanoda-0003-auto-universe"
+}

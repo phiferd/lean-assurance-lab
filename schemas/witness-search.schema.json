@@ -1,0 +1,40 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanverifier.local/schemas/witness-search.schema.json",
+  "title": "LeanVerifier witness search result",
+  "type": "object",
+  "required": [
+    "schema_version", "witness_id", "mutant_id", "status", "search_status",
+    "minimization_status", "semantic_status", "success_predicate", "random_seed",
+    "attempts", "inputs", "costs", "final_predicate_checks"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "witness_id": {"type": "string", "minLength": 1},
+    "mutant_id": {"type": "string", "minLength": 1},
+    "status": {
+      "enum": ["NO_WITNESS_FOUND", "WITNESS_FOUND", "MINIMIZED_WITNESS_FOUND"]
+    },
+    "search_status": {"enum": ["NO_WITNESS_FOUND", "WITNESS_FOUND"]},
+    "minimization_status": {"enum": ["NOT_APPLICABLE", "MINIMIZED"]},
+    "semantic_status": {
+      "enum": ["UNRESOLVED", "AMBIGUOUS_SEMANTICS", "CHECKER_DISAGREEMENT", "CONFIRMED_EXPECTED_OUTCOME"]
+    },
+    "success_predicate": {"const": "baseline(input) != mutant(input)"},
+    "random_seed": {"type": "integer"},
+    "attempts": {"type": "integer", "minimum": 0},
+    "inputs": {"type": "object"},
+    "costs": {"type": "object"},
+    "final_predicate_checks": {"type": "array"}
+  },
+  "allOf": [
+    {
+      "if": {"properties": {"search_status": {"const": "WITNESS_FOUND"}}},
+      "then": {
+        "required": ["original_witness", "minimized_witness", "semantic_classification"],
+        "properties": {"minimization_status": {"const": "MINIMIZED"}}
+      }
+    }
+  ],
+  "additionalProperties": true
+}

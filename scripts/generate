@@ -1,52 +1,216 @@
 #!/usr/bin/env python3
-"""Create a witness-search plan for a meaningful surviving mutant.
-
-This script intentionally does not claim to synthesize witnesses yet. It writes
-the durable search metadata needed for the first semi-automatic experiment.
-"""
+"""Execute a bounded, reproducible NDJSON witness search."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import sys
+import tempfile
+import time
 from datetime import datetime, timezone
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from nanoda_differential import DifferentialSession, sha256_file  # noqa: E402
+from witness_search import (  # noqa: E402
+    canonical_ndjson,
+    generate_candidates,
+    minimize_witness,
+    semantic_classification,
+)
+
+
+def relative(path: Path) -> str:
+    try:
+        return str(path.resolve().relative_to(ROOT))
+    except ValueError:
+        return str(path.resolve())
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--mutant-id", required=True)
-    parser.add_argument("--subsystem", default="unknown")
+    parser.add_argument("--subsystem")
     parser.add_argument("--strategy", default="structure-aware-ndjson-mutation")
-    parser.add_argument("--seed-artifact", action="append", default=[])
-    parser.add_argument("--output-dir", type=Path, default=Path("results/witnesses"))
+    parser.add_argument("--seed-artifact", action="append", type=Path, default=[])
+    parser.add_argument("--random-seed", type=int, default=0)
+    parser.add_argument("--max-attempts", type=int, default=100)
+    parser.add_argument("--max-minimization-checks", type=int, default=200)
+    parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument(
+        "--expected-outcome",
+        choices=["ACCEPT", "REJECT", "DECLINE", "CRASH", "TIMEOUT"],
+    )
+    parser.add_argument("--expected-evidence", type=Path)
+    parser.add_argument("--witness-id")
+    parser.add_argument("--output-dir", type=Path, default=ROOT / "results" / "witnesses")
     args = parser.parse_args()
 
-    witness_id = f"{args.mutant_id}-witness-plan"
-    out_dir = args.output_dir / witness_id
-    out_dir.mkdir(parents=True, exist_ok=True)
+    if args.max_attempts < 1:
+        parser.error("--max-attempts must be positive")
+    spec_path = ROOT / "mutations" / f"{args.mutant_id}.json"
+    if not spec_path.exists():
+        parser.error(f"unknown mutant: {args.mutant_id}")
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    subsystem = args.subsystem or spec.get("subsystem") or "unknown"
+    seed_paths = [path.resolve() for path in args.seed_artifact]
+    missing = [str(path) for path in seed_paths if not path.exists()]
+    if missing:
+        parser.error(f"seed artifacts not found: {', '.join(missing)}")
+    evidence = None
+    if args.expected_evidence:
+        evidence = json.loads(args.expected_evidence.read_text(encoding="utf-8"))
 
-    metadata = {
-        "witness_id": witness_id,
-        "mutant_id": args.mutant_id,
-        "subsystem": args.subsystem,
-        "strategy": args.strategy,
-        "seed_artifacts": args.seed_artifact,
-        "status": "PLANNED",
-        "success_predicate": "baseline(input) != mutant(input)",
-        "created_at": datetime.now(timezone.utc).isoformat(),
-        "next_steps": [
-            "select positive and negative Arena artifacts near the mutated subsystem",
-            "apply structure-aware NDJSON mutations",
-            "run baseline and mutant after each candidate",
-            "retain candidates with different normalized outcomes",
-        ],
-    }
-    (out_dir / "metadata.json").write_text(
-        json.dumps(metadata, indent=2, sort_keys=True) + "\n",
-        encoding="utf-8",
-    )
-    print(out_dir)
+    witness_id = args.witness_id or f"{args.mutant_id}-search-{args.random_seed}"
+    result_dir = args.output_dir / witness_id
+    result_dir.mkdir(parents=True, exist_ok=True)
+    attempts_path = result_dir / "attempts.jsonl"
+    candidates = generate_candidates(subsystem, seed_paths, args.random_seed)
+    started = time.monotonic()
+    found = None
+    attempt_count = 0
+
+    with tempfile.TemporaryDirectory(prefix=f"{witness_id}-", dir=ROOT / "results") as temp:
+        scratch = Path(temp) / "candidate.ndjson"
+        with DifferentialSession(args.mutant_id, args.timeout) as session:
+            with attempts_path.open("w", encoding="utf-8") as attempt_log:
+                for index, candidate in enumerate(candidates[: args.max_attempts], 1):
+                    scratch.write_bytes(candidate["payload"])
+                    attempt_started = time.monotonic()
+                    evaluation = session.evaluate(scratch)
+                    attempt = {
+                        "attempt": index,
+                        "strategy": candidate["strategy"],
+                        "transformation": candidate["transformation"],
+                        "seed_artifact": candidate["seed"],
+                        "random_seed": args.random_seed,
+                        "candidate_sha256": candidate["sha256"],
+                        "candidate_bytes": len(candidate["payload"]),
+                        "baseline_outcome": evaluation["baseline"]["normalized_outcome"],
+                        "mutant_outcome": evaluation["mutant"]["normalized_outcome"],
+                        "different": evaluation["different"],
+                        "seconds": time.monotonic() - attempt_started,
+                    }
+                    attempt_log.write(json.dumps(attempt, sort_keys=True) + "\n")
+                    attempt_log.flush()
+                    attempt_count = index
+                    if evaluation["different"]:
+                        found = candidate
+                        break
+
+            metadata = {
+                "schema_version": 1,
+                "witness_id": witness_id,
+                "mutant_id": args.mutant_id,
+                "subsystem": subsystem,
+                "strategy": args.strategy,
+                "success_predicate": "baseline(input) != mutant(input)",
+                "random_seed": args.random_seed,
+                "max_attempts": args.max_attempts,
+                "attempts": attempt_count,
+                "candidate_population": len(candidates),
+                "attempt_log": relative(attempts_path),
+                "inputs": {
+                    "mutation_spec": relative(spec_path),
+                    "mutation_spec_sha256": sha256_file(spec_path),
+                    "seed_artifacts": [
+                        {"path": relative(path), "sha256": sha256_file(path)} for path in seed_paths
+                    ],
+                    "generator_sha256": hashlib.sha256(
+                        (ROOT / "lib" / "witness_search.py").read_bytes()
+                    ).hexdigest(),
+                    "search_script_sha256": hashlib.sha256(
+                        (ROOT / "scripts" / "generate").read_bytes()
+                    ).hexdigest(),
+                    "expected_evidence": (
+                        {
+                            "path": relative(args.expected_evidence),
+                            "sha256": sha256_file(args.expected_evidence),
+                        }
+                        if args.expected_evidence
+                        else None
+                    ),
+                },
+                "created_at": datetime.now(timezone.utc).isoformat(),
+            }
+
+            if found is None:
+                metadata.update(
+                    status="NO_WITNESS_FOUND",
+                    search_status="NO_WITNESS_FOUND",
+                    minimization_status="NOT_APPLICABLE",
+                    semantic_status="UNRESOLVED",
+                    unresolved_reason=(
+                        "BOUNDED_CANDIDATE_POPULATION_EXHAUSTED"
+                        if attempt_count == len(candidates)
+                        else "ATTEMPT_BUDGET_EXHAUSTED"
+                    ),
+                    final_predicate_checks=[],
+                )
+            else:
+                candidate = found
+                generated_dir = ROOT / "corpus" / "generated"
+                minimized_dir = ROOT / "corpus" / "minimized"
+                generated_dir.mkdir(parents=True, exist_ok=True)
+                minimized_dir.mkdir(parents=True, exist_ok=True)
+                original_path = generated_dir / f"{witness_id}.ndjson"
+                minimized_path = minimized_dir / f"{witness_id}-min.ndjson"
+                original_path.write_bytes(candidate["payload"])
+                minimized_records, minimize_stats = minimize_witness(
+                    candidate["records"], scratch, session, args.max_minimization_checks
+                )
+                minimized_path.write_bytes(canonical_ndjson(minimized_records))
+                final_original = session.evaluate(original_path)
+                final_minimized = session.evaluate(minimized_path)
+                if not final_original["different"] or not final_minimized["different"]:
+                    raise RuntimeError("final distinction predicate check failed")
+                semantic = semantic_classification(
+                    final_original["baseline"]["normalized_outcome"],
+                    final_original["artifact_sha256"],
+                    args.expected_outcome,
+                    evidence,
+                )
+                metadata.update(
+                    status="MINIMIZED_WITNESS_FOUND",
+                    search_status="WITNESS_FOUND",
+                    minimization_status="MINIMIZED",
+                    semantic_status=semantic["status"],
+                    semantic_classification=semantic,
+                    found_at_attempt=attempt_count,
+                    found_by={
+                        "strategy": candidate["strategy"],
+                        "transformation": candidate["transformation"],
+                        "seed_artifact": candidate["seed"],
+                    },
+                    original_witness={
+                        "path": relative(original_path),
+                        "sha256": sha256_file(original_path),
+                        "bytes": original_path.stat().st_size,
+                        "records": len(candidate["records"]),
+                    },
+                    minimized_witness={
+                        "path": relative(minimized_path),
+                        "sha256": sha256_file(minimized_path),
+                        "bytes": minimized_path.stat().st_size,
+                        "records": len(minimized_records),
+                    },
+                    minimization=minimize_stats,
+                    final_predicate_checks=[final_original, final_minimized],
+                )
+            metadata["costs"] = {
+                "wall_seconds": time.monotonic() - started,
+                "checker_runs": session.checker_runs,
+                "checker_seconds": session.checker_seconds,
+                "preparation": session.preparation,
+            }
+
+    metadata_path = result_dir / "metadata.json"
+    metadata_path.write_text(json.dumps(metadata, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(metadata_path)
     return 0
 
 

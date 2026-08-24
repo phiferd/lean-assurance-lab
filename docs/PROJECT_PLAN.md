@@ -98,12 +98,22 @@ Current measured state, distinguishing tracked artifacts from local evidence:
 - Full-corpus controls for one killed and one surviving generated mutant
   reproduced both coverage-guided conclusions across all 197 tests.
 - `results/assurance/milestone-1.json` records a passing Milestone 1 gate.
-- `results/artifacts/graph.json` content-addresses 35 input and derived
-  artifacts; 28 current artifacts pass, with three historical reports or
+- `results/artifacts/graph.json` content-addresses 40 input and derived
+  artifacts; 32 current artifacts pass, with four historical reports or
   attestations and four superseded mutation artifacts retained.
 - `results/assurance/milestone-2.json` records a passing Milestone 2 gate and
   mechanically verifies all four required invalidation paths.
 - `results/assurance/milestone-3.json` records a passing 13-check Milestone 3
+  gate.
+- Executable structure-aware witness search now records every candidate,
+  normalized outcome pair, seed, transformation, input digest, and cost.
+- A mechanical search rediscovered the confirmed `nanoda-0003` witness on its
+  first attempt and automatically reduced it from 9 to 8 NDJSON records while
+  preserving the baseline `REJECT` / mutant `ACCEPT` distinction.
+- A 60-attempt bounded search over a 143-candidate universe-focused population
+  found no witness for `nanoda-gen-ca8565ff512e` and durably records the result
+  as unresolved rather than equivalent.
+- `results/assurance/milestone-4.json` records a passing 11-check Milestone 4
   gate.
 
 ## Milestone 0: Reproducible Project Foundation
@@ -276,7 +286,10 @@ Exit criteria:
 
 Goal: reduce manual effort in classifying meaningful survivors.
 
-Tasks:
+Status: complete as of 2026-08-23. The mechanical completion gate is
+`results/assurance/milestone-4.json`, with all 11 checks passing.
+
+Completed:
 
 1. Replace witness planning with executable witness-search strategies.
 2. Support structure-aware mutation of existing NDJSON/export artifacts.

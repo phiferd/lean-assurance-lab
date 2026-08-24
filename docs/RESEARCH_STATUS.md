@@ -101,6 +101,20 @@ Last updated: 2026-08-23
   survivor `nanoda-gen-4238224977cc`; both coverage-guided conclusions matched
   after complete 197-test runs.
 - Produced `results/assurance/milestone-3.json`; all 13 Milestone 3 checks pass.
+- Replaced the witness-planning stub with direct baseline/mutant execution,
+  deterministic subsystem templates, structure-aware NDJSON transformations,
+  per-attempt JSONL records, content-bound inputs, and cost accounting.
+- Mechanically rediscovered the confirmed `nanoda-0003` universe-ownership
+  witness on attempt 1 and automatically minimized it from 9 records / 522
+  bytes to 8 records / 339 bytes over 66 additional predicate checks. Both
+  artifacts preserve baseline `REJECT` versus mutant `ACCEPT`.
+- Executed 60 of 143 deterministic universe-focused candidates against active
+  survivor `nanoda-gen-ca8565ff512e`. No candidate distinguished baseline from
+  mutant, so the bounded result is durably classified `UNRESOLVED` with reason
+  `ATTEMPT_BUDGET_EXHAUSTED`; equivalence is not claimed.
+- Added explicit states for witness found, minimized witness found, no witness,
+  ambiguous semantics, and reference-checker disagreement.
+- Produced `results/assurance/milestone-4.json`; all 11 Milestone 4 checks pass.
 
 ## Command Log
 
@@ -180,6 +194,9 @@ scripts/build-artifact-graph
 scripts/artifact-status --require-current --output results/artifacts/status.json
 python3 -m unittest discover -s tests -p 'test_*.py' -v
 scripts/milestone-3-assurance
+scripts/generate --mutant-id nanoda-0003 --subsystem universes --random-seed 4103 --max-attempts 20 --max-minimization-checks 200 --expected-outcome REJECT --expected-evidence results/witnesses/nanoda-0003-undeclared-const-universe/confirmation.json --witness-id nanoda-0003-auto-universe
+scripts/generate --mutant-id nanoda-gen-ca8565ff512e --subsystem universes --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/013_levelComp1.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/016_levelParams.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/tutorial/good/020_imax1.ndjson --seed-artifact external/lean-kernel-arena/_build/tests/level-imax-leq.ndjson --random-seed 4104 --max-attempts 60 --witness-id nanoda-gen-ca8565ff512e-search-0001
+scripts/milestone-4-assurance --allow-stale-artifacts
 ```
 
 Notes:
@@ -248,15 +265,20 @@ classified_non_semantic: 10
 meaningful_survivors: 1
 survived_without_witness: 19
 unknown_equivalence: 3
-witnesses_found: 1
-minimized_witnesses: 0
+witnesses_found: 2
+minimized_witnesses: 1
+witness_searches_without_result: 1
+confirmed_witness_semantics: 1
+ambiguous_witness_semantics: 0
+witness_checker_disagreements: 0
 arena_regression_candidates: 1
-artifact_nodes: 35
-current_artifacts: 28
-historical_artifacts: 3
+artifact_nodes: 40
+current_artifacts: 32
+historical_artifacts: 4
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
 milestone_3_checks_passing: 13
+milestone_4_checks_passing: 11
 ```
 
 ## First Mutation Result
@@ -332,12 +354,15 @@ milestone_3_checks_passing: 13
   the attestation commit. Current claims depend on content digests and the exact
   upstream Arena revision, avoiding a self-referential commit hash while
   preserving the producing repository revision for audit.
+- The first automated negative witness search was deliberately bounded at 60
+  attempts out of 143 generated candidates. It establishes only that those 60
+  candidates did not distinguish the checkers; the survivor remains unresolved.
 
 ## Next Concrete Experiment
 
-1. Begin mechanical witness search for the two active universe-boundary
-   survivors and the six superseded quotient-validation survivors.
-2. Add structure-aware NDJSON transformations and automatic witness
-   minimization.
-3. Prepare a second independent validator for direct compatibility and
-   confirmation runs.
+1. Begin Milestone 5 by adding a validator-neutral direct runner and explicit
+   export-format/toolchain compatibility records.
+2. Run the original and minimized `nanoda-0003` witnesses through the official
+   checker using the new cross-validator result schema.
+3. Extend confirmation to another compatible independent checker, preserving
+   declines, incompatibilities, crashes, timeouts, and disagreements directly.
