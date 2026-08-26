@@ -32,20 +32,29 @@ third-party provenance relevant to publication.
   repair; the materialized-validator compatibility test is explicitly skipped
   at that boundary.
 
-## Publication Blockers
+## Publication Blocker
 
 1. **Arena-derived artifact provenance.** The repaired 10 MB projection witness
    is derived from Lean Kernel Arena's `perf/grind-ring-5` export. GitHub exposes
-   no detected license for Lean Kernel Arena or CollatzLean. Obtain permission
-   or a clear redistribution determination and record attribution before
+   no detected license for Lean Kernel Arena. Clarification is pending in
+   [leanprover/lean-kernel-arena#162](https://github.com/leanprover/lean-kernel-arena/issues/162).
+   Record the maintainers' redistribution terms and required attribution before
    publishing that artifact.
-2. **Personal-identity disclosure.** Reachable commits contain a personal Gmail
-   author address, and historical evidence contains the local macOS username
-   in absolute paths. The owner must explicitly accept that disclosure or
-   rewrite history and regenerate affected attestations before publication.
-3. **GitHub security settings.** After changing visibility, enable private
-   vulnerability reporting and protect `main` with the unit-test workflow as a
-   required check before inviting contributions.
+
+## Publication-Day Controls
+
+Immediately after changing visibility, enable private vulnerability reporting
+and protect `main` with the unit-test workflow as a required check before
+inviting contributions.
+
+## Owner Decisions
+
+- Existing commit-author email and historical local-path disclosures are
+  accepted; repository history will not be rewritten. Future commits in the
+  local checkout use the authenticated GitHub noreply address.
+- Project-owned code and documentation use the MIT License under `Dan Phifer`.
+- CollatzLean is referenced only by links; its content is not redistributed by
+  this repository.
 
 ## Improvements Applied During Audit
 
@@ -69,5 +78,6 @@ third-party provenance relevant to publication.
   scanning and push protection when repository visibility and account features
   permit it.
 
-Publication can proceed after all three blockers are resolved and the final
-checks in this document are rerun against the exact public candidate commit.
+Publication can proceed after the provenance blocker is resolved and the final
+checks in this document are rerun against the exact candidate commit. Apply the
+publication-day controls in the same visibility-change session.
