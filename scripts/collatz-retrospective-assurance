@@ -1,0 +1,390 @@
+#!/usr/bin/env python3
+"""Audit and report the amended frozen Collatz retrospective."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+RESULT_DIR = ROOT / "results" / "collatz-retrospective"
+FREEZE = RESULT_DIR / "freeze.json"
+GENERATION = RESULT_DIR / "generation.json"
+CANDIDATE_FREEZE = RESULT_DIR / "candidate-freeze.json"
+EVALUATION = RESULT_DIR / "evaluation.json"
+FIRST_REPAIR = RESULT_DIR / "projection-repair"
+SECOND_REPAIR = RESULT_DIR / "projection-repair-v2"
+FIRST_AMENDMENT = FIRST_REPAIR / "amendment.json"
+REPAIRED_COVERAGE = FIRST_REPAIR / "coverage.jsonl"
+SECOND_AMENDMENT = SECOND_REPAIR / "amendment.json"
+REPAIRED_GENERATION = SECOND_REPAIR / "generation.json"
+REPAIRED_CANDIDATE_FREEZE = SECOND_REPAIR / "candidate-freeze.json"
+REPAIRED_EVALUATION = SECOND_REPAIR / "evaluation.json"
+REPAIRED_ASSURANCE = SECOND_REPAIR / "assurance.json"
+ASSURANCE = RESULT_DIR / "assurance.json"
+REPORT = RESULT_DIR / "REPORT.md"
+SPEC = ROOT / "experiments" / "collatz-retrospective" / "spec.json"
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def read_jsonl(path: Path) -> list[dict[str, Any]]:
+    return [json.loads(line) for line in path.read_text(encoding="utf-8").splitlines() if line]
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def record(path: Path) -> dict[str, Any]:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def bound(item: dict[str, Any]) -> bool:
+    path = ROOT / item["path"]
+    return path.is_file() and sha256_file(path) == item["sha256"]
+
+
+def outcomes(row: dict[str, Any]) -> dict[str, str]:
+    return {name: result["normalized_outcome"] for name, result in row["checkers"].items()}
+
+
+def table(outcome: dict[str, str]) -> str:
+    labels = [
+        ("Affected official Lean 4.29", "affected_official_4_29"),
+        ("Pre-fix nanoda `ddfac2b`", "prefixed_nanoda_ddfac2b"),
+        ("Fixed official Lean 4.33", "fixed_official_4_33"),
+        ("Fixed nanoda `6ae1f0c`", "fixed_nanoda_6ae1f0c"),
+        ("Kiota `58e8636`", "independent_kiota_58e8636"),
+        ("Lean4Lean `ecb3b66`", "independent_lean4lean_ecb3b66"),
+    ]
+    rows = ["| Checker | Outcome |", "| --- | --- |"]
+    rows.extend(f"| {label} | {outcome[key]} |" for label, key in labels)
+    return "\n".join(rows)
+
+
+def main() -> int:
+    freeze = load(FREEZE)
+    generation = load(GENERATION)
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    evaluation = load(EVALUATION)
+    spec = load(SPEC)
+    first_amendment = load(FIRST_AMENDMENT)
+    second_amendment = load(SECOND_AMENDMENT)
+    repaired_generation = load(REPAIRED_GENERATION)
+    repaired_candidate_freeze = load(REPAIRED_CANDIDATE_FREEZE)
+    repaired_evaluation = load(REPAIRED_EVALUATION)
+    repaired_assurance = load(REPAIRED_ASSURANCE)
+    repaired_coverage = read_jsonl(REPAIRED_COVERAGE)
+
+    nested_row = evaluation["generated_candidate_evaluations"][0]
+    projection_row = repaired_evaluation["generated_candidate_evaluations"][0]
+    nested_outcomes = outcomes(nested_row)
+    projection_outcomes = outcomes(projection_row)
+    holdout_outcomes = outcomes(evaluation["disclosed_holdout_evaluation"])
+    archived_generation_path = ROOT / first_amendment["invalid_run_archive"]["generation"]["path"]
+    archived_generation = load(archived_generation_path)
+
+    nested_distinction = (
+        nested_outcomes["affected_official_4_29"] == "ACCEPT"
+        and nested_outcomes["fixed_official_4_33"] == "REJECT"
+    )
+    projection_distinction = (
+        projection_outcomes["prefixed_nanoda_ddfac2b"] == "ACCEPT"
+        and projection_outcomes["fixed_nanoda_6ae1f0c"] == "REJECT"
+    )
+    independent_rejection = any(
+        outcome[name] == "REJECT"
+        for outcome in [nested_outcomes, projection_outcomes]
+        for name in [
+            "fixed_nanoda_6ae1f0c",
+            "independent_kiota_58e8636",
+            "independent_lean4lean_ecb3b66",
+        ]
+    )
+    expected_classification = (
+        "FULL_CLASS_REDISCOVERY"
+        if nested_distinction and projection_distinction and independent_rejection
+        else "PARTIAL_REDISCOVERY"
+        if nested_distinction or projection_distinction
+        else "NO_REDISCOVERY"
+    )
+
+    corpus_bound = all(bound(item) for item in freeze["pre_disclosure_corpus"]["files"])
+    binaries_bound = all(bound(item) for item in freeze["checker_binaries"].values())
+    original_candidates_bound = all(bound(item) for item in candidate_freeze["candidates"])
+    repaired_candidates_bound = all(
+        bound(item) for item in repaired_candidate_freeze["candidates"]
+    )
+    invalid_archive_bound = all(
+        bound(item) for item in first_amendment["invalid_run_archive"].values()
+    )
+    current_target = str(
+        (
+            ROOT
+            / "external"
+            / "lean-kernel-arena"
+            / "_build"
+            / "checkers"
+            / "nanoda"
+            / "src"
+            / "src"
+            / "tc.rs"
+        ).resolve()
+    )
+
+    checks = {
+        "protocol_freeze_complete": freeze["status"]
+        == "FROZEN_BEFORE_GENERATION_AND_HELD_OUT_EVALUATION",
+        "pre_disclosure_arena_revision_bound": freeze["historical_boundary"]["arena_revision"]
+        == spec["historical_boundary"]["arena_revision"],
+        "disclosed_regression_absent_from_corpus": freeze["historical_boundary"][
+            "regression_commit_absent"
+        ]
+        and all(
+            "nested-unused-param" not in item["path"]
+            for item in freeze["pre_disclosure_corpus"]["files"]
+        ),
+        "historical_corpus_complete_and_bound": freeze["pre_disclosure_corpus"]["test_count"]
+        == spec["historical_boundary"]["expected_materialized_test_count"]
+        and corpus_bound,
+        "checker_binaries_bound": binaries_bound,
+        "frozen_runner_identity_unchanged": bound(freeze["runner"])
+        and evaluation["producer"]["sha256"] == freeze["runner"]["sha256"],
+        "original_generation_after_protocol_freeze": datetime.fromisoformat(freeze["frozen_at"])
+        < datetime.fromisoformat(generation["completed_at"]),
+        "disclosed_inputs_excluded_from_original_generation": not any(
+            generation["contamination_controls"][key]
+            for key in [
+                "disclosed_arena_artifact_read_by_generation",
+                "published_collatz_artifact_read_by_generation",
+            ]
+        ),
+        "historical_feedback_excluded_from_original_generation": not generation[
+            "contamination_controls"
+        ]["historical_checker_executed_by_generation"],
+        "original_candidate_freeze_complete_and_bound": candidate_freeze["status"]
+        == "CANDIDATES_FROZEN_BEFORE_HISTORICAL_AND_HOLDOUT_EVALUATION"
+        and original_candidates_bound
+        and bound(candidate_freeze["generation"]),
+        "original_candidate_freeze_precedes_evaluation": datetime.fromisoformat(
+            candidate_freeze["frozen_at"]
+        )
+        < datetime.fromisoformat(evaluation["started_at"]),
+        "nested_component_rediscovered": nested_distinction,
+        "nested_candidate_independently_rejected": nested_outcomes[
+            "independent_kiota_58e8636"
+        ]
+        == "REJECT"
+        and nested_outcomes["independent_lean4lean_ecb3b66"] == "REJECT",
+        "disclosed_holdout_used_only_after_original_candidate_freeze": evaluation[
+            "feedback_boundary"
+        ]["holdout_evaluated_only_after_candidate_freeze"],
+        "holdout_reproduces_official_version_distinction": holdout_outcomes[
+            "affected_official_4_29"
+        ]
+        == "ACCEPT"
+        and holdout_outcomes["fixed_official_4_33"] == "REJECT",
+        "invalid_zero_input_run_archived_and_bound": invalid_archive_bound,
+        "invalid_projection_result_identified": archived_generation["coverage"][
+            "scheduled_test_count"
+        ]
+        == 0
+        and archived_generation["projection_search"]["attempts"] == 0,
+        "first_repair_amendment_bound": first_amendment["status"]
+        == "AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION"
+        and bound(first_amendment["original_protocol_freeze"])
+        and bound(first_amendment["repair_runner"]),
+        "repaired_coverage_complete_and_bound": len(repaired_coverage)
+        == repaired_generation["coverage"]["prescreened_test_count"]
+        == 26
+        and bound(second_amendment["reused_repaired_coverage"]),
+        "coverage_path_mismatch_repaired": all(
+            row["embedded_source"].replace("\\", "/").endswith("/src/tc.rs")
+            for row in repaired_coverage
+        )
+        and all(row["embedded_source"] != current_target for row in repaired_coverage),
+        "repaired_coverage_schedule_nonempty": repaired_generation["coverage"][
+            "target_covering_test_count"
+        ]
+        == repaired_generation["coverage"]["scheduled_test_count"]
+        == 11,
+        "second_repair_amendment_bound": second_amendment["status"]
+        == "SECOND_AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION"
+        and bound(second_amendment["first_repair_amendment"])
+        and bound(second_amendment["repair_runner"]),
+        "second_amendment_precedes_repaired_generation": datetime.fromisoformat(
+            second_amendment["frozen_at"]
+        )
+        < datetime.fromisoformat(repaired_generation["completed_at"]),
+        "first_repair_stopped_before_candidate_freeze": not (
+            FIRST_REPAIR / "candidate-freeze.json"
+        ).exists(),
+        "repaired_generation_did_not_execute_historical_checkers_or_read_disclosed_inputs": not any(
+            repaired_generation["contamination_controls"][key]
+            for key in [
+                "disclosed_arena_artifact_read_by_generation",
+                "published_collatz_artifact_read_by_generation",
+                "historical_checker_executed_by_generation",
+            ]
+        ),
+        "fixed_seed_and_budget_preserved": repaired_generation["projection_search"][
+            "random_seed"
+        ]
+        == spec["generation"]["random_seed"]
+        and repaired_generation["projection_search"]["max_attempts"]
+        == spec["generation"]["max_projection_candidates"]
+        and repaired_generation["projection_search"]["attempts"] <= spec["generation"][
+            "max_projection_candidates"
+        ],
+        "bounded_search_found_modeled_distinction": repaired_generation[
+            "projection_search"
+        ]["witness_found"]
+        and repaired_generation["projection_search"]["attempts"] == 1,
+        "source_model_built_and_restored": repaired_generation["source_restored"]
+        and repaired_generation["source_model_preparation"]["source_restored"],
+        "repaired_candidate_freeze_complete_and_bound": repaired_candidate_freeze["status"]
+        == "BOUNDED_REPAIRED_PROJECTION_CANDIDATES_FROZEN_BEFORE_HISTORICAL_EVALUATION"
+        and repaired_candidates_bound
+        and bound(repaired_candidate_freeze["generation"]),
+        "repaired_candidate_freeze_precedes_historical_evaluation": datetime.fromisoformat(
+            repaired_candidate_freeze["frozen_at"]
+        )
+        < datetime.fromisoformat(repaired_evaluation["started_at"]),
+        "repaired_candidate_evaluated_by_six_checkers": len(
+            repaired_evaluation["generated_candidate_evaluations"]
+        )
+        == len(repaired_candidate_freeze["candidates"])
+        == 1
+        and len(projection_row["checkers"]) == 6,
+        "projection_component_rediscovered": projection_distinction,
+        "projection_candidate_independently_rejected": projection_outcomes[
+            "independent_kiota_58e8636"
+        ]
+        == "REJECT"
+        and projection_outcomes["independent_lean4lean_ecb3b66"] == "REJECT",
+        "repair_assurance_passes_and_is_bound": repaired_assurance["status"] == "PASS"
+        and all(repaired_assurance["checks"].values())
+        and all(bound(item) for item in repaired_assurance["evidence"].values())
+        and bound(repaired_assurance["producer"])
+        and repaired_assurance["producer"]["sha256"]
+        == second_amendment["repair_runner"]["sha256"],
+        "combined_classification_recomputed": expected_classification
+        == "FULL_CLASS_REDISCOVERY",
+        "post_disclosure_repair_caveat_recorded": first_amendment["protocol"][
+            "does_not_restore_original_pre_disclosure_blinding"
+        ]
+        and second_amendment["protocol"]["does_not_restore_original_pre_disclosure_blinding"],
+    }
+    assurance = {
+        "schema_version": 2,
+        "experiment_id": freeze["experiment_id"],
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": expected_classification,
+        "original_run_classification": evaluation["classification"],
+        "repaired_projection_classification": repaired_evaluation["classification"],
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "checks": checks,
+        "evidence": {
+            "freeze": record(FREEZE),
+            "original_generation": record(GENERATION),
+            "original_candidate_freeze": record(CANDIDATE_FREEZE),
+            "original_evaluation": record(EVALUATION),
+            "first_repair_amendment": record(FIRST_AMENDMENT),
+            "repaired_coverage": record(REPAIRED_COVERAGE),
+            "second_repair_amendment": record(SECOND_AMENDMENT),
+            "repaired_generation": record(REPAIRED_GENERATION),
+            "repaired_candidate_freeze": record(REPAIRED_CANDIDATE_FREEZE),
+            "repaired_evaluation": record(REPAIRED_EVALUATION),
+            "repaired_assurance": record(REPAIRED_ASSURANCE),
+        },
+        "producer": record(Path(__file__)),
+    }
+    ASSURANCE.write_text(json.dumps(assurance, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    nested_artifact = nested_row["artifact"]
+    projection_artifact = projection_row["artifact"]
+    report = f"""# Frozen Collatz Retrospective Report
+
+Status: **{assurance['status']}**  
+Classification: **{expected_classification} (amended)**
+
+## Result
+
+The amended bounded retrospective rediscovered both specified fault components. The original generated nested-inductive artifact distinguishes affected official Lean 4.29 from fixed official Lean 4.33. The repaired projection candidate distinguishes pre-fix nanoda `ddfac2b` from fixed nanoda `6ae1f0c`. Kiota and Lean4Lean reject both candidates.
+
+The original zero-input projection result is invalid and is not counted as a negative result. It is preserved under `{relative(RESULT_DIR / 'invalid-zero-input-run')}`. The projection branch was rerun through two frozen protocol amendments after diagnosing coverage-path and candidate-materialization defects.
+
+This remains retrospective, operator-informed capability evidence. The amendments preserve the original corpus, generator semantics, seed, limits, modeled mutant, and candidate-before-historical-evaluation boundary, but a post-disclosure repair cannot recreate the original pre-disclosure blind execution. The repair was developed after the original historical evaluation, so those outcomes were known even though repaired generation did not execute historical checkers or use candidate-specific historical feedback. This is not prospective discovery evidence or a general bug-finding rate.
+
+## Frozen Boundary
+
+- Historical Arena revision: `{freeze['historical_boundary']['arena_revision']}`
+- Historical corpus: {freeze['pre_disclosure_corpus']['test_count']} materialized tests, {freeze['pre_disclosure_corpus']['total_bytes']} bytes
+- Corpus composite SHA-256: `{freeze['pre_disclosure_corpus']['composite_sha256']}`
+- Original protocol freeze SHA-256: `{sha256_file(FREEZE)}`
+- Random seed: `{repaired_generation['projection_search']['random_seed']}`
+- Projection candidate budget: {repaired_generation['projection_search']['max_attempts']}
+- Disclosed Arena and published Collatz artifacts used during generation: no
+- Historical checker binaries executed by either generation stage: no
+
+## Protocol Repair
+
+The frozen coverage binary identifies its nanoda source as an absolute path under the repository's former `LeanVerifier` checkout. The original runner requested the current `LeanAssuranceLab` path, received an empty `llvm-cov show` report, and incorrectly converted that infrastructure mismatch into zero covering tests and zero search attempts.
+
+The first amendment switched extraction to `llvm-cov export` JSON and matched the bound target by repository-relative suffix, with fail-closed checks for missing, ambiguous, or empty mappings. Of 26 projection-bearing pre-disclosure inputs, 11 covered the frozen `def_eq_proj` target.
+
+The restored schedule exposed a second implementation defect: the nominally bounded generator deep-copied every possible payload before truncating to 64. The second amendment constructs and shuffles the same complete substitution-reference list, then materializes and deduplicates payloads in that same seeded order until the frozen limit. Unit tests compare its order and prefix directly against the frozen eager generator on tractable fixtures.
+
+## Nested Component
+
+`{nested_artifact['path']}` ({nested_artifact['bytes']} bytes, SHA-256 `{nested_artifact['sha256']}`)
+
+{table(nested_outcomes)}
+
+This candidate establishes the dropped nested-unused-parameter distinction. Both pre-fix and fixed nanoda accept it, so it is not the projection-component witness.
+
+## Projection Component
+
+`{projection_artifact['path']}` ({projection_artifact['bytes']} bytes, SHA-256 `{projection_artifact['sha256']}`)
+
+{table(projection_outcomes)}
+
+The repaired search evaluated all 11 original target-covering seeds against fixed nanoda and the modeled source mutant; none distinguished them. Seeded structured mutation attempt 1 changed projection structure name `{repaired_generation['projection_search']['found']['old_type_name']}` to `{repaired_generation['projection_search']['found']['new_type_name']}` in `{repaired_generation['projection_search']['found']['seed']}`. Fixed nanoda rejected it while the modeled mutant accepted it. After candidate freeze, pre-fix nanoda accepted it and fixed nanoda rejected it, establishing the projection-structure-identity component.
+
+Both official Lean versions reject this projection candidate. That is expected: this component models the separate historical nanoda defect, not the official Lean nested-parameter defect.
+
+## Disclosed Holdout
+
+The Arena `nested-unused-param` artifact was evaluated only after the original candidate freeze. Affected official Lean accepted it; fixed official Lean, fixed nanoda, Kiota, and Lean4Lean rejected it. The pinned pre-fix nanoda revision rejected this reduced Arena artifact, which is narrower than the original Collatz development discussed in the postmortem. The repaired projection branch did not evaluate the disclosed holdout.
+
+## Cost
+
+- Original generated/holdout checker runs: {evaluation['costs']['checker_runs']}
+- Original generated/holdout checker seconds: {evaluation['costs']['checker_seconds']:.4f}
+- Repaired coverage inputs: {repaired_generation['coverage']['prescreened_test_count']}
+- Repaired source-model checker runs: {repaired_generation['costs']['checker_runs']}
+- Repaired source-model checker seconds: {repaired_generation['costs']['checker_seconds']:.4f}
+- Repaired historical/fixed checker runs: {repaired_evaluation['costs']['checker_runs']}
+- Repaired historical/fixed checker seconds: {repaired_evaluation['costs']['checker_seconds']:.4f}
+
+Mechanical audit: `{relative(ASSURANCE)}` ({len(checks)} combined checks) and `{relative(REPAIRED_ASSURANCE)}` ({len(repaired_assurance['checks'])} repair checks).
+"""
+    REPORT.write_text(report, encoding="utf-8")
+    print(ASSURANCE)
+    print(REPORT)
+    return 0 if assurance["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

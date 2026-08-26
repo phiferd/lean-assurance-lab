@@ -1,0 +1,153 @@
+{
+  "candidate_freeze": {
+    "path": "results/collatz-retrospective/candidate-freeze.json",
+    "sha256": "1d56800fdff7d620a0e80b942f888a0d06004ed04e0dc94aeeb6b5bb1f632643"
+  },
+  "classification": "PARTIAL_REDISCOVERY",
+  "completed_at": "2026-08-24T19:12:31.026343+00:00",
+  "costs": {
+    "checker_runs": 12,
+    "checker_seconds": 1.501620248774998
+  },
+  "criteria": {
+    "independent_fixed_checker_rejection": true,
+    "nested_unused_parameter_distinction": true,
+    "projection_structure_identity_distinction": false
+  },
+  "disclosed_holdout_evaluation": {
+    "artifact": {
+      "bytes": 60643,
+      "path": "external/lean-kernel-arena/_build/tests/nested-unused-param.ndjson",
+      "sha256": "0510cceb7cc66b39792a4d1589cbcee499b1ba56837203030a3324fb6355a618"
+    },
+    "checkers": {
+      "affected_official_4_29": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.03155270800925791,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "24f10cff8209cfa72bf07ec82dfdda6e0ac9202ace300a49d3246e6e497da130"
+      },
+      "fixed_nanoda_6ae1f0c": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.004927415982820094,
+        "stderr_sha256": "b42481b66071e56276f5a07da2c9a61bb54c6dd97cdc104742fa33490f813d3b",
+        "stderr_tail": "\nthread 'thread_2' (28188598) panicked at src/tc.rs:471:21:\ninfer_proj prop\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'thread_0' (28188596) panicked at src/tc.rs:471:21:\ninfer_proj prop\n\nthread 'thread_1' (28188597) panicked at src/tc.rs:471:21:\ninfer_proj prop\n\nthread 'thread_3' (28188599) panicked at src/tc.rs:921:71:\nassertion failed: self.def_eq(u, v)\n\nthread 'main' (28188595) panicked at src/tc.rs:139:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "fixed_official_4_33": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.030718458001501858,
+        "stderr_sha256": "c9cda828640ef7a04bfa9604b6ccdfe010b4e74808286d369793377ea403d5a9",
+        "stderr_tail": "uncaught exception: while replaying declaration 'E':\n(kernel) invalid projection\n  w.1\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "independent_kiota_58e8636": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.004438749980181456,
+        "stderr_sha256": "165c48b2fd3eb8a5aaf9e3210bd681f00fa7bb9301fd88bba13bda4b10eb504b",
+        "stderr_tail": "REJECT: [E] projection struct name mismatch\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "independent_lean4lean_ecb3b66": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.03431345894932747,
+        "stderr_sha256": "a64461a9104efdd43084530e7024615d0bd15625e355c70ec7bd0ead0067a4f5",
+        "stderr_tail": "uncaught exception: at E: (kernel) invalid projection\n  w.1\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "prefixed_nanoda_ddfac2b": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.004953416995704174,
+        "stderr_sha256": "3c8d1f2bdde064ae3d5c55fdc1d627980c36aca3d457576695876bb180eb6f3a",
+        "stderr_tail": "\nthread 'thread_0' (28188578) panicked at src/tc.rs:474:21:\ninfer_proj prop\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'thread_2' (28188580) panicked at src/tc.rs:474:21:\ninfer_proj prop\n\nthread 'thread_3' (28188581) panicked at src/tc.rs:474:21:\ninfer_proj prop\n\nthread 'thread_1' (28188579) panicked at src/tc.rs:922:71:\nassertion failed: self.def_eq(u, v)\n\nthread 'main' (28188577) panicked at src/tc.rs:140:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    }
+  },
+  "experiment_id": "collatz-pre-disclosure-retrospective-2026-08-24",
+  "feedback_boundary": {
+    "candidates_frozen_before_historical_evaluation": true,
+    "holdout_evaluated_only_after_candidate_freeze": true,
+    "protocol_frozen_before_generation": true,
+    "published_collatz_artifact_evaluated": false
+  },
+  "generated_candidate_evaluations": [
+    {
+      "artifact": {
+        "bytes": 11217,
+        "path": "corpus/collatz-retrospective/nested-phantom-candidate.ndjson",
+        "sha256": "2167ca8678c772b7bef0d0210fe9ed5f54a29e49d3d14b69e96b792ed5e48a61"
+      },
+      "checkers": {
+        "affected_official_4_29": {
+          "exit_code": 0,
+          "normalized_outcome": "ACCEPT",
+          "seconds": 1.0126011660322547,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": "",
+          "stdout_sha256": "0a3345343ae4011c166356b95bda4b8bd3ca8c05fd8b96aa4815c47d3718ee81"
+        },
+        "fixed_nanoda_6ae1f0c": {
+          "exit_code": 0,
+          "normalized_outcome": "ACCEPT",
+          "seconds": 0.12628579197917134,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": "",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fixed_official_4_33": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.05225379194598645,
+          "stderr_sha256": "2cbacca6c85b163a9b64ae54046b64a4ebd2e51007eaf1ef256df6659c5b645a",
+          "stderr_tail": "uncaught exception: while replaying declaration 'RetrospectiveFamily':\n(kernel) invalid projection\n  carrier.1\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "independent_kiota_58e8636": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.005965790944173932,
+          "stderr_sha256": "11f4525b6163748fc29739c553ae15b7b926eda5fae879035d4faa6a2db9e3ac",
+          "stderr_tail": "REJECT: [RetrospectiveFamily] projection struct name mismatch\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "independent_lean4lean_ecb3b66": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.06514012499246746,
+          "stderr_sha256": "d284bc82c95ce732a0b4cace97bbce56e1463bb94579f715dbd801905fec4e2a",
+          "stderr_tail": "uncaught exception: at RetrospectiveFamily: (kernel) invalid projection\n  carrier.1\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefixed_nanoda_ddfac2b": {
+          "exit_code": 0,
+          "normalized_outcome": "ACCEPT",
+          "seconds": 0.12846937496215105,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": "",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "producer": {
+    "bytes": 34849,
+    "path": "scripts/collatz-retrospective",
+    "sha256": "0501a547958b5a987b158cc0357f7fac59a3f7d671a1e01c8b7357914114a7c5"
+  },
+  "protocol_freeze": {
+    "path": "results/collatz-retrospective/freeze.json",
+    "sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37"
+  },
+  "reason": "At least one specified fault component was distinguished, but the full two-component criterion was not met.",
+  "schema_version": 1,
+  "started_at": "2026-08-24T19:12:29.287735+00:00",
+  "status": "COMPLETE"
+}

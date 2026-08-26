@@ -5,6 +5,16 @@ ROOT="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
 EXTERNAL_DIR="${ROOT}/external"
 LKA_ROOT="${LKA_ROOT:-${EXTERNAL_DIR}/lean-kernel-arena}"
 LKA_REPO="${LKA_REPO:-https://github.com/leanprover/lean-kernel-arena.git}"
+REPRODUCIBLE=false
+
+if [[ "${1:-}" == "--reproducible" ]]; then
+  REPRODUCIBLE=true
+  shift
+fi
+if [[ $# -ne 0 ]]; then
+  echo "usage: scripts/setup-arena [--reproducible]" >&2
+  exit 2
+fi
 
 mkdir -p "${EXTERNAL_DIR}" \
   "${ROOT}/results/baseline" \
@@ -32,6 +42,21 @@ if [[ -d "${LKA_ROOT}/.git" ]]; then
 else
   echo "Cloning Lean Kernel Arena into ${LKA_ROOT}"
   git clone "${LKA_REPO}" "${LKA_ROOT}"
+fi
+
+if [[ "${REPRODUCIBLE}" == true ]]; then
+  ARENA_REVISION="$(python3 -c 'import json,sys; print(json.load(open(sys.argv[1]))["arena"]["revision"])' "${ROOT}/config/reproducibility.json")"
+  CURRENT_REVISION="$(git -C "${LKA_ROOT}" rev-parse HEAD)"
+  if [[ "${CURRENT_REVISION}" != "${ARENA_REVISION}" ]]; then
+    if [[ -n "$(git -C "${LKA_ROOT}" status --porcelain)" ]]; then
+      echo "reproducible setup refuses to change a dirty Arena checkout" >&2
+      exit 1
+    fi
+    echo "Checking out pinned Arena revision ${ARENA_REVISION}"
+    git -C "${LKA_ROOT}" checkout --detach "${ARENA_REVISION}"
+  fi
+
+  python3 "${ROOT}/scripts/verify-portable-coverage" --check-environment-only
 fi
 
 echo "Arena root: ${LKA_ROOT}"

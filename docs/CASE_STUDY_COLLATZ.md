@@ -141,40 +141,82 @@ generated the test before the bug became public.
 | --- | --- | --- |
 | Would the current corpus catch the published exploit class? | Yes. | The exact Arena regression now expects rejection, and current `nanoda` rejects it. |
 | Would differential testing between the affected official Lean and then-current `nanoda` have raised an outcome difference? | No. | Both accepted the original artifact, although their implementation defects differed. |
-| Did this project independently predict or discover the bug before disclosure? | No. | There is no pre-disclosure experiment, and the exact regression entered Arena after the report. |
-| Does the current mutation model prove it would generate this witness? | No. | The campaign has not mechanically evaluated an exact phantom-parameter or wrong-projection-structure mutant with a held-out version of this witness. |
+| Did this project independently predict or discover the bug before disclosure? | No. | No experiment was run before disclosure; the frozen retrospective below was designed and executed afterward. |
+| Does the retrospective show that the current machinery can generate related witnesses? | Yes, within the amended bounded protocol. | It generated one artifact distinguishing affected from fixed official Lean and a second distinguishing pre-fix from fixed nanoda. The projection branch required documented infrastructure repairs after its original zero-input result was invalidated. |
 | Could this architecture prevent a future release containing a similar defect? | Conditionally. | It must generate or already contain a distinguishing input, compare against a checker or expected outcome that rejects it, and be enforced as a release gate. |
 
 Lean Assurance Lab is assurance infrastructure, not a runtime shield around
 every Lean proof. A testing signal prevents a release only when a release
 process runs it and treats the result as blocking.
 
-## The Next Honest Experiment
+## Frozen Retrospective Result
 
-Prerequisite status as of 2026-08-24: **ready to freeze**. The current
-official/Kiota disagreement has a mechanically reproduced, upstream-ready
-report, and new rotating full-corpus executions have durable checkpoint/resume
-support. Neither prerequisite is evidence that the retrospective will succeed.
+Execution status as of 2026-08-24: **complete;
+`FULL_CLASS_REDISCOVERY` (amended)**. The combined mechanical audit passes all
+36 checks, and the repaired projection branch passes its 15-check audit. The full scoped report is
+[`results/collatz-retrospective/REPORT.md`](../results/collatz-retrospective/REPORT.md).
 
-A useful retrospective experiment would test capability without feeding the
-known witness directly into generation:
+The protocol froze 152 materialized tests from Arena revision
+`dd345f6a5c034d73b5889b318cbd88252c7627c9`, whose tree predates regression
+commit `289d09c`. It also bound affected official Lean 4.29, pre-fix nanoda
+`ddfac2b`, four fixed or independent checker states, two independently stated
+fault operators, seed `20260824`, and fixed budgets. The published Collatz
+artifact and Arena `nested-unused-param` regression were excluded from
+generation; historical checker outcomes were unavailable until a separate
+candidate freeze had been written.
 
-1. Pin the affected official Lean revision and the pre-fix `nanoda` revision.
-2. Freeze an Arena corpus from before commit `289d09c`, excluding the disclosed
-   regression and derivatives.
-3. Introduce independently specified mutation operators for dropped
-   nested-inductive parameter validation and projection-structure identity.
-4. Run coverage-guided mutation evaluation and bounded witness generation with
-   fixed seeds and budgets.
-5. Keep the published Collatz and `nested-unused-param` artifacts held out until
-   evaluation.
-6. Check whether generation rediscovers a distinguishing artifact and whether a
-   genuinely independent, fixed checker rejects it.
-7. Record failure to rediscover the behavior just as carefully as success.
+Generation produced an 11,217-byte malformed nested-inductive artifact without
+checker feedback. Affected official Lean 4.29 accepted it, while fixed official
+Lean 4.33, Kiota, and Lean4Lean rejected it. This mechanically rediscovers the
+dropped unused-parameter distinction and obtains rejection from two independent
+implementation families.
 
-That experiment could show that the machinery is capable of finding this bug
-class under stated retrospective conditions. It still would not prove that an
-unbounded, previously unknown version of the same bug would always be found.
+The original projection half did not execute. Its frozen LLVM binary embedded
+source paths under the repository's former checkout root, while the runner
+filtered by the current absolute path. `llvm-cov` returned an empty source
+report, which the runner incorrectly interpreted as zero coverage and zero
+eligible attempts. That result proved nothing about the projection search and
+is preserved under `results/collatz-retrospective/invalid-zero-input-run` as an
+invalidated run.
+
+The reusable coverage pipeline has since been changed to embed stable virtual
+source roots, canonicalize exported filenames to repository-relative IDs, and
+verify relocation with a coverage sentinel. Those repairs prevent the same
+class of local-path failure in future collections. They do not alter the
+archived frozen binary or restore blindness to this retrospective's repaired
+projection branch.
+
+The first frozen amendment parsed `llvm-cov export` by repository-relative
+source suffix and failed closed on missing or empty mappings. It found 11 of the
+26 projection-bearing historical inputs covered `def_eq_proj`. Restoring that
+schedule exposed another implementation defect: the nominal 64-candidate limit
+was applied only after eagerly deep-copying the complete substitution universe.
+A second frozen amendment implemented the same seeded permutation and payload
+order lazily, materializing at most the fixed budget. Direct tests show its
+order and bounded prefix match the original eager generator on tractable
+fixtures.
+
+All 11 covering historical inputs produced no source-mutant distinction. The
+first seeded structured mutation did: fixed nanoda rejected it while the
+modeled projection-identity mutant accepted it. After a new candidate freeze,
+pre-fix nanoda accepted the candidate and fixed nanoda rejected it; both
+official Lean versions, Kiota, and Lean4Lean rejected it. Together with the
+nested artifact, this meets the frozen two-component criterion for full-class
+rediscovery.
+
+Only after the candidate freeze, the disclosed Arena regression was evaluated.
+Affected official Lean accepted it; fixed official Lean, fixed nanoda, Kiota,
+and Lean4Lean rejected it. The pinned pre-fix nanoda revision rejected this
+reduced Arena artifact, which is not the same input as the original Collatz
+development discussed in the postmortem.
+
+This experiment demonstrates bounded, operator-informed retrospective
+capability for both specified components. Because the projection rerun was a
+post-disclosure protocol repair, it cannot recreate the original blind
+execution even though the corpus, strategy, generator semantics, seed, limits,
+modeled mutant, and candidate-before-historical-evaluation boundary remained
+fixed. It does not show prospective discovery, establish a general bug-finding
+rate, or prove prevention of the original incident.
 
 ## Sources
 

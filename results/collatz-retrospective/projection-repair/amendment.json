@@ -1,0 +1,117 @@
+{
+  "diagnosis": {
+    "effect": "The source report was empty, all prescreened inputs appeared uncovered, and the search made zero attempts.",
+    "failure": "The frozen LLVM binary embedded its former checkout root, while llvm-cov show was filtered by the current absolute source path.",
+    "invalidated_component": "IGNORE_PROJECTION_STRUCTURE_IDENTITY search",
+    "unaffected_component": "DROP_NESTED_UNUSED_PARAMETER_VALIDATION generation and evaluation"
+  },
+  "experiment_id": "collatz-pre-disclosure-retrospective-2026-08-24",
+  "experiment_spec": {
+    "bytes": 2497,
+    "path": "experiments/collatz-retrospective/spec.json",
+    "sha256": "e9c97b3772474dc22328dac920aa9e95d54df737afa50062bc93ccbb479a5ed7"
+  },
+  "frozen_at": "2026-08-25T00:17:55.582169+00:00",
+  "frozen_runner": {
+    "bytes": 34849,
+    "path": "scripts/collatz-retrospective",
+    "sha256": "0501a547958b5a987b158cc0357f7fac59a3f7d671a1e01c8b7357914114a7c5"
+  },
+  "generation_parameters": {
+    "coverage_prescreen": "NDJSON contains at least one projection node",
+    "coverage_target_fragment": "fn def_eq_proj",
+    "coverage_target_source": "src/tc.rs",
+    "max_coverage_tests": 32,
+    "max_projection_candidates": 64,
+    "nested_candidate_variants": 1,
+    "random_seed": 20260824,
+    "strategy": [
+      "coverage-guided pre-disclosure corpus evaluation of the projection-identity source mutant",
+      "bounded structure-name substitution in projection nodes from pre-disclosure inputs",
+      "operator-derived malformed nested-inductive declaration with an unused projection parameter"
+    ]
+  },
+  "invalid_run_archive": {
+    "assurance": {
+      "bytes": 2366,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/assurance.json",
+      "sha256": "af9a6b581bb75bb783e040578e27477c3ffa752e4fc1c6632a4e71ee23606501"
+    },
+    "assurance_runner": {
+      "bytes": 10724,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/collatz-retrospective-assurance",
+      "sha256": "6a52633856fbe6d56af46e3231cb3249424375d065f477a6ebd8eb60f9d8e342"
+    },
+    "candidate_freeze": {
+      "bytes": 978,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/candidate-freeze.json",
+      "sha256": "1d56800fdff7d620a0e80b942f888a0d06004ed04e0dc94aeeb6b5bb1f632643"
+    },
+    "coverage": {
+      "bytes": 7572,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/coverage.jsonl",
+      "sha256": "925dcf6755a2531276a86b5f592c7f1b3b8faa09b3b0966d84617a057eb41e16"
+    },
+    "evaluation": {
+      "bytes": 7960,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/evaluation.json",
+      "sha256": "3d8bdaa899d878fc0e577d28eab7f437014e57cca73ed11a312815f0e56d5f59"
+    },
+    "generation": {
+      "bytes": 3135,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/generation.json",
+      "sha256": "fdf4c8126432432bbf27d759aff871a918d9dd73509c97165a86b6612e33d4da"
+    },
+    "generation_attempts": {
+      "bytes": 0,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/generation-attempts.jsonl",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "report": {
+      "bytes": 2833,
+      "path": "results/collatz-retrospective/invalid-zero-input-run/REPORT.md",
+      "sha256": "4cd870a5400942b97995fd688d1b1b33e2abce329e644e9460515530644d62dd"
+    }
+  },
+  "original_protocol_freeze": {
+    "bytes": 40010,
+    "path": "results/collatz-retrospective/freeze.json",
+    "sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37"
+  },
+  "projection_mutation": {
+    "bytes": 837,
+    "path": "mutations/nanoda-collatz-projection-identity.json",
+    "sha256": "de54f6a472517dcaf0004f614d455ba9e18d627a7f36fd1fde882ab9a4542c89"
+  },
+  "protocol": {
+    "disclosed_artifacts_may_not_be_read_by_repaired_generation": true,
+    "does_not_restore_original_pre_disclosure_blinding": true,
+    "frozen_generator_reused_without_modification": true,
+    "historical_checker_feedback_may_not_be_used_before_candidate_freeze": true,
+    "original_invalid_run_preserved": true,
+    "post_disclosure_protocol_repair": true
+  },
+  "repair_id": "collatz-projection-coverage-path-repair-2026-08-24",
+  "repair_runner": {
+    "bytes": 27346,
+    "path": "scripts/collatz-retrospective-projection-repair",
+    "sha256": "425f40725d756f64c0383a19a69e12b4b3672a02158b9cf02702d2bbf3a4311c"
+  },
+  "repair_scope": {
+    "changed": [
+      "Read LLVM export JSON and identify the frozen target by repository-relative suffix.",
+      "Require exactly one target source map with target-line segments.",
+      "Abort if coverage selection produces no scheduled inputs."
+    ],
+    "source_suffix": "src/tc.rs",
+    "unchanged": [
+      "Historical corpus and protocol freeze",
+      "Projection mutation generator",
+      "Modeled nanoda source mutant",
+      "Random seed, schedule limit, and candidate budget",
+      "Candidate-before-historical-evaluation boundary"
+    ]
+  },
+  "schema_version": 1,
+  "status": "AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION"
+}

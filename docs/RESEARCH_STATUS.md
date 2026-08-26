@@ -46,7 +46,10 @@ Last updated: 2026-08-24
   source-digest-checked collection state and mechanical baseline-outcome
   validation.
 - Collected coverage for all 197 materialized nanoda tests across 20 Rust source
-  files and built forward/reverse indexes for 3,884 covered source locations.
+  files and built schema-2 forward/reverse indexes for 3,451 canonical covered
+  source locations. The lower count is not a coverage regression: schema 2
+  uses canonical executable regions from `llvm-cov export`, while schema 1
+  counted rendered source lines from `llvm-cov show`.
 - Added `scripts/schedule-mutant` and `scripts/run-mutant-scheduled` for
   fastest-first coverage-guided mutation execution with early kill and baseline
   restoration.
@@ -197,6 +200,36 @@ Last updated: 2026-08-24
   clearly separating injected faults from potential bugs and preserving the
   unresolved hard-gate failure.
 - Produced `results/assurance/milestone-9.json`; all 25 Milestone 9 checks pass.
+- Froze a 152-test Arena corpus at pre-regression revision `dd345f6`, affected
+  official Lean 4.29 and pre-fix nanoda `ddfac2b`, fixed/independent checker
+  binaries, two fault operators, seed `20260824`, and bounded generation inputs
+  before any historical checker or disclosed holdout feedback was available.
+- Generated an 11,217-byte malformed nested-inductive artifact from the frozen
+  operator specification. Affected official Lean accepted it; fixed official
+  Lean, Kiota, and Lean4Lean rejected it.
+- Invalidated and archived the original projection result after diagnosing an
+  absolute LLVM source-path mismatch: 26 projection-bearing historical inputs
+  had been incorrectly reported as yielding zero target-covering schedules and
+  therefore zero search attempts.
+- Froze a coverage-repair amendment, parsed LLVM export data by relative source
+  suffix, and found 11 target-covering historical inputs. The repaired stage
+  fails closed if source mapping or coverage selection is empty.
+- Froze a second amendment after the restored schedule exposed eager,
+  effectively unbounded payload materialization ahead of the nominal
+  64-candidate limit. The replacement applies the same seeded shuffle and
+  deduplication order lazily; direct equivalence tests cover full order and
+  bounded prefixes.
+- Evaluated all 11 covering historical inputs against fixed nanoda and the
+  modeled projection mutant, then found a distinction on structured mutation
+  attempt 1. After candidate freeze, pre-fix nanoda accepted the candidate while
+  fixed nanoda, both official Lean versions, Kiota, and Lean4Lean rejected it.
+- Evaluated the disclosed `nested-unused-param` artifact only after the
+  candidate freeze. Affected official Lean accepted it; fixed official Lean,
+  fixed nanoda, Kiota, and Lean4Lean rejected it, while the pinned pre-fix
+  nanoda rejected this reduced artifact.
+- Classified the amended experiment `FULL_CLASS_REDISCOVERY` and produced
+  `results/collatz-retrospective/assurance.json`; all 36 combined checks and all
+  15 repaired-branch checks pass.
 
 ## Command Log
 
@@ -247,6 +280,8 @@ scripts/run-mutant-scheduled nanoda-0002
 scripts/run-mutant-scheduled nanoda-0004
 scripts/snapshot-coverage
 scripts/snapshot-coverage --verify
+scripts/verify-portable-coverage
+scripts/verify-portable-coverage --verify
 scripts/generate-mutations --limit 12 --batch-id nanoda-syntax-0003 --write --register
 scripts/validate-mutation-batch nanoda-syntax-0003
 scripts/run-mutation-batch nanoda-syntax-0003
@@ -548,14 +583,18 @@ milestone_9_checks_passing: 25
   an explicit rationale. The two regression artifacts are therefore not marked
   ready for upstream adoption even though their official expected `REJECT`
   outcomes are mechanically established.
+- The Collatz retrospective is operator-informed and post-disclosure. Its
+  amended full-class result is evidence only for the frozen bounded protocol,
+  not prospective discovery, prevention of the original incident, or a general
+  bug-finding rate. The invalid zero-attempt run is preserved for audit. The
+  protocol repairs kept the corpus, strategy, generator semantics, seed,
+  limits, and feedback boundary fixed, but cannot recreate the original blind
+  execution.
 
-## Next Concrete Experiment
+## Next Concrete Tasks
 
-1. Freeze and execute the pre-disclosure Collatz retrospective protocol in
-   `docs/CASE_STUDY_COLLATZ.md`. Do not expose the published witness or regression
-   to generation before the freeze.
-2. Submit the prepared Kiota universe-ownership report upstream and preserve the
+1. Submit the prepared Kiota universe-ownership report upstream and preserve the
    local hard-gate failure until the disagreement is adjudicated.
-3. Define remote storage for ignored coverage and materialized-corpus payloads,
+2. Define remote storage for ignored coverage and materialized-corpus payloads,
    then keep the current assurance and public status artifacts synchronized as
    evidence changes.

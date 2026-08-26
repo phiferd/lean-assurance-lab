@@ -1204,53 +1204,88 @@
   },
   "coverage": {
     "files": {
+      "build-manifest.json": {
+        "bytes": 1865,
+        "sha256": "a4f470bbfc0798d1624bc6f057d0e4350880a2181666f6aee382fecaa7c20919"
+      },
       "collection-state.json": {
-        "bytes": 161,
-        "sha256": "8311105364104a4ba2b75f639b0552c345ee176d0edda4627c6757ece8a341ae"
+        "bytes": 2094,
+        "sha256": "365973be27b9dd10c17b9378023cf247b7ce20491e414bff163c2f41dbbf105f"
       },
       "config.json": {
         "bytes": 174,
         "sha256": "36cecabf4fd3d5dd34d9f9baa7b5d79ab28c164b33ba0e7e10f196f9d1491e63"
       },
       "coverage.jsonl": {
-        "bytes": 7482557,
-        "sha256": "41dab1208517214aaf709048f653b54010b4875378e29bbd6c4f2eaedeadb068"
+        "bytes": 6583594,
+        "sha256": "b7874424d2e14f1522f705ad3c7ce1d15883d89ebe64080a93cafbeb337f331b"
       },
       "line-to-tests.json": {
-        "bytes": 11271442,
-        "sha256": "ff0179977ea4d887c63d9d656db5f30a696dcb9696bd3c3d497066054ce7f787"
+        "bytes": 9991216,
+        "sha256": "e3bae7cc90302a6a293dcf6a1f620fd30c52655b29f8f9ff30767c49398669b1"
       },
       "manifest.json": {
-        "bytes": 696,
-        "sha256": "c87dc614ae554fc6485be20ee87080db68f3a44733b060c6e3f9cf6665240136"
+        "bytes": 1315,
+        "sha256": "3930e7e3508df9169d19098c5dcf535b51a337a88251ee99d833ea17ea44ee48"
       },
       "test-to-lines.json": {
-        "bytes": 8917658,
-        "sha256": "aee5c4574c0439a4ff887f10a8fb1157c3e207a31061a6c279a0f82eab4efe10"
+        "bytes": 7860723,
+        "sha256": "5e8adfa608718834cc960eab70c78e4d1c2346cfad329789ffc41289f916a1a5"
       }
     },
     "manifest": {
-      "binary": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/nanoda/src/target-coverage/release/nanoda_bin",
-      "build_seconds": 0.0,
+      "arena_revision": "f0fe3b379dbce91537417b529140d0ca250f271c",
+      "binary": {
+        "bytes": 3175440,
+        "logical_path": "cargo-target/release/nanoda_bin",
+        "sha256": "2ad51444225e48550602e26eaaa2967aaa959a62ae5ee74e53ecd65c8265e6ea"
+      },
+      "build_manifest": {
+        "logical_path": "build-manifest.json",
+        "sha256": "a4f470bbfc0798d1624bc6f057d0e4350880a2181666f6aee382fecaa7c20919"
+      },
       "checker": "nanoda",
+      "checker_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
       "checker_threads": 1,
-      "collected_at": "2026-08-24T16:03:04.071709+00:00",
-      "covered_location_count": 3884,
-      "llvm_cov": "/opt/homebrew/opt/llvm@22/bin/llvm-cov",
-      "llvm_profdata": "/opt/homebrew/opt/llvm@22/bin/llvm-profdata",
-      "run_seconds": 5114.370146989822,
-      "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+      "covered_location_count": 3451,
+      "llvm": {
+        "cov": {
+          "name": "llvm-cov",
+          "version": "Homebrew LLVM version 22.1.8\n  Optimized build."
+        },
+        "profdata": {
+          "name": "llvm-profdata",
+          "version": "Homebrew LLVM version 22.1.8\n  Optimized build."
+        }
+      },
+      "operational_metrics": {
+        "excluded_from_content_identity": true,
+        "logical_path": "collection-metrics.json"
+      },
+      "schema_version": 2,
+      "sentinel": {
+        "location": "src/tc.rs:869",
+        "passed": true,
+        "test": "proj-of-prop"
+      },
       "source_file_count": 20,
+      "source_identity": {
+        "embedded_root": "/lean-assurance/nanoda",
+        "locations": "repository-relative"
+      },
       "source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
       "test_count": 197,
       "test_pattern": null
     }
   },
-  "created_at": "2026-08-24T16:03:28.063099+00:00",
+  "created_at": "2026-08-25T14:08:58.618707+00:00",
   "producer_inputs": {
-    "scripts/collect-coverage": "6faac5a02b9d96bca5f5660cf596a573172b2349bf6d0ca8699d30b7b0f75a81",
+    "config/reproducibility.json": "d281fc7ae6c3fda84a9a8726040026be4f8ae7837f4f63793909985bca4548ff",
+    "lib/portable_coverage.py": "fc23730bbd22c74316050b0726b0ff195e0685818fd0367f51dc947fbbc6e6fd",
+    "scripts/collect-coverage": "929a3546bd6f8278e6d95e6217687b436543810360676a2b86d2c4872df66b35",
     "scripts/reindex-coverage": "d939d9233307435d8e490e812923b4a1aaaa0998cd1b36723a05471f326b87af",
-    "scripts/schedule-mutant": "935207bee0fe063054669df4b181778cc913a62b73cb3903b4ce85260614434a"
+    "scripts/schedule-mutant": "2155147c620f783e6bb6fd8ddff60336558f834e3af512daf00762610b3fe47b",
+    "scripts/verify-portable-coverage": "80e3c1fd34bec93e96c02be52713d19f250e2bc1b033a9781715819e70cfb989"
   },
   "schema_version": 1
 }

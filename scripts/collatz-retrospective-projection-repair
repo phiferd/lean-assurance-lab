@@ -1,0 +1,616 @@
+#!/usr/bin/env python3
+"""Repair and rerun the invalidated Collatz projection-search branch."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import os
+import shutil
+import subprocess
+import tempfile
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from types import ModuleType
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+FROZEN_RUNNER = ROOT / "scripts" / "collatz-retrospective"
+RESULT_DIR = ROOT / "results" / "collatz-retrospective"
+REPAIR_DIR = RESULT_DIR / "projection-repair"
+ARCHIVE_DIR = RESULT_DIR / "invalid-zero-input-run"
+CORPUS_DIR = ROOT / "corpus" / "collatz-retrospective"
+AMENDMENT = REPAIR_DIR / "amendment.json"
+COVERAGE = REPAIR_DIR / "coverage.jsonl"
+ATTEMPTS = REPAIR_DIR / "generation-attempts.jsonl"
+GENERATION = REPAIR_DIR / "generation.json"
+CANDIDATE_FREEZE = REPAIR_DIR / "candidate-freeze.json"
+EVALUATION = REPAIR_DIR / "evaluation.json"
+ASSURANCE = REPAIR_DIR / "assurance.json"
+PROJECTION_CANDIDATE = CORPUS_DIR / "projection-identity-candidate-repair.ndjson"
+SOURCE_SUFFIX = "src/tc.rs"
+
+
+def load_frozen_runner() -> ModuleType:
+    loader = importlib.machinery.SourceFileLoader("collatz_retrospective_frozen", str(FROZEN_RUNNER))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"cannot load frozen runner: {FROZEN_RUNNER}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+FROZEN = load_frozen_runner()
+
+
+class CoverageExtractionError(RuntimeError):
+    pass
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def record(path: Path) -> dict[str, Any]:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def bound_path(item: dict[str, Any]) -> Path:
+    path = ROOT / item["path"]
+    if not path.is_file() or sha256_file(path) != item["sha256"]:
+        raise SystemExit(f"bound artifact missing or stale: {item['path']}")
+    return path
+
+
+def composite(items: list[dict[str, Any]]) -> str:
+    digest = hashlib.sha256()
+    for item in sorted(items, key=lambda row: row["path"]):
+        digest.update(item["path"].encode())
+        digest.update(b"\0")
+        digest.update(item["sha256"].encode())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def extract_target_coverage(
+    export: dict[str, Any], source_suffix: str, target_lines: set[int]
+) -> tuple[str, list[int]]:
+    suffix = source_suffix.replace("\\", "/").lstrip("/")
+    matches: list[dict[str, Any]] = []
+    for data in export.get("data", []):
+        for item in data.get("files", []):
+            filename = str(item.get("filename", "")).replace("\\", "/")
+            if filename == suffix or filename.endswith(f"/{suffix}"):
+                matches.append(item)
+    if len(matches) != 1:
+        raise CoverageExtractionError(
+            f"expected one LLVM coverage file ending in {suffix!r}, found {len(matches)}"
+        )
+
+    item = matches[0]
+    observed_target_segment = False
+    covered: set[int] = set()
+    for segment in item.get("segments", []):
+        if len(segment) < 4:
+            continue
+        line, _column, count, has_count = segment[:4]
+        if int(line) not in target_lines:
+            continue
+        observed_target_segment = True
+        if has_count and int(count) > 0:
+            covered.add(int(line))
+    if not observed_target_segment:
+        raise CoverageExtractionError(
+            f"LLVM source map for {item['filename']} has no target-line segments"
+        )
+    return str(item["filename"]), sorted(covered)
+
+
+def run_checked(command: list[str]) -> subprocess.CompletedProcess[bytes]:
+    proc = subprocess.run(command, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+    if proc.returncode:
+        detail = proc.stderr.decode(errors="replace")[-2000:]
+        raise CoverageExtractionError(f"command failed ({proc.returncode}): {' '.join(command)}\n{detail}")
+    return proc
+
+
+def original_artifacts() -> dict[str, Path]:
+    return {
+        "coverage": RESULT_DIR / "coverage.jsonl",
+        "generation_attempts": RESULT_DIR / "generation-attempts.jsonl",
+        "generation": RESULT_DIR / "generation.json",
+        "candidate_freeze": RESULT_DIR / "candidate-freeze.json",
+        "evaluation": RESULT_DIR / "evaluation.json",
+        "assurance": RESULT_DIR / "assurance.json",
+        "report": RESULT_DIR / "REPORT.md",
+        "assurance_runner": ROOT / "scripts" / "collatz-retrospective-assurance",
+    }
+
+
+def amendment_command() -> int:
+    if AMENDMENT.exists() or ARCHIVE_DIR.exists():
+        raise SystemExit("projection repair amendment/archive already exists")
+    freeze = FROZEN.validate_protocol_freeze()
+    original_generation = load(FROZEN.GENERATION)
+    if not (
+        original_generation["coverage"]["scheduled_test_count"] == 0
+        and original_generation["projection_search"]["attempts"] == 0
+    ):
+        raise SystemExit("original run is not the diagnosed zero-input run")
+
+    REPAIR_DIR.mkdir(parents=True, exist_ok=True)
+    ARCHIVE_DIR.mkdir(parents=True, exist_ok=False)
+    archived: dict[str, dict[str, Any]] = {}
+    for name, source in original_artifacts().items():
+        if not source.is_file():
+            raise SystemExit(f"original artifact missing: {source}")
+        destination = ARCHIVE_DIR / source.name
+        shutil.copy2(source, destination)
+        archived[name] = record(destination)
+
+    amendment = {
+        "schema_version": 1,
+        "repair_id": "collatz-projection-coverage-path-repair-2026-08-24",
+        "experiment_id": freeze["experiment_id"],
+        "status": "AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION",
+        "frozen_at": utc_now(),
+        "diagnosis": {
+            "invalidated_component": "IGNORE_PROJECTION_STRUCTURE_IDENTITY search",
+            "failure": "The frozen LLVM binary embedded its former checkout root, while llvm-cov show was filtered by the current absolute source path.",
+            "effect": "The source report was empty, all prescreened inputs appeared uncovered, and the search made zero attempts.",
+            "unaffected_component": "DROP_NESTED_UNUSED_PARAMETER_VALIDATION generation and evaluation",
+        },
+        "repair_scope": {
+            "changed": [
+                "Read LLVM export JSON and identify the frozen target by repository-relative suffix.",
+                "Require exactly one target source map with target-line segments.",
+                "Abort if coverage selection produces no scheduled inputs.",
+            ],
+            "unchanged": [
+                "Historical corpus and protocol freeze",
+                "Projection mutation generator",
+                "Modeled nanoda source mutant",
+                "Random seed, schedule limit, and candidate budget",
+                "Candidate-before-historical-evaluation boundary",
+            ],
+            "source_suffix": SOURCE_SUFFIX,
+        },
+        "protocol": {
+            "post_disclosure_protocol_repair": True,
+            "original_invalid_run_preserved": True,
+            "frozen_generator_reused_without_modification": True,
+            "disclosed_artifacts_may_not_be_read_by_repaired_generation": True,
+            "historical_checker_feedback_may_not_be_used_before_candidate_freeze": True,
+            "does_not_restore_original_pre_disclosure_blinding": True,
+        },
+        "original_protocol_freeze": record(FROZEN.FREEZE),
+        "frozen_runner": record(FROZEN_RUNNER),
+        "repair_runner": record(Path(__file__)),
+        "experiment_spec": record(FROZEN.SPEC),
+        "projection_mutation": record(FROZEN.MUTATION),
+        "invalid_run_archive": archived,
+        "generation_parameters": load(FROZEN.SPEC)["generation"],
+    }
+    AMENDMENT.write_text(json.dumps(amendment, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(AMENDMENT)
+    return 0
+
+
+def validate_amendment() -> tuple[dict[str, Any], dict[str, Any]]:
+    freeze = FROZEN.validate_protocol_freeze()
+    amendment = load(AMENDMENT)
+    if amendment["status"] != "AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION":
+        raise SystemExit("invalid repair amendment status")
+    if bound_path(amendment["original_protocol_freeze"]) != FROZEN.FREEZE:
+        raise SystemExit("repair amendment binds the wrong protocol freeze")
+    if bound_path(amendment["frozen_runner"]) != FROZEN_RUNNER:
+        raise SystemExit("repair amendment binds the wrong frozen runner")
+    if bound_path(amendment["repair_runner"]) != Path(__file__).resolve():
+        raise SystemExit("repair runner changed after amendment freeze")
+    for item in amendment["invalid_run_archive"].values():
+        bound_path(item)
+    return freeze, amendment
+
+
+def collect_target_coverage(
+    freeze: dict[str, Any], source_suffix: str
+) -> tuple[list[dict[str, Any]], list[Path]]:
+    binary = FROZEN.bound_path(freeze["checker_binaries"]["coverage_nanoda"])
+    config = FROZEN.bound_path(freeze["coverage_config"])
+    profdata = FROZEN.llvm_tool("llvm-profdata")
+    llvm_cov = FROZEN.llvm_tool("llvm-cov")
+    if not profdata or not llvm_cov:
+        raise SystemExit("matching LLVM coverage tools are unavailable")
+
+    candidates = [FROZEN.bound_path(item) for item in freeze["pre_disclosure_corpus"]["files"]]
+    candidates = [path for path in candidates if FROZEN.projection_records(path)]
+    targets = set(FROZEN.target_lines())
+    rows: list[dict[str, Any]] = []
+    selected: list[Path] = []
+    with tempfile.TemporaryDirectory(prefix="collatz-projection-repair-coverage-") as temp_name:
+        temp = Path(temp_name)
+        for index, artifact in enumerate(candidates, 1):
+            profile_pattern = temp / f"test-{index}-%p.profraw"
+            env = os.environ.copy()
+            env["LLVM_PROFILE_FILE"] = str(profile_pattern)
+            started = time.monotonic()
+            with artifact.open("rb") as handle:
+                try:
+                    proc = subprocess.run(
+                        [str(binary), str(config)],
+                        stdin=handle,
+                        stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE,
+                        env=env,
+                        timeout=300,
+                    )
+                    code: int | None = proc.returncode
+                except subprocess.TimeoutExpired:
+                    code = None
+
+            profiles = sorted(temp.glob(f"test-{index}-*.profraw"))
+            if not profiles:
+                raise CoverageExtractionError(f"instrumented checker emitted no profile for {artifact}")
+            merged = temp / f"test-{index}.profdata"
+            run_checked([profdata, "merge", "-sparse", *map(str, profiles), "-o", str(merged)])
+            exported = run_checked(
+                [llvm_cov, "export", str(binary), f"--instr-profile={merged}"]
+            )
+            try:
+                export_data = json.loads(exported.stdout)
+            except json.JSONDecodeError as exc:
+                raise CoverageExtractionError(f"invalid llvm-cov export for {artifact}: {exc}") from exc
+            embedded_source, covered = extract_target_coverage(export_data, source_suffix, targets)
+            for path in [merged, *profiles]:
+                path.unlink(missing_ok=True)
+
+            row = {
+                "test": FROZEN.relative(artifact),
+                "sha256": FROZEN.sha256_file(artifact),
+                "outcome": FROZEN.normalize_exit(code),
+                "seconds": time.monotonic() - started,
+                "embedded_source": embedded_source,
+                "source_suffix": source_suffix,
+                "target_lines": covered,
+                "covers_projection_identity_operator": bool(covered),
+            }
+            rows.append(row)
+            if covered:
+                selected.append(artifact)
+            print(f"repair coverage [{index}/{len(candidates)}] {artifact.name}: {bool(covered)}", flush=True)
+
+    if not selected:
+        raise CoverageExtractionError(
+            "coverage selection returned no inputs; repaired search is inconclusive and will not run"
+        )
+    COVERAGE.write_text(
+        "".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8"
+    )
+    elapsed = {row["test"]: row["seconds"] for row in rows}
+    selected.sort(key=lambda path: elapsed[FROZEN.relative(path)])
+    return rows, selected
+
+
+def generation_command() -> int:
+    if any(path.exists() for path in [GENERATION, CANDIDATE_FREEZE, EVALUATION, ASSURANCE]):
+        raise SystemExit("projection repair generation/evaluation artifacts already exist")
+    freeze, amendment = validate_amendment()
+    spec = load(FROZEN.SPEC)
+    rows, scheduled = collect_target_coverage(freeze, amendment["repair_scope"]["source_suffix"])
+    scheduled = scheduled[: spec["generation"]["max_coverage_tests"]]
+    if not scheduled:
+        raise CoverageExtractionError("coverage limit produced an empty repaired schedule")
+
+    attempts: list[dict[str, Any]] = []
+    original_kill: dict[str, Any] | None = None
+    found: dict[str, Any] | None = None
+    started = time.monotonic()
+    with FROZEN.DifferentialSession("nanoda-collatz-projection-identity", timeout=300.0) as session:
+        for artifact in scheduled:
+            result = session.evaluate(artifact)
+            if result["different"]:
+                original_kill = {"test": FROZEN.relative(artifact), "evaluation": result}
+                break
+
+        candidates = FROZEN.projection_mutations(scheduled, spec["generation"]["random_seed"])
+        candidates = candidates[: spec["generation"]["max_projection_candidates"]]
+        with tempfile.TemporaryDirectory(prefix="collatz-projection-repair-search-") as temp_name:
+            scratch = Path(temp_name) / "candidate.ndjson"
+            for index, candidate in enumerate(candidates, 1):
+                scratch.write_bytes(candidate["payload"])
+                result = session.evaluate(scratch)
+                attempt = {
+                    "attempt": index,
+                    "strategy": "projection-structure-name-substitution",
+                    "seed": candidate["seed"],
+                    "record": candidate["record"],
+                    "old_type_name": candidate["old_type_name"],
+                    "new_type_name": candidate["new_type_name"],
+                    "candidate_sha256": candidate["sha256"],
+                    "baseline_outcome": result["baseline"]["normalized_outcome"],
+                    "mutant_outcome": result["mutant"]["normalized_outcome"],
+                    "different": result["different"],
+                }
+                attempts.append(attempt)
+                if result["different"]:
+                    PROJECTION_CANDIDATE.write_bytes(candidate["payload"])
+                    found = {**attempt, "artifact": record(PROJECTION_CANDIDATE)}
+                    break
+        preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+
+    ATTEMPTS.write_text(
+        "".join(json.dumps(item, sort_keys=True) + "\n" for item in attempts), encoding="utf-8"
+    )
+    generation = {
+        "schema_version": 1,
+        "repair_id": amendment["repair_id"],
+        "experiment_id": freeze["experiment_id"],
+        "status": "REPAIRED_PROJECTION_GENERATION_COMPLETE_BEFORE_HISTORICAL_EVALUATION",
+        "completed_at": utc_now(),
+        "protocol_amendment": record(AMENDMENT),
+        "original_protocol_freeze": record(FROZEN.FREEZE),
+        "frozen_generator": record(FROZEN_RUNNER),
+        "contamination_controls": {
+            "post_disclosure_protocol_repair": True,
+            "disclosed_arena_artifact_read_by_generation": False,
+            "published_collatz_artifact_read_by_generation": False,
+            "historical_checker_executed_by_generation": False,
+            "modeled_nanoda_mutant_feedback_used": True,
+        },
+        "coverage": {
+            "artifact": record(COVERAGE),
+            "prescreened_test_count": len(rows),
+            "target_covering_test_count": sum(row["covers_projection_identity_operator"] for row in rows),
+            "scheduled_test_count": len(scheduled),
+            "scheduled_tests": [FROZEN.relative(path) for path in scheduled],
+            "target_lines": FROZEN.target_lines(),
+            "source_suffix": amendment["repair_scope"]["source_suffix"],
+            "extraction": "llvm-cov export JSON; repository-relative suffix match",
+            "empty_selection_policy": "abort-inconclusive",
+        },
+        "pre_disclosure_corpus_mutation_evaluation": {
+            "killed_by_original_corpus": original_kill is not None,
+            "first_kill": original_kill,
+        },
+        "projection_search": {
+            "random_seed": spec["generation"]["random_seed"],
+            "max_attempts": spec["generation"]["max_projection_candidates"],
+            "attempts": len(attempts),
+            "attempt_log": record(ATTEMPTS),
+            "witness_found": found is not None,
+            "found": found,
+        },
+        "generated_candidate": found["artifact"] if found else None,
+        "source_model_preparation": preparation,
+        "source_restored": bool(preparation["source_restored"]),
+        "costs": {
+            "wall_seconds": time.monotonic() - started,
+            "checker_runs": checker_runs,
+            "checker_seconds": checker_seconds,
+        },
+    }
+    GENERATION.write_text(json.dumps(generation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    candidates_frozen = [generation["generated_candidate"]] if generation["generated_candidate"] else []
+    candidate_freeze = {
+        "schema_version": 1,
+        "repair_id": amendment["repair_id"],
+        "experiment_id": freeze["experiment_id"],
+        "status": "REPAIRED_PROJECTION_CANDIDATES_FROZEN_BEFORE_HISTORICAL_EVALUATION",
+        "frozen_at": utc_now(),
+        "protocol_amendment": record(AMENDMENT),
+        "generation": record(GENERATION),
+        "candidates": candidates_frozen,
+        "candidate_composite_sha256": composite(candidates_frozen),
+        "historical_checker_feedback_used": False,
+        "disclosed_holdout_feedback_used": False,
+    }
+    CANDIDATE_FREEZE.write_text(
+        json.dumps(candidate_freeze, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(CANDIDATE_FREEZE)
+    return 0
+
+
+def projection_distinction(rows: list[dict[str, Any]]) -> bool:
+    return any(
+        row["checkers"]["prefixed_nanoda_ddfac2b"]["normalized_outcome"] == "ACCEPT"
+        and row["checkers"]["fixed_nanoda_6ae1f0c"]["normalized_outcome"] == "REJECT"
+        for row in rows
+    )
+
+
+def evaluate_command() -> int:
+    if EVALUATION.exists():
+        raise SystemExit("projection repair evaluation already exists")
+    freeze, amendment = validate_amendment()
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    if candidate_freeze["status"] != "REPAIRED_PROJECTION_CANDIDATES_FROZEN_BEFORE_HISTORICAL_EVALUATION":
+        raise SystemExit("repaired projection candidate boundary is not frozen")
+    started_at = utc_now()
+    if datetime.fromisoformat(candidate_freeze["frozen_at"]) >= datetime.fromisoformat(started_at):
+        raise SystemExit("repaired candidate freeze must predate evaluation")
+    bound_path(candidate_freeze["protocol_amendment"])
+    bound_path(candidate_freeze["generation"])
+    candidates = [bound_path(item) for item in candidate_freeze["candidates"]]
+    binaries = {
+        name: FROZEN.bound_path(item)
+        for name, item in freeze["checker_binaries"].items()
+        if name != "coverage_nanoda"
+    }
+    generated = [FROZEN.evaluate_artifact(path, binaries) for path in candidates]
+    distinguished = projection_distinction(generated)
+    costs = [item for row in generated for item in row["checkers"].values()]
+    result = {
+        "schema_version": 1,
+        "repair_id": amendment["repair_id"],
+        "experiment_id": freeze["experiment_id"],
+        "status": "COMPLETE",
+        "classification": (
+            "PROJECTION_COMPONENT_REDISCOVERED"
+            if distinguished
+            else "PROJECTION_COMPONENT_NOT_REDISCOVERED"
+        ),
+        "projection_structure_identity_distinction": distinguished,
+        "started_at": started_at,
+        "completed_at": utc_now(),
+        "protocol_amendment": record(AMENDMENT),
+        "candidate_freeze": record(CANDIDATE_FREEZE),
+        "generated_candidate_evaluations": generated,
+        "feedback_boundary": {
+            "repair_amendment_frozen_before_generation": datetime.fromisoformat(amendment["frozen_at"])
+            < datetime.fromisoformat(load(GENERATION)["completed_at"]),
+            "candidates_frozen_before_historical_evaluation": True,
+            "disclosed_holdout_evaluated": False,
+            "published_collatz_artifact_evaluated": False,
+        },
+        "costs": {
+            "checker_runs": len(costs),
+            "checker_seconds": sum(item["seconds"] for item in costs),
+        },
+        "producer": record(Path(__file__)),
+    }
+    EVALUATION.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(EVALUATION)
+    return 0
+
+
+def verify_command() -> int:
+    freeze, amendment = validate_amendment()
+    generation = load(GENERATION)
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    evaluation = load(EVALUATION)
+    spec = load(FROZEN.SPEC)
+    coverage_rows = [
+        json.loads(line) for line in COVERAGE.read_text(encoding="utf-8").splitlines() if line
+    ]
+    attempts = [
+        json.loads(line) for line in ATTEMPTS.read_text(encoding="utf-8").splitlines() if line
+    ]
+    candidates_bound = all(bound_path(item).is_file() for item in candidate_freeze["candidates"])
+    expected_distinction = projection_distinction(evaluation["generated_candidate_evaluations"])
+    invalid_generation = load(bound_path(amendment["invalid_run_archive"]["generation"]))
+    checks = {
+        "amendment_frozen_before_repaired_generation": datetime.fromisoformat(amendment["frozen_at"])
+        < datetime.fromisoformat(generation["completed_at"]),
+        "original_protocol_freeze_still_bound": bound_path(amendment["original_protocol_freeze"])
+        == FROZEN.FREEZE,
+        "original_invalid_run_preserved": all(
+            bound_path(item).is_file() for item in amendment["invalid_run_archive"].values()
+        ),
+        "invalid_zero_input_result_identified": invalid_generation["coverage"]["scheduled_test_count"]
+        == 0
+        and invalid_generation["projection_search"]["attempts"] == 0,
+        "frozen_generator_reused": bound_path(generation["frozen_generator"]) == FROZEN_RUNNER,
+        "disclosed_inputs_excluded_during_repaired_generation": not any(
+            generation["contamination_controls"][key]
+            for key in [
+                "disclosed_arena_artifact_read_by_generation",
+                "published_collatz_artifact_read_by_generation",
+            ]
+        ),
+        "historical_feedback_excluded_before_candidate_freeze": not generation[
+            "contamination_controls"
+        ]["historical_checker_executed_by_generation"],
+        "coverage_artifact_complete_and_bound": len(coverage_rows)
+        == generation["coverage"]["prescreened_test_count"]
+        and bound_path(generation["coverage"]["artifact"]) == COVERAGE,
+        "coverage_source_resolved_by_suffix": all(
+            row["embedded_source"].replace("\\", "/").endswith(f"/{SOURCE_SUFFIX}")
+            for row in coverage_rows
+        ),
+        "coverage_selection_nonempty": generation["coverage"]["target_covering_test_count"] > 0
+        and generation["coverage"]["scheduled_test_count"] > 0,
+        "fixed_seed_and_budget_respected": generation["projection_search"]["random_seed"]
+        == spec["generation"]["random_seed"]
+        and generation["projection_search"]["max_attempts"]
+        == spec["generation"]["max_projection_candidates"]
+        and len(attempts) == generation["projection_search"]["attempts"]
+        <= generation["projection_search"]["max_attempts"],
+        "source_model_restored": generation["source_restored"]
+        and generation["source_model_preparation"]["source_restored"],
+        "candidate_freeze_complete_and_bound": candidate_freeze["status"]
+        == "REPAIRED_PROJECTION_CANDIDATES_FROZEN_BEFORE_HISTORICAL_EVALUATION"
+        and candidates_bound
+        and bound_path(candidate_freeze["generation"]) == GENERATION,
+        "candidate_freeze_precedes_historical_evaluation": datetime.fromisoformat(
+            candidate_freeze["frozen_at"]
+        )
+        < datetime.fromisoformat(evaluation["started_at"]),
+        "all_repaired_candidates_evaluated": len(evaluation["generated_candidate_evaluations"])
+        == len(candidate_freeze["candidates"]),
+        "six_checkers_evaluated_per_candidate": all(
+            len(row["checkers"]) == 6 for row in evaluation["generated_candidate_evaluations"]
+        ),
+        "projection_classification_recomputed": evaluation[
+            "projection_structure_identity_distinction"
+        ]
+        == expected_distinction
+        and evaluation["classification"]
+        == (
+            "PROJECTION_COMPONENT_REDISCOVERED"
+            if expected_distinction
+            else "PROJECTION_COMPONENT_NOT_REDISCOVERED"
+        ),
+        "repair_runner_identity_preserved": bound_path(amendment["repair_runner"])
+        == Path(__file__).resolve()
+        and evaluation["producer"]["sha256"] == amendment["repair_runner"]["sha256"],
+        "original_frozen_inputs_still_bound": all(
+            FROZEN.bound_path(item).is_file() for item in freeze["pre_disclosure_corpus"]["files"]
+        ),
+    }
+    assurance = {
+        "schema_version": 1,
+        "repair_id": amendment["repair_id"],
+        "experiment_id": freeze["experiment_id"],
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": evaluation["classification"],
+        "checked_at": utc_now(),
+        "checks": checks,
+        "evidence": {
+            "amendment": record(AMENDMENT),
+            "coverage": record(COVERAGE),
+            "generation": record(GENERATION),
+            "candidate_freeze": record(CANDIDATE_FREEZE),
+            "evaluation": record(EVALUATION),
+        },
+        "producer": record(Path(__file__)),
+    }
+    ASSURANCE.write_text(json.dumps(assurance, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(ASSURANCE)
+    return 0 if assurance["status"] == "PASS" else 1
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=["amend", "generate", "evaluate", "verify"])
+    args = parser.parse_args()
+    return {
+        "amend": amendment_command,
+        "generate": generation_command,
+        "evaluate": evaluate_command,
+        "verify": verify_command,
+    }[args.command]()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

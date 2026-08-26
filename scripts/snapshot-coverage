@@ -18,7 +18,7 @@ CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
 BASELINE = ROOT / "results" / "baseline" / "outcomes" / "nanoda-full.jsonl"
 COVERAGE_DIR = ROOT / "results" / "coverage" / "nanoda"
 DEFAULT_OUTPUT = ROOT / "results" / "manifests" / "coverage-nanoda.json"
-COVERAGE_FILES = (
+LEGACY_COVERAGE_FILES = (
     "collection-state.json",
     "config.json",
     "coverage.jsonl",
@@ -27,9 +27,12 @@ COVERAGE_FILES = (
     "test-to-lines.json",
 )
 INPUT_SCRIPTS = (
+    "config/reproducibility.json",
+    "lib/portable_coverage.py",
     "scripts/collect-coverage",
     "scripts/reindex-coverage",
     "scripts/schedule-mutant",
+    "scripts/verify-portable-coverage",
 )
 
 
@@ -87,6 +90,9 @@ def snapshot() -> dict:
     coverage_manifest = json.loads(
         (COVERAGE_DIR / "manifest.json").read_text(encoding="utf-8")
     )
+    coverage_files = list(LEGACY_COVERAGE_FILES)
+    if coverage_manifest.get("schema_version", 1) >= 2:
+        coverage_files.append("build-manifest.json")
     coverage_rows = read_jsonl(COVERAGE_DIR / "coverage.jsonl")
     baseline_rows = read_jsonl(BASELINE)
     coverage_outcomes = {row["test"]: row["outcome"] for row in coverage_rows}
@@ -135,7 +141,7 @@ def snapshot() -> dict:
                     "bytes": (COVERAGE_DIR / name).stat().st_size,
                     "sha256": sha256_file(COVERAGE_DIR / name),
                 }
-                for name in COVERAGE_FILES
+                for name in coverage_files
             },
         },
         "producer_inputs": {

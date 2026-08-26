@@ -1,0 +1,10 @@
+{
+  "id": "nanoda-collatz-projection-identity",
+  "checker": "nanoda",
+  "source_file": "src/tc.rs",
+  "original": "            (\n                Proj { ty_name: ty_name_l, idx: idx_l, structure: structure_l, .. },\n                Proj { ty_name: ty_name_r, idx: idx_r, structure: structure_r, .. }\n            ) => ty_name_l == ty_name_r && idx_l == idx_r && self.def_eq(structure_l, structure_r),",
+  "mutated": "            (Proj { idx: idx_l, structure: structure_l, .. }, Proj { idx: idx_r, structure: structure_r, .. }) =>\n                idx_l == idx_r && self.def_eq(structure_l, structure_r),",
+  "mutation_operator": "IGNORE_PROJECTION_STRUCTURE_IDENTITY",
+  "subsystem": "definitional-equality",
+  "semantic_rationale": "Recreates the pre-fix nanoda comparison rule without copying a disclosed witness into generation."
+}

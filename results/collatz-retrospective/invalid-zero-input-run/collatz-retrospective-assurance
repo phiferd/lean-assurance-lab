@@ -1,0 +1,189 @@
+#!/usr/bin/env python3
+"""Audit the completed Collatz retrospective and render its scoped report."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+RESULT_DIR = ROOT / "results" / "collatz-retrospective"
+FREEZE = RESULT_DIR / "freeze.json"
+GENERATION = RESULT_DIR / "generation.json"
+CANDIDATE_FREEZE = RESULT_DIR / "candidate-freeze.json"
+EVALUATION = RESULT_DIR / "evaluation.json"
+ASSURANCE = RESULT_DIR / "assurance.json"
+REPORT = RESULT_DIR / "REPORT.md"
+SPEC = ROOT / "experiments" / "collatz-retrospective" / "spec.json"
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def record(path: Path) -> dict[str, Any]:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def bound(item: dict[str, Any]) -> bool:
+    path = ROOT / item["path"]
+    return path.is_file() and sha256_file(path) == item["sha256"]
+
+
+def outcomes(row: dict[str, Any]) -> dict[str, str]:
+    return {name: result["normalized_outcome"] for name, result in row["checkers"].items()}
+
+
+def main() -> int:
+    freeze = load(FREEZE)
+    generation = load(GENERATION)
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    evaluation = load(EVALUATION)
+    spec = load(SPEC)
+    coverage_rows = [
+        json.loads(line)
+        for line in (ROOT / generation["coverage"]["artifact"]["path"]).read_text(encoding="utf-8").splitlines()
+        if line
+    ]
+    generated = evaluation["generated_candidate_evaluations"]
+    generated_outcomes = outcomes(generated[0])
+    holdout_outcomes = outcomes(evaluation["disclosed_holdout_evaluation"])
+    corpus_bound = all(bound(item) for item in freeze["pre_disclosure_corpus"]["files"])
+    binaries_bound = all(bound(item) for item in freeze["checker_binaries"].values())
+    candidates_bound = all(bound(item) for item in candidate_freeze["candidates"])
+
+    nested_distinction = (
+        generated_outcomes["affected_official_4_29"] == "ACCEPT"
+        and generated_outcomes["fixed_official_4_33"] == "REJECT"
+    )
+    projection_distinction = (
+        generated_outcomes["prefixed_nanoda_ddfac2b"] == "ACCEPT"
+        and generated_outcomes["fixed_nanoda_6ae1f0c"] == "REJECT"
+    )
+    independent_rejection = any(
+        generated_outcomes[name] == "REJECT"
+        for name in ["fixed_nanoda_6ae1f0c", "independent_kiota_58e8636", "independent_lean4lean_ecb3b66"]
+    )
+    expected_classification = (
+        "FULL_CLASS_REDISCOVERY"
+        if nested_distinction and projection_distinction and independent_rejection
+        else "PARTIAL_REDISCOVERY"
+        if nested_distinction or projection_distinction
+        else "NO_REDISCOVERY"
+    )
+
+    checks = {
+        "protocol_freeze_complete": freeze["status"] == "FROZEN_BEFORE_GENERATION_AND_HELD_OUT_EVALUATION",
+        "pre_disclosure_arena_revision_bound": freeze["historical_boundary"]["arena_revision"] == spec["historical_boundary"]["arena_revision"],
+        "disclosed_regression_absent_from_corpus": freeze["historical_boundary"]["regression_commit_absent"] and all("nested-unused-param" not in item["path"] for item in freeze["pre_disclosure_corpus"]["files"]),
+        "historical_corpus_complete_and_bound": freeze["pre_disclosure_corpus"]["test_count"] == spec["historical_boundary"]["expected_materialized_test_count"] and corpus_bound,
+        "checker_binaries_bound": binaries_bound,
+        "runner_identity_unchanged": bound(freeze["runner"]) and evaluation["producer"]["sha256"] == freeze["runner"]["sha256"],
+        "generation_after_protocol_freeze": datetime.fromisoformat(freeze["frozen_at"]) < datetime.fromisoformat(generation["completed_at"]),
+        "disclosed_inputs_excluded_during_generation": not any(generation["contamination_controls"][key] for key in ["disclosed_arena_artifact_read_by_generation", "published_collatz_artifact_read_by_generation"]),
+        "historical_checker_feedback_excluded_during_generation": not generation["contamination_controls"]["historical_checker_executed_by_generation"],
+        "coverage_stage_executed_and_bound": len(coverage_rows) == generation["coverage"]["prescreened_test_count"] > 0 and bound(generation["coverage"]["artifact"]),
+        "zero_covering_schedule_preserved_as_negative_result": generation["coverage"]["target_covering_test_count"] == 0 and generation["coverage"]["scheduled_test_count"] == 0 and not generation["projection_search"]["witness_found"],
+        "fixed_seed_and_budget_respected": generation["projection_search"]["random_seed"] == spec["generation"]["random_seed"] and generation["projection_search"]["attempts"] <= generation["projection_search"]["max_attempts"],
+        "source_model_built_and_restored": generation["source_restored"] and generation["source_model_preparation"]["source_restored"],
+        "candidate_freeze_complete_and_bound": candidate_freeze["status"] == "CANDIDATES_FROZEN_BEFORE_HISTORICAL_AND_HOLDOUT_EVALUATION" and candidates_bound and bound(candidate_freeze["generation"]),
+        "candidate_freeze_precedes_evaluation": datetime.fromisoformat(candidate_freeze["frozen_at"]) < datetime.fromisoformat(evaluation["started_at"]),
+        "all_generated_candidates_evaluated": len(generated) == len(candidate_freeze["candidates"]),
+        "six_checkers_evaluated_per_artifact": all(len(row["checkers"]) == 6 for row in [*generated, evaluation["disclosed_holdout_evaluation"]]),
+        "nested_component_rediscovered": nested_distinction,
+        "independent_fixed_checker_rejected_generated_artifact": independent_rejection,
+        "projection_component_failure_preserved": not projection_distinction and not generation["projection_search"]["witness_found"],
+        "disclosed_holdout_used_only_after_candidate_freeze": evaluation["feedback_boundary"]["holdout_evaluated_only_after_candidate_freeze"],
+        "holdout_reproduces_official_version_distinction": holdout_outcomes["affected_official_4_29"] == "ACCEPT" and holdout_outcomes["fixed_official_4_33"] == "REJECT",
+        "classification_recomputed": evaluation["classification"] == expected_classification == "PARTIAL_REDISCOVERY",
+    }
+    assurance = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": evaluation["classification"],
+        "checked_at": datetime.now(timezone.utc).isoformat(),
+        "checks": checks,
+        "evidence": {
+            "freeze": record(FREEZE),
+            "generation": record(GENERATION),
+            "candidate_freeze": record(CANDIDATE_FREEZE),
+            "evaluation": record(EVALUATION),
+        },
+        "producer": record(Path(__file__)),
+    }
+    ASSURANCE.write_text(json.dumps(assurance, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    report = f"""# Frozen Collatz Retrospective Report
+
+Status: **{assurance['status']}**  
+Classification: **{evaluation['classification']}**
+
+## Result
+
+The bounded retrospective partially rediscovered the disclosed fault class. The generated artifact was accepted by affected official Lean 4.29 and rejected by fixed official Lean 4.33. Kiota and Lean4Lean also rejected it, providing independent implementation evidence. The projection-structure-identity component was not rediscovered within the frozen schedule.
+
+This is retrospective capability evidence under an operator-informed protocol. It is not evidence that the project prospectively discovered the 2026 incident, and it is not a general bug-finding rate.
+
+## Frozen Boundary
+
+- Historical Arena revision: `{freeze['historical_boundary']['arena_revision']}`
+- Historical corpus: {freeze['pre_disclosure_corpus']['test_count']} materialized tests, {freeze['pre_disclosure_corpus']['total_bytes']} bytes
+- Corpus composite SHA-256: `{freeze['pre_disclosure_corpus']['composite_sha256']}`
+- Protocol freeze SHA-256: `{sha256_file(FREEZE)}`
+- Random seed: `{generation['projection_search']['random_seed']}`
+- Projection candidate budget: {generation['projection_search']['max_attempts']}
+- Disclosed Arena and published Collatz artifacts used during generation: no
+- Historical checker feedback used during generation: no
+
+## Generated Artifact
+
+`{generated[0]['artifact']['path']}` ({generated[0]['artifact']['bytes']} bytes, SHA-256 `{generated[0]['artifact']['sha256']}`)
+
+| Checker | Outcome |
+| --- | --- |
+| Affected official Lean 4.29 | {generated_outcomes['affected_official_4_29']} |
+| Pre-fix nanoda `ddfac2b` | {generated_outcomes['prefixed_nanoda_ddfac2b']} |
+| Fixed official Lean 4.33 | {generated_outcomes['fixed_official_4_33']} |
+| Fixed nanoda `6ae1f0c` | {generated_outcomes['fixed_nanoda_6ae1f0c']} |
+| Kiota `58e8636` | {generated_outcomes['independent_kiota_58e8636']} |
+| Lean4Lean `ecb3b66` | {generated_outcomes['independent_lean4lean_ecb3b66']} |
+
+The result establishes the dropped nested-unused-parameter distinction. It does not distinguish pre-fix from fixed nanoda: both accepted the generated artifact.
+
+## Negative Result
+
+The coverage stage examined {generation['coverage']['prescreened_test_count']} pre-disclosure inputs containing serialized projections. None covered the frozen nanoda projection-equality target, so the coverage-guided schedule and structured projection search contained zero eligible attempts. No projection-identity witness was generated. This is recorded as a failed component, not as equivalence and not as full rediscovery.
+
+## Disclosed Holdout
+
+The Arena `nested-unused-param` artifact was opened only after the candidate freeze. Affected official Lean 4.29 accepted it; fixed official Lean 4.33, fixed nanoda, Kiota, and Lean4Lean rejected it. The pinned pre-fix nanoda revision rejected this reduced Arena artifact, which is narrower than the original Collatz development discussed in the postmortem.
+
+## Cost
+
+- Generated/holdout checker runs: {evaluation['costs']['checker_runs']}
+- Generated/holdout checker seconds: {evaluation['costs']['checker_seconds']:.4f}
+- Source-model checker runs: {generation['costs']['checker_runs']}
+- Nested candidate build/export seconds: {generation['costs']['build_export_seconds']:.4f}
+
+Mechanical audit: `{relative(ASSURANCE)}` ({len(checks)} checks).
+"""
+    REPORT.write_text(report, encoding="utf-8")
+    print(ASSURANCE)
+    print(REPORT)
+    return 0 if assurance["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

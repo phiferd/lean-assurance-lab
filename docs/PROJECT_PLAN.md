@@ -72,11 +72,16 @@ Current measured state, distinguishing tracked artifacts from local evidence:
   rejects it and `nanoda-0003` accepts it.
 - Per-test coverage collection completed for all 197 materialized `nanoda`
   tests, with exact instrumented-versus-baseline outcome agreement.
-- The local coverage indexes contain 3,884 covered source locations across 20
+- The schema-2 local coverage indexes contain 3,451 canonical covered source
+  locations across 20
   Rust source files. They are excluded from Git under the current artifact
   storage policy, so they are reproducible local evidence but not yet durable
   repository artifacts. A tracked identity snapshot binds every local coverage
   file and all 9.5 GB of materialized corpus inputs by SHA-256.
+- Portable coverage builds now remap local paths, separate operational metrics
+  from content identity, require a coverage sentinel, and pass a two-checkout
+  relocation test with identical binary and canonical coverage hashes. All 197
+  tests have been recollected under schema 2 with exact baseline agreement.
 - Coverage-guided execution reproduced the `nanoda-0001` kill after 7 of 67
   covering tests and exhausted all 120 covering tests for `nanoda-0003`
   without a difference.
@@ -169,6 +174,13 @@ Current measured state, distinguishing tracked artifacts from local evidence:
   without private context.
 - `results/assurance/milestone-9.json` records a passing 25-check community
   workflow gate.
+- The amended frozen Collatz retrospective is complete. Its 36-check combined
+  audit and 15-check repaired-branch audit pass, and its measured classification
+  is `FULL_CLASS_REDISCOVERY`. One generated artifact distinguishes affected
+  official Lean 4.29 from fixed Lean 4.33; a second distinguishes pre-fix from
+  fixed nanoda. The original zero-input projection branch remains archived as
+  invalid, and the report records that post-disclosure repairs do not restore
+  the original blind execution.
 
 ## Milestone 0: Reproducible Project Foundation
 
@@ -559,18 +571,25 @@ Completed prerequisites on 2026-08-24:
   Milestone 7 runner remains unchanged because its hash is part of that
   completed experiment's evidence.
 
+Completed next experiment on 2026-08-24:
+
+- The amended frozen Collatz retrospective completed from a content-addressed
+  protocol, two repair amendments, and separate candidate boundaries. It is
+  classified `FULL_CLASS_REDISCOVERY`; see
+  `results/collatz-retrospective/REPORT.md`. The original invalid zero-input run
+  is archived. Repaired generation did not execute historical checkers or read
+  disclosed Collatz/Arena artifacts, but its post-disclosure knowledge limitation
+  remains explicit in the report.
+
 Next:
 
-1. Freeze and run the pre-disclosure Collatz retrospective described in
-   `docs/CASE_STUDY_COLLATZ.md`; preserve a failure to rediscover the bug class
-   just as carefully as a success.
-2. Submit the prepared Kiota report upstream and track maintainer adjudication
+1. Submit the prepared Kiota report upstream and track maintainer adjudication
    without changing the local disagreement status prematurely.
-3. Define durable remote storage for ignored coverage and materialized-corpus
+2. Define durable remote storage for ignored coverage and materialized-corpus
    payloads while retaining content-addressed local verification.
-4. Expand rotating evidence with additional validator-specific mutants and
+3. Expand rotating evidence with additional validator-specific mutants and
    semantic subsystems without using held-out feedback during generation.
-5. Regenerate the assurance snapshot and public status whenever a bound input
+4. Regenerate the assurance snapshot and public status whenever a bound input
    changes, preserving unfavorable or unresolved results as current evidence.
 
 ## Decision Rules

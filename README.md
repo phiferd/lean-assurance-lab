@@ -51,6 +51,15 @@ result, not a failed milestone implementation. The Milestone 8 implementation
 gate passes all 24 checks, and the Milestone 9 community-workflow gate passes
 all 25 checks.
 
+The amended frozen Collatz retrospective is complete and classified
+`FULL_CLASS_REDISCOVERY`. The original run recreated the affected-official/
+fixed-official nested-parameter distinction. After preserving and invalidating
+its zero-input projection branch, two protocol amendments repaired relocated
+LLVM source paths and bounded candidate materialization. The repaired search
+then recreated the pre-fix/fixed nanoda projection-structure-identity
+distinction on attempt 1. The scoped report is
+[results/collatz-retrospective/REPORT.md](results/collatz-retrospective/REPORT.md).
+
 ## Repository Layout
 
 ```text
@@ -67,6 +76,7 @@ docs/
   RESEARCH_STATUS.md
 results/
   baseline/
+  collatz-retrospective/
   cross-validation/
   expected-outcomes/
   mutants/
@@ -85,6 +95,8 @@ scripts/
   build-rotating-heldout-report
   audit-coverage-guidance
   collect-coverage
+  collatz-retrospective
+  collatz-retrospective-assurance
   compare
   check-distinction
   confirm-witness
@@ -190,11 +202,27 @@ Collect exact per-test Rust line coverage for the materialized nanoda corpus:
 scripts/collect-coverage --timeout 7200 --checker-threads 1
 ```
 
-The collector uses an isolated instrumented binary under `target-coverage`,
+For a fresh checkout, pin the Arena revision and verify the required host tools
+before materializing its checkers and tests:
+
+```sh
+scripts/setup-arena --reproducible
+scripts/verify-portable-coverage --check-environment-only
+```
+
+The collector remaps checkout, Cargo, target, and Rust sysroot paths to stable
+virtual roots and suppresses the final Mach-O UUID on macOS. It uses an
+isolated instrumented binary under `target-coverage`,
 checks every instrumented outcome against the cached baseline, checkpoints each
 test, and writes forward and reverse indexes under `results/coverage/nanoda/`.
 Interrupted runs can continue with `--resume --reuse-build`, provided the saved
 source digest and collection configuration still match.
+
+`scripts/verify-portable-coverage` builds in two different absolute paths,
+including one with spaces, and requires identical binary hashes and canonical
+repository-relative coverage. Exact binary identity is guaranteed only for the
+pinned host and toolchain in `config/reproducibility.json`; other targets may
+reproduce semantic coverage without producing the same executable bytes.
 
 Inspect or persist the fastest-first covering-test schedule for a mutant:
 
@@ -367,6 +395,7 @@ verify the Milestone 1 gate with:
 ```sh
 scripts/snapshot-coverage
 scripts/snapshot-coverage --verify
+scripts/verify-portable-coverage --verify
 scripts/assurance-snapshot
 ```
 

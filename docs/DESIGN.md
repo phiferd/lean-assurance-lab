@@ -46,8 +46,12 @@ without going through the whole Arena runner.
 ### Coverage Index And Scheduler
 
 `scripts/collect-coverage` builds nanoda with Rust source coverage in an
-isolated `target-coverage` directory and runs every materialized Arena test
-separately. Each profile is accepted only when the instrumented normalized
+isolated `target-coverage` directory. Build flags remap the checker checkout,
+Cargo home, target directory, and Rust sysroot to stable virtual roots. On
+macOS, the final executable is relinked without a random Mach-O UUID. Coverage
+export is canonicalized to repository-relative source identities and rejects
+ambiguous or unknown source mappings. The collector runs every materialized
+Arena test separately. Each profile is accepted only when the instrumented normalized
 outcome matches the cached baseline. Collection state includes a source digest,
 thread count, and test pattern so incompatible interrupted runs cannot be
 silently merged.
@@ -59,7 +63,14 @@ results/coverage/<checker>/coverage.jsonl
 results/coverage/<checker>/test-to-lines.json
 results/coverage/<checker>/line-to-tests.json
 results/coverage/<checker>/manifest.json
+results/coverage/<checker>/build-manifest.json
+results/coverage/<checker>/collection-metrics.json
 ```
+
+The first five files are content identity. Operational timestamps, elapsed
+times, and local executable paths are isolated in `collection-metrics.json`
+and excluded from content hashes. The default collection also requires a known
+coverage sentinel so an empty or mis-mapped export fails closed.
 
 `scripts/schedule-mutant` maps the registered mutant source span through the
 reverse index and orders covering tests by uninstrumented baseline wall time.
@@ -114,6 +125,13 @@ materialized NDJSON inputs, baseline outcomes, checker source, Arena revision,
 checker definition, collection configuration, and producer scripts into a
 compact tracked manifest. Its `--verify` mode fails when any bound input or
 output changes.
+
+`scripts/verify-portable-coverage` is the relocation control. Under the pinned
+host and tools in `config/reproducibility.json`, it builds the same checker in
+two absolute paths and requires identical executable, build-manifest, and
+canonical coverage hashes. The complete 197-test payload has been recollected
+under schema 2 and includes its portable build manifest. The superseded
+schema-1 payload is not retroactively treated as portable evidence.
 
 `scripts/assurance-snapshot` is the Milestone 1 gate. It requires current
 coverage identity, identity-bound conclusions for all four controlled mutants,

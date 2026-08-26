@@ -1,0 +1,719 @@
+#!/usr/bin/env python3
+"""Freeze, generate, and evaluate the bounded Collatz retrospective."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+import os
+import random
+import re
+import shutil
+import subprocess
+import sys
+import tempfile
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from nanoda_differential import DifferentialSession, sha256_file  # noqa: E402
+
+SPEC = ROOT / "experiments" / "collatz-retrospective" / "spec.json"
+MUTATION = ROOT / "mutations" / "nanoda-collatz-projection-identity.json"
+PRE_ARENA = ROOT / "external" / "lean-kernel-arena-collatz-pre"
+CURRENT_ARENA = ROOT / "external" / "lean-kernel-arena"
+RESULT_DIR = ROOT / "results" / "collatz-retrospective"
+CORPUS_DIR = ROOT / "corpus" / "collatz-retrospective"
+FREEZE = RESULT_DIR / "freeze.json"
+GENERATION = RESULT_DIR / "generation.json"
+CANDIDATE_FREEZE = RESULT_DIR / "candidate-freeze.json"
+EVALUATION = RESULT_DIR / "evaluation.json"
+ATTEMPTS = RESULT_DIR / "generation-attempts.jsonl"
+COVERAGE = RESULT_DIR / "coverage.jsonl"
+
+
+def utc_now() -> str:
+    return datetime.now(timezone.utc).isoformat()
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def relative(path: Path) -> str:
+    return str(path.resolve().relative_to(ROOT))
+
+
+def record(path: Path) -> dict[str, Any]:
+    return {"path": relative(path), "sha256": sha256_file(path), "bytes": path.stat().st_size}
+
+
+def git_output(cwd: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=cwd, check=True, text=True, stdout=subprocess.PIPE
+    ).stdout.strip()
+
+
+def source_digest(checker_root: Path) -> str:
+    digest = hashlib.sha256()
+    for path in sorted((checker_root / "src").rglob("*.rs")):
+        digest.update(str(path.relative_to(checker_root)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def corpus_files() -> list[Path]:
+    root = PRE_ARENA / "_build" / "tests"
+    return sorted(path for path in root.rglob("*.ndjson") if "work" not in path.parts)
+
+
+def composite(records: list[dict[str, Any]]) -> str:
+    digest = hashlib.sha256()
+    for item in sorted(records, key=lambda row: row["path"]):
+        digest.update(item["path"].encode())
+        digest.update(b"\0")
+        digest.update(item["sha256"].encode())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def bound_path(item: dict[str, Any]) -> Path:
+    path = ROOT / item["path"]
+    if not path.is_file() or sha256_file(path) != item["sha256"]:
+        raise SystemExit(f"bound artifact missing or stale: {item['path']}")
+    return path
+
+
+def checker_paths() -> dict[str, Path]:
+    return {
+        "affected_official_4_29": PRE_ARENA / "_build" / "checkers" / "official" / "src" / ".lake" / "build" / "bin" / "kernel",
+        "prefixed_nanoda_ddfac2b": PRE_ARENA / "_build" / "checkers" / "nanoda" / "src" / "target" / "release" / "nanoda_bin",
+        "fixed_official_4_33": CURRENT_ARENA / "_build" / "checkers" / "official" / "src" / ".lake" / "build" / "bin" / "kernel",
+        "fixed_nanoda_6ae1f0c": CURRENT_ARENA / "_build" / "checkers" / "nanoda" / "src" / "target" / "release" / "nanoda_bin",
+        "independent_kiota_58e8636": CURRENT_ARENA / "_build" / "checkers" / "kiota" / "src" / "target" / "release" / "kiota",
+        "independent_lean4lean_ecb3b66": CURRENT_ARENA / "_build" / "checkers" / "lean4lean" / "src" / ".lake" / "build" / "bin" / "lean4lean",
+    }
+
+
+def validate_protocol_freeze() -> dict[str, Any]:
+    freeze = load(FREEZE)
+    if freeze["status"] != "FROZEN_BEFORE_GENERATION_AND_HELD_OUT_EVALUATION":
+        raise SystemExit("invalid protocol freeze status")
+    bound_path(freeze["experiment_spec"])
+    bound_path(freeze["runner"])
+    bound_path(freeze["projection_mutation"])
+    for item in freeze["pre_disclosure_corpus"]["files"]:
+        bound_path(item)
+    for item in freeze["checker_binaries"].values():
+        bound_path(item)
+    if freeze["protocol"]["disclosed_artifacts_used_for_generation"]:
+        raise SystemExit("freeze records disclosed-input contamination")
+    if freeze["protocol"]["historical_checker_feedback_used_for_generation"]:
+        raise SystemExit("freeze records historical feedback contamination")
+    return freeze
+
+
+def freeze_command() -> int:
+    if any(path.exists() for path in [FREEZE, GENERATION, CANDIDATE_FREEZE, EVALUATION]):
+        raise SystemExit("Collatz freeze/run artifacts already exist; boundary is immutable")
+    spec = load(SPEC)
+    if git_output(PRE_ARENA, "rev-parse", "HEAD") != spec["historical_boundary"]["arena_revision"]:
+        raise SystemExit("historical Arena checkout is at the wrong revision")
+    if git_output(PRE_ARENA, "rev-parse", "HEAD^{tree}") != spec["historical_boundary"]["arena_tree"]:
+        raise SystemExit("historical Arena tree does not match the declared tree")
+    regression = spec["historical_boundary"]["first_disclosed_regression_commit"]
+    if subprocess.run(
+        ["git", "merge-base", "--is-ancestor", regression, "HEAD"], cwd=PRE_ARENA
+    ).returncode == 0:
+        raise SystemExit("disclosed regression is present in historical Arena boundary")
+    files = corpus_files()
+    if len(files) != spec["historical_boundary"]["expected_materialized_test_count"]:
+        raise SystemExit(
+            f"expected {spec['historical_boundary']['expected_materialized_test_count']} "
+            f"historical tests, found {len(files)}"
+        )
+    corpus = [record(path) for path in files]
+    if any("nested-unused-param" in item["path"] for item in corpus):
+        raise SystemExit("disclosed regression entered historical corpus")
+
+    historical_nanoda = PRE_ARENA / "_build" / "checkers" / "nanoda" / "src"
+    if git_output(historical_nanoda, "rev-parse", "HEAD") != spec["historical_boundary"]["affected_nanoda_revision"]:
+        raise SystemExit("historical nanoda checkout is at the wrong revision")
+    current_nanoda = CURRENT_ARENA / "_build" / "checkers" / "nanoda" / "src"
+    coverage_binary = current_nanoda / "target-coverage" / "release" / "nanoda_bin"
+    coverage_config = ROOT / "results" / "coverage" / "nanoda" / "config.json"
+    current_coverage_manifest = load(ROOT / "results" / "coverage" / "nanoda" / "manifest.json")
+    if source_digest(current_nanoda) != current_coverage_manifest["source_sha256"]:
+        raise SystemExit("instrumented nanoda coverage binary is not source-bound to current nanoda")
+
+    binaries = checker_paths()
+    binaries["coverage_nanoda"] = coverage_binary
+    missing = [str(path) for path in binaries.values() if not path.is_file()]
+    if missing:
+        raise SystemExit(f"checker binaries missing: {missing}")
+
+    disclosed = CURRENT_ARENA / "_build" / "tests" / "nested-unused-param.ndjson"
+    disclosed_source = CURRENT_ARENA / "tests" / "nested-unused-param.lean"
+    manifest = {
+        "schema_version": 1,
+        "experiment_id": spec["experiment_id"],
+        "status": "FROZEN_BEFORE_GENERATION_AND_HELD_OUT_EVALUATION",
+        "frozen_at": utc_now(),
+        "protocol": {
+            "disclosed_artifacts_used_for_generation": False,
+            "historical_checker_feedback_used_for_generation": False,
+            "modeled_source_mutant_feedback_permitted": True,
+            "candidate_freeze_required_before_historical_evaluation": True,
+            "published_collatz_artifact_available_to_runner": False,
+        },
+        "experiment_spec": record(SPEC),
+        "runner": record(Path(__file__)),
+        "projection_mutation": record(MUTATION),
+        "historical_boundary": {
+            "arena_revision": git_output(PRE_ARENA, "rev-parse", "HEAD"),
+            "arena_tree": git_output(PRE_ARENA, "rev-parse", "HEAD^{tree}"),
+            "regression_commit_absent": True,
+            "nanoda_revision": git_output(historical_nanoda, "rev-parse", "HEAD"),
+        },
+        "pre_disclosure_corpus": {
+            "build_mode": spec["historical_boundary"]["corpus_build_mode"],
+            "test_count": len(corpus),
+            "total_bytes": sum(item["bytes"] for item in corpus),
+            "composite_sha256": composite(corpus),
+            "files": corpus,
+        },
+        "current_nanoda_source_sha256": source_digest(current_nanoda),
+        "coverage_config": record(coverage_config),
+        "checker_binaries": {name: record(path) for name, path in binaries.items()},
+        "excluded_holdouts": {
+            "arena_regression": record(disclosed),
+            "arena_regression_source": record(disclosed_source),
+            "published_collatz": {
+                "local_path": None,
+                "available_to_generation": False,
+                "identity": "https://github.com/xrchz/CollatzLean",
+            },
+        },
+        "budgets": copy.deepcopy(spec["generation"]),
+    }
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    FREEZE.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(FREEZE)
+    return 0
+
+
+def normalize_exit(code: int | None) -> str:
+    if code is None:
+        return "TIMEOUT"
+    if code == 0:
+        return "ACCEPT"
+    if code == 2:
+        return "DECLINE"
+    if code < 0:
+        return "CRASH"
+    return "REJECT"
+
+
+def llvm_tool(name: str) -> str:
+    candidates = [
+        shutil.which(name),
+        f"/opt/homebrew/opt/llvm@22/bin/{name}",
+        f"/opt/homebrew/Cellar/llvm@22/22.1.8/bin/{name}",
+    ]
+    return next((item for item in candidates if item and Path(item).is_file()), "")
+
+
+def projection_records(path: Path) -> bool:
+    return b'"proj"' in path.read_bytes()
+
+
+def target_lines() -> list[int]:
+    source = CURRENT_ARENA / "_build" / "checkers" / "nanoda" / "src" / "src" / "tc.rs"
+    lines = source.read_text(encoding="utf-8").splitlines()
+    start = next(index for index, line in enumerate(lines, 1) if "fn def_eq_proj" in line)
+    end = next(index for index in range(start, min(start + 14, len(lines))) if lines[index - 1].strip() == "}")
+    return list(range(start, end + 1))
+
+
+def collect_target_coverage(freeze: dict[str, Any]) -> tuple[list[dict[str, Any]], list[Path]]:
+    binary = bound_path(freeze["checker_binaries"]["coverage_nanoda"])
+    config = bound_path(freeze["coverage_config"])
+    source = CURRENT_ARENA / "_build" / "checkers" / "nanoda" / "src" / "src" / "tc.rs"
+    profdata = llvm_tool("llvm-profdata")
+    llvm_cov = llvm_tool("llvm-cov")
+    if not profdata or not llvm_cov:
+        raise SystemExit("matching LLVM coverage tools are unavailable")
+    candidates = [bound_path(item) for item in freeze["pre_disclosure_corpus"]["files"]]
+    candidates = [path for path in candidates if projection_records(path)]
+    lines = set(target_lines())
+    rows: list[dict[str, Any]] = []
+    selected: list[Path] = []
+    with tempfile.TemporaryDirectory(prefix="collatz-coverage-") as temp_name:
+        temp = Path(temp_name)
+        for index, artifact in enumerate(candidates, 1):
+            profile_pattern = temp / f"test-{index}-%p.profraw"
+            env = os.environ.copy()
+            env["LLVM_PROFILE_FILE"] = str(profile_pattern)
+            started = time.monotonic()
+            with artifact.open("rb") as handle:
+                try:
+                    proc = subprocess.run(
+                        [str(binary), str(config)], stdin=handle, stdout=subprocess.PIPE,
+                        stderr=subprocess.PIPE, env=env, timeout=300,
+                    )
+                    code: int | None = proc.returncode
+                except subprocess.TimeoutExpired:
+                    code = None
+            profiles = sorted(temp.glob(f"test-{index}-*.profraw"))
+            covered: list[int] = []
+            if profiles:
+                merged = temp / f"test-{index}.profdata"
+                subprocess.run([profdata, "merge", "-sparse", *map(str, profiles), "-o", str(merged)], check=True)
+                shown = subprocess.run(
+                    [llvm_cov, "show", str(binary), f"--instr-profile={merged}",
+                     "--show-line-counts", str(source)],
+                    check=True, text=True, stdout=subprocess.PIPE,
+                ).stdout
+                for raw in shown.splitlines():
+                    match = re.match(r"^\s*(\d+)\|\s*([^|]*)\|", raw)
+                    if match and int(match.group(1)) in lines and match.group(2).strip() not in {"", "0"}:
+                        covered.append(int(match.group(1)))
+                merged.unlink(missing_ok=True)
+                for path in profiles:
+                    path.unlink(missing_ok=True)
+            row = {
+                "test": relative(artifact),
+                "sha256": sha256_file(artifact),
+                "outcome": normalize_exit(code),
+                "seconds": time.monotonic() - started,
+                "target_lines": sorted(set(covered)),
+                "covers_projection_identity_operator": bool(covered),
+            }
+            rows.append(row)
+            if covered:
+                selected.append(artifact)
+            print(f"coverage [{index}/{len(candidates)}] {artifact.name}: {bool(covered)}", flush=True)
+    COVERAGE.write_text("".join(json.dumps(row, sort_keys=True) + "\n" for row in rows), encoding="utf-8")
+    selected.sort(key=lambda path: next(row["seconds"] for row in rows if row["test"] == relative(path)))
+    return rows, selected
+
+
+def structure_names(records: list[dict[str, Any]]) -> dict[int, int]:
+    result: dict[int, int] = {}
+    for row in records:
+        block = row.get("inductive")
+        if not isinstance(block, dict):
+            continue
+        ctors = {item["induct"]: item for item in block.get("ctors", [])}
+        for item in block.get("types", []):
+            ctor_names = item.get("ctors", [])
+            if len(ctor_names) != 1:
+                continue
+            ctor = ctors.get(item.get("name"))
+            if ctor is not None:
+                result[item["name"]] = int(ctor.get("numFields", 0))
+    return result
+
+
+def projection_mutations(seed_paths: list[Path], random_seed: int) -> list[dict[str, Any]]:
+    candidates: list[dict[str, Any]] = []
+    for seed in seed_paths:
+        records = [json.loads(line) for line in seed.read_text(encoding="utf-8").splitlines() if line]
+        names = structure_names(records)
+        for row_index, row in enumerate(records):
+            proj = row.get("proj")
+            if not isinstance(proj, dict):
+                continue
+            old = proj.get("typeName")
+            idx = int(proj.get("idx", 0))
+            for replacement, fields in sorted(names.items()):
+                if replacement == old or fields <= idx:
+                    continue
+                changed = copy.deepcopy(records)
+                changed[row_index]["proj"]["typeName"] = replacement
+                payload = ("\n".join(json.dumps(item, sort_keys=True, separators=(",", ":")) for item in changed) + "\n").encode()
+                candidates.append({
+                    "seed": relative(seed), "record": row_index, "old_type_name": old,
+                    "new_type_name": replacement, "payload": payload,
+                    "sha256": hashlib.sha256(payload).hexdigest(),
+                })
+    random.Random(random_seed).shuffle(candidates)
+    unique: list[dict[str, Any]] = []
+    seen: set[str] = set()
+    for item in candidates:
+        if item["sha256"] not in seen:
+            seen.add(item["sha256"])
+            unique.append(item)
+    return unique
+
+
+NESTED_SOURCE = """import Lean
+open Lean Elab Command
+
+structure RetrospectiveCarrier where
+  payload : Nat
+
+structure RetrospectiveClaim where
+  payload : Bool
+
+inductive RetrospectiveContainer (alpha : Type) (phantom : Nat) : Type where
+  | mk
+
+meta def buildRetrospectiveCandidate : CommandElabM Unit := do
+  let add (declaration : Declaration) : CommandElabM Unit :=
+    liftCoreM <| withOptions (debug.skipKernelTC.set · true) <| addDecl declaration
+  let carrier := mkBVar 0
+  let family := mkApp (mkConst `RetrospectiveFamily) carrier
+  let wrongProjection := mkProj ``RetrospectiveClaim 0 carrier
+  let nested := mkApp2 (mkConst ``RetrospectiveContainer) family wrongProjection
+  let familyType := mkForall `carrier .default (mkConst ``RetrospectiveCarrier) (mkSort 1)
+  let constructorType := mkForall `carrier .default (mkConst ``RetrospectiveCarrier) <|
+    mkForall `nested .default nested (mkApp (mkConst `RetrospectiveFamily) (mkBVar 1))
+  add <| .inductDecl [] 1 [{
+    name := `RetrospectiveFamily
+    type := familyType
+    ctors := [{ name := `RetrospectiveFamily.mk, type := constructorType }]
+  }] false
+
+elab "build_retrospective_candidate" : command => buildRetrospectiveCandidate
+build_retrospective_candidate
+"""
+
+
+def build_nested_candidate() -> tuple[Path, Path, dict[str, Any]]:
+    source_path = CORPUS_DIR / "nested-phantom-candidate.lean"
+    artifact_path = CORPUS_DIR / "nested-phantom-candidate.ndjson"
+    source_path.write_text(NESTED_SOURCE, encoding="utf-8")
+    exporter = PRE_ARENA / "_build" / "lean4export" / "leanprover_lean4_v4.29.1" / ".lake" / "build" / "bin" / "lean4export"
+    with tempfile.TemporaryDirectory(prefix="collatz-nested-build-") as temp_name:
+        work = Path(temp_name)
+        (work / "Test.lean").write_text(NESTED_SOURCE, encoding="utf-8")
+        (work / "lean-toolchain").write_text("leanprover/lean4:v4.29.1\n", encoding="utf-8")
+        (work / "lakefile.toml").write_text('name = "collatz-retrospective"\n\n[[lean_lib]]\nname = "Test"\n', encoding="utf-8")
+        started = time.monotonic()
+        build = subprocess.run(
+            ["lake", "build", "Test"], cwd=work, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.STDOUT,
+        )
+        if build.returncode:
+            raise SystemExit(f"nested candidate build failed:\n{build.stdout[-4000:]}")
+        with artifact_path.open("wb") as output:
+            export = subprocess.run(
+                ["lake", "env", str(exporter), "Test", "--", "RetrospectiveFamily"],
+                cwd=work, stdout=output, stderr=subprocess.PIPE,
+            )
+        if export.returncode:
+            raise SystemExit(f"nested candidate export failed: {export.stderr.decode(errors='replace')[-4000:]}")
+        seconds = time.monotonic() - started
+    return source_path, artifact_path, {"build_export_seconds": seconds}
+
+
+def generate_command() -> int:
+    if GENERATION.exists() or CANDIDATE_FREEZE.exists() or EVALUATION.exists():
+        raise SystemExit("generation/evaluation artifacts already exist")
+    freeze = validate_protocol_freeze()
+    spec = load(SPEC)
+    RESULT_DIR.mkdir(parents=True, exist_ok=True)
+    CORPUS_DIR.mkdir(parents=True, exist_ok=True)
+    coverage_rows, scheduled = collect_target_coverage(freeze)
+    scheduled = scheduled[: spec["generation"]["max_coverage_tests"]]
+    attempts: list[dict[str, Any]] = []
+    original_kill: dict[str, Any] | None = None
+    found: dict[str, Any] | None = None
+    projection_path = CORPUS_DIR / "projection-identity-candidate.ndjson"
+    started = time.monotonic()
+    with DifferentialSession("nanoda-collatz-projection-identity", timeout=300.0) as session:
+        for artifact in scheduled:
+            evaluation = session.evaluate(artifact)
+            if evaluation["different"]:
+                original_kill = {"test": relative(artifact), "evaluation": evaluation}
+                break
+        candidates = projection_mutations(scheduled, spec["generation"]["random_seed"])
+        candidates = candidates[: spec["generation"]["max_projection_candidates"]]
+        with tempfile.TemporaryDirectory(prefix="collatz-projection-search-") as temp_name:
+            scratch = Path(temp_name) / "candidate.ndjson"
+            for index, candidate in enumerate(candidates, 1):
+                scratch.write_bytes(candidate["payload"])
+                evaluation = session.evaluate(scratch)
+                attempt = {
+                    "attempt": index, "strategy": "projection-structure-name-substitution",
+                    "seed": candidate["seed"], "record": candidate["record"],
+                    "old_type_name": candidate["old_type_name"],
+                    "new_type_name": candidate["new_type_name"],
+                    "candidate_sha256": candidate["sha256"],
+                    "baseline_outcome": evaluation["baseline"]["normalized_outcome"],
+                    "mutant_outcome": evaluation["mutant"]["normalized_outcome"],
+                    "different": evaluation["different"],
+                }
+                attempts.append(attempt)
+                if evaluation["different"]:
+                    projection_path.write_bytes(candidate["payload"])
+                    found = {**attempt, "artifact": record(projection_path)}
+                    break
+        preparation = session.preparation
+        checker_runs = session.checker_runs
+        checker_seconds = session.checker_seconds
+    ATTEMPTS.write_text("".join(json.dumps(item, sort_keys=True) + "\n" for item in attempts), encoding="utf-8")
+    nested_source, nested_artifact, nested_cost = build_nested_candidate()
+    generated_candidates = {
+        "nested_unused_parameter": {
+            "operator": "DROP_NESTED_UNUSED_PARAMETER_VALIDATION",
+            "source": record(nested_source),
+            "artifact": record(nested_artifact),
+            "generation": "operator-derived-static-template-without-checker-feedback",
+        },
+        "projection_structure_identity": (
+            {
+                "operator": "IGNORE_PROJECTION_STRUCTURE_IDENTITY",
+                "artifact": found["artifact"],
+                "found_at_attempt": found["attempt"],
+                "generation": "coverage-guided-structured-mutation",
+            }
+            if found else None
+        ),
+    }
+    generation = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "GENERATION_COMPLETE_BEFORE_HISTORICAL_EVALUATION",
+        "started_after_freeze": datetime.fromisoformat(freeze["frozen_at"]) < datetime.now(timezone.utc),
+        "completed_at": utc_now(),
+        "protocol_freeze": {"path": relative(FREEZE), "sha256": sha256_file(FREEZE)},
+        "contamination_controls": {
+            "disclosed_arena_artifact_read_by_generation": False,
+            "published_collatz_artifact_read_by_generation": False,
+            "historical_checker_executed_by_generation": False,
+            "modeled_nanoda_mutant_feedback_used": True,
+        },
+        "coverage": {
+            "artifact": record(COVERAGE),
+            "prescreened_test_count": len(coverage_rows),
+            "target_covering_test_count": sum(row["covers_projection_identity_operator"] for row in coverage_rows),
+            "scheduled_test_count": len(scheduled),
+            "target_lines": target_lines(),
+        },
+        "pre_disclosure_corpus_mutation_evaluation": {
+            "killed_by_original_corpus": original_kill is not None,
+            "first_kill": original_kill,
+        },
+        "projection_search": {
+            "random_seed": spec["generation"]["random_seed"],
+            "max_attempts": spec["generation"]["max_projection_candidates"],
+            "attempts": len(attempts),
+            "attempt_log": record(ATTEMPTS),
+            "witness_found": found is not None,
+            "found": found,
+        },
+        "generated_candidates": generated_candidates,
+        "source_model_preparation": preparation,
+        "source_restored": bool(preparation["source_restored"]),
+        "costs": {
+            "wall_seconds": time.monotonic() - started,
+            "checker_runs": checker_runs,
+            "checker_seconds": checker_seconds,
+            **nested_cost,
+        },
+    }
+    GENERATION.write_text(json.dumps(generation, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    candidate_items = [generated_candidates["nested_unused_parameter"]["artifact"]]
+    if generated_candidates["projection_structure_identity"]:
+        candidate_items.append(generated_candidates["projection_structure_identity"]["artifact"])
+    candidate_freeze = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "CANDIDATES_FROZEN_BEFORE_HISTORICAL_AND_HOLDOUT_EVALUATION",
+        "frozen_at": utc_now(),
+        "protocol_freeze": {"path": relative(FREEZE), "sha256": sha256_file(FREEZE)},
+        "generation": record(GENERATION),
+        "candidates": candidate_items,
+        "candidate_composite_sha256": composite(candidate_items),
+        "historical_checker_feedback_used": False,
+        "disclosed_holdout_feedback_used": False,
+    }
+    CANDIDATE_FREEZE.write_text(json.dumps(candidate_freeze, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(CANDIDATE_FREEZE)
+    return 0
+
+
+def compact_run(command: list[str], artifact: Path, stdin: bool, timeout: float = 600.0) -> dict[str, Any]:
+    started = time.monotonic()
+    try:
+        if stdin:
+            with artifact.open("rb") as handle:
+                proc = subprocess.run(command, stdin=handle, stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+        else:
+            proc = subprocess.run([*command, str(artifact)], stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout)
+        code: int | None = proc.returncode
+        stdout = proc.stdout
+        stderr = proc.stderr
+    except subprocess.TimeoutExpired as exc:
+        code = None
+        stdout = exc.stdout or b""
+        stderr = exc.stderr or b""
+    return {
+        "normalized_outcome": normalize_exit(code),
+        "exit_code": code,
+        "seconds": time.monotonic() - started,
+        "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+        "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+        "stderr_tail": stderr.decode(errors="replace")[-1000:],
+    }
+
+
+def evaluate_artifact(path: Path, binaries: dict[str, Path]) -> dict[str, Any]:
+    historical_config = PRE_ARENA / "_build" / "checkers" / "nanoda" / "src" / "config.json"
+    current_config = CURRENT_ARENA / "_build" / "checkers" / "nanoda" / "src" / "config.json"
+    commands = {
+        "affected_official_4_29": ([str(binaries["affected_official_4_29"])], False),
+        "prefixed_nanoda_ddfac2b": ([str(binaries["prefixed_nanoda_ddfac2b"]), str(historical_config)], True),
+        "fixed_official_4_33": ([str(binaries["fixed_official_4_33"])], False),
+        "fixed_nanoda_6ae1f0c": ([str(binaries["fixed_nanoda_6ae1f0c"]), str(current_config)], True),
+        "independent_kiota_58e8636": ([str(binaries["independent_kiota_58e8636"])], False),
+        "independent_lean4lean_ecb3b66": ([str(binaries["independent_lean4lean_ecb3b66"]), "--import"], False),
+    }
+    return {
+        "artifact": record(path),
+        "checkers": {name: compact_run(command, path, stdin) for name, (command, stdin) in commands.items()},
+    }
+
+
+def classify(generated: list[dict[str, Any]]) -> tuple[str, str, dict[str, bool]]:
+    nested = False
+    projection = False
+    independent_rejection = False
+    unresolved = False
+    exceptional = {"CRASH", "TIMEOUT", "DECLINE"}
+    for row in generated:
+        outcomes = {name: item["normalized_outcome"] for name, item in row["checkers"].items()}
+        unresolved |= any(value in exceptional for value in outcomes.values())
+        independent = any(outcomes[name] == "REJECT" for name in ["independent_kiota_58e8636", "independent_lean4lean_ecb3b66", "fixed_nanoda_6ae1f0c"])
+        nested_hit = outcomes["affected_official_4_29"] == "ACCEPT" and outcomes["fixed_official_4_33"] == "REJECT"
+        projection_hit = outcomes["prefixed_nanoda_ddfac2b"] == "ACCEPT" and outcomes["fixed_nanoda_6ae1f0c"] == "REJECT"
+        nested |= nested_hit
+        projection |= projection_hit
+        independent_rejection |= independent and (nested_hit or projection_hit)
+    facts = {
+        "nested_unused_parameter_distinction": nested,
+        "projection_structure_identity_distinction": projection,
+        "independent_fixed_checker_rejection": independent_rejection,
+    }
+    if nested and projection and independent_rejection:
+        return "FULL_CLASS_REDISCOVERY", "Both independently specified fault components were distinguished by generated artifacts, with independent fixed-checker rejection.", facts
+    if nested or projection:
+        return "PARTIAL_REDISCOVERY", "At least one specified fault component was distinguished, but the full two-component criterion was not met.", facts
+    if unresolved:
+        return "INCONCLUSIVE", "No distinction was established and at least one required checker result was exceptional.", facts
+    return "NO_REDISCOVERY", "The bounded generated candidates did not distinguish either historical fault component.", facts
+
+
+def evaluate_command() -> int:
+    if EVALUATION.exists():
+        raise SystemExit("evaluation artifact already exists and cannot be overwritten")
+    freeze = validate_protocol_freeze()
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    if candidate_freeze["status"] != "CANDIDATES_FROZEN_BEFORE_HISTORICAL_AND_HOLDOUT_EVALUATION":
+        raise SystemExit("candidate boundary is not frozen")
+    started_at = utc_now()
+    if datetime.fromisoformat(candidate_freeze["frozen_at"]) >= datetime.fromisoformat(started_at):
+        raise SystemExit("candidate freeze must predate evaluation")
+    bound_path(candidate_freeze["protocol_freeze"])
+    bound_path(candidate_freeze["generation"])
+    candidates = [bound_path(item) for item in candidate_freeze["candidates"]]
+    binaries = {name: bound_path(item) for name, item in freeze["checker_binaries"].items() if name != "coverage_nanoda"}
+    generated = [evaluate_artifact(path, binaries) for path in candidates]
+    disclosed = bound_path(freeze["excluded_holdouts"]["arena_regression"])
+    holdout = evaluate_artifact(disclosed, binaries)
+    classification, reason, facts = classify(generated)
+    costs = [item for row in [*generated, holdout] for item in row["checkers"].values()]
+    result = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "COMPLETE",
+        "classification": classification,
+        "reason": reason,
+        "criteria": facts,
+        "started_at": started_at,
+        "completed_at": utc_now(),
+        "protocol_freeze": {"path": relative(FREEZE), "sha256": sha256_file(FREEZE)},
+        "candidate_freeze": {"path": relative(CANDIDATE_FREEZE), "sha256": sha256_file(CANDIDATE_FREEZE)},
+        "generated_candidate_evaluations": generated,
+        "disclosed_holdout_evaluation": holdout,
+        "feedback_boundary": {
+            "protocol_frozen_before_generation": datetime.fromisoformat(freeze["frozen_at"]) < datetime.fromisoformat(started_at),
+            "candidates_frozen_before_historical_evaluation": True,
+            "holdout_evaluated_only_after_candidate_freeze": True,
+            "published_collatz_artifact_evaluated": False,
+        },
+        "costs": {"checker_runs": len(costs), "checker_seconds": sum(item["seconds"] for item in costs)},
+        "producer": record(Path(__file__)),
+    }
+    EVALUATION.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(EVALUATION)
+    return 0
+
+
+def verify_command() -> int:
+    freeze = validate_protocol_freeze()
+    generation = load(GENERATION)
+    candidate_freeze = load(CANDIDATE_FREEZE)
+    evaluation = load(EVALUATION)
+    checks = {
+        "historical_corpus_precedes_disclosed_regression": freeze["historical_boundary"]["regression_commit_absent"],
+        "historical_corpus_count_matches": freeze["pre_disclosure_corpus"]["test_count"] == load(SPEC)["historical_boundary"]["expected_materialized_test_count"],
+        "protocol_frozen_before_generation": datetime.fromisoformat(freeze["frozen_at"]) < datetime.fromisoformat(generation["completed_at"]),
+        "disclosed_inputs_excluded_from_generation": not any(generation["contamination_controls"][key] for key in ["disclosed_arena_artifact_read_by_generation", "published_collatz_artifact_read_by_generation"]),
+        "historical_feedback_excluded_from_generation": not generation["contamination_controls"]["historical_checker_executed_by_generation"],
+        "coverage_guidance_executed": generation["coverage"]["prescreened_test_count"] > 0 and generation["coverage"]["target_covering_test_count"] > 0,
+        "fixed_seed_recorded": generation["projection_search"]["random_seed"] == load(SPEC)["generation"]["random_seed"],
+        "attempt_budget_respected": generation["projection_search"]["attempts"] <= generation["projection_search"]["max_attempts"],
+        "source_restored": generation["source_restored"],
+        "candidate_freeze_binds_generation": bound_path(candidate_freeze["generation"]) == GENERATION,
+        "candidates_frozen_before_evaluation": datetime.fromisoformat(candidate_freeze["frozen_at"]) < datetime.fromisoformat(evaluation["started_at"]),
+        "evaluation_complete": evaluation["status"] == "COMPLETE",
+        "holdout_after_candidate_freeze": evaluation["feedback_boundary"]["holdout_evaluated_only_after_candidate_freeze"],
+        "classification_in_model": evaluation["classification"] in load(SPEC)["classification_order"],
+        "independent_rejection_required_for_full_claim": evaluation["classification"] != "FULL_CLASS_REDISCOVERY" or evaluation["criteria"]["independent_fixed_checker_rejection"],
+        "runner_identity_preserved": sha256_file(Path(__file__)) == freeze["runner"]["sha256"] == evaluation["producer"]["sha256"],
+    }
+    result = {
+        "schema_version": 1,
+        "experiment_id": freeze["experiment_id"],
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": evaluation["classification"],
+        "checks": checks,
+        "checked_at": utc_now(),
+        "evidence": {
+            "freeze": record(FREEZE),
+            "generation": record(GENERATION),
+            "candidate_freeze": record(CANDIDATE_FREEZE),
+            "evaluation": record(EVALUATION),
+        },
+    }
+    output = RESULT_DIR / "assurance.json"
+    output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(output)
+    return 0 if result["status"] == "PASS" else 1
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("command", choices=["freeze", "generate", "evaluate", "verify"])
+    args = parser.parse_args()
+    return {
+        "freeze": freeze_command,
+        "generate": generate_command,
+        "evaluate": evaluate_command,
+        "verify": verify_command,
+    }[args.command]()
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

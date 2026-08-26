@@ -1,0 +1,123 @@
+{
+  "build": {
+    "binary": {
+      "bytes": 3175440,
+      "logical_path": "cargo-target/release/nanoda_bin",
+      "sha256": "2ad51444225e48550602e26eaaa2967aaa959a62ae5ee74e53ecd65c8265e6ea"
+    },
+    "cargo_lock_sha256": "5c99446c237555e0d4cda4007cda4d576ea3dbba895b2b0aacde424cb21ad688",
+    "cargo_toml_sha256": "04b9d07cfa907f587abc7541b1bf400960e54d6df596d07c0a50c4ce1808d375",
+    "commands": [
+      [
+        "cargo",
+        "build",
+        "--locked",
+        "--release"
+      ],
+      [
+        "cargo",
+        "rustc",
+        "--locked",
+        "--release",
+        "--bin",
+        "nanoda_bin",
+        "--",
+        "-C",
+        "link-arg=-Wl,-no_uuid"
+      ]
+    ],
+    "environment": {
+      "CARGO_INCREMENTAL": "0",
+      "CARGO_PROFILE_RELEASE_LTO": "false",
+      "SOURCE_DATE_EPOCH": "0",
+      "ZERO_AR_DATE": "1",
+      "darwin_linker_no_uuid": true,
+      "path_remap_scope": "all",
+      "path_remaps": [
+        {
+          "destination": "-C instrument-coverage",
+          "source": "rustc_flag"
+        },
+        {
+          "destination": "/lean-assurance/cargo-target",
+          "source": "cargo_target_dir"
+        },
+        {
+          "destination": "/lean-assurance/nanoda",
+          "source": "checker_root"
+        },
+        {
+          "destination": "/lean-assurance/cargo-home",
+          "source": "cargo_home"
+        },
+        {
+          "destination": "/lean-assurance/rust-sysroot",
+          "source": "rustc_sysroot"
+        }
+      ],
+      "rust_codegen_units": 1
+    },
+    "schema_version": 1,
+    "source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+    "tools": {
+      "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+      "host": "aarch64-apple-darwin",
+      "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)\nbinary: rustc\ncommit-hash: 88d9e12ae178fab0fb5cc050a94da85685d449ea\ncommit-date: 2026-08-18\nhost: aarch64-apple-darwin\nrelease: 1.98.0\nLLVM version: 22.1.8"
+    }
+  },
+  "claim": "nanoda instrumented build and canonical coverage are invariant across checkout paths",
+  "comparison": {
+    "binary_sha256_equal": true,
+    "build_manifest_equal": true,
+    "canonical_coverage_equal": true,
+    "checkout_count": 2,
+    "different_absolute_paths": true,
+    "path_with_spaces_included": true
+  },
+  "coverage": {
+    "covered_location_count": 1863,
+    "covered_locations_sha256": "983e76b5a26b4adf0cc5bd1ffa7db0d7262f8ceb2dfd5a5264c14d22c92e9c13",
+    "embedded_source_root": "/lean-assurance/nanoda",
+    "exit_code": 101,
+    "outcome": "REJECT"
+  },
+  "environment": {
+    "arena_revision": "f0fe3b379dbce91537417b529140d0ca250f271c",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "llvm_cov": "22.1.8",
+    "llvm_profdata": "22.1.8",
+    "nanoda_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "rustc": {
+      "LLVM version": "22.1.8",
+      "binary": "rustc",
+      "commit_date": "2026-08-18",
+      "commit_hash": "88d9e12ae178fab0fb5cc050a94da85685d449ea",
+      "host": "aarch64-apple-darwin",
+      "release": "1.98.0",
+      "version": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)"
+    }
+  },
+  "inputs": {
+    "artifact": {
+      "logical_path": "_build/tests/proj-of-prop.ndjson",
+      "sha256": "7ec1cb24885cae045ccb842f1fc786869ed708a19fa289f92b410297a299f5d5"
+    },
+    "checker_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+    "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6"
+  },
+  "pins": {
+    "path": "config/reproducibility.json",
+    "sha256": "d281fc7ae6c3fda84a9a8726040026be4f8ae7837f4f63793909985bca4548ff"
+  },
+  "producer": {
+    "path": "scripts/verify-portable-coverage",
+    "sha256": "80e3c1fd34bec93e96c02be52713d19f250e2bc1b033a9781715819e70cfb989"
+  },
+  "schema_version": 1,
+  "sentinel": {
+    "location": "src/tc.rs:869",
+    "passed": true,
+    "test": "proj-of-prop"
+  },
+  "status": "PASS"
+}

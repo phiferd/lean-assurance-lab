@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-24T16:31:39.948771+00:00",
+  "generated_at": "2026-08-25T14:10:49.722894+00:00",
   "nodes": [
     {
       "artifact_type": "repository",
       "dependencies": [],
-      "expected_sha256": "79df63ded83a6de12f3717d204f1587f129c471018e33d03c2c6b2c88010e44b",
+      "expected_sha256": "e142b5413cce880c1c478e0a478906d09ecf983746e8da49431013e5f156d519",
       "id": "input:repository-revision",
       "lifecycle": "historical",
       "locator": {
@@ -165,7 +165,7 @@
     {
       "artifact_type": "configuration",
       "dependencies": [],
-      "expected_sha256": "a32c3bc937ba6c709d902a168d309090967bcd7d1755bf0de20532369f0cf50b",
+      "expected_sha256": "f21ad786feeb1156efa5d955f6ec21a6e310b6576312e6ca0bbe27a67290df51",
       "id": "configuration:nanoda",
       "lifecycle": "current",
       "locator": {
@@ -210,7 +210,7 @@
     {
       "artifact_type": "configuration",
       "dependencies": [],
-      "expected_sha256": "8898f580cc100b39ce4b62b8c821535d8b9172cee323e20cfb7362d386e3387b",
+      "expected_sha256": "c312c556e703c0681aadd2b518d853fecba0aee15379f0c2bd9965d51678d159",
       "id": "configuration:community-workflow",
       "lifecycle": "current",
       "locator": {
@@ -234,17 +234,56 @@
       "required_for_current_claims": true
     },
     {
-      "artifact_type": "script",
+      "artifact_type": "configuration",
       "dependencies": [],
-      "expected_sha256": "ef35a0d76f1cb1cf77d0c47b284c6000a26c998c9d6d93ea611ba0f0ac26e1f5",
+      "expected_sha256": "4a433aa6ca135d7f98aec189107df5b2699709a0fdca7f543f55aab4dadfc0d3",
+      "id": "configuration:collatz-retrospective",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "experiments/collatz-retrospective/spec.json",
+          "mutations/nanoda-collatz-projection-identity.json"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "Experiment-scoped retrospective model; excluded from the active mutation campaign catalog.",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "configuration",
+      "dependencies": [],
+      "expected_sha256": "d281fc7ae6c3fda84a9a8726040026be4f8ae7837f4f63793909985bca4548ff",
+      "id": "configuration:reproducibility",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "config/reproducibility.json"
+      },
+      "notes": "Pinned Arena, nanoda, Rust, Cargo, and LLVM identities for portable coverage builds.",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "script",
+      "dependencies": [
+        {
+          "expected_sha256": "d281fc7ae6c3fda84a9a8726040026be4f8ae7837f4f63793909985bca4548ff",
+          "id": "configuration:reproducibility"
+        }
+      ],
+      "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
       "id": "script:coverage",
       "lifecycle": "current",
       "locator": {
         "exclude": [],
         "include": [
+          "lib/portable_coverage.py",
           "scripts/collect-coverage",
           "scripts/reindex-coverage",
-          "scripts/snapshot-coverage"
+          "scripts/snapshot-coverage",
+          "scripts/verify-portable-coverage",
+          "tests/test_portable_coverage.py"
         ],
         "kind": "file_set",
         "root": "."
@@ -253,9 +292,35 @@
       "required_for_current_claims": true
     },
     {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "d281fc7ae6c3fda84a9a8726040026be4f8ae7837f4f63793909985bca4548ff",
+          "id": "configuration:reproducibility"
+        },
+        {
+          "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
+          "id": "script:coverage"
+        },
+        {
+          "expected_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613",
+          "id": "validator:nanoda"
+        }
+      ],
+      "expected_sha256": "67a8f658d812b1703771e453e157c16a7becf7d7ccdfc9e68c25d019e93ba9e9",
+      "id": "result:portable-coverage-verification",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/reproducibility/nanoda-portability.json"
+      },
+      "notes": "Relocation test proving identical nanoda binary and canonical coverage identities across different checkout paths.",
+      "required_for_current_claims": true
+    },
+    {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+      "expected_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
       "id": "script:mutation-execution",
       "lifecycle": "current",
       "locator": {
@@ -371,7 +436,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+      "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
       "id": "script:artifact-system",
       "lifecycle": "current",
       "locator": {
@@ -394,6 +459,58 @@
           "tests/test_cross_validation.py",
           "tests/test_transfer_experiment.py",
           "tests/test_rotating_evaluation.py"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "script",
+      "dependencies": [
+        {
+          "expected_sha256": "4a433aa6ca135d7f98aec189107df5b2699709a0fdca7f543f55aab4dadfc0d3",
+          "id": "configuration:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+      "id": "script:collatz-retrospective",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "scripts/collatz-retrospective",
+          "scripts/collatz-retrospective-assurance"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "script",
+      "dependencies": [
+        {
+          "expected_sha256": "4a433aa6ca135d7f98aec189107df5b2699709a0fdca7f543f55aab4dadfc0d3",
+          "id": "configuration:collatz-retrospective"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+      "id": "script:collatz-retrospective-repair",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "scripts/collatz-retrospective-projection-repair",
+          "scripts/collatz-retrospective-projection-repair-v2",
+          "tests/test_collatz_projection_repair.py",
+          "tests/test_collatz_projection_repair_v2.py"
         ],
         "kind": "file_set",
         "root": "."
@@ -436,7 +553,9 @@
       "id": "mutation-spec:catalog",
       "lifecycle": "current",
       "locator": {
-        "exclude": [],
+        "exclude": [
+          "nanoda-collatz-projection-identity.json"
+        ],
         "include": [
           "*.json"
         ],
@@ -504,7 +623,7 @@
           "id": "corpus:arena-materialized"
         },
         {
-          "expected_sha256": "a32c3bc937ba6c709d902a168d309090967bcd7d1755bf0de20532369f0cf50b",
+          "expected_sha256": "f21ad786feeb1156efa5d955f6ec21a6e310b6576312e6ca0bbe27a67290df51",
           "id": "configuration:nanoda"
         }
       ],
@@ -534,15 +653,15 @@
           "id": "corpus:baseline-outcomes"
         },
         {
-          "expected_sha256": "a32c3bc937ba6c709d902a168d309090967bcd7d1755bf0de20532369f0cf50b",
+          "expected_sha256": "f21ad786feeb1156efa5d955f6ec21a6e310b6576312e6ca0bbe27a67290df51",
           "id": "configuration:nanoda"
         },
         {
-          "expected_sha256": "ef35a0d76f1cb1cf77d0c47b284c6000a26c998c9d6d93ea611ba0f0ac26e1f5",
+          "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
           "id": "script:coverage"
         }
       ],
-      "expected_sha256": "bf0da4bab572e228a821ca69619fda5eccff7499586c1fd5f7ead2a1ec85cb3c",
+      "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
       "id": "coverage:local-payload",
       "lifecycle": "current",
       "locator": {
@@ -561,11 +680,11 @@
       "artifact_type": "coverage",
       "dependencies": [
         {
-          "expected_sha256": "bf0da4bab572e228a821ca69619fda5eccff7499586c1fd5f7ead2a1ec85cb3c",
+          "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
           "id": "coverage:local-payload"
         }
       ],
-      "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+      "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
       "id": "coverage:identity-snapshot",
       "lifecycle": "current",
       "locator": {
@@ -579,7 +698,7 @@
       "artifact_type": "comparison",
       "dependencies": [
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         },
         {
@@ -587,7 +706,7 @@
           "id": "mutation-spec:controlled"
         },
         {
-          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+          "expected_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
           "id": "script:mutation-execution"
         }
       ],
@@ -624,7 +743,7 @@
           "id": "mutation-spec:catalog"
         },
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         }
       ],
@@ -650,7 +769,7 @@
           "id": "mutation-spec:catalog"
         },
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         }
       ],
@@ -684,11 +803,11 @@
           "id": "mutation-spec:catalog"
         },
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+          "expected_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
           "id": "script:mutation-execution"
         }
       ],
@@ -755,11 +874,11 @@
           "id": "mutation-spec:catalog"
         },
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+          "expected_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
           "id": "script:mutation-execution"
         }
       ],
@@ -973,7 +1092,7 @@
           "id": "classification:regression-0003"
         },
         {
-          "expected_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+          "expected_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
           "id": "script:mutation-execution"
         }
       ],
@@ -1288,6 +1407,392 @@
       "required_for_current_claims": true
     },
     {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "4a433aa6ca135d7f98aec189107df5b2699709a0fdca7f543f55aab4dadfc0d3",
+          "id": "configuration:collatz-retrospective"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37",
+      "id": "run:collatz-protocol-freeze",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/freeze.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "corpus",
+      "dependencies": [
+        {
+          "expected_sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37",
+          "id": "run:collatz-protocol-freeze"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "2bf1fe348eeea2dff42c7f56af36b3106621dbbf5d253ccccb7f9364d3b2c3a6",
+      "id": "corpus:collatz-generated",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "nested-phantom-candidate.lean",
+          "nested-phantom-candidate.ndjson"
+        ],
+        "kind": "file_set",
+        "root": "corpus/collatz-retrospective"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37",
+          "id": "run:collatz-protocol-freeze"
+        },
+        {
+          "expected_sha256": "2bf1fe348eeea2dff42c7f56af36b3106621dbbf5d253ccccb7f9364d3b2c3a6",
+          "id": "corpus:collatz-generated"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "b7b5f36a01c473a26c5b3616ec710f8d8d7d1e1fa34ab1dce8fc06d4bd6f4252",
+      "id": "run:collatz-generation",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "generation.json",
+          "coverage.jsonl",
+          "generation-attempts.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "results/collatz-retrospective"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "b7b5f36a01c473a26c5b3616ec710f8d8d7d1e1fa34ab1dce8fc06d4bd6f4252",
+          "id": "run:collatz-generation"
+        },
+        {
+          "expected_sha256": "2bf1fe348eeea2dff42c7f56af36b3106621dbbf5d253ccccb7f9364d3b2c3a6",
+          "id": "corpus:collatz-generated"
+        }
+      ],
+      "expected_sha256": "1d56800fdff7d620a0e80b942f888a0d06004ed04e0dc94aeeb6b5bb1f632643",
+      "id": "run:collatz-candidate-freeze",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/candidate-freeze.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "1d56800fdff7d620a0e80b942f888a0d06004ed04e0dc94aeeb6b5bb1f632643",
+          "id": "run:collatz-candidate-freeze"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "3d8bdaa899d878fc0e577d28eab7f437014e57cca73ed11a312815f0e56d5f59",
+      "id": "run:collatz-evaluation",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/evaluation.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "b7b5f36a01c473a26c5b3616ec710f8d8d7d1e1fa34ab1dce8fc06d4bd6f4252",
+          "id": "run:collatz-generation"
+        },
+        {
+          "expected_sha256": "1d56800fdff7d620a0e80b942f888a0d06004ed04e0dc94aeeb6b5bb1f632643",
+          "id": "run:collatz-candidate-freeze"
+        },
+        {
+          "expected_sha256": "3d8bdaa899d878fc0e577d28eab7f437014e57cca73ed11a312815f0e56d5f59",
+          "id": "run:collatz-evaluation"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "a31c4b3cf391b80fa12cdc2aa7e7fd5dbb03c47dd0b78ab3a064528b8f202d8b",
+      "id": "run:collatz-invalid-zero-input-archive",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "coverage.jsonl",
+          "generation-attempts.jsonl",
+          "generation.json",
+          "candidate-freeze.json",
+          "evaluation.json",
+          "assurance.json",
+          "REPORT.md",
+          "collatz-retrospective-assurance"
+        ],
+        "kind": "file_set",
+        "root": "results/collatz-retrospective/invalid-zero-input-run"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37",
+          "id": "run:collatz-protocol-freeze"
+        },
+        {
+          "expected_sha256": "a31c4b3cf391b80fa12cdc2aa7e7fd5dbb03c47dd0b78ab3a064528b8f202d8b",
+          "id": "run:collatz-invalid-zero-input-archive"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "bed74a6c408edc8b61b89e79896f2b4f1497becfd69decc492430795c8874521",
+      "id": "run:collatz-projection-coverage-repair",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "amendment.json",
+          "coverage.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "results/collatz-retrospective/projection-repair"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "bed74a6c408edc8b61b89e79896f2b4f1497becfd69decc492430795c8874521",
+          "id": "run:collatz-projection-coverage-repair"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "262518e00531559b2d6ee361eac93d8a46616e77d6a1fdd521e47cb90821e684",
+      "id": "run:collatz-projection-bounded-repair",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/projection-repair-v2/amendment.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "corpus",
+      "dependencies": [
+        {
+          "expected_sha256": "262518e00531559b2d6ee361eac93d8a46616e77d6a1fdd521e47cb90821e684",
+          "id": "run:collatz-projection-bounded-repair"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "a6586716c3f188cff9af0840107b2c6ed9078249e6438e605da49f98f2b8c0dc",
+      "id": "corpus:collatz-projection-repair",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "corpus/collatz-retrospective/projection-identity-candidate-repair-v2.ndjson"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "262518e00531559b2d6ee361eac93d8a46616e77d6a1fdd521e47cb90821e684",
+          "id": "run:collatz-projection-bounded-repair"
+        },
+        {
+          "expected_sha256": "bed74a6c408edc8b61b89e79896f2b4f1497becfd69decc492430795c8874521",
+          "id": "run:collatz-projection-coverage-repair"
+        },
+        {
+          "expected_sha256": "a6586716c3f188cff9af0840107b2c6ed9078249e6438e605da49f98f2b8c0dc",
+          "id": "corpus:collatz-projection-repair"
+        }
+      ],
+      "expected_sha256": "8ee5ab7e83be9a2e786cea8005f43e7961972b1f85111f9cc2d8cdac47bd35cf",
+      "id": "run:collatz-projection-repair-generation",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "generation.json",
+          "generation-attempts.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "results/collatz-retrospective/projection-repair-v2"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "8ee5ab7e83be9a2e786cea8005f43e7961972b1f85111f9cc2d8cdac47bd35cf",
+          "id": "run:collatz-projection-repair-generation"
+        },
+        {
+          "expected_sha256": "a6586716c3f188cff9af0840107b2c6ed9078249e6438e605da49f98f2b8c0dc",
+          "id": "corpus:collatz-projection-repair"
+        }
+      ],
+      "expected_sha256": "51dcbdc1ec7c84f9bb2a4f4debda436268d32ba142a19d4a12b61f6784c953aa",
+      "id": "run:collatz-projection-repair-candidate-freeze",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/projection-repair-v2/candidate-freeze.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "run",
+      "dependencies": [
+        {
+          "expected_sha256": "51dcbdc1ec7c84f9bb2a4f4debda436268d32ba142a19d4a12b61f6784c953aa",
+          "id": "run:collatz-projection-repair-candidate-freeze"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "85bf941f00bfb21affc7265ee378495f2c895a3227f1234ef19ce5cde6a354de",
+      "id": "run:collatz-projection-repair-evaluation",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/projection-repair-v2/evaluation.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "85bf941f00bfb21affc7265ee378495f2c895a3227f1234ef19ce5cde6a354de",
+          "id": "run:collatz-projection-repair-evaluation"
+        },
+        {
+          "expected_sha256": "f882df0949e3b374bbbde277f551a1ff712bfd83bba6bf2c7d2e87bdf4d9c820",
+          "id": "script:collatz-retrospective-repair"
+        }
+      ],
+      "expected_sha256": "8a85429f0fed2a322b5197e4ef9c697220c040a122af50797e589e80caaabc74",
+      "id": "report:collatz-projection-repair-assurance",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/projection-repair-v2/assurance.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "3d8bdaa899d878fc0e577d28eab7f437014e57cca73ed11a312815f0e56d5f59",
+          "id": "run:collatz-evaluation"
+        },
+        {
+          "expected_sha256": "a31c4b3cf391b80fa12cdc2aa7e7fd5dbb03c47dd0b78ab3a064528b8f202d8b",
+          "id": "run:collatz-invalid-zero-input-archive"
+        },
+        {
+          "expected_sha256": "8a85429f0fed2a322b5197e4ef9c697220c040a122af50797e589e80caaabc74",
+          "id": "report:collatz-projection-repair-assurance"
+        },
+        {
+          "expected_sha256": "2d5cc905b61a2e22fbb0f13a5d077f14d5d534694f1b5fcf2642a17dab7e813f",
+          "id": "script:collatz-retrospective"
+        }
+      ],
+      "expected_sha256": "72ff4a6197c95b0b1cb4b26fd3c0f7d477676e6f6b5398ef5a20de0d9b1e6f1a",
+      "id": "report:collatz-retrospective-assurance",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/assurance.json"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "report",
+      "dependencies": [
+        {
+          "expected_sha256": "72ff4a6197c95b0b1cb4b26fd3c0f7d477676e6f6b5398ef5a20de0d9b1e6f1a",
+          "id": "report:collatz-retrospective-assurance"
+        }
+      ],
+      "expected_sha256": "6f708cdcfa566a6eba4f0405c28302dd97feb4660f2c19b8e697404a4008a139",
+      "id": "report:collatz-retrospective",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/collatz-retrospective/REPORT.md"
+      },
+      "notes": "",
+      "required_for_current_claims": true
+    },
+    {
       "artifact_type": "report",
       "dependencies": [
         {
@@ -1315,7 +1820,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1365,7 +1870,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1431,7 +1936,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1449,7 +1954,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         },
         {
@@ -1473,7 +1978,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1491,7 +1996,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1533,7 +2038,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1567,7 +2072,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1617,7 +2122,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -1822,7 +2327,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         },
         {
@@ -1851,7 +2356,7 @@
       "artifact_type": "script",
       "dependencies": [
         {
-          "expected_sha256": "8898f580cc100b39ce4b62b8c821535d8b9172cee323e20cfb7362d386e3387b",
+          "expected_sha256": "c312c556e703c0681aadd2b518d853fecba0aee15379f0c2bd9965d51678d159",
           "id": "configuration:community-workflow"
         },
         {
@@ -2241,7 +2746,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2323,7 +2828,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2365,7 +2870,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2415,7 +2920,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2441,11 +2946,11 @@
           "id": "script:current-assurance"
         },
         {
-          "expected_sha256": "dd6d80febc1706d9ab6ca641da8aaee972156540891d70a2e44aa4242d560c44",
+          "expected_sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "bf0da4bab572e228a821ca69619fda5eccff7499586c1fd5f7ead2a1ec85cb3c",
+          "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
           "id": "coverage:local-payload"
         },
         {
@@ -2489,7 +2994,7 @@
           "id": "report:rotating-heldout-m7"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2523,7 +3028,7 @@
           "id": "report:milestone7-assurance"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2545,7 +3050,7 @@
           "id": "report:current-assurance"
         },
         {
-          "expected_sha256": "8898f580cc100b39ce4b62b8c821535d8b9172cee323e20cfb7362d386e3387b",
+          "expected_sha256": "c312c556e703c0681aadd2b518d853fecba0aee15379f0c2bd9965d51678d159",
           "id": "configuration:community-workflow"
         },
         {
@@ -2575,7 +3080,7 @@
           "id": "report:public-status"
         },
         {
-          "expected_sha256": "8898f580cc100b39ce4b62b8c821535d8b9172cee323e20cfb7362d386e3387b",
+          "expected_sha256": "c312c556e703c0681aadd2b518d853fecba0aee15379f0c2bd9965d51678d159",
           "id": "configuration:community-workflow"
         },
         {
@@ -2583,7 +3088,7 @@
           "id": "script:community-workflow"
         },
         {
-          "expected_sha256": "328ff66c27736d9103673264db5b9257ac91a70ed3190788bb4b18c6d7e58fc5",
+          "expected_sha256": "a1af1a06d8afaed7240eaf224aea1c4a9f5d9b9dae1c0e821de42ba792866ef1",
           "id": "script:artifact-system"
         }
       ],
@@ -2600,7 +3105,7 @@
   ],
   "provenance": {
     "arena_revision": "f0fe3b379dbce91537417b529140d0ca250f271c",
-    "configurations_sha256": "a32c3bc937ba6c709d902a168d309090967bcd7d1755bf0de20532369f0cf50b",
+    "configurations_sha256": "f21ad786feeb1156efa5d955f6ec21a6e310b6576312e6ca0bbe27a67290df51",
     "corpus_inventory_sha256": "57a8e14fe625bebb5fbb029ca051d2de07f742d9fe77ce18553f4bf900c8563f",
     "lean_versions": {
       "lean4export": "3.1.0",
@@ -2609,8 +3114,8 @@
       "witness": "4.29.1"
     },
     "mutation_specs_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
-    "repository_revision": "a5f1d55dda8d647e60d5d99cc1b2bf54ac8e442a",
-    "scripts_sha256": "9822832e1c7329d84d2d041df41927ff96e5cba5be3c110f7ca8ee3fa58f17af",
+    "repository_revision": "05fd53337b9a7dc68ec9a97fd15135010455ae61",
+    "scripts_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
     "validator_source_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613"
   },
   "schema_version": 1

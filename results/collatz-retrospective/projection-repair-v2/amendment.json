@@ -1,0 +1,81 @@
+{
+  "diagnosis": {
+    "effect": "The first repair was interrupted before generation.json or a candidate freeze was written.",
+    "failed_stage": "projection candidate materialization before candidate evaluation",
+    "failure": "The frozen generator deep-copied every possible payload before applying its 64-candidate limit.",
+    "observed_trigger": "The restored schedule includes multi-megabyte inputs with hundreds of projection records."
+  },
+  "experiment_id": "collatz-pre-disclosure-retrospective-2026-08-24",
+  "first_repair_amendment": {
+    "bytes": 5092,
+    "path": "results/collatz-retrospective/projection-repair/amendment.json",
+    "sha256": "ffd385d5336f7bdfe19f55b17d2993cb8cb5e5f841a78c4def786f1d7bf0b4f4"
+  },
+  "first_repair_runner": {
+    "bytes": 27346,
+    "path": "scripts/collatz-retrospective-projection-repair",
+    "sha256": "425f40725d756f64c0383a19a69e12b4b3672a02158b9cf02702d2bbf3a4311c"
+  },
+  "frozen_at": "2026-08-25T00:45:44.396865+00:00",
+  "frozen_generator": {
+    "bytes": 34849,
+    "path": "scripts/collatz-retrospective",
+    "sha256": "0501a547958b5a987b158cc0357f7fac59a3f7d671a1e01c8b7357914114a7c5"
+  },
+  "generation_parameters": {
+    "coverage_prescreen": "NDJSON contains at least one projection node",
+    "coverage_target_fragment": "fn def_eq_proj",
+    "coverage_target_source": "src/tc.rs",
+    "max_coverage_tests": 32,
+    "max_projection_candidates": 64,
+    "nested_candidate_variants": 1,
+    "random_seed": 20260824,
+    "strategy": [
+      "coverage-guided pre-disclosure corpus evaluation of the projection-identity source mutant",
+      "bounded structure-name substitution in projection nodes from pre-disclosure inputs",
+      "operator-derived malformed nested-inductive declaration with an unused projection parameter"
+    ]
+  },
+  "original_protocol_freeze": {
+    "bytes": 40010,
+    "path": "results/collatz-retrospective/freeze.json",
+    "sha256": "ef298e01f26799cb295df4e14ff549864a56e28452464f972069bd10b082ec37"
+  },
+  "protocol": {
+    "disclosed_artifacts_may_not_be_read_by_generation": true,
+    "does_not_restore_original_pre_disclosure_blinding": true,
+    "historical_checker_feedback_may_not_be_used_before_candidate_freeze": true,
+    "post_disclosure_protocol_repair": true,
+    "prior_amendment_preserved": true,
+    "prior_repair_produced_no_candidate_freeze": true
+  },
+  "repair_id": "collatz-projection-bounded-materialization-repair-2026-08-24",
+  "repair_runner": {
+    "bytes": 23646,
+    "path": "scripts/collatz-retrospective-projection-repair-v2",
+    "sha256": "5dcc531fc43d1c7f0c1b55c3d6c4d84ef1afe6bbe3b70ffa7225fe60487bb996"
+  },
+  "repair_scope": {
+    "changed": [
+      "Represent the same ordered substitution universe as lightweight references.",
+      "Apply the same seeded shuffle to that complete reference list.",
+      "Materialize and deduplicate payloads in shuffled order, stopping after the frozen limit."
+    ],
+    "equivalence_argument": "Random.shuffle depends on list length and order, not payload contents. The lightweight references have the same order and cardinality as the frozen eager candidates; payload hashes are deduplicated in the same shuffled order.",
+    "unchanged": [
+      "Successful repaired coverage rows and runtime ordering",
+      "Historical corpus and target-covering schedule",
+      "Substitution eligibility and payload serialization",
+      "Modeled nanoda source mutant and differential evaluator",
+      "Random seed and 64-candidate limit",
+      "Candidate-before-historical-evaluation boundary"
+    ]
+  },
+  "reused_repaired_coverage": {
+    "bytes": 11986,
+    "path": "results/collatz-retrospective/projection-repair/coverage.jsonl",
+    "sha256": "390d122e01990e591adbe2d4fefee54bc79242107fc04312bd11268fa0bd730f"
+  },
+  "schema_version": 1,
+  "status": "SECOND_AMENDMENT_FROZEN_BEFORE_REPAIRED_GENERATION"
+}

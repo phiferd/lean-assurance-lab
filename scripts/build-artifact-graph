@@ -251,10 +251,45 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "configuration:collatz-retrospective",
+            "configuration",
+            locator=files(
+                ".",
+                "experiments/collatz-retrospective/spec.json",
+                "mutations/nanoda-collatz-projection-identity.json",
+            ),
+            required=True,
+            notes="Experiment-scoped retrospective model; excluded from the active mutation campaign catalog.",
+        ),
+        node(
+            "configuration:reproducibility",
+            "configuration",
+            locator=file("config/reproducibility.json"),
+            required=True,
+            notes="Pinned Arena, nanoda, Rust, Cargo, and LLVM identities for portable coverage builds.",
+        ),
+        node(
             "script:coverage",
             "script",
-            locator=files(".", "scripts/collect-coverage", "scripts/reindex-coverage", "scripts/snapshot-coverage"),
+            locator=files(
+                ".",
+                "lib/portable_coverage.py",
+                "scripts/collect-coverage",
+                "scripts/reindex-coverage",
+                "scripts/snapshot-coverage",
+                "scripts/verify-portable-coverage",
+                "tests/test_portable_coverage.py",
+            ),
+            dependencies=["configuration:reproducibility"],
             required=True,
+        ),
+        node(
+            "result:portable-coverage-verification",
+            "run",
+            locator=file("results/reproducibility/nanoda-portability.json"),
+            dependencies=["configuration:reproducibility", "script:coverage", "validator:nanoda"],
+            required=True,
+            notes="Relocation test proving identical nanoda binary and canonical coverage identities across different checkout paths.",
         ),
         node(
             "script:mutation-execution",
@@ -428,6 +463,33 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "script:collatz-retrospective",
+            "script",
+            locator=files(
+                ".",
+                "scripts/collatz-retrospective",
+                "scripts/collatz-retrospective-assurance",
+            ),
+            dependencies=["configuration:collatz-retrospective"],
+            required=True,
+        ),
+        node(
+            "script:collatz-retrospective-repair",
+            "script",
+            locator=files(
+                ".",
+                "scripts/collatz-retrospective-projection-repair",
+                "scripts/collatz-retrospective-projection-repair-v2",
+                "tests/test_collatz_projection_repair.py",
+                "tests/test_collatz_projection_repair_v2.py",
+            ),
+            dependencies=[
+                "configuration:collatz-retrospective",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
             "mutation-model:nanoda",
             "mutation-model",
             locator=files(
@@ -445,7 +507,12 @@ def catalog() -> list[dict]:
         node(
             "mutation-spec:catalog",
             "mutation-spec",
-            locator=files("mutations", "*.json"),
+            locator={
+                "kind": "file_set",
+                "root": "mutations",
+                "include": ["*.json"],
+                "exclude": ["nanoda-collatz-projection-identity.json"],
+            },
             dependencies=["mutation-model:nanoda"],
             required=True,
         ),
@@ -865,6 +932,184 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "run:collatz-protocol-freeze",
+            "run",
+            locator=file("results/collatz-retrospective/freeze.json"),
+            dependencies=[
+                "configuration:collatz-retrospective",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
+            "corpus:collatz-generated",
+            "corpus",
+            locator=files(
+                "corpus/collatz-retrospective",
+                "nested-phantom-candidate.lean",
+                "nested-phantom-candidate.ndjson",
+            ),
+            dependencies=[
+                "run:collatz-protocol-freeze",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-generation",
+            "run",
+            locator=files(
+                "results/collatz-retrospective",
+                "generation.json",
+                "coverage.jsonl",
+                "generation-attempts.jsonl",
+            ),
+            dependencies=[
+                "run:collatz-protocol-freeze",
+                "corpus:collatz-generated",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-candidate-freeze",
+            "run",
+            locator=file("results/collatz-retrospective/candidate-freeze.json"),
+            dependencies=["run:collatz-generation", "corpus:collatz-generated"],
+            required=True,
+        ),
+        node(
+            "run:collatz-evaluation",
+            "run",
+            locator=file("results/collatz-retrospective/evaluation.json"),
+            dependencies=[
+                "run:collatz-candidate-freeze",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-invalid-zero-input-archive",
+            "run",
+            locator=files(
+                "results/collatz-retrospective/invalid-zero-input-run",
+                "coverage.jsonl",
+                "generation-attempts.jsonl",
+                "generation.json",
+                "candidate-freeze.json",
+                "evaluation.json",
+                "assurance.json",
+                "REPORT.md",
+                "collatz-retrospective-assurance",
+            ),
+            dependencies=[
+                "run:collatz-generation",
+                "run:collatz-candidate-freeze",
+                "run:collatz-evaluation",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-projection-coverage-repair",
+            "run",
+            locator=files(
+                "results/collatz-retrospective/projection-repair",
+                "amendment.json",
+                "coverage.jsonl",
+            ),
+            dependencies=[
+                "run:collatz-protocol-freeze",
+                "run:collatz-invalid-zero-input-archive",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-projection-bounded-repair",
+            "run",
+            locator=file("results/collatz-retrospective/projection-repair-v2/amendment.json"),
+            dependencies=[
+                "run:collatz-projection-coverage-repair",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "corpus:collatz-projection-repair",
+            "corpus",
+            locator=file("corpus/collatz-retrospective/projection-identity-candidate-repair-v2.ndjson"),
+            dependencies=[
+                "run:collatz-projection-bounded-repair",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-projection-repair-generation",
+            "run",
+            locator=files(
+                "results/collatz-retrospective/projection-repair-v2",
+                "generation.json",
+                "generation-attempts.jsonl",
+            ),
+            dependencies=[
+                "run:collatz-projection-bounded-repair",
+                "run:collatz-projection-coverage-repair",
+                "corpus:collatz-projection-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-projection-repair-candidate-freeze",
+            "run",
+            locator=file("results/collatz-retrospective/projection-repair-v2/candidate-freeze.json"),
+            dependencies=[
+                "run:collatz-projection-repair-generation",
+                "corpus:collatz-projection-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "run:collatz-projection-repair-evaluation",
+            "run",
+            locator=file("results/collatz-retrospective/projection-repair-v2/evaluation.json"),
+            dependencies=[
+                "run:collatz-projection-repair-candidate-freeze",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "report:collatz-projection-repair-assurance",
+            "report",
+            locator=file("results/collatz-retrospective/projection-repair-v2/assurance.json"),
+            dependencies=[
+                "run:collatz-projection-repair-evaluation",
+                "script:collatz-retrospective-repair",
+            ],
+            required=True,
+        ),
+        node(
+            "report:collatz-retrospective-assurance",
+            "report",
+            locator=file("results/collatz-retrospective/assurance.json"),
+            dependencies=[
+                "run:collatz-evaluation",
+                "run:collatz-invalid-zero-input-archive",
+                "report:collatz-projection-repair-assurance",
+                "script:collatz-retrospective",
+            ],
+            required=True,
+        ),
+        node(
+            "report:collatz-retrospective",
+            "report",
+            locator=file("results/collatz-retrospective/REPORT.md"),
+            dependencies=["report:collatz-retrospective-assurance"],
+            required=True,
+        ),
+        node(
             "report:mutation-summary-m3",
             "report",
             locator=file("results/assurance/milestone-3-report.json"),
@@ -1135,6 +1380,15 @@ def main() -> int:
     coverage_manifest = json.loads(
         (ROOT / "results" / "coverage" / "nanoda" / "manifest.json").read_text(encoding="utf-8")
     )
+    if coverage_manifest.get("schema_version", 1) >= 2:
+        coverage_build_manifest = json.loads(
+            (ROOT / "results" / "coverage" / "nanoda" / "build-manifest.json").read_text(
+                encoding="utf-8"
+            )
+        )
+        coverage_rustc = coverage_build_manifest["tools"]["rustc"].splitlines()[0]
+    else:
+        coverage_rustc = coverage_manifest["rustc"]
     graph = {
         "schema_version": 1,
         "generated_at": datetime.now(timezone.utc).isoformat(),
@@ -1146,7 +1400,7 @@ def main() -> int:
                 "witness": "4.29.1",
                 "official_reference": "4.33.0",
                 "lean4export": "3.1.0",
-                "rustc": coverage_manifest["rustc"],
+                "rustc": coverage_rustc,
             },
             "mutation_specs_sha256": by_id["mutation-spec:catalog"]["expected_sha256"],
             "corpus_inventory_sha256": by_id["corpus:arena-materialized"]["expected_sha256"],

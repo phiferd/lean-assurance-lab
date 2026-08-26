@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""Build and cover nanoda in two checkout paths and compare deterministic identities."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import os
+import shutil
+import subprocess
+import sys
+import tempfile
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from portable_coverage import (  # noqa: E402
+    VIRTUAL_CHECKER_ROOT,
+    build_checker,
+    canonical_coverage,
+    command_output,
+    coverage_digest,
+    expected_source_ids,
+    sha256_file,
+    source_digest,
+)
+
+
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
+DEFAULT_ARTIFACT = ARENA_ROOT / "_build" / "tests" / "proj-of-prop.ndjson"
+DEFAULT_CONFIG = CHECKER_ROOT / "config.json"
+PINS = ROOT / "config" / "reproducibility.json"
+DEFAULT_OUTPUT = ROOT / "results" / "reproducibility" / "nanoda-portability.json"
+
+
+def find_llvm_tool(name: str) -> str:
+    candidates = [
+        shutil.which(name),
+        f"/opt/homebrew/opt/llvm@22/bin/{name}",
+        f"/opt/homebrew/Cellar/llvm@22/22.1.8/bin/{name}",
+    ]
+    for candidate in candidates:
+        if candidate and Path(candidate).is_file():
+            return candidate
+    raise SystemExit(f"matching LLVM tool not found: {name}")
+
+
+def git_output(cwd: Path, *args: str) -> str:
+    return subprocess.run(
+        ["git", *args], cwd=cwd, check=True, text=True, stdout=subprocess.PIPE
+    ).stdout.strip()
+
+
+def rustc_verbose() -> dict[str, str]:
+    lines = command_output(["rustc", "--version", "--verbose"]).splitlines()
+    result = {"version": lines[0]}
+    for line in lines[1:]:
+        if ": " in line:
+            key, value = line.split(": ", 1)
+            result[key.replace("-", "_")] = value
+    return result
+
+
+def llvm_version(tool: str) -> str:
+    output = command_output([tool, "--version"])
+    for line in output.splitlines():
+        if "LLVM version" in line:
+            return line.split("LLVM version", 1)[1].strip()
+    raise SystemExit(f"cannot parse LLVM version from {tool}")
+
+
+def validate_pins(pins: dict[str, Any], llvm_cov: str, llvm_profdata: str) -> dict[str, Any]:
+    actual = {
+        "arena_revision": git_output(ARENA_ROOT, "rev-parse", "HEAD"),
+        "cargo": command_output(["cargo", "--version"]),
+        "rustc": rustc_verbose(),
+        "llvm_cov": llvm_version(llvm_cov),
+        "llvm_profdata": llvm_version(llvm_profdata),
+    }
+    if (CHECKER_ROOT / ".git").exists():
+        actual["nanoda_revision"] = git_output(CHECKER_ROOT, "rev-parse", "HEAD")
+    expected_rust = pins["rust"]
+    failures = []
+    if actual["arena_revision"] != pins["arena"]["revision"]:
+        failures.append("Arena revision")
+    if actual.get("nanoda_revision") not in (None, pins["nanoda"]["revision"]):
+        failures.append("nanoda revision")
+    if actual["cargo"] != expected_rust["cargo"]:
+        failures.append("Cargo version")
+    for actual_key, expected_key in [
+        ("commit_hash", "commit_hash"),
+        ("host", "host"),
+        ("release", "release"),
+    ]:
+        if actual["rustc"].get(actual_key) != expected_rust[expected_key]:
+            failures.append(f"rustc {expected_key}")
+    for key in ["llvm_cov", "llvm_profdata"]:
+        if actual[key] != pins["llvm"]["version"]:
+            failures.append(key)
+    if failures:
+        raise SystemExit(f"reproducibility pins do not match: {sorted(failures)}")
+    return actual
+
+
+def copy_checker(source: Path, destination: Path) -> None:
+    shutil.copytree(
+        source,
+        destination,
+        ignore=shutil.ignore_patterns(
+            ".git", "target", "target-*", "*.profraw", "*.profdata", "__pycache__"
+        ),
+    )
+
+
+def normalize_exit(code: int) -> str:
+    if code == 0:
+        return "ACCEPT"
+    if code == 2:
+        return "DECLINE"
+    return "REJECT"
+
+
+def coverage_run(
+    checker_root: Path,
+    binary: Path,
+    artifact: Path,
+    config_source: Path,
+    llvm_profdata: str,
+    llvm_cov: str,
+) -> dict[str, Any]:
+    config = checker_root / "portable-config.json"
+    config_data = json.loads(config_source.read_text(encoding="utf-8"))
+    config_data["num_threads"] = 1
+    config.write_text(json.dumps(config_data, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    with tempfile.TemporaryDirectory(prefix="portable-coverage-profile-") as temp_name:
+        temp = Path(temp_name)
+        profile_pattern = temp / "run-%p.profraw"
+        env = os.environ.copy()
+        env["LLVM_PROFILE_FILE"] = str(profile_pattern)
+        with artifact.open("rb") as handle:
+            proc = subprocess.run(
+                [str(binary), str(config)],
+                cwd=checker_root,
+                env=env,
+                stdin=handle,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=300,
+            )
+        profiles = sorted(temp.glob("run-*.profraw"))
+        if not profiles:
+            raise SystemExit(f"portable checker emitted no profile: {checker_root}")
+        profdata = temp / "run.profdata"
+        subprocess.run(
+            [llvm_profdata, "merge", "-sparse", *map(str, profiles), "-o", str(profdata)],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+        exported = subprocess.run(
+            [llvm_cov, "export", str(binary), f"--instr-profile={profdata}"],
+            check=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+        )
+    export = json.loads(exported.stdout)
+    embedded_root, covered = canonical_coverage(export, expected_source_ids(checker_root))
+    return {
+        "outcome": normalize_exit(proc.returncode),
+        "exit_code": proc.returncode,
+        "embedded_source_root": embedded_root,
+        "covered_location_count": len(covered),
+        "covered_locations_sha256": coverage_digest(covered),
+        "covered": covered,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifact", type=Path, default=DEFAULT_ARTIFACT)
+    parser.add_argument("--config", type=Path, default=DEFAULT_CONFIG)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--verify", action="store_true")
+    parser.add_argument(
+        "--check-environment-only",
+        action="store_true",
+        help="validate pinned repositories and tools without building",
+    )
+    parser.add_argument("--work-dir", type=Path, help="preserve relocation builds for diagnosis")
+    args = parser.parse_args()
+
+    pins = json.loads(PINS.read_text(encoding="utf-8"))
+    llvm_profdata = find_llvm_tool("llvm-profdata")
+    llvm_cov = find_llvm_tool("llvm-cov")
+    environment = validate_pins(pins, llvm_cov, llvm_profdata)
+    if args.check_environment_only:
+        print("portable coverage environment matches config/reproducibility.json")
+        return 0
+    artifact = args.artifact.resolve()
+    config = args.config.resolve()
+    if not artifact.is_file() or not config.is_file():
+        raise SystemExit("portable coverage artifact/config is missing")
+
+    temporary: tempfile.TemporaryDirectory[str] | None = None
+    if args.work_dir:
+        temp = args.work_dir.resolve()
+        temp.mkdir(parents=True, exist_ok=False)
+    else:
+        temporary = tempfile.TemporaryDirectory(prefix="lean-assurance-relocation-")
+        temp = Path(temporary.name)
+    try:
+        roots = [
+            temp / "checkout-a" / "nanoda",
+            temp / "checkout with spaces b" / "nanoda",
+        ]
+        results = []
+        for index, checker_root in enumerate(roots, 1):
+            copy_checker(CHECKER_ROOT, checker_root)
+            target = checker_root / "target-portable" if index == 1 else temp / f"target-{index}"
+            binary, build, _log = build_checker(checker_root, target)
+            run = coverage_run(checker_root, binary, artifact, config, llvm_profdata, llvm_cov)
+            results.append({"build": build, "coverage": run})
+    finally:
+        if temporary is not None:
+            temporary.cleanup()
+
+    first, second = results
+    if first["build"] != second["build"]:
+        changed = sorted(
+            key
+            for key in set(first["build"]) | set(second["build"])
+            if first["build"].get(key) != second["build"].get(key)
+        )
+        detail = {
+            key: {"first": first["build"].get(key), "second": second["build"].get(key)}
+            for key in changed
+        }
+        raise SystemExit(
+            "portable build manifests differ between checkout paths: "
+            + json.dumps(detail, sort_keys=True)
+        )
+    if first["coverage"] != second["coverage"]:
+        raise SystemExit("canonical coverage differs between checkout paths")
+    sentinel = pins["coverage_sentinel"]
+    if sentinel["location"] not in first["coverage"]["covered"]:
+        raise SystemExit(
+            f"relocation sentinel is not covered: {sentinel['test']}:{sentinel['location']}"
+        )
+    if first["coverage"]["embedded_source_root"] != VIRTUAL_CHECKER_ROOT:
+        raise SystemExit("portable binary does not use the virtual checker source root")
+
+    coverage_summary = {
+        key: value for key, value in first["coverage"].items() if key != "covered"
+    }
+    attestation = {
+        "schema_version": 1,
+        "status": "PASS",
+        "claim": "nanoda instrumented build and canonical coverage are invariant across checkout paths",
+        "pins": {"path": str(PINS.relative_to(ROOT)), "sha256": sha256_file(PINS)},
+        "inputs": {
+            "checker_source_sha256": source_digest(CHECKER_ROOT),
+            "artifact": {
+                "logical_path": str(artifact.relative_to(ARENA_ROOT)),
+                "sha256": sha256_file(artifact),
+            },
+            "config_sha256": sha256_file(config),
+        },
+        "environment": environment,
+        "build": first["build"],
+        "coverage": coverage_summary,
+        "sentinel": {**sentinel, "passed": True},
+        "comparison": {
+            "checkout_count": 2,
+            "different_absolute_paths": True,
+            "path_with_spaces_included": True,
+            "binary_sha256_equal": True,
+            "build_manifest_equal": True,
+            "canonical_coverage_equal": True,
+        },
+        "producer": {
+            "path": str(Path(__file__).resolve().relative_to(ROOT)),
+            "sha256": sha256_file(Path(__file__)),
+        },
+    }
+    if args.verify:
+        saved = json.loads(args.output.read_text(encoding="utf-8"))
+        if saved != attestation:
+            changed = sorted(
+                key
+                for key in set(saved) | set(attestation)
+                if saved.get(key) != attestation.get(key)
+            )
+            raise SystemExit(f"portable coverage attestation is stale: {changed}")
+        print(f"portable coverage verified: {args.output}")
+        return 0
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(attestation, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

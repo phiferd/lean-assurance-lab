@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "experiment_id": "collatz-pre-disclosure-retrospective-2026-08-24",
+  "claim_scope": "Bounded retrospective capability test; not prospective discovery evidence.",
+  "historical_boundary": {
+    "arena_revision": "dd345f6a5c034d73b5889b318cbd88252c7627c9",
+    "arena_tree": "90a11825acbddfc8dc139a123dadd3a9194a0885",
+    "first_disclosed_regression_commit": "289d09c61e478a99fa49c9758746bd4587b337b3",
+    "corpus_build_mode": "build-test --skip-ci",
+    "expected_materialized_test_count": 152,
+    "affected_official_version": "4.29.0",
+    "affected_nanoda_revision": "ddfac2bf5a7b56cb46e141494427ff3dd55963c7"
+  },
+  "operators": [
+    {
+      "id": "DROP_NESTED_UNUSED_PARAMETER_VALIDATION",
+      "subsystem": "inductive-declarations",
+      "semantic_model": "Do not type-check a nested-inductive application argument when specialization removes it from the auxiliary type.",
+      "realization": "Affected official Lean 4.29.0 compared with fixed official Lean 4.33.0."
+    },
+    {
+      "id": "IGNORE_PROJECTION_STRUCTURE_IDENTITY",
+      "subsystem": "definitional-equality",
+      "semantic_model": "Treat projections with equal field indexes and definitionally equal structures as equal without comparing their declared structure names.",
+      "realization": "nanoda-collatz-projection-identity source mutant compared with fixed nanoda."
+    }
+  ],
+  "generation": {
+    "random_seed": 20260824,
+    "coverage_prescreen": "NDJSON contains at least one projection node",
+    "coverage_target_source": "src/tc.rs",
+    "coverage_target_fragment": "fn def_eq_proj",
+    "max_coverage_tests": 32,
+    "max_projection_candidates": 64,
+    "nested_candidate_variants": 1,
+    "strategy": [
+      "coverage-guided pre-disclosure corpus evaluation of the projection-identity source mutant",
+      "bounded structure-name substitution in projection nodes from pre-disclosure inputs",
+      "operator-derived malformed nested-inductive declaration with an unused projection parameter"
+    ]
+  },
+  "held_out": {
+    "arena_test": "nested-unused-param",
+    "published_collatz_artifact_available_locally": false,
+    "generation_may_read_arena_test": false,
+    "generation_may_read_published_collatz_artifact": false,
+    "generation_may_use_historical_checker_outcomes": false,
+    "evaluation_requires_candidate_freeze": true
+  },
+  "classification_order": [
+    "FULL_CLASS_REDISCOVERY",
+    "PARTIAL_REDISCOVERY",
+    "NO_REDISCOVERY",
+    "INCONCLUSIVE"
+  ]
+}

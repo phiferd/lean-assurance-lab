@@ -1,0 +1,94 @@
+{
+  "candidate_freeze": {
+    "bytes": 1158,
+    "path": "results/collatz-retrospective/projection-repair-v2/candidate-freeze.json",
+    "sha256": "51dcbdc1ec7c84f9bb2a4f4debda436268d32ba142a19d4a12b61f6784c953aa"
+  },
+  "classification": "PROJECTION_COMPONENT_REDISCOVERED",
+  "completed_at": "2026-08-25T00:46:42.058575+00:00",
+  "costs": {
+    "checker_runs": 6,
+    "checker_seconds": 5.103838165174238
+  },
+  "experiment_id": "collatz-pre-disclosure-retrospective-2026-08-24",
+  "feedback_boundary": {
+    "candidates_frozen_before_historical_evaluation": true,
+    "disclosed_holdout_evaluated": false,
+    "published_collatz_artifact_evaluated": false,
+    "second_amendment_frozen_before_generation": true
+  },
+  "generated_candidate_evaluations": [
+    {
+      "artifact": {
+        "bytes": 10184927,
+        "path": "corpus/collatz-retrospective/projection-identity-candidate-repair-v2.ndjson",
+        "sha256": "a6586716c3f188cff9af0840107b2c6ed9078249e6438e605da49f98f2b8c0dc"
+      },
+      "checkers": {
+        "affected_official_4_29": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.7022350410697982,
+          "stderr_sha256": "5d6374bc67c801fc48ab1eaf5e6b639005ddfe64c2f67464171eb6e7042325d3",
+          "stderr_tail": "uncaught exception: (kernel) invalid projection\n  failed to pretty print expression (use 'set_option pp.rawOnError true' for raw representation)\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fixed_nanoda_6ae1f0c": {
+          "exit_code": 101,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.9088309579528868,
+          "stderr_sha256": "18e861dfc71db75b24c33e3193e7e797f98408b1ac5da43f18733f4206bf9f44",
+          "stderr_tail": "\nthread 'thread_1' (29088762) panicked at src/tc.rs:921:71:\nassertion failed: self.def_eq(u, v)\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'main' (29088756) panicked at src/tc.rs:139:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "fixed_official_4_33": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.687712375074625,
+          "stderr_sha256": "654e246a5cc51b9905154d558e4e8c0ec4a8e23e73079d28c74c90ab5e173739",
+          "stderr_tail": "uncaught exception: while replaying declaration 'Lean.Grind.CommRing.Poly.mulMon.go.eq_def':\n(kernel) invalid projection\n  failed to pretty print expression (use 'set_option pp.rawOnError true' for raw representation)\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "independent_kiota_58e8636": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 1.2926822080044076,
+          "stderr_sha256": "509ed785b26a74d27eae40f9d49314437393018267c8ab883d5b540c9a1b20db",
+          "stderr_tail": "[decl #100] theorem Nat.succ_le_succ\n[decl #200] def List.utf8Encode\n[decl #300] def Exists.casesOn\n[decl #400] theorem Lean.Grind.AddCommGroup.neg_add_cancel\n[decl #500] theorem Nat.add_sub_cancel_left\n[decl #600] theorem Int.nonneg_or_nonneg_neg\n[decl #700] def Lean.Omega.Constraint.sat\n[decl #800] def Int.instDiv\n[decl #900] theorem WellFounded.Nat.fix_eq\n[decl #1000] theorem Int.negSucc_eq\n[decl #1100] def _private.Init.Data.Int.DivMod.Bootstrap.0.Int.emod_emod_of_dvd.match_1_1\n[decl #1200] def GetElem?.getElem?\n[decl #1300] theorem Nat.lt_or_gt_of_ne\n[decl #1400] theorem Bool.false_eq_true\n[decl #1500] theorem Int.add_le_add_iff_right._simp_1\n[decl #1600] def Prod.lex\n[decl #1700] def Bool.dcond.match_1\n[decl #1800] theorem Lean.Grind.CommRing.instBEqMon.beq.eq_3\n[decl #1900] theorem Lean.Grind.Semiring.ofNat_mul\nREJECT: [Lean.Grind.CommRing.Poly.mulMon.go.eq_def] projection struct name mismatch\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "independent_lean4lean_ecb3b66": {
+          "exit_code": 1,
+          "normalized_outcome": "REJECT",
+          "seconds": 0.7765721670584753,
+          "stderr_sha256": "54a4d86fe2fc0fcceb28c1b8e88a30f35b616c18524eb0517661ac3b7f0628ee",
+          "stderr_tail": "um k')) => cond.{1} Lean.Grind.CommRing.Poly (BEq.beq.{0} Int (instBEqOfDecidableEq.{0} Int Int.instDecidableEq) k' (OfNat.ofNat.{0} Int 0 (instOfNat 0))) (Lean.Grind.CommRing.Poly.num (OfNat.ofNat.{0} Int 0 (instOfNat 0))) (Lean.Grind.CommRing.Poly.add (HMul.hMul.{0, 0, 0} Int Int Int (instHMul.{0} Int Int.instMul) _kernel_fresh.15 k') _kernel_fresh.16 (Lean.Grind.CommRing.Poly.num (OfNat.ofNat.{0} Int 0 (instOfNat 0))))) (fun (k' : Int) (m' : Lean.Grind.CommRing.Mon) (p : Lean.Grind.CommRing.Poly) (x._@.Init.Grind.Ring.CommSolver.1676014526._hygCtx._hyg.105 : Lean.Grind.CommRing.Poly.below.{1} (fun (x._@.Init.Grind.Ring.CommSolver.3745234885._hygCtx._hyg.9 : Lean.Grind.CommRing.Poly) => Lean.Grind.CommRing.Poly) (Lean.Grind.CommRing.Poly.add k' m' p)) => Lean.Grind.CommRing.Poly.add (HMul.hMul.{0, 0, 0} Int Int Int (instHMul.{0} Int Int.instMul) _kernel_fresh.15 k') (Lean.Grind.CommRing.Mon.mul _kernel_fresh.16 m') x._@.Init.Grind.Ring.CommSolver.1676014526._hygCtx._hyg.105.1) f)).2\n",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "prefixed_nanoda_ddfac2b": {
+          "exit_code": 0,
+          "normalized_outcome": "ACCEPT",
+          "seconds": 0.7358054160140455,
+          "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+          "stderr_tail": "",
+          "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      }
+    }
+  ],
+  "producer": {
+    "bytes": 23646,
+    "path": "scripts/collatz-retrospective-projection-repair-v2",
+    "sha256": "5dcc531fc43d1c7f0c1b55c3d6c4d84ef1afe6bbe3b70ffa7225fe60487bb996"
+  },
+  "projection_structure_identity_distinction": true,
+  "protocol_amendment": {
+    "bytes": 3872,
+    "path": "results/collatz-retrospective/projection-repair-v2/amendment.json",
+    "sha256": "262518e00531559b2d6ee361eac93d8a46616e77d6a1fdd521e47cb90821e684"
+  },
+  "repair_id": "collatz-projection-bounded-materialization-repair-2026-08-24",
+  "schema_version": 1,
+  "started_at": "2026-08-25T00:46:36.720438+00:00",
+  "status": "COMPLETE"
+}
