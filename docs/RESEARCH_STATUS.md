@@ -551,9 +551,10 @@ milestone_9_checks_passing: 25
   upstream Kiota revision `686063c13b22ce379c05dfe7fc03656655ac60e5` with a
   passing positive control. The schema-validated record is
   `results/investigations/kiota-universe-ownership/upstream-main.json`, and the
-  upstream-ready report is `docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md`.
-  The disagreement remains unresolved until upstream adjudication; no majority
-  or implementation count is used to decide semantics.
+  report is `docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md`. It was submitted
+  as [Kiota issue #3](https://github.com/sankalpsthakur/kiota/issues/3). The
+  disagreement remains unresolved until upstream adjudication; no majority or
+  implementation count is used to decide semantics.
 - The minimized witness preserves export metadata but official Lean rejects it
   at `defnInfo invalid`, earlier than the original undefined-universe error.
   Its expected rejection is established, but its explanatory semantics are not

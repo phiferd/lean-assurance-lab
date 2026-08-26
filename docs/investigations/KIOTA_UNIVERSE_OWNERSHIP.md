@@ -1,6 +1,9 @@
 # Kiota Accepts an Undeclared Universe Parameter in a Definition Value
 
-Status: `READY_FOR_UPSTREAM_REPORT`
+Status: `SUBMITTED_UPSTREAM_AWAITING_ADJUDICATION`
+
+Upstream issue:
+[sankalpsthakur/kiota#3](https://github.com/sankalpsthakur/kiota/issues/3)
 
 Suggested upstream issue title:
 
