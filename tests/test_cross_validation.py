@@ -98,7 +98,9 @@ class CrossValidationTests(unittest.TestCase):
         self.assertEqual(decline["normalized_outcome"], "DECLINE")
         self.assertEqual(crash["normalized_outcome"], "CRASH")
         self.assertEqual(timeout["normalized_outcome"], "TIMEOUT")
-        self.assertEqual(decline["command"], ["/bin/sh", "-c", "exit 2"])
+        self.assertEqual(
+            decline["command"], [str(Path("/bin/sh").resolve()), "-c", "exit 2"]
+        )
 
 
 if __name__ == "__main__":
