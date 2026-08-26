@@ -1,10 +1,10 @@
 # Publication Readiness Audit
 
-Audit date: 2026-08-25
+Audit date: 2026-08-26
 
-Audited revision: `3d86039`
+Audited base revision: `1fc23bb`
 
-Status: **NO-GO pending owner decisions**
+Status: **GO, with publication-day controls pending**
 
 ## Scope
 
@@ -18,7 +18,7 @@ third-party provenance relevant to publication.
 - No private keys, common provider tokens, credential files, authentication
   headers, or suspicious secret assignments were found in tracked content or
   reachable commit history by the repository-local pattern scan.
-- The audited revision contains 308 tracked files. Its largest file is the
+- The publication candidate contains 314 tracked files. Its largest file is the
   10,184,927-byte repaired projection witness, below GitHub's 100 MB per-file
   limit.
 - No unexpected binary or executable payloads were found.
@@ -32,14 +32,18 @@ third-party provenance relevant to publication.
   repair; the materialized-validator compatibility test is explicitly skipped
   at that boundary.
 
-## Publication Blocker
+## Resolved Publication Blocker
 
-1. **Arena-derived artifact provenance.** The repaired 10 MB projection witness
-   is derived from Lean Kernel Arena's `perf/grind-ring-5` export. GitHub exposes
-   no detected license for Lean Kernel Arena. Clarification is pending in
-   [leanprover/lean-kernel-arena#162](https://github.com/leanprover/lean-kernel-arena/issues/162).
-   Record the maintainers' redistribution terms and required attribution before
-   publishing that artifact.
+The repaired 10 MB projection witness is derived from Lean Kernel Arena's
+`perf/grind-ring-5` export. Arena collaborator Joachim Breitner clarified that
+Arena tests record their source provenance and are generally under the Apache
+License, Version 2.0, in
+[leanprover/lean-kernel-arena#162](https://github.com/leanprover/lean-kernel-arena/issues/162#issuecomment-5421173941).
+
+The repository now uses the same Apache-2.0 license. [NOTICE](../NOTICE) traces
+the source revisions and prominently records the modifications to the repaired
+projection witness and the two Milestone 6 derivatives. No pre-publication
+provenance blocker remains.
 
 ## Publication-Day Controls
 
@@ -52,7 +56,8 @@ inviting contributions.
 - Existing commit-author email and historical local-path disclosures are
   accepted; repository history will not be rewritten. Future commits in the
   local checkout use the authenticated GitHub noreply address.
-- Project-owned code and documentation use the MIT License under `Dan Phifer`.
+- The complete repository uses the Apache License, Version 2.0. Identified
+  third-party derivations and modifications are recorded in `NOTICE`.
 - CollatzLean is referenced only by links; its content is not redistributed by
   this repository.
 
@@ -60,8 +65,8 @@ inviting contributions.
 
 - Added `requirements-dev.txt` and a least-privilege GitHub Actions unit-test
   workflow.
-- Added the MIT License under `Dan Phifer` and explicit inbound contribution
-  terms.
+- Replaced the initial MIT license with Apache-2.0, aligned inbound contribution
+  terms, and added a third-party provenance and modification notice.
 - Made the materialized-checker compatibility test skip cleanly when a clone
   does not contain the ignored Arena checkout.
 - Added `SECURITY.md` with coordinated-disclosure instructions.
@@ -78,6 +83,17 @@ inviting contributions.
   scanning and push protection when repository visibility and account features
   permit it.
 
-Publication can proceed after the provenance blocker is resolved and the final
-checks in this document are rerun against the exact candidate commit. Apply the
-publication-day controls in the same visibility-change session.
+## Final Verification
+
+- All 58 local unit tests pass.
+- Portable coverage verification passes with 197 tests and 3,451 canonical
+  covered locations.
+- Milestone 8 passes all 24 checks; Milestone 9 passes all 26 checks, including
+  the Apache license and derived-artifact notice check.
+- The artifact graph reports 91 current, 7 historical, and 4 superseded nodes,
+  with all current claims valid.
+- The current assurance gate still fails solely for the two unresolved semantic
+  checker disagreements. Publication readiness does not suppress that result.
+
+Publication can proceed. Apply the publication-day controls in the same
+visibility-change session.

@@ -45,6 +45,8 @@ def main() -> int:
     mutation_report = load(ROOT / "results" / "assurance" / "milestone-7-report.json")
     m4 = load(ROOT / "results" / "assurance" / "milestone-4.json")
     rotating = load(ROOT / "results" / "rotating-heldout" / "milestone-7" / "report.json")
+    coverage = load(ROOT / "results" / "coverage" / "nanoda" / "manifest.json")
+    coverage_metrics = load(ROOT / "results" / "coverage" / "nanoda" / "collection-metrics.json")
     gate_checks = snapshot["gate"]["checks"]
     required_sections = {
         "identity", "validators", "corpus", "mutation_testing", "witness_synthesis",
@@ -92,11 +94,15 @@ def main() -> int:
         "held_out_scores_and_scope_are_reported": snapshot["held_out_evaluation"]["score_change"] == 0.5
         and snapshot["held_out_evaluation"]["classification"] == rotating["classification"]
         and "not a general transfer-rate estimate" in snapshot["held_out_evaluation"]["scope"],
-        "coverage_statistics_and_storage_limit_are_visible": snapshot["coverage"]["covered_source_locations"] == 3884
-        and snapshot["coverage"]["source_file_count"] == 20
+        "coverage_statistics_and_storage_limit_are_visible": snapshot["coverage"]["covered_source_locations"] == coverage["covered_location_count"]
+        and snapshot["coverage"]["source_file_count"] == coverage["source_file_count"]
+        and snapshot["coverage"]["collection_seconds"] == coverage_metrics["run_seconds"]
         and snapshot["coverage"]["payload_tracked_in_git"] is False,
-        "execution_cost_has_scoped_components": snapshot["execution_cost"]["recorded_checker_runs"] == 859
-        and snapshot["execution_cost"]["recorded_checker_seconds"] > 12000
+        "execution_cost_has_scoped_components": snapshot["execution_cost"]["recorded_checker_runs"]
+        == sum(row.get("checker_runs", 0) for row in snapshot["execution_cost"]["components"] if "checker_seconds" in row)
+        and snapshot["execution_cost"]["recorded_checker_seconds"]
+        == sum(row.get("checker_seconds", 0.0) for row in snapshot["execution_cost"]["components"])
+        and snapshot["execution_cost"]["recorded_checker_seconds"] > 0
         and len(snapshot["execution_cost"]["components"]) >= 7
         and "not reconstructed" in snapshot["execution_cost"]["scope"],
         "hard_gates_are_separate_from_trends": set(gate_checks) == set(policy["hard_gates"])

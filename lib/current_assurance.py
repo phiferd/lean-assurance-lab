@@ -117,6 +117,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         "policy": root / "config" / "assurance-policy.json",
         "coverage_identity": root / "results" / "manifests" / "coverage-nanoda.json",
         "coverage_manifest": root / "results" / "coverage" / "nanoda" / "manifest.json",
+        "coverage_metrics": root / "results" / "coverage" / "nanoda" / "collection-metrics.json",
         "mutation_report": root / "results" / "assurance" / "milestone-7-report.json",
         "mutation_batch": root / "results" / "mutation-batches" / "nanoda-semantic-0001.json",
         "m4": root / "results" / "assurance" / "milestone-4.json",
@@ -128,6 +129,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     }
     coverage_identity = load(paths["coverage_identity"])
     coverage = load(paths["coverage_manifest"])
+    coverage_metrics = load(paths["coverage_metrics"])
     report = load(paths["mutation_report"])
     batch = load(paths["mutation_batch"])
     m4 = load(paths["m4"])
@@ -239,7 +241,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     build_seconds = sum(row["seconds"] for row in batch["build_validation"]["results"])
     build_seconds += batch["build_validation"]["baseline_restore_seconds"]
     checker_components = [
-        {"name": "coverage_collection", "checker_runs": coverage["test_count"], "checker_seconds": coverage["run_seconds"]},
+        {"name": "coverage_collection", "checker_runs": coverage["test_count"], "checker_seconds": coverage_metrics["run_seconds"]},
         {"name": "witness_search_and_minimization", "checker_runs": m4["measurements"]["checker_runs"], "checker_seconds": m4["measurements"]["checker_seconds"]},
         {"name": "cross_validation", "checker_runs": cross_runs, "checker_seconds": cross_seconds},
         {"name": "milestone_6_transfer", "checker_runs": m6["measurements"]["held_out_checker_runs"], "checker_seconds": m6["measurements"]["held_out_checker_seconds"]},
@@ -330,7 +332,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "test_count": coverage["test_count"],
             "covered_source_locations": coverage["covered_location_count"],
             "source_file_count": coverage["source_file_count"],
-            "collection_seconds": coverage["run_seconds"],
+            "collection_seconds": coverage_metrics["run_seconds"],
             "payload_tracked_in_git": False,
         },
         "execution_cost": {

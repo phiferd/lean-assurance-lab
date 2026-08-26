@@ -76,6 +76,8 @@ def main() -> int:
     m8 = load(ROOT / "results" / "assurance" / "milestone-8.json")
     constitution = (ROOT / "CONSTITUTION.md").read_text(encoding="utf-8")
     guide = (ROOT / "CONTRIBUTING.md").read_text(encoding="utf-8")
+    license_text = (ROOT / "LICENSE").read_text(encoding="utf-8")
+    notice = (ROOT / "NOTICE").read_text(encoding="utf-8")
     collatz_case_study = (ROOT / "docs" / "CASE_STUDY_COLLATZ.md").read_text(encoding="utf-8")
     introduction = (ROOT / "docs" / "INTRODUCTION.md").read_text(encoding="utf-8")
     public = (ROOT / "docs" / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
@@ -100,6 +102,11 @@ def main() -> int:
         and "mechanically reproducible" in guide
         and "personal preference" in guide
         and "Community Participation With Standards" in constitution,
+        "apache_license_and_derived_artifact_notice_are_present": "Apache License\n                           Version 2.0" in license_text
+        and "repository's [Apache License, Version 2.0](LICENSE)" in guide
+        and "projection-identity-candidate-repair-v2.ndjson" in notice
+        and "nonprop-theorem.ndjson" in notice
+        and "issuecomment-5421173941" in notice,
         "contribution_catalog_conforms_to_schema": validate_catalog(catalog, catalog_schema) == [],
         "all_seven_contribution_paths_are_defined": type_ids == EXPECTED_TYPES
         and all(section in guide for section in guide_sections),

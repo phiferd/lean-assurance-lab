@@ -222,9 +222,9 @@ def main() -> int:
         "schema_version": 1,
         "collected_at": datetime.now(timezone.utc).isoformat(),
         "build_seconds": build_seconds,
-        "binary_executable": str(binary),
-        "llvm_cov_executable": llvm_cov,
-        "llvm_profdata_executable": llvm_profdata,
+        "binary_logical_path": portable_build["binary"]["logical_path"],
+        "llvm_cov": Path(llvm_cov).name,
+        "llvm_profdata": Path(llvm_profdata).name,
         "tests": {},
     }
 

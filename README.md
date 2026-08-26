@@ -435,7 +435,6 @@ input. Normal report commands refuse stale dependencies once the graph exists.
 
 ## License
 
-Lean Assurance Lab is licensed under the [MIT License](LICENSE). Third-party
-repositories and artifacts remain subject to their respective terms; see the
-provenance finding in
-[docs/PUBLICATION_AUDIT.md](docs/PUBLICATION_AUDIT.md).
+Lean Assurance Lab is licensed under the
+[Apache License, Version 2.0](LICENSE). Third-party provenance and modifications
+to derived corpus artifacts are recorded in [NOTICE](NOTICE).

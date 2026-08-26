@@ -9,7 +9,7 @@ confirms an expected result.
 ## Contribution License
 
 By submitting a contribution, you agree that it may be distributed under the
-repository's [MIT License](LICENSE).
+repository's [Apache License, Version 2.0](LICENSE).
 
 ## Start Here
 

@@ -240,6 +240,7 @@ def catalog() -> list[dict]:
                 "CONSTITUTION.md",
                 "CONTRIBUTING.md",
                 "LICENSE",
+                "NOTICE",
                 "README.md",
                 "SECURITY.md",
                 "docs/CASE_STUDY_COLLATZ.md",
@@ -551,7 +552,16 @@ def catalog() -> list[dict]:
         node(
             "coverage:local-payload",
             "coverage",
-            locator=files("results/coverage/nanoda", "*.json", "*.jsonl"),
+            locator=files(
+                "results/coverage/nanoda",
+                "build-manifest.json",
+                "collection-state.json",
+                "config.json",
+                "coverage.jsonl",
+                "line-to-tests.json",
+                "manifest.json",
+                "test-to-lines.json",
+            ),
             dependencies=[
                 "validator:nanoda",
                 "corpus:arena-materialized",
@@ -560,6 +570,15 @@ def catalog() -> list[dict]:
                 "script:coverage",
             ],
             required=True,
+            notes="Portable coverage content identity; operational timing is excluded.",
+        ),
+        node(
+            "coverage:operational-metrics",
+            "coverage",
+            locator=file("results/coverage/nanoda/collection-metrics.json"),
+            dependencies=["coverage:local-payload"],
+            required=True,
+            notes="Path-normalized wall-clock observations excluded from portable coverage identity.",
         ),
         node(
             "coverage:identity-snapshot",
@@ -1297,6 +1316,7 @@ def catalog() -> list[dict]:
             dependencies=[
                 "configuration:assurance-policy", "script:current-assurance",
                 "coverage:identity-snapshot", "coverage:local-payload",
+                "coverage:operational-metrics",
                 "inventory:cross-validators", "report:mutation-summary",
                 "run:mutation-batch-semantic-0001", "report:milestone4-assurance",
                 "report:milestone6-assurance", "report:milestone7-assurance",

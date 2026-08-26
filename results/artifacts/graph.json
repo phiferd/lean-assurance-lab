@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-08-26T02:08:00.000833+00:00",
+  "generated_at": "2026-08-26T11:07:26.305843+00:00",
   "nodes": [
     {
       "artifact_type": "repository",
       "dependencies": [],
-      "expected_sha256": "350505e296c926dfa8af816c058f6e2a821ef7ed795d7357e194f3c7300f5e69",
+      "expected_sha256": "5374378bf2e780374a10e6256fe0d9ab663da59ec6435fb377bafd093156c657",
       "id": "input:repository-revision",
       "lifecycle": "historical",
       "locator": {
@@ -210,7 +210,7 @@
     {
       "artifact_type": "configuration",
       "dependencies": [],
-      "expected_sha256": "31fed05d3af646c7506fc202cd19108feb320fa04cc8318f15c7f34366db3317",
+      "expected_sha256": "45e0adb70687c47b80fde574111d0b2faa640bd43321fe4e748c70fa2ab1c683",
       "id": "configuration:community-workflow",
       "lifecycle": "current",
       "locator": {
@@ -219,6 +219,7 @@
           "CONSTITUTION.md",
           "CONTRIBUTING.md",
           "LICENSE",
+          "NOTICE",
           "README.md",
           "SECURITY.md",
           "docs/CASE_STUDY_COLLATZ.md",
@@ -277,7 +278,7 @@
           "id": "configuration:reproducibility"
         }
       ],
-      "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
+      "expected_sha256": "f67046228095944762a2581e26eebaaceafa4cfcd23e0670e4298a69155b9136",
       "id": "script:coverage",
       "lifecycle": "current",
       "locator": {
@@ -304,7 +305,7 @@
           "id": "configuration:reproducibility"
         },
         {
-          "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
+          "expected_sha256": "f67046228095944762a2581e26eebaaceafa4cfcd23e0670e4298a69155b9136",
           "id": "script:coverage"
         },
         {
@@ -441,7 +442,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+      "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
       "id": "script:artifact-system",
       "lifecycle": "current",
       "locator": {
@@ -662,30 +663,53 @@
           "id": "configuration:nanoda"
         },
         {
-          "expected_sha256": "418222d49cc662df643f72afdc325534fe1b86af1df03b5583a60cef696983f5",
+          "expected_sha256": "f67046228095944762a2581e26eebaaceafa4cfcd23e0670e4298a69155b9136",
           "id": "script:coverage"
         }
       ],
-      "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
+      "expected_sha256": "8293777834175d02c998c149f3a9189340934eeacac578cb64da4d8414897cfe",
       "id": "coverage:local-payload",
       "lifecycle": "current",
       "locator": {
         "exclude": [],
         "include": [
-          "*.json",
-          "*.jsonl"
+          "build-manifest.json",
+          "collection-state.json",
+          "config.json",
+          "coverage.jsonl",
+          "line-to-tests.json",
+          "manifest.json",
+          "test-to-lines.json"
         ],
         "kind": "file_set",
         "root": "results/coverage/nanoda"
       },
-      "notes": "",
+      "notes": "Portable coverage content identity; operational timing is excluded.",
       "required_for_current_claims": true
     },
     {
       "artifact_type": "coverage",
       "dependencies": [
         {
-          "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
+          "expected_sha256": "8293777834175d02c998c149f3a9189340934eeacac578cb64da4d8414897cfe",
+          "id": "coverage:local-payload"
+        }
+      ],
+      "expected_sha256": "f2eac987180cd78535e3d91ee198a96c8c2a35b8cb4f63e597da85f45202e06c",
+      "id": "coverage:operational-metrics",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/coverage/nanoda/collection-metrics.json"
+      },
+      "notes": "Path-normalized wall-clock observations excluded from portable coverage identity.",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "coverage",
+      "dependencies": [
+        {
+          "expected_sha256": "8293777834175d02c998c149f3a9189340934eeacac578cb64da4d8414897cfe",
           "id": "coverage:local-payload"
         }
       ],
@@ -1825,7 +1849,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -1875,7 +1899,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -1941,7 +1965,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -1983,7 +2007,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2001,7 +2025,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2043,7 +2067,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2077,7 +2101,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2127,7 +2151,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2332,7 +2356,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         },
         {
@@ -2340,7 +2364,7 @@
           "id": "script:reporting"
         }
       ],
-      "expected_sha256": "e794f515e2f57fdd84c7a5527fe1cbe86b7ada94d4d1a6cf838b128d65b3ae43",
+      "expected_sha256": "43c6972b37ae0f018baea21af8ad3407b0d45bcc748146b044ea06dc14e9a4cb",
       "id": "script:current-assurance",
       "lifecycle": "current",
       "locator": {
@@ -2361,15 +2385,15 @@
       "artifact_type": "script",
       "dependencies": [
         {
-          "expected_sha256": "31fed05d3af646c7506fc202cd19108feb320fa04cc8318f15c7f34366db3317",
+          "expected_sha256": "45e0adb70687c47b80fde574111d0b2faa640bd43321fe4e748c70fa2ab1c683",
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "e794f515e2f57fdd84c7a5527fe1cbe86b7ada94d4d1a6cf838b128d65b3ae43",
+          "expected_sha256": "43c6972b37ae0f018baea21af8ad3407b0d45bcc748146b044ea06dc14e9a4cb",
           "id": "script:current-assurance"
         }
       ],
-      "expected_sha256": "2a03aba00a6a36db6e05688a44f4b18d2ecdb81a29fd9a0affff3bfc62e58066",
+      "expected_sha256": "1fee7c1d050a1af5e6bdd69f40941305e5523a3b6e7ed003c23e2564860f9878",
       "id": "script:community-workflow",
       "lifecycle": "current",
       "locator": {
@@ -2751,7 +2775,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2833,7 +2857,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2875,7 +2899,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2925,7 +2949,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -2947,7 +2971,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "e794f515e2f57fdd84c7a5527fe1cbe86b7ada94d4d1a6cf838b128d65b3ae43",
+          "expected_sha256": "43c6972b37ae0f018baea21af8ad3407b0d45bcc748146b044ea06dc14e9a4cb",
           "id": "script:current-assurance"
         },
         {
@@ -2955,8 +2979,12 @@
           "id": "coverage:identity-snapshot"
         },
         {
-          "expected_sha256": "fd5c52ade3739cf5a8aeeeb72ee7da0cb0ed222c9049779eb48393942c442591",
+          "expected_sha256": "8293777834175d02c998c149f3a9189340934eeacac578cb64da4d8414897cfe",
           "id": "coverage:local-payload"
+        },
+        {
+          "expected_sha256": "f2eac987180cd78535e3d91ee198a96c8c2a35b8cb4f63e597da85f45202e06c",
+          "id": "coverage:operational-metrics"
         },
         {
           "expected_sha256": "d5ecad87c1b8586ec19bfd494559c38c0e2c266d95ce7d5dc540207d1b69492d",
@@ -2999,11 +3027,11 @@
           "id": "report:rotating-heldout-m7"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "37380b81e0cc83daa332a858d5f60666b49f74cc2c7060488ddd80e0a2b7fcc7",
+      "expected_sha256": "c417acfd699702e3342b982651b673f9d33ed1f642adc9fcb5cd44484ef951d3",
       "id": "report:current-assurance",
       "lifecycle": "current",
       "locator": {
@@ -3017,7 +3045,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "37380b81e0cc83daa332a858d5f60666b49f74cc2c7060488ddd80e0a2b7fcc7",
+          "expected_sha256": "c417acfd699702e3342b982651b673f9d33ed1f642adc9fcb5cd44484ef951d3",
           "id": "report:current-assurance"
         },
         {
@@ -3025,7 +3053,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "e794f515e2f57fdd84c7a5527fe1cbe86b7ada94d4d1a6cf838b128d65b3ae43",
+          "expected_sha256": "43c6972b37ae0f018baea21af8ad3407b0d45bcc748146b044ea06dc14e9a4cb",
           "id": "script:current-assurance"
         },
         {
@@ -3033,7 +3061,7 @@
           "id": "report:milestone7-assurance"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
@@ -3051,19 +3079,19 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "37380b81e0cc83daa332a858d5f60666b49f74cc2c7060488ddd80e0a2b7fcc7",
+          "expected_sha256": "c417acfd699702e3342b982651b673f9d33ed1f642adc9fcb5cd44484ef951d3",
           "id": "report:current-assurance"
         },
         {
-          "expected_sha256": "31fed05d3af646c7506fc202cd19108feb320fa04cc8318f15c7f34366db3317",
+          "expected_sha256": "45e0adb70687c47b80fde574111d0b2faa640bd43321fe4e748c70fa2ab1c683",
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "2a03aba00a6a36db6e05688a44f4b18d2ecdb81a29fd9a0affff3bfc62e58066",
+          "expected_sha256": "1fee7c1d050a1af5e6bdd69f40941305e5523a3b6e7ed003c23e2564860f9878",
           "id": "script:community-workflow"
         }
       ],
-      "expected_sha256": "eb4d8d74d9b1d8e36caeed2237ebbdb6ea4c15eb9be2b41176f33c7eaf4e12b9",
+      "expected_sha256": "7925c0cea43cdd7c1c308c9138a0258872f7d9a00e5b371606aa5a25e45e5c2c",
       "id": "report:public-status",
       "lifecycle": "current",
       "locator": {
@@ -3081,23 +3109,23 @@
           "id": "report:milestone8-assurance"
         },
         {
-          "expected_sha256": "eb4d8d74d9b1d8e36caeed2237ebbdb6ea4c15eb9be2b41176f33c7eaf4e12b9",
+          "expected_sha256": "7925c0cea43cdd7c1c308c9138a0258872f7d9a00e5b371606aa5a25e45e5c2c",
           "id": "report:public-status"
         },
         {
-          "expected_sha256": "31fed05d3af646c7506fc202cd19108feb320fa04cc8318f15c7f34366db3317",
+          "expected_sha256": "45e0adb70687c47b80fde574111d0b2faa640bd43321fe4e748c70fa2ab1c683",
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "2a03aba00a6a36db6e05688a44f4b18d2ecdb81a29fd9a0affff3bfc62e58066",
+          "expected_sha256": "1fee7c1d050a1af5e6bdd69f40941305e5523a3b6e7ed003c23e2564860f9878",
           "id": "script:community-workflow"
         },
         {
-          "expected_sha256": "f88e7411e49a982fb041b54bf90ccc11236fcb61980e23a6b73de2b931026006",
+          "expected_sha256": "94892b03c3487c87a2f5a403bc77170dfc35681e068677bfa5793ada008c9954",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "bbfc081494e96fcc3e728fe636819b8b4c6099f3f778e8a8738fef9f88a97945",
+      "expected_sha256": "20e71ba7bb26953044be1745f88a7c5f6dbce88b7812508110bbe9802fd41b3a",
       "id": "report:milestone9-assurance",
       "lifecycle": "current",
       "locator": {
@@ -3119,7 +3147,7 @@
       "witness": "4.29.1"
     },
     "mutation_specs_sha256": "8b218e282d6bfd6fe212782c0e09547fb81a66b6b15afaabdcf6e09385649c0a",
-    "repository_revision": "632f65ccf61af3164b4fb8db9a06302f382a55be",
+    "repository_revision": "1fc23bb282d67d25a91e8ecfa48104321a0752b6",
     "scripts_sha256": "da233e8894a958f16e897fc0bda9dc81b4e5308ddc15aff6b979890b0b97a06d",
     "validator_source_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613"
   },
