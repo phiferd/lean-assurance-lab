@@ -29,6 +29,9 @@ class CrossValidationTests(unittest.TestCase):
         self.assertGreaterEqual(len(catalog["validators"]), 2)
 
     def test_witness_is_statically_compatible_with_built_profiles(self):
+        arena_root = ROOT / "external" / "lean-kernel-arena"
+        if not (arena_root / ".git").exists():
+            self.skipTest("requires materialized Lean Kernel Arena checker profiles")
         metadata = inspect_export(ROOT / "corpus" / "generated" / "nanoda-0003-auto-universe.ndjson")
         for profile in load_catalog()["validators"]:
             with self.subTest(profile=profile["id"]):

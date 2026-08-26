@@ -6,6 +6,11 @@ contribution is reviewed by whether it adds scoped, durable evidence that is
 mechanically reproducible, not by whether it produces a favorable metric or
 confirms an expected result.
 
+## Contribution License
+
+By submitting a contribution, you agree that it may be distributed under the
+repository's [MIT License](LICENSE).
+
 ## Start Here
 
 1. If the domain is new to you, begin with the

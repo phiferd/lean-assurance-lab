@@ -142,6 +142,27 @@ scripts/
 The upstream Lean Kernel Arena checkout is expected at `external/lean-kernel-arena`
 by default. Override with `LKA_ROOT=/path/to/lean-kernel-arena`.
 
+## Prerequisites And Clone-Safe Checks
+
+The repository-local unit suite requires Python 3.10 or newer and the two
+packages in `requirements-dev.txt`:
+
+```sh
+python3 -m venv .venv
+.venv/bin/python -m pip install --requirement requirements-dev.txt
+.venv/bin/python -m unittest discover -s tests -v
+```
+
+The unit suite works without ignored external checkouts. One integration test
+is skipped until Lean Kernel Arena checker profiles have been materialized.
+
+Full experiments additionally require Git, Cargo, Rust, Elan, `uv`, the Arena
+system prerequisites, and substantial disk space. `scripts/setup-arena` clones
+Arena; `scripts/setup-arena --reproducible` also checks the pinned host and tool
+identities in `config/reproducibility.json`. Exact portable binary identity is
+currently attested on the pinned `aarch64-apple-darwin` environment. The
+materialized corpus is approximately 9.5 GB.
+
 ## First Commands
 
 ```sh
@@ -411,3 +432,10 @@ The status command reports current, stale, missing, historical, and superseded
 artifacts. Use `--simulate-change ARTIFACT_ID` or
 `--simulate-missing ARTIFACT_ID` to inspect invalidation without modifying an
 input. Normal report commands refuse stale dependencies once the graph exists.
+
+## License
+
+Lean Assurance Lab is licensed under the [MIT License](LICENSE). Third-party
+repositories and artifacts remain subject to their respective terms; see the
+provenance finding in
+[docs/PUBLICATION_AUDIT.md](docs/PUBLICATION_AUDIT.md).
