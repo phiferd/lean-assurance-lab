@@ -59,25 +59,36 @@ def build() -> float:
     return time.time() - started
 
 
-def run_input(artifact: Path) -> dict:
+def run_input(artifact: Path, timeout: float) -> dict:
     binary = CHECKER_ROOT / "target" / "release" / "nanoda_bin"
     config = CHECKER_ROOT / "config.json"
     started = time.time()
     with artifact.open("rb") as handle:
-        proc = subprocess.run(
-            [str(binary), str(config)],
-            cwd=CHECKER_ROOT,
-            stdin=handle,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-        )
+        try:
+            proc = subprocess.run(
+                [str(binary), str(config)],
+                cwd=CHECKER_ROOT,
+                stdin=handle,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                timeout=timeout,
+            )
+            exit_code = proc.returncode
+            outcome = "ACCEPT" if exit_code == 0 else "REJECT"
+            stdout = proc.stdout
+            stderr = proc.stderr
+        except subprocess.TimeoutExpired as exc:
+            exit_code = None
+            outcome = "TIMEOUT"
+            stdout = exc.stdout or b""
+            stderr = exc.stderr or b""
     return {
-        "exit_code": proc.returncode,
-        "normalized_outcome": "ACCEPT" if proc.returncode == 0 else "REJECT",
+        "exit_code": exit_code,
+        "normalized_outcome": outcome,
         "seconds": time.time() - started,
-        "stdout_sha256": hashlib.sha256(proc.stdout).hexdigest(),
-        "stderr_sha256": hashlib.sha256(proc.stderr).hexdigest(),
-        "stderr": proc.stderr.decode(errors="replace")[-2000:],
+        "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
+        "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
+        "stderr": stderr.decode(errors="replace")[-2000:],
     }
 
 
@@ -86,6 +97,7 @@ def main() -> int:
     parser.add_argument("mutant_id")
     parser.add_argument("artifact", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument("--timeout", type=float, default=1800.0)
     args = parser.parse_args()
     artifact = args.artifact.resolve()
     spec_path = ROOT / "mutations" / f"{args.mutant_id}.json"
@@ -104,11 +116,12 @@ def main() -> int:
     try:
         result["restore_before"] = set_state(spec, "baseline")
         result["baseline_build_seconds"] = build()
-        result["baseline"] = run_input(artifact)
+        result["timeout_seconds"] = args.timeout
+        result["baseline"] = run_input(artifact, args.timeout)
         result["apply_mutant"] = set_state(spec, "mutant")
         active = True
         result["mutant_build_seconds"] = build()
-        result["mutant"] = run_input(artifact)
+        result["mutant"] = run_input(artifact, args.timeout)
         result["different"] = (
             result["baseline"]["normalized_outcome"]
             != result["mutant"]["normalized_outcome"]

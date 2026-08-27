@@ -1,6 +1,24 @@
 # Research Status
 
-Last updated: 2026-08-26
+Last updated: 2026-08-27
+
+## How Status Is Tracked
+
+This document is the canonical human-readable research tracker:
+
+- `Attempted` is the append-only record of completed experiments and durable
+  engineering work.
+- `Research Frontier` is the ranked queue. Only its `Active` subsection defines
+  what should be investigated next.
+- `Waiting` records work blocked on upstream adjudication without allowing it to
+  displace executable local work.
+- `Future Directions` preserves promising ideas that have not yet outranked the
+  active queue.
+- `Unresolved Problems` records limitations and open claims, not task priority.
+
+`docs/PUBLIC_STATUS.md` remains a generated assurance snapshot rather than a
+planning document. GitHub issues track upstream conversations, but this file
+retains the project's own priorities and completion conditions.
 
 ## Attempted
 
@@ -244,12 +262,15 @@ Last updated: 2026-08-26
 - Added inductive-metadata witness generation and found a distinction for the
   fourth survivor on attempt 20 by incrementing an exported inductive
   declaration's `numIndices`. Baseline Nanoda rejects the exact artifact while
-  the mutant, official Lean 4.33, and Lean4Lean accept it.
-- Reproduced that over-rejection against current Nanoda master revision
+  the mutant, official Lean 4.33, and Lean4Lean accept it. This establishes an
+  implementation inconsistency; whether the metadata must be authoritative is
+  still an open contract question.
+- Reproduced that disagreement against current Nanoda master revision
   `05055695879dfebb6628a67da88ceca6cd6b0421`; current Nanoda accepts the
   unchanged positive control and rejects the hash-bound generated artifact.
-  The mutant is classified `REFERENCE_ALIGNED` and excluded from both mutation
-  score denominators rather than counted as a successful kill or survivor.
+  The mutant retains the project's designated-reference `REFERENCE_ALIGNED`
+  classification and is excluded from both mutation score denominators, while
+  the cross-checker contract remains unresolved.
 - Rebuilt the current mutation report, three-artifact regression manifest,
   artifact graph, assurance snapshot, and public status. Artifact freshness
   passes; the sole hard-gate failure is now the three unresolved semantic
@@ -296,6 +317,14 @@ Last updated: 2026-08-26
   the four-outcome disagreement reproduces on fetched upstream `main`
   `686063c`. The witness is retained as a regression candidate with unresolved
   cross-validator disagreement rather than majority-voting Kiota away.
+- Rechecked the environment-cutoff mutant against current Arena's newly added
+  `tutorial/014_selfProof`, materialized from Arena revision `162f4e5`. Baseline
+  Nanoda passes the test by rejecting the theorem self-reference, while
+  `nanoda-gen-8317efea2c7d` fails the test by accepting it. The machine
+  classification is therefore `KILLED`. This is a later corpus improvement and
+  does not rewrite the frozen 197-test survival result. The exact export,
+  provenance, and restored differential run are under
+  `results/investigations/nanoda-env-cutoff-self-reference/`.
 
 ## Command Log
 
@@ -646,10 +675,10 @@ milestone_9_checks_passing: 25
   bound inputs and runner hashes, validates the completed corpus prefix, and
   reports abandoned in-flight attempts. The original Milestone 7 runner remains
   unchanged because its content hash is part of the completed evidence.
-- The current assurance hard gate remains `FAIL` until the two semantic
-  official Lean/Kiota disagreements and the current Nanoda over-rejection are
-  adjudicated, or the policy changes with an explicit rationale. No
-  implementation count is used to collapse these disagreements.
+- The current assurance hard gate remains `FAIL` until the semantic
+  official Lean/Kiota disagreements and the current Nanoda `numIndices`
+  inconsistency are adjudicated, or the policy changes with an explicit
+  rationale. No implementation count is used to collapse these disagreements.
 - The Collatz retrospective is operator-informed and post-disclosure. Its
   amended full-class result is evidence only for the frozen bounded protocol,
   not prospective discovery, prevention of the original incident, or a general
@@ -658,13 +687,81 @@ milestone_9_checks_passing: 25
   limits, and feedback boundary fixed, but cannot recreate the original blind
   execution.
 
-## Next Concrete Tasks
+## Research Frontier
 
-1. Triage the next highest-value unresolved survivor with focused source
-   invariants and bounded witness searches, prioritizing the environment cutoff
-   boundary and remaining universe comparisons.
-2. Prepare the hash-bound Nanoda `numIndices` over-rejection for upstream
-   adjudication while preserving its `REFERENCE_ALIGNED` local classification.
-3. Define remote storage for ignored coverage and materialized-corpus payloads,
-   then keep the current assurance and public status artifacts synchronized as
-   evidence changes.
+### Recently Completed
+
+- `F-ENV-CUTOFF`: found and independently validated the definition
+  self-reference witness for `nanoda-gen-8317efea2c7d`. Current Arena's later
+  `tutorial/014_selfProof` also kills the mutant, so no duplicate Arena proposal
+  is needed. The separate Kiota disagreement is reported as
+  [Kiota #5](https://github.com/sankalpsthakur/kiota/issues/5).
+- `F-IMAX-EQUALITY`: found a source-directed `imax` witness for
+  `nanoda-gen-0bb50147dff2`; official Lean, Kiota, and Lean4Lean all establish
+  the expected `REJECT` outcome.
+- `F-NUMINDICES-REPORT`: reproduced the nested `numIndices` disagreement on
+  current Nanoda master and reported it as
+  [Nanoda #29](https://github.com/ammkrn/nanoda_lib/issues/29). The issue now
+  explicitly asks whether the serialized field is authoritative rather than
+  assuming Nanoda is incorrect.
+
+### Active
+
+1. `F-UNIVERSE-BOUNDARY`: investigate `nanoda-gen-7447f6511962`, the untriaged
+   `leq_core` mutation from `diff >= 0` to `diff > 0` at `src/level.rs:182`.
+   A 2026-08-27 rerun initially timed out the mutant on `mathlib` at 120 seconds,
+   but a matched 900-second reproduction showed that baseline and mutant both
+   pass in 347.2 and 348.7 seconds respectively. The refreshed 198-test schedule
+   then exhausted all 36 covering tests with no difference, so the timeout is
+   invalid as a kill and the mutant remains `SURVIVED_WITHOUT_WITNESS`. Next,
+   derive the exact equality boundary and run a persisted witness search.
+   Semantic completion still requires a minimized distinguishing artifact with
+   reference validation or a documented source invariant and exhausted bound;
+   equivalence must not be inferred from search failure.
+2. `F-RESTORED-RECURSOR`: investigate `nanoda-gen-8237cd6d3cb2`, which skips
+   `original.aux_data_ck(&restored)` for nested recursors. On 2026-08-27 the
+   portable coverage snapshot was extended to 198 tests and all nine tests
+   covering `src/inductive.rs:1687` were rerun; every normalized baseline and
+   mutant outcome matched. This bounded corpus result leaves the mutant alive.
+   The next step is a source-derived nested-recursor witness search, with the
+   same matched-control and independent-validation requirements.
+3. `F-SURVIVOR-RANKING`: refresh the ranking after each completed survivor
+   investigation using semantic consequence, source reachability, independence
+   from already tested invariants, and expected investigation cost. Do not run
+   a large undirected campaign until the remaining high-value survivors have
+   been source-triaged.
+
+### Waiting
+
+- `W-NANODA-NUMINDICES`: await maintainer guidance on
+  [Nanoda #29](https://github.com/ammkrn/nanoda_lib/issues/29). Do not propose an
+  Arena `accept` or `reject` test until the contract is adjudicated or Arena
+  explicitly chooses `either`. Then update the investigation terminology,
+  machine classification, assurance snapshot, and proposed test outcome
+  together.
+- `W-KIOTA-UNIVERSES`: await adjudication of
+  [Kiota #3](https://github.com/sankalpsthakur/kiota/issues/3) for undeclared
+  universe ownership.
+- `W-KIOTA-SELF-REFERENCE`: await adjudication of
+  [Kiota #5](https://github.com/sankalpsthakur/kiota/issues/5) for declaration
+  self-reference.
+
+### Future Directions
+
+- `D-IMPLEMENTATION-SPECS`: independently reverse engineer the accepted export
+  contract from official Lean, Nanoda, Kiota, and Lean4Lean, then compare the
+  frozen profiles. Start with inductive and recursor metadata. Record parser,
+  reconstruction, validation, and semantic-use behavior separately. Translate
+  observations into characterization tests first; promote them to conformance
+  tests only after an `accept`, `reject`, or `either` contract is justified.
+- `D-UNDIRECTED-CAMPAIGN`: run a broader unattended mutant campaign only after
+  the targeted frontier stops producing higher-value source-directed work.
+  Keep generation, checker execution, minimization, and result persistence
+  local and deterministic; reserve model use for source interpretation and
+  semantic triage.
+- `D-MUTATION-SURFACE`: extend operators to match arms and richer reduction
+  behavior after the current survivor queue, retaining isolated build
+  validation and semantic-policy review.
+- `D-REMOTE-PAYLOADS`: define content-addressed remote storage for ignored
+  coverage and materialized-corpus payloads, then keep assurance and public
+  status artifacts synchronized when evidence changes.

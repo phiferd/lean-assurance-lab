@@ -2,6 +2,8 @@
 
 Status: `CURRENT_UPSTREAM_DISAGREEMENT`
 
+Upstream issue: [ammkrn/nanoda_lib#29](https://github.com/ammkrn/nanoda_lib/issues/29)
+
 ## Summary
 
 A structure-aware mutation of Arena's accepted `nested-nonuniform-param`

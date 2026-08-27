@@ -139,6 +139,37 @@ The dedicated producer is `scripts/reproduce-kiota-self-reference`. It verifies
 the exact Kiota revision and clean checkout, binds source and binary hashes, and
 validates its result against the validator-investigation schema.
 
+### Current Arena tutorial follow-up
+
+After this investigation, current Arena `master` was found to contain
+`tutorial/014_selfProof`, introduced by Arena commit
+`5947480373bceb29a6840452e1ed37da5ddaa515`. That test is a self-referential
+theorem rather than this investigation's self-referential ordinary definition,
+but both exercise the same current-declaration visibility boundary in Nanoda.
+
+The exact tutorial export was materialized from Arena revision
+`162f4e5876723537fb7557dc35fc00befe90efaa`, copied byte-for-byte to
+`corpus/generated/arena-tutorial-014-selfProof-162f4e5.ndjson`, and bound by
+SHA-256 in
+`results/investigations/nanoda-env-cutoff-self-reference/arena-tutorial-014-selfProof-source.json`.
+The differential result is recorded at
+`results/investigations/nanoda-env-cutoff-self-reference/arena-tutorial-014-selfProof-reproduction.json`:
+
+- Baseline Nanoda: test `PASSED`; the checker produced the expected `REJECT`
+  outcome (exit 101).
+- Mutant `nanoda-gen-8317efea2c7d`: test `FAILED`; the checker incorrectly
+  produced `ACCEPT` (exit 0).
+- Machine mutation classification: `KILLED`, because the test distinguishes
+  the baseline from the mutant.
+- Nanoda source and binary were restored and rebuilt after the run.
+
+Therefore the current upstream Arena tutorial already kills this mutant. This
+does not change the historical result that the mutant survived the project's
+frozen 197-test corpus: the tutorial case was added to Arena later and was not
+an input to that experiment. It does mean that a separate Arena test is not
+needed merely to close this mutation gap. A definition-specific variant would
+only add declaration-kind coverage beyond the existing theorem case.
+
 ## Current Conclusion
 
 The Nanoda mutant is meaningfully distinguishable: it accepts a declaration
@@ -146,14 +177,16 @@ self-reference rejected by baseline Nanoda and the designated official Lean
 reference. Lean4Lean agrees with the reference. Kiota's acceptance is preserved
 as an exceptional semantic disagreement and is not majority-voted away.
 
-The witness is eligible for the generated regression inventory because its
-expected `REJECT` outcome is established by the designated reference, but its
-cross-validation status must remain visibly unresolved until the Kiota
-disagreement is repaired or otherwise resolved.
+The witness remains eligible for the project's generated regression inventory
+because its expected `REJECT` outcome is established by the designated
+reference. Its cross-validation status must remain visibly unresolved until
+the Kiota disagreement is repaired or otherwise resolved. For upstream Arena,
+however, `tutorial/014_selfProof` already detects the source mutant.
 
-An upstream Kiota report is warranted, but filing it is a separate external
-write action. The repository evidence is complete without treating maintainer
-adjudication as part of this investigation's result.
+The Kiota disagreement was reported as
+[Kiota issue #5](https://github.com/sankalpsthakur/kiota/issues/5). Maintainer
+adjudication remains external to the mechanically established repository
+evidence.
 
 Any successful distinction must then be checked with official Lean, Kiota, and
 Lean4Lean before it is classified or added to the regression corpus.

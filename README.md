@@ -12,6 +12,9 @@ then using surviving mutants to drive adversarial exported-artifact generation.
 The project is governed by `CONSTITUTION.md`. The current execution plan lives
 in `docs/PROJECT_PLAN.md`. The public assurance state is in
 `docs/PUBLIC_STATUS.md`, and contribution requirements are in `CONTRIBUTING.md`.
+Evaluated proposals for post-milestone work, including the boundary between
+near-term improvements and independent exploratory research, are in
+[`docs/research/RESEARCH_BACKED_IMPROVEMENTS.md`](docs/research/RESEARCH_BACKED_IMPROVEMENTS.md).
 
 The core success condition is always executable:
 

@@ -1,0 +1,50 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://phiferd.github.io/lean-assurance-lab/schemas/infection-funnel.schema.json",
+  "title": "Reach/Infect/Kill Funnel Experiment",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "experiment_id",
+    "mutant_id",
+    "status",
+    "infection_condition",
+    "counts",
+    "checks",
+    "infection_tests",
+    "known_killers",
+    "provenance",
+    "costs",
+    "tests"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "experiment_id": {"type": "string", "minLength": 1},
+    "mutant_id": {"type": "string", "minLength": 1},
+    "status": {"const": "COMPLETED"},
+    "infection_condition": {"type": "string", "minLength": 1},
+    "instrumentation_marker": {"type": "string", "minLength": 1},
+    "counts": {
+      "type": "object",
+      "required": ["covering_tests", "static_theorem_precondition", "dynamic_infection", "known_killers"],
+      "additionalProperties": {"type": "integer", "minimum": 0}
+    },
+    "checks": {
+      "type": "object",
+      "required": ["all_instrumented_outcomes_preserved", "all_known_killers_infected", "infection_tests_equal_known_killers"],
+      "additionalProperties": {"type": "boolean"}
+    },
+    "infection_tests": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "known_killers": {"type": "array", "items": {"type": "string"}, "uniqueItems": true},
+    "provenance": {"type": "object", "minProperties": 1},
+    "costs": {"type": "object", "minProperties": 1},
+    "tests": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["test", "input_sha256", "baseline_outcome", "static_theorem_precondition", "executed", "infected"]
+      }
+    }
+  },
+  "additionalProperties": false
+}

@@ -6,7 +6,7 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `b7387f5b0da2b3e92990ed3b318a24f19119c7f65d1ffddd58994f4c3d176cdb`
+Snapshot SHA-256: `b8615a105acfbfc5eeacc7ac929eb14f32d0864ccb747add613f9b8823d635c7`
 
 ## Current Gate: FAIL
 
@@ -14,7 +14,8 @@ The current assurance gate has 4 passing hard checks and
 1 failing hard check. Failure reason: `semantic_checker_disagreements`.
 
 The failure is intentional and informative: the unresolved semantic cases now
-include two universe-ownership artifacts that Kiota accepts against official
+include two
+universe-ownership artifacts that Kiota accepts against official
 Lean's expected rejection, plus a nested-inductive metadata artifact that
 official Lean and Lean4Lean accept while current Nanoda rejects, plus a
 definition self-reference that official Lean and Lean4Lean reject while Kiota
@@ -41,8 +42,8 @@ erase those states.
   classification `MIXED_WITH_POSITIVE_GAIN`.
 - Unresolved disagreements: 4 semantic
   and 1 parse-behavior case.
-- Recorded execution: 869
-  checker runs and 11322.24
+- Recorded execution: 870
+  checker runs and 6920.07
   checker-seconds across the non-overlapping components listed in the snapshot.
 
 ## What This Means

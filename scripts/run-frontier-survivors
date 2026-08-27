@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Run only the source-triage frontier survivors through scheduled coverage."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_MUTANTS = (
+    "nanoda-gen-7447f6511962",
+    "nanoda-gen-8237cd6d3cb2",
+)
+
+
+def run(command: list[str]) -> subprocess.CompletedProcess[str]:
+    return subprocess.run(
+        command,
+        cwd=ROOT,
+        text=True,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.STDOUT,
+    )
+
+
+def schedule(mutant_id: str) -> dict:
+    proc = run([str(ROOT / "scripts" / "schedule-mutant"), mutant_id])
+    if proc.returncode != 0:
+        raise SystemExit(proc.stdout)
+    return json.loads(proc.stdout)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "mutant_id",
+        nargs="*",
+        help="frontier survivor mutant id; defaults to the active Research Frontier targets",
+    )
+    parser.add_argument("--dry-run", action="store_true", help="print schedules without executing")
+    parser.add_argument("--timeout", type=float, default=1800.0)
+    args = parser.parse_args()
+
+    mutants = tuple(args.mutant_id) or DEFAULT_MUTANTS
+    for mutant_id in mutants:
+        current_schedule = schedule(mutant_id)
+        print(
+            json.dumps(
+                {
+                    "mutant_id": mutant_id,
+                    "selected_test_count": current_schedule["selected_test_count"],
+                    "estimated_seconds": current_schedule["estimated_seconds"],
+                    "selection_policy": current_schedule["selection_policy"],
+                    "covered_locations": current_schedule["covered_locations"],
+                    "coverage_stale": current_schedule["coverage_stale"],
+                },
+                sort_keys=True,
+            ),
+            flush=True,
+        )
+        if args.dry_run:
+            continue
+
+        proc = run(
+            [
+                str(ROOT / "scripts" / "run-mutant-scheduled"),
+                mutant_id,
+                "--timeout",
+                str(args.timeout),
+            ]
+        )
+        sys.stdout.write(proc.stdout)
+        sys.stdout.flush()
+        if proc.returncode != 0:
+            return proc.returncode
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

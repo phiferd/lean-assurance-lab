@@ -1,0 +1,220 @@
+#!/usr/bin/env python3
+"""Reproduce the nanoda-0001 reach -> infect -> kill funnel experiment."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import shutil
+import subprocess
+import tempfile
+import time
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA_ROOT = ROOT / "external" / "lean-kernel-arena"
+CHECKER_ROOT = ARENA_ROOT / "_build" / "checkers" / "nanoda" / "src"
+TEST_ROOT = ARENA_ROOT / "_build" / "tests"
+SCHEDULE = ROOT / "results" / "mutants" / "nanoda-0001" / "schedule.json"
+COMPARISON = ROOT / "results" / "mutants" / "nanoda-0001" / "comparison.json"
+MUTATION_SPEC = ROOT / "mutations" / "nanoda-0001.json"
+DEFAULT_OUTPUT = (
+    ROOT / "results" / "research" / "reach-infect" / "nanoda-0001.json"
+)
+MARKER = "LAL_INFECTION:nanoda-0001:theorem-sort-nonzero"
+ORIGINAL = """        if let Declar::Theorem {..} = d {
+            if !self.ctx.is_zero(sort) {"""
+INSTRUMENTED = """        if let Declar::Theorem {..} = d {
+            let lal_infected = !self.ctx.is_zero(sort);
+            if lal_infected {
+                eprintln!(\"LAL_INFECTION:nanoda-0001:theorem-sort-nonzero\");
+            }
+            if lal_infected {"""
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def git_output(cwd: Path, *args: str) -> str:
+    return subprocess.check_output(["git", *args], cwd=cwd, text=True).strip()
+
+
+def tool_output(*args: str) -> str:
+    return subprocess.check_output(list(args), text=True).strip()
+
+
+def built_tests() -> dict[str, Path]:
+    tests: dict[str, Path] = {}
+    for stats_path in TEST_ROOT.rglob("*.stats.json"):
+        data = json.loads(stats_path.read_text(encoding="utf-8"))
+        ndjson = stats_path.with_name(stats_path.name.replace(".stats.json", ".ndjson"))
+        tests[data["name"]] = ndjson
+    return tests
+
+
+def contains_theorem(path: Path) -> bool:
+    with path.open(encoding="utf-8") as handle:
+        return any('"thm"' in line for line in handle)
+
+
+def normalize_exit(exit_code: int) -> str:
+    if exit_code == 0:
+        return "ACCEPT"
+    if exit_code == 2:
+        return "DECLINE"
+    return "REJECT"
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--timeout", type=float, default=1800.0)
+    args = parser.parse_args()
+
+    schedule = json.loads(SCHEDULE.read_text(encoding="utf-8"))
+    comparison = json.loads(COMPARISON.read_text(encoding="utf-8"))
+    tests = built_tests()
+    known_killers = sorted(row["test"] for row in comparison["differences"])
+    started = time.time()
+
+    with tempfile.TemporaryDirectory(prefix="lal-infection-") as temp_name:
+        temp_root = Path(temp_name)
+        checker = temp_root / "nanoda"
+        subprocess.run(
+            ["git", "clone", "--quiet", "--no-hardlinks", str(CHECKER_ROOT), str(checker)],
+            check=True,
+        )
+        shutil.copy2(CHECKER_ROOT / "config.json", checker / "config.json")
+        checker_revision = git_output(checker, "rev-parse", "HEAD")
+        source = checker / "src" / "tc.rs"
+        baseline_source_sha256 = sha256_file(source)
+        text = source.read_text(encoding="utf-8")
+        if text.count(ORIGINAL) != 1:
+            raise SystemExit("nanoda-0001 infection instrumentation anchor is not unique")
+        source.write_text(text.replace(ORIGINAL, INSTRUMENTED, 1), encoding="utf-8")
+        instrumented_source_sha256 = sha256_file(source)
+
+        build_started = time.time()
+        build = subprocess.run(
+            ["cargo", "build", "--release"],
+            cwd=checker,
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.STDOUT,
+        )
+        build_seconds = time.time() - build_started
+        if build.returncode != 0:
+            raise SystemExit(build.stdout)
+
+        binary = checker / "target" / "release" / "nanoda_bin"
+        config = checker / "config.json"
+        records = []
+        for item in schedule["tests"]:
+            name = item["test"]
+            input_path = tests[name]
+            static_precondition = contains_theorem(input_path)
+            record = {
+                "baseline_outcome": item["baseline_outcome"],
+                "executed": static_precondition,
+                "infected": False,
+                "input_sha256": sha256_file(input_path),
+                "static_theorem_precondition": static_precondition,
+                "test": name,
+            }
+            if static_precondition:
+                run_started = time.time()
+                with input_path.open("rb") as input_handle:
+                    try:
+                        proc = subprocess.run(
+                            [str(binary), str(config)],
+                            cwd=checker,
+                            stdin=input_handle,
+                            stdout=subprocess.PIPE,
+                            stderr=subprocess.PIPE,
+                            timeout=args.timeout,
+                        )
+                        outcome = normalize_exit(proc.returncode)
+                        exit_code = proc.returncode
+                    except subprocess.TimeoutExpired as exc:
+                        outcome = "TIMEOUT"
+                        exit_code = None
+                        proc = exc
+                stderr = proc.stderr or b""
+                record.update(
+                    {
+                        "exit_code": exit_code,
+                        "infected": MARKER.encode() in stderr,
+                        "instrumented_outcome": outcome,
+                        "outcome_preserved": outcome == item["baseline_outcome"],
+                        "wall_seconds": time.time() - run_started,
+                    }
+                )
+            records.append(record)
+
+        infection_tests = sorted(row["test"] for row in records if row["infected"])
+        result = {
+            "schema_version": 1,
+            "experiment_id": "nanoda-0001-dynamic-infection-funnel",
+            "mutant_id": "nanoda-0001",
+            "status": "COMPLETED",
+            "infection_condition": (
+                "declaration is Theorem and "
+                "!ctx.is_zero(ensure_sort(infer(theorem_type)))"
+            ),
+            "instrumentation_marker": MARKER,
+            "counts": {
+                "covering_tests": len(records),
+                "static_theorem_precondition": sum(
+                    row["static_theorem_precondition"] for row in records
+                ),
+                "dynamic_infection": len(infection_tests),
+                "known_killers": len(known_killers),
+            },
+            "checks": {
+                "all_instrumented_outcomes_preserved": all(
+                    row.get("outcome_preserved", True) for row in records
+                ),
+                "all_known_killers_infected": set(known_killers) <= set(infection_tests),
+                "infection_tests_equal_known_killers": infection_tests == known_killers,
+            },
+            "infection_tests": infection_tests,
+            "known_killers": known_killers,
+            "provenance": {
+                "lean_assurance_lab_revision": git_output(ROOT, "rev-parse", "HEAD"),
+                "nanoda_revision": checker_revision,
+                "baseline_tc_source_sha256": baseline_source_sha256,
+                "instrumented_tc_source_sha256": instrumented_source_sha256,
+                "instrumentation_original": ORIGINAL,
+                "instrumentation_replacement": INSTRUMENTED,
+                "instrumented_binary_sha256": sha256_file(binary),
+                "mutation_spec": str(MUTATION_SPEC.relative_to(ROOT)),
+                "mutation_spec_sha256": sha256_file(MUTATION_SPEC),
+                "schedule": str(SCHEDULE.relative_to(ROOT)),
+                "schedule_sha256": sha256_file(SCHEDULE),
+                "comparison": str(COMPARISON.relative_to(ROOT)),
+                "comparison_sha256": sha256_file(COMPARISON),
+                "rustc": tool_output("rustc", "--version"),
+                "cargo": tool_output("cargo", "--version"),
+            },
+            "costs": {
+                "build_seconds": build_seconds,
+                "checker_runs": sum(row["executed"] for row in records),
+                "checker_seconds": sum(row.get("wall_seconds", 0.0) for row in records),
+                "wall_seconds": time.time() - started,
+            },
+            "tests": records,
+        }
+
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(
+        json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+    )
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
