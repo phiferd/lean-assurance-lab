@@ -82,6 +82,18 @@ def catalog() -> list[dict]:
     milestone3_batch = json.loads(
         (ROOT / "results" / "mutation-batches" / "nanoda-semantic-0001.json").read_text(encoding="utf-8")
     )
+    semantic2_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-semantic-0002.json").read_text(encoding="utf-8")
+    )
+    semantic3_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-semantic-0003.json").read_text(encoding="utf-8")
+    )
+    depth_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-semantic-depth-0001.json").read_text(encoding="utf-8")
+    )
+    parallel_batch = json.loads(
+        (ROOT / "results" / "mutation-batches" / "nanoda-semantic-parallel-0001.json").read_text(encoding="utf-8")
+    )
     milestone1_comparisons = [
         f"{row['id']}/scheduled-comparison.json" for row in milestone1_batch["mutants"]
     ]
@@ -90,6 +102,23 @@ def catalog() -> list[dict]:
     ] + [
         "nanoda-gen-34b1a4c65d39/comparison.json",
         "nanoda-gen-4238224977cc/comparison.json",
+    ]
+    semantic2_comparisons = [
+        f"{row['id']}/scheduled-comparison.json" for row in semantic2_batch["mutants"]
+    ]
+    semantic3_comparisons = [
+        f"{row['id']}/scheduled-comparison.json"
+        for row in semantic3_batch["mutants"]
+        if any(
+            result["mutant_id"] == row["id"] and result["status"] == "BUILT"
+            for result in semantic3_batch["build_validation"]["results"]
+        )
+    ]
+    depth_comparisons = [
+        f"{row['id']}/scheduled-comparison.json" for row in depth_batch["mutants"]
+    ]
+    parallel_comparisons = [
+        f"{row['id']}/scheduled-comparison.json" for row in parallel_batch["mutants"]
     ]
     return [
         node(
@@ -407,7 +436,9 @@ def catalog() -> list[dict]:
             "script",
             locator=files(
                 ".",
+                "scripts/reproduce-kiota-self-reference",
                 "scripts/reproduce-kiota-universe-ownership",
+                "scripts/reproduce-nanoda-numindices-overrejection",
                 "schemas/validator-investigation-result.schema.json",
             ),
             dependencies=["script:cross-validation"],
@@ -504,6 +535,12 @@ def catalog() -> list[dict]:
                 "mutation-model/catalog.json",
                 "schemas/mutation-catalog.schema.json",
                 "scripts/generate-mutations",
+                "scripts/audit-mutation-surface",
+                "scripts/classify-nat-extension-survivors",
+                "scripts/classify-quot-ind-survivor",
+                "scripts/classify-constructor-owner-survivor",
+                "scripts/classify-uncovered-mutation-sites",
+                "tests/test_mutation_surface_audit.py",
                 "tools/nanoda-mutator/Cargo.toml",
                 "tools/nanoda-mutator/Cargo.lock",
                 "tools/nanoda-mutator/src/**/*.rs",
@@ -670,6 +707,141 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "run:mutation-batch-semantic-0002",
+            "run",
+            locator=file("results/mutation-batches/nanoda-semantic-0002.json"),
+            dependencies=[
+                "validator:nanoda",
+                "corpus:arena-materialized",
+                "mutation-model:nanoda",
+                "mutation-spec:catalog",
+                "coverage:identity-snapshot",
+                "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:semantic-mutants-current",
+            "comparison",
+            locator={
+                "kind": "file_set",
+                "root": "results/mutants",
+                "include": semantic2_comparisons,
+                "exclude": [],
+            },
+            dependencies=["run:mutation-batch-semantic-0002"],
+            required=True,
+        ),
+        node(
+            "run:mutation-batch-semantic-0003",
+            "run",
+            locator=file("results/mutation-batches/nanoda-semantic-0003.json"),
+            dependencies=[
+                "validator:nanoda", "corpus:arena-materialized",
+                "mutation-model:nanoda", "mutation-spec:catalog",
+                "coverage:identity-snapshot", "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:semantic-mutants-0003",
+            "comparison",
+            locator={
+                "kind": "file_set", "root": "results/mutants",
+                "include": semantic3_comparisons, "exclude": [],
+            },
+            dependencies=["run:mutation-batch-semantic-0003"],
+            required=True,
+        ),
+        node(
+            "run:mutation-batch-semantic-depth-0001",
+            "run",
+            locator=file("results/mutation-batches/nanoda-semantic-depth-0001.json"),
+            dependencies=[
+                "validator:nanoda", "corpus:arena-materialized",
+                "mutation-model:nanoda", "mutation-spec:catalog",
+                "coverage:identity-snapshot", "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:semantic-depth-mutants-current",
+            "comparison",
+            locator={
+                "kind": "file_set", "root": "results/mutants",
+                "include": depth_comparisons, "exclude": [],
+            },
+            dependencies=["run:mutation-batch-semantic-depth-0001"],
+            required=True,
+        ),
+        node(
+            "run:mutation-batch-semantic-parallel-0001",
+            "run",
+            locator=file("results/mutation-batches/nanoda-semantic-parallel-0001.json"),
+            dependencies=[
+                "validator:nanoda", "corpus:arena-materialized",
+                "mutation-model:nanoda", "mutation-spec:catalog",
+                "coverage:identity-snapshot", "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:semantic-parallel-mutant-current",
+            "comparison",
+            locator={
+                "kind": "file_set", "root": "results/mutants",
+                "include": parallel_comparisons, "exclude": [],
+            },
+            dependencies=["run:mutation-batch-semantic-parallel-0001"],
+            required=True,
+        ),
+        node(
+            "audit:mutation-surface-current",
+            "report",
+            locator=file("results/audits/mutation-surface-nanoda-v2.json"),
+            dependencies=[
+                "coverage:local-payload",
+                "mutation-model:nanoda",
+                "mutation-spec:catalog",
+                "run:mutation-batch-semantic-0001",
+                "run:mutation-batch-semantic-0002",
+                "run:mutation-batch-semantic-0003",
+                "run:mutation-batch-semantic-depth-0001",
+            ],
+            required=True,
+        ),
+        node(
+            "investigation:nanoda-uncovered-mutation-sites",
+            "classification",
+            locator=files(
+                ".",
+                "results/investigations/nanoda-uncovered-mutation-sites.json",
+                "results/investigations/nanoda-parallel-coverage-gap/reproduction.json",
+                "docs/investigations/NANODA_PARALLEL_COVERAGE_GAP.md",
+            ),
+            dependencies=[
+                "audit:mutation-surface-current",
+                "comparison:semantic-parallel-mutant-current",
+                "mutation-model:nanoda",
+                "script:mutation-execution",
+            ],
+            required=True,
+        ),
+        node(
+            "classification:nat-extension-survivors",
+            "classification",
+            locator=file("results/investigations/nanoda-nat-extension-survivors.json"),
+            dependencies=["comparison:semantic-mutants-current", "mutation-model:nanoda"],
+            required=True,
+        ),
+        node(
+            "classification:quot-ind-proof-irrelevance",
+            "classification",
+            locator=file("results/investigations/nanoda-quot-ind-proof-irrelevance.json"),
+            dependencies=["comparison:semantic-mutants-current", "mutation-model:nanoda"],
+            required=True,
+        ),
+        node(
             "comparison:coverage-guidance-audit-m3",
             "comparison",
             locator=file("results/audits/coverage-guidance-milestone-3.json"),
@@ -688,6 +860,15 @@ def catalog() -> list[dict]:
                 "comparison:controlled-mutants",
                 "comparison:generated-mutants-m1",
                 "comparison:semantic-mutants-m3",
+                "comparison:semantic-mutants-current",
+                "comparison:semantic-mutants-0003",
+                "comparison:semantic-depth-mutants-current",
+                "comparison:semantic-parallel-mutant-current",
+                "classification:nat-extension-survivors",
+                "classification:quot-ind-proof-irrelevance",
+                "classification:nanoda-constructor-owner",
+                "witness-search:nanoda-imax-equality",
+                "comparison:nanoda-imax-equality-references",
             ],
             required=True,
         ),
@@ -837,6 +1018,205 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "witness-search:nanoda-inductive-metadata",
+            "witness",
+            locator=files(
+                ".",
+                "corpus/generated/nanoda-gen-82dd1d305bfd-inductive-metadata-20260826.ndjson",
+                "corpus/minimized/nanoda-gen-82dd1d305bfd-inductive-metadata-20260826-min.ndjson",
+                "results/witnesses/nanoda-gen-82dd1d305bfd-inductive-metadata-20260826/*.json",
+                "results/witnesses/nanoda-gen-82dd1d305bfd-inductive-metadata-20260826/*.jsonl",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-current",
+                "script:witness-search",
+            ],
+            required=True,
+        ),
+        node(
+            "witness-search:nanoda-constructor-owner",
+            "classification",
+            locator=files(
+                ".",
+                "results/witnesses/nanoda-gen-7037dcbaa21c-constructor-owner-20260826/*.json",
+                "results/witnesses/nanoda-gen-7037dcbaa21c-constructor-owner-20260826/*.jsonl",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-0003",
+                "script:witness-search",
+            ],
+            required=True,
+        ),
+        node(
+            "witness-search:nanoda-imax-equality",
+            "witness",
+            locator=files(
+                ".",
+                "corpus/generated/nanoda-gen-0bb50147dff2-distinct-*.ndjson",
+                "results/investigations/nanoda-distinct-*/reproduction.json",
+                "results/witnesses/nanoda-gen-0bb50147dff2-distinct-imax-left/*.json",
+                "results/witnesses/nanoda-gen-0bb50147dff2-distinct-imax-left/*.jsonl",
+                "docs/investigations/NANODA_IMAX_EQUALITY_SURVIVOR.md",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-0003",
+                "script:witness-search",
+            ],
+            required=True,
+        ),
+        node(
+            "input:expected-outcome-nanoda-imax-equality",
+            "configuration",
+            locator=file(
+                "results/expected-outcomes/nanoda-gen-0bb50147dff2-distinct-imax-left.json"
+            ),
+            dependencies=[
+                "validator:official",
+                "witness-search:nanoda-imax-equality",
+                "configuration:cross-validation",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "witness-search:nanoda-env-cutoff",
+            "witness",
+            locator=files(
+                ".",
+                "corpus/generated/nanoda-gen-8317efea2c7d-*.ndjson",
+                "results/investigations/nanoda-env-cutoff-*/reproduction.json",
+                "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/*.json",
+                "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/*.jsonl",
+                "docs/investigations/NANODA_ENV_CUTOFF_SURVIVOR.md",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-0003",
+                "script:witness-search",
+            ],
+            required=True,
+        ),
+        node(
+            "input:expected-outcome-nanoda-env-cutoff",
+            "configuration",
+            locator=file(
+                "results/expected-outcomes/nanoda-gen-8317efea2c7d-self-reference.json"
+            ),
+            dependencies=[
+                "validator:official",
+                "witness-search:nanoda-env-cutoff",
+                "configuration:cross-validation",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:nanoda-env-cutoff-references",
+            "comparison",
+            locator=file(
+                "results/cross-validation/nanoda-gen-8317efea2c7d-self-reference/results.json"
+            ),
+            dependencies=[
+                "validator:official", "validator:kiota", "validator:lean4lean",
+                "inventory:cross-validators",
+                "witness-search:nanoda-env-cutoff",
+                "input:expected-outcome-nanoda-env-cutoff",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:nanoda-imax-equality-references",
+            "comparison",
+            locator=file(
+                "results/cross-validation/nanoda-gen-0bb50147dff2-distinct-imax-left/results.json"
+            ),
+            dependencies=[
+                "validator:official", "validator:kiota", "validator:lean4lean",
+                "inventory:cross-validators",
+                "witness-search:nanoda-imax-equality",
+                "input:expected-outcome-nanoda-imax-equality",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "classification:nanoda-constructor-owner",
+            "classification",
+            locator=file("results/investigations/nanoda-constructor-owner-survivor.json"),
+            dependencies=[
+                "witness-search:nanoda-constructor-owner",
+                "comparison:semantic-mutants-0003",
+                "mutation-model:nanoda",
+            ],
+            required=True,
+        ),
+        node(
+            "input:expected-outcome-nanoda-inductive-metadata",
+            "configuration",
+            locator=file(
+                "results/expected-outcomes/nanoda-gen-82dd1d305bfd-inductive-metadata.json"
+            ),
+            dependencies=[
+                "validator:official",
+                "witness-search:nanoda-inductive-metadata",
+                "configuration:cross-validation",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "comparison:nanoda-inductive-metadata-references",
+            "comparison",
+            locator=file(
+                "results/cross-validation/nanoda-gen-82dd1d305bfd-inductive-metadata/results.json"
+            ),
+            dependencies=[
+                "validator:official",
+                "validator:kiota",
+                "validator:lean4lean",
+                "inventory:cross-validators",
+                "witness-search:nanoda-inductive-metadata",
+                "input:expected-outcome-nanoda-inductive-metadata",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
+            "investigation:nanoda-numindices-overrejection",
+            "report",
+            locator=files(
+                ".",
+                "docs/investigations/NANODA_NUMINDICES_OVERREJECTION.md",
+                "results/investigations/nanoda-numindices-overrejection/upstream-main.json",
+            ),
+            dependencies=[
+                "comparison:nanoda-inductive-metadata-references",
+                "script:validator-investigations",
+            ],
+            required=True,
+            notes="Current Nanoda master rejects a reference-accepted numIndices witness while accepting its unchanged control.",
+        ),
+        node(
+            "classification:regression-candidates-current",
+            "classification",
+            locator=file("corpus/regression-candidates/current.json"),
+            dependencies=[
+                "classification:regression-candidates-m5",
+                "comparison:nanoda-inductive-metadata-references",
+                "input:expected-outcome-nanoda-inductive-metadata",
+                "comparison:nanoda-imax-equality-references",
+                "input:expected-outcome-nanoda-imax-equality",
+                "comparison:nanoda-env-cutoff-references",
+                "input:expected-outcome-nanoda-env-cutoff",
+                "script:cross-validation",
+            ],
+            required=True,
+        ),
+        node(
             "investigation:kiota-universe-ownership",
             "report",
             locator=files(
@@ -852,6 +1232,18 @@ def catalog() -> list[dict]:
             ],
             required=True,
             notes="Current upstream disagreement is reproduced and submitted as Kiota issue #3; maintainer adjudication remains unresolved.",
+        ),
+        node(
+            "investigation:kiota-self-reference",
+            "report",
+            locator=file("results/investigations/kiota-self-reference/upstream-main.json"),
+            dependencies=[
+                "comparison:nanoda-env-cutoff-references",
+                "input:expected-outcome-nanoda-env-cutoff",
+                "script:validator-investigations",
+            ],
+            required=True,
+            notes="Current Kiota upstream main accepts a definition self-reference rejected by official Lean and Lean4Lean.",
         ),
         node(
             "corpus:transfer-m6",
@@ -1221,6 +1613,37 @@ def catalog() -> list[dict]:
             required=True,
         ),
         node(
+            "report:mutation-summary-current",
+            "report",
+            locator=file("results/assurance/current-mutation-report.json"),
+            dependencies=[
+                "classification:registry",
+                "comparison:controlled-mutants",
+                "comparison:semantic-mutants-m3",
+                "comparison:semantic-mutants-current",
+                "comparison:semantic-mutants-0003",
+                "comparison:semantic-depth-mutants-current",
+                "comparison:semantic-parallel-mutant-current",
+                "classification:nat-extension-survivors",
+                "classification:quot-ind-proof-irrelevance",
+                "classification:nanoda-constructor-owner",
+                "investigation:nanoda-uncovered-mutation-sites",
+                "witness-search:nanoda-inductive-metadata",
+                "witness-search:nanoda-constructor-owner",
+                "comparison:nanoda-inductive-metadata-references",
+                "witness-search:nanoda-imax-equality",
+                "comparison:nanoda-imax-equality-references",
+                "witness-search:nanoda-env-cutoff",
+                "comparison:nanoda-env-cutoff-references",
+                "investigation:kiota-self-reference",
+                "script:reporting",
+                "script:witness-search",
+                "script:cross-validation",
+                "script:artifact-system",
+            ],
+            required=True,
+        ),
+        node(
             "report:milestone1-assurance",
             "report",
             locator=file("results/assurance/milestone-1.json"),
@@ -1317,12 +1740,23 @@ def catalog() -> list[dict]:
                 "configuration:assurance-policy", "script:current-assurance",
                 "coverage:identity-snapshot", "coverage:local-payload",
                 "coverage:operational-metrics",
-                "inventory:cross-validators", "report:mutation-summary",
-                "run:mutation-batch-semantic-0001", "report:milestone4-assurance",
+                "inventory:cross-validators", "report:mutation-summary-current",
+                "run:mutation-batch-semantic-0001",
+                "run:mutation-batch-semantic-0002",
+                "run:mutation-batch-semantic-0003",
+                "run:mutation-batch-semantic-depth-0001",
+                "run:mutation-batch-semantic-parallel-0001",
+                "report:milestone4-assurance",
                 "report:milestone6-assurance", "report:milestone7-assurance",
-                "classification:regression-candidates-m5",
+                "classification:regression-candidates-current",
                 "comparison:cross-validator-witnesses",
                 "comparison:cross-validator-parse-probe",
+                "comparison:nanoda-inductive-metadata-references",
+                "investigation:nanoda-numindices-overrejection",
+                "comparison:nanoda-env-cutoff-references",
+                "investigation:kiota-self-reference",
+                "audit:mutation-surface-current",
+                "investigation:nanoda-uncovered-mutation-sites",
                 "report:rotating-heldout-m7", "script:artifact-system",
             ],
             required=True,

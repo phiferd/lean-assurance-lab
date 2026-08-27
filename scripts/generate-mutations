@@ -83,7 +83,7 @@ def infer_subsystem(source_file: str, function: str | None, fallback: str) -> st
             return "recursors"
         return "inductive-declarations"
     if source_file == "src/expr.rs":
-        if any(term in function for term in ("lift", "subst", "instantiate")):
+        if any(term in function for term in ("lift", "subst", "inst", "abstr")):
             return "substitution-lifting"
         if any(term in function for term in ("bvar", "loose")):
             return "bound-variables"
@@ -103,13 +103,15 @@ def infer_subsystem(source_file: str, function: str | None, fallback: str) -> st
 def is_modeled_function(source_file: str, function: str | None) -> bool:
     function = function or ""
     if source_file == "src/tc.rs":
+        if function == "strong_reduce":
+            return False
         return any(term in function for term in ("check", "infer", "def_eq", "whnf", "reduce"))
     if source_file in {"src/inductive.rs", "src/quot.rs"}:
         return "check" in function
     if source_file == "src/level.rs":
         return any(term in function for term in ("level", "is_", "dec_", "normalize", "imax", "leq"))
     if source_file == "src/expr.rs":
-        return any(term in function for term in ("lift", "subst", "instantiate", "bvar", "loose"))
+        return any(term in function for term in ("lift", "subst", "inst", "abstr", "bvar", "loose"))
     if source_file == "src/env.rs":
         return any(term in function for term in ("check", "declar", "insert"))
     return False
@@ -150,6 +152,36 @@ def select_balanced(eligible: list[dict], limit: int) -> list[dict]:
     return selected
 
 
+def select_semantic_diversity(eligible: list[dict], limit: int) -> list[dict]:
+    """Greedily spread selection across subsystems, functions, and families."""
+    remaining = list(eligible)
+    selected = []
+    subsystem_counts: defaultdict[str, int] = defaultdict(int)
+    function_counts: defaultdict[tuple[str, str], int] = defaultdict(int)
+    family_counts: defaultdict[str, int] = defaultdict(int)
+    while remaining and len(selected) < limit:
+        remaining.sort(
+            key=lambda row: (
+                subsystem_counts[row["subsystem"]],
+                function_counts[(row["source_file"], row.get("function") or "")],
+                family_counts[row["family"]],
+                row["estimated_seconds"],
+                row["subsystem"],
+                row["source_file"],
+                row.get("function") or "",
+                row["line_start"],
+                row["column_start"],
+                row["operator"],
+            )
+        )
+        chosen = remaining.pop(0)
+        selected.append(chosen)
+        subsystem_counts[chosen["subsystem"]] += 1
+        function_counts[(chosen["source_file"], chosen.get("function") or "")] += 1
+        family_counts[chosen["family"]] += 1
+    return selected
+
+
 def _group_by(rows: list[dict], key: str) -> dict[str, list[dict]]:
     grouped: dict[str, list[dict]] = defaultdict(list)
     for row in rows:
@@ -161,6 +193,17 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--limit", type=int, default=12)
     parser.add_argument("--batch-id", default="nanoda-semantic-0001")
+    parser.add_argument(
+        "--selection",
+        choices=("runtime-family-v1", "semantic-diversity-v1"),
+        default="runtime-family-v1",
+    )
+    parser.add_argument(
+        "--include-subsystem",
+        action="append",
+        default=[],
+        help="limit selection to one or more named semantic subsystems",
+    )
     parser.add_argument("--write", action="store_true")
     parser.add_argument("--register", action="store_true")
     parser.add_argument(
@@ -185,6 +228,10 @@ def main() -> int:
             refresh_ids = {row["id"] for row in existing_manifest["mutants"]}
 
     model = json.loads(MODEL.read_text(encoding="utf-8"))
+    subsystem_ids = {row["id"] for row in model["subsystems"]}
+    unknown_subsystems = set(args.include_subsystem) - subsystem_ids
+    if unknown_subsystems:
+        raise SystemExit(f"unknown --include-subsystem values: {sorted(unknown_subsystems)}")
     operators = {
         operator: family["id"]
         for family in model["operator_families"]
@@ -192,6 +239,7 @@ def main() -> int:
     }
     line_to_tests = json.loads(COVERAGE.read_text(encoding="utf-8"))
     baseline_times = {row["test"]: row.get("wall_time") or 0 for row in read_jsonl(BASELINE)}
+    full_corpus_seconds = sum(baseline_times.values())
     existing_specs = [
         spec
         for path in sorted(MUTATIONS.glob("*.json"))
@@ -218,7 +266,14 @@ def main() -> int:
             locations = [f"{source_file}:{line}" for line in range(candidate["line_start"], candidate["line_end"] + 1)]
             covering = sorted({test for location in locations for test in line_to_tests.get(location, [])})
             candidate["covering_test_count"] = len(covering)
-            candidate["estimated_seconds"] = sum(baseline_times[test] for test in covering)
+            candidate["coverage_selection"] = (
+                "LINE_COVERAGE" if covering else "FULL_BASELINE_FALLBACK"
+            )
+            candidate["estimated_seconds"] = (
+                sum(baseline_times[test] for test in covering)
+                if covering
+                else full_corpus_seconds
+            )
             payload = identity_payload(candidate)
             candidate["identity_sha256"] = sha256_bytes(payload)
             candidate["id"] = f"nanoda-gen-{candidate['identity_sha256'][:12]}"
@@ -240,12 +295,15 @@ def main() -> int:
             candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="OPERATOR_NOT_IN_CATALOG")
         elif candidate["subsystem"] == "unknown" or not is_modeled_function(candidate["source_file"], candidate.get("function")):
             candidate.update(attempt_status="REJECTED_NON_SEMANTIC", attempt_reason="NOT_IN_A_MODELED_SEMANTIC_FUNCTION")
-        elif not candidate["covering_test_count"]:
-            candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="UNCOVERED_SOURCE_LOCATION")
+        elif args.include_subsystem and candidate["subsystem"] not in args.include_subsystem:
+            candidate.update(attempt_status="UNSUPPORTED_MUTATION_SITE", attempt_reason="OUTSIDE_REQUESTED_SUBSYSTEM")
         else:
             eligible.append(candidate)
 
-    selected = select_balanced(eligible, args.limit)
+    if args.selection == "semantic-diversity-v1":
+        selected = select_semantic_diversity(eligible, args.limit)
+    else:
+        selected = select_balanced(eligible, args.limit)
     selected_ids = {row["id"] for row in selected}
     for candidate in eligible:
         if candidate["id"] in selected_ids:
@@ -276,6 +334,7 @@ def main() -> int:
                 "subsystem": candidate["subsystem"],
                 "semantic_rationale": candidate["rationale"],
                 "covering_test_count": candidate["covering_test_count"],
+                "coverage_selection": candidate["coverage_selection"],
                 "estimated_seconds": candidate["estimated_seconds"],
                 "identity": {
                     "algorithm": "sha256(source-file,NUL,line,NUL,column,NUL,operator,NUL,original,NUL,mutated)",
@@ -288,6 +347,11 @@ def main() -> int:
             }
         )
 
+    selection_label = (
+        "subsystem/function/family diversity, then estimated runtime"
+        if args.selection == "semantic-diversity-v1"
+        else "estimated-runtime order, round-robin by operator family"
+    )
     manifest = {
         "schema_version": 2,
         "batch_id": args.batch_id,
@@ -299,9 +363,13 @@ def main() -> int:
             "cargo_manifest_sha256": sha256_file(TOOL_MANIFEST),
             "rust_source_sha256": sha256_file(ROOT / "tools" / "nanoda-mutator" / "src" / "main.rs"),
             "wrapper_sha256": sha256_file(Path(__file__)),
-            "selection": "estimated-runtime order, round-robin by operator family",
+            "selection": selection_label,
+            "selection_id": args.selection,
         },
         "requested_count": args.limit,
+        "selection_filters": {
+            "included_subsystems": sorted(args.include_subsystem),
+        },
         "generated_count": len(specs),
         "attempt_summary": {
             status: sum(row["attempt_status"] == status for row in candidates)
@@ -313,6 +381,7 @@ def main() -> int:
                 for key in (
                     "id", "source_file", "source_span", "column_start", "function", "operator",
                     "family", "subsystem", "identity_sha256", "covering_test_count",
+                    "coverage_selection", "estimated_seconds",
                     "attempt_status", "attempt_reason", "rationale",
                 )
             }

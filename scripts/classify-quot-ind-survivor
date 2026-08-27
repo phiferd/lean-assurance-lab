@@ -1,0 +1,141 @@
+#!/usr/bin/env python3
+"""Classify suppression of Quot.ind reduction under proof irrelevance."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import sys
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / "lib"))
+
+from nanoda_differential import DifferentialSession  # noqa: E402
+
+
+MUTANT_ID = "nanoda-gen-cb4949d04bbf"
+CHECKER = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+ARTIFACT = (
+    ROOT / "external" / "lean-kernel-arena" / "_build" / "tests" /
+    "tutorial" / "good" / "133_quotIndReduction.ndjson"
+)
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-quot-ind-proof-irrelevance.json"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def classify(spec: dict, comparison: dict, quot_source: str, tc_source: str, probe: dict) -> dict:
+    checks = {
+        "mutation_disables_only_quot_ind_discrimination": (
+            spec.get("function") == "reduce_quot"
+            and spec.get("mutation_operator") == "REL_EQ_TO_NE"
+            and "quot_ind" in spec.get("original", "")
+        ),
+        "quot_ind_motive_is_restricted_to_prop": (
+            "Quot.ind :" in quot_source and "@Quot A r → Prop" in quot_source
+        ),
+        "definitional_equality_applies_proof_irrelevance": (
+            "if self.proof_irrel_eq(x_n, y_n)" in tc_source
+            and "fn proof_irrel_eq" in tc_source
+        ),
+        "covering_schedule_exhausted_without_difference": (
+            comparison.get("status") == "SURVIVED"
+            and comparison.get("all_covering_tests_exhausted") is True
+        ),
+        "explicit_reduction_probe_accepts_in_both_states": (
+            probe.get("different") is False
+            and probe.get("baseline", {}).get("normalized_outcome") == "ACCEPT"
+            and probe.get("mutant", {}).get("normalized_outcome") == "ACCEPT"
+        ),
+    }
+    passed = all(checks.values())
+    return {
+        "status": "PASS" if passed else "FAIL",
+        "classification": "EQUIVALENT_UNDER_PROOF_IRRELEVANCE" if passed else "UNRESOLVED",
+        "registry_classification": "EQUIVALENT" if passed else "SURVIVED_WITHOUT_WITNESS",
+        "checks": checks,
+        "reason": (
+            "Quot.ind can produce only proofs. Suppressing its iota reduction changes proof "
+            "normal forms but not observable definitional equality because proof irrelevance "
+            "compares their proposition types."
+        ),
+        "claim_scope": (
+            "Pinned Nanoda checker semantics and Lean's proof-irrelevant Quot.ind primitive; "
+            "this does not classify analogous reduction suppression for Quot.lift."
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write-status", action="store_true")
+    parser.add_argument("--timeout", type=float, default=60.0)
+    args = parser.parse_args()
+    spec_path = ROOT / "mutations" / f"{MUTANT_ID}.json"
+    comparison_path = ROOT / "results" / "mutants" / MUTANT_ID / "scheduled-comparison.json"
+    quot_path = CHECKER / "src" / "quot.rs"
+    tc_path = CHECKER / "src" / "tc.rs"
+    with DifferentialSession(MUTANT_ID, args.timeout) as session:
+        probe = session.evaluate(ARTIFACT)
+        preparation = session.preparation
+    report = classify(
+        json.loads(spec_path.read_text(encoding="utf-8")),
+        json.loads(comparison_path.read_text(encoding="utf-8")),
+        quot_path.read_text(encoding="utf-8"),
+        tc_path.read_text(encoding="utf-8"),
+        probe,
+    )
+    report.update(
+        {
+            "schema_version": 1,
+            "checker": "nanoda",
+            "mutant_id": MUTANT_ID,
+            "probe": probe,
+            "preparation": preparation,
+            "inputs": {
+                "mutation_spec": str(spec_path.relative_to(ROOT)),
+                "mutation_spec_sha256": sha256_file(spec_path),
+                "scheduled_comparison": str(comparison_path.relative_to(ROOT)),
+                "scheduled_comparison_sha256": sha256_file(comparison_path),
+                "explicit_reduction_artifact": str(ARTIFACT.relative_to(ROOT)),
+                "explicit_reduction_artifact_sha256": sha256_file(ARTIFACT),
+                "quot_source_sha256": sha256_file(quot_path),
+                "typechecker_source_sha256": sha256_file(tc_path),
+            },
+        }
+    )
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.write_status:
+        if report["status"] != "PASS":
+            raise SystemExit("refusing to classify mutant because an equivalence check failed")
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            handle.write(
+                json.dumps(
+                    {
+                        "id": MUTANT_ID,
+                        "status": "SURVIVED",
+                        "classification": "EQUIVALENT",
+                        "notes": (
+                            "Proof-irrelevance equivalence established by "
+                            "results/investigations/nanoda-quot-ind-proof-irrelevance.json"
+                        ),
+                        "updated_at": datetime.now(timezone.utc).isoformat(),
+                    },
+                    sort_keys=True,
+                )
+                + "\n"
+            )
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

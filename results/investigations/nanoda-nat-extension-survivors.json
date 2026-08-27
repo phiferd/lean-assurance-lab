@@ -1,0 +1,40 @@
+{
+  "checker": "nanoda",
+  "checks": {
+    "active_config_enables_nat_extension": true,
+    "both_covering_schedules_exhausted_without_difference": true,
+    "both_mutations_only_elide_expected_assertion": true,
+    "internal_nat_literal_constructor_is_guarded": true,
+    "parser_rejects_nat_literals_when_disabled": true
+  },
+  "claim_scope": "Pinned Nanoda public file/config entrypoint only; this does not classify hypothetical library callers that construct an invalid internal DAG outside the public parser.",
+  "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT",
+  "inputs": {
+    "config": "external/lean-kernel-arena/_build/checkers/nanoda/src/config.json",
+    "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6",
+    "parser_source": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/parser.rs",
+    "parser_source_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+    "util_source": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/util.rs",
+    "util_source_sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"
+  },
+  "mutants": [
+    {
+      "comparison_path": "results/mutants/nanoda-gen-d65f8501971d/scheduled-comparison.json",
+      "comparison_sha256": "fc68c7e04f3441db5cb8767a9283ff3bdf1ca368f2e8ac5d34b470a2454c7641",
+      "mutant_id": "nanoda-gen-d65f8501971d",
+      "spec_path": "mutations/nanoda-gen-d65f8501971d.json",
+      "spec_sha256": "379d12a0b71f8374d7a184f9b45dd9440ba6217fb678159bb31e3472ff43e830"
+    },
+    {
+      "comparison_path": "results/mutants/nanoda-gen-5016b52728c0/scheduled-comparison.json",
+      "comparison_sha256": "1a7179b9358301455489c8b7def7106aa6d4f56abb6c490b28415d72955dbf42",
+      "mutant_id": "nanoda-gen-5016b52728c0",
+      "spec_path": "mutations/nanoda-gen-5016b52728c0.json",
+      "spec_sha256": "161385b93d35f42402a5a1a5e77c955d17a343e480cf6a27721f7178b8ae35ea"
+    }
+  ],
+  "reason": "The active entrypoint fixes nat_extension=true. With false, the parser rejects NatLit records and the internal constructor refuses to create them, so the elided assertions cannot reject an artifact that reaches these functions.",
+  "registry_classification": "EQUIVALENT",
+  "schema_version": 1,
+  "status": "PASS"
+}

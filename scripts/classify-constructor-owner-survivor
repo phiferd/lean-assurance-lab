@@ -1,0 +1,153 @@
+#!/usr/bin/env python3
+"""Classify Nanoda's constructor-owner existence assertion as redundant."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+MUTANT_ID = "nanoda-gen-7037dcbaa21c"
+SEARCH_ID = "nanoda-gen-7037dcbaa21c-constructor-owner-20260826"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-constructor-owner-survivor.json"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def classify(
+    spec: dict,
+    comparison: dict,
+    parser_source: str,
+    inductive_source: str,
+    env_source: str,
+    search: dict,
+    attempts: list[dict],
+) -> dict:
+    direct_owner_attempts = [
+        row for row in attempts if ":induct:" in row.get("transformation", "")
+    ]
+    checks = {
+        "mutation_only_elides_constructor_owner_existence_assertion": (
+            spec.get("function") == "check_declar"
+            and spec.get("mutation_operator") == "SKIP_VALIDATION"
+            and "ctor_data.inductive_name" in spec.get("original", "")
+        ),
+        "covering_schedule_exhausted_without_difference": (
+            comparison.get("status") == "SURVIVED"
+            and comparison.get("all_covering_tests_exhausted") is True
+        ),
+        "parser_inserts_inductive_types_before_constructors": (
+            parser_source.index("for IndInfo") < parser_source.index("for Constructor")
+            and "self.declars.insert(name, inductive)" in parser_source
+            and "self.declars.insert(name, ctor)" in parser_source
+        ),
+        "reconstructed_constructor_owner_comes_from_enclosing_inductive": (
+            "inductive_name: inductive.name" in inductive_source
+            and "env_ext.insert(ctor.name, d)" in inductive_source
+        ),
+        "auxiliary_data_check_compares_constructor_owner": (
+            "self.inductive_name == other.inductive_name" in env_source
+            and "assert!(old_ctor.aux_data_ck(&new_ctor))" in inductive_source
+        ),
+        "bounded_search_exhausted_without_witness": (
+            search.get("status") == "NO_WITNESS_FOUND"
+            and search.get("attempts") == 300
+            and len(attempts) == 300
+            and all(row.get("different") is False for row in attempts)
+        ),
+        "direct_owner_corruptions_were_exercised": (
+            len(direct_owner_attempts) >= 1
+            and all(row.get("baseline_outcome") == row.get("mutant_outcome") for row in direct_owner_attempts)
+        ),
+    }
+    passed = all(checks.values())
+    return {
+        "status": "PASS" if passed else "FAIL",
+        "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT" if passed else "UNRESOLVED",
+        "registry_classification": "EQUIVALENT" if passed else "SURVIVED_WITHOUT_WITNESS",
+        "checks": checks,
+        "direct_owner_attempt_count": len(direct_owner_attempts),
+        "reason": (
+            "Constructor declarations are parsed only inside an inductive block. Inductive "
+            "validation reconstructs each owner from the enclosing inductive and compares it "
+            "with serialized auxiliary data before the later existence assertion is reached."
+        ),
+        "claim_scope": (
+            "Pinned Nanoda public export parser and checker entrypoint; this does not classify "
+            "hypothetical library callers that inject ConstructorData directly."
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write-status", action="store_true")
+    args = parser.parse_args()
+    spec_path = ROOT / "mutations" / f"{MUTANT_ID}.json"
+    comparison_path = ROOT / "results" / "mutants" / MUTANT_ID / "scheduled-comparison.json"
+    search_root = ROOT / "results" / "witnesses" / SEARCH_ID
+    search_path = search_root / "metadata.json"
+    attempts_path = search_root / "attempts.jsonl"
+    parser_path = CHECKER / "src" / "parser.rs"
+    inductive_path = CHECKER / "src" / "inductive.rs"
+    env_path = CHECKER / "src" / "env.rs"
+    attempts = [
+        json.loads(line) for line in attempts_path.read_text(encoding="utf-8").splitlines() if line
+    ]
+    report = classify(
+        json.loads(spec_path.read_text(encoding="utf-8")),
+        json.loads(comparison_path.read_text(encoding="utf-8")),
+        parser_path.read_text(encoding="utf-8"),
+        inductive_path.read_text(encoding="utf-8"),
+        env_path.read_text(encoding="utf-8"),
+        json.loads(search_path.read_text(encoding="utf-8")),
+        attempts,
+    )
+    report.update({
+        "schema_version": 1,
+        "checker": "nanoda",
+        "mutant_id": MUTANT_ID,
+        "inputs": {
+            "mutation_spec": str(spec_path.relative_to(ROOT)),
+            "mutation_spec_sha256": sha256_file(spec_path),
+            "scheduled_comparison": str(comparison_path.relative_to(ROOT)),
+            "scheduled_comparison_sha256": sha256_file(comparison_path),
+            "witness_search": str(search_path.relative_to(ROOT)),
+            "witness_search_sha256": sha256_file(search_path),
+            "attempts": str(attempts_path.relative_to(ROOT)),
+            "attempts_sha256": sha256_file(attempts_path),
+            "parser_source_sha256": sha256_file(parser_path),
+            "inductive_source_sha256": sha256_file(inductive_path),
+            "environment_source_sha256": sha256_file(env_path),
+        },
+    })
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.write_status:
+        if report["status"] != "PASS":
+            raise SystemExit("refusing to classify mutant because an equivalence check failed")
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({
+                "id": MUTANT_ID,
+                "status": "SURVIVED",
+                "classification": "EQUIVALENT",
+                "notes": (
+                    "Entrypoint equivalence established by "
+                    "results/investigations/nanoda-constructor-owner-survivor.json"
+                ),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }, sort_keys=True) + "\n")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

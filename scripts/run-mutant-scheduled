@@ -198,7 +198,9 @@ def main() -> int:
 
         status = "KILLED" if difference else "SURVIVED"
         reason = "DIFFERENCE" if difference else (
-            "UNCOVERED" if not schedule["tests"] else "ALL_COVERING_TESTS_MATCH"
+            "ALL_BASELINE_TESTS_MATCH"
+            if schedule["selection_policy"] == "FULL_BASELINE_FALLBACK"
+            else "ALL_COVERING_TESTS_MATCH"
         )
         comparison = {
             "mutant_id": args.mutant_id,
@@ -210,6 +212,8 @@ def main() -> int:
             "difference_count": int(difference is not None),
             "first_difference": difference,
             "all_covering_tests_exhausted": difference is None,
+            "all_scheduled_tests_exhausted": difference is None,
+            "selection_policy": schedule["selection_policy"],
             "source_sha256": schedule["current_source_sha256"],
             "mutation_spec_sha256": schedule["mutation_spec_sha256"],
             "coverage_manifest_sha256": schedule["coverage_manifest_sha256"],

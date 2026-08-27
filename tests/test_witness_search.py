@@ -11,6 +11,7 @@ sys.path.insert(0, str(ROOT / "lib"))
 from witness_search import (  # noqa: E402
     canonical_ndjson,
     generate_candidates,
+    inductive_metadata_candidates,
     minimize_witness,
     semantic_classification,
     undeclared_universe_template,
@@ -25,6 +26,39 @@ class FakeSession:
 
 
 class WitnessSearchTests(unittest.TestCase):
+    def test_inductive_metadata_candidates_target_auxiliary_fields(self):
+        records = [
+            {"meta": {"format": {"version": "3.1.0"}}},
+            {
+                "inductive": {
+                    "types": [{"numParams": 1, "numIndices": 0, "isRec": True, "all": [1, 2]}],
+                    "ctors": [{"cidx": 0, "numFields": 1, "induct": 7}],
+                }
+            },
+        ]
+        with tempfile.TemporaryDirectory() as temp:
+            seed = Path(temp) / "seed.ndjson"
+            seed.write_bytes(canonical_ndjson(records))
+            candidates = inductive_metadata_candidates(seed)
+
+        transformations = {row["transformation"] for row in candidates}
+        self.assertTrue(any(":numParams:increment:" in row for row in transformations))
+        self.assertTrue(any(":all:remove-member-0:" in row for row in transformations))
+        self.assertTrue(any(":isRec:toggle:" in row for row in transformations))
+        self.assertTrue(any(":induct:increment:" in row for row in transformations))
+
+    def test_inductive_metadata_candidates_precede_generic_mutations(self):
+        seed = ROOT / "external" / "lean-kernel-arena" / "_build" / "tests" / "nested-nonuniform-param.ndjson"
+        if not seed.exists():
+            self.skipTest("Arena profiles are not materialized")
+
+        candidates = generate_candidates("inductive-declarations", [seed], 19)
+
+        targeted = [row["strategy"] == "inductive-metadata-mutation" for row in candidates]
+        first_generic = targeted.index(False) if False in targeted else len(targeted)
+        self.assertTrue(all(targeted[:first_generic]))
+        self.assertFalse(any(targeted[first_generic:]))
+
     def test_universe_template_is_the_confirmed_witness(self):
         payload = canonical_ndjson(undeclared_universe_template())
         self.assertEqual(

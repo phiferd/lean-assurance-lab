@@ -45,11 +45,13 @@ subsystems. The measured aggregate is one positive fold and one neutral fold,
 improving the modeled held-out score from 0.5 to 1.0.
 
 The versioned current assurance snapshot reports `FAIL`: four of five hard
-checks pass, while two unresolved semantic disagreements between official Lean
-and Kiota fail the configured disagreement check. This is the intended honest
-result, not a failed milestone implementation. The Milestone 8 implementation
-gate passes all 24 checks, and the Milestone 9 community-workflow gate passes
-all 25 checks.
+checks pass, while three unresolved semantic disagreements fail the configured
+disagreement check. Two concern universe ownership between official Lean and
+Kiota. The third is a current Nanoda nested-inductive metadata over-rejection:
+official Lean and Lean4Lean accept the generated artifact while Nanoda rejects
+it. This is the intended honest result, not a failed milestone implementation.
+The Milestone 8 implementation gate passes all 24 checks, and the Milestone 9
+community-workflow gate passes all 25 checks.
 
 The amended frozen Collatz retrospective is complete and classified
 `FULL_CLASS_REDISCOVERY`. The original run recreated the affected-official/
@@ -382,6 +384,9 @@ of silently dropping them from execution accounting.
 The current official Lean/Kiota universe-ownership disagreement has an
 [upstream-ready investigation report](docs/investigations/KIOTA_UNIVERSE_OWNERSHIP.md)
 and a schema-validated reproduction against Kiota's current upstream `main`.
+The current Nanoda nested-inductive metadata disagreement has a separate
+[hash-bound investigation report](docs/investigations/NANODA_NUMINDICES_OVERREJECTION.md)
+reproduced against Nanoda master revision `05055695879dfebb6628a67da88ceca6cd6b0421`.
 
 Produce the current assurance and public status artifacts with:
 

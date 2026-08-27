@@ -124,6 +124,47 @@ def structural_candidates(seed: Path) -> list[dict[str, Any]]:
     return candidates
 
 
+def inductive_metadata_candidates(seed: Path) -> list[dict[str, Any]]:
+    """Mutate serialized fields consumed by inductive auxiliary-data checks."""
+    records = read_ndjson(seed)
+    candidates: list[dict[str, Any]] = []
+    numeric_fields = {
+        "numParams", "numIndices", "numNested", "numFields", "cidx",
+        "nfields", "numMotives", "numMinors", "induct",
+    }
+    boolean_fields = {"isRec", "isReflexive", "k"}
+    membership_fields = {"all", "ctors"}
+    for record_index, record in enumerate(records):
+        for path, value in _walk(record):
+            if not path:
+                continue
+            key = path[-1]
+            replacements: list[tuple[str, Any]] = []
+            if key in numeric_fields and isinstance(value, int) and not isinstance(value, bool):
+                replacements.append(("increment", value + 1))
+                if value > 0:
+                    replacements.append(("decrement", value - 1))
+            elif key in boolean_fields and isinstance(value, bool):
+                replacements.append(("toggle", not value))
+            elif key in membership_fields and isinstance(value, list) and value:
+                for index in range(len(value)):
+                    replacements.append((f"remove-member-{index}", value[:index] + value[index + 1 :]))
+            for label, replacement in replacements:
+                changed = copy.deepcopy(records)
+                changed[record_index] = _set_path(record, path, replacement)
+                candidates.append(
+                    {
+                        "records": changed,
+                        "strategy": "inductive-metadata-mutation",
+                        "transformation": (
+                            f"record-{record_index}:{key}:{label}:{'.'.join(map(str, path))}"
+                        ),
+                        "seed": str(seed),
+                    }
+                )
+    return candidates
+
+
 def generate_candidates(
     subsystem: str,
     seed_paths: list[Path],
@@ -139,9 +180,21 @@ def generate_candidates(
                 "seed": None,
             }
         )
-    for seed in seed_paths:
-        candidates.extend(structural_candidates(seed))
-    if candidates:
+    if subsystem == "inductive-declarations":
+        targeted = []
+        generic = []
+        for seed in seed_paths:
+            targeted.extend(inductive_metadata_candidates(seed))
+            generic.extend(structural_candidates(seed))
+        randomizer = random.Random(random_seed)
+        randomizer.shuffle(targeted)
+        randomizer.shuffle(generic)
+        candidates.extend(targeted)
+        candidates.extend(generic)
+    else:
+        for seed in seed_paths:
+            candidates.extend(structural_candidates(seed))
+    if candidates and subsystem != "inductive-declarations":
         first, rest = candidates[0], candidates[1:]
         random.Random(random_seed).shuffle(rest)
         candidates = [first, *rest]

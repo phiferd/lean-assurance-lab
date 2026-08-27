@@ -58,6 +58,27 @@ def source_digest(checker_root: Path) -> str:
     return digest.hexdigest()
 
 
+def select_tests(
+    locations: list[str], line_to_tests: dict[str, list[str]], baseline: dict[str, dict]
+) -> tuple[list[str], list[str], str]:
+    selected = set()
+    covered_locations = []
+    for location in locations:
+        names = line_to_tests.get(location, [])
+        if names:
+            covered_locations.append(location)
+            selected.update(names)
+    policy = "LINE_COVERAGE"
+    if not selected:
+        selected.update(baseline)
+        policy = "FULL_BASELINE_FALLBACK"
+    tests = sorted(
+        selected,
+        key=lambda name: (baseline[name].get("wall_time") or float("inf"), name),
+    )
+    return covered_locations, tests, policy
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("mutant_id")
@@ -86,7 +107,6 @@ def main() -> int:
             "recollect coverage or pass --allow-stale-coverage"
         )
 
-    records = {row["test"]: row for row in read_jsonl(args.coverage_dir / "coverage.jsonl")}
     baseline = {row["test"]: row for row in read_jsonl(BASELINE)}
     line_to_tests = json.loads(
         (args.coverage_dir / "line-to-tests.json").read_text(encoding="utf-8")
@@ -94,17 +114,13 @@ def main() -> int:
     source_file = spec["source_file"]
     lines = span_lines(str(registry["source_span"]))
     locations = [f"{source_file}:{line}" for line in lines]
-    selected = set()
-    covered_locations = []
-    for location in locations:
-        names = line_to_tests.get(location, [])
-        if names:
-            covered_locations.append(location)
-            selected.update(names)
-    tests = sorted(
-        selected,
-        key=lambda name: (baseline[name].get("wall_time") or float("inf"), name),
+    covered_locations, tests, selection_policy = select_tests(
+        locations, line_to_tests, baseline
     )
+    coverage_config_path = args.coverage_dir / "config.json"
+    execution_config_path = checker_root / "config.json"
+    coverage_config = json.loads(coverage_config_path.read_text(encoding="utf-8"))
+    execution_config = json.loads(execution_config_path.read_text(encoding="utf-8"))
     schedule = {
         "mutant_id": args.mutant_id,
         "checker": checker,
@@ -112,7 +128,13 @@ def main() -> int:
         "source_span": registry["source_span"],
         "locations": locations,
         "covered_locations": covered_locations,
+        "selection_policy": selection_policy,
         "coverage_stale": stale,
+        "coverage_profile_matches_execution_config": coverage_config == execution_config,
+        "coverage_checker_threads": coverage_config.get("num_threads"),
+        "execution_checker_threads": execution_config.get("num_threads"),
+        "coverage_config_sha256": file_digest(coverage_config_path),
+        "execution_config_sha256": file_digest(execution_config_path),
         "current_source_sha256": current_digest,
         "coverage_source_sha256": manifest["source_sha256"],
         "coverage_test_count": manifest["test_count"],
@@ -125,7 +147,7 @@ def main() -> int:
         "tests": [
             {
                 "test": name,
-                "baseline_outcome": records[name]["outcome"],
+                "baseline_outcome": baseline[name]["outcome"],
                 "baseline_wall_time": baseline[name].get("wall_time"),
             }
             for name in tests

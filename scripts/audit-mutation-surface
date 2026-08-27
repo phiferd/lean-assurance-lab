@@ -1,0 +1,191 @@
+#!/usr/bin/env python3
+"""Measure how mutation discovery, policy, coverage, and selection narrow a batch."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from collections import Counter, defaultdict
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_BATCH = ROOT / "results" / "mutation-batches" / "nanoda-semantic-0001.json"
+DEFAULT_CATALOG = ROOT / "mutation-model" / "catalog.json"
+DEFAULT_OUTPUT = ROOT / "results" / "audits" / "mutation-surface-nanoda.json"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def audit(batch: dict, catalog: dict, additional_batches: list[dict] | None = None) -> dict:
+    batches = [batch, *(additional_batches or [])]
+    reason_priority = {
+        "ISOLATED_RELEASE_BUILD_PASSED": 6,
+        "ISOLATED_RELEASE_BUILD_FAILED": 5,
+        "OUTSIDE_BOUNDED_BATCH_LIMIT": 4,
+        "UNCOVERED_SOURCE_LOCATION": 3,
+        "MATCHES_EXISTING_CONTROLLED_OR_GENERATED_SPEC": 2,
+    }
+    attempts_by_id: dict[str, dict] = {}
+    for item in batches:
+        for row in item["attempts"]:
+            current = attempts_by_id.get(row["id"])
+            if current is None or reason_priority.get(row["attempt_reason"], 0) > reason_priority.get(current["attempt_reason"], 0):
+                attempts_by_id[row["id"]] = row
+    attempts = list(attempts_by_id.values())
+    selected_ids = {row["id"] for item in batches for row in item["mutants"]}
+    covered_reasons = {"ISOLATED_RELEASE_BUILD_PASSED", "OUTSIDE_BOUNDED_BATCH_LIMIT"}
+    eligible_reasons = covered_reasons | {"UNCOVERED_SOURCE_LOCATION"}
+    surface_reasons = eligible_reasons | {
+        "ISOLATED_RELEASE_BUILD_FAILED", "MATCHES_EXISTING_CONTROLLED_OR_GENERATED_SPEC"
+    }
+    eligible = [row for row in attempts if row["attempt_reason"] in eligible_reasons]
+    covered = [row for row in eligible if row["attempt_reason"] in covered_reasons]
+    surface = [row for row in attempts if row["attempt_reason"] in surface_reasons]
+
+    def functions(rows: list[dict]) -> list[str]:
+        return sorted({row["function"] for row in rows if row.get("function")})
+
+    subsystem_rows = []
+    for subsystem in catalog["subsystems"]:
+        subsystem_id = subsystem["id"]
+        rows = [row for row in eligible if row.get("subsystem") == subsystem_id]
+        surface_rows = [row for row in surface if row.get("subsystem") == subsystem_id]
+        covered_rows = [row for row in rows if row["attempt_reason"] in covered_reasons]
+        selected_rows = [row for row in rows if row["id"] in selected_ids]
+        subsystem_rows.append(
+            {
+                "subsystem": subsystem_id,
+                "eligible_candidate_count": len(rows),
+                "covered_candidate_count": len(covered_rows),
+                "selected_candidate_count": len(selected_rows),
+                "operator_surface_candidate_count": len(surface_rows),
+                "eligible_functions": functions(rows),
+                "selected_functions": functions(selected_rows),
+                "selection_gap": bool(covered_rows and not selected_rows),
+                "operator_surface_gap": not surface_rows,
+            }
+        )
+
+    family_rows = []
+    for family in catalog["operator_families"]:
+        family_id = family["id"]
+        rows = [row for row in eligible if row.get("family") == family_id]
+        family_rows.append(
+            {
+                "family": family_id,
+                "eligible_candidate_count": len(rows),
+                "selected_candidate_count": sum(row["id"] in selected_ids for row in rows),
+                "eligible_function_count": len(functions(rows)),
+            }
+        )
+
+    function_map: dict[tuple[str, str, str], list[dict]] = defaultdict(list)
+    for row in eligible:
+        key = (row["source_file"], row.get("function") or "<none>", row["subsystem"])
+        function_map[key].append(row)
+    function_rows = []
+    for (source_file, function, subsystem), rows in sorted(function_map.items()):
+        selected_count = sum(row["id"] in selected_ids for row in rows)
+        function_rows.append(
+            {
+                "source_file": source_file,
+                "function": function,
+                "subsystem": subsystem,
+                "eligible_candidate_count": len(rows),
+                "covered_candidate_count": sum(
+                    row["attempt_reason"] in covered_reasons for row in rows
+                ),
+                "selected_candidate_count": selected_count,
+                "families": sorted({row["family"] for row in rows}),
+            }
+        )
+
+    reason_counts = Counter(row["attempt_reason"] for row in attempts)
+    status_counts = Counter(row["attempt_status"] for row in attempts)
+    selected_functions = functions([row for row in eligible if row["id"] in selected_ids])
+    eligible_functions = functions(eligible)
+    findings = {
+        "batch_limit_excludes_covered_candidates": reason_counts["OUTSIDE_BOUNDED_BATCH_LIMIT"] > 0,
+        "selected_functions_are_minority": len(selected_functions) * 2 < len(eligible_functions),
+        "subsystems_missing_due_to_selection": [
+            row["subsystem"] for row in subsystem_rows if row["selection_gap"]
+        ],
+        "subsystems_missing_from_operator_surface": [
+            row["subsystem"] for row in subsystem_rows if row["operator_surface_gap"]
+        ],
+        "uncovered_eligible_candidate_count": reason_counts["UNCOVERED_SOURCE_LOCATION"],
+    }
+    priorities = []
+    if findings["subsystems_missing_due_to_selection"]:
+        priorities.append("STRATIFY_NEXT_BATCH_BY_SUBSYSTEM_AND_FUNCTION")
+    if findings["subsystems_missing_from_operator_surface"]:
+        priorities.append("ADD_OPERATORS_FOR_UNREACHED_SEMANTIC_SUBSYSTEMS")
+    if findings["uncovered_eligible_candidate_count"]:
+        priorities.append("INVESTIGATE_ELIGIBLE_UNCOVERED_LOCATIONS")
+
+    return {
+        "schema_version": 1,
+        "checker": batch["checker"],
+        "batch_id": "+".join(item["batch_id"] for item in batches),
+        "totals": {
+            "discovered_candidate_count": len(attempts),
+            "selected_candidate_count": len(selected_ids),
+            "covered_eligible_candidate_count": len(covered),
+            "eligible_candidate_count": len(eligible),
+            "operator_surface_candidate_count": len(surface),
+            "eligible_function_count": len(eligible_functions),
+            "selected_function_count": len(selected_functions),
+            "duplicate_candidate_count": reason_counts["MATCHES_EXISTING_CONTROLLED_OR_GENERATED_SPEC"],
+            "rejected_candidate_count": sum(
+                status == "REJECTED_NON_SEMANTIC" and count or 0
+                for status, count in status_counts.items()
+            ),
+        },
+        "attempt_status_counts": dict(sorted(status_counts.items())),
+        "attempt_reason_counts": dict(sorted(reason_counts.items())),
+        "by_operator_family": family_rows,
+        "by_subsystem": subsystem_rows,
+        "by_function": function_rows,
+        "findings": findings,
+        "priorities": priorities,
+        "claim_scope": (
+            "Counts describe syntax candidates emitted by the active operators and then "
+            "filtered by the current semantic policy and coverage. They are not all possible "
+            "semantic source mutations."
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--batch", type=Path, default=DEFAULT_BATCH)
+    parser.add_argument("--catalog", type=Path, default=DEFAULT_CATALOG)
+    parser.add_argument("--additional-batch", type=Path, action="append", default=[])
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    batch = json.loads(args.batch.read_text(encoding="utf-8"))
+    additional_batches = [json.loads(path.read_text(encoding="utf-8")) for path in args.additional_batch]
+    catalog = json.loads(args.catalog.read_text(encoding="utf-8"))
+    report = audit(batch, catalog, additional_batches)
+    report["inputs"] = {
+        "batch": str(args.batch.resolve().relative_to(ROOT)),
+        "batch_sha256": sha256_file(args.batch),
+        "additional_batches": [
+            {"path": str(path.resolve().relative_to(ROOT)), "sha256": sha256_file(path)}
+            for path in args.additional_batch
+        ],
+        "catalog": str(args.catalog.resolve().relative_to(ROOT)),
+        "catalog_sha256": sha256_file(args.catalog),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

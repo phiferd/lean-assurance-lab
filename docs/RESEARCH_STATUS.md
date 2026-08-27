@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-24
+Last updated: 2026-08-26
 
 ## Attempted
 
@@ -230,6 +230,72 @@ Last updated: 2026-08-24
 - Classified the amended experiment `FULL_CLASS_REDISCOVERY` and produced
   `results/collatz-retrospective/assurance.json`; all 36 combined checks and all
   15 repaired-branch checks pass.
+- Audited the Nanoda mutation surface: the parser finds 480 syntax candidates,
+  127 satisfy the semantic policy, and 121 of those are covered, but the first
+  semantic batch selected only 12 candidates in 7 of 37 eligible functions.
+- Added `semantic-diversity-v1`, which spreads a bounded batch across subsystem,
+  function, and operator family before considering estimated execution cost.
+  The resulting 12-mutant `nanoda-semantic-0002` batch spans 12 functions and
+  seven reachable subsystems; all mutants built, eight were killed, and four
+  exhausted their covering schedules.
+- Established three of the four survivors as equivalent at Nanoda's checker
+  entrypoint: two remove assertions already guaranteed by `nat_extension`, and
+  one changes only proof-irrelevant `Quot.ind` reduction behavior.
+- Added inductive-metadata witness generation and found a distinction for the
+  fourth survivor on attempt 20 by incrementing an exported inductive
+  declaration's `numIndices`. Baseline Nanoda rejects the exact artifact while
+  the mutant, official Lean 4.33, and Lean4Lean accept it.
+- Reproduced that over-rejection against current Nanoda master revision
+  `05055695879dfebb6628a67da88ceca6cd6b0421`; current Nanoda accepts the
+  unchanged positive control and rejects the hash-bound generated artifact.
+  The mutant is classified `REFERENCE_ALIGNED` and excluded from both mutation
+  score denominators rather than counted as a successful kill or survivor.
+- Rebuilt the current mutation report, three-artifact regression manifest,
+  artifact graph, assurance snapshot, and public status. Artifact freshness
+  passes; the sole hard-gate failure is now the three unresolved semantic
+  checker disagreements.
+- Ran a third semantic-diversity batch across 12 additional functions. Eleven
+  mutants built, eight were killed, and three survived; the remaining mutation
+  failed its isolated build because the original binder-depth operator changed
+  an owned integer into a reference.
+- Established the surviving constructor-owner assertion as equivalent at the
+  checker entry point after a 300-attempt bounded search found no witness and
+  source invariants showed that constructor ownership is reconstructed from the
+  containing inductive declaration.
+- Replaced the malformed binder-depth operator with
+  `BINDER_DEPTH_INCREMENT_ZERO` and ran a targeted 12-mutant batch over
+  substitution/lifting and bound-variable functions. All 12 built and all 12
+  were killed by the existing corpus.
+- Expanded the syntax audit to 524 discovered candidates, 185 on the operator
+  surface, 131 eligible under the then-current semantic policy, and 125 with
+  line-coverage inputs. Every modeled subsystem now has operator surface.
+- Investigated all six uncovered candidates. Five belong to Nanoda's explicitly
+  dead debug-only `strong_reduce` entry point and are now outside the model. The
+  remaining parallel validation mutant was hidden because coverage used one
+  thread while execution used four; baseline rejected two exact malformed
+  artifacts that the mutant accepted.
+- Changed scheduling to retain modeled zero-coverage candidates and run the
+  complete baseline corpus as a conservative fallback. The targeted parallel
+  batch built and killed its mutant, and the machine-readable resolution is
+  `results/investigations/nanoda-uncovered-mutation-sites.json`.
+- Triaged universe survivor `nanoda-gen-0bb50147dff2`. A plain-parameter
+  hypothesis did not distinguish it, but a source-directed `imax u v` versus
+  `imax w v` declaration changed baseline Nanoda from `REJECT` to mutant
+  `ACCEPT` on attempt 2.
+- Official Lean 4.33, Kiota, and Lean4Lean all reject the exact `IMax` witness
+  and accept its structure-matched control. The expected outcome is established
+  without disagreement, and the artifact is a confirmed regression candidate.
+- Triaged declaration-visibility survivor `nanoda-gen-8317efea2c7d`. A first
+  inductive forward-reference candidate showed that the mutant could cross the
+  environment cutoff but remained malformed because it lacked recursor
+  metadata. A six-record definition self-reference then changed baseline
+  Nanoda from `REJECT` to mutant `ACCEPT`; both accept the matched control.
+- Official Lean 4.33 and Lean4Lean reject the self-reference, establishing the
+  expected `REJECT` outcome with baseline Nanoda. Kiota accepts it. Source
+  tracing found that Kiota inserts the definition before checking its body, and
+  the four-outcome disagreement reproduces on fetched upstream `main`
+  `686063c`. The witness is retained as a regression candidate with unresolved
+  cross-validator disagreement rather than majority-voting Kiota away.
 
 ## Command Log
 
@@ -398,33 +464,34 @@ Notes:
 ## Current Metrics
 
 ```yaml
-mutation_score: 0.9
+mutation_score: 0.926829268292683
 mutation_score_scope: explicit MEANINGFUL_SEMANTIC classifications only
-modeled_mutation_score: 0.3103448275862069
-modeled_mutation_score_denominator: 29
-generated_mutants: 42
-evaluated_mutants: 29
-killed_mutants: 9
-surviving_mutants: 20
-build_failed_mutants: 0
+modeled_mutation_score: 0.6333333333333333
+modeled_mutation_score_denominator: 60
+generated_mutants: 79
+evaluated_mutants: 65
+killed_mutants: 38
+surviving_mutants: 27
+build_failed_mutants: 1
 superseded_mutants: 13
 unevaluated_mutants: 0
-classified_equivalent: 0
+classified_equivalent: 4
+classified_reference_aligned: 1
 classified_unreachable: 0
 classified_performance_only: 0
 classified_non_semantic: 10
-meaningful_survivors: 1
+meaningful_survivors: 3
 survived_without_witness: 19
-unknown_equivalence: 3
-witnesses_found: 2
-minimized_witnesses: 1
-witness_searches_without_result: 1
-confirmed_witness_semantics: 1
+unknown_equivalence: 4
+witnesses_found: 4
+minimized_witnesses: 3
+witness_searches_without_result: 2
+confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
-witness_checker_disagreements: 0
-arena_regression_candidates: 1
-artifact_nodes: 78
-current_artifacts: 67
+witness_checker_disagreements: 1
+generated_regression_candidates: 5
+artifact_nodes: 129
+current_artifacts: 118
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -432,10 +499,10 @@ milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
 cross_validators: 2
 configured_validators: 3
-cross_validation_cases: 3
-cross_validation_checker_disagreements: 3
-expected_outcomes_established: 4
-regression_candidates_with_unresolved_disagreement: 2
+cross_validation_cases: 6
+cross_validation_checker_disagreements: 4
+expected_outcomes_established: 7
+regression_candidates_with_unresolved_disagreement: 3
 milestone_5_checks_passing: 15
 transfer_experiments: 1
 positive_transfer: 1
@@ -460,10 +527,10 @@ current_assurance_status: FAIL
 current_hard_gates_passing: 4
 current_hard_gates_failing: 1
 current_failure_reason: semantic_checker_disagreements
-current_semantic_disagreements: 2
+current_semantic_disagreements: 3
 current_parse_behavior_disagreements: 1
-current_recorded_checker_runs: 859
-current_recorded_checker_seconds: 12034.080104356399
+current_recorded_checker_runs: 863
+current_recorded_checker_seconds: 11322.103071455727
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
@@ -528,15 +595,15 @@ milestone_9_checks_passing: 25
 
 ## Unresolved Problems
 
-- Six mutants in active batch `nanoda-semantic-0001`, eleven mutants in the
-  superseded first batch, one earlier generated mutant, and `nanoda-0004`
-  survived without witnesses. They are not claimed equivalent.
+- Twenty evaluated mutants remain classified `SURVIVED_WITHOUT_WITNESS`,
+  and four more retain unknown equivalence. They are not claimed equivalent.
 - Coverage payloads remain ignored local files; their complete identities and
   corpus inputs are tracked and mechanically verified, but remote payload
   storage is not yet implemented.
-- The current four operator families remain a narrow source-level semantic
-  model; match-arm, substitution/lifting, and richer reduction mutations remain
-  future work.
+- The current operator families remain a narrow source-level semantic model.
+  Substitution/lifting and bound-variable handling are now represented and the
+  first targeted batch killed all 12 mutants, but match-arm and richer reduction
+  mutations remain future work.
 - Large corpus files are expensive: `mathlib.ndjson` is about 5.2 GB,
   `cslib.ndjson` about 2.0 GB, and `cedar.ndjson` about 790 MB.
 - The repository revision recorded by an attestation becomes historical after
@@ -580,10 +647,9 @@ milestone_9_checks_passing: 25
   reports abandoned in-flight attempts. The original Milestone 7 runner remains
   unchanged because its content hash is part of the completed evidence.
 - The current assurance hard gate remains `FAIL` until the two semantic
-  official Lean/Kiota disagreements are adjudicated or the policy changes with
-  an explicit rationale. The two regression artifacts are therefore not marked
-  ready for upstream adoption even though their official expected `REJECT`
-  outcomes are mechanically established.
+  official Lean/Kiota disagreements and the current Nanoda over-rejection are
+  adjudicated, or the policy changes with an explicit rationale. No
+  implementation count is used to collapse these disagreements.
 - The Collatz retrospective is operator-informed and post-disclosure. Its
   amended full-class result is evidence only for the frozen bounded protocol,
   not prospective discovery, prevention of the original incident, or a general
@@ -594,8 +660,11 @@ milestone_9_checks_passing: 25
 
 ## Next Concrete Tasks
 
-1. Submit the prepared Kiota universe-ownership report upstream and preserve the
-   local hard-gate failure until the disagreement is adjudicated.
-2. Define remote storage for ignored coverage and materialized-corpus payloads,
+1. Triage the next highest-value unresolved survivor with focused source
+   invariants and bounded witness searches, prioritizing the environment cutoff
+   boundary and remaining universe comparisons.
+2. Prepare the hash-bound Nanoda `numIndices` over-rejection for upstream
+   adjudication while preserving its `REFERENCE_ALIGNED` local classification.
+3. Define remote storage for ignored coverage and materialized-corpus payloads,
    then keep the current assurance and public status artifacts synchronized as
    evidence changes.

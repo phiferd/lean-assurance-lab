@@ -26,14 +26,17 @@ relational-boundary
   REL_LT_TO_LE, REL_LE_TO_LT, REL_GT_TO_GE, REL_GE_TO_GT
 equality-discrimination
   REL_EQ_TO_NE, REL_NE_TO_EQ
+binder-depth-adjustment
+  BINDER_DEPTH_INCREMENT_ELIDE, BINDER_DEPTH_INCREMENT_ZERO
 ```
 
-These operators model omitted checks, inverted guards, endpoint errors, and
-confusion between equality and inequality. They are emitted only inside
-modeled semantic functions and mapped to an explicit subsystem. Parser,
-diagnostic, test, formatting, and infrastructure paths are rejected by policy.
-The catalog is intentionally narrower than the list of all source edits one
-could mechanically perform.
+These operators model omitted checks, inverted guards, endpoint errors,
+confusion between equality and inequality, and failure to increase de Bruijn
+depth when traversal enters a binder. They are emitted only inside modeled
+semantic functions and mapped to an explicit subsystem. Parser, diagnostic,
+test, formatting, and infrastructure paths are rejected by policy. The catalog
+is intentionally narrower than the list of all source edits one could
+mechanically perform.
 
 ## Mutant Registry
 
@@ -126,6 +129,15 @@ current corpus does not expose the difference.
 
 This category drives witness generation.
 
+### Reference Aligned
+
+The mutant differs from baseline on an exact artifact, a designated compatible
+reference establishes the expected outcome, and the mutant matches that outcome
+while baseline does not. This is evidence of a baseline over-rejection or other
+reference disagreement, not evidence that the corpus failed to kill an incorrect
+mutant. `REFERENCE_ALIGNED` mutants remain reported but are excluded from both
+mutation-score denominators.
+
 ### Survived Without Witness
 
 Every selected covering test matched baseline, but no distinguishing witness is
@@ -177,6 +189,11 @@ required_metadata:
 
 Selection is deterministic, ordered by estimated covering-test runtime, and
 round-robin by operator family. A batch is capped at 25 selected mutants.
+When a modeled source location has no line-coverage inputs, generation retains
+the candidate with a full-corpus cost estimate and scheduled execution falls
+back to every baseline test. Zero selected inputs are never interpreted as a
+surviving mutant. Explicitly dead debug/introspection entry points remain
+outside the modeled semantic surface.
 Mutation scores are reported by operator, operator family, and subsystem. A
 stratum with fewer than three evaluated mutants is labeled
 `INSUFFICIENT_SAMPLE` and has no score, while its raw killed/survived counts

@@ -27,7 +27,7 @@ class CurrentAssuranceTests(unittest.TestCase):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
         self.assertEqual(snapshot["gate"]["status"], "FAIL")
         self.assertEqual(snapshot["gate"]["failure_reasons"], ["semantic_checker_disagreements"])
-        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 2)
+        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 4)
         self.assertEqual(snapshot["cross_validator_disagreements"]["parse_behavior_count"], 1)
 
     def test_snapshot_has_every_plan_metric(self):
@@ -39,6 +39,12 @@ class CurrentAssuranceTests(unittest.TestCase):
         }
         self.assertTrue(required <= set(snapshot))
         self.assertTrue(snapshot["scope"]["injected_faults_are_not_discovered_bugs"])
+
+    def test_generated_witness_kills_are_derived_from_current_evidence(self):
+        snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
+        self.assertEqual(snapshot["mutation_testing"]["killed_by_generated_corpus"], 3)
+        self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 5)
+        self.assertEqual(snapshot["witness_synthesis"]["witnesses_minimized"], 3)
 
 
 if __name__ == "__main__":

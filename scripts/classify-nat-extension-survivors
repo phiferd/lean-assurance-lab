@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Classify nat-extension assertion elisions under Nanoda's public entrypoint."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+MUTANT_IDS = ("nanoda-gen-d65f8501971d", "nanoda-gen-5016b52728c0")
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-nat-extension-survivors.json"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def classify(config: dict, parser_source: str, util_source: str, evidence: list[dict]) -> dict:
+    expected_assertion = "assert!(self.ctx.export_file.config.nat_extension);"
+    checks = {
+        "active_config_enables_nat_extension": config.get("nat_extension") is True,
+        "parser_rejects_nat_literals_when_disabled": (
+            "if !self.config.nat_extension" in parser_source
+            and "Nat lit extension disallowed by checker execution config" in parser_source
+        ),
+        "internal_nat_literal_constructor_is_guarded": (
+            "pub fn mk_nat_lit" in util_source
+            and "if !self.export_file.config.nat_extension" in util_source
+            and "Some(self.alloc_expr(Expr::NatLit" in util_source
+        ),
+        "both_mutations_only_elide_expected_assertion": all(
+            row["spec"].get("mutation_operator") == "SKIP_VALIDATION"
+            and row["spec"].get("original") == expected_assertion
+            and row["spec"].get("function") in {"infer", "def_eq_nat"}
+            for row in evidence
+        ),
+        "both_covering_schedules_exhausted_without_difference": all(
+            row["comparison"].get("status") == "SURVIVED"
+            and row["comparison"].get("reason") == "ALL_COVERING_TESTS_MATCH"
+            and row["comparison"].get("all_covering_tests_exhausted") is True
+            for row in evidence
+        ),
+    }
+    return {
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT" if all(checks.values()) else "UNRESOLVED",
+        "registry_classification": "EQUIVALENT" if all(checks.values()) else "SURVIVED_WITHOUT_WITNESS",
+        "checks": checks,
+        "reason": (
+            "The active entrypoint fixes nat_extension=true. With false, the parser rejects NatLit "
+            "records and the internal constructor refuses to create them, so the elided assertions "
+            "cannot reject an artifact that reaches these functions."
+        ),
+        "claim_scope": (
+            "Pinned Nanoda public file/config entrypoint only; this does not classify hypothetical "
+            "library callers that construct an invalid internal DAG outside the public parser."
+        ),
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write-status", action="store_true")
+    args = parser.parse_args()
+    config_path = CHECKER / "config.json"
+    parser_path = CHECKER / "src" / "parser.rs"
+    util_path = CHECKER / "src" / "util.rs"
+    evidence = []
+    for mutant_id in MUTANT_IDS:
+        spec_path = ROOT / "mutations" / f"{mutant_id}.json"
+        comparison_path = ROOT / "results" / "mutants" / mutant_id / "scheduled-comparison.json"
+        evidence.append(
+            {
+                "mutant_id": mutant_id,
+                "spec_path": str(spec_path.relative_to(ROOT)),
+                "spec_sha256": sha256_file(spec_path),
+                "spec": json.loads(spec_path.read_text(encoding="utf-8")),
+                "comparison_path": str(comparison_path.relative_to(ROOT)),
+                "comparison_sha256": sha256_file(comparison_path),
+                "comparison": json.loads(comparison_path.read_text(encoding="utf-8")),
+            }
+        )
+    report = classify(
+        json.loads(config_path.read_text(encoding="utf-8")),
+        parser_path.read_text(encoding="utf-8"),
+        util_path.read_text(encoding="utf-8"),
+        evidence,
+    )
+    report.update(
+        {
+            "schema_version": 1,
+            "checker": "nanoda",
+            "mutants": [
+                {
+                    key: row[key]
+                    for key in (
+                        "mutant_id", "spec_path", "spec_sha256",
+                        "comparison_path", "comparison_sha256",
+                    )
+                }
+                for row in evidence
+            ],
+            "inputs": {
+                "config": str(config_path.relative_to(ROOT)),
+                "config_sha256": sha256_file(config_path),
+                "parser_source": str(parser_path.relative_to(ROOT)),
+                "parser_source_sha256": sha256_file(parser_path),
+                "util_source": str(util_path.relative_to(ROOT)),
+                "util_source_sha256": sha256_file(util_path),
+            },
+        }
+    )
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.write_status:
+        if report["status"] != "PASS":
+            raise SystemExit("refusing to classify mutants because an equivalence check failed")
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            for mutant_id in MUTANT_IDS:
+                handle.write(
+                    json.dumps(
+                        {
+                            "id": mutant_id,
+                            "status": "SURVIVED",
+                            "classification": "EQUIVALENT",
+                            "notes": (
+                                "Entrypoint equivalence established by "
+                                "results/investigations/nanoda-nat-extension-survivors.json"
+                            ),
+                            "updated_at": datetime.now(timezone.utc).isoformat(),
+                        },
+                        sort_keys=True,
+                    )
+                    + "\n"
+                )
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

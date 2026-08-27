@@ -1,0 +1,132 @@
+#!/usr/bin/env python3
+"""Resolve the uncovered-site finding from the current Nanoda surface audit."""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+AUDIT = ROOT / "results" / "audits" / "mutation-surface-nanoda-v2.json"
+CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-uncovered-mutation-sites.json"
+MUTANT_ID = "nanoda-gen-4c6d80f39770"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_generator():
+    path = ROOT / "scripts" / "generate-mutations"
+    loader = importlib.machinery.SourceFileLoader("generate_mutations_policy", str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def evidence(path: Path) -> dict:
+    return {
+        "path": str(path.relative_to(ROOT)),
+        "sha256": sha256_file(path),
+    }
+
+
+def main() -> int:
+    audit = json.loads(AUDIT.read_text(encoding="utf-8"))
+    uncovered = [
+        row
+        for row in audit["by_function"]
+        if row["eligible_candidate_count"] > row["covered_candidate_count"]
+    ]
+    counts = {row["function"]: row["eligible_candidate_count"] for row in uncovered}
+    if counts != {"check_all_declars_par": 1, "strong_reduce": 5}:
+        raise SystemExit(f"unexpected uncovered-site inventory: {counts}")
+
+    source_path = CHECKER_ROOT / "src" / "tc.rs"
+    source = source_path.read_text(encoding="utf-8")
+    if "#[allow(dead_code)]\n    pub(crate) fn strong_reduce" not in source:
+        raise SystemExit("strong_reduce is no longer explicitly marked dead code")
+    generator = load_generator()
+    if generator.is_modeled_function("src/tc.rs", "strong_reduce"):
+        raise SystemExit("strong_reduce remains in the modeled semantic surface")
+
+    execution_config_path = CHECKER_ROOT / "config.json"
+    coverage_config_path = ROOT / "results" / "coverage" / "nanoda" / "config.json"
+    execution_config = json.loads(execution_config_path.read_text(encoding="utf-8"))
+    coverage_config = json.loads(coverage_config_path.read_text(encoding="utf-8"))
+    if execution_config.get("num_threads", 0) <= 1 or coverage_config.get("num_threads") != 1:
+        raise SystemExit("expected serial-coverage/parallel-execution configuration mismatch")
+
+    comparison_path = ROOT / "results" / "mutants" / MUTANT_ID / "scheduled-comparison.json"
+    comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+    if comparison.get("status") != "KILLED" or comparison.get("selection_policy") != "FULL_BASELINE_FALLBACK":
+        raise SystemExit("parallel-path mutant was not killed through the full-corpus fallback")
+    run_dirs = sorted((comparison_path.parent / "scheduled-runs").iterdir())
+    schedule_path = run_dirs[-1] / "schedule.json"
+    schedule = json.loads(schedule_path.read_text(encoding="utf-8"))
+    if schedule.get("selected_test_count") != 197:
+        raise SystemExit("fallback schedule did not select the full baseline corpus")
+
+    reproduction_path = (
+        ROOT / "results" / "investigations" / "nanoda-parallel-coverage-gap" /
+        "reproduction.json"
+    )
+    reproduction = json.loads(reproduction_path.read_text(encoding="utf-8"))
+    if reproduction.get("status") != "KILLED":
+        raise SystemExit("direct parallel-path reproduction did not kill the mutant")
+
+    report = {
+        "schema_version": 1,
+        "status": "RESOLVED",
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "audit": evidence(AUDIT),
+        "uncovered_candidate_count": 6,
+        "classifications": [
+            {
+                "function": "check_all_declars_par",
+                "candidate_count": 1,
+                "classification": "CONFIGURATION_REACHABLE",
+                "cause": "Coverage used one thread while mutation execution used four threads.",
+                "resolution": "Modeled zero-coverage mutations now fall back to the full baseline corpus.",
+                "mutant_id": MUTANT_ID,
+                "first_scheduled_difference": comparison["first_difference"],
+                "direct_reproduction_difference": reproduction["different"],
+            },
+            {
+                "function": "strong_reduce",
+                "candidate_count": 5,
+                "classification": "OUTSIDE_ENTRYPOINT_MODEL",
+                "cause": "The checker marks this debug/introspection function as dead code.",
+                "resolution": "The semantic-function policy now excludes strong_reduce.",
+            },
+        ],
+        "configuration": {
+            "coverage_num_threads": coverage_config["num_threads"],
+            "execution_num_threads": execution_config["num_threads"],
+        },
+        "evidence": [
+            evidence(source_path),
+            evidence(coverage_config_path),
+            evidence(execution_config_path),
+            evidence(ROOT / "scripts" / "schedule-mutant"),
+            evidence(ROOT / "scripts" / "generate-mutations"),
+            evidence(comparison_path),
+            evidence(schedule_path),
+            evidence(reproduction_path),
+        ],
+    }
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

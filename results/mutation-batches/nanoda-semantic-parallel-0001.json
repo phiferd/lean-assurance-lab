@@ -1,0 +1,129 @@
+{
+  "attempt_summary": {
+    "BUILD_FAILURE": 0,
+    "COMPILING_SEMANTIC_MUTANT": 1,
+    "DUPLICATE": 0,
+    "REJECTED_NON_SEMANTIC": 0,
+    "UNSUPPORTED_MUTATION_SITE": 0
+  },
+  "attempts": [
+    {
+      "attempt_reason": "ISOLATED_RELEASE_BUILD_PASSED",
+      "attempt_status": "COMPILING_SEMANTIC_MUTANT",
+      "column_start": 32,
+      "coverage_selection": "FULL_BASELINE_FALLBACK",
+      "covering_test_count": 0,
+      "estimated_seconds": 472.6482152938843,
+      "family": "validation-elision",
+      "function": "check_all_declars_par",
+      "id": "nanoda-gen-4c6d80f39770",
+      "identity_sha256": "4c6d80f3977085347bdc94ac62dc9705bb142efca427ac0e80de37970fe97df0",
+      "operator": "SKIP_VALIDATION",
+      "rationale": "Models omission of declaration validation in the parallel execution path.",
+      "source_file": "src/tc.rs",
+      "source_span": "130",
+      "subsystem": "declaration-validation"
+    }
+  ],
+  "batch_id": "nanoda-semantic-parallel-0001",
+  "build_validation": {
+    "baseline_restore_seconds": 10.737697124481201,
+    "completed_at": "2026-08-26T22:03:27.084713+00:00",
+    "results": [
+      {
+        "log": "results/mutation-batches/logs/nanoda-semantic-parallel-0001/nanoda-gen-4c6d80f39770.log",
+        "mutant_id": "nanoda-gen-4c6d80f39770",
+        "returncode": 0,
+        "seconds": 10.373610973358154,
+        "status": "BUILT"
+      }
+    ]
+  },
+  "checker": "nanoda",
+  "created_at": "2026-08-26T22:03:00Z",
+  "execution": {
+    "completed_at": "2026-08-26T22:03:51.863837+00:00",
+    "results": [
+      {
+        "comparison": {
+          "all_covering_tests_exhausted": false,
+          "all_scheduled_tests_exhausted": false,
+          "baseline_outcomes_sha256": "efc4c5c99be2abe319f9cfa06c3042c077b7113ac794304161f09d8a08fbb485",
+          "coverage_index_sha256": "e3bae7cc90302a6a293dcf6a1f620fd30c52655b29f8f9ff30767c49398669b1",
+          "coverage_manifest_sha256": "3930e7e3508df9169d19098c5dcf535b51a337a88251ee99d833ea17ea44ee48",
+          "coverage_test_count": 197,
+          "difference_count": 1,
+          "executed_test_count": 10,
+          "first_difference": {
+            "baseline": "REJECT",
+            "candidate": "ACCEPT",
+            "exit_code": 0,
+            "test": "tutorial/052_indNeg",
+            "wall_time": 0.002524852752685547
+          },
+          "mutant_id": "nanoda-gen-4c6d80f39770",
+          "mutation_spec_sha256": "8357f11804c98ee2f96c0b64944c1df389cc24c8661d776b4985bdc56c399231",
+          "reason": "DIFFERENCE",
+          "recorded_at": "2026-08-26T22:03:41.150922+00:00",
+          "schedule_sha256": "2f22e8eefffcd7aedf5f66cabab0fa4d80b2d6ea99b82df170b65dcf4ab0cfdf",
+          "scheduled_test_count": 197,
+          "selection_policy": "FULL_BASELINE_FALLBACK",
+          "source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+          "status": "KILLED"
+        },
+        "completed_at": "2026-08-26T22:03:51.863320+00:00",
+        "mutant_id": "nanoda-gen-4c6d80f39770",
+        "runner_returncode": 0
+      }
+    ],
+    "started_at": "2026-08-26T22:03:29.436629+00:00",
+    "status": "COMPLETE"
+  },
+  "generated_count": 1,
+  "generator": {
+    "cargo_manifest_sha256": "2e3d48df0768da6f32ed0341e6b47a9dda2e0cc651623146ece286a5e1eb8aed",
+    "rust_source_sha256": "fe4079ed42395bfe899ad7be0f184ccdf9cbed8632959c127d79baefcd9384c5",
+    "selection": "targeted production-configuration coverage-gap investigation",
+    "selection_id": "targeted-coverage-gap-v1",
+    "wrapper_sha256": "39daa0125f41a161512a9db3ab3742c9f3a582043f297c528c7ee65dc1fb3c6a"
+  },
+  "mutants": [
+    {
+      "checker": "nanoda",
+      "coverage_selection": "FULL_BASELINE_FALLBACK",
+      "covering_test_count": 0,
+      "estimated_seconds": 472.6482152938843,
+      "function": "check_all_declars_par",
+      "generator": {
+        "mutation_catalog_sha256": "c38e324c01f7a6567285049abd45086bec9975051cf1e7eda58b0815da85462b",
+        "name": "tools/nanoda-mutator"
+      },
+      "id": "nanoda-gen-4c6d80f39770",
+      "identity": {
+        "algorithm": "sha256(source-file,NUL,line,NUL,column,NUL,operator,NUL,original,NUL,mutated)",
+        "sha256": "4c6d80f3977085347bdc94ac62dc9705bb142efca427ac0e80de37970fe97df0"
+      },
+      "mutated": "if false { self.check_declar(declar); }",
+      "mutation_operator": "SKIP_VALIDATION",
+      "operator_family": "validation-elision",
+      "original": "self.check_declar(declar);",
+      "replace_occurrence": 1,
+      "schema_version": 2,
+      "semantic_rationale": "Models omission of declaration validation in the parallel execution path.",
+      "source_column": 32,
+      "source_file": "src/tc.rs",
+      "source_span": "130",
+      "subsystem": "declaration-validation"
+    }
+  ],
+  "mutation_catalog": "mutation-model/catalog.json",
+  "mutation_catalog_sha256": "c38e324c01f7a6567285049abd45086bec9975051cf1e7eda58b0815da85462b",
+  "requested_count": 1,
+  "schema_version": 2,
+  "selection_filters": {
+    "included_subsystems": [
+      "declaration-validation"
+    ]
+  },
+  "source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8"
+}

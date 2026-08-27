@@ -1,0 +1,33 @@
+{
+  "checker": "nanoda",
+  "checks": {
+    "auxiliary_data_check_compares_constructor_owner": true,
+    "bounded_search_exhausted_without_witness": true,
+    "covering_schedule_exhausted_without_difference": true,
+    "direct_owner_corruptions_were_exercised": true,
+    "mutation_only_elides_constructor_owner_existence_assertion": true,
+    "parser_inserts_inductive_types_before_constructors": true,
+    "reconstructed_constructor_owner_comes_from_enclosing_inductive": true
+  },
+  "claim_scope": "Pinned Nanoda public export parser and checker entrypoint; this does not classify hypothetical library callers that inject ConstructorData directly.",
+  "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT",
+  "direct_owner_attempt_count": 10,
+  "inputs": {
+    "attempts": "results/witnesses/nanoda-gen-7037dcbaa21c-constructor-owner-20260826/attempts.jsonl",
+    "attempts_sha256": "801d96832a2fbd9f32c6389883fe42045b7a757f4a409bee44ab9deb242c1948",
+    "environment_source_sha256": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01",
+    "inductive_source_sha256": "e4be60335f8c0eda18eae074acbf1ea6a6a2b709b31d4d50dbb92dd3443263fc",
+    "mutation_spec": "mutations/nanoda-gen-7037dcbaa21c.json",
+    "mutation_spec_sha256": "ee3a7619a901451f89bada4f9c559d2ebf82b191252daab7ecb32d08f747b82c",
+    "parser_source_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+    "scheduled_comparison": "results/mutants/nanoda-gen-7037dcbaa21c/scheduled-comparison.json",
+    "scheduled_comparison_sha256": "ff82b473177ee02a10d5d114133053043ead4b9431e6779561681b50fcba0ab8",
+    "witness_search": "results/witnesses/nanoda-gen-7037dcbaa21c-constructor-owner-20260826/metadata.json",
+    "witness_search_sha256": "504e05a3005c7c824ab172e701ef1ba66e294310dd72002b22d736364baa0b88"
+  },
+  "mutant_id": "nanoda-gen-7037dcbaa21c",
+  "reason": "Constructor declarations are parsed only inside an inductive block. Inductive validation reconstructs each owner from the enclosing inductive and compares it with serialized auxiliary data before the later existence assertion is reached.",
+  "registry_classification": "EQUIVALENT",
+  "schema_version": 1,
+  "status": "PASS"
+}

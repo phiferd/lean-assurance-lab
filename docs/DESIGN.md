@@ -84,8 +84,8 @@ source-mapping or instrumentation mistakes.
 ### Mutant Generator
 
 `tools/nanoda-mutator` parses Rust with `syn` and emits validation-elision,
-predicate-negation, relational-boundary, and equality-discrimination
-candidates. `scripts/generate-mutations` maps candidates to the structured
+predicate-negation, relational-boundary, equality-discrimination, and
+binder-depth-adjustment candidates. `scripts/generate-mutations` maps candidates to the structured
 operator/subsystem catalog, classifies duplicates, unsupported sites, and
 rejected non-semantic changes, filters through exact coverage, and selects a
 bounded family-balanced population. Identities bind source file, line, column,

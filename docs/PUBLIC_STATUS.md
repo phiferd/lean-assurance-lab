@@ -6,38 +6,43 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `24a1c963e456068803eae1d77cf53e278bb145acea3bcd93c486472df5549efd`
+Snapshot SHA-256: `b7387f5b0da2b3e92990ed3b318a24f19119c7f65d1ffddd58994f4c3d176cdb`
 
 ## Current Gate: FAIL
 
 The current assurance gate has 4 passing hard checks and
 1 failing hard check. Failure reason: `semantic_checker_disagreements`.
 
-The failure is intentional and informative: official Lean rejects two
-universe-ownership artifacts that Kiota accepts. Their expected outcome is
-mechanically established as `REJECT`, but the independent checker disagreement
-remains unresolved. The project does not use implementation counts or majority
-vote to erase that state.
+The failure is intentional and informative: the unresolved semantic cases now
+include two universe-ownership artifacts that Kiota accepts against official
+Lean's expected rejection, plus a nested-inductive metadata artifact that
+official Lean and Lean4Lean accept while current Nanoda rejects, plus a
+definition self-reference that official Lean and Lean4Lean reject while Kiota
+accepts. The project does not use implementation counts or majority vote to
+erase those states.
 
 ## Measured State
 
 - Validators: 3 pinned implementation families.
 - Corpus: 197 materialized tests,
   9506646641 content-addressed bytes.
-- Modeled semantic mutants: 29 evaluated,
-  9 killed by the existing corpus,
-  1 additional source mutant killed by a
+- Modeled semantic mutants: 65 evaluated,
+  38 killed by the existing corpus,
+  3 additional source mutants killed by a
   generated witness, and 19 surviving without a
   witness.
-- Witness synthesis: 1 of
-  2 bounded searches found a witness.
+- Reference-aligned mutants: 1 excluded
+  from mutation-score denominators because the mutant matches established
+  expected behavior while baseline does not.
+- Witness synthesis: 4 of
+  6 bounded searches found a witness.
 - Rotating held-out evaluation: score 0.5 to
   1.0 across 2 one-mutant folds;
   classification `MIXED_WITH_POSITIVE_GAIN`.
-- Unresolved disagreements: 2 semantic
+- Unresolved disagreements: 4 semantic
   and 1 parse-behavior case.
-- Recorded execution: 859
-  checker runs and 11322.03
+- Recorded execution: 869
+  checker runs and 11322.24
   checker-seconds across the non-overlapping components listed in the snapshot.
 
 ## What This Means

@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Reproduce the nested numIndices over-rejection on an upstream Nanoda checkout."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+import tempfile
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARTIFACT = ROOT / "corpus" / "minimized" / "nanoda-gen-82dd1d305bfd-inductive-metadata-20260826-min.ndjson"
+CONTROL = ROOT / "external" / "lean-kernel-arena" / "_build" / "tests" / "nested-nonuniform-param.ndjson"
+EXPECTED = ROOT / "results" / "expected-outcomes" / "nanoda-gen-82dd1d305bfd-inductive-metadata.json"
+CROSS = ROOT / "results" / "cross-validation" / "nanoda-gen-82dd1d305bfd-inductive-metadata" / "results.json"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-numindices-overrejection" / "upstream-main.json"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def source_digest(checkout: Path) -> str:
+    digest = hashlib.sha256()
+    paths = [checkout / "Cargo.toml", checkout / "Cargo.lock", *sorted((checkout / "src").rglob("*.rs"))]
+    for path in paths:
+        digest.update(str(path.relative_to(checkout)).encode())
+        digest.update(b"\0")
+        digest.update(path.read_bytes())
+        digest.update(b"\0")
+    return digest.hexdigest()
+
+
+def run(binary: Path, checkout: Path, artifact: Path, timeout: float) -> dict:
+    config = {
+        "export_file_path": str(artifact.resolve()),
+        "nat_extension": True,
+        "string_extension": True,
+        "unpermitted_axiom_hard_error": False,
+        "unsafe_permit_all_axioms": True,
+        "num_threads": 4,
+    }
+    with tempfile.NamedTemporaryFile(mode="w", suffix=".json", encoding="utf-8") as handle:
+        json.dump(config, handle)
+        handle.flush()
+        started = time.monotonic()
+        proc = subprocess.run(
+            [str(binary), handle.name], cwd=checkout, text=True,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout,
+        )
+    return {
+        "normalized_outcome": "ACCEPT" if proc.returncode == 0 else "REJECT",
+        "exit_code": proc.returncode,
+        "seconds": time.monotonic() - started,
+        "stdout_sha256": hashlib.sha256(proc.stdout.encode()).hexdigest(),
+        "stderr_sha256": hashlib.sha256(proc.stderr.encode()).hexdigest(),
+        "stdout_tail": proc.stdout[-1000:],
+        "stderr_tail": proc.stderr[-1000:],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--nanoda-checkout", type=Path, required=True)
+    parser.add_argument("--upstream-revision", required=True)
+    parser.add_argument("--build", action="store_true")
+    parser.add_argument("--timeout", type=float, default=60.0)
+    parser.add_argument("--output", type=Path, default=OUTPUT)
+    args = parser.parse_args()
+    checkout = args.nanoda_checkout.resolve()
+    if args.build:
+        subprocess.run(["cargo", "build", "--release"], cwd=checkout, check=True)
+    binary = checkout / "target" / "release" / "nanoda_bin"
+    if not binary.is_file():
+        raise SystemExit(f"Nanoda release binary not found: {binary}")
+    expected = json.loads(EXPECTED.read_text(encoding="utf-8"))
+    cross = json.loads(CROSS.read_text(encoding="utf-8"))
+    validator_outcomes = {
+        row["checker"]: row.get("result", {}).get("normalized_outcome")
+        for row in cross["validators"] if row.get("result")
+    }
+    upstream_artifact = run(binary, checkout, ARTIFACT, args.timeout)
+    upstream_control = run(binary, checkout, CONTROL, args.timeout)
+    checks = {
+        "expected_outcome_is_accept": expected["status"] == "ESTABLISHED" and expected["expected_outcome"] == "ACCEPT",
+        "expected_evidence_binds_artifact": expected["artifact"]["sha256"] == sha256_file(ARTIFACT),
+        "official_accepts_artifact": validator_outcomes.get("official") == "ACCEPT",
+        "lean4lean_accepts_artifact": validator_outcomes.get("lean4lean") == "ACCEPT",
+        "upstream_nanoda_rejects_artifact": upstream_artifact["normalized_outcome"] == "REJECT",
+        "upstream_nanoda_accepts_control": upstream_control["normalized_outcome"] == "ACCEPT",
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "classification": "CURRENT_UPSTREAM_DISAGREEMENT" if all(checks.values()) else "UNRESOLVED",
+        "checks": checks,
+        "artifact": {"path": str(ARTIFACT.relative_to(ROOT)), "sha256": sha256_file(ARTIFACT)},
+        "control": {"path": str(CONTROL.relative_to(ROOT)), "sha256": sha256_file(CONTROL)},
+        "expected_evidence": {"path": str(EXPECTED.relative_to(ROOT)), "sha256": sha256_file(EXPECTED)},
+        "cross_validation": {"path": str(CROSS.relative_to(ROOT)), "sha256": sha256_file(CROSS)},
+        "upstream_nanoda": {
+            "repository": "https://github.com/ammkrn/nanoda_lib",
+            "revision": args.upstream_revision,
+            "source_sha256": source_digest(checkout),
+            "binary_sha256": sha256_file(binary),
+            "artifact_result": upstream_artifact,
+            "control_result": upstream_control,
+        },
+        "predicate": (
+            "official(artifact)=ACCEPT and lean4lean(artifact)=ACCEPT and "
+            "upstream_nanoda(artifact)=REJECT and upstream_nanoda(control)=ACCEPT"
+        ),
+        "created_at": datetime.now(timezone.utc).isoformat(),
+    }
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,71 @@
+{
+  "checker": "nanoda",
+  "checks": {
+    "covering_schedule_exhausted_without_difference": true,
+    "definitional_equality_applies_proof_irrelevance": true,
+    "explicit_reduction_probe_accepts_in_both_states": true,
+    "mutation_disables_only_quot_ind_discrimination": true,
+    "quot_ind_motive_is_restricted_to_prop": true
+  },
+  "claim_scope": "Pinned Nanoda checker semantics and Lean's proof-irrelevant Quot.ind primitive; this does not classify analogous reduction suppression for Quot.lift.",
+  "classification": "EQUIVALENT_UNDER_PROOF_IRRELEVANCE",
+  "inputs": {
+    "explicit_reduction_artifact": "external/lean-kernel-arena/_build/tests/tutorial/good/133_quotIndReduction.ndjson",
+    "explicit_reduction_artifact_sha256": "0053779f82af2dfc35cd6c866a66be4496008589b11c22e6b80e91835957bedd",
+    "mutation_spec": "mutations/nanoda-gen-cb4949d04bbf.json",
+    "mutation_spec_sha256": "30bec8f225abaebe524e31495d4f4542acf21d377e7f26e422713a7642f40e77",
+    "quot_source_sha256": "0131ae36f3daea5262f280aca44085c15e5335a8657cefd2afcec4c2bc388463",
+    "scheduled_comparison": "results/mutants/nanoda-gen-cb4949d04bbf/scheduled-comparison.json",
+    "scheduled_comparison_sha256": "8a7830c95c8a3cd845120b3f9092ddce0d21d4ec8de2067358670b60d8e912ae",
+    "typechecker_source_sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+  },
+  "mutant_id": "nanoda-gen-cb4949d04bbf",
+  "preparation": {
+    "apply_mutant": "changed",
+    "baseline_build": {
+      "output_tail": "",
+      "returncode": 0,
+      "seconds": 0.12723437487147748
+    },
+    "baseline_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+    "mutant_build": {
+      "output_tail": "",
+      "returncode": 0,
+      "seconds": 11.787351083941758
+    },
+    "restore_after": "changed",
+    "restore_before": "already",
+    "restored_build": {
+      "output_tail": "",
+      "returncode": 0,
+      "seconds": 11.405203875154257
+    },
+    "restored_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+    "source_restored": true
+  },
+  "probe": {
+    "artifact_bytes": 7817,
+    "artifact_sha256": "0053779f82af2dfc35cd6c866a66be4496008589b11c22e6b80e91835957bedd",
+    "baseline": {
+      "exit_code": 0,
+      "normalized_outcome": "ACCEPT",
+      "seconds": 0.13887008395977318,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "different": false,
+    "mutant": {
+      "exit_code": 0,
+      "normalized_outcome": "ACCEPT",
+      "seconds": 0.13382066716440022,
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stderr_tail": "",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "reason": "Quot.ind can produce only proofs. Suppressing its iota reduction changes proof normal forms but not observable definitional equality because proof irrelevance compares their proposition types.",
+  "registry_classification": "EQUIVALENT",
+  "schema_version": 1,
+  "status": "PASS"
+}

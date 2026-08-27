@@ -1,0 +1,73 @@
+{
+  "audit": {
+    "path": "results/audits/mutation-surface-nanoda-v2.json",
+    "sha256": "08de037683d42b8da599ee54ce6f69153a9c6303b3b8f2bb6e9a5262436143ee"
+  },
+  "classifications": [
+    {
+      "candidate_count": 1,
+      "cause": "Coverage used one thread while mutation execution used four threads.",
+      "classification": "CONFIGURATION_REACHABLE",
+      "direct_reproduction_difference": true,
+      "first_scheduled_difference": {
+        "baseline": "REJECT",
+        "candidate": "ACCEPT",
+        "exit_code": 0,
+        "test": "tutorial/052_indNeg",
+        "wall_time": 0.002524852752685547
+      },
+      "function": "check_all_declars_par",
+      "mutant_id": "nanoda-gen-4c6d80f39770",
+      "resolution": "Modeled zero-coverage mutations now fall back to the full baseline corpus."
+    },
+    {
+      "candidate_count": 5,
+      "cause": "The checker marks this debug/introspection function as dead code.",
+      "classification": "OUTSIDE_ENTRYPOINT_MODEL",
+      "function": "strong_reduce",
+      "resolution": "The semantic-function policy now excludes strong_reduce."
+    }
+  ],
+  "configuration": {
+    "coverage_num_threads": 1,
+    "execution_num_threads": 4
+  },
+  "evidence": [
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/tc.rs",
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    },
+    {
+      "path": "results/coverage/nanoda/config.json",
+      "sha256": "36cecabf4fd3d5dd34d9f9baa7b5d79ab28c164b33ba0e7e10f196f9d1491e63"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/config.json",
+      "sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6"
+    },
+    {
+      "path": "scripts/schedule-mutant",
+      "sha256": "23b7fd2bec2e8019281ae2f75661c263460b68203af4ed24b534dfddb711dfb8"
+    },
+    {
+      "path": "scripts/generate-mutations",
+      "sha256": "39daa0125f41a161512a9db3ab3742c9f3a582043f297c528c7ee65dc1fb3c6a"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-4c6d80f39770/scheduled-comparison.json",
+      "sha256": "a3ffb5e4e4ed6d5d502c7c6de04f95753c64854ae4ba9937e523d0f3db3637f6"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-4c6d80f39770/scheduled-runs/20260826T220329Z/schedule.json",
+      "sha256": "2f22e8eefffcd7aedf5f66cabab0fa4d80b2d6ea99b82df170b65dcf4ab0cfdf"
+    },
+    {
+      "path": "results/investigations/nanoda-parallel-coverage-gap/reproduction.json",
+      "sha256": "c5bd971c6587f88f00edd6d425823c0aff48d7bf3f17bb8c5181ec7c5b63a09d"
+    }
+  ],
+  "recorded_at": "2026-08-26T22:05:15.528275+00:00",
+  "schema_version": 1,
+  "status": "RESOLVED",
+  "uncovered_candidate_count": 6
+}

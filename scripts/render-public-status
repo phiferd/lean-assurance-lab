@@ -39,11 +39,13 @@ Snapshot SHA-256: `{digest}`
 The current assurance gate has {gate['passing']} passing hard checks and
 {gate['failing']} failing hard check. Failure reason: {failures}.
 
-The failure is intentional and informative: official Lean rejects two
-universe-ownership artifacts that Kiota accepts. Their expected outcome is
-mechanically established as `REJECT`, but the independent checker disagreement
-remains unresolved. The project does not use implementation counts or majority
-vote to erase that state.
+The failure is intentional and informative: the unresolved semantic cases now
+include two universe-ownership artifacts that Kiota accepts against official
+Lean's expected rejection, plus a nested-inductive metadata artifact that
+official Lean and Lean4Lean accept while current Nanoda rejects, plus a
+definition self-reference that official Lean and Lean4Lean reject while Kiota
+accepts. The project does not use implementation counts or majority vote to
+erase those states.
 
 ## Measured State
 
@@ -52,9 +54,12 @@ vote to erase that state.
   {snapshot['corpus']['total_bytes']} content-addressed bytes.
 - Modeled semantic mutants: {mutation['total_semantic_mutants']} evaluated,
   {mutation['killed_by_existing_corpus']} killed by the existing corpus,
-  {mutation['killed_by_generated_corpus']} additional source mutant killed by a
+  {mutation['killed_by_generated_corpus']} additional source mutants killed by a
   generated witness, and {mutation['unresolved_mutants']} surviving without a
   witness.
+- Reference-aligned mutants: {mutation['reference_aligned_mutants']} excluded
+  from mutation-score denominators because the mutant matches established
+  expected behavior while baseline does not.
 - Witness synthesis: {snapshot['witness_synthesis']['witnesses_found']} of
   {snapshot['witness_synthesis']['searches']} bounded searches found a witness.
 - Rotating held-out evaluation: score {held_out['original_score']} to

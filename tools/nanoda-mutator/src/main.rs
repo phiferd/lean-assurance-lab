@@ -152,6 +152,26 @@ impl<'ast> Visit<'ast> for Collector<'_> {
     }
 
     fn visit_expr_binary(&mut self, binary: &'ast syn::ExprBinary) {
+        if matches!(binary.op, BinOp::Add(_))
+            && matches!(
+                &*binary.right,
+                Expr::Lit(expr_lit)
+                    if matches!(&expr_lit.lit, syn::Lit::Int(value) if value.base10_digits() == "1")
+            )
+        {
+            let span = binary.span();
+            let original = self.text(span);
+            let mutated = format!("({} + 0)", self.text(binary.left.span()));
+            self.add(
+                span,
+                "BINDER_DEPTH_INCREMENT_ZERO",
+                "binder-depth-adjustment",
+                "unknown",
+                "Models failure to increase de Bruijn depth when entering a binder.",
+                original,
+                mutated,
+            );
+        }
         let mutation = match binary.op {
             BinOp::Eq(_) => Some(("REL_EQ_TO_NE", "!=", "equality-discrimination")),
             BinOp::Ne(_) => Some(("REL_NE_TO_EQ", "==", "equality-discrimination")),
@@ -216,4 +236,47 @@ fn main() {
         "{}",
         serde_json::to_string_pretty(&collector.candidates).unwrap()
     );
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    fn collect(source: &str) -> Vec<Candidate> {
+        let syntax = syn::parse_file(source).unwrap();
+        let mut line_offsets = vec![0];
+        for (index, byte) in source.bytes().enumerate() {
+            if byte == b'\n' {
+                line_offsets.push(index + 1);
+            }
+        }
+        let mut collector = Collector {
+            source,
+            line_offsets,
+            candidates: Vec::new(),
+            current_function: None,
+        };
+        collector.visit_file(&syntax);
+        collector.candidates
+    }
+
+    #[test]
+    fn emits_binder_depth_increment_elision() {
+        let candidates = collect("fn inst_aux(offset: u16) { let next = offset + 1; }");
+        let candidate = candidates
+            .iter()
+            .find(|row| row.operator == "BINDER_DEPTH_INCREMENT_ZERO")
+            .unwrap();
+        assert_eq!(candidate.function.as_deref(), Some("inst_aux"));
+        assert_eq!(candidate.original, "offset + 1");
+        assert_eq!(candidate.mutated, "(offset + 0)");
+    }
+
+    #[test]
+    fn ignores_non_unit_addition() {
+        let candidates = collect("fn inst_aux(offset: u16) { let next = offset + 2; }");
+        assert!(candidates
+            .iter()
+            .all(|row| row.operator != "BINDER_DEPTH_INCREMENT_ZERO"));
+    }
 }

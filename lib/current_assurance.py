@@ -83,8 +83,8 @@ def _cross_validation(root: Path) -> tuple[list[dict[str, Any]], int, int, int, 
         if result.get("classification") == "CHECKER_DISAGREEMENT" and kind == "PARSE_BEHAVIOR":
             parse += 1
         validators = result.get("validators", [])
-        runs += len(validators)
-        seconds += sum(row.get("result", {}).get("seconds", 0.0) for row in validators)
+        runs += sum(row.get("result") is not None for row in validators)
+        seconds += sum((row.get("result") or {}).get("seconds", 0.0) for row in validators)
         cases.append({
             "case_id": result["case_id"],
             "classification": result["classification"],
@@ -93,6 +93,25 @@ def _cross_validation(root: Path) -> tuple[list[dict[str, Any]], int, int, int, 
             "path": relative(root, path),
             "sha256": sha256_file(path),
         })
+    nanoda_path = (
+        root / "results" / "investigations" / "nanoda-numindices-overrejection" /
+        "upstream-main.json"
+    )
+    if nanoda_path.exists():
+        result = load(nanoda_path)
+        if result.get("classification") == "CURRENT_UPSTREAM_DISAGREEMENT":
+            semantic += 1
+        cases.append({
+            "case_id": "nanoda-numindices-overrejection",
+            "classification": result.get("classification", "UNRESOLVED"),
+            "disagreement_kind": "SEMANTIC_OUTCOME",
+            "semantic_status": "UNRESOLVED",
+            "path": relative(root, nanoda_path),
+            "sha256": sha256_file(nanoda_path),
+        })
+        runs += 2
+        seconds += result.get("upstream_nanoda", {}).get("artifact_result", {}).get("seconds", 0.0)
+        seconds += result.get("upstream_nanoda", {}).get("control_result", {}).get("seconds", 0.0)
     return cases, semantic, parse, runs, seconds
 
 
@@ -118,20 +137,26 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         "coverage_identity": root / "results" / "manifests" / "coverage-nanoda.json",
         "coverage_manifest": root / "results" / "coverage" / "nanoda" / "manifest.json",
         "coverage_metrics": root / "results" / "coverage" / "nanoda" / "collection-metrics.json",
-        "mutation_report": root / "results" / "assurance" / "milestone-7-report.json",
-        "mutation_batch": root / "results" / "mutation-batches" / "nanoda-semantic-0001.json",
+        "mutation_report": root / "results" / "assurance" / "current-mutation-report.json",
         "m4": root / "results" / "assurance" / "milestone-4.json",
         "m6": root / "results" / "assurance" / "milestone-6.json",
         "m7": root / "results" / "assurance" / "milestone-7.json",
         "rotating": root / "results" / "rotating-heldout" / "milestone-7" / "report.json",
         "validators": root / "results" / "cross-validation" / "validator-inventory.json",
-        "regressions": root / "corpus" / "regression-candidates" / "milestone-5.json",
+        "regressions": root / "corpus" / "regression-candidates" / "current.json",
     }
     coverage_identity = load(paths["coverage_identity"])
     coverage = load(paths["coverage_manifest"])
     coverage_metrics = load(paths["coverage_metrics"])
     report = load(paths["mutation_report"])
-    batch = load(paths["mutation_batch"])
+    batch_paths = [
+        root / "results" / "mutation-batches" / "nanoda-semantic-0001.json",
+        root / "results" / "mutation-batches" / "nanoda-semantic-0002.json",
+        root / "results" / "mutation-batches" / "nanoda-semantic-0003.json",
+        root / "results" / "mutation-batches" / "nanoda-semantic-depth-0001.json",
+        root / "results" / "mutation-batches" / "nanoda-semantic-parallel-0001.json",
+    ]
+    batches = [load(path) for path in batch_paths]
     m4 = load(paths["m4"])
     m6 = load(paths["m6"])
     m7 = load(paths["m7"])
@@ -142,7 +167,13 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     baseline_policy = policy["hard_gates"]["baseline_identity"]
     baseline_sha = coverage_identity["baseline"]["sha256"]
     baseline_count = coverage_identity["baseline"]["test_count"]
-    comparison_rows = [row["comparison"] for row in batch["execution"]["results"]]
+    batch_comparison_rows = [
+        row["comparison"]
+        for batch in batches
+        for row in batch["execution"]["results"]
+        if row.get("comparison") is not None
+    ]
+    comparison_rows = list(batch_comparison_rows)
     for mutant_id in ("nanoda-0001", "nanoda-0002", "nanoda-0003", "nanoda-0004"):
         comparison_rows.append(load(root / "results" / "mutants" / mutant_id / "scheduled-comparison.json"))
     baseline_consistent = (
@@ -157,12 +188,16 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         str(number): load(root / "results" / "assurance" / f"milestone-{number}.json")
         for number in required_milestones
     }
-    selected_ids = {row["id"] for row in batch["mutants"]}
-    build_ids = {row["mutant_id"] for row in batch["build_validation"]["results"]}
-    execution_ids = {row["mutant_id"] for row in batch["execution"]["results"]}
+    selected_ids = {row["id"] for batch in batches for row in batch["mutants"]}
+    build_ids = {
+        row["mutant_id"] for batch in batches for row in batch["build_validation"]["results"]
+    }
+    execution_ids = {
+        row["mutant_id"] for batch in batches for row in batch["execution"]["results"]
+    }
     inventories_complete = (
         all(item["status"] == "PASS" and all(item["checks"].values()) for item in milestone_results.values())
-        and batch["execution"]["status"] == "COMPLETE"
+        and all(batch["execution"]["status"] == "COMPLETE" for batch in batches)
         and selected_ids == build_ids == execution_ids
         and report["unevaluated_mutants"] == 0
         and baseline_count == len(coverage_identity["corpus"]["files"])
@@ -193,13 +228,14 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             baseline_consistent,
             "Baseline outcomes and every active comparison use the policy-pinned identity.",
             {"sha256": baseline_sha, "test_count": baseline_count, "comparison_count": len(comparison_rows)},
-            [relative(root, paths["coverage_identity"]), relative(root, paths["mutation_batch"])],
+            [relative(root, paths["coverage_identity"]), *[relative(root, path) for path in batch_paths]],
         ),
         "complete_result_inventories": gate_result(
             inventories_complete,
             "Required milestone inventories and the active semantic batch are complete.",
             {"milestones": required_milestones, "selected": len(selected_ids), "built": len(build_ids), "executed": len(execution_ids)},
-            [relative(root, paths["mutation_batch"])] + [f"results/assurance/milestone-{number}.json" for number in required_milestones],
+            [relative(root, path) for path in batch_paths]
+            + [f"results/assurance/milestone-{number}.json" for number in required_milestones],
         ),
         "semantic_checker_disagreements": gate_result(
             disagreements_ok,
@@ -235,11 +271,18 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "binary_sha256": row["binary_sha256"],
         })
 
-    batch_started = datetime.fromisoformat(batch["execution"]["started_at"])
-    batch_completed = datetime.fromisoformat(batch["execution"]["completed_at"])
-    batch_elapsed = (batch_completed - batch_started).total_seconds()
-    build_seconds = sum(row["seconds"] for row in batch["build_validation"]["results"])
-    build_seconds += batch["build_validation"]["baseline_restore_seconds"]
+    batch_elapsed = sum(
+        (
+            datetime.fromisoformat(batch["execution"]["completed_at"])
+            - datetime.fromisoformat(batch["execution"]["started_at"])
+        ).total_seconds()
+        for batch in batches
+    )
+    build_seconds = sum(
+        sum(row["seconds"] for row in batch["build_validation"]["results"])
+        + batch["build_validation"]["baseline_restore_seconds"]
+        for batch in batches
+    )
     checker_components = [
         {"name": "coverage_collection", "checker_runs": coverage["test_count"], "checker_seconds": coverage_metrics["run_seconds"]},
         {"name": "witness_search_and_minimization", "checker_runs": m4["measurements"]["checker_runs"], "checker_seconds": m4["measurements"]["checker_seconds"]},
@@ -248,8 +291,8 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         {"name": "milestone_7_rotating_folds", "checker_runs": rotating["costs"]["checker_runs"], "checker_seconds": rotating["costs"]["checker_seconds"]},
     ]
     cost_components: list[dict[str, Any]] = checker_components + [
-        {"name": "active_mutation_batch", "wall_seconds": batch_elapsed, "checker_runs": sum(row["executed_test_count"] for row in comparison_rows[:len(batch["execution"]["results"])])},
-        {"name": "active_mutation_batch_builds", "wall_seconds": build_seconds, "builds": len(build_ids) + 1},
+        {"name": "active_mutation_batches", "wall_seconds": batch_elapsed, "checker_runs": sum(row["executed_test_count"] for row in batch_comparison_rows)},
+        {"name": "active_mutation_batch_builds", "wall_seconds": build_seconds, "builds": len(build_ids) + len(batches)},
     ]
 
     config_paths = [
@@ -261,7 +304,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     trends = policy["trend_thresholds"]
     producer_path = root / "scripts" / "current-assurance-snapshot"
     library_path = Path(__file__)
-    semantic_case_count = 1 if regressions["candidates"] else 0
+    semantic_case_count = len(regressions["candidates"])
     return {
         "schema_version": 1,
         "snapshot_id": "current-assurance",
@@ -286,25 +329,26 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "materialized_payload_tracked_in_git": False,
         },
         "mutation_testing": {
-            "population_scope": "All 29 evaluated modeled nanoda mutants in the current mutation report.",
+            "population_scope": f"All {report['evaluated_mutants']} evaluated Nanoda mutants in the current mutation report, with equivalent and reference-aligned cases excluded from modeled scores.",
             "total_semantic_mutants": report["evaluated_mutants"],
             "killed_by_existing_corpus": report["killed_mutants"],
-            "killed_by_generated_corpus": 1,
+            "killed_by_generated_corpus": report["generated_witness_kills"],
             "surviving_mutants": report["surviving_mutants"],
             "meaningful_survivors": report["meaningful_survivors"],
             "equivalent_mutants": report["classified_equivalent"],
             "unreachable_mutants": report["classified_unreachable"],
+            "reference_aligned_mutants": report["classified_reference_aligned"],
             "unresolved_mutants": report["survived_without_witness"],
             "modeled_mutation_score": report["modeled_mutation_score"],
             "meaningful_mutation_score": report["mutation_score"],
             "subsystem_scores": report["stratified_metrics"]["by_subsystem"],
         },
         "witness_synthesis": {
-            "searches": m4["measurements"]["searches"],
-            "witnesses_found": m4["measurements"]["witnesses_found"],
-            "witnesses_minimized": m4["measurements"]["witnesses_minimized"],
-            "bounded_searches_without_witness": m4["measurements"]["bounded_searches_without_witness"],
-            "success_rate": m4["measurements"]["witnesses_found"] / m4["measurements"]["searches"],
+            "searches": report["witnesses_found"] + report["witness_searches_without_result"],
+            "witnesses_found": report["witnesses_found"],
+            "witnesses_minimized": report["minimized_witnesses"],
+            "bounded_searches_without_witness": report["witness_searches_without_result"],
+            "success_rate": report["witnesses_found"] / (report["witnesses_found"] + report["witness_searches_without_result"]),
         },
         "generated_regressions": {
             "artifact_count": len(regressions["candidates"]),

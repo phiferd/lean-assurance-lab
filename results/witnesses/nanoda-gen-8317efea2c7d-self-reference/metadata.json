@@ -1,0 +1,98 @@
+{
+  "attempt_log": "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/attempts.jsonl",
+  "attempts": 2,
+  "candidate_population": 2,
+  "costs": {
+    "checker_runs": 4,
+    "source_restored_after_each_differential": true
+  },
+  "created_at": "2026-08-27T03:41:00Z",
+  "expected_outcome": "REJECT",
+  "final_predicate_checks": [
+    {
+      "artifact_sha256": "63b778e6f145a2eae6757666c13e4e2f231233bfb813e5d3d4e5a645492215f0",
+      "baseline": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT"
+      },
+      "different": true,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT"
+      }
+    }
+  ],
+  "found_at_attempt": 2,
+  "found_by": {
+    "strategy": "current-definition-self-reference",
+    "transformation": "define cutoffSelf : Sort 1 with cutoffSelf as its own value"
+  },
+  "inputs": {
+    "control_reproduction": {
+      "path": "results/investigations/nanoda-env-cutoff-self-reference/control-reproduction.json",
+      "sha256": "cb3994fd625fed2e5173ed7cb23107892c67310f72fafe81395647c583b251f6"
+    },
+    "cross_validation": {
+      "classification": "CHECKER_DISAGREEMENT",
+      "path": "results/cross-validation/nanoda-gen-8317efea2c7d-self-reference/results.json",
+      "sha256": "bfbe47debb29a54b8222ab06770501e98a88cdfea457a32eb92d0382ed21a418"
+    },
+    "expected_evidence": {
+      "path": "results/expected-outcomes/nanoda-gen-8317efea2c7d-self-reference.json",
+      "sha256": "4025cf34cc9b2be4ce7273ffc018b4077702d59f856dec613fd62b59dc90c377"
+    },
+    "failed_hypothesis": {
+      "path": "results/investigations/nanoda-env-cutoff-forward-reference/reproduction.json",
+      "sha256": "61b324fc2b22e1838cf616137ed7f098c4eb2118803af3f2be7d77ea378f61ef"
+    },
+    "kiota_upstream_reproduction": {
+      "path": "results/investigations/kiota-self-reference/upstream-main.json",
+      "sha256": "cabe9fc8558e7d2af91a53dfa3de8ae24b49460ecadfd6114cdccd9684883ef1"
+    },
+    "mutation_spec": "mutations/nanoda-gen-8317efea2c7d.json",
+    "mutation_spec_sha256": "62a9e67334cdf4ecb697f7a69675a274c1d9535e2584ef92c6166ec8806daf99",
+    "reproduction": {
+      "path": "results/investigations/nanoda-env-cutoff-self-reference/reproduction.json",
+      "sha256": "b3db7c787dce63d977f7a29c2fa20b7e4a87813dda3266039dab683909b2b9a4"
+    }
+  },
+  "max_attempts": 2,
+  "minimization": {
+    "method": "hand-constructed record-minimal witness",
+    "original_records": 6,
+    "retained_records": 6
+  },
+  "minimization_status": "MINIMIZED",
+  "minimized_witness": {
+    "bytes": 387,
+    "path": "corpus/generated/nanoda-gen-8317efea2c7d-self-reference.ndjson",
+    "records": 6,
+    "sha256": "63b778e6f145a2eae6757666c13e4e2f231233bfb813e5d3d4e5a645492215f0"
+  },
+  "mutant_id": "nanoda-gen-8317efea2c7d",
+  "original_witness": {
+    "bytes": 387,
+    "path": "corpus/generated/nanoda-gen-8317efea2c7d-self-reference.ndjson",
+    "records": 6,
+    "sha256": "63b778e6f145a2eae6757666c13e4e2f231233bfb813e5d3d4e5a645492215f0"
+  },
+  "positive_control": {
+    "path": "corpus/generated/nanoda-gen-8317efea2c7d-self-reference-control.ndjson",
+    "sha256": "90aa5aad1fc77ca22f770fef3be7f4d374f244812f4db385d8c2279843fe3624"
+  },
+  "random_seed": 0,
+  "schema_version": 1,
+  "search_status": "WITNESS_FOUND",
+  "semantic_classification": {
+    "cross_validation_status": "CHECKER_DISAGREEMENT",
+    "reason": "DESIGNATED_REFERENCE_MATCHES_BASELINE;_KIOTA_ACCEPTANCE_RECORDED_SEPARATELY",
+    "reference_outcome": "REJECT",
+    "status": "CONFIRMED_EXPECTED_OUTCOME"
+  },
+  "semantic_status": "CONFIRMED_EXPECTED_OUTCOME",
+  "status": "MINIMIZED_WITNESS_FOUND",
+  "strategy": "source-directed-environment-boundary-construction",
+  "subsystem": "declaration-validation",
+  "success_predicate": "baseline(input) != mutant(input)",
+  "witness_id": "nanoda-gen-8317efea2c7d-self-reference"
+}

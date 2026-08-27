@@ -18,6 +18,12 @@ sys.path.insert(0, str(ROOT / "lib"))
 from artifact_graph import load_graph, require_current  # noqa: E402
 
 
+EXCLUDED_CLASSIFICATIONS = {
+    "EQUIVALENT", "UNREACHABLE", "PERFORMANCE_ONLY", "NON_SEMANTIC",
+    "REFERENCE_ALIGNED",
+}
+
+
 def read_jsonl(path: Path) -> list[dict]:
     if not path.exists():
         return []
@@ -66,9 +72,11 @@ def stratified_metrics(
     operator_families: dict[str, str],
 ) -> dict[str, dict]:
     groups: dict[str, list[tuple[dict, bool | None]]] = {}
-    excluded = {"EQUIVALENT", "UNREACHABLE", "PERFORMANCE_ONLY", "NON_SEMANTIC"}
     for mutant_id, record in mutants.items():
-        if record.get("status") == "SUPERSEDED" or record.get("classification") in excluded:
+        if (
+            record.get("status") == "SUPERSEDED"
+            or record.get("classification") in EXCLUDED_CLASSIFICATIONS
+        ):
             continue
         if dimension == "operator_family":
             value = record.get(dimension) or operator_families.get(record.get("mutation_operator"))
@@ -143,6 +151,7 @@ def main() -> int:
     classified_unreachable = 0
     classified_performance_only = 0
     classified_non_semantic = 0
+    classified_reference_aligned = 0
     meaningful_survivors = 0
     modeled_tested = 0
     modeled_killed = 0
@@ -175,6 +184,8 @@ def main() -> int:
             classified_performance_only += 1
         elif classification == "NON_SEMANTIC":
             classified_non_semantic += 1
+        elif classification == "REFERENCE_ALIGNED":
+            classified_reference_aligned += 1
         elif classification == "MEANINGFUL_SEMANTIC":
             meaningful_tested += killed_state is not None
             meaningful_killed += killed_state is True
@@ -187,7 +198,7 @@ def main() -> int:
         if (
             killed_state is not None
             and status != "SUPERSEDED"
-            and classification not in {"EQUIVALENT", "UNREACHABLE", "PERFORMANCE_ONLY", "NON_SEMANTIC"}
+            and classification not in EXCLUDED_CLASSIFICATIONS
         ):
             modeled_tested += 1
             modeled_killed += killed_state is True
@@ -196,30 +207,37 @@ def main() -> int:
     if meaningful_tested:
         score = meaningful_killed / meaningful_tested
 
-    witnesses_found = 0
+    witness_found_ids: set[str] = set()
+    confirmed_generated_kill_ids: set[str] = set()
     witness_searches_without_result = 0
     ambiguous_witness_semantics = 0
     witness_checker_disagreements = 0
     confirmed_witness_semantics = 0
+    minimized_witness_ids: set[str] = set()
     if (args.results_root / "witnesses").exists():
         for path in (args.results_root / "witnesses").glob("*/metadata.json"):
             try:
                 metadata = json.loads(path.read_text(encoding="utf-8"))
             except json.JSONDecodeError:
                 continue
-            if metadata.get("status") in {
-                "DISTINGUISHING_FOUND",
-                "MINIMIZED",
-                "MINIMIZED_WITNESS_FOUND",
-                "ARENA_CANDIDATE",
-                "CONFIRMED_REGRESSION_CANDIDATE",
-            }:
-                witnesses_found += 1
+            mutant_id = metadata.get("mutant_id")
+            if mutant_id and metadata.get("search_status") == "WITNESS_FOUND":
+                witness_found_ids.add(mutant_id)
+            if mutant_id and metadata.get("semantic_status") == "CONFIRMED_EXPECTED_OUTCOME":
+                confirmed_generated_kill_ids.add(mutant_id)
             witness_searches_without_result += metadata.get("search_status") == "NO_WITNESS_FOUND"
             ambiguous_witness_semantics += metadata.get("semantic_status") == "AMBIGUOUS_SEMANTICS"
             witness_checker_disagreements += metadata.get("semantic_status") == "CHECKER_DISAGREEMENT"
             confirmed_witness_semantics += metadata.get("semantic_status") == "CONFIRMED_EXPECTED_OUTCOME"
-    minimized = list(Path("corpus/minimized").glob("*-min.*"))
+            if metadata.get("minimization_status") == "MINIMIZED":
+                minimized_witness_ids.add(metadata.get("witness_id") or path.parent.name)
+    witnesses_found = len(witness_found_ids)
+    generated_witness_kills = sum(
+        mutant_id in mutants
+        and mutants[mutant_id].get("classification") == "MEANINGFUL_SEMANTIC"
+        and comparison_killed(args.results_root, mutant_id) is False
+        for mutant_id in confirmed_generated_kill_ids
+    )
     arena_candidates = 0
     if (args.results_root / "witnesses").exists():
         for path in (args.results_root / "witnesses").glob("*/metadata.json"):
@@ -290,15 +308,17 @@ def main() -> int:
         "classified_unreachable": classified_unreachable,
         "classified_performance_only": classified_performance_only,
         "classified_non_semantic": classified_non_semantic,
+        "classified_reference_aligned": classified_reference_aligned,
         "meaningful_survivors": meaningful_survivors,
         "survived_without_witness": survived_without_witness,
         "unknown_equivalence": unknown_equivalence,
         "witnesses_found": witnesses_found,
+        "generated_witness_kills": generated_witness_kills,
         "witness_searches_without_result": witness_searches_without_result,
         "ambiguous_witness_semantics": ambiguous_witness_semantics,
         "witness_checker_disagreements": witness_checker_disagreements,
         "confirmed_witness_semantics": confirmed_witness_semantics,
-        "minimized_witnesses": len(minimized),
+        "minimized_witnesses": len(minimized_witness_ids),
         "arena_regression_candidates": arena_candidates,
         "cross_validators": len(cross_validator_ids),
         "cross_validation_cases": sum(cross_validation_counts.values()),
