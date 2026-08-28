@@ -11,11 +11,13 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 OUTPUT = ROOT / "results" / "investigations" / "checker-rule-inventory.json"
+OUTPUT_MD = ROOT / "results" / "investigations" / "checker-rule-inventory.md"
 MATRICES = (
     ("quotient_contract", ROOT / "results" / "investigations" / "nanoda-quotient-contract-matrix.json"),
     ("restored_nested_declarations", ROOT / "results" / "investigations" / "nanoda-restored-declaration-contract-matrix.json"),
     ("declaration_environment", ROOT / "results" / "investigations" / "nanoda-declaration-environment-contract-matrix.json"),
     ("core_declaration_typing", ROOT / "results" / "investigations" / "nanoda-core-declaration-contract-matrix.json"),
+    ("universe_definitional_equality", ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.json"),
 )
 CHECKERS = ("nanoda_baseline", "official", "kiota", "lean4lean")
 
@@ -65,16 +67,16 @@ def main() -> int:
             }
 
     checks = {
-        "four_source_matrices_are_present": len(matrix_evidence) == 4,
-        "thirteen_boundaries_are_directly_executable": len(boundaries) == 13,
+        "five_source_matrices_are_present": len(matrix_evidence) == 5,
+        "eighteen_boundaries_are_directly_executable": len(boundaries) == 18,
         "official_and_lean4lean_agree_on_all_boundaries": (
             pairwise["official__lean4lean"]["disagree"] == 0
         ),
-        "nanoda_differs_from_official_on_four_boundaries": (
-            pairwise["nanoda_baseline__official"]["disagree"] == 4
+        "nanoda_differs_from_official_on_six_boundaries": (
+            pairwise["nanoda_baseline__official"]["disagree"] == 6
         ),
-        "kiota_differs_from_official_on_seven_boundaries": (
-            pairwise["official__kiota"]["disagree"] == 7
+        "kiota_differs_from_official_on_nine_boundaries": (
+            pairwise["official__kiota"]["disagree"] == 9
         ),
     }
     report = {
@@ -89,7 +91,6 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "universe inequality and definitional equality",
                 "application reduction, recursors, and projections",
                 "ordinary inductive positivity and parameter uniformity",
                 "literal extensions and parser/configuration behavior",
@@ -99,24 +100,64 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "universe_definitional_equality",
+                "family": "reduction_and_projection_typing",
                 "reason": (
-                    "The distinct-IMax boundary already has consensus rejection evidence and can "
-                    "anchor adjacent source-derived universe rules."
+                    "The mutation corpus has several kills, but exact expected-outcome evidence is "
+                    "less consistently normalized than in the completed families."
                 ),
             },
             {
                 "rank": 2,
-                "family": "reduction_and_projection_typing",
+                "family": "ordinary_inductive_well_formedness",
                 "reason": (
-                    "The mutation corpus has several kills, but exact expected-outcome evidence is "
-                    "less consistently normalized than in the first two families."
+                    "Positivity and parameter-uniformity checks are high-impact semantic rules "
+                    "with source anchors but no bounded four-checker matrix yet."
                 ),
             },
         ],
-        "scope": "Inventory of 11 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+        "scope": "Inventory of 18 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    display_names = {
+        "nanoda_baseline": "Nanoda baseline",
+        "official": "Official Lean",
+        "kiota": "Kiota",
+        "lean4lean": "Lean4Lean",
+    }
+    lines = [
+        "# Checker Rule Inventory",
+        "",
+        f"Five bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
+        "",
+        "| Checker | Accept | Reject | Total |",
+        "| --- | ---: | ---: | ---: |",
+    ]
+    for checker in CHECKERS:
+        profile = profiles[checker]
+        lines.append(
+            f"| {display_names[checker]} | {profile['accept']} | {profile['reject']} | {profile['total']} |"
+        )
+    lines.extend([
+        "",
+        f"Official Lean and Lean4Lean agree on all {len(boundaries)} boundaries. Nanoda differs",
+        "from them on four serialized quotient signatures and two universe right-successor",
+        "comparisons. Kiota differs from them on seven declaration/prerequisite boundaries and",
+        "the same two universe comparisons.",
+        "",
+        "These counts are descriptive, not votes. Exact artifacts, controls, expected-outcome",
+        "evidence, and checker outcomes remain linked in `checker-rule-inventory.json`.",
+        "",
+        "## Coverage Gaps",
+        "",
+        "- application reduction, recursors, and projections;",
+        "- ordinary inductive positivity and parameter uniformity;",
+        "- literal extension and parser/configuration behavior;",
+        "- axiom policy and unsafe declarations.",
+        "",
+        "The next ranked family is reduction and projection typing.",
+        "",
+    ])
+    OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
     print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks, "profiles": profiles}, indent=2, sort_keys=True))
     return 0 if report["status"] == "PASS" else 1
 

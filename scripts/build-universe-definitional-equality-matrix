@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Build the observed universe definitional-equality contract matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.json"
+OUTPUT_MD = ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.md"
+CASES = (
+    ("imax_left_one_reduces_to_right", "universe-imax-left-one", "imax-left-one-nanoda.json"),
+    ("imax_right_zero_reduces_to_zero", "universe-imax-right-zero", "imax-right-zero-nanoda.json"),
+    ("imax_right_one_compares_as_max", "universe-imax-right-one", "imax-right-one-nanoda.json"),
+    ("imax_right_successor_compares_as_max", "universe-imax-right-succ", "imax-right-succ-nanoda.json"),
+    (
+        "distinct_imax_left_parameters_are_not_equal",
+        "nanoda-gen-0bb50147dff2-distinct-imax-left",
+        "imax-distinct-left-nanoda.json",
+    ),
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    rows = []
+    for boundary, case_id, nanoda_name in CASES:
+        nanoda_path = ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality" / nanoda_name
+        cross_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        nanoda = json.loads(nanoda_path.read_text(encoding="utf-8"))
+        cross = json.loads(cross_path.read_text(encoding="utf-8"))
+        validators = {
+            item["checker"]: item["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        controls = {
+            item["checker"]: item["positive_control"]["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        rows.append({
+            "boundary": boundary,
+            "case_id": case_id,
+            "artifact": cross["artifact"],
+            "expected_outcome": cross["expected_outcome"],
+            "classification": cross["classification"],
+            "candidate_outcomes": {
+                "nanoda_baseline": nanoda["candidate"]["result"]["normalized_outcome"],
+                **validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": nanoda["control"]["result"]["normalized_outcome"],
+                **controls,
+            },
+            "evidence": {
+                "nanoda_pair": str(nanoda_path.relative_to(ROOT)),
+                "nanoda_pair_sha256": sha256_file(nanoda_path),
+                "cross_validation": str(cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(cross_path),
+            },
+        })
+
+    consensus_accept = rows[:2]
+    right_successor = rows[2:4]
+    distinct_left = rows[4]
+    checks = {
+        "all_controls_are_accepted": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "all_checkers_accept_left_one_and_right_zero": all(
+            row["candidate_outcomes"][checker] == "ACCEPT"
+            for row in consensus_accept
+            for checker in ("nanoda_baseline", "official", "kiota", "lean4lean")
+        ),
+        "official_and_lean4lean_reject_both_right_successor_comparisons": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in right_successor
+            for checker in ("official", "lean4lean")
+        ),
+        "nanoda_and_kiota_accept_both_right_successor_comparisons": all(
+            row["candidate_outcomes"][checker] == "ACCEPT"
+            for row in right_successor
+            for checker in ("nanoda_baseline", "kiota")
+        ),
+        "all_checkers_reject_distinct_imax_left_parameters": (
+            set(distinct_left["candidate_outcomes"].values()) == {"REJECT"}
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "consensus": (
+                "All four checkers accept the tested imax-left-one and imax-right-zero reductions, "
+                "and reject the tested equality of IMax levels with distinct left parameters."
+            ),
+            "right_successor_disagreement": (
+                "Nanoda and Kiota accept both tested comparisons of imax with a successor right "
+                "operand against max; official Lean and Lean4Lean reject both."
+            ),
+        },
+        "scope": (
+            "Five exact universe-level declarations. The two right-successor cases characterize "
+            "an unresolved checker disagreement and are not a majority-vote contract."
+        ),
+        "upstream_action": "DISCUSS_BEFORE_FILING",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    lines = [
+        "# Universe Definitional-Equality Matrix",
+        "",
+        "| Boundary | Nanoda | Official | Kiota | Lean4Lean |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for row in rows:
+        outcomes = row["candidate_outcomes"]
+        lines.append(
+            f"| `{row['boundary']}` | {outcomes['nanoda_baseline']} | "
+            f"{outcomes['official']} | {outcomes['kiota']} | {outcomes['lean4lean']} |"
+        )
+    lines.extend([
+        "",
+        "All matched controls are accepted by all four checkers. Official Lean and Lean4Lean",
+        "agree on all five cases. Nanoda and Kiota accept the two right-successor comparisons",
+        "that both Lean implementations reject. This is a bounded observed profile, not a",
+        "complete universe-level specification or a majority-vote decision.",
+        "",
+    ])
+    OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
+    print(json.dumps({
+        "checks": checks,
+        "output": str(OUTPUT.relative_to(ROOT)),
+        "status": report["status"],
+    }, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -518,9 +518,9 @@ witness_searches_without_result: 2
 confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
-generated_regression_candidates: 16
-artifact_nodes: 158
-current_artifacts: 147
+generated_regression_candidates: 20
+artifact_nodes: 159
+current_artifacts: 148
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -528,10 +528,10 @@ milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
 cross_validators: 3
 configured_validators: 3
-cross_validation_cases: 17
-cross_validation_checker_disagreements: 9
-expected_outcomes_established: 16
-regression_candidates_with_unresolved_disagreement: 8
+cross_validation_cases: 21
+cross_validation_checker_disagreements: 11
+expected_outcomes_established: 20
+regression_candidates_with_unresolved_disagreement: 10
 milestone_5_checks_passing: 15
 transfer_experiments: 1
 positive_transfer: 1
@@ -556,10 +556,10 @@ current_assurance_status: FAIL
 current_hard_gates_passing: 4
 current_hard_gates_failing: 1
 current_failure_reason: semantic_checker_disagreements
-current_semantic_disagreements: 9
+current_semantic_disagreements: 11
 current_parse_behavior_disagreements: 1
-current_recorded_checker_runs: 904
-current_recorded_checker_seconds: 6920.734942783951
+current_recorded_checker_runs: 916
+current_recorded_checker_seconds: 6921.000308576855
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
@@ -805,19 +805,25 @@ milestone_9_checks_passing: 26
   for let annotation/value agreement and the requirement that theorem types are
   propositions. Nanoda, official Lean, Kiota, and Lean4Lean reject both exact
   violations and accept their matched controls.
-- `F-CHECKER-RULE-INVENTORY`: aggregated four bounded matrices into 13 directly
-  executable checker boundaries. Official Lean and Lean4Lean agree on all 13;
-  Nanoda differs from them on four quotient primitive signatures, and Kiota
-  differs on seven prerequisite, restored-declaration, and environment rules.
-  The inventory records unmodeled surfaces and ranks universe definitional
-  equality as the next source-derived family.
+- `F-CHECKER-RULE-INVENTORY`: aggregated five bounded matrices into 18 directly
+  executable checker boundaries. Official Lean and Lean4Lean agree on all 18;
+  Nanoda differs from them on six cases, and Kiota differs on nine. The
+  inventory records unmodeled surfaces and ranks reduction/projection typing as
+  the next source-derived family.
+- `F-UNIVERSE-DEFINITIONAL-EQUALITY-MATRIX`: characterized five exact `IMax`
+  boundaries. All four checkers accept left-one and right-zero reductions and
+  reject equality with distinct left parameters. Nanoda and Kiota accept both
+  tested comparisons of `imax` with a successor right operand against `max`;
+  official Lean and Lean4Lean reject the general case and its `imax u 1`
+  specialization while accepting matched direct-`max` controls. This remains
+  an unresolved checker-contract disagreement; no issue was filed.
 
 ### Active
 
-1. `F-UNIVERSE-DEFINITIONAL-EQUALITY-MATRIX`: use the existing distinct-`IMax`
-   consensus-rejection case as an anchor, identify adjacent source-derived
-   universe equality boundaries, and build matched controls plus a bounded
-   four-checker rule matrix.
+1. `F-REDUCTION-PROJECTION-TYPING-MATRIX`: identify exact source-derived rules
+   around application reduction, recursors, and projections, then build matched
+   controls and a bounded four-checker matrix from the highest-impact existing
+   mutation evidence.
 
 ### Waiting
 
@@ -838,6 +844,10 @@ milestone_9_checks_passing: 26
   recursor type, and constructor index. Official Lean and Lean4Lean reject all
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
+- `W-IMAX-RIGHT-SUCCESSOR`: discuss whether the two exact cases should be
+  reported to Nanoda and Kiota, Arena, or both. Official Lean and Lean4Lean
+  reject while Nanoda and Kiota accept; matched direct-`max` controls pass all
+  four checkers. Do not file automatically.
 
 ### Future Directions
 
