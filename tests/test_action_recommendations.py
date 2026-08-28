@@ -41,7 +41,16 @@ class ActionRecommendationTests(unittest.TestCase):
         ]
         self.assertTrue(external)
         self.assertTrue(all(row["human_gate"]["required"] for row in external))
-        self.assertTrue(all(row["human_gate"]["status"] == "REVIEW_REQUIRED" for row in external))
+        self.assertTrue(all(row["human_gate"]["status"] != "NOT_REQUIRED" for row in external))
+
+        completed = [row for row in external if row["execution_status"] == "COMPLETED"]
+        self.assertTrue(completed)
+        self.assertTrue(all(row["human_gate"]["status"] == "APPROVED" for row in completed))
+        self.assertTrue(all(row.get("external_reference") for row in completed))
+
+        pending = [row for row in external if row["execution_status"] == "NOT_STARTED"]
+        self.assertTrue(pending)
+        self.assertTrue(all(row["human_gate"]["status"] == "REVIEW_REQUIRED" for row in pending))
 
     def test_every_finding_has_a_concrete_action(self):
         for finding in self.report["findings"]:

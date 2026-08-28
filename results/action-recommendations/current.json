@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-28T12:00:00-04:00",
+  "generated_at": "2026-08-28T18:16:06-04:00",
   "policy": "docs/INVESTIGATION_SOP.md",
   "findings": [
     {
@@ -53,14 +53,15 @@
         },
         {
           "id": "imax-submit-arena-tests",
-          "action": "SUBMIT_CORPUS_PR",
+          "action": "PROPOSE_CORPUS_TEST",
           "target": "leanprover/lean-kernel-arena",
           "priority": "HIGH",
-          "rationale": "Arena lacks direct reject coverage for the minimal and general right-successor comparisons.",
+          "rationale": "Arena lacks direct reject coverage for the minimal and general right-successor comparisons; an issue requests contract clarification before proposing a corpus patch.",
           "prerequisites": ["completed: current implementation reproductions", "completed: Arena duplicate search found no match", "completed: expected outcome established by official Lean"],
           "external_action": true,
-          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
-          "execution_status": "NOT_STARTED"
+          "human_gate": {"required": true, "status": "APPROVED"},
+          "execution_status": "COMPLETED",
+          "external_reference": "https://github.com/leanprover/lean-kernel-arena/issues/175"
         }
       ]
     },
