@@ -519,8 +519,8 @@ confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
 generated_regression_candidates: 15
-artifact_nodes: 154
-current_artifacts: 143
+artifact_nodes: 155
+current_artifacts: 144
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -791,12 +791,18 @@ milestone_9_checks_passing: 26
   deviations but reject both Eq deviations; Kiota accepts all six. This is a
   bounded inferred contract, not a complete specification, and no issue was
   filed automatically.
+- `F-SPEC-DERIVATION-PILOT`: generalized the rule-to-test method to three
+  restored nested-declaration fields. Nanoda, official Lean, and Lean4Lean
+  reject restored recursor `k`, recursor type, and constructor-index
+  mismatches; Kiota accepts all three. Both pilot matrices are machine-derived
+  from exact differential and cross-validation evidence.
 
 ### Active
 
-1. `F-SPEC-DERIVATION-PILOT`: use the quotient matrix as the first bounded
-   reverse-engineered-spec pilot, with every inferred rule linked directly to
-   executable accept/reject cases.
+1. `F-DECLARATION-ENVIRONMENT-MATRIX`: derive the next bounded rule family from
+   universe ownership, declaration self-reference, and related environment
+   visibility cases. Keep distinct rules separate unless their source and test
+   evidence establish one shared boundary.
 
 ### Waiting
 

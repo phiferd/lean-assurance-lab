@@ -1,0 +1,107 @@
+#!/usr/bin/env python3
+"""Build the observed restored nested-declaration contract matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-restored-declaration-contract-matrix.json"
+CASES = (
+    (
+        "restored_aux_recursor_k",
+        "nanoda-gen-8237cd6d3cb2-restored-aux-k",
+        "nanoda-restored-recursor/valid-aux-k-reproduction.json",
+    ),
+    (
+        "restored_aux_recursor_type",
+        "nanoda-gen-7b603be7dc87-restored-aux-type",
+        "nanoda-restored-recursor-type/aux-type-reproduction.json",
+    ),
+    (
+        "restored_constructor_index",
+        "nanoda-gen-a59d7fa2cfb3-restored-ctor-index",
+        "nanoda-restored-ctor/ctor-index-reproduction.json",
+    ),
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    rows = []
+    for boundary, case_id, reproduction_name in CASES:
+        reproduction_path = ROOT / "results" / "investigations" / reproduction_name
+        cross_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        reproduction = json.loads(reproduction_path.read_text(encoding="utf-8"))
+        cross = json.loads(cross_path.read_text(encoding="utf-8"))
+        validators = {
+            item["checker"]: item["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        controls = {
+            item["checker"]: item["positive_control"]["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        rows.append({
+            "boundary": boundary,
+            "case_id": case_id,
+            "artifact": cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": reproduction["baseline"]["normalized_outcome"],
+                **validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": "ACCEPT",
+                **controls,
+            },
+            "evidence": {
+                "reproduction": str(reproduction_path.relative_to(ROOT)),
+                "reproduction_sha256": sha256_file(reproduction_path),
+                "cross_validation": str(cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(cross_path),
+            },
+        })
+
+    checks = {
+        "all_controls_are_accepted": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "nanoda_official_and_lean4lean_reject_all_variants": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in rows for checker in ("nanoda_baseline", "official", "lean4lean")
+        ),
+        "kiota_accepts_all_variants": all(
+            row["candidate_outcomes"]["kiota"] == "ACCEPT" for row in rows
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "nanoda": "Rejects all three tested restored nested declaration mismatches.",
+            "official": "Rejects all three tested restored nested declaration mismatches.",
+            "kiota": "Accepts all three tested restored nested declaration mismatches.",
+            "lean4lean": "Rejects all three tested restored nested declaration mismatches.",
+        },
+        "scope": (
+            "Observed behavior for three exact nested-inductive exports only. The family covers "
+            "restored auxiliary recursor k, restored auxiliary recursor type, and restored "
+            "constructor index metadata; it is not a complete inductive-declaration spec."
+        ),
+        "upstream_action": "DISCUSS_BEFORE_FILING",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
