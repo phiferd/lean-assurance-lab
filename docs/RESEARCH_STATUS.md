@@ -519,8 +519,8 @@ confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
 generated_regression_candidates: 23
-artifact_nodes: 161
-current_artifacts: 150
+artifact_nodes: 162
+current_artifacts: 151
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -566,6 +566,8 @@ community_issue_forms: 5
 milestone_9_checks_passing: 29
 action_recommendation_findings: 2
 external_actions_pending_human_review: 5
+current_upstream_action_preflight_pairs: 8
+prepared_external_action_drafts: 5
 ```
 
 ## First Mutation Result
@@ -831,17 +833,18 @@ external_actions_pending_human_review: 5
   records two findings and five recommended external actions; external issues,
   pull requests, comments, and disclosures remain blocked on explicit human
   authorization for each target.
+- `F-UPSTREAM-ACTION-PREFLIGHT`: rebuilt current Nanoda master `0505569`, Kiota
+  main `686063c`, and Lean4Lean arena `bce3448`. All eight candidate/control
+  runs reproduce the two finding families, four exact tracker searches found no
+  duplicate issues, and the public-report security assessment found no concrete
+  exploit requiring private disclosure. Five focused external drafts are
+  prepared and hash-bound; none has been submitted.
 
 ### Active
 
-1. `F-UPSTREAM-ACTION-PREFLIGHT`: reproduce the `IMax` acceptance and
-   possibly-`Prop` projection findings against current upstream heads, repeat
-   exact duplicate searches, assess public-versus-private reporting, and
-   prepare focused issue and Arena test drafts. Do not submit any external
-   action without explicit human authorization for that target.
-2. `F-REDUCTION-SEMANTICS-MATRIX`: after action-ready findings are handed off,
-   normalize the strongest existing quotient, literal, and recursor reduction
-   evidence into exact cases with matched controls.
+1. `F-REDUCTION-SEMANTICS-MATRIX`: normalize the strongest existing quotient,
+   literal, and recursor reduction evidence into exact cases with matched
+   controls while the action-ready external drafts await human review.
 
 ### Waiting
 
@@ -863,13 +866,14 @@ external_actions_pending_human_review: 5
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
 - `W-IMAX-RIGHT-SUCCESSOR`: discuss whether the two exact cases should be
-  reported to Nanoda and Kiota, Arena, or both. Official Lean and Lean4Lean
-  reject while Nanoda and Kiota accept; matched direct-`max` controls pass all
-  four checkers. Do not file automatically.
+  submitted as prepared Nanoda and Kiota issues and an Arena corpus PR. Current
+  upstream reproduction and duplicate searches are complete. All three actions
+  remain `REVIEW_REQUIRED`; do not submit without target-specific approval.
 - `W-POSSIBLY-PROP-PROJECTIONS`: discuss whether Nanoda and Lean4Lean should be
-  notified that they reject Arena tutorial good tests 094 and 095. Arena already
-  contains and explains both cases, so no Arena coverage proposal is needed.
-  Do not file implementation issues automatically.
+  notified using the two prepared issue drafts. Current upstream reproduction
+  and duplicate searches are complete. Arena already contains and explains
+  both cases, so no Arena proposal is recommended. Both implementation issues
+  remain `REVIEW_REQUIRED`.
 
 ### Future Directions
 

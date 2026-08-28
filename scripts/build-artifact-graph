@@ -441,6 +441,8 @@ def catalog() -> list[dict]:
                 "scripts/reproduce-kiota-self-reference",
                 "scripts/reproduce-kiota-universe-ownership",
                 "scripts/reproduce-nanoda-numindices-overrejection",
+                "scripts/run-upstream-validator-pair",
+                "scripts/build-upstream-action-preflight",
                 "schemas/validator-investigation-result.schema.json",
             ),
             dependencies=["script:cross-validation"],
@@ -2352,10 +2354,28 @@ def catalog() -> list[dict]:
             dependencies=[
                 "comparison:universe-definitional-equality-matrix",
                 "comparison:projection-typing-contract-matrix",
+                "investigation:upstream-action-preflight",
                 "script:community-workflow",
             ],
             required=True,
             notes="Concrete investigation recommendations are machine-readable; every external action remains human-gated.",
+        ),
+        node(
+            "investigation:upstream-action-preflight",
+            "report",
+            locator=files(
+                ".",
+                "config/nanoda-current-upstream.json",
+                "results/investigations/upstream-action-preflight/*",
+                "results/action-recommendations/drafts/*.md",
+            ),
+            dependencies=[
+                "comparison:universe-definitional-equality-matrix",
+                "comparison:projection-typing-contract-matrix",
+                "script:validator-investigations",
+            ],
+            required=True,
+            notes="Eight current-head candidate/control runs and four exact duplicate searches support five human-gated external drafts.",
         ),
     ]
 

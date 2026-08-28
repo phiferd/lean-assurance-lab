@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""Consolidate current-head reproductions into an action-readiness report."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+BASE = ROOT / "results" / "investigations" / "upstream-action-preflight"
+OUTPUT = BASE / "report.json"
+CASES = (
+    ("nanoda-imax-right-one.json", "ACCEPT"),
+    ("nanoda-imax-right-succ.json", "ACCEPT"),
+    ("kiota-imax-right-one.json", "ACCEPT"),
+    ("kiota-imax-right-succ.json", "ACCEPT"),
+    ("nanoda-projection-maybe-prop.json", "REJECT"),
+    ("nanoda-projection-maybe-prop-past.json", "REJECT"),
+    ("lean4lean-projection-maybe-prop.json", "REJECT"),
+    ("lean4lean-projection-maybe-prop-past.json", "REJECT"),
+)
+DRAFTS = (
+    "nanoda-imax-right-successor-issue.md",
+    "kiota-imax-right-successor-issue.md",
+    "nanoda-possibly-prop-projection-issue.md",
+    "lean4lean-possibly-prop-projection-issue.md",
+    "arena-imax-right-successor-pr.md",
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    evidence = []
+    reports = {}
+    for name, expected_candidate in CASES:
+        path = BASE / name
+        report = json.loads(path.read_text(encoding="utf-8"))
+        reports[name] = report
+        evidence.append({
+            "path": str(path.relative_to(ROOT)),
+            "sha256": sha256_file(path),
+        })
+
+    duplicate_path = BASE / "duplicate-searches.json"
+    duplicates = json.loads(duplicate_path.read_text(encoding="utf-8"))
+    evidence.append({
+        "path": str(duplicate_path.relative_to(ROOT)),
+        "sha256": sha256_file(duplicate_path),
+    })
+    draft_evidence = []
+    for name in DRAFTS:
+        path = ROOT / "results" / "action-recommendations" / "drafts" / name
+        record = {"path": str(path.relative_to(ROOT)), "sha256": sha256_file(path)}
+        draft_evidence.append(record)
+        evidence.append(record)
+    checks = {
+        "all_eight_pairs_completed": all(report["status"] == "PASS" for report in reports.values()),
+        "all_controls_are_accepted": all(
+            report["control"]["result"]["normalized_outcome"] == "ACCEPT"
+            for report in reports.values()
+        ),
+        "candidate_outcomes_persist_on_current_heads": all(
+            reports[name]["candidate"]["result"]["normalized_outcome"] == expected
+            for name, expected in CASES
+        ),
+        "nanoda_runs_share_one_current_revision": len({
+            report["checker"]["source_revision"]
+            for name, report in reports.items() if name.startswith("nanoda-")
+        }) == 1,
+        "kiota_runs_share_one_current_revision": len({
+            report["checker"]["source_revision"]
+            for name, report in reports.items() if name.startswith("kiota-")
+        }) == 1,
+        "lean4lean_runs_share_one_current_revision": len({
+            report["checker"]["source_revision"]
+            for name, report in reports.items() if name.startswith("lean4lean-")
+        }) == 1,
+        "exact_duplicate_searches_found_no_matches": all(
+            not search["matches"] for search in duplicates["searches"]
+        ) and len(duplicates["searches"]) == 4,
+        "all_five_external_action_drafts_are_present": len(draft_evidence) == 5,
+    }
+    revisions = {
+        "nanoda": reports["nanoda-imax-right-one.json"]["checker"]["source_revision"],
+        "kiota": reports["kiota-imax-right-one.json"]["checker"]["source_revision"],
+        "lean4lean": reports["lean4lean-projection-maybe-prop.json"]["checker"]["source_revision"],
+    }
+    result = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "current_upstream_revisions": revisions,
+        "evidence": evidence,
+        "security_assessment": {
+            "disposition": "PUBLIC_ISSUE_APPROPRIATE",
+            "rationale": (
+                "The findings are checker conformance gaps over public exported artifacts. "
+                "No false-theorem exploit, secret, or deployed-system compromise has been demonstrated."
+            ),
+            "non_claim": "This assessment does not claim that acceptance divergence is harmless or that no exploit can exist.",
+        },
+        "recommended_external_actions": [
+            {"action": "FILE_IMPLEMENTATION_ISSUE", "target": "ammkrn/nanoda_lib", "finding": "IMax right-successor acceptance", "human_gate": "REVIEW_REQUIRED"},
+            {"action": "FILE_IMPLEMENTATION_ISSUE", "target": "sankalpsthakur/kiota", "finding": "IMax right-successor acceptance", "human_gate": "REVIEW_REQUIRED"},
+            {"action": "SUBMIT_CORPUS_PR", "target": "leanprover/lean-kernel-arena", "finding": "IMax right-successor reject coverage", "human_gate": "REVIEW_REQUIRED"},
+            {"action": "FILE_IMPLEMENTATION_ISSUE", "target": "ammkrn/nanoda_lib", "finding": "possibly-Prop projection over-rejection", "human_gate": "REVIEW_REQUIRED"},
+            {"action": "FILE_IMPLEMENTATION_ISSUE", "target": "digama0/lean4lean", "finding": "possibly-Prop projection over-rejection", "human_gate": "REVIEW_REQUIRED"}
+        ],
+        "authorization": {
+            "status": "HUMAN_REVIEW_REQUIRED",
+            "external_actions_executed": 0,
+        },
+    }
+    OUTPUT.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "checks": checks,
+        "output": str(OUTPUT.relative_to(ROOT)),
+        "revisions": revisions,
+        "status": result["status"],
+    }, indent=2, sort_keys=True))
+    return 0 if result["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

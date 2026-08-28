@@ -25,6 +25,9 @@ class ActionRecommendationTests(unittest.TestCase):
         cls.report = json.loads(
             (ROOT / "results" / "action-recommendations" / "current.json").read_text()
         )
+        cls.preflight = json.loads(
+            (ROOT / "results" / "investigations" / "upstream-action-preflight" / "report.json").read_text()
+        )
 
     def test_current_recommendations_conform_to_schema(self):
         jsonschema.Draft202012Validator(self.schema).validate(self.report)
@@ -56,6 +59,13 @@ class ActionRecommendationTests(unittest.TestCase):
         for finding in self.report["findings"]:
             for evidence in finding["evidence"]:
                 self.assertEqual(module.sha256_file(ROOT / evidence["path"]), evidence["sha256"])
+
+    def test_upstream_preflight_is_complete_but_not_submitted(self):
+        self.assertEqual(self.preflight["status"], "PASS")
+        self.assertTrue(all(self.preflight["checks"].values()))
+        self.assertEqual(len(self.preflight["recommended_external_actions"]), 5)
+        self.assertEqual(self.preflight["authorization"]["status"], "HUMAN_REVIEW_REQUIRED")
+        self.assertEqual(self.preflight["authorization"]["external_actions_executed"], 0)
 
 
 if __name__ == "__main__":

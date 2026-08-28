@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Record baseline Nanoda outcomes for one candidate and matched control."""
+"""Record candidate/control outcomes from a clean external validator checkout."""
 
 from __future__ import annotations
 
@@ -13,42 +13,49 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
-CHECKER_ROOT = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
 
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
-def run(checker_root: Path, binary: Path, config: Path, artifact: Path, timeout: float) -> dict:
-    started = time.time()
-    with artifact.open("rb") as handle:
-        try:
-            proc = subprocess.run(
-                [str(binary), str(config)],
-                cwd=checker_root,
-                stdin=handle,
-                stdout=subprocess.PIPE,
-                stderr=subprocess.PIPE,
-                timeout=timeout,
-            )
-            outcome = "ACCEPT" if proc.returncode == 0 else "REJECT"
-            exit_code = proc.returncode
-            stdout = proc.stdout
-            stderr = proc.stderr
-        except subprocess.TimeoutExpired as exc:
-            outcome = "TIMEOUT"
-            exit_code = None
-            stdout = exc.stdout or b""
-            stderr = exc.stderr or b""
+def run(checker_root: Path, command: list[str], timeout: float) -> dict:
+    started = time.monotonic()
+    try:
+        proc = subprocess.run(
+            command,
+            cwd=checker_root,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            timeout=timeout,
+        )
+        outcome = "ACCEPT" if proc.returncode == 0 else "REJECT"
+        exit_code = proc.returncode
+        stdout = proc.stdout
+        stderr = proc.stderr
+    except subprocess.TimeoutExpired as exc:
+        outcome = "TIMEOUT"
+        exit_code = None
+        stdout = exc.stdout or b""
+        stderr = exc.stderr or b""
     return {
         "normalized_outcome": outcome,
         "exit_code": exit_code,
-        "seconds": time.time() - started,
+        "seconds": time.monotonic() - started,
         "stdout_sha256": hashlib.sha256(stdout).hexdigest(),
         "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
         "stderr_tail": stderr.decode(errors="replace")[-2000:],
     }
+
+
+def revision(checker_root: Path) -> str:
+    return subprocess.run(
+        ["git", "rev-parse", "HEAD"],
+        cwd=checker_root,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
 
 
 def main() -> int:
@@ -56,45 +63,55 @@ def main() -> int:
     parser.add_argument("case_id")
     parser.add_argument("candidate", type=Path)
     parser.add_argument("--control", type=Path, required=True)
-    parser.add_argument("--config", type=Path, default=CHECKER_ROOT / "config.json")
-    parser.add_argument("--checker-root", type=Path, default=CHECKER_ROOT)
+    parser.add_argument("--checker-id", required=True)
+    parser.add_argument("--checker-root", type=Path, required=True)
+    parser.add_argument("--binary-relative", type=Path, required=True)
+    parser.add_argument("--import-flag")
     parser.add_argument("--timeout", type=float, default=300.0)
     parser.add_argument("--output", type=Path, required=True)
     args = parser.parse_args()
 
     checker_root = args.checker_root.resolve()
-    binary = checker_root / "target" / "release" / "nanoda_bin"
+    binary = checker_root / args.binary_relative
     candidate = args.candidate.resolve()
     control = args.control.resolve()
-    config = args.config.resolve()
-    source_revision = subprocess.run(
-        ["git", "rev-parse", "HEAD"],
+    dirty = subprocess.run(
+        ["git", "status", "--porcelain"],
         cwd=checker_root,
         check=True,
-        stdout=subprocess.PIPE,
         text=True,
+        stdout=subprocess.PIPE,
     ).stdout.strip()
+    if dirty:
+        raise SystemExit("external validator checkout is not clean")
+
+    def command(artifact: Path) -> list[str]:
+        parts = [str(binary)]
+        if args.import_flag:
+            parts.append(args.import_flag)
+        parts.append(str(artifact))
+        return parts
+
     result = {
         "schema_version": 1,
         "case_id": args.case_id,
         "created_at": datetime.now(timezone.utc).isoformat(),
         "checker": {
-            "id": "nanoda",
-            "binary": "<checker-root>/target/release/nanoda_bin",
+            "id": args.checker_id,
+            "source_revision": revision(checker_root),
+            "source_clean": True,
+            "binary": f"<checker-root>/{args.binary_relative}",
             "binary_sha256": sha256_file(binary),
-            "config": str(config.relative_to(ROOT)),
-            "config_sha256": sha256_file(config),
-            "source_revision": source_revision,
         },
         "candidate": {
             "path": str(candidate.relative_to(ROOT)),
             "sha256": sha256_file(candidate),
-            "result": run(checker_root, binary, config, candidate, args.timeout),
+            "result": run(checker_root, command(candidate), args.timeout),
         },
         "control": {
             "path": str(control.relative_to(ROOT)),
             "sha256": sha256_file(control),
-            "result": run(checker_root, binary, config, control, args.timeout),
+            "result": run(checker_root, command(control), args.timeout),
         },
         "timeout_seconds": args.timeout,
     }
@@ -107,10 +124,10 @@ def main() -> int:
     args.output.parent.mkdir(parents=True, exist_ok=True)
     args.output.write_text(json.dumps(result, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     print(json.dumps({
-        "output": str(args.output),
-        "status": result["status"],
         "candidate": result["candidate"]["result"]["normalized_outcome"],
         "control": result["control"]["result"]["normalized_outcome"],
+        "output": str(args.output),
+        "status": result["status"],
     }, indent=2, sort_keys=True))
     return 0 if result["status"] == "PASS" else 1
 
