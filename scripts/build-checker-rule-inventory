@@ -18,6 +18,7 @@ MATRICES = (
     ("declaration_environment", ROOT / "results" / "investigations" / "nanoda-declaration-environment-contract-matrix.json"),
     ("core_declaration_typing", ROOT / "results" / "investigations" / "nanoda-core-declaration-contract-matrix.json"),
     ("universe_definitional_equality", ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.json"),
+    ("projection_typing", ROOT / "results" / "investigations" / "nanoda-projection-typing-contract-matrix.json"),
 )
 CHECKERS = ("nanoda_baseline", "official", "kiota", "lean4lean")
 
@@ -67,13 +68,13 @@ def main() -> int:
             }
 
     checks = {
-        "five_source_matrices_are_present": len(matrix_evidence) == 5,
-        "eighteen_boundaries_are_directly_executable": len(boundaries) == 18,
-        "official_and_lean4lean_agree_on_all_boundaries": (
-            pairwise["official__lean4lean"]["disagree"] == 0
+        "six_source_matrices_are_present": len(matrix_evidence) == 6,
+        "twenty_one_boundaries_are_directly_executable": len(boundaries) == 21,
+        "official_and_lean4lean_differ_on_two_boundaries": (
+            pairwise["official__lean4lean"]["disagree"] == 2
         ),
-        "nanoda_differs_from_official_on_six_boundaries": (
-            pairwise["nanoda_baseline__official"]["disagree"] == 6
+        "nanoda_differs_from_official_on_eight_boundaries": (
+            pairwise["nanoda_baseline__official"]["disagree"] == 8
         ),
         "kiota_differs_from_official_on_nine_boundaries": (
             pairwise["official__kiota"]["disagree"] == 9
@@ -91,7 +92,7 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "application reduction, recursors, and projections",
+                "application, recursor, quotient, and literal reduction",
                 "ordinary inductive positivity and parameter uniformity",
                 "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
@@ -100,10 +101,10 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "reduction_and_projection_typing",
+                "family": "reduction_semantics",
                 "reason": (
-                    "The mutation corpus has several kills, but exact expected-outcome evidence is "
-                    "less consistently normalized than in the completed families."
+                    "Projection typing now has direct cases, while quotient, literal, and recursor "
+                    "reduction evidence is not yet normalized into one rule matrix."
                 ),
             },
             {
@@ -115,7 +116,7 @@ def main() -> int:
                 ),
             },
         ],
-        "scope": "Inventory of 18 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+        "scope": "Inventory of 21 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     display_names = {
@@ -127,7 +128,7 @@ def main() -> int:
     lines = [
         "# Checker Rule Inventory",
         "",
-        f"Five bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
+        f"Six bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
         "",
         "| Checker | Accept | Reject | Total |",
         "| --- | ---: | ---: | ---: |",
@@ -139,22 +140,22 @@ def main() -> int:
         )
     lines.extend([
         "",
-        f"Official Lean and Lean4Lean agree on all {len(boundaries)} boundaries. Nanoda differs",
-        "from them on four serialized quotient signatures and two universe right-successor",
-        "comparisons. Kiota differs from them on seven declaration/prerequisite boundaries and",
-        "the same two universe comparisons.",
+        "Official Lean and Lean4Lean differ only on the two possibly-Prop projection cases.",
+        "Nanoda differs from official Lean on those two cases, four serialized quotient",
+        "signatures, and two universe right-successor comparisons. Kiota differs from official",
+        "Lean on seven declaration/prerequisite boundaries and the two universe comparisons.",
         "",
         "These counts are descriptive, not votes. Exact artifacts, controls, expected-outcome",
         "evidence, and checker outcomes remain linked in `checker-rule-inventory.json`.",
         "",
         "## Coverage Gaps",
         "",
-        "- application reduction, recursors, and projections;",
+        "- application, recursor, quotient, and literal reduction;",
         "- ordinary inductive positivity and parameter uniformity;",
         "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is reduction and projection typing.",
+        "The next ranked family is reduction semantics.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")

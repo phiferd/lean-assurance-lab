@@ -6,7 +6,7 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `2665748500a02369f1b58d2b5e5fa309e75ca3d9e70edc2a7d878e564f7960a8`
+Snapshot SHA-256: `0e8036de11e3cb044411397d719825edbcaa63659de02785ac9e9f5ccd17dbee`
 
 ## Current Gate: FAIL
 
@@ -40,10 +40,10 @@ erase those states.
 - Rotating held-out evaluation: score 0.5 to
   1.0 across 2 one-mutant folds;
   classification `MIXED_WITH_POSITIVE_GAIN`.
-- Unresolved disagreements: 11 semantic
+- Unresolved disagreements: 13 semantic
   and 1 parse-behavior case.
-- Recorded execution: 916
-  checker runs and 6921.00
+- Recorded execution: 925
+  checker runs and 6921.17
   checker-seconds across the non-overlapping components listed in the snapshot.
 
 ## What This Means

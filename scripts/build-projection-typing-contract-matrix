@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""Build the observed projection typing contract matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-projection-typing-contract-matrix.json"
+OUTPUT_MD = ROOT / "results" / "investigations" / "nanoda-projection-typing-contract-matrix.md"
+CASES = (
+    ("possibly_prop_direct_field_projection", "projection-maybe-prop", "projection-maybe-prop-nanoda.json"),
+    ("possibly_prop_dependent_past_field_projection", "projection-maybe-prop-past", "projection-maybe-prop-past-nanoda.json"),
+    ("definite_prop_data_projection", "projection-definite-prop-data", "projection-definite-prop-data-nanoda.json"),
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    rows = []
+    for boundary, case_id, nanoda_name in CASES:
+        nanoda_path = ROOT / "results" / "investigations" / "nanoda-reduction-projection-typing" / nanoda_name
+        cross_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        nanoda = json.loads(nanoda_path.read_text(encoding="utf-8"))
+        cross = json.loads(cross_path.read_text(encoding="utf-8"))
+        validator_outcomes = {
+            item["checker"]: item["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        control_outcomes = {
+            item["checker"]: item["positive_control"]["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        rows.append({
+            "boundary": boundary,
+            "case_id": case_id,
+            "artifact": cross["artifact"],
+            "expected_outcome": cross["expected_outcome"],
+            "classification": cross["classification"],
+            "candidate_outcomes": {
+                "nanoda_baseline": nanoda["candidate"]["result"]["normalized_outcome"],
+                **validator_outcomes,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": nanoda["control"]["result"]["normalized_outcome"],
+                **control_outcomes,
+            },
+            "evidence": {
+                "nanoda_pair": str(nanoda_path.relative_to(ROOT)),
+                "nanoda_pair_sha256": sha256_file(nanoda_path),
+                "cross_validation": str(cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(cross_path),
+            },
+        })
+
+    possibly_prop = rows[:2]
+    definite_prop = rows[2]
+    checks = {
+        "all_controls_are_accepted": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "official_and_kiota_accept_both_possibly_prop_projections": all(
+            row["candidate_outcomes"][checker] == "ACCEPT"
+            for row in possibly_prop for checker in ("official", "kiota")
+        ),
+        "nanoda_and_lean4lean_reject_both_possibly_prop_projections": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in possibly_prop for checker in ("nanoda_baseline", "lean4lean")
+        ),
+        "all_checkers_reject_definite_prop_data_projection": (
+            set(definite_prop["candidate_outcomes"].values()) == {"REJECT"}
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "possibly_prop_projection": (
+                "Official Lean and Kiota accept both Arena-good possibly-Prop projection cases; "
+                "Nanoda and Lean4Lean reject both."
+            ),
+            "definite_prop_data_projection": (
+                "All four checkers reject the Arena-bad data projection from a structure definitely in Prop."
+            ),
+        },
+        "scope": (
+            "Three exact Arena tutorial exports with one structure-matched non-projection control. "
+            "The possibly-Prop cases remain unresolved checker disagreements."
+        ),
+        "upstream_action": "DISCUSS_BEFORE_FILING",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    lines = [
+        "# Projection Typing Contract Matrix",
+        "",
+        "| Boundary | Nanoda | Official | Kiota | Lean4Lean |",
+        "| --- | --- | --- | --- | --- |",
+    ]
+    for row in rows:
+        outcomes = row["candidate_outcomes"]
+        lines.append(
+            f"| `{row['boundary']}` | {outcomes['nanoda_baseline']} | "
+            f"{outcomes['official']} | {outcomes['kiota']} | {outcomes['lean4lean']} |"
+        )
+    lines.extend([
+        "",
+        "All matched controls are accepted. Official Lean and Kiota accept the two Arena-good",
+        "possibly-Prop projections, while Nanoda and Lean4Lean reject them. All four reject",
+        "definite data projection from `Prop`. These are exact characterization cases, not votes.",
+        "",
+    ])
+    OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
+    print(json.dumps({
+        "checks": checks,
+        "output": str(OUTPUT.relative_to(ROOT)),
+        "status": report["status"],
+    }, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

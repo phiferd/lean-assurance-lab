@@ -1,0 +1,126 @@
+{
+  "cases": [
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 131
+        },
+        "path": "corpus/generated/projection-maybe-prop.ndjson",
+        "sha256": "b454eb79be1a89d37eea09a670a8fc38d30fd0b3215c57d130ab4c984d531894"
+      },
+      "boundary": "possibly_prop_direct_field_projection",
+      "candidate_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "ACCEPT"
+      },
+      "case_id": "projection-maybe-prop",
+      "classification": "CHECKER_DISAGREEMENT",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/projection-maybe-prop/results.json",
+        "cross_validation_sha256": "1c86d2c98709b0ee49b5174e01f825e72b0adfab67ac7793e247842df3051fef",
+        "nanoda_pair": "results/investigations/nanoda-reduction-projection-typing/projection-maybe-prop-nanoda.json",
+        "nanoda_pair_sha256": "94324086e0e0f2dfc24577a43e610917179aa4ba5690e9878d13ad98a58f9d14"
+      },
+      "expected_outcome": "ACCEPT"
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 131
+        },
+        "path": "corpus/generated/projection-maybe-prop-past.ndjson",
+        "sha256": "f5293856199b9b3eb82b3abb4bcb06121807cf9c828a049cfcc9c2f022002e38"
+      },
+      "boundary": "possibly_prop_dependent_past_field_projection",
+      "candidate_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "ACCEPT"
+      },
+      "case_id": "projection-maybe-prop-past",
+      "classification": "CHECKER_DISAGREEMENT",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/projection-maybe-prop-past/results.json",
+        "cross_validation_sha256": "9cb9574afd18790b6d6847838ae06bbec587e429b68eafe00cdbcaffe2818b9b",
+        "nanoda_pair": "results/investigations/nanoda-reduction-projection-typing/projection-maybe-prop-past-nanoda.json",
+        "nanoda_pair_sha256": "866b7a3e4be9bdd197fba1b5b5c45a69def20bffbf92cace6068f76abb2752ba"
+      },
+      "expected_outcome": "ACCEPT"
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 143
+        },
+        "path": "corpus/generated/projection-definite-prop-data.ndjson",
+        "sha256": "1dbc013754ba41dae8c0449252708027e7f59fd8523d0896f2c8aae65d942b29"
+      },
+      "boundary": "definite_prop_data_projection",
+      "candidate_outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "projection-definite-prop-data",
+      "classification": "CONFIRMED",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/projection-definite-prop-data/results.json",
+        "cross_validation_sha256": "877a05b0d78e4feaf67c8f8013370dd4f88936c1b35c256de535d53aa544ee0f",
+        "nanoda_pair": "results/investigations/nanoda-reduction-projection-typing/projection-definite-prop-data-nanoda.json",
+        "nanoda_pair_sha256": "ab36a7f1c0cf65b05c7c2b37b973745dff2f681b7829e42dda54e3c7afcd69bd"
+      },
+      "expected_outcome": "REJECT"
+    }
+  ],
+  "checks": {
+    "all_checkers_reject_definite_prop_data_projection": true,
+    "all_controls_are_accepted": true,
+    "nanoda_and_lean4lean_reject_both_possibly_prop_projections": true,
+    "official_and_kiota_accept_both_possibly_prop_projections": true
+  },
+  "observed_rules": {
+    "definite_prop_data_projection": "All four checkers reject the Arena-bad data projection from a structure definitely in Prop.",
+    "possibly_prop_projection": "Official Lean and Kiota accept both Arena-good possibly-Prop projection cases; Nanoda and Lean4Lean reject both."
+  },
+  "schema_version": 1,
+  "scope": "Three exact Arena tutorial exports with one structure-matched non-projection control. The possibly-Prop cases remain unresolved checker disagreements.",
+  "status": "PASS",
+  "upstream_action": "DISCUSS_BEFORE_FILING"
+}

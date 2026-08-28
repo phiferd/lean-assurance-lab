@@ -154,6 +154,30 @@
         "sha256": "c44c05d9fc218bce62b01e1eb8f7c8f774b51770e4fe983930864f777a8334bd"
       },
       {
+        "case_id": "projection-definite-prop-data",
+        "classification": "CONFIRMED",
+        "disagreement_kind": null,
+        "path": "results/cross-validation/projection-definite-prop-data/results.json",
+        "semantic_status": "ESTABLISHED",
+        "sha256": "877a05b0d78e4feaf67c8f8013370dd4f88936c1b35c256de535d53aa544ee0f"
+      },
+      {
+        "case_id": "projection-maybe-prop",
+        "classification": "CHECKER_DISAGREEMENT",
+        "disagreement_kind": "SEMANTIC_OUTCOME",
+        "path": "results/cross-validation/projection-maybe-prop/results.json",
+        "semantic_status": "UNRESOLVED",
+        "sha256": "1c86d2c98709b0ee49b5174e01f825e72b0adfab67ac7793e247842df3051fef"
+      },
+      {
+        "case_id": "projection-maybe-prop-past",
+        "classification": "CHECKER_DISAGREEMENT",
+        "disagreement_kind": "SEMANTIC_OUTCOME",
+        "path": "results/cross-validation/projection-maybe-prop-past/results.json",
+        "semantic_status": "UNRESOLVED",
+        "sha256": "9cb9574afd18790b6d6847838ae06bbec587e429b68eafe00cdbcaffe2818b9b"
+      },
+      {
         "case_id": "universe-imax-left-one",
         "classification": "CONFIRMED",
         "disagreement_kind": null,
@@ -196,7 +220,7 @@
     ],
     "majority_vote_used": false,
     "parse_behavior_count": 1,
-    "semantic_unresolved_count": 11
+    "semantic_unresolved_count": 13
   },
   "evidence": {
     "coverage_identity": {
@@ -230,9 +254,9 @@
       "sha256": "968e7c95cb895fbf7ec23fac27fa92c7ae26f3a4943e6df179970ded5fb1174b"
     },
     "mutation_report": {
-      "bytes": 7886,
+      "bytes": 7887,
       "path": "results/assurance/current-mutation-report.json",
-      "sha256": "8904ac663836dc115972a05b6a3215f30b0a4cb867c3bf952a2868fd3bf4d2fe"
+      "sha256": "ea6140b114bb9371c9405b1d0f1182058ca12d7aba0751c9c80fb681096193c5"
     },
     "policy": {
       "bytes": 1751,
@@ -240,9 +264,9 @@
       "sha256": "d79c5297a7b4f8612489757654943fb814943956171abb35fc458bcecbc7a0ef"
     },
     "regressions": {
-      "bytes": 16713,
+      "bytes": 19101,
       "path": "corpus/regression-candidates/current.json",
-      "sha256": "ea04143a76e4b2b2c40d5cbeab562d08696e09a12d1ec89f1a5134a15cbeb5a2"
+      "sha256": "6a768032a13073041189803a617932c18a7f66a132b4abdf88d1db69179dca88"
     },
     "rotating": {
       "bytes": 4142,
@@ -268,8 +292,8 @@
         "name": "witness_search_and_minimization"
       },
       {
-        "checker_runs": 62,
-        "checker_seconds": 1.2235831691650674,
+        "checker_runs": 71,
+        "checker_seconds": 1.3914123362628743,
         "name": "cross_validation"
       },
       {
@@ -293,8 +317,8 @@
         "wall_seconds": 576.6428446769714
       }
     ],
-    "recorded_checker_runs": 916,
-    "recorded_checker_seconds": 6921.000308576855,
+    "recorded_checker_runs": 925,
+    "recorded_checker_seconds": 6921.168137743953,
     "scope": "Sum of non-overlapping recorded checker-run components plus separately labeled batch/build wall time; setup and historical superseded work are not reconstructed."
   },
   "gate": {
@@ -381,11 +405,14 @@
           "results/expected-outcomes/universe-imax-left-one.json",
           "results/expected-outcomes/universe-imax-right-zero.json",
           "results/expected-outcomes/universe-imax-right-one.json",
-          "results/expected-outcomes/universe-imax-right-succ.json"
+          "results/expected-outcomes/universe-imax-right-succ.json",
+          "results/expected-outcomes/projection-maybe-prop.json",
+          "results/expected-outcomes/projection-maybe-prop-past.json",
+          "results/expected-outcomes/projection-definite-prop-data.json"
         ],
         "observed": {
-          "candidates": 20,
-          "established": 20
+          "candidates": 23,
+          "established": 23
         },
         "status": "PASS",
         "summary": "Every generated regression candidate carries hash-bound expected-outcome evidence."
@@ -400,13 +427,15 @@
           "results/cross-validation/nanoda-gen-a59d7fa2cfb3-restored-ctor-index/results.json",
           "results/cross-validation/nanoda-gen-cd41c71bc814-quot-eq-refl/results.json",
           "results/cross-validation/nanoda-gen-d39c873fbcb7-quot-eq-type/results.json",
+          "results/cross-validation/projection-maybe-prop/results.json",
+          "results/cross-validation/projection-maybe-prop-past/results.json",
           "results/cross-validation/universe-imax-right-one/results.json",
           "results/cross-validation/universe-imax-right-succ/results.json",
           "results/investigations/nanoda-numindices-overrejection/upstream-main.json"
         ],
         "observed": {
           "maximum": 0,
-          "unresolved": 11
+          "unresolved": 13
         },
         "status": "FAIL",
         "summary": "Unresolved semantic checker disagreements must not exceed the configured maximum."
@@ -420,7 +449,7 @@
     "status": "FAIL"
   },
   "generated_regressions": {
-    "artifact_count": 20,
+    "artifact_count": 23,
     "candidates": [
       {
         "case_id": "nanoda-0003-original",
@@ -521,10 +550,25 @@
         "case_id": "universe-imax-right-succ",
         "expected_outcome": "REJECT",
         "status": "EXPECTED_OUTCOME_ESTABLISHED_WITH_UNRESOLVED_DISAGREEMENT"
+      },
+      {
+        "case_id": "projection-maybe-prop",
+        "expected_outcome": "ACCEPT",
+        "status": "EXPECTED_OUTCOME_ESTABLISHED_WITH_UNRESOLVED_DISAGREEMENT"
+      },
+      {
+        "case_id": "projection-maybe-prop-past",
+        "expected_outcome": "ACCEPT",
+        "status": "EXPECTED_OUTCOME_ESTABLISHED_WITH_UNRESOLVED_DISAGREEMENT"
+      },
+      {
+        "case_id": "projection-definite-prop-data",
+        "expected_outcome": "REJECT",
+        "status": "EXPECTED_OUTCOME_ESTABLISHED"
       }
     ],
     "ready_for_upstream": 0,
-    "semantic_case_count": 20
+    "semantic_case_count": 23
   },
   "held_out_evaluation": {
     "augmented_score": 1.0,
@@ -571,7 +615,7 @@
         "sha256": "8b713e2b32402bf0028b1bd54440f162e4a493a3078f5998cd4654911bb6d083"
       }
     ],
-    "producing_repository_revision": "821ee33ec50d304a7c0832a43fe986624d1c93e9"
+    "producing_repository_revision": "4fa10182ba0f5e778b14fd999ffe3ff65486caaa"
   },
   "mutation_testing": {
     "equivalent_mutants": 12,

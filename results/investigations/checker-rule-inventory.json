@@ -197,37 +197,70 @@
         "nanoda_baseline": "REJECT",
         "official": "REJECT"
       }
+    },
+    {
+      "boundary": "possibly_prop_direct_field_projection",
+      "case_id": "projection-maybe-prop",
+      "family": "projection_typing",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "possibly_prop_dependent_past_field_projection",
+      "case_id": "projection-maybe-prop-past",
+      "family": "projection_typing",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "definite_prop_data_projection",
+      "case_id": "projection-definite-prop-data",
+      "family": "projection_typing",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
     }
   ],
-  "boundary_count": 18,
+  "boundary_count": 21,
   "checker_profiles": {
     "kiota": {
-      "accept": 15,
-      "reject": 3,
-      "total": 18
+      "accept": 17,
+      "reject": 4,
+      "total": 21
     },
     "lean4lean": {
       "accept": 6,
-      "reject": 12,
-      "total": 18
+      "reject": 15,
+      "total": 21
     },
     "nanoda_baseline": {
       "accept": 4,
-      "reject": 14,
-      "total": 18
+      "reject": 17,
+      "total": 21
     },
     "official": {
-      "accept": 6,
-      "reject": 12,
-      "total": 18
+      "accept": 8,
+      "reject": 13,
+      "total": 21
     }
   },
   "checks": {
-    "eighteen_boundaries_are_directly_executable": true,
-    "five_source_matrices_are_present": true,
     "kiota_differs_from_official_on_nine_boundaries": true,
-    "nanoda_differs_from_official_on_six_boundaries": true,
-    "official_and_lean4lean_agree_on_all_boundaries": true
+    "nanoda_differs_from_official_on_eight_boundaries": true,
+    "official_and_lean4lean_differ_on_two_boundaries": true,
+    "six_source_matrices_are_present": true,
+    "twenty_one_boundaries_are_directly_executable": true
   },
   "coverage_scope": {
     "covered_families": [
@@ -235,10 +268,11 @@
       "restored_nested_declarations",
       "declaration_environment",
       "core_declaration_typing",
-      "universe_definitional_equality"
+      "universe_definitional_equality",
+      "projection_typing"
     ],
     "unmodeled_surfaces": [
-      "application reduction, recursors, and projections",
+      "application, recursor, quotient, and literal reduction",
       "ordinary inductive positivity and parameter uniformity",
       "literal extensions and parser/configuration behavior",
       "axiom policy and unsafe declaration handling"
@@ -274,45 +308,51 @@
       "family": "universe_definitional_equality",
       "path": "results/investigations/nanoda-universe-definitional-equality-matrix.json",
       "sha256": "812985451f07a7659283bae2803904fb68379d32a80e70b4d2029a47e86b6403"
+    },
+    {
+      "boundary_count": 3,
+      "family": "projection_typing",
+      "path": "results/investigations/nanoda-projection-typing-contract-matrix.json",
+      "sha256": "4600a95cb351a2cbc7dfcfbeff8068a935f4f4b65ac6c98418f7425f4693e3ac"
     }
   ],
   "pairwise_profiles": {
     "kiota__lean4lean": {
-      "agree": 9,
-      "disagree": 9,
-      "total": 18
+      "agree": 10,
+      "disagree": 11,
+      "total": 21
     },
     "nanoda_baseline__kiota": {
-      "agree": 7,
-      "disagree": 11,
-      "total": 18
+      "agree": 8,
+      "disagree": 13,
+      "total": 21
     },
     "nanoda_baseline__lean4lean": {
-      "agree": 12,
+      "agree": 15,
       "disagree": 6,
-      "total": 18
+      "total": 21
     },
     "nanoda_baseline__official": {
-      "agree": 12,
-      "disagree": 6,
-      "total": 18
+      "agree": 13,
+      "disagree": 8,
+      "total": 21
     },
     "official__kiota": {
-      "agree": 9,
+      "agree": 12,
       "disagree": 9,
-      "total": 18
+      "total": 21
     },
     "official__lean4lean": {
-      "agree": 18,
-      "disagree": 0,
-      "total": 18
+      "agree": 19,
+      "disagree": 2,
+      "total": 21
     }
   },
   "ranked_next_families": [
     {
-      "family": "reduction_and_projection_typing",
+      "family": "reduction_semantics",
       "rank": 1,
-      "reason": "The mutation corpus has several kills, but exact expected-outcome evidence is less consistently normalized than in the completed families."
+      "reason": "Projection typing now has direct cases, while quotient, literal, and recursor reduction evidence is not yet normalized into one rule matrix."
     },
     {
       "family": "ordinary_inductive_well_formedness",
@@ -321,6 +361,6 @@
     }
   ],
   "schema_version": 1,
-  "scope": "Inventory of 18 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+  "scope": "Inventory of 21 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
   "status": "PASS"
 }
