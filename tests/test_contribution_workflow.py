@@ -81,6 +81,13 @@ class ContributionWorkflowTests(unittest.TestCase):
         errors = validate_manifest(ROOT, manifest, self.manifest_schema, self.catalog)
         self.assertTrue(any("does not match" in error or "outside repository" in error for error in errors))
 
+    def test_bug_investigations_require_action_and_authorization_metadata(self):
+        row = next(item for item in self.catalog["contribution_types"] if item["id"] == "bug-investigation")
+        self.assertTrue(
+            {"recommended_action", "recommendation_status", "human_authorization_status"}
+            <= set(row["required_type_metadata"])
+        )
+
 
 if __name__ == "__main__":
     unittest.main()

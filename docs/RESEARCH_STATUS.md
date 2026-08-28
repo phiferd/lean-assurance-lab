@@ -519,8 +519,8 @@ confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
 generated_regression_candidates: 23
-artifact_nodes: 160
-current_artifacts: 149
+artifact_nodes: 161
+current_artifacts: 150
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -563,7 +563,9 @@ current_recorded_checker_seconds: 6921.168137743953
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
-milestone_9_checks_passing: 26
+milestone_9_checks_passing: 29
+action_recommendation_findings: 2
+external_actions_pending_human_review: 5
 ```
 
 ## First Mutation Result
@@ -823,13 +825,23 @@ milestone_9_checks_passing: 26
   Nanoda and Lean4Lean reject both. All four reject the Arena-bad definite-Prop
   data projection and accept the control. The aggregate inventory now covers
   21 boundaries across six matrices.
+- `F-INVESTIGATION-ACTION-SOP`: made concrete follow-through a constitutional
+  requirement. Every mature finding must recommend a named action, target,
+  priority, prerequisites, and evidence. A schema-backed current register
+  records two findings and five recommended external actions; external issues,
+  pull requests, comments, and disclosures remain blocked on explicit human
+  authorization for each target.
 
 ### Active
 
-1. `F-REDUCTION-SEMANTICS-MATRIX`: normalize the strongest existing quotient,
-   literal, and recursor reduction evidence into exact cases with matched
-   controls, keeping reduction behavior separate from the completed projection
-   typing matrix.
+1. `F-UPSTREAM-ACTION-PREFLIGHT`: reproduce the `IMax` acceptance and
+   possibly-`Prop` projection findings against current upstream heads, repeat
+   exact duplicate searches, assess public-versus-private reporting, and
+   prepare focused issue and Arena test drafts. Do not submit any external
+   action without explicit human authorization for that target.
+2. `F-REDUCTION-SEMANTICS-MATRIX`: after action-ready findings are handed off,
+   normalize the strongest existing quotient, literal, and recursor reduction
+   evidence into exact cases with matched controls.
 
 ### Waiting
 

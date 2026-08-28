@@ -1,0 +1,90 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "generated_at", "policy", "findings"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "policy": {"const": "docs/INVESTIGATION_SOP.md"},
+    "findings": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/finding"}
+    }
+  },
+  "$defs": {
+    "bound_file": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      }
+    },
+    "human_gate": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["required", "status"],
+      "properties": {
+        "required": {"type": "boolean"},
+        "status": {"enum": ["NOT_REQUIRED", "REVIEW_REQUIRED", "APPROVED", "DECLINED"]}
+      }
+    },
+    "recommendation": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id", "action", "target", "priority", "rationale", "prerequisites",
+        "external_action", "human_gate", "execution_status"
+      ],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "action": {
+          "enum": [
+            "CONTINUE_INVESTIGATION", "VALIDATE_CURRENT_UPSTREAM",
+            "FILE_IMPLEMENTATION_ISSUE", "PROPOSE_CORPUS_TEST",
+            "SUBMIT_IMPLEMENTATION_PR", "SUBMIT_CORPUS_PR",
+            "RESPONSIBLE_DISCLOSURE", "NO_EXTERNAL_ACTION"
+          ]
+        },
+        "target": {"type": "string", "minLength": 1},
+        "priority": {"enum": ["HIGH", "MEDIUM", "LOW"]},
+        "rationale": {"type": "string", "minLength": 1},
+        "prerequisites": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "external_action": {"type": "boolean"},
+        "human_gate": {"$ref": "#/$defs/human_gate"},
+        "execution_status": {"enum": ["NOT_STARTED", "IN_PROGRESS", "COMPLETED", "DEFERRED"]},
+        "external_reference": {"type": "string", "format": "uri"}
+      },
+      "allOf": [
+        {
+          "if": {"properties": {"external_action": {"const": true}}, "required": ["external_action"]},
+          "then": {
+            "properties": {
+              "human_gate": {
+                "properties": {
+                  "required": {"const": true},
+                  "status": {"enum": ["REVIEW_REQUIRED", "APPROVED", "DECLINED"]}
+                }
+              }
+            }
+          }
+        }
+      ]
+    },
+    "finding": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": ["id", "summary", "disposition", "evidence", "recommendations"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "summary": {"type": "string", "minLength": 1},
+        "disposition": {"enum": ["UNDER_INVESTIGATION", "ACTION_RECOMMENDED", "ACTION_TAKEN", "DEFERRED", "NO_EXTERNAL_ACTION"]},
+        "evidence": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/bound_file"}},
+        "recommendations": {"type": "array", "minItems": 1, "items": {"$ref": "#/$defs/recommendation"}}
+      }
+    }
+  }
+}

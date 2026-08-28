@@ -12,6 +12,8 @@ then using surviving mutants to drive adversarial exported-artifact generation.
 The project is governed by `CONSTITUTION.md`. The current execution plan lives
 in `docs/PROJECT_PLAN.md`. The public assurance state is in
 `docs/PUBLIC_STATUS.md`, and contribution requirements are in `CONTRIBUTING.md`.
+Completed findings follow the concrete recommendation and human authorization
+rules in [`docs/INVESTIGATION_SOP.md`](docs/INVESTIGATION_SOP.md).
 Evaluated proposals for post-milestone work, including the boundary between
 near-term improvements and independent exploratory research, are in
 [`docs/research/RESEARCH_BACKED_IMPROVEMENTS.md`](docs/research/RESEARCH_BACKED_IMPROVEMENTS.md).
@@ -48,13 +50,12 @@ subsystems. The measured aggregate is one positive fold and one neutral fold,
 improving the modeled held-out score from 0.5 to 1.0.
 
 The versioned current assurance snapshot reports `FAIL`: four of five hard
-checks pass, while three unresolved semantic disagreements fail the configured
-disagreement check. Two concern universe ownership between official Lean and
-Kiota. The third is a current Nanoda nested-inductive metadata over-rejection:
-official Lean and Lean4Lean accept the generated artifact while Nanoda rejects
-it. This is the intended honest result, not a failed milestone implementation.
+checks pass, while 13 unresolved semantic disagreements fail the configured
+disagreement check. The exact current cases and evidence are generated in
+`docs/PUBLIC_STATUS.md`; the failure is the intended honest result, not a failed
+milestone implementation.
 The Milestone 8 implementation gate passes all 24 checks, and the Milestone 9
-community-workflow gate passes all 25 checks.
+community-workflow gate passes all 29 checks.
 
 The amended frozen Collatz retrospective is complete and classified
 `FULL_CLASS_REDISCOVERY`. The original run recreated the affected-official/

@@ -1,0 +1,121 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-08-28T12:00:00-04:00",
+  "policy": "docs/INVESTIGATION_SOP.md",
+  "findings": [
+    {
+      "id": "imax-right-successor-checker-disagreement",
+      "summary": "Nanoda and Kiota accept two IMax right-successor comparisons that official Lean and Lean4Lean reject; all matched controls pass.",
+      "disposition": "ACTION_RECOMMENDED",
+      "evidence": [
+        {
+          "path": "results/investigations/nanoda-universe-definitional-equality-matrix.json",
+          "sha256": "812985451f07a7659283bae2803904fb68379d32a80e70b4d2029a47e86b6403"
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "imax-validate-current-heads",
+          "action": "VALIDATE_CURRENT_UPSTREAM",
+          "target": "ammkrn/nanoda_lib master and sankalpsthakur/kiota main",
+          "priority": "HIGH",
+          "rationale": "Acceptance beyond the designated reference contract may affect trusted behavior and must be checked before reporting.",
+          "prerequisites": [],
+          "external_action": false,
+          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "imax-file-nanoda-issue",
+          "action": "FILE_IMPLEMENTATION_ISSUE",
+          "target": "ammkrn/nanoda_lib",
+          "priority": "HIGH",
+          "rationale": "If current master still accepts both cases, Nanoda should receive one focused report containing the minimal and general witnesses.",
+          "prerequisites": ["current-master reproduction persists", "exact duplicate search completed", "public-report security assessment completed"],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "imax-file-kiota-issue",
+          "action": "FILE_IMPLEMENTATION_ISSUE",
+          "target": "sankalpsthakur/kiota",
+          "priority": "HIGH",
+          "rationale": "If current main still accepts both cases, Kiota should receive one focused report containing the minimal and general witnesses.",
+          "prerequisites": ["current-main reproduction persists", "exact duplicate search completed", "public-report security assessment completed"],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "imax-submit-arena-tests",
+          "action": "SUBMIT_CORPUS_PR",
+          "target": "leanprover/lean-kernel-arena",
+          "priority": "HIGH",
+          "rationale": "Arena lacks direct reject coverage for the minimal and general right-successor comparisons.",
+          "prerequisites": ["current implementation reproductions completed", "Arena duplicate search completed", "test expectation remains established by official Lean"],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        }
+      ]
+    },
+    {
+      "id": "possibly-prop-projection-overrejection",
+      "summary": "Nanoda and Lean4Lean reject Arena tutorial good tests 094 and 095 while official Lean and Kiota accept them; all checkers reject the definite-Prop data projection.",
+      "disposition": "ACTION_RECOMMENDED",
+      "evidence": [
+        {
+          "path": "results/investigations/nanoda-projection-typing-contract-matrix.json",
+          "sha256": "4600a95cb351a2cbc7dfcfbeff8068a935f4f4b65ac6c98418f7425f4693e3ac"
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "projection-validate-current-heads",
+          "action": "VALIDATE_CURRENT_UPSTREAM",
+          "target": "ammkrn/nanoda_lib master and digama0/lean4lean arena",
+          "priority": "MEDIUM",
+          "rationale": "The pinned checkers reject existing Arena-good tests; current upstream behavior must be confirmed before reporting.",
+          "prerequisites": [],
+          "external_action": false,
+          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "projection-file-nanoda-issue",
+          "action": "FILE_IMPLEMENTATION_ISSUE",
+          "target": "ammkrn/nanoda_lib",
+          "priority": "MEDIUM",
+          "rationale": "If current master still rejects tests 094 and 095, Nanoda should receive one compatibility report covering both related cases.",
+          "prerequisites": ["current-master reproduction persists", "exact duplicate search completed"],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "projection-file-lean4lean-issue",
+          "action": "FILE_IMPLEMENTATION_ISSUE",
+          "target": "digama0/lean4lean",
+          "priority": "MEDIUM",
+          "rationale": "If the current arena branch still rejects tests 094 and 095, Lean4Lean should receive one compatibility report covering both cases.",
+          "prerequisites": ["current-arena-branch reproduction persists", "exact duplicate search completed"],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "projection-no-arena-duplicate",
+          "action": "NO_EXTERNAL_ACTION",
+          "target": "leanprover/lean-kernel-arena",
+          "priority": "LOW",
+          "rationale": "Arena already contains and explains tutorial good tests 094 and 095, so another corpus proposal would duplicate existing coverage.",
+          "prerequisites": [],
+          "external_action": false,
+          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
+          "execution_status": "COMPLETED"
+        }
+      ]
+    }
+  ]
+}

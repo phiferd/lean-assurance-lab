@@ -98,6 +98,25 @@ The preferred output of a discovered gap is an improvement to the shared Lean
 validation ecosystem: a regression test, a clearer conformance case, a better
 validator check, or a documented unresolved issue.
 
+### Evidence Must Lead To A Recommendation
+
+A completed investigation must recommend what should happen next. The
+recommendation must name a concrete action, target, priority, prerequisites,
+and supporting evidence. Appropriate actions include further investigation,
+an implementation issue, a shared-corpus test, an implementation fix, a corpus
+pull request, responsible disclosure, or an explicit evidence-based decision
+that no external action is warranted. Metrics and archived evidence are not a
+sufficient endpoint when the evidence supports an ecosystem improvement.
+
+### External Actions Require Human Authorization
+
+The project may mechanically determine that an external issue, pull request, or
+disclosure is recommended and may prepare a draft. It must not publish, submit,
+or otherwise contact an external project without explicit human authorization
+for that action and target. Human gating controls execution, not analysis: a
+missing authorization must never make the recommendation vague or suppress an
+actionable finding.
+
 ### Generalization Matters
 
 Evidence is stronger when it transfers across independent implementations or
@@ -146,6 +165,8 @@ A proposed objective is aligned when it can answer yes to these questions:
 3. Are its claims scoped to exact inputs and assumptions?
 4. Does it preserve uncertainty rather than hiding or overstating it?
 5. Can community members inspect, challenge, or build on the result?
+6. Does a completed finding state a concrete recommended next action, including
+   an evidence-based recommendation of no action when appropriate?
 
 If the answer to any question is no, the objective should be revised or
 rejected.

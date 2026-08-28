@@ -11,6 +11,7 @@ from datetime import datetime
 from pathlib import Path
 
 import yaml
+import jsonschema
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT / "lib"))
@@ -70,6 +71,14 @@ def main() -> int:
     catalog = load(ROOT / "config" / "contribution-types.json")
     catalog_schema = load(ROOT / "schemas" / "contribution-types.schema.json")
     manifest_schema = load(ROOT / "schemas" / "contribution-manifest.schema.json")
+    action_schema = load(ROOT / "schemas" / "investigation-action-recommendations.schema.json")
+    action_report = load(ROOT / "results" / "action-recommendations" / "current.json")
+    action_schema_errors = list(jsonschema.Draft202012Validator(action_schema).iter_errors(action_report))
+    action_recommendations = [
+        recommendation
+        for finding in action_report.get("findings", [])
+        for recommendation in finding.get("recommendations", [])
+    ]
     snapshot_path = ROOT / "results" / "assurance" / "current.json"
     snapshot = load(snapshot_path)
     snapshot_sha = sha256_file(snapshot_path)
@@ -80,6 +89,7 @@ def main() -> int:
     notice = (ROOT / "NOTICE").read_text(encoding="utf-8")
     collatz_case_study = (ROOT / "docs" / "CASE_STUDY_COLLATZ.md").read_text(encoding="utf-8")
     introduction = (ROOT / "docs" / "INTRODUCTION.md").read_text(encoding="utf-8")
+    investigation_sop = (ROOT / "docs" / "INVESTIGATION_SOP.md").read_text(encoding="utf-8")
     public = (ROOT / "docs" / "PUBLIC_STATUS.md").read_text(encoding="utf-8")
     readme = (ROOT / "README.md").read_text(encoding="utf-8")
     pr_template = (ROOT / ".github" / "pull_request_template.md").read_text(encoding="utf-8")
@@ -163,7 +173,31 @@ def main() -> int:
         and "This is a retrospective case study, not evidence of prospective discovery." in collatz_case_study
         and "Comparing only those two normalized outcomes would" in collatz_case_study,
         "responsible_bug_investigation_is_defined": "responsible disclosure" in guide
-        and "injected mutants are not presented as bugs" in json.dumps(catalog),
+        and "injected mutants are not presented as bugs" in json.dumps(catalog)
+        and "recommended_action" in json.dumps(catalog),
+        "completed_investigations_require_concrete_recommendations": (
+            "Evidence Must Lead To A Recommendation" in constitution
+            and "Action Decision Rules" in investigation_sop
+            and "concrete action" in investigation_sop
+            and all(finding.get("recommendations") for finding in action_report.get("findings", []))
+        ),
+        "action_recommendations_are_machine_readable": (
+            not action_schema_errors
+            and len(action_report.get("findings", [])) >= 1
+            and all(row.get("target") and row.get("rationale") for row in action_recommendations)
+        ),
+        "external_actions_require_human_authorization": (
+            "External Actions Require Human Authorization" in constitution
+            and "explicit human authorization" in investigation_sop
+            and all(
+                not row["external_action"]
+                or (
+                    row["human_gate"]["required"]
+                    and row["human_gate"]["status"] in {"REVIEW_REQUIRED", "APPROVED", "DECLINED"}
+                )
+                for row in action_recommendations
+            )
+        ),
         "negative_and_unresolved_results_are_welcome": "negative, neutral, incompatible, or unresolved result is welcome" in guide,
         "milestone8_remains_valid": m8["status"] == "PASS" and all(m8["checks"].values())
         and m8["current_assurance_gate"] == "FAIL",

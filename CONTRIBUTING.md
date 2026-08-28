@@ -16,6 +16,7 @@ repository's [Apache License, Version 2.0](LICENSE).
 1. If the domain is new to you, begin with the
    [Introduction](docs/INTRODUCTION.md).
 2. Read the [Constitution](CONSTITUTION.md),
+   [Investigation and Upstream Action SOP](docs/INVESTIGATION_SOP.md),
    [Public Status](docs/PUBLIC_STATUS.md), and the relevant section of the
    [Design](docs/DESIGN.md).
 3. Open the matching issue form for substantial work so assumptions and expected
@@ -105,10 +106,15 @@ states, and the exact scope of every conclusion.
 
 Provide exact affected versions, a content-addressed reproducer, raw and
 normalized unmodified-validator outcomes, expected-semantics status, and
-disclosure status. Deliberately injected mutants are fault models, not discovered
-bugs. If semantics are unresolved, report a disagreement rather than assigning
-fault by vote. Do not post sensitive vulnerability details publicly before
-coordinating responsible disclosure with affected maintainers.
+disclosure status. Every mature investigation must also provide a concrete
+action recommendation, recommendation disposition, and human-authorization
+status under `docs/INVESTIGATION_SOP.md`. Deliberately injected mutants are
+fault models, not discovered bugs. If semantics are unresolved, recommend the
+specific investigation or adjudication needed rather than assigning fault by
+vote. Do not post sensitive vulnerability details publicly before coordinating
+responsible disclosure with affected maintainers. Issues, pull requests,
+comments, and disclosures require explicit human authorization for each target;
+the recommendation itself must remain clear while authorization is pending.
 
 ### Documentation
 
