@@ -1,4 +1,4 @@
-# Nanoda Restored-Recursor Survivor
+# Nanoda Restored-Recursor Witness
 
 Mutant: `nanoda-gen-8237cd6d3cb2`
 
@@ -29,9 +29,22 @@ The runner restored and rebuilt the baseline checker after the comparison.
 
 ## Status
 
-The mutant survives the current 198-test corpus. This is bounded evidence that
-the existing covering tests do not exercise an observable consequence of the
-skipped check; it is not evidence that the mutation is equivalent. The next
-investigation should derive a malformed nested-recursor candidate from the
-`aux_data_ck` contract, pair it with a matched valid control, and validate any
-difference against an independent checker.
+The mutant survives the current 198-test corpus, but a source-derived test now
+kills it. Starting from a valid 105-record nested-inductive export, the witness
+changes only the restored auxiliary recursor's serialized `k` field from
+`false` to `true`:
+
+- control: `corpus/generated/nanoda-gen-8237cd6d3cb2-valid-control.ndjson`
+- witness: `corpus/generated/nanoda-gen-8237cd6d3cb2-valid-aux-k.ndjson`
+- differential: `valid-aux-k-reproduction.json`
+
+The test passes without the mutation and fails with it: baseline Nanoda rejects
+at `src/inductive.rs:1687`, while mutant Nanoda accepts. The byte-identical
+control export is accepted by both builds.
+
+Official Lean establishes `REJECT` as the exact expected outcome, and Lean4Lean
+also rejects. Kiota accepts the witness, so that checker disagreement remains
+explicit in
+`results/cross-validation/nanoda-gen-8237cd6d3cb2-restored-aux-k/results.json`.
+It does not invalidate the mutation kill and must not be resolved by majority
+vote.

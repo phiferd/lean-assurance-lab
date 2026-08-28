@@ -493,24 +493,24 @@ Notes:
 ## Current Metrics
 
 ```yaml
-mutation_score: 0.926829268292683
+mutation_score: 0.9375
 mutation_score_scope: explicit MEANINGFUL_SEMANTIC classifications only
-modeled_mutation_score: 0.6333333333333333
-modeled_mutation_score_denominator: 60
+modeled_mutation_score: 0.9375
+modeled_mutation_score_denominator: 48
 generated_mutants: 79
 evaluated_mutants: 65
-killed_mutants: 38
-surviving_mutants: 27
+killed_mutants: 49
+surviving_mutants: 16
 build_failed_mutants: 1
 superseded_mutants: 13
 unevaluated_mutants: 0
-classified_equivalent: 4
-classified_reference_aligned: 1
+classified_equivalent: 12
+classified_reference_aligned: 5
 classified_unreachable: 0
 classified_performance_only: 0
 classified_non_semantic: 10
 meaningful_survivors: 3
-survived_without_witness: 19
+survived_without_witness: 0
 unknown_equivalence: 4
 witnesses_found: 4
 minimized_witnesses: 3
@@ -518,20 +518,20 @@ witness_searches_without_result: 2
 confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
-generated_regression_candidates: 5
-artifact_nodes: 129
-current_artifacts: 118
+generated_regression_candidates: 15
+artifact_nodes: 154
+current_artifacts: 143
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
 milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
-cross_validators: 2
+cross_validators: 3
 configured_validators: 3
-cross_validation_cases: 6
-cross_validation_checker_disagreements: 4
-expected_outcomes_established: 7
-regression_candidates_with_unresolved_disagreement: 3
+cross_validation_cases: 16
+cross_validation_checker_disagreements: 9
+expected_outcomes_established: 16
+regression_candidates_with_unresolved_disagreement: 8
 milestone_5_checks_passing: 15
 transfer_experiments: 1
 positive_transfer: 1
@@ -556,14 +556,14 @@ current_assurance_status: FAIL
 current_hard_gates_passing: 4
 current_hard_gates_failing: 1
 current_failure_reason: semantic_checker_disagreements
-current_semantic_disagreements: 3
+current_semantic_disagreements: 9
 current_parse_behavior_disagreements: 1
-current_recorded_checker_runs: 863
-current_recorded_checker_seconds: 11322.103071455727
+current_recorded_checker_runs: 900
+current_recorded_checker_seconds: 6920.650456825038
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
-milestone_9_checks_passing: 25
+milestone_9_checks_passing: 26
 ```
 
 ## First Mutation Result
@@ -704,32 +704,99 @@ milestone_9_checks_passing: 25
   [Nanoda #29](https://github.com/ammkrn/nanoda_lib/issues/29). The issue now
   explicitly asks whether the serialized field is authoritative rather than
   assuming Nanoda is incorrect.
+- `F-UNIVERSE-BOUNDARY`: proved `nanoda-gen-7447f6511962` equivalent by
+  match-arm shadowing. The preceding `(Zero, _) if diff >= 0` arm consumes every
+  input on which the original later predicate could be true, so the mutated
+  `Zero, Param` arm is reachable only for `diff < 0`, where both `>= 0` and
+  `> 0` are false. A source-derived candidate and instrumentation reproduction
+  confirmed the reachability analysis; the earlier 120-second `mathlib`
+  timeout remains archived as an invalid undersized-bound result.
+- `F-RESTORED-RECURSOR`: found a one-field restored auxiliary recursor witness
+  for `nanoda-gen-8237cd6d3cb2`. The unchanged 105-record nested-inductive
+  control is accepted by every tested checker. Changing only `k: false` to
+  `k: true` makes baseline Nanoda reject at `src/inductive.rs:1687` while the
+  mutant accepts. Official Lean establishes `REJECT` and Lean4Lean confirms;
+  Kiota accepts, so its metadata-contract disagreement remains unresolved.
+- `F-RESTORED-RECURSOR-TYPE`: found a one-field type witness for
+  `nanoda-gen-7b603be7dc87`. Replacing only the restored auxiliary recursor's
+  serialized type with the independently well-formed base recursor type makes
+  baseline Nanoda reject while the mutant accepts. Official Lean and Lean4Lean
+  reject; Kiota accepts, reinforcing one broader restored-recursor validation
+  disagreement rather than a separate issue per field.
+- `F-RESTORED-CTOR-METADATA`: found a one-field constructor-index witness for
+  `nanoda-gen-a59d7fa2cfb3`. Changing only `LALNest.node`'s serialized `cidx`
+  from `0` to `1` makes baseline Nanoda reject while the mutant accepts.
+  Official Lean and Lean4Lean reject; Kiota accepts, extending the same restored
+  nested declaration-validation disagreement to constructor metadata.
+- `F-INDUCTIVE-BINDER-TYPE-0`: proved `nanoda-gen-96211e002bfd` equivalent.
+  `local_params` and the first inductive-spec traversal derive their compared
+  binder types from the same unchanged inductive type, in the same order and
+  under identical prior substitutions. Nested specialization rewrites only
+  constructors, so the skipped equality assertion cannot fail.
+- `F-CONSTRUCTOR-PARAM-BINDER`: proved `nanoda-gen-da679d93da63` equivalent at
+  whole-checker scope. A cumulative-sort mismatch survives the local skipped
+  check but is rejected by mandatory standalone constructor-type inference.
+  More generally, the exact-parameter result check forces each corresponding
+  bound variable into the parent inductive application, where standalone
+  inference re-establishes the same binder-domain equality.
+- `F-IMAX-DIFF-BOUNDARY`: proved `nanoda-gen-ca8565ff512e` equivalent. Disabling
+  the equal-`IMax`, `diff = 0` fast path only routes the comparison through the
+  exhaustive parameter or nested-maximum fallbacks. Two exported candidates
+  matched, and Nanoda's focused equal-`IMax` unit test passed under the mutant.
+- `F-QUOT-IND-GUARD`: proved `nanoda-gen-701a664f39e5` equivalent and duplicate
+  to the previously classified `nanoda-gen-cb4949d04bbf`. The audit covers both
+  loss of proof-only `Quot.ind` reduction and the inverted guard's newly enabled
+  path for other quotient primitives; mandatory structural application checking
+  prevents malformed overapplications from being hidden by reduction.
+- `F-LET-VALUE-TYPE-TRANSFER`: killed `nanoda-gen-e551a17020ce` with the exact
+  malformed-let artifact previously generated for Kiota and evaluated against
+  held-out Lean4Lean. Baseline Nanoda rejects, the mutant accepts, and both
+  accept the matched control. Official Lean, Kiota, and Lean4Lean all confirm
+  `REJECT`, so this is a clean regression candidate without a disagreement.
+- `F-QUOT-PRIMITIVE-TYPES`: classified four exact-type mutants as
+  `REFERENCE_ALIGNED`: base `Quot`, `Quot.mk`, `Quot.lift`, and `Quot.ind`.
+  Each one-field sort replacement makes baseline Nanoda reject and its mutant
+  accept, while official Lean, Kiota, and Lean4Lean accept every exact artifact.
+  The evidence forms one serialized primitive-contract finding, not four issues.
+- `F-QUOT-EQ-TYPE`: killed `nanoda-gen-d39c873fbcb7` with a structurally valid
+  equality family returning `Sort (max 1 u)` in place of proposition-valued
+  built-in `Eq`. Baseline Nanoda rejects exactly at the skipped prerequisite
+  assertion and the mutant accepts; both accept the canonical control. Official
+  Lean and Lean4Lean reject the candidate, while Kiota accepts it, leaving an
+  explicit checker disagreement attached to the regression candidate.
+- `F-QUOT-EQ-REFL`: killed `nanoda-gen-cd41c71bc814` with a valid Eq family
+  whose sole constructor has one extra unused field. Baseline rejection is
+  isolated to `src/quot.rs:105`, the mutant accepts, and both accept the
+  canonical control. Official Lean and Lean4Lean reject while Kiota accepts,
+  matching the adjacent Eq-type disagreement and completing one prerequisite
+  family.
+- `F-SERIAL-DECLARATION-LOOP`: killed `nanoda-gen-1dedcb13793f` under Nanoda's
+  supported one-thread configuration. The prior 173-test survival used the
+  four-thread differential config, which bypassed the mutated serial branch.
+  `scripts/run-mutant-input` now accepts and records `--config`; the existing
+  malformed-let case is rejected by baseline and accepted by the mutant, while
+  both accept its matched control.
+- `F-STRING-EXTENSION-GUARD`: classified `nanoda-gen-4238224977cc` equivalent
+  at Nanoda's public file/config entrypoint. The active config makes the
+  assertion true; with the extension disabled, both the parser and internal
+  constructors prevent a string literal from reaching inference.
+- `F-BINDER-SORT-SURVIVORS`: classified `nanoda-0004` and
+  `nanoda-gen-9a8edf073073` equivalent at the public declaration entrypoint.
+  Let value-type equality and recursive comparison of lambda Pi telescopes
+  against independently sort-checked expected types re-establish the skipped
+  checks. Source-derived malformed probes are rejected by both builds.
+- `F-QUOTIENT-CONTRACT-MATRIX`: synthesized four primitive-signature cases and
+  two Eq-prerequisite cases into one executable checker matrix. Nanoda rejects
+  all six deviations; official Lean and Lean4Lean accept the four primitive
+  deviations but reject both Eq deviations; Kiota accepts all six. This is a
+  bounded inferred contract, not a complete specification, and no issue was
+  filed automatically.
 
 ### Active
 
-1. `F-UNIVERSE-BOUNDARY`: investigate `nanoda-gen-7447f6511962`, the untriaged
-   `leq_core` mutation from `diff >= 0` to `diff > 0` at `src/level.rs:182`.
-   A 2026-08-27 rerun initially timed out the mutant on `mathlib` at 120 seconds,
-   but a matched 900-second reproduction showed that baseline and mutant both
-   pass in 347.2 and 348.7 seconds respectively. The refreshed 198-test schedule
-   then exhausted all 36 covering tests with no difference, so the timeout is
-   invalid as a kill and the mutant remains `SURVIVED_WITHOUT_WITNESS`. Next,
-   derive the exact equality boundary and run a persisted witness search.
-   Semantic completion still requires a minimized distinguishing artifact with
-   reference validation or a documented source invariant and exhausted bound;
-   equivalence must not be inferred from search failure.
-2. `F-RESTORED-RECURSOR`: investigate `nanoda-gen-8237cd6d3cb2`, which skips
-   `original.aux_data_ck(&restored)` for nested recursors. On 2026-08-27 the
-   portable coverage snapshot was extended to 198 tests and all nine tests
-   covering `src/inductive.rs:1687` were rerun; every normalized baseline and
-   mutant outcome matched. This bounded corpus result leaves the mutant alive.
-   The next step is a source-derived nested-recursor witness search, with the
-   same matched-control and independent-validation requirements.
-3. `F-SURVIVOR-RANKING`: refresh the ranking after each completed survivor
-   investigation using semantic consequence, source reachability, independence
-   from already tested invariants, and expected investigation cost. Do not run
-   a large undirected campaign until the remaining high-value survivors have
-   been source-triaged.
+1. `F-SPEC-DERIVATION-PILOT`: use the quotient matrix as the first bounded
+   reverse-engineered-spec pilot, with every inferred rule linked directly to
+   executable accept/reject cases.
 
 ### Waiting
 
@@ -745,6 +812,11 @@ milestone_9_checks_passing: 25
 - `W-KIOTA-SELF-REFERENCE`: await adjudication of
   [Kiota #5](https://github.com/sankalpsthakur/kiota/issues/5) for declaration
   self-reference.
+- `W-KIOTA-RESTORED-DECLARATIONS`: decide whether to report Kiota's acceptance
+  of three isolated restored nested declaration mismatches: recursor `k`,
+  recursor type, and constructor index. Official Lean and Lean4Lean reject all
+  three exact artifacts. Discuss them together before filing to avoid issue
+  spam and to determine whether one shared validation boundary explains them.
 
 ### Future Directions
 

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Classify suppression of Quot.ind reduction under proof irrelevance."""
+"""Classify an inverted Quot.ind reduction guard under proof irrelevance."""
 
 from __future__ import annotations
 
@@ -17,13 +17,12 @@ sys.path.insert(0, str(ROOT / "lib"))
 from nanoda_differential import DifferentialSession  # noqa: E402
 
 
-MUTANT_ID = "nanoda-gen-cb4949d04bbf"
+DEFAULT_MUTANT_ID = "nanoda-gen-cb4949d04bbf"
 CHECKER = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
 ARTIFACT = (
     ROOT / "external" / "lean-kernel-arena" / "_build" / "tests" /
     "tutorial" / "good" / "133_quotIndReduction.ndjson"
 )
-OUTPUT = ROOT / "results" / "investigations" / "nanoda-quot-ind-proof-irrelevance.json"
 REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
 
 
@@ -33,9 +32,9 @@ def sha256_file(path: Path) -> str:
 
 def classify(spec: dict, comparison: dict, quot_source: str, tc_source: str, probe: dict) -> dict:
     checks = {
-        "mutation_disables_only_quot_ind_discrimination": (
+        "mutation_inverts_quot_ind_discrimination": (
             spec.get("function") == "reduce_quot"
-            and spec.get("mutation_operator") == "REL_EQ_TO_NE"
+            and spec.get("mutation_operator") in {"REL_EQ_TO_NE", "BOOL_NEGATE"}
             and "quot_ind" in spec.get("original", "")
         ),
         "quot_ind_motive_is_restricted_to_prop": (
@@ -44,6 +43,16 @@ def classify(spec: dict, comparison: dict, quot_source: str, tc_source: str, pro
         "definitional_equality_applies_proof_irrelevance": (
             "if self.proof_irrel_eq(x_n, y_n)" in tc_source
             and "fn proof_irrel_eq" in tc_source
+        ),
+        "serialized_applications_receive_structural_check_inference": (
+            "let inferred_type = tc.infer(*val, crate::tc::InferFlag::Check);" in tc_source
+            and "let arg_type = self.infer(arg, flag);" in tc_source
+            and "self.assert_def_eq(binder_type, arg_type);" in tc_source
+        ),
+        "non_ind_quotient_primitives_have_bounded_checked_arities": (
+            "Quot : Π {A : Sort u}" in quot_source
+            and "Quot.mk : Π {A : Sort u}" in quot_source
+            and "Quot.lift : Π {A : Sort u}" in quot_source
         ),
         "covering_schedule_exhausted_without_difference": (
             comparison.get("status") == "SURVIVED"
@@ -62,9 +71,12 @@ def classify(spec: dict, comparison: dict, quot_source: str, tc_source: str, pro
         "registry_classification": "EQUIVALENT" if passed else "SURVIVED_WITHOUT_WITNESS",
         "checks": checks,
         "reason": (
-            "Quot.ind can produce only proofs. Suppressing its iota reduction changes proof "
-            "normal forms but not observable definitional equality because proof irrelevance "
-            "compares their proposition types."
+            "Quot.ind can produce only proofs, so suppressing its iota reduction cannot change "
+            "observable definitional equality. Inverting the guard also admits other quotient "
+            "primitive names, but checked Quot and Quot.mk applications cannot reach argument "
+            "index 4; Quot.lift is handled by the preceding arm; and any well-typed Quot.sound "
+            "case remains proof-valued. Mandatory structural Check inference rejects malformed "
+            "applications before final declaration equality can validate them."
         ),
         "claim_scope": (
             "Pinned Nanoda checker semantics and Lean's proof-irrelevant Quot.ind primitive; "
@@ -75,14 +87,16 @@ def classify(spec: dict, comparison: dict, quot_source: str, tc_source: str, pro
 
 def main() -> int:
     parser = argparse.ArgumentParser()
+    parser.add_argument("--mutant-id", default=DEFAULT_MUTANT_ID)
     parser.add_argument("--write-status", action="store_true")
     parser.add_argument("--timeout", type=float, default=60.0)
     args = parser.parse_args()
-    spec_path = ROOT / "mutations" / f"{MUTANT_ID}.json"
-    comparison_path = ROOT / "results" / "mutants" / MUTANT_ID / "scheduled-comparison.json"
+    mutant_id = args.mutant_id
+    spec_path = ROOT / "mutations" / f"{mutant_id}.json"
+    comparison_path = ROOT / "results" / "mutants" / mutant_id / "scheduled-comparison.json"
     quot_path = CHECKER / "src" / "quot.rs"
     tc_path = CHECKER / "src" / "tc.rs"
-    with DifferentialSession(MUTANT_ID, args.timeout) as session:
+    with DifferentialSession(mutant_id, args.timeout) as session:
         probe = session.evaluate(ARTIFACT)
         preparation = session.preparation
     report = classify(
@@ -96,7 +110,7 @@ def main() -> int:
         {
             "schema_version": 1,
             "checker": "nanoda",
-            "mutant_id": MUTANT_ID,
+            "mutant_id": mutant_id,
             "probe": probe,
             "preparation": preparation,
             "inputs": {
@@ -111,8 +125,13 @@ def main() -> int:
             },
         }
     )
-    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
-    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    output = (
+        ROOT / "results" / "investigations" / "nanoda-quot-ind-proof-irrelevance.json"
+        if mutant_id == DEFAULT_MUTANT_ID
+        else ROOT / "results" / "investigations" / "nanoda-quot-ind-guard" / "equivalence-analysis.json"
+    )
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     if args.write_status:
         if report["status"] != "PASS":
             raise SystemExit("refusing to classify mutant because an equivalence check failed")
@@ -120,12 +139,12 @@ def main() -> int:
             handle.write(
                 json.dumps(
                     {
-                        "id": MUTANT_ID,
+                        "id": mutant_id,
                         "status": "SURVIVED",
                         "classification": "EQUIVALENT",
                         "notes": (
-                            "Proof-irrelevance equivalence established by "
-                            "results/investigations/nanoda-quot-ind-proof-irrelevance.json"
+                            "Inverted Quot.ind guard equivalence established by "
+                            f"{output.relative_to(ROOT)}"
                         ),
                         "updated_at": datetime.now(timezone.utc).isoformat(),
                     },

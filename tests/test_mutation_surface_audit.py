@@ -61,8 +61,17 @@ class MutationSurfaceAuditTests(unittest.TestCase):
             "original": "c_name == cache.quot_ind",
         }
         comparison = {"status": "SURVIVED", "all_covering_tests_exhausted": True}
-        quot_source = "Quot.ind : x; @Quot A r → Prop"
-        tc_source = "if self.proof_irrel_eq(x_n, y_n) {} fn proof_irrel_eq() {}"
+        quot_source = (
+            "Quot.ind : x; @Quot A r → Prop; "
+            "Quot : Π {A : Sort u}; Quot.mk : Π {A : Sort u}; "
+            "Quot.lift : Π {A : Sort u}"
+        )
+        tc_source = (
+            "if self.proof_irrel_eq(x_n, y_n) {} fn proof_irrel_eq() {} "
+            "let inferred_type = tc.infer(*val, crate::tc::InferFlag::Check); "
+            "let arg_type = self.infer(arg, flag); "
+            "self.assert_def_eq(binder_type, arg_type);"
+        )
         accepted = {
             "different": False,
             "baseline": {"normalized_outcome": "ACCEPT"},

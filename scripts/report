@@ -49,7 +49,11 @@ def latest_by_id(records: list[dict]) -> dict[str, dict]:
     return latest
 
 
-def comparison_killed(results_root: Path, mutant_id: str) -> bool | None:
+def comparison_killed(
+    results_root: Path, mutant_id: str, record: dict | None = None
+) -> bool | None:
+    if record and record.get("status") in {"KILLED", "SURVIVED"}:
+        return record["status"] == "KILLED"
     paths = [
         results_root / "mutants" / mutant_id / "scheduled-comparison.json",
         results_root / "mutants" / mutant_id / "comparison.json",
@@ -84,7 +88,9 @@ def stratified_metrics(
             value = record.get(dimension)
         if not value:
             value = "unknown"
-        groups.setdefault(value, []).append((record, comparison_killed(results_root, mutant_id)))
+        groups.setdefault(value, []).append(
+            (record, comparison_killed(results_root, mutant_id, record))
+        )
     output = {}
     for value, entries in sorted(groups.items()):
         evaluated = [killed for _, killed in entries if killed is not None]
@@ -164,7 +170,7 @@ def main() -> int:
     for mutant_id, record in mutants.items():
         classification = record.get("classification", "UNKNOWN_EQUIVALENCE")
         status = record.get("status")
-        killed_state = comparison_killed(args.results_root, mutant_id)
+        killed_state = comparison_killed(args.results_root, mutant_id, record)
         if killed_state is True:
             killed += 1
         elif killed_state is False:
@@ -235,7 +241,7 @@ def main() -> int:
     generated_witness_kills = sum(
         mutant_id in mutants
         and mutants[mutant_id].get("classification") == "MEANINGFUL_SEMANTIC"
-        and comparison_killed(args.results_root, mutant_id) is False
+        and comparison_killed(args.results_root, mutant_id, mutants[mutant_id]) is False
         for mutant_id in confirmed_generated_kill_ids
     )
     arena_candidates = 0

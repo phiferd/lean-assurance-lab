@@ -1,0 +1,43 @@
+{
+  "checker": "nanoda",
+  "checks": {
+    "covering_schedules_exhausted_without_difference": true,
+    "declaration_types_are_sort_checked": true,
+    "definition_values_are_checked_against_declared_types": true,
+    "lambda_inference_rebuilds_pi_telescope": true,
+    "let_value_type_is_checked_against_annotation": true,
+    "mutations_only_elide_target_sort_checks": true,
+    "pi_inference_checks_every_domain": true,
+    "source_derived_malformed_probes_rejected_by_both_builds": true
+  },
+  "classification": "EQUIVALENT_AT_PUBLIC_DECLARATION_ENTRYPOINT",
+  "limitations": "This does not claim equivalence for direct internal TypeChecker callers, concurrent mutations, or a checker whose definitional equality violates conversion typing.",
+  "mutants": [
+    {
+      "comparison_path": "results/mutants/nanoda-0004/scheduled-comparison.json",
+      "comparison_sha256": "afbefe95c788c12dc080f6bead7d8ab4c95a66a4be8f67a66926d5c8d0875a5a",
+      "id": "nanoda-0004",
+      "probe_path": "results/investigations/nanoda-binder-sort-survivors/lambda-reproduction.json",
+      "probe_sha256": "2ede604b4b51e3f6871d51921c9f0d1c7060b8e3bd1648cc54ca31517d324c53",
+      "spec_path": "mutations/nanoda-0004.json",
+      "spec_sha256": "e7892e06de7021d2c1ae578cf5613df8ebc003adc1e4f7c4e78f3198b5d5fa34"
+    },
+    {
+      "comparison_path": "results/mutants/nanoda-gen-9a8edf073073/scheduled-comparison.json",
+      "comparison_sha256": "70c6cee59c106be38f637c3f8e334cdcdf591d897a98fa4112ca23d4abc979e2",
+      "id": "nanoda-gen-9a8edf073073",
+      "probe_path": "results/investigations/nanoda-binder-sort-survivors/let-reproduction.json",
+      "probe_sha256": "21a21cf9f056549c37aa8042cac187766844156dcbeb8e04fe86662701cc001f",
+      "spec_path": "mutations/nanoda-gen-9a8edf073073.json",
+      "spec_sha256": "270da22c1a18123dc38eaec27222bcfcacff4a21bf47735284ebfb901fb62ecc"
+    }
+  ],
+  "proof_scope": "Single-mutant execution through ExportFile::check_declar. Checked inference returns a well-formed type. Let annotations must be definitionally equal to the checked value type. Lambda Pi domains are recursively compared with a sort-checked expected type, either at an enclosing checked construct or at the declaration boundary. Conversion preserves well-formedness, so neither skipped local sort check adds an accepting path.",
+  "registry_classification": "EQUIVALENT",
+  "schema_version": 1,
+  "source": {
+    "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/tc.rs",
+    "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+  },
+  "status": "PASS"
+}

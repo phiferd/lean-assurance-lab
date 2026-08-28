@@ -1,0 +1,119 @@
+#!/usr/bin/env python3
+"""Build the observed quotient contract matrix from exact case evidence."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-quotient-contract-matrix.json"
+CASES = (
+    ("quot_type", "nanoda-gen-7b386d7135bb-quot-type", "nanoda-quot-type/reproduction.json"),
+    ("quot_mk_type", "nanoda-gen-962509604870-quot-mk-type", "nanoda-quot-mk-type/reproduction.json"),
+    ("quot_lift_type", "nanoda-gen-5dd8a3776055-quot-lift-type", "nanoda-quot-lift-type/reproduction.json"),
+    ("quot_ind_type", "nanoda-gen-cdebd265971c-quot-ind-type", "nanoda-quot-ind-type/reproduction.json"),
+    ("eq_type_prerequisite", "nanoda-gen-d39c873fbcb7-quot-eq-type", "nanoda-quot-eq-type/max1-reproduction.json"),
+    ("eq_refl_prerequisite", "nanoda-gen-cd41c71bc814-quot-eq-refl", "nanoda-quot-eq-refl/reproduction.json"),
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    rows = []
+    for boundary, case_id, reproduction_name in CASES:
+        reproduction_path = ROOT / "results" / "investigations" / reproduction_name
+        cross_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        reproduction = json.loads(reproduction_path.read_text(encoding="utf-8"))
+        cross = json.loads(cross_path.read_text(encoding="utf-8"))
+        validators = {
+            item["checker"]: item["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        controls = {
+            item["checker"]: item["positive_control"]["result"]["normalized_outcome"]
+            for item in cross["validators"]
+        }
+        rows.append({
+            "boundary": boundary,
+            "case_id": case_id,
+            "artifact": cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": reproduction["baseline"]["normalized_outcome"],
+                **validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": "ACCEPT",
+                **controls,
+            },
+            "evidence": {
+                "reproduction": str(reproduction_path.relative_to(ROOT)),
+                "reproduction_sha256": sha256_file(reproduction_path),
+                "cross_validation": str(cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(cross_path),
+            },
+        })
+
+    controls_all_accept = all(
+        set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+    )
+    primitive_rows = rows[:4]
+    prerequisite_rows = rows[4:]
+    checks = {
+        "all_controls_are_accepted": controls_all_accept,
+        "nanoda_rejects_all_six_variants": all(
+            row["candidate_outcomes"]["nanoda_baseline"] == "REJECT" for row in rows
+        ),
+        "official_and_lean4lean_accept_primitive_signature_variants": all(
+            row["candidate_outcomes"][checker] == "ACCEPT"
+            for row in primitive_rows for checker in ("official", "lean4lean")
+        ),
+        "official_and_lean4lean_reject_eq_prerequisite_variants": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in prerequisite_rows for checker in ("official", "lean4lean")
+        ),
+        "kiota_accepts_all_six_variants": all(
+            row["candidate_outcomes"]["kiota"] == "ACCEPT" for row in rows
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "nanoda": (
+                "Rejects every tested deviation: four serialized Quot primitive signatures and "
+                "both built-in Eq prerequisites are enforced exactly."
+            ),
+            "official": (
+                "Accepts all four tested serialized Quot primitive signature deviations, but "
+                "rejects both tested built-in Eq prerequisite deviations when Quot.lift is present."
+            ),
+            "kiota": (
+                "Accepts all six tested deviations; this matrix observes no enforced exact "
+                "quotient/Eq signature boundary."
+            ),
+            "lean4lean": (
+                "Matches official Lean on all six tested deviations: primitive signatures are "
+                "accepted and both Eq prerequisite deviations are rejected."
+            ),
+        },
+        "scope": (
+            "Observed behavior for six exact exports only. These rules are a bounded inferred "
+            "contract and must not be presented as a complete implementation specification."
+        ),
+        "upstream_action": "DISCUSS_BEFORE_FILING",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

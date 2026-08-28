@@ -1,0 +1,39 @@
+{
+  "analysis": {
+    "fallback": "When the equal-IMax fast path is disabled at diff = 0, canonical parameter second operands are handled by leq_imax_by_cases and Max/IMax second operands are handled by the general is_any_max arms. Identical levels remain less than or equal through those exhaustive fallbacks.",
+    "mutated_fast_path": "(IMax(a, b, ..), IMax(x, y, ..)) if (a == x) && (b == y) && (diff > 0) => true",
+    "original_fast_path": "(IMax(a, b, ..), IMax(x, y, ..)) if (a == x) && (b == y) && diff >= 0 => true"
+  },
+  "candidates": [
+    {
+      "artifact": "corpus/generated/nanoda-gen-0bb50147dff2-distinct-imax-left-control.ndjson",
+      "baseline_outcome": "ACCEPT",
+      "mutant_outcome": "ACCEPT",
+      "reproduction": "results/investigations/nanoda-imax-diff-boundary/reproduction.json"
+    },
+    {
+      "artifact": "corpus/generated/nanoda-gen-ca8565ff512e-equal-imax-boundary.ndjson",
+      "artifact_sha256": "283ae729b1818b326d0c63895fb1d7c0e0b677d38f40daec4194e92810387c82",
+      "baseline_outcome": "ACCEPT",
+      "mutant_outcome": "ACCEPT",
+      "reproduction": "results/investigations/nanoda-imax-diff-boundary/equal-imax-reproduction.json",
+      "reproduction_sha256": "0dd884af669f0923eb8aec889ffdded03a0fa603c186eefc981064afbd1c8c60"
+    }
+  ],
+  "checker_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "classification": "EQUIVALENT",
+  "created_at": "2026-08-27T23:38:38Z",
+  "focused_test": {
+    "command": "cargo test leq_test_imax_imax --release -- --nocapture",
+    "mutant_result": "PASS",
+    "tests_failed": 0,
+    "tests_passed": 1
+  },
+  "mutant_id": "nanoda-gen-ca8565ff512e",
+  "mutation_spec_sha256": "0ff4fa15de7f83668568a49b321c0e52d44a629ac632733c48afde3dbb57a330",
+  "schema_version": 1,
+  "source_file": "src/level.rs",
+  "source_sha256": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf",
+  "source_span": "188",
+  "status": "COMPLETED"
+}

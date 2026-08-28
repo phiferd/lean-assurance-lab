@@ -4,8 +4,10 @@
     "covering_schedule_exhausted_without_difference": true,
     "definitional_equality_applies_proof_irrelevance": true,
     "explicit_reduction_probe_accepts_in_both_states": true,
-    "mutation_disables_only_quot_ind_discrimination": true,
-    "quot_ind_motive_is_restricted_to_prop": true
+    "mutation_inverts_quot_ind_discrimination": true,
+    "non_ind_quotient_primitives_have_bounded_checked_arities": true,
+    "quot_ind_motive_is_restricted_to_prop": true,
+    "serialized_applications_receive_structural_check_inference": true
   },
   "claim_scope": "Pinned Nanoda checker semantics and Lean's proof-irrelevant Quot.ind primitive; this does not classify analogous reduction suppression for Quot.lift.",
   "classification": "EQUIVALENT_UNDER_PROOF_IRRELEVANCE",
@@ -25,20 +27,20 @@
     "baseline_build": {
       "output_tail": "",
       "returncode": 0,
-      "seconds": 0.12723437487147748
+      "seconds": 0.034647291991859674
     },
     "baseline_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
     "mutant_build": {
       "output_tail": "",
       "returncode": 0,
-      "seconds": 11.787351083941758
+      "seconds": 10.635682708118111
     },
     "restore_after": "changed",
     "restore_before": "already",
     "restored_build": {
       "output_tail": "",
       "returncode": 0,
-      "seconds": 11.405203875154257
+      "seconds": 10.68278120807372
     },
     "restored_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
     "source_restored": true
@@ -49,7 +51,7 @@
     "baseline": {
       "exit_code": 0,
       "normalized_outcome": "ACCEPT",
-      "seconds": 0.13887008395977318,
+      "seconds": 0.13367458386346698,
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stderr_tail": "",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
@@ -58,13 +60,13 @@
     "mutant": {
       "exit_code": 0,
       "normalized_outcome": "ACCEPT",
-      "seconds": 0.13382066716440022,
+      "seconds": 0.12681370903737843,
       "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
       "stderr_tail": "",
       "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
     }
   },
-  "reason": "Quot.ind can produce only proofs. Suppressing its iota reduction changes proof normal forms but not observable definitional equality because proof irrelevance compares their proposition types.",
+  "reason": "Quot.ind can produce only proofs, so suppressing its iota reduction cannot change observable definitional equality. Inverting the guard also admits other quotient primitive names, but checked Quot and Quot.mk applications cannot reach argument index 4; Quot.lift is handled by the preceding arm; and any well-typed Quot.sound case remains proof-valued. Mandatory structural Check inference rejects malformed applications before final declaration equality can validate them.",
   "registry_classification": "EQUIVALENT",
   "schema_version": 1,
   "status": "PASS"

@@ -1,0 +1,147 @@
+#!/usr/bin/env python3
+"""Classify redundant lambda and let binder-sort checks at the public entrypoint."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER_SOURCE = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src" / "src" / "tc.rs"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-binder-sort-survivors" / "equivalence-analysis.json"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+CASES = {
+    "nanoda-0004": {
+        "probe": ROOT / "results" / "investigations" / "nanoda-binder-sort-survivors" / "lambda-reproduction.json",
+        "comparison": ROOT / "results" / "mutants" / "nanoda-0004" / "scheduled-comparison.json",
+    },
+    "nanoda-gen-9a8edf073073": {
+        "probe": ROOT / "results" / "investigations" / "nanoda-binder-sort-survivors" / "let-reproduction.json",
+        "comparison": ROOT / "results" / "mutants" / "nanoda-gen-9a8edf073073" / "scheduled-comparison.json",
+    },
+}
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write-status", action="store_true")
+    args = parser.parse_args()
+    source = CHECKER_SOURCE.read_text(encoding="utf-8")
+    evidence = {}
+    for mutant_id, paths in CASES.items():
+        spec_path = ROOT / "mutations" / f"{mutant_id}.json"
+        spec = json.loads(spec_path.read_text(encoding="utf-8"))
+        probe = json.loads(paths["probe"].read_text(encoding="utf-8"))
+        comparison = json.loads(paths["comparison"].read_text(encoding="utf-8"))
+        evidence[mutant_id] = {
+            "spec_path": str(spec_path.relative_to(ROOT)),
+            "spec_sha256": sha256_file(spec_path),
+            "probe_path": str(paths["probe"].relative_to(ROOT)),
+            "probe_sha256": sha256_file(paths["probe"]),
+            "comparison_path": str(paths["comparison"].relative_to(ROOT)),
+            "comparison_sha256": sha256_file(paths["comparison"]),
+            "spec": spec,
+            "probe": probe,
+            "comparison": comparison,
+        }
+
+    checks = {
+        "declaration_types_are_sort_checked": (
+            "let inferred_type = self.infer(info.ty, Check);" in source
+            and "let sort = self.ensure_sort(inferred_type);" in source
+        ),
+        "definition_values_are_checked_against_declared_types": (
+            "let inferred_type = tc.infer(*val, crate::tc::InferFlag::Check);" in source
+            and "tc.assert_def_eq(inferred_type, d.info().ty);" in source
+        ),
+        "let_value_type_is_checked_against_annotation": (
+            "let val_ty = self.infer(val, flag);" in source
+            and "self.assert_def_eq(val_ty, binder_type);" in source
+        ),
+        "lambda_inference_rebuilds_pi_telescope": (
+            "abstrd = self.ctx.mk_pi(binder_name, binder_style, t, abstrd);" in source
+        ),
+        "pi_inference_checks_every_domain": (
+            "let dom_univ = self.infer_sort_of(binder_type, flag);" in source
+        ),
+        "mutations_only_elide_target_sort_checks": all(
+            row["spec"].get("original", "").strip() == "self.infer_sort_of(binder_type, flag);"
+            for row in evidence.values()
+        ),
+        "covering_schedules_exhausted_without_difference": all(
+            row["comparison"].get("status") == "SURVIVED"
+            and row["comparison"].get("reason") == "ALL_COVERING_TESTS_MATCH"
+            and row["comparison"].get("all_covering_tests_exhausted") is True
+            for row in evidence.values()
+        ),
+        "source_derived_malformed_probes_rejected_by_both_builds": all(
+            row["probe"].get("different") is False
+            and row["probe"].get("baseline", {}).get("normalized_outcome") == "REJECT"
+            and row["probe"].get("mutant", {}).get("normalized_outcome") == "REJECT"
+            for row in evidence.values()
+        ),
+    }
+    passed = all(checks.values())
+    report = {
+        "schema_version": 1,
+        "checker": "nanoda",
+        "status": "PASS" if passed else "FAIL",
+        "classification": "EQUIVALENT_AT_PUBLIC_DECLARATION_ENTRYPOINT" if passed else "UNRESOLVED",
+        "registry_classification": "EQUIVALENT" if passed else "SURVIVED_WITHOUT_WITNESS",
+        "checks": checks,
+        "proof_scope": (
+            "Single-mutant execution through ExportFile::check_declar. Checked inference returns a "
+            "well-formed type. Let annotations must be definitionally equal to the checked value "
+            "type. Lambda Pi domains are recursively compared with a sort-checked expected type, "
+            "either at an enclosing checked construct or at the declaration boundary. Conversion "
+            "preserves well-formedness, so neither skipped local sort check adds an accepting path."
+        ),
+        "limitations": (
+            "This does not claim equivalence for direct internal TypeChecker callers, concurrent "
+            "mutations, or a checker whose definitional equality violates conversion typing."
+        ),
+        "source": {
+            "path": str(CHECKER_SOURCE.relative_to(ROOT)),
+            "sha256": sha256_file(CHECKER_SOURCE),
+        },
+        "mutants": [
+            {
+                "id": mutant_id,
+                **{key: row[key] for key in (
+                    "spec_path", "spec_sha256", "probe_path", "probe_sha256",
+                    "comparison_path", "comparison_sha256",
+                )},
+            }
+            for mutant_id, row in evidence.items()
+        ],
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.write_status:
+        if not passed:
+            raise SystemExit("refusing to classify mutants because an equivalence check failed")
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            for mutant_id in CASES:
+                handle.write(json.dumps({
+                    "id": mutant_id,
+                    "status": "SURVIVED",
+                    "classification": "EQUIVALENT",
+                    "notes": (
+                        "Whole-checker equivalence established by "
+                        "results/investigations/nanoda-binder-sort-survivors/equivalence-analysis.json"
+                    ),
+                    "updated_at": datetime.now(timezone.utc).isoformat(),
+                }, sort_keys=True) + "\n")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

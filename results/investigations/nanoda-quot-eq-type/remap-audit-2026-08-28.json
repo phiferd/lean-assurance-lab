@@ -1,0 +1,25 @@
+{
+  "target_mutant": "nanoda-gen-d39c873fbcb7",
+  "rewriter": "results/investigations/nanoda-quot-eq-type/remap_quot_eq.py",
+  "commands": [
+    "python3 results/investigations/nanoda-quot-eq-type/remap_quot_eq.py results/investigations/nanoda-quot-eq-type/alt-eq-template-max1.ndjson external/lean-kernel-arena/_build/tests/tutorial/good/130_quotLiftType.ndjson corpus/generated/nanoda-gen-d39c873fbcb7-quot-eq-type-candidate.ndjson corpus/generated/nanoda-gen-d39c873fbcb7-quot-eq-type-control.ndjson",
+    "scripts/run-mutant-input nanoda-gen-d39c873fbcb7 corpus/generated/nanoda-gen-d39c873fbcb7-quot-eq-type-candidate.ndjson --output results/investigations/nanoda-quot-eq-type/max1-reproduction.json --timeout 300"
+  ],
+  "rewriter_output": {
+    "alternate_records": 62,
+    "canonical_records": 124,
+    "candidate_records": 129,
+    "declared_expression_ids_unique": true,
+    "declared_name_ids_unique": true,
+    "declared_level_ids_unique": true
+  },
+  "baseline": {
+    "outcome": "REJECT",
+    "stage": "quotient Eq prerequisite",
+    "diagnostic": "assertion failed: self.def_eq(u, v)",
+    "source": "src/quot.rs:89"
+  },
+  "mutant": {"outcome": "ACCEPT", "exit_code": 0},
+  "control": {"baseline": "ACCEPT", "mutant": "ACCEPT"},
+  "status": "KILLED"
+}

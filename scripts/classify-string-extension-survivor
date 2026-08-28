@@ -1,0 +1,115 @@
+#!/usr/bin/env python3
+"""Classify the string-extension assertion elision at Nanoda's public entrypoint."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CHECKER = ROOT / "external" / "lean-kernel-arena" / "_build" / "checkers" / "nanoda" / "src"
+MUTANT_ID = "nanoda-gen-4238224977cc"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-string-extension-survivor.json"
+REGISTRY = ROOT / "results" / "mutants" / "registry.jsonl"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write-status", action="store_true")
+    args = parser.parse_args()
+
+    config_path = CHECKER / "config.json"
+    parser_path = CHECKER / "src" / "parser.rs"
+    util_path = CHECKER / "src" / "util.rs"
+    spec_path = ROOT / "mutations" / f"{MUTANT_ID}.json"
+    comparison_path = ROOT / "results" / "mutants" / MUTANT_ID / "scheduled-comparison.json"
+
+    config = json.loads(config_path.read_text(encoding="utf-8"))
+    parser_source = parser_path.read_text(encoding="utf-8")
+    util_source = util_path.read_text(encoding="utf-8")
+    spec = json.loads(spec_path.read_text(encoding="utf-8"))
+    comparison = json.loads(comparison_path.read_text(encoding="utf-8"))
+    checks = {
+        "active_config_enables_string_extension": config.get("string_extension") is True,
+        "parser_rejects_string_literals_when_disabled": (
+            "if !self.config.string_extension" in parser_source
+            and "String lit extension disallowed by checker execution config" in parser_source
+        ),
+        "internal_string_literal_constructor_is_guarded": (
+            "pub fn mk_string_lit" in util_source
+            and "if !self.export_file.config.string_extension" in util_source
+            and "Some(self.alloc_expr(Expr::StringLit" in util_source
+        ),
+        "mutation_only_elides_expected_assertion": (
+            spec.get("mutation_operator") == "SKIP_VALIDATION"
+            and spec.get("original") == "assert!(self.ctx.export_file.config.string_extension);"
+            and spec.get("function") == "infer"
+        ),
+        "covering_schedule_exhausted_without_difference": (
+            comparison.get("status") == "SURVIVED"
+            and comparison.get("reason") == "ALL_COVERING_TESTS_MATCH"
+            and comparison.get("all_covering_tests_exhausted") is True
+        ),
+    }
+    passed = all(checks.values())
+    report = {
+        "schema_version": 1,
+        "checker": "nanoda",
+        "status": "PASS" if passed else "FAIL",
+        "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT" if passed else "UNRESOLVED",
+        "registry_classification": "EQUIVALENT" if passed else "SURVIVED_WITHOUT_WITNESS",
+        "checks": checks,
+        "reason": (
+            "The active entrypoint fixes string_extension=true. With false, the parser rejects "
+            "StrLit records and internal constructors refuse to create them, so the elided "
+            "inference assertion cannot distinguish a public-entrypoint artifact."
+        ),
+        "claim_scope": (
+            "Pinned Nanoda public file/config entrypoint only; hypothetical library callers that "
+            "construct an invalid internal DAG are outside this classification."
+        ),
+        "mutant": {
+            "id": MUTANT_ID,
+            "spec_path": str(spec_path.relative_to(ROOT)),
+            "spec_sha256": sha256_file(spec_path),
+            "comparison_path": str(comparison_path.relative_to(ROOT)),
+            "comparison_sha256": sha256_file(comparison_path),
+        },
+        "inputs": {
+            "config": str(config_path.relative_to(ROOT)),
+            "config_sha256": sha256_file(config_path),
+            "parser_source": str(parser_path.relative_to(ROOT)),
+            "parser_source_sha256": sha256_file(parser_path),
+            "util_source": str(util_path.relative_to(ROOT)),
+            "util_source_sha256": sha256_file(util_path),
+        },
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    if args.write_status:
+        if not passed:
+            raise SystemExit("refusing to classify mutant because an equivalence check failed")
+        with REGISTRY.open("a", encoding="utf-8") as handle:
+            handle.write(json.dumps({
+                "id": MUTANT_ID,
+                "status": "SURVIVED",
+                "classification": "EQUIVALENT",
+                "notes": (
+                    "Public-entrypoint equivalence established by "
+                    "results/investigations/nanoda-string-extension-survivor.json"
+                ),
+                "updated_at": datetime.now(timezone.utc).isoformat(),
+            }, sort_keys=True) + "\n")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0 if passed else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

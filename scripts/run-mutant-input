@@ -59,9 +59,8 @@ def build() -> float:
     return time.time() - started
 
 
-def run_input(artifact: Path, timeout: float) -> dict:
+def run_input(artifact: Path, config: Path, timeout: float) -> dict:
     binary = CHECKER_ROOT / "target" / "release" / "nanoda_bin"
-    config = CHECKER_ROOT / "config.json"
     started = time.time()
     with artifact.open("rb") as handle:
         try:
@@ -97,9 +96,14 @@ def main() -> int:
     parser.add_argument("mutant_id")
     parser.add_argument("artifact", type=Path)
     parser.add_argument("--output", type=Path, required=True)
+    parser.add_argument(
+        "--config", type=Path, default=CHECKER_ROOT / "config.json",
+        help="Nanoda runtime configuration (default: checker config.json)",
+    )
     parser.add_argument("--timeout", type=float, default=1800.0)
     args = parser.parse_args()
     artifact = args.artifact.resolve()
+    config = args.config.resolve()
     spec_path = ROOT / "mutations" / f"{args.mutant_id}.json"
     spec = json.loads(spec_path.read_text(encoding="utf-8"))
     active = False
@@ -110,6 +114,10 @@ def main() -> int:
             "path": str(artifact.relative_to(ROOT)),
             "sha256": sha256_file(artifact),
         },
+        "config": {
+            "path": str(config.relative_to(ROOT)),
+            "sha256": sha256_file(config),
+        },
         "mutation_spec_sha256": sha256_file(spec_path),
         "started_at": datetime.now(timezone.utc).isoformat(),
     }
@@ -117,11 +125,11 @@ def main() -> int:
         result["restore_before"] = set_state(spec, "baseline")
         result["baseline_build_seconds"] = build()
         result["timeout_seconds"] = args.timeout
-        result["baseline"] = run_input(artifact, args.timeout)
+        result["baseline"] = run_input(artifact, config, args.timeout)
         result["apply_mutant"] = set_state(spec, "mutant")
         active = True
         result["mutant_build_seconds"] = build()
-        result["mutant"] = run_input(artifact, args.timeout)
+        result["mutant"] = run_input(artifact, config, args.timeout)
         result["different"] = (
             result["baseline"]["normalized_outcome"]
             != result["mutant"]["normalized_outcome"]

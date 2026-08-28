@@ -1,0 +1,31 @@
+{
+  "checker": "nanoda",
+  "checks": {
+    "active_config_enables_string_extension": true,
+    "covering_schedule_exhausted_without_difference": true,
+    "internal_string_literal_constructor_is_guarded": true,
+    "mutation_only_elides_expected_assertion": true,
+    "parser_rejects_string_literals_when_disabled": true
+  },
+  "claim_scope": "Pinned Nanoda public file/config entrypoint only; hypothetical library callers that construct an invalid internal DAG are outside this classification.",
+  "classification": "EQUIVALENT_AT_PUBLIC_ENTRYPOINT",
+  "inputs": {
+    "config": "external/lean-kernel-arena/_build/checkers/nanoda/src/config.json",
+    "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6",
+    "parser_source": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/parser.rs",
+    "parser_source_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+    "util_source": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/util.rs",
+    "util_source_sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"
+  },
+  "mutant": {
+    "comparison_path": "results/mutants/nanoda-gen-4238224977cc/scheduled-comparison.json",
+    "comparison_sha256": "137f94749cfb5b44be2acd27d6327fefdd70b5019166dc7422b792a4ead2c19f",
+    "id": "nanoda-gen-4238224977cc",
+    "spec_path": "mutations/nanoda-gen-4238224977cc.json",
+    "spec_sha256": "0a92b8976d77c50946918d440973b4fb34d1b9c86c1c2c12f0512ced7e9e15c3"
+  },
+  "reason": "The active entrypoint fixes string_extension=true. With false, the parser rejects StrLit records and internal constructors refuse to create them, so the elided inference assertion cannot distinguish a public-entrypoint artifact.",
+  "registry_classification": "EQUIVALENT",
+  "schema_version": 1,
+  "status": "PASS"
+}

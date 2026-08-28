@@ -1,4 +1,4 @@
-# Nanoda Universe Boundary Survivor
+# Nanoda Universe Boundary Equivalence
 
 Mutant: `nanoda-gen-7447f6511962`
 
@@ -51,9 +51,37 @@ That comparison is recorded at:
 
 `results/mutants/nanoda-gen-7447f6511962/scheduled-runs/20260827T165419Z/comparison.json`
 
+## Source-Derived Boundary Analysis
+
+The apparent `>=` versus `>` boundary is unreachable as a behavioral
+difference because of match-arm ordering:
+
+```text
+(Zero, _) if diff >= 0 => true
+...
+(Zero, Param { .. }) => diff >= 0  // mutant: diff > 0
+```
+
+The first arm consumes every `Zero, Param` input for which `diff >= 0`. The
+later mutated arm is therefore reachable only when `diff < 0`. In that region,
+both `diff >= 0` and `diff > 0` are false. The original and mutant return the
+same value for every possible input to this match expression.
+
+A source-derived candidate was also exported from a deliberately unchecked
+universe-polymorphic inductive declaration to force a zero-level constructor
+field against a parameterized codomain. Both baseline and mutant Nanoda accept
+the artifact. Instrumentation confirmed that the specific later arm was
+reached only with `diff = -1`; the `diff = 0` case was consumed by the preceding
+arm. The candidate and restored differential are:
+
+- `corpus/generated/nanoda-gen-7447f6511962-zero-le-param.ndjson`
+- `results/investigations/nanoda-universe-boundary/zero-le-param-reproduction.json`
+
+The hash-bound proof summary is in `equivalence-analysis.json`.
+
 ## Status
 
-The mutant is `SURVIVED_WITHOUT_WITNESS`. Preserve the raw 120-second run as an
-audit example of an undersized timeout, but do not classify it as a performance
-or semantic kill. The next useful work is a source-derived equality-boundary
-witness search with matched controls and independent checker validation.
+The mutant is `EQUIVALENT`; no distinguishing witness exists for this source
+mutation. Preserve the raw 120-second run as an audit example of an undersized
+timeout, but do not classify it as a performance or semantic kill. The checker
+source was restored and rebuilt after instrumentation.

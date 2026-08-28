@@ -1,0 +1,26 @@
+{
+  "analysis": {
+    "mutated_arm": "(Zero, Param { .. }) => diff > 0",
+    "original_arm": "(Zero, Param { .. }) => diff >= 0",
+    "preceding_arm": "(Zero, _) if diff >= 0 => true",
+    "proof": "The preceding arm consumes every Zero/Param input with diff >= 0. The mutated arm is therefore reachable only when diff < 0, where both diff >= 0 and diff > 0 evaluate to false. Both programs return the same value for every input reaching this match expression."
+  },
+  "candidate": {
+    "artifact": "corpus/generated/nanoda-gen-7447f6511962-zero-le-param.ndjson",
+    "artifact_sha256": "a2a8bd35736a12bf84186455380de76607bb91893ca1db8a01b724606f542b3e",
+    "baseline_outcome": "ACCEPT",
+    "mutant_outcome": "ACCEPT",
+    "reproduction": "results/investigations/nanoda-universe-boundary/zero-le-param-reproduction.json",
+    "reproduction_sha256": "c8529df77d8021f4ff868183d820bb343bdd6bf5061bd6f076c1317e3302dbd7"
+  },
+  "checker_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "classification": "EQUIVALENT",
+  "created_at": "2026-08-27T19:13:57Z",
+  "mutant_id": "nanoda-gen-7447f6511962",
+  "mutation_spec_sha256": "2e8f921788c8946dcf0985f799badcd5c1a2b4391153eaab74dae4866a273360",
+  "schema_version": 1,
+  "source_file": "src/level.rs",
+  "source_sha256": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf",
+  "source_span": "178-182",
+  "status": "COMPLETED"
+}
