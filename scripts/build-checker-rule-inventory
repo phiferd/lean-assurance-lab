@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+"""Aggregate bounded checker contract matrices and rank uncovered rule families."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from collections import Counter
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "checker-rule-inventory.json"
+MATRICES = (
+    ("quotient_contract", ROOT / "results" / "investigations" / "nanoda-quotient-contract-matrix.json"),
+    ("restored_nested_declarations", ROOT / "results" / "investigations" / "nanoda-restored-declaration-contract-matrix.json"),
+    ("declaration_environment", ROOT / "results" / "investigations" / "nanoda-declaration-environment-contract-matrix.json"),
+    ("core_declaration_typing", ROOT / "results" / "investigations" / "nanoda-core-declaration-contract-matrix.json"),
+)
+CHECKERS = ("nanoda_baseline", "official", "kiota", "lean4lean")
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    boundaries = []
+    matrix_evidence = []
+    for family, path in MATRICES:
+        matrix = json.loads(path.read_text(encoding="utf-8"))
+        if matrix.get("status") != "PASS":
+            raise SystemExit(f"matrix is not passing: {path}")
+        matrix_evidence.append({
+            "family": family,
+            "path": str(path.relative_to(ROOT)),
+            "sha256": sha256_file(path),
+            "boundary_count": len(matrix["cases"]),
+        })
+        for case in matrix["cases"]:
+            boundaries.append({
+                "family": family,
+                "boundary": case["boundary"],
+                "case_id": case["case_id"],
+                "outcomes": case["candidate_outcomes"],
+            })
+
+    profiles = {}
+    for checker in CHECKERS:
+        counts = Counter(row["outcomes"][checker] for row in boundaries)
+        profiles[checker] = {
+            "accept": counts["ACCEPT"],
+            "reject": counts["REJECT"],
+            "total": len(boundaries),
+        }
+
+    pairwise = {}
+    for i, left in enumerate(CHECKERS):
+        for right in CHECKERS[i + 1:]:
+            agree = sum(row["outcomes"][left] == row["outcomes"][right] for row in boundaries)
+            pairwise[f"{left}__{right}"] = {
+                "agree": agree,
+                "disagree": len(boundaries) - agree,
+                "total": len(boundaries),
+            }
+
+    checks = {
+        "four_source_matrices_are_present": len(matrix_evidence) == 4,
+        "thirteen_boundaries_are_directly_executable": len(boundaries) == 13,
+        "official_and_lean4lean_agree_on_all_boundaries": (
+            pairwise["official__lean4lean"]["disagree"] == 0
+        ),
+        "nanoda_differs_from_official_on_four_boundaries": (
+            pairwise["nanoda_baseline__official"]["disagree"] == 4
+        ),
+        "kiota_differs_from_official_on_seven_boundaries": (
+            pairwise["official__kiota"]["disagree"] == 7
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "matrix_evidence": matrix_evidence,
+        "boundary_count": len(boundaries),
+        "boundaries": boundaries,
+        "checker_profiles": profiles,
+        "pairwise_profiles": pairwise,
+        "coverage_scope": {
+            "covered_families": [family for family, _ in MATRICES],
+            "unmodeled_surfaces": [
+                "universe inequality and definitional equality",
+                "application reduction, recursors, and projections",
+                "ordinary inductive positivity and parameter uniformity",
+                "literal extensions and parser/configuration behavior",
+                "axiom policy and unsafe declaration handling",
+            ],
+        },
+        "ranked_next_families": [
+            {
+                "rank": 1,
+                "family": "universe_definitional_equality",
+                "reason": (
+                    "The distinct-IMax boundary already has consensus rejection evidence and can "
+                    "anchor adjacent source-derived universe rules."
+                ),
+            },
+            {
+                "rank": 2,
+                "family": "reduction_and_projection_typing",
+                "reason": (
+                    "The mutation corpus has several kills, but exact expected-outcome evidence is "
+                    "less consistently normalized than in the first two families."
+                ),
+            },
+        ],
+        "scope": "Inventory of 11 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks, "profiles": profiles}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

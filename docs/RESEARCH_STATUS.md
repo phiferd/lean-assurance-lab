@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-27
+Last updated: 2026-08-28
 
 ## How Status Is Tracked
 
@@ -518,9 +518,9 @@ witness_searches_without_result: 2
 confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
-generated_regression_candidates: 15
-artifact_nodes: 156
-current_artifacts: 145
+generated_regression_candidates: 16
+artifact_nodes: 158
+current_artifacts: 147
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -528,7 +528,7 @@ milestone_3_checks_passing: 13
 milestone_4_checks_passing: 11
 cross_validators: 3
 configured_validators: 3
-cross_validation_cases: 16
+cross_validation_cases: 17
 cross_validation_checker_disagreements: 9
 expected_outcomes_established: 16
 regression_candidates_with_unresolved_disagreement: 8
@@ -558,8 +558,8 @@ current_hard_gates_failing: 1
 current_failure_reason: semantic_checker_disagreements
 current_semantic_disagreements: 9
 current_parse_behavior_disagreements: 1
-current_recorded_checker_runs: 901
-current_recorded_checker_seconds: 6920.6762277827365
+current_recorded_checker_runs: 904
+current_recorded_checker_seconds: 6920.734942783951
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
@@ -801,12 +801,23 @@ milestone_9_checks_passing: 26
   self-reference. Nanoda, official Lean, and Lean4Lean reject both exact
   violations; Kiota accepts both. `numIndices` remains in the restored
   inductive-metadata family rather than being conflated with environment scope.
+- `F-CORE-DECLARATION-TYPING-MATRIX`: added executable characterization cases
+  for let annotation/value agreement and the requirement that theorem types are
+  propositions. Nanoda, official Lean, Kiota, and Lean4Lean reject both exact
+  violations and accept their matched controls.
+- `F-CHECKER-RULE-INVENTORY`: aggregated four bounded matrices into 13 directly
+  executable checker boundaries. Official Lean and Lean4Lean agree on all 13;
+  Nanoda differs from them on four quotient primitive signatures, and Kiota
+  differs on seven prerequisite, restored-declaration, and environment rules.
+  The inventory records unmodeled surfaces and ranks universe definitional
+  equality as the next source-derived family.
 
 ### Active
 
-1. `F-CHECKER-RULE-INVENTORY`: aggregate the three bounded matrices into a
-   checker-by-rule inventory, identify implementation surfaces with no direct
-   executable rule yet, and rank the next spec-derived test family.
+1. `F-UNIVERSE-DEFINITIONAL-EQUALITY-MATRIX`: use the existing distinct-`IMax`
+   consensus-rejection case as an anchor, identify adjacent source-derived
+   universe equality boundaries, and build matched controls plus a bounded
+   four-checker rule matrix.
 
 ### Waiting
 

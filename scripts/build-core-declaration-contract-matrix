@@ -1,0 +1,108 @@
+#!/usr/bin/env python3
+"""Build the observed core declaration typing contract matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-core-declaration-contract-matrix.json"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validator_outcomes(cross: dict) -> tuple[dict, dict]:
+    return (
+        {item["checker"]: item["result"]["normalized_outcome"] for item in cross["validators"]},
+        {item["checker"]: item["positive_control"]["result"]["normalized_outcome"] for item in cross["validators"]},
+    )
+
+
+def main() -> int:
+    let_repro_path = ROOT / "results" / "investigations" / "nanoda-let-value-type" / "transfer-reproduction.json"
+    let_control_path = ROOT / "results" / "investigations" / "nanoda-let-value-type" / "control-reproduction.json"
+    let_cross_path = ROOT / "results" / "cross-validation" / "nanoda-gen-e551a17020ce-let-value-type" / "results.json"
+    theorem_nanoda_path = ROOT / "results" / "investigations" / "nanoda-core-declaration-typing" / "nonprop-theorem-nanoda.json"
+    theorem_cross_path = ROOT / "results" / "cross-validation" / "m6-nonprop-theorem" / "results.json"
+
+    let_repro = json.loads(let_repro_path.read_text(encoding="utf-8"))
+    let_control = json.loads(let_control_path.read_text(encoding="utf-8"))
+    let_cross = json.loads(let_cross_path.read_text(encoding="utf-8"))
+    theorem_nanoda = json.loads(theorem_nanoda_path.read_text(encoding="utf-8"))
+    theorem_cross = json.loads(theorem_cross_path.read_text(encoding="utf-8"))
+    let_validators, let_controls = validator_outcomes(let_cross)
+    theorem_validators, theorem_controls = validator_outcomes(theorem_cross)
+
+    rows = [
+        {
+            "boundary": "let_annotation_matches_value_type",
+            "case_id": "nanoda-gen-e551a17020ce-let-value-type",
+            "artifact": let_cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": let_repro["baseline"]["normalized_outcome"],
+                **let_validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": let_control["baseline"]["normalized_outcome"],
+                **let_controls,
+            },
+            "evidence": {
+                "nanoda_differential": str(let_repro_path.relative_to(ROOT)),
+                "nanoda_differential_sha256": sha256_file(let_repro_path),
+                "cross_validation": str(let_cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(let_cross_path),
+            },
+        },
+        {
+            "boundary": "theorem_type_is_proposition",
+            "case_id": "m6-nonprop-theorem",
+            "artifact": theorem_cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": theorem_nanoda["candidate"]["result"]["normalized_outcome"],
+                **theorem_validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": theorem_nanoda["control"]["result"]["normalized_outcome"],
+                **theorem_controls,
+            },
+            "evidence": {
+                "nanoda_pair": str(theorem_nanoda_path.relative_to(ROOT)),
+                "nanoda_pair_sha256": sha256_file(theorem_nanoda_path),
+                "cross_validation": str(theorem_cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(theorem_cross_path),
+            },
+        },
+    ]
+    checks = {
+        "all_controls_are_accepted": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "all_four_checkers_reject_both_variants": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in rows for checker in ("nanoda_baseline", "official", "kiota", "lean4lean")
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "let_annotation_matches_value_type": "All four checkers reject the tested let value/type mismatch.",
+            "theorem_type_is_proposition": "All four checkers reject the tested non-Prop theorem declaration.",
+        },
+        "scope": "Two exact core declaration typing cases; consensus does not imply complete declaration-checking equivalence.",
+        "upstream_action": "NONE_CONSENSUS_RULES",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,84 @@
+{
+  "cases": [
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 8
+        },
+        "path": "corpus/transfer/milestone-7/let-value-type-mismatch.ndjson",
+        "sha256": "a2f53d20e33e3a4f69e5061b3b4b2a328de3c4f9bff64dee3b250cc847427d43"
+      },
+      "boundary": "let_annotation_matches_value_type",
+      "candidate_outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "nanoda-gen-e551a17020ce-let-value-type",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/nanoda-gen-e551a17020ce-let-value-type/results.json",
+        "cross_validation_sha256": "c44c05d9fc218bce62b01e1eb8f7c8f774b51770e4fe983930864f777a8334bd",
+        "nanoda_differential": "results/investigations/nanoda-let-value-type/transfer-reproduction.json",
+        "nanoda_differential_sha256": "e81818616dad68870041ca0de51b6c10540c50c36a294c3c02a763fadb56ef62"
+      }
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 7
+        },
+        "path": "corpus/transfer/milestone-6/nonprop-theorem.ndjson",
+        "sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f"
+      },
+      "boundary": "theorem_type_is_proposition",
+      "candidate_outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "m6-nonprop-theorem",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/m6-nonprop-theorem/results.json",
+        "cross_validation_sha256": "a756733a33c631dc17ec675da7a445da159020e2f8efc395f41fd181cf81bd0b",
+        "nanoda_pair": "results/investigations/nanoda-core-declaration-typing/nonprop-theorem-nanoda.json",
+        "nanoda_pair_sha256": "6bd3b33f22354addd2422475c09aa6def518acaed4660ba2057bb02398404e9e"
+      }
+    }
+  ],
+  "checks": {
+    "all_controls_are_accepted": true,
+    "all_four_checkers_reject_both_variants": true
+  },
+  "observed_rules": {
+    "let_annotation_matches_value_type": "All four checkers reject the tested let value/type mismatch.",
+    "theorem_type_is_proposition": "All four checkers reject the tested non-Prop theorem declaration."
+  },
+  "schema_version": 1,
+  "scope": "Two exact core declaration typing cases; consensus does not imply complete declaration-checking equivalence.",
+  "status": "PASS",
+  "upstream_action": "NONE_CONSENSUS_RULES"
+}
