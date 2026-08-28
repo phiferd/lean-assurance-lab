@@ -838,13 +838,26 @@ prepared_external_action_drafts: 5
   runs reproduce the two finding families, four exact tracker searches found no
   duplicate issues, and the public-report security assessment found no concrete
   exploit requiring private disclosure. Five focused external drafts are
-  prepared and hash-bound; none has been submitted.
+  prepared and hash-bound. At the preflight boundary none had been submitted;
+  the later Arena proposal is recorded separately below.
+- `F-REDUCTION-SEMANTICS-MATRIX`: normalized eight exact beta, zeta,
+  projection, recursor, quotient, and native-natural reduction boundaries.
+  All four checkers accept every candidate and control. The focused
+  `Quot.lift` candidate kills its dispatch mutant; `Quot.ind` cannot expose
+  proof-valued reduction suppression because proof irrelevance identifies the
+  results. The exact `Nat.ble` case survives its dispatch mutant, while
+  `Nat.land` kills the same mutant by exposing collateral misclassification.
+  No checker issue is recommended from this passing bounded matrix.
+- `F-IMAX-ARENA-PROPOSAL`: filed
+  [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
+  clarify and add reject coverage for the two right-successor comparisons.
+  Nanoda and Kiota implementation reports remain unpublished.
 
 ### Active
 
-1. `F-REDUCTION-SEMANTICS-MATRIX`: normalize the strongest existing quotient,
-   literal, and recursor reduction evidence into exact cases with matched
-   controls while the action-ready external drafts await human review.
+1. `F-ORDINARY-INDUCTIVE-WELL-FORMEDNESS`: derive exact positivity and
+   parameter-uniformity boundaries from Nanoda's source checks, pair each with
+   a valid control, and compare all four checkers before recommending action.
 
 ### Waiting
 
@@ -865,10 +878,10 @@ prepared_external_action_drafts: 5
   recursor type, and constructor index. Official Lean and Lean4Lean reject all
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
-- `W-IMAX-RIGHT-SUCCESSOR`: discuss whether the two exact cases should be
-  submitted as prepared Nanoda and Kiota issues and an Arena corpus PR. Current
-  upstream reproduction and duplicate searches are complete. All three actions
-  remain `REVIEW_REQUIRED`; do not submit without target-specific approval.
+- `W-IMAX-RIGHT-SUCCESSOR`: await Arena discussion in
+  [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Prepared
+  Nanoda and Kiota implementation issues remain `REVIEW_REQUIRED`; do not
+  submit either without target-specific approval.
 - `W-POSSIBLY-PROP-PROJECTIONS`: discuss whether Nanoda and Lean4Lean should be
   notified using the two prepared issue drafts. Current upstream reproduction
   and duplicate searches are complete. Arena already contains and explains

@@ -230,37 +230,125 @@
         "nanoda_baseline": "REJECT",
         "official": "REJECT"
       }
+    },
+    {
+      "boundary": "beta_reduction",
+      "case_id": "reduction-semantics-beta",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "zeta_reduction",
+      "case_id": "reduction-semantics-zeta",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "constructor_projection_reduction",
+      "case_id": "reduction-semantics-projection",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "recursor_iota_reduction",
+      "case_id": "reduction-semantics-recursor",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "quot_lift_reduction",
+      "case_id": "reduction-semantics-quot-lift",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "quot_ind_proof_reduction",
+      "case_id": "reduction-semantics-quot-ind",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "native_nat_ble_reduction",
+      "case_id": "reduction-semantics-nat-ble",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
+    },
+    {
+      "boundary": "native_nat_land_reduction",
+      "case_id": "reduction-semantics-nat-land",
+      "family": "reduction_semantics",
+      "outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      }
     }
   ],
-  "boundary_count": 21,
+  "boundary_count": 29,
   "checker_profiles": {
     "kiota": {
-      "accept": 17,
+      "accept": 25,
       "reject": 4,
-      "total": 21
+      "total": 29
     },
     "lean4lean": {
-      "accept": 6,
+      "accept": 14,
       "reject": 15,
-      "total": 21
+      "total": 29
     },
     "nanoda_baseline": {
-      "accept": 4,
+      "accept": 12,
       "reject": 17,
-      "total": 21
+      "total": 29
     },
     "official": {
-      "accept": 8,
+      "accept": 16,
       "reject": 13,
-      "total": 21
+      "total": 29
     }
   },
   "checks": {
     "kiota_differs_from_official_on_nine_boundaries": true,
     "nanoda_differs_from_official_on_eight_boundaries": true,
     "official_and_lean4lean_differ_on_two_boundaries": true,
-    "six_source_matrices_are_present": true,
-    "twenty_one_boundaries_are_directly_executable": true
+    "seven_source_matrices_are_present": true,
+    "twenty_nine_boundaries_are_directly_executable": true
   },
   "coverage_scope": {
     "covered_families": [
@@ -269,10 +357,10 @@
       "declaration_environment",
       "core_declaration_typing",
       "universe_definitional_equality",
-      "projection_typing"
+      "projection_typing",
+      "reduction_semantics"
     ],
     "unmodeled_surfaces": [
-      "application, recursor, quotient, and literal reduction",
       "ordinary inductive positivity and parameter uniformity",
       "literal extensions and parser/configuration behavior",
       "axiom policy and unsafe declaration handling"
@@ -314,49 +402,50 @@
       "family": "projection_typing",
       "path": "results/investigations/nanoda-projection-typing-contract-matrix.json",
       "sha256": "4600a95cb351a2cbc7dfcfbeff8068a935f4f4b65ac6c98418f7425f4693e3ac"
+    },
+    {
+      "boundary_count": 8,
+      "family": "reduction_semantics",
+      "path": "results/investigations/nanoda-reduction-semantics-matrix.json",
+      "sha256": "1742646d0f8cfefd65aaa6b293064485ba44475857047501ed7f1e4c18aaa020"
     }
   ],
   "pairwise_profiles": {
     "kiota__lean4lean": {
-      "agree": 10,
+      "agree": 18,
       "disagree": 11,
-      "total": 21
+      "total": 29
     },
     "nanoda_baseline__kiota": {
-      "agree": 8,
+      "agree": 16,
       "disagree": 13,
-      "total": 21
+      "total": 29
     },
     "nanoda_baseline__lean4lean": {
-      "agree": 15,
+      "agree": 23,
       "disagree": 6,
-      "total": 21
+      "total": 29
     },
     "nanoda_baseline__official": {
-      "agree": 13,
+      "agree": 21,
       "disagree": 8,
-      "total": 21
+      "total": 29
     },
     "official__kiota": {
-      "agree": 12,
+      "agree": 20,
       "disagree": 9,
-      "total": 21
+      "total": 29
     },
     "official__lean4lean": {
-      "agree": 19,
+      "agree": 27,
       "disagree": 2,
-      "total": 21
+      "total": 29
     }
   },
   "ranked_next_families": [
     {
-      "family": "reduction_semantics",
-      "rank": 1,
-      "reason": "Projection typing now has direct cases, while quotient, literal, and recursor reduction evidence is not yet normalized into one rule matrix."
-    },
-    {
       "family": "ordinary_inductive_well_formedness",
-      "rank": 2,
+      "rank": 1,
       "reason": "Positivity and parameter-uniformity checks are high-impact semantic rules with source anchors but no bounded four-checker matrix yet."
     }
   ],

@@ -1,0 +1,129 @@
+#!/usr/bin/env python3
+"""Materialize exact reduction candidate/control exports through Arena."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "lean-kernel-arena"
+SOURCE = ROOT / "results" / "investigations" / "nanoda-reduction-semantics" / "source.lean"
+OUTPUT_DIR = ROOT / "corpus" / "generated"
+MANIFEST = ROOT / "results" / "investigations" / "nanoda-reduction-semantics" / "materialization.json"
+PREFIX = "lal-reduction-semantics-"
+
+DECLARATIONS = {
+    "beta-candidate": "lalReductionBetaCandidate",
+    "beta-control": "lalReductionBetaControl",
+    "zeta-candidate": "lalReductionZetaCandidate",
+    "zeta-control": "lalReductionZetaControl",
+    "projection-candidate": "lalReductionProjectionCandidate",
+    "projection-control": "lalReductionProjectionControl",
+    "recursor-candidate": "lalReductionRecursorCandidate",
+    "recursor-control": "lalReductionRecursorControl",
+    "nat-ble-candidate": "lalReductionNatBleCandidate",
+    "nat-ble-control": "lalReductionNatBleControl",
+    "nat-land-candidate": "lalReductionNatLandCandidate",
+    "nat-land-control": "lalReductionNatLandControl",
+}
+
+TUTORIAL_ARTIFACTS = {
+    "quot-lift-candidate": "132_quotLiftReduction",
+    "quot-lift-control": "130_quotLiftType",
+    "quot-ind-candidate": "133_quotIndReduction",
+    "quot-ind-control": "129_quotIndType",
+}
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    tests_dir = ARENA / "tests"
+    temporary_source = tests_dir / f"{PREFIX}source.lean"
+    temporary_yamls = []
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip():
+        raise SystemExit("Arena checkout must be clean before materialization")
+
+    try:
+        shutil.copyfile(SOURCE, temporary_source)
+        for suffix, declaration in DECLARATIONS.items():
+            name = f"{PREFIX}{suffix}"
+            yaml_path = tests_dir / f"{name}.yaml"
+            yaml_path.write_text(
+                "description: Exact reduction-semantics investigation artifact.\n"
+                f"leanfile: tests/{temporary_source.name}\n"
+                f"export-decls: [\"{declaration}\"]\n"
+                "outcome: accept\n",
+                encoding="utf-8",
+            )
+            temporary_yamls.append(yaml_path)
+            subprocess.run(
+                [str(ROOT / ".venv-arena" / "bin" / "python"), "lka.py", "build-test", name],
+                cwd=ARENA,
+                check=True,
+            )
+            built = ARENA / "_build" / "tests" / f"{name}.ndjson"
+            destination = OUTPUT_DIR / f"{name}.ndjson"
+            shutil.copyfile(built, destination)
+        for suffix, tutorial_name in TUTORIAL_ARTIFACTS.items():
+            built = ARENA / "_build" / "tests" / "tutorial" / "good" / f"{tutorial_name}.ndjson"
+            if not built.is_file():
+                raise SystemExit(
+                    f"missing canonical tutorial artifact {built}; run Arena build-test tutorial first"
+                )
+            destination = OUTPUT_DIR / f"{PREFIX}{suffix}.ndjson"
+            shutil.copyfile(built, destination)
+    finally:
+        temporary_source.unlink(missing_ok=True)
+        for path in temporary_yamls:
+            path.unlink(missing_ok=True)
+
+    arena_revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+    artifacts = []
+    for suffix, declaration in DECLARATIONS.items():
+        path = OUTPUT_DIR / f"{PREFIX}{suffix}.ndjson"
+        artifacts.append({
+            "declaration": declaration,
+            "path": str(path.relative_to(ROOT)),
+            "sha256": digest(path),
+        })
+    for suffix, tutorial_name in TUTORIAL_ARTIFACTS.items():
+        path = OUTPUT_DIR / f"{PREFIX}{suffix}.ndjson"
+        artifacts.append({
+            "declaration": tutorial_name.split("_", 1)[1],
+            "origin": f"external/lean-kernel-arena/_build/tests/tutorial/good/{tutorial_name}.ndjson",
+            "path": str(path.relative_to(ROOT)),
+            "sha256": digest(path),
+        })
+    report = {
+        "schema_version": 1,
+        "status": "PASS",
+        "arena_revision": arena_revision,
+        "source": {
+            "path": str(SOURCE.relative_to(ROOT)),
+            "sha256": digest(SOURCE),
+        },
+        "artifacts": artifacts,
+        "temporary_arena_files_removed": not temporary_source.exists()
+        and all(not path.exists() for path in temporary_yamls),
+    }
+    MANIFEST.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -19,6 +19,7 @@ MATRICES = (
     ("core_declaration_typing", ROOT / "results" / "investigations" / "nanoda-core-declaration-contract-matrix.json"),
     ("universe_definitional_equality", ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.json"),
     ("projection_typing", ROOT / "results" / "investigations" / "nanoda-projection-typing-contract-matrix.json"),
+    ("reduction_semantics", ROOT / "results" / "investigations" / "nanoda-reduction-semantics-matrix.json"),
 )
 CHECKERS = ("nanoda_baseline", "official", "kiota", "lean4lean")
 
@@ -68,8 +69,8 @@ def main() -> int:
             }
 
     checks = {
-        "six_source_matrices_are_present": len(matrix_evidence) == 6,
-        "twenty_one_boundaries_are_directly_executable": len(boundaries) == 21,
+        "seven_source_matrices_are_present": len(matrix_evidence) == 7,
+        "twenty_nine_boundaries_are_directly_executable": len(boundaries) == 29,
         "official_and_lean4lean_differ_on_two_boundaries": (
             pairwise["official__lean4lean"]["disagree"] == 2
         ),
@@ -92,7 +93,6 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "application, recursor, quotient, and literal reduction",
                 "ordinary inductive positivity and parameter uniformity",
                 "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
@@ -101,14 +101,6 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "reduction_semantics",
-                "reason": (
-                    "Projection typing now has direct cases, while quotient, literal, and recursor "
-                    "reduction evidence is not yet normalized into one rule matrix."
-                ),
-            },
-            {
-                "rank": 2,
                 "family": "ordinary_inductive_well_formedness",
                 "reason": (
                     "Positivity and parameter-uniformity checks are high-impact semantic rules "
@@ -128,7 +120,7 @@ def main() -> int:
     lines = [
         "# Checker Rule Inventory",
         "",
-        f"Six bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
+        f"Seven bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
         "",
         "| Checker | Accept | Reject | Total |",
         "| --- | ---: | ---: | ---: |",
@@ -150,12 +142,11 @@ def main() -> int:
         "",
         "## Coverage Gaps",
         "",
-        "- application, recursor, quotient, and literal reduction;",
         "- ordinary inductive positivity and parameter uniformity;",
         "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is reduction semantics.",
+        "The next ranked family is ordinary inductive well-formedness.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
