@@ -519,8 +519,8 @@ confirmed_witness_semantics: 3
 ambiguous_witness_semantics: 0
 witness_checker_disagreements: 1
 generated_regression_candidates: 15
-artifact_nodes: 155
-current_artifacts: 144
+artifact_nodes: 156
+current_artifacts: 145
 historical_artifacts: 7
 superseded_artifacts: 4
 milestone_2_checks_passing: 9
@@ -558,8 +558,8 @@ current_hard_gates_failing: 1
 current_failure_reason: semantic_checker_disagreements
 current_semantic_disagreements: 9
 current_parse_behavior_disagreements: 1
-current_recorded_checker_runs: 900
-current_recorded_checker_seconds: 6920.650456825038
+current_recorded_checker_runs: 901
+current_recorded_checker_seconds: 6920.6762277827365
 milestone_8_checks_passing: 24
 contribution_paths: 7
 community_issue_forms: 5
@@ -796,13 +796,17 @@ milestone_9_checks_passing: 26
   reject restored recursor `k`, recursor type, and constructor-index
   mismatches; Kiota accepts all three. Both pilot matrices are machine-derived
   from exact differential and cross-validation evidence.
+- `F-DECLARATION-ENVIRONMENT-MATRIX`: derived two separate executable rules
+  for referenced-constant universe ownership and current-declaration
+  self-reference. Nanoda, official Lean, and Lean4Lean reject both exact
+  violations; Kiota accepts both. `numIndices` remains in the restored
+  inductive-metadata family rather than being conflated with environment scope.
 
 ### Active
 
-1. `F-DECLARATION-ENVIRONMENT-MATRIX`: derive the next bounded rule family from
-   universe ownership, declaration self-reference, and related environment
-   visibility cases. Keep distinct rules separate unless their source and test
-   evidence establish one shared boundary.
+1. `F-CHECKER-RULE-INVENTORY`: aggregate the three bounded matrices into a
+   checker-by-rule inventory, identify implementation surfaces with no direct
+   executable rule yet, and rank the next spec-derived test family.
 
 ### Waiting
 

@@ -1,0 +1,127 @@
+#!/usr/bin/env python3
+"""Build the observed declaration-environment contract matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-declaration-environment-contract-matrix.json"
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validator_outcomes(cross: dict) -> tuple[dict, dict]:
+    candidates = {
+        item["checker"]: item["result"]["normalized_outcome"]
+        for item in cross["validators"]
+    }
+    controls = {
+        item["checker"]: item["positive_control"]["result"]["normalized_outcome"]
+        for item in cross["validators"]
+    }
+    return candidates, controls
+
+
+def main() -> int:
+    universe_meta_path = ROOT / "results" / "witnesses" / "nanoda-0003-auto-universe" / "metadata.json"
+    universe_cross_path = ROOT / "results" / "cross-validation" / "nanoda-0003-original" / "results.json"
+    self_repro_path = ROOT / "results" / "investigations" / "nanoda-env-cutoff-self-reference" / "reproduction.json"
+    self_cross_path = ROOT / "results" / "cross-validation" / "nanoda-gen-8317efea2c7d-self-reference" / "results.json"
+
+    universe_meta = json.loads(universe_meta_path.read_text(encoding="utf-8"))
+    universe_cross = json.loads(universe_cross_path.read_text(encoding="utf-8"))
+    self_repro = json.loads(self_repro_path.read_text(encoding="utf-8"))
+    self_cross = json.loads(self_cross_path.read_text(encoding="utf-8"))
+    universe_validators, universe_controls = validator_outcomes(universe_cross)
+    self_validators, self_controls = validator_outcomes(self_cross)
+
+    universe_final = universe_meta["final_predicate_checks"][0]
+    rows = [
+        {
+            "boundary": "constant_reference_universe_ownership",
+            "case_id": "nanoda-0003-original",
+            "artifact": universe_cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": universe_final["baseline"]["normalized_outcome"],
+                **universe_validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": "ACCEPT",
+                **universe_controls,
+            },
+            "evidence": {
+                "nanoda_differential": str(universe_meta_path.relative_to(ROOT)),
+                "nanoda_differential_sha256": sha256_file(universe_meta_path),
+                "cross_validation": str(universe_cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(universe_cross_path),
+            },
+        },
+        {
+            "boundary": "current_declaration_self_reference",
+            "case_id": "nanoda-gen-8317efea2c7d-self-reference",
+            "artifact": self_cross["artifact"],
+            "candidate_outcomes": {
+                "nanoda_baseline": self_repro["baseline"]["normalized_outcome"],
+                **self_validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": "ACCEPT",
+                **self_controls,
+            },
+            "evidence": {
+                "nanoda_differential": str(self_repro_path.relative_to(ROOT)),
+                "nanoda_differential_sha256": sha256_file(self_repro_path),
+                "cross_validation": str(self_cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": sha256_file(self_cross_path),
+            },
+        },
+    ]
+    checks = {
+        "all_controls_are_accepted": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "nanoda_official_and_lean4lean_reject_both_variants": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in rows for checker in ("nanoda_baseline", "official", "lean4lean")
+        ),
+        "kiota_accepts_both_variants": all(
+            row["candidate_outcomes"]["kiota"] == "ACCEPT" for row in rows
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "observed_rules": {
+            "nanoda": "Rejects both tested declaration-environment violations.",
+            "official": "Rejects both tested declaration-environment violations.",
+            "kiota": "Accepts both tested declaration-environment violations.",
+            "lean4lean": "Rejects both tested declaration-environment violations.",
+        },
+        "rule_boundaries": {
+            "constant_reference_universe_ownership": (
+                "Every universe used to instantiate a referenced constant must be owned by the "
+                "declaration currently being checked."
+            ),
+            "current_declaration_self_reference": (
+                "The declaration currently being checked is not visible through ordinary "
+                "constant lookup in its own value."
+            ),
+        },
+        "scope": "Two exact declaration-environment cases; the rules remain separate and do not imply a complete environment specification.",
+        "upstream_action": "DISCUSS_BEFORE_FILING",
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({"output": str(OUTPUT.relative_to(ROOT)), "status": report["status"], "checks": checks}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

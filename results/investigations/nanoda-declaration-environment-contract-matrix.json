@@ -1,0 +1,91 @@
+{
+  "cases": [
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 9
+        },
+        "path": "corpus/generated/nanoda-0003-auto-universe.ndjson",
+        "sha256": "5f49dd739c4e909a0147b7fc5a8bee4e2eb06ca0f4ad7c87ef20ba871ff7fff3"
+      },
+      "boundary": "constant_reference_universe_ownership",
+      "candidate_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "nanoda-0003-original",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/nanoda-0003-original/results.json",
+        "cross_validation_sha256": "07f2870b90014d70d1ebc954b3899f2ab429ff03d168d1ce9cce56b93290d1ac",
+        "nanoda_differential": "results/witnesses/nanoda-0003-auto-universe/metadata.json",
+        "nanoda_differential_sha256": "edaafe0d380687d7f14d66387079e97f25c0c4bd134038f987150116eeda8fb5"
+      }
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 6
+        },
+        "path": "corpus/generated/nanoda-gen-8317efea2c7d-self-reference.ndjson",
+        "sha256": "63b778e6f145a2eae6757666c13e4e2f231233bfb813e5d3d4e5a645492215f0"
+      },
+      "boundary": "current_declaration_self_reference",
+      "candidate_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "nanoda-gen-8317efea2c7d-self-reference",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/nanoda-gen-8317efea2c7d-self-reference/results.json",
+        "cross_validation_sha256": "bfbe47debb29a54b8222ab06770501e98a88cdfea457a32eb92d0382ed21a418",
+        "nanoda_differential": "results/investigations/nanoda-env-cutoff-self-reference/reproduction.json",
+        "nanoda_differential_sha256": "b3db7c787dce63d977f7a29c2fa20b7e4a87813dda3266039dab683909b2b9a4"
+      }
+    }
+  ],
+  "checks": {
+    "all_controls_are_accepted": true,
+    "kiota_accepts_both_variants": true,
+    "nanoda_official_and_lean4lean_reject_both_variants": true
+  },
+  "observed_rules": {
+    "kiota": "Accepts both tested declaration-environment violations.",
+    "lean4lean": "Rejects both tested declaration-environment violations.",
+    "nanoda": "Rejects both tested declaration-environment violations.",
+    "official": "Rejects both tested declaration-environment violations."
+  },
+  "rule_boundaries": {
+    "constant_reference_universe_ownership": "Every universe used to instantiate a referenced constant must be owned by the declaration currently being checked.",
+    "current_declaration_self_reference": "The declaration currently being checked is not visible through ordinary constant lookup in its own value."
+  },
+  "schema_version": 1,
+  "scope": "Two exact declaration-environment cases; the rules remain separate and do not imply a complete environment specification.",
+  "status": "PASS",
+  "upstream_action": "DISCUSS_BEFORE_FILING"
+}
