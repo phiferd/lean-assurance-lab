@@ -62,7 +62,7 @@ def main() -> int:
         # The generator reports a smaller remaining pool as a nonzero result.
         # Materialize that final partial batch instead of discarding useful work.
         if generated != 0:
-            match = re.search(r"only (\\d+) covered, semantic, non-duplicate candidates found", generation_log.read_text())
+            match = re.search(r"only (\d+) covered, semantic, non-duplicate candidates found", generation_log.read_text())
             if match and int(match.group(1)):
                 command[command.index("--limit") + 1] = match.group(1)
                 generated = run(command, generation_log)
