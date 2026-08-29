@@ -870,6 +870,13 @@ prepared_external_action_drafts: 5
   control. Official Lean, Kiota, and Lean4Lean all confirm rejection. A single
   Arena test proposal is recommended because the existing dummy-recursor case
   does not isolate the rule; no implementation issue is recommended.
+- `F-LITERAL-PARSER-CONFIGURATION`: closed the family at Nanoda's pinned public
+  entrypoint. Two Nat-extension assertion omissions and one String-extension
+  assertion omission are already proved equivalent: active config enables the
+  extensions, while disabled config rejects literal records in the parser and
+  internal constructors before the mutated downstream checks. No checker issue
+  or additional matrix is recommended from this configuration-reachability
+  result.
 - `F-IMAX-ARENA-PROPOSAL`: filed
   [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
   clarify and add reject coverage for the two right-successor comparisons.
@@ -877,11 +884,11 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-LITERAL-PARSER-CONFIGURATION`: derive exact literal-extension and parser
-   configuration boundaries, beginning with the already classified string-
-   extension guard and distinguishing unreachable configuration states from
-   malformed serialized literals. Pair every candidate with a valid control
-   before deciding whether this family merits a full checker matrix.
+1. `F-AXIOM-UNSAFE-DECLARATIONS`: derive exact boundaries for ordinary axioms,
+   Nanoda's axiom allow/skip policy, and serialized `isUnsafe` declaration
+   flags. Separate configurable trust policy from kernel well-formedness and
+   compare other checkers only where the export contract is implementation-
+   independent.
 
 ### Waiting
 

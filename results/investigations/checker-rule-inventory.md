@@ -20,7 +20,9 @@ evidence, and checker outcomes remain linked in `checker-rule-inventory.json`.
 
 ## Coverage Gaps
 
-- literal extension and parser/configuration behavior;
 - axiom policy and unsafe declarations.
 
-The next ranked family is literal extensions and parser/configuration behavior.
+Literal extension and parser/configuration assertion mutants are classified at the
+public entrypoint without a separate cross-checker matrix.
+
+The next ranked family is axiom policy and unsafe declarations.

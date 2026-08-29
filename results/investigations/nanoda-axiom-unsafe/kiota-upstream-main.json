@@ -1,0 +1,78 @@
+{
+  "candidate": {
+    "path": "corpus/generated/axiom-unsafe-candidate.ndjson",
+    "sha256": "203e7e41eb4e9e9d8b34bb1f4daa2bfc4032496979779a82e7c624375b66c4c4"
+  },
+  "case_id": "kiota-unsafe-axiom-safe-dependent",
+  "classification": "CURRENT_UPSTREAM_ALIGNED",
+  "control": {
+    "path": "corpus/generated/axiom-unsafe-control.ndjson",
+    "sha256": "b3d5e6f1f6e45721973e4e7167fbe0a92abbdcd69f039112eac70ab25c028acc"
+  },
+  "created_at": "2026-08-29T01:14:42.428645+00:00",
+  "expected_evidence": {
+    "expected_outcome": "REJECT",
+    "path": "results/expected-outcomes/axiom-unsafe-flag.json",
+    "sha256": "a57cddbd3de93fce3ea031d9a33a4cf04c36af5cf53c3eaebf44c06a0cf9af26"
+  },
+  "mechanical_predicate": {
+    "expression": "official(candidate)=REJECT and official(control)=ACCEPT and current-kiota(candidate)=REJECT and current-kiota(control)=ACCEPT",
+    "satisfied": true
+  },
+  "producer": {
+    "path": "scripts/reproduce-kiota-unsafe-axiom",
+    "sha256": "f27e8ddbcebfcb5c185626726e082cbd51eeeb31a7b775cc3da21511bf207ae5"
+  },
+  "schema_version": 1,
+  "scope": "Current-upstream alignment means no Kiota implementation issue is recommended; the Arena-pinned revision remains separately characterized.",
+  "status": "CONFIRMED",
+  "validators": [
+    {
+      "candidate_result": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.027967375004664063,
+        "stderr_sha256": "879ccccb921472e7f7c080f544d965d559eb6fdc6e1efca795ed721f016944aa",
+        "stderr_tail": "uncaught exception: while replaying declaration 'letRed':\n(kernel) unknown constant 'aProp'\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "control_result": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0283607910387218,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "d7b70d7ca4bc132416372b1be92990c8499737f5a355b1d6c4fcf693d2cf5f6d",
+        "stdout_tail": "Accepted 2 declarations.\n"
+      },
+      "id": "official"
+    },
+    {
+      "binary_sha256": "9810d9615cbe8e2ed8c8324ef0192dc58fbc38e7e26289e7e9a6aee60ad9fc87",
+      "candidate_result": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.00417783297598362,
+        "stderr_sha256": "507a7e3fe1baf9b6abc87520589f4ce53a2b968faf33f9d4abbd605c096e8be4",
+        "stderr_tail": "REJECT: unsafe axiom\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "control_result": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.003857959061861038,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "id": "kiota-upstream-main",
+      "parser_source_sha256": "305f32d1bea4427e57739eefd011ada7ea92ba376310b49a8ac2981c11d1c1b7",
+      "remote": "https://github.com/sankalpsthakur/kiota.git",
+      "revision": "686063c13b22ce379c05dfe7fc03656655ac60e5",
+      "source_clean": true
+    }
+  ]
+}

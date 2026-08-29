@@ -1,0 +1,79 @@
+#!/usr/bin/env python3
+"""Materialize a one-field unsafe-axiom candidate from an Arena-good export."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "lean-kernel-arena"
+SOURCE = ARENA / "_build" / "tests" / "tutorial" / "good" / "033_letRed.ndjson"
+CONTROL = ROOT / "corpus" / "generated" / "axiom-unsafe-control.ndjson"
+CANDIDATE = ROOT / "corpus" / "generated" / "axiom-unsafe-candidate.ndjson"
+AXIOM_ONLY_CONTROL = ROOT / "corpus" / "generated" / "axiom-unsafe-only-control.ndjson"
+AXIOM_ONLY_CANDIDATE = ROOT / "corpus" / "generated" / "axiom-unsafe-only-candidate.ndjson"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-axiom-unsafe" / "materialization.json"
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip():
+        raise SystemExit("Arena checkout must be clean")
+    if not SOURCE.is_file():
+        raise SystemExit(f"missing Arena tutorial artifact: {SOURCE}")
+    shutil.copyfile(SOURCE, CONTROL)
+    records = [json.loads(line) for line in CONTROL.read_text(encoding="utf-8").splitlines()]
+    axioms = [record["axiom"] for record in records if "axiom" in record]
+    if len(axioms) != 1 or axioms[0]["isUnsafe"] is not False:
+        raise SystemExit("expected exactly one safe axiom")
+    axioms[0]["isUnsafe"] = True
+    CANDIDATE.write_text(
+        "".join(json.dumps(record, separators=(",", ":"), sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    control_records = [json.loads(line) for line in CONTROL.read_text(encoding="utf-8").splitlines()]
+    axiom_index = next(i for i, record in enumerate(control_records) if "axiom" in record)
+    axiom_only_control = control_records[:axiom_index + 1]
+    axiom_only_candidate = json.loads(json.dumps(axiom_only_control))
+    axiom_only_candidate[-1]["axiom"]["isUnsafe"] = True
+    for path, subset in (
+        (AXIOM_ONLY_CONTROL, axiom_only_control),
+        (AXIOM_ONLY_CANDIDATE, axiom_only_candidate),
+    ):
+        path.write_text(
+            "".join(json.dumps(record, separators=(",", ":"), sort_keys=True) + "\n" for record in subset),
+            encoding="utf-8",
+        )
+    report = {
+        "schema_version": 1,
+        "status": "PASS",
+        "arena_revision": subprocess.run(
+            ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+            text=True, stdout=subprocess.PIPE,
+        ).stdout.strip(),
+        "origin": str(SOURCE.relative_to(ROOT)),
+        "control": {"path": str(CONTROL.relative_to(ROOT)), "sha256": digest(CONTROL)},
+        "candidate": {"path": str(CANDIDATE.relative_to(ROOT)), "sha256": digest(CANDIDATE)},
+        "axiom_only_control": {"path": str(AXIOM_ONLY_CONTROL.relative_to(ROOT)), "sha256": digest(AXIOM_ONLY_CONTROL)},
+        "axiom_only_candidate": {"path": str(AXIOM_ONLY_CANDIDATE.relative_to(ROOT)), "sha256": digest(AXIOM_ONLY_CANDIDATE)},
+        "transformation": {"record": "axiom", "field": "isUnsafe", "from": False, "to": True},
+    }
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

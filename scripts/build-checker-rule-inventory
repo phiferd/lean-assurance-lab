@@ -93,18 +93,20 @@ def main() -> int:
         "pairwise_profiles": pairwise,
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
+            "classified_non_matrix_families": [
+                "literal_extensions_and_parser_configuration",
+            ],
             "unmodeled_surfaces": [
-                "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
             ],
         },
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "literal_extensions_and_parser_configuration",
+                "family": "axiom_policy_and_unsafe_declarations",
                 "reason": (
-                    "Ordinary inductive omission isolation is complete. Literal extension and "
-                    "parser/configuration behavior is the next unmodeled source-derived family."
+                    "Ordinary inductive omission isolation is complete, and literal extension "
+                    "assertion mutants are closed by public-entrypoint reachability proofs."
                 ),
             },
         ],
@@ -143,10 +145,12 @@ def main() -> int:
         "",
         "## Coverage Gaps",
         "",
-        "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is literal extensions and parser/configuration behavior.",
+        "Literal extension and parser/configuration assertion mutants are classified at the",
+        "public entrypoint without a separate cross-checker matrix.",
+        "",
+        "The next ranked family is axiom policy and unsafe declarations.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")

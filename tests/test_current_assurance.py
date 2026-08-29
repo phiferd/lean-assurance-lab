@@ -27,7 +27,7 @@ class CurrentAssuranceTests(unittest.TestCase):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
         self.assertEqual(snapshot["gate"]["status"], "FAIL")
         self.assertEqual(snapshot["gate"]["failure_reasons"], ["semantic_checker_disagreements"])
-        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 14)
+        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 15)
         self.assertEqual(snapshot["cross_validator_disagreements"]["parse_behavior_count"], 1)
 
     def test_snapshot_has_every_plan_metric(self):
