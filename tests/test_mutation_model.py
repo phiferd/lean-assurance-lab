@@ -16,7 +16,7 @@ class MutationModelTests(unittest.TestCase):
         cls.batch = json.loads((ROOT / "results" / "mutation-batches" / "nanoda-semantic-0001.json").read_text())
 
     def test_manual_catalog_binds_specs(self) -> None:
-        self.assertEqual(len(self.catalog["manual_mutants"]), 4)
+        self.assertEqual(len(self.catalog["manual_mutants"]), 6)
         for row in self.catalog["manual_mutants"]:
             digest = hashlib.sha256((ROOT / row["spec"]).read_bytes()).hexdigest()
             self.assertEqual(digest, row["spec_sha256"])

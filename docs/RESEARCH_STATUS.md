@@ -848,6 +848,14 @@ prepared_external_action_drafts: 5
   results. The exact `Nat.ble` case survives its dispatch mutant, while
   `Nat.land` kills the same mutant by exposing collateral misclassification.
   No checker issue is recommended from this passing bounded matrix.
+- `F-ORDINARY-INDUCTIVE-WELL-FORMEDNESS`: characterized six exact strict-
+  positivity, constructor-parameter, result-parameter, result-universe, and
+  recursive-index boundaries from canonical Arena cases. All four checkers
+  reject every malformed candidate and accept every control. Focused Nanoda
+  positivity and result-parameter omission probes survive because independent
+  `isRec` or reconstructed-recursor consistency checks reject the canonical
+  artifacts. That is defense-in-depth evidence, not an equivalence result; no
+  external issue is recommended from the consensus matrix.
 - `F-IMAX-ARENA-PROPOSAL`: filed
   [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
   clarify and add reject coverage for the two right-successor comparisons.
@@ -855,9 +863,11 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-ORDINARY-INDUCTIVE-WELL-FORMEDNESS`: derive exact positivity and
-   parameter-uniformity boundaries from Nanoda's source checks, pair each with
-   a valid control, and compare all four checkers before recommending action.
+1. `F-ORDINARY-INDUCTIVE-WITNESS-ISOLATION`: derive internally consistent
+   malformed inductive artifacts that isolate Nanoda's positivity and exact
+   constructor-result parameter checks. Preserve valid `isRec`, constructor,
+   recursor, and recursor-rule metadata so the omission probes are tested at
+   whole-checker scope; do not infer equivalence from the canonical survivors.
 
 ### Waiting
 

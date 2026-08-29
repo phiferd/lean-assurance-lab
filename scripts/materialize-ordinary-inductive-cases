@@ -1,0 +1,71 @@
+#!/usr/bin/env python3
+"""Copy canonical Arena ordinary-inductive cases into the frozen corpus."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "lean-kernel-arena"
+TUTORIAL = ARENA / "_build" / "tests" / "tutorial"
+OUTPUT_DIR = ROOT / "corpus" / "generated"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive" / "materialization.json"
+
+CASES = {
+    "classic-negative": ("bad/052_indNeg", "good/042_natDef"),
+    "reducible-hidden-negative": ("bad/055_indNegReducible", "good/053_reduceCtorParam.mk"),
+    "constructor-param-domain": ("bad/048_inductWrongCtorParams", "good/039_pprodType"),
+    "constructor-result-params": ("bad/049_inductWrongCtorResParams", "good/039_pprodType"),
+    "constructor-result-levels": ("bad/050_inductWrongCtorResLevel", "good/039_pprodType"),
+    "recursive-index-occurrence": ("bad/051_inductInIndex", "good/043_rbTreeDef"),
+}
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip():
+        raise SystemExit("Arena checkout must be clean")
+    artifacts = []
+    for case_id, (candidate_origin, control_origin) in CASES.items():
+        row = {"case_id": case_id}
+        for role, origin in (("candidate", candidate_origin), ("control", control_origin)):
+            source = TUTORIAL / f"{origin}.ndjson"
+            if not source.is_file():
+                raise SystemExit(f"missing Arena artifact {source}; run build-test tutorial first")
+            destination = OUTPUT_DIR / f"ordinary-inductive-{case_id}-{role}.ndjson"
+            shutil.copyfile(source, destination)
+            row[role] = {
+                "origin": str(source.relative_to(ROOT)),
+                "path": str(destination.relative_to(ROOT)),
+                "sha256": digest(destination),
+            }
+        artifacts.append(row)
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+    report = {
+        "schema_version": 1,
+        "status": "PASS",
+        "arena_revision": revision,
+        "cases": artifacts,
+    }
+    OUTPUT.parent.mkdir(parents=True, exist_ok=True)
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -20,6 +20,7 @@ MATRICES = (
     ("universe_definitional_equality", ROOT / "results" / "investigations" / "nanoda-universe-definitional-equality-matrix.json"),
     ("projection_typing", ROOT / "results" / "investigations" / "nanoda-projection-typing-contract-matrix.json"),
     ("reduction_semantics", ROOT / "results" / "investigations" / "nanoda-reduction-semantics-matrix.json"),
+    ("ordinary_inductive_well_formedness", ROOT / "results" / "investigations" / "nanoda-ordinary-inductive-contract-matrix.json"),
 )
 CHECKERS = ("nanoda_baseline", "official", "kiota", "lean4lean")
 
@@ -69,8 +70,8 @@ def main() -> int:
             }
 
     checks = {
-        "seven_source_matrices_are_present": len(matrix_evidence) == 7,
-        "twenty_nine_boundaries_are_directly_executable": len(boundaries) == 29,
+        "eight_source_matrices_are_present": len(matrix_evidence) == 8,
+        "thirty_five_boundaries_are_directly_executable": len(boundaries) == 35,
         "official_and_lean4lean_differ_on_two_boundaries": (
             pairwise["official__lean4lean"]["disagree"] == 2
         ),
@@ -93,7 +94,7 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "ordinary inductive positivity and parameter uniformity",
+                "whole-checker isolation witnesses for ordinary inductive positivity and parameter uniformity",
                 "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
             ],
@@ -101,14 +102,14 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "ordinary_inductive_well_formedness",
+                "family": "ordinary_inductive_witness_isolation",
                 "reason": (
-                    "Positivity and parameter-uniformity checks are high-impact semantic rules "
-                    "with source anchors but no bounded four-checker matrix yet."
+                    "The bounded matrix establishes consensus outcomes, but canonical artifacts "
+                    "do not isolate the focused Nanoda omission mutants."
                 ),
             },
         ],
-        "scope": "Inventory of 21 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+        "scope": "Inventory of 35 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     display_names = {
@@ -120,7 +121,7 @@ def main() -> int:
     lines = [
         "# Checker Rule Inventory",
         "",
-        f"Seven bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
+        f"Eight bounded matrices now provide {len(boundaries)} exact, executable rule boundaries.",
         "",
         "| Checker | Accept | Reject | Total |",
         "| --- | ---: | ---: | ---: |",
@@ -142,11 +143,11 @@ def main() -> int:
         "",
         "## Coverage Gaps",
         "",
-        "- ordinary inductive positivity and parameter uniformity;",
+        "- whole-checker isolation witnesses for ordinary inductive positivity and parameter uniformity;",
         "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is ordinary inductive well-formedness.",
+        "The next ranked family is ordinary inductive witness isolation.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")

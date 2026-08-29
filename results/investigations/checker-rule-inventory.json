@@ -318,37 +318,103 @@
         "nanoda_baseline": "ACCEPT",
         "official": "ACCEPT"
       }
+    },
+    {
+      "boundary": "classic_strict_positivity",
+      "case_id": "ordinary-inductive-classic-negative",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
+    },
+    {
+      "boundary": "reducible_hidden_strict_positivity",
+      "case_id": "ordinary-inductive-reducible-hidden-negative",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
+    },
+    {
+      "boundary": "constructor_parameter_domain",
+      "case_id": "ordinary-inductive-constructor-param-domain",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
+    },
+    {
+      "boundary": "constructor_result_parameter_uniformity",
+      "case_id": "ordinary-inductive-constructor-result-params",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
+    },
+    {
+      "boundary": "constructor_result_universe_uniformity",
+      "case_id": "ordinary-inductive-constructor-result-levels",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
+    },
+    {
+      "boundary": "recursive_occurrence_excluded_from_indices",
+      "case_id": "ordinary-inductive-recursive-index-occurrence",
+      "family": "ordinary_inductive_well_formedness",
+      "outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      }
     }
   ],
-  "boundary_count": 29,
+  "boundary_count": 35,
   "checker_profiles": {
     "kiota": {
       "accept": 25,
-      "reject": 4,
-      "total": 29
+      "reject": 10,
+      "total": 35
     },
     "lean4lean": {
       "accept": 14,
-      "reject": 15,
-      "total": 29
+      "reject": 21,
+      "total": 35
     },
     "nanoda_baseline": {
       "accept": 12,
-      "reject": 17,
-      "total": 29
+      "reject": 23,
+      "total": 35
     },
     "official": {
       "accept": 16,
-      "reject": 13,
-      "total": 29
+      "reject": 19,
+      "total": 35
     }
   },
   "checks": {
+    "eight_source_matrices_are_present": true,
     "kiota_differs_from_official_on_nine_boundaries": true,
     "nanoda_differs_from_official_on_eight_boundaries": true,
     "official_and_lean4lean_differ_on_two_boundaries": true,
-    "seven_source_matrices_are_present": true,
-    "twenty_nine_boundaries_are_directly_executable": true
+    "thirty_five_boundaries_are_directly_executable": true
   },
   "coverage_scope": {
     "covered_families": [
@@ -358,10 +424,11 @@
       "core_declaration_typing",
       "universe_definitional_equality",
       "projection_typing",
-      "reduction_semantics"
+      "reduction_semantics",
+      "ordinary_inductive_well_formedness"
     ],
     "unmodeled_surfaces": [
-      "ordinary inductive positivity and parameter uniformity",
+      "whole-checker isolation witnesses for ordinary inductive positivity and parameter uniformity",
       "literal extensions and parser/configuration behavior",
       "axiom policy and unsafe declaration handling"
     ]
@@ -408,48 +475,54 @@
       "family": "reduction_semantics",
       "path": "results/investigations/nanoda-reduction-semantics-matrix.json",
       "sha256": "1742646d0f8cfefd65aaa6b293064485ba44475857047501ed7f1e4c18aaa020"
+    },
+    {
+      "boundary_count": 6,
+      "family": "ordinary_inductive_well_formedness",
+      "path": "results/investigations/nanoda-ordinary-inductive-contract-matrix.json",
+      "sha256": "26637d7c35f94ce69c9d2fb654c810c70bd814c3598ee6a2a5be7b769832ec6c"
     }
   ],
   "pairwise_profiles": {
     "kiota__lean4lean": {
-      "agree": 18,
+      "agree": 24,
       "disagree": 11,
-      "total": 29
+      "total": 35
     },
     "nanoda_baseline__kiota": {
-      "agree": 16,
+      "agree": 22,
       "disagree": 13,
-      "total": 29
+      "total": 35
     },
     "nanoda_baseline__lean4lean": {
-      "agree": 23,
+      "agree": 29,
       "disagree": 6,
-      "total": 29
+      "total": 35
     },
     "nanoda_baseline__official": {
-      "agree": 21,
+      "agree": 27,
       "disagree": 8,
-      "total": 29
+      "total": 35
     },
     "official__kiota": {
-      "agree": 20,
+      "agree": 26,
       "disagree": 9,
-      "total": 29
+      "total": 35
     },
     "official__lean4lean": {
-      "agree": 27,
+      "agree": 33,
       "disagree": 2,
-      "total": 29
+      "total": 35
     }
   },
   "ranked_next_families": [
     {
-      "family": "ordinary_inductive_well_formedness",
+      "family": "ordinary_inductive_witness_isolation",
       "rank": 1,
-      "reason": "Positivity and parameter-uniformity checks are high-impact semantic rules with source anchors but no bounded four-checker matrix yet."
+      "reason": "The bounded matrix establishes consensus outcomes, but canonical artifacts do not isolate the focused Nanoda omission mutants."
     }
   ],
   "schema_version": 1,
-  "scope": "Inventory of 21 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+  "scope": "Inventory of 35 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
   "status": "PASS"
 }

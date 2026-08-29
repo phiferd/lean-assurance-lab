@@ -1,0 +1,169 @@
+#!/usr/bin/env python3
+"""Build the bounded ordinary-inductive well-formedness matrix."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+INVESTIGATION = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive"
+OUTPUT = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive-contract-matrix.json"
+OUTPUT_MD = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive-contract-matrix.md"
+BOUNDARIES = (
+    ("classic_strict_positivity", "classic-negative"),
+    ("reducible_hidden_strict_positivity", "reducible-hidden-negative"),
+    ("constructor_parameter_domain", "constructor-param-domain"),
+    ("constructor_result_parameter_uniformity", "constructor-result-params"),
+    ("constructor_result_universe_uniformity", "constructor-result-levels"),
+    ("recursive_occurrence_excluded_from_indices", "recursive-index-occurrence"),
+)
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    mutation_path = INVESTIGATION / "mutation-sensitivity.json"
+    mutation = json.loads(mutation_path.read_text(encoding="utf-8"))
+    sensitivity = {row["case_id"]: row for row in mutation["cases"]}
+    rows = []
+    for boundary, family in BOUNDARIES:
+        case_id = f"ordinary-inductive-{family}"
+        nanoda_path = INVESTIGATION / f"{family}-nanoda.json"
+        cross_path = ROOT / "results" / "cross-validation" / case_id / "results.json"
+        expected_path = ROOT / "results" / "expected-outcomes" / f"{case_id}.json"
+        nanoda = json.loads(nanoda_path.read_text(encoding="utf-8"))
+        cross = json.loads(cross_path.read_text(encoding="utf-8"))
+        validators = {
+            row["checker"]: row["result"]["normalized_outcome"]
+            for row in cross["validators"]
+        }
+        controls = {
+            row["checker"]: row["positive_control"]["result"]["normalized_outcome"]
+            for row in cross["validators"]
+        }
+        probe = sensitivity.get(family)
+        rows.append({
+            "boundary": boundary,
+            "case_id": case_id,
+            "artifact": cross["artifact"],
+            "expected_outcome": cross["expected_outcome"],
+            "candidate_outcomes": {
+                "nanoda_baseline": nanoda["candidate"]["result"]["normalized_outcome"],
+                **validators,
+            },
+            "control_outcomes": {
+                "nanoda_baseline": nanoda["control"]["result"]["normalized_outcome"],
+                **controls,
+            },
+            "mutation_sensitivity": (
+                {
+                    "mutant_id": probe["mutant_id"],
+                    "classification": probe["classification"],
+                }
+                if probe else None
+            ),
+            "evidence": {
+                "expected_outcome": str(expected_path.relative_to(ROOT)),
+                "expected_outcome_sha256": digest(expected_path),
+                "cross_validation": str(cross_path.relative_to(ROOT)),
+                "cross_validation_sha256": digest(cross_path),
+                "nanoda_pair": str(nanoda_path.relative_to(ROOT)),
+                "nanoda_pair_sha256": digest(nanoda_path),
+            },
+        })
+
+    checks = {
+        "six_exact_ordinary_inductive_boundaries": len(rows) == 6,
+        "all_candidates_are_rejected_by_all_checkers": all(
+            set(row["candidate_outcomes"].values()) == {"REJECT"} for row in rows
+        ),
+        "all_controls_are_accepted_by_all_checkers": all(
+            set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
+        ),
+        "all_focused_omission_probes_survive_canonical_candidates": all(
+            row["classification"] == "SURVIVED_EXACT_CANDIDATE"
+            for row in sensitivity.values()
+        ),
+        "all_mutated_sources_are_restored": all(
+            row["preparation"]["source_restored"] for row in mutation["mutations"].values()
+        ),
+    }
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(checks.values()) else "FAIL",
+        "checks": checks,
+        "cases": rows,
+        "mutation_evidence": {
+            "path": str(mutation_path.relative_to(ROOT)),
+            "sha256": digest(mutation_path),
+        },
+        "observed_rules": {
+            "cross_checker": (
+                "All four checkers reject the six exact malformed inductive declarations and "
+                "accept their matched controls."
+            ),
+            "isolation_limit": (
+                "The canonical Arena negatives do not isolate Nanoda's positivity or exact "
+                "constructor-result parameter checks: independent isRec and reconstructed-"
+                "recursor consistency checks reject the same artifacts."
+            ),
+            "mutation_interpretation": (
+                "Survival of these omission probes is defense-in-depth evidence only; it does "
+                "not establish that either omitted rule is equivalent at whole-checker scope."
+            ),
+        },
+        "scope": (
+            "Six exact reject boundaries and controls derived from canonical Arena cases. "
+            "Agreement is a bounded profile, not a complete inductive-declaration specification."
+        ),
+        "recommended_action": {
+            "action": "CONTINUE_INVESTIGATION",
+            "target": "source-derived internally consistent positivity and parameter-uniformity witnesses",
+            "rationale": (
+                "The matrix finds no checker disagreement, but its canonical artifacts cannot "
+                "determine whether Nanoda's focused omission mutants are killable."
+            ),
+            "external_action": False,
+        },
+    }
+    OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+
+    lines = [
+        "# Ordinary Inductive Contract Matrix",
+        "",
+        "| Boundary | Nanoda | Official | Kiota | Lean4Lean | Mutation sensitivity |",
+        "| --- | --- | --- | --- | --- | --- |",
+    ]
+    for row in rows:
+        outcomes = row["candidate_outcomes"]
+        sensitivity_text = (
+            row["mutation_sensitivity"]["classification"]
+            if row["mutation_sensitivity"] else "NOT_TESTED"
+        )
+        lines.append(
+            f"| `{row['boundary']}` | {outcomes['nanoda_baseline']} | {outcomes['official']} | "
+            f"{outcomes['kiota']} | {outcomes['lean4lean']} | {sensitivity_text} |"
+        )
+    lines.extend([
+        "",
+        "All controls are accepted by all four checkers. The three focused omission",
+        "probes survive their exact canonical candidates because independent `isRec` or",
+        "reconstructed-recursor checks reject first or later. This is defense in depth,",
+        "not evidence that the omitted checks are equivalent.",
+        "",
+        "No external issue is recommended. Continue locally with internally consistent,",
+        "source-derived witnesses that isolate positivity and parameter uniformity.",
+        "",
+    ])
+    OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
+    print(json.dumps({"checks": checks, "output": str(OUTPUT.relative_to(ROOT)), "status": report["status"]}, indent=2, sort_keys=True))
+    return 0 if report["status"] == "PASS" else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
