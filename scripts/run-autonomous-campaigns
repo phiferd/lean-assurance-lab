@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import re
 import subprocess
 from datetime import datetime, timezone
 from pathlib import Path
@@ -52,10 +53,19 @@ def main() -> int:
         state["batches"].append(row)
         save(state_path, state)
         log_dir = ROOT / "results" / "autonomous-campaigns" / "logs" / args.campaign_prefix
-        generated = run([
+        generation_log = log_dir / f"{batch_id}-generate.log"
+        command = [
             str(ROOT / "scripts" / "generate-mutations"), "--batch-id", batch_id,
             "--limit", str(args.limit), "--selection", "semantic-diversity-v1", "--write", "--register",
-        ], log_dir / f"{batch_id}-generate.log")
+        ]
+        generated = run(command, generation_log)
+        # The generator reports a smaller remaining pool as a nonzero result.
+        # Materialize that final partial batch instead of discarding useful work.
+        if generated != 0:
+            match = re.search(r"only (\\d+) covered, semantic, non-duplicate candidates found", generation_log.read_text())
+            if match and int(match.group(1)):
+                command[command.index("--limit") + 1] = match.group(1)
+                generated = run(command, generation_log)
         manifest_path = ROOT / "results" / "mutation-batches" / f"{batch_id}.json"
         if generated != 0 or not manifest_path.exists():
             row.update({"status": "FAILED_GENERATION", "completed_at": datetime.now(timezone.utc).isoformat()})
