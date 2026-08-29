@@ -93,6 +93,11 @@ def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("batch_id")
     parser.add_argument("--restore-only", action="store_true")
+    parser.add_argument(
+        "--resume",
+        action="store_true",
+        help="reuse build results already durably recorded in the batch manifest",
+    )
     args = parser.parse_args()
     manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
     manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
@@ -111,10 +116,21 @@ def main() -> int:
         restore_log.write_text(output, encoding="utf-8")
         print(json.dumps({"status": "RESTORED", "returncode": returncode, "seconds": seconds}))
         return returncode
-    results = []
+    previous_validation = manifest.get("build_validation", {})
+    results = list(previous_validation.get("results", [])) if args.resume else []
+    completed = {row["mutant_id"] for row in results}
+    if results and not args.resume:
+        raise SystemExit("batch already has build validation results; use --resume")
+    manifest["build_validation"] = {
+        "started_at": previous_validation.get("started_at", datetime.now(timezone.utc).isoformat()),
+        "results": results,
+    }
+    manifest_path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     active_spec = None
     try:
         for entry, spec in zip(manifest["mutants"], specs, strict=True):
+            if entry["id"] in completed:
+                continue
             set_state(spec, "baseline")
             set_state(spec, "mutant")
             active_spec = spec
@@ -132,6 +148,10 @@ def main() -> int:
                 "log": str(log_path.relative_to(ROOT)),
             }
             results.append(result)
+            manifest["build_validation"]["results"] = results
+            manifest_path.write_text(
+                json.dumps(manifest, indent=2, sort_keys=True) + "\n", encoding="utf-8"
+            )
             append_status(
                 entry["id"],
                 status,
@@ -151,11 +171,12 @@ def main() -> int:
         if returncode != 0:
             raise SystemExit(f"baseline restore build failed: {restore_log}")
 
-    manifest["build_validation"] = {
+    manifest["build_validation"].update({
         "completed_at": datetime.now(timezone.utc).isoformat(),
+        "status": "COMPLETE",
         "baseline_restore_seconds": seconds,
         "results": results,
-    }
+    })
     build_by_id = {row["mutant_id"]: row for row in results}
     for attempt in manifest.get("attempts", []):
         build_result = build_by_id.get(attempt["id"])

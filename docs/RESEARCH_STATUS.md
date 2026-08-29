@@ -22,6 +22,15 @@ retains the project's own priorities and completion conditions.
 
 ## Attempted
 
+- Added a disk-backed `scripts/run-campaign` supervisor for already-generated
+  bounded mutation batches. It binds the selected mutants and source inputs,
+  records phase-level interruptions and logs, adopts pre-existing completed
+  build/execution evidence, and resumes without conversational state. Build
+  validation now persists each mutant result, matching the existing
+  per-mutant execution checkpoint. The unattended loop is deliberately limited
+  to build validation, coverage-guided execution, and assurance refresh;
+  witness design, semantic classification, and external publication remain
+  human or model-review work.
 - Created the initial durable project scaffold.
 - Identified upstream Lean Kernel Arena as `https://github.com/leanprover/lean-kernel-arena`.
 - Cloned Lean Kernel Arena at `external/lean-kernel-arena`.
