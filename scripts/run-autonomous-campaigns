@@ -1,0 +1,93 @@
+#!/usr/bin/env python3
+"""Generate and execute a bounded sequence of quarantined mutation batches."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+
+
+def save(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name(f".{path.name}.tmp")
+    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    temporary.replace(path)
+
+
+def run(command: list[str], log: Path) -> int:
+    log.parent.mkdir(parents=True, exist_ok=True)
+    with log.open("w", encoding="utf-8") as handle:
+        return subprocess.run(command, cwd=ROOT, stdout=handle, stderr=subprocess.STDOUT).returncode
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("campaign_prefix")
+    parser.add_argument("--batches", type=int, default=8)
+    parser.add_argument("--limit", type=int, default=25)
+    parser.add_argument("--start-at", type=int, default=2)
+    args = parser.parse_args()
+    if args.batches < 1 or args.limit < 1 or args.start_at < 1:
+        raise SystemExit("--batches, --limit, and --start-at must be positive")
+
+    state_path = ROOT / "results" / "autonomous-campaigns" / f"{args.campaign_prefix}.json"
+    state = {
+        "schema_version": 1,
+        "campaign_prefix": args.campaign_prefix,
+        "started_at": datetime.now(timezone.utc).isoformat(),
+        "limits": {"batches": args.batches, "mutants_per_batch": args.limit},
+        "batches": [],
+        "status": "RUNNING",
+    }
+    save(state_path, state)
+    for index in range(args.start_at, args.start_at + args.batches):
+        batch_id = f"{args.campaign_prefix}-{index:04d}"
+        row = {"batch_id": batch_id, "started_at": datetime.now(timezone.utc).isoformat(), "status": "GENERATING"}
+        state["batches"].append(row)
+        save(state_path, state)
+        log_dir = ROOT / "results" / "autonomous-campaigns" / "logs" / args.campaign_prefix
+        generated = run([
+            str(ROOT / "scripts" / "generate-mutations"), "--batch-id", batch_id,
+            "--limit", str(args.limit), "--selection", "semantic-diversity-v1", "--write", "--register",
+        ], log_dir / f"{batch_id}-generate.log")
+        manifest_path = ROOT / "results" / "mutation-batches" / f"{batch_id}.json"
+        if generated != 0 or not manifest_path.exists():
+            row.update({"status": "FAILED_GENERATION", "completed_at": datetime.now(timezone.utc).isoformat()})
+            state["status"] = row["status"]
+            save(state_path, state)
+            return 1
+        manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
+        row["generated_count"] = manifest["generated_count"]
+        if not manifest["generated_count"]:
+            row.update({"status": "EXHAUSTED", "completed_at": datetime.now(timezone.utc).isoformat()})
+            state["status"] = "COMPLETE"
+            save(state_path, state)
+            return 0
+        row["status"] = "EXECUTING"
+        save(state_path, state)
+        executed = run([
+            str(ROOT / "scripts" / "run-campaign"), batch_id, "--batch-id", batch_id, "--through", "assurance",
+        ], log_dir / f"{batch_id}-campaign.log")
+        row.update({
+            "status": "COMPLETE" if executed == 0 else "FAILED_EXECUTION",
+            "completed_at": datetime.now(timezone.utc).isoformat(),
+        })
+        save(state_path, state)
+        if executed != 0:
+            state["status"] = row["status"]
+            save(state_path, state)
+            return 1
+    state["status"] = "COMPLETE"
+    state["completed_at"] = datetime.now(timezone.utc).isoformat()
+    save(state_path, state)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
