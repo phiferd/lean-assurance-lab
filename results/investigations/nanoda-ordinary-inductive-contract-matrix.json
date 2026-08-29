@@ -236,31 +236,77 @@
       },
       "expected_outcome": "REJECT",
       "mutation_sensitivity": null
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 53
+        },
+        "path": "corpus/generated/lal-ordinary-inductive-proof-parameter-candidate.ndjson",
+        "sha256": "25cfb47d4c80ebe1ec61931898df8e6bd8d06793aebf3ee8b2a7cd00beca1abc"
+      },
+      "boundary": "constructor_result_proof_parameter_uniformity",
+      "candidate_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "ordinary-inductive-proof-parameter-uniformity",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/ordinary-inductive-proof-parameter-uniformity/results.json",
+        "cross_validation_sha256": "b39f92beaac3204dcd1f2b91d314261ba32832405f20a3a011dc90b58a8fd789",
+        "expected_outcome": "results/expected-outcomes/ordinary-inductive-proof-parameter-uniformity.json",
+        "expected_outcome_sha256": "c526a5e20dd8ec0f2ff871710ac9fe0cbbd12ce3cd3ac34ca90d00713b1f0f6c",
+        "nanoda_control_pair": "results/investigations/nanoda-ordinary-inductive/proof-parameter-control-differential.json",
+        "nanoda_control_pair_sha256": "0c3af0eea9a5d6a6cf7df87d2b6f533a298061474ff292811a637f75b5fe58d8",
+        "nanoda_pair": "results/investigations/nanoda-ordinary-inductive/proof-parameter-differential.json",
+        "nanoda_pair_sha256": "737c2d3a2e9348cf86257cf0faee5791beffb77e6fed8ea6cdfd88002cf0e318"
+      },
+      "expected_outcome": "REJECT",
+      "mutation_sensitivity": {
+        "classification": "KILLED_BY_CANDIDATE",
+        "mutant_id": "nanoda-0006"
+      }
     }
   ],
   "checks": {
-    "all_candidates_are_rejected_by_all_checkers": true,
     "all_controls_are_accepted_by_all_checkers": true,
     "all_focused_omission_probes_survive_canonical_candidates": true,
     "all_mutated_sources_are_restored": true,
-    "six_exact_ordinary_inductive_boundaries": true
+    "kiota_accepts_only_the_proof_parameter_candidate": true,
+    "nanoda_official_and_lean4lean_reject_all_candidates": true,
+    "proof_parameter_candidate_kills_uniformity_mutant": true,
+    "seven_exact_ordinary_inductive_boundaries": true
   },
   "mutation_evidence": {
     "path": "results/investigations/nanoda-ordinary-inductive/mutation-sensitivity.json",
     "sha256": "d914a581c0f4c5c93b4768157ebfd030ebee967cd4cba4ed7b095423ebaaf51e"
   },
   "observed_rules": {
-    "cross_checker": "All four checkers reject the six exact malformed inductive declarations and accept their matched controls.",
+    "cross_checker": "All four checkers reject the six canonical malformed declarations. Nanoda, official Lean, and Lean4Lean also reject the proof-parameter witness, while Kiota accepts it. Every matched control is accepted.",
     "isolation_limit": "The canonical Arena negatives do not isolate Nanoda's positivity or exact constructor-result parameter checks: independent isRec and reconstructed-recursor consistency checks reject the same artifacts.",
-    "mutation_interpretation": "Survival of these omission probes is defense-in-depth evidence only; it does not establish that either omitted rule is equivalent at whole-checker scope."
+    "mutation_interpretation": "Survival of these omission probes is defense-in-depth evidence only; it does not establish positivity equivalence. The proof-parameter witness kills the parameter-uniformity omission at whole-checker scope."
   },
   "recommended_action": {
     "action": "CONTINUE_INVESTIGATION",
-    "external_action": false,
-    "rationale": "The matrix finds no checker disagreement, but its canonical artifacts cannot determine whether Nanoda's focused omission mutants are killable.",
-    "target": "source-derived internally consistent positivity and parameter-uniformity witnesses"
+    "external_action": true,
+    "human_gate": "REVIEW_REQUIRED",
+    "rationale": "Parameter-uniformity isolation is complete and exposes a current Kiota disagreement; positivity remains unisolated.",
+    "target": "source-derived internally consistent positivity witness and human review of the proof-parameter external actions"
   },
   "schema_version": 1,
-  "scope": "Six exact reject boundaries and controls derived from canonical Arena cases. Agreement is a bounded profile, not a complete inductive-declaration specification.",
+  "scope": "Six canonical reject boundaries plus one source-derived proof-parameter boundary. The profile is bounded and is not a complete inductive-declaration specification.",
   "status": "PASS"
 }

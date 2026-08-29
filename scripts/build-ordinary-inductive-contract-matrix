@@ -20,6 +20,7 @@ BOUNDARIES = (
     ("constructor_result_universe_uniformity", "constructor-result-levels"),
     ("recursive_occurrence_excluded_from_indices", "recursive-index-occurrence"),
 )
+PROOF_CASE_ID = "ordinary-inductive-proof-parameter-uniformity"
 
 
 def digest(path: Path) -> str:
@@ -77,10 +78,57 @@ def main() -> int:
             },
         })
 
+    proof_cross_path = ROOT / "results" / "cross-validation" / PROOF_CASE_ID / "results.json"
+    proof_expected_path = ROOT / "results" / "expected-outcomes" / f"{PROOF_CASE_ID}.json"
+    proof_diff_path = INVESTIGATION / "proof-parameter-differential.json"
+    proof_control_path = INVESTIGATION / "proof-parameter-control-differential.json"
+    proof_cross = json.loads(proof_cross_path.read_text(encoding="utf-8"))
+    proof_diff = json.loads(proof_diff_path.read_text(encoding="utf-8"))
+    proof_control = json.loads(proof_control_path.read_text(encoding="utf-8"))
+    rows.append({
+        "boundary": "constructor_result_proof_parameter_uniformity",
+        "case_id": PROOF_CASE_ID,
+        "artifact": proof_cross["artifact"],
+        "expected_outcome": proof_cross["expected_outcome"],
+        "candidate_outcomes": {
+            "nanoda_baseline": proof_diff["baseline"]["normalized_outcome"],
+            **{
+                row["checker"]: row["result"]["normalized_outcome"]
+                for row in proof_cross["validators"]
+            },
+        },
+        "control_outcomes": {
+            "nanoda_baseline": proof_control["baseline"]["normalized_outcome"],
+            **{
+                row["checker"]: row["positive_control"]["result"]["normalized_outcome"]
+                for row in proof_cross["validators"]
+            },
+        },
+        "mutation_sensitivity": {
+            "mutant_id": "nanoda-0006",
+            "classification": "KILLED_BY_CANDIDATE",
+        },
+        "evidence": {
+            "expected_outcome": str(proof_expected_path.relative_to(ROOT)),
+            "expected_outcome_sha256": digest(proof_expected_path),
+            "cross_validation": str(proof_cross_path.relative_to(ROOT)),
+            "cross_validation_sha256": digest(proof_cross_path),
+            "nanoda_pair": str(proof_diff_path.relative_to(ROOT)),
+            "nanoda_pair_sha256": digest(proof_diff_path),
+            "nanoda_control_pair": str(proof_control_path.relative_to(ROOT)),
+            "nanoda_control_pair_sha256": digest(proof_control_path),
+        },
+    })
+
     checks = {
-        "six_exact_ordinary_inductive_boundaries": len(rows) == 6,
-        "all_candidates_are_rejected_by_all_checkers": all(
-            set(row["candidate_outcomes"].values()) == {"REJECT"} for row in rows
+        "seven_exact_ordinary_inductive_boundaries": len(rows) == 7,
+        "nanoda_official_and_lean4lean_reject_all_candidates": all(
+            row["candidate_outcomes"][checker] == "REJECT"
+            for row in rows for checker in ("nanoda_baseline", "official", "lean4lean")
+        ),
+        "kiota_accepts_only_the_proof_parameter_candidate": (
+            [row["case_id"] for row in rows if row["candidate_outcomes"]["kiota"] == "ACCEPT"]
+            == [PROOF_CASE_ID]
         ),
         "all_controls_are_accepted_by_all_checkers": all(
             set(row["control_outcomes"].values()) == {"ACCEPT"} for row in rows
@@ -91,7 +139,8 @@ def main() -> int:
         ),
         "all_mutated_sources_are_restored": all(
             row["preparation"]["source_restored"] for row in mutation["mutations"].values()
-        ),
+        ) and proof_diff["restore_after"] == "changed" and proof_control["restore_after"] == "changed",
+        "proof_parameter_candidate_kills_uniformity_mutant": proof_diff["status"] == "KILLED",
     }
     report = {
         "schema_version": 1,
@@ -104,8 +153,9 @@ def main() -> int:
         },
         "observed_rules": {
             "cross_checker": (
-                "All four checkers reject the six exact malformed inductive declarations and "
-                "accept their matched controls."
+                "All four checkers reject the six canonical malformed declarations. Nanoda, "
+                "official Lean, and Lean4Lean also reject the proof-parameter witness, while "
+                "Kiota accepts it. Every matched control is accepted."
             ),
             "isolation_limit": (
                 "The canonical Arena negatives do not isolate Nanoda's positivity or exact "
@@ -114,21 +164,23 @@ def main() -> int:
             ),
             "mutation_interpretation": (
                 "Survival of these omission probes is defense-in-depth evidence only; it does "
-                "not establish that either omitted rule is equivalent at whole-checker scope."
+                "not establish positivity equivalence. The proof-parameter witness kills the "
+                "parameter-uniformity omission at whole-checker scope."
             ),
         },
         "scope": (
-            "Six exact reject boundaries and controls derived from canonical Arena cases. "
-            "Agreement is a bounded profile, not a complete inductive-declaration specification."
+            "Six canonical reject boundaries plus one source-derived proof-parameter boundary. "
+            "The profile is bounded and is not a complete inductive-declaration specification."
         ),
         "recommended_action": {
             "action": "CONTINUE_INVESTIGATION",
-            "target": "source-derived internally consistent positivity and parameter-uniformity witnesses",
+            "target": "source-derived internally consistent positivity witness and human review of the proof-parameter external actions",
             "rationale": (
-                "The matrix finds no checker disagreement, but its canonical artifacts cannot "
-                "determine whether Nanoda's focused omission mutants are killable."
+                "Parameter-uniformity isolation is complete and exposes a current Kiota "
+                "disagreement; positivity remains unisolated."
             ),
-            "external_action": False,
+            "external_action": True,
+            "human_gate": "REVIEW_REQUIRED",
         },
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
@@ -151,13 +203,14 @@ def main() -> int:
         )
     lines.extend([
         "",
-        "All controls are accepted by all four checkers. The three focused omission",
+        "All controls are accepted by all four checkers. The three canonical omission",
         "probes survive their exact canonical candidates because independent `isRec` or",
         "reconstructed-recursor checks reject first or later. This is defense in depth,",
-        "not evidence that the omitted checks are equivalent.",
+        "not evidence that positivity is equivalent. The source-derived proof-parameter",
+        "candidate kills the exact parameter-uniformity omission; Kiota alone accepts it.",
         "",
-        "No external issue is recommended. Continue locally with internally consistent,",
-        "source-derived witnesses that isolate positivity and parameter uniformity.",
+        "Continue locally with an internally consistent positivity witness. A Kiota issue",
+        "and Arena reject-test proposal are recommended but require human approval.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")

@@ -8,11 +8,13 @@
 | `constructor_result_parameter_uniformity` | REJECT | REJECT | REJECT | REJECT | SURVIVED_EXACT_CANDIDATE |
 | `constructor_result_universe_uniformity` | REJECT | REJECT | REJECT | REJECT | NOT_TESTED |
 | `recursive_occurrence_excluded_from_indices` | REJECT | REJECT | REJECT | REJECT | NOT_TESTED |
+| `constructor_result_proof_parameter_uniformity` | REJECT | REJECT | ACCEPT | REJECT | KILLED_BY_CANDIDATE |
 
-All controls are accepted by all four checkers. The three focused omission
+All controls are accepted by all four checkers. The three canonical omission
 probes survive their exact canonical candidates because independent `isRec` or
 reconstructed-recursor checks reject first or later. This is defense in depth,
-not evidence that the omitted checks are equivalent.
+not evidence that positivity is equivalent. The source-derived proof-parameter
+candidate kills the exact parameter-uniformity omission; Kiota alone accepts it.
 
-No external issue is recommended. Continue locally with internally consistent,
-source-derived witnesses that isolate positivity and parameter uniformity.
+Continue locally with an internally consistent positivity witness. A Kiota issue
+and Arena reject-test proposal are recommended but require human approval.

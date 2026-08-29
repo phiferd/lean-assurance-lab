@@ -186,6 +186,14 @@
         "sha256": "485f1eb9fc6fd5f69a3fc7917785a017de90121a4ea6602b1f40552cf3ab2f3c"
       },
       {
+        "case_id": "ordinary-inductive-proof-parameter-uniformity",
+        "classification": "CHECKER_DISAGREEMENT",
+        "disagreement_kind": "SEMANTIC_OUTCOME",
+        "path": "results/cross-validation/ordinary-inductive-proof-parameter-uniformity/results.json",
+        "semantic_status": "UNRESOLVED",
+        "sha256": "b39f92beaac3204dcd1f2b91d314261ba32832405f20a3a011dc90b58a8fd789"
+      },
+      {
         "case_id": "ordinary-inductive-recursive-index-occurrence",
         "classification": "CONFIRMED",
         "disagreement_kind": null,
@@ -332,7 +340,7 @@
     ],
     "majority_vote_used": false,
     "parse_behavior_count": 1,
-    "semantic_unresolved_count": 13
+    "semantic_unresolved_count": 14
   },
   "evidence": {
     "coverage_identity": {
@@ -366,9 +374,9 @@
       "sha256": "968e7c95cb895fbf7ec23fac27fa92c7ae26f3a4943e6df179970ded5fb1174b"
     },
     "mutation_report": {
-      "bytes": 7887,
+      "bytes": 7912,
       "path": "results/assurance/current-mutation-report.json",
-      "sha256": "ea6140b114bb9371c9405b1d0f1182058ca12d7aba0751c9c80fb681096193c5"
+      "sha256": "86ab2cd930f99ebed00090c7cee47a4c165ebdde4d2ad7900eabb049d625694d"
     },
     "policy": {
       "bytes": 1751,
@@ -376,9 +384,9 @@
       "sha256": "d79c5297a7b4f8612489757654943fb814943956171abb35fc458bcecbc7a0ef"
     },
     "regressions": {
-      "bytes": 19101,
+      "bytes": 19992,
       "path": "corpus/regression-candidates/current.json",
-      "sha256": "6a768032a13073041189803a617932c18a7f66a132b4abdf88d1db69179dca88"
+      "sha256": "fe85d52a1d6e0fee495ca83b4f2dba70d0eae5abbf3864587c1e83fce9ec43c7"
     },
     "rotating": {
       "bytes": 4142,
@@ -404,8 +412,8 @@
         "name": "witness_search_and_minimization"
       },
       {
-        "checker_runs": 113,
-        "checker_seconds": 2.316876584314741,
+        "checker_runs": 116,
+        "checker_seconds": 2.3760602934053168,
         "name": "cross_validation"
       },
       {
@@ -429,8 +437,8 @@
         "wall_seconds": 576.6428446769714
       }
     ],
-    "recorded_checker_runs": 967,
-    "recorded_checker_seconds": 6922.093601992005,
+    "recorded_checker_runs": 970,
+    "recorded_checker_seconds": 6922.152785701095,
     "scope": "Sum of non-overlapping recorded checker-run components plus separately labeled batch/build wall time; setup and historical superseded work are not reconstructed."
   },
   "gate": {
@@ -520,11 +528,12 @@
           "results/expected-outcomes/universe-imax-right-succ.json",
           "results/expected-outcomes/projection-maybe-prop.json",
           "results/expected-outcomes/projection-maybe-prop-past.json",
-          "results/expected-outcomes/projection-definite-prop-data.json"
+          "results/expected-outcomes/projection-definite-prop-data.json",
+          "results/expected-outcomes/ordinary-inductive-proof-parameter-uniformity.json"
         ],
         "observed": {
-          "candidates": 23,
-          "established": 23
+          "candidates": 24,
+          "established": 24
         },
         "status": "PASS",
         "summary": "Every generated regression candidate carries hash-bound expected-outcome evidence."
@@ -539,6 +548,7 @@
           "results/cross-validation/nanoda-gen-a59d7fa2cfb3-restored-ctor-index/results.json",
           "results/cross-validation/nanoda-gen-cd41c71bc814-quot-eq-refl/results.json",
           "results/cross-validation/nanoda-gen-d39c873fbcb7-quot-eq-type/results.json",
+          "results/cross-validation/ordinary-inductive-proof-parameter-uniformity/results.json",
           "results/cross-validation/projection-maybe-prop/results.json",
           "results/cross-validation/projection-maybe-prop-past/results.json",
           "results/cross-validation/universe-imax-right-one/results.json",
@@ -547,7 +557,7 @@
         ],
         "observed": {
           "maximum": 0,
-          "unresolved": 13
+          "unresolved": 14
         },
         "status": "FAIL",
         "summary": "Unresolved semantic checker disagreements must not exceed the configured maximum."
@@ -561,7 +571,7 @@
     "status": "FAIL"
   },
   "generated_regressions": {
-    "artifact_count": 23,
+    "artifact_count": 24,
     "candidates": [
       {
         "case_id": "nanoda-0003-original",
@@ -677,10 +687,15 @@
         "case_id": "projection-definite-prop-data",
         "expected_outcome": "REJECT",
         "status": "EXPECTED_OUTCOME_ESTABLISHED"
+      },
+      {
+        "case_id": "ordinary-inductive-proof-parameter-uniformity",
+        "expected_outcome": "REJECT",
+        "status": "EXPECTED_OUTCOME_ESTABLISHED_WITH_UNRESOLVED_DISAGREEMENT"
       }
     ],
     "ready_for_upstream": 0,
-    "semantic_case_count": 23
+    "semantic_case_count": 24
   },
   "held_out_evaluation": {
     "augmented_score": 1.0,
@@ -727,16 +742,16 @@
         "sha256": "8b713e2b32402bf0028b1bd54440f162e4a493a3078f5998cd4654911bb6d083"
       }
     ],
-    "producing_repository_revision": "8973a94647fba87d2b5f9e8a15cb687fb59b5c34"
+    "producing_repository_revision": "42671e39d6c0988f901fc1e1ea0c7ab93a361ae3"
   },
   "mutation_testing": {
     "equivalent_mutants": 12,
-    "killed_by_existing_corpus": 49,
+    "killed_by_existing_corpus": 50,
     "killed_by_generated_corpus": 3,
-    "meaningful_mutation_score": 0.9375,
+    "meaningful_mutation_score": 0.9387755102040817,
     "meaningful_survivors": 3,
-    "modeled_mutation_score": 0.9375,
-    "population_scope": "All 65 evaluated Nanoda mutants in the current mutation report, with equivalent and reference-aligned cases excluded from modeled scores.",
+    "modeled_mutation_score": 0.92,
+    "population_scope": "All 67 evaluated Nanoda mutants in the current mutation report, with equivalent and reference-aligned cases excluded from modeled scores.",
     "reference_aligned_mutants": 5,
     "subsystem_scores": {
       "bound-variables": {
@@ -791,13 +806,13 @@
       },
       "inductive-declarations": {
         "build_failed": 0,
-        "evaluated": 4,
+        "evaluated": 6,
         "evidence": "MEASURED",
-        "killed": 4,
+        "killed": 5,
         "minimum_sample": 3,
-        "mutation_score": 1.0,
-        "population": 4,
-        "survived": 0
+        "mutation_score": 0.8333333333333334,
+        "population": 6,
+        "survived": 1
       },
       "quotients": {
         "build_failed": 0,
@@ -840,10 +855,10 @@
         "survived": 2
       }
     },
-    "surviving_mutants": 16,
-    "total_semantic_mutants": 65,
+    "surviving_mutants": 17,
+    "total_semantic_mutants": 67,
     "unreachable_mutants": 0,
-    "unresolved_mutants": 0
+    "unresolved_mutants": 1
   },
   "producer": {
     "library_sha256": "aee28d591c6082be207afcb2815f9c7224b1bba8659fb30e96244413afcd7925",
@@ -883,14 +898,14 @@
       "context": "This score uses only explicit MEANINGFUL_SEMANTIC classifications and has a small denominator.",
       "enabled_as_gate": false,
       "minimum": null,
-      "observed": 0.9375
+      "observed": 0.9387755102040817
     },
     "modeled_mutation_score": {
       "assessment": "CONTEXT_ONLY",
       "context": "Report the bounded modeled population; do not turn it into a universal quality threshold.",
       "enabled_as_gate": false,
       "minimum": null,
-      "observed": 0.9375
+      "observed": 0.92
     }
   },
   "validators": [

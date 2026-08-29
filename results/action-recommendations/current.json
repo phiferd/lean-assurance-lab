@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "generated_at": "2026-08-28T18:16:06-04:00",
+  "generated_at": "2026-08-28T20:56:00-04:00",
   "policy": "docs/INVESTIGATION_SOP.md",
   "findings": [
     {
@@ -123,6 +123,77 @@
           "external_action": false,
           "human_gate": {"required": false, "status": "NOT_REQUIRED"},
           "execution_status": "COMPLETED"
+        }
+      ]
+    },
+    {
+      "id": "proof-parameter-uniformity-disagreement",
+      "summary": "A constructor can swap two proof-valued inductive parameters and remain definitionally consistent downstream; official Lean, Lean4Lean, and Nanoda reject the exact artifact while current Kiota accepts it.",
+      "disposition": "ACTION_RECOMMENDED",
+      "evidence": [
+        {
+          "path": "results/investigations/kiota-proof-parameter-uniformity/README.md",
+          "sha256": "01397aae919b4f03d0580e9d4672f5f4a8791cb621b17d405fdbc90af8044167"
+        },
+        {
+          "path": "results/investigations/kiota-proof-parameter-uniformity/upstream-main.json",
+          "sha256": "5275338c4dbc15354699cb8ae50d573f160df9b95e8a7af86cca3a4ec1654568"
+        },
+        {
+          "path": "results/cross-validation/ordinary-inductive-proof-parameter-uniformity/results.json",
+          "sha256": "b39f92beaac3204dcd1f2b91d314261ba32832405f20a3a011dc90b58a8fd789"
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "proof-parameter-validate-current-kiota",
+          "action": "VALIDATE_CURRENT_UPSTREAM",
+          "target": "sankalpsthakur/kiota main",
+          "priority": "HIGH",
+          "rationale": "The pinned Arena checker disagreement must reproduce on current upstream before any report is recommended.",
+          "prerequisites": [],
+          "external_action": false,
+          "human_gate": {
+            "required": false,
+            "status": "NOT_REQUIRED"
+          },
+          "execution_status": "COMPLETED"
+        },
+        {
+          "id": "proof-parameter-file-kiota-issue",
+          "action": "FILE_IMPLEMENTATION_ISSUE",
+          "target": "sankalpsthakur/kiota",
+          "priority": "HIGH",
+          "rationale": "Current Kiota accepts an inductive declaration rejected by the designated reference and Lean4Lean; the proof-valued parameters isolate exact constructor-result uniformity from later definitional equality.",
+          "prerequisites": [
+            "completed: current-main reproduction persists",
+            "completed: duplicate issue search found no match",
+            "completed: focused draft prepared"
+          ],
+          "external_action": true,
+          "human_gate": {
+            "required": true,
+            "status": "REVIEW_REQUIRED"
+          },
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "proof-parameter-propose-arena-test",
+          "action": "PROPOSE_CORPUS_TEST",
+          "target": "leanprover/lean-kernel-arena",
+          "priority": "HIGH",
+          "rationale": "The existing malformed result-parameter fixture uses a dummy recursor and does not isolate this proof-irrelevance boundary; the new full-recursor artifact distinguishes current Kiota.",
+          "prerequisites": [
+            "completed: official Lean expected rejection",
+            "completed: all-checker matched control",
+            "completed: focused draft prepared"
+          ],
+          "external_action": true,
+          "human_gate": {
+            "required": true,
+            "status": "REVIEW_REQUIRED"
+          },
+          "execution_status": "NOT_STARTED"
         }
       ]
     }

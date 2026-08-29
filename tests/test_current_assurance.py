@@ -27,7 +27,7 @@ class CurrentAssuranceTests(unittest.TestCase):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
         self.assertEqual(snapshot["gate"]["status"], "FAIL")
         self.assertEqual(snapshot["gate"]["failure_reasons"], ["semantic_checker_disagreements"])
-        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 13)
+        self.assertEqual(snapshot["cross_validator_disagreements"]["semantic_unresolved_count"], 14)
         self.assertEqual(snapshot["cross_validator_disagreements"]["parse_behavior_count"], 1)
 
     def test_snapshot_has_every_plan_metric(self):
@@ -43,7 +43,7 @@ class CurrentAssuranceTests(unittest.TestCase):
     def test_generated_witness_kills_are_derived_from_current_evidence(self):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
         self.assertEqual(snapshot["mutation_testing"]["killed_by_generated_corpus"], 3)
-        self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 23)
+        self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 24)
         self.assertEqual(snapshot["witness_synthesis"]["witnesses_minimized"], 3)
 
 

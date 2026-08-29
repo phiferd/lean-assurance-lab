@@ -1,0 +1,92 @@
+#!/usr/bin/env python3
+"""Export and mutate the proof-parameter control for parameter isolation."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "lean-kernel-arena"
+SOURCE = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive" / "proof-parameter-source.lean"
+NAME = "lal-ordinary-inductive-proof-parameter-control"
+OUTPUT_DIR = ROOT / "corpus" / "generated"
+CONTROL = OUTPUT_DIR / f"{NAME}.ndjson"
+CANDIDATE = OUTPUT_DIR / "lal-ordinary-inductive-proof-parameter-candidate.ndjson"
+MANIFEST = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive" / "proof-parameter-materialization.json"
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def main() -> int:
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip():
+        raise SystemExit("Arena checkout must be clean")
+    temporary_source = ARENA / "tests" / f"{NAME}.lean"
+    temporary_yaml = ARENA / "tests" / f"{NAME}.yaml"
+    try:
+        shutil.copyfile(SOURCE, temporary_source)
+        temporary_yaml.write_text(
+            "description: Proof-parameter uniformity isolation control.\n"
+            f"leanfile: tests/{temporary_source.name}\n"
+            'export-decls: ["LALProofParameterSwap"]\n'
+            "outcome: accept\n",
+            encoding="utf-8",
+        )
+        subprocess.run(
+            [str(ROOT / ".venv-arena" / "bin" / "python"), "lka.py", "build-test", NAME],
+            cwd=ARENA,
+            check=True,
+        )
+        built = ARENA / "_build" / "tests" / f"{NAME}.ndjson"
+        shutil.copyfile(built, CONTROL)
+    finally:
+        temporary_source.unlink(missing_ok=True)
+        temporary_yaml.unlink(missing_ok=True)
+    records = [json.loads(line) for line in CONTROL.read_text(encoding="utf-8").splitlines()]
+    by_expr = {record["ie"]: record for record in records if "ie" in record}
+    if by_expr[10].get("app") != {"arg": 2, "fn": 9}:
+        raise SystemExit("unexpected control expression 10")
+    if by_expr[11].get("app") != {"arg": 1, "fn": 10}:
+        raise SystemExit("unexpected control expression 11")
+    by_expr[10]["app"]["arg"] = 1
+    by_expr[11]["app"]["arg"] = 2
+    CANDIDATE.write_text(
+        "".join(json.dumps(record, separators=(",", ":"), sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+    report = {
+        "schema_version": 1,
+        "status": "PASS",
+        "arena_revision": revision,
+        "source": {"path": str(SOURCE.relative_to(ROOT)), "sha256": digest(SOURCE)},
+        "control": {"path": str(CONTROL.relative_to(ROOT)), "sha256": digest(CONTROL)},
+        "candidate": {"path": str(CANDIDATE.relative_to(ROOT)), "sha256": digest(CANDIDATE)},
+        "transformation": {
+            "description": "Swap only proof parameters p and q in the constructor result application.",
+            "expression_changes": [
+                {"expression_id": 10, "field": "app.arg", "from": 2, "to": 1},
+                {"expression_id": 11, "field": "app.arg", "from": 1, "to": 2},
+            ],
+        },
+        "temporary_arena_files_removed": not temporary_source.exists() and not temporary_yaml.exists(),
+    }
+    MANIFEST.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

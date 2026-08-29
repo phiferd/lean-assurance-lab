@@ -1,0 +1,85 @@
+{
+  "candidate": {
+    "bytes": 2961,
+    "path": "corpus/generated/lal-ordinary-inductive-proof-parameter-candidate.ndjson",
+    "sha256": "25cfb47d4c80ebe1ec61931898df8e6bd8d06793aebf3ee8b2a7cd00beca1abc"
+  },
+  "case_id": "kiota-proof-parameter-uniformity",
+  "classification": "CURRENT_UPSTREAM_DISAGREEMENT",
+  "control": {
+    "bytes": 2961,
+    "path": "corpus/generated/lal-ordinary-inductive-proof-parameter-control.ndjson",
+    "sha256": "7f9b3c07a64b441f8dd0f7dd2912274241fdb17118953fb089f796fdd1590af4"
+  },
+  "created_at": "2026-08-29T00:58:28.134264+00:00",
+  "expected_evidence": {
+    "expected_outcome": "REJECT",
+    "path": "results/expected-outcomes/ordinary-inductive-proof-parameter-uniformity.json",
+    "sha256": "c526a5e20dd8ec0f2ff871710ac9fe0cbbd12ce3cd3ac34ca90d00713b1f0f6c"
+  },
+  "mechanical_predicate": {
+    "expression": "official(candidate)=REJECT and official(control)=ACCEPT and kiota(candidate)=ACCEPT and kiota(control)=ACCEPT",
+    "satisfied": true
+  },
+  "producer": {
+    "path": "scripts/reproduce-kiota-proof-parameter-uniformity",
+    "sha256": "202347bdd9cb32ac1820252dae65174a33d0ab4e03dc57209eb9d2ae20ceaebb"
+  },
+  "schema_version": 1,
+  "scope": {
+    "majority_vote_used": false,
+    "non_claim": "This exact disagreement does not establish general Kiota unsoundness."
+  },
+  "status": "CONFIRMED",
+  "validators": [
+    {
+      "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "candidate_result": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.026530541945248842,
+        "stderr_sha256": "5f5ba5e6bc6de1b7357d34e6f2efaea1d2f302214c84ee2feb0789f3913d174f",
+        "stderr_tail": "uncaught exception: while replaying declaration 'LALProofParameterSwap':\n(kernel) invalid return type for 'LALProofParameterSwap.mk'\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "control_result": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.024596583796665072,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "bb55a0180a2d0b56c26213ec4fb12f548e46a76e706a88ea7e1d5d25f20f5b5a",
+        "stdout_tail": "Accepted 3 declarations.\n"
+      },
+      "id": "official",
+      "revision": "37f7525b732808a49b746dc6999d53c3717db124"
+    },
+    {
+      "binary_sha256": "9810d9615cbe8e2ed8c8324ef0192dc58fbc38e7e26289e7e9a6aee60ad9fc87",
+      "candidate_result": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0029875419568270445,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "control_result": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0025887920055538416,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "id": "kiota-upstream-main",
+      "remote": "https://github.com/sankalpsthakur/kiota.git",
+      "revision": "686063c13b22ce379c05dfe7fc03656655ac60e5",
+      "source_clean": true,
+      "source_sha256": "dad9c3ee2a1ccba9e49acce8795bd374c86516ba1585c628072e0c1a63320dfc"
+    }
+  ]
+}

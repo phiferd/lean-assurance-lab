@@ -856,6 +856,13 @@ prepared_external_action_drafts: 5
   `isRec` or reconstructed-recursor consistency checks reject the canonical
   artifacts. That is defense-in-depth evidence, not an equivalence result; no
   external issue is recommended from the consensus matrix.
+- `F-ORDINARY-INDUCTIVE-PARAMETER-WITNESS`: killed `nanoda-0006` with a
+  fully exporter-generated inductive whose proof parameters `p` and `q` are
+  swapped only in the constructor result. Baseline Nanoda rejects at exact
+  parameter matching, the omission mutant accepts, and both accept the control.
+  Official Lean and Lean4Lean reject; current Kiota main `686063c` accepts.
+  One Arena reject-test proposal and one Kiota issue are recommended but remain
+  human-gated; no external action has been taken.
 - `F-IMAX-ARENA-PROPOSAL`: filed
   [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
   clarify and add reject coverage for the two right-successor comparisons.
@@ -863,11 +870,11 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-ORDINARY-INDUCTIVE-WITNESS-ISOLATION`: derive internally consistent
-   malformed inductive artifacts that isolate Nanoda's positivity and exact
-   constructor-result parameter checks. Preserve valid `isRec`, constructor,
-   recursor, and recursor-rule metadata so the omission probes are tested at
-   whole-checker scope; do not infer equivalence from the canonical survivors.
+1. `F-ORDINARY-INDUCTIVE-POSITIVITY-WITNESS`: derive an internally consistent
+   malformed inductive artifact that isolates Nanoda's positivity check.
+   Preserve valid `isRec`, constructor, recursor, and recursor-rule metadata so
+   the omission probe is tested at whole-checker scope; parameter-uniformity
+   isolation is complete.
 
 ### Waiting
 
@@ -888,6 +895,10 @@ prepared_external_action_drafts: 5
   recursor type, and constructor index. Official Lean and Lean4Lean reject all
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
+- `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: review the prepared single Kiota issue
+  and Arena reject-test proposal for the swapped proof-parameter witness. Both
+  reproduce on current Kiota main and have no matching issue, but publication
+  requires target-specific human approval.
 - `W-IMAX-RIGHT-SUCCESSOR`: await Arena discussion in
   [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Prepared
   Nanoda and Kiota implementation issues remain `REVIEW_REQUIRED`; do not

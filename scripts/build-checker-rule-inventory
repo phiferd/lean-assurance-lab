@@ -71,15 +71,15 @@ def main() -> int:
 
     checks = {
         "eight_source_matrices_are_present": len(matrix_evidence) == 8,
-        "thirty_five_boundaries_are_directly_executable": len(boundaries) == 35,
+        "thirty_six_boundaries_are_directly_executable": len(boundaries) == 36,
         "official_and_lean4lean_differ_on_two_boundaries": (
             pairwise["official__lean4lean"]["disagree"] == 2
         ),
         "nanoda_differs_from_official_on_eight_boundaries": (
             pairwise["nanoda_baseline__official"]["disagree"] == 8
         ),
-        "kiota_differs_from_official_on_nine_boundaries": (
-            pairwise["official__kiota"]["disagree"] == 9
+        "kiota_differs_from_official_on_ten_boundaries": (
+            pairwise["official__kiota"]["disagree"] == 10
         ),
     }
     report = {
@@ -94,7 +94,7 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "whole-checker isolation witnesses for ordinary inductive positivity and parameter uniformity",
+                "whole-checker isolation witness for ordinary inductive positivity",
                 "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
             ],
@@ -102,14 +102,14 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "ordinary_inductive_witness_isolation",
+                "family": "ordinary_inductive_positivity_witness_isolation",
                 "reason": (
-                    "The bounded matrix establishes consensus outcomes, but canonical artifacts "
-                    "do not isolate the focused Nanoda omission mutants."
+                    "The proof-parameter witness isolates parameter uniformity, but canonical "
+                    "artifacts still do not isolate the focused Nanoda positivity omission."
                 ),
             },
         ],
-        "scope": "Inventory of 35 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+        "scope": "Inventory of 36 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     display_names = {
@@ -136,18 +136,19 @@ def main() -> int:
         "Official Lean and Lean4Lean differ only on the two possibly-Prop projection cases.",
         "Nanoda differs from official Lean on those two cases, four serialized quotient",
         "signatures, and two universe right-successor comparisons. Kiota differs from official",
-        "Lean on seven declaration/prerequisite boundaries and the two universe comparisons.",
+        "Lean on seven declaration/prerequisite boundaries, two universe comparisons, and the",
+        "proof-parameter constructor-result boundary.",
         "",
         "These counts are descriptive, not votes. Exact artifacts, controls, expected-outcome",
         "evidence, and checker outcomes remain linked in `checker-rule-inventory.json`.",
         "",
         "## Coverage Gaps",
         "",
-        "- whole-checker isolation witnesses for ordinary inductive positivity and parameter uniformity;",
+        "- whole-checker isolation witness for ordinary inductive positivity;",
         "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is ordinary inductive witness isolation.",
+        "The next ranked family is ordinary inductive positivity witness isolation.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
