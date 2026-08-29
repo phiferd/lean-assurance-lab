@@ -53,11 +53,14 @@ erase those states.
 - Validators: {len(snapshot['validators'])} pinned implementation families.
 - Corpus: {snapshot['corpus']['test_count']} materialized tests,
   {snapshot['corpus']['total_bytes']} content-addressed bytes.
-- Modeled semantic mutants: {mutation['total_semantic_mutants']} evaluated,
+- Canonical modeled semantic population: {mutation['total_semantic_mutants']} evaluated,
   {mutation['killed_by_existing_corpus']} killed by the existing corpus,
   {mutation['killed_by_generated_corpus']} additional source mutants killed by a
   generated witness, and {mutation['unresolved_mutants']} surviving without a
   witness.
+- Mechanically executed survivors awaiting semantic/witness triage:
+  {mutation['pending_survivor_triage']['count']}. They are not included in the
+  canonical modeled population or its mutation-score denominator.
 - Reference-aligned mutants: {mutation['reference_aligned_mutants']} excluded
   from mutation-score denominators because the mutant matches established
   expected behavior while baseline does not.

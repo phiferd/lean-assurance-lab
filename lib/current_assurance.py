@@ -16,6 +16,18 @@ def load(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def latest_registry_records(path: Path) -> dict[str, dict[str, Any]]:
+    latest: dict[str, dict[str, Any]] = {}
+    for line in path.read_text(encoding="utf-8").splitlines():
+        if not line.strip():
+            continue
+        row = json.loads(line)
+        mutant_id = row.get("id")
+        if mutant_id:
+            latest.setdefault(mutant_id, {}).update(row)
+    return latest
+
+
 def sha256_file(path: Path) -> str:
     digest = hashlib.sha256()
     with path.open("rb") as handle:
@@ -144,6 +156,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         "rotating": root / "results" / "rotating-heldout" / "milestone-7" / "report.json",
         "validators": root / "results" / "cross-validation" / "validator-inventory.json",
         "regressions": root / "corpus" / "regression-candidates" / "current.json",
+        "mutation_registry": root / "results" / "mutants" / "registry.jsonl",
     }
     coverage_identity = load(paths["coverage_identity"])
     coverage = load(paths["coverage_manifest"])
@@ -163,6 +176,12 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     rotating = load(paths["rotating"])
     inventory = load(paths["validators"])
     regressions = load(paths["regressions"])
+    pending_survivor_ids = sorted(
+        mutant_id
+        for mutant_id, row in latest_registry_records(paths["mutation_registry"]).items()
+        if row.get("status") == "SURVIVED"
+        and row.get("classification") == "SURVIVED_WITHOUT_WITNESS"
+    )
 
     baseline_policy = policy["hard_gates"]["baseline_identity"]
     baseline_sha = coverage_identity["baseline"]["sha256"]
@@ -329,7 +348,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "materialized_payload_tracked_in_git": False,
         },
         "mutation_testing": {
-            "population_scope": f"All {report['evaluated_mutants']} evaluated Nanoda mutants in the current mutation report, with equivalent and reference-aligned cases excluded from modeled scores.",
+            "population_scope": f"Canonical modeled population: {report['evaluated_mutants']} evaluated Nanoda mutants in the current mutation report. Equivalent and reference-aligned cases are excluded from modeled scores.",
             "total_semantic_mutants": report["evaluated_mutants"],
             "killed_by_existing_corpus": report["killed_mutants"],
             "killed_by_generated_corpus": report["generated_witness_kills"],
@@ -339,6 +358,12 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "unreachable_mutants": report["classified_unreachable"],
             "reference_aligned_mutants": report["classified_reference_aligned"],
             "unresolved_mutants": report["survived_without_witness"],
+            "pending_survivor_triage": {
+                "count": len(pending_survivor_ids),
+                "classification": "SURVIVED_WITHOUT_WITNESS",
+                "scope": "Mechanically executed survivors awaiting semantic classification or witness investigation. They are not admitted to the canonical modeled population or its mutation-score denominator.",
+                "mutant_ids": pending_survivor_ids,
+            },
             "modeled_mutation_score": report["modeled_mutation_score"],
             "meaningful_mutation_score": report["mutation_score"],
             "subsystem_scores": report["stratified_metrics"]["by_subsystem"],

@@ -46,6 +46,14 @@ class CurrentAssuranceTests(unittest.TestCase):
         self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 25)
         self.assertEqual(snapshot["witness_synthesis"]["witnesses_minimized"], 3)
 
+    def test_pending_mechanical_survivors_are_not_conflated_with_modeled_results(self):
+        snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
+        pending = snapshot["mutation_testing"]["pending_survivor_triage"]
+        self.assertEqual(pending["classification"], "SURVIVED_WITHOUT_WITNESS")
+        self.assertEqual(pending["count"], len(pending["mutant_ids"]))
+        self.assertEqual(pending["count"], 9)
+        self.assertIn("not admitted", pending["scope"])
+
 
 if __name__ == "__main__":
     unittest.main()

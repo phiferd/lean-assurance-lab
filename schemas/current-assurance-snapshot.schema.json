@@ -20,7 +20,19 @@
     "corpus": {"type": "object", "required": ["test_count", "total_bytes", "identity_manifest_sha256"]},
     "mutation_testing": {
       "type": "object",
-      "required": ["total_semantic_mutants", "killed_by_existing_corpus", "killed_by_generated_corpus", "surviving_mutants", "meaningful_survivors", "equivalent_mutants", "unreachable_mutants", "unresolved_mutants", "subsystem_scores"]
+      "required": ["total_semantic_mutants", "killed_by_existing_corpus", "killed_by_generated_corpus", "surviving_mutants", "meaningful_survivors", "equivalent_mutants", "unreachable_mutants", "unresolved_mutants", "pending_survivor_triage", "subsystem_scores"],
+      "properties": {
+        "pending_survivor_triage": {
+          "type": "object",
+          "required": ["count", "classification", "scope", "mutant_ids"],
+          "properties": {
+            "count": {"type": "integer", "minimum": 0},
+            "classification": {"const": "SURVIVED_WITHOUT_WITNESS"},
+            "scope": {"type": "string"},
+            "mutant_ids": {"type": "array", "items": {"type": "string"}}
+          }
+        }
+      }
     },
     "witness_synthesis": {"type": "object", "required": ["searches", "witnesses_found", "success_rate"]},
     "generated_regressions": {"type": "object", "required": ["artifact_count", "semantic_case_count", "candidates"]},
