@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""Export and transform a reducible-hidden positivity witness."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "lean-kernel-arena"
+SOURCE = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive" / "reducible-positivity-source.lean"
+NAME = "lal-ordinary-inductive-reducible-positivity-control"
+OUTPUT_DIR = ROOT / "corpus" / "generated"
+CONTROL = OUTPUT_DIR / f"{NAME}.ndjson"
+CANDIDATE = OUTPUT_DIR / "lal-ordinary-inductive-reducible-positivity-candidate.ndjson"
+MANIFEST = ROOT / "results" / "investigations" / "nanoda-ordinary-inductive" / "reducible-positivity-materialization.json"
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def shift_expr(value: int) -> int:
+    return value + 3 if value >= 23 else value
+
+
+def shift_record(record: dict) -> None:
+    if "ie" in record:
+        record["ie"] = shift_expr(record["ie"])
+    for key in ("forallE", "lam", "letE"):
+        if key in record:
+            for field in ("type", "body", "value"):
+                if field in record[key]:
+                    record[key][field] = shift_expr(record[key][field])
+    if "app" in record:
+        record["app"]["fn"] = shift_expr(record["app"]["fn"])
+        record["app"]["arg"] = shift_expr(record["app"]["arg"])
+    if "proj" in record:
+        record["proj"]["expr"] = shift_expr(record["proj"]["expr"])
+    if "def" in record:
+        record["def"]["type"] = shift_expr(record["def"]["type"])
+        record["def"]["value"] = shift_expr(record["def"]["value"])
+    if "inductive" in record:
+        for ctor in record["inductive"]["ctors"]:
+            ctor["type"] = shift_expr(ctor["type"])
+        for recursor in record["inductive"]["recs"]:
+            recursor["type"] = shift_expr(recursor["type"])
+            for rule in recursor["rules"]:
+                rule["rhs"] = shift_expr(rule["rhs"])
+        for inductive in record["inductive"]["types"]:
+            inductive["type"] = shift_expr(inductive["type"])
+
+
+def main() -> int:
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip():
+        raise SystemExit("Arena checkout must be clean")
+    temporary_source = ARENA / "tests" / f"{NAME}.lean"
+    temporary_yaml = ARENA / "tests" / f"{NAME}.yaml"
+    try:
+        shutil.copyfile(SOURCE, temporary_source)
+        temporary_yaml.write_text(
+            "description: Reducible-hidden positivity isolation control.\n"
+            f"leanfile: tests/{temporary_source.name}\n"
+            'export-decls: ["LALConstType", "LALReduciblePositivity"]\n'
+            "outcome: accept\n",
+            encoding="utf-8",
+        )
+        subprocess.run(
+            [str(ROOT / ".venv-arena" / "bin" / "python"), "lka.py", "build-test", NAME],
+            cwd=ARENA,
+            check=True,
+        )
+        built = ARENA / "_build" / "tests" / f"{NAME}.ndjson"
+        shutil.copyfile(built, CONTROL)
+    finally:
+        temporary_source.unlink(missing_ok=True)
+        temporary_yaml.unlink(missing_ok=True)
+    records = [json.loads(line) for line in CONTROL.read_text(encoding="utf-8").splitlines()]
+    by_expr = {record["ie"]: record for record in records if "ie" in record}
+    if by_expr[23].get("forallE", {}).get("type") != 21:
+        raise SystemExit("unexpected shared recursive-field expression")
+    if max(by_expr) != 46 or "inductive" not in records[-1]:
+        raise SystemExit("unexpected control expression layout")
+    for record in records:
+        shift_record(record)
+    by_expr = {record["ie"]: record for record in records if "ie" in record}
+    hidden_domain = [
+        {"const": {"name": 1, "us": []}, "ie": 23},
+        {"app": {"arg": 21, "fn": 23}, "ie": 24},
+        {"app": {"arg": 22, "fn": 24}, "ie": 25},
+    ]
+    by_expr[26]["forallE"]["type"] = 25
+    insertion = next(i for i, record in enumerate(records) if record.get("ie") == 26)
+    records[insertion:insertion] = hidden_domain
+    CANDIDATE.write_text(
+        "".join(json.dumps(record, separators=(",", ":"), sort_keys=True) + "\n" for record in records),
+        encoding="utf-8",
+    )
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE,
+    ).stdout.strip()
+    report = {
+        "schema_version": 1,
+        "status": "PASS",
+        "arena_revision": revision,
+        "source": {"path": str(SOURCE.relative_to(ROOT)), "sha256": digest(SOURCE)},
+        "control": {"path": str(CONTROL.relative_to(ROOT)), "sha256": digest(CONTROL)},
+        "candidate": {"path": str(CANDIDATE.relative_to(ROOT)), "sha256": digest(CANDIDATE)},
+        "transformation": {
+            "description": "Replace the shared Unit domain with definitionally equal LALConstType Unit LALReduciblePositivity.",
+            "shared_expression_change": {"control_expression_id": 23, "candidate_expression_id": 26, "field": "forallE.type", "from": 21, "to": 25},
+            "added_expression_ids": [23, 24, 25],
+            "shifted_control_expression_ids": {"from": "23-46", "to": "26-49"},
+        },
+        "temporary_arena_files_removed": not temporary_source.exists() and not temporary_yaml.exists(),
+    }
+    MANIFEST.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps(report, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

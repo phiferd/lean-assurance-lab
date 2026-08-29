@@ -196,6 +196,59 @@
           "execution_status": "NOT_STARTED"
         }
       ]
+    },
+    {
+      "id": "reducible-hidden-positivity-corpus-gap",
+      "summary": "A full-recursor reducible-hidden negative artifact kills Nanoda's strict-positivity omission, while Arena's existing dummy-recursor fixture remains rejected for independent reasons.",
+      "disposition": "ACTION_RECOMMENDED",
+      "evidence": [
+        {
+          "path": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-README.md",
+          "sha256": "1e36e5170b219601e58ef55775dee3f7fe247b3fc1404d4bbd286e057b05e701"
+        },
+        {
+          "path": "results/cross-validation/ordinary-inductive-reducible-positivity-witness/results.json",
+          "sha256": "9a65098b978beba90e2a51f856bc2b0588086c1f61331870aef3dc012c2fb7f2"
+        },
+        {
+          "path": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-differential.json",
+          "sha256": "ef2d38c29ee97061d32694123d28503cfce4c3c24fa37c0b131122295f1e8e5a"
+        }
+      ],
+      "recommendations": [
+        {
+          "id": "reducible-positivity-propose-arena-test",
+          "action": "PROPOSE_CORPUS_TEST",
+          "target": "leanprover/lean-kernel-arena",
+          "priority": "HIGH",
+          "rationale": "The existing logical case does not isolate strict positivity because its dummy recursor supplies an independent rejection path; the full-recursor witness kills the exact omission and all reference checkers agree on rejection.",
+          "prerequisites": [
+            "completed: all-checker expected rejection",
+            "completed: matched control accepted by all checkers",
+            "completed: focused draft prepared"
+          ],
+          "external_action": true,
+          "human_gate": {
+            "required": true,
+            "status": "REVIEW_REQUIRED"
+          },
+          "execution_status": "NOT_STARTED"
+        },
+        {
+          "id": "reducible-positivity-no-implementation-issue",
+          "action": "NO_EXTERNAL_ACTION",
+          "target": "Nanoda, Kiota, official Lean, and Lean4Lean implementations",
+          "priority": "LOW",
+          "rationale": "Every unmodified checker rejects the candidate and accepts the control, so the finding concerns corpus isolation rather than an observed implementation defect.",
+          "prerequisites": [],
+          "external_action": false,
+          "human_gate": {
+            "required": false,
+            "status": "NOT_REQUIRED"
+          },
+          "execution_status": "COMPLETED"
+        }
+      ]
     }
   ]
 }

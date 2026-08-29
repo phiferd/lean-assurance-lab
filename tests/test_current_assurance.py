@@ -43,7 +43,7 @@ class CurrentAssuranceTests(unittest.TestCase):
     def test_generated_witness_kills_are_derived_from_current_evidence(self):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
         self.assertEqual(snapshot["mutation_testing"]["killed_by_generated_corpus"], 3)
-        self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 24)
+        self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 25)
         self.assertEqual(snapshot["witness_synthesis"]["witnesses_minimized"], 3)
 
 

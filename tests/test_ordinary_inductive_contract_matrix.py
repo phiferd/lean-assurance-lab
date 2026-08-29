@@ -18,7 +18,7 @@ class OrdinaryInductiveContractMatrixTests(unittest.TestCase):
         self.assertTrue(all(self.report["checks"].values()))
 
     def test_expected_candidate_split_and_controls(self):
-        self.assertEqual(len(self.report["cases"]), 7)
+        self.assertEqual(len(self.report["cases"]), 8)
         for case in self.report["cases"]:
             self.assertEqual(set(case["control_outcomes"].values()), {"ACCEPT"})
         proof = next(case for case in self.report["cases"] if "proof_parameter" in case["boundary"])
@@ -30,12 +30,12 @@ class OrdinaryInductiveContractMatrixTests(unittest.TestCase):
 
     def test_survival_is_not_reported_as_equivalence(self):
         probes = [case["mutation_sensitivity"] for case in self.report["cases"] if case["mutation_sensitivity"]]
-        self.assertEqual(len(probes), 4)
+        self.assertEqual(len(probes), 5)
         self.assertEqual(
             {probe["classification"] for probe in probes},
             {"SURVIVED_EXACT_CANDIDATE", "KILLED_BY_CANDIDATE"},
         )
-        self.assertIn("does not establish positivity", self.report["observed_rules"]["mutation_interpretation"])
+        self.assertIn("does not establish equivalence", self.report["observed_rules"]["mutation_interpretation"])
 
     def test_continued_local_investigation_is_recommended(self):
         recommendation = self.report["recommended_action"]

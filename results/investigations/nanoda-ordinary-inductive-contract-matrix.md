@@ -9,12 +9,13 @@
 | `constructor_result_universe_uniformity` | REJECT | REJECT | REJECT | REJECT | NOT_TESTED |
 | `recursive_occurrence_excluded_from_indices` | REJECT | REJECT | REJECT | REJECT | NOT_TESTED |
 | `constructor_result_proof_parameter_uniformity` | REJECT | REJECT | ACCEPT | REJECT | KILLED_BY_CANDIDATE |
+| `reducible_hidden_strict_positivity_isolated` | REJECT | REJECT | REJECT | REJECT | KILLED_BY_CANDIDATE |
 
 All controls are accepted by all four checkers. The three canonical omission
 probes survive their exact canonical candidates because independent `isRec` or
 reconstructed-recursor checks reject first or later. This is defense in depth,
-not evidence that positivity is equivalent. The source-derived proof-parameter
-candidate kills the exact parameter-uniformity omission; Kiota alone accepts it.
+not evidence of equivalence. The two source-derived candidates kill the exact
+parameter-uniformity and positivity omissions; Kiota alone accepts the former.
 
-Continue locally with an internally consistent positivity witness. A Kiota issue
-and Arena reject-test proposal are recommended but require human approval.
+A Kiota issue and two Arena reject-test proposals are recommended but require
+human approval. No implementation issue is recommended for the positivity case.

@@ -279,34 +279,78 @@
         "classification": "KILLED_BY_CANDIDATE",
         "mutant_id": "nanoda-0006"
       }
+    },
+    {
+      "artifact": {
+        "metadata": {
+          "exporter_version": "3.1.0",
+          "format_version": "3.1.0",
+          "lean_githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+          "lean_version": "4.29.1",
+          "parse_errors": [],
+          "record_count": 81
+        },
+        "path": "corpus/generated/lal-ordinary-inductive-reducible-positivity-candidate.ndjson",
+        "sha256": "5e1c3ea262e5d57f0ffef2cbb7009a5a9020a977b648f109c0b0ab51ef3fa664"
+      },
+      "boundary": "reducible_hidden_strict_positivity_isolated",
+      "candidate_outcomes": {
+        "kiota": "REJECT",
+        "lean4lean": "REJECT",
+        "nanoda_baseline": "REJECT",
+        "official": "REJECT"
+      },
+      "case_id": "ordinary-inductive-reducible-positivity-witness",
+      "control_outcomes": {
+        "kiota": "ACCEPT",
+        "lean4lean": "ACCEPT",
+        "nanoda_baseline": "ACCEPT",
+        "official": "ACCEPT"
+      },
+      "evidence": {
+        "cross_validation": "results/cross-validation/ordinary-inductive-reducible-positivity-witness/results.json",
+        "cross_validation_sha256": "9a65098b978beba90e2a51f856bc2b0588086c1f61331870aef3dc012c2fb7f2",
+        "expected_outcome": "results/expected-outcomes/ordinary-inductive-reducible-positivity-witness.json",
+        "expected_outcome_sha256": "3f341d9a3c5612ea51e03574844f0a441d82bd481d461686faaec0267177d444",
+        "nanoda_control_pair": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-control-differential.json",
+        "nanoda_control_pair_sha256": "46a8d84a313a910543c79e7ce7b336cf702a78589874f849b59623f0cd437365",
+        "nanoda_pair": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-differential.json",
+        "nanoda_pair_sha256": "ef2d38c29ee97061d32694123d28503cfce4c3c24fa37c0b131122295f1e8e5a"
+      },
+      "expected_outcome": "REJECT",
+      "mutation_sensitivity": {
+        "classification": "KILLED_BY_CANDIDATE",
+        "mutant_id": "nanoda-0005"
+      }
     }
   ],
   "checks": {
     "all_controls_are_accepted_by_all_checkers": true,
     "all_focused_omission_probes_survive_canonical_candidates": true,
     "all_mutated_sources_are_restored": true,
+    "eight_exact_ordinary_inductive_boundaries": true,
     "kiota_accepts_only_the_proof_parameter_candidate": true,
     "nanoda_official_and_lean4lean_reject_all_candidates": true,
     "proof_parameter_candidate_kills_uniformity_mutant": true,
-    "seven_exact_ordinary_inductive_boundaries": true
+    "reducible_positivity_candidate_kills_positivity_mutant": true
   },
   "mutation_evidence": {
     "path": "results/investigations/nanoda-ordinary-inductive/mutation-sensitivity.json",
     "sha256": "d914a581c0f4c5c93b4768157ebfd030ebee967cd4cba4ed7b095423ebaaf51e"
   },
   "observed_rules": {
-    "cross_checker": "All four checkers reject the six canonical malformed declarations. Nanoda, official Lean, and Lean4Lean also reject the proof-parameter witness, while Kiota accepts it. Every matched control is accepted.",
+    "cross_checker": "All four checkers reject the six canonical malformed declarations and the isolated reducible-positivity witness. Nanoda, official Lean, and Lean4Lean also reject the proof-parameter witness, while Kiota accepts it. Every matched control is accepted.",
     "isolation_limit": "The canonical Arena negatives do not isolate Nanoda's positivity or exact constructor-result parameter checks: independent isRec and reconstructed-recursor consistency checks reject the same artifacts.",
-    "mutation_interpretation": "Survival of these omission probes is defense-in-depth evidence only; it does not establish positivity equivalence. The proof-parameter witness kills the parameter-uniformity omission at whole-checker scope."
+    "mutation_interpretation": "Survival of these omission probes is defense-in-depth evidence only; it does not establish equivalence. The source-derived proof-parameter and reducible-positivity witnesses kill both omissions at whole-checker scope."
   },
   "recommended_action": {
     "action": "CONTINUE_INVESTIGATION",
     "external_action": true,
     "human_gate": "REVIEW_REQUIRED",
-    "rationale": "Parameter-uniformity isolation is complete and exposes a current Kiota disagreement; positivity remains unisolated.",
-    "target": "source-derived internally consistent positivity witness and human review of the proof-parameter external actions"
+    "rationale": "Both omission mutants now have whole-checker witnesses. Parameter uniformity exposes a Kiota disagreement, while positivity identifies stronger Arena coverage.",
+    "target": "human review of the two ordinary-inductive Arena proposals and the Kiota proof-parameter issue"
   },
   "schema_version": 1,
-  "scope": "Six canonical reject boundaries plus one source-derived proof-parameter boundary. The profile is bounded and is not a complete inductive-declaration specification.",
+  "scope": "Six canonical reject boundaries plus source-derived proof-parameter and reducible-positivity boundaries. The profile is bounded and is not a complete inductive-declaration specification.",
   "status": "PASS"
 }

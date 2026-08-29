@@ -863,6 +863,13 @@ prepared_external_action_drafts: 5
   Official Lean and Lean4Lean reject; current Kiota main `686063c` accepts.
   One Arena reject-test proposal and one Kiota issue are recommended but remain
   human-gated; no external action has been taken.
+- `F-ORDINARY-INDUCTIVE-POSITIVITY-WITNESS`: killed `nanoda-0005` with a
+  full-recursor artifact whose shared constructor/recursor field domain changes
+  from `Unit` to definitionally equal `LALConstType Unit I`. Baseline Nanoda
+  rejects at strict positivity, the omission mutant accepts, and both accept the
+  control. Official Lean, Kiota, and Lean4Lean all confirm rejection. A single
+  Arena test proposal is recommended because the existing dummy-recursor case
+  does not isolate the rule; no implementation issue is recommended.
 - `F-IMAX-ARENA-PROPOSAL`: filed
   [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
   clarify and add reject coverage for the two right-successor comparisons.
@@ -870,11 +877,11 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-ORDINARY-INDUCTIVE-POSITIVITY-WITNESS`: derive an internally consistent
-   malformed inductive artifact that isolates Nanoda's positivity check.
-   Preserve valid `isRec`, constructor, recursor, and recursor-rule metadata so
-   the omission probe is tested at whole-checker scope; parameter-uniformity
-   isolation is complete.
+1. `F-LITERAL-PARSER-CONFIGURATION`: derive exact literal-extension and parser
+   configuration boundaries, beginning with the already classified string-
+   extension guard and distinguishing unreachable configuration states from
+   malformed serialized literals. Pair every candidate with a valid control
+   before deciding whether this family merits a full checker matrix.
 
 ### Waiting
 
@@ -899,6 +906,10 @@ prepared_external_action_drafts: 5
   and Arena reject-test proposal for the swapped proof-parameter witness. Both
   reproduce on current Kiota main and have no matching issue, but publication
   requires target-specific human approval.
+- `W-ARENA-REDUCIBLE-POSITIVITY`: review the prepared Arena proposal for the
+  full-recursor reducible-hidden positivity witness. It strengthens an existing
+  logical test rather than reporting an implementation defect; submission
+  requires explicit human approval.
 - `W-IMAX-RIGHT-SUCCESSOR`: await Arena discussion in
   [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Prepared
   Nanoda and Kiota implementation issues remain `REVIEW_REQUIRED`; do not

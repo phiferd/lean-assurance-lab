@@ -71,7 +71,7 @@ def main() -> int:
 
     checks = {
         "eight_source_matrices_are_present": len(matrix_evidence) == 8,
-        "thirty_six_boundaries_are_directly_executable": len(boundaries) == 36,
+        "thirty_seven_boundaries_are_directly_executable": len(boundaries) == 37,
         "official_and_lean4lean_differ_on_two_boundaries": (
             pairwise["official__lean4lean"]["disagree"] == 2
         ),
@@ -94,7 +94,6 @@ def main() -> int:
         "coverage_scope": {
             "covered_families": [family for family, _ in MATRICES],
             "unmodeled_surfaces": [
-                "whole-checker isolation witness for ordinary inductive positivity",
                 "literal extensions and parser/configuration behavior",
                 "axiom policy and unsafe declaration handling",
             ],
@@ -102,14 +101,14 @@ def main() -> int:
         "ranked_next_families": [
             {
                 "rank": 1,
-                "family": "ordinary_inductive_positivity_witness_isolation",
+                "family": "literal_extensions_and_parser_configuration",
                 "reason": (
-                    "The proof-parameter witness isolates parameter uniformity, but canonical "
-                    "artifacts still do not isolate the focused Nanoda positivity omission."
+                    "Ordinary inductive omission isolation is complete. Literal extension and "
+                    "parser/configuration behavior is the next unmodeled source-derived family."
                 ),
             },
         ],
-        "scope": "Inventory of 36 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
+        "scope": "Inventory of 37 exact boundaries only; pairwise agreement is descriptive and is not majority-vote semantics.",
     }
     OUTPUT.write_text(json.dumps(report, indent=2, sort_keys=True) + "\n", encoding="utf-8")
     display_names = {
@@ -144,11 +143,10 @@ def main() -> int:
         "",
         "## Coverage Gaps",
         "",
-        "- whole-checker isolation witness for ordinary inductive positivity;",
         "- literal extension and parser/configuration behavior;",
         "- axiom policy and unsafe declarations.",
         "",
-        "The next ranked family is ordinary inductive positivity witness isolation.",
+        "The next ranked family is literal extensions and parser/configuration behavior.",
         "",
     ])
     OUTPUT_MD.write_text("\n".join(lines), encoding="utf-8")
