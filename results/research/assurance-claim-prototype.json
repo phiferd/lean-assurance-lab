@@ -1,0 +1,501 @@
+{
+  "checks": {
+    "artifact_hashes_match": true,
+    "both_claim_kinds_exercised": true,
+    "claim_shapes_match_kind": true,
+    "complete_vectors_preserved": true,
+    "controls_accept_for_every_observation": true,
+    "eq_expected_outcome_is_reference_reject": true,
+    "eq_nanoda_target_isolated": true,
+    "evidence_payloads_linked_not_copied": true,
+    "isunsafe_decomposed_into_stateful_scenarios": true,
+    "isunsafe_field_change_isolated_in_both_pairs": true,
+    "no_aggregate_semantic_oracle": true,
+    "recommendations_are_actionable": true,
+    "unknowns_preserved_for_every_claim": true
+  },
+  "claims": [
+    {
+      "authority": {
+        "basis": "DESIGNATED_REFERENCE_PLUS_MULTI_IMPLEMENTATION_CHARACTERIZATION",
+        "criterion": "Pinned official reference rejects an exact candidate whose control it accepts; Nanoda and Lean4Lean corroborate while compatible Kiota disagrees.",
+        "status": "UNRESOLVED"
+      },
+      "evidence": [
+        {
+          "path": "corpus/generated/nanoda-gen-d39c873fbcb7-quot-eq-type-candidate.ndjson",
+          "sha256": "777475027a53b84836a95eb4758f49fc0aa90923f72e511a48c88fff4a1e32a2"
+        },
+        {
+          "path": "corpus/generated/nanoda-gen-d39c873fbcb7-quot-eq-type-control.ndjson",
+          "sha256": "fdb1b6085c32d29a27ef9aa531bb10dabe8560f6f58efbe1ccfb817b5e329d21"
+        },
+        {
+          "path": "results/expected-outcomes/nanoda-gen-d39c873fbcb7-quot-eq-type.json",
+          "sha256": "90198f099279dbbfff330b281445bc3e941c642d51dc513f136be1f527e3d79c"
+        },
+        {
+          "path": "results/cross-validation/nanoda-gen-d39c873fbcb7-quot-eq-type/results.json",
+          "sha256": "01f2eb2859e2d268402e4ca8b4ee250bc36519e2b81803df56b3f2738a61119c"
+        },
+        {
+          "path": "results/investigations/nanoda-quot-eq-type/max1-reproduction.json",
+          "sha256": "6ec2d2334bc07bc5ba9f496e72d3541713bd7bc2f4501fb4f225e9f013bfb258"
+        },
+        {
+          "path": "results/investigations/nanoda-quot-eq-type/control-reproduction.json",
+          "sha256": "5f245f354c2422445270bdf673414390b75e0cfb7fafe9a3bd1c6d1df72d737b"
+        },
+        {
+          "path": "results/investigations/nanoda-quot-eq-type/remap-audit-2026-08-28.json",
+          "sha256": "49baffa32c592c64bfa35fd4bf17ee80ccab38116525c99cb7b9637ec12d62db"
+        },
+        {
+          "path": "mutations/nanoda-gen-d39c873fbcb7.json",
+          "sha256": "b20630d0b3c2c04893be15864abd10863c98f63f6946c8b7c68804b6b9f5cf25"
+        }
+      ],
+      "id": "quotient.eq.result-universe-prerequisite",
+      "isolation": {
+        "competing_violations": "NONE_KNOWN_IN_BOUNDED_REMAP_AUDIT",
+        "per_observer": {
+          "kiota": "NOT_APPLICABLE_ACCEPTED",
+          "lean4lean": "DIAGNOSTIC_SUPPORT",
+          "nanoda": "ISOLATED_BY_OMISSION_DIFFERENTIAL",
+          "official": "DIAGNOSTIC_SUPPORT"
+        },
+        "target_violation": "ESTABLISHED_FOR_TESTED_RESULT_UNIVERSE_DEVIATION"
+      },
+      "kind": "NORMATIVE_CANDIDATE_OBLIGATION",
+      "layers": [
+        "KERNEL_EXTENSION_INITIALIZATION"
+      ],
+      "observations": {
+        "kiota": {
+          "attribution": "NOT_APPLICABLE_ACCEPTED",
+          "candidate": "ACCEPT",
+          "classification": "CHECKER_DISAGREEMENT",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+            "implementation_family": "kiota-rust",
+            "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+            "version": "0.1.0"
+          },
+          "stage": "PARSED_OR_IGNORED"
+        },
+        "lean4lean": {
+          "attribution": "DIAGNOSTIC_SUPPORT",
+          "candidate": "REJECT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+            "implementation_family": "lean4lean-lean",
+            "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+            "version": "arena-ecb3b66"
+          },
+          "stage": "REACHED_VALIDATION"
+        },
+        "nanoda": {
+          "attribution": "ISOLATED_BY_OMISSION_DIFFERENTIAL",
+          "candidate": "REJECT",
+          "classification": "SUBJECT_CHARACTERIZATION",
+          "control": "ACCEPT",
+          "identity": {
+            "binary_sha256": "UNKNOWN",
+            "config_sha256": "UNKNOWN",
+            "implementation_family": "nanoda-rust",
+            "source_revision": "NOT_RECORDED",
+            "version": "NOT_RECORDED"
+          },
+          "stage": "TARGET_ASSERTION_REACHED"
+        },
+        "official": {
+          "attribution": "DIAGNOSTIC_SUPPORT",
+          "candidate": "REJECT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+            "implementation_family": "lean4-official",
+            "source_revision": "NOT_RECORDED",
+            "version": "4.33.0"
+          },
+          "stage": "REACHED_VALIDATION"
+        }
+      },
+      "recommendation": {
+        "action": "Factor the remaining adjacent Eq prerequisite before any external report.",
+        "evidence": "results/cross-validation/nanoda-gen-d39c873fbcb7-quot-eq-type/results.json",
+        "prerequisites": [
+          "Preserve compatible Kiota disagreement.",
+          "Do not promote to formal-spec authority without a formal or documented source."
+        ],
+        "priority": "RESEARCH_FRONTIER_AFTER_MODEL_GATE",
+        "target": "Lean Assurance Lab quotient contract investigation"
+      },
+      "statement": {
+        "applicability": [
+          "Quotient support is initialized from the tested built-in declaration graph.",
+          "Canonical Quot and Quot.mk prerequisites have already passed in Nanoda."
+        ],
+        "expected_effect": {
+          "outcome": "REJECT",
+          "scope": "DESIGNATED_OFFICIAL_REFERENCE"
+        },
+        "judgment": "Initialize quotient support from built-in Eq and quotient declarations.",
+        "premises": [
+          "Eq preserves the canonical parameter domain and constructor telescope.",
+          "The canonical quotient suffix is remapped to the candidate Eq graph."
+        ],
+        "target_premise": "The tested built-in Eq result is proposition-valued."
+      },
+      "unknowns": [
+        "Formal or documented semantic authority for the complete built-in Eq contract.",
+        "Exact Nanoda revision, binary, and configuration for the preserved differential run.",
+        "Whether compatible Kiota reaches or reconstructs the same prerequisite."
+      ]
+    },
+    {
+      "authority": {
+        "basis": "REVISION_SCOPED_MULTI_IMPLEMENTATION_CHARACTERIZATION",
+        "criterion": "Exact one-field candidate/control pair with pinned external vectors and a revision/configuration-bound Nanoda parser result.",
+        "status": "EMPIRICALLY_CHARACTERIZED"
+      },
+      "evidence": [
+        {
+          "path": "corpus/generated/axiom-unsafe-only-candidate.ndjson",
+          "sha256": "347d348ebe8da9b95d17fbd4b8c1120bbcfe8f0b87d24ccf9fd17081706c28ae"
+        },
+        {
+          "path": "corpus/generated/axiom-unsafe-only-control.ndjson",
+          "sha256": "0e168c8e62593327c2a1634c9c966c8dff60c6bcf0a80a5d2e3c902334f2520f"
+        },
+        {
+          "path": "results/investigations/nanoda-axiom-unsafe/materialization.json",
+          "sha256": "c6a152447611ffa7440aaa1871f57393a3b2d53368a39bb19b980729783c6c8e"
+        },
+        {
+          "path": "results/expected-outcomes/axiom-unsafe-only.json",
+          "sha256": "60d6f78c1c5b2720693c4c32f42ce7afd4b7e4f6b88e89542449cf3dc6bea21e"
+        },
+        {
+          "path": "results/cross-validation/axiom-unsafe-only/results.json",
+          "sha256": "40544b64fc49cd1fef20c95bb198fcff92a080e4095ded5570e4000f61cbf3ed"
+        },
+        {
+          "path": "results/investigations/nanoda-axiom-unsafe/axiom-only-nanoda-pair.json",
+          "sha256": "00e7bf620d9afb76f25fb3bbe8b9d7ea0518154cba26504649c9fb222b9c6696"
+        }
+      ],
+      "id": "serialized-unsafe-axiom.ingestion",
+      "isolation": {
+        "competing_violations": "NONE_IN_ONE_FIELD_ARTIFACT_DIFF",
+        "per_observer": {
+          "kiota": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN",
+          "lean4lean": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN",
+          "nanoda": "ISOLATED_SERIALIZED_FLAG_REJECTION",
+          "official": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN"
+        },
+        "target_violation": "SERIALIZED_FLAG_CHANGE_ESTABLISHED"
+      },
+      "kind": "EMPIRICAL_CONTRACT_SCENARIO",
+      "layers": [
+        "SERIALIZATION",
+        "PARSER",
+        "RECONSTRUCTION"
+      ],
+      "observations": {
+        "kiota": {
+          "attribution": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN",
+          "candidate": "ACCEPT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+            "implementation_family": "kiota-rust",
+            "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+            "version": "0.1.0"
+          },
+          "stage": "PARSED_OR_IGNORED"
+        },
+        "lean4lean": {
+          "attribution": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN",
+          "candidate": "ACCEPT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+            "implementation_family": "lean4lean-lean",
+            "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+            "version": "arena-ecb3b66"
+          },
+          "stage": "PARSED_OR_IGNORED"
+        },
+        "nanoda": {
+          "attribution": "ISOLATED_SERIALIZED_FLAG_REJECTION",
+          "candidate": "REJECT",
+          "classification": "SUBJECT_CHARACTERIZATION",
+          "control": "ACCEPT",
+          "identity": {
+            "binary_sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+            "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6",
+            "implementation_family": "nanoda-rust",
+            "source_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+            "version": "arena-pinned-binary"
+          },
+          "stage": "PARSER_ASSERTION"
+        },
+        "official": {
+          "attribution": "PROCESS_ACCEPTED_ADMISSION_UNKNOWN",
+          "candidate": "ACCEPT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+            "implementation_family": "lean4-official",
+            "source_revision": "NOT_RECORDED",
+            "version": "4.33.0"
+          },
+          "stage": "PARSED_OR_IGNORED"
+        }
+      },
+      "recommendation": {
+        "action": "Measure post-ingestion environment visibility before assigning admit or skip semantics.",
+        "evidence": "results/cross-validation/axiom-unsafe-only/results.json",
+        "prerequisites": [
+          "Use dependent probes and exact checker revisions."
+        ],
+        "priority": "ACTIVE_FRONTIER",
+        "target": "F-AXIOM-UNSAFE-DECLARATIONS"
+      },
+      "statement": {
+        "observation_points": [
+          "process outcome",
+          "parser rejection stage",
+          "post-import environment visibility (not observed by this standalone probe)"
+        ],
+        "precondition": "The matched isUnsafe=false axiom artifact is accepted.",
+        "profile_specific_effects": "See the complete observations vector; no common expected effect is asserted.",
+        "stimulus": "Change only the serialized axiom isUnsafe field from false to true.",
+        "subject_scope": "Pinned official, Nanoda, Lean4Lean, and Kiota importer profiles."
+      },
+      "unknowns": [
+        "Whether process-level acceptance admits, skips, or otherwise hides the axiom.",
+        "Authoritative implementation-independent export contract for serialized isUnsafe."
+      ]
+    },
+    {
+      "authority": {
+        "basis": "REVISION_SCOPED_STATEFUL_CHARACTERIZATION",
+        "criterion": "The same one-field change is followed by a safe dependent declaration; diagnostics and revision-bound runs expose visibility and rejection stages.",
+        "status": "EMPIRICALLY_CHARACTERIZED_REVISION_SENSITIVE"
+      },
+      "evidence": [
+        {
+          "path": "corpus/generated/axiom-unsafe-candidate.ndjson",
+          "sha256": "203e7e41eb4e9e9d8b34bb1f4daa2bfc4032496979779a82e7c624375b66c4c4"
+        },
+        {
+          "path": "corpus/generated/axiom-unsafe-control.ndjson",
+          "sha256": "b3d5e6f1f6e45721973e4e7167fbe0a92abbdcd69f039112eac70ab25c028acc"
+        },
+        {
+          "path": "results/investigations/nanoda-axiom-unsafe/materialization.json",
+          "sha256": "c6a152447611ffa7440aaa1871f57393a3b2d53368a39bb19b980729783c6c8e"
+        },
+        {
+          "path": "results/expected-outcomes/axiom-unsafe-flag.json",
+          "sha256": "a57cddbd3de93fce3ea031d9a33a4cf04c36af5cf53c3eaebf44c06a0cf9af26"
+        },
+        {
+          "path": "results/cross-validation/axiom-unsafe-flag/results.json",
+          "sha256": "0375a440380d4b4f8d59f9a0a763f58a8a13564988d9afa2b5a2eee77c990f3b"
+        },
+        {
+          "path": "results/investigations/nanoda-axiom-unsafe/nanoda-pair.json",
+          "sha256": "b264c14a9fa51700c8f7889d602d98bf07cc8007df33bfdf69e6ac6f6ff6afd2"
+        },
+        {
+          "path": "results/investigations/nanoda-axiom-unsafe/kiota-upstream-main.json",
+          "sha256": "e1c5eadbe1f3cc19861511fa4c717532d3c29626c046ef6f88523a5b992b4887"
+        }
+      ],
+      "id": "serialized-unsafe-axiom.dependent-visibility",
+      "isolation": {
+        "competing_violations": "TARGET_FIELD_ISOLATED_BUT_REJECTION_STAGE_DIFFERS_BY_PROFILE",
+        "per_observer": {
+          "kiota": "DEPENDENT_USE_ACCEPTED",
+          "kiota_current": "DIRECT_UNSAFE_AXIOM_REJECTION",
+          "lean4lean": "ENVIRONMENT_NON_VISIBILITY_ESTABLISHED_MECHANISM_UNKNOWN",
+          "nanoda": "EARLY_SERIALIZED_FLAG_REJECTION",
+          "official": "ENVIRONMENT_NON_VISIBILITY_ESTABLISHED_MECHANISM_UNKNOWN"
+        },
+        "target_violation": "SERIALIZED_FLAG_CHANGE_ESTABLISHED"
+      },
+      "kind": "EMPIRICAL_CONTRACT_SCENARIO",
+      "layers": [
+        "SERIALIZATION",
+        "TRUST_POLICY",
+        "ENVIRONMENT_RECONSTRUCTION",
+        "DEPENDENT_USE"
+      ],
+      "observations": {
+        "kiota": {
+          "attribution": "DEPENDENT_USE_ACCEPTED",
+          "candidate": "ACCEPT",
+          "classification": "CHECKER_DISAGREEMENT",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+            "implementation_family": "kiota-rust",
+            "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+            "version": "0.1.0"
+          },
+          "stage": "PARSED_OR_IGNORED"
+        },
+        "kiota_current": {
+          "attribution": "DIRECT_UNSAFE_AXIOM_REJECTION",
+          "candidate": "REJECT",
+          "classification": "CURRENT_UPSTREAM_ALIGNED",
+          "control": "ACCEPT",
+          "identity": {
+            "binary_sha256": "9810d9615cbe8e2ed8c8324ef0192dc58fbc38e7e26289e7e9a6aee60ad9fc87",
+            "implementation_family": "kiota-rust",
+            "source_revision": "686063c13b22ce379c05dfe7fc03656655ac60e5",
+            "version": "upstream-main-reproduction"
+          },
+          "stage": "UNSAFE_AXIOM_POLICY"
+        },
+        "lean4lean": {
+          "attribution": "ENVIRONMENT_NON_VISIBILITY_ESTABLISHED_MECHANISM_UNKNOWN",
+          "candidate": "REJECT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+            "implementation_family": "lean4lean-lean",
+            "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+            "version": "arena-ecb3b66"
+          },
+          "stage": "REACHED_VALIDATION"
+        },
+        "nanoda": {
+          "attribution": "EARLY_SERIALIZED_FLAG_REJECTION",
+          "candidate": "REJECT",
+          "classification": "SUBJECT_CHARACTERIZATION",
+          "control": "ACCEPT",
+          "identity": {
+            "binary_sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+            "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6",
+            "implementation_family": "nanoda-rust",
+            "source_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+            "version": "arena-pinned-binary"
+          },
+          "stage": "PARSER_ASSERTION"
+        },
+        "official": {
+          "attribution": "ENVIRONMENT_NON_VISIBILITY_ESTABLISHED_MECHANISM_UNKNOWN",
+          "candidate": "REJECT",
+          "classification": "CONFIRMED",
+          "control": "ACCEPT",
+          "identity": {
+            "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+            "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+            "implementation_family": "lean4-official",
+            "source_revision": "NOT_RECORDED",
+            "version": "4.33.0"
+          },
+          "stage": "REACHED_VALIDATION"
+        }
+      },
+      "recommendation": {
+        "action": "Complete the configuration cross-product with probes that distinguish reject, non-visible, and visible states.",
+        "evidence": "results/cross-validation/axiom-unsafe-flag/results.json",
+        "prerequisites": [
+          "Bind every checker revision and configuration.",
+          "Keep parser, policy, environment visibility, and dependent use separate."
+        ],
+        "priority": "ACTIVE_FRONTIER",
+        "target": "F-AXIOM-UNSAFE-DECLARATIONS"
+      },
+      "statement": {
+        "observation_points": [
+          "unsafe axiom ingestion",
+          "environment visibility",
+          "safe dependent declaration checking",
+          "final process outcome"
+        ],
+        "precondition": "The matched isUnsafe=false axiom and dependent definition are accepted.",
+        "profile_specific_effects": "See the revision-scoped observations vector; no common expected effect is asserted.",
+        "stimulus": "Change only the axiom isUnsafe field, then import a safe declaration that depends on it.",
+        "subject_scope": "Pinned cohort plus a separately recorded current Kiota revision."
+      },
+      "unknowns": [
+        "Exact admit/skip/reject transition for accepting standalone profiles.",
+        "Nanoda behavior under permit-all, whitelist, hard-error, and skip configurations.",
+        "Implementation-independent authority for the serialized safety flag."
+      ]
+    }
+  ],
+  "gate_decision": {
+    "next_step": "FACTOR_REMAINING_THREE_CASES",
+    "rationale": "The quotient Eq calibration fits a bounded normative-candidate obligation, while isUnsafe is representable only after decomposition into empirical ingestion and dependent-visibility scenarios.",
+    "status": "PASS"
+  },
+  "model": {
+    "claim_kinds": {
+      "EMPIRICAL_CONTRACT_SCENARIO": {
+        "statement_shape": [
+          "subject_scope",
+          "precondition",
+          "stimulus",
+          "observation_points",
+          "profile_specific_effects"
+        ]
+      },
+      "NORMATIVE_CANDIDATE_OBLIGATION": {
+        "statement_shape": [
+          "judgment",
+          "applicability",
+          "premises",
+          "target_premise",
+          "expected_effect"
+        ]
+      }
+    },
+    "common_dimensions": [
+      "id",
+      "kind",
+      "layers",
+      "authority",
+      "statement",
+      "evidence",
+      "observations",
+      "isolation",
+      "unknowns",
+      "recommendation"
+    ],
+    "evidence_policy": {
+      "aggregate_counts_are_semantic_evidence": false,
+      "authority_is_separate_from_layer": true,
+      "evidence_payloads_are_content_addressed_references": true,
+      "isolation_is_per_observer": true,
+      "unknown_is_representable": true
+    },
+    "status": "RESEARCH_ONLY_NOT_A_PRODUCTION_SCHEMA"
+  },
+  "prototype_id": "two-kind-assurance-claim-falsification-gate",
+  "schema_version": 1,
+  "scope": "Falsification-first Phase 2 gate over quotient Eq and decomposed isUnsafe only; not a semantic denominator, conformance claim, or production schema.",
+  "status": "PASS"
+}

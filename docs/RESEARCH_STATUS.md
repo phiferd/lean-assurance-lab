@@ -704,6 +704,28 @@ prepared_external_action_drafts: 5
 
 ### Recently Completed
 
+- `F-ASSURANCE-METHODS-LANDSCAPE`: preserved the broader assurance-methods
+  landscape in the
+  [assurance methods map](research/ASSURANCE_METHODS_MAP.md) with
+  primary/official source provenance, explicit project analogues and
+  mismatches, non-prioritizing maturity, and evidence-based reconsideration
+  conditions. The map is institutional memory; this file remains the planning
+  authority.
+- `F-RULE-LEVEL-FACTORING-PHASE1`: adversarially factored five existing
+  checker-rule boundaries in the
+  [Phase 1 factoring experiment](research/RULE_LEVEL_FACTORING_EXPERIMENT.md).
+  The result is decision B: normative or normative-candidate obligations and
+  scoped empirical contract scenarios need different claim kinds with a shared
+  evidence envelope. Serialized `Quot` fails as a universal rejection
+  obligation, and `isUnsafe` fails as one rule.
+- `F-ASSURANCE-CLAIM-PROTOTYPE-GATE`: built the accepted falsification-first
+  [Phase 2 prototype](research/ASSURANCE_CLAIM_PROTOTYPE.md) from existing
+  evidence. The generated research artifact passes all thirteen mechanical
+  checks: quotient `Eq` fits a bounded normative-candidate obligation, while
+  `isUnsafe` is representable only after splitting ingestion from dependent
+  visibility. The gate does not yet justify a matrix, RIPR integration,
+  semantics-directed reproduction, production schema, or semantic-coverage
+  claim.
 - `F-ENV-CUTOFF`: found and independently validated the definition
   self-reference witness for `nanoda-gen-8317efea2c7d`. Current Arena's later
   `tutorial/014_selfProof` also kills the mutant, so no duplicate Arena proposal
@@ -898,6 +920,15 @@ prepared_external_action_drafts: 5
    flags. Separate configurable trust policy from kernel well-formedness and
    compare other checkers only where the export contract is implementation-
    independent.
+2. `F-ASSURANCE-CLAIM-PROTOTYPE-REMAINDER`: apply the passing two-kind
+   research prototype unchanged to the theorem proposition-valued-result
+   requirement, referenced-constant universe ownership, and serialized base
+   `Quot` exact-type handling. Success means all three retain authority, layer,
+   full revision-scoped observations, per-observer isolation/attribution,
+   provenance gaps, and unknowns without adding a claim kind. Failure means
+   refine or reject the model. Do not derive a characterization matrix,
+   integrate RIPR, or attempt semantics-directed reproduction before this gate
+   closes.
 
 ### Waiting
 
