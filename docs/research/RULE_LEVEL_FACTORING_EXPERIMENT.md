@@ -708,13 +708,14 @@ made active here:
   behavior, collapses expected outcomes with semantic authority, or needs
   stronger isolation than the existing artifacts establish.
 
-The proposed matrix remains behind the remainder gate. If later begun, it would
-remain a research characterization artifact unless a separate justification
-supports public assurance claims.
+The proposed characterization view remains a research artifact unless a
+separate justification supports public assurance claims.
 
 ## Accepted follow-up
 
-The first bounded Phase 2 gate was accepted and is recorded in
-[Assurance Claim Prototype](ASSURANCE_CLAIM_PROTOTYPE.md). It exercises the
-quotient `Eq` calibration and decomposed `isUnsafe` scenarios only; the
-remaining three cases stay behind the recorded frontier gate.
+The accepted Phase 2 representative-set gate is recorded in
+[Assurance Claim Prototype](ASSURANCE_CLAIM_PROTOTYPE.md). It exercises all
+five sampled boundaries as six claims after decomposing `isUnsafe`. The
+unchanged two-kind model passes; the next bounded frontier is a mechanically
+derived research-only known-rule characterization view. RIPR linkage and
+semantics-directed reproduction remain behind that gate.

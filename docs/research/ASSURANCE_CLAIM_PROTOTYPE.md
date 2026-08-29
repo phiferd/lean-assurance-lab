@@ -1,22 +1,24 @@
 # Assurance Claim Prototype: Falsification-First Gate
 
 - Research snapshot: 2026-08-29
-- Phase: accepted Phase 2, first bounded gate
+- Phase: accepted Phase 2, representative-set gate
 - Status: `PASS`
 
 ## Scope
 
-This is the smallest research-only prototype justified by the
-[Phase 1 factoring result](RULE_LEVEL_FACTORING_EXPERIMENT.md). It exercises
-the proposed split on only:
+This research-only prototype is justified by the
+[Phase 1 factoring result](RULE_LEVEL_FACTORING_EXPERIMENT.md). It now exercises
+the proposed split across the complete representative set:
 
-1. the quotient built-in `Eq` result-universe prerequisite, used as the
-   normative-candidate calibration; and
-2. serialized `isUnsafe` axiom handling, used as the adversarial case.
+1. the quotient built-in `Eq` result-universe prerequisite;
+2. theorem results must be proposition-valued;
+3. referenced-constant universe ownership;
+4. serialized base `Quot` exact-type handling; and
+5. serialized `isUnsafe` axiom handling, decomposed into ingestion and
+   dependent-visibility scenarios.
 
 It is not a production schema, semantic denominator, coverage metric,
-conformance claim, or replacement for the existing checker matrices. It does
-not yet factor the theorem, referenced-universe, or serialized `Quot` cases.
+conformance claim, or replacement for the existing checker matrices.
 
 ## Mechanical artifact
 
@@ -88,6 +90,82 @@ promoted by the three-to-one observation split.
 The object retains the missing Nanoda revision, binary, and configuration as
 unknown. It does not infer them from the present checkout.
 
+## Remaining-case result
+
+The three cases behind the second gate fit the existing split without adding a
+claim kind.
+
+### Theorem result is proposition-valued
+
+Stable identity: `theorem.result-proposition-valued`.
+
+Kind: `NORMATIVE_CANDIDATE_OBLIGATION`.
+
+Every tested checker rejects the non-`Prop` theorem and accepts the matched
+definition-form control. The designated-reference expectation is therefore
+`ESTABLISHED` for this exact case, while its epistemic basis remains reference
+behavior plus implementation characterization rather than a linked formal
+derivation. Nanoda's exact guard-omission differential and the existing
+Reach/Infect experiment remain discovery and isolation provenance, not the
+identity of the obligation.
+
+| Profile | Candidate | Control | Attribution |
+| --- | --- | --- | --- |
+| official Lean | `REJECT` | `ACCEPT` | diagnostic support |
+| Nanoda | `REJECT` | `ACCEPT` | target guard omission differential |
+| Lean4Lean | `REJECT` | `ACCEPT` | diagnostic support |
+| pinned Kiota | `REJECT` | `ACCEPT` | diagnostic support |
+
+The control changes declaration kind and benign name rather than providing a
+separate proposition-valued theorem. That limitation remains explicit.
+
+### Referenced-constant universe ownership
+
+Stable identity: `declaration.constant-reference-universe-ownership`.
+
+Kind: `NORMATIVE_CANDIDATE_OBLIGATION`.
+
+The official designated reference and Lean4Lean reject the exact undeclared
+universe reference while Kiota accepts it. Authority therefore remains
+`UNRESOLVED`; the observation count is not a semantic vote. The old Nanoda
+differential reaches the precise ownership assertion, but its revision,
+binary, configuration, and matched-control run are not all durably linked by
+the selected machine records. The prototype records that control cell as
+`NOT_DURABLY_LINKED` rather than manufacturing provenance.
+
+| Profile | Candidate | Control | Attribution |
+| --- | --- | --- | --- |
+| official Lean | `REJECT` | `ACCEPT` | diagnostic support |
+| Nanoda | `REJECT` | `NOT_DURABLY_LINKED` | target assertion omission differential; identity unknown |
+| Lean4Lean | `REJECT` | `ACCEPT` | compatible rejection, not instrumented |
+| pinned Kiota | `ACCEPT` | `ACCEPT` | unresolved disagreement |
+
+The existing Kiota #3 adjudication remains the action target; this factoring
+does not create a duplicate external action.
+
+### Serialized base `Quot` type treatment
+
+Stable identity: `serialized-quotient.base-type-treatment`.
+
+Kind: `EMPIRICAL_CONTRACT_SCENARIO`.
+
+This case is the decisive type split. Official Lean, Lean4Lean, and Kiota
+accept the independently well-formed serialized type deviation and its
+canonical control. Nanoda rejects the deviation at an exact-type assertion,
+and omitting that assertion makes it accept. Representing this as a normative
+rejection obligation would contradict the designated reference.
+
+| Profile | Candidate | Control | Attribution |
+| --- | --- | --- | --- |
+| official Lean | `ACCEPT` | `ACCEPT` | field treatment unknown |
+| Nanoda | `REJECT` | `ACCEPT` | exact-type assertion omission differential |
+| Lean4Lean | `ACCEPT` | `ACCEPT` | field treatment unknown |
+| pinned Kiota | `ACCEPT` | `ACCEPT` | field treatment unknown |
+
+The empirical scenario preserves the question of whether accepting checkers
+ignore, reconstruct, normalize, or validate the field differently. It does not
+answer that question by inference.
+
 ## Adversarial result: `isUnsafe`
 
 The hard case does not fit one rule. The prototype passes only after splitting
@@ -138,41 +216,43 @@ The generated result is `PASS`; every check is mechanically true:
 - both claim kinds are exercised;
 - every claim has the common envelope and its kind-specific statement shape;
 - complete candidate/control vectors match the evidence;
-- every matched control is accepted;
+- every durably recorded matched control is accepted, and the missing Nanoda
+  universe-control link remains explicit;
 - the designated-reference `Eq` outcome remains distinct from unresolved
   semantic authority;
 - the Nanoda `Eq` target is isolated by the omission differential;
 - evidence payloads remain linked rather than copied;
 - `isUnsafe` is decomposed into stateful scenarios;
 - both `isUnsafe` pairs differ only at the serialized flag;
+- all representative cases factor without adding a third claim kind;
+- established, unresolved, and empirical-reference-aligned authority states
+  remain distinct;
+- the universe case preserves its Nanoda identity/control provenance gap;
+- serialized `Quot` is not assigned a normative rejection effect;
 - no aggregate count is used as a semantic oracle;
 - every recommendation names an action, target, priority, prerequisites, and
   evidence; and
 - every claim retains explicit unknowns.
 
-The gate does **not** establish that two kinds are sufficient for all existing
-boundaries. It establishes only that the easiest calibration and hardest
-adversarial case can be represented without the original overstatement.
+The gate does **not** establish that two kinds are sufficient for every future
+boundary. It establishes that the complete adversarial representative set can
+be represented without the original overstatement.
 
 ## Decision and frontier
 
-Decision: **proceed to the remaining three Phase 1 cases using the model
-unchanged.**
+Decision: **the representative-set gate is closed; proceed to a research-only
+known-rule characterization view derived from existing artifacts.**
 
-The next bounded step is to factor:
+That view is the next bounded frontier, not a production schema. It must expose,
+per characterized boundary, positive and negative evidence, isolation,
+authority, layer, discovery provenance, the full checker observation vector,
+disagreement state, unknowns, and recommended action. It must be generated from
+existing claim and matrix evidence and must fail closed when a required link is
+missing.
 
-1. theorem result must be proposition-valued;
-2. referenced-constant universe ownership; and
-3. serialized base `Quot` exact-type handling.
-
-Success requires all three to retain authority, layer, complete observation
-vectors, per-observer attribution, provenance gaps, and unknowns without a new
-claim kind. Failure means refine or reject the two-kind model before deriving a
-characterization matrix.
-
-The known-rule characterization view, RIPR linkage, and semantics-directed
-reproduction remain behind that gate. No aggregate semantic-coverage
-percentage is authorized.
+RIPR linkage and semantics-directed reproduction remain behind that next gate.
+No aggregate semantic-coverage percentage is authorized, and the characterized
+set is not a denominator over Lean semantics.
 
 Planning authority and the parallel axiom-policy investigation remain in
 [Research Status](../RESEARCH_STATUS.md).

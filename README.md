@@ -66,6 +66,17 @@ then recreated the pre-fix/fixed nanoda projection-structure-identity
 distinction on attempt 1. The scoped report is
 [results/collatz-retrospective/REPORT.md](results/collatz-retrospective/REPORT.md).
 
+## Shared Ecosystem Contribution
+
+The project has submitted one small Lean Kernel Arena test contribution:
+[Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176). Its
+single tutorial-file change adds the two adjacent `imax` right-successor reject
+cases (`imax u 1` and `imax u (v + 1)`) developed from the project's checker
+disagreement evidence. The PR is open and mergeable as of 2026-08-29; expected
+merge is not recorded as completed. Current upstream status and the next local
+research frontier are tracked in
+[`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md).
+
 ## Repository Layout
 
 ```text

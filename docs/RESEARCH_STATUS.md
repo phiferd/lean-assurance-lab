@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-28
+Last updated: 2026-08-29
 
 ## How Status Is Tracked
 
@@ -726,6 +726,15 @@ prepared_external_action_drafts: 5
   visibility. The gate does not yet justify a matrix, RIPR integration,
   semantics-directed reproduction, production schema, or semantic-coverage
   claim.
+- `F-ASSURANCE-CLAIM-PROTOTYPE-REMAINDER`: applied the unchanged two-kind
+  prototype to theorem proposition-valued results, referenced-constant universe
+  ownership, and serialized base `Quot` exact-type handling. The generated
+  [representative-set artifact](../results/research/assurance-claim-prototype.json)
+  now passes all seventeen checks over six claims. Theorem and universe
+  ownership fit normative-candidate obligations with different authority
+  states; serialized `Quot` fits only an empirical contract scenario. The old
+  Nanoda universe-control provenance gap remains explicit rather than being
+  reconstructed from the present checkout. No third claim kind was added.
 - `F-ENV-CUTOFF`: found and independently validated the definition
   self-reference witness for `nanoda-gen-8317efea2c7d`. Current Arena's later
   `tutorial/014_selfProof` also kills the mutant, so no duplicate Arena proposal
@@ -911,7 +920,12 @@ prepared_external_action_drafts: 5
 - `F-IMAX-ARENA-PROPOSAL`: filed
   [Arena #175](https://github.com/leanprover/lean-kernel-arena/issues/175) to
   clarify and add reject coverage for the two right-successor comparisons.
-  Nanoda and Kiota implementation reports remain unpublished.
+  Maintainer guidance invited the corner-case tests, and one small Arena test
+  contribution was submitted as
+  [Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176).
+  The single `Tutorial.lean` change adds the adjacent `imax u 1` and
+  `imax u (v + 1)` reject cases. The PR is open and mergeable as of 2026-08-29,
+  not yet merged. Nanoda and Kiota implementation reports remain unpublished.
 
 ### Active
 
@@ -920,15 +934,19 @@ prepared_external_action_drafts: 5
    flags. Separate configurable trust policy from kernel well-formedness and
    compare other checkers only where the export contract is implementation-
    independent.
-2. `F-ASSURANCE-CLAIM-PROTOTYPE-REMAINDER`: apply the passing two-kind
-   research prototype unchanged to the theorem proposition-valued-result
-   requirement, referenced-constant universe ownership, and serialized base
-   `Quot` exact-type handling. Success means all three retain authority, layer,
-   full revision-scoped observations, per-observer isolation/attribution,
-   provenance gaps, and unknowns without adding a claim kind. Failure means
-   refine or reject the model. Do not derive a characterization matrix,
-   integrate RIPR, or attempt semantics-directed reproduction before this gate
-   closes.
+2. `F-ASSURANCE-CLAIM-CHARACTERIZATION-VIEW`: derive a research-only
+   known-rule characterization view mechanically from existing claim and matrix
+   artifacts. Each row must retain positive and negative evidence, isolation,
+   authority, semantic/contract layer, discovery provenance, the full checker
+   observation vector, disagreement state, unknowns, and recommended action.
+   The builder must fail closed on missing required links and preserve
+   normative-candidate obligations separately from empirical contract
+   scenarios. Success is a deterministic view over the currently factored
+   representative set with explicit source hashes; failure is any loss of
+   evidence fidelity or need for a third kind. This is not a semantic
+   denominator, coverage percentage, public conformance claim, or production
+   schema. Do not integrate RIPR or attempt semantics-directed reproduction
+   before this gate closes.
 
 ### Waiting
 
@@ -957,10 +975,13 @@ prepared_external_action_drafts: 5
   full-recursor reducible-hidden positivity witness. It strengthens an existing
   logical test rather than reporting an implementation defect; submission
   requires explicit human approval.
-- `W-IMAX-RIGHT-SUCCESSOR`: await Arena discussion in
-  [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Prepared
-  Nanoda and Kiota implementation issues remain `REVIEW_REQUIRED`; do not
-  submit either without target-specific approval.
+- `W-IMAX-RIGHT-SUCCESSOR`: await review and expected merge of the open,
+  mergeable [Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176),
+  which contributes the two adjacent tutorial corner cases authorized in
+  [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Do not
+  record the contribution as upstream corpus coverage until the PR actually
+  merges. Prepared Nanoda and Kiota implementation issues remain
+  `REVIEW_REQUIRED`; do not submit either without target-specific approval.
 - `W-POSSIBLY-PROP-PROJECTIONS`: discuss whether Nanoda and Lean4Lean should be
   notified using the two prepared issue drafts. Current upstream reproduction
   and duplicate searches are complete. Arena already contains and explains
