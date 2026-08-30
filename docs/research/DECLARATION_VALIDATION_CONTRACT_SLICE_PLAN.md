@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 and 1 recorded
+- Status: active execution mandate; Milestones 0 through 3 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -14,6 +14,16 @@
   `scripts/validate-declaration-validation-target`
 - Milestone 1 record:
   results/research/declaration-validation-milestone-1.json
+- Milestones 2–3 characterization model:
+  config/declaration-validation-characterization-model.json
+- Milestones 2–3 entry schema:
+  schemas/declaration-validation-characterization-entry.schema.json
+- Milestones 2–3 validation command:
+  `scripts/validate-declaration-validation-characterization-model`
+- Milestone 2 record:
+  results/research/declaration-validation-milestone-2.json
+- Milestone 3 record:
+  results/research/declaration-validation-milestone-3.json
 
 The adversarial review of the initial plan is accepted.
 

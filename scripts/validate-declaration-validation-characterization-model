@@ -1,0 +1,727 @@
+#!/usr/bin/env python3
+"""Validate the Milestones 2–3 declaration characterization ontology."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
+MODEL_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-characterization-model.schema.json"
+ENTRY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-characterization-entry.schema.json"
+TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
+TEST_PATH = ROOT / "tests" / "test_declaration_validation_characterization_model.py"
+COMPLETION_RECORDS = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-2.json",
+    ROOT / "results" / "research" / "declaration-validation-milestone-3.json",
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    if pointer == "":
+        return document
+    if not pointer.startswith("/"):
+        raise ValueError("pointer does not start with '/'")
+    current = document
+    for raw_token in pointer[1:].split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            try:
+                current = current[int(token)]
+            except (ValueError, IndexError) as error:
+                raise ValueError(f"invalid list index {token!r}") from error
+        elif isinstance(current, dict):
+            if token not in current:
+                raise ValueError(f"missing object key {token!r}")
+            current = current[token]
+        else:
+            raise ValueError(f"cannot descend through {type(current).__name__}")
+    return current
+
+
+def schema_errors(document: dict[str, Any], schema: dict[str, Any]) -> list[str]:
+    validator = jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.FormatChecker()
+    )
+    return [
+        f"schema /{'/'.join(str(part) for part in error.absolute_path)}: {error.message}"
+        for error in sorted(
+            validator.iter_errors(document), key=lambda item: list(item.absolute_path)
+        )
+    ]
+
+
+def lineage_by_pointer(model: dict[str, Any]) -> dict[str, dict[str, Any]]:
+    return {
+        row["profile_pointer"]: row
+        for row in model["lineage_registry"]["observers"]
+    }
+
+
+def validate_entry(
+    entry: dict[str, Any],
+    model: dict[str, Any],
+    entry_schema: dict[str, Any],
+    target: dict[str, Any],
+) -> list[str]:
+    """Apply schema checks plus cross-reference and epistemic invariants."""
+    errors = schema_errors(entry, entry_schema)
+    if errors:
+        return errors
+
+    evidence_by_id: dict[str, dict[str, Any]] = {}
+    for evidence in entry["evidence"]:
+        evidence_id = evidence["id"]
+        if evidence_id in evidence_by_id:
+            errors.append(f"duplicate evidence id: {evidence_id}")
+        evidence_by_id[evidence_id] = evidence
+
+        allowed_types = model["evidence_qualification"]["role_source_type_matrix"][
+            evidence["role"]
+        ]
+        if evidence["source_type"] not in allowed_types:
+            errors.append(
+                f"evidence {evidence_id}: source type {evidence['source_type']} "
+                f"is not qualified for role {evidence['role']}"
+            )
+
+        pointer = evidence["claim_supported"]["entry_json_pointer"]
+        try:
+            resolve_pointer(entry, pointer)
+        except ValueError as error:
+            errors.append(f"evidence {evidence_id}: invalid claim pointer {pointer}: {error}")
+
+        source_lock = evidence["source_lock"]
+        if source_lock["registry"] == "SEMANTIC_TARGET_PROFILE":
+            lock_id = source_lock["lock_id"]
+            try:
+                resolve_pointer(target, lock_id)
+            except ValueError as error:
+                errors.append(
+                    f"evidence {evidence_id}: invalid target-profile lock {lock_id}: {error}"
+                )
+                continue
+            if lock_id.startswith("/observer_profiles/"):
+                expected = lineage_by_pointer(model).get(lock_id)
+                if expected is None:
+                    errors.append(
+                        f"evidence {evidence_id}: observer source lock lacks a lineage binding"
+                    )
+                else:
+                    lineage = evidence.get("lineage")
+                    if lineage is None:
+                        errors.append(
+                            f"evidence {evidence_id}: observer source lock lacks lineage"
+                        )
+                    else:
+                        for field in (
+                            "group",
+                            "relationship_to_target",
+                            "independence_scope",
+                        ):
+                            expected_field = (
+                                "lineage_group" if field == "group" else field
+                            )
+                            if lineage[field] != expected[expected_field]:
+                                errors.append(
+                                    f"evidence {evidence_id}: lineage {field} does not "
+                                    f"match {lock_id}"
+                                )
+
+    authority_refs = entry["authority"]["basis"]["evidence_refs"]
+    soundness_refs = entry["soundness_relevance"]["basis_evidence_refs"]
+    for field, refs in (
+        ("authority", authority_refs),
+        ("soundness_relevance", soundness_refs),
+    ):
+        for evidence_id in refs:
+            if evidence_id not in evidence_by_id:
+                errors.append(f"unknown {field} evidence ref: {evidence_id}")
+
+    if (
+        entry["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+        and entry["authority"]["status"] == "ESTABLISHED"
+    ):
+        roles = {
+            evidence_by_id[evidence_id]["role"]
+            for evidence_id in authority_refs
+            if evidence_id in evidence_by_id
+        }
+        if "NORMATIVE_SUPPORT" not in roles:
+            errors.append(
+                "ESTABLISHED normative authority requires role-qualified NORMATIVE_SUPPORT"
+            )
+
+    if entry["lifecycle"]["status"] in {"SUPERSEDED", "REDUNDANT"}:
+        if entry["id"] in entry["lifecycle"]["target_ids"]:
+            errors.append("lifecycle target cannot be the entry itself")
+
+    if entry["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+        judgment_pointer = entry["statement"]["judgment"]["target_profile_pointer"]
+        try:
+            resolve_pointer(target, judgment_pointer)
+        except ValueError as error:
+            errors.append(f"invalid modeled-judgment pointer {judgment_pointer}: {error}")
+    else:
+        seen_profiles: set[str] = set()
+        for effect in entry["statement"]["profile_specific_effects"]:
+            pointer = effect["observer_profile_pointer"]
+            if pointer in seen_profiles:
+                errors.append(f"duplicate empirical observer profile: {pointer}")
+            seen_profiles.add(pointer)
+            try:
+                resolve_pointer(target, pointer)
+            except ValueError as error:
+                errors.append(f"invalid empirical observer pointer {pointer}: {error}")
+
+    return errors
+
+
+def normative_fixture() -> dict[str, Any]:
+    """A schema-only normative fixture, never a research catalog entry."""
+    return {
+        "schema_version": 1,
+        "id": "FIXTURE.NORMATIVE.THEOREM_TYPE",
+        "name": "Schema fixture for a normative candidate",
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION",
+        "layers": ["KERNEL_DECLARATION_VALIDITY"],
+        "authority": {
+            "status": "ESTABLISHED",
+            "scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+            "basis": {
+                "qualification_rule": "FIXTURE.NORMATIVE_SUPPORT_PRESENT",
+                "summary": "Schema-only fixture with one qualified normative source.",
+                "evidence_refs": ["EVID.FIXTURE.NORMATIVE"],
+                "unmet_requirements": [],
+            },
+        },
+        "lifecycle": {
+            "status": "ACTIVE",
+            "reason": "Schema-only conformance fixture.",
+            "target_ids": [],
+        },
+        "soundness_relevance": {
+            "status": "NOT_ASSESSED",
+            "basis_evidence_refs": [],
+            "statement": "The fixture makes no soundness claim.",
+        },
+        "statement": {
+            "judgment": {
+                "target_profile_pointer": "/logical_target/modeled_judgment",
+                "statement": "Schema-only instance of the pinned modeled judgment.",
+            },
+            "applicability": [
+                {
+                    "id": "PRED.FIXTURE.DECL_KIND",
+                    "statement": "The declaration has the fixture declaration kind.",
+                }
+            ],
+            "premises": [],
+            "target_premise": {
+                "id": "PRED.FIXTURE.REQUIRED",
+                "statement": "The fixture predicate holds.",
+            },
+            "expected_effect": {
+                "violation_expectation": "REJECT",
+                "authority_scope": "Schema fixture only; not a Lean semantic claim.",
+            },
+        },
+        "evidence": [
+            {
+                "id": "EVID.FIXTURE.NORMATIVE",
+                "role": "NORMATIVE_SUPPORT",
+                "source_type": "NORMATIVE_SPECIFICATION",
+                "source_lock": {
+                    "registry": "LOCAL_ARTIFACT_LOCK",
+                    "lock_id": "FIXTURE.NORMATIVE.SOURCE",
+                },
+                "exact_locator": {
+                    "kind": "DOCUMENT_SECTION",
+                    "value": "fixture-section",
+                },
+                "claim_supported": {
+                    "entry_json_pointer": "/statement/target_premise",
+                    "predicate_id": "CLAIM.FIXTURE.NORMATIVE",
+                    "proposition": "Supports only the schema fixture predicate.",
+                },
+                "assumptions": [],
+                "limitations": ["Not a research finding or source citation."],
+            }
+        ],
+        "unknowns": [],
+        "notes": ["Constructed in memory and never admitted to the catalog."],
+    }
+
+
+def empirical_fixture(model: dict[str, Any]) -> dict[str, Any]:
+    """A schema-only cross-layer fixture using the pinned Lean4Lean lineage."""
+    pointer = "/observer_profiles/lean4lean"
+    binding = lineage_by_pointer(model)[pointer]
+    return {
+        "schema_version": 1,
+        "id": "FIXTURE.EMPIRICAL.RECONSTRUCTION",
+        "name": "Schema fixture for a cross-layer empirical scenario",
+        "kind": "EMPIRICAL_CONTRACT_SCENARIO",
+        "layers": ["EXPORT_FORMAT", "RECONSTRUCTION", "IMPLEMENTATION_POLICY"],
+        "authority": {
+            "status": "ESTABLISHED",
+            "scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+            "basis": {
+                "qualification_rule": "FIXTURE.OBSERVATION_AND_CONTROL_PRESENT",
+                "summary": "Schema-only fixture with an implementation observation and control.",
+                "evidence_refs": ["EVID.FIXTURE.OBSERVATION", "EVID.FIXTURE.CONTROL"],
+                "unmet_requirements": [],
+            },
+        },
+        "lifecycle": {
+            "status": "ACTIVE",
+            "reason": "Schema-only conformance fixture.",
+            "target_ids": [],
+        },
+        "soundness_relevance": {
+            "status": "NOT_ASSESSED",
+            "basis_evidence_refs": [],
+            "statement": "The fixture makes no soundness claim.",
+        },
+        "statement": {
+            "subject_scope": "A fictional serialized field under a pinned observer profile.",
+            "precondition": [
+                {
+                    "id": "PRED.FIXTURE.CONTROL_ACCEPTS",
+                    "statement": "The schema-only control reaches the observer.",
+                }
+            ],
+            "stimulus": {
+                "id": "PRED.FIXTURE.FIELD_CHANGED",
+                "statement": "The fictional serialized field differs from its control.",
+            },
+            "observation_points": [
+                {
+                    "id": "PRED.FIXTURE.IMPORT_OUTCOME",
+                    "layer": "RECONSTRUCTION",
+                    "statement": "Observe the schema-only importer outcome.",
+                }
+            ],
+            "profile_specific_effects": [
+                {
+                    "observer_profile_pointer": pointer,
+                    "outcome": "UNRESOLVED",
+                    "attribution": "Fixture effect; no real checker execution is asserted.",
+                }
+            ],
+        },
+        "evidence": [
+            {
+                "id": "EVID.FIXTURE.OBSERVATION",
+                "role": "IMPLEMENTATION_OBSERVATION",
+                "source_type": "CHECKER_RESULT",
+                "source_lock": {
+                    "registry": "SEMANTIC_TARGET_PROFILE",
+                    "lock_id": pointer,
+                },
+                "exact_locator": {"kind": "CASE_ID", "value": "fixture-case"},
+                "claim_supported": {
+                    "entry_json_pointer": "/statement/profile_specific_effects/0",
+                    "predicate_id": "CLAIM.FIXTURE.OBSERVATION",
+                    "proposition": "Supports only representability of a profile-specific effect.",
+                },
+                "assumptions": [],
+                "lineage": {
+                    "group": binding["lineage_group"],
+                    "relationship_to_target": binding["relationship_to_target"],
+                    "independence_scope": binding["independence_scope"],
+                    "basis": "Copied from the pinned target-profile lineage fixture binding.",
+                },
+                "limitations": ["No real checker result is asserted."],
+            },
+            {
+                "id": "EVID.FIXTURE.CONTROL",
+                "role": "CONTROL",
+                "source_type": "WITNESS_ARTIFACT",
+                "source_lock": {
+                    "registry": "LOCAL_ARTIFACT_LOCK",
+                    "lock_id": "FIXTURE.CONTROL.ARTIFACT",
+                },
+                "exact_locator": {
+                    "kind": "ARTIFACT_SHA256",
+                    "value": "0000000000000000000000000000000000000000000000000000000000000000",
+                },
+                "claim_supported": {
+                    "entry_json_pointer": "/statement/precondition/0",
+                    "predicate_id": "CLAIM.FIXTURE.CONTROL",
+                    "proposition": "Supports only representability of a bound control.",
+                },
+                "assumptions": [],
+                "limitations": ["The all-zero digest is an unmistakable fixture sentinel."],
+            },
+        ],
+        "unknowns": [
+            {
+                "id": "CLAIM.FIXTURE.INTERPRETATION_UNKNOWN",
+                "question": "Which layer would explain a real observation?",
+                "blocking_for": ["LAYER_CLASSIFICATION"],
+            }
+        ],
+        "notes": ["Constructed in memory and never admitted to the catalog."],
+    }
+
+
+def implementation_consensus_fixture(
+    model: dict[str, Any], normative: dict[str, Any]
+) -> dict[str, Any]:
+    """Replace normative support with four implementation observations."""
+    entry = copy.deepcopy(normative)
+    entry["authority"]["basis"]["qualification_rule"] = "FIXTURE.CONSENSUS_ONLY"
+    entry["authority"]["basis"]["summary"] = (
+        "Four fictional implementation observations without normative support."
+    )
+    entry["evidence"] = []
+    entry["authority"]["basis"]["evidence_refs"] = []
+    for index, binding in enumerate(model["lineage_registry"]["observers"], start=1):
+        evidence_id = f"EVID.FIXTURE.IMPLEMENTATION_{index}"
+        entry["authority"]["basis"]["evidence_refs"].append(evidence_id)
+        entry["evidence"].append(
+            {
+                "id": evidence_id,
+                "role": "IMPLEMENTATION_OBSERVATION",
+                "source_type": "CHECKER_RESULT",
+                "source_lock": {
+                    "registry": "SEMANTIC_TARGET_PROFILE",
+                    "lock_id": binding["profile_pointer"],
+                },
+                "exact_locator": {
+                    "kind": "CASE_ID",
+                    "value": f"fictional-consensus-{index}",
+                },
+                "claim_supported": {
+                    "entry_json_pointer": "/statement/target_premise",
+                    "predicate_id": f"CLAIM.FIXTURE.IMPLEMENTATION_{index}",
+                    "proposition": "Fictional implementation behavior only.",
+                },
+                "assumptions": [],
+                "lineage": {
+                    "group": binding["lineage_group"],
+                    "relationship_to_target": binding["relationship_to_target"],
+                    "independence_scope": binding["independence_scope"],
+                    "basis": "Copied from the schema fixture lineage binding.",
+                },
+                "limitations": ["Not normative support."],
+            }
+        )
+    return entry
+
+
+def validate_model(
+    model: dict[str, Any],
+    model_schema: dict[str, Any],
+    entry_schema: dict[str, Any],
+    target: dict[str, Any],
+) -> list[str]:
+    errors = schema_errors(model, model_schema)
+    if errors:
+        return errors
+
+    for binding_name, expected_path in (
+        ("target_profile", TARGET_PATH),
+        ("entry_schema", ENTRY_SCHEMA_PATH),
+    ):
+        binding = model[binding_name]
+        if binding["path"] != expected_path.relative_to(ROOT).as_posix():
+            errors.append(f"{binding_name} path does not match canonical path")
+        if binding["sha256"] != sha256_file(expected_path):
+            errors.append(f"{binding_name} hash mismatch")
+    if model["target_profile"]["identity"] != target["profile_id"]:
+        errors.append("target profile identity mismatch")
+
+    calibration_paths: set[str] = set()
+    for calibration in model["calibration_inputs"]:
+        path = ROOT / calibration["path"]
+        if calibration["path"] in calibration_paths:
+            errors.append(f"duplicate calibration input: {calibration['path']}")
+        calibration_paths.add(calibration["path"])
+        if not path.is_file():
+            errors.append(f"missing calibration input: {calibration['path']}")
+        elif sha256_file(path) != calibration["sha256"]:
+            errors.append(f"calibration input hash mismatch: {calibration['path']}")
+
+    schema_kinds = set(entry_schema["properties"]["kind"]["enum"])
+    schema_layers = set(entry_schema["$defs"]["layer"]["enum"])
+    schema_authority = set(
+        entry_schema["$defs"]["authority"]["properties"]["status"]["enum"]
+    )
+    schema_lifecycle = set(
+        entry_schema["$defs"]["lifecycle"]["properties"]["status"]["enum"]
+    )
+    schema_soundness = set(
+        entry_schema["$defs"]["soundnessRelevance"]["properties"]["status"]["enum"]
+    )
+    schema_roles = set(
+        entry_schema["$defs"]["evidence"]["properties"]["role"]["enum"]
+    )
+    schema_source_types = set(
+        entry_schema["$defs"]["evidence"]["properties"]["source_type"]["enum"]
+    )
+    comparisons = (
+        ("kinds", schema_kinds, set(model["kinds"])),
+        (
+            "layers",
+            schema_layers,
+            {row["id"] for row in model["axes"]["layers"]["values"]},
+        ),
+        (
+            "authority statuses",
+            schema_authority,
+            {row["id"] for row in model["axes"]["authority"]["values"]},
+        ),
+        (
+            "lifecycle statuses",
+            schema_lifecycle,
+            {row["id"] for row in model["axes"]["lifecycle"]["values"]},
+        ),
+        (
+            "soundness statuses",
+            schema_soundness,
+            {row["id"] for row in model["axes"]["soundness_relevance"]["values"]},
+        ),
+        (
+            "evidence roles",
+            schema_roles,
+            {row["id"] for row in model["evidence_qualification"]["roles"]},
+        ),
+        (
+            "source types",
+            schema_source_types,
+            {row["id"] for row in model["evidence_qualification"]["source_types"]},
+        ),
+    )
+    for name, schema_values, model_values in comparisons:
+        if schema_values != model_values:
+            errors.append(f"model/schema {name} mismatch")
+
+    statement_requirements = {
+        "NORMATIVE_CANDIDATE_OBLIGATION": set(
+            entry_schema["$defs"]["normativeStatement"]["required"]
+        ),
+        "EMPIRICAL_CONTRACT_SCENARIO": set(
+            entry_schema["$defs"]["empiricalStatement"]["required"]
+        ),
+    }
+    for kind, required_fields in statement_requirements.items():
+        if set(model["kinds"][kind]["statement_fields"]) != required_fields:
+            errors.append(f"model/schema statement fields mismatch for {kind}")
+
+    matrix = model["evidence_qualification"]["role_source_type_matrix"]
+    if set(matrix) != schema_roles:
+        errors.append("role/source matrix does not cover exactly the evidence roles")
+    for role, source_types in matrix.items():
+        if not set(source_types) <= schema_source_types:
+            errors.append(f"role/source matrix contains unknown source type for {role}")
+
+    observer_bindings = lineage_by_pointer(model)
+    if len(observer_bindings) != 4:
+        errors.append("lineage registry must bind exactly four unique observer profiles")
+    for pointer, binding in observer_bindings.items():
+        try:
+            observer = resolve_pointer(target, pointer)
+            basis = resolve_pointer(target, binding["basis_pointer"])
+        except ValueError as error:
+            errors.append(f"invalid lineage registry pointer for {pointer}: {error}")
+            continue
+        if observer["lineage_group"] != binding["lineage_group"]:
+            errors.append(f"lineage group mismatch for {pointer}")
+        if not isinstance(basis, str) or not basis:
+            errors.append(f"empty lineage basis for {pointer}")
+
+    return errors
+
+
+def conformance_suite(
+    model: dict[str, Any], entry_schema: dict[str, Any], target: dict[str, Any]
+) -> tuple[list[str], dict[str, bool]]:
+    normative = normative_fixture()
+    empirical = empirical_fixture(model)
+    checks: dict[str, bool] = {}
+
+    checks["normative_kind_representable"] = not validate_entry(
+        normative, model, entry_schema, target
+    )
+    checks["empirical_kind_representable"] = not validate_entry(
+        empirical, model, entry_schema, target
+    )
+    checks["scenario_can_span_multiple_layers"] = (
+        len(empirical["layers"]) == 3
+        and not validate_entry(empirical, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["confidence"] = 0.9
+    checks["free_form_confidence_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["layers"] = "KERNEL_DECLARATION_VALIDITY"
+    checks["singular_layer_field_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["authority"]["status"] = "POLICY"
+    checks["policy_as_authority_status_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["lifecycle"]["status"] = "RECONSTRUCTION"
+    checks["reconstruction_as_lifecycle_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    consensus = implementation_consensus_fixture(model, normative)
+    consensus_errors = validate_entry(consensus, model, entry_schema, target)
+    checks["implementation_consensus_not_normative_support"] = any(
+        "requires role-qualified NORMATIVE_SUPPORT" in error
+        for error in consensus_errors
+    )
+
+    mutation = copy.deepcopy(empirical)
+    del mutation["evidence"][0]["lineage"]
+    checks["implementation_evidence_requires_lineage"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(empirical)
+    mutation["evidence"][0]["lineage"]["group"] = "FALSE_INDEPENDENT_GROUP"
+    lineage_errors = validate_entry(mutation, model, entry_schema, target)
+    checks["lean4lean_lineage_mismatch_rejected"] = any(
+        "lineage group does not match" in error for error in lineage_errors
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["evidence"][0]["claim_supported"]["entry_json_pointer"] = "/missing"
+    checks["unresolvable_claim_pointer_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["evidence"][0]["role"] = "IMPLEMENTATION_OBSERVATION"
+    checks["role_source_type_mismatch_rejected"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    formal = mutation["evidence"][0]
+    formal["source_type"] = "FORMAL_MECHANIZATION"
+    formal["lineage"] = {
+        "group": "FIXTURE_FORMAL_LINEAGE",
+        "relationship_to_target": "NON_IMPLEMENTATION_SOURCE",
+        "independence_scope": "NOT_APPLICABLE",
+        "basis": "Fixture only.",
+    }
+    checks["formal_result_requires_mechanized_detail"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    mutation = copy.deepcopy(normative)
+    mutation["authority"]["status"] = "PROVISIONAL"
+    checks["provisional_requires_unmet_requirement"] = bool(
+        validate_entry(mutation, model, entry_schema, target)
+    )
+
+    errors = [f"conformance check failed: {name}" for name, passed in checks.items() if not passed]
+    return errors, checks
+
+
+def validate_completion_records() -> tuple[list[str], int]:
+    errors: list[str] = []
+    checked = 0
+    for path in COMPLETION_RECORDS:
+        if not path.is_file():
+            errors.append(f"missing completion record: {path.relative_to(ROOT)}")
+            continue
+        checked += 1
+        record = load_json(path)
+        if record.get("status") != "PASS":
+            errors.append(f"completion record is not PASS: {path.relative_to(ROOT)}")
+        for name, binding in record.get("artifacts", {}).items():
+            artifact_path = ROOT / binding["path"]
+            if not artifact_path.is_file():
+                errors.append(
+                    f"completion record {path.name} has missing artifact {binding['path']}"
+                )
+            elif sha256_file(artifact_path) != binding["sha256"]:
+                errors.append(
+                    f"completion record {path.name} has stale {name} hash"
+                )
+    return errors, checked
+
+
+def validate_all(require_completion_records: bool = True) -> tuple[list[str], dict[str, Any]]:
+    model = load_json(MODEL_PATH)
+    model_schema = load_json(MODEL_SCHEMA_PATH)
+    entry_schema = load_json(ENTRY_SCHEMA_PATH)
+    target = load_json(TARGET_PATH)
+
+    errors: list[str] = []
+    try:
+        jsonschema.Draft202012Validator.check_schema(model_schema)
+        jsonschema.Draft202012Validator.check_schema(entry_schema)
+    except jsonschema.SchemaError as error:
+        errors.append(f"invalid JSON Schema: {error.message}")
+    errors.extend(validate_model(model, model_schema, entry_schema, target))
+    conformance_errors, checks = conformance_suite(model, entry_schema, target)
+    errors.extend(conformance_errors)
+
+    completion_checked = 0
+    if require_completion_records:
+        completion_errors, completion_checked = validate_completion_records()
+        errors.extend(completion_errors)
+
+    summary = {
+        "completion_records_checked": completion_checked,
+        "conformance_checks": len(checks),
+        "entry_schema_sha256": sha256_file(ENTRY_SCHEMA_PATH),
+        "evidence_roles": len(model["evidence_qualification"]["roles"]),
+        "lineage_profiles": len(model["lineage_registry"]["observers"]),
+        "model_schema_sha256": sha256_file(MODEL_SCHEMA_PATH),
+        "model_sha256": sha256_file(MODEL_PATH),
+        "source_types": len(model["evidence_qualification"]["source_types"]),
+        "status": "PASS" if not errors else "FAIL",
+        "target_profile_sha256": sha256_file(TARGET_PATH),
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--model-only",
+        action="store_true",
+        help="skip completion-record bindings while constructing the milestone",
+    )
+    args = parser.parse_args()
+    errors, summary = validate_all(require_completion_records=not args.model_only)
+    for error in sorted(errors):
+        print(error)
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 1 if errors else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

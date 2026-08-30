@@ -1,0 +1,441 @@
+{
+  "schema_version": 1,
+  "model_id": "declaration-validation-characterization-model.v1",
+  "recorded_at": "2026-08-30T02:11:35-04:00",
+  "status": "PRE_DISCOVERY_ONTOLOGY",
+  "target_profile": {
+    "path": "config/declaration-validation-target.json",
+    "sha256": "4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa",
+    "identity": "ordinary-declaration-validation.lean4-4.33.0.arena-37f7525.v1"
+  },
+  "entry_schema": {
+    "path": "schemas/declaration-validation-characterization-entry.schema.json",
+    "sha256": "33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6",
+    "identity": "Declaration Validation Characterization Entry schema version 1"
+  },
+  "kinds": {
+    "NORMATIVE_CANDIDATE_OBLIGATION": {
+      "semantic_role": "A candidate requirement on the pinned modeled declaration-validity judgment. Its kind does not imply that normative authority has been established.",
+      "authority_scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+      "statement_fields": [
+        "judgment",
+        "applicability",
+        "premises",
+        "target_premise",
+        "expected_effect"
+      ],
+      "promotion_rule": "An empirical scenario may be represented separately as a normative candidate only through an auditable research decision supported by normative evidence; changing kind in place is forbidden.",
+      "not_equivalent_to": [
+        "an official-kernel implementation check",
+        "a checker-consensus result",
+        "an Arena expected outcome",
+        "a mutation operator or mutant identity"
+      ]
+    },
+    "EMPIRICAL_CONTRACT_SCENARIO": {
+      "semantic_role": "A precisely characterized observable boundary whose interpretation may depend on serialization, reconstruction, policy, completeness, version, configuration, or an unresolved specification choice.",
+      "authority_scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+      "statement_fields": [
+        "subject_scope",
+        "precondition",
+        "stimulus",
+        "observation_points",
+        "profile_specific_effects"
+      ],
+      "promotion_rule": "No observation count, checker agreement, designated-reference outcome, or LLM judgment promotes this object into a normative candidate. A separate decision record and separately identified candidate are required.",
+      "not_equivalent_to": [
+        "a universal semantic obligation",
+        "a validator-independent expected outcome",
+        "a normative negative-coverage denominator entry"
+      ]
+    }
+  },
+  "axes": {
+    "layers": {
+      "orthogonal_to": ["kind", "authority", "lifecycle", "soundness_relevance"],
+      "cardinality": "ONE_OR_MORE",
+      "values": [
+        {
+          "id": "KERNEL_DECLARATION_VALIDITY",
+          "definition": "Behavior attributed to the pinned checked declaration-addition judgment, subject to per-entry authority qualification."
+        },
+        {
+          "id": "EXPORT_FORMAT",
+          "definition": "Requirements or observations about the serialized lean4export representation itself."
+        },
+        {
+          "id": "RECONSTRUCTION",
+          "definition": "Treatment of serialized information during parsing, reconstruction, redundancy handling, or replay before or around kernel validation."
+        },
+        {
+          "id": "TRUST_POLICY",
+          "definition": "Acceptance or rejection induced by explicit trust, safety, axiom, or configuration policy rather than ordinary checked declaration validity alone."
+        },
+        {
+          "id": "IMPLEMENTATION_POLICY",
+          "definition": "A deliberate implementation constraint not established as a universal requirement of the pinned modeled judgment."
+        }
+      ]
+    },
+    "authority": {
+      "orthogonal_to": ["kind", "layers", "lifecycle", "soundness_relevance"],
+      "cardinality": "EXACTLY_ONE",
+      "confidence_field_forbidden": true,
+      "values": [
+        {
+          "id": "ESTABLISHED",
+          "definition": "The entry's explicitly named authority scope satisfies an auditable qualification rule with no recorded unmet requirement. Established normative scope additionally requires NORMATIVE_SUPPORT; full family-specific sufficiency rules are deferred to Milestone 7."
+        },
+        {
+          "id": "PROVISIONAL",
+          "definition": "Evidence supports a bounded candidate or scenario, but at least one named qualification requirement remains unmet."
+        },
+        {
+          "id": "UNRESOLVED",
+          "definition": "Available evidence leaves the stated authority scope genuinely undecided or contradictory, with the blocking question preserved."
+        }
+      ]
+    },
+    "lifecycle": {
+      "orthogonal_to": ["kind", "layers", "authority", "soundness_relevance"],
+      "cardinality": "EXACTLY_ONE",
+      "values": [
+        {
+          "id": "ACTIVE",
+          "definition": "Current characterization object retained for the bounded study."
+        },
+        {
+          "id": "SUPERSEDED",
+          "definition": "Replaced by one or more identified objects while retained for audit history."
+        },
+        {
+          "id": "REDUNDANT",
+          "definition": "Shown to be subsumed by one or more identified semantic objects while retained for audit history."
+        },
+        {
+          "id": "OUT_OF_SCOPE",
+          "definition": "A valid discovered issue excluded from the frozen ordinary-declaration slice with an explicit reason."
+        }
+      ]
+    },
+    "soundness_relevance": {
+      "orthogonal_to": ["kind", "layers", "authority", "lifecycle"],
+      "cardinality": "EXACTLY_ONE",
+      "values": [
+        {
+          "id": "DIRECT_LOGICAL_SOUNDNESS_RELEVANCE_ESTABLISHED",
+          "definition": "Evidence establishes a direct connection to logical soundness for the stated scope."
+        },
+        {
+          "id": "DECLARATION_CONFORMANCE_ONLY_ESTABLISHED",
+          "definition": "Evidence establishes declaration-contract relevance but not a direct logical-soundness consequence."
+        },
+        {
+          "id": "UNRESOLVED",
+          "definition": "The soundness consequence is materially uncertain and remains an explicit research question."
+        },
+        {
+          "id": "NOT_ASSESSED",
+          "definition": "No soundness-relevance assessment has yet been attempted; rejection behavior must not fill this gap by inference."
+        }
+      ]
+    }
+  },
+  "evidence_qualification": {
+    "ranking_policy": "NONE_ROLE_QUALIFICATION_ONLY",
+    "required_fields": [
+      "role",
+      "source_type",
+      "source_lock",
+      "exact_locator",
+      "claim_supported",
+      "assumptions"
+    ],
+    "roles": [
+      {
+        "id": "NORMATIVE_SUPPORT",
+        "purpose": "Supports a claim about the intended or formally modeled judgment under explicit assumptions.",
+        "may_establish": [
+          "a normative premise within the precise scope stated by the source",
+          "a modeled rule when the source-to-target relationship and assumptions are qualified"
+        ],
+        "does_not_establish": [
+          "unqualified equivalence between a formal model and the pinned implementation",
+          "behavior outside the source's assumptions",
+          "normativity merely because the source is official code"
+        ]
+      },
+      {
+        "id": "IMPLEMENTATION_OBSERVATION",
+        "purpose": "Records exact behavior or enforcement in a pinned implementation or checker profile.",
+        "may_establish": [
+          "that the pinned implementation contains an identified check",
+          "that a pinned checker accepted or rejected an exact input under an exact configuration"
+        ],
+        "does_not_establish": [
+          "normativity",
+          "logical soundness impact",
+          "independence from another implementation without lineage evidence"
+        ]
+      },
+      {
+        "id": "DISCOVERY",
+        "purpose": "Explains why a candidate or scenario entered the research surface.",
+        "may_establish": [
+          "discovery provenance",
+          "that the source contains a boundary requiring disposition"
+        ],
+        "does_not_establish": [
+          "authority status",
+          "semantic layer by itself",
+          "isolation"
+        ]
+      },
+      {
+        "id": "ISOLATION",
+        "purpose": "Supports reach, infection, target-predicate violation, or separation from competing predicates for a bounded artifact pair or experiment.",
+        "may_establish": [
+          "a bounded differential",
+          "reach or infection under the recorded experiment",
+          "absence of named competing violations within the audit scope"
+        ],
+        "does_not_establish": [
+          "normativity",
+          "general absence of all competing obligations",
+          "checker-independent behavior"
+        ]
+      },
+      {
+        "id": "CONTRADICTION",
+        "purpose": "Records evidence that conflicts with an authority claim, layer assignment, interpretation, or observer attribution.",
+        "may_establish": [
+          "that a claimed interpretation is not supported uniformly",
+          "that an unresolved state or narrower scope is required"
+        ],
+        "does_not_establish": [
+          "which competing interpretation is correct by itself",
+          "checker unsoundness"
+        ]
+      },
+      {
+        "id": "CONTROL",
+        "purpose": "Binds a positive, negative, environmental, or procedural control used to interpret another evidence item.",
+        "may_establish": [
+          "bounded control behavior",
+          "that the observer or path was operational under the recorded conditions"
+        ],
+        "does_not_establish": [
+          "target-predicate isolation without a competing-obligation analysis",
+          "normativity"
+        ]
+      }
+    ],
+    "source_types": [
+      {
+        "id": "FORMAL_MECHANIZATION",
+        "definition": "A pinned theorem or definition checked in a proof assistant, with assumptions and its relation to the target judgment recorded."
+      },
+      {
+        "id": "NORMATIVE_SPECIFICATION",
+        "definition": "A source explicitly designated as specifying the relevant modeled judgment."
+      },
+      {
+        "id": "AUTHORITATIVE_DOCUMENTATION",
+        "definition": "Official documentation that states intended behavior; explanatory and normative passages must remain distinguishable in the locator and claim."
+      },
+      {
+        "id": "IMPLEMENTATION_SOURCE",
+        "definition": "Pinned source code that establishes implementation behavior, enforcement, reconstruction, or policy."
+      },
+      {
+        "id": "CHECKER_RESULT",
+        "definition": "A content-bound execution result for a pinned checker profile."
+      },
+      {
+        "id": "MUTATION_RESULT",
+        "definition": "A mutation experiment establishing a bounded reach, infection, or differential property."
+      },
+      {
+        "id": "WITNESS_ARTIFACT",
+        "definition": "A content-addressed positive or negative serialized artifact used to expose a boundary."
+      },
+      {
+        "id": "ARENA_TEST",
+        "definition": "A pinned Lean Kernel Arena case or test expectation, which establishes Arena intent rather than normativity by itself."
+      },
+      {
+        "id": "LAB_EXPERIMENT",
+        "definition": "A reproducible Lean Assurance Lab investigation, matrix, remap audit, or control experiment."
+      },
+      {
+        "id": "EXPORT_ARTIFACT",
+        "definition": "A content-addressed serialized stream or export metadata record."
+      },
+      {
+        "id": "OTHER",
+        "definition": "An explicitly qualified source not covered by another type; it cannot serve as NORMATIVE_SUPPORT without extending this model."
+      }
+    ],
+    "role_source_type_matrix": {
+      "NORMATIVE_SUPPORT": [
+        "FORMAL_MECHANIZATION",
+        "NORMATIVE_SPECIFICATION",
+        "AUTHORITATIVE_DOCUMENTATION"
+      ],
+      "IMPLEMENTATION_OBSERVATION": [
+        "IMPLEMENTATION_SOURCE",
+        "CHECKER_RESULT"
+      ],
+      "DISCOVERY": [
+        "FORMAL_MECHANIZATION",
+        "NORMATIVE_SPECIFICATION",
+        "AUTHORITATIVE_DOCUMENTATION",
+        "IMPLEMENTATION_SOURCE",
+        "CHECKER_RESULT",
+        "MUTATION_RESULT",
+        "WITNESS_ARTIFACT",
+        "ARENA_TEST",
+        "LAB_EXPERIMENT",
+        "EXPORT_ARTIFACT",
+        "OTHER"
+      ],
+      "ISOLATION": [
+        "CHECKER_RESULT",
+        "MUTATION_RESULT",
+        "WITNESS_ARTIFACT",
+        "ARENA_TEST",
+        "LAB_EXPERIMENT",
+        "EXPORT_ARTIFACT"
+      ],
+      "CONTRADICTION": [
+        "FORMAL_MECHANIZATION",
+        "NORMATIVE_SPECIFICATION",
+        "AUTHORITATIVE_DOCUMENTATION",
+        "IMPLEMENTATION_SOURCE",
+        "CHECKER_RESULT",
+        "MUTATION_RESULT",
+        "WITNESS_ARTIFACT",
+        "ARENA_TEST",
+        "LAB_EXPERIMENT",
+        "EXPORT_ARTIFACT",
+        "OTHER"
+      ],
+      "CONTROL": [
+        "CHECKER_RESULT",
+        "WITNESS_ARTIFACT",
+        "ARENA_TEST",
+        "LAB_EXPERIMENT",
+        "EXPORT_ARTIFACT"
+      ]
+    },
+    "normative_establishment_guard": {
+      "required_role": "NORMATIVE_SUPPORT",
+      "implementation_consensus_sufficient": false,
+      "checker_majority_sufficient": false,
+      "llm_judgment_sufficient": false,
+      "full_sufficiency_rules_deferred_to": "MILESTONE_7"
+    },
+    "claim_binding": {
+      "structured_pointer_required": true,
+      "predicate_id_required": true,
+      "prose_only_forbidden": true
+    },
+    "mechanized_result_requirements": [
+      "exact revision through source_lock",
+      "theorem or definition locator",
+      "relevant assumptions or axioms",
+      "relationship to the pinned modeled declaration judgment",
+      "check command or an explicit reason it is not yet recorded"
+    ]
+  },
+  "lineage_registry": {
+    "target_profile_path": "config/declaration-validation-target.json",
+    "observers": [
+      {
+        "profile_pointer": "/observer_profiles/official_importer",
+        "lineage_group": "LEAN4_OFFICIAL_CPP_KERNEL_V4_33_0",
+        "relationship_to_target": "TARGET_IMPLEMENTATION_COMPOSITE",
+        "independence_scope": "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+        "basis_pointer": "/observer_profiles/official_importer/lineage_statement"
+      },
+      {
+        "profile_pointer": "/observer_profiles/nanoda",
+        "lineage_group": "NANODA_RUST_IMPLEMENTATION",
+        "relationship_to_target": "DISTINCT_CODEBASE",
+        "independence_scope": "DISTINCT_LINEAGE_ONLY",
+        "basis_pointer": "/observer_profiles/nanoda/lineage_statement"
+      },
+      {
+        "profile_pointer": "/observer_profiles/lean4lean",
+        "lineage_group": "LEAN4LEAN_DERIVED_FROM_OFFICIAL_CPP_KERNEL",
+        "relationship_to_target": "DERIVED_FROM_TARGET_IMPLEMENTATION",
+        "independence_scope": "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+        "basis_pointer": "/observer_profiles/lean4lean/lineage_statement"
+      },
+      {
+        "profile_pointer": "/observer_profiles/kiota",
+        "lineage_group": "KIOTA_RUST_FROM_SCRATCH_NOT_NANODA_FORK",
+        "relationship_to_target": "DISTINCT_CODEBASE",
+        "independence_scope": "DISTINCT_LINEAGE_ONLY",
+        "basis_pointer": "/observer_profiles/kiota/lineage_statement"
+      }
+    ],
+    "majority_oracle": false,
+    "agreement_establishes_normativity": false
+  },
+  "calibration_inputs": [
+    {
+      "path": "results/research/assurance-claim-prototype.json",
+      "sha256": "ab26f55c1c48d9112c415f720ae604448000659db90dd4f0f4dcef968756af3f",
+      "role": "DESIGN_INPUT_NOT_SEMANTIC_AUTHORITY",
+      "use": "Adversarial calibration that previously demonstrated both kinds and the need to decompose stateful isUnsafe behavior.",
+      "prohibition": "Its six prototype claims are not imported as declaration-validation catalog entries and do not establish normative authority."
+    },
+    {
+      "path": "docs/research/ASSURANCE_CLAIM_PROTOTYPE.md",
+      "sha256": "d6efea38dff0f79e09705f15fd54950c352b488bce5df4a4c536476d5efad0cc",
+      "role": "DESIGN_INPUT_NOT_SEMANTIC_AUTHORITY",
+      "use": "Documents the smallest two-kind model tested against the previous representative set and its known limitations.",
+      "prohibition": "Explanatory prose does not become evidence for a future entry unless separately locked and role-qualified."
+    },
+    {
+      "path": "docs/research/RULE_LEVEL_FACTORING_EXPERIMENT.md",
+      "sha256": "350f6e4195cf4a75a934a56dbbec05c3be07088b493fbb332439d3a323890165",
+      "role": "DESIGN_INPUT_NOT_SEMANTIC_AUTHORITY",
+      "use": "Provides prior merge/split and layer-calibration pressure, including reconstruction and policy boundaries.",
+      "prohibition": "The prior factored set is not a discovery closure or a denominator for the new ordinary-declaration slice."
+    }
+  ],
+  "invariants": [
+    "Every characterization entry has exactly one of the two kinds; no universal catch-all object exists.",
+    "Kind, layers, authority, lifecycle, and soundness relevance are orthogonal axes.",
+    "Layers are a nonempty set, so one scenario may span serialization, reconstruction, policy, and kernel observation without forced collapse.",
+    "POLICY and RECONSTRUCTION are layer concepts and cannot appear as authority or lifecycle states.",
+    "Free-form confidence is forbidden; authority is justified only through an explicit qualification rule, bound evidence, and unmet requirements.",
+    "An ESTABLISHED normative candidate requires at least one role-qualified NORMATIVE_SUPPORT item; implementation agreement cannot substitute for it.",
+    "Every evidence item names its role, source type, source lock, exact locator, structured claim, and assumptions.",
+    "Evidence roles qualify distinct propositions and are never converted into a one-dimensional rank.",
+    "Implementation-source, checker-result, and formal-mechanization evidence records carry explicit lineage information.",
+    "A mechanized result records its exact theorem or definition, assumptions or axioms, target-judgment relationship, and check command or missing-command reason.",
+    "Lean4Lean observations are classified as derived from the official C++ kernel and are not independent votes.",
+    "No checker count, majority, or consensus establishes normativity.",
+    "Unknown authority, interpretation, or soundness relevance remains explicit rather than being inferred from rejection behavior.",
+    "Schema conformance alone establishes representability, not the truth or authority of an entry."
+  ],
+  "completion_boundary": {
+    "completed_milestones": [2, 3],
+    "next_milestone": "MILESTONE_4_DEFINE_DISCOVERY_CLOSURE",
+    "catalog_entries_created": false,
+    "discovery_started": false
+  },
+  "nonclaims": [
+    "No declaration-validation candidate obligation or empirical scenario has been entered into a canonical catalog.",
+    "No rule is established merely because the entry schema can represent it.",
+    "No evidence role is a rank, score, confidence value, or semantic vote.",
+    "No official implementation check has been promoted to a normative requirement.",
+    "No checker agreement or majority has been used as a semantic oracle.",
+    "No Lean4Lean result is cited as mechanized normative support by this milestone.",
+    "No discovery source boundary has been frozen or inspected under Milestone 4 methodology.",
+    "No source-lock registry, candidate inventory, Arena coverage denominator, or negative-witness campaign has been created."
+  ]
+}

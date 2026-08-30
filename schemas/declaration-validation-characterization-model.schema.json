@@ -1,0 +1,353 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-characterization-model.schema.json",
+  "title": "Declaration Validation Characterization Model",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "model_id",
+    "recorded_at",
+    "status",
+    "target_profile",
+    "entry_schema",
+    "kinds",
+    "axes",
+    "evidence_qualification",
+    "lineage_registry",
+    "calibration_inputs",
+    "invariants",
+    "completion_boundary",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "model_id": {"const": "declaration-validation-characterization-model.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PRE_DISCOVERY_ONTOLOGY"},
+    "target_profile": {"$ref": "#/$defs/artifactBinding"},
+    "entry_schema": {"$ref": "#/$defs/artifactBinding"},
+    "kinds": {
+      "type": "object",
+      "required": [
+        "NORMATIVE_CANDIDATE_OBLIGATION",
+        "EMPIRICAL_CONTRACT_SCENARIO"
+      ],
+      "properties": {
+        "NORMATIVE_CANDIDATE_OBLIGATION": {"$ref": "#/$defs/kindContract"},
+        "EMPIRICAL_CONTRACT_SCENARIO": {"$ref": "#/$defs/kindContract"}
+      },
+      "additionalProperties": false
+    },
+    "axes": {
+      "type": "object",
+      "required": ["layers", "authority", "lifecycle", "soundness_relevance"],
+      "properties": {
+        "layers": {"$ref": "#/$defs/axisContract"},
+        "authority": {"$ref": "#/$defs/axisContract"},
+        "lifecycle": {"$ref": "#/$defs/axisContract"},
+        "soundness_relevance": {"$ref": "#/$defs/axisContract"}
+      },
+      "additionalProperties": false
+    },
+    "evidence_qualification": {
+      "type": "object",
+      "required": [
+        "ranking_policy",
+        "required_fields",
+        "roles",
+        "source_types",
+        "role_source_type_matrix",
+        "normative_establishment_guard",
+        "claim_binding",
+        "mechanized_result_requirements"
+      ],
+      "properties": {
+        "ranking_policy": {"const": "NONE_ROLE_QUALIFICATION_ONLY"},
+        "required_fields": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "roles": {
+          "type": "array",
+          "minItems": 6,
+          "items": {"$ref": "#/$defs/evidenceRole"}
+        },
+        "source_types": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/sourceType"}
+        },
+        "role_source_type_matrix": {
+          "type": "object",
+          "required": [
+            "NORMATIVE_SUPPORT",
+            "IMPLEMENTATION_OBSERVATION",
+            "DISCOVERY",
+            "ISOLATION",
+            "CONTRADICTION",
+            "CONTROL"
+          ],
+          "properties": {
+            "NORMATIVE_SUPPORT": {"$ref": "#/$defs/nonemptyStringSet"},
+            "IMPLEMENTATION_OBSERVATION": {"$ref": "#/$defs/nonemptyStringSet"},
+            "DISCOVERY": {"$ref": "#/$defs/nonemptyStringSet"},
+            "ISOLATION": {"$ref": "#/$defs/nonemptyStringSet"},
+            "CONTRADICTION": {"$ref": "#/$defs/nonemptyStringSet"},
+            "CONTROL": {"$ref": "#/$defs/nonemptyStringSet"}
+          },
+          "additionalProperties": false
+        },
+        "normative_establishment_guard": {
+          "type": "object",
+          "required": [
+            "required_role",
+            "implementation_consensus_sufficient",
+            "checker_majority_sufficient",
+            "llm_judgment_sufficient",
+            "full_sufficiency_rules_deferred_to"
+          ],
+          "properties": {
+            "required_role": {"const": "NORMATIVE_SUPPORT"},
+            "implementation_consensus_sufficient": {"const": false},
+            "checker_majority_sufficient": {"const": false},
+            "llm_judgment_sufficient": {"const": false},
+            "full_sufficiency_rules_deferred_to": {"const": "MILESTONE_7"}
+          },
+          "additionalProperties": false
+        },
+        "claim_binding": {
+          "type": "object",
+          "required": ["structured_pointer_required", "predicate_id_required", "prose_only_forbidden"],
+          "properties": {
+            "structured_pointer_required": {"const": true},
+            "predicate_id_required": {"const": true},
+            "prose_only_forbidden": {"const": true}
+          },
+          "additionalProperties": false
+        },
+        "mechanized_result_requirements": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "lineage_registry": {
+      "type": "object",
+      "required": ["target_profile_path", "observers", "majority_oracle", "agreement_establishes_normativity"],
+      "properties": {
+        "target_profile_path": {"type": "string", "minLength": 1},
+        "observers": {
+          "type": "array",
+          "minItems": 4,
+          "items": {"$ref": "#/$defs/lineageBinding"}
+        },
+        "majority_oracle": {"const": false},
+        "agreement_establishes_normativity": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "calibration_inputs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/calibrationInput"}
+    },
+    "invariants": {
+      "type": "array",
+      "minItems": 8,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": ["completed_milestones", "next_milestone", "catalog_entries_created", "discovery_started"],
+      "properties": {
+        "completed_milestones": {
+          "type": "array",
+          "const": [2, 3]
+        },
+        "next_milestone": {"const": "MILESTONE_4_DEFINE_DISCOVERY_CLOSURE"},
+        "catalog_entries_created": {"const": false},
+        "discovery_started": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "artifactBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "identity"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "identity": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "kindContract": {
+      "type": "object",
+      "required": [
+        "semantic_role",
+        "authority_scope",
+        "statement_fields",
+        "promotion_rule",
+        "not_equivalent_to"
+      ],
+      "properties": {
+        "semantic_role": {"type": "string", "minLength": 1},
+        "authority_scope": {
+          "enum": [
+            "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+            "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES"
+          ]
+        },
+        "statement_fields": {
+          "type": "array",
+          "minItems": 5,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "promotion_rule": {"type": "string", "minLength": 1},
+        "not_equivalent_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "axisContract": {
+      "type": "object",
+      "required": ["orthogonal_to", "values"],
+      "properties": {
+        "orthogonal_to": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "cardinality": {"enum": ["EXACTLY_ONE", "ONE_OR_MORE"]},
+        "confidence_field_forbidden": {"type": "boolean"},
+        "values": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/axisValue"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "axisValue": {
+      "type": "object",
+      "required": ["id", "definition"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "definition": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "evidenceRole": {
+      "type": "object",
+      "required": ["id", "purpose", "may_establish", "does_not_establish"],
+      "properties": {
+        "id": {
+          "enum": [
+            "NORMATIVE_SUPPORT",
+            "IMPLEMENTATION_OBSERVATION",
+            "DISCOVERY",
+            "ISOLATION",
+            "CONTRADICTION",
+            "CONTROL"
+          ]
+        },
+        "purpose": {"type": "string", "minLength": 1},
+        "may_establish": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "does_not_establish": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "sourceType": {
+      "type": "object",
+      "required": ["id", "definition"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "definition": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "nonemptyStringSet": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"}
+    },
+    "lineageBinding": {
+      "type": "object",
+      "required": [
+        "profile_pointer",
+        "lineage_group",
+        "relationship_to_target",
+        "independence_scope",
+        "basis_pointer"
+      ],
+      "properties": {
+        "profile_pointer": {"type": "string", "pattern": "^/observer_profiles/"},
+        "lineage_group": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "relationship_to_target": {
+          "enum": [
+            "TARGET_IMPLEMENTATION_COMPOSITE",
+            "DERIVED_FROM_TARGET_IMPLEMENTATION",
+            "DISTINCT_CODEBASE",
+            "UNRESOLVED"
+          ]
+        },
+        "independence_scope": {
+          "enum": [
+            "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+            "DISTINCT_LINEAGE_ONLY",
+            "UNRESOLVED"
+          ]
+        },
+        "basis_pointer": {"type": "string", "pattern": "^/observer_profiles/"}
+      },
+      "additionalProperties": false
+    },
+    "calibrationInput": {
+      "type": "object",
+      "required": ["path", "sha256", "role", "use", "prohibition"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "role": {"const": "DESIGN_INPUT_NOT_SEMANTIC_AUTHORITY"},
+        "use": {"type": "string", "minLength": 1},
+        "prohibition": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

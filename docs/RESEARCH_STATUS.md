@@ -961,17 +961,30 @@ prepared_external_action_drafts: 5
    `scripts/validate-declaration-validation-target`; completion details are in
    the
    [Milestone 1 result](../results/research/declaration-validation-milestone-1.json).
-   The next authorized work is Milestone 2's two-kind characterization model;
-   no candidate obligation or coverage denominator has yet been created.
-   Continue by preserving normative-candidate obligations separately from
-   empirical contract scenarios, exhausting a declared ordinary-declaration
-   discovery surface, and producing the content-addressed catalog, source lock,
-   decision trail, generated report, adversarial review, and frozen design for
-   the later Arena negative-coverage phase. Completion is the plan's validated,
-   frozen artifact set or an explicitly bounded unresolved result under one of
-   its stop conditions. This slice does not execute the broad Arena coverage
-   campaign, create a public conformance claim, or infer semantic authority from
-   checker agreement.
+   Milestones 2 and 3 are also complete. The canonical
+   [characterization model](../config/declaration-validation-characterization-model.json)
+   and strict
+   [entry schema](../schemas/declaration-validation-characterization-entry.schema.json)
+   preserve normative candidates separately from empirical scenarios; make
+   layer, authority, lifecycle, and soundness relevance orthogonal; and require
+   every evidence item to carry a role, source type, lock, exact locator,
+   structured claim, and assumptions. Lean4Lean's derived lineage is enforced,
+   and a four-observer implementation consensus is mechanically rejected as
+   sufficient normative support. Run
+   `scripts/validate-declaration-validation-characterization-model`; the durable
+   results are
+   [Milestone 2](../results/research/declaration-validation-milestone-2.json)
+   and
+   [Milestone 3](../results/research/declaration-validation-milestone-3.json).
+   The next authorized work is Milestone 4: freeze an exhaustively inspectable
+   discovery closure before creating any real catalog entry. Continue from that
+   closure toward the content-addressed catalog, source lock, decision trail,
+   generated report, adversarial review, and frozen design for the later Arena
+   negative-coverage phase. Completion is the plan's validated, frozen artifact
+   set or an explicitly bounded unresolved result under one of its stop
+   conditions. This slice does not execute the broad Arena coverage campaign,
+   create a public conformance claim, or infer semantic authority from checker
+   agreement.
 
 ### Waiting
 

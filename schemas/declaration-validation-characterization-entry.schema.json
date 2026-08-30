@@ -1,0 +1,591 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-characterization-entry.schema.json",
+  "title": "Declaration Validation Characterization Entry",
+  "description": "Canonical shape for one normative candidate obligation or empirical contract scenario. Conformance to this schema does not establish semantic authority.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "id",
+    "name",
+    "kind",
+    "layers",
+    "authority",
+    "lifecycle",
+    "soundness_relevance",
+    "statement",
+    "evidence",
+    "unknowns"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "id": {"$ref": "#/$defs/semanticId"},
+    "name": {"type": "string", "minLength": 1},
+    "kind": {
+      "enum": [
+        "NORMATIVE_CANDIDATE_OBLIGATION",
+        "EMPIRICAL_CONTRACT_SCENARIO"
+      ]
+    },
+    "layers": {
+      "type": "array",
+      "minItems": 1,
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/layer"}
+    },
+    "authority": {"$ref": "#/$defs/authority"},
+    "lifecycle": {"$ref": "#/$defs/lifecycle"},
+    "soundness_relevance": {"$ref": "#/$defs/soundnessRelevance"},
+    "statement": {},
+    "evidence": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "unknowns": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/openQuestion"}
+    },
+    "notes": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "allOf": [
+    {
+      "if": {
+        "properties": {"kind": {"const": "NORMATIVE_CANDIDATE_OBLIGATION"}},
+        "required": ["kind"]
+      },
+      "then": {
+        "properties": {
+          "statement": {"$ref": "#/$defs/normativeStatement"},
+          "authority": {
+            "properties": {
+              "scope": {"const": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT"}
+            }
+          },
+          "layers": {"contains": {"const": "KERNEL_DECLARATION_VALIDITY"}}
+        }
+      },
+      "else": {
+        "properties": {
+          "statement": {"$ref": "#/$defs/empiricalStatement"},
+          "authority": {
+            "properties": {
+              "scope": {"const": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES"}
+            }
+          }
+        }
+      }
+    }
+  ],
+  "$defs": {
+    "semanticId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(\\.[A-Z][A-Z0-9_]*)+$"
+    },
+    "evidenceId": {
+      "type": "string",
+      "pattern": "^EVID(\\.[A-Z][A-Z0-9_]*)+$"
+    },
+    "predicateId": {
+      "type": "string",
+      "pattern": "^(PRED|CLAIM|ASSUMPTION)(\\.[A-Z][A-Z0-9_]*)+$"
+    },
+    "layer": {
+      "enum": [
+        "KERNEL_DECLARATION_VALIDITY",
+        "EXPORT_FORMAT",
+        "RECONSTRUCTION",
+        "TRUST_POLICY",
+        "IMPLEMENTATION_POLICY"
+      ]
+    },
+    "authority": {
+      "type": "object",
+      "required": ["status", "scope", "basis"],
+      "properties": {
+        "status": {"enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]},
+        "scope": {
+          "enum": [
+            "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+            "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES"
+          ]
+        },
+        "basis": {
+          "type": "object",
+          "required": [
+            "qualification_rule",
+            "summary",
+            "evidence_refs",
+            "unmet_requirements"
+          ],
+          "properties": {
+            "qualification_rule": {"type": "string", "minLength": 1},
+            "summary": {"type": "string", "minLength": 1},
+            "evidence_refs": {
+              "type": "array",
+              "minItems": 1,
+              "uniqueItems": true,
+              "items": {"$ref": "#/$defs/evidenceId"}
+            },
+            "unmet_requirements": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "ESTABLISHED"}},
+            "required": ["status"]
+          },
+          "then": {
+            "properties": {
+              "basis": {
+                "properties": {"unmet_requirements": {"maxItems": 0}}
+              }
+            }
+          },
+          "else": {
+            "properties": {
+              "basis": {
+                "properties": {"unmet_requirements": {"minItems": 1}}
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lifecycle": {
+      "type": "object",
+      "required": ["status", "reason", "target_ids"],
+      "properties": {
+        "status": {
+          "enum": ["ACTIVE", "SUPERSEDED", "REDUNDANT", "OUT_OF_SCOPE"]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "target_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticId"}
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"status": {"const": "ACTIVE"}},
+            "required": ["status"]
+          },
+          "then": {"properties": {"target_ids": {"maxItems": 0}}}
+        },
+        {
+          "if": {
+            "properties": {"status": {"enum": ["SUPERSEDED", "REDUNDANT"]}},
+            "required": ["status"]
+          },
+          "then": {"properties": {"target_ids": {"minItems": 1}}}
+        },
+        {
+          "if": {
+            "properties": {"status": {"const": "OUT_OF_SCOPE"}},
+            "required": ["status"]
+          },
+          "then": {"properties": {"target_ids": {"maxItems": 0}}}
+        }
+      ]
+    },
+    "soundnessRelevance": {
+      "type": "object",
+      "required": ["status", "basis_evidence_refs", "statement"],
+      "properties": {
+        "status": {
+          "enum": [
+            "DIRECT_LOGICAL_SOUNDNESS_RELEVANCE_ESTABLISHED",
+            "DECLARATION_CONFORMANCE_ONLY_ESTABLISHED",
+            "UNRESOLVED",
+            "NOT_ASSESSED"
+          ]
+        },
+        "basis_evidence_refs": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidenceId"}
+        },
+        "statement": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "status": {
+                "enum": [
+                  "DIRECT_LOGICAL_SOUNDNESS_RELEVANCE_ESTABLISHED",
+                  "DECLARATION_CONFORMANCE_ONLY_ESTABLISHED"
+                ]
+              }
+            },
+            "required": ["status"]
+          },
+          "then": {"properties": {"basis_evidence_refs": {"minItems": 1}}}
+        }
+      ]
+    },
+    "predicate": {
+      "type": "object",
+      "required": ["id", "statement"],
+      "properties": {
+        "id": {"$ref": "#/$defs/predicateId"},
+        "statement": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "normativeStatement": {
+      "type": "object",
+      "required": [
+        "judgment",
+        "applicability",
+        "premises",
+        "target_premise",
+        "expected_effect"
+      ],
+      "properties": {
+        "judgment": {
+          "type": "object",
+          "required": ["target_profile_pointer", "statement"],
+          "properties": {
+            "target_profile_pointer": {"type": "string", "pattern": "^/"},
+            "statement": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "applicability": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/predicate"}
+        },
+        "premises": {
+          "type": "array",
+          "items": {"$ref": "#/$defs/predicate"}
+        },
+        "target_premise": {"$ref": "#/$defs/predicate"},
+        "expected_effect": {
+          "type": "object",
+          "required": ["violation_expectation", "authority_scope"],
+          "properties": {
+            "violation_expectation": {"enum": ["REJECT", "ACCEPT", "UNRESOLVED"]},
+            "authority_scope": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "empiricalStatement": {
+      "type": "object",
+      "required": [
+        "subject_scope",
+        "precondition",
+        "stimulus",
+        "observation_points",
+        "profile_specific_effects"
+      ],
+      "properties": {
+        "subject_scope": {"type": "string", "minLength": 1},
+        "precondition": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/predicate"}
+        },
+        "stimulus": {"$ref": "#/$defs/predicate"},
+        "observation_points": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["id", "layer", "statement"],
+            "properties": {
+              "id": {"$ref": "#/$defs/predicateId"},
+              "layer": {"$ref": "#/$defs/layer"},
+              "statement": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        },
+        "profile_specific_effects": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["observer_profile_pointer", "outcome", "attribution"],
+            "properties": {
+              "observer_profile_pointer": {"type": "string", "pattern": "^/observer_profiles/"},
+              "outcome": {
+                "enum": [
+                  "ACCEPT",
+                  "REJECT",
+                  "ERROR",
+                  "TIMEOUT",
+                  "NOT_INSPECTED",
+                  "NOT_APPLICABLE",
+                  "UNRESOLVED"
+                ]
+              },
+              "attribution": {"type": "string", "minLength": 1}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "evidence": {
+      "type": "object",
+      "required": [
+        "id",
+        "role",
+        "source_type",
+        "source_lock",
+        "exact_locator",
+        "claim_supported",
+        "assumptions"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/evidenceId"},
+        "role": {
+          "enum": [
+            "NORMATIVE_SUPPORT",
+            "IMPLEMENTATION_OBSERVATION",
+            "DISCOVERY",
+            "ISOLATION",
+            "CONTRADICTION",
+            "CONTROL"
+          ]
+        },
+        "source_type": {
+          "enum": [
+            "FORMAL_MECHANIZATION",
+            "NORMATIVE_SPECIFICATION",
+            "AUTHORITATIVE_DOCUMENTATION",
+            "IMPLEMENTATION_SOURCE",
+            "CHECKER_RESULT",
+            "MUTATION_RESULT",
+            "WITNESS_ARTIFACT",
+            "ARENA_TEST",
+            "LAB_EXPERIMENT",
+            "EXPORT_ARTIFACT",
+            "OTHER"
+          ]
+        },
+        "source_lock": {
+          "type": "object",
+          "required": ["registry", "lock_id"],
+          "properties": {
+            "registry": {
+              "enum": [
+                "SEMANTIC_TARGET_PROFILE",
+                "DECLARATION_VALIDATION_SOURCE_LOCK",
+                "LOCAL_ARTIFACT_LOCK"
+              ]
+            },
+            "lock_id": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "exact_locator": {
+          "type": "object",
+          "required": ["kind", "value"],
+          "properties": {
+            "kind": {
+              "enum": [
+                "JSON_POINTER",
+                "SOURCE_SYMBOL",
+                "SOURCE_RANGE",
+                "THEOREM_OR_DEFINITION",
+                "DOCUMENT_SECTION",
+                "CASE_ID",
+                "ARTIFACT_SHA256",
+                "COMMAND"
+              ]
+            },
+            "value": {"type": "string", "minLength": 1},
+            "secondary": {
+              "type": "array",
+              "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          },
+          "additionalProperties": false
+        },
+        "claim_supported": {
+          "type": "object",
+          "required": ["entry_json_pointer", "predicate_id", "proposition"],
+          "properties": {
+            "entry_json_pointer": {"type": "string", "pattern": "^/"},
+            "predicate_id": {"$ref": "#/$defs/predicateId"},
+            "proposition": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "assumptions": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["id", "statement", "status"],
+            "properties": {
+              "id": {"$ref": "#/$defs/predicateId"},
+              "statement": {"type": "string", "minLength": 1},
+              "status": {"enum": ["ACTIVE", "DISCHARGED", "UNRESOLVED"]}
+            },
+            "additionalProperties": false
+          }
+        },
+        "lineage": {"$ref": "#/$defs/lineage"},
+        "mechanized_result": {"$ref": "#/$defs/mechanizedResult"},
+        "limitations": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {
+              "source_type": {"enum": ["IMPLEMENTATION_SOURCE", "CHECKER_RESULT"]}
+            },
+            "required": ["source_type"]
+          },
+          "then": {"required": ["lineage"]}
+        },
+        {
+          "if": {
+            "properties": {"source_type": {"const": "FORMAL_MECHANIZATION"}},
+            "required": ["source_type"]
+          },
+          "then": {"required": ["mechanized_result", "lineage"]}
+        },
+        {
+          "if": {
+            "properties": {"role": {"const": "NORMATIVE_SUPPORT"}},
+            "required": ["role"]
+          },
+          "then": {
+            "properties": {
+              "source_type": {
+                "enum": [
+                  "FORMAL_MECHANIZATION",
+                  "NORMATIVE_SPECIFICATION",
+                  "AUTHORITATIVE_DOCUMENTATION"
+                ]
+              }
+            }
+          }
+        }
+      ]
+    },
+    "lineage": {
+      "type": "object",
+      "required": [
+        "group",
+        "relationship_to_target",
+        "independence_scope",
+        "basis"
+      ],
+      "properties": {
+        "group": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "relationship_to_target": {
+          "enum": [
+            "TARGET_IMPLEMENTATION_COMPOSITE",
+            "DERIVED_FROM_TARGET_IMPLEMENTATION",
+            "DISTINCT_CODEBASE",
+            "NON_IMPLEMENTATION_SOURCE",
+            "UNRESOLVED"
+          ]
+        },
+        "independence_scope": {
+          "enum": [
+            "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+            "DISTINCT_LINEAGE_ONLY",
+            "NOT_APPLICABLE",
+            "UNRESOLVED"
+          ]
+        },
+        "basis": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "mechanizedResult": {
+      "type": "object",
+      "required": [
+        "theorem_or_definition",
+        "relevant_assumptions_or_axioms",
+        "relationship_to_modeled_judgment",
+        "check_command",
+        "unchecked_command_reason"
+      ],
+      "properties": {
+        "theorem_or_definition": {"type": "string", "minLength": 1},
+        "relevant_assumptions_or_axioms": {
+          "type": "array",
+          "items": {"type": "string", "minLength": 1}
+        },
+        "relationship_to_modeled_judgment": {"type": "string", "minLength": 1},
+        "check_command": {"type": ["string", "null"], "minLength": 1},
+        "unchecked_command_reason": {"type": ["string", "null"], "minLength": 1}
+      },
+      "additionalProperties": false,
+      "oneOf": [
+        {
+          "properties": {
+            "check_command": {"type": "string", "minLength": 1},
+            "unchecked_command_reason": {"type": "null"}
+          }
+        },
+        {
+          "properties": {
+            "check_command": {"type": "null"},
+            "unchecked_command_reason": {"type": "string", "minLength": 1}
+          }
+        }
+      ]
+    },
+    "openQuestion": {
+      "type": "object",
+      "required": ["id", "question", "blocking_for"],
+      "properties": {
+        "id": {"$ref": "#/$defs/predicateId"},
+        "question": {"type": "string", "minLength": 1},
+        "blocking_for": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "AUTHORITY_ESTABLISHMENT",
+              "LAYER_CLASSIFICATION",
+              "SOUNDNESS_RELEVANCE",
+              "OBSERVER_ATTRIBUTION",
+              "MERGE_OR_SPLIT",
+              "OTHER"
+            ]
+          }
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
