@@ -1,0 +1,140 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-authority-rules.schema.json",
+  "title": "Declaration Validation Authority Qualification Rules",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "rule_set_id",
+    "recorded_at",
+    "status",
+    "bindings",
+    "rules",
+    "global_prohibitions"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "rule_set_id": {"const": "ordinary-declaration-validation.authority-rules.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_MILESTONE_7_QUALIFICATION_RULES"},
+    "bindings": {
+      "type": "object",
+      "required": ["semantic_target", "characterization_model", "source_lock"],
+      "properties": {
+        "semantic_target": {"$ref": "#/$defs/fileBinding"},
+        "characterization_model": {"$ref": "#/$defs/fileBinding"},
+        "source_lock": {"$ref": "#/$defs/fileBinding"}
+      },
+      "additionalProperties": false
+    },
+    "rules": {
+      "type": "array",
+      "minItems": 6,
+      "maxItems": 6,
+      "items": {"$ref": "#/$defs/rule"}
+    },
+    "global_prohibitions": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "LLM_JUDGMENT_AS_EVIDENCE",
+          "CHECKER_MAJORITY_AS_NORMATIVITY",
+          "IMPLEMENTATION_CONSENSUS_AS_NORMATIVITY",
+          "UNQUALIFIED_LINEAGE_INDEPENDENCE",
+          "FREE_FORM_CONFIDENCE",
+          "SILENT_AUTHORITY_INFERENCE"
+        ]
+      }
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "rule": {
+      "type": "object",
+      "required": [
+        "id",
+        "applies_to",
+        "sufficiency",
+        "checks",
+        "rationale",
+        "forbidden_inferences"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^AUTH\\.(NORMATIVE|EMPIRICAL)\\.(ESTABLISHED|PROVISIONAL|UNRESOLVED)\\.V[0-9]+$"
+        },
+        "applies_to": {
+          "type": "object",
+          "required": ["kind", "authority_status", "authority_scope"],
+          "properties": {
+            "kind": {
+              "enum": [
+                "NORMATIVE_CANDIDATE_OBLIGATION",
+                "EMPIRICAL_CONTRACT_SCENARIO"
+              ]
+            },
+            "authority_status": {
+              "enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]
+            },
+            "authority_scope": {
+              "enum": [
+                "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+                "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES"
+              ]
+            }
+          },
+          "additionalProperties": false
+        },
+        "sufficiency": {"const": "ALL_LISTED_CHECKS_REQUIRED"},
+        "checks": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/check"}
+        },
+        "rationale": {"type": "string", "minLength": 1},
+        "forbidden_inferences": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    },
+    "check": {
+      "enum": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "NO_UNMET_REQUIREMENTS",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "HAS_NORMATIVE_SUPPORT",
+        "NORMATIVE_SUPPORT_SOURCE_TYPE_ALLOWED",
+        "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM",
+        "HAS_IMPLEMENTATION_OBSERVATION",
+        "OBSERVER_VECTOR_COMPLETE",
+        "HAS_NON_PLACEHOLDER_OBSERVER_OUTCOME",
+        "OBSERVED_OUTCOMES_EVIDENCE_BACKED",
+        "NO_ACTIVE_AUTHORITY_CONTRADICTION",
+        "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION",
+        "FORBID_CONSENSUS_ONLY_NORMATIVITY",
+        "FORBID_LLM_AUTHORITY"
+      ]
+    }
+  }
+}

@@ -1,0 +1,791 @@
+#!/usr/bin/env python3
+"""Validate the canonical declaration-validation catalog and derived artifacts."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+CATALOG_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-catalog.schema.json"
+ENTRY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-characterization-entry.schema.json"
+AUTHORITY_PATH = ROOT / "config" / "declaration-validation-authority-rules.json"
+AUTHORITY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-authority-rules.schema.json"
+DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-catalog-decisions.json"
+DECISIONS_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-catalog-decisions.schema.json"
+FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-freeze.json"
+FREEZE_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-freeze-manifest.schema.json"
+REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_OBLIGATIONS.md"
+TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
+MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+IDENTITY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+SOURCE_LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
+PRIOR_DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
+REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-report"
+FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-freeze"
+SOURCE_LOCK_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-source-lock"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7.json"
+
+OBSERVER_POINTERS = {
+    "/observer_profiles/official_importer",
+    "/observer_profiles/nanoda",
+    "/observer_profiles/lean4lean",
+    "/observer_profiles/kiota",
+}
+OBSERVED_OUTCOMES = {"ACCEPT", "REJECT", "ERROR", "TIMEOUT"}
+EXPECTED_BINDINGS = {
+    "semantic_target": TARGET_PATH,
+    "characterization_model": MODEL_PATH,
+    "discovery_closure": CLOSURE_PATH,
+    "identity_registry": IDENTITY_PATH,
+    "source_lock": SOURCE_LOCK_PATH,
+    "entry_schema": ENTRY_SCHEMA_PATH,
+    "authority_rules": AUTHORITY_PATH,
+}
+EXPECTED_AUTHORITY_BINDINGS = {
+    "semantic_target": TARGET_PATH,
+    "characterization_model": MODEL_PATH,
+    "source_lock": SOURCE_LOCK_PATH,
+}
+EXPECTED_RULE_CHECKS = {
+    ("NORMATIVE_CANDIDATE_OBLIGATION", "ESTABLISHED"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "NO_UNMET_REQUIREMENTS",
+        "HAS_NORMATIVE_SUPPORT",
+        "NORMATIVE_SUPPORT_SOURCE_TYPE_ALLOWED",
+        "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM",
+        "NO_ACTIVE_AUTHORITY_CONTRADICTION",
+        "FORBID_CONSENSUS_ONLY_NORMATIVITY",
+        "FORBID_LLM_AUTHORITY",
+    },
+    ("NORMATIVE_CANDIDATE_OBLIGATION", "PROVISIONAL"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "FORBID_LLM_AUTHORITY",
+    },
+    ("NORMATIVE_CANDIDATE_OBLIGATION", "UNRESOLVED"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION",
+        "FORBID_LLM_AUTHORITY",
+    },
+    ("EMPIRICAL_CONTRACT_SCENARIO", "ESTABLISHED"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "NO_UNMET_REQUIREMENTS",
+        "HAS_IMPLEMENTATION_OBSERVATION",
+        "OBSERVER_VECTOR_COMPLETE",
+        "HAS_NON_PLACEHOLDER_OBSERVER_OUTCOME",
+        "OBSERVED_OUTCOMES_EVIDENCE_BACKED",
+        "NO_ACTIVE_AUTHORITY_CONTRADICTION",
+        "FORBID_LLM_AUTHORITY",
+    },
+    ("EMPIRICAL_CONTRACT_SCENARIO", "PROVISIONAL"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "OBSERVER_VECTOR_COMPLETE",
+        "FORBID_LLM_AUTHORITY",
+    },
+    ("EMPIRICAL_CONTRACT_SCENARIO", "UNRESOLVED"): {
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION",
+        "OBSERVER_VECTOR_COMPLETE",
+        "FORBID_LLM_AUTHORITY",
+    },
+}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    if pointer in {"", "/"}:
+        return document
+    if not pointer.startswith("/"):
+        raise KeyError("not a JSON Pointer")
+    current = document
+    for raw in pointer[1:].split("/"):
+        part = raw.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            current = current[int(part)]
+        elif isinstance(current, dict):
+            current = current[part]
+        else:
+            raise KeyError(part)
+    return current
+
+
+def schema_errors(
+    instance: dict[str, Any],
+    schema: dict[str, Any],
+    label: str,
+) -> list[str]:
+    validator = jsonschema.Draft202012Validator(
+        schema,
+        format_checker=jsonschema.FormatChecker(),
+    )
+    errors: list[str] = []
+    for error in sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path)):
+        where = "/" + "/".join(str(part) for part in error.absolute_path)
+        errors.append(f"{label} schema {where}: {error.message}")
+    return errors
+
+
+def unique_index(rows: list[dict[str, Any]], field: str, label: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    index: dict[str, dict[str, Any]] = {}
+    errors: list[str] = []
+    for row in rows:
+        value = row[field]
+        if value in index:
+            errors.append(f"duplicate {label}: {value}")
+        index[value] = row
+    return index, errors
+
+
+def binding_errors(bindings: dict[str, Any], expected: dict[str, Path], label: str) -> list[str]:
+    errors: list[str] = []
+    if set(bindings) != set(expected):
+        errors.append(f"{label} binding names are not exact")
+        return errors
+    for name, path in expected.items():
+        binding = bindings[name]
+        if ROOT / binding["path"] != path:
+            errors.append(f"{label} {name} path is not canonical")
+        elif binding["sha256"] != sha256_file(path):
+            errors.append(f"{label} {name} hash is stale")
+    return errors
+
+
+def source_lock_indices(source_lock: dict[str, Any]) -> dict[str, tuple[str, dict[str, Any]]]:
+    result: dict[str, tuple[str, dict[str, Any]]] = {}
+    for section, kind in [
+        ("repositories", "repository"),
+        ("source_files", "source_file"),
+        ("tracked_evidence", "tracked_evidence"),
+        ("generated_witnesses", "generated_witness"),
+        ("optional_local_observations", "optional_local_observation"),
+    ]:
+        for row in source_lock[section]:
+            result[row["id"]] = (kind, row)
+    for row in source_lock["observer_configurations"]:
+        result[f"OBSERVER.{row['observer']}"] = ("observer_configuration", row)
+    for section in ("normative_documentation", "mechanized_results"):
+        for row in source_lock[section]["records"]:
+            result[row["id"]] = (section, row)
+    return result
+
+
+def pointer_is_within(pointer: str, allowed: set[str]) -> bool:
+    return any(
+        pointer == root or pointer.startswith(root.rstrip("/") + "/")
+        for root in allowed
+    )
+
+
+def document_contains_case_id(value: Any, case_id: str) -> bool:
+    if isinstance(value, dict):
+        if any(value.get(key) == case_id for key in ("id", "case_id", "name")):
+            return True
+        return any(document_contains_case_id(item, case_id) for item in value.values())
+    if isinstance(value, list):
+        return any(document_contains_case_id(item, case_id) for item in value)
+    return False
+
+
+def evidence_source_errors(
+    evidence: dict[str, Any],
+    target: dict[str, Any],
+    source_lock: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    registry_name = evidence["source_lock"]["registry"]
+    lock_id = evidence["source_lock"]["lock_id"]
+    indices = source_lock_indices(source_lock)
+    locked: tuple[str, dict[str, Any]] | None = None
+    if registry_name == "SEMANTIC_TARGET_PROFILE":
+        allowed = {
+            target["profile_id"],
+            target["logical_target"]["target_id"],
+            "/logical_target/modeled_judgment",
+            *OBSERVER_POINTERS,
+        }
+        if lock_id not in allowed:
+            errors.append(f"{evidence['id']}: unknown semantic-target lock id {lock_id}")
+    elif registry_name == "DECLARATION_VALIDATION_SOURCE_LOCK":
+        locked = indices.get(lock_id)
+        if locked is None:
+            errors.append(f"{evidence['id']}: unknown source-lock id {lock_id}")
+    else:
+        locked = indices.get(lock_id)
+        if locked is None or locked[0] not in {"tracked_evidence", "generated_witness"}:
+            errors.append(f"{evidence['id']}: local-artifact lock id is not content-bound by the source lock")
+
+    if locked is None:
+        return errors
+    kind, row = locked
+    locator = evidence["exact_locator"]
+    value = locator["value"]
+    locator_kind = locator["kind"]
+    if kind == "tracked_evidence":
+        allowed_locators = set(row["json_pointer_or_case_id"])
+        if locator_kind == "JSON_POINTER":
+            pointer = value
+            if "#" in value:
+                path, pointer = value.split("#", 1)
+                if path != row["path"]:
+                    errors.append(f"{evidence['id']}: JSON locator path disagrees with tracked evidence {lock_id}")
+            if not pointer_is_within(pointer, allowed_locators):
+                errors.append(f"{evidence['id']}: JSON locator is not bound by tracked evidence {lock_id}")
+            else:
+                try:
+                    resolve_pointer(load_json(ROOT / row["path"]), pointer)
+                except (OSError, json.JSONDecodeError, KeyError, IndexError, ValueError):
+                    errors.append(f"{evidence['id']}: JSON locator does not resolve in tracked evidence {lock_id}")
+        elif locator_kind == "CASE_ID":
+            try:
+                document = load_json(ROOT / row["path"])
+            except (OSError, json.JSONDecodeError):
+                errors.append(f"{evidence['id']}: case artifact is not readable JSON")
+            else:
+                if not document_contains_case_id(document, value):
+                    errors.append(f"{evidence['id']}: case ID does not resolve in tracked evidence {lock_id}")
+        elif locator_kind == "COMMAND" and value not in allowed_locators:
+            errors.append(f"{evidence['id']}: command locator is not bound by tracked evidence {lock_id}")
+    elif kind == "generated_witness":
+        if locator_kind == "ARTIFACT_SHA256" and value != row["artifact_sha256"]:
+            errors.append(f"{evidence['id']}: artifact digest locator disagrees with witness {lock_id}")
+        elif locator_kind not in {"ARTIFACT_SHA256", "CASE_ID"}:
+            errors.append(f"{evidence['id']}: incompatible witness locator kind {locator_kind}")
+    elif kind == "source_file":
+        if locator_kind not in {"SOURCE_SYMBOL", "SOURCE_RANGE"}:
+            errors.append(f"{evidence['id']}: source file requires a source symbol or range locator")
+    return errors
+
+
+def validate_rule_set(authority: dict[str, Any]) -> tuple[list[str], dict[str, dict[str, Any]]]:
+    errors: list[str] = []
+    rules_by_id, new = unique_index(authority["rules"], "id", "authority rule")
+    errors.extend(new)
+    by_pair: dict[tuple[str, str], dict[str, Any]] = {}
+    for rule in authority["rules"]:
+        applies = rule["applies_to"]
+        pair = (applies["kind"], applies["authority_status"])
+        if pair in by_pair:
+            errors.append(f"duplicate authority kind/status rule: {pair}")
+        by_pair[pair] = rule
+        if set(rule["checks"]) != EXPECTED_RULE_CHECKS.get(pair, set()):
+            errors.append(f"{rule['id']}: qualification checks differ from frozen V1 sufficiency")
+        expected_scope = (
+            "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT"
+            if pair[0] == "NORMATIVE_CANDIDATE_OBLIGATION"
+            else "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES"
+        )
+        if applies["authority_scope"] != expected_scope:
+            errors.append(f"{rule['id']}: authority scope does not match kind")
+    if set(by_pair) != set(EXPECTED_RULE_CHECKS):
+        errors.append("authority rules do not cover exactly both kinds and all three statuses")
+    return errors, rules_by_id
+
+
+def validate_entry(
+    wrapper: dict[str, Any],
+    *,
+    catalog_ids: set[str],
+    identities: dict[str, dict[str, Any]],
+    decision_ids: set[str],
+    authority_rules: dict[str, dict[str, Any]],
+    target: dict[str, Any],
+    source_lock: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    entry = wrapper["characterization"]
+    entry_id = entry["id"]
+    identity = identities.get(entry_id)
+    if identity is None:
+        errors.append(f"{entry_id}: catalog ID is absent from the frozen identity registry")
+    else:
+        if wrapper["identity_statement_sha256"] != identity["statement_sha256"]:
+            errors.append(f"{entry_id}: identity statement hash is stale")
+        intended = identity["intended_kind"]
+        if intended is not None and entry["kind"] != intended:
+            errors.append(f"{entry_id}: catalog kind changes the frozen identity denotation")
+
+    for decision_id in wrapper["decision_ids"]:
+        if decision_id not in decision_ids:
+            errors.append(f"{entry_id}: unknown decision ID {decision_id}")
+
+    targets = entry["lifecycle"]["target_ids"]
+    for target_id in targets:
+        if target_id == entry_id:
+            errors.append(f"{entry_id}: lifecycle target cannot reference itself")
+        elif target_id not in catalog_ids:
+            errors.append(f"{entry_id}: lifecycle target is not a catalog entry: {target_id}")
+
+    evidence_by_id, new = unique_index(entry["evidence"], "id", f"{entry_id} evidence ID")
+    errors.extend(new)
+    all_evidence_refs = set(entry["authority"]["basis"]["evidence_refs"])
+    all_evidence_refs.update(entry["soundness_relevance"]["basis_evidence_refs"])
+    for observation in wrapper["observer_vector"]:
+        all_evidence_refs.update(observation["evidence_refs"])
+    for mapping in wrapper["source_mappings"]:
+        all_evidence_refs.update(mapping["evidence_refs"])
+    unknown_refs = all_evidence_refs - set(evidence_by_id)
+    if unknown_refs:
+        errors.append(f"{entry_id}: unresolved evidence refs {sorted(unknown_refs)}")
+
+    pointer_errors = False
+    source_errors = False
+    for evidence in entry["evidence"]:
+        pointer = evidence["claim_supported"]["entry_json_pointer"]
+        try:
+            resolve_pointer(entry, pointer)
+        except (KeyError, IndexError, ValueError):
+            errors.append(f"{entry_id}/{evidence['id']}: claim JSON Pointer does not resolve")
+            pointer_errors = True
+        found = evidence_source_errors(evidence, target, source_lock)
+        if found:
+            errors.extend(found)
+            source_errors = True
+
+    observer_by_pointer: dict[str, dict[str, Any]] = {}
+    for observation in wrapper["observer_vector"]:
+        pointer = observation["profile_pointer"]
+        if pointer in observer_by_pointer:
+            errors.append(f"{entry_id}: duplicate observer profile {pointer}")
+        observer_by_pointer[pointer] = observation
+        if observation["outcome"] in OBSERVED_OUTCOMES and not observation["evidence_refs"]:
+            errors.append(f"{entry_id}/{pointer}: concrete observer outcome lacks evidence")
+    complete_vector = set(observer_by_pointer) == OBSERVER_POINTERS
+    if not complete_vector:
+        errors.append(f"{entry_id}: observer vector is incomplete")
+
+    if entry["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+        pointer = entry["statement"]["judgment"]["target_profile_pointer"]
+        try:
+            resolve_pointer(target, pointer)
+        except (KeyError, IndexError, ValueError):
+            errors.append(f"{entry_id}: modeled-judgment target pointer does not resolve")
+    else:
+        for effect in entry["statement"]["profile_specific_effects"]:
+            pointer = effect["observer_profile_pointer"]
+            observation = observer_by_pointer.get(pointer)
+            if observation is None:
+                errors.append(f"{entry_id}: empirical effect has no observer-vector row: {pointer}")
+            elif effect["outcome"] != observation["outcome"]:
+                errors.append(f"{entry_id}: empirical effect disagrees with observer vector for {pointer}")
+
+    source_ids = {row["id"] for row in source_lock["source_files"]}
+    for mapping in wrapper["source_mappings"]:
+        if mapping["source_file_id"] not in source_ids:
+            errors.append(f"{entry_id}: unknown mapped source file {mapping['source_file_id']}")
+
+    basis = entry["authority"]["basis"]
+    rule = authority_rules.get(basis["qualification_rule"])
+    if rule is None:
+        errors.append(f"{entry_id}: unknown authority qualification rule {basis['qualification_rule']}")
+        return errors
+    applies = rule["applies_to"]
+    if (
+        applies["kind"] != entry["kind"]
+        or applies["authority_status"] != entry["authority"]["status"]
+        or applies["authority_scope"] != entry["authority"]["scope"]
+    ):
+        errors.append(f"{entry_id}: qualification rule does not apply to entry kind/scope/status")
+
+    evidence_values = list(evidence_by_id.values())
+    authority_evidence = [evidence_by_id[item] for item in basis["evidence_refs"] if item in evidence_by_id]
+    checks = set(rule["checks"])
+    if "NO_UNMET_REQUIREMENTS" in checks and basis["unmet_requirements"]:
+        errors.append(f"{entry_id}: established authority has unmet requirements")
+    if "HAS_NAMED_UNMET_REQUIREMENT" in checks and not basis["unmet_requirements"]:
+        errors.append(f"{entry_id}: non-established authority lacks a named unmet requirement")
+    normative_support = [item for item in authority_evidence if item["role"] == "NORMATIVE_SUPPORT"]
+    if "HAS_NORMATIVE_SUPPORT" in checks and not normative_support:
+        errors.append(f"{entry_id}: established normative authority lacks NORMATIVE_SUPPORT")
+    if "NORMATIVE_SUPPORT_SOURCE_TYPE_ALLOWED" in checks and any(
+        item["source_type"] not in {
+            "FORMAL_MECHANIZATION",
+            "NORMATIVE_SPECIFICATION",
+            "AUTHORITATIVE_DOCUMENTATION",
+        }
+        for item in normative_support
+    ):
+        errors.append(f"{entry_id}: normative support uses a non-normative source type")
+    if "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM" in checks and any(
+        not item["claim_supported"]["entry_json_pointer"].startswith("/statement")
+        for item in normative_support
+    ):
+        errors.append(f"{entry_id}: normative support does not target the modeled statement")
+    if "HAS_IMPLEMENTATION_OBSERVATION" in checks and not any(
+        item["role"] == "IMPLEMENTATION_OBSERVATION" for item in authority_evidence
+    ):
+        errors.append(f"{entry_id}: established empirical authority lacks an implementation observation")
+    if "HAS_NON_PLACEHOLDER_OBSERVER_OUTCOME" in checks and not any(
+        item["outcome"] in OBSERVED_OUTCOMES for item in wrapper["observer_vector"]
+    ):
+        errors.append(f"{entry_id}: established empirical authority has no concrete observer outcome")
+    if "OBSERVER_VECTOR_COMPLETE" in checks and not complete_vector:
+        errors.append(f"{entry_id}: authority rule requires a complete observer vector")
+    if "OBSERVED_OUTCOMES_EVIDENCE_BACKED" in checks:
+        for observation in wrapper["observer_vector"]:
+            if observation["outcome"] in OBSERVED_OUTCOMES and not observation["evidence_refs"]:
+                errors.append(f"{entry_id}: observed outcome is not evidence-backed")
+    active_authority_contradiction = any(
+        item["role"] == "CONTRADICTION"
+        and item["claim_supported"]["entry_json_pointer"].startswith("/authority")
+        for item in evidence_values
+    )
+    if "NO_ACTIVE_AUTHORITY_CONTRADICTION" in checks and active_authority_contradiction:
+        errors.append(f"{entry_id}: established authority has an active authority contradiction")
+    if "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION" in checks:
+        blocking_unknown = any(
+            "AUTHORITY_ESTABLISHMENT" in item["blocking_for"] for item in entry["unknowns"]
+        )
+        unresolved_assumption = any(
+            assumption["status"] == "UNRESOLVED"
+            for item in evidence_values
+            for assumption in item["assumptions"]
+        )
+        if not (blocking_unknown or active_authority_contradiction or unresolved_assumption):
+            errors.append(f"{entry_id}: unresolved authority lacks a blocking unknown or contradiction")
+    if "CLAIM_POINTERS_RESOLVE" in checks and pointer_errors:
+        errors.append(f"{entry_id}: qualification rule has unresolved claim pointers")
+    if "SOURCE_LOCK_REFS_RESOLVE" in checks and source_errors:
+        errors.append(f"{entry_id}: qualification rule has unresolved source locks")
+    return errors
+
+
+def lifecycle_cycle_errors(entries: list[dict[str, Any]]) -> list[str]:
+    graph = {
+        row["characterization"]["id"]: row["characterization"]["lifecycle"]["target_ids"]
+        for row in entries
+    }
+    errors: list[str] = []
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node: str) -> None:
+        if node in visiting:
+            errors.append(f"lifecycle target cycle contains {node}")
+            return
+        if node in visited:
+            return
+        visiting.add(node)
+        for target in graph.get(node, []):
+            visit(target)
+        visiting.remove(node)
+        visited.add(node)
+
+    for node in graph:
+        visit(node)
+    return errors
+
+
+def validate_decisions(
+    decisions: dict[str, Any],
+    catalog: dict[str, Any],
+    identities: dict[str, dict[str, Any]],
+) -> tuple[list[str], set[str]]:
+    errors: list[str] = []
+    records_by_id, new = unique_index(decisions["records"], "id", "post-catalog decision")
+    errors.extend(new)
+    catalog_hash = sha256_file(CATALOG_PATH)
+    entry_by_id = {
+        row["characterization"]["id"]: row["characterization"] for row in catalog["entries"]
+    }
+    evidence_pairs = {
+        (entry_id, evidence["id"])
+        for entry_id, entry in entry_by_id.items()
+        for evidence in entry["evidence"]
+    }
+    referenced = {
+        decision_id
+        for row in catalog["entries"]
+        for decision_id in row["decision_ids"]
+        if decision_id.startswith("DEC.CATALOG.")
+    }
+    for record in decisions["records"]:
+        if record["catalog_hash_after"] != catalog_hash:
+            errors.append(f"{record['id']}: catalog_hash_after is not the current catalog")
+        for stable_id in set(record["inputs"] + record["result"]):
+            if stable_id not in identities:
+                errors.append(f"{record['id']}: unknown stable identity {stable_id}")
+        for evidence in record["evidence"]:
+            pair = (evidence["entry_id"], evidence["evidence_id"])
+            if pair not in evidence_pairs:
+                errors.append(f"{record['id']}: unresolved decision evidence {pair}")
+        for stable_id, digest in record["statement_hashes_after"].items():
+            current = entry_by_id.get(stable_id)
+            if current is None:
+                errors.append(f"{record['id']}: statement hash names absent catalog entry {stable_id}")
+                continue
+            payload = json.dumps(current["statement"], sort_keys=True, separators=(",", ":")).encode()
+            if hashlib.sha256(payload).hexdigest() != digest:
+                errors.append(f"{record['id']}: statement_hashes_after is stale for {stable_id}")
+    orphaned = set(records_by_id) - referenced
+    if orphaned:
+        errors.append(f"post-catalog decisions are not referenced by catalog entries: {sorted(orphaned)}")
+    return errors, set(records_by_id)
+
+
+def validate_freeze(
+    freeze: dict[str, Any],
+    *,
+    rendered_freeze: dict[str, Any] | None = None,
+) -> list[str]:
+    errors: list[str] = []
+    for name, binding in freeze["artifacts"].items():
+        path = ROOT / binding["path"]
+        if not path.is_file():
+            errors.append(f"freeze artifact {name} is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"freeze artifact {name} hash is stale")
+        if path == FREEZE_PATH:
+            errors.append("freeze manifest cannot content-bind itself")
+    if rendered_freeze is None:
+        rendered_freeze = load_module("declaration_m7_freeze_renderer", FREEZE_RENDERER_PATH).render()
+    if freeze != rendered_freeze:
+        errors.append("freeze manifest is not synchronized with its canonical inputs")
+
+    order = freeze["attestation_order"]
+    rank = {name: index for index, name in enumerate(order)}
+    graph: dict[str, list[str]] = {name: [] for name in freeze["artifacts"]}
+    for edge in freeze["dependency_edges"]:
+        source = edge["from"]
+        target = edge["to"]
+        if source not in graph or target not in graph:
+            errors.append(f"freeze dependency edge names unknown artifact: {source}->{target}")
+            continue
+        graph[source].append(target)
+        source_tier = freeze["artifacts"][source]["tier"]
+        target_tier = freeze["artifacts"][target]["tier"]
+        if rank[target_tier] > rank[source_tier]:
+            errors.append(f"freeze edge violates attestation order: {source}->{target}")
+    visiting: set[str] = set()
+    visited: set[str] = set()
+
+    def visit(node: str) -> None:
+        if node in visiting:
+            errors.append(f"freeze dependency graph contains a cycle at {node}")
+            return
+        if node in visited:
+            return
+        visiting.add(node)
+        for target in graph[node]:
+            visit(target)
+        visiting.remove(node)
+        visited.add(node)
+
+    for node in graph:
+        visit(node)
+    return errors
+
+
+def validate_artifacts(
+    catalog: dict[str, Any],
+    catalog_schema: dict[str, Any],
+    entry_schema: dict[str, Any],
+    authority: dict[str, Any],
+    authority_schema: dict[str, Any],
+    decisions: dict[str, Any],
+    decisions_schema: dict[str, Any],
+    freeze: dict[str, Any],
+    freeze_schema: dict[str, Any],
+    target: dict[str, Any],
+    identities_document: dict[str, Any],
+    source_lock: dict[str, Any],
+    prior_decisions: dict[str, Any],
+    *,
+    rendered_report: str | None = None,
+    rendered_freeze: dict[str, Any] | None = None,
+    check_generated: bool = True,
+) -> list[str]:
+    resolved_catalog_schema = copy.deepcopy(catalog_schema)
+    resolved_catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = entry_schema
+    errors = schema_errors(catalog, resolved_catalog_schema, "catalog")
+    errors.extend(schema_errors(authority, authority_schema, "authority rules"))
+    errors.extend(schema_errors(decisions, decisions_schema, "catalog decisions"))
+    errors.extend(schema_errors(freeze, freeze_schema, "freeze manifest"))
+    if errors:
+        return errors
+
+    errors.extend(binding_errors(catalog["artifact_bindings"], EXPECTED_BINDINGS, "catalog"))
+    errors.extend(binding_errors(authority["bindings"], EXPECTED_AUTHORITY_BINDINGS, "authority"))
+    if catalog["id_evolution_rules"] != identities_document["id_evolution_rules"]:
+        errors.append("catalog stable-ID evolution rules differ from the frozen identity registry")
+    if set(catalog["observer_order"]) != OBSERVER_POINTERS:
+        errors.append("catalog observer order does not cover the exact pinned observer set")
+
+    rule_errors, rules_by_id = validate_rule_set(authority)
+    errors.extend(rule_errors)
+    identities, new = unique_index(identities_document["identities"], "id", "stable identity")
+    errors.extend(new)
+    prior_ids = {row["id"] for row in prior_decisions["records"]}
+    decision_errors, post_ids = validate_decisions(decisions, catalog, identities)
+    errors.extend(decision_errors)
+
+    entry_rows = catalog["entries"]
+    catalog_ids: set[str] = set()
+    for row in entry_rows:
+        entry_id = row["characterization"]["id"]
+        if entry_id in catalog_ids:
+            errors.append(f"duplicate catalog stable ID: {entry_id}")
+        catalog_ids.add(entry_id)
+    all_decision_ids = prior_ids | post_ids
+    for row in entry_rows:
+        errors.extend(
+            validate_entry(
+                row,
+                catalog_ids=catalog_ids,
+                identities=identities,
+                decision_ids=all_decision_ids,
+                authority_rules=rules_by_id,
+                target=target,
+                source_lock=source_lock,
+            )
+        )
+    errors.extend(lifecycle_cycle_errors(entry_rows))
+
+    if catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY":
+        boundary = catalog["completion_boundary"]
+        if entry_rows or boundary["inventory_populated"] or boundary["authority_assignments_created"]:
+            errors.append("Milestone 7 infrastructure catalog crossed into inventory adjudication")
+        if boundary["next_milestone"] != "MILESTONE_8_BUILD_FIRST_CHARACTERIZATION_INVENTORY":
+            errors.append("Milestone 7 catalog does not authorize exactly Milestone 8 next")
+        if decisions["records"]:
+            errors.append("Milestone 7 post-catalog decision log must remain empty")
+
+    if check_generated:
+        report_renderer = load_module("declaration_m7_report_renderer", REPORT_RENDERER_PATH)
+        if rendered_report is None:
+            rendered_report = report_renderer.render(catalog, source_lock)
+        if REPORT_PATH.read_text(encoding="utf-8") != rendered_report:
+            errors.append("generated human report is not synchronized with the canonical catalog")
+        catalog_hash = sha256_file(CATALOG_PATH)
+        if f"Catalog SHA-256: `{catalog_hash}`" not in rendered_report:
+            errors.append("generated human report does not include the canonical catalog hash")
+        errors.extend(validate_freeze(freeze, rendered_freeze=rendered_freeze))
+    return errors
+
+
+def validate_completion_record() -> list[str]:
+    if not COMPLETION_PATH.is_file():
+        return [f"missing completion record: {COMPLETION_PATH.relative_to(ROOT)}"]
+    record = load_json(COMPLETION_PATH)
+    errors: list[str] = []
+    if record.get("status") != "PASS":
+        errors.append("Milestone 7 completion record is not PASS")
+    for name, binding in record.get("artifacts", {}).items():
+        path = ROOT / binding["path"]
+        if not path.is_file():
+            errors.append(f"completion record {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"completion record {name} hash is stale")
+    boundary = record.get("completion_boundary", {})
+    if boundary.get("next_authorized_milestone") != "Milestone 8 — Build the First Characterization Inventory":
+        errors.append("completion record does not authorize exactly Milestone 8 next")
+    return errors
+
+
+def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:
+    catalog = load_json(CATALOG_PATH)
+    source_validator = load_module("declaration_m6_source_validator", SOURCE_LOCK_VALIDATOR_PATH)
+    source_errors, _ = source_validator.validate_all(require_completion=True, online=False)
+    errors = [f"source-lock predecessor: {error}" for error in source_errors]
+    errors.extend(
+        validate_artifacts(
+            catalog,
+            load_json(CATALOG_SCHEMA_PATH),
+            load_json(ENTRY_SCHEMA_PATH),
+            load_json(AUTHORITY_PATH),
+            load_json(AUTHORITY_SCHEMA_PATH),
+            load_json(DECISIONS_PATH),
+            load_json(DECISIONS_SCHEMA_PATH),
+            load_json(FREEZE_PATH),
+            load_json(FREEZE_SCHEMA_PATH),
+            load_json(TARGET_PATH),
+            load_json(IDENTITY_PATH),
+            load_json(SOURCE_LOCK_PATH),
+            load_json(PRIOR_DECISIONS_PATH),
+        )
+    )
+    if require_completion:
+        errors.extend(validate_completion_record())
+    entries = catalog["entries"]
+    summary = {
+        "catalog_sha256": sha256_file(CATALOG_PATH),
+        "entries": len(entries),
+        "normative_candidates": sum(
+            row["characterization"]["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION" for row in entries
+        ),
+        "empirical_scenarios": sum(
+            row["characterization"]["kind"] == "EMPIRICAL_CONTRACT_SCENARIO" for row in entries
+        ),
+        "authority_rules": len(load_json(AUTHORITY_PATH)["rules"]),
+        "observer_profiles": len(catalog["observer_order"]),
+        "post_catalog_decisions": len(load_json(DECISIONS_PATH)["records"]),
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifacts-only", action="store_true", help="skip the completion record while constructing the milestone")
+    args = parser.parse_args()
+    errors, summary = validate_all(require_completion=not args.artifacts_only)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        print(json.dumps(summary, sort_keys=True))
+        return 1
+    print("declaration-validation canonical catalog: PASS")
+    print(json.dumps(summary, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

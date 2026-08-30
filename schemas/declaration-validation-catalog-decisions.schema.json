@@ -1,0 +1,101 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-catalog-decisions.schema.json",
+  "title": "Declaration Validation Post-Catalog Decision Log",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "log_id",
+    "recorded_at",
+    "status",
+    "catalog_id",
+    "records"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "log_id": {"const": "ordinary-declaration-validation.catalog-decisions.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "ACTIVE_APPEND_ONLY_POST_CATALOG_DECISION_LOG"},
+    "catalog_id": {"const": "ordinary-declaration-validation.catalog.v1"},
+    "records": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/decision"}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "semanticId": {
+      "type": "string",
+      "pattern": "^[A-Z][A-Z0-9]*(\\.[A-Z][A-Z0-9_]*)+$"
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "id",
+        "decision_type",
+        "decision",
+        "inputs",
+        "result",
+        "reason",
+        "evidence",
+        "catalog_hash_before",
+        "catalog_hash_after",
+        "statement_hashes_before",
+        "statement_hashes_after"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DEC\\.CATALOG\\.[0-9]{3,}$"},
+        "decision_type": {
+          "enum": [
+            "MERGE",
+            "SPLIT",
+            "EXCLUSION",
+            "AUTHORITY_CHANGE",
+            "LAYER_CHANGE",
+            "LIFECYCLE_CHANGE",
+            "OTHER"
+          ]
+        },
+        "decision": {"type": "string", "minLength": 1},
+        "inputs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticId"}
+        },
+        "result": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticId"}
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["entry_id", "evidence_id"],
+            "properties": {
+              "entry_id": {"$ref": "#/$defs/semanticId"},
+              "evidence_id": {"type": "string", "pattern": "^EVID(\\.[A-Z][A-Z0-9_]*)+$"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "catalog_hash_before": {"$ref": "#/$defs/sha256"},
+        "catalog_hash_after": {"$ref": "#/$defs/sha256"},
+        "statement_hashes_before": {"$ref": "#/$defs/statementHashes"},
+        "statement_hashes_after": {"$ref": "#/$defs/statementHashes"}
+      },
+      "additionalProperties": false
+    },
+    "statementHashes": {
+      "type": "object",
+      "propertyNames": {"$ref": "#/$defs/semanticId"},
+      "additionalProperties": {"$ref": "#/$defs/sha256"}
+    }
+  }
+}

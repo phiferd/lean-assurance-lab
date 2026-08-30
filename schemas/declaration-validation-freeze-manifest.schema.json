@@ -1,0 +1,83 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-freeze-manifest.schema.json",
+  "title": "Declaration Validation Acyclic Freeze Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "generated_at",
+    "status",
+    "artifacts",
+    "attestation_order",
+    "dependency_edges",
+    "acyclic"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {"const": "ordinary-declaration-validation.milestone-7-freeze.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_MILESTONE_7_INFRASTRUCTURE"},
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "source_lock",
+        "authority_rules",
+        "catalog",
+        "generated_report",
+        "prior_identity_decisions",
+        "post_catalog_decisions"
+      ],
+      "additionalProperties": {"$ref": "#/$defs/fileBinding"}
+    },
+    "attestation_order": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {
+        "enum": [
+          "SOURCE_AND_EVIDENCE_LOCKS",
+          "AUTHORITY_QUALIFICATION_RULES",
+          "CANONICAL_CATALOG",
+          "GENERATED_HUMAN_REPORT",
+          "DECISION_RECORDS"
+        ]
+      }
+    },
+    "dependency_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "acyclic": {"const": true}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "tier"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "tier": {
+          "enum": [
+            "SOURCE_AND_EVIDENCE_LOCKS",
+            "AUTHORITY_QUALIFICATION_RULES",
+            "CANONICAL_CATALOG",
+            "GENERATED_HUMAN_REPORT",
+            "DECISION_RECORDS"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

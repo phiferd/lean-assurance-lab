@@ -1,0 +1,76 @@
+{
+  "acyclic": true,
+  "artifacts": {
+    "authority_rules": {
+      "path": "config/declaration-validation-authority-rules.json",
+      "sha256": "8dff17908589e8cda0eac349664b642fc5a76126ba544510917405bbff550f62",
+      "tier": "AUTHORITY_QUALIFICATION_RULES"
+    },
+    "catalog": {
+      "path": "config/declaration-validation-catalog.json",
+      "sha256": "86880f235d7c31217341c036603df7adb7d5b19778614afd733ea27095c86075",
+      "tier": "CANONICAL_CATALOG"
+    },
+    "generated_report": {
+      "path": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+      "sha256": "0ba637ef9a15bc09f95ffccc3ae6cdd25b82271348dc3fcc9a2bc885e0595a66",
+      "tier": "GENERATED_HUMAN_REPORT"
+    },
+    "post_catalog_decisions": {
+      "path": "results/research/declaration-validation-catalog-decisions.json",
+      "sha256": "b17b2ce8af273cfb7e8a2da768cd571d9201443b6e0077191eca7977660a1a2d",
+      "tier": "DECISION_RECORDS"
+    },
+    "prior_identity_decisions": {
+      "path": "results/research/declaration-validation-milestone-5-decisions.json",
+      "sha256": "7ec0ae65d601ae5062ca5e8225bd23860cc9ceeeea44bb9fe73ee0cc8de39e32",
+      "tier": "SOURCE_AND_EVIDENCE_LOCKS"
+    },
+    "source_lock": {
+      "path": "config/declaration-validation-source-lock.json",
+      "sha256": "2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b",
+      "tier": "SOURCE_AND_EVIDENCE_LOCKS"
+    }
+  },
+  "attestation_order": [
+    "SOURCE_AND_EVIDENCE_LOCKS",
+    "AUTHORITY_QUALIFICATION_RULES",
+    "CANONICAL_CATALOG",
+    "GENERATED_HUMAN_REPORT",
+    "DECISION_RECORDS"
+  ],
+  "dependency_edges": [
+    {
+      "from": "authority_rules",
+      "to": "source_lock"
+    },
+    {
+      "from": "catalog",
+      "to": "source_lock"
+    },
+    {
+      "from": "catalog",
+      "to": "authority_rules"
+    },
+    {
+      "from": "catalog",
+      "to": "prior_identity_decisions"
+    },
+    {
+      "from": "generated_report",
+      "to": "catalog"
+    },
+    {
+      "from": "generated_report",
+      "to": "source_lock"
+    },
+    {
+      "from": "post_catalog_decisions",
+      "to": "catalog"
+    }
+  ],
+  "generated_at": "2026-08-30T14:30:00-04:00",
+  "manifest_id": "ordinary-declaration-validation.milestone-7-freeze.v1",
+  "schema_version": 1,
+  "status": "FROZEN_MILESTONE_7_INFRASTRUCTURE"
+}

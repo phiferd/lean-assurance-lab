@@ -1,0 +1,177 @@
+{
+  "bindings": {
+    "characterization_model": {
+      "path": "config/declaration-validation-characterization-model.json",
+      "sha256": "6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7"
+    },
+    "semantic_target": {
+      "path": "config/declaration-validation-target.json",
+      "sha256": "4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa"
+    },
+    "source_lock": {
+      "path": "config/declaration-validation-source-lock.json",
+      "sha256": "2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b"
+    }
+  },
+  "global_prohibitions": [
+    "LLM_JUDGMENT_AS_EVIDENCE",
+    "CHECKER_MAJORITY_AS_NORMATIVITY",
+    "IMPLEMENTATION_CONSENSUS_AS_NORMATIVITY",
+    "UNQUALIFIED_LINEAGE_INDEPENDENCE",
+    "FREE_FORM_CONFIDENCE",
+    "SILENT_AUTHORITY_INFERENCE"
+  ],
+  "recorded_at": "2026-08-30T14:25:00-04:00",
+  "rule_set_id": "ordinary-declaration-validation.authority-rules.v1",
+  "rules": [
+    {
+      "applies_to": {
+        "authority_scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+        "authority_status": "ESTABLISHED",
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "NO_UNMET_REQUIREMENTS",
+        "HAS_NORMATIVE_SUPPORT",
+        "NORMATIVE_SUPPORT_SOURCE_TYPE_ALLOWED",
+        "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM",
+        "NO_ACTIVE_AUTHORITY_CONTRADICTION",
+        "FORBID_CONSENSUS_ONLY_NORMATIVITY",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "Official implementation rejection alone does not establish normativity.",
+        "Agreement among observer profiles does not establish normativity.",
+        "A normative source does not establish claims outside its recorded assumptions or target relationship."
+      ],
+      "id": "AUTH.NORMATIVE.ESTABLISHED.V1",
+      "rationale": "Established normative authority requires content-bound normative support aimed at the modeled claim, resolved assumptions and locators, no unmet qualification requirement, and no unresolved contradiction to the authority claim.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    },
+    {
+      "applies_to": {
+        "authority_scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+        "authority_status": "PROVISIONAL",
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "Provisional status must not be rendered or counted as established normativity.",
+        "Implementation consensus must not silently discharge the named unmet requirement."
+      ],
+      "id": "AUTH.NORMATIVE.PROVISIONAL.V1",
+      "rationale": "A normative candidate may remain provisional with bounded evidence, but it must name the missing qualification rather than converting discovery or implementation evidence into authority.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    },
+    {
+      "applies_to": {
+        "authority_scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+        "authority_status": "UNRESOLVED",
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "Unresolved evidence must not be collapsed into rejection policy or logical validity.",
+        "The tidier interpretation must not be selected without qualifying evidence."
+      ],
+      "id": "AUTH.NORMATIVE.UNRESOLVED.V1",
+      "rationale": "Unresolved normative authority requires a durable blocking question, unresolved assumption, or contradiction in addition to a named unmet requirement.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    },
+    {
+      "applies_to": {
+        "authority_scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+        "authority_status": "ESTABLISHED",
+        "kind": "EMPIRICAL_CONTRACT_SCENARIO"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "NO_UNMET_REQUIREMENTS",
+        "HAS_IMPLEMENTATION_OBSERVATION",
+        "OBSERVER_VECTOR_COMPLETE",
+        "HAS_NON_PLACEHOLDER_OBSERVER_OUTCOME",
+        "OBSERVED_OUTCOMES_EVIDENCE_BACKED",
+        "NO_ACTIVE_AUTHORITY_CONTRADICTION",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "An established empirical boundary must not be rendered as a normative requirement.",
+        "Agreement across profiles must not be described as independent voting without lineage qualification."
+      ],
+      "id": "AUTH.EMPIRICAL.ESTABLISHED.V1",
+      "rationale": "Established empirical authority requires at least one content-bound implementation observation, a complete explicit observer vector, evidence for every concrete outcome, and no unresolved qualification requirement.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    },
+    {
+      "applies_to": {
+        "authority_scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+        "authority_status": "PROVISIONAL",
+        "kind": "EMPIRICAL_CONTRACT_SCENARIO"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "OBSERVER_VECTOR_COMPLETE",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "Partial observation must not be rendered as a complete checker comparison.",
+        "A provisional scenario must not enter the normative coverage denominator."
+      ],
+      "id": "AUTH.EMPIRICAL.PROVISIONAL.V1",
+      "rationale": "A scenario may be provisionally retained while observer inspection or attribution is incomplete, provided the missing qualification and all uninspected profiles are explicit.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    },
+    {
+      "applies_to": {
+        "authority_scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+        "authority_status": "UNRESOLVED",
+        "kind": "EMPIRICAL_CONTRACT_SCENARIO"
+      },
+      "checks": [
+        "KIND_SCOPE_STATUS_MATCH",
+        "BASIS_EVIDENCE_REFS_RESOLVE",
+        "CLAIM_POINTERS_RESOLVE",
+        "SOURCE_LOCK_REFS_RESOLVE",
+        "HAS_NAMED_UNMET_REQUIREMENT",
+        "HAS_BLOCKING_AUTHORITY_UNKNOWN_OR_CONTRADICTION",
+        "OBSERVER_VECTOR_COMPLETE",
+        "FORBID_LLM_AUTHORITY"
+      ],
+      "forbidden_inferences": [
+        "Contradictory or attribution-uncertain outcomes must remain visible.",
+        "Unresolved cross-layer behavior must not be forced into one layer."
+      ],
+      "id": "AUTH.EMPIRICAL.UNRESOLVED.V1",
+      "rationale": "An unresolved empirical scenario preserves its complete observer vector while naming the contradiction, unresolved assumption, or blocking interpretation question.",
+      "sufficiency": "ALL_LISTED_CHECKS_REQUIRED"
+    }
+  ],
+  "schema_version": 1,
+  "status": "FROZEN_MILESTONE_7_QUALIFICATION_RULES"
+}

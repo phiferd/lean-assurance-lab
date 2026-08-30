@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 6 recorded
+- Status: active execution mandate; Milestones 0 through 7 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -46,6 +46,18 @@
   `scripts/validate-declaration-validation-source-lock --online`
 - Milestone 6 record:
   results/research/declaration-validation-milestone-6.json
+- Milestone 7 canonical catalog:
+  config/declaration-validation-catalog.json
+- Milestone 7 authority rules:
+  config/declaration-validation-authority-rules.json
+- Milestone 7 generated report:
+  docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md
+- Milestone 7 validation command:
+  `scripts/validate-declaration-validation-catalog`
+- Milestone 7 freeze manifest:
+  results/research/declaration-validation-milestone-7-freeze.json
+- Milestone 7 record:
+  results/research/declaration-validation-milestone-7.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -713,6 +725,40 @@ That disagreement is then implementation evidence, not a reason to downgrade
 the formal rule automatically.
 
 Document the actual qualification rule used for each established candidate.
+
+### Milestone 7 Completion — 2026-08-30
+
+The authoritative `config/declaration-validation-catalog.json` is deliberately
+empty at this milestone. It content-binds the semantic target,
+characterization model, discovery closure, stable identity registry, source
+lock, entry schema, and authority-rule set. This establishes the canonical
+data and generated-view architecture without performing the Milestone 8
+per-identity adjudication.
+
+`config/declaration-validation-authority-rules.json` defines six versioned
+qualification rules: one for each normative/empirical kind and each of
+ESTABLISHED, PROVISIONAL, and UNRESOLVED. An established normative entry must
+carry content-bound `NORMATIVE_SUPPORT` aimed at the modeled statement;
+implementation agreement cannot satisfy that requirement. Non-established
+entries must name unmet requirements, and unresolved entries must preserve a
+blocking question, unresolved assumption, or authority contradiction.
+
+`scripts/validate-declaration-validation-catalog` checks the catalog and entry
+schemas plus stable-ID immutability, lifecycle and merge/supersession targets,
+decision references, evidence and claim pointers, source-lock resolution,
+versioned authority sufficiency, exact four-observer vectors, source mappings,
+generated-report synchronization, and the acyclic freeze graph. Its focused
+test suite exercises populated in-memory normative and empirical entries while
+the canonical Milestone 7 catalog remains empty.
+
+The generated
+`docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md` includes the canonical
+catalog SHA-256 and derives all required summary, observation, unresolved,
+source-mapping, normative, and empirical views. The post-catalog decision log
+is an empty append-only scaffold. The generated Milestone 7 freeze manifest
+binds source/evidence locks, authority rules, catalog, report, and decision
+records in an explicitly validated acyclic order. No rule, layer, authority,
+soundness assessment, or coverage-denominator membership was assigned.
 
 ## Milestone 8 — Build the First Characterization Inventory
 

@@ -1,0 +1,290 @@
+#!/usr/bin/env python3
+"""Render the declaration-validation human audit from the canonical catalog."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from collections import Counter
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+SOURCE_LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
+DEFAULT_OUTPUT = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_OBLIGATIONS.md"
+
+KINDS = ["NORMATIVE_CANDIDATE_OBLIGATION", "EMPIRICAL_CONTRACT_SCENARIO"]
+LAYERS = [
+    "KERNEL_DECLARATION_VALIDITY",
+    "EXPORT_FORMAT",
+    "RECONSTRUCTION",
+    "TRUST_POLICY",
+    "IMPLEMENTATION_POLICY",
+]
+AUTHORITY_STATUSES = ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]
+LIFECYCLE_STATUSES = ["ACTIVE", "SUPERSEDED", "REDUNDANT", "OUT_OF_SCOPE"]
+OBSERVER_OUTCOMES = [
+    "ACCEPT",
+    "REJECT",
+    "ERROR",
+    "TIMEOUT",
+    "NOT_INSPECTED",
+    "NOT_APPLICABLE",
+    "UNRESOLVED",
+]
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def cell(value: Any) -> str:
+    if isinstance(value, list):
+        value = ", ".join(str(item) for item in value)
+    return str(value).replace("|", "\\|").replace("\n", " ")
+
+
+def table(headers: list[str], rows: list[list[Any]]) -> list[str]:
+    result = [
+        "| " + " | ".join(cell(value) for value in headers) + " |",
+        "| " + " | ".join("---" for _ in headers) + " |",
+    ]
+    result.extend("| " + " | ".join(cell(value) for value in row) + " |" for row in rows)
+    return result
+
+
+def characterization(entry: dict[str, Any]) -> dict[str, Any]:
+    return entry["characterization"]
+
+
+def evidence_groups(entry: dict[str, Any]) -> tuple[list[str], list[str]]:
+    arena: list[str] = []
+    lab: list[str] = []
+    for evidence in characterization(entry)["evidence"]:
+        if evidence["source_type"] == "ARENA_TEST":
+            arena.append(evidence["id"])
+        if evidence["source_type"] in {
+            "LAB_EXPERIMENT",
+            "MUTATION_RESULT",
+            "WITNESS_ARTIFACT",
+        }:
+            lab.append(evidence["id"])
+    return sorted(arena), sorted(lab)
+
+
+def statement_summary(value: dict[str, Any]) -> str:
+    if value["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+        return value["statement"]["target_premise"]["statement"]
+    return value["statement"]["stimulus"]["statement"]
+
+
+def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | None = None) -> str:
+    if catalog is None:
+        catalog = load_json(CATALOG_PATH)
+    if source_lock is None:
+        source_lock = load_json(SOURCE_LOCK_PATH)
+    catalog_hash = sha256_file(CATALOG_PATH) if catalog == load_json(CATALOG_PATH) else hashlib.sha256(
+        (json.dumps(catalog, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    ).hexdigest()
+    entries = sorted(catalog["entries"], key=lambda row: characterization(row)["id"])
+    source_by_id = {row["id"]: row for row in source_lock["source_files"]}
+
+    kind_counts = Counter(characterization(row)["kind"] for row in entries)
+    layer_counts = Counter(
+        layer for row in entries for layer in characterization(row)["layers"]
+    )
+    authority_counts = Counter(
+        characterization(row)["authority"]["status"] for row in entries
+    )
+    lifecycle_counts = Counter(
+        characterization(row)["lifecycle"]["status"] for row in entries
+    )
+    observer_counts: dict[str, Counter[str]] = {
+        pointer: Counter() for pointer in catalog["observer_order"]
+    }
+    for row in entries:
+        for observation in row["observer_vector"]:
+            observer_counts[observation["profile_pointer"]][observation["outcome"]] += 1
+
+    lines = [
+        "# Declaration Validation Obligations and Scenarios",
+        "",
+        "> Generated file. Edit `config/declaration-validation-catalog.json`, not this report.",
+        "",
+        f"- Catalog ID: `{catalog['catalog_id']}`",
+        f"- Catalog status: `{catalog['status']}`",
+        f"- Catalog SHA-256: `{catalog_hash}`",
+        f"- Catalog entries: {len(entries)}",
+        "",
+        "This report is a deterministic view of the canonical machine-readable catalog. "
+        "Its catalog hash is checked mechanically. The Milestone 7 catalog is intentionally "
+        "empty: Milestone 8 performs the per-identity evidence and authority adjudication.",
+        "",
+        "## Bound Inputs",
+        "",
+    ]
+    lines.extend(
+        table(
+            ["Input", "Path", "SHA-256"],
+            [
+                [name, binding["path"], f"`{binding['sha256']}`"]
+                for name, binding in sorted(catalog["artifact_bindings"].items())
+            ],
+        )
+    )
+    lines.extend(["", "## Summary", "", "### Counts by Kind", ""])
+    lines.extend(table(["Kind", "Count"], [[name, kind_counts[name]] for name in KINDS]))
+    lines.extend(["", "### Counts by Layer", ""])
+    lines.extend(table(["Layer", "Count"], [[name, layer_counts[name]] for name in LAYERS]))
+    lines.extend(["", "### Counts by Authority Status", ""])
+    lines.extend(
+        table(["Authority status", "Count"], [[name, authority_counts[name]] for name in AUTHORITY_STATUSES])
+    )
+    lines.extend(["", "### Counts by Lifecycle Status", ""])
+    lines.extend(
+        table(["Lifecycle status", "Count"], [[name, lifecycle_counts[name]] for name in LIFECYCLE_STATUSES])
+    )
+    lines.extend(["", "## Checker Observation Summary", ""])
+    lines.extend(
+        table(
+            ["Observer", *OBSERVER_OUTCOMES],
+            [
+                [pointer, *[observer_counts[pointer][outcome] for outcome in OBSERVER_OUTCOMES]]
+                for pointer in catalog["observer_order"]
+            ],
+        )
+    )
+
+    lines.extend(["", "## Catalog Summary Table", ""])
+    summary_rows: list[list[Any]] = []
+    for row in entries:
+        value = characterization(row)
+        arena, lab = evidence_groups(row)
+        summary_rows.append(
+            [
+                value["id"],
+                value["name"],
+                value["kind"],
+                value["layers"],
+                value["authority"]["status"],
+                value["lifecycle"]["status"],
+                arena or "—",
+                lab or "—",
+            ]
+        )
+    if summary_rows:
+        lines.extend(
+            table(
+                ["ID", "Rule/scenario", "Kind", "Layers", "Authority", "Lifecycle", "Arena", "Lab"],
+                summary_rows,
+            )
+        )
+    else:
+        lines.append("No characterization entries have been admitted yet.")
+
+    unresolved = [
+        row
+        for row in entries
+        if characterization(row)["authority"]["status"] == "UNRESOLVED"
+        or characterization(row)["unknowns"]
+    ]
+    lines.extend(["", "## Unresolved Items", ""])
+    if unresolved:
+        for row in unresolved:
+            value = characterization(row)
+            questions = "; ".join(item["question"] for item in value["unknowns"]) or value["authority"]["basis"]["summary"]
+            lines.append(f"- `{value['id']}` — {questions}")
+    else:
+        lines.append("No unresolved catalog entries are present.")
+
+    lines.extend(["", "## Source Mappings", ""])
+    mapping_rows: list[list[Any]] = []
+    for row in entries:
+        value = characterization(row)
+        for mapping in row["source_mappings"]:
+            source = source_by_id.get(mapping["source_file_id"], {})
+            mapping_rows.append(
+                [
+                    value["id"],
+                    mapping["implementation"],
+                    mapping["role"],
+                    mapping["source_file_id"],
+                    source.get("path", "UNKNOWN"),
+                    mapping["symbol_or_range"],
+                ]
+            )
+    if mapping_rows:
+        lines.extend(table(["ID", "Implementation", "Role", "Source ID", "Path", "Symbol/range"], mapping_rows))
+    else:
+        lines.append("No source mappings are present.")
+
+    normative = [row for row in entries if characterization(row)["kind"] == KINDS[0]]
+    empirical = [row for row in entries if characterization(row)["kind"] == KINDS[1]]
+    for heading, rows in [
+        ("Normative Candidate Obligations", normative),
+        ("Empirical Contract Scenarios", empirical),
+    ]:
+        lines.extend(["", f"## {heading}", ""])
+        if not rows:
+            lines.append("No entries.")
+            continue
+        for row in rows:
+            value = characterization(row)
+            lines.extend(
+                [
+                    "",
+                    f"### `{value['id']}` — {value['name']}",
+                    "",
+                    f"- Statement: {statement_summary(value)}",
+                    f"- Layers: `{cell(value['layers'])}`",
+                    f"- Authority: `{value['authority']['status']}` via `{value['authority']['basis']['qualification_rule']}`",
+                    f"- Lifecycle: `{value['lifecycle']['status']}`",
+                    f"- Soundness relevance: `{value['soundness_relevance']['status']}`",
+                    f"- Decision IDs: `{cell(row['decision_ids'])}`",
+                    "",
+                    "Observer vector:",
+                    "",
+                ]
+            )
+            lines.extend(
+                table(
+                    ["Profile", "Outcome", "Attribution", "Evidence"],
+                    [
+                        [item["profile_pointer"], item["outcome"], item["attribution"], item["evidence_refs"] or "—"]
+                        for item in row["observer_vector"]
+                    ],
+                )
+            )
+            lines.extend(["", "Evidence:", ""])
+            for evidence in value["evidence"]:
+                lines.append(
+                    f"- `{evidence['id']}` — `{evidence['role']}` / `{evidence['source_type']}`: "
+                    f"{evidence['claim_supported']['proposition']}"
+                )
+
+    lines.extend(["", "## Milestone Boundary", ""])
+    for statement in catalog["nonclaims"]:
+        lines.append(f"- {statement}")
+    lines.extend(["", f"Next milestone: `{catalog['completion_boundary']['next_milestone']}`", ""])
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(render(), encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

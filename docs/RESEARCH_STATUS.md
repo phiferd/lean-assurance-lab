@@ -1030,14 +1030,27 @@ prepared_external_action_drafts: 5
    `scripts/validate-declaration-validation-source-lock`; completion details are
    in the
    [Milestone 6 result](../results/research/declaration-validation-milestone-6.json).
-   The next authorized work is Milestone 7: make canonical machine data
-   authoritative and derive synchronized human outputs. Continue toward the catalog, decision trail,
-   generated report, adversarial review, and frozen design for the later Arena
-   negative-coverage phase. Completion is the plan's validated, frozen artifact
-   set or an explicitly bounded unresolved result under one of its stop
-   conditions. This slice does not execute the broad Arena coverage campaign,
-   create a public conformance claim, or infer semantic authority from checker
-   agreement.
+   Milestone 7 is complete. The authoritative
+   [canonical catalog](../config/declaration-validation-catalog.json) is
+   intentionally empty until Milestone 8 adjudicates the frozen identities.
+   Six versioned
+   [authority rules](../config/declaration-validation-authority-rules.json)
+   cover both object kinds and all three authority states without admitting
+   checker consensus as normative support. The
+   [generated report](research/DECLARATION_VALIDATION_OBLIGATIONS.md) derives
+   all catalog views and embeds the catalog hash; the
+   [freeze manifest](../results/research/declaration-validation-milestone-7-freeze.json)
+   binds the source lock, authority rules, catalog, report, and decision logs
+   in an acyclic order. Run
+   `scripts/validate-declaration-validation-catalog`; completion details are in
+   the
+   [Milestone 7 result](../results/research/declaration-validation-milestone-7.json).
+   The next authorized work is Milestone 8: inspect and disposition every
+   frozen identity into the first characterization inventory. Continue toward
+   the adversarial review and frozen design for the later Arena
+   negative-coverage phase. This slice does not execute the broad Arena
+   coverage campaign, create a public conformance claim, or infer semantic
+   authority from checker agreement.
 
 ### Waiting
 

@@ -1,0 +1,174 @@
+{
+  "schema_version": 1,
+  "milestone": "declaration-validation-contract-slice-7",
+  "recorded_at": "2026-08-30T14:55:00-04:00",
+  "status": "PASS",
+  "repository_state": {
+    "head_at_milestone_start": "20d97db4927757b3b738724f550f282cacaad392",
+    "branch": "main",
+    "tree_clean_at_milestone_start": true,
+    "prior_milestone_record": "results/research/declaration-validation-milestone-6.json"
+  },
+  "artifacts": {
+    "authority_rules": {
+      "path": "config/declaration-validation-authority-rules.json",
+      "sha256": "8dff17908589e8cda0eac349664b642fc5a76126ba544510917405bbff550f62"
+    },
+    "catalog": {
+      "path": "config/declaration-validation-catalog.json",
+      "sha256": "86880f235d7c31217341c036603df7adb7d5b19778614afd733ea27095c86075"
+    },
+    "post_catalog_decisions": {
+      "path": "results/research/declaration-validation-catalog-decisions.json",
+      "sha256": "b17b2ce8af273cfb7e8a2da768cd571d9201443b6e0077191eca7977660a1a2d"
+    },
+    "authority_rules_schema": {
+      "path": "schemas/declaration-validation-authority-rules.schema.json",
+      "sha256": "c27bb8e6a72302b19c4a330a92d795418a9e89c52f7be10f4b01c08c07c3a1cf"
+    },
+    "catalog_schema": {
+      "path": "schemas/declaration-validation-catalog.schema.json",
+      "sha256": "e19c5c8af37ed0c3ad38b1d7d575e38db5a42d0915cfb50c5e883afc5eea108f"
+    },
+    "post_catalog_decisions_schema": {
+      "path": "schemas/declaration-validation-catalog-decisions.schema.json",
+      "sha256": "7e1926dde42ea6d18f9993043953581919450287bb5f35fb61834be2b56219c3"
+    },
+    "freeze_manifest_schema": {
+      "path": "schemas/declaration-validation-freeze-manifest.schema.json",
+      "sha256": "42a8afdfdffec3c3018e306f3d78496edc6352a2c871226891351989c9605fce"
+    },
+    "report_renderer": {
+      "path": "scripts/render-declaration-validation-report",
+      "sha256": "ec3219e71d33c3ee4472ae6dfb150e1cdd68b03b7bfe826281518ba7fc760892"
+    },
+    "freeze_renderer": {
+      "path": "scripts/render-declaration-validation-freeze",
+      "sha256": "ce602d6bddc7f7aea22d6796c586434910795650721420fa76b3f4d1e65de4c3"
+    },
+    "validator": {
+      "path": "scripts/validate-declaration-validation-catalog",
+      "sha256": "b2aacc328f3fdc5980ca377ac2fcc84d9d35650bb41cd8777806403906900894"
+    },
+    "tests": {
+      "path": "tests/test_declaration_validation_catalog.py",
+      "sha256": "a10d6972030fa14236d04adb1d5ee9cbf27d47bcf327e678d0c33d2fdb046c08"
+    },
+    "generated_report": {
+      "path": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+      "sha256": "0ba637ef9a15bc09f95ffccc3ae6cdd25b82271348dc3fcc9a2bc885e0595a66"
+    },
+    "freeze_manifest": {
+      "path": "results/research/declaration-validation-milestone-7-freeze.json",
+      "sha256": "2ec4bb2c7d4e22dd6b2178f17ef18cd5ed081f7da01766f10199acc1db494520"
+    },
+    "source_lock": {
+      "path": "config/declaration-validation-source-lock.json",
+      "sha256": "2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b"
+    }
+  },
+  "mutable_frontier_updates": {
+    "execution_mandate": {
+      "path": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+      "sha256_at_completion": "dd1277fa0e0bf4057dc921d8b95c4e0a079e8965f9e5febb81008c63fad39692",
+      "lifecycle": "MUTABLE_CANONICAL_FRONTIER"
+    },
+    "canonical_status": {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256_at_completion": "fc11454a0de58a22874edcd64dadcbab3b819270f6b1c59a4f0a986e1e59950a",
+      "lifecycle": "MUTABLE_CANONICAL_FRONTIER"
+    }
+  },
+  "canonical_architecture": {
+    "catalog_is_authoritative": true,
+    "human_report_is_generated": true,
+    "catalog_hash_embedded_in_report": "86880f235d7c31217341c036603df7adb7d5b19778614afd733ea27095c86075",
+    "object_kinds": 2,
+    "authority_rules": 6,
+    "observer_profiles_required_per_entry": 4,
+    "post_catalog_decision_records": 0,
+    "catalog_entries": 0,
+    "inventory_intentionally_deferred_to_milestone_8": true
+  },
+  "authority_qualification": {
+    "statuses": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"],
+    "normative_established_requires_normative_support": true,
+    "checker_consensus_establishes_normativity": false,
+    "llm_judgment_is_evidence": false,
+    "non_established_requires_named_unmet_requirement": true,
+    "unresolved_requires_durable_blocker": true
+  },
+  "acyclic_attestation": {
+    "status": "PASS",
+    "order": [
+      "SOURCE_AND_EVIDENCE_LOCKS",
+      "AUTHORITY_QUALIFICATION_RULES",
+      "CANONICAL_CATALOG",
+      "GENERATED_HUMAN_REPORT",
+      "DECISION_RECORDS"
+    ],
+    "manifest_content_binds_itself": false
+  },
+  "predecessor_snapshot_correction": {
+    "reason": "Milestone 5 and 6 completion records had treated mutable canonical frontier documents as current immutable files. Their recorded hashes now verify against the exact milestone Git blobs, so later authorized frontier updates do not rewrite historical bytes or invalidate predecessor checks.",
+    "milestone_5_commit": "7e46a96203be63b878be07e07fd31fe150d2b49e",
+    "milestone_6_commit": "20d97db4927757b3b738724f550f282cacaad392",
+    "milestone_5_validator": "PASS",
+    "milestone_6_validator": "PASS",
+    "history_rewritten": false
+  },
+  "validation": {
+    "command": "scripts/validate-declaration-validation-catalog",
+    "artifacts_only_status": "PASS",
+    "focused_test_command": "python3 -m unittest discover -s tests -p 'test_declaration_validation_catalog.py'",
+    "focused_tests": 26,
+    "all_declaration_validation_test_command": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'",
+    "all_declaration_validation_tests": 83,
+    "predecessor_validators": {
+      "target": "PASS",
+      "characterization_model": "PASS_MODEL_ONLY",
+      "discovery_closure": "PASS_CLOSURE_ONLY",
+      "stable_identity_registry": "PASS",
+      "source_lock": "PASS"
+    },
+    "milestone_9_assurance": "PASS_30_OF_30",
+    "artifact_status": "PASS_CURRENT_CLAIMS_VALID",
+    "git_diff_check": "PASS"
+  },
+  "requirements_audit": {
+    "canonical_machine_data_authoritative": "PROVED_BY_CATALOG_COMPLETION_BOUNDARY_AND_REPORT_SYNC",
+    "generated_obligation_and_scenario_sections": "PROVED_BY_RENDERER_AND_TEST",
+    "generated_summary_tables_and_counts": "PROVED_BY_RENDERER_AND_TEST",
+    "checker_observation_summaries": "PROVED_BY_EXACT_OBSERVER_VECTOR_SCHEMA_RENDERER_AND_TEST",
+    "generated_unresolved_list": "PROVED_BY_RENDERER_AND_TEST",
+    "generated_source_mappings": "PROVED_BY_CATALOG_WRAPPER_RENDERER_AND_TEST",
+    "unique_and_immutable_ids": "PROVED_BY_REGISTRY_BINDING_VALIDATOR_AND_NEGATIVE_TESTS",
+    "supersession_and_merge_targets": "PROVED_BY_LIFECYCLE_TARGET_AND_CYCLE_VALIDATION_TESTS",
+    "evidence_and_hashes": "PROVED_BY_SOURCE_LOCK_PREDECESSOR_AND_REFERENCE_VALIDATION_TESTS",
+    "json_pointer_and_case_references": "PROVED_BY_CLAIM_AND_LOCK_LOCATOR_VALIDATION_TESTS",
+    "allowed_kind_layer_status_combinations": "PROVED_BY_ENTRY_SCHEMA_AND_QUALIFICATION_RULE_MATCHING",
+    "authority_sufficiency": "PROVED_BY_SIX_VERSIONED_RULES_AND_CONSENSUS_NEGATIVE_TEST",
+    "complete_observer_vectors": "PROVED_BY_SCHEMA_VALIDATOR_AND_NEGATIVE_TEST",
+    "catalog_report_hash_synchronization": "PROVED_BY_RENDERER_EXACT_MATCH_AND_EMBEDDED_HASH_TEST",
+    "acyclic_artifact_attestation": "PROVED_BY_FREEZE_RENDERER_GRAPH_VALIDATOR_AND_TEST"
+  },
+  "completion_boundary": {
+    "completed": "Milestone 7 canonical-data, generated-view, authority-rule, and acyclic-attestation architecture",
+    "next_authorized_milestone": "Milestone 8 — Build the First Characterization Inventory",
+    "deferred": [
+      "per-identity kind and layer adjudication",
+      "per-identity authority and soundness-relevance adjudication",
+      "populated implementation source mappings and observer vectors",
+      "catalog decision records arising from inventory adjudication",
+      "adversarial review",
+      "Arena isolated-negative coverage denominator"
+    ],
+    "nonclaims": [
+      "The empty catalog does not establish any declaration-validation obligation or scenario.",
+      "No stable identity has been promoted to a catalog entry.",
+      "No checker consensus establishes normativity.",
+      "No soundness or coverage claim was created.",
+      "No broad mutation, witness-synthesis, or Arena coverage campaign was run."
+    ]
+  }
+}

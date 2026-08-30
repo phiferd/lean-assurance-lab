@@ -435,7 +435,20 @@ def validate_completion_record() -> list[str]:
         errors.append("Milestone 6 completion record is not PASS")
     for name, binding in record.get("artifacts", {}).items():
         path = ROOT / binding["path"]
-        if not path.is_file():
+        verification = binding.get("verification", {"mode": "CURRENT_WORKTREE_FILE"})
+        if verification["mode"] == "HISTORICAL_GIT_BLOB":
+            result = subprocess.run(
+                ["git", "show", f"{verification['commit']}:{binding['path']}"],
+                cwd=ROOT,
+                stdout=subprocess.PIPE,
+                stderr=subprocess.PIPE,
+                check=False,
+            )
+            if result.returncode != 0:
+                errors.append(f"completion record {name} historical Git blob is unavailable")
+            elif sha256_bytes(result.stdout) != binding["sha256"]:
+                errors.append(f"completion record {name} historical Git blob hash is stale")
+        elif not path.is_file():
             errors.append(f"completion record {name} artifact is missing")
         elif sha256_file(path) != binding["sha256"]:
             errors.append(f"completion record {name} hash is stale")
