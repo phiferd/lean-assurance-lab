@@ -38,6 +38,24 @@ The current assurance gate may legitimately be `FAIL`. A contribution must not
 rewrite policy, suppress evidence, or relabel an unresolved state merely to make
 the gate pass.
 
+## Research Planning And Issue Coordination
+
+[`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md) decides which research
+questions are Active. GitHub Issues split those questions into independently
+executable units and coordinate ownership. For substantial work, assignment or
+an explicit claim on the Issue is the coordination mechanism.
+
+An Issue is not project truth. Closing an Issue does not establish a result
+until the required evidence and conclusion are represented in repository
+artifacts. The pull request and its mechanical evidence are the reviewable
+result; accepted repository artifacts are the durable conclusion.
+
+A contributor may propose work outside the current frontier, including through
+an explicit contribution path below. The proposal does not silently become
+Active merely because an Issue exists. Research priority changes belong in
+`docs/RESEARCH_STATUS.md` and must retain a bounded, falsifiable completion
+condition.
+
 ## Contribution Manifest
 
 Evidence-producing contributions should include a JSON manifest conforming to
@@ -153,7 +171,10 @@ solely to change timestamps.
 
 ## Issue Selection
 
-Use the structured forms for validator disagreements, proposed regressions,
+Use the contributor-task form for bounded, claimable project work beneath an
+Active frontier item or an explicit contribution path in this guide. Use the
+incoming-finding forms for validator disagreements, proposed regressions,
 mutation operators, stale artifacts or reproduction failures, and assurance
-report issues. General feature work should begin with the closest form and state
-the intended mechanical completion condition.
+report issues. Every substantial task must state its starting evidence, resource
+profile, durable repository outputs, allowed outcomes, non-claims, and
+mechanical completion condition before expensive execution begins.

@@ -1,0 +1,125 @@
+name: Contributor task
+description: Claim bounded project work with a mechanical evidence and completion contract.
+title: "[contributor-task] "
+labels: ["research-task"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        `docs/RESEARCH_STATUS.md` is the research-planning authority. This Issue coordinates a bounded unit of work; it does not independently activate a research direction or establish a result. A PR plus mechanical evidence is the reviewable result, and accepted repository artifacts are the durable conclusion.
+
+  - type: input
+    id: frontier
+    attributes:
+      label: Frontier / contribution path
+      description: Reference an F-* item from docs/RESEARCH_STATUS.md or an explicit contribution path from CONTRIBUTING.md.
+      placeholder: "F-AXIOM-UNSAFE-DECLARATIONS or CONTRIBUTING.md: Witness Generators"
+    validations:
+      required: true
+
+  - type: textarea
+    id: bounded_question
+    attributes:
+      label: Bounded question
+      description: State one exact question. Reject open-ended formulations such as "Research universes."
+      placeholder: "Determine whether MUTANT_ID is behaviorally equivalent at Nanoda's public checker entrypoint or construct a distinguishing witness."
+    validations:
+      required: true
+
+  - type: textarea
+    id: starting_evidence
+    attributes:
+      label: Starting evidence
+      description: List exact mutant IDs, relevant paths, revisions/configurations where known, and existing result artifacts.
+    validations:
+      required: true
+
+  - type: textarea
+    id: completion
+    attributes:
+      label: Mechanical completion condition
+      description: State the exact observable condition that makes the task complete, such as a witness plus matched control, exact cross-validator characterization, documented entrypoint equivalence, bounded search exhaustion recorded as unresolved, or a deterministic generated view passing stated checks.
+    validations:
+      required: true
+
+  - type: textarea
+    id: outcomes
+    attributes:
+      label: Allowed outcome states
+      description: Keep every applicable terminal state. Success must not mean only "find a bug."
+      value: |
+        - WITNESS_FOUND
+        - EQUIVALENT_AT_ENTRYPOINT
+        - NON_SEMANTIC
+        - REFERENCE_ALIGNED
+        - CHECKER_DISAGREEMENT
+        - BOUNDED_UNRESOLVED
+        - INCOMPATIBLE
+    validations:
+      required: true
+
+  - type: dropdown
+    id: cpu
+    attributes:
+      label: CPU
+      options:
+        - light
+        - moderate
+        - heavy
+        - unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: disk
+    attributes:
+      label: Disk
+      options:
+        - repo-only
+        - Arena checkout required
+        - materialized corpus required (~9.5 GB)
+        - unknown
+    validations:
+      required: true
+
+  - type: dropdown
+    id: llm
+    attributes:
+      label: LLM
+      options:
+        - optional
+        - helpful for semantic analysis
+        - strongly recommended
+        - not useful
+    validations:
+      required: true
+
+  - type: textarea
+    id: repository_artifacts
+    attributes:
+      label: Expected repository artifacts
+      description: Identify the durable output paths or artifact kinds that should result, including an explicit unresolved record when appropriate.
+    validations:
+      required: true
+
+  - type: textarea
+    id: non_claims
+    attributes:
+      label: Explicit non-claims
+      description: State what the work cannot establish. Do not infer checker fault from disagreement, semantic authority by implementation vote, or completeness from a characterized set.
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: evidence_contract
+    attributes:
+      label: Evidence-contract confirmations
+      options:
+        - label: Revisions, configurations, and random seeds will be pinned where applicable.
+          required: true
+        - label: Raw outcomes, exceptional results, and unresolved states will be preserved.
+          required: true
+        - label: Expected semantics will not be established by majority vote.
+          required: true
+        - label: Repository verification commands will be run, or unavailable environment-dependent checks will be explained.
+          required: true

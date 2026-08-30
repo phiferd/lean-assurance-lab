@@ -17,8 +17,26 @@ This document is the canonical human-readable research tracker:
 - `Unresolved Problems` records limitations and open claims, not task priority.
 
 `docs/PUBLIC_STATUS.md` remains a generated assurance snapshot rather than a
-planning document. GitHub issues track upstream conversations, but this file
-retains the project's own priorities and completion conditions.
+planning document. GitHub Issues coordinate bounded, claimable work beneath the
+Active frontier and track upstream conversations; an Issue does not activate a
+research direction or establish project truth. This file retains the project's
+own priorities and completion conditions.
+
+Research activity is not progress merely because it produces another document,
+taxonomy, or abstraction. Every Active frontier item must have a falsifiable
+completion condition and terminate in at least one of:
+
+- executable evidence;
+- a characterized boundary;
+- a regression or corpus contribution;
+- an upstream action recommendation;
+- a demonstrated negative result; or
+- an explicitly bounded unresolved result.
+
+Keep the number of top-level Active research themes small. The normal target is
+one or two coherent frontier themes, with parallel work occurring through
+bounded GitHub Issues beneath them rather than by activating many unrelated
+research directions.
 
 ## Attempted
 

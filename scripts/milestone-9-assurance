@@ -26,7 +26,7 @@ EXPECTED_TYPES = {
 }
 EXPECTED_FORMS = {
     "validator-disagreement.yml", "proposed-regression.yml", "mutation-operator.yml",
-    "reproduction-failure.yml", "assurance-report.yml",
+    "reproduction-failure.yml", "assurance-report.yml", "contributor-task.yml",
 }
 
 
@@ -147,6 +147,24 @@ def main() -> int:
         "mutation_operator_form_requires_semantic_model": {row.get("id") for row in forms["mutation-operator.yml"]["body"]} >= {"operator", "rationale", "discovery", "exclusions", "validation", "scope"},
         "reproduction_form_records_identity_and_impact": {row.get("id") for row in forms["reproduction-failure.yml"]["body"]} >= {"artifact", "identity", "command", "expected", "observed", "category", "impact"},
         "assurance_report_form_can_challenge_gate_or_scope": {row.get("id") for row in forms["assurance-report.yml"]["body"]} >= {"snapshot", "field", "evidence", "issue_kind", "impact", "correction"},
+        "contributor_task_form_bounds_claimable_work": (
+            {row.get("id") for row in forms["contributor-task.yml"]["body"]}
+            >= {
+                "frontier", "bounded_question", "starting_evidence", "completion",
+                "outcomes", "cpu", "disk", "llm", "repository_artifacts",
+                "non_claims", "evidence_contract",
+            }
+            and {
+                "WITNESS_FOUND", "EQUIVALENT_AT_ENTRYPOINT", "NON_SEMANTIC",
+                "REFERENCE_ALIGNED", "CHECKER_DISAGREEMENT", "BOUNDED_UNRESOLVED",
+                "INCOMPATIBLE",
+            }
+            <= set(next(
+                row["attributes"]["value"]
+                for row in forms["contributor-task.yml"]["body"]
+                if row.get("id") == "outcomes"
+            ).replace("- ", "").splitlines())
+        ),
         "public_status_is_generated_and_snapshot_bound": f"Snapshot SHA-256: `{snapshot_sha}`" in public
         and "scripts/render-public-status" in public,
         "public_status_matches_current_gate": f"## Current Gate: {snapshot['gate']['status']}" in public

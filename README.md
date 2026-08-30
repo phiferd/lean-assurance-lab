@@ -5,37 +5,57 @@
 an honest assessment of this project's limits, read the
 [2026 Collatz incident case study](docs/CASE_STUDY_COLLATZ.md).**
 
-Lean Assurance Lab is a mechanical testing project for Lean proof checkers.
-The initial target is mutation testing against one checker implementation,
-then using surviving mutants to drive adversarial exported-artifact generation.
+Lean Assurance Lab is a continuous assurance project for Lean's
+proof-validation ecosystem. It uses independent validators, generated positive
+and negative tests, semantic mutation, contract characterization, coverage,
+witness generation, and other reproducible techniques to discover and
+characterize validation boundaries.
 
-The project is governed by `CONSTITUTION.md`. The current execution plan lives
-in `docs/PROJECT_PLAN.md`. The public assurance state is in
-`docs/PUBLIC_STATUS.md`, and contribution requirements are in `CONTRIBUTING.md`.
+**Want to contribute?**
+
+- Claimable work: [GitHub Issues](https://github.com/phiferd/lean-assurance-lab/issues)
+- Research priority and context: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)
+- Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Current measured assurance state: [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md)
+
+The project is governed by `CONSTITUTION.md`.
+[`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md) is the research-planning
+authority: its Active frontier says what the project should investigate next.
+GitHub Issues coordinate bounded, claimable work beneath that frontier;
+creating an Issue does not independently activate a research direction or
+establish a result. [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md) is a
+generated report of measured state, not a priority queue. Methods, project-plan,
+and research documents preserve intellectual and implementation history, but
+do not independently authorize work.
+
+Contribution requirements are in [`CONTRIBUTING.md`](CONTRIBUTING.md).
 Completed findings follow the concrete recommendation and human authorization
 rules in [`docs/INVESTIGATION_SOP.md`](docs/INVESTIGATION_SOP.md).
 Evaluated proposals for post-milestone work, including the boundary between
 near-term improvements and independent exploratory research, are in
 [`docs/research/RESEARCH_BACKED_IMPROVEMENTS.md`](docs/research/RESEARCH_BACKED_IMPROVEMENTS.md).
 
-The core success condition is always executable:
+Mechanical completion conditions vary by task. A central differential pattern
+is executable:
 
 ```text
 checker_a(input) != checker_b(input)
 ```
 
 LLMs and humans may propose candidates or explain results, but they do not
-decide whether a test succeeded.
+replace the task's stated mechanical completion condition. Witnesses, scoped
+equivalence results, characterized boundaries, negative results, and bounded
+unresolved results can all be valid outcomes when their evidence is preserved.
 
 ## Research Question
 
-How effectively does the current Lean Kernel Arena corpus discriminate correct
-Lean kernel behavior from plausible incorrect implementations, and can
-automated mutation-driven adversarial test generation systematically improve
-that discrimination?
-
-A secondary question is whether the same machinery can discover previously
-unknown disagreements among independently implemented Lean proof checkers.
+How effectively can reproducible evidence characterize the validation
+boundaries and measured assurance state of Lean's proof-validation ecosystem?
+Current methods include testing how well the Lean Kernel Arena corpus
+discriminates plausible incorrect implementations, using semantic mutation and
+adversarial generation to improve that discrimination, and investigating
+disagreements among independently implemented validators without treating
+implementation vote as semantic authority.
 
 ## Current Milestone
 
@@ -50,12 +70,14 @@ subsystems. The measured aggregate is one positive fold and one neutral fold,
 improving the modeled held-out score from 0.5 to 1.0.
 
 The versioned current assurance snapshot reports `FAIL`: four of five hard
-checks pass, while 13 unresolved semantic disagreements fail the configured
-disagreement check. The exact current cases and evidence are generated in
-`docs/PUBLIC_STATUS.md`; the failure is the intended honest result, not a failed
-milestone implementation.
+checks pass, while 15 unresolved semantic disagreements fail the configured
+disagreement check. One additional parse-behavior disagreement remains visible,
+and 9 mechanically executed survivors await semantic or witness triage outside
+the canonical modeled population. The exact current cases and evidence are
+generated in `docs/PUBLIC_STATUS.md`; the failure is the intended honest result,
+not a failed milestone implementation.
 The Milestone 8 implementation gate passes all 24 checks, and the Milestone 9
-community-workflow gate passes all 29 checks.
+community-workflow gate passes all 30 checks.
 
 The amended frozen Collatz retrospective is complete and classified
 `FULL_CLASS_REDISCOVERY`. The original run recreated the affected-official/
