@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 3 recorded
+- Status: active execution mandate; Milestones 0 through 4 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -24,6 +24,12 @@
   results/research/declaration-validation-milestone-2.json
 - Milestone 3 record:
   results/research/declaration-validation-milestone-3.json
+- Milestone 4 discovery closure:
+  config/declaration-validation-discovery-closure.json
+- Milestone 4 validation command:
+  `scripts/validate-declaration-validation-discovery-closure`
+- Milestone 4 record:
+  results/research/declaration-validation-milestone-4.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -358,6 +364,24 @@ classification:
 
 Unexpected checks must not be omitted merely because they do not fit the
 initial theory.
+
+### Milestone 4 Completion — 2026-08-30
+
+The frozen
+`config/declaration-validation-discovery-closure.json` completes this
+milestone without creating a characterization catalog. It fixes four primary
+declaration kinds, records every inspected ordinary-declaration site across 22
+pinned source files, closes the required starting audit with an explicit
+four-observer vector, and disposes every reached helper as included, imported,
+or excluded. Its `SITE.*` values are provenance identities and its `SEED.*`
+values are provisional grouping keys only. Validation and mutation tests are
+provided by `scripts/validate-declaration-validation-discovery-closure` and
+`tests/test_declaration_validation_discovery_closure.py`.
+
+The traversal preserved two pinned Kiota differences—current-declaration
+visibility and universe-parameter ownership—as empirical observations. It did
+not promote them, or any checker consensus, into normative obligations. Stable
+semantic IDs and durable merge/split decisions remain Milestone 5 work.
 
 ## Milestone 5 — Stable Semantic Identities and Durable Decisions
 

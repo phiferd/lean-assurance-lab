@@ -976,9 +976,21 @@ prepared_external_action_drafts: 5
    [Milestone 2](../results/research/declaration-validation-milestone-2.json)
    and
    [Milestone 3](../results/research/declaration-validation-milestone-3.json).
-   The next authorized work is Milestone 4: freeze an exhaustively inspectable
-   discovery closure before creating any real catalog entry. Continue from that
-   closure toward the content-addressed catalog, source lock, decision trail,
+   Milestone 4 is complete. The frozen
+   [discovery closure](../config/declaration-validation-discovery-closure.json)
+   exhausts 22 pinned source files into 59 disposed sites, closes 22 required
+   topics with exact four-observer vectors, and assigns 13 helper dependencies
+   to included, imported-prerequisite, or excluded states. It records 21
+   provisional `SEED.*` groups but creates no catalog entry and assigns no
+   stable semantic ID. In particular, Kiota's pinned current-declaration
+   visibility and universe-ownership differences remain empirical observations,
+   not normative or soundness conclusions. Run
+   `scripts/validate-declaration-validation-discovery-closure`; completion
+   details are in the
+   [Milestone 4 result](../results/research/declaration-validation-milestone-4.json).
+   The next authorized work is Milestone 5: assign stable semantic identities
+   and preserve durable merge/split/exclusion decisions. Continue toward the
+   content-addressed catalog, source lock, decision trail,
    generated report, adversarial review, and frozen design for the later Arena
    negative-coverage phase. Completion is the plan's validated, frozen artifact
    set or an explicitly bounded unresolved result under one of its stop

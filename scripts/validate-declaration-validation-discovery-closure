@@ -1,0 +1,273 @@
+#!/usr/bin/env python3
+"""Validate the frozen Milestone 4 ordinary-declaration discovery closure."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-discovery-closure.schema.json"
+TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
+MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
+TEST_PATH = ROOT / "tests" / "test_declaration_validation_discovery_closure.py"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-4.json"
+
+OBSERVERS = ("OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA")
+REQUIRED_TOPICS = {
+    "TOPIC.NAME_FRESHNESS",
+    "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+    "TOPIC.FVAR_CLOSURE",
+    "TOPIC.MVAR_CLOSURE",
+    "TOPIC.LOOSE_BOUND_VARIABLE",
+    "TOPIC.UNIVERSE_OWNERSHIP",
+    "TOPIC.CONSTANT_UNIVERSE_ARITY",
+    "TOPIC.TYPE_WELL_FORMED_SORT",
+    "TOPIC.BODY_WELL_FORMED",
+    "TOPIC.BODY_TYPE_MATCH",
+    "TOPIC.THEOREM_TYPE_PROP",
+    "TOPIC.CURRENT_DECL_VISIBILITY",
+    "TOPIC.SAFE_UNSAFE_DEPENDENCY",
+    "TOPIC.LOCAL_BINDER_SORT",
+    "TOPIC.LET_ANNOTATION_VALUE",
+    "TOPIC.APPLICATION_TYPING",
+    "TOPIC.PROJECTION_EXPRESSION_TYPING",
+    "TOPIC.AXIOM_ADMISSION_POLICY",
+    "TOPIC.SERIALIZED_SAFETY",
+    "TOPIC.REPLAY_AND_CHECK_PHASE",
+    "TOPIC.LITERAL_EXTENSIONS",
+    "TOPIC.EXCLUDED_DECLARATION_KINDS",
+}
+EXPECTED_PRIMARY_KINDS = {
+    "SAFE_AXIOM", "SAFE_DEFINITION", "THEOREM", "SAFE_OPAQUE"
+}
+EXPECTED_EXCLUDED_KINDS = {
+    "UNSAFE_DEFINITION", "UNSAFE_OPAQUE", "PARTIAL_DEFINITION",
+    "MUTUAL_DEFINITION", "INDUCTIVE_FAMILY", "QUOTIENT_PRIMITIVES",
+    "PROJECTION_METADATA", "NATIVE_EXTENSION",
+}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def unique_index(rows: list[dict[str, Any]], field: str, label: str) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    index: dict[str, dict[str, Any]] = {}
+    errors: list[str] = []
+    for row in rows:
+        value = row[field]
+        if value in index:
+            errors.append(f"duplicate {label}: {value}")
+        index[value] = row
+    return index, errors
+
+
+def validate_closure(
+    closure: dict[str, Any],
+    schema: dict[str, Any],
+    target: dict[str, Any],
+    model: dict[str, Any],
+) -> list[str]:
+    errors: list[str] = []
+    validator = jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.FormatChecker()
+    )
+    for error in sorted(validator.iter_errors(closure), key=lambda e: list(e.absolute_path)):
+        where = "/" + "/".join(str(part) for part in error.absolute_path)
+        errors.append(f"schema {where}: {error.message}")
+    if errors:
+        return errors
+
+    source_by_id, new = unique_index(closure["sources"], "id", "source id")
+    errors.extend(new)
+    site_by_id, new = unique_index(closure["sites"], "id", "site id")
+    errors.extend(new)
+    topic_by_id, new = unique_index(closure["topics"], "id", "topic id")
+    errors.extend(new)
+    dependency_by_id, new = unique_index(closure["dependencies"], "id", "dependency id")
+    errors.extend(new)
+    seed_by_key, new = unique_index(closure["seed_groups"], "key", "seed key")
+    errors.extend(new)
+    _, new = unique_index(closure["exclusions"], "id", "exclusion id")
+    errors.extend(new)
+
+    for name, binding, expected_path in (
+        ("target profile", closure["predecessors"]["target_profile"], TARGET_PATH),
+        ("characterization model", closure["predecessors"]["characterization_model"], MODEL_PATH),
+    ):
+        if ROOT / binding["path"] != expected_path:
+            errors.append(f"{name} path does not bind the canonical artifact")
+        elif sha256_file(expected_path) != binding["sha256"]:
+            errors.append(f"{name} predecessor hash is stale")
+
+    primary = {row["id"] for row in closure["scope"]["primary_declaration_kinds"]}
+    excluded = {row["id"] for row in closure["scope"]["excluded_declaration_kinds"]}
+    if primary != EXPECTED_PRIMARY_KINDS:
+        errors.append(f"primary declaration kinds are not the frozen set: {sorted(primary)}")
+    if not EXPECTED_EXCLUDED_KINDS.issubset(excluded):
+        errors.append("one or more required excluded declaration kinds are missing")
+    if primary & excluded:
+        errors.append("a declaration kind is both primary and excluded")
+
+    source_observers = {source["observer"] for source in closure["sources"]}
+    if source_observers != set(OBSERVERS):
+        errors.append(f"source observers are not the exact four profiles: {sorted(source_observers)}")
+
+    target_revisions = {
+        "OFFICIAL": target["logical_target"]["source"]["revision"],
+        "NANODA": target["observer_profiles"]["nanoda"]["implementation"]["revision"],
+        "LEAN4LEAN": target["observer_profiles"]["lean4lean"]["implementation"]["revision"],
+        "KIOTA": target["observer_profiles"]["kiota"]["implementation"]["revision"],
+    }
+    arena_revision = target["observer_profiles"]["official_importer"]["arena_integration"]["revision"]
+    for source in closure["sources"]:
+        expected_revision = target_revisions[source["observer"]]
+        if source["id"] == "SRC.OFFICIAL.ARENA_MAIN":
+            expected_revision = arena_revision
+        if source["revision"] != expected_revision:
+            errors.append(f"{source['id']}: revision does not match its pinned profile")
+        for site_id in source["site_ids"]:
+            site = site_by_id.get(site_id)
+            if site is None:
+                errors.append(f"{source['id']}: unknown site {site_id}")
+            elif site["source_id"] != source["id"]:
+                errors.append(f"{source['id']}: site {site_id} points to another source")
+
+    for site in closure["sites"]:
+        source = source_by_id.get(site["source_id"])
+        if source is None:
+            errors.append(f"{site['id']}: unknown source {site['source_id']}")
+        elif site["id"] not in source["site_ids"]:
+            errors.append(f"{site['id']}: missing from its source site ledger")
+        for topic_id in site["topic_ids"]:
+            if topic_id not in topic_by_id:
+                errors.append(f"{site['id']}: unknown topic {topic_id}")
+        for dependency_id in site["dependency_ids"]:
+            if dependency_id not in dependency_by_id:
+                errors.append(f"{site['id']}: unknown dependency {dependency_id}")
+        for seed_key in site["seed_keys"]:
+            seed = seed_by_key.get(seed_key)
+            if seed is None:
+                errors.append(f"{site['id']}: unknown seed {seed_key}")
+        if site["disposition"] in {"CANDIDATE_SEED", "EMPIRICAL_SCENARIO_SEED"} and not site["seed_keys"]:
+            errors.append(f"{site['id']}: seed disposition has no provisional seed")
+        if site["disposition"] in {"EXCLUDED", "NO_DISTINCT_CANDIDATE"} and site["seed_keys"]:
+            errors.append(f"{site['id']}: non-seed disposition carries a seed")
+
+    actual_topics = set(topic_by_id)
+    missing_topics = REQUIRED_TOPICS - actual_topics
+    if missing_topics:
+        errors.append(f"required starting-audit topics missing: {sorted(missing_topics)}")
+    for topic in closure["topics"]:
+        rows = topic["observer_matrix"]
+        observers = [row["observer"] for row in rows]
+        if set(observers) != set(OBSERVERS) or len(set(observers)) != len(OBSERVERS):
+            errors.append(f"{topic['id']}: observer vector is not exactly the four pinned observers")
+        if topic["treatment"] == "PRIMARY" and not topic["seed_keys"]:
+            errors.append(f"{topic['id']}: primary topic lacks a seed")
+        for seed_key in topic["seed_keys"]:
+            if seed_key not in seed_by_key:
+                errors.append(f"{topic['id']}: unknown seed {seed_key}")
+        for row in rows:
+            if row["state"] in {"ENFORCED", "OBSERVED_DIFFERENCE", "IMPORTED_PREREQUISITE"} and not row["site_ids"]:
+                errors.append(f"{topic['id']}/{row['observer']}: evidenced state has no site")
+            for site_id in row["site_ids"]:
+                site = site_by_id.get(site_id)
+                if site is None:
+                    errors.append(f"{topic['id']}/{row['observer']}: unknown site {site_id}")
+                elif source_by_id[site["source_id"]]["observer"] != row["observer"]:
+                    errors.append(f"{topic['id']}/{row['observer']}: site {site_id} belongs to another observer")
+                elif topic["id"] not in site["topic_ids"]:
+                    errors.append(f"{topic['id']}/{row['observer']}: site {site_id} lacks reciprocal topic binding")
+
+    for dependency in closure["dependencies"]:
+        for site_id in dependency["site_ids"]:
+            if site_id not in site_by_id:
+                errors.append(f"{dependency['id']}: unknown site {site_id}")
+    for seed in closure["seed_groups"]:
+        if seed["status"] != "PROVISIONAL_PENDING_MILESTONE_5":
+            errors.append(f"{seed['key']}: seed was prematurely promoted")
+        for site_id in seed["site_ids"]:
+            site = site_by_id.get(site_id)
+            if site is None:
+                errors.append(f"{seed['key']}: unknown site {site_id}")
+            elif seed["key"] not in site["seed_keys"]:
+                errors.append(f"{seed['key']}: site {site_id} lacks reciprocal seed binding")
+    for exclusion in closure["exclusions"]:
+        for site_id in exclusion["site_ids"]:
+            if site_id not in site_by_id:
+                errors.append(f"{exclusion['id']}: unknown site {site_id}")
+
+    if any(key.startswith("DECL.") for key in seed_by_key):
+        errors.append("Milestone 4 seed keys must not masquerade as stable DECL.* identities")
+    if model["completion_boundary"]["next_milestone"] != "MILESTONE_4_DEFINE_DISCOVERY_CLOSURE":
+        errors.append("characterization-model predecessor is not the frozen pre-discovery model")
+    if model["completion_boundary"]["catalog_entries_created"]:
+        errors.append("predecessor unexpectedly contains catalog entries")
+    return errors
+
+
+def validate_completion_record() -> list[str]:
+    if not COMPLETION_PATH.exists():
+        return [f"missing completion record: {COMPLETION_PATH.relative_to(ROOT)}"]
+    record = load_json(COMPLETION_PATH)
+    errors: list[str] = []
+    if record.get("status") != "PASS":
+        errors.append("Milestone 4 completion record is not PASS")
+    for name, binding in record.get("artifacts", {}).items():
+        path = ROOT / binding["path"]
+        if not path.is_file():
+            errors.append(f"completion record {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"completion record {name} hash is stale")
+    return errors
+
+
+def validate_all(require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:
+    closure = load_json(CLOSURE_PATH)
+    schema = load_json(SCHEMA_PATH)
+    target = load_json(TARGET_PATH)
+    model = load_json(MODEL_PATH)
+    errors = validate_closure(closure, schema, target, model)
+    if require_completion:
+        errors.extend(validate_completion_record())
+    summary = {
+        "sources": len(closure["sources"]),
+        "sites": len(closure["sites"]),
+        "topics": len(closure["topics"]),
+        "dependencies": len(closure["dependencies"]),
+        "seed_groups": len(closure["seed_groups"]),
+        "exclusions": len(closure["exclusions"]),
+        "closure_sha256": sha256_file(CLOSURE_PATH),
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--closure-only", action="store_true", help="skip the completion record while constructing the milestone")
+    args = parser.parse_args()
+    errors, summary = validate_all(require_completion=not args.closure_only)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    print("declaration-validation discovery closure: PASS")
+    print(json.dumps(summary, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

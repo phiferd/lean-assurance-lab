@@ -1,0 +1,284 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-discovery-closure.schema.json",
+  "title": "Declaration Validation Discovery Closure",
+  "type": "object",
+  "required": [
+    "schema_version", "closure_id", "recorded_at", "status", "predecessors",
+    "scope", "method", "sources", "sites", "topics", "dependencies",
+    "seed_groups", "exclusions", "completion", "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "closure_id": {"const": "ordinary-declaration-validation.discovery-closure.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_EXHAUSTED"},
+    "predecessors": {
+      "type": "object",
+      "required": ["target_profile", "characterization_model"],
+      "properties": {
+        "target_profile": {"$ref": "#/$defs/artifactBinding"},
+        "characterization_model": {"$ref": "#/$defs/artifactBinding"}
+      },
+      "additionalProperties": false
+    },
+    "scope": {
+      "type": "object",
+      "required": [
+        "primary_declaration_kinds", "excluded_declaration_kinds",
+        "primary_phase", "boundary_phases", "excluded_phases"
+      ],
+      "properties": {
+        "primary_declaration_kinds": {"$ref": "#/$defs/scopeItems"},
+        "excluded_declaration_kinds": {"$ref": "#/$defs/scopeItems"},
+        "primary_phase": {"type": "string", "minLength": 1},
+        "boundary_phases": {"$ref": "#/$defs/scopeItems"},
+        "excluded_phases": {"$ref": "#/$defs/scopeItems"}
+      },
+      "additionalProperties": false
+    },
+    "method": {
+      "type": "object",
+      "required": [
+        "closure_unit", "completion_rule", "site_dispositions", "observer_states",
+        "provisional_identity_policy", "normativity_policy"
+      ],
+      "properties": {
+        "closure_unit": {"type": "string", "minLength": 1},
+        "completion_rule": {"type": "string", "minLength": 1},
+        "site_dispositions": {
+          "type": "array", "uniqueItems": true, "minItems": 5,
+          "items": {"enum": [
+            "CANDIDATE_SEED", "EMPIRICAL_SCENARIO_SEED", "IMPORTED_PREREQUISITE",
+            "EXCLUDED", "NO_DISTINCT_CANDIDATE"
+          ]}
+        },
+        "observer_states": {
+          "type": "array", "uniqueItems": true, "minItems": 4,
+          "items": {"enum": [
+            "ENFORCED", "OBSERVED_DIFFERENCE", "ABSENT_OR_NOT_FOUND",
+            "NOT_REPRESENTABLE_IN_INPUT", "IMPORTED_PREREQUISITE", "NOT_APPLICABLE"
+          ]}
+        },
+        "provisional_identity_policy": {"type": "string", "minLength": 1},
+        "normativity_policy": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "sources": {
+      "type": "array", "minItems": 4,
+      "items": {"$ref": "#/$defs/source"}
+    },
+    "sites": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/site"}
+    },
+    "topics": {
+      "type": "array", "minItems": 16,
+      "items": {"$ref": "#/$defs/topic"}
+    },
+    "dependencies": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/dependency"}
+    },
+    "seed_groups": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/seedGroup"}
+    },
+    "exclusions": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/exclusion"}
+    },
+    "completion": {
+      "type": "object",
+      "required": [
+        "declared_sources_exhausted", "all_sites_disposed", "all_topics_closed",
+        "all_dependencies_disposed", "all_seed_groups_provisional",
+        "catalog_entries_created", "stable_semantic_ids_assigned", "next_milestone"
+      ],
+      "properties": {
+        "declared_sources_exhausted": {"const": true},
+        "all_sites_disposed": {"const": true},
+        "all_topics_closed": {"const": true},
+        "all_dependencies_disposed": {"const": true},
+        "all_seed_groups_provisional": {"const": true},
+        "catalog_entries_created": {"const": false},
+        "stable_semantic_ids_assigned": {"const": false},
+        "next_milestone": {"const": "MILESTONE_5_STABLE_IDENTITIES_AND_DECISIONS"}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array", "minItems": 4, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "artifactBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "scopeItem": {
+      "type": "object",
+      "required": ["id", "reason"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]*$"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "scopeItems": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/scopeItem"}
+    },
+    "source": {
+      "type": "object",
+      "required": [
+        "id", "observer", "repository_url", "revision", "path", "blob_sha256",
+        "inspection", "site_ids"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^SRC\\.[A-Z0-9_.]+$"},
+        "observer": {"enum": ["OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"]},
+        "repository_url": {"type": "string", "format": "uri"},
+        "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "inspection": {
+          "type": "object",
+          "required": ["mode", "locator", "result"],
+          "properties": {
+            "mode": {"enum": ["WHOLE_FILE_RELEVANCE_SCAN", "BOUNDED_SYMBOL_TRAVERSAL"]},
+            "locator": {"type": "string", "minLength": 1},
+            "result": {"const": "EXHAUSTED_FOR_DECLARED_SLICE"}
+          },
+          "additionalProperties": false
+        },
+        "site_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "site": {
+      "type": "object",
+      "required": [
+        "id", "source_id", "symbol_or_range", "behavior", "topic_ids",
+        "disposition", "seed_keys", "dependency_ids", "rationale"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"},
+        "source_id": {"type": "string", "pattern": "^SRC\\.[A-Z0-9_.]+$"},
+        "symbol_or_range": {"type": "string", "minLength": 1},
+        "behavior": {"type": "string", "minLength": 1},
+        "topic_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^TOPIC\\.[A-Z0-9_.]+$"}
+        },
+        "disposition": {"enum": [
+          "CANDIDATE_SEED", "EMPIRICAL_SCENARIO_SEED", "IMPORTED_PREREQUISITE",
+          "EXCLUDED", "NO_DISTINCT_CANDIDATE"
+        ]},
+        "seed_keys": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SEED\\.[A-Z0-9_.]+$"}
+        },
+        "dependency_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^DEP\\.[A-Z0-9_.]+$"}
+        },
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "observerRow": {
+      "type": "object",
+      "required": ["observer", "state", "site_ids", "note"],
+      "properties": {
+        "observer": {"enum": ["OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"]},
+        "state": {"enum": [
+          "ENFORCED", "OBSERVED_DIFFERENCE", "ABSENT_OR_NOT_FOUND",
+          "NOT_REPRESENTABLE_IN_INPUT", "IMPORTED_PREREQUISITE", "NOT_APPLICABLE"
+        ]},
+        "site_ids": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"}
+        },
+        "note": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "topic": {
+      "type": "object",
+      "required": ["id", "name", "treatment", "observer_matrix", "seed_keys", "disposition"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^TOPIC\\.[A-Z0-9_.]+$"},
+        "name": {"type": "string", "minLength": 1},
+        "treatment": {"enum": ["PRIMARY", "BOUNDARY", "IMPORTED_PREREQUISITE", "EXCLUDED"]},
+        "observer_matrix": {
+          "type": "array", "minItems": 4, "maxItems": 4,
+          "items": {"$ref": "#/$defs/observerRow"}
+        },
+        "seed_keys": {
+          "type": "array", "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SEED\\.[A-Z0-9_.]+$"}
+        },
+        "disposition": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "dependency": {
+      "type": "object",
+      "required": ["id", "treatment", "reason", "site_ids"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^DEP\\.[A-Z0-9_.]+$"},
+        "treatment": {"enum": ["INCLUDED", "IMPORTED_PREREQUISITE", "EXCLUDED"]},
+        "reason": {"type": "string", "minLength": 1},
+        "site_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "seedGroup": {
+      "type": "object",
+      "required": ["key", "kind_hint", "status", "site_ids", "merge_split", "rationale"],
+      "properties": {
+        "key": {"type": "string", "pattern": "^SEED\\.[A-Z0-9_.]+$"},
+        "kind_hint": {"enum": [
+          "NORMATIVE_CANDIDATE_OBLIGATION", "EMPIRICAL_CONTRACT_SCENARIO", "UNRESOLVED"
+        ]},
+        "status": {"const": "PROVISIONAL_PENDING_MILESTONE_5"},
+        "site_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"}
+        },
+        "merge_split": {"enum": ["KEEP", "PROVISIONAL_MERGE", "PROVISIONAL_SPLIT", "DEFER"]},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "exclusion": {
+      "type": "object",
+      "required": ["id", "subject", "reason", "site_ids"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^EXCL\\.[A-Z0-9_.]+$"},
+        "subject": {"type": "string", "minLength": 1},
+        "reason": {"type": "string", "minLength": 1},
+        "site_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SITE\\.[A-Z0-9_.]+$"}
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
