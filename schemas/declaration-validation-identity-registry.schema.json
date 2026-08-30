@@ -1,0 +1,115 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-identity-registry.schema.json",
+  "title": "Declaration Validation Stable Identity Registry",
+  "type": "object",
+  "required": [
+    "schema_version", "registry_id", "recorded_at", "status", "predecessor",
+    "decision_log_path", "id_evolution_rules", "identities", "seed_resolutions",
+    "completion_boundary", "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "registry_id": {"const": "ordinary-declaration-validation.identity-registry.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_PRECATALOG_IDENTITIES"},
+    "predecessor": {"$ref": "#/$defs/artifactBinding"},
+    "decision_log_path": {"const": "results/research/declaration-validation-milestone-5-decisions.json"},
+    "id_evolution_rules": {
+      "type": "object",
+      "required": ["retain_id_when", "new_id_when", "supersession", "merge_tombstone", "deletion", "reuse"],
+      "properties": {
+        "retain_id_when": {"const": "EDITORIAL_CLARIFICATION_PRESERVES_SEMANTIC_DENOTATION"},
+        "new_id_when": {
+          "type": "array",
+          "const": ["APPLICABILITY_CHANGES", "MODELED_JUDGMENT_CHANGES", "TARGET_PREDICATE_CHANGES", "KIND_CHANGES"]
+        },
+        "supersession": {"const": "OLD_ID_RETAINED_AS_SUPERSEDED_TOMBSTONE_NAMING_SUCCESSOR"},
+        "merge_tombstone": {"const": "MERGED_ID_RETAINED_AS_REDUNDANT_TOMBSTONE_NAMING_SURVIVOR"},
+        "deletion": {"const": "FORBIDDEN"},
+        "reuse": {"const": "FORBIDDEN"}
+      },
+      "additionalProperties": false
+    },
+    "identities": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/identity"}
+    },
+    "seed_resolutions": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/seedResolution"}
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": [
+        "stable_ids_assigned", "all_milestone_4_seeds_resolved", "authority_assigned",
+        "layers_assigned", "catalog_entries_created", "next_milestone"
+      ],
+      "properties": {
+        "stable_ids_assigned": {"const": true},
+        "all_milestone_4_seeds_resolved": {"const": true},
+        "authority_assigned": {"const": false},
+        "layers_assigned": {"const": false},
+        "catalog_entries_created": {"const": false},
+        "next_milestone": {"const": "MILESTONE_6_CONTENT_ADDRESSED_PROVENANCE"}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array", "minItems": 4, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "artifactBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    },
+    "identity": {
+      "type": "object",
+      "required": [
+        "id", "name", "intended_kind", "identity_status", "semantic_statement",
+        "applicability", "statement_sha256", "source_seed_keys", "decision_ids"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(DECL|EXPR|SCENARIO)\\.[A-Z0-9_]+(\\.[A-Z0-9_]+)+$"},
+        "name": {"type": "string", "minLength": 1},
+        "intended_kind": {"enum": ["NORMATIVE_CANDIDATE_OBLIGATION", "EMPIRICAL_CONTRACT_SCENARIO", null]},
+        "identity_status": {"enum": ["ACTIVE_PROVISIONAL", "DEFERRED_KIND", "RESERVED_OUT_OF_SCOPE"]},
+        "semantic_statement": {"type": "string", "minLength": 1},
+        "applicability": {"type": "string", "minLength": 1},
+        "statement_sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "source_seed_keys": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^SEED\\.[A-Z0-9_.]+$"}
+        },
+        "decision_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^DEC\\.M5\\.[0-9]{3}$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "seedResolution": {
+      "type": "object",
+      "required": ["seed_key", "decision_id", "action", "result_ids", "reason"],
+      "properties": {
+        "seed_key": {"type": "string", "pattern": "^SEED\\.[A-Z0-9_.]+$"},
+        "decision_id": {"type": "string", "pattern": "^DEC\\.M5\\.[0-9]{3}$"},
+        "action": {"enum": ["KEEP", "MERGE_IMPLEMENTATION_SITES", "SPLIT", "SPLIT_AND_REUSE", "DEFER_AS_DISTINCT", "DEFER_OUT_OF_SCOPE"]},
+        "result_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^(DECL|EXPR|SCENARIO)\\.[A-Z0-9_]+(\\.[A-Z0-9_]+)+$"}
+        },
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

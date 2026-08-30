@@ -1,0 +1,320 @@
+#!/usr/bin/env python3
+"""Validate the Milestone 5 stable-identity freeze and generated decision log."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import re
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REGISTRY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+REGISTRY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-identity-registry.schema.json"
+DECISION_LOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
+DECISION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-decision-log.schema.json"
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-5-decisions"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5.json"
+
+EXPECTED_ID_EVOLUTION_RULES = {
+    "retain_id_when": "EDITORIAL_CLARIFICATION_PRESERVES_SEMANTIC_DENOTATION",
+    "new_id_when": [
+        "APPLICABILITY_CHANGES",
+        "MODELED_JUDGMENT_CHANGES",
+        "TARGET_PREDICATE_CHANGES",
+        "KIND_CHANGES",
+    ],
+    "supersession": "OLD_ID_RETAINED_AS_SUPERSEDED_TOMBSTONE_NAMING_SUCCESSOR",
+    "merge_tombstone": "MERGED_ID_RETAINED_AS_REDUNDANT_TOMBSTONE_NAMING_SURVIVOR",
+    "deletion": "FORBIDDEN",
+    "reuse": "FORBIDDEN",
+}
+
+SINGLE_RESULT_ACTIONS = {
+    "KEEP",
+    "MERGE_IMPLEMENTATION_SITES",
+    "DEFER_AS_DISTINCT",
+    "DEFER_OUT_OF_SCOPE",
+}
+SPLIT_ACTIONS = {"SPLIT", "SPLIT_AND_REUSE"}
+FORBIDDEN_ID_PARTS = ("NANODA", "KIOTA", "LEAN4LEAN", "OFFICIAL", "MUTANT", "SEED", "SITE")
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def statement_sha256(identity: dict[str, Any]) -> str:
+    payload = {
+        "applicability": identity["applicability"],
+        "intended_kind": identity["intended_kind"],
+        "semantic_statement": identity["semantic_statement"],
+    }
+    encoded = json.dumps(payload, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def schema_errors(instance: dict[str, Any], schema: dict[str, Any], label: str) -> list[str]:
+    errors: list[str] = []
+    validator = jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.FormatChecker()
+    )
+    for error in sorted(validator.iter_errors(instance), key=lambda e: list(e.absolute_path)):
+        where = "/" + "/".join(str(part) for part in error.absolute_path)
+        errors.append(f"{label} schema {where}: {error.message}")
+    return errors
+
+
+def unique_index(
+    rows: list[dict[str, Any]], field: str, label: str
+) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    index: dict[str, dict[str, Any]] = {}
+    errors: list[str] = []
+    for row in rows:
+        value = row[field]
+        if value in index:
+            errors.append(f"duplicate {label}: {value}")
+        index[value] = row
+    return index, errors
+
+
+def load_renderer() -> Any:
+    loader = importlib.machinery.SourceFileLoader("declaration_m5_renderer", str(RENDERER_PATH))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError("could not create renderer module specification")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def validate_artifacts(
+    registry: dict[str, Any],
+    registry_schema: dict[str, Any],
+    decision_log: dict[str, Any],
+    decision_schema: dict[str, Any],
+    closure: dict[str, Any],
+    *,
+    rendered_decision_log: dict[str, Any] | None = None,
+) -> list[str]:
+    errors = schema_errors(registry, registry_schema, "registry")
+    errors.extend(schema_errors(decision_log, decision_schema, "decision log"))
+    if errors:
+        return errors
+
+    closure_hash = sha256_file(CLOSURE_PATH)
+    registry_hash = sha256_file(REGISTRY_PATH)
+    if registry["predecessor"] != {
+        "path": "config/declaration-validation-discovery-closure.json",
+        "sha256": closure_hash,
+    }:
+        errors.append("registry predecessor does not bind the canonical Milestone 4 closure")
+    if registry["id_evolution_rules"] != EXPECTED_ID_EVOLUTION_RULES:
+        errors.append("stable-ID evolution rules are not the frozen Milestone 5 policy")
+
+    identity_by_id, new = unique_index(registry["identities"], "id", "stable identity")
+    errors.extend(new)
+    resolution_by_seed, new = unique_index(registry["seed_resolutions"], "seed_key", "seed resolution")
+    errors.extend(new)
+    resolution_by_decision, new = unique_index(registry["seed_resolutions"], "decision_id", "resolution decision")
+    errors.extend(new)
+    seed_by_key, new = unique_index(closure["seed_groups"], "key", "Milestone 4 seed")
+    errors.extend(new)
+    record_by_id, new = unique_index(decision_log["records"], "id", "decision record")
+    errors.extend(new)
+
+    if set(resolution_by_seed) != set(seed_by_key):
+        missing = sorted(set(seed_by_key) - set(resolution_by_seed))
+        extra = sorted(set(resolution_by_seed) - set(seed_by_key))
+        errors.append(f"seed-resolution closure mismatch; missing={missing}, extra={extra}")
+    if set(record_by_id) != set(resolution_by_decision):
+        missing = sorted(set(resolution_by_decision) - set(record_by_id))
+        extra = sorted(set(record_by_id) - set(resolution_by_decision))
+        errors.append(f"decision-record closure mismatch; missing={missing}, extra={extra}")
+
+    referenced_identities: set[str] = set()
+    seen_result_ids: set[str] = set()
+    for resolution in registry["seed_resolutions"]:
+        seed_key = resolution["seed_key"]
+        decision_id = resolution["decision_id"]
+        action = resolution["action"]
+        result_ids = resolution["result_ids"]
+        if action in SINGLE_RESULT_ACTIONS and len(result_ids) != 1:
+            errors.append(f"{decision_id}: {action} must resolve to exactly one stable identity")
+        if action in SPLIT_ACTIONS and len(result_ids) < 2:
+            errors.append(f"{decision_id}: {action} must resolve to at least two stable identities")
+        if action == "MERGE_IMPLEMENTATION_SITES":
+            seed = seed_by_key.get(seed_key)
+            if seed is not None and len(seed["site_ids"]) < 2:
+                errors.append(f"{decision_id}: site merge has fewer than two implementation sites")
+        if action == "SPLIT_AND_REUSE":
+            if not (set(result_ids) & seen_result_ids):
+                errors.append(f"{decision_id}: SPLIT_AND_REUSE does not reuse an earlier identity")
+            if not (set(result_ids) - seen_result_ids):
+                errors.append(f"{decision_id}: SPLIT_AND_REUSE creates no new identity")
+        for stable_id in result_ids:
+            referenced_identities.add(stable_id)
+            identity = identity_by_id.get(stable_id)
+            if identity is None:
+                errors.append(f"{decision_id}: unknown result identity {stable_id}")
+                continue
+            if seed_key not in identity["source_seed_keys"]:
+                errors.append(f"{decision_id}: {stable_id} lacks reciprocal seed {seed_key}")
+            if decision_id not in identity["decision_ids"]:
+                errors.append(f"{decision_id}: {stable_id} lacks reciprocal decision reference")
+            if action == "DEFER_OUT_OF_SCOPE" and identity["identity_status"] != "RESERVED_OUT_OF_SCOPE":
+                errors.append(f"{decision_id}: deferred out-of-scope identity is not reserved")
+            if action != "DEFER_OUT_OF_SCOPE" and identity["identity_status"] == "RESERVED_OUT_OF_SCOPE":
+                errors.append(f"{decision_id}: in-scope decision points to a reserved identity")
+        seen_result_ids.update(result_ids)
+
+    if referenced_identities != set(identity_by_id):
+        orphaned = sorted(set(identity_by_id) - referenced_identities)
+        errors.append(f"stable identities are not all reachable from seed decisions: {orphaned}")
+
+    for stable_id, identity in identity_by_id.items():
+        if any(part in stable_id for part in FORBIDDEN_ID_PARTS):
+            errors.append(f"{stable_id}: stable ID contains implementation/provenance terminology")
+        if re.search(r"(^|\.)[0-9A-F]{8,}($|\.)", stable_id):
+            errors.append(f"{stable_id}: stable ID appears content- or source-addressed")
+        expected_hash = statement_sha256(identity)
+        if identity["statement_sha256"] != expected_hash:
+            errors.append(f"{stable_id}: statement hash is stale")
+        kind = identity["intended_kind"]
+        status = identity["identity_status"]
+        if kind == "EMPIRICAL_CONTRACT_SCENARIO" and not stable_id.startswith("SCENARIO."):
+            errors.append(f"{stable_id}: empirical scenario must use the SCENARIO.* namespace")
+        if kind != "EMPIRICAL_CONTRACT_SCENARIO" and stable_id.startswith("SCENARIO."):
+            errors.append(f"{stable_id}: SCENARIO.* identity must be empirical")
+        if status == "ACTIVE_PROVISIONAL" and kind is None:
+            errors.append(f"{stable_id}: unassigned kind cannot be active provisional")
+        if status == "DEFERRED_KIND" and kind is not None:
+            errors.append(f"{stable_id}: deferred kind was prematurely classified")
+        expected_seeds = {
+            resolution["seed_key"]
+            for resolution in registry["seed_resolutions"]
+            if stable_id in resolution["result_ids"]
+        }
+        expected_decisions = {
+            resolution["decision_id"]
+            for resolution in registry["seed_resolutions"]
+            if stable_id in resolution["result_ids"]
+        }
+        if set(identity["source_seed_keys"]) != expected_seeds:
+            errors.append(f"{stable_id}: source-seed references are not exactly reciprocal")
+        if set(identity["decision_ids"]) != expected_decisions:
+            errors.append(f"{stable_id}: decision references are not exactly reciprocal")
+
+    if decision_log["predecessor"] != {
+        "path": "config/declaration-validation-discovery-closure.json",
+        "sha256": closure_hash,
+    }:
+        errors.append("decision log predecessor binding is stale")
+    if decision_log["registry"] != {
+        "path": "config/declaration-validation-identity-registry.json",
+        "sha256": registry_hash,
+    }:
+        errors.append("decision log registry binding is stale")
+    for record in decision_log["records"]:
+        if record["catalog_hash_before"] != closure_hash:
+            errors.append(f"{record['id']}: catalog_hash_before is stale")
+        if record["catalog_hash_after"] != registry_hash:
+            errors.append(f"{record['id']}: catalog_hash_after is stale")
+        if record["decision"] != record["result"]["action"]:
+            errors.append(f"{record['id']}: decision and result action disagree")
+
+    if rendered_decision_log is None:
+        rendered_decision_log = load_renderer().render()
+    if decision_log != rendered_decision_log:
+        errors.append("generated decision log is not synchronized with its canonical inputs")
+
+    boundary = registry["completion_boundary"]
+    if boundary["authority_assigned"] or boundary["layers_assigned"] or boundary["catalog_entries_created"]:
+        errors.append("Milestone 5 crossed the pre-catalog completion boundary")
+    return errors
+
+
+def validate_completion_record() -> list[str]:
+    if not COMPLETION_PATH.exists():
+        return [f"missing completion record: {COMPLETION_PATH.relative_to(ROOT)}"]
+    record = load_json(COMPLETION_PATH)
+    errors: list[str] = []
+    if record.get("status") != "PASS":
+        errors.append("Milestone 5 completion record is not PASS")
+    for name, binding in record.get("artifacts", {}).items():
+        path = ROOT / binding["path"]
+        if not path.is_file():
+            errors.append(f"completion record {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"completion record {name} hash is stale")
+    boundary = record.get("completion_boundary", {})
+    if boundary.get("next_authorized_milestone") != "Milestone 6 — Content-Addressed Provenance":
+        errors.append("completion record does not authorize exactly Milestone 6 next")
+    return errors
+
+
+def validate_all(require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:
+    registry = load_json(REGISTRY_PATH)
+    registry_schema = load_json(REGISTRY_SCHEMA_PATH)
+    decision_log = load_json(DECISION_LOG_PATH)
+    decision_schema = load_json(DECISION_SCHEMA_PATH)
+    closure = load_json(CLOSURE_PATH)
+    errors = validate_artifacts(
+        registry, registry_schema, decision_log, decision_schema, closure
+    )
+    if require_completion:
+        errors.extend(validate_completion_record())
+    summary = {
+        "milestone_4_seeds": len(closure["seed_groups"]),
+        "seed_resolutions": len(registry["seed_resolutions"]),
+        "stable_identities": len(registry["identities"]),
+        "decision_records": len(decision_log["records"]),
+        "normative_candidate_identities": sum(
+            item["intended_kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+            for item in registry["identities"]
+        ),
+        "empirical_scenario_identities": sum(
+            item["intended_kind"] == "EMPIRICAL_CONTRACT_SCENARIO"
+            for item in registry["identities"]
+        ),
+        "unassigned_kind_identities": sum(
+            item["intended_kind"] is None
+            for item in registry["identities"]
+        ),
+        "registry_sha256": sha256_file(REGISTRY_PATH),
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument(
+        "--artifacts-only",
+        action="store_true",
+        help="skip the completion record while constructing the milestone",
+    )
+    args = parser.parse_args()
+    errors, summary = validate_all(require_completion=not args.artifacts_only)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    print("declaration-validation Milestone 5 identities and decisions: PASS")
+    print(json.dumps(summary, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

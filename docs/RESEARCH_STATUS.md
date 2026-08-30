@@ -1006,9 +1006,20 @@ prepared_external_action_drafts: 5
    `scripts/validate-declaration-validation-discovery-closure`; completion
    details are in the
    [Milestone 4 result](../results/research/declaration-validation-milestone-4.json).
-   The next authorized work is Milestone 5: assign stable semantic identities
-   and preserve durable merge/split/exclusion decisions. Continue toward the
-   content-addressed catalog, source lock, decision trail,
+   Milestone 5 is complete. The frozen
+   [stable identity registry](../config/declaration-validation-identity-registry.json)
+   resolves all 21 provisional discovery seeds into 30 implementation-neutral
+   identities: 19 normative candidates, 9 empirical scenarios, and 2 identities
+   whose kind remains unresolved. The generated
+   [decision log](../results/research/declaration-validation-milestone-5-decisions.json)
+   preserves every keep, merge, split, reuse, deferral, and exclusion with
+   discovery-only evidence and content-bound before/after hashes. It assigns no
+   authority, layer, soundness relevance, catalog status, or coverage
+   eligibility. Run `scripts/validate-declaration-validation-milestone-5`;
+   completion details are in the
+   [Milestone 5 result](../results/research/declaration-validation-milestone-5.json).
+   The next authorized work is Milestone 6: create the offline/online
+   content-addressed source lock. Continue toward the catalog, decision trail,
    generated report, adversarial review, and frozen design for the later Arena
    negative-coverage phase. Completion is the plan's validated, frozen artifact
    set or an explicitly bounded unresolved result under one of its stop

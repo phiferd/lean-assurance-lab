@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Render the Milestone 5 decision log from the frozen closure and identity registry."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+REGISTRY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def render() -> dict[str, Any]:
+    closure = load(CLOSURE_PATH)
+    registry = load(REGISTRY_PATH)
+    closure_hash = sha256(CLOSURE_PATH)
+    registry_hash = sha256(REGISTRY_PATH)
+    seeds = {seed["key"]: (index, seed) for index, seed in enumerate(closure["seed_groups"])}
+    identities = {identity["id"]: identity for identity in registry["identities"]}
+    records = []
+    for resolution in registry["seed_resolutions"]:
+        seed_key = resolution["seed_key"]
+        decision_id = resolution["decision_id"]
+        index, seed = seeds[seed_key]
+        result_identities = []
+        for stable_id in resolution["result_ids"]:
+            identity = identities[stable_id]
+            result_identities.append({
+                "stable_id": stable_id,
+                "intended_kind": identity["intended_kind"],
+                "identity_status": identity["identity_status"],
+            })
+        record_index = len(records)
+        records.append({
+            "id": decision_id,
+            "decision": resolution["action"],
+            "inputs": {
+                "seed_keys": [seed_key],
+                "site_ids": seed["site_ids"],
+                "prior_kind_hint": seed["kind_hint"],
+                "prior_merge_split": seed["merge_split"],
+            },
+            "result": {
+                "action": resolution["action"],
+                "identities": result_identities,
+            },
+            "reason": resolution["reason"],
+            "evidence": [{
+                "id": f"EVID.M5.DECISION_{decision_id.rsplit('.', 1)[-1]}",
+                "role": "DISCOVERY",
+                "source_type": "LAB_EXPERIMENT",
+                "source_lock": {
+                    "registry": "LOCAL_ARTIFACT_LOCK",
+                    "lock_id": f"milestone-4-discovery-closure@sha256:{closure_hash}",
+                },
+                "exact_locator": {
+                    "kind": "JSON_POINTER",
+                    "value": f"config/declaration-validation-discovery-closure.json#/seed_groups/{index}",
+                },
+                "claim_supported": {
+                    "entry_json_pointer": f"/records/{record_index}",
+                    "predicate_id": "CLAIM.M5.SEED_DISPOSITION",
+                    "proposition": f"Binds {seed_key} and its inspected source sites to this identity decision.",
+                },
+                "assumptions": [{
+                    "id": "ASSUMPTION.M4.DISCOVERY_ONLY",
+                    "statement": "The frozen Milestone 4 seed and site ledger is discovery provenance, not normative authority.",
+                    "status": "ACTIVE",
+                }],
+            }],
+            "catalog_hash_before": closure_hash,
+            "catalog_hash_after": registry_hash,
+        })
+    return {
+        "schema_version": 1,
+        "log_id": "ordinary-declaration-validation.milestone-5-decisions.v1",
+        "generated_at": registry["recorded_at"],
+        "status": "FROZEN_GENERATED_DECISION_LOG",
+        "hash_domain": "M4_DISCOVERY_CLOSURE_TO_M5_IDENTITY_REGISTRY",
+        "predecessor": {"path": str(CLOSURE_PATH.relative_to(ROOT)), "sha256": closure_hash},
+        "registry": {"path": str(REGISTRY_PATH.relative_to(ROOT)), "sha256": registry_hash},
+        "records": records,
+        "completion": {
+            "all_seed_resolutions_recorded": True,
+            "history_rewritten": False,
+            "catalog_entries_created": False,
+        },
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
