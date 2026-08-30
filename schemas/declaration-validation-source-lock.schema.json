@@ -1,0 +1,273 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-source-lock.schema.json",
+  "title": "Declaration Validation Content-Addressed Source Lock",
+  "type": "object",
+  "required": [
+    "schema_version", "lock_id", "recorded_at", "status", "hash_semantics",
+    "predecessors", "repositories", "source_files", "tracked_evidence",
+    "generated_witnesses", "optional_local_observations",
+    "observer_configurations", "normative_documentation", "mechanized_results",
+    "validation_modes", "completion_boundary", "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "lock_id": {"const": "ordinary-declaration-validation.source-lock.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_CONTENT_ADDRESSED_SOURCE_LOCK"},
+    "hash_semantics": {
+      "type": "object",
+      "required": ["blob_sha256", "file_sha256", "artifact_sha256", "configuration_sha256"],
+      "properties": {
+        "blob_sha256": {"type": "string", "pattern": "SHA-256.*not a Git object ID"},
+        "file_sha256": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"type": "string", "minLength": 1},
+        "configuration_sha256": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "predecessors": {
+      "type": "object",
+      "required": ["semantic_target", "characterization_model", "discovery_closure", "identity_registry", "decision_log"],
+      "properties": {
+        "semantic_target": {"$ref": "#/$defs/artifactBinding"},
+        "characterization_model": {"$ref": "#/$defs/artifactBinding"},
+        "discovery_closure": {"$ref": "#/$defs/artifactBinding"},
+        "identity_registry": {"$ref": "#/$defs/artifactBinding"},
+        "decision_log": {"$ref": "#/$defs/artifactBinding"}
+      },
+      "additionalProperties": false
+    },
+    "repositories": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/repository"}
+    },
+    "source_files": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/sourceFile"}
+    },
+    "tracked_evidence": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/trackedEvidence"}
+    },
+    "generated_witnesses": {
+      "type": "array", "minItems": 1,
+      "items": {"$ref": "#/$defs/generatedWitness"}
+    },
+    "optional_local_observations": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/optionalLocal"}
+    },
+    "observer_configurations": {
+      "type": "array", "minItems": 4, "maxItems": 4,
+      "items": {"$ref": "#/$defs/observerConfiguration"}
+    },
+    "normative_documentation": {"$ref": "#/$defs/normativeSection"},
+    "mechanized_results": {"$ref": "#/$defs/mechanizedSection"},
+    "validation_modes": {
+      "type": "object",
+      "required": ["offline", "online"],
+      "properties": {
+        "offline": {"$ref": "#/$defs/validationMode"},
+        "online": {"$ref": "#/$defs/validationMode"}
+      },
+      "additionalProperties": false
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": ["source_lock_created", "offline_validation_supported", "online_verification_supported", "catalog_entries_created", "authority_assigned", "next_milestone"],
+      "properties": {
+        "source_lock_created": {"const": true},
+        "offline_validation_supported": {"const": true},
+        "online_verification_supported": {"const": true},
+        "catalog_entries_created": {"const": false},
+        "authority_assigned": {"const": false},
+        "next_milestone": {"const": "MILESTONE_7_CANONICAL_DATA_FIRST"}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array", "minItems": 5, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "artifactBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "repository": {
+      "type": "object",
+      "required": ["id", "repository_url", "revision", "purpose"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^REPO(\\.[A-Z0-9_]+)+$"},
+        "repository_url": {"type": "string", "pattern": "^https://github\\.com/"},
+        "revision": {"$ref": "#/$defs/revision"},
+        "purpose": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "sourceFile": {
+      "type": "object",
+      "required": ["id", "repository_id", "path", "symbol_or_range", "blob_sha256", "source_role", "locator_verification"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^(SRC|SRCLOCK)(\\.[A-Z0-9_]+)+$"},
+        "repository_id": {"type": "string", "pattern": "^REPO(\\.[A-Z0-9_]+)+$"},
+        "path": {"type": "string", "minLength": 1},
+        "symbol_or_range": {"type": "string", "minLength": 1},
+        "blob_sha256": {"$ref": "#/$defs/sha256"},
+        "source_role": {
+          "enum": ["DISCOVERY_SOURCE", "OBSERVER_CONFIGURATION", "TOOLCHAIN_RECIPE", "BUILD_RECIPE", "EXPORT_PRODUCER", "EXPORT_RECONSTRUCTION"]
+        },
+        "locator_verification": {
+          "type": "object",
+          "required": ["mode", "tokens"],
+          "properties": {
+            "mode": {"enum": ["TOKENS", "HASH_ONLY_DESCRIPTIVE_LOCATOR"]},
+            "tokens": {
+              "type": "array", "uniqueItems": true,
+              "items": {"type": "string", "minLength": 1}
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "trackedEvidence": {
+      "type": "object",
+      "required": ["id", "path", "file_sha256", "json_pointer_or_case_id", "source_role"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^LOCAL(\\.[A-Z0-9_]+)+$"},
+        "path": {"type": "string", "minLength": 1},
+        "file_sha256": {"$ref": "#/$defs/sha256"},
+        "json_pointer_or_case_id": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "source_role": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "generatedWitness": {
+      "type": "object",
+      "required": ["id", "path", "artifact_sha256", "generator_or_origin", "relevant_case_id", "source_role"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^WITNESS(\\.[A-Z0-9_]+)+$"},
+        "path": {"type": "string", "minLength": 1},
+        "artifact_sha256": {"$ref": "#/$defs/sha256"},
+        "generator_or_origin": {"type": "string", "minLength": 1},
+        "relevant_case_id": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^(DECL|EXPR|SCENARIO)(\\.[A-Z0-9_]+)+$"}
+        },
+        "source_role": {"const": "EXISTING_LAB_EVIDENCE_ONLY"}
+      },
+      "additionalProperties": false
+    },
+    "optionalLocal": {
+      "type": "object",
+      "required": ["id", "path_hint", "file_sha256", "availability", "source_role", "claim_supported"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "path_hint": {"type": "string", "minLength": 1},
+        "file_sha256": {"$ref": "#/$defs/sha256"},
+        "availability": {"const": "OPTIONAL_LOCAL_OBSERVATION"},
+        "source_role": {"type": "string", "minLength": 1},
+        "claim_supported": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "observerConfiguration": {
+      "type": "object",
+      "required": ["observer", "observer_id", "lineage_group", "entrypoint_source_file_id", "configuration", "configuration_sha256", "configuration_source_file_ids", "binary_observation_id"],
+      "properties": {
+        "observer": {"enum": ["OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"]},
+        "observer_id": {"type": "string", "minLength": 1},
+        "lineage_group": {"type": "string", "minLength": 1},
+        "entrypoint_source_file_id": {"type": "string", "pattern": "^(SRC|SRCLOCK)(\\.[A-Z0-9_]+)+$"},
+        "configuration": {"type": "object", "minProperties": 1},
+        "configuration_sha256": {"$ref": "#/$defs/sha256"},
+        "configuration_source_file_ids": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^(SRC|SRCLOCK)(\\.[A-Z0-9_]+)+$"}
+        },
+        "binary_observation_id": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "normativeSection": {
+      "type": "object",
+      "required": ["selection_status", "records", "reason"],
+      "properties": {
+        "selection_status": {"enum": ["NONE_SELECTED_BEFORE_CATALOG_AUTHORITY_REVIEW", "SELECTED"]},
+        "records": {"type": "array", "items": {"$ref": "#/$defs/normativeDocument"}},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "normativeDocument": {
+      "type": "object",
+      "required": ["id", "document_kind", "version_or_edition", "stable_url_or_doi", "section_anchor_or_page", "retrieved_content_sha256", "claim_supported"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "document_kind": {"type": "string", "minLength": 1},
+        "version_or_edition": {"type": "string", "minLength": 1},
+        "stable_url_or_doi": {"type": "string", "minLength": 1},
+        "section_anchor_or_page": {"type": "string", "minLength": 1},
+        "retrieved_content_sha256": {"$ref": "#/$defs/sha256"},
+        "claim_supported": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "mechanizedSection": {
+      "type": "object",
+      "required": ["selection_status", "records", "reason"],
+      "properties": {
+        "selection_status": {"enum": ["NONE_SELECTED_BEFORE_CATALOG_AUTHORITY_REVIEW", "SELECTED"]},
+        "records": {"type": "array", "items": {"$ref": "#/$defs/mechanizedResult"}},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "mechanizedResult": {
+      "type": "object",
+      "required": ["id", "repository_url", "revision", "module", "theorem_or_definition", "path", "blob_sha256", "assumptions_or_axioms", "verification_command", "target_judgment_mapping"],
+      "properties": {
+        "id": {"type": "string", "minLength": 1},
+        "repository_url": {"type": "string", "minLength": 1},
+        "revision": {"$ref": "#/$defs/revision"},
+        "module": {"type": "string", "minLength": 1},
+        "theorem_or_definition": {"type": "string", "minLength": 1},
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha256": {"$ref": "#/$defs/sha256"},
+        "assumptions_or_axioms": {"type": "array", "items": {"type": "string", "minLength": 1}},
+        "verification_command": {"type": "string", "minLength": 1},
+        "target_judgment_mapping": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "validationMode": {
+      "type": "object",
+      "required": ["command", "guarantees"],
+      "properties": {
+        "command": {"type": "string", "minLength": 1},
+        "guarantees": {
+          "type": "array", "minItems": 1, "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "ignored_external_checkout_required": {"type": "boolean"},
+        "uses_isolated_temporary_git_repositories": {"type": "boolean"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

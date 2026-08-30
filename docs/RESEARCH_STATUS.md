@@ -1018,8 +1018,20 @@ prepared_external_action_drafts: 5
    eligibility. Run `scripts/validate-declaration-validation-milestone-5`;
    completion details are in the
    [Milestone 5 result](../results/research/declaration-validation-milestone-5.json).
-   The next authorized work is Milestone 6: create the offline/online
-   content-addressed source lock. Continue toward the catalog, decision trail,
+   Milestone 6 is complete. The frozen
+   [source lock](../config/declaration-validation-source-lock.json) binds nine
+   repository/revision identities, 41 pinned source/configuration/build files,
+   19 tracked Lab evidence artifacts, 12 existing witnesses, 18 optional local
+   observations, and all four observer configurations. Offline validation is
+   independent of the ignored `external/` checkout; online verification has
+   confirmed all 9 remote revisions, all 41 raw-content SHA-256 values, and 13
+   enabled locator tokens. Normative-documentation and mechanized-result slots
+   remain explicitly empty pending per-identity authority review. Run
+   `scripts/validate-declaration-validation-source-lock`; completion details are
+   in the
+   [Milestone 6 result](../results/research/declaration-validation-milestone-6.json).
+   The next authorized work is Milestone 7: make canonical machine data
+   authoritative and derive synchronized human outputs. Continue toward the catalog, decision trail,
    generated report, adversarial review, and frozen design for the later Arena
    negative-coverage phase. Completion is the plan's validated, frozen artifact
    set or an explicitly bounded unresolved result under one of its stop

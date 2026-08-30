@@ -1,0 +1,390 @@
+#!/usr/bin/env python3
+"""Render the Milestone 6 declaration-validation provenance source lock."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
+MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+REGISTRY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
+DEFAULT_OUTPUT = ROOT / "config" / "declaration-validation-source-lock.json"
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def digest_json(value: Any) -> str:
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return hashlib.sha256(encoded).hexdigest()
+
+
+REPOSITORIES = [
+    {
+        "id": "REPO.LEAN4.LOGICAL_TARGET",
+        "repository_url": "https://github.com/leanprover/lean4",
+        "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+        "purpose": "Lean 4.33.0 modeled checked-declaration judgment and official implementation sources.",
+    },
+    {
+        "id": "REPO.LEAN4.ARTIFACT_PRODUCER",
+        "repository_url": "https://github.com/leanprover/lean4",
+        "revision": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+        "purpose": "Lean 4.29.1 artifact-producer identity; distinct from the logical target.",
+    },
+    {
+        "id": "REPO.ARENA",
+        "repository_url": "https://github.com/leanprover/lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+        "purpose": "Pinned observer definitions, official replay entrypoint, and build recipes.",
+    },
+    {
+        "id": "REPO.NANODA",
+        "repository_url": "https://github.com/ammkrn/nanoda_lib",
+        "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+        "purpose": "Pinned Nanoda implementation and build recipe.",
+    },
+    {
+        "id": "REPO.LEAN4LEAN",
+        "repository_url": "https://github.com/digama0/lean4lean",
+        "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+        "purpose": "Pinned Lean4Lean implementation, replay path, manifest, and toolchain.",
+    },
+    {
+        "id": "REPO.KIOTA",
+        "repository_url": "https://github.com/sankalpsthakur/kiota",
+        "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+        "purpose": "Pinned Kiota implementation and build recipe.",
+    },
+    {
+        "id": "REPO.LEAN4EXPORT.PRODUCER",
+        "repository_url": "https://github.com/leanprover/lean4export",
+        "revision": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+        "purpose": "Producer exporter revision used with the Arena Lean 4.29.1 override.",
+    },
+    {
+        "id": "REPO.LEAN4EXPORT.OFFICIAL_IMPORTER",
+        "repository_url": "https://github.com/leanprover/lean4export",
+        "revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+        "purpose": "Official observer parser/reconstructor dependency.",
+    },
+    {
+        "id": "REPO.LEAN4EXPORT.LEAN4LEAN_IMPORTER",
+        "repository_url": "https://github.com/leanprover/lean4export",
+        "revision": "a3e35a584f59b390667db7269cd37fca8575e4bf",
+        "purpose": "Lean4Lean observer parser/reconstructor dependency.",
+    },
+]
+
+
+SUPPLEMENTAL_SOURCE_FILES = [
+    ("SRCLOCK.ARENA.OFFICIAL_DEFINITION", "REPO.ARENA", "checkers/official.yaml", "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a", "OBSERVER_CONFIGURATION", "official observer definition", []),
+    ("SRCLOCK.ARENA.NANODA_DEFINITION", "REPO.ARENA", "checkers/nanoda.yaml", "0bde2416430191feb9d08517e5c34c447e98495645864caa853ce249fb7ed760", "OBSERVER_CONFIGURATION", "Nanoda observer definition", []),
+    ("SRCLOCK.ARENA.LEAN4LEAN_DEFINITION", "REPO.ARENA", "checkers/lean4lean.yaml", "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927", "OBSERVER_CONFIGURATION", "Lean4Lean observer definition and lineage statement", []),
+    ("SRCLOCK.ARENA.KIOTA_DEFINITION", "REPO.ARENA", "checkers/kiota.yaml", "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f", "OBSERVER_CONFIGURATION", "Kiota observer definition and lineage statement", []),
+    ("SRCLOCK.ARENA.OFFICIAL_TOOLCHAIN", "REPO.ARENA", "checkers/official-v4.33.0/lean-toolchain", "0d3c76ccd8772d8bcbe207241421a760312b71a6aa82f84194391fdf5cb026d6", "TOOLCHAIN_RECIPE", "official observer template toolchain", []),
+    ("SRCLOCK.ARENA.OFFICIAL_LAKEFILE", "REPO.ARENA", "checkers/official-v4.33.0/lakefile.toml", "e4ef28e6b2a315349e38c35aa2e5a70022d9d5b284f9d4184acadd62cd88cd38", "BUILD_RECIPE", "official observer Lake build recipe", []),
+    ("SRCLOCK.NANODA.CARGO_TOML", "REPO.NANODA", "Cargo.toml", "04b9d07cfa907f587abc7541b1bf400960e54d6df596d07c0a50c4ce1808d375", "BUILD_RECIPE", "Nanoda Cargo manifest", []),
+    ("SRCLOCK.NANODA.CARGO_LOCK", "REPO.NANODA", "Cargo.lock", "5c99446c237555e0d4cda4007cda4d576ea3dbba895b2b0aacde424cb21ad688", "BUILD_RECIPE", "Nanoda dependency lock", []),
+    ("SRCLOCK.LEAN4LEAN.LAKEFILE", "REPO.LEAN4LEAN", "lakefile.toml", "cf74ad78cb19f565cc4c10873fdab10fdedf86b2b883f9fb073cb2488d05ff82", "BUILD_RECIPE", "Lean4Lean Lake build recipe", []),
+    ("SRCLOCK.LEAN4LEAN.MANIFEST", "REPO.LEAN4LEAN", "lake-manifest.json", "d84781a6612954d175b39cca5a08910e2d99b5a88b0462a374323f1b713c74a5", "BUILD_RECIPE", "Lean4Lean dependency lock", []),
+    ("SRCLOCK.LEAN4LEAN.TOOLCHAIN", "REPO.LEAN4LEAN", "lean-toolchain", "0d3c76ccd8772d8bcbe207241421a760312b71a6aa82f84194391fdf5cb026d6", "TOOLCHAIN_RECIPE", "Lean4Lean toolchain label", []),
+    ("SRCLOCK.KIOTA.CARGO_TOML", "REPO.KIOTA", "Cargo.toml", "3921e654e53f28a00e5bebacacb15d0ce8e98c506fe6e89c738d541175b54ba6", "BUILD_RECIPE", "Kiota Cargo manifest", []),
+    ("SRCLOCK.KIOTA.CARGO_LOCK", "REPO.KIOTA", "Cargo.lock", "5ec82186988acc6147319f5d09e80dbec526cd43d25f3dd1ac9a0a9dc00b743b", "BUILD_RECIPE", "Kiota dependency lock", []),
+    ("SRCLOCK.EXPORT.PRODUCER_MODULE", "REPO.LEAN4EXPORT.PRODUCER", "Export.lean", "1c60d571dc24bfb99e7cbb218d8d489919bbc871238f6db9c76248521fbea998", "EXPORT_PRODUCER", "format declaration and producer exporter", ["let formatMeta"]),
+    ("SRCLOCK.EXPORT.PRODUCER_PARSE", "REPO.LEAN4EXPORT.PRODUCER", "Export/Parse.lean", "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286", "EXPORT_RECONSTRUCTION", "producer-checkout parser module", ["parseStream"]),
+    ("SRCLOCK.EXPORT.OFFICIAL_MODULE", "REPO.LEAN4EXPORT.OFFICIAL_IMPORTER", "Export.lean", "c1c154a1b5d308acb6db78f9bfe8663c7f06c2e7ea288b31ff4e70f0225af704", "EXPORT_RECONSTRUCTION", "official observer export module", ["let formatMeta"]),
+    ("SRCLOCK.EXPORT.OFFICIAL_PARSE", "REPO.LEAN4EXPORT.OFFICIAL_IMPORTER", "Export/Parse.lean", "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286", "EXPORT_RECONSTRUCTION", "official observer parser module", ["parseStream"]),
+    ("SRCLOCK.EXPORT.LEAN4LEAN_MODULE", "REPO.LEAN4EXPORT.LEAN4LEAN_IMPORTER", "Export.lean", "c1c154a1b5d308acb6db78f9bfe8663c7f06c2e7ea288b31ff4e70f0225af704", "EXPORT_RECONSTRUCTION", "Lean4Lean observer export module", ["let formatMeta"]),
+    ("SRCLOCK.EXPORT.LEAN4LEAN_PARSE", "REPO.LEAN4EXPORT.LEAN4LEAN_IMPORTER", "Export/Parse.lean", "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286", "EXPORT_RECONSTRUCTION", "Lean4Lean observer parser module", ["parseStream"]),
+]
+
+
+LOCATOR_TOKENS = {
+    "SRC.OFFICIAL.ARENA_MAIN": ["def runKernel", "def main"],
+    "SRC.NANODA.TC": ["pub fn check_declar", "fn check_declar_info"],
+    "SRC.LEAN4LEAN.ENVIRONMENT": ["def checkConstantVal", "def addDefinition"],
+    "SRC.KIOTA.TC": ["pub fn check_decl"],
+}
+
+
+TRACKED_EVIDENCE = [
+    ("LOCAL.TARGET_PROFILE", "config/declaration-validation-target.json", ["/profile_id", "/logical_target", "/observer_profiles"], "SEMANTIC_TARGET"),
+    ("LOCAL.CHARACTERIZATION_MODEL", "config/declaration-validation-characterization-model.json", ["/kinds", "/evidence_qualification"], "EVIDENCE_MODEL"),
+    ("LOCAL.DISCOVERY_CLOSURE", "config/declaration-validation-discovery-closure.json", ["/sources", "/sites", "/seed_groups"], "DISCOVERY"),
+    ("LOCAL.IDENTITY_REGISTRY", "config/declaration-validation-identity-registry.json", ["/identities", "/seed_resolutions"], "STABLE_IDENTITIES"),
+    ("LOCAL.M5_DECISIONS", "results/research/declaration-validation-milestone-5-decisions.json", ["/records"], "DECISION_TRAIL"),
+    ("LOCAL.VALIDATOR_CATALOG", "config/validators.json", ["/policy", "/validators"], "OBSERVER_IDENTITY"),
+    ("LOCAL.NONPROP_RESULTS", "results/cross-validation/m6-nonprop-theorem/results.json", ["/artifact", "/validators"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.CORE_DECL_MATRIX", "results/investigations/nanoda-core-declaration-contract-matrix.json", ["/cases", "/observed_rules"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.DECL_ENV_MATRIX", "results/investigations/nanoda-declaration-environment-contract-matrix.json", ["/cases", "/observed_rules", "/rule_boundaries"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.SELF_REFERENCE_RESULTS", "results/cross-validation/nanoda-gen-8317efea2c7d-self-reference/results.json", ["/artifact", "/validators"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.SELF_REFERENCE_METADATA", "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/metadata.json", ["/"], "WITNESS_ORIGIN"),
+    ("LOCAL.UNIVERSE_OWNERSHIP_METADATA", "results/witnesses/nanoda-0003-undeclared-const-universe/metadata.json", ["/"], "WITNESS_ORIGIN"),
+    ("LOCAL.LET_VALUE_RESULTS", "results/cross-validation/nanoda-gen-e551a17020ce-let-value-type/results.json", ["/artifact", "/validators"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.AXIOM_FLAG_RESULTS", "results/cross-validation/axiom-unsafe-flag/results.json", ["/artifact", "/validators"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.AXIOM_ONLY_RESULTS", "results/cross-validation/axiom-unsafe-only/results.json", ["/artifact", "/validators"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.AXIOM_MATERIALIZATION", "results/investigations/nanoda-axiom-unsafe/materialization.json", ["/"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.KIOTA_UNIVERSE", "results/investigations/kiota-universe-ownership/upstream-main.json", ["/"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.KIOTA_SELF_REFERENCE", "results/investigations/kiota-self-reference/upstream-main.json", ["/"], "EXISTING_LAB_EVIDENCE"),
+    ("LOCAL.UNIVERSE_PARAM_CONTROL", "results/investigations/nanoda-distinct-universe-param-equality/reproduction.json", ["/"], "EXISTING_LAB_EVIDENCE"),
+]
+
+
+WITNESSES = [
+    ("WITNESS.NONPROP_THEOREM", "corpus/transfer/milestone-6/nonprop-theorem.ndjson", "results/cross-validation/m6-nonprop-theorem/results.json", ["DECL.THEOREM.TYPE_PROP"]),
+    ("WITNESS.NONPROP_DEFINITION_CONTROL", "corpus/transfer/milestone-6/nonprop-definition-control.ndjson", "results/cross-validation/m6-nonprop-theorem/results.json", ["DECL.THEOREM.TYPE_PROP"]),
+    ("WITNESS.SELF_REFERENCE", "corpus/generated/nanoda-gen-8317efea2c7d-self-reference.ndjson", "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/metadata.json", ["DECL.ENV.CURRENT_DECL_NOT_VISIBLE", "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY"]),
+    ("WITNESS.SELF_REFERENCE_CONTROL", "corpus/generated/nanoda-gen-8317efea2c7d-self-reference-control.ndjson", "results/witnesses/nanoda-gen-8317efea2c7d-self-reference/metadata.json", ["DECL.ENV.CURRENT_DECL_NOT_VISIBLE", "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY"]),
+    ("WITNESS.UNIVERSE_OWNERSHIP", "corpus/generated/nanoda-0003-undeclared-const-universe.ndjson", "results/witnesses/nanoda-0003-undeclared-const-universe/metadata.json", ["DECL.UNIVERSE.PARAM_OWNERSHIP"]),
+    ("WITNESS.UNIVERSE_OWNERSHIP_CONTROL", "corpus/controls/nanoda-0003-declared-const-universe.ndjson", "results/witnesses/nanoda-0003-undeclared-const-universe/metadata.json", ["DECL.UNIVERSE.PARAM_OWNERSHIP"]),
+    ("WITNESS.LET_VALUE_TYPE", "corpus/transfer/milestone-7/let-value-type-mismatch.ndjson", "results/cross-validation/nanoda-gen-e551a17020ce-let-value-type/results.json", ["EXPR.LET.VALUE_TYPE_MATCH"]),
+    ("WITNESS.LET_VALUE_TYPE_CONTROL", "corpus/transfer/milestone-7/let-value-type-control.ndjson", "results/cross-validation/nanoda-gen-e551a17020ce-let-value-type/results.json", ["EXPR.LET.VALUE_TYPE_MATCH"]),
+    ("WITNESS.AXIOM_UNSAFE_FLAG", "corpus/generated/axiom-unsafe-candidate.ndjson", "results/investigations/nanoda-axiom-unsafe/materialization.json", ["SCENARIO.AXIOM.SAFETY_FLAG", "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION"]),
+    ("WITNESS.AXIOM_UNSAFE_FLAG_CONTROL", "corpus/generated/axiom-unsafe-control.ndjson", "results/investigations/nanoda-axiom-unsafe/materialization.json", ["SCENARIO.AXIOM.SAFETY_FLAG", "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION"]),
+    ("WITNESS.AXIOM_UNSAFE_ONLY", "corpus/generated/axiom-unsafe-only-candidate.ndjson", "results/investigations/nanoda-axiom-unsafe/materialization.json", ["SCENARIO.AXIOM.ADMISSION_POLICY", "SCENARIO.AXIOM.SAFETY_FLAG"]),
+    ("WITNESS.AXIOM_UNSAFE_ONLY_CONTROL", "corpus/generated/axiom-unsafe-only-control.ndjson", "results/investigations/nanoda-axiom-unsafe/materialization.json", ["SCENARIO.AXIOM.ADMISSION_POLICY", "SCENARIO.AXIOM.SAFETY_FLAG"]),
+]
+
+
+OBSERVER_BINDINGS = {
+    "official_importer": {
+        "observer": "OFFICIAL",
+        "entrypoint_source_file_id": "SRC.OFFICIAL.ARENA_MAIN",
+        "configuration_source_file_ids": [
+            "SRCLOCK.ARENA.OFFICIAL_DEFINITION",
+            "SRCLOCK.ARENA.OFFICIAL_TOOLCHAIN",
+            "SRCLOCK.ARENA.OFFICIAL_LAKEFILE",
+            "SRCLOCK.EXPORT.OFFICIAL_MODULE",
+            "SRCLOCK.EXPORT.OFFICIAL_PARSE",
+        ],
+        "binary_observation_id": "official-observer-binary",
+    },
+    "nanoda": {
+        "observer": "NANODA",
+        "entrypoint_source_file_id": "SRC.NANODA.TC",
+        "configuration_source_file_ids": [
+            "SRCLOCK.ARENA.NANODA_DEFINITION",
+            "SRCLOCK.NANODA.CARGO_TOML",
+            "SRCLOCK.NANODA.CARGO_LOCK",
+        ],
+        "binary_observation_id": "nanoda-observer-binary",
+    },
+    "lean4lean": {
+        "observer": "LEAN4LEAN",
+        "entrypoint_source_file_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+        "configuration_source_file_ids": [
+            "SRCLOCK.ARENA.LEAN4LEAN_DEFINITION",
+            "SRCLOCK.LEAN4LEAN.LAKEFILE",
+            "SRCLOCK.LEAN4LEAN.MANIFEST",
+            "SRCLOCK.LEAN4LEAN.TOOLCHAIN",
+            "SRCLOCK.EXPORT.LEAN4LEAN_MODULE",
+            "SRCLOCK.EXPORT.LEAN4LEAN_PARSE",
+        ],
+        "binary_observation_id": "lean4lean-observer-binary",
+    },
+    "kiota": {
+        "observer": "KIOTA",
+        "entrypoint_source_file_id": "SRC.KIOTA.TC",
+        "configuration_source_file_ids": [
+            "SRCLOCK.ARENA.KIOTA_DEFINITION",
+            "SRCLOCK.KIOTA.CARGO_TOML",
+            "SRCLOCK.KIOTA.CARGO_LOCK",
+        ],
+        "binary_observation_id": "kiota-observer-binary",
+    },
+}
+
+
+def render() -> dict[str, Any]:
+    target = load(TARGET_PATH)
+    closure = load(CLOSURE_PATH)
+    registry = load(REGISTRY_PATH)
+    repository_by_key = {
+        (row["repository_url"], row["revision"]): row["id"] for row in REPOSITORIES
+    }
+    source_files = []
+    for source in closure["sources"]:
+        repository_id = repository_by_key[(source["repository_url"], source["revision"])]
+        tokens = LOCATOR_TOKENS.get(source["id"], [])
+        source_files.append({
+            "id": source["id"],
+            "repository_id": repository_id,
+            "path": source["path"],
+            "symbol_or_range": source["inspection"]["locator"],
+            "blob_sha256": source["blob_sha256"],
+            "source_role": "DISCOVERY_SOURCE",
+            "locator_verification": {
+                "mode": "TOKENS" if tokens else "HASH_ONLY_DESCRIPTIVE_LOCATOR",
+                "tokens": tokens,
+            },
+        })
+    for file_id, repository_id, path, file_hash, role, locator, tokens in SUPPLEMENTAL_SOURCE_FILES:
+        source_files.append({
+            "id": file_id,
+            "repository_id": repository_id,
+            "path": path,
+            "symbol_or_range": locator,
+            "blob_sha256": file_hash,
+            "source_role": role,
+            "locator_verification": {
+                "mode": "TOKENS" if tokens else "HASH_ONLY_DESCRIPTIVE_LOCATOR",
+                "tokens": tokens,
+            },
+        })
+
+    tracked_evidence = []
+    for evidence_id, relative_path, pointers, role in TRACKED_EVIDENCE:
+        path = ROOT / relative_path
+        tracked_evidence.append({
+            "id": evidence_id,
+            "path": relative_path,
+            "file_sha256": sha256(path),
+            "json_pointer_or_case_id": pointers,
+            "source_role": role,
+        })
+
+    optional_local = []
+    for evidence in target["evidence_lock"]:
+        if evidence["availability"] != "OPTIONAL_LOCAL_OBSERVATION":
+            continue
+        path = Path(evidence["path"])
+        if path.is_absolute():
+            continue
+        optional_local.append({
+            "id": evidence["id"],
+            "path_hint": evidence["path"],
+            "file_sha256": evidence["sha256"],
+            "availability": "OPTIONAL_LOCAL_OBSERVATION",
+            "source_role": evidence["role"],
+            "claim_supported": evidence["claim_supported"],
+        })
+
+    witnesses = []
+    identity_ids = {row["id"] for row in registry["identities"]}
+    for witness_id, relative_path, origin, relevant_ids in WITNESSES:
+        if not set(relevant_ids).issubset(identity_ids):
+            raise ValueError(f"{witness_id}: unknown relevant identity")
+        witnesses.append({
+            "id": witness_id,
+            "path": relative_path,
+            "artifact_sha256": sha256(ROOT / relative_path),
+            "generator_or_origin": origin,
+            "relevant_case_id": relevant_ids,
+            "source_role": "EXISTING_LAB_EVIDENCE_ONLY",
+        })
+
+    observers = []
+    for profile_key, binding in OBSERVER_BINDINGS.items():
+        profile = target["observer_profiles"][profile_key]
+        observers.append({
+            "observer": binding["observer"],
+            "observer_id": profile["observer_id"],
+            "lineage_group": profile["lineage_group"],
+            "entrypoint_source_file_id": binding["entrypoint_source_file_id"],
+            "configuration": profile["configuration"],
+            "configuration_sha256": digest_json(profile["configuration"]),
+            "configuration_source_file_ids": binding["configuration_source_file_ids"],
+            "binary_observation_id": binding["binary_observation_id"],
+        })
+
+    return {
+        "schema_version": 1,
+        "lock_id": "ordinary-declaration-validation.source-lock.v1",
+        "recorded_at": "2026-08-30T13:20:00-04:00",
+        "status": "FROZEN_CONTENT_ADDRESSED_SOURCE_LOCK",
+        "hash_semantics": {
+            "blob_sha256": "SHA-256 digest of raw file content, not a Git object ID or Git blob hash.",
+            "file_sha256": "SHA-256 digest of the complete local tracked file bytes.",
+            "artifact_sha256": "SHA-256 digest of the complete generated witness bytes.",
+            "configuration_sha256": "SHA-256 of canonical compact JSON with sorted object keys.",
+        },
+        "predecessors": {
+            "semantic_target": {"path": str(TARGET_PATH.relative_to(ROOT)), "sha256": sha256(TARGET_PATH)},
+            "characterization_model": {"path": str(MODEL_PATH.relative_to(ROOT)), "sha256": sha256(MODEL_PATH)},
+            "discovery_closure": {"path": str(CLOSURE_PATH.relative_to(ROOT)), "sha256": sha256(CLOSURE_PATH)},
+            "identity_registry": {"path": str(REGISTRY_PATH.relative_to(ROOT)), "sha256": sha256(REGISTRY_PATH)},
+            "decision_log": {"path": str(DECISIONS_PATH.relative_to(ROOT)), "sha256": sha256(DECISIONS_PATH)},
+        },
+        "repositories": REPOSITORIES,
+        "source_files": source_files,
+        "tracked_evidence": tracked_evidence,
+        "generated_witnesses": witnesses,
+        "optional_local_observations": optional_local,
+        "observer_configurations": observers,
+        "normative_documentation": {
+            "selection_status": "NONE_SELECTED_BEFORE_CATALOG_AUTHORITY_REVIEW",
+            "records": [],
+            "reason": "Milestone 6 provides the durable representation. No document is promoted as normative support before per-identity authority review in Milestone 8.",
+        },
+        "mechanized_results": {
+            "selection_status": "NONE_SELECTED_BEFORE_CATALOG_AUTHORITY_REVIEW",
+            "records": [],
+            "reason": "No Lean4Lean or other mechanized theorem is claimed to establish the pinned declaration judgment at this milestone.",
+        },
+        "validation_modes": {
+            "offline": {
+                "command": "scripts/validate-declaration-validation-source-lock",
+                "guarantees": [
+                    "schema and internal-reference conformance",
+                    "predecessor and tracked-evidence content hashes",
+                    "generated-witness hashes and identity references",
+                    "exact Milestone 4 source coverage",
+                    "observer configuration digests",
+                    "generated lock synchronization",
+                ],
+                "ignored_external_checkout_required": False,
+            },
+            "online": {
+                "command": "scripts/validate-declaration-validation-source-lock --online",
+                "guarantees": [
+                    "every repository revision is fetchable as the exact pinned commit",
+                    "every pinned source path has the expected raw-content SHA-256",
+                    "declared locator tokens occur where token verification is enabled",
+                ],
+                "uses_isolated_temporary_git_repositories": True,
+            },
+        },
+        "completion_boundary": {
+            "source_lock_created": True,
+            "offline_validation_supported": True,
+            "online_verification_supported": True,
+            "catalog_entries_created": False,
+            "authority_assigned": False,
+            "next_milestone": "MILESTONE_7_CANONICAL_DATA_FIRST",
+        },
+        "nonclaims": [
+            "A source lock proves identity and content, not semantic authority or correctness.",
+            "Optional local binaries are observations and are not required for fresh-process offline validation.",
+            "Existing Lab witnesses are discovery inputs and do not establish isolation or negative coverage.",
+            "No normative documentation or mechanized theorem is silently promoted by this lock.",
+            "No ignored external checkout is an implicit dependency of offline validation.",
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

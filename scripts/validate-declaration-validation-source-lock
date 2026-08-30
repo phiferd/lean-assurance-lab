@@ -1,0 +1,529 @@
+#!/usr/bin/env python3
+"""Validate Milestone 6 provenance offline and optionally against pinned GitHub sources."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import subprocess
+import urllib.error
+import urllib.parse
+import urllib.request
+from datetime import datetime
+from pathlib import Path, PurePosixPath
+from typing import Any, Callable
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
+SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-source-lock.schema.json"
+TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
+MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+REGISTRY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
+RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-source-lock"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-6.json"
+
+OBSERVERS = {"OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"}
+PREDECESSOR_PATHS = {
+    "semantic_target": TARGET_PATH,
+    "characterization_model": MODEL_PATH,
+    "discovery_closure": CLOSURE_PATH,
+    "identity_registry": REGISTRY_PATH,
+    "decision_log": DECISIONS_PATH,
+}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def digest_json(value: Any) -> str:
+    encoded = json.dumps(value, sort_keys=True, separators=(",", ":")).encode("utf-8")
+    return sha256_bytes(encoded)
+
+
+def load_renderer() -> Any:
+    loader = importlib.machinery.SourceFileLoader("declaration_m6_renderer", str(RENDERER_PATH))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError("could not create source-lock renderer module specification")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def unique_index(
+    rows: list[dict[str, Any]], field: str, label: str
+) -> tuple[dict[str, dict[str, Any]], list[str]]:
+    result: dict[str, dict[str, Any]] = {}
+    errors: list[str] = []
+    for row in rows:
+        value = row[field]
+        if value in result:
+            errors.append(f"duplicate {label}: {value}")
+        result[value] = row
+    return result, errors
+
+
+def safe_relative_path(value: str) -> bool:
+    path = PurePosixPath(value)
+    return not path.is_absolute() and ".." not in path.parts and value not in {"", "."}
+
+
+def resolve_json_pointer(document: Any, pointer: str) -> Any:
+    if pointer in {"", "/"}:
+        return document
+    if not pointer.startswith("/"):
+        raise KeyError("not a JSON Pointer")
+    current = document
+    for raw_part in pointer[1:].split("/"):
+        part = raw_part.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            current = current[int(part)]
+        elif isinstance(current, dict):
+            current = current[part]
+        else:
+            raise KeyError(part)
+    return current
+
+
+def is_tracked(path: str) -> bool:
+    result = subprocess.run(
+        ["git", "ls-files", "--error-unmatch", "--", path],
+        cwd=ROOT,
+        stdout=subprocess.DEVNULL,
+        stderr=subprocess.DEVNULL,
+        check=False,
+    )
+    return result.returncode == 0
+
+
+def expected_repository_keys(target: dict[str, Any]) -> set[tuple[str, str]]:
+    observer_profiles = target["observer_profiles"]
+    return {
+        (
+            target["logical_target"]["source"]["repository_url"],
+            target["logical_target"]["source"]["revision"],
+        ),
+        (
+            target["artifact_producer"]["source"]["repository_url"],
+            target["artifact_producer"]["source"]["revision"],
+        ),
+        (
+            observer_profiles["official_importer"]["arena_integration"]["repository_url"],
+            observer_profiles["official_importer"]["arena_integration"]["revision"],
+        ),
+        (
+            observer_profiles["nanoda"]["implementation"]["repository_url"],
+            observer_profiles["nanoda"]["implementation"]["revision"],
+        ),
+        (
+            observer_profiles["lean4lean"]["implementation"]["repository_url"],
+            observer_profiles["lean4lean"]["implementation"]["revision"],
+        ),
+        (
+            observer_profiles["kiota"]["implementation"]["repository_url"],
+            observer_profiles["kiota"]["implementation"]["revision"],
+        ),
+        (
+            target["export_contract"]["producer_exporter"]["repository_url"],
+            target["export_contract"]["producer_exporter"]["revision"],
+        ),
+        (
+            target["export_contract"]["official_importer_parser"]["repository_url"],
+            target["export_contract"]["official_importer_parser"]["revision"],
+        ),
+        (
+            observer_profiles["lean4lean"]["configuration"]["importer_parser_repository"],
+            observer_profiles["lean4lean"]["configuration"]["importer_parser_revision"],
+        ),
+    }
+
+
+def validate_lock(
+    lock: dict[str, Any],
+    schema: dict[str, Any],
+    target: dict[str, Any],
+    closure: dict[str, Any],
+    registry: dict[str, Any],
+    *,
+    rendered_lock: dict[str, Any] | None = None,
+    check_git_tracking: bool = True,
+) -> tuple[list[str], dict[str, int]]:
+    errors: list[str] = []
+    validator = jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.FormatChecker()
+    )
+    for error in sorted(validator.iter_errors(lock), key=lambda e: list(e.absolute_path)):
+        where = "/" + "/".join(str(part) for part in error.absolute_path)
+        errors.append(f"schema {where}: {error.message}")
+    if errors:
+        return errors, {"optional_local_checked": 0, "optional_local_missing": 0}
+
+    for name, expected_path in PREDECESSOR_PATHS.items():
+        binding = lock["predecessors"][name]
+        if ROOT / binding["path"] != expected_path:
+            errors.append(f"{name}: predecessor path is not canonical")
+        elif binding["sha256"] != sha256_file(expected_path):
+            errors.append(f"{name}: predecessor hash is stale")
+
+    repository_by_id, new = unique_index(lock["repositories"], "id", "repository id")
+    errors.extend(new)
+    source_by_id, new = unique_index(lock["source_files"], "id", "source-file id")
+    errors.extend(new)
+    tracked_by_id, new = unique_index(lock["tracked_evidence"], "id", "tracked-evidence id")
+    errors.extend(new)
+    witness_by_id, new = unique_index(lock["generated_witnesses"], "id", "witness id")
+    errors.extend(new)
+    optional_by_id, new = unique_index(lock["optional_local_observations"], "id", "optional-observation id")
+    errors.extend(new)
+    _, new = unique_index(lock["observer_configurations"], "observer", "observer configuration")
+    errors.extend(new)
+
+    actual_repository_keys = {
+        (row["repository_url"], row["revision"]) for row in lock["repositories"]
+    }
+    expected_keys = expected_repository_keys(target)
+    if actual_repository_keys != expected_keys:
+        errors.append(
+            "repository pins do not exactly cover the target/export/observer tuple; "
+            f"missing={sorted(expected_keys - actual_repository_keys)}, "
+            f"extra={sorted(actual_repository_keys - expected_keys)}"
+        )
+
+    closure_sources = {row["id"]: row for row in closure["sources"]}
+    for source_id, closure_source in closure_sources.items():
+        locked = source_by_id.get(source_id)
+        if locked is None:
+            errors.append(f"{source_id}: Milestone 4 source is missing from the source lock")
+            continue
+        repository = repository_by_id.get(locked["repository_id"])
+        if repository is None:
+            errors.append(f"{source_id}: unknown repository {locked['repository_id']}")
+            continue
+        if (
+            repository["repository_url"] != closure_source["repository_url"]
+            or repository["revision"] != closure_source["revision"]
+            or locked["path"] != closure_source["path"]
+            or locked["blob_sha256"] != closure_source["blob_sha256"]
+        ):
+            errors.append(f"{source_id}: source lock disagrees with the frozen discovery closure")
+
+    for source in lock["source_files"]:
+        if source["repository_id"] not in repository_by_id:
+            errors.append(f"{source['id']}: unknown repository {source['repository_id']}")
+        if not safe_relative_path(source["path"]):
+            errors.append(f"{source['id']}: source path is not a safe repository-relative path")
+        mode = source["locator_verification"]["mode"]
+        tokens = source["locator_verification"]["tokens"]
+        if mode == "TOKENS" and not tokens:
+            errors.append(f"{source['id']}: token verification has no tokens")
+        if mode == "HASH_ONLY_DESCRIPTIVE_LOCATOR" and tokens:
+            errors.append(f"{source['id']}: descriptive-only locator unexpectedly carries tokens")
+
+    for evidence in lock["tracked_evidence"]:
+        relative = evidence["path"]
+        if not safe_relative_path(relative):
+            errors.append(f"{evidence['id']}: tracked-evidence path is unsafe")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            errors.append(f"{evidence['id']}: tracked evidence is missing")
+            continue
+        if check_git_tracking and not is_tracked(relative):
+            errors.append(f"{evidence['id']}: evidence file is not tracked by Git")
+        if sha256_file(path) != evidence["file_sha256"]:
+            errors.append(f"{evidence['id']}: tracked-evidence hash is stale")
+        try:
+            document = load_json(path)
+        except (json.JSONDecodeError, UnicodeDecodeError) as exc:
+            errors.append(f"{evidence['id']}: evidence is not JSON: {exc}")
+            continue
+        for locator in evidence["json_pointer_or_case_id"]:
+            try:
+                resolve_json_pointer(document, locator)
+            except (KeyError, IndexError, ValueError) as exc:
+                errors.append(f"{evidence['id']}: unresolved JSON locator {locator}: {exc}")
+
+    identity_ids = {row["id"] for row in registry["identities"]}
+    for witness in lock["generated_witnesses"]:
+        relative = witness["path"]
+        origin = witness["generator_or_origin"]
+        if not safe_relative_path(relative) or not safe_relative_path(origin):
+            errors.append(f"{witness['id']}: witness or origin path is unsafe")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            errors.append(f"{witness['id']}: witness artifact is missing")
+        else:
+            if check_git_tracking and not is_tracked(relative):
+                errors.append(f"{witness['id']}: witness artifact is not tracked by Git")
+            if sha256_file(path) != witness["artifact_sha256"]:
+                errors.append(f"{witness['id']}: witness hash is stale")
+        origin_path = ROOT / origin
+        if not origin_path.is_file():
+            errors.append(f"{witness['id']}: generator/origin artifact is missing")
+        if origin not in {row["path"] for row in tracked_by_id.values()}:
+            errors.append(f"{witness['id']}: generator/origin is not content-bound as tracked evidence")
+        unknown_ids = set(witness["relevant_case_id"]) - identity_ids
+        if unknown_ids:
+            errors.append(f"{witness['id']}: unknown stable identity references {sorted(unknown_ids)}")
+
+    optional_checked = 0
+    optional_missing = 0
+    for observation in lock["optional_local_observations"]:
+        relative = observation["path_hint"]
+        if not safe_relative_path(relative):
+            errors.append(f"{observation['id']}: optional-local path is unsafe or absolute")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            optional_missing += 1
+            continue
+        optional_checked += 1
+        if sha256_file(path) != observation["file_sha256"]:
+            errors.append(f"{observation['id']}: optional-local observation hash drifted")
+
+    expected_profile_by_observer = {
+        "OFFICIAL": target["observer_profiles"]["official_importer"],
+        "NANODA": target["observer_profiles"]["nanoda"],
+        "LEAN4LEAN": target["observer_profiles"]["lean4lean"],
+        "KIOTA": target["observer_profiles"]["kiota"],
+    }
+    actual_observers = {row["observer"] for row in lock["observer_configurations"]}
+    if actual_observers != OBSERVERS:
+        errors.append(f"observer configurations are not the exact four profiles: {sorted(actual_observers)}")
+    for observer in lock["observer_configurations"]:
+        profile = expected_profile_by_observer[observer["observer"]]
+        if observer["observer_id"] != profile["observer_id"]:
+            errors.append(f"{observer['observer']}: observer ID drifted from target lock")
+        if observer["lineage_group"] != profile["lineage_group"]:
+            errors.append(f"{observer['observer']}: lineage group drifted from target lock")
+        if observer["configuration"] != profile["configuration"]:
+            errors.append(f"{observer['observer']}: configuration drifted from target lock")
+        if observer["configuration_sha256"] != digest_json(observer["configuration"]):
+            errors.append(f"{observer['observer']}: configuration digest is stale")
+        entrypoint = source_by_id.get(observer["entrypoint_source_file_id"])
+        if entrypoint is None:
+            errors.append(f"{observer['observer']}: unknown entrypoint source")
+        elif entrypoint["locator_verification"]["mode"] != "TOKENS":
+            errors.append(f"{observer['observer']}: entrypoint lacks mechanical token verification")
+        for source_id in observer["configuration_source_file_ids"]:
+            if source_id not in source_by_id:
+                errors.append(f"{observer['observer']}: unknown configuration source {source_id}")
+        if observer["binary_observation_id"] not in optional_by_id:
+            errors.append(f"{observer['observer']}: binary observation is not content-bound")
+
+    for section_name in ("normative_documentation", "mechanized_results"):
+        section = lock[section_name]
+        if section["selection_status"] == "NONE_SELECTED_BEFORE_CATALOG_AUTHORITY_REVIEW" and section["records"]:
+            errors.append(f"{section_name}: none-selected state carries records")
+        if section["selection_status"] == "SELECTED" and not section["records"]:
+            errors.append(f"{section_name}: selected state has no records")
+
+    if lock["completion_boundary"]["catalog_entries_created"]:
+        errors.append("Milestone 6 crossed the pre-catalog boundary")
+    if lock["completion_boundary"]["authority_assigned"]:
+        errors.append("Milestone 6 assigned authority prematurely")
+    if lock["validation_modes"]["offline"].get("ignored_external_checkout_required") is not False:
+        errors.append("offline mode silently depends on an ignored external checkout")
+
+    if rendered_lock is None:
+        rendered_lock = load_renderer().render()
+    if lock != rendered_lock:
+        errors.append("source lock is not synchronized with its canonical renderer inputs")
+
+    counts = {
+        "optional_local_checked": optional_checked,
+        "optional_local_missing": optional_missing,
+    }
+    return errors, counts
+
+
+def github_slug(repository_url: str) -> str:
+    parsed = urllib.parse.urlparse(repository_url)
+    if parsed.scheme != "https" or parsed.netloc != "github.com":
+        raise ValueError(f"unsupported repository URL: {repository_url}")
+    slug = parsed.path.strip("/")
+    if slug.endswith(".git"):
+        slug = slug[:-4]
+    if slug.count("/") != 1:
+        raise ValueError(f"unsupported GitHub repository path: {slug}")
+    return slug
+
+
+def fetch_url(url: str) -> bytes:
+    request = urllib.request.Request(
+        url,
+        headers={"User-Agent": "Lean-Assurance-Lab-source-lock-verifier/1"},
+    )
+    with urllib.request.urlopen(request, timeout=60) as response:
+        return response.read()
+
+
+def verify_online_sources(
+    lock: dict[str, Any],
+    *,
+    fetcher: Callable[[str], bytes] = fetch_url,
+) -> tuple[list[str], dict[str, int]]:
+    errors: list[str] = []
+    repositories = {row["id"]: row for row in lock["repositories"]}
+    files_by_repository: dict[str, list[dict[str, Any]]] = {
+        repository_id: [] for repository_id in repositories
+    }
+    for source in lock["source_files"]:
+        files_by_repository.setdefault(source["repository_id"], []).append(source)
+
+    commits_checked = 0
+    source_files_checked = 0
+    locator_tokens_checked = 0
+    for repository_id, repository in repositories.items():
+        try:
+            slug = github_slug(repository["repository_url"])
+            revision = repository["revision"]
+            commit_url = f"https://api.github.com/repos/{slug}/commits/{revision}"
+            commit = json.loads(fetcher(commit_url).decode("utf-8"))
+            if commit.get("sha") != revision:
+                errors.append(f"{repository_id}: remote commit resolved to {commit.get('sha')!r}")
+            else:
+                commits_checked += 1
+            for source in files_by_repository.get(repository_id, []):
+                quoted_path = "/".join(urllib.parse.quote(part) for part in source["path"].split("/"))
+                raw_url = f"https://raw.githubusercontent.com/{slug}/{revision}/{quoted_path}"
+                content = fetcher(raw_url)
+                if sha256_bytes(content) != source["blob_sha256"]:
+                    errors.append(f"{source['id']}: remote raw-content SHA-256 mismatch")
+                    continue
+                source_files_checked += 1
+                if source["locator_verification"]["mode"] == "TOKENS":
+                    text = content.decode("utf-8")
+                    for token in source["locator_verification"]["tokens"]:
+                        if token not in text:
+                            errors.append(f"{source['id']}: locator token not found: {token}")
+                        else:
+                            locator_tokens_checked += 1
+        except (ValueError, KeyError, UnicodeDecodeError, json.JSONDecodeError, urllib.error.URLError) as exc:
+            errors.append(f"{repository_id}: online verification failed: {exc}")
+    return errors, {
+        "repository_revisions_checked": commits_checked,
+        "source_files_checked": source_files_checked,
+        "locator_tokens_checked": locator_tokens_checked,
+    }
+
+
+def validate_completion_record() -> list[str]:
+    if not COMPLETION_PATH.exists():
+        return [f"missing completion record: {COMPLETION_PATH.relative_to(ROOT)}"]
+    record = load_json(COMPLETION_PATH)
+    errors: list[str] = []
+    if record.get("status") != "PASS":
+        errors.append("Milestone 6 completion record is not PASS")
+    for name, binding in record.get("artifacts", {}).items():
+        path = ROOT / binding["path"]
+        if not path.is_file():
+            errors.append(f"completion record {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"completion record {name} hash is stale")
+    if record.get("completion_boundary", {}).get("next_authorized_milestone") != "Milestone 7 — Canonical Data First":
+        errors.append("completion record does not authorize exactly Milestone 7 next")
+    return errors
+
+
+def validate_all(
+    *,
+    require_completion: bool = True,
+    online: bool = False,
+) -> tuple[list[str], dict[str, Any]]:
+    lock = load_json(LOCK_PATH)
+    schema = load_json(SCHEMA_PATH)
+    target = load_json(TARGET_PATH)
+    closure = load_json(CLOSURE_PATH)
+    registry = load_json(REGISTRY_PATH)
+    errors, local_counts = validate_lock(lock, schema, target, closure, registry)
+    online_counts = {
+        "repository_revisions_checked": 0,
+        "source_files_checked": 0,
+        "locator_tokens_checked": 0,
+    }
+    if online and not errors:
+        online_errors, online_counts = verify_online_sources(lock)
+        errors.extend(online_errors)
+    if require_completion:
+        errors.extend(validate_completion_record())
+    summary = {
+        "mode": "ONLINE" if online else "OFFLINE",
+        "repositories": len(lock["repositories"]),
+        "source_files": len(lock["source_files"]),
+        "tracked_evidence": len(lock["tracked_evidence"]),
+        "generated_witnesses": len(lock["generated_witnesses"]),
+        "optional_local_observations": len(lock["optional_local_observations"]),
+        "observers": len(lock["observer_configurations"]),
+        "source_lock_sha256": sha256_file(LOCK_PATH),
+        **local_counts,
+        **online_counts,
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--online", action="store_true", help="also verify pinned GitHub revisions and source bytes")
+    parser.add_argument("--lock-only", action="store_true", help="skip the completion record while constructing the milestone")
+    parser.add_argument("--output", type=Path, help="write a durable verification result")
+    args = parser.parse_args()
+    errors, summary = validate_all(
+        require_completion=not args.lock_only,
+        online=args.online,
+    )
+    status = "FAIL" if errors else "PASS"
+    if args.output:
+        output_path = args.output if args.output.is_absolute() else ROOT / args.output
+        output_path.parent.mkdir(parents=True, exist_ok=True)
+        output_path.write_text(
+            json.dumps(
+                {
+                    "schema_version": 1,
+                    "verification_id": "ordinary-declaration-validation.source-lock-verification.v1",
+                    "verified_at": datetime.now().astimezone().isoformat(timespec="seconds"),
+                    "status": status,
+                    "command_mode": summary["mode"],
+                    "source_lock": {
+                        "path": str(LOCK_PATH.relative_to(ROOT)),
+                        "sha256": summary["source_lock_sha256"],
+                    },
+                    "transport": "GITHUB_COMMIT_API_AND_RAW_CONTENT" if args.online else "LOCAL_TRACKED_FILES_ONLY",
+                    "summary": summary,
+                    "errors": errors,
+                },
+                indent=2,
+                sort_keys=True,
+            ) + "\n",
+            encoding="utf-8",
+        )
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        print(json.dumps(summary, sort_keys=True))
+        return 1
+    print("declaration-validation source lock: PASS")
+    print(json.dumps(summary, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

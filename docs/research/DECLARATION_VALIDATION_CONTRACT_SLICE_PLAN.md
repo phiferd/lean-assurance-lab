@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 5 recorded
+- Status: active execution mandate; Milestones 0 through 6 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -38,6 +38,14 @@
   `scripts/validate-declaration-validation-milestone-5`
 - Milestone 5 record:
   results/research/declaration-validation-milestone-5.json
+- Milestone 6 source lock:
+  config/declaration-validation-source-lock.json
+- Milestone 6 offline validation command:
+  `scripts/validate-declaration-validation-source-lock`
+- Milestone 6 online verification command:
+  `scripts/validate-declaration-validation-source-lock --online`
+- Milestone 6 record:
+  results/research/declaration-validation-milestone-6.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -574,6 +582,32 @@ Do not silently depend on ignored local checker directories.
 Observer configuration should be content-bound where possible. Record the
 entrypoint, configuration digest, toolchain or build recipe, and binary digest
 when an existing behavioral claim depends on them.
+
+### Milestone 6 Completion — 2026-08-30
+
+The frozen `config/declaration-validation-source-lock.json` content-binds the
+full target tuple as nine repository/revision identities. It locks all 22
+Milestone 4 discovery sources plus 19 exporter, parser, observer-definition,
+toolchain, and build-recipe files; 19 tracked Lab evidence artifacts; 12
+existing witnesses; 18 optional local observations; and the exact four
+observer configurations. `blob_sha256` is explicitly the SHA-256 digest of raw
+file content, not a Git object ID.
+
+`scripts/validate-declaration-validation-source-lock` performs fresh-process
+offline validation without requiring the ignored `external/` checkout. It
+checks schema conformance, predecessor and tracked-file hashes, JSON locators,
+witness origins and stable-identity references, complete discovery-source
+coverage, observer configuration digests, and renderer synchronization.
+Optional local build artifacts are checked when present and reported missing
+without becoming offline prerequisites.
+
+Online mode verifies pinned revisions through the GitHub commit API and fetches
+raw source content by exact revision. The frozen live-verification record
+confirms 9 revisions, 41 source files, and 13 mechanically checked locator
+tokens. Normative-documentation and mechanized-result representations are
+present but explicitly empty: Milestone 6 does not promote any source to
+normative authority before per-identity review. No catalog entry, layer,
+authority status, soundness assessment, or coverage denominator was created.
 
 ## Milestone 7 — Canonical Data First
 
