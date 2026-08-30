@@ -1,0 +1,255 @@
+#!/usr/bin/env python3
+"""Validate the pinned declaration-validation semantic target profile offline."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_TARGET = ROOT / "config" / "declaration-validation-target.json"
+SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-target.schema.json"
+COMPLETION_RECORD_PATH = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-1.json"
+)
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    """Resolve the JSON Pointer subset used by evidence locators."""
+    current = document
+    if pointer == "":
+        return current
+    if not pointer.startswith("/"):
+        raise ValueError("pointer does not start with '/'")
+    for raw_token in pointer[1:].split("/"):
+        token = raw_token.replace("~1", "/").replace("~0", "~")
+        if isinstance(current, list):
+            try:
+                current = current[int(token)]
+            except (ValueError, IndexError) as error:
+                raise ValueError(f"invalid list index {token!r}") from error
+        elif isinstance(current, dict):
+            if token not in current:
+                raise ValueError(f"missing object key {token!r}")
+            current = current[token]
+        else:
+            raise ValueError(f"cannot descend through {type(current).__name__}")
+    return current
+
+
+def repo_path(raw_path: str) -> Path:
+    path = Path(raw_path)
+    return path if path.is_absolute() else ROOT / path
+
+
+def validate_target(target_path: Path) -> tuple[list[str], dict[str, Any]]:
+    errors: list[str] = []
+    schema = json.loads(SCHEMA_PATH.read_text(encoding="utf-8"))
+    target = json.loads(target_path.read_text(encoding="utf-8"))
+
+    validator = jsonschema.Draft202012Validator(
+        schema, format_checker=jsonschema.FormatChecker()
+    )
+    for error in sorted(validator.iter_errors(target), key=lambda item: list(item.absolute_path)):
+        location = "/" + "/".join(str(part) for part in error.absolute_path)
+        errors.append(f"schema {location}: {error.message}")
+
+    evidence = target.get("evidence_lock", [])
+    evidence_by_id: dict[str, dict[str, Any]] = {}
+    checked_required = 0
+    checked_optional = 0
+    missing_optional = 0
+    for item in evidence:
+        evidence_id = item.get("id")
+        if evidence_id in evidence_by_id:
+            errors.append(f"duplicate evidence id: {evidence_id}")
+            continue
+        evidence_by_id[evidence_id] = item
+        availability = item.get("availability")
+        if availability == "REMOTE_PIN":
+            continue
+        path = repo_path(item.get("path", ""))
+        if availability == "REQUIRED_OFFLINE":
+            checked_required += 1
+            try:
+                path.resolve().relative_to(ROOT.resolve())
+            except ValueError:
+                errors.append(f"required offline evidence is outside repository: {item.get('path')}")
+                continue
+            if not path.is_file():
+                errors.append(f"missing required offline evidence: {item.get('path')}")
+                continue
+        elif availability == "OPTIONAL_LOCAL_OBSERVATION":
+            if not path.is_file():
+                missing_optional += 1
+                continue
+            checked_optional += 1
+        else:
+            continue
+        actual_hash = sha256_file(path)
+        if actual_hash != item.get("sha256"):
+            errors.append(
+                f"evidence hash mismatch: {item.get('path')} "
+                f"(expected {item.get('sha256')}, got {actual_hash})"
+            )
+            continue
+        if item.get("json_pointers"):
+            try:
+                document = json.loads(path.read_text(encoding="utf-8"))
+            except (UnicodeDecodeError, json.JSONDecodeError) as error:
+                errors.append(f"cannot parse pointer-bearing evidence {item.get('path')}: {error}")
+                continue
+            for pointer in item["json_pointers"]:
+                try:
+                    resolve_pointer(document, pointer)
+                except ValueError as error:
+                    errors.append(f"invalid evidence pointer {item.get('path')}#{pointer}: {error}")
+
+    reference_sections = [
+        ("logical_target", target.get("logical_target", {})),
+        ("export_contract", target.get("export_contract", {})),
+        ("artifact_producer", target.get("artifact_producer", {})),
+    ]
+    reference_sections.extend(
+        (f"observer_profiles.{name}", profile)
+        for name, profile in target.get("observer_profiles", {}).items()
+    )
+    referenced_ids: set[str] = set()
+    for section_name, section in reference_sections:
+        for evidence_id in section.get("evidence_refs", []):
+            referenced_ids.add(evidence_id)
+            if evidence_id not in evidence_by_id:
+                errors.append(f"unknown evidence ref {evidence_id!r} in {section_name}")
+    for evidence_id in evidence_by_id:
+        if evidence_id not in referenced_ids:
+            errors.append(f"unreferenced evidence lock entry: {evidence_id}")
+
+    logical = target.get("logical_target", {})
+    export = target.get("export_contract", {})
+    producer = target.get("artifact_producer", {})
+    observers = target.get("observer_profiles", {})
+    official = observers.get("official_importer", {})
+    nanoda = observers.get("nanoda", {})
+    lean4lean = observers.get("lean4lean", {})
+    kiota = observers.get("kiota", {})
+
+    expected_observers = {"official_importer", "nanoda", "lean4lean", "kiota"}
+    if set(observers) != expected_observers:
+        errors.append("observer vector must contain exactly official_importer, nanoda, lean4lean, and kiota")
+    observer_ids = [profile.get("observer_id") for profile in observers.values()]
+    if len(observer_ids) != len(set(observer_ids)):
+        errors.append("observer ids are not unique")
+    if logical.get("target_id") in observer_ids:
+        errors.append("modeled judgment target id is conflated with an observer id")
+
+    logical_revision = logical.get("source", {}).get("revision")
+    official_revision = official.get("implementation", {}).get("revision")
+    producer_revision = producer.get("lean_revision")
+    if logical_revision != official_revision:
+        errors.append("official observer kernel revision does not match the pinned logical target revision")
+    if producer.get("source", {}).get("revision") != producer_revision:
+        errors.append("artifact producer source revision does not match lean_revision")
+    if producer_revision == logical_revision:
+        errors.append("artifact producer and logical target revisions were silently normalized")
+    if producer.get("lean_version") == official.get("implementation", {}).get("release_label", "").removeprefix("v"):
+        errors.append("artifact producer and official observer versions were silently normalized")
+
+    producer_exporter_revision = export.get("producer_exporter", {}).get("revision")
+    official_parser_revision = export.get("official_importer_parser", {}).get("revision")
+    configured_official_parser = official.get("configuration", {}).get("importer_parser_revision")
+    lean4lean_parser_revision = lean4lean.get("configuration", {}).get("importer_parser_revision")
+    if producer_exporter_revision == official_parser_revision:
+        errors.append("producer exporter and official importer parser revisions are conflated")
+    if official_parser_revision != configured_official_parser:
+        errors.append("official importer parser pin disagrees with export contract")
+    if len({producer_exporter_revision, official_parser_revision, lean4lean_parser_revision}) != 3:
+        errors.append("producer, official importer, and Lean4Lean parser revisions are not distinct")
+
+    arena_revisions = {
+        profile.get("arena_integration", {}).get("revision") for profile in observers.values()
+    }
+    if len(arena_revisions) != 1:
+        errors.append("observer profiles do not share one pinned Arena integration revision")
+    if lean4lean.get("lineage_group") != "LEAN4LEAN_DERIVED_FROM_OFFICIAL_CPP_KERNEL":
+        errors.append("Lean4Lean official-kernel lineage is not explicit")
+    if kiota.get("lineage_group") != "KIOTA_RUST_FROM_SCRATCH_NOT_NANODA_FORK":
+        errors.append("Kiota lineage classification is not explicit")
+    if nanoda.get("configuration", {}).get("num_threads") != 4:
+        errors.append("Nanoda profile is not the pinned four-thread Arena observer")
+    if nanoda.get("configuration", {}).get("unsafe_permit_all_axioms") is not True:
+        errors.append("Nanoda permissive axiom policy is not explicit")
+    if any(profile.get("semantic_role") != "EMPIRICAL_OBSERVER" for profile in observers.values()):
+        errors.append("one or more observer profiles are not classified as empirical observers")
+
+    nonclaims = "\n".join(target.get("nonclaims", [])).lower()
+    for required_phrase in ("normative", "majority", "official importer", "negative-coverage"):
+        if required_phrase not in nonclaims:
+            errors.append(f"nonclaims do not explicitly cover {required_phrase!r}")
+
+    completion_record_checked = False
+    if target_path.resolve() == DEFAULT_TARGET.resolve() and COMPLETION_RECORD_PATH.is_file():
+        completion_record_checked = True
+        completion = json.loads(COMPLETION_RECORD_PATH.read_text(encoding="utf-8"))
+        bindings = (
+            ("target_lock", DEFAULT_TARGET),
+            ("schema", SCHEMA_PATH),
+            ("validator", Path(__file__).resolve()),
+        )
+        for field, artifact_path in bindings:
+            recorded = completion.get(field, {})
+            try:
+                expected_path = artifact_path.relative_to(ROOT).as_posix()
+            except ValueError:
+                expected_path = str(artifact_path)
+            if recorded.get("path") != expected_path:
+                errors.append(f"completion record {field}.path is not {expected_path}")
+            actual_hash = sha256_file(artifact_path)
+            if recorded.get("sha256") != actual_hash:
+                errors.append(f"completion record {field}.sha256 does not match {expected_path}")
+        if completion.get("status") != "PASS":
+            errors.append("completion record status is not PASS")
+        if completion.get("target_lock", {}).get("profile_id") != target.get("profile_id"):
+            errors.append("completion record profile id does not match target lock")
+
+    summary = {
+        "completion_record_checked": completion_record_checked,
+        "evidence_entries": len(evidence),
+        "observer_profiles": len(observers),
+        "optional_local_evidence_checked": checked_optional,
+        "optional_local_evidence_missing": missing_optional,
+        "profile_id": target.get("profile_id"),
+        "required_offline_evidence_checked": checked_required,
+        "schema_sha256": sha256_file(SCHEMA_PATH),
+        "status": "PASS" if not errors else "FAIL",
+        "target_sha256": sha256_file(target_path),
+    }
+    return errors, summary
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("path", nargs="?", type=Path, default=DEFAULT_TARGET)
+    args = parser.parse_args()
+    target_path = args.path if args.path.is_absolute() else ROOT / args.path
+    errors, summary = validate_target(target_path)
+    if errors:
+        for error in sorted(errors):
+            print(error)
+        print(json.dumps(summary, indent=2, sort_keys=True))
+        return 1
+    print(json.dumps(summary, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

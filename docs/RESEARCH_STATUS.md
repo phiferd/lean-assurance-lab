@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-29
+Last updated: 2026-08-30
 
 ## How Status Is Tracked
 
@@ -927,26 +927,51 @@ prepared_external_action_drafts: 5
   `imax u (v + 1)` reject cases. The PR is open and mergeable as of 2026-08-29,
   not yet merged. Nanoda and Kiota implementation reports remain unpublished.
 
+### Frontier Transition — 2026-08-30
+
+- The human-approved
+  [Declaration Validation Contract Slice](research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md)
+  takes the deliberate-supersession path defined by its Milestone 0. This is a
+  planning-authority change, not a claim that the previous characterization
+  gate was completed.
+- `F-ASSURANCE-CLAIM-CHARACTERIZATION-VIEW` is superseded before its proposed
+  builder was implemented. Its two-kind model, evidence-fidelity requirements,
+  and prohibition on treating empirical observations as a semantic denominator
+  remain mandatory inputs to the replacement frontier.
+- `F-AXIOM-UNSAFE-DECLARATIONS` is absorbed as a bounded sub-question of the
+  declaration-validation slice. Its existing evidence and unresolved states
+  remain intact. This transition does not authorize a broad axiom campaign or
+  permit trust-policy behavior into the primary kernel-validity denominator.
+
 ### Active
 
-1. `F-AXIOM-UNSAFE-DECLARATIONS`: derive exact boundaries for ordinary axioms,
-   Nanoda's axiom allow/skip policy, and serialized `isUnsafe` declaration
-   flags. Separate configurable trust policy from kernel well-formedness and
-   compare other checkers only where the export contract is implementation-
-   independent.
-2. `F-ASSURANCE-CLAIM-CHARACTERIZATION-VIEW`: derive a research-only
-   known-rule characterization view mechanically from existing claim and matrix
-   artifacts. Each row must retain positive and negative evidence, isolation,
-   authority, semantic/contract layer, discovery provenance, the full checker
-   observation vector, disagreement state, unknowns, and recommended action.
-   The builder must fail closed on missing required links and preserve
-   normative-candidate obligations separately from empirical contract
-   scenarios. Success is a deterministic view over the currently factored
-   representative set with explicit source hashes; failure is any loss of
-   evidence fidelity or need for a third kind. This is not a semantic
-   denominator, coverage percentage, public conformance claim, or production
-   schema. Do not integrate RIPR or attempt semantics-directed reproduction
-   before this gate closes.
+1. `F-DECLARATION-VALIDATION-CONTRACT-SLICE`: execute the revised
+   [declaration-validation mandate](research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md).
+   The deliberate frontier transition and starting dirty-tree dispositions are
+   recorded in the
+   [Milestone 0 result](../results/research/declaration-validation-milestone-0.json).
+   Milestone 1 is complete: the
+   [semantic target lock](../config/declaration-validation-target.json) pins the
+   Lean 4.33.0 checked declaration-addition judgment separately from the Lean
+   4.29.1 artifact producer, the lean4export 3.1.0 producer/importer revisions,
+   and all four Arena observer profiles. The lock preserves Lean4Lean's official
+   C++ kernel lineage and the distinct parser revisions instead of treating
+   checker agreement or version labels as semantic authority. Its schema and
+   cross-field/evidence checks run with
+   `scripts/validate-declaration-validation-target`; completion details are in
+   the
+   [Milestone 1 result](../results/research/declaration-validation-milestone-1.json).
+   The next authorized work is Milestone 2's two-kind characterization model;
+   no candidate obligation or coverage denominator has yet been created.
+   Continue by preserving normative-candidate obligations separately from
+   empirical contract scenarios, exhausting a declared ordinary-declaration
+   discovery surface, and producing the content-addressed catalog, source lock,
+   decision trail, generated report, adversarial review, and frozen design for
+   the later Arena negative-coverage phase. Completion is the plan's validated,
+   frozen artifact set or an explicitly bounded unresolved result under one of
+   its stop conditions. This slice does not execute the broad Arena coverage
+   campaign, create a public conformance claim, or infer semantic authority from
+   checker agreement.
 
 ### Waiting
 

@@ -1,0 +1,286 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-target.schema.json",
+  "title": "Declaration Validation Semantic Target Lock",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "profile_id",
+    "recorded_at",
+    "status",
+    "logical_target",
+    "export_contract",
+    "artifact_producer",
+    "observer_profiles",
+    "cross_version_facts",
+    "identity_separation_assertions",
+    "evidence_lock",
+    "known_unknowns",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "profile_id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PINNED_WITH_EXPLICIT_CROSS_VERSION_PROFILE"},
+    "logical_target": {"$ref": "#/$defs/logicalTarget"},
+    "export_contract": {"$ref": "#/$defs/exportContract"},
+    "artifact_producer": {"$ref": "#/$defs/artifactProducer"},
+    "observer_profiles": {
+      "type": "object",
+      "required": ["official_importer", "nanoda", "lean4lean", "kiota"],
+      "properties": {
+        "official_importer": {"$ref": "#/$defs/observer"},
+        "nanoda": {"$ref": "#/$defs/observer"},
+        "lean4lean": {"$ref": "#/$defs/observer"},
+        "kiota": {"$ref": "#/$defs/observer"}
+      },
+      "additionalProperties": false
+    },
+    "cross_version_facts": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "identity_separation_assertions": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "evidence_lock": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"$ref": "#/$defs/evidence"}
+    },
+    "known_unknowns": {
+      "type": "array",
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 4,
+      "items": {"type": "string", "minLength": 1},
+      "uniqueItems": true
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{64}$"
+    },
+    "revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "sourcePin": {
+      "type": "object",
+      "required": ["repository_url", "revision"],
+      "properties": {
+        "repository_url": {"type": "string", "format": "uri"},
+        "revision": {"$ref": "#/$defs/revision"},
+        "release_label": {"type": "string", "minLength": 1},
+        "branch_or_input_ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "logicalTarget": {
+      "type": "object",
+      "required": [
+        "target_id",
+        "implementation_or_specification",
+        "semantic_role",
+        "source",
+        "modeled_judgment",
+        "authority_caveat",
+        "evidence_refs"
+      ],
+      "properties": {
+        "target_id": {"type": "string", "minLength": 1},
+        "implementation_or_specification": {
+          "const": "OFFICIAL_LEAN_KERNEL_IMPLEMENTATION"
+        },
+        "semantic_role": {"const": "VERSIONED_MODELED_JUDGMENT_TARGET"},
+        "source": {"$ref": "#/$defs/sourcePin"},
+        "modeled_judgment": {
+          "type": "object",
+          "required": [
+            "id",
+            "statement",
+            "entrypoints",
+            "environment_basis",
+            "included_phase",
+            "excluded_phases",
+            "slice_boundary"
+          ],
+          "properties": {
+            "id": {"const": "CHECKED_ORDINARY_DECLARATION_ENVIRONMENT_EXTENSION"},
+            "statement": {"type": "string", "minLength": 1},
+            "entrypoints": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1},
+              "uniqueItems": true
+            },
+            "environment_basis": {"type": "string", "minLength": 1},
+            "included_phase": {"type": "string", "minLength": 1},
+            "excluded_phases": {
+              "type": "array",
+              "minItems": 1,
+              "items": {"type": "string", "minLength": 1},
+              "uniqueItems": true
+            },
+            "slice_boundary": {"type": "string", "minLength": 1}
+          },
+          "additionalProperties": false
+        },
+        "authority_caveat": {"type": "string", "minLength": 1},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}
+      },
+      "additionalProperties": false
+    },
+    "exportContract": {
+      "type": "object",
+      "required": [
+        "format_name",
+        "format_version",
+        "producer_exporter",
+        "official_importer_parser",
+        "compatibility_scope",
+        "identity_caveat",
+        "evidence_refs"
+      ],
+      "properties": {
+        "format_name": {"const": "lean4export NDJSON"},
+        "format_version": {"type": "string", "minLength": 1},
+        "producer_exporter": {"$ref": "#/$defs/producerSourcePin"},
+        "official_importer_parser": {"$ref": "#/$defs/sourcePin"},
+        "compatibility_scope": {"type": "string", "minLength": 1},
+        "identity_caveat": {"type": "string", "minLength": 1},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}
+      },
+      "additionalProperties": false
+    },
+    "artifactProducer": {
+      "type": "object",
+      "required": [
+        "producer_id",
+        "lean_version",
+        "lean_revision",
+        "source",
+        "production_profile",
+        "evidence_refs"
+      ],
+      "properties": {
+        "producer_id": {"type": "string", "minLength": 1},
+        "lean_version": {"type": "string", "minLength": 1},
+        "lean_revision": {"$ref": "#/$defs/revision"},
+        "source": {"$ref": "#/$defs/sourcePin"},
+        "production_profile": {"type": "string", "minLength": 1},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}
+      },
+      "additionalProperties": false
+    },
+    "producerSourcePin": {
+      "type": "object",
+      "required": [
+        "repository_url",
+        "revision",
+        "upstream_declared_toolchain",
+        "arena_build_toolchain_override"
+      ],
+      "properties": {
+        "repository_url": {"type": "string", "format": "uri"},
+        "revision": {"$ref": "#/$defs/revision"},
+        "release_label": {"type": "string", "minLength": 1},
+        "branch_or_input_ref": {"type": "string", "minLength": 1},
+        "upstream_declared_toolchain": {"type": "string", "minLength": 1},
+        "arena_build_toolchain_override": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "observer": {
+      "type": "object",
+      "required": [
+        "observer_id",
+        "semantic_role",
+        "implementation",
+        "arena_integration",
+        "configuration",
+        "lineage_group",
+        "lineage_statement",
+        "authority_caveat",
+        "evidence_refs"
+      ],
+      "properties": {
+        "observer_id": {"type": "string", "minLength": 1},
+        "semantic_role": {"const": "EMPIRICAL_OBSERVER"},
+        "implementation": {"$ref": "#/$defs/sourcePin"},
+        "arena_integration": {
+          "type": "object",
+          "required": ["repository_url", "revision", "definition_path", "definition_sha256"],
+          "properties": {
+            "repository_url": {"type": "string", "format": "uri"},
+            "revision": {"$ref": "#/$defs/revision"},
+            "definition_path": {"type": "string", "minLength": 1},
+            "definition_sha256": {"$ref": "#/$defs/sha256"}
+          },
+          "additionalProperties": false
+        },
+        "configuration": {"type": "object", "minProperties": 1},
+        "lineage_group": {"type": "string", "pattern": "^[A-Z0-9_]+$"},
+        "lineage_statement": {"type": "string", "minLength": 1},
+        "authority_caveat": {"type": "string", "minLength": 1},
+        "evidence_refs": {"$ref": "#/$defs/evidenceRefs"}
+      },
+      "additionalProperties": false
+    },
+    "evidenceRefs": {
+      "type": "array",
+      "minItems": 1,
+      "items": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+      "uniqueItems": true
+    },
+    "evidence": {
+      "oneOf": [
+        {"$ref": "#/$defs/localEvidence"},
+        {"$ref": "#/$defs/remoteEvidence"}
+      ]
+    },
+    "localEvidence": {
+      "type": "object",
+      "required": ["id", "availability", "path", "sha256", "role", "claim_supported"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+        "availability": {"enum": ["REQUIRED_OFFLINE", "OPTIONAL_LOCAL_OBSERVATION"]},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "role": {"enum": ["TARGET_IDENTITY", "FORMAT_IDENTITY", "PRODUCER_IDENTITY", "OBSERVER_IDENTITY", "LINEAGE_CLASSIFICATION", "CROSS_VERSION_OBSERVATION"]},
+        "claim_supported": {"type": "string", "minLength": 1},
+        "json_pointers": {
+          "type": "array",
+          "items": {"type": "string", "pattern": "^/"},
+          "uniqueItems": true
+        }
+      },
+      "additionalProperties": false
+    },
+    "remoteEvidence": {
+      "type": "object",
+      "required": ["id", "availability", "repository_url", "revision", "path", "role", "claim_supported"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^[a-z0-9][a-z0-9.-]+$"},
+        "availability": {"const": "REMOTE_PIN"},
+        "repository_url": {"type": "string", "format": "uri"},
+        "revision": {"$ref": "#/$defs/revision"},
+        "path": {"type": "string", "minLength": 1},
+        "role": {"enum": ["TARGET_IDENTITY", "FORMAT_IDENTITY", "PRODUCER_IDENTITY", "OBSERVER_IDENTITY", "LINEAGE_CLASSIFICATION", "CROSS_VERSION_OBSERVATION"]},
+        "claim_supported": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,446 @@
+{
+  "schema_version": 1,
+  "profile_id": "ordinary-declaration-validation.lean4-4.33.0.arena-37f7525.v1",
+  "recorded_at": "2026-08-30T01:07:17-04:00",
+  "status": "PINNED_WITH_EXPLICIT_CROSS_VERSION_PROFILE",
+  "logical_target": {
+    "target_id": "lean4-4.33.0.checked-ordinary-declaration-addition",
+    "implementation_or_specification": "OFFICIAL_LEAN_KERNEL_IMPLEMENTATION",
+    "semantic_role": "VERSIONED_MODELED_JUDGMENT_TARGET",
+    "source": {
+      "repository_url": "https://github.com/leanprover/lean4",
+      "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "release_label": "v4.33.0"
+    },
+    "modeled_judgment": {
+      "id": "CHECKED_ORDINARY_DECLARATION_ENVIRONMENT_EXTENSION",
+      "statement": "For a pinned Lean.Kernel.Environment E and an ordinary declaration d in the bounded slice, checked kernel addition either rejects d or returns the extended checked environment E'.",
+      "entrypoints": [
+        "Lean.Kernel.Environment.addDeclCore",
+        "C++ environment::add with check=true via lean_add_decl"
+      ],
+      "environment_basis": "The checked kernel environment supplied immediately before d; importer construction and replay order are observer configuration, not implicit parts of this judgment.",
+      "included_phase": "Lean 4.33.0 checked kernel declaration addition for the ordinary-declaration kinds later frozen by the Milestone 4 discovery surface.",
+      "excluded_phases": [
+        "lean4export parsing and serialized-field reconstruction",
+        "export production by Lean 4.29.1",
+        "elaboration before export",
+        "unchecked declaration insertion",
+        "Arena outcome normalization",
+        "trust or safety policy outside the modeled checked-addition judgment"
+      ],
+      "slice_boundary": "Milestone 1 pins the versioned judgment identity. It does not yet establish any rule within that judgment or freeze the exact source-module discovery closure; those remain Milestones 2 through 4."
+    },
+    "authority_caveat": "Selecting this implementation revision as the modeled judgment does not make every implementation check a normative Lean rule. Normative authority must be qualified per candidate using the later evidence model.",
+    "evidence_refs": [
+      "lean-4.33-environment-interface",
+      "lean-kernel-source-pin",
+      "arena-official-definition",
+      "cross-validation-profile"
+    ]
+  },
+  "export_contract": {
+    "format_name": "lean4export NDJSON",
+    "format_version": "3.1.0",
+    "producer_exporter": {
+      "repository_url": "https://github.com/leanprover/lean4export",
+      "revision": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+      "branch_or_input_ref": "master as resolved by the Arena producer build",
+      "upstream_declared_toolchain": "leanprover/lean4:v4.34.0-rc2",
+      "arena_build_toolchain_override": "leanprover/lean4:v4.29.1"
+    },
+    "official_importer_parser": {
+      "repository_url": "https://github.com/leanprover/lean4export",
+      "revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+      "branch_or_input_ref": "master as resolved in the official observer lake manifest"
+    },
+    "compatibility_scope": "The profile covers Lab artifacts whose metadata says format 3.1.0, exporter 3.1.0, and Lean producer 4.29.1, as empirically consumed by the pinned observers and positive controls. This is not a claim of compatibility for every possible 3.1.0 stream.",
+    "identity_caveat": "The producer exporter revision and the official importer's parser revision are distinct pins despite both reporting format/exporter version 3.1.0. Parsing and reconstruction are not the modeled kernel declaration judgment.",
+    "evidence_refs": [
+      "producer-export-module",
+      "producer-export-parse-module",
+      "producer-exporter-built-toolchain",
+      "producer-exporter-source-pin",
+      "official-importer-manifest",
+      "cross-validation-profile"
+    ]
+  },
+  "artifact_producer": {
+    "producer_id": "lean4-4.29.1.arena-export-profile",
+    "lean_version": "4.29.1",
+    "lean_revision": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+    "source": {
+      "repository_url": "https://github.com/leanprover/lean4",
+      "revision": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+      "release_label": "v4.29.1"
+    },
+    "production_profile": "Lean 4.29.1 modules exported by the Arena-built lean4export producer at cacf989, with its lean-toolchain overridden to v4.29.1; artifact metadata remains the authority for any individual stream.",
+    "evidence_refs": [
+      "cross-validation-profile",
+      "producer-export-module"
+    ]
+  },
+  "observer_profiles": {
+    "official_importer": {
+      "observer_id": "arena-official-importer.lean4-4.33.0",
+      "semantic_role": "EMPIRICAL_OBSERVER",
+      "implementation": {
+        "repository_url": "https://github.com/leanprover/lean4",
+        "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+        "release_label": "v4.33.0"
+      },
+      "arena_integration": {
+        "repository_url": "https://github.com/leanprover/lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+        "definition_path": "checkers/official.yaml",
+        "definition_sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a"
+      },
+      "configuration": {
+        "built_toolchain": "leanprover/lean4:v4.33.0",
+        "template_toolchain_before_build_override": "leanprover/lean4:v4.33.0-rc2",
+        "importer_parser_repository": "https://github.com/leanprover/lean4export",
+        "importer_parser_revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+        "command": ".lake/build/bin/kernel INPUT",
+        "parse_entrypoint": "Export.parseStream",
+        "kernel_environment": "Lean.mkEmptyEnvironment",
+        "replay_behavior": "Erase Quot.mk, Quot.lift, and Quot.ind from the parsed constMap, then replay remaining declarations in the parser-provided map order.",
+        "outcome_role": "Designated reference observer under Lab policy; not a majority oracle."
+      },
+      "lineage_group": "LEAN4_OFFICIAL_CPP_KERNEL_V4_33_0",
+      "lineage_statement": "Arena wrapper and lean4export importer/reconstructor feeding the official Lean 4.33.0 checked kernel.",
+      "authority_caveat": "The observer's acceptance or rejection establishes behavior of this composite profile. It does not alone establish normativity, and importer reconstruction must not be attributed automatically to the kernel judgment.",
+      "evidence_refs": [
+        "arena-official-definition",
+        "arena-official-main",
+        "official-template-toolchain",
+        "official-built-toolchain",
+        "official-importer-manifest",
+        "official-observer-binary",
+        "cross-validation-profile",
+        "validator-catalog"
+      ]
+    },
+    "nanoda": {
+      "observer_id": "arena-nanoda.6ae1f0c.default-four-thread",
+      "semantic_role": "EMPIRICAL_OBSERVER",
+      "implementation": {
+        "repository_url": "https://github.com/ammkrn/nanoda_lib",
+        "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+        "branch_or_input_ref": "master"
+      },
+      "arena_integration": {
+        "repository_url": "https://github.com/leanprover/lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+        "definition_path": "checkers/nanoda.yaml",
+        "definition_sha256": "0bde2416430191feb9d08517e5c34c447e98495645864caa853ce249fb7ed760"
+      },
+      "configuration": {
+        "command": "target/release/nanoda_bin config.json < INPUT",
+        "use_stdin": true,
+        "nat_extension": true,
+        "string_extension": true,
+        "unpermitted_axiom_hard_error": false,
+        "unsafe_permit_all_axioms": true,
+        "num_threads": 4,
+        "profile_scope": "Arena default observer profile, not the separate one-thread coverage-instrumented profile."
+      },
+      "lineage_group": "NANODA_RUST_IMPLEMENTATION",
+      "lineage_statement": "Rust alternative checker identified by its own repository and pinned revision. No implementation agreement involving this observer is treated as normative evidence by itself.",
+      "authority_caveat": "Nanoda observations characterize this exact configuration, including permissive axiom policy and four-thread execution. They are not a semantic vote.",
+      "evidence_refs": [
+        "arena-nanoda-definition",
+        "nanoda-generated-config",
+        "nanoda-observer-binary"
+      ]
+    },
+    "lean4lean": {
+      "observer_id": "arena-lean4lean.ecb3b66",
+      "semantic_role": "EMPIRICAL_OBSERVER",
+      "implementation": {
+        "repository_url": "https://github.com/digama0/lean4lean",
+        "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+        "branch_or_input_ref": "arena"
+      },
+      "arena_integration": {
+        "repository_url": "https://github.com/leanprover/lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+        "definition_path": "checkers/lean4lean.yaml",
+        "definition_sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927"
+      },
+      "configuration": {
+        "command": ".lake/build/bin/lean4lean --import INPUT",
+        "built_toolchain_label": "leanprover/lean4:v4.33.0-rc2",
+        "observed_toolchain_revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+        "importer_parser_repository": "https://github.com/leanprover/lean4export",
+        "importer_parser_revision": "a3e35a584f59b390667db7269cd37fca8575e4bf",
+        "importer_parser_input_ref": "v4.30.0"
+      },
+      "lineage_group": "LEAN4LEAN_DERIVED_FROM_OFFICIAL_CPP_KERNEL",
+      "lineage_statement": "The pinned Arena definition says Lean4Lean is derived directly from the official C++ kernel and likely shares some implementation bugs; it is not counted as an independent vote.",
+      "authority_caveat": "No Lean4Lean metatheory result is designated as normative evidence by this target lock. Any later mechanized citation must pin the exact theorem, assumptions, and relation to the modeled judgment.",
+      "evidence_refs": [
+        "arena-lean4lean-definition",
+        "lean4lean-manifest",
+        "lean4lean-toolchain",
+        "lean4lean-observer-binary",
+        "cross-validation-profile"
+      ]
+    },
+    "kiota": {
+      "observer_id": "arena-kiota.58e8636",
+      "semantic_role": "EMPIRICAL_OBSERVER",
+      "implementation": {
+        "repository_url": "https://github.com/sankalpsthakur/kiota",
+        "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+        "release_label": "0.1.0",
+        "branch_or_input_ref": "main"
+      },
+      "arena_integration": {
+        "repository_url": "https://github.com/leanprover/lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+        "definition_path": "checkers/kiota.yaml",
+        "definition_sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f"
+      },
+      "configuration": {
+        "command": "timeout 3600s ./target/release/kiota INPUT",
+        "build_profile": "cargo release",
+        "timeout_seconds": 3600,
+        "reconstruction_note": "Arena description says Kiota re-derives K-likeness and iota instead of trusting those export fields."
+      },
+      "lineage_group": "KIOTA_RUST_FROM_SCRATCH_NOT_NANODA_FORK",
+      "lineage_statement": "The pinned Arena definition describes Kiota as a from-scratch Rust kernel and not a Nanoda fork. This is an implementation-lineage classification, not semantic authority.",
+      "authority_caveat": "Kiota observations characterize this exact revision and configuration. Disagreement remains empirical unless independently adjudicated.",
+      "evidence_refs": [
+        "arena-kiota-definition",
+        "kiota-observer-binary",
+        "cross-validation-profile"
+      ]
+    }
+  },
+  "cross_version_facts": [
+    "Primary Lab export artifacts in this profile report Lean 4.29.1 at revision f72c35b and format/exporter 3.1.0.",
+    "The designated official observer runs the Lean 4.33.0 checked kernel at revision d8b1897.",
+    "The producer exporter checkout is cacf989, while the official importer's lean4export parser checkout is f297dfe.",
+    "Lean4Lean's toolchain label is v4.33.0-rc2 while the observed Lean commit is d8b1897; the label is preserved rather than normalized to v4.33.0.",
+    "Lean4Lean resolves a third lean4export parser revision, a3e35a5 from input ref v4.30.0.",
+    "The ordinary Nanoda observer uses four threads; separate coverage artifacts that use one thread are not interchangeable with this profile."
+  ],
+  "identity_separation_assertions": [
+    "logical_target.target_id is the checked declaration-addition judgment, not an importer executable identity.",
+    "observer_profiles.official_importer includes parsing, reconstruction, empty-environment construction, and replay around the official kernel.",
+    "export_contract.producer_exporter is distinct from export_contract.official_importer_parser.",
+    "artifact_producer identifies the Lean version that produced a stream and is distinct from every observer version.",
+    "An observer lineage group describes implementation ancestry only and carries no authority vote."
+  ],
+  "evidence_lock": [
+    {
+      "id": "cross-validation-profile",
+      "availability": "REQUIRED_OFFLINE",
+      "path": "results/cross-validation/m6-nonprop-theorem/results.json",
+      "sha256": "a756733a33c631dc17ec675da7a445da159020e2f8efc395f41fd181cf81bd0b",
+      "role": "CROSS_VERSION_OBSERVATION",
+      "claim_supported": "Binds representative 4.29.1/3.1.0 artifact metadata to pinned official, Kiota, and Lean4Lean observer identities.",
+      "json_pointers": [
+        "/artifact/metadata",
+        "/validators/0/compatibility/checker_identity",
+        "/validators/1/compatibility/checker_identity",
+        "/validators/2/compatibility/checker_identity"
+      ]
+    },
+    {
+      "id": "validator-catalog",
+      "availability": "REQUIRED_OFFLINE",
+      "path": "config/validators.json",
+      "sha256": "c391daf1cb5cf63e11bae43453ca9577e66daeeae150014256f531ef9e8e4da9",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Records current Lab compatibility policy and pinned official, Kiota, and Lean4Lean profiles.",
+      "json_pointers": [
+        "/policy",
+        "/validators"
+      ]
+    },
+    {
+      "id": "lean-4.33-environment-interface",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0/src/lean/Lean/Environment.lean",
+      "sha256": "ee364e4788ce0560c87f621eeb3c4c3dfec62e8db4e15e099fd80e6adc533b86",
+      "role": "TARGET_IDENTITY",
+      "claim_supported": "Installed Lean 4.33.0 interface exposes checked addDeclCore via lean_add_decl and separately exposes unchecked insertion."
+    },
+    {
+      "id": "arena-official-definition",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/official.yaml",
+      "sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Pins the official observer build override and execution command."
+    },
+    {
+      "id": "arena-official-main",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/official-v4.33.0/Main.lean",
+      "sha256": "f0c209172f79e2b0b6599f7acc989e15a158f4118a6ddab0a567773b75f333bb",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Records official importer parse, empty-environment, Quot erasure, and replay behavior."
+    },
+    {
+      "id": "official-template-toolchain",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/official-v4.33.0/lean-toolchain",
+      "sha256": "0d3c76ccd8772d8bcbe207241421a760312b71a6aa82f84194391fdf5cb026d6",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Preserves the official observer template's v4.33.0-rc2 label before the Arena build override."
+    },
+    {
+      "id": "official-built-toolchain",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/lean-toolchain",
+      "sha256": "302cd63c54178885b89e669f33b38f12f4dd7ae7e5cac537b3203e3768d8fb2b",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally built official observer's v4.33.0 toolchain override."
+    },
+    {
+      "id": "official-importer-manifest",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/lake-manifest.json",
+      "sha256": "91cf35681c65b549cfb2e86e2af9d2012f6ddadcc9d7dc9631a2496f6d7ae076",
+      "role": "FORMAT_IDENTITY",
+      "claim_supported": "Pins the official observer's lean4export parser dependency to f297dfe."
+    },
+    {
+      "id": "official-observer-binary",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+      "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally observed official importer executable."
+    },
+    {
+      "id": "producer-export-module",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/Export.lean",
+      "sha256": "1c60d571dc24bfb99e7cbb218d8d489919bbc871238f6db9c76248521fbea998",
+      "role": "PRODUCER_IDENTITY",
+      "claim_supported": "Content-binds the locally observed producer exporter module declaring format 3.1.0."
+    },
+    {
+      "id": "producer-export-parse-module",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/Export/Parse.lean",
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+      "role": "FORMAT_IDENTITY",
+      "claim_supported": "Content-binds the corresponding producer checkout's parser module without treating it as the official observer parser."
+    },
+    {
+      "id": "producer-exporter-built-toolchain",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/lean-toolchain",
+      "sha256": "7dc000621e0046d1aada809e2b7177e64454645cf4c741e9daaf79c99ec2e7a2",
+      "role": "PRODUCER_IDENTITY",
+      "claim_supported": "Content-binds the Arena producer checkout's v4.29.1 toolchain override."
+    },
+    {
+      "id": "arena-nanoda-definition",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/nanoda.yaml",
+      "sha256": "0bde2416430191feb9d08517e5c34c447e98495645864caa853ce249fb7ed760",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Pins Nanoda revision, four-thread configuration, extension settings, axiom policy, and command."
+    },
+    {
+      "id": "nanoda-generated-config",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/config.json",
+      "sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally generated default Arena Nanoda configuration."
+    },
+    {
+      "id": "nanoda-observer-binary",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+      "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally observed default release Nanoda executable."
+    },
+    {
+      "id": "arena-lean4lean-definition",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/lean4lean.yaml",
+      "sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927",
+      "role": "LINEAGE_CLASSIFICATION",
+      "claim_supported": "Pins Lean4Lean revision and records that it is derived directly from the official C++ kernel and likely shares implementation bugs."
+    },
+    {
+      "id": "lean4lean-manifest",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/lean4lean/src/lake-manifest.json",
+      "sha256": "d84781a6612954d175b39cca5a08910e2d99b5a88b0462a374323f1b713c74a5",
+      "role": "FORMAT_IDENTITY",
+      "claim_supported": "Pins Lean4Lean's lean4export dependency to a3e35a5 from v4.30.0."
+    },
+    {
+      "id": "lean4lean-toolchain",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/lean4lean/src/lean-toolchain",
+      "sha256": "0d3c76ccd8772d8bcbe207241421a760312b71a6aa82f84194391fdf5cb026d6",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Preserves the v4.33.0-rc2 toolchain label used by the pinned Lean4Lean observer."
+    },
+    {
+      "id": "lean4lean-observer-binary",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+      "sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally observed Lean4Lean executable."
+    },
+    {
+      "id": "arena-kiota-definition",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/checkers/kiota.yaml",
+      "sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f",
+      "role": "LINEAGE_CLASSIFICATION",
+      "claim_supported": "Pins Kiota revision, command, timeout, and the Arena's from-scratch/not-a-Nanoda-fork lineage statement."
+    },
+    {
+      "id": "kiota-observer-binary",
+      "availability": "OPTIONAL_LOCAL_OBSERVATION",
+      "path": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+      "sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+      "role": "OBSERVER_IDENTITY",
+      "claim_supported": "Content-binds the locally observed Kiota executable."
+    },
+    {
+      "id": "lean-kernel-source-pin",
+      "availability": "REMOTE_PIN",
+      "repository_url": "https://github.com/leanprover/lean4",
+      "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "path": "src/kernel/environment.cpp",
+      "role": "TARGET_IDENTITY",
+      "claim_supported": "Pins the implementation source behind the modeled checked declaration-addition judgment for later online source-lock verification."
+    },
+    {
+      "id": "producer-exporter-source-pin",
+      "availability": "REMOTE_PIN",
+      "repository_url": "https://github.com/leanprover/lean4export",
+      "revision": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+      "path": "Export.lean",
+      "role": "PRODUCER_IDENTITY",
+      "claim_supported": "Pins the producer exporter source revision separately from importer parser revisions."
+    }
+  ],
+  "known_unknowns": [
+    "The exact ordinary-declaration kinds and source-module discovery closure are intentionally deferred to Milestone 4.",
+    "This target lock does not yet adjudicate which discovered checks are normative, reconstruction, trust policy, implementation policy, or empirical-only scenarios.",
+    "Full online verification of every remote source pin and source blob is deferred to the Milestone 6 source lock."
+  ],
+  "nonclaims": [
+    "No implementation check is established as a normative obligation by this target lock.",
+    "The official importer is not asserted to be semantically identical to the official Lean kernel judgment.",
+    "Checker agreement is not an authority rule or majority oracle.",
+    "Lean4Lean is not treated as independent of the official C++ kernel lineage.",
+    "Format version equality does not imply exporter or parser source identity.",
+    "No Arena negative-coverage denominator is created by this milestone."
+  ]
+}
