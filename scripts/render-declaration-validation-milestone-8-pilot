@@ -51,7 +51,7 @@ def render(pilot: dict[str, Any] | None = None) -> str:
         f"- Bound authority registry: `{pilot['artifact_bindings']['approved_authority_sources']['registry_id']}`",
         f"- M4 site dispositions: {len(pilot['site_dispositions'])}",
         "",
-        "This is the separately reviewable five-entry candidate batch authorized before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.",
+        "This is the reviewed, historical five-entry candidate batch preserved before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.",
         "",
         "## Selection",
         "",
@@ -114,6 +114,12 @@ def render(pilot: dict[str, Any] | None = None) -> str:
         f"The repaired pilot content-binds the empty historical registry snapshot at `{pilot['artifact_bindings']['approved_authority_sources']['path']}` (SHA-256 `{pilot['artifact_bindings']['approved_authority_sources']['sha256']}`). It also preserves the pre-hardening pilot provenance record at `{pilot['predecessor_pilot']['path']}`.",
         "",
         "A future registry successor must be separately approved against its predecessor before a later catalog can bind it; this pilot neither approves a source nor selects one.",
+        "",
+        "## Historical Boundary",
+        "",
+        f"The pilot predecessor is the immutable M7 historical attestation at `{pilot['predecessor_catalog']['attestation_path']}` (SHA-256 `{pilot['predecessor_catalog']['attestation_sha256']}`), specifically its `{pilot['predecessor_catalog']['artifact']}` artifact. It does not read the mutable current catalog path.",
+        "",
+        "The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are resolved from exact Git blobs at the pilot repair commit. Future M8 catalog evolution therefore cannot re-interpret this pilot through later catalog or schema bytes.",
         "",
     ])
 

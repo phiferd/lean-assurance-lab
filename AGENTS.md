@@ -41,6 +41,14 @@ subsequent milestone unless durable research state authorizes it.
 - Never weaken an assurance gate merely to make work pass.
 - When an invariant can be mechanically checked, enforce it in schemas,
   validators, tests, or milestone gates rather than relying on instructions.
+- Before editing an artifact marked frozen or historical, stop. Create or
+  evolve an explicit successor, or use the repository's historical-binding
+  mechanism; never regenerate an earlier milestone merely to make a later one
+  pass.
+- When crossing a milestone boundary, run the applicable historical-transition
+  regression in addition to the milestone validators. The transition must prove
+  that historical attestations still validate unchanged against their bound
+  content while the current successor artifact changes.
 
 For declaration-validation catalog entries, authority/evidence adjudication,
 declaration-validation evidence locks, or M8/M9 declaration-validation work,

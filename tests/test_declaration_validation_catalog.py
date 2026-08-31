@@ -38,8 +38,6 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         cls.authority_schema = module.load_json(module.AUTHORITY_SCHEMA_PATH)
         cls.decisions = module.load_json(module.DECISIONS_PATH)
         cls.decisions_schema = module.load_json(module.DECISIONS_SCHEMA_PATH)
-        cls.freeze = module.load_json(module.FREEZE_PATH)
-        cls.freeze_schema = module.load_json(module.FREEZE_SCHEMA_PATH)
         cls.target = module.load_json(module.TARGET_PATH)
         cls.model = module.load_json(module.MODEL_PATH)
         cls.identities_document = module.load_json(module.IDENTITY_PATH)
@@ -135,8 +133,6 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.authority_schema,
             self.decisions if decisions is None else decisions,
             self.decisions_schema,
-            self.freeze,
-            self.freeze_schema,
             self.target,
             self.model,
             self.identities_document,
@@ -295,7 +291,6 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.entry_schema,
             self.authority_schema,
             self.decisions_schema,
-            self.freeze_schema,
             self.evidence_lock_schema,
             self.approved_authority_sources_schema,
         ):
@@ -339,12 +334,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         ):
             self.assertIn(heading, report)
 
-    def test_freeze_is_deterministic_acyclic_and_does_not_bind_itself(self):
-        renderer = module.load_module("catalog_freeze_test", module.FREEZE_RENDERER_PATH)
-        self.assertEqual(renderer.render(), self.freeze)
-        self.assertEqual(module.validate_freeze(self.freeze), [])
-        paths = {binding["path"] for binding in self.freeze["artifacts"].values()}
-        self.assertNotIn(str(module.FREEZE_PATH.relative_to(ROOT)), paths)
+    def test_historical_m7_attestation_replaces_mutable_freeze_rendering(self):
+        self.assertEqual(module.validate_historical_m7_attestation(), [])
 
     def test_valid_normative_fixture_satisfies_established_rule(self):
         catalog = self.populated_catalog(self.normative_wrapper())
@@ -1145,13 +1136,14 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertTrue(any("before snapshot is missing" in item for item in errors))
         self.assertFalse(any("catalog_hash_after is not the supplied catalog" in item for item in errors))
 
-    def test_fake_pass_completion_record_without_artifacts_is_rejected(self):
-        errors = module.validate_completion_record(
-            {"schema_version": 2, "status": "PASS"},
-            rendered={},
-            run_tests=False,
+    def test_historical_m7_attestation_rejects_missing_completion_artifact(self):
+        historical = module.load_module(
+            "catalog_history_test", module.HISTORICAL_VALIDATOR_PATH
         )
-        self.assertTrue(any("completion record schema" in item for item in errors))
+        attestation = historical.load_json(historical.M7_ATTESTATION_PATH)
+        del attestation["artifacts"]["completion_record"]
+        errors = historical.validate_m7_attestation(attestation)
+        self.assertTrue(any("artifact set is not exact" in item for item in errors))
 
 
 if __name__ == "__main__":

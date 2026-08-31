@@ -137,6 +137,13 @@ A fresh process should be able to inspect the repository and determine the
 current assurance state, the evidence behind it, and the work still unresolved.
 Reproduction is part of the product, not an optional afterthought.
 
+### Frozen History Is Immutable
+
+Frozen or historical research artifacts retain their exact meaning and bytes.
+Later work evolves through explicit successors or content-addressed historical
+bindings; it must never reinterpret a historical claim against whatever bytes
+currently occupy a mutable path.
+
 ### Community Participation With Standards
 
 The project should welcome contributions from the Lean community and adjacent

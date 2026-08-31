@@ -889,6 +889,12 @@ complete, or proceed to Milestone 9 on the basis of that pilot. After review,
 full M8 completion requires the exact disposition vector for all 30 frozen
 identities accepted by `scripts/validate-declaration-validation-catalog`.
 
+The M7→M8 transition follows the repository-wide frozen-history invariant.
+M8 may advance the canonical catalog only when the immutable M7 attestation and
+the repaired five-entry pilot both validate unchanged under the
+historical-transition regression; later catalog or schema bytes must not be
+used to reinterpret either predecessor.
+
 The frozen stable semantic identities and their denotations must not drift.
 Checker observations must be derived from the structured, content-bound result
 evidence required by the catalog validator. While the current gate is in
@@ -898,9 +904,11 @@ Catalog adjudication may not extend the frozen approved-authority-source
 registry. Lack of qualified normative support must remain `PROVISIONAL` or
 `UNRESOLVED` with the required unmet requirement or blocker; it must not be
 converted into invented authority. The M7 evidence-lock root is immutable: M8
-uses a new content-bound sequence-2 successor. These requirements are enforced
-by the canonical schemas, validators, tests, and freeze/report generation
-paths; this plan does not substitute prose for those gates.
+begins with a content-bound sequence-2 successor, and the repaired pilot binds
+its explicit sequence-3 repair successor rather than rewriting either earlier
+lock. These requirements are enforced by the canonical schemas, validators,
+tests, and freeze/report generation paths; this plan does not substitute prose
+for those gates.
 
 Inspect the declared ordinary-declaration discovery surface.
 

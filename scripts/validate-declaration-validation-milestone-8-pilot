@@ -14,10 +14,14 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT_PATH = ROOT / "config" / "declaration-validation-milestone-8-pilot.json"
-PILOT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-pilot.schema.json"
+PILOT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-pilot.v2.schema.json"
 CATALOG_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
 REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-pilot"
 REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
+M8_PILOT_COMMIT = "a9c52cc334886cebbeb8d38e47454c02b893613a"
+FROZEN_PILOT_SCHEMA_SHA256 = "c37bd9f3bbf9a7ff71848f632b35cb70d727aa57118c97e6d342e20d51fa881d"
+M7_HISTORY_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-historical.json"
 FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH = (
     ROOT / "config" / "declaration-validation-approved-authority-sources" / "m7-pre-m8.json"
 )
@@ -29,19 +33,25 @@ EXPECTED_IDS = {
     "EXPR.LET.VALUE_TYPE_MATCH",
     "SCENARIO.AXIOM.SAFETY_FLAG",
 }
-EXPECTED_BINDINGS = {
-    "authority_rules": ROOT / "config" / "declaration-validation-authority-rules.json",
-    "approved_authority_sources_schema": ROOT / "schemas" / "declaration-validation-approved-authority-sources.schema.json",
-    "catalog_schema": ROOT / "schemas" / "declaration-validation-catalog.schema.json",
-    "characterization_model": ROOT / "config" / "declaration-validation-characterization-model.json",
-    "discovery_closure": ROOT / "config" / "declaration-validation-discovery-closure.json",
-    "entry_schema": ROOT / "schemas" / "declaration-validation-characterization-entry.schema.json",
-    "evidence_lock": ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-8-pilot-repair.json",
-    "evidence_lock_schema": ROOT / "schemas" / "declaration-validation-evidence-lock.schema.json",
-    "identity_registry": ROOT / "config" / "declaration-validation-identity-registry.json",
-    "semantic_target": ROOT / "config" / "declaration-validation-target.json",
-    "source_lock": ROOT / "config" / "declaration-validation-source-lock.json",
+EXPECTED_BINDING_PATHS = {
+    "authority_rules": "config/declaration-validation-authority-rules.json",
+    "approved_authority_sources": "config/declaration-validation-approved-authority-sources/m7-pre-m8.json",
+    "approved_authority_sources_schema": "schemas/declaration-validation-approved-authority-sources.schema.json",
+    "catalog_schema": "schemas/declaration-validation-catalog.schema.json",
+    "characterization_model": "config/declaration-validation-characterization-model.json",
+    "discovery_closure": "config/declaration-validation-discovery-closure.json",
+    "entry_schema": "schemas/declaration-validation-characterization-entry.schema.json",
+    "evidence_lock": "config/declaration-validation-evidence-locks/milestone-8-pilot-repair.json",
+    "evidence_lock_schema": "schemas/declaration-validation-evidence-lock.schema.json",
+    "identity_registry": "config/declaration-validation-identity-registry.json",
+    "prior_identity_decisions": "results/research/declaration-validation-milestone-5-decisions.json",
+    "semantic_target": "config/declaration-validation-target.json",
+    "source_lock": "config/declaration-validation-source-lock.json",
 }
+EXPECTED_EVIDENCE_PREDECESSORS = [
+    "config/declaration-validation-evidence-locks/milestone-8-pilot.json",
+    "config/declaration-validation-evidence-locks/milestone-7.json",
+]
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -55,6 +65,7 @@ def load_module(name: str, path: Path) -> Any:
 
 
 catalog = load_module("declaration_m8_pilot_catalog_validator", CATALOG_VALIDATOR_PATH)
+history = load_module("declaration_m8_pilot_history_validator", HISTORICAL_VALIDATOR_PATH)
 
 
 def load_json(path: Path) -> dict[str, Any]:
@@ -65,53 +76,102 @@ def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
 
 
+def bound_json(
+    binding: dict[str, Any], *, label: str, expected_path: str | None = None
+) -> tuple[dict[str, Any] | None, list[str]]:
+    errors: list[str] = []
+    if expected_path is not None and binding.get("path") != expected_path:
+        errors.append(f"{label} path is not the frozen pilot path")
+    document, blob_errors = history.historical_json(
+        binding, label=label, expected_commit=M8_PILOT_COMMIT
+    )
+    errors.extend(blob_errors)
+    return document, errors
+
+
+def historical_predecessor_catalog(
+    pilot: dict[str, Any],
+) -> tuple[dict[str, Any] | None, list[str]]:
+    errors: list[str] = []
+    predecessor = pilot["predecessor_catalog"]
+    if predecessor["attestation_path"] != str(M7_HISTORY_PATH.relative_to(ROOT)):
+        return None, ["pilot predecessor catalog must use the immutable M7 historical attestation"]
+    if predecessor["attestation_sha256"] != sha256_file(M7_HISTORY_PATH):
+        errors.append("pilot predecessor historical-attestation hash is stale")
+    attestation = load_json(M7_HISTORY_PATH)
+    errors.extend(history.validate_m7_attestation(attestation))
+    if predecessor["artifact"] != "catalog":
+        errors.append("pilot predecessor historical artifact is not the M7 catalog")
+        return None, errors
+    catalog_binding = attestation["artifacts"]["catalog"]
+    document, binding_errors = history.historical_json(
+        catalog_binding,
+        label="pilot predecessor M7 catalog",
+        expected_commit=attestation["historical_commit"],
+    )
+    errors.extend(binding_errors)
+    return document, errors
+
+
 def validate_document(
     pilot: dict[str, Any] | None = None,
     *,
     check_generated: bool = True,
 ) -> list[str]:
     pilot = load_json(PILOT_PATH) if pilot is None else pilot
+    if sha256_file(PILOT_SCHEMA_PATH) != FROZEN_PILOT_SCHEMA_SHA256:
+        return ["historical Milestone 8 pilot schema bytes changed"]
     errors = catalog.schema_errors(pilot, load_json(PILOT_SCHEMA_PATH), "Milestone 8 pilot")
     if errors:
         return errors
 
-    if pilot["predecessor_catalog"]["path"] != "config/declaration-validation-catalog.json":
-        errors.append("pilot predecessor catalog path is not canonical")
-    elif pilot["predecessor_catalog"]["sha256"] != sha256_file(catalog.CATALOG_PATH):
-        errors.append("pilot predecessor catalog hash is stale")
+    predecessor_catalog, predecessor_errors = historical_predecessor_catalog(pilot)
+    errors.extend(predecessor_errors)
+    predecessor_pilot, prior_pilot_errors = bound_json(
+        pilot["predecessor_pilot"],
+        label="pilot pre-hardening provenance",
+        expected_path="results/research/declaration-validation-milestone-8-pilot-pre-hardening-provenance.json",
+    )
+    errors.extend(prior_pilot_errors)
+    if predecessor_pilot is not None:
+        if predecessor_pilot.get("status") != "SUPERSEDED_PILOT_PROVENANCE":
+            errors.append("pilot pre-hardening provenance status is not preserved")
+        if predecessor_pilot.get("historical_commit") != "6f2e0e72563417f0b5a22d021177ede61ff791bc":
+            errors.append("pilot pre-hardening provenance commit is not preserved")
 
-    predecessor_pilot = pilot["predecessor_pilot"]
-    predecessor_pilot_path = ROOT / predecessor_pilot["path"]
-    if (
-        predecessor_pilot["path"]
-        != "results/research/declaration-validation-milestone-8-pilot-pre-hardening-provenance.json"
-    ):
-        errors.append("pilot pre-hardening provenance path is not canonical")
-    elif not predecessor_pilot_path.is_file() or predecessor_pilot["sha256"] != sha256_file(predecessor_pilot_path):
-        errors.append("pilot pre-hardening provenance binding is missing or stale")
-
-    for name, path in EXPECTED_BINDINGS.items():
-        binding = pilot["artifact_bindings"][name]
-        if ROOT / binding["path"] != path:
-            errors.append(f"pilot {name} binding path is not canonical")
-        elif binding["sha256"] != sha256_file(path):
-            errors.append(f"pilot {name} binding hash is stale")
+    bound_documents: dict[str, dict[str, Any]] = {}
+    for name, expected_path in EXPECTED_BINDING_PATHS.items():
+        document, binding_errors = bound_json(
+            pilot["artifact_bindings"][name], label=f"pilot {name}", expected_path=expected_path
+        )
+        errors.extend(binding_errors)
+        if document is not None:
+            bound_documents[name] = document
+    if errors:
+        return errors
 
     approved_binding = pilot["artifact_bindings"]["approved_authority_sources"]
-    approved_path = ROOT / approved_binding["path"]
-    if approved_path != FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH:
-        errors.append("pilot approved authority-source registry path is not the content-bound frozen pre-M8 snapshot")
-    elif approved_binding["sha256"] != sha256_file(approved_path):
-        errors.append("pilot approved authority-source registry hash is stale")
+    if approved_binding["registry_id"] != bound_documents["approved_authority_sources"].get("registry_id"):
+        errors.append("pilot approved authority-source registry identity is stale")
+    if approved_binding["path"] != str(FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH.relative_to(ROOT)):
+        errors.append("pilot approved authority-source registry is not the frozen pre-M8 snapshot")
 
-    canonical_catalog = load_json(catalog.CATALOG_PATH)
-    if canonical_catalog["status"] != "MILESTONE_7_INFRASTRUCTURE_ONLY":
-        errors.append("pilot must not change the canonical catalog to a Milestone 8 status")
-    if canonical_catalog["entries"] or canonical_catalog["identity_dispositions"]:
-        errors.append("pilot must not populate the canonical catalog or disposition vector")
-    boundary = canonical_catalog["completion_boundary"]
-    if boundary["inventory_populated"] or boundary["authority_assignments_created"]:
-        errors.append("pilot must not assert Milestone 8 completion flags")
+    historical_locks = {
+        pilot["artifact_bindings"]["evidence_lock"]["path"]: bound_documents["evidence_lock"]
+    }
+    historical_lock_hashes = {
+        pilot["artifact_bindings"]["evidence_lock"]["path"]: pilot["artifact_bindings"]["evidence_lock"]["sha256"]
+    }
+    for expected_path, binding in zip(EXPECTED_EVIDENCE_PREDECESSORS, pilot["evidence_lock_predecessors"]):
+        document, binding_errors = bound_json(
+            binding, label="pilot evidence-lock predecessor", expected_path=expected_path
+        )
+        errors.extend(binding_errors)
+        if document is not None:
+            historical_locks[expected_path] = document
+            historical_lock_hashes[expected_path] = binding["sha256"]
+    if errors:
+        return errors
 
     selected_ids = set(pilot["candidate_ids"])
     entry_ids = [row["characterization"].get("id") for row in pilot["entries"]]
@@ -120,47 +180,47 @@ def validate_document(
     if len(entry_ids) != len(set(entry_ids)):
         errors.append("pilot contains duplicate stable identities")
 
-    evidence_lock = load_json(EXPECTED_BINDINGS["evidence_lock"])
-    evidence_schema = load_json(EXPECTED_BINDINGS["evidence_lock_schema"])
-    source_lock = load_json(EXPECTED_BINDINGS["source_lock"])
     evidence_errors, evidence_locks = catalog.validate_evidence_lock_chain(
-        evidence_lock,
-        evidence_schema,
-        source_lock,
+        bound_documents["evidence_lock"],
+        bound_documents["evidence_lock_schema"],
+        bound_documents["source_lock"],
         check_git_tracking=check_generated,
+        historical_documents=historical_locks,
+        historical_document_sha256=historical_lock_hashes,
+        source_lock_sha256=pilot["artifact_bindings"]["source_lock"]["sha256"],
+        identities_document=bound_documents["identity_registry"],
     )
     errors.extend(evidence_errors)
-    if evidence_lock["sequence"] != 3 or evidence_lock["status"] != "MILESTONE_8_EVIDENCE_SELECTION":
+    if (
+        bound_documents["evidence_lock"]["sequence"] != 3
+        or bound_documents["evidence_lock"]["status"] != "MILESTONE_8_EVIDENCE_SELECTION"
+    ):
         errors.append("repaired pilot must bind the sequence-3 Milestone 8 evidence-selection successor")
 
-    catalog_schema = load_json(EXPECTED_BINDINGS["catalog_schema"])
-    entry_schema = load_json(EXPECTED_BINDINGS["entry_schema"])
+    catalog_schema = bound_documents["catalog_schema"]
+    entry_schema = bound_documents["entry_schema"]
     resolved_catalog_schema = copy.deepcopy(catalog_schema)
     resolved_catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = entry_schema
-    schema_probe = copy.deepcopy(canonical_catalog)
-    schema_probe["entries"] = pilot["entries"]
-    errors.extend(catalog.schema_errors(schema_probe, resolved_catalog_schema, "pilot entries"))
+    if predecessor_catalog is not None:
+        schema_probe = copy.deepcopy(predecessor_catalog)
+        schema_probe["entries"] = pilot["entries"]
+        schema_probe["site_dispositions"] = pilot["site_dispositions"]
+        errors.extend(catalog.schema_errors(schema_probe, resolved_catalog_schema, "pilot entries"))
 
-    identities_document = load_json(EXPECTED_BINDINGS["identity_registry"])
+    identities_document = bound_documents["identity_registry"]
     identities, duplicate_id_errors = catalog.unique_index(
         identities_document["identities"], "id", "stable identity"
     )
     errors.extend(duplicate_id_errors)
-    authority = load_json(EXPECTED_BINDINGS["authority_rules"])
-    rule_errors, rules = catalog.validate_rule_set(authority)
+    rule_errors, rules = catalog.validate_rule_set(bound_documents["authority_rules"])
     errors.extend(rule_errors)
-    prior_decisions = load_json(catalog.PRIOR_DECISIONS_PATH)
-    decision_ids = {row["id"] for row in prior_decisions["records"]}
-    target = load_json(EXPECTED_BINDINGS["semantic_target"])
-    model = load_json(EXPECTED_BINDINGS["characterization_model"])
-    approved_sources = load_json(approved_path)
-    if approved_binding["registry_id"] != approved_sources["registry_id"]:
-        errors.append("pilot approved authority-source registry identity is stale")
+    decision_ids = {row["id"] for row in bound_documents["prior_identity_decisions"]["records"]}
+    approved_sources = bound_documents["approved_authority_sources"]
     errors.extend(
         catalog.validate_approved_authority_source_registry(
             approved_sources,
-            load_json(EXPECTED_BINDINGS["approved_authority_sources_schema"]),
-            approved_path,
+            bound_documents["approved_authority_sources_schema"],
+            FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH,
             check_generated=check_generated,
         )
     )
@@ -182,9 +242,9 @@ def validate_document(
                 identities=identities,
                 decision_ids=decision_ids,
                 authority_rules=rules,
-                target=target,
-                model=model,
-                source_lock=source_lock,
+                target=bound_documents["semantic_target"],
+                model=bound_documents["characterization_model"],
+                source_lock=bound_documents["source_lock"],
                 evidence_locks=evidence_locks,
                 approved_authority_sources=approved_sources,
             )
@@ -195,7 +255,7 @@ def validate_document(
             pilot["site_dispositions"],
             stable_ids=selected_ids,
             identities=identities,
-            discovery_closure=load_json(EXPECTED_BINDINGS["discovery_closure"]),
+            discovery_closure=bound_documents["discovery_closure"],
             entries=pilot["entries"],
         )
     )

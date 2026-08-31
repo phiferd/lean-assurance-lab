@@ -3,13 +3,13 @@
 > Generated file. Edit `config/declaration-validation-milestone-8-pilot.json`, not this report.
 
 - Pilot ID: `ordinary-declaration-validation.milestone-8-pilot.v1`
-- Status: `MILESTONE_8_FIVE_ENTRY_PILOT_AWAITING_REVIEW`
-- Pilot SHA-256: `53fe3e54431e0b850540740ea70bd2a7870b0967d07e54081f5bbe9d13e49f1e`
+- Status: `MILESTONE_8_FIVE_ENTRY_PILOT_REVIEWED`
+- Pilot SHA-256: `6fa2622de2d23e520a609a811d38f67097778a89203349993a619f0afc3057ed`
 - Candidate entries: 5
 - Bound authority registry: `ordinary-declaration-validation.approved-authority-sources.m7.v1`
 - M4 site dispositions: 31
 
-This is the separately reviewable five-entry candidate batch authorized before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.
+This is the reviewed, historical five-entry candidate batch preserved before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.
 
 ## Selection
 
@@ -127,6 +127,12 @@ The repaired pilot content-binds the empty historical registry snapshot at `conf
 
 A future registry successor must be separately approved against its predecessor before a later catalog can bind it; this pilot neither approves a source nor selects one.
 
+## Historical Boundary
+
+The pilot predecessor is the immutable M7 historical attestation at `results/research/declaration-validation-milestone-7-historical.json` (SHA-256 `2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8`), specifically its `catalog` artifact. It does not read the mutable current catalog path.
+
+The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are resolved from exact Git blobs at the pilot repair commit. Future M8 catalog evolution therefore cannot re-interpret this pilot through later catalog or schema bytes.
+
 ## Required Review
 
 - Review the five selected stable identities, their exact denotations, and whether each stated layer is appropriately scoped.
@@ -136,7 +142,7 @@ A future registry successor must be separately approved against its predecessor 
 
 ## Stop Boundary
 
-Stop after this five-entry candidate batch. Do not modify the canonical catalog status, create a 30-identity disposition vector, claim Milestone 8 completion, or begin Milestone 9 until review is complete.
+The five-entry pilot review is complete. Preserve this historical pilot; do not modify the canonical catalog status, create a 30-identity disposition vector, claim Milestone 8 completion, or begin Milestone 9 from this artifact.
 
 ## Nonclaims
 

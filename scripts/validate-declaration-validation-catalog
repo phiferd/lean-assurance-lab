@@ -27,8 +27,6 @@ AUTHORITY_PATH = ROOT / "config" / "declaration-validation-authority-rules.json"
 AUTHORITY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-authority-rules.schema.json"
 DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-catalog-decisions.json"
 DECISIONS_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-catalog-decisions.schema.json"
-FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-freeze.json"
-FREEZE_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-freeze-manifest.schema.json"
 REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_OBLIGATIONS.md"
 TARGET_PATH = ROOT / "config" / "declaration-validation-target.json"
 MODEL_PATH = ROOT / "config" / "declaration-validation-characterization-model.json"
@@ -45,11 +43,9 @@ APPROVED_AUTHORITY_SOURCES_SUCCESSOR_DIR = ROOT / "config" / "declaration-valida
 FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH = APPROVED_AUTHORITY_SOURCES_SUCCESSOR_DIR / "m7-pre-m8.json"
 PRIOR_DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
 REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-report"
-FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-freeze"
 SOURCE_LOCK_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-source-lock"
-COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7.json"
-COMPLETION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-7.schema.json"
-COMPLETION_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-7-completion"
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
+PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
 
 OBSERVER_POINTERS = {
     "/observer_profiles/official_importer",
@@ -586,6 +582,10 @@ def validate_evidence_lock_chain(
     source_lock: dict[str, Any],
     *,
     check_git_tracking: bool = True,
+    historical_documents: dict[str, dict[str, Any]] | None = None,
+    historical_document_sha256: dict[str, str] | None = None,
+    source_lock_sha256: str | None = None,
+    identities_document: dict[str, Any] | None = None,
 ) -> tuple[list[str], list[dict[str, Any]]]:
     """Validate a successor chain without mutating the frozen Milestone 6 lock."""
     errors: list[str] = []
@@ -609,7 +609,9 @@ def validate_evidence_lock_chain(
         if predecessor.get("kind") == "MILESTONE_6_SOURCE_LOCK":
             if ROOT / predecessor.get("path", "") != SOURCE_LOCK_PATH:
                 errors.append("evidence-lock root does not name the canonical Milestone 6 source lock")
-            elif predecessor.get("sha256") != sha256_file(SOURCE_LOCK_PATH):
+            elif predecessor.get("sha256") != (
+                source_lock_sha256 if source_lock_sha256 is not None else sha256_file(SOURCE_LOCK_PATH)
+            ):
                 errors.append("evidence-lock root source-lock hash is stale")
             break
         if predecessor.get("kind") != "EVIDENCE_LOCK":
@@ -621,18 +623,29 @@ def validate_evidence_lock_chain(
         ):
             errors.append("evidence-lock predecessor path is not canonical and safe")
             break
-        path = ROOT / relative
-        if not path.is_file():
-            errors.append(f"evidence-lock predecessor is missing: {relative}")
-            break
-        if sha256_file(path) != predecessor.get("sha256"):
-            errors.append(f"evidence-lock predecessor hash is stale: {relative}")
-            break
-        try:
-            cursor = load_json(path)
-        except (OSError, json.JSONDecodeError):
-            errors.append(f"evidence-lock predecessor is unreadable JSON: {relative}")
-            break
+        if historical_documents is not None and relative in historical_documents:
+            cursor = historical_documents[relative]
+            expected_predecessor_hash = (
+                historical_document_sha256.get(relative, document_sha256(cursor))
+                if historical_document_sha256 is not None
+                else document_sha256(cursor)
+            )
+            if expected_predecessor_hash != predecessor.get("sha256"):
+                errors.append(f"evidence-lock predecessor hash is stale: {relative}")
+                break
+        else:
+            path = ROOT / relative
+            if not path.is_file():
+                errors.append(f"evidence-lock predecessor is missing: {relative}")
+                break
+            if sha256_file(path) != predecessor.get("sha256"):
+                errors.append(f"evidence-lock predecessor hash is stale: {relative}")
+                break
+            try:
+                cursor = load_json(path)
+            except (OSError, json.JSONDecodeError):
+                errors.append(f"evidence-lock predecessor is unreadable JSON: {relative}")
+                break
 
     chain = list(reversed(chain_reversed))
     for index, lock in enumerate(chain, start=1):
@@ -653,7 +666,8 @@ def validate_evidence_lock_chain(
     base_ids = set(source_lock_indices(source_lock))
     seen_ids = set(base_ids)
     tracked_paths = {row["path"] for row in source_lock["tracked_evidence"]}
-    identity_ids = {row["id"] for row in load_json(IDENTITY_PATH)["identities"]}
+    identity_source = identities_document if identities_document is not None else load_json(IDENTITY_PATH)
+    identity_ids = {row["id"] for row in identity_source["identities"]}
     for lock in chain:
         for section in (
             "normative_documentation",
@@ -1633,59 +1647,6 @@ def validate_decisions(
     return errors, set(records_by_id)
 
 
-def validate_freeze(
-    freeze: dict[str, Any],
-    *,
-    rendered_freeze: dict[str, Any] | None = None,
-) -> list[str]:
-    errors: list[str] = []
-    for name, binding in freeze["artifacts"].items():
-        path = ROOT / binding["path"]
-        if not path.is_file():
-            errors.append(f"freeze artifact {name} is missing")
-        elif sha256_file(path) != binding["sha256"]:
-            errors.append(f"freeze artifact {name} hash is stale")
-        if path == FREEZE_PATH:
-            errors.append("freeze manifest cannot content-bind itself")
-    if rendered_freeze is None:
-        rendered_freeze = load_module("declaration_m7_freeze_renderer", FREEZE_RENDERER_PATH).render()
-    if freeze != rendered_freeze:
-        errors.append("freeze manifest is not synchronized with its canonical inputs")
-
-    order = freeze["attestation_order"]
-    rank = {name: index for index, name in enumerate(order)}
-    graph: dict[str, list[str]] = {name: [] for name in freeze["artifacts"]}
-    for edge in freeze["dependency_edges"]:
-        source = edge["from"]
-        target = edge["to"]
-        if source not in graph or target not in graph:
-            errors.append(f"freeze dependency edge names unknown artifact: {source}->{target}")
-            continue
-        graph[source].append(target)
-        source_tier = freeze["artifacts"][source]["tier"]
-        target_tier = freeze["artifacts"][target]["tier"]
-        if rank[target_tier] > rank[source_tier]:
-            errors.append(f"freeze edge violates attestation order: {source}->{target}")
-    visiting: set[str] = set()
-    visited: set[str] = set()
-
-    def visit(node: str) -> None:
-        if node in visiting:
-            errors.append(f"freeze dependency graph contains a cycle at {node}")
-            return
-        if node in visited:
-            return
-        visiting.add(node)
-        for target in graph[node]:
-            visit(target)
-        visiting.remove(node)
-        visited.add(node)
-
-    for node in graph:
-        visit(node)
-    return errors
-
-
 def validate_identity_dispositions(
     catalog: dict[str, Any],
     identities: dict[str, dict[str, Any]],
@@ -1749,8 +1710,6 @@ def validate_artifacts(
     authority_schema: dict[str, Any],
     decisions: dict[str, Any],
     decisions_schema: dict[str, Any],
-    freeze: dict[str, Any],
-    freeze_schema: dict[str, Any],
     target: dict[str, Any],
     model: dict[str, Any],
     identities_document: dict[str, Any],
@@ -1762,7 +1721,6 @@ def validate_artifacts(
     prior_decisions: dict[str, Any],
     *,
     rendered_report: str | None = None,
-    rendered_freeze: dict[str, Any] | None = None,
     check_generated: bool = True,
     enforce_milestone_boundary: bool = True,
     allow_test_approved_sources: bool = False,
@@ -1772,7 +1730,6 @@ def validate_artifacts(
     errors = schema_errors(catalog, resolved_catalog_schema, "catalog")
     errors.extend(schema_errors(authority, authority_schema, "authority rules"))
     errors.extend(schema_errors(decisions, decisions_schema, "catalog decisions"))
-    errors.extend(schema_errors(freeze, freeze_schema, "freeze manifest"))
     if errors:
         return errors
 
@@ -1960,80 +1917,23 @@ def validate_artifacts(
         catalog_hash = sha256_file(CATALOG_PATH)
         if f"Catalog SHA-256: `{catalog_hash}`" not in rendered_report:
             errors.append("generated human report does not include the canonical catalog hash")
-        errors.extend(validate_freeze(freeze, rendered_freeze=rendered_freeze))
     return errors
 
 
-def validate_completion_record(
-    record: dict[str, Any] | None = None,
-    *,
-    rendered: dict[str, Any] | None = None,
-    run_tests: bool = True,
-) -> list[str]:
-    if not COMPLETION_PATH.is_file():
-        return [f"missing completion record: {COMPLETION_PATH.relative_to(ROOT)}"]
-    if record is None:
-        record = load_json(COMPLETION_PATH)
-    errors: list[str] = []
-    errors.extend(
-        schema_errors(
-            record,
-            load_json(COMPLETION_SCHEMA_PATH),
-            "Milestone 7 completion record",
-        )
+def validate_historical_m7_attestation() -> list[str]:
+    """Validate M7 through its immutable Git-blob attestation, never live paths."""
+
+    historical = load_module(
+        "declaration_m7_historical_attestation_validator", HISTORICAL_VALIDATOR_PATH
     )
-    if errors:
-        return errors
-    if rendered is None:
-        rendered = load_module(
-            "declaration_m7_completion_renderer", COMPLETION_RENDERER_PATH
-        ).render()
-    if record != rendered:
-        errors.append("Milestone 7 completion record is not synchronized with derived facts")
-    for name, binding in record["artifacts"].items():
-        path = ROOT / binding["path"]
-        if not path.is_file():
-            errors.append(f"completion record {name} artifact is missing")
-        elif sha256_file(path) != binding["sha256"]:
-            errors.append(f"completion record {name} hash is stale")
-        if path == COMPLETION_PATH:
-            errors.append("completion record cannot content-bind itself")
-    catalog_hash = sha256_file(CATALOG_PATH)
-    report = REPORT_PATH.read_text(encoding="utf-8")
-    if record["canonical_architecture"]["catalog_hash_embedded_in_report"] != catalog_hash:
-        errors.append("completion record catalog hash claim is stale")
-    if f"Catalog SHA-256: `{catalog_hash}`" not in report:
-        errors.append("completion record claims a report binding that is absent")
-    test_source = (ROOT / "tests" / "test_declaration_validation_catalog.py").read_text(
-        encoding="utf-8"
-    )
-    for attack in record["residual_attack_results"]:
-        for test_name in attack["regression_tests"]:
-            if f"def {test_name}(" not in test_source:
-                errors.append(
-                    f"completion record residual attack names missing test {test_name}"
-                )
-    if run_tests:
-        result = subprocess.run(
-            [
-                sys.executable,
-                "-m",
-                "unittest",
-                "discover",
-                "-s",
-                "tests",
-                "-p",
-                "test_declaration_validation_*.py",
-            ],
-            cwd=ROOT,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.STDOUT,
-            text=True,
-            check=False,
-        )
-        if result.returncode != 0:
-            errors.append("completion record full declaration-validation test gate failed")
-    return errors
+    return historical.validate_m7_attestation()
+
+
+def validate_historical_m8_pilot() -> list[str]:
+    """Require the repaired pilot to remain valid while the canonical catalog evolves."""
+
+    pilot = load_module("declaration_m8_historical_pilot_validator", PILOT_VALIDATOR_PATH)
+    return pilot.validate_document()
 
 
 def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:
@@ -2056,8 +1956,6 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
             load_json(AUTHORITY_SCHEMA_PATH),
             load_json(DECISIONS_PATH),
             load_json(DECISIONS_SCHEMA_PATH),
-            load_json(FREEZE_PATH),
-            load_json(FREEZE_SCHEMA_PATH),
             load_json(TARGET_PATH),
             load_json(MODEL_PATH),
             load_json(IDENTITY_PATH),
@@ -2070,7 +1968,8 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
         )
     )
     if require_completion:
-        errors.extend(validate_completion_record())
+        errors.extend(validate_historical_m7_attestation())
+        errors.extend(validate_historical_m8_pilot())
     entries = catalog["entries"]
     summary = {
         "catalog_sha256": sha256_file(CATALOG_PATH),

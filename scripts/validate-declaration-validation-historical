@@ -1,0 +1,222 @@
+#!/usr/bin/env python3
+"""Validate immutable declaration-validation milestone attestations from Git blobs."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+M7_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-historical.json"
+ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-historical-attestation.schema.json"
+M7_COMMIT = "da6b56af92ce2bcbfa6f2f29a6f699b2f0b24c19"
+FROZEN_M7_ATTESTATION_SHA256 = "2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8"
+FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb089a146dbc8e27b5595a00"
+
+M7_COMPLETION_ARTIFACTS = {
+    "approved_authority_sources",
+    "approved_authority_sources_schema",
+    "authority_rules",
+    "authority_rules_schema",
+    "catalog",
+    "catalog_schema",
+    "completion_renderer",
+    "completion_schema",
+    "entry_schema",
+    "evidence_lock",
+    "evidence_lock_schema",
+    "freeze_manifest",
+    "freeze_manifest_schema",
+    "freeze_renderer",
+    "generated_report",
+    "identity_registry",
+    "invented_specification_fixture",
+    "milestone_4_completion",
+    "milestone_4_validator",
+    "post_catalog_decisions",
+    "post_catalog_decisions_schema",
+    "report_renderer",
+    "source_lock",
+    "tests",
+    "validator",
+}
+M7_ATTESTATION_ARTIFACTS = M7_COMPLETION_ARTIFACTS | {
+    "completion_record",
+    "prior_identity_decisions",
+}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def safe_relative_path(value: str) -> bool:
+    path = Path(value)
+    return not path.is_absolute() and ".." not in path.parts and ":" not in value
+
+
+def schema_errors(instance: Any, schema: dict[str, Any], label: str) -> list[str]:
+    validator = jsonschema.Draft202012Validator(schema)
+    return [
+        f"{label} schema error at /{'/'.join(str(part) for part in error.absolute_path)}: {error.message}"
+        for error in sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path))
+    ]
+
+
+def git_output(args: list[str]) -> tuple[bytes | None, str | None]:
+    result = subprocess.run(
+        ["git", *args], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False
+    )
+    if result.returncode:
+        return None, result.stderr.decode("utf-8", errors="replace").strip()
+    return result.stdout, None
+
+
+def git_blob_bytes(binding: dict[str, Any], *, label: str, expected_commit: str | None = None) -> tuple[bytes | None, list[str]]:
+    """Resolve one exact, safely-addressed Git blob without reading its current path."""
+
+    errors: list[str] = []
+    path = binding.get("path")
+    commit = binding.get("git_commit")
+    blob = binding.get("git_blob")
+    if not isinstance(path, str) or not safe_relative_path(path):
+        return None, [f"{label}: historical Git path is not safe"]
+    if expected_commit is not None and commit != expected_commit:
+        errors.append(f"{label}: historical Git commit differs from the attestation commit")
+    if not isinstance(commit, str) or not isinstance(blob, str):
+        return None, errors + [f"{label}: historical Git binding is incomplete"]
+    object_id, git_error = git_output(["rev-parse", "--verify", f"{commit}^{{commit}}"])
+    if git_error is not None:
+        return None, errors + [f"{label}: historical Git commit is unavailable"]
+    if object_id is None or object_id.decode().strip() != commit:
+        return None, errors + [f"{label}: historical Git commit does not resolve exactly"]
+    actual_blob, git_error = git_output(["rev-parse", "--verify", f"{commit}:{path}"])
+    if git_error is not None:
+        return None, errors + [f"{label}: historical Git blob is unavailable"]
+    if actual_blob is None or actual_blob.decode().strip() != blob:
+        return None, errors + [f"{label}: historical Git blob identity is stale"]
+    content, git_error = git_output(["show", f"{commit}:{path}"])
+    if git_error is not None or content is None:
+        return None, errors + [f"{label}: historical Git blob content is unavailable"]
+    if sha256_bytes(content) != binding.get("sha256"):
+        errors.append(f"{label}: historical Git blob SHA-256 is stale")
+    return content, errors
+
+
+def historical_json(binding: dict[str, Any], *, label: str, expected_commit: str | None = None) -> tuple[dict[str, Any] | None, list[str]]:
+    content, errors = git_blob_bytes(binding, label=label, expected_commit=expected_commit)
+    if content is None:
+        return None, errors
+    try:
+        return json.loads(content), errors
+    except json.JSONDecodeError:
+        return None, errors + [f"{label}: historical Git blob is not JSON"]
+
+
+def match_artifact_binding(
+    artifact: dict[str, Any], binding: dict[str, Any], label: str
+) -> list[str]:
+    errors: list[str] = []
+    if artifact.get("path") != binding["path"]:
+        errors.append(f"{label}: historical path disagrees with attestation")
+    if artifact.get("sha256") != binding["sha256"]:
+        errors.append(f"{label}: historical SHA-256 disagrees with attestation")
+    return errors
+
+
+def validate_m7_attestation(document: dict[str, Any] | None = None) -> list[str]:
+    if document is None:
+        errors: list[str] = []
+        if sha256_bytes(M7_ATTESTATION_PATH.read_bytes()) != FROZEN_M7_ATTESTATION_SHA256:
+            errors.append("Milestone 7 historical attestation bytes changed")
+        if sha256_bytes(ATTESTATION_SCHEMA_PATH.read_bytes()) != FROZEN_ATTESTATION_SCHEMA_SHA256:
+            errors.append("historical-attestation schema bytes changed")
+        if errors:
+            return errors
+        document = load_json(M7_ATTESTATION_PATH)
+    errors = schema_errors(document, load_json(ATTESTATION_SCHEMA_PATH), "Milestone 7 historical attestation")
+    if errors:
+        return errors
+    if document["attestation_id"] != "ordinary-declaration-validation.milestone-7.historical.v1":
+        errors.append("Milestone 7 historical attestation identity is incorrect")
+    if document["historical_commit"] != M7_COMMIT:
+        errors.append("Milestone 7 historical attestation commit is incorrect")
+    recovery = document["recovery"]
+    if recovery["recovered_from_commit"] != M7_COMMIT:
+        errors.append("Milestone 7 recovery does not identify the pre-transition commit")
+    artifacts = document["artifacts"]
+    if set(artifacts) != M7_ATTESTATION_ARTIFACTS:
+        errors.append("Milestone 7 historical attestation artifact set is not exact")
+        return errors
+
+    contents: dict[str, bytes] = {}
+    for name, binding in artifacts.items():
+        content, binding_errors = git_blob_bytes(binding, label=f"Milestone 7 {name}", expected_commit=M7_COMMIT)
+        errors.extend(binding_errors)
+        if content is not None:
+            contents[name] = content
+    if errors:
+        return errors
+
+    catalog = json.loads(contents["catalog"])
+    catalog_schema = json.loads(contents["catalog_schema"])
+    freeze = json.loads(contents["freeze_manifest"])
+    freeze_schema = json.loads(contents["freeze_manifest_schema"])
+    completion = json.loads(contents["completion_record"])
+    completion_schema = json.loads(contents["completion_schema"])
+    errors.extend(schema_errors(catalog, catalog_schema, "historical M7 catalog"))
+    errors.extend(schema_errors(freeze, freeze_schema, "historical M7 freeze manifest"))
+    errors.extend(schema_errors(completion, completion_schema, "historical M7 completion record"))
+    if errors:
+        return errors
+
+    if catalog.get("status") != "MILESTONE_7_INFRASTRUCTURE_ONLY" or catalog.get("entries"):
+        errors.append("historical M7 catalog does not preserve the empty infrastructure boundary")
+    if "site_dispositions" in catalog:
+        errors.append("historical M7 catalog was reinterpreted under a later site-disposition schema")
+    if freeze["artifacts"].get("catalog", {}).get("sha256") != artifacts["catalog"]["sha256"]:
+        errors.append("historical M7 freeze does not bind the recovered catalog")
+    if completion["artifacts"].get("freeze_manifest", {}).get("sha256") != artifacts["freeze_manifest"]["sha256"]:
+        errors.append("historical M7 completion does not bind the recovered freeze")
+    if completion["canonical_architecture"].get("catalog_hash_embedded_in_report") != artifacts["catalog"]["sha256"]:
+        errors.append("historical M7 completion does not bind the recovered catalog hash")
+    if f"Catalog SHA-256: `{artifacts['catalog']['sha256']}`" not in contents["generated_report"].decode("utf-8"):
+        errors.append("historical M7 generated report does not bind the recovered catalog hash")
+
+    for name in M7_COMPLETION_ARTIFACTS:
+        record_binding = completion["artifacts"].get(name)
+        if not isinstance(record_binding, dict):
+            errors.append(f"historical M7 completion omits {name}")
+            continue
+        errors.extend(match_artifact_binding(record_binding, artifacts[name], f"historical M7 completion {name}"))
+    for name, record_binding in freeze["artifacts"].items():
+        if name not in artifacts:
+            errors.append(f"historical M7 freeze references unbound artifact {name}")
+            continue
+        errors.extend(match_artifact_binding(record_binding, artifacts[name], f"historical M7 freeze {name}"))
+    return errors
+
+
+def main() -> int:
+    errors = validate_m7_attestation()
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    print("declaration-validation historical M7 attestation: PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

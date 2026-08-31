@@ -1064,8 +1064,8 @@ prepared_external_action_drafts: 5
    original validator as historical Git blobs, matching Milestones 5 and 6
    without rewriting historical bytes. These checks mechanically enforce the
    qualification rules; they do not prove those rules epistemically
-   sufficient. The five-entry Milestone 8 candidate batch is now prepared and
-   awaits review before any further identity adjudication. Its canonical
+   sufficient. The five-entry Milestone 8 candidate batch was then prepared
+   for independent review before any further identity adjudication. Its canonical
    candidate data is
    [bound separately](../config/declaration-validation-milestone-8-pilot.json),
    and its generated review view is
@@ -1089,10 +1089,9 @@ prepared_external_action_drafts: 5
    `scripts/validate-declaration-validation-catalog`,
    `scripts/validate-declaration-validation-source-lock`,
    `scripts/validate-declaration-validation-milestone-8-pilot`, and all 123
-   declaration-validation tests. The exact next authorized action is an
-   independent adversarial review of this corrected five-entry pilot. Do not
-   populate the remaining 25 identities, claim Milestone 8 completion, perform
-   the planned Sol review, or begin Milestone 9 yet.
+   declaration-validation tests. At that point the next authorized action was
+   an independent adversarial review of this corrected five-entry pilot; its
+   later acceptance is recorded below with the lifecycle repair.
 
    A final residual exploit-first pass at
    `0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a` then demonstrated three remaining
@@ -1116,7 +1115,7 @@ prepared_external_action_drafts: 5
    generated Milestone 7 completion record preserves the accepted-at-baseline
    and rejected-after-hardening results. The catalog remains empty, the approved
    registry contains zero sources, soundness remains `NOT_ASSESSED`, and the M8
-   five-entry pilot awaits review without asserting M8 completion. The exact
+   five-entry pilot remained review-only without asserting M8 completion. The exact
    claim is limited to mechanical rejection of these
    attacks, not epistemic sufficiency of the authority model.
 
@@ -1125,6 +1124,33 @@ prepared_external_action_drafts: 5
    repository-local declaration-validation adjudication skill routes M8/M9
    catalog work to the canonical artifacts and validators. This organizational
    change does not start M8, alter the frontier, or change any research finding.
+
+   The M7→M8 historical transition boundary is now mechanically safe. The
+   actual pre-M8 M7 catalog, its M7-era schema, generated report, validator,
+   tests, freeze, completion record, and all completion dependencies are
+   recovered through the exact Git blobs at
+   `da6b56af92ce2bcbfa6f2f29a6f699b2f0b24c19`. The new historical attestation
+   preserves the trail that `a9c52cc334886cebbeb8d38e47454c02b893613a`
+   legitimately evolved the current catalog schema but had re-rendered mutable
+   M7 paths. Historical validation now uses the recovered blobs and their own
+   historical schemas, never the current catalog path.
+
+   The five-entry repaired pilot is likewise historical: its M7 predecessor is
+   the M7 attestation; its prior pilot provenance, authority registry, source
+   lock, evidence-lock chain, schemas, decision log, and other inputs are
+   pinned to exact Git blobs from the repair commit. A transition regression
+   supplies an M8-shaped current catalog with different bytes and proves that
+   the M7 catalog, freeze, and completion blobs and the pilot bytes remain
+   unchanged while both historical validators pass. This does not populate the
+   remaining 25 identities, approve authority sources, assess soundness, or
+   start M9. Validation passed
+   `scripts/validate-declaration-validation-source-lock`,
+   `scripts/validate-declaration-validation-catalog`,
+   `scripts/validate-declaration-validation-milestone-8-pilot`,
+   `scripts/validate-declaration-validation-historical`, and all 127
+   declaration-validation tests. The exact next authorized action is:
+   **Populate and adjudicate the
+   complete Milestone 8 frozen identity inventory.**
 
 ### Waiting
 
