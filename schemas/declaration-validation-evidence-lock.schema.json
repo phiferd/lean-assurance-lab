@@ -72,6 +72,7 @@
       "type": "object",
       "required": [
         "id",
+        "approved_source_id",
         "document_kind",
         "version_or_edition",
         "stable_url_or_doi",
@@ -82,6 +83,7 @@
       ],
       "properties": {
         "id": {"type": "string", "pattern": "^NORMDOC(\\.[A-Z0-9_]+)+$"},
+        "approved_source_id": {"type": "string", "pattern": "^APPROVED\\.NORMDOC(\\.[A-Z0-9_]+)+$"},
         "document_kind": {"enum": ["SPECIFICATION", "AUTHORITATIVE_DOCUMENTATION"]},
         "version_or_edition": {"type": "string", "minLength": 1},
         "stable_url_or_doi": {"type": "string", "minLength": 1},
@@ -96,6 +98,7 @@
       "type": "object",
       "required": [
         "id",
+        "approved_source_id",
         "repository_url",
         "revision",
         "module",
@@ -110,6 +113,7 @@
       ],
       "properties": {
         "id": {"type": "string", "pattern": "^MECH(\\.[A-Z0-9_]+)+$"},
+        "approved_source_id": {"type": "string", "pattern": "^APPROVED\\.MECH(\\.[A-Z0-9_]+)+$"},
         "repository_url": {"type": "string", "minLength": 1},
         "revision": {"$ref": "#/$defs/revision"},
         "module": {"type": "string", "minLength": 1},

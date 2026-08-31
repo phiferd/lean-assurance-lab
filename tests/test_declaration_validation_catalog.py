@@ -49,7 +49,28 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         cls.source_lock = module.load_json(module.SOURCE_LOCK_PATH)
         cls.evidence_lock = module.load_json(module.M7_EVIDENCE_LOCK_PATH)
         cls.evidence_lock_schema = module.load_json(module.EVIDENCE_LOCK_SCHEMA_PATH)
+        cls.approved_authority_sources = module.load_json(
+            module.APPROVED_AUTHORITY_SOURCES_PATH
+        )
+        cls.approved_authority_sources_schema = module.load_json(
+            module.APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH
+        )
         cls.prior_decisions = module.load_json(module.PRIOR_DECISIONS_PATH)
+
+    def approved_authority_sources_fixture(self):
+        result = copy.deepcopy(self.approved_authority_sources)
+        source_path = "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md"
+        result["normative_documentation"] = [
+            {
+                "id": "APPROVED.NORMDOC.FIXTURE.SPECIFICATION",
+                "document_kind": "SPECIFICATION",
+                "version_or_edition": "in-memory test fixture",
+                "stable_url_or_doi": "https://leanassurancelab.invalid/test-fixture",
+                "authenticated_content_sha256": module.sha256_file(ROOT / source_path),
+                "approval_decision": "DEC.AUTHORITY_SOURCE.FIXTURE",
+            }
+        ]
+        return result
 
     def successor_evidence_lock(self):
         result = copy.deepcopy(self.evidence_lock)
@@ -65,6 +86,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         result["normative_documentation"] = [
             {
                 "id": "NORMDOC.FIXTURE.SPECIFICATION",
+                "approved_source_id": "APPROVED.NORMDOC.FIXTURE.SPECIFICATION",
                 "document_kind": "SPECIFICATION",
                 "version_or_edition": "in-memory test fixture",
                 "stable_url_or_doi": "https://leanassurancelab.invalid/test-fixture",
@@ -82,7 +104,9 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         authority=None,
         decisions=None,
         evidence_lock=None,
+        approved_authority_sources=None,
         enforce_milestone_boundary=False,
+        allow_test_approved_sources=True,
     ):
         catalog_value = copy.deepcopy(self.catalog if catalog is None else catalog)
         if evidence_lock is None:
@@ -91,8 +115,17 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
                 if catalog_value["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY"
                 else self.successor_evidence_lock()
             )
+        if approved_authority_sources is None:
+            approved_authority_sources = (
+                self.approved_authority_sources
+                if catalog_value["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY"
+                else self.approved_authority_sources_fixture()
+            )
         catalog_value["artifact_bindings"]["evidence_lock"]["sha256"] = (
             module.document_sha256(evidence_lock)
+        )
+        catalog_value["artifact_bindings"]["approved_authority_sources"]["sha256"] = (
+            module.document_sha256(approved_authority_sources)
         )
         return module.validate_artifacts(
             catalog_value,
@@ -110,9 +143,12 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.source_lock,
             evidence_lock,
             self.evidence_lock_schema,
+            approved_authority_sources,
+            self.approved_authority_sources_schema,
             self.prior_decisions,
             check_generated=False,
             enforce_milestone_boundary=enforce_milestone_boundary,
+            allow_test_approved_sources=allow_test_approved_sources,
         )
 
     def populated_catalog(self, *entries):
@@ -152,12 +188,15 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         }
         return {
             "characterization": entry,
-            "identity_denotation": {
-                "semantic_statement": identity["semantic_statement"],
-                "applicability": identity["applicability"],
-                "intended_kind": identity["intended_kind"],
-            },
+            "identity_denotation": module.canonical_identity_denotation(identity),
             "identity_statement_sha256": identity["statement_sha256"],
+            "semantic_denotation_sha256": hashlib.sha256(
+                json.dumps(
+                    module.canonical_identity_denotation(identity),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest(),
             "decision_ids": list(identity["decision_ids"]),
             "observer_vector": [
                 {
@@ -180,7 +219,13 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             "AUTH.EMPIRICAL.ESTABLISHED.V1"
         )
         entry["statement"]["subject_scope"] = identity["applicability"]
+        entry["statement"]["precondition"][0]["statement"] = identity[
+            "applicability"
+        ]
         entry["statement"]["stimulus"]["statement"] = identity["semantic_statement"]
+        entry["statement"]["observation_points"][0]["statement"] = (
+            module.empirical_observation_statement(identity)
+        )
         entry["statement"]["profile_specific_effects"][0]["outcome"] = "REJECT"
         witness = self.source_lock["generated_witnesses"][0]
         control = next(item for item in entry["evidence"] if item["role"] == "CONTROL")
@@ -201,7 +246,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         }
         observation["exact_locator"] = {
             "kind": "JSON_POINTER",
-            "value": "results/cross-validation/m6-nonprop-theorem/results.json#/validators",
+            "value": "results/cross-validation/m6-nonprop-theorem/results.json#/validators/2/result/normalized_outcome",
             "secondary": [
                 "observer_profile=/observer_profiles/lean4lean",
                 "outcome=REJECT",
@@ -220,12 +265,15 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             )
         return {
             "characterization": entry,
-            "identity_denotation": {
-                "semantic_statement": identity["semantic_statement"],
-                "applicability": identity["applicability"],
-                "intended_kind": identity["intended_kind"],
-            },
+            "identity_denotation": module.canonical_identity_denotation(identity),
             "identity_statement_sha256": identity["statement_sha256"],
+            "semantic_denotation_sha256": hashlib.sha256(
+                json.dumps(
+                    module.canonical_identity_denotation(identity),
+                    sort_keys=True,
+                    separators=(",", ":"),
+                ).encode("utf-8")
+            ).hexdigest(),
             "decision_ids": list(identity["decision_ids"]),
             "observer_vector": observations,
             "source_mappings": [],
@@ -239,6 +287,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.decisions_schema,
             self.freeze_schema,
             self.evidence_lock_schema,
+            self.approved_authority_sources_schema,
         ):
             jsonschema.Draft202012Validator.check_schema(schema)
         self.assertEqual(self.errors(enforce_milestone_boundary=True), [])
@@ -408,7 +457,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         }
         self.assertEqual(
             module.evidence_source_errors(
-                evidence, self.target, self.source_lock, [self.evidence_lock]
+                evidence,
+                self.target,
+                self.source_lock,
+                [self.evidence_lock],
+                self.approved_authority_sources,
             ), []
         )
 
@@ -428,7 +481,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             any(
                 "case ID does not resolve" in item
                 for item in module.evidence_source_errors(
-                    evidence, self.target, self.source_lock, [self.evidence_lock]
+                    evidence,
+                    self.target,
+                    self.source_lock,
+                    [self.evidence_lock],
+                    self.approved_authority_sources,
                 )
             )
         )
@@ -574,6 +631,250 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         errors = self.errors(self.populated_catalog(entry))
         self.assertTrue(any("must remain NOT_ASSESSED" in item for item in errors))
 
+    def test_locally_forged_normative_document_cannot_establish_authority(self):
+        entry = self.normative_wrapper()
+        evidence = entry["characterization"]["evidence"][0]
+        evidence["source_lock"]["lock_id"] = "NORMDOC.FORGED.TEST"
+        evidence["exact_locator"]["value"] = "invented-section"
+        evidence_lock = self.successor_evidence_lock()
+        invented_path = "tests/fixtures/declaration-validation/invented-specification.md"
+        self.assertTrue(module.is_tracked(invented_path))
+        evidence_lock["normative_documentation"] = [
+            {
+                "id": "NORMDOC.FORGED.TEST",
+                "approved_source_id": "APPROVED.NORMDOC.FORGED.TEST",
+                "document_kind": "SPECIFICATION",
+                "version_or_edition": "plausible invented edition",
+                "stable_url_or_doi": "https://lean-lang.org/forged-specification",
+                "retrieved_path": invented_path,
+                "retrieved_content_sha256": module.sha256_file(ROOT / invented_path),
+                "section_anchor_or_page": "invented-section",
+                "claim_supported": "Lean requires arbitrary predicate X.",
+            }
+        ]
+        errors = self.errors(
+            self.populated_catalog(entry), evidence_lock=evidence_lock
+        )
+        self.assertTrue(
+            any("absent from the frozen approved authority-source registry" in item for item in errors)
+        )
+
+    def test_catalog_adjudication_cannot_extend_frozen_approved_source_registry(self):
+        approved_sources = self.approved_authority_sources_fixture()
+        errors = self.errors(
+            self.populated_catalog(self.normative_wrapper()),
+            approved_authority_sources=approved_sources,
+            allow_test_approved_sources=False,
+        )
+        self.assertTrue(
+            any("cannot extend the frozen pre-M8 approved" in item for item in errors)
+        )
+
+    def test_locally_forged_authoritative_document_cannot_establish_authority(self):
+        entry = self.normative_wrapper()
+        evidence = entry["characterization"]["evidence"][0]
+        evidence["source_type"] = "AUTHORITATIVE_DOCUMENTATION"
+        evidence["source_lock"]["lock_id"] = "NORMDOC.FORGED.AUTHORITATIVE"
+        evidence["exact_locator"]["value"] = "invented-section"
+        evidence_lock = self.successor_evidence_lock()
+        invented_path = "tests/fixtures/declaration-validation/invented-specification.md"
+        evidence_lock["normative_documentation"] = [
+            {
+                "id": "NORMDOC.FORGED.AUTHORITATIVE",
+                "approved_source_id": "APPROVED.NORMDOC.FORGED.AUTHORITATIVE",
+                "document_kind": "AUTHORITATIVE_DOCUMENTATION",
+                "version_or_edition": "plausible invented edition",
+                "stable_url_or_doi": "https://lean-lang.org/forged-documentation",
+                "retrieved_path": invented_path,
+                "retrieved_content_sha256": module.sha256_file(ROOT / invented_path),
+                "section_anchor_or_page": "invented-section",
+                "claim_supported": "Lean requires arbitrary predicate X.",
+            }
+        ]
+        errors = self.errors(
+            self.populated_catalog(entry), evidence_lock=evidence_lock
+        )
+        self.assertTrue(
+            any("absent from the frozen approved authority-source registry" in item for item in errors)
+        )
+
+    def test_locally_forged_formal_mechanization_cannot_establish_authority(self):
+        entry = self.normative_wrapper()
+        evidence = entry["characterization"]["evidence"][0]
+        evidence["source_type"] = "FORMAL_MECHANIZATION"
+        evidence["source_lock"]["lock_id"] = "MECH.FORGED.TEST"
+        evidence["exact_locator"] = {
+            "kind": "THEOREM_OR_DEFINITION",
+            "value": "forged_theorem",
+        }
+        evidence["lineage"] = {
+            "group": "FORGED_LOCAL",
+            "relationship_to_target": "NON_IMPLEMENTATION_SOURCE",
+            "independence_scope": "NOT_APPLICABLE",
+            "basis": "Self-asserted fixture lineage.",
+        }
+        evidence["mechanized_result"] = {
+            "theorem_or_definition": "forged_theorem",
+            "relevant_assumptions_or_axioms": [],
+            "relationship_to_modeled_judgment": "Self-asserted mapping.",
+            "check_command": "true",
+            "unchecked_command_reason": None,
+        }
+        evidence_lock = self.successor_evidence_lock()
+        evidence_lock["normative_documentation"] = []
+        invented_path = "tests/fixtures/declaration-validation/invented-specification.md"
+        digest = module.sha256_file(ROOT / invented_path)
+        evidence_lock["mechanized_results"] = [
+            {
+                "id": "MECH.FORGED.TEST",
+                "approved_source_id": "APPROVED.MECH.FORGED.TEST",
+                "repository_url": "https://github.com/leanprover/lean4",
+                "revision": "0" * 40,
+                "module": "Forged",
+                "theorem_or_definition": "forged_theorem",
+                "path": "Forged.lean",
+                "blob_sha256": digest,
+                "retrieved_path": invented_path,
+                "retrieved_content_sha256": digest,
+                "assumptions_or_axioms": [],
+                "verification_command": "true",
+                "target_judgment_mapping": "Self-asserted mapping.",
+            }
+        ]
+        errors = self.errors(
+            self.populated_catalog(entry), evidence_lock=evidence_lock
+        )
+        self.assertTrue(
+            any("absent from the frozen approved authority-source registry" in item for item in errors)
+        )
+
+    def test_checker_outcome_cannot_be_forged_by_secondary_metadata(self):
+        entry = self.empirical_wrapper()
+        evidence = next(
+            item
+            for item in entry["characterization"]["evidence"]
+            if item["role"] == "IMPLEMENTATION_OBSERVATION"
+        )
+        evidence["source_lock"]["lock_id"] = "LOCAL.SELF_REFERENCE_RESULTS"
+        evidence["exact_locator"] = {
+            "kind": "JSON_POINTER",
+            "value": "results/cross-validation/nanoda-gen-8317efea2c7d-self-reference/results.json#/validators/1/result/normalized_outcome",
+            "secondary": [
+                "observer_profile=/observer_profiles/kiota",
+                "outcome=REJECT",
+            ],
+        }
+        extracted = module.checker_observation_from_evidence(
+            evidence, self.source_lock, [self.evidence_lock]
+        )
+        self.assertEqual(extracted["checker"], "kiota")
+        self.assertEqual(extracted["outcome"], "ACCEPT")
+        for observation in entry["observer_vector"]:
+            concrete = observation["profile_pointer"] == "/observer_profiles/kiota"
+            observation["outcome"] = "REJECT" if concrete else "NOT_INSPECTED"
+            observation["evidence_refs"] = [evidence["id"]] if concrete else []
+        entry["characterization"]["statement"]["profile_specific_effects"] = [
+            {
+                "observer_profile_pointer": "/observer_profiles/kiota",
+                "outcome": "REJECT",
+                "attribution": "Forged opposite of the content-bound ACCEPT result.",
+            }
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("profile/outcome-bound checker evidence" in item for item in errors))
+
+    def test_checker_outcome_cannot_be_forged_through_case_id_locator(self):
+        entry = self.empirical_wrapper()
+        evidence = next(
+            item
+            for item in entry["characterization"]["evidence"]
+            if item["role"] == "IMPLEMENTATION_OBSERVATION"
+        )
+        evidence["source_lock"]["lock_id"] = "LOCAL.SELF_REFERENCE_RESULTS"
+        evidence["exact_locator"] = {
+            "kind": "CASE_ID",
+            "value": "nanoda-gen-8317efea2c7d-self-reference",
+            "secondary": [
+                "observer_profile=/observer_profiles/kiota",
+                "outcome=REJECT",
+            ],
+        }
+        for observation in entry["observer_vector"]:
+            concrete = observation["profile_pointer"] == "/observer_profiles/kiota"
+            observation["outcome"] = "REJECT" if concrete else "NOT_INSPECTED"
+            observation["evidence_refs"] = [evidence["id"]] if concrete else []
+        entry["characterization"]["statement"]["profile_specific_effects"] = [
+            {
+                "observer_profile_pointer": "/observer_profiles/kiota",
+                "outcome": "REJECT",
+                "attribution": "Free-form case locator cannot establish an outcome.",
+            }
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("profile/outcome-bound checker evidence" in item for item in errors))
+
+    def test_stable_identity_rejects_applicability_or_premise_drift(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["statement"]["applicability"].append(
+            {"id": "PRED.FORGED.NAME_FOO", "statement": "The theorem name is Foo."}
+        )
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("applicability narrows or widens" in item for item in errors))
+
+        entry = self.normative_wrapper()
+        entry["characterization"]["statement"]["premises"].append(
+            {"id": "PRED.FORGED.UNRELATED", "statement": "Unrelated predicate P holds."}
+        )
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("additional normative premises" in item for item in errors))
+
+    def test_stable_identity_rejects_modeled_judgment_drift(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["statement"]["judgment"][
+            "target_profile_pointer"
+        ] = "/logical_target/target_id"
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("modeled-judgment identity changes" in item for item in errors))
+
+    def test_empirical_stable_identity_rejects_precondition_or_observation_drift(self):
+        entry = self.empirical_wrapper()
+        entry["characterization"]["statement"]["precondition"].append(
+            {
+                "id": "PRED.FORGED.EMPIRICAL_SCOPE",
+                "statement": "Only when unrelated condition P holds.",
+            }
+        )
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("empirical precondition changes" in item for item in errors))
+
+        entry = self.empirical_wrapper()
+        entry["characterization"]["statement"]["observation_points"].append(
+            {
+                "id": "PRED.FORGED.OBSERVATION",
+                "layer": "IMPLEMENTATION_POLICY",
+                "statement": "Observe an unrelated implementation property.",
+            }
+        )
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("empirical observation point changes" in item for item in errors))
+
+    def test_editorial_and_observational_fields_are_not_identity_defining(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["name"] = "Editorially revised fixture name"
+        entry["characterization"]["statement"]["judgment"]["statement"] = (
+            "Editorial explanation of the same pinned judgment."
+        )
+        entry["characterization"]["statement"]["expected_effect"][
+            "authority_scope"
+        ] = "Editorial explanation of the same authority scope."
+        self.assertEqual(self.errors(self.populated_catalog(entry)), [])
+
+        empirical = self.empirical_wrapper()
+        empirical["characterization"]["statement"]["profile_specific_effects"][0][
+            "attribution"
+        ] = "Editorially revised attribution of the same extracted outcome."
+        self.assertEqual(self.errors(self.populated_catalog(empirical)), [])
+
     def test_stable_identity_binds_structured_semantics(self):
         entry = self.normative_wrapper()
         entry["characterization"]["statement"]["target_premise"]["statement"] = (
@@ -587,7 +888,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             "violation_expectation"
         ] = "ACCEPT"
         errors = self.errors(self.populated_catalog(entry))
-        self.assertTrue(any("cannot expect acceptance" in item for item in errors))
+        self.assertTrue(any("violation semantics change" in item for item in errors))
 
         empirical = self.empirical_wrapper()
         empirical["characterization"]["statement"]["stimulus"]["statement"] = (
@@ -596,7 +897,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         errors = self.errors(self.populated_catalog(empirical))
         self.assertTrue(any("empirical stimulus changes the stable semantic identity" in item for item in errors))
 
-    def test_concrete_observer_evidence_must_match_profile_and_outcome(self):
+    def test_secondary_observer_metadata_is_not_factual_authority(self):
         entry = self.empirical_wrapper()
         observation = next(
             item
@@ -605,10 +906,10 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         )
         observation["exact_locator"]["secondary"] = [
             "observer_profile=/observer_profiles/official_importer",
-            "outcome=REJECT",
+            "outcome=ACCEPT",
         ]
         errors = self.errors(self.populated_catalog(entry))
-        self.assertTrue(any("profile/outcome-bound checker evidence" in item for item in errors))
+        self.assertEqual(errors, [])
 
     def test_source_mapping_must_match_implementation_repository_and_evidence(self):
         entry = self.normative_wrapper()
@@ -699,8 +1000,12 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         entry["decision_ids"].append("DEC.CATALOG.999")
         catalog = self.populated_catalog(entry)
         evidence_lock = self.successor_evidence_lock()
+        approved_sources = self.approved_authority_sources_fixture()
         catalog["artifact_bindings"]["evidence_lock"]["sha256"] = module.document_sha256(
             evidence_lock
+        )
+        catalog["artifact_bindings"]["approved_authority_sources"]["sha256"] = (
+            module.document_sha256(approved_sources)
         )
         statement_bytes = json.dumps(
             entry["characterization"]["statement"],
@@ -741,6 +1046,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             catalog,
             decisions=decisions,
             evidence_lock=evidence_lock,
+            approved_authority_sources=approved_sources,
         )
         self.assertTrue(any("before snapshot is missing" in item for item in errors))
         self.assertFalse(any("catalog_hash_after is not the supplied catalog" in item for item in errors))

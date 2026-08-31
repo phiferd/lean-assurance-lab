@@ -12,20 +12,21 @@
     "artifacts",
     "canonical_architecture",
     "authority_qualification",
+    "residual_attack_results",
     "validation",
     "requirements_audit",
     "completion_boundary"
   ],
   "properties": {
-    "schema_version": {"const": 2},
-    "milestone": {"const": "declaration-validation-contract-slice-7-hardened"},
+    "schema_version": {"const": 3},
+    "milestone": {"const": "declaration-validation-contract-slice-7-residual-hardened"},
     "recorded_at": {"type": "string", "format": "date-time"},
     "status": {"const": "PASS"},
     "repository_state": {
       "type": "object",
       "required": ["head_at_hardening_start", "branch", "tree_clean_at_hardening_start", "prior_milestone_record"],
       "properties": {
-        "head_at_hardening_start": {"const": "c89a95efcb4066e4d9aec0fa7c1a9d2ebe8f32e1"},
+        "head_at_hardening_start": {"const": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a"},
         "branch": {"const": "main"},
         "tree_clean_at_hardening_start": {"const": true},
         "prior_milestone_record": {"const": "results/research/declaration-validation-milestone-6.json"}
@@ -35,6 +36,8 @@
     "artifacts": {
       "type": "object",
       "required": [
+        "approved_authority_sources",
+        "approved_authority_sources_schema",
         "authority_rules",
         "catalog",
         "post_catalog_decisions",
@@ -55,6 +58,7 @@
         "completion_renderer",
         "validator",
         "tests",
+        "invented_specification_fixture",
         "generated_report",
         "freeze_manifest"
       ],
@@ -73,6 +77,9 @@
         "catalog_entries",
         "identity_dispositions",
         "evidence_lock_sequence",
+        "approved_normative_sources",
+        "approved_mechanized_sources",
+        "semantic_denotation_profile",
         "inventory_intentionally_deferred_to_milestone_8"
       ],
       "properties": {
@@ -86,6 +93,9 @@
         "catalog_entries": {"const": 0},
         "identity_dispositions": {"const": 0},
         "evidence_lock_sequence": {"const": 1},
+        "approved_normative_sources": {"const": 0},
+        "approved_mechanized_sources": {"const": 0},
+        "semantic_denotation_profile": {"const": "ordinary-declaration-validation.semantic-denotation-projection.v1"},
         "inventory_intentionally_deferred_to_milestone_8": {"const": true}
       },
       "additionalProperties": false
@@ -99,7 +109,10 @@
         "statement_contradictions_block_established",
         "soundness_relevance_during_m8",
         "checker_consensus_establishes_normativity",
-        "llm_judgment_is_evidence"
+        "llm_judgment_is_evidence",
+        "locally_written_snapshot_authenticates_external_origin",
+        "approved_authority_source_registry_is_frozen_before_m8",
+        "secondary_locator_metadata_establishes_checker_outcome"
       ],
       "properties": {
         "semantic_target_is_normative_evidence": {"const": false},
@@ -109,8 +122,45 @@
         "soundness_relevance_during_m8": {"const": "NOT_ASSESSED_ONLY"},
         "checker_consensus_establishes_normativity": {"const": false},
         "llm_judgment_is_evidence": {"const": false}
+        ,"locally_written_snapshot_authenticates_external_origin": {"const": false}
+        ,"approved_authority_source_registry_is_frozen_before_m8": {"const": true}
+        ,"secondary_locator_metadata_establishes_checker_outcome": {"const": false}
       },
       "additionalProperties": false
+    },
+    "residual_attack_results": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": [
+          "attack_id",
+          "baseline_at_commit",
+          "baseline_result",
+          "final_result",
+          "regression_tests"
+        ],
+        "properties": {
+          "attack_id": {
+            "enum": [
+              "FORGED_NORMATIVE_DOCUMENT_AUTHORITY",
+              "FORGED_CHECKER_RESULT_ATTRIBUTION",
+              "STABLE_ID_SEMANTIC_DENOTATION_DRIFT"
+            ]
+          },
+          "baseline_at_commit": {"const": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a"},
+          "baseline_result": {"const": "VALIDATED_WITH_ZERO_ERRORS"},
+          "final_result": {"type": "string", "pattern": "^REJECTED_"},
+          "regression_tests": {
+            "type": "array",
+            "minItems": 2,
+            "uniqueItems": true,
+            "items": {"type": "string", "pattern": "^test_[a-z0-9_]+$"}
+          }
+        },
+        "additionalProperties": false
+      }
     },
     "validation": {
       "type": "object",
@@ -128,6 +178,7 @@
         "authority_qualification",
         "identity_semantic_binding",
         "observer_and_source_attribution",
+        "authority_source_authentication",
         "m8_discovery_closure",
         "decision_transition_history",
         "versioned_evidence_lock_evolution",
@@ -137,8 +188,9 @@
       ],
       "properties": {
         "authority_qualification": {"const": "RULE_ENFORCEMENT_MECHANICALLY_TESTED_NOT_EPISTEMICALLY_PROVED"},
-        "identity_semantic_binding": {"const": "REGISTRY_DENOTATION_AND_STRUCTURED_STATEMENT_COUPLED"},
-        "observer_and_source_attribution": {"const": "PROFILE_OUTCOME_SOURCE_AND_REPOSITORY_COUPLED"},
+        "identity_semantic_binding": {"const": "FROZEN_REGISTRY_PLUS_CANONICAL_STRUCTURED_DENOTATION_COUPLED"},
+        "observer_and_source_attribution": {"const": "CHECKER_AND_OUTCOME_EXTRACTED_FROM_CONTENT_BOUND_RESULT_BYTES"},
+        "authority_source_authentication": {"const": "FROZEN_PRE_M8_APPROVED_SOURCE_REGISTRY_REQUIRED"},
         "m8_discovery_closure": {"const": "EXACT_30_IDENTITY_DISPOSITION_REQUIRED"},
         "decision_transition_history": {"const": "CONTENT_BOUND_BEFORE_SNAPSHOT_AND_SUPPLIED_AFTER_CATALOG_REQUIRED"},
         "versioned_evidence_lock_evolution": {"const": "IMMUTABLE_M7_ROOT_WITH_SUCCESSOR_CHAIN"},
@@ -152,10 +204,10 @@
       "type": "object",
       "required": ["completed", "next_authorized_milestone", "deferred", "nonclaims"],
       "properties": {
-        "completed": {"const": "Milestone 7 hardened canonical-data and qualification architecture"},
+        "completed": {"const": "Milestone 7 residual authority, attribution, and semantic-identity hardening"},
         "next_authorized_milestone": {"const": "Milestone 8 — Build the First Characterization Inventory"},
         "deferred": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
-        "nonclaims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+        "nonclaims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
       },
       "additionalProperties": false
     }

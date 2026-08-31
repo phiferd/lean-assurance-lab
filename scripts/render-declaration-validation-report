@@ -14,6 +14,7 @@ from typing import Any
 ROOT = Path(__file__).resolve().parents[1]
 CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
 SOURCE_LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
+APPROVED_AUTHORITY_SOURCES_PATH = ROOT / "config" / "declaration-validation-approved-authority-sources.json"
 DEFAULT_OUTPUT = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_OBLIGATIONS.md"
 
 KINDS = ["NORMATIVE_CANDIDATE_OBLIGATION", "EMPIRICAL_CONTRACT_SCENARIO"]
@@ -89,6 +90,7 @@ def render(
     catalog: dict[str, Any] | None = None,
     source_lock: dict[str, Any] | None = None,
     evidence_lock: dict[str, Any] | None = None,
+    approved_authority_sources: dict[str, Any] | None = None,
 ) -> str:
     if catalog is None:
         catalog = load_json(CATALOG_PATH)
@@ -96,6 +98,8 @@ def render(
         source_lock = load_json(SOURCE_LOCK_PATH)
     if evidence_lock is None:
         evidence_lock = load_json(ROOT / catalog["artifact_bindings"]["evidence_lock"]["path"])
+    if approved_authority_sources is None:
+        approved_authority_sources = load_json(APPROVED_AUTHORITY_SOURCES_PATH)
     catalog_hash = sha256_file(CATALOG_PATH) if catalog == load_json(CATALOG_PATH) else hashlib.sha256(
         (json.dumps(catalog, indent=2, sort_keys=True) + "\n").encode("utf-8")
     ).hexdigest()
@@ -123,7 +127,8 @@ def render(
     status_summary = {
         "MILESTONE_7_INFRASTRUCTURE_ONLY": (
             "The Milestone 7 catalog is intentionally empty. Its schemas, qualification "
-            "gates, versioned evidence-lock root, and generated views are frozen before "
+            "gates, versioned evidence-lock root, approved-authority-source registry, "
+            "canonical semantic-denotation projection, and generated views are frozen before "
             "Milestone 8 performs per-identity adjudication."
         ),
         "MILESTONE_8_CHARACTERIZATION_INVENTORY": (
@@ -147,6 +152,12 @@ def render(
         f"Its catalog hash is checked mechanically. {status_summary}",
         f"The bound evidence-lock successor is `{evidence_lock['lock_id']}` at sequence "
         f"{evidence_lock['sequence']}.",
+        "The separately frozen approved-authority-source registry contains "
+        f"{len(approved_authority_sources['normative_documentation'])} normative documents "
+        f"and {len(approved_authority_sources['mechanized_results'])} mechanized sources. "
+        "Content addressing alone is not treated as authentication of external origin.",
+        "Stable IDs bind the complete canonical semantic projection; observer outcomes and "
+        "editorial prose remain non-identity research metadata.",
         "",
         "## Bound Inputs",
         "",

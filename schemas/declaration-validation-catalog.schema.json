@@ -10,6 +10,7 @@
     "status",
     "artifact_bindings",
     "id_evolution_rules",
+    "identity_denotation_profile",
     "observer_order",
     "entries",
     "identity_dispositions",
@@ -31,6 +32,8 @@
     "artifact_bindings": {
       "type": "object",
       "required": [
+        "approved_authority_sources",
+        "approved_authority_sources_schema",
         "semantic_target",
         "characterization_model",
         "discovery_closure",
@@ -42,6 +45,8 @@
         "authority_rules"
       ],
       "properties": {
+        "approved_authority_sources": {"$ref": "#/$defs/fileBinding"},
+        "approved_authority_sources_schema": {"$ref": "#/$defs/fileBinding"},
         "semantic_target": {"$ref": "#/$defs/fileBinding"},
         "characterization_model": {"$ref": "#/$defs/fileBinding"},
         "discovery_closure": {"$ref": "#/$defs/fileBinding"},
@@ -55,6 +60,7 @@
       "additionalProperties": false
     },
     "id_evolution_rules": {"$ref": "#/$defs/idEvolutionRules"},
+    "identity_denotation_profile": {"$ref": "#/$defs/identityDenotationProfile"},
     "observer_order": {
       "type": "array",
       "minItems": 4,
@@ -140,6 +146,63 @@
       },
       "additionalProperties": false
     },
+    "identityDenotationProfile": {
+      "type": "object",
+      "required": [
+        "profile_id",
+        "normative",
+        "empirical",
+        "non_identity_fields",
+        "semantic_change_requires_new_id"
+      ],
+      "properties": {
+        "profile_id": {"const": "ordinary-declaration-validation.semantic-denotation-projection.v1"},
+        "normative": {
+          "type": "object",
+          "required": [
+            "applicability",
+            "modeled_judgment_target_profile_pointer",
+            "premises",
+            "target_premise",
+            "violation_expectation"
+          ],
+          "properties": {
+            "applicability": {"const": "EXACT_SINGLE_FROZEN_APPLICABILITY"},
+            "modeled_judgment_target_profile_pointer": {"const": "/logical_target/modeled_judgment"},
+            "premises": {"const": "EMPTY_NO_ADDITIONAL_REACH_RESTRICTIONS"},
+            "target_premise": {"const": "EXACT_FROZEN_SEMANTIC_STATEMENT"},
+            "violation_expectation": {"const": "REJECT"}
+          },
+          "additionalProperties": false
+        },
+        "empirical": {
+          "type": "object",
+          "required": [
+            "subject_scope",
+            "precondition",
+            "stimulus",
+            "observation_point",
+            "profile_specific_effects"
+          ],
+          "properties": {
+            "subject_scope": {"const": "EXACT_FROZEN_APPLICABILITY"},
+            "precondition": {"const": "EXACT_SINGLE_FROZEN_APPLICABILITY"},
+            "stimulus": {"const": "EXACT_FROZEN_SEMANTIC_STATEMENT"},
+            "observation_point": {"const": "EXACT_SINGLE_DERIVED_PINNED_OBSERVER_OUTCOME"},
+            "profile_specific_effects": {"const": "NON_IDENTITY_OBSERVATIONS"}
+          },
+          "additionalProperties": false
+        },
+        "non_identity_fields": {
+          "type": "array",
+          "minItems": 6,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "semantic_change_requires_new_id": {"const": true}
+      },
+      "additionalProperties": false
+    },
     "observerPointer": {
       "enum": [
         "/observer_profiles/official_importer",
@@ -165,6 +228,7 @@
         "characterization",
         "identity_denotation",
         "identity_statement_sha256",
+        "semantic_denotation_sha256",
         "decision_ids",
         "observer_vector",
         "source_mappings"
@@ -175,7 +239,12 @@
         },
         "identity_denotation": {
           "type": "object",
-          "required": ["semantic_statement", "applicability", "intended_kind"],
+          "required": [
+            "semantic_statement",
+            "applicability",
+            "intended_kind",
+            "canonical_semantics"
+          ],
           "properties": {
             "semantic_statement": {"type": "string", "minLength": 1},
             "applicability": {"type": "string", "minLength": 1},
@@ -184,11 +253,18 @@
                 "NORMATIVE_CANDIDATE_OBLIGATION",
                 "EMPIRICAL_CONTRACT_SCENARIO"
               ]
+            },
+            "canonical_semantics": {
+              "oneOf": [
+                {"$ref": "#/$defs/normativeCanonicalSemantics"},
+                {"$ref": "#/$defs/empiricalCanonicalSemantics"}
+              ]
             }
           },
           "additionalProperties": false
         },
         "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
+        "semantic_denotation_sha256": {"$ref": "#/$defs/sha256"},
         "decision_ids": {
           "type": "array",
           "minItems": 1,
@@ -205,6 +281,69 @@
           "type": "array",
           "items": {"$ref": "#/$defs/sourceMapping"}
         }
+      },
+      "additionalProperties": false
+    },
+    "normativeCanonicalSemantics": {
+      "type": "object",
+      "required": [
+        "kind",
+        "modeled_judgment_target_profile_pointer",
+        "applicability",
+        "premises",
+        "target_premise",
+        "violation_expectation"
+      ],
+      "properties": {
+        "kind": {"const": "NORMATIVE_CANDIDATE_OBLIGATION"},
+        "modeled_judgment_target_profile_pointer": {"const": "/logical_target/modeled_judgment"},
+        "applicability": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "premises": {"type": "array", "maxItems": 0},
+        "target_premise": {"type": "string", "minLength": 1},
+        "violation_expectation": {"const": "REJECT"}
+      },
+      "additionalProperties": false
+    },
+    "empiricalCanonicalSemantics": {
+      "type": "object",
+      "required": [
+        "kind",
+        "subject_scope",
+        "precondition",
+        "stimulus",
+        "observation_points",
+        "observer_population",
+        "profile_specific_effects_identity_relevance"
+      ],
+      "properties": {
+        "kind": {"const": "EMPIRICAL_CONTRACT_SCENARIO"},
+        "subject_scope": {"type": "string", "minLength": 1},
+        "precondition": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "stimulus": {"type": "string", "minLength": 1},
+        "observation_points": {
+          "type": "array",
+          "minItems": 1,
+          "maxItems": 1,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "observer_population": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/observerPointer"}
+        },
+        "profile_specific_effects_identity_relevance": {"const": "NON_IDENTITY_OBSERVATIONS"}
       },
       "additionalProperties": false
     },

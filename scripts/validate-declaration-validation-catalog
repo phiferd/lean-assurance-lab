@@ -36,6 +36,8 @@ IDENTITY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json
 SOURCE_LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
 EVIDENCE_LOCK_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-evidence-lock.schema.json"
 M7_EVIDENCE_LOCK_PATH = ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-7.json"
+APPROVED_AUTHORITY_SOURCES_PATH = ROOT / "config" / "declaration-validation-approved-authority-sources.json"
+APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-approved-authority-sources.schema.json"
 PRIOR_DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
 REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-report"
 FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-freeze"
@@ -51,7 +53,43 @@ OBSERVER_POINTERS = {
     "/observer_profiles/kiota",
 }
 OBSERVED_OUTCOMES = {"ACCEPT", "REJECT", "ERROR", "TIMEOUT"}
+OBSERVER_CHECKER_IDS = {
+    "/observer_profiles/official_importer": "official",
+    "/observer_profiles/nanoda": "nanoda",
+    "/observer_profiles/lean4lean": "lean4lean",
+    "/observer_profiles/kiota": "kiota",
+}
+IDENTITY_DENOTATION_PROFILE = {
+    "profile_id": "ordinary-declaration-validation.semantic-denotation-projection.v1",
+    "normative": {
+        "applicability": "EXACT_SINGLE_FROZEN_APPLICABILITY",
+        "modeled_judgment_target_profile_pointer": "/logical_target/modeled_judgment",
+        "premises": "EMPTY_NO_ADDITIONAL_REACH_RESTRICTIONS",
+        "target_premise": "EXACT_FROZEN_SEMANTIC_STATEMENT",
+        "violation_expectation": "REJECT",
+    },
+    "empirical": {
+        "observation_point": "EXACT_SINGLE_DERIVED_PINNED_OBSERVER_OUTCOME",
+        "precondition": "EXACT_SINGLE_FROZEN_APPLICABILITY",
+        "profile_specific_effects": "NON_IDENTITY_OBSERVATIONS",
+        "stimulus": "EXACT_FROZEN_SEMANTIC_STATEMENT",
+        "subject_scope": "EXACT_FROZEN_APPLICABILITY",
+    },
+    "non_identity_fields": [
+        "predicate labels",
+        "explanatory judgment and authority-scope prose",
+        "contract layers",
+        "authority status and evidence",
+        "observer outcomes and attributions",
+        "implementation mappings and notes",
+    ],
+    "semantic_change_requires_new_id": True,
+}
+FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256 = (
+    "f971f5ec8ca19ed29fef20c7d62a54aa78667080bf4d704836968dbaba713368"
+)
 EXPECTED_BINDINGS = {
+    "approved_authority_sources_schema": APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH,
     "semantic_target": TARGET_PATH,
     "characterization_model": MODEL_PATH,
     "discovery_closure": CLOSURE_PATH,
@@ -76,6 +114,7 @@ EXPECTED_RULE_CHECKS = {
         "HAS_NORMATIVE_SUPPORT",
         "NORMATIVE_SUPPORT_SOURCE_TYPE_ALLOWED",
         "NORMATIVE_SUPPORT_SOURCE_LOCK_KIND_COMPATIBLE",
+        "NORMATIVE_SUPPORT_SOURCE_IDENTITY_PREAPPROVED",
         "FORBID_SEMANTIC_TARGET_AS_NORMATIVE_SUPPORT",
         "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM",
         "NO_UNRESOLVED_NORMATIVE_SUPPORT_ASSUMPTIONS",
@@ -113,6 +152,7 @@ EXPECTED_RULE_CHECKS = {
         "HAS_NON_PLACEHOLDER_OBSERVER_OUTCOME",
         "OBSERVED_OUTCOMES_EVIDENCE_BACKED",
         "OBSERVED_OUTCOMES_ATTRIBUTION_BOUND",
+        "OBSERVED_OUTCOMES_EXTRACTED_FROM_RESULT_BYTES",
         "NO_ACTIVE_AUTHORITY_CONTRADICTION",
         "NO_RELEVANT_STATEMENT_CONTRADICTION",
         "FORBID_LLM_AUTHORITY",
@@ -181,6 +221,41 @@ def document_bytes(document: dict[str, Any]) -> bytes:
 
 def document_sha256(document: dict[str, Any]) -> str:
     return hashlib.sha256(document_bytes(document)).hexdigest()
+
+
+def empirical_observation_statement(identity: dict[str, Any]) -> str:
+    return f"Observe each pinned observer's outcome for: {identity['semantic_statement']}"
+
+
+def canonical_identity_denotation(identity: dict[str, Any]) -> dict[str, Any]:
+    kind = identity["intended_kind"]
+    base = {
+        "semantic_statement": identity["semantic_statement"],
+        "applicability": identity["applicability"],
+        "intended_kind": kind,
+    }
+    if kind == "NORMATIVE_CANDIDATE_OBLIGATION":
+        base["canonical_semantics"] = {
+            "kind": kind,
+            "modeled_judgment_target_profile_pointer": "/logical_target/modeled_judgment",
+            "applicability": [identity["applicability"]],
+            "premises": [],
+            "target_premise": identity["semantic_statement"],
+            "violation_expectation": "REJECT",
+        }
+    elif kind == "EMPIRICAL_CONTRACT_SCENARIO":
+        base["canonical_semantics"] = {
+            "kind": kind,
+            "subject_scope": identity["applicability"],
+            "precondition": [identity["applicability"]],
+            "stimulus": identity["semantic_statement"],
+            "observation_points": [empirical_observation_statement(identity)],
+            "observer_population": sorted(OBSERVER_POINTERS),
+            "profile_specific_effects_identity_relevance": "NON_IDENTITY_OBSERVATIONS",
+        }
+    else:
+        raise ValueError(f"identity {identity['id']} has no catalog-admissible kind")
+    return base
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -287,6 +362,19 @@ def source_lock_indices(
             for row in evidence_lock[section]:
                 result[row["id"]] = (kind, row)
     return result
+
+
+def approved_authority_source_indices(
+    registry: dict[str, Any],
+) -> tuple[dict[str, tuple[str, dict[str, Any]]], list[str]]:
+    result: dict[str, tuple[str, dict[str, Any]]] = {}
+    errors: list[str] = []
+    for section in ("normative_documentation", "mechanized_results"):
+        for row in registry[section]:
+            if row["id"] in result:
+                errors.append(f"duplicate approved authority-source ID: {row['id']}")
+            result[row["id"]] = (section, row)
+    return result, errors
 
 
 def pointer_is_within(pointer: str, allowed: set[str]) -> bool:
@@ -468,6 +556,7 @@ def evidence_source_errors(
     target: dict[str, Any],
     source_lock: dict[str, Any],
     evidence_locks: list[dict[str, Any]],
+    approved_authority_sources: dict[str, Any],
 ) -> list[str]:
     errors: list[str] = []
     registry_name = evidence["source_lock"]["registry"]
@@ -513,6 +602,40 @@ def evidence_source_errors(
         )
         if evidence["source_type"] != expected_type:
             errors.append(f"{evidence['id']}: normative document kind disagrees with source type")
+        approved, _ = approved_authority_source_indices(approved_authority_sources)
+        approval = approved.get(row["approved_source_id"])
+        expected_identity = {
+            "document_kind": row["document_kind"],
+            "version_or_edition": row["version_or_edition"],
+            "stable_url_or_doi": row["stable_url_or_doi"],
+            "authenticated_content_sha256": row["retrieved_content_sha256"],
+        }
+        if approval is None or approval[0] != "normative_documentation":
+            errors.append(
+                f"{evidence['id']}: normative document is absent from the frozen approved authority-source registry"
+            )
+        elif any(approval[1][key] != value for key, value in expected_identity.items()):
+            errors.append(
+                f"{evidence['id']}: normative document identity disagrees with its approved authority source"
+            )
+    elif kind == "mechanized_results":
+        approved, _ = approved_authority_source_indices(approved_authority_sources)
+        approval = approved.get(row["approved_source_id"])
+        expected_identity = {
+            "repository_url": row["repository_url"],
+            "revision": row["revision"],
+            "path": row["path"],
+            "blob_sha256": row["blob_sha256"],
+            "theorem_or_definition": row["theorem_or_definition"],
+        }
+        if approval is None or approval[0] != "mechanized_results":
+            errors.append(
+                f"{evidence['id']}: mechanized result is absent from the frozen approved authority-source registry"
+            )
+        elif any(approval[1][key] != value for key, value in expected_identity.items()):
+            errors.append(
+                f"{evidence['id']}: mechanized source identity disagrees with its approved authority source"
+            )
     locator = evidence["exact_locator"]
     value = locator["value"]
     locator_kind = locator["kind"]
@@ -567,14 +690,70 @@ def evidence_source_errors(
     return errors
 
 
-def evidence_matches_observation(
-    evidence: dict[str, Any], profile_pointer: str, outcome: str
-) -> bool:
-    secondary = set(evidence["exact_locator"].get("secondary", []))
+def checker_observation_from_evidence(
+    evidence: dict[str, Any],
+    source_lock: dict[str, Any],
+    evidence_locks: list[dict[str, Any]],
+) -> dict[str, str] | None:
+    """Extract an observer fact from content-bound structured result bytes.
+
+    Human-readable secondary locator strings are deliberately ignored. The
+    JSON pointer must identify one validator row's normalized outcome, and the
+    checker identity is read from the sibling field in the same row.
+    """
+    if evidence["source_type"] != "CHECKER_RESULT":
+        return None
+    locked = source_lock_indices(source_lock, evidence_locks).get(
+        evidence["source_lock"]["lock_id"]
+    )
+    if locked is None or locked[0] != "tracked_evidence":
+        return None
+    locator = evidence["exact_locator"]
+    if locator["kind"] != "JSON_POINTER":
+        return None
+    row = locked[1]
+    value = locator["value"]
+    pointer = value
+    if "#" in value:
+        path, pointer = value.split("#", 1)
+        if path != row["path"]:
+            return None
+    match = re.fullmatch(r"/validators/(0|[1-9][0-9]*)/result/normalized_outcome", pointer)
+    if match is None:
+        return None
+    try:
+        document = load_json(ROOT / row["path"])
+        index = int(match.group(1))
+        validator = document["validators"][index]
+        outcome = validator["result"]["normalized_outcome"]
+        checker = validator["checker"]
+    except (OSError, json.JSONDecodeError, KeyError, IndexError, TypeError):
+        return None
+    if not isinstance(outcome, str) or not isinstance(checker, str):
+        return None
     return {
-        f"observer_profile={profile_pointer}",
-        f"outcome={outcome}",
-    } <= secondary
+        "checker": checker,
+        "outcome": outcome,
+        "case_id": str(document.get("case_id", "")),
+        "artifact_path": row["path"],
+        "json_pointer": pointer,
+    }
+
+
+def evidence_matches_observation(
+    evidence: dict[str, Any],
+    profile_pointer: str,
+    outcome: str,
+    source_lock: dict[str, Any],
+    evidence_locks: list[dict[str, Any]],
+) -> bool:
+    observed = checker_observation_from_evidence(
+        evidence, source_lock, evidence_locks
+    )
+    return observed is not None and (
+        observed["checker"] == OBSERVER_CHECKER_IDS[profile_pointer]
+        and observed["outcome"] == outcome
+    )
 
 
 def validate_rule_set(authority: dict[str, Any]) -> tuple[list[str], dict[str, dict[str, Any]]]:
@@ -613,6 +792,7 @@ def validate_entry(
     model: dict[str, Any],
     source_lock: dict[str, Any],
     evidence_locks: list[dict[str, Any]],
+    approved_authority_sources: dict[str, Any],
 ) -> list[str]:
     errors: list[str] = []
     entry = wrapper["characterization"]
@@ -621,20 +801,26 @@ def validate_entry(
     if identity is None:
         errors.append(f"{entry_id}: catalog ID is absent from the frozen identity registry")
     else:
-        expected_denotation = {
+        expected_denotation = canonical_identity_denotation(identity)
+        if wrapper["identity_denotation"] != expected_denotation:
+            errors.append(f"{entry_id}: structured identity denotation differs from the frozen registry")
+        legacy_denotation = {
             "semantic_statement": identity["semantic_statement"],
             "applicability": identity["applicability"],
             "intended_kind": identity["intended_kind"],
         }
-        if wrapper["identity_denotation"] != expected_denotation:
-            errors.append(f"{entry_id}: structured identity denotation differs from the frozen registry")
         expected_identity_hash = hashlib.sha256(
+            json.dumps(legacy_denotation, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest()
+        expected_semantic_hash = hashlib.sha256(
             json.dumps(expected_denotation, sort_keys=True, separators=(",", ":")).encode("utf-8")
         ).hexdigest()
         if wrapper["identity_statement_sha256"] != identity["statement_sha256"]:
             errors.append(f"{entry_id}: identity statement hash is stale")
         if wrapper["identity_statement_sha256"] != expected_identity_hash:
             errors.append(f"{entry_id}: identity statement hash does not bind the structured denotation")
+        if wrapper["semantic_denotation_sha256"] != expected_semantic_hash:
+            errors.append(f"{entry_id}: canonical semantic denotation hash is stale")
         intended = identity["intended_kind"]
         if intended is not None and entry["kind"] != intended:
             errors.append(f"{entry_id}: catalog kind changes the frozen identity denotation")
@@ -644,25 +830,35 @@ def validate_entry(
             errors.append(f"{entry_id}: catalog entry omits its frozen identity decision")
 
         if entry["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+            if (
+                entry["statement"]["judgment"]["target_profile_pointer"]
+                != "/logical_target/modeled_judgment"
+            ):
+                errors.append(f"{entry_id}: modeled-judgment identity changes the stable semantic denotation")
             if entry["statement"]["target_premise"]["statement"] != identity["semantic_statement"]:
                 errors.append(f"{entry_id}: normative target premise changes the stable semantic identity")
-            applicability_statements = {
+            applicability_statements = [
                 item["statement"] for item in entry["statement"]["applicability"]
-            }
-            if identity["applicability"] not in applicability_statements:
-                errors.append(f"{entry_id}: normative applicability does not include the frozen applicability")
-            if entry["statement"]["expected_effect"]["violation_expectation"] == "ACCEPT":
-                errors.append(f"{entry_id}: normative candidate cannot expect acceptance of its violation")
-            if (
-                entry["authority"]["status"] == "ESTABLISHED"
-                and entry["statement"]["expected_effect"]["violation_expectation"] != "REJECT"
-            ):
-                errors.append(f"{entry_id}: established normative candidate must expect rejection")
+            ]
+            if applicability_statements != [identity["applicability"]]:
+                errors.append(f"{entry_id}: normative applicability narrows or widens the stable semantic denotation")
+            if entry["statement"]["premises"]:
+                errors.append(f"{entry_id}: additional normative premises change the stable semantic denotation")
+            if entry["statement"]["expected_effect"]["violation_expectation"] != "REJECT":
+                errors.append(f"{entry_id}: normative violation semantics change the stable semantic denotation")
         else:
             if entry["statement"]["subject_scope"] != identity["applicability"]:
                 errors.append(f"{entry_id}: empirical subject scope changes the stable applicability")
             if entry["statement"]["stimulus"]["statement"] != identity["semantic_statement"]:
                 errors.append(f"{entry_id}: empirical stimulus changes the stable semantic identity")
+            preconditions = [item["statement"] for item in entry["statement"]["precondition"]]
+            if preconditions != [identity["applicability"]]:
+                errors.append(f"{entry_id}: empirical precondition changes the stable semantic denotation")
+            observation_points = [
+                item["statement"] for item in entry["statement"]["observation_points"]
+            ]
+            if observation_points != [empirical_observation_statement(identity)]:
+                errors.append(f"{entry_id}: empirical observation point changes the stable semantic denotation")
 
     for decision_id in wrapper["decision_ids"]:
         if decision_id not in decision_ids:
@@ -701,7 +897,13 @@ def validate_entry(
         except (KeyError, IndexError, ValueError):
             errors.append(f"{entry_id}/{evidence['id']}: claim JSON Pointer does not resolve")
             pointer_errors = True
-        found = evidence_source_errors(evidence, target, source_lock, evidence_locks)
+        found = evidence_source_errors(
+            evidence,
+            target,
+            source_lock,
+            evidence_locks,
+            approved_authority_sources,
+        )
         if found:
             errors.extend(found)
             source_errors = True
@@ -720,7 +922,11 @@ def validate_entry(
                 for evidence_id in observation["evidence_refs"]
                 if evidence_id in evidence_by_id
                 and evidence_matches_observation(
-                    evidence_by_id[evidence_id], pointer, observation["outcome"]
+                    evidence_by_id[evidence_id],
+                    pointer,
+                    observation["outcome"],
+                    source_lock,
+                    evidence_locks,
                 )
                 and evidence_by_id[evidence_id]["source_type"] == "CHECKER_RESULT"
             ]
@@ -815,10 +1021,31 @@ def validate_entry(
     ):
         errors.append(f"{entry_id}: semantic-target profile cannot serve as normative support")
     if "NORMATIVE_SUPPORT_SOURCE_LOCK_KIND_COMPATIBLE" in checks and any(
-        evidence_source_errors(item, target, source_lock, evidence_locks)
+        evidence_source_errors(
+            item,
+            target,
+            source_lock,
+            evidence_locks,
+            approved_authority_sources,
+        )
         for item in normative_support
     ):
         errors.append(f"{entry_id}: normative support is not bound to a compatible normative source")
+    if "NORMATIVE_SUPPORT_SOURCE_IDENTITY_PREAPPROVED" in checks and any(
+        any(
+            "approved authority-source registry" in error
+            or "approved authority source" in error
+            for error in evidence_source_errors(
+                item,
+                target,
+                source_lock,
+                evidence_locks,
+                approved_authority_sources,
+            )
+        )
+        for item in normative_support
+    ):
+        errors.append(f"{entry_id}: normative support source identity was not preapproved")
     if "NORMATIVE_SUPPORT_TARGETS_NORMATIVE_CLAIM" in checks and any(
         not item["claim_supported"]["entry_json_pointer"].startswith("/statement")
         for item in normative_support
@@ -828,7 +1055,13 @@ def validate_entry(
         item["role"] == "IMPLEMENTATION_OBSERVATION"
         and item["source_type"] == "CHECKER_RESULT"
         and any(
-            evidence_matches_observation(item, observation["profile_pointer"], observation["outcome"])
+            evidence_matches_observation(
+                item,
+                observation["profile_pointer"],
+                observation["outcome"],
+                source_lock,
+                evidence_locks,
+            )
             for observation in wrapper["observer_vector"]
             if observation["outcome"] in OBSERVED_OUTCOMES
         )
@@ -845,7 +1078,10 @@ def validate_entry(
         for observation in wrapper["observer_vector"]:
             if observation["outcome"] in OBSERVED_OUTCOMES and not observation["evidence_refs"]:
                 errors.append(f"{entry_id}: observed outcome is not evidence-backed")
-    if "OBSERVED_OUTCOMES_ATTRIBUTION_BOUND" in checks:
+    if (
+        "OBSERVED_OUTCOMES_ATTRIBUTION_BOUND" in checks
+        or "OBSERVED_OUTCOMES_EXTRACTED_FROM_RESULT_BYTES" in checks
+    ):
         for observation in wrapper["observer_vector"]:
             if observation["outcome"] not in OBSERVED_OUTCOMES:
                 continue
@@ -854,6 +1090,8 @@ def validate_entry(
                     evidence_by_id[evidence_id],
                     observation["profile_pointer"],
                     observation["outcome"],
+                    source_lock,
+                    evidence_locks,
                 )
                 for evidence_id in observation["evidence_refs"]
                 if evidence_id in evidence_by_id
@@ -1225,12 +1463,15 @@ def validate_artifacts(
     source_lock: dict[str, Any],
     evidence_lock: dict[str, Any],
     evidence_lock_schema: dict[str, Any],
+    approved_authority_sources: dict[str, Any],
+    approved_authority_sources_schema: dict[str, Any],
     prior_decisions: dict[str, Any],
     *,
     rendered_report: str | None = None,
     rendered_freeze: dict[str, Any] | None = None,
     check_generated: bool = True,
     enforce_milestone_boundary: bool = True,
+    allow_test_approved_sources: bool = False,
 ) -> list[str]:
     resolved_catalog_schema = copy.deepcopy(catalog_schema)
     resolved_catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = entry_schema
@@ -1238,11 +1479,21 @@ def validate_artifacts(
     errors.extend(schema_errors(authority, authority_schema, "authority rules"))
     errors.extend(schema_errors(decisions, decisions_schema, "catalog decisions"))
     errors.extend(schema_errors(freeze, freeze_schema, "freeze manifest"))
+    errors.extend(
+        schema_errors(
+            approved_authority_sources,
+            approved_authority_sources_schema,
+            "approved authority sources",
+        )
+    )
     if errors:
         return errors
 
     bindings = catalog["artifact_bindings"]
-    if set(bindings) != set(EXPECTED_BINDINGS) | {"evidence_lock"}:
+    if set(bindings) != set(EXPECTED_BINDINGS) | {
+        "evidence_lock",
+        "approved_authority_sources",
+    }:
         errors.append("catalog binding names are not exact")
     else:
         errors.extend(
@@ -1263,7 +1514,31 @@ def validate_artifacts(
             evidence_path = ROOT / evidence_binding["path"]
             if not evidence_path.is_file() or sha256_file(evidence_path) != evidence_binding["sha256"]:
                 errors.append("catalog evidence-lock file binding is missing or stale")
+        approved_binding = bindings["approved_authority_sources"]
+        if ROOT / approved_binding["path"] != APPROVED_AUTHORITY_SOURCES_PATH:
+            errors.append("catalog approved authority-source registry path is not canonical")
+        expected_approved_hash = (
+            sha256_file(APPROVED_AUTHORITY_SOURCES_PATH)
+            if check_generated
+            else document_sha256(approved_authority_sources)
+        )
+        if approved_binding["sha256"] != expected_approved_hash:
+            errors.append("catalog approved authority-source registry hash is stale")
     errors.extend(binding_errors(authority["bindings"], EXPECTED_AUTHORITY_BINDINGS, "authority"))
+    approved_indices, approved_errors = approved_authority_source_indices(
+        approved_authority_sources
+    )
+    errors.extend(approved_errors)
+    if (
+        not allow_test_approved_sources
+        and document_sha256(approved_authority_sources)
+        != FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256
+    ):
+        errors.append(
+            "catalog adjudication cannot extend the frozen pre-M8 approved authority-source registry"
+        )
+    if catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY" and approved_indices:
+        errors.append("Milestone 7 approved authority-source registry must remain empty")
     evidence_errors, evidence_locks = validate_evidence_lock_chain(
         evidence_lock,
         evidence_lock_schema,
@@ -1281,6 +1556,8 @@ def validate_artifacts(
         errors.append("catalog status and evidence-lock successor status disagree")
     if catalog["id_evolution_rules"] != identities_document["id_evolution_rules"]:
         errors.append("catalog stable-ID evolution rules differ from the frozen identity registry")
+    if catalog["identity_denotation_profile"] != IDENTITY_DENOTATION_PROFILE:
+        errors.append("catalog semantic-denotation projection differs from the frozen M7 profile")
     if set(catalog["observer_order"]) != OBSERVER_POINTERS:
         errors.append("catalog observer order does not cover the exact pinned observer set")
 
@@ -1316,6 +1593,7 @@ def validate_artifacts(
                 model=model,
                 source_lock=source_lock,
                 evidence_locks=evidence_locks,
+                approved_authority_sources=approved_authority_sources,
             )
         )
         for decision_id in row["decision_ids"]:
@@ -1413,6 +1691,15 @@ def validate_completion_record(
         errors.append("completion record catalog hash claim is stale")
     if f"Catalog SHA-256: `{catalog_hash}`" not in report:
         errors.append("completion record claims a report binding that is absent")
+    test_source = (ROOT / "tests" / "test_declaration_validation_catalog.py").read_text(
+        encoding="utf-8"
+    )
+    for attack in record["residual_attack_results"]:
+        for test_name in attack["regression_tests"]:
+            if f"def {test_name}(" not in test_source:
+                errors.append(
+                    f"completion record residual attack names missing test {test_name}"
+                )
     if run_tests:
         result = subprocess.run(
             [
@@ -1460,6 +1747,8 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
             load_json(SOURCE_LOCK_PATH),
             evidence_lock,
             load_json(EVIDENCE_LOCK_SCHEMA_PATH),
+            load_json(APPROVED_AUTHORITY_SOURCES_PATH),
+            load_json(APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH),
             load_json(PRIOR_DECISIONS_PATH),
         )
     )
@@ -1480,6 +1769,12 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
         "post_catalog_decisions": len(load_json(DECISIONS_PATH)["records"]),
         "identity_dispositions": len(catalog["identity_dispositions"]),
         "evidence_lock_sequence": evidence_lock["sequence"],
+        "approved_normative_sources": len(
+            load_json(APPROVED_AUTHORITY_SOURCES_PATH)["normative_documentation"]
+        ),
+        "approved_mechanized_sources": len(
+            load_json(APPROVED_AUTHORITY_SOURCES_PATH)["mechanized_results"]
+        ),
     }
     return errors, summary
 

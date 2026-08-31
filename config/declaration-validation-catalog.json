@@ -1,8 +1,16 @@
 {
   "artifact_bindings": {
+    "approved_authority_sources": {
+      "path": "config/declaration-validation-approved-authority-sources.json",
+      "sha256": "1c151df258514fd46f868593e09b18fe0b02e8dfe1c27fa4b92bcc682a830708"
+    },
+    "approved_authority_sources_schema": {
+      "path": "schemas/declaration-validation-approved-authority-sources.schema.json",
+      "sha256": "d4e9c78ab35302d7a56b193d87226a7943b8e85db6fdf89dd19d891ae367b325"
+    },
     "authority_rules": {
       "path": "config/declaration-validation-authority-rules.json",
-      "sha256": "efd1443d00493b1ef106da17258f58da2c226c4e96be1b4ce543ce08c9ad1398"
+      "sha256": "de56148f267eca9f1fd91c6f9a8d42f7786e1b946eb7565f704ccaa193838ea0"
     },
     "characterization_model": {
       "path": "config/declaration-validation-characterization-model.json",
@@ -22,7 +30,7 @@
     },
     "evidence_lock_schema": {
       "path": "schemas/declaration-validation-evidence-lock.schema.json",
-      "sha256": "1ddc557ae8175b90b4cffc66730f6cd3c9e1af044775b967ef0e235fee133fb9"
+      "sha256": "45e0c7a69be059a371f4d33445cb7cdbdad21c542a82b07a7f1dfb65a6416adf"
     },
     "identity_registry": {
       "path": "config/declaration-validation-identity-registry.json",
@@ -47,6 +55,32 @@
   },
   "entries": [],
   "identity_dispositions": [],
+  "identity_denotation_profile": {
+    "profile_id": "ordinary-declaration-validation.semantic-denotation-projection.v1",
+    "normative": {
+      "applicability": "EXACT_SINGLE_FROZEN_APPLICABILITY",
+      "modeled_judgment_target_profile_pointer": "/logical_target/modeled_judgment",
+      "premises": "EMPTY_NO_ADDITIONAL_REACH_RESTRICTIONS",
+      "target_premise": "EXACT_FROZEN_SEMANTIC_STATEMENT",
+      "violation_expectation": "REJECT"
+    },
+    "empirical": {
+      "observation_point": "EXACT_SINGLE_DERIVED_PINNED_OBSERVER_OUTCOME",
+      "precondition": "EXACT_SINGLE_FROZEN_APPLICABILITY",
+      "profile_specific_effects": "NON_IDENTITY_OBSERVATIONS",
+      "stimulus": "EXACT_FROZEN_SEMANTIC_STATEMENT",
+      "subject_scope": "EXACT_FROZEN_APPLICABILITY"
+    },
+    "non_identity_fields": [
+      "predicate labels",
+      "explanatory judgment and authority-scope prose",
+      "contract layers",
+      "authority status and evidence",
+      "observer outcomes and attributions",
+      "implementation mappings and notes"
+    ],
+    "semantic_change_requires_new_id": true
+  },
   "id_evolution_rules": {
     "deletion": "FORBIDDEN",
     "merge_tombstone": "MERGED_ID_RETAINED_AS_REDUNDANT_TOMBSTONE_NAMING_SURVIVOR",

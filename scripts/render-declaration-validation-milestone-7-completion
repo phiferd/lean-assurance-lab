@@ -14,6 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-7.json"
 
 ARTIFACTS = {
+    "approved_authority_sources": "config/declaration-validation-approved-authority-sources.json",
+    "approved_authority_sources_schema": "schemas/declaration-validation-approved-authority-sources.schema.json",
     "authority_rules": "config/declaration-validation-authority-rules.json",
     "catalog": "config/declaration-validation-catalog.json",
     "post_catalog_decisions": "results/research/declaration-validation-catalog-decisions.json",
@@ -34,6 +36,7 @@ ARTIFACTS = {
     "completion_renderer": "scripts/render-declaration-validation-milestone-7-completion",
     "validator": "scripts/validate-declaration-validation-catalog",
     "tests": "tests/test_declaration_validation_catalog.py",
+    "invented_specification_fixture": "tests/fixtures/declaration-validation/invented-specification.md",
     "generated_report": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
     "freeze_manifest": "results/research/declaration-validation-milestone-7-freeze.json",
 }
@@ -52,14 +55,15 @@ def render() -> dict[str, Any]:
     authority = load_json(ROOT / ARTIFACTS["authority_rules"])
     decisions = load_json(ROOT / ARTIFACTS["post_catalog_decisions"])
     evidence_lock = load_json(ROOT / ARTIFACTS["evidence_lock"])
+    approved_sources = load_json(ROOT / ARTIFACTS["approved_authority_sources"])
     catalog_hash = sha256_file(ROOT / ARTIFACTS["catalog"])
     return {
-        "schema_version": 2,
-        "milestone": "declaration-validation-contract-slice-7-hardened",
-        "recorded_at": "2026-08-30T17:00:00-04:00",
+        "schema_version": 3,
+        "milestone": "declaration-validation-contract-slice-7-residual-hardened",
+        "recorded_at": "2026-08-31T07:30:00-04:00",
         "status": "PASS",
         "repository_state": {
-            "head_at_hardening_start": "c89a95efcb4066e4d9aec0fa7c1a9d2ebe8f32e1",
+            "head_at_hardening_start": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a",
             "branch": "main",
             "tree_clean_at_hardening_start": True,
             "prior_milestone_record": "results/research/declaration-validation-milestone-6.json",
@@ -79,6 +83,9 @@ def render() -> dict[str, Any]:
             "catalog_entries": len(catalog["entries"]),
             "identity_dispositions": len(catalog["identity_dispositions"]),
             "evidence_lock_sequence": evidence_lock["sequence"],
+            "approved_normative_sources": len(approved_sources["normative_documentation"]),
+            "approved_mechanized_sources": len(approved_sources["mechanized_results"]),
+            "semantic_denotation_profile": catalog["identity_denotation_profile"]["profile_id"],
             "inventory_intentionally_deferred_to_milestone_8": not catalog["completion_boundary"]["inventory_populated"],
         },
         "authority_qualification": {
@@ -89,7 +96,46 @@ def render() -> dict[str, Any]:
             "soundness_relevance_during_m8": "NOT_ASSESSED_ONLY",
             "checker_consensus_establishes_normativity": False,
             "llm_judgment_is_evidence": False,
+            "locally_written_snapshot_authenticates_external_origin": False,
+            "approved_authority_source_registry_is_frozen_before_m8": True,
+            "secondary_locator_metadata_establishes_checker_outcome": False,
         },
+        "residual_attack_results": [
+            {
+                "attack_id": "FORGED_NORMATIVE_DOCUMENT_AUTHORITY",
+                "baseline_at_commit": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a",
+                "baseline_result": "VALIDATED_WITH_ZERO_ERRORS",
+                "final_result": "REJECTED_UNLESS_SOURCE_IDENTITY_IS_PREAPPROVED",
+                "regression_tests": [
+                    "test_locally_forged_normative_document_cannot_establish_authority",
+                    "test_catalog_adjudication_cannot_extend_frozen_approved_source_registry",
+                    "test_locally_forged_authoritative_document_cannot_establish_authority",
+                    "test_locally_forged_formal_mechanization_cannot_establish_authority"
+                ]
+            },
+            {
+                "attack_id": "FORGED_CHECKER_RESULT_ATTRIBUTION",
+                "baseline_at_commit": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a",
+                "baseline_result": "VALIDATED_WITH_ZERO_ERRORS",
+                "final_result": "REJECTED_BY_STRUCTURED_RESULT_EXTRACTION",
+                "regression_tests": [
+                    "test_checker_outcome_cannot_be_forged_by_secondary_metadata",
+                    "test_checker_outcome_cannot_be_forged_through_case_id_locator"
+                ]
+            },
+            {
+                "attack_id": "STABLE_ID_SEMANTIC_DENOTATION_DRIFT",
+                "baseline_at_commit": "0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a",
+                "baseline_result": "VALIDATED_WITH_ZERO_ERRORS",
+                "final_result": "REJECTED_BY_CANONICAL_STRUCTURED_DENOTATION",
+                "regression_tests": [
+                    "test_stable_identity_rejects_applicability_or_premise_drift",
+                    "test_stable_identity_rejects_modeled_judgment_drift",
+                    "test_empirical_stable_identity_rejects_precondition_or_observation_drift",
+                    "test_editorial_and_observational_fields_are_not_identity_defining"
+                ]
+            }
+        ],
         "validation": {
             "command": "scripts/validate-declaration-validation-catalog",
             "focused_test_command": "python3 -m unittest discover -s tests -p 'test_declaration_validation_catalog.py'",
@@ -97,8 +143,9 @@ def render() -> dict[str, Any]:
         },
         "requirements_audit": {
             "authority_qualification": "RULE_ENFORCEMENT_MECHANICALLY_TESTED_NOT_EPISTEMICALLY_PROVED",
-            "identity_semantic_binding": "REGISTRY_DENOTATION_AND_STRUCTURED_STATEMENT_COUPLED",
-            "observer_and_source_attribution": "PROFILE_OUTCOME_SOURCE_AND_REPOSITORY_COUPLED",
+            "identity_semantic_binding": "FROZEN_REGISTRY_PLUS_CANONICAL_STRUCTURED_DENOTATION_COUPLED",
+            "observer_and_source_attribution": "CHECKER_AND_OUTCOME_EXTRACTED_FROM_CONTENT_BOUND_RESULT_BYTES",
+            "authority_source_authentication": "FROZEN_PRE_M8_APPROVED_SOURCE_REGISTRY_REQUIRED",
             "m8_discovery_closure": "EXACT_30_IDENTITY_DISPOSITION_REQUIRED",
             "decision_transition_history": "CONTENT_BOUND_BEFORE_SNAPSHOT_AND_SUPPLIED_AFTER_CATALOG_REQUIRED",
             "versioned_evidence_lock_evolution": "IMMUTABLE_M7_ROOT_WITH_SUCCESSOR_CHAIN",
@@ -107,7 +154,7 @@ def render() -> dict[str, Any]:
             "json_pointer_conformance": "RFC6901_STRICT_NO_NEGATIVE_ARRAY_INDICES",
         },
         "completion_boundary": {
-            "completed": "Milestone 7 hardened canonical-data and qualification architecture",
+            "completed": "Milestone 7 residual authority, attribution, and semantic-identity hardening",
             "next_authorized_milestone": "Milestone 8 — Build the First Characterization Inventory",
             "deferred": [
                 "per-identity kind, layer, and authority adjudication",
@@ -118,6 +165,7 @@ def render() -> dict[str, Any]:
             "nonclaims": [
                 "The empty catalog establishes no declaration-validation obligation or scenario.",
                 "Mechanically tested qualification rules are not proved epistemically sufficient.",
+                "The empty approved-source registry establishes no normative or mechanized authority.",
                 "No checker consensus establishes normativity.",
                 "No soundness or coverage claim was created.",
             ],

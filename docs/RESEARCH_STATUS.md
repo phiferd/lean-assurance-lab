@@ -1074,6 +1074,31 @@ prepared_external_action_drafts: 5
    coverage campaign, create a public conformance claim, or infer semantic
    authority from checker agreement.
 
+   A final residual exploit-first pass at
+   `0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a` then demonstrated three remaining
+   attacks with zero-error validation before repair: locally manufactured
+   normative authority, checker outcomes asserted through free-form secondary
+   metadata rather than result bytes, and stable-ID denotation drift through
+   additional predicates or a different resolving judgment pointer. Equivalent
+   probes also admitted forged authoritative documentation, self-asserted formal
+   mechanization, and empirical precondition/observation drift. M7 now binds an
+   intentionally empty, separately frozen
+   [approved authority-source registry](../config/declaration-validation-approved-authority-sources.json).
+   Evidence-lock snapshots cannot establish normative authority unless their
+   external source identity was approved before catalog adjudication; M8 cannot
+   extend that registry. Concrete checker observations are extracted from exact
+   structured result pointers, with secondary locator strings treated only as
+   annotations. Stable IDs bind a canonical semantic projection covering the
+   modeled judgment, exact applicability/reach structure, target predicate,
+   violation semantics, and empirical scenario scope/observation target while
+   excluding editorial and research-result metadata. The named residual attack
+   tests are frozen in `tests/test_declaration_validation_catalog.py`, and the
+   generated Milestone 7 completion record preserves the accepted-at-baseline
+   and rejected-after-hardening results. The catalog remains empty, the approved
+   registry contains zero sources, soundness remains `NOT_ASSESSED`, and M8 has
+   not started. The exact claim is limited to mechanical rejection of these
+   attacks, not epistemic sufficiency of the authority model.
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

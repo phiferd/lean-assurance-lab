@@ -828,6 +828,57 @@ batch. Do not mark the canonical catalog `MILESTONE_8_CHARACTERIZATION_INVENTORY
 until that pilot has been reviewed and the exact 30-identity disposition vector
 can be completed without weakening these gates.
 
+### Milestone 7 Residual Adversarial Hardening — 2026-08-31
+
+A final exploit-first pass tested three residual attacks against commit
+`0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a` before changing the validator. All
+three primary attacks validated with zero errors: a locally authored snapshot
+behind a plausible normative-document URL established `ESTABLISHED` authority;
+free-form locator metadata changed a content-bound Kiota `ACCEPT` result into a
+catalog `REJECT`; and additional applicability/premise predicates narrowed a
+stable normative ID. Redirecting the modeled-judgment pointer to another
+resolving target-profile field also validated. The bounded equivalent probes
+confirmed the same source-origin problem for `AUTHORITATIVE_DOCUMENTATION` and
+a fully schema-conforming self-asserted `FORMAL_MECHANIZATION`, plus empirical
+precondition and observation-point drift.
+
+The authority-source repair uses the bounded approved-registry option. The new
+`config/declaration-validation-approved-authority-sources.json` is separately
+frozen before Milestone 8 and is intentionally empty. A normative-document or
+mechanized evidence-lock record must identify an exact preapproved source whose
+external identity and authenticated content or repository blob identity match.
+Catalog adjudication cannot extend the frozen registry; a future addition needs
+a separate explicit authority-source decision, new registry version, and
+corresponding architecture update before catalog adjudication. Content
+addressing remains only a claim about inspected bytes, never a claim about
+external origin.
+
+Concrete checker observations now require an exact JSON pointer to
+`/validators/<index>/result/normalized_outcome`. The validator reads the
+checker ID, outcome, case ID, and artifact path from the content-bound result
+record and maps the checker to the pinned observer profile. Free-form
+`exact_locator.secondary` strings remain human annotations and have no factual
+authority. A case-ID locator or metadata surrounding an opposite structured
+outcome cannot establish a concrete observation.
+
+Stable identity now uses the frozen
+`ordinary-declaration-validation.semantic-denotation-projection.v1`. For
+normative entries it binds kind, exact modeled judgment, exact frozen
+applicability, absence of additional premises, exact target predicate, and
+rejection semantics. For empirical scenarios it binds kind, exact frozen
+subject scope and precondition, exact stimulus, a single derived pinned-observer
+observation point, and the pinned observer population. Profile-specific
+outcomes, evidence, authority state, layers, predicate labels, implementation
+mappings, and explanatory prose remain non-identity research metadata. Any
+change to the canonical semantic projection requires a new stable ID.
+
+The canonical catalog and identity-disposition vector remain empty; the
+approved-source registry is empty; soundness remains `NOT_ASSESSED`; and no
+Milestone 8 pilot or authority adjudication was started. The limited claim is:
+these specific source-authority, checker-attribution, and semantic-identity
+forgery attacks are mechanically rejected. This does not prove the authority
+model epistemically sufficient.
+
 ## Milestone 8 — Build the First Characterization Inventory
 
 Inspect the declared ordinary-declaration discovery surface.
