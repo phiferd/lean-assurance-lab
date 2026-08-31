@@ -891,9 +891,10 @@ identities accepted by `scripts/validate-declaration-validation-catalog`.
 
 The M7→M8 transition follows the repository-wide frozen-history invariant.
 M8 may advance the canonical catalog only when the immutable M7 attestation and
-the repaired five-entry pilot both validate unchanged under the
-historical-transition regression; later catalog or schema bytes must not be
-used to reinterpret either predecessor.
+the immutable reviewed-pilot attestation at
+`results/research/declaration-validation-milestone-8-pilot-reviewed-historical.json`
+both validate unchanged under the historical-transition regression; later
+catalog or schema bytes must not be used to reinterpret either predecessor.
 
 The frozen stable semantic identities and their denotations must not drift.
 Checker observations must be derived from the structured, content-bound result

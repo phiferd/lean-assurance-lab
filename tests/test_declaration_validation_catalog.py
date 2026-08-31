@@ -337,6 +337,9 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
     def test_historical_m7_attestation_replaces_mutable_freeze_rendering(self):
         self.assertEqual(module.validate_historical_m7_attestation(), [])
 
+    def test_reviewed_m8_pilot_attestation_is_required_by_completion_validation(self):
+        self.assertEqual(module.validate_historical_m8_pilot(), [])
+
     def test_valid_normative_fixture_satisfies_established_rule(self):
         catalog = self.populated_catalog(self.normative_wrapper())
         self.assertEqual(self.errors(catalog), [])

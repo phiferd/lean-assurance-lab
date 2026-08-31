@@ -13,15 +13,20 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
+# This mutable convenience representation is intentionally not historical input.
 PILOT_PATH = ROOT / "config" / "declaration-validation-milestone-8-pilot.json"
-PILOT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-pilot.v2.schema.json"
 CATALOG_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
 HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
-REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-pilot"
-REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
-M8_PILOT_COMMIT = "a9c52cc334886cebbeb8d38e47454c02b893613a"
-FROZEN_PILOT_SCHEMA_SHA256 = "c37bd9f3bbf9a7ff71848f632b35cb70d727aa57118c97e6d342e20d51fa881d"
-M7_HISTORY_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-historical.json"
+REVIEWED_PILOT_ATTESTATION_PATH = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-8-pilot-reviewed-historical.json"
+)
+REVIEWED_PILOT_ATTESTATION_SCHEMA_PATH = (
+    ROOT / "schemas" / "declaration-validation-reviewed-pilot-attestation.v1.schema.json"
+)
+M8_REVIEWED_PILOT_COMMIT = "62e0631949f514c1d8458bd0562621dfba60cefe"
+M8_PILOT_DEPENDENCY_COMMIT = "a9c52cc334886cebbeb8d38e47454c02b893613a"
+FROZEN_REVIEWED_PILOT_ATTESTATION_SHA256 = "9962738f09db162efb1c41e115e2f87415c560584fe1ba34481f18e5a5f523c4"
+FROZEN_REVIEWED_PILOT_ATTESTATION_SCHEMA_SHA256 = "61448cf344eb0d8a9edfc0525c994d21e60d3adb22cc4b7eb40071b488d78957"
 FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH = (
     ROOT / "config" / "declaration-validation-approved-authority-sources" / "m7-pre-m8.json"
 )
@@ -83,31 +88,95 @@ def bound_json(
     if expected_path is not None and binding.get("path") != expected_path:
         errors.append(f"{label} path is not the frozen pilot path")
     document, blob_errors = history.historical_json(
-        binding, label=label, expected_commit=M8_PILOT_COMMIT
+        binding, label=label, expected_commit=M8_PILOT_DEPENDENCY_COMMIT
     )
     errors.extend(blob_errors)
     return document, errors
 
 
+def reviewed_pilot_context(
+    attestation: dict[str, Any] | None = None,
+) -> tuple[dict[str, Any] | None, list[str]]:
+    """Resolve the reviewed pilot and its historical inputs from Git blobs only."""
+
+    errors: list[str] = []
+    if sha256_file(REVIEWED_PILOT_ATTESTATION_SCHEMA_PATH) != FROZEN_REVIEWED_PILOT_ATTESTATION_SCHEMA_SHA256:
+        return ["reviewed-pilot historical-attestation schema bytes changed"]
+    if attestation is None:
+        if sha256_file(REVIEWED_PILOT_ATTESTATION_PATH) != FROZEN_REVIEWED_PILOT_ATTESTATION_SHA256:
+            return ["reviewed-pilot historical attestation bytes changed"]
+        attestation = load_json(REVIEWED_PILOT_ATTESTATION_PATH)
+    attestation_schema = load_json(REVIEWED_PILOT_ATTESTATION_SCHEMA_PATH)
+    errors.extend(
+        catalog.schema_errors(
+            attestation, attestation_schema, "reviewed Milestone 8 pilot historical attestation"
+        )
+    )
+    if errors:
+        return None, errors
+    if attestation["historical_commit"] != M8_REVIEWED_PILOT_COMMIT:
+        return None, ["reviewed-pilot historical attestation commit is incorrect"]
+
+    expected_paths = {
+        "pilot": "config/declaration-validation-milestone-8-pilot.json",
+        "pilot_schema": "schemas/declaration-validation-milestone-8-pilot.v2.schema.json",
+        "m7_historical_attestation": "results/research/declaration-validation-milestone-7-historical.json",
+        "m7_historical_attestation_schema": "schemas/declaration-validation-historical-attestation.schema.json",
+    }
+    resolved: dict[str, dict[str, Any]] = {}
+    for name, expected_path in expected_paths.items():
+        binding = attestation[name]
+        if binding["path"] != expected_path:
+            errors.append(f"reviewed-pilot {name} path is not exact")
+        document, binding_errors = history.historical_json(
+            binding,
+            label=f"reviewed-pilot {name}",
+            expected_commit=M8_REVIEWED_PILOT_COMMIT,
+        )
+        errors.extend(binding_errors)
+        if document is not None:
+            resolved[name] = document
+    if errors:
+        return None, errors
+
+    pilot = resolved["pilot"]
+    if pilot.get("pilot_id") != attestation["review"]["pilot_id"]:
+        errors.append("reviewed-pilot identity disagrees with the frozen pilot bytes")
+    if pilot.get("status") != attestation["review"]["status"]:
+        errors.append("reviewed-pilot status disagrees with the frozen pilot bytes")
+    errors.extend(
+        history.validate_m7_attestation(
+            resolved["m7_historical_attestation"],
+            schema=resolved["m7_historical_attestation_schema"],
+        )
+    )
+    if errors:
+        return None, errors
+    return {"attestation": attestation, **resolved}, []
+
+
 def historical_predecessor_catalog(
     pilot: dict[str, Any],
+    *,
+    m7_attestation: dict[str, Any],
+    m7_attestation_schema: dict[str, Any],
+    m7_attestation_binding: dict[str, Any],
 ) -> tuple[dict[str, Any] | None, list[str]]:
     errors: list[str] = []
     predecessor = pilot["predecessor_catalog"]
-    if predecessor["attestation_path"] != str(M7_HISTORY_PATH.relative_to(ROOT)):
+    if predecessor["attestation_path"] != m7_attestation_binding["path"]:
         return None, ["pilot predecessor catalog must use the immutable M7 historical attestation"]
-    if predecessor["attestation_sha256"] != sha256_file(M7_HISTORY_PATH):
+    if predecessor["attestation_sha256"] != m7_attestation_binding["sha256"]:
         errors.append("pilot predecessor historical-attestation hash is stale")
-    attestation = load_json(M7_HISTORY_PATH)
-    errors.extend(history.validate_m7_attestation(attestation))
+    errors.extend(history.validate_m7_attestation(m7_attestation, schema=m7_attestation_schema))
     if predecessor["artifact"] != "catalog":
         errors.append("pilot predecessor historical artifact is not the M7 catalog")
         return None, errors
-    catalog_binding = attestation["artifacts"]["catalog"]
+    catalog_binding = m7_attestation["artifacts"]["catalog"]
     document, binding_errors = history.historical_json(
         catalog_binding,
         label="pilot predecessor M7 catalog",
-        expected_commit=attestation["historical_commit"],
+        expected_commit=m7_attestation["historical_commit"],
     )
     errors.extend(binding_errors)
     return document, errors
@@ -118,14 +187,21 @@ def validate_document(
     *,
     check_generated: bool = True,
 ) -> list[str]:
-    pilot = load_json(PILOT_PATH) if pilot is None else pilot
-    if sha256_file(PILOT_SCHEMA_PATH) != FROZEN_PILOT_SCHEMA_SHA256:
-        return ["historical Milestone 8 pilot schema bytes changed"]
-    errors = catalog.schema_errors(pilot, load_json(PILOT_SCHEMA_PATH), "Milestone 8 pilot")
+    context, context_errors = reviewed_pilot_context()
+    if context_errors:
+        return context_errors
+    assert context is not None
+    pilot = context["pilot"] if pilot is None else pilot
+    errors = catalog.schema_errors(pilot, context["pilot_schema"], "Milestone 8 pilot")
     if errors:
         return errors
 
-    predecessor_catalog, predecessor_errors = historical_predecessor_catalog(pilot)
+    predecessor_catalog, predecessor_errors = historical_predecessor_catalog(
+        pilot,
+        m7_attestation=context["m7_historical_attestation"],
+        m7_attestation_schema=context["m7_historical_attestation_schema"],
+        m7_attestation_binding=context["attestation"]["m7_historical_attestation"],
+    )
     errors.extend(predecessor_errors)
     predecessor_pilot, prior_pilot_errors = bound_json(
         pilot["predecessor_pilot"],
@@ -260,13 +336,6 @@ def validate_document(
         )
     )
 
-    if check_generated:
-        renderer = load_module("declaration_m8_pilot_report_renderer", REPORT_RENDERER_PATH)
-        expected_report = renderer.render(pilot)
-        if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != expected_report:
-            errors.append("generated Milestone 8 pilot report is not synchronized")
-        if f"Pilot SHA-256: `{sha256_file(PILOT_PATH)}`" not in expected_report:
-            errors.append("generated Milestone 8 pilot report omits the canonical pilot hash")
     return errors
 
 

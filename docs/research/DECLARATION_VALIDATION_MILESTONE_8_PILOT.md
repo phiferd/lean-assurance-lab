@@ -1,6 +1,6 @@
 # Declaration Validation Milestone 8 Pilot
 
-> Generated file. Edit `config/declaration-validation-milestone-8-pilot.json`, not this report.
+> Generated from the immutable reviewed-pilot attestation; do not edit this report.
 
 - Pilot ID: `ordinary-declaration-validation.milestone-8-pilot.v1`
 - Status: `MILESTONE_8_FIVE_ENTRY_PILOT_REVIEWED`
@@ -131,7 +131,7 @@ A future registry successor must be separately approved against its predecessor 
 
 The pilot predecessor is the immutable M7 historical attestation at `results/research/declaration-validation-milestone-7-historical.json` (SHA-256 `2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8`), specifically its `catalog` artifact. It does not read the mutable current catalog path.
 
-The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are resolved from exact Git blobs at the pilot repair commit. Future M8 catalog evolution therefore cannot re-interpret this pilot through later catalog or schema bytes.
+The reviewed pilot itself is frozen through `results/research/declaration-validation-milestone-8-pilot-reviewed-historical.json`: its exact bytes are resolved from Git commit `62e0631949f514c1d8458bd0562621dfba60cefe` and SHA-256 `6fa2622de2d23e520a609a811d38f67097778a89203349993a619f0afc3057ed` rather than the mutable pilot path. The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are likewise content-bound. Future M8 catalog, schema, validator, or report evolution therefore cannot re-interpret this reviewed pilot.
 
 ## Required Review
 

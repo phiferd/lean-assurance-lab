@@ -1152,6 +1152,33 @@ prepared_external_action_drafts: 5
    **Populate and adjudicate the
    complete Milestone 8 frozen identity inventory.**
 
+   The reviewed five-entry M8 pilot is now independently immutable. Its new
+   [reviewed-pilot historical attestation](../results/research/declaration-validation-milestone-8-pilot-reviewed-historical.json)
+   binds the exact `config/declaration-validation-milestone-8-pilot.json`
+   bytes from `62e0631949f514c1d8458bd0562621dfba60cefe` (Git blob
+   `8a76bb539083e440b048b26076b7c4c9f5c92ae8`, SHA-256
+   `6fa2622de2d23e520a609a811d38f67097778a89203349993a619f0afc3057ed`),
+   its historical v2 schema, and its M7 historical-attestation predecessor.
+   The reviewed-pilot validator resolves those Git blobs directly; it no
+   longer loads the mutable pilot path as historical input. The current path
+   remains only a convenience representation.
+
+   The strengthened M7→M8 transition regression proves that a different
+   M8-shaped current catalog leaves immutable M7 and reviewed-pilot validation
+   passing, then proves that an invalid mutable current pilot cannot redefine
+   the reviewed blob. It rejects wrong reviewed-pilot blob, SHA-256, and
+   historical-commit bindings. This provenance-only repair leaves the five
+   semantic denotations, classifications, observer outcomes, authority-source
+   counts (0 normative, 0 mechanized), and `NOT_ASSESSED` soundness conclusion
+   unchanged. Validation passed
+   `scripts/validate-declaration-validation-source-lock`,
+   `scripts/validate-declaration-validation-historical`,
+   `scripts/validate-declaration-validation-milestone-8-pilot`,
+   `scripts/validate-declaration-validation-catalog`, and all 130
+   declaration-validation tests. The exact next authorized action remains:
+   **Populate and adjudicate the
+   complete Milestone 8 frozen identity inventory.**
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

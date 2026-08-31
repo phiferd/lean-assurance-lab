@@ -1930,10 +1930,12 @@ def validate_historical_m7_attestation() -> list[str]:
 
 
 def validate_historical_m8_pilot() -> list[str]:
-    """Require the repaired pilot to remain valid while the canonical catalog evolves."""
+    """Require the reviewed pilot's Git-blob attestation alongside the M7 history."""
 
-    pilot = load_module("declaration_m8_historical_pilot_validator", PILOT_VALIDATOR_PATH)
-    return pilot.validate_document()
+    historical = load_module(
+        "declaration_m8_historical_pilot_attestation_validator", HISTORICAL_VALIDATOR_PATH
+    )
+    return historical.validate_reviewed_m8_pilot()
 
 
 def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:

@@ -5,12 +5,17 @@ from __future__ import annotations
 
 import hashlib
 import json
+import subprocess
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
 PILOT_PATH = ROOT / "config" / "declaration-validation-milestone-8-pilot.json"
+REVIEWED_PILOT_ATTESTATION_PATH = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-8-pilot-reviewed-historical.json"
+)
+FROZEN_REVIEWED_PILOT_ATTESTATION_SHA256 = "9962738f09db162efb1c41e115e2f87415c560584fe1ba34481f18e5a5f523c4"
 REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
 
 
@@ -20,6 +25,27 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def sha256_file(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def reviewed_pilot() -> tuple[dict[str, Any], dict[str, Any]]:
+    """Render the exact reviewed pilot, never a mutable convenience copy."""
+
+    if sha256_file(REVIEWED_PILOT_ATTESTATION_PATH) != FROZEN_REVIEWED_PILOT_ATTESTATION_SHA256:
+        raise RuntimeError("reviewed-pilot historical attestation bytes changed")
+    attestation = load_json(REVIEWED_PILOT_ATTESTATION_PATH)
+    binding = attestation["pilot"]
+    result = subprocess.run(
+        ["git", "show", f"{binding['git_commit']}:{binding['path']}"],
+        cwd=ROOT,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+        check=False,
+    )
+    if result.returncode:
+        raise RuntimeError("reviewed pilot Git blob is unavailable")
+    if hashlib.sha256(result.stdout).hexdigest() != binding["sha256"]:
+        raise RuntimeError("reviewed pilot Git blob SHA-256 is stale")
+    return json.loads(result.stdout), attestation
 
 
 def row_for(entry: dict[str, Any]) -> tuple[str, str, str, str]:
@@ -37,12 +63,16 @@ def row_for(entry: dict[str, Any]) -> tuple[str, str, str, str]:
 
 
 def render(pilot: dict[str, Any] | None = None) -> str:
-    pilot = load_json(PILOT_PATH) if pilot is None else pilot
-    pilot_hash = sha256_file(PILOT_PATH)
+    attestation: dict[str, Any] | None = None
+    if pilot is None:
+        pilot, attestation = reviewed_pilot()
+    pilot_hash = (
+        attestation["pilot"]["sha256"] if attestation is not None else sha256_file(PILOT_PATH)
+    )
     lines = [
         "# Declaration Validation Milestone 8 Pilot",
         "",
-        "> Generated file. Edit `config/declaration-validation-milestone-8-pilot.json`, not this report.",
+        "> Generated from the immutable reviewed-pilot attestation; do not edit this report.",
         "",
         f"- Pilot ID: `{pilot['pilot_id']}`",
         f"- Status: `{pilot['status']}`",
@@ -119,7 +149,7 @@ def render(pilot: dict[str, Any] | None = None) -> str:
         "",
         f"The pilot predecessor is the immutable M7 historical attestation at `{pilot['predecessor_catalog']['attestation_path']}` (SHA-256 `{pilot['predecessor_catalog']['attestation_sha256']}`), specifically its `{pilot['predecessor_catalog']['artifact']}` artifact. It does not read the mutable current catalog path.",
         "",
-        "The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are resolved from exact Git blobs at the pilot repair commit. Future M8 catalog evolution therefore cannot re-interpret this pilot through later catalog or schema bytes.",
+        f"The reviewed pilot itself is frozen through `{REVIEWED_PILOT_ATTESTATION_PATH.relative_to(ROOT)}`: its exact bytes are resolved from Git commit `{attestation['historical_commit'] if attestation is not None else 'the reviewed-pilot attestation'}` and SHA-256 `{pilot_hash}` rather than the mutable pilot path. The pre-hardening provenance record, repaired evidence-lock chain, and every other pilot input are likewise content-bound. Future M8 catalog, schema, validator, or report evolution therefore cannot re-interpret this reviewed pilot.",
         "",
     ])
 

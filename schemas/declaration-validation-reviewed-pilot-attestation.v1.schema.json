@@ -1,0 +1,62 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-reviewed-pilot-attestation.v1.schema.json",
+  "title": "Declaration Validation Reviewed Milestone 8 Pilot Historical Attestation",
+  "description": "Binds the reviewed five-entry Milestone 8 pilot and its historical schema to exact Git blobs so validation never follows a mutable pilot path.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "attestation_id",
+    "recorded_at",
+    "status",
+    "historical_commit",
+    "review",
+    "pilot",
+    "pilot_schema",
+    "m7_historical_attestation",
+    "m7_historical_attestation_schema",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "attestation_id": {"const": "ordinary-declaration-validation.milestone-8-pilot.reviewed-historical.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_REVIEWED_MILESTONE_8_PILOT_ATTESTATION"},
+    "historical_commit": {"$ref": "#/$defs/gitObjectId"},
+    "review": {
+      "type": "object",
+      "required": ["pilot_id", "status"],
+      "properties": {
+        "pilot_id": {"const": "ordinary-declaration-validation.milestone-8-pilot.v1"},
+        "status": {"const": "MILESTONE_8_FIVE_ENTRY_PILOT_REVIEWED"}
+      },
+      "additionalProperties": false
+    },
+    "pilot": {"$ref": "#/$defs/gitBlobBinding"},
+    "pilot_schema": {"$ref": "#/$defs/gitBlobBinding"},
+    "m7_historical_attestation": {"$ref": "#/$defs/gitBlobBinding"},
+    "m7_historical_attestation_schema": {"$ref": "#/$defs/gitBlobBinding"},
+    "nonclaims": {
+      "type": "array",
+      "minItems": 2,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObjectId": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gitBlobBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObjectId"},
+        "git_blob": {"$ref": "#/$defs/gitObjectId"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

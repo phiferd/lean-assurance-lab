@@ -31,10 +31,14 @@ pilot_validator = load_module(
 
 class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
     def test_m8_current_catalog_transition_leaves_historical_attestations_unchanged(self):
-        """This would fail when the pilot/M7 validators followed config/catalog.json."""
+        """This would fail when M7 or the reviewed pilot followed config/catalog.json."""
 
         attestation = history.load_json(history.M7_ATTESTATION_PATH)
-        pilot = pilot_validator.load_json(pilot_validator.PILOT_PATH)
+        reviewed_context, reviewed_errors = pilot_validator.reviewed_pilot_context()
+        self.assertEqual(reviewed_errors, [])
+        self.assertIsNotNone(reviewed_context)
+        assert reviewed_context is not None
+        pilot = reviewed_context["pilot"]
         before_blobs = {}
         for name in ("catalog", "freeze_manifest", "completion_record"):
             content, errors = history.git_blob_bytes(
@@ -42,7 +46,15 @@ class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
             )
             self.assertEqual(errors, [])
             before_blobs[name] = hashlib.sha256(content).hexdigest()
-        before_pilot_sha = pilot_validator.sha256_file(pilot_validator.PILOT_PATH)
+        pilot_bytes, pilot_errors = history.git_blob_bytes(
+            reviewed_context["attestation"]["pilot"],
+            label="transition before reviewed pilot",
+            expected_commit=pilot_validator.M8_REVIEWED_PILOT_COMMIT,
+        )
+        self.assertEqual(pilot_errors, [])
+        self.assertIsNotNone(pilot_bytes)
+        assert pilot_bytes is not None
+        before_pilot_sha = hashlib.sha256(pilot_bytes).hexdigest()
         before_catalog_sha = pilot_validator.sha256_file(
             ROOT / "config" / "declaration-validation-catalog.json"
         )
@@ -84,7 +96,74 @@ class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
             )
             self.assertEqual(errors, [])
             self.assertEqual(hashlib.sha256(content).hexdigest(), expected_sha)
-        self.assertEqual(pilot_validator.sha256_file(pilot_validator.PILOT_PATH), before_pilot_sha)
+        pilot_bytes, pilot_errors = history.git_blob_bytes(
+            reviewed_context["attestation"]["pilot"],
+            label="transition after reviewed pilot",
+            expected_commit=pilot_validator.M8_REVIEWED_PILOT_COMMIT,
+        )
+        self.assertEqual(pilot_errors, [])
+        self.assertIsNotNone(pilot_bytes)
+        assert pilot_bytes is not None
+        self.assertEqual(hashlib.sha256(pilot_bytes).hexdigest(), before_pilot_sha)
+        self.assertEqual(
+            reviewed_context["attestation"]["pilot"]["sha256"], before_pilot_sha
+        )
+
+    def test_mutable_current_pilot_path_cannot_redefine_reviewed_pilot(self):
+        """The historical validator must not read config/declaration-validation-milestone-8-pilot.json."""
+
+        reviewed_context, reviewed_errors = pilot_validator.reviewed_pilot_context()
+        self.assertEqual(reviewed_errors, [])
+        self.assertIsNotNone(reviewed_context)
+        assert reviewed_context is not None
+        before_pilot_sha = reviewed_context["attestation"]["pilot"]["sha256"]
+        mutated_current_pilot = copy.deepcopy(reviewed_context["pilot"])
+        mutated_current_pilot["candidate_ids"] = []
+
+        with tempfile.TemporaryDirectory() as directory:
+            current_pilot = Path(directory) / "declaration-validation-milestone-8-pilot.json"
+            current_pilot.write_text(
+                json.dumps(mutated_current_pilot, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            self.assertNotEqual(pilot_validator.sha256_file(current_pilot), before_pilot_sha)
+            original_pilot_path = pilot_validator.PILOT_PATH
+            pilot_validator.PILOT_PATH = current_pilot
+            try:
+                self.assertEqual(pilot_validator.validate_document(check_generated=False), [])
+            finally:
+                pilot_validator.PILOT_PATH = original_pilot_path
+
+        frozen_pilot, frozen_errors = history.git_blob_bytes(
+            reviewed_context["attestation"]["pilot"],
+            label="current-path replacement reviewed pilot",
+            expected_commit=pilot_validator.M8_REVIEWED_PILOT_COMMIT,
+        )
+        self.assertEqual(frozen_errors, [])
+        self.assertIsNotNone(frozen_pilot)
+        assert frozen_pilot is not None
+        self.assertEqual(hashlib.sha256(frozen_pilot).hexdigest(), before_pilot_sha)
+
+    def test_reviewed_pilot_attestation_tampering_fails(self):
+        reviewed_context, reviewed_errors = pilot_validator.reviewed_pilot_context()
+        self.assertEqual(reviewed_errors, [])
+        self.assertIsNotNone(reviewed_context)
+        assert reviewed_context is not None
+
+        wrong_blob = copy.deepcopy(reviewed_context["attestation"])
+        wrong_blob["pilot"]["git_blob"] = "0" * 40
+        _, errors = pilot_validator.reviewed_pilot_context(wrong_blob)
+        self.assertTrue(any("blob identity is stale" in item for item in errors))
+
+        wrong_sha = copy.deepcopy(reviewed_context["attestation"])
+        wrong_sha["pilot"]["sha256"] = "0" * 64
+        _, errors = pilot_validator.reviewed_pilot_context(wrong_sha)
+        self.assertTrue(any("SHA-256 is stale" in item for item in errors))
+
+        wrong_commit = copy.deepcopy(reviewed_context["attestation"])
+        wrong_commit["historical_commit"] = "0" * 40
+        _, errors = pilot_validator.reviewed_pilot_context(wrong_commit)
+        self.assertTrue(any("attestation commit is incorrect" in item for item in errors))
 
     def test_pilot_rejects_a_mutable_current_catalog_as_its_predecessor(self):
         pilot = pilot_validator.load_json(pilot_validator.PILOT_PATH)

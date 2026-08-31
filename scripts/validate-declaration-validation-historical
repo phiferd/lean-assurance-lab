@@ -4,6 +4,8 @@
 from __future__ import annotations
 
 import hashlib
+import importlib.machinery
+import importlib.util
 import json
 import subprocess
 import sys
@@ -16,6 +18,7 @@ import jsonschema
 ROOT = Path(__file__).resolve().parents[1]
 M7_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-historical.json"
 ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-historical-attestation.schema.json"
+REVIEWED_PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
 M7_COMMIT = "da6b56af92ce2bcbfa6f2f29a6f699b2f0b24c19"
 FROZEN_M7_ATTESTATION_SHA256 = "2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8"
 FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb089a146dbc8e27b5595a00"
@@ -55,6 +58,16 @@ M7_ATTESTATION_ARTIFACTS = M7_COMPLETION_ARTIFACTS | {
 
 def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
 
 
 def sha256_bytes(value: bytes) -> str:
@@ -135,7 +148,13 @@ def match_artifact_binding(
     return errors
 
 
-def validate_m7_attestation(document: dict[str, Any] | None = None) -> list[str]:
+def validate_m7_attestation(
+    document: dict[str, Any] | None = None,
+    *,
+    schema: dict[str, Any] | None = None,
+) -> list[str]:
+    """Validate M7 from its supplied immutable documents when provided."""
+
     if document is None:
         errors: list[str] = []
         if sha256_bytes(M7_ATTESTATION_PATH.read_bytes()) != FROZEN_M7_ATTESTATION_SHA256:
@@ -145,7 +164,8 @@ def validate_m7_attestation(document: dict[str, Any] | None = None) -> list[str]
         if errors:
             return errors
         document = load_json(M7_ATTESTATION_PATH)
-    errors = schema_errors(document, load_json(ATTESTATION_SCHEMA_PATH), "Milestone 7 historical attestation")
+    schema = load_json(ATTESTATION_SCHEMA_PATH) if schema is None else schema
+    errors = schema_errors(document, schema, "Milestone 7 historical attestation")
     if errors:
         return errors
     if document["attestation_id"] != "ordinary-declaration-validation.milestone-7.historical.v1":
@@ -208,13 +228,23 @@ def validate_m7_attestation(document: dict[str, Any] | None = None) -> list[str]
     return errors
 
 
+def validate_reviewed_m8_pilot() -> list[str]:
+    """Validate the reviewed pilot through its own immutable Git-blob attestation."""
+
+    pilot = load_module(
+        "declaration_reviewed_m8_pilot_validator", REVIEWED_PILOT_VALIDATOR_PATH
+    )
+    return pilot.validate_document()
+
+
 def main() -> int:
     errors = validate_m7_attestation()
+    errors.extend(validate_reviewed_m8_pilot())
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("declaration-validation historical M7 attestation: PASS")
+    print("declaration-validation historical M7 attestation and reviewed M8 pilot: PASS")
     return 0
 
 
