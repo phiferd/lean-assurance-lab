@@ -1,0 +1,105 @@
+#!/usr/bin/env python3
+"""Render the review-only declaration-validation Milestone 8 pilot."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PILOT_PATH = ROOT / "config" / "declaration-validation-milestone-8-pilot.json"
+REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def row_for(entry: dict[str, Any]) -> tuple[str, str, str, str]:
+    characterization = entry["characterization"]
+    observations = ", ".join(
+        f"{item['profile_pointer'].rsplit('/', 1)[-1]}={item['outcome']}"
+        for item in entry["observer_vector"]
+    )
+    return (
+        characterization["id"],
+        characterization["kind"],
+        characterization["authority"]["status"],
+        observations,
+    )
+
+
+def render(pilot: dict[str, Any] | None = None) -> str:
+    pilot = load_json(PILOT_PATH) if pilot is None else pilot
+    pilot_hash = sha256_file(PILOT_PATH)
+    lines = [
+        "# Declaration Validation Milestone 8 Pilot",
+        "",
+        "> Generated file. Edit `config/declaration-validation-milestone-8-pilot.json`, not this report.",
+        "",
+        f"- Pilot ID: `{pilot['pilot_id']}`",
+        f"- Status: `{pilot['status']}`",
+        f"- Pilot SHA-256: `{pilot_hash}`",
+        f"- Candidate entries: {len(pilot['entries'])}",
+        "",
+        "This is the separately reviewable five-entry candidate batch authorized before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.",
+        "",
+        "## Selection",
+        "",
+        pilot["selection"]["method"],
+        "",
+    ]
+    for item in pilot["selection"]["coverage"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "## Candidate Summary", "", "| Stable ID | Kind | Authority | Observer vector |", "| --- | --- | --- | --- |"])
+    for entry in pilot["entries"]:
+        stable_id, kind, authority, observations = row_for(entry)
+        lines.append(f"| `{stable_id}` | `{kind}` | `{authority}` | `{observations}` |")
+
+    lines.extend(["", "## Per-Entry Review Material", ""])
+    for entry in pilot["entries"]:
+        characterization = entry["characterization"]
+        lines.extend([
+            f"### `{characterization['id']}` — {characterization['name']}",
+            "",
+            f"- Layers: {', '.join(f'`{item}`' for item in characterization['layers'])}",
+            f"- Authority: `{characterization['authority']['status']}` — {characterization['authority']['basis']['summary']}",
+            f"- Lifecycle: `{characterization['lifecycle']['status']}`",
+            f"- Soundness relevance: `{characterization['soundness_relevance']['status']}`",
+            "- Source mappings: " + (
+                ", ".join(
+                    f"`{item['implementation']}` at `{item['source_file_id']}`"
+                    for item in entry["source_mappings"]
+                ) or "none"
+            ),
+            "- Open questions: " + (
+                "; ".join(item["question"] for item in characterization["unknowns"])
+                or "none"
+            ),
+            "",
+        ])
+
+    lines.extend(["## Required Review", ""])
+    for item in pilot["review_requirements"]:
+        lines.append(f"- {item}")
+    lines.extend(["", "## Stop Boundary", "", pilot["stop_condition"], "", "## Nonclaims", ""])
+    for item in pilot["nonclaims"]:
+        lines.append(f"- {item}")
+    lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    REPORT_PATH.write_text(render(), encoding="utf-8")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

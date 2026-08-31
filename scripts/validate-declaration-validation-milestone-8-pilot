@@ -1,0 +1,183 @@
+#!/usr/bin/env python3
+"""Validate the separately reviewable five-entry Milestone 8 pilot."""
+
+from __future__ import annotations
+
+import copy
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PILOT_PATH = ROOT / "config" / "declaration-validation-milestone-8-pilot.json"
+PILOT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-pilot.schema.json"
+CATALOG_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
+REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-pilot"
+REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
+
+EXPECTED_IDS = {
+    "DECL.THEOREM.TYPE_PROP",
+    "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+    "DECL.UNIVERSE.PARAM_OWNERSHIP",
+    "EXPR.LET.VALUE_TYPE_MATCH",
+    "SCENARIO.AXIOM.SAFETY_FLAG",
+}
+EXPECTED_BINDINGS = {
+    "authority_rules": ROOT / "config" / "declaration-validation-authority-rules.json",
+    "catalog_schema": ROOT / "schemas" / "declaration-validation-catalog.schema.json",
+    "characterization_model": ROOT / "config" / "declaration-validation-characterization-model.json",
+    "entry_schema": ROOT / "schemas" / "declaration-validation-characterization-entry.schema.json",
+    "evidence_lock": ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-8-pilot.json",
+    "evidence_lock_schema": ROOT / "schemas" / "declaration-validation-evidence-lock.schema.json",
+    "identity_registry": ROOT / "config" / "declaration-validation-identity-registry.json",
+    "semantic_target": ROOT / "config" / "declaration-validation-target.json",
+    "source_lock": ROOT / "config" / "declaration-validation-source-lock.json",
+}
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+catalog = load_module("declaration_m8_pilot_catalog_validator", CATALOG_VALIDATOR_PATH)
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def validate_document(
+    pilot: dict[str, Any] | None = None,
+    *,
+    check_generated: bool = True,
+) -> list[str]:
+    pilot = load_json(PILOT_PATH) if pilot is None else pilot
+    errors = catalog.schema_errors(pilot, load_json(PILOT_SCHEMA_PATH), "Milestone 8 pilot")
+    if errors:
+        return errors
+
+    if pilot["predecessor_catalog"]["path"] != "config/declaration-validation-catalog.json":
+        errors.append("pilot predecessor catalog path is not canonical")
+    elif pilot["predecessor_catalog"]["sha256"] != sha256_file(catalog.CATALOG_PATH):
+        errors.append("pilot predecessor catalog hash is stale")
+
+    for name, path in EXPECTED_BINDINGS.items():
+        binding = pilot["artifact_bindings"][name]
+        if ROOT / binding["path"] != path:
+            errors.append(f"pilot {name} binding path is not canonical")
+        elif binding["sha256"] != sha256_file(path):
+            errors.append(f"pilot {name} binding hash is stale")
+
+    canonical_catalog = load_json(catalog.CATALOG_PATH)
+    if canonical_catalog["status"] != "MILESTONE_7_INFRASTRUCTURE_ONLY":
+        errors.append("pilot must not change the canonical catalog to a Milestone 8 status")
+    if canonical_catalog["entries"] or canonical_catalog["identity_dispositions"]:
+        errors.append("pilot must not populate the canonical catalog or disposition vector")
+    boundary = canonical_catalog["completion_boundary"]
+    if boundary["inventory_populated"] or boundary["authority_assignments_created"]:
+        errors.append("pilot must not assert Milestone 8 completion flags")
+
+    selected_ids = set(pilot["candidate_ids"])
+    entry_ids = [row["characterization"].get("id") for row in pilot["entries"]]
+    if selected_ids != EXPECTED_IDS or set(entry_ids) != EXPECTED_IDS:
+        errors.append("pilot candidate selection differs from the authorized five-entry batch")
+    if len(entry_ids) != len(set(entry_ids)):
+        errors.append("pilot contains duplicate stable identities")
+
+    evidence_lock = load_json(EXPECTED_BINDINGS["evidence_lock"])
+    evidence_schema = load_json(EXPECTED_BINDINGS["evidence_lock_schema"])
+    source_lock = load_json(EXPECTED_BINDINGS["source_lock"])
+    evidence_errors, evidence_locks = catalog.validate_evidence_lock_chain(
+        evidence_lock,
+        evidence_schema,
+        source_lock,
+        check_git_tracking=check_generated,
+    )
+    errors.extend(evidence_errors)
+    if evidence_lock["sequence"] != 2 or evidence_lock["status"] != "MILESTONE_8_EVIDENCE_SELECTION":
+        errors.append("pilot must bind the sequence-2 Milestone 8 evidence-selection successor")
+
+    catalog_schema = load_json(EXPECTED_BINDINGS["catalog_schema"])
+    entry_schema = load_json(EXPECTED_BINDINGS["entry_schema"])
+    resolved_catalog_schema = copy.deepcopy(catalog_schema)
+    resolved_catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = entry_schema
+    schema_probe = copy.deepcopy(canonical_catalog)
+    schema_probe["entries"] = pilot["entries"]
+    errors.extend(catalog.schema_errors(schema_probe, resolved_catalog_schema, "pilot entries"))
+
+    identities_document = load_json(EXPECTED_BINDINGS["identity_registry"])
+    identities, duplicate_id_errors = catalog.unique_index(
+        identities_document["identities"], "id", "stable identity"
+    )
+    errors.extend(duplicate_id_errors)
+    authority = load_json(EXPECTED_BINDINGS["authority_rules"])
+    rule_errors, rules = catalog.validate_rule_set(authority)
+    errors.extend(rule_errors)
+    prior_decisions = load_json(catalog.PRIOR_DECISIONS_PATH)
+    decision_ids = {row["id"] for row in prior_decisions["records"]}
+    target = load_json(EXPECTED_BINDINGS["semantic_target"])
+    model = load_json(EXPECTED_BINDINGS["characterization_model"])
+    approved_sources = load_json(catalog.APPROVED_AUTHORITY_SOURCES_PATH)
+    if approved_sources["normative_documentation"] or approved_sources["mechanized_results"]:
+        errors.append("pilot must use the frozen empty approved-authority-source registry")
+
+    for row in pilot["entries"]:
+        entry = row["characterization"]
+        if entry["authority"]["status"] != "PROVISIONAL":
+            errors.append(f"{entry['id']}: pilot entries must remain PROVISIONAL")
+        if entry["soundness_relevance"]["status"] != "NOT_ASSESSED":
+            errors.append(f"{entry['id']}: pilot entries must retain NOT_ASSESSED soundness relevance")
+        if not row["source_mappings"]:
+            errors.append(f"{entry['id']}: pilot entry lacks a source mapping")
+        errors.extend(
+            catalog.validate_entry(
+                row,
+                catalog_ids=set(entry_ids),
+                identities=identities,
+                decision_ids=decision_ids,
+                authority_rules=rules,
+                target=target,
+                model=model,
+                source_lock=source_lock,
+                evidence_locks=evidence_locks,
+                approved_authority_sources=approved_sources,
+            )
+        )
+    errors.extend(catalog.lifecycle_cycle_errors(pilot["entries"]))
+
+    if check_generated:
+        renderer = load_module("declaration_m8_pilot_report_renderer", REPORT_RENDERER_PATH)
+        expected_report = renderer.render(pilot)
+        if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != expected_report:
+            errors.append("generated Milestone 8 pilot report is not synchronized")
+        if f"Pilot SHA-256: `{sha256_file(PILOT_PATH)}`" not in expected_report:
+            errors.append("generated Milestone 8 pilot report omits the canonical pilot hash")
+    return errors
+
+
+def main() -> int:
+    errors = validate_document()
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    print("declaration-validation Milestone 8 five-entry pilot: PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1064,12 +1064,18 @@ prepared_external_action_drafts: 5
    original validator as historical Git blobs, matching Milestones 5 and 6
    without rewriting historical bytes. These checks mechanically enforce the
    qualification rules; they do not prove those rules epistemically
-   sufficient. The next authorized work is Milestone 8: first prepare and
-   review a five-entry
-   candidate batch, then inspect and disposition every frozen identity into the
-   first complete characterization inventory. Do not claim Milestone 8 status
-   for the pilot or for any incomplete disposition vector. Continue toward
-   the adversarial review and frozen design for the later Arena
+   sufficient. The five-entry Milestone 8 candidate batch is now prepared and
+   awaits review before any further identity adjudication. Its canonical
+   candidate data is
+   [bound separately](../config/declaration-validation-milestone-8-pilot.json),
+   its selected existing observer-result evidence is bound by the sequence-2
+   [successor lock](../config/declaration-validation-evidence-locks/milestone-8-pilot.json),
+   and its generated review view is
+   [available here](research/DECLARATION_VALIDATION_MILESTONE_8_PILOT.md).
+   After review, inspect and disposition every frozen identity into the first
+   complete characterization inventory. Do not claim Milestone 8 status for
+   the pilot or for any incomplete disposition vector. Continue toward the
+   adversarial review and frozen design for the later Arena
    negative-coverage phase. This slice does not execute the broad Arena
    coverage campaign, create a public conformance claim, or infer semantic
    authority from checker agreement.
@@ -1095,8 +1101,9 @@ prepared_external_action_drafts: 5
    tests are frozen in `tests/test_declaration_validation_catalog.py`, and the
    generated Milestone 7 completion record preserves the accepted-at-baseline
    and rejected-after-hardening results. The catalog remains empty, the approved
-   registry contains zero sources, soundness remains `NOT_ASSESSED`, and M8 has
-   not started. The exact claim is limited to mechanical rejection of these
+   registry contains zero sources, soundness remains `NOT_ASSESSED`, and the M8
+   five-entry pilot awaits review without asserting M8 completion. The exact
+   claim is limited to mechanical rejection of these
    attacks, not epistemic sufficiency of the authority model.
 
    The repository operating-instruction prerequisite is complete: `AGENTS.md`
