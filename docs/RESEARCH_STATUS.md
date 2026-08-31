@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-30
+Last updated: 2026-08-31
 
 ## How Status Is Tracked
 
@@ -1098,6 +1098,12 @@ prepared_external_action_drafts: 5
    registry contains zero sources, soundness remains `NOT_ASSESSED`, and M8 has
    not started. The exact claim is limited to mechanical rejection of these
    attacks, not epistemic sufficiency of the authority model.
+
+   The repository operating-instruction prerequisite is complete: `AGENTS.md`
+   now routes agents through this status artifact and the active plan, and the
+   repository-local declaration-validation adjudication skill routes M8/M9
+   catalog work to the canonical artifacts and validators. This organizational
+   change does not start M8, alter the frontier, or change any research finding.
 
 ### Waiting
 

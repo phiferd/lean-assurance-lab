@@ -881,6 +881,27 @@ model epistemically sufficient.
 
 ## Milestone 8 — Build the First Characterization Inventory
 
+### Execution Boundary and Completion Gate
+
+Begin with a separately reviewable five-entry candidate pilot. Do not mark the
+canonical catalog `MILESTONE_8_CHARACTERIZATION_INVENTORY`, claim Milestone 8
+complete, or proceed to Milestone 9 on the basis of that pilot. After review,
+full M8 completion requires the exact disposition vector for all 30 frozen
+identities accepted by `scripts/validate-declaration-validation-catalog`.
+
+The frozen stable semantic identities and their denotations must not drift.
+Checker observations must be derived from the structured, content-bound result
+evidence required by the catalog validator. While the current gate is in
+force, every admitted entry retains `soundness_relevance = NOT_ASSESSED`.
+
+Catalog adjudication may not extend the frozen approved-authority-source
+registry. Lack of qualified normative support must remain `PROVISIONAL` or
+`UNRESOLVED` with the required unmet requirement or blocker; it must not be
+converted into invented authority. The M7 evidence-lock root is immutable: M8
+uses a new content-bound sequence-2 successor. These requirements are enforced
+by the canonical schemas, validators, tests, and freeze/report generation
+paths; this plan does not substitute prose for those gates.
+
 Inspect the declared ordinary-declaration discovery surface.
 
 For every discovered item:
