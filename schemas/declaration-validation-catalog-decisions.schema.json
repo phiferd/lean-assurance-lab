@@ -39,6 +39,7 @@
         "result",
         "reason",
         "evidence",
+        "catalog_snapshot_before",
         "catalog_hash_before",
         "catalog_hash_after",
         "statement_hashes_before",
@@ -84,6 +85,15 @@
             },
             "additionalProperties": false
           }
+        },
+        "catalog_snapshot_before": {
+          "type": "object",
+          "required": ["path", "sha256"],
+          "properties": {
+            "path": {"type": "string", "minLength": 1},
+            "sha256": {"$ref": "#/$defs/sha256"}
+          },
+          "additionalProperties": false
         },
         "catalog_hash_before": {"$ref": "#/$defs/sha256"},
         "catalog_hash_after": {"$ref": "#/$defs/sha256"},

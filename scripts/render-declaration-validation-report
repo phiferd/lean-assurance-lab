@@ -85,15 +85,22 @@ def statement_summary(value: dict[str, Any]) -> str:
     return value["statement"]["stimulus"]["statement"]
 
 
-def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | None = None) -> str:
+def render(
+    catalog: dict[str, Any] | None = None,
+    source_lock: dict[str, Any] | None = None,
+    evidence_lock: dict[str, Any] | None = None,
+) -> str:
     if catalog is None:
         catalog = load_json(CATALOG_PATH)
     if source_lock is None:
         source_lock = load_json(SOURCE_LOCK_PATH)
+    if evidence_lock is None:
+        evidence_lock = load_json(ROOT / catalog["artifact_bindings"]["evidence_lock"]["path"])
     catalog_hash = sha256_file(CATALOG_PATH) if catalog == load_json(CATALOG_PATH) else hashlib.sha256(
         (json.dumps(catalog, indent=2, sort_keys=True) + "\n").encode("utf-8")
     ).hexdigest()
     entries = sorted(catalog["entries"], key=lambda row: characterization(row)["id"])
+    dispositions = sorted(catalog["identity_dispositions"], key=lambda row: row["id"])
     source_by_id = {row["id"]: row for row in source_lock["source_files"]}
 
     kind_counts = Counter(characterization(row)["kind"] for row in entries)
@@ -113,6 +120,19 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
         for observation in row["observer_vector"]:
             observer_counts[observation["profile_pointer"]][observation["outcome"]] += 1
 
+    status_summary = {
+        "MILESTONE_7_INFRASTRUCTURE_ONLY": (
+            "The Milestone 7 catalog is intentionally empty. Its schemas, qualification "
+            "gates, versioned evidence-lock root, and generated views are frozen before "
+            "Milestone 8 performs per-identity adjudication."
+        ),
+        "MILESTONE_8_CHARACTERIZATION_INVENTORY": (
+            "This is the first closed Milestone 8 characterization inventory. Every frozen "
+            "identity has an explicit catalog, deferred-kind, or out-of-scope disposition."
+        ),
+        "MILESTONE_9_PRE_REVIEW_FREEZE": "This is the frozen pre-adversarial-review inventory.",
+        "MILESTONE_9_REVIEWED_FREEZE": "This is the frozen post-adversarial-review inventory.",
+    }[catalog["status"]]
     lines = [
         "# Declaration Validation Obligations and Scenarios",
         "",
@@ -124,8 +144,9 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
         f"- Catalog entries: {len(entries)}",
         "",
         "This report is a deterministic view of the canonical machine-readable catalog. "
-        "Its catalog hash is checked mechanically. The Milestone 7 catalog is intentionally "
-        "empty: Milestone 8 performs the per-identity evidence and authority adjudication.",
+        f"Its catalog hash is checked mechanically. {status_summary}",
+        f"The bound evidence-lock successor is `{evidence_lock['lock_id']}` at sequence "
+        f"{evidence_lock['sequence']}.",
         "",
         "## Bound Inputs",
         "",
@@ -150,6 +171,17 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
     lines.extend(["", "### Counts by Lifecycle Status", ""])
     lines.extend(
         table(["Lifecycle status", "Count"], [[name, lifecycle_counts[name]] for name in LIFECYCLE_STATUSES])
+    )
+    lines.extend(["", "### Counts by Identity Disposition", ""])
+    disposition_counts = Counter(row["disposition"] for row in dispositions)
+    lines.extend(
+        table(
+            ["Disposition", "Count"],
+            [
+                [name, disposition_counts[name]]
+                for name in ["CATALOG_ENTRY", "DEFERRED_UNRESOLVED_KIND", "OUT_OF_SCOPE"]
+            ],
+        )
     )
     lines.extend(["", "## Checker Observation Summary", ""])
     lines.extend(
@@ -189,18 +221,54 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
     else:
         lines.append("No characterization entries have been admitted yet.")
 
+    lines.extend(["", "## Frozen Identity Dispositions", ""])
+    if dispositions:
+        lines.extend(
+            table(
+                ["ID", "Disposition", "Reason", "Decisions"],
+                [
+                    [row["id"], row["disposition"], row["reason"], row["decision_ids"]]
+                    for row in dispositions
+                ],
+            )
+        )
+    else:
+        lines.append("No identity dispositions have been assigned at this milestone.")
+
     unresolved = [
         row
         for row in entries
-        if characterization(row)["authority"]["status"] == "UNRESOLVED"
+        if characterization(row)["authority"]["status"] in {"PROVISIONAL", "UNRESOLVED"}
         or characterization(row)["unknowns"]
+        or characterization(row)["authority"]["basis"]["unmet_requirements"]
+        or any(
+            assumption["status"] in {"ACTIVE", "UNRESOLVED"}
+            for evidence in characterization(row)["evidence"]
+            for assumption in evidence["assumptions"]
+        )
+        or any(
+            evidence["role"] == "CONTRADICTION"
+            for evidence in characterization(row)["evidence"]
+        )
     ]
     lines.extend(["", "## Unresolved Items", ""])
     if unresolved:
         for row in unresolved:
             value = characterization(row)
-            questions = "; ".join(item["question"] for item in value["unknowns"]) or value["authority"]["basis"]["summary"]
-            lines.append(f"- `{value['id']}` — {questions}")
+            details = [item["question"] for item in value["unknowns"]]
+            details.extend(value["authority"]["basis"]["unmet_requirements"])
+            details.extend(
+                assumption["statement"]
+                for evidence in value["evidence"]
+                for assumption in evidence["assumptions"]
+                if assumption["status"] in {"ACTIVE", "UNRESOLVED"}
+            )
+            details.extend(
+                evidence["claim_supported"]["proposition"]
+                for evidence in value["evidence"]
+                if evidence["role"] == "CONTRADICTION"
+            )
+            lines.append(f"- `{value['id']}` — {'; '.join(details) or value['authority']['basis']['summary']}")
     else:
         lines.append("No unresolved catalog entries are present.")
 
@@ -245,6 +313,9 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
                     f"- Statement: {statement_summary(value)}",
                     f"- Layers: `{cell(value['layers'])}`",
                     f"- Authority: `{value['authority']['status']}` via `{value['authority']['basis']['qualification_rule']}`",
+                    f"- Authority basis: {value['authority']['basis']['summary']}",
+                    f"- Unmet authority requirements: `{cell(value['authority']['basis']['unmet_requirements']) or '—'}`",
+                    f"- Active evidence assumptions: `{cell([assumption['id'] for evidence in value['evidence'] for assumption in evidence['assumptions'] if assumption['status'] == 'ACTIVE']) or '—'}`",
                     f"- Lifecycle: `{value['lifecycle']['status']}`",
                     f"- Soundness relevance: `{value['soundness_relevance']['status']}`",
                     f"- Decision IDs: `{cell(row['decision_ids'])}`",
@@ -264,9 +335,16 @@ def render(catalog: dict[str, Any] | None = None, source_lock: dict[str, Any] | 
             )
             lines.extend(["", "Evidence:", ""])
             for evidence in value["evidence"]:
+                assumptions = [
+                    f"{item['id']}={item['status']}" for item in evidence["assumptions"]
+                ]
+                limitations = evidence.get("limitations", [])
+                contradiction = "ACTIVE" if evidence["role"] == "CONTRADICTION" else "—"
                 lines.append(
                     f"- `{evidence['id']}` — `{evidence['role']}` / `{evidence['source_type']}`: "
-                    f"{evidence['claim_supported']['proposition']}"
+                    f"{evidence['claim_supported']['proposition']} "
+                    f"Assumptions: `{cell(assumptions) or '—'}`. "
+                    f"Contradiction: `{contradiction}`. Limitations: `{cell(limitations) or '—'}`."
                 )
 
     lines.extend(["", "## Milestone Boundary", ""])

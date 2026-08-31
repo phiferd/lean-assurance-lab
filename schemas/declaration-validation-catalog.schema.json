@@ -12,6 +12,7 @@
     "id_evolution_rules",
     "observer_order",
     "entries",
+    "identity_dispositions",
     "completion_boundary",
     "nonclaims"
   ],
@@ -35,6 +36,8 @@
         "discovery_closure",
         "identity_registry",
         "source_lock",
+        "evidence_lock",
+        "evidence_lock_schema",
         "entry_schema",
         "authority_rules"
       ],
@@ -44,6 +47,8 @@
         "discovery_closure": {"$ref": "#/$defs/fileBinding"},
         "identity_registry": {"$ref": "#/$defs/fileBinding"},
         "source_lock": {"$ref": "#/$defs/fileBinding"},
+        "evidence_lock": {"$ref": "#/$defs/fileBinding"},
+        "evidence_lock_schema": {"$ref": "#/$defs/fileBinding"},
         "entry_schema": {"$ref": "#/$defs/fileBinding"},
         "authority_rules": {"$ref": "#/$defs/fileBinding"}
       },
@@ -60,6 +65,10 @@
     "entries": {
       "type": "array",
       "items": {"$ref": "#/$defs/catalogEntry"}
+    },
+    "identity_dispositions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/identityDisposition"}
     },
     "completion_boundary": {
       "type": "object",
@@ -154,6 +163,7 @@
       "type": "object",
       "required": [
         "characterization",
+        "identity_denotation",
         "identity_statement_sha256",
         "decision_ids",
         "observer_vector",
@@ -162,6 +172,21 @@
       "properties": {
         "characterization": {
           "$ref": "https://leanassurancelab.invalid/schemas/declaration-validation-characterization-entry.schema.json"
+        },
+        "identity_denotation": {
+          "type": "object",
+          "required": ["semantic_statement", "applicability", "intended_kind"],
+          "properties": {
+            "semantic_statement": {"type": "string", "minLength": 1},
+            "applicability": {"type": "string", "minLength": 1},
+            "intended_kind": {
+              "enum": [
+                "NORMATIVE_CANDIDATE_OBLIGATION",
+                "EMPIRICAL_CONTRACT_SCENARIO"
+              ]
+            }
+          },
+          "additionalProperties": false
         },
         "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
         "decision_ids": {
@@ -179,6 +204,35 @@
         "source_mappings": {
           "type": "array",
           "items": {"$ref": "#/$defs/sourceMapping"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "identityDisposition": {
+      "type": "object",
+      "required": [
+        "id",
+        "identity_statement_sha256",
+        "disposition",
+        "reason",
+        "decision_ids"
+      ],
+      "properties": {
+        "id": {"$ref": "#/$defs/semanticId"},
+        "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
+        "disposition": {
+          "enum": [
+            "CATALOG_ENTRY",
+            "DEFERRED_UNRESOLVED_KIND",
+            "OUT_OF_SCOPE"
+          ]
+        },
+        "reason": {"type": "string", "minLength": 1},
+        "decision_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^DEC\\.[A-Z0-9_.]+$"}
         }
       },
       "additionalProperties": false

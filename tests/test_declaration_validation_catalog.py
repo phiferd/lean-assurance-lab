@@ -47,11 +47,55 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             row["id"]: row for row in cls.identities_document["identities"]
         }
         cls.source_lock = module.load_json(module.SOURCE_LOCK_PATH)
+        cls.evidence_lock = module.load_json(module.M7_EVIDENCE_LOCK_PATH)
+        cls.evidence_lock_schema = module.load_json(module.EVIDENCE_LOCK_SCHEMA_PATH)
         cls.prior_decisions = module.load_json(module.PRIOR_DECISIONS_PATH)
 
-    def errors(self, catalog=None, authority=None, decisions=None):
+    def successor_evidence_lock(self):
+        result = copy.deepcopy(self.evidence_lock)
+        result["lock_id"] = "ordinary-declaration-validation.evidence-lock.test-m8.v1"
+        result["sequence"] = 2
+        result["status"] = "MILESTONE_8_EVIDENCE_SELECTION"
+        result["predecessor"] = {
+            "kind": "EVIDENCE_LOCK",
+            "path": str(module.M7_EVIDENCE_LOCK_PATH.relative_to(ROOT)),
+            "sha256": module.sha256_file(module.M7_EVIDENCE_LOCK_PATH),
+        }
+        source_path = "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md"
+        result["normative_documentation"] = [
+            {
+                "id": "NORMDOC.FIXTURE.SPECIFICATION",
+                "document_kind": "SPECIFICATION",
+                "version_or_edition": "in-memory test fixture",
+                "stable_url_or_doi": "https://leanassurancelab.invalid/test-fixture",
+                "retrieved_path": source_path,
+                "retrieved_content_sha256": module.sha256_file(ROOT / source_path),
+                "section_anchor_or_page": "fixture-section",
+                "claim_supported": "Schema and validator regression fixture only.",
+            }
+        ]
+        return result
+
+    def errors(
+        self,
+        catalog=None,
+        authority=None,
+        decisions=None,
+        evidence_lock=None,
+        enforce_milestone_boundary=False,
+    ):
+        catalog_value = copy.deepcopy(self.catalog if catalog is None else catalog)
+        if evidence_lock is None:
+            evidence_lock = (
+                self.evidence_lock
+                if catalog_value["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY"
+                else self.successor_evidence_lock()
+            )
+        catalog_value["artifact_bindings"]["evidence_lock"]["sha256"] = (
+            module.document_sha256(evidence_lock)
+        )
         return module.validate_artifacts(
-            self.catalog if catalog is None else catalog,
+            catalog_value,
             self.catalog_schema,
             self.entry_schema,
             self.authority if authority is None else authority,
@@ -61,10 +105,14 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.freeze,
             self.freeze_schema,
             self.target,
+            self.model,
             self.identities_document,
             self.source_lock,
+            evidence_lock,
+            self.evidence_lock_schema,
             self.prior_decisions,
             check_generated=False,
+            enforce_milestone_boundary=enforce_milestone_boundary,
         )
 
     def populated_catalog(self, *entries):
@@ -88,18 +136,29 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         entry["authority"]["basis"]["qualification_rule"] = (
             "AUTH.NORMATIVE.ESTABLISHED.V1"
         )
+        entry["statement"]["target_premise"]["statement"] = identity[
+            "semantic_statement"
+        ]
+        entry["statement"]["applicability"][0]["statement"] = identity[
+            "applicability"
+        ]
         entry["evidence"][0]["source_lock"] = {
-            "registry": "SEMANTIC_TARGET_PROFILE",
-            "lock_id": self.target["profile_id"],
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": "NORMDOC.FIXTURE.SPECIFICATION",
         }
         entry["evidence"][0]["exact_locator"] = {
             "kind": "DOCUMENT_SECTION",
-            "value": "/logical_target/modeled_judgment",
+            "value": "fixture-section",
         }
         return {
             "characterization": entry,
+            "identity_denotation": {
+                "semantic_statement": identity["semantic_statement"],
+                "applicability": identity["applicability"],
+                "intended_kind": identity["intended_kind"],
+            },
             "identity_statement_sha256": identity["statement_sha256"],
-            "decision_ids": identity["decision_ids"],
+            "decision_ids": list(identity["decision_ids"]),
             "observer_vector": [
                 {
                     "profile_pointer": pointer,
@@ -112,8 +171,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             "source_mappings": [],
         }
 
-    def empirical_wrapper(self):
-        stable_id = "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY"
+    def empirical_wrapper(self, stable_id="SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY"):
         identity = self.identities[stable_id]
         entry = model_module.empirical_fixture(self.model)
         entry["id"] = stable_id
@@ -121,6 +179,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         entry["authority"]["basis"]["qualification_rule"] = (
             "AUTH.EMPIRICAL.ESTABLISHED.V1"
         )
+        entry["statement"]["subject_scope"] = identity["applicability"]
+        entry["statement"]["stimulus"]["statement"] = identity["semantic_statement"]
         entry["statement"]["profile_specific_effects"][0]["outcome"] = "REJECT"
         witness = self.source_lock["generated_witnesses"][0]
         control = next(item for item in entry["evidence"] if item["role"] == "CONTROL")
@@ -131,6 +191,21 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         control["exact_locator"] = {
             "kind": "ARTIFACT_SHA256",
             "value": witness["artifact_sha256"],
+        }
+        observation = next(
+            item for item in entry["evidence"] if item["role"] == "IMPLEMENTATION_OBSERVATION"
+        )
+        observation["source_lock"] = {
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": "LOCAL.NONPROP_RESULTS",
+        }
+        observation["exact_locator"] = {
+            "kind": "JSON_POINTER",
+            "value": "results/cross-validation/m6-nonprop-theorem/results.json#/validators",
+            "secondary": [
+                "observer_profile=/observer_profiles/lean4lean",
+                "outcome=REJECT",
+            ],
         }
         observations = []
         for pointer in self.catalog["observer_order"]:
@@ -145,8 +220,13 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             )
         return {
             "characterization": entry,
+            "identity_denotation": {
+                "semantic_statement": identity["semantic_statement"],
+                "applicability": identity["applicability"],
+                "intended_kind": identity["intended_kind"],
+            },
             "identity_statement_sha256": identity["statement_sha256"],
-            "decision_ids": identity["decision_ids"],
+            "decision_ids": list(identity["decision_ids"]),
             "observer_vector": observations,
             "source_mappings": [],
         }
@@ -158,9 +238,10 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.authority_schema,
             self.decisions_schema,
             self.freeze_schema,
+            self.evidence_lock_schema,
         ):
             jsonschema.Draft202012Validator.check_schema(schema)
-        self.assertEqual(self.errors(), [])
+        self.assertEqual(self.errors(enforce_milestone_boundary=True), [])
 
     def test_milestone_7_catalog_is_authoritative_but_empty(self):
         self.assertEqual(self.catalog["status"], "MILESTONE_7_INFRASTRUCTURE_ONLY")
@@ -177,8 +258,10 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
 
     def test_report_is_deterministic_synchronized_and_content_bound(self):
         renderer = module.load_module("catalog_report_test", module.REPORT_RENDERER_PATH)
-        first = renderer.render(self.catalog, self.source_lock)
-        self.assertEqual(first, renderer.render(self.catalog, self.source_lock))
+        first = renderer.render(self.catalog, self.source_lock, self.evidence_lock)
+        self.assertEqual(
+            first, renderer.render(self.catalog, self.source_lock, self.evidence_lock)
+        )
         self.assertEqual(first, module.REPORT_PATH.read_text(encoding="utf-8"))
         self.assertIn(module.sha256_file(module.CATALOG_PATH), first)
 
@@ -313,6 +396,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
 
     def test_tracked_evidence_descendant_json_pointer_resolves(self):
         evidence = copy.deepcopy(self.normative_wrapper()["characterization"]["evidence"][0])
+        evidence["role"] = "DISCOVERY"
+        evidence["source_type"] = "LAB_EXPERIMENT"
         evidence["source_lock"] = {
             "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
             "lock_id": "LOCAL.CORE_DECL_MATRIX",
@@ -322,11 +407,15 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             "value": "results/investigations/nanoda-core-declaration-contract-matrix.json#/cases/0",
         }
         self.assertEqual(
-            module.evidence_source_errors(evidence, self.target, self.source_lock), []
+            module.evidence_source_errors(
+                evidence, self.target, self.source_lock, [self.evidence_lock]
+            ), []
         )
 
     def test_unknown_case_id_fails_source_lock_resolution(self):
         evidence = copy.deepcopy(self.normative_wrapper()["characterization"]["evidence"][0])
+        evidence["role"] = "DISCOVERY"
+        evidence["source_type"] = "LAB_EXPERIMENT"
         evidence["source_lock"] = {
             "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
             "lock_id": "LOCAL.CORE_DECL_MATRIX",
@@ -339,7 +428,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             any(
                 "case ID does not resolve" in item
                 for item in module.evidence_source_errors(
-                    evidence, self.target, self.source_lock
+                    evidence, self.target, self.source_lock, [self.evidence_lock]
                 )
             )
         )
@@ -382,9 +471,287 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         entry = self.normative_wrapper()
         catalog = self.populated_catalog(entry)
         renderer = module.load_module("catalog_dynamic_report_test", module.REPORT_RENDERER_PATH)
-        report = renderer.render(catalog, self.source_lock)
+        report = renderer.render(catalog, self.source_lock, self.successor_evidence_lock())
         self.assertIn("DECL.THEOREM.TYPE_PROP", report)
         self.assertIn("| NORMATIVE_CANDIDATE_OBLIGATION | 1 |", report)
+
+    def test_semantic_target_profile_cannot_establish_normativity(self):
+        entry = self.normative_wrapper()
+        evidence = entry["characterization"]["evidence"][0]
+        evidence["source_lock"] = {
+            "registry": "SEMANTIC_TARGET_PROFILE",
+            "lock_id": self.target["profile_id"],
+        }
+        evidence["exact_locator"] = {
+            "kind": "DOCUMENT_SECTION",
+            "value": "/logical_target/modeled_judgment",
+        }
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(
+            any("semantic-target profile cannot serve as normative support" in item for item in errors)
+        )
+
+    def test_source_type_must_match_locked_record_kind(self):
+        entry = self.normative_wrapper()
+        evidence = entry["characterization"]["evidence"][0]
+        evidence["source_lock"] = {
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": "SRC.NANODA.TC",
+        }
+        evidence["exact_locator"] = {"kind": "SOURCE_SYMBOL", "value": "check_declar"}
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("incompatible with locked record kind source_file" in item for item in errors))
+
+    def test_unqualified_other_evidence_cannot_establish_empirical_authority(self):
+        entry = self.empirical_wrapper()
+        evidence = next(
+            item
+            for item in entry["characterization"]["evidence"]
+            if item["role"] == "IMPLEMENTATION_OBSERVATION"
+        )
+        evidence["source_type"] = "OTHER"
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(
+            any("role/source-type combination is not qualified" in item for item in errors)
+        )
+        self.assertTrue(any("OTHER/LLM-like evidence" in item for item in errors))
+
+    def test_established_normative_support_rejects_unresolved_assumptions(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["evidence"][0]["assumptions"] = [
+            {
+                "id": "ASSUMPTION.FIXTURE.UNRESOLVED",
+                "statement": "A required target relationship remains unresolved.",
+                "status": "UNRESOLVED",
+            }
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("unresolved assumptions" in item for item in errors))
+
+    def test_established_normative_support_rejects_active_assumptions(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["evidence"][0]["assumptions"] = [
+            {
+                "id": "ASSUMPTION.FIXTURE.ACTIVE",
+                "statement": "The formal model-to-target relationship is assumed.",
+                "status": "ACTIVE",
+            }
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("has active assumptions" in item for item in errors))
+
+    def test_active_statement_contradiction_blocks_established_authority(self):
+        entry = self.normative_wrapper()
+        contradiction = copy.deepcopy(entry["characterization"]["evidence"][0])
+        contradiction.update(
+            {
+                "id": "EVID.FIXTURE.CONTRADICTION",
+                "role": "CONTRADICTION",
+                "source_type": "LAB_EXPERIMENT",
+                "source_lock": {
+                    "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+                    "lock_id": "LOCAL.CORE_DECL_MATRIX",
+                },
+                "exact_locator": {"kind": "JSON_POINTER", "value": "/cases/0"},
+                "claim_supported": {
+                    "entry_json_pointer": "/statement/target_premise",
+                    "predicate_id": "CLAIM.FIXTURE.CONTRADICTION",
+                    "proposition": "The fixture contradicts the target premise.",
+                },
+            }
+        )
+        entry["characterization"]["evidence"].append(contradiction)
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("active statement contradiction" in item for item in errors))
+
+    def test_soundness_claims_are_blocked_until_separately_qualified(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["soundness_relevance"] = {
+            "status": "DIRECT_LOGICAL_SOUNDNESS_RELEVANCE_ESTABLISHED",
+            "basis_evidence_refs": ["EVID.FIXTURE.NORMATIVE"],
+            "statement": "Unsupported direct soundness claim.",
+        }
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("must remain NOT_ASSESSED" in item for item in errors))
+
+    def test_stable_identity_binds_structured_semantics(self):
+        entry = self.normative_wrapper()
+        entry["characterization"]["statement"]["target_premise"]["statement"] = (
+            "A theorem declaration type need not be proposition-valued."
+        )
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("target premise changes the stable semantic identity" in item for item in errors))
+
+        entry = self.normative_wrapper()
+        entry["characterization"]["statement"]["expected_effect"][
+            "violation_expectation"
+        ] = "ACCEPT"
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("cannot expect acceptance" in item for item in errors))
+
+        empirical = self.empirical_wrapper()
+        empirical["characterization"]["statement"]["stimulus"]["statement"] = (
+            "Characterize an unrelated scenario."
+        )
+        errors = self.errors(self.populated_catalog(empirical))
+        self.assertTrue(any("empirical stimulus changes the stable semantic identity" in item for item in errors))
+
+    def test_concrete_observer_evidence_must_match_profile_and_outcome(self):
+        entry = self.empirical_wrapper()
+        observation = next(
+            item
+            for item in entry["characterization"]["evidence"]
+            if item["role"] == "IMPLEMENTATION_OBSERVATION"
+        )
+        observation["exact_locator"]["secondary"] = [
+            "observer_profile=/observer_profiles/official_importer",
+            "outcome=REJECT",
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("profile/outcome-bound checker evidence" in item for item in errors))
+
+    def test_source_mapping_must_match_implementation_repository_and_evidence(self):
+        entry = self.normative_wrapper()
+        implementation = copy.deepcopy(entry["characterization"]["evidence"][0])
+        implementation.update(
+            {
+                "id": "EVID.FIXTURE.KIOTA_MAPPING",
+                "role": "IMPLEMENTATION_OBSERVATION",
+                "source_type": "IMPLEMENTATION_SOURCE",
+                "source_lock": {
+                    "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+                    "lock_id": "SRC.NANODA.TC",
+                },
+                "exact_locator": {"kind": "SOURCE_SYMBOL", "value": "nonexistent::symbol"},
+                "lineage": {
+                    "group": "NANODA",
+                    "relationship_to_target": "DISTINCT_CODEBASE",
+                    "independence_scope": "DISTINCT_LINEAGE_ONLY",
+                    "basis": "In-memory mismatch fixture.",
+                },
+            }
+        )
+        entry["characterization"]["evidence"].append(implementation)
+        entry["source_mappings"] = [
+            {
+                "implementation": "KIOTA",
+                "source_file_id": "SRC.NANODA.TC",
+                "symbol_or_range": "nonexistent::symbol",
+                "role": "ENFORCEMENT",
+                "evidence_refs": ["EVID.FIXTURE.KIOTA_MAPPING"],
+            }
+        ]
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("does not belong to KIOTA" in item for item in errors))
+        self.assertTrue(any("not bound by the source-lock locator" in item for item in errors))
+
+    def test_milestone_8_requires_complete_identity_dispositions(self):
+        catalog = self.populated_catalog(self.normative_wrapper())
+        errors = self.errors(catalog, enforce_milestone_boundary=True)
+        self.assertTrue(any("do not exactly cover the frozen discovery surface" in item for item in errors))
+        self.assertTrue(any("do not exactly match identities" in item for item in errors))
+
+    def test_reserved_out_of_scope_identity_cannot_be_active_entry(self):
+        entry = self.empirical_wrapper("SCENARIO.LITERAL.AVAILABILITY_POLICY")
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertTrue(any("reserved/deferred identity cannot be admitted" in item for item in errors))
+
+    def test_json_pointer_resolution_is_strict_rfc6901(self):
+        self.assertEqual(module.resolve_pointer({"": 7}, "/"), 7)
+        with self.assertRaises(KeyError):
+            module.resolve_pointer({"a": [10, 20]}, "/a/-1")
+        with self.assertRaises(KeyError):
+            module.resolve_pointer({"a": 1}, "/~2")
+
+    def test_evidence_lock_successor_chain_binds_immutable_m7_root(self):
+        successor = self.successor_evidence_lock()
+        errors, chain = module.validate_evidence_lock_chain(
+            successor,
+            self.evidence_lock_schema,
+            self.source_lock,
+            check_git_tracking=False,
+        )
+        self.assertEqual(errors, [])
+        self.assertEqual([item["sequence"] for item in chain], [1, 2])
+        successor["predecessor"]["sha256"] = "0" * 64
+        errors, _ = module.validate_evidence_lock_chain(
+            successor,
+            self.evidence_lock_schema,
+            self.source_lock,
+            check_git_tracking=False,
+        )
+        self.assertTrue(any("predecessor hash is stale" in item for item in errors))
+
+    def test_report_is_status_aware_and_exposes_provisional_gap(self):
+        entry = self.normative_wrapper()
+        authority = entry["characterization"]["authority"]
+        authority["status"] = "PROVISIONAL"
+        authority["basis"]["qualification_rule"] = "AUTH.NORMATIVE.PROVISIONAL.V1"
+        authority["basis"]["unmet_requirements"] = ["Independent normative source missing."]
+        catalog = self.populated_catalog(entry)
+        renderer = module.load_module("catalog_status_report_test", module.REPORT_RENDERER_PATH)
+        report = renderer.render(catalog, self.source_lock, self.successor_evidence_lock())
+        self.assertNotIn("Milestone 7 catalog is intentionally empty", report)
+        self.assertIn("Independent normative source missing.", report)
+
+    def test_decision_requires_content_bound_before_snapshot(self):
+        entry = self.normative_wrapper()
+        entry["decision_ids"].append("DEC.CATALOG.999")
+        catalog = self.populated_catalog(entry)
+        evidence_lock = self.successor_evidence_lock()
+        catalog["artifact_bindings"]["evidence_lock"]["sha256"] = module.document_sha256(
+            evidence_lock
+        )
+        statement_bytes = json.dumps(
+            entry["characterization"]["statement"],
+            sort_keys=True,
+            separators=(",", ":"),
+        ).encode()
+        statement_hash = hashlib.sha256(statement_bytes).hexdigest()
+        decisions = copy.deepcopy(self.decisions)
+        decisions["records"] = [
+            {
+                "id": "DEC.CATALOG.999",
+                "decision_type": "OTHER",
+                "decision": "Invalid fixture lacking a durable before snapshot.",
+                "inputs": ["DECL.THEOREM.TYPE_PROP"],
+                "result": ["DECL.THEOREM.TYPE_PROP"],
+                "reason": "Exercise the snapshot gate.",
+                "evidence": [
+                    {
+                        "entry_id": "DECL.THEOREM.TYPE_PROP",
+                        "evidence_id": "EVID.FIXTURE.NORMATIVE",
+                    }
+                ],
+                "catalog_snapshot_before": {
+                    "path": "results/research/declaration-validation-catalog-snapshots/missing.json",
+                    "sha256": "0" * 64,
+                },
+                "catalog_hash_before": "0" * 64,
+                "catalog_hash_after": module.document_sha256(catalog),
+                "statement_hashes_before": {
+                    "DECL.THEOREM.TYPE_PROP": statement_hash
+                },
+                "statement_hashes_after": {
+                    "DECL.THEOREM.TYPE_PROP": statement_hash
+                },
+            }
+        ]
+        errors = self.errors(
+            catalog,
+            decisions=decisions,
+            evidence_lock=evidence_lock,
+        )
+        self.assertTrue(any("before snapshot is missing" in item for item in errors))
+        self.assertFalse(any("catalog_hash_after is not the supplied catalog" in item for item in errors))
+
+    def test_fake_pass_completion_record_without_artifacts_is_rejected(self):
+        errors = module.validate_completion_record(
+            {"schema_version": 2, "status": "PASS"},
+            rendered={},
+            run_tests=False,
+        )
+        self.assertTrue(any("completion record schema" in item for item in errors))
 
 
 if __name__ == "__main__":

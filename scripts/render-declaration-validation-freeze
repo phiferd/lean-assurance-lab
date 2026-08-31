@@ -19,6 +19,14 @@ ARTIFACTS = {
         "config/declaration-validation-source-lock.json",
         "SOURCE_AND_EVIDENCE_LOCKS",
     ),
+    "evidence_lock": (
+        "config/declaration-validation-evidence-locks/milestone-7.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "evidence_lock_schema": (
+        "schemas/declaration-validation-evidence-lock.schema.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
     "authority_rules": (
         "config/declaration-validation-authority-rules.json",
         "AUTHORITY_QUALIFICATION_RULES",
@@ -52,10 +60,13 @@ ATTESTATION_ORDER = [
 DEPENDENCY_EDGES = [
     {"from": "authority_rules", "to": "source_lock"},
     {"from": "catalog", "to": "source_lock"},
+    {"from": "catalog", "to": "evidence_lock"},
+    {"from": "catalog", "to": "evidence_lock_schema"},
     {"from": "catalog", "to": "authority_rules"},
     {"from": "catalog", "to": "prior_identity_decisions"},
     {"from": "generated_report", "to": "catalog"},
     {"from": "generated_report", "to": "source_lock"},
+    {"from": "generated_report", "to": "evidence_lock"},
     {"from": "post_catalog_decisions", "to": "catalog"},
 ]
 

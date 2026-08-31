@@ -1045,8 +1045,30 @@ prepared_external_action_drafts: 5
    `scripts/validate-declaration-validation-catalog`; completion details are in
    the
    [Milestone 7 result](../results/research/declaration-validation-milestone-7.json).
-   The next authorized work is Milestone 8: inspect and disposition every
-   frozen identity into the first characterization inventory. Continue toward
+   A separate adversarial review then exposed and the hardened M7 architecture
+   corrected additional epistemic-boundary failures: semantic-target
+   configuration and implementation files can no longer be relabeled as
+   normative support; evidence type is coupled to locked record kind;
+   unresolved or active normative assumptions and statement contradictions
+   block `ESTABLISHED`; soundness remains mechanically restricted to
+   `NOT_ASSESSED`; stable IDs bind their structured denotations; observer and
+   implementation mappings are attribution-bound; and Milestone 8 requires an
+   exact disposition of all 30 frozen identities. Decision records now bind a
+   tracked before snapshot and the supplied after catalog. A new immutable
+   [Milestone 7 evidence-lock root](../config/declaration-validation-evidence-locks/milestone-7.json)
+   permits later evidence selection through a versioned successor without
+   rewriting the frozen Milestone 6 lock. The generated report is status-aware,
+   the completion record is schema/render/test gated, and JSON Pointer handling
+   is strict RFC 6901. The predecessor sweep also changed Milestone 4's
+   completion verification to content-check its mutable frontier documents and
+   original validator as historical Git blobs, matching Milestones 5 and 6
+   without rewriting historical bytes. These checks mechanically enforce the
+   qualification rules; they do not prove those rules epistemically
+   sufficient. The next authorized work is Milestone 8: first prepare and
+   review a five-entry
+   candidate batch, then inspect and disposition every frozen identity into the
+   first complete characterization inventory. Do not claim Milestone 8 status
+   for the pilot or for any incomplete disposition vector. Continue toward
    the adversarial review and frozen design for the later Arena
    negative-coverage phase. This slice does not execute the broad Arena
    coverage campaign, create a public conformance claim, or infer semantic

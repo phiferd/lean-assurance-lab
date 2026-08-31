@@ -3,17 +3,27 @@
   "artifacts": {
     "authority_rules": {
       "path": "config/declaration-validation-authority-rules.json",
-      "sha256": "8dff17908589e8cda0eac349664b642fc5a76126ba544510917405bbff550f62",
+      "sha256": "efd1443d00493b1ef106da17258f58da2c226c4e96be1b4ce543ce08c9ad1398",
       "tier": "AUTHORITY_QUALIFICATION_RULES"
     },
     "catalog": {
       "path": "config/declaration-validation-catalog.json",
-      "sha256": "86880f235d7c31217341c036603df7adb7d5b19778614afd733ea27095c86075",
+      "sha256": "598240c33f705d9fce3d33295fa03a88cbb514c595048d33a96a74182b9fcb5a",
       "tier": "CANONICAL_CATALOG"
+    },
+    "evidence_lock": {
+      "path": "config/declaration-validation-evidence-locks/milestone-7.json",
+      "sha256": "cb93d2f3f83fa23803dd47a94fcfe793c5cbd26170695988a2727fa09feb255c",
+      "tier": "SOURCE_AND_EVIDENCE_LOCKS"
+    },
+    "evidence_lock_schema": {
+      "path": "schemas/declaration-validation-evidence-lock.schema.json",
+      "sha256": "1ddc557ae8175b90b4cffc66730f6cd3c9e1af044775b967ef0e235fee133fb9",
+      "tier": "SOURCE_AND_EVIDENCE_LOCKS"
     },
     "generated_report": {
       "path": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
-      "sha256": "0ba637ef9a15bc09f95ffccc3ae6cdd25b82271348dc3fcc9a2bc885e0595a66",
+      "sha256": "36ab1485d77ac12b23b26f8cc4a6920ff72fc4b76f42f3835dc84229a339a519",
       "tier": "GENERATED_HUMAN_REPORT"
     },
     "post_catalog_decisions": {
@@ -50,6 +60,14 @@
     },
     {
       "from": "catalog",
+      "to": "evidence_lock"
+    },
+    {
+      "from": "catalog",
+      "to": "evidence_lock_schema"
+    },
+    {
+      "from": "catalog",
       "to": "authority_rules"
     },
     {
@@ -63,6 +81,10 @@
     {
       "from": "generated_report",
       "to": "source_lock"
+    },
+    {
+      "from": "generated_report",
+      "to": "evidence_lock"
     },
     {
       "from": "post_catalog_decisions",

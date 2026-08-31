@@ -760,6 +760,74 @@ binds source/evidence locks, authority rules, catalog, report, and decision
 records in an explicitly validated acyclic order. No rule, layer, authority,
 soundness assessment, or coverage-denominator membership was assigned.
 
+### Milestone 7 Adversarial Hardening — 2026-08-30
+
+A second, independently conducted adversarial review found that the initial
+Milestone 7 validator enforced several labels separately without coupling the
+epistemically important relationships between them. Milestone 8 remains
+blocked until the corrections below are present. The correction trail is
+preserved in the hardened Milestone 7 completion record rather than replacing
+the earlier interpretation silently.
+
+The hardened validator now rejects semantic-target-profile configuration as
+normative support and mechanically couples every evidence `source_type` to a
+compatible content-addressed record kind. `NORMATIVE_SPECIFICATION` and
+`AUTHORITATIVE_DOCUMENTATION` can refer only to appropriately classified
+normative-document records; `FORMAL_MECHANIZATION` can refer only to a
+mechanized-result record; implementation source, checker result, Lab evidence,
+and witness types are similarly restricted. `OTHER` evidence cannot support an
+authority assignment. These are mechanically tested qualification rules, not
+proof that the chosen rules are epistemically sufficient.
+
+Established normative authority now rejects both unresolved and active
+supporting assumptions. Any contradiction aimed at either the structured
+statement or authority basis blocks `ESTABLISHED`. Because this slice has no
+separate soundness-qualification ontology, every admitted entry must retain
+`soundness_relevance = NOT_ASSESSED` through Milestone 8.
+
+Stable-ID validation now compares a catalog wrapper's complete copied
+denotation—intended kind, semantic statement, applicability, and digest—with
+the frozen identity registry. Normative target premises and applicability are
+also coupled directly to that denotation. An entry cannot preserve an ID while
+substituting the opposite predicate or an `ACCEPT` expectation. Identities
+frozen as deferred-kind or reserved-out-of-scope cannot be admitted as active
+entries.
+
+Milestone 8 completion now requires an exact disposition vector for all 30
+frozen identities. Every `ACTIVE_PROVISIONAL` identity must have a catalog
+entry; the deferred-kind identity must remain explicitly deferred; reserved
+identities must remain explicitly out of scope. A one-entry catalog cannot
+claim completion merely by changing the milestone status and booleans.
+
+Concrete observer outcomes require checker-result evidence that identifies the
+same observer profile and outcome. Implementation mappings require an exact
+source-bound evidence item, a repository owned by the named implementation,
+and a symbol/range bound by the source lock. Post-catalog decisions now require
+a tracked content-addressed before-catalog snapshot, verified before/after
+statement hashes, the supplied after-catalog hash, and decision-type-specific
+merge, split, exclusion, authority, layer, or lifecycle effects.
+
+The frozen Milestone 6 source lock remains unchanged. Milestone 7 adds an empty
+sequence-1 evidence-lock root under
+`config/declaration-validation-evidence-locks/`; Milestone 8 must create a new
+content-bound sequence-2 successor instead of mutating the Milestone 7 or
+Milestone 6 lock. The generated report is milestone-aware and exposes
+provisional requirements, assumptions, contradictions, and limitations. The
+Milestone 7 completion record is schema-validated and deterministically
+rendered from exact artifact bindings, and strict RFC 6901 pointer handling
+rejects negative indices and malformed escapes.
+
+The final predecessor sweep also corrected the Milestone 4 completion
+validator to verify its mutable plan/status and original validator bytes as
+historical Git blobs. This is the same non-rewriting predecessor rule already
+used for Milestones 5 and 6; current frontier edits no longer make the frozen
+Milestone 4 discovery result appear stale.
+
+Milestone 8 should begin with a separately inspectable five-entry candidate
+batch. Do not mark the canonical catalog `MILESTONE_8_CHARACTERIZATION_INVENTORY`
+until that pilot has been reviewed and the exact 30-identity disposition vector
+can be completed without weakening these gates.
+
 ## Milestone 8 — Build the First Characterization Inventory
 
 Inspect the declared ordinary-declaration discovery surface.

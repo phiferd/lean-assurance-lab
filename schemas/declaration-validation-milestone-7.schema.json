@@ -1,0 +1,176 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-7.schema.json",
+  "title": "Declaration Validation Milestone 7 Hardened Completion Record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "milestone",
+    "recorded_at",
+    "status",
+    "repository_state",
+    "artifacts",
+    "canonical_architecture",
+    "authority_qualification",
+    "validation",
+    "requirements_audit",
+    "completion_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "milestone": {"const": "declaration-validation-contract-slice-7-hardened"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PASS"},
+    "repository_state": {
+      "type": "object",
+      "required": ["head_at_hardening_start", "branch", "tree_clean_at_hardening_start", "prior_milestone_record"],
+      "properties": {
+        "head_at_hardening_start": {"const": "c89a95efcb4066e4d9aec0fa7c1a9d2ebe8f32e1"},
+        "branch": {"const": "main"},
+        "tree_clean_at_hardening_start": {"const": true},
+        "prior_milestone_record": {"const": "results/research/declaration-validation-milestone-6.json"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "authority_rules",
+        "catalog",
+        "post_catalog_decisions",
+        "evidence_lock",
+        "identity_registry",
+        "source_lock",
+        "milestone_4_completion",
+        "milestone_4_validator",
+        "authority_rules_schema",
+        "catalog_schema",
+        "entry_schema",
+        "post_catalog_decisions_schema",
+        "evidence_lock_schema",
+        "freeze_manifest_schema",
+        "completion_schema",
+        "report_renderer",
+        "freeze_renderer",
+        "completion_renderer",
+        "validator",
+        "tests",
+        "generated_report",
+        "freeze_manifest"
+      ],
+      "additionalProperties": {"$ref": "#/$defs/fileBinding"}
+    },
+    "canonical_architecture": {
+      "type": "object",
+      "required": [
+        "catalog_is_authoritative",
+        "human_report_is_generated",
+        "catalog_hash_embedded_in_report",
+        "object_kinds",
+        "authority_rules",
+        "observer_profiles_required_per_entry",
+        "post_catalog_decision_records",
+        "catalog_entries",
+        "identity_dispositions",
+        "evidence_lock_sequence",
+        "inventory_intentionally_deferred_to_milestone_8"
+      ],
+      "properties": {
+        "catalog_is_authoritative": {"const": true},
+        "human_report_is_generated": {"const": true},
+        "catalog_hash_embedded_in_report": {"$ref": "#/$defs/sha256"},
+        "object_kinds": {"const": 2},
+        "authority_rules": {"const": 6},
+        "observer_profiles_required_per_entry": {"const": 4},
+        "post_catalog_decision_records": {"const": 0},
+        "catalog_entries": {"const": 0},
+        "identity_dispositions": {"const": 0},
+        "evidence_lock_sequence": {"const": 1},
+        "inventory_intentionally_deferred_to_milestone_8": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "authority_qualification": {
+      "type": "object",
+      "required": [
+        "semantic_target_is_normative_evidence",
+        "source_type_lock_kind_coupled",
+        "unresolved_or_active_normative_assumptions_establish_authority",
+        "statement_contradictions_block_established",
+        "soundness_relevance_during_m8",
+        "checker_consensus_establishes_normativity",
+        "llm_judgment_is_evidence"
+      ],
+      "properties": {
+        "semantic_target_is_normative_evidence": {"const": false},
+        "source_type_lock_kind_coupled": {"const": true},
+        "unresolved_or_active_normative_assumptions_establish_authority": {"const": false},
+        "statement_contradictions_block_established": {"const": true},
+        "soundness_relevance_during_m8": {"const": "NOT_ASSESSED_ONLY"},
+        "checker_consensus_establishes_normativity": {"const": false},
+        "llm_judgment_is_evidence": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": ["command", "focused_test_command", "all_declaration_validation_test_command"],
+      "properties": {
+        "command": {"const": "scripts/validate-declaration-validation-catalog"},
+        "focused_test_command": {"const": "python3 -m unittest discover -s tests -p 'test_declaration_validation_catalog.py'"},
+        "all_declaration_validation_test_command": {"const": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'"}
+      },
+      "additionalProperties": false
+    },
+    "requirements_audit": {
+      "type": "object",
+      "required": [
+        "authority_qualification",
+        "identity_semantic_binding",
+        "observer_and_source_attribution",
+        "m8_discovery_closure",
+        "decision_transition_history",
+        "versioned_evidence_lock_evolution",
+        "generated_report_sync",
+        "completion_record_audit",
+        "json_pointer_conformance"
+      ],
+      "properties": {
+        "authority_qualification": {"const": "RULE_ENFORCEMENT_MECHANICALLY_TESTED_NOT_EPISTEMICALLY_PROVED"},
+        "identity_semantic_binding": {"const": "REGISTRY_DENOTATION_AND_STRUCTURED_STATEMENT_COUPLED"},
+        "observer_and_source_attribution": {"const": "PROFILE_OUTCOME_SOURCE_AND_REPOSITORY_COUPLED"},
+        "m8_discovery_closure": {"const": "EXACT_30_IDENTITY_DISPOSITION_REQUIRED"},
+        "decision_transition_history": {"const": "CONTENT_BOUND_BEFORE_SNAPSHOT_AND_SUPPLIED_AFTER_CATALOG_REQUIRED"},
+        "versioned_evidence_lock_evolution": {"const": "IMMUTABLE_M7_ROOT_WITH_SUCCESSOR_CHAIN"},
+        "generated_report_sync": {"const": "STATUS_AWARE_AND_CATALOG_HASH_BOUND"},
+        "completion_record_audit": {"const": "SCHEMA_RENDERER_ARTIFACT_AND_TEST_GATED"},
+        "json_pointer_conformance": {"const": "RFC6901_STRICT_NO_NEGATIVE_ARRAY_INDICES"}
+      },
+      "additionalProperties": false
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": ["completed", "next_authorized_milestone", "deferred", "nonclaims"],
+      "properties": {
+        "completed": {"const": "Milestone 7 hardened canonical-data and qualification architecture"},
+        "next_authorized_milestone": {"const": "Milestone 8 — Build the First Characterization Inventory"},
+        "deferred": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "nonclaims": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
