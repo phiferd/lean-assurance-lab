@@ -1,0 +1,128 @@
+#!/usr/bin/env python3
+"""Render the declaration-validation Milestone 8 completion record."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-8-freeze.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-8.json"
+
+ARTIFACTS = {
+    "catalog": "config/declaration-validation-catalog.json",
+    "catalog_schema": "schemas/declaration-validation-catalog.schema.json",
+    "entry_schema": "schemas/declaration-validation-characterization-entry.schema.json",
+    "identity_registry": "config/declaration-validation-identity-registry.json",
+    "source_lock": "config/declaration-validation-source-lock.json",
+    "evidence_lock": "config/declaration-validation-evidence-locks/milestone-8-inventory.json",
+    "approved_authority_sources": "config/declaration-validation-approved-authority-sources.json",
+    "generated_report": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+    "freeze_manifest": "results/research/declaration-validation-milestone-8-freeze.json",
+    "freeze_schema": "schemas/declaration-validation-milestone-8-freeze.schema.json",
+    "freeze_renderer": "scripts/render-declaration-validation-milestone-8-freeze",
+    "completion_schema": "schemas/declaration-validation-milestone-8.schema.json",
+    "completion_renderer": "scripts/render-declaration-validation-milestone-8-completion",
+    "inventory_populator": "scripts/populate-declaration-validation-milestone-8",
+    "catalog_validator": "scripts/validate-declaration-validation-catalog",
+    "catalog_tests": "tests/test_declaration_validation_catalog.py",
+    "historical_validator": "scripts/validate-declaration-validation-historical",
+    "pilot_validator": "scripts/validate-declaration-validation-milestone-8-pilot",
+    "source_lock_validator": "scripts/validate-declaration-validation-source-lock",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+}
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def render() -> dict[str, Any]:
+    catalog = load(CATALOG_PATH)
+    freeze = load(FREEZE_PATH)
+    return {
+        "schema_version": 1,
+        "milestone": "declaration-validation-contract-slice-8",
+        "recorded_at": catalog["recorded_at"],
+        "status": "PASS",
+        "repository_state": {
+            "head_at_milestone_start": "6e715f46262cdb97230afc4fbc4f6e17634c3726",
+            "branch": "main",
+            "tree_clean_at_milestone_start": True,
+            "prior_milestone_record": "results/research/declaration-validation-milestone-7.json",
+        },
+        "artifacts": {
+            name: {"path": relative, "sha256": sha256_file(ROOT / relative)}
+            for name, relative in ARTIFACTS.items()
+        },
+        "inventory_summary": freeze["inventory_summary"],
+        "qualification_boundary": {
+            "approved_normative_sources": 0,
+            "approved_mechanized_sources": 0,
+            "established_authority_entries": 0,
+            "provisional_authority_entries": 27,
+            "soundness_relevance": "NOT_ASSESSED_ONLY",
+            "checker_consensus_establishes_normativity": False,
+            "llm_judgment_is_evidence": False,
+        },
+        "validation": {
+            "catalog_command": "scripts/validate-declaration-validation-catalog",
+            "source_lock_command": "scripts/validate-declaration-validation-source-lock",
+            "historical_command": "scripts/validate-declaration-validation-historical",
+            "pilot_command": "scripts/validate-declaration-validation-milestone-8-pilot",
+            "test_command": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'",
+        },
+        "requirements_audit": {
+            "historical_predecessors": "IMMUTABLE_M7_AND_REVIEWED_PILOT_ATTESTATIONS_REQUIRED",
+            "identity_denotations": "EXACT_FROZEN_M5_CANONICAL_SEMANTIC_PROJECTION",
+            "identity_disposition_closure": "ALL_30_FROZEN_IDENTITIES_EXACTLY_DISPOSITIONED",
+            "site_disposition_closure": "ALL_149_RELEVANT_M4_M5_SITE_IDENTITY_PAIRS_DISPOSITIONED",
+            "role_qualified_evidence": "EVERY_ACTIVE_ENTRY_HAS_CONTENT_BOUND_DISCOVERY_OR_PILOT_EVIDENCE",
+            "implementation_mappings": "104_SOURCE_LOCKED_MAPPINGS_PLUS_PILOT_ATTRIBUTION",
+            "authority_qualification": "ALL_27_ENTRIES_PROVISIONAL_EMPTY_APPROVED_SOURCE_REGISTRY_PRESERVED",
+            "observer_attribution": "CONCRETE_OUTCOMES_ONLY_FROM_STRUCTURED_RESULT_BYTES_PLACEHOLDERS_EXPLICIT",
+            "generated_report": "DETERMINISTIC_CATALOG_HASH_BOUND_VIEW",
+            "freeze_manifest": "ACYCLIC_CONTENT_BOUND_M8_ATTESTATION",
+        },
+        "completion_boundary": {
+            "completed": "Milestone 8 first characterization inventory",
+            "next_authorized_milestone": "Milestone 9 — Adversarial Review as a Reproducible Artifact",
+            "deferred": [
+                "independent adversarial review of every M8 entry and exclusion",
+                "any authority-source approval or established normative promotion",
+                "soundness-relevance qualification",
+                "Arena isolated-negative coverage denominator and broad coverage study",
+            ],
+            "nonclaims": [
+                "The inventory does not prove Lean or its kernel correct.",
+                "No checker agreement or implementation source establishes normativity.",
+                "No entry has established authority or assessed soundness relevance.",
+                "Milestone 9 review and Milestone 10 coverage design have not begun.",
+            ],
+        },
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

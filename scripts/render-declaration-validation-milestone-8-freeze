@@ -1,0 +1,175 @@
+#!/usr/bin/env python3
+"""Render the acyclic Milestone 8 declaration-validation freeze manifest."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+DEFAULT_OUTPUT = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-8-freeze.json"
+)
+
+PREDECESSORS = {
+    "milestone_7": (
+        "results/research/declaration-validation-milestone-7-historical.json",
+        "HISTORICAL_PREDECESSORS",
+    ),
+    "reviewed_pilot": (
+        "results/research/declaration-validation-milestone-8-pilot-reviewed-historical.json",
+        "HISTORICAL_PREDECESSORS",
+    ),
+}
+ARTIFACTS = {
+    "approved_authority_sources": (
+        "config/declaration-validation-approved-authority-sources.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "authority_rules": (
+        "config/declaration-validation-authority-rules.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "discovery_closure": (
+        "config/declaration-validation-discovery-closure.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "identity_registry": (
+        "config/declaration-validation-identity-registry.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "source_lock": (
+        "config/declaration-validation-source-lock.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "evidence_lock": (
+        "config/declaration-validation-evidence-locks/milestone-8-inventory.json",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+    ),
+    "catalog": (
+        "config/declaration-validation-catalog.json",
+        "CANONICAL_CATALOG",
+    ),
+    "generated_report": (
+        "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+        "GENERATED_HUMAN_REPORT",
+    ),
+    "prior_identity_decisions": (
+        "results/research/declaration-validation-milestone-5-decisions.json",
+        "DECISION_RECORDS",
+    ),
+    "post_catalog_decisions": (
+        "results/research/declaration-validation-catalog-decisions.json",
+        "DECISION_RECORDS",
+    ),
+    "inventory_populator": (
+        "scripts/populate-declaration-validation-milestone-8",
+        "DURABLE_RESEARCH_STATE",
+    ),
+    "research_plan": (
+        "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+        "DURABLE_RESEARCH_STATE",
+    ),
+    "research_status": (
+        "docs/RESEARCH_STATUS.md",
+        "DURABLE_RESEARCH_STATE",
+    ),
+}
+ATTESTATION_ORDER = [
+    "HISTORICAL_PREDECESSORS",
+    "SOURCE_AND_EVIDENCE_LOCKS",
+    "CANONICAL_CATALOG",
+    "GENERATED_HUMAN_REPORT",
+    "DECISION_RECORDS",
+    "DURABLE_RESEARCH_STATE",
+]
+DEPENDENCY_EDGES = [
+    {"from": "catalog", "to": "milestone_7"},
+    {"from": "catalog", "to": "reviewed_pilot"},
+    {"from": "catalog", "to": "approved_authority_sources"},
+    {"from": "catalog", "to": "authority_rules"},
+    {"from": "catalog", "to": "discovery_closure"},
+    {"from": "catalog", "to": "identity_registry"},
+    {"from": "catalog", "to": "source_lock"},
+    {"from": "catalog", "to": "evidence_lock"},
+    {"from": "generated_report", "to": "catalog"},
+    {"from": "post_catalog_decisions", "to": "catalog"},
+    {"from": "research_plan", "to": "catalog"},
+    {"from": "research_status", "to": "catalog"},
+]
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def binding(relative: str, tier: str) -> dict[str, str]:
+    return {"path": relative, "sha256": sha256_file(ROOT / relative), "tier": tier}
+
+
+def render() -> dict[str, Any]:
+    catalog = load(CATALOG_PATH)
+    entries = catalog["entries"]
+    dispositions = catalog["identity_dispositions"]
+    return {
+        "schema_version": 1,
+        "manifest_id": "ordinary-declaration-validation.milestone-8-freeze.v1",
+        "generated_at": catalog["recorded_at"],
+        "status": "FROZEN_MILESTONE_8_CHARACTERIZATION_INVENTORY",
+        "predecessor_attestations": {
+            name: binding(*value) for name, value in PREDECESSORS.items()
+        },
+        "artifacts": {name: binding(*value) for name, value in ARTIFACTS.items()},
+        "inventory_summary": {
+            "frozen_identities": len(dispositions),
+            "catalog_entries": len(entries),
+            "normative_candidates": sum(
+                row["characterization"]["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+                for row in entries
+            ),
+            "empirical_scenarios": sum(
+                row["characterization"]["kind"] == "EMPIRICAL_CONTRACT_SCENARIO"
+                for row in entries
+            ),
+            "deferred_kind": sum(
+                row["disposition"] == "DEFERRED_UNRESOLVED_KIND" for row in dispositions
+            ),
+            "out_of_scope": sum(row["disposition"] == "OUT_OF_SCOPE" for row in dispositions),
+            "site_dispositions": len(catalog["site_dispositions"]),
+            "source_mappings": sum(len(row["source_mappings"]) for row in entries),
+            "provisional_authority": sum(
+                row["characterization"]["authority"]["status"] == "PROVISIONAL"
+                for row in entries
+            ),
+            "not_assessed_soundness": sum(
+                row["characterization"]["soundness_relevance"]["status"] == "NOT_ASSESSED"
+                for row in entries
+            ),
+        },
+        "attestation_order": ATTESTATION_ORDER,
+        "dependency_edges": DEPENDENCY_EDGES,
+        "acyclic": True,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

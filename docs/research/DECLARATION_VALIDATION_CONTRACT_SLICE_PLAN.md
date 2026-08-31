@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 7 recorded
+- Status: active execution mandate; Milestones 0 through 8 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -58,6 +58,14 @@
   results/research/declaration-validation-milestone-7-freeze.json
 - Milestone 7 record:
   results/research/declaration-validation-milestone-7.json
+- Milestone 8 canonical inventory:
+  config/declaration-validation-catalog.json
+- Milestone 8 evidence-lock successor:
+  config/declaration-validation-evidence-locks/milestone-8-inventory.json
+- Milestone 8 validation command:
+  `scripts/validate-declaration-validation-catalog`
+- Milestone 8 record:
+  results/research/declaration-validation-milestone-8.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -932,6 +940,38 @@ Existing witnesses may be reused.
 
 Minimal probes are permitted only where necessary to disambiguate the
 characterization itself, and must become durable evidence.
+
+### Milestone 8 Completion — 2026-08-31
+
+The canonical catalog now has status
+`MILESTONE_8_CHARACTERIZATION_INVENTORY` and gives an exact disposition to all
+30 frozen identities: 27 active catalog entries, one deferred unresolved-kind
+identity, and two reserved out-of-scope identities. The active inventory
+contains 19 normative candidate obligations and 8 empirical contract
+scenarios. All 27 authority assignments remain `PROVISIONAL`; the frozen
+approved-authority-source registry is unchanged and empty, so no
+implementation behavior, checker agreement, or discovery evidence is promoted
+to normative authority. Every entry retains
+`soundness_relevance = NOT_ASSESSED`.
+
+The inventory preserves the reviewed five-entry pilot through its immutable
+historical attestation and reuses those exact entries. The remaining entries
+bind their frozen M5 denotations, role-qualified M4 discovery evidence, and
+source-locked implementation mappings. The 149-row M4-to-M5-to-M8 site vector
+exhausts every relevant frozen site/identity pair, while the 30-row identity
+vector preserves the deferred and out-of-scope boundaries instead of forcing
+catalog entries. The sequence-4
+`config/declaration-validation-evidence-locks/milestone-8-inventory.json`
+successor extends the repaired pilot chain without selecting a new authority
+source or rewriting a predecessor.
+
+The generated report, acyclic Milestone 8 freeze manifest, and completion
+record are derived from the canonical inventory. Validation requires the
+source lock, immutable M7 and reviewed-pilot historical attestations, catalog
+validator, M8 completion bindings, and the complete declaration-validation
+test suite. This milestone does not perform the independent adversarial review
+or construct an Arena negative-coverage denominator. The next authorized
+milestone is Milestone 9.
 
 ## Milestone 9 — Adversarial Review as a Reproducible Artifact
 

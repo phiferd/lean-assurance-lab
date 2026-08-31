@@ -1179,6 +1179,30 @@ prepared_external_action_drafts: 5
    **Populate and adjudicate the
    complete Milestone 8 frozen identity inventory.**
 
+   Milestone 8 is now complete. The canonical
+   [catalog](../config/declaration-validation-catalog.json) has status
+   `MILESTONE_8_CHARACTERIZATION_INVENTORY` and exactly dispositions all 30
+   frozen identities: 27 active entries, one deferred unresolved-kind identity,
+   and two reserved out-of-scope identities. The active entries comprise 19
+   normative candidates and 8 empirical scenarios. All 27 authority states
+   remain `PROVISIONAL`, the frozen approved-authority-source registry remains
+   empty, and all soundness relevance remains `NOT_ASSESSED`. The complete
+   149-row site-disposition vector preserves every relevant M4/M5 identity-site
+   pair, including the reviewed pilot's Kiota absence findings, while 104
+   source-locked implementation mappings make the broader inventory
+   reproducible without treating implementations as authority.
+
+   The sequence-4
+   [M8 evidence lock](../config/declaration-validation-evidence-locks/milestone-8-inventory.json)
+   extends the immutable repaired-pilot chain without selecting normative or
+   mechanized authority. The generated obligations report, M8 freeze manifest,
+   and M8 completion record bind the canonical result. Validation passed the
+   source-lock, historical M7/reviewed-pilot transition, canonical catalog, M8
+   completion, and declaration-validation test gates. No M9 challenge has been
+   adjudicated and no Arena coverage denominator has been created. The exact
+   next authorized action is: **Conduct Milestone 9 as a separate reproducible
+   adversarial review of the frozen M8 inventory.**
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

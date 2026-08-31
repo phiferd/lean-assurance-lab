@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-8-freeze.schema.json",
+  "title": "Declaration Validation Milestone 8 Freeze Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "generated_at",
+    "status",
+    "predecessor_attestations",
+    "artifacts",
+    "inventory_summary",
+    "attestation_order",
+    "dependency_edges",
+    "acyclic"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {"const": "ordinary-declaration-validation.milestone-8-freeze.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_MILESTONE_8_CHARACTERIZATION_INVENTORY"},
+    "predecessor_attestations": {
+      "type": "object",
+      "required": ["milestone_7", "reviewed_pilot"],
+      "properties": {
+        "milestone_7": {"$ref": "#/$defs/fileBinding"},
+        "reviewed_pilot": {"$ref": "#/$defs/fileBinding"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "approved_authority_sources",
+        "authority_rules",
+        "discovery_closure",
+        "identity_registry",
+        "source_lock",
+        "evidence_lock",
+        "catalog",
+        "generated_report",
+        "prior_identity_decisions",
+        "post_catalog_decisions",
+        "inventory_populator",
+        "research_plan",
+        "research_status"
+      ],
+      "additionalProperties": {"$ref": "#/$defs/fileBinding"}
+    },
+    "inventory_summary": {
+      "type": "object",
+      "required": [
+        "frozen_identities",
+        "catalog_entries",
+        "normative_candidates",
+        "empirical_scenarios",
+        "deferred_kind",
+        "out_of_scope",
+        "site_dispositions",
+        "source_mappings",
+        "provisional_authority",
+        "not_assessed_soundness"
+      ],
+      "properties": {
+        "frozen_identities": {"const": 30},
+        "catalog_entries": {"const": 27},
+        "normative_candidates": {"const": 19},
+        "empirical_scenarios": {"const": 8},
+        "deferred_kind": {"const": 1},
+        "out_of_scope": {"const": 2},
+        "site_dispositions": {"const": 149},
+        "source_mappings": {"const": 104},
+        "provisional_authority": {"const": 27},
+        "not_assessed_soundness": {"const": 27}
+      },
+      "additionalProperties": false
+    },
+    "attestation_order": {
+      "const": [
+        "HISTORICAL_PREDECESSORS",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+        "CANONICAL_CATALOG",
+        "GENERATED_HUMAN_REPORT",
+        "DECISION_RECORDS",
+        "DURABLE_RESEARCH_STATE"
+      ]
+    },
+    "dependency_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "acyclic": {"const": true}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "tier"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+        "tier": {
+          "enum": [
+            "HISTORICAL_PREDECESSORS",
+            "SOURCE_AND_EVIDENCE_LOCKS",
+            "CANONICAL_CATALOG",
+            "GENERATED_HUMAN_REPORT",
+            "DECISION_RECORDS",
+            "DURABLE_RESEARCH_STATE"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

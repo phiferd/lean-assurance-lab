@@ -46,6 +46,12 @@ REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-report"
 SOURCE_LOCK_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-source-lock"
 HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
 PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
+M8_FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-8-freeze.json"
+M8_FREEZE_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-freeze.schema.json"
+M8_FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-freeze"
+M8_COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-8.json"
+M8_COMPLETION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8.schema.json"
+M8_COMPLETION_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-completion"
 
 OBSERVER_POINTERS = {
     "/observer_profiles/official_importer",
@@ -1938,6 +1944,107 @@ def validate_historical_m8_pilot() -> list[str]:
     return historical.validate_reviewed_m8_pilot()
 
 
+def validate_bound_files(bindings: dict[str, Any], label: str) -> list[str]:
+    errors: list[str] = []
+    for name, binding in bindings.items():
+        relative = binding["path"]
+        if not safe_relative_path(relative):
+            errors.append(f"{label} {name} path is not safe and relative")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            errors.append(f"{label} {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"{label} {name} artifact hash is stale")
+    return errors
+
+
+def dependency_cycle_errors(edges: list[dict[str, str]]) -> list[str]:
+    graph: dict[str, list[str]] = {}
+    for edge in edges:
+        graph.setdefault(edge["from"], []).append(edge["to"])
+        graph.setdefault(edge["to"], [])
+    visiting: set[str] = set()
+    visited: set[str] = set()
+    errors: list[str] = []
+
+    def visit(node: str) -> None:
+        if node in visiting:
+            errors.append(f"Milestone 8 freeze dependency cycle contains {node}")
+            return
+        if node in visited:
+            return
+        visiting.add(node)
+        for target in graph[node]:
+            visit(target)
+        visiting.remove(node)
+        visited.add(node)
+
+    for node in graph:
+        visit(node)
+    return errors
+
+
+def validate_current_m8_completion(catalog: dict[str, Any]) -> list[str]:
+    """Validate the derived M8 freeze and completion record without cycles."""
+
+    errors: list[str] = []
+    required = [
+        M8_FREEZE_PATH,
+        M8_FREEZE_SCHEMA_PATH,
+        M8_FREEZE_RENDERER_PATH,
+        M8_COMPLETION_PATH,
+        M8_COMPLETION_SCHEMA_PATH,
+        M8_COMPLETION_RENDERER_PATH,
+    ]
+    missing = [str(path.relative_to(ROOT)) for path in required if not path.is_file()]
+    if missing:
+        return [f"Milestone 8 completion artifact is missing: {relative}" for relative in missing]
+
+    freeze = load_json(M8_FREEZE_PATH)
+    completion = load_json(M8_COMPLETION_PATH)
+    errors.extend(
+        schema_errors(
+            freeze,
+            load_json(M8_FREEZE_SCHEMA_PATH),
+            "Milestone 8 freeze manifest",
+        )
+    )
+    errors.extend(
+        schema_errors(
+            completion,
+            load_json(M8_COMPLETION_SCHEMA_PATH),
+            "Milestone 8 completion record",
+        )
+    )
+    if errors:
+        return errors
+
+    freeze_renderer = load_module("declaration_m8_freeze_renderer", M8_FREEZE_RENDERER_PATH)
+    if M8_FREEZE_PATH.read_bytes() != document_bytes(freeze_renderer.render()):
+        errors.append("Milestone 8 freeze manifest is not synchronized with its renderer")
+    completion_renderer = load_module(
+        "declaration_m8_completion_renderer", M8_COMPLETION_RENDERER_PATH
+    )
+    if M8_COMPLETION_PATH.read_bytes() != document_bytes(completion_renderer.render()):
+        errors.append("Milestone 8 completion record is not synchronized with its renderer")
+
+    errors.extend(validate_bound_files(freeze["predecessor_attestations"], "M8 predecessor"))
+    errors.extend(validate_bound_files(freeze["artifacts"], "M8 freeze"))
+    errors.extend(validate_bound_files(completion["artifacts"], "M8 completion"))
+    errors.extend(dependency_cycle_errors(freeze["dependency_edges"]))
+
+    if freeze["artifacts"]["catalog"]["sha256"] != sha256_file(CATALOG_PATH):
+        errors.append("Milestone 8 freeze does not bind the current canonical catalog")
+    if completion["artifacts"]["freeze_manifest"]["sha256"] != sha256_file(M8_FREEZE_PATH):
+        errors.append("Milestone 8 completion does not bind the current freeze manifest")
+    if freeze["inventory_summary"] != completion["inventory_summary"]:
+        errors.append("Milestone 8 completion summary disagrees with the freeze manifest")
+    if catalog["status"] != "MILESTONE_8_CHARACTERIZATION_INVENTORY":
+        errors.append("Milestone 8 completion is bound to a non-M8 catalog status")
+    return errors
+
+
 def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[str, Any]]:
     catalog = load_json(CATALOG_PATH)
     evidence_binding = catalog["artifact_bindings"]["evidence_lock"]
@@ -1972,6 +2079,8 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
     if require_completion:
         errors.extend(validate_historical_m7_attestation())
         errors.extend(validate_historical_m8_pilot())
+        if catalog["status"] == "MILESTONE_8_CHARACTERIZATION_INVENTORY":
+            errors.extend(validate_current_m8_completion(catalog))
     entries = catalog["entries"]
     summary = {
         "catalog_sha256": sha256_file(CATALOG_PATH),

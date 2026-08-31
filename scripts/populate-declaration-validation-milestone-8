@@ -1,0 +1,671 @@
+#!/usr/bin/env python3
+"""Populate the canonical Milestone 8 declaration-validation inventory.
+
+This is a deterministic adjudication helper for the frozen M4/M5 surface.  It
+preserves the reviewed five-entry pilot verbatim, creates no authority source,
+and assigns conservative provisional dispositions to the remaining active
+identities.
+"""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+IDENTITY_PATH = ROOT / "config" / "declaration-validation-identity-registry.json"
+CLOSURE_PATH = ROOT / "config" / "declaration-validation-discovery-closure.json"
+SOURCE_LOCK_PATH = ROOT / "config" / "declaration-validation-source-lock.json"
+PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
+EVIDENCE_LOCK_PATH = (
+    ROOT
+    / "config"
+    / "declaration-validation-evidence-locks"
+    / "milestone-8-inventory.json"
+)
+EVIDENCE_PREDECESSOR_PATH = (
+    ROOT
+    / "config"
+    / "declaration-validation-evidence-locks"
+    / "milestone-8-pilot-repair.json"
+)
+VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
+
+RECORDED_AT = "2026-08-31T17:00:00-04:00"
+OBSERVER_ORDER = [
+    "/observer_profiles/official_importer",
+    "/observer_profiles/nanoda",
+    "/observer_profiles/lean4lean",
+    "/observer_profiles/kiota",
+]
+IMPLEMENTATIONS = {
+    "OFFICIAL": "LOGICAL_TARGET",
+    "NANODA": "NANODA",
+    "LEAN4LEAN": "LEAN4LEAN",
+    "KIOTA": "KIOTA",
+}
+LINEAGE = {
+    "LOGICAL_TARGET": {
+        "group": "LEAN4_OFFICIAL_CPP_KERNEL_V4_33_0",
+        "relationship_to_target": "TARGET_IMPLEMENTATION_COMPOSITE",
+        "independence_scope": "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+        "basis": "The source lock binds the pinned official Lean target implementation.",
+    },
+    "OFFICIAL_IMPORTER": {
+        "group": "LEAN4_OFFICIAL_CPP_KERNEL_V4_33_0",
+        "relationship_to_target": "TARGET_IMPLEMENTATION_COMPOSITE",
+        "independence_scope": "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+        "basis": "The official importer is a composite observer, not a normative oracle.",
+    },
+    "NANODA": {
+        "group": "NANODA_RUST_IMPLEMENTATION",
+        "relationship_to_target": "DISTINCT_CODEBASE",
+        "independence_scope": "DISTINCT_LINEAGE_ONLY",
+        "basis": "The target and source locks identify the pinned Nanoda Rust implementation.",
+    },
+    "LEAN4LEAN": {
+        "group": "LEAN4LEAN_DERIVED_FROM_OFFICIAL_CPP_KERNEL",
+        "relationship_to_target": "DERIVED_FROM_TARGET_IMPLEMENTATION",
+        "independence_scope": "NOT_AN_INDEPENDENT_IMPLEMENTATION_OBSERVATION",
+        "basis": "The target lock records Lean4Lean's direct derivation from the official C++ kernel.",
+    },
+    "KIOTA": {
+        "group": "KIOTA_RUST_FROM_SCRATCH_NOT_NANODA_FORK",
+        "relationship_to_target": "DISTINCT_CODEBASE",
+        "independence_scope": "DISTINCT_LINEAGE_ONLY",
+        "basis": "The target and source locks identify the pinned Kiota Rust implementation.",
+    },
+}
+EMPIRICAL_LAYERS = {
+    "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY": ["EXPORT_FORMAT", "RECONSTRUCTION"],
+    "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY": ["EXPORT_FORMAT", "RECONSTRUCTION"],
+    "SCENARIO.AXIOM.ADMISSION_POLICY": ["TRUST_POLICY", "IMPLEMENTATION_POLICY"],
+    "SCENARIO.AXIOM.SAFETY_FLAG": [
+        "RECONSTRUCTION",
+        "TRUST_POLICY",
+        "IMPLEMENTATION_POLICY",
+    ],
+    "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION": [
+        "RECONSTRUCTION",
+        "IMPLEMENTATION_POLICY",
+    ],
+    "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER": [
+        "RECONSTRUCTION",
+        "TRUST_POLICY",
+        "IMPLEMENTATION_POLICY",
+    ],
+    "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION": ["RECONSTRUCTION"],
+    "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY": [
+        "RECONSTRUCTION",
+        "IMPLEMENTATION_POLICY",
+    ],
+}
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def document_bytes(document: dict[str, Any]) -> bytes:
+    return (json.dumps(document, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def load_validator() -> Any:
+    loader = importlib.machinery.SourceFileLoader("declaration_m8_populator", str(VALIDATOR_PATH))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"cannot load {VALIDATOR_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_reviewed_pilot() -> dict[str, Any]:
+    loader = importlib.machinery.SourceFileLoader(
+        "declaration_m8_reviewed_pilot_loader", str(PILOT_VALIDATOR_PATH)
+    )
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"cannot load {PILOT_VALIDATOR_PATH}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    context, errors = module.reviewed_pilot_context()
+    if errors or context is None:
+        raise RuntimeError("reviewed pilot Git-blob attestation failed: " + "; ".join(errors))
+    return context["pilot"]
+
+
+def token(stable_id: str) -> str:
+    return stable_id
+
+
+def discovery_evidence(stable_id: str) -> dict[str, Any]:
+    evidence_id = f"EVID.M8.INVENTORY.{token(stable_id)}.DISCOVERY"
+    return {
+        "id": evidence_id,
+        "role": "DISCOVERY",
+        "source_type": "LAB_EXPERIMENT",
+        "source_lock": {
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": "LOCAL.DISCOVERY_CLOSURE",
+        },
+        "exact_locator": {"kind": "JSON_POINTER", "value": "/sites"},
+        "claim_supported": {
+            "entry_json_pointer": "/statement",
+            "predicate_id": f"PRED.M8.INVENTORY.{token(stable_id)}.DISCOVERY",
+            "proposition": (
+                "The frozen discovery closure supplies the bounded implementation-site "
+                "surface for this stable identity; it does not establish authority."
+            ),
+        },
+        "assumptions": [],
+        "limitations": [
+            "Discovery closure and implementation agreement are not normative authority."
+        ],
+    }
+
+
+def observer_vector() -> list[dict[str, Any]]:
+    return [
+        {
+            "profile_pointer": pointer,
+            "outcome": "NOT_INSPECTED",
+            "attribution": (
+                "No content-bound concrete outcome was selected for this identity in the "
+                "Milestone 8 inventory."
+            ),
+            "evidence_refs": [],
+        }
+        for pointer in OBSERVER_ORDER
+    ]
+
+
+def normative_entry(identity: dict[str, Any], validator: Any) -> dict[str, Any]:
+    stable_id = identity["id"]
+    evidence = discovery_evidence(stable_id)
+    characterization = {
+        "schema_version": 1,
+        "id": stable_id,
+        "name": identity["name"],
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION",
+        "layers": ["KERNEL_DECLARATION_VALIDITY"],
+        "authority": {
+            "status": "PROVISIONAL",
+            "scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
+            "basis": {
+                "qualification_rule": "AUTH.NORMATIVE.PROVISIONAL.V1",
+                "summary": (
+                    "The frozen discovery surface supports retaining this bounded candidate, "
+                    "but the pre-M8 approved-authority-source registry contains no qualifying "
+                    "normative source."
+                ),
+                "evidence_refs": [evidence["id"]],
+                "unmet_requirements": [
+                    "A preapproved normative document or mechanized result supporting this "
+                    "exact modeled declaration-validity requirement is absent from the frozen "
+                    "authority-source registry."
+                ],
+            },
+        },
+        "lifecycle": {
+            "status": "ACTIVE",
+            "reason": (
+                "The frozen identity is active and receives its first complete M8 catalog "
+                "disposition without merge, split, or supersession."
+            ),
+            "target_ids": [],
+        },
+        "soundness_relevance": {
+            "status": "NOT_ASSESSED",
+            "basis_evidence_refs": [],
+            "statement": (
+                "Milestone 8 does not infer logical-soundness relevance from implementation "
+                "checks, witnesses, or rejection behavior."
+            ),
+        },
+        "statement": {
+            "judgment": {
+                "target_profile_pointer": "/logical_target/modeled_judgment",
+                "statement": "The frozen modeled checked ordinary declaration-addition judgment.",
+            },
+            "applicability": [
+                {
+                    "id": f"PRED.M8.INVENTORY.{token(stable_id)}.APPLICABILITY",
+                    "statement": identity["applicability"],
+                }
+            ],
+            "premises": [],
+            "target_premise": {
+                "id": f"PRED.M8.INVENTORY.{token(stable_id)}.TARGET",
+                "statement": identity["semantic_statement"],
+            },
+            "expected_effect": {
+                "violation_expectation": "REJECT",
+                "authority_scope": (
+                    "Only if this candidate is later qualified as a normative requirement for "
+                    "the modeled judgment."
+                ),
+            },
+        },
+        "evidence": [evidence],
+        "unknowns": [
+            {
+                "id": f"ASSUMPTION.M8.INVENTORY.{token(stable_id)}.NORMATIVE_SOURCE",
+                "question": (
+                    "Which preapproved normative source, if any, qualifies this exact candidate "
+                    "for the modeled judgment?"
+                ),
+                "blocking_for": ["AUTHORITY_ESTABLISHMENT"],
+            }
+        ],
+        "notes": [
+            "All observer outcomes remain explicit placeholders unless content-bound result bytes are selected."
+        ],
+    }
+    denotation = validator.canonical_identity_denotation(identity)
+    return {
+        "characterization": characterization,
+        "identity_denotation": denotation,
+        "identity_statement_sha256": identity["statement_sha256"],
+        "semantic_denotation_sha256": hashlib.sha256(
+            json.dumps(denotation, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest(),
+        "decision_ids": list(identity["decision_ids"]),
+        "observer_vector": observer_vector(),
+        "source_mappings": [],
+        "arena_disposition": {
+            "disposition": "DEFERRED",
+            "evidence_refs": [],
+            "notes": (
+                "No additional content-bound Arena linkage is asserted in M8; isolated "
+                "negative-coverage adjudication remains the separately authorized M10 study."
+            ),
+        },
+    }
+
+
+def empirical_entry(identity: dict[str, Any], validator: Any) -> dict[str, Any]:
+    stable_id = identity["id"]
+    evidence = discovery_evidence(stable_id)
+    observations = observer_vector()
+    observation_statement = validator.empirical_observation_statement(identity)
+    layers = EMPIRICAL_LAYERS[stable_id]
+    characterization = {
+        "schema_version": 1,
+        "id": stable_id,
+        "name": identity["name"],
+        "kind": "EMPIRICAL_CONTRACT_SCENARIO",
+        "layers": layers,
+        "authority": {
+            "status": "PROVISIONAL",
+            "scope": "EMPIRICAL_BOUNDARY_FOR_PINNED_PROFILES",
+            "basis": {
+                "qualification_rule": "AUTH.EMPIRICAL.PROVISIONAL.V1",
+                "summary": (
+                    "The frozen discovery surface supports this profile-scoped scenario, but "
+                    "the inventory selects no complete content-bound observer outcome vector."
+                ),
+                "evidence_refs": [evidence["id"]],
+                "unmet_requirements": [
+                    "Content-bound structured result evidence has not established concrete "
+                    "outcomes for all applicable pinned observer profiles."
+                ],
+            },
+        },
+        "lifecycle": {
+            "status": "ACTIVE",
+            "reason": (
+                "The frozen empirical identity is active and receives its first complete M8 "
+                "catalog disposition without a normative promotion."
+            ),
+            "target_ids": [],
+        },
+        "soundness_relevance": {
+            "status": "NOT_ASSESSED",
+            "basis_evidence_refs": [],
+            "statement": (
+                "Milestone 8 does not infer logical-soundness relevance from profile-specific "
+                "reconstruction, policy, or replay behavior."
+            ),
+        },
+        "statement": {
+            "subject_scope": identity["applicability"],
+            "precondition": [
+                {
+                    "id": f"PRED.M8.INVENTORY.{token(stable_id)}.PRECONDITION",
+                    "statement": identity["applicability"],
+                }
+            ],
+            "stimulus": {
+                "id": f"PRED.M8.INVENTORY.{token(stable_id)}.STIMULUS",
+                "statement": identity["semantic_statement"],
+            },
+            "observation_points": [
+                {
+                    "id": f"PRED.M8.INVENTORY.{token(stable_id)}.OBSERVATION",
+                    "layer": layers[0],
+                    "statement": observation_statement,
+                }
+            ],
+            "profile_specific_effects": [
+                {
+                    "observer_profile_pointer": row["profile_pointer"],
+                    "outcome": row["outcome"],
+                    "attribution": row["attribution"],
+                }
+                for row in observations
+            ],
+        },
+        "evidence": [evidence],
+        "unknowns": [
+            {
+                "id": f"ASSUMPTION.M8.INVENTORY.{token(stable_id)}.OBSERVER_RESULTS",
+                "question": (
+                    "What content-bound result bytes establish the complete pinned-observer "
+                    "vector for this exact scenario?"
+                ),
+                "blocking_for": ["OBSERVER_ATTRIBUTION"],
+            }
+        ],
+        "notes": [
+            "This scenario remains profile-scoped and does not enter a normative coverage denominator."
+        ],
+    }
+    denotation = validator.canonical_identity_denotation(identity)
+    return {
+        "characterization": characterization,
+        "identity_denotation": denotation,
+        "identity_statement_sha256": identity["statement_sha256"],
+        "semantic_denotation_sha256": hashlib.sha256(
+            json.dumps(denotation, sort_keys=True, separators=(",", ":")).encode("utf-8")
+        ).hexdigest(),
+        "decision_ids": list(identity["decision_ids"]),
+        "observer_vector": observations,
+        "source_mappings": [],
+        "arena_disposition": {
+            "disposition": "DEFERRED",
+            "evidence_refs": [],
+            "notes": (
+                "No additional content-bound Arena linkage is asserted for this profile-scoped "
+                "scenario in M8."
+            ),
+        },
+    }
+
+
+def site_disposition(
+    stable_id: str,
+    identity: dict[str, Any],
+    site: dict[str, Any],
+    source: dict[str, Any],
+) -> dict[str, Any]:
+    if site["disposition"] == "IMPORTED_PREREQUISITE":
+        disposition = "IMPORTED_PREREQUISITE"
+    elif identity["intended_kind"] == "EMPIRICAL_CONTRACT_SCENARIO":
+        if "AXIOM" in stable_id or "SAFETY" in stable_id:
+            disposition = (
+                "MAPPED_POLICY"
+                if "POLICY" in site["id"] or ".AXIOM" in site["id"]
+                else "MAPPED_RECONSTRUCTION"
+            )
+        else:
+            disposition = "MAPPED_RECONSTRUCTION"
+    else:
+        disposition = "MAPPED_IMPLEMENTATION_BEHAVIOR"
+    return {
+        "stable_identity_id": stable_id,
+        "site_id": site["id"],
+        "source_file_id": site["source_id"],
+        "implementation": IMPLEMENTATIONS[source["observer"]],
+        "symbol_or_range": site["symbol_or_range"],
+        "disposition": disposition,
+        "evidence_refs": [],
+        "notes": (
+            "This exact frozen M4 site/identity pair is retained as a bounded implementation "
+            "or profile finding; it does not establish normative authority or soundness."
+        ),
+    }
+
+
+def source_implementation(source_id: str, observer: str) -> str:
+    if source_id == "SRC.OFFICIAL.ARENA_MAIN":
+        return "OFFICIAL_IMPORTER"
+    return IMPLEMENTATIONS[observer]
+
+
+def attach_source_mappings(
+    entries: list[dict[str, Any]],
+    site_rows: list[dict[str, Any]],
+    *,
+    pilot_ids: set[str],
+    closure_sources: dict[str, dict[str, Any]],
+    locked_sources: dict[str, dict[str, Any]],
+) -> None:
+    entry_by_id = {row["characterization"]["id"]: row for row in entries}
+    for stable_id, entry in entry_by_id.items():
+        if stable_id in pilot_ids:
+            continue
+        characterization = entry["characterization"]
+        source_ids = sorted(
+            {
+                row["source_file_id"]
+                for row in site_rows
+                if row["stable_identity_id"] == stable_id
+            }
+        )
+        evidence_by_source: dict[str, str] = {}
+        for source_id in source_ids:
+            closure_source = closure_sources[source_id]
+            locked_source = locked_sources[source_id]
+            implementation = source_implementation(source_id, closure_source["observer"])
+            evidence_id = f"EVID.M8.INVENTORY.{token(stable_id)}.SOURCE.{source_id}"
+            evidence_by_source[source_id] = evidence_id
+            characterization["evidence"].append(
+                {
+                    "id": evidence_id,
+                    "role": "IMPLEMENTATION_OBSERVATION",
+                    "source_type": "IMPLEMENTATION_SOURCE",
+                    "source_lock": {
+                        "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+                        "lock_id": source_id,
+                    },
+                    "exact_locator": {
+                        "kind": "SOURCE_RANGE",
+                        "value": locked_source["symbol_or_range"],
+                    },
+                    "claim_supported": {
+                        "entry_json_pointer": "/layers",
+                        "predicate_id": (
+                            f"PRED.M8.INVENTORY.{token(stable_id)}.SOURCE.{source_id}"
+                        ),
+                        "proposition": (
+                            "The pinned source file implements, reconstructs, or observes part "
+                            "of this bounded catalog boundary without establishing authority."
+                        ),
+                    },
+                    "assumptions": [],
+                    "lineage": LINEAGE[implementation],
+                    "limitations": [
+                        "Implementation-source attribution is not a normative or soundness conclusion."
+                    ],
+                }
+            )
+            if characterization["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+                role = "ENFORCEMENT"
+            elif "AXIOM" in stable_id or "SAFETY" in stable_id:
+                role = "POLICY"
+            else:
+                role = "RECONSTRUCTION"
+            entry["source_mappings"].append(
+                {
+                    "implementation": implementation,
+                    "source_file_id": source_id,
+                    "symbol_or_range": locked_source["symbol_or_range"],
+                    "role": role,
+                    "evidence_refs": [evidence_id],
+                }
+            )
+        for row in site_rows:
+            if row["stable_identity_id"] != stable_id or row["evidence_refs"]:
+                continue
+            row["evidence_refs"] = [evidence_by_source[row["source_file_id"]]]
+
+
+def render_evidence_lock() -> dict[str, Any]:
+    predecessor_relative = str(EVIDENCE_PREDECESSOR_PATH.relative_to(ROOT))
+    return {
+        "schema_version": 1,
+        "lock_id": "ordinary-declaration-validation.evidence-lock.milestone-8-inventory.v1",
+        "sequence": 4,
+        "recorded_at": RECORDED_AT,
+        "status": "MILESTONE_8_EVIDENCE_SELECTION",
+        "predecessor": {
+            "kind": "EVIDENCE_LOCK",
+            "path": predecessor_relative,
+            "sha256": sha256_file(EVIDENCE_PREDECESSOR_PATH),
+        },
+        "normative_documentation": [],
+        "mechanized_results": [],
+        "tracked_evidence": [],
+        "generated_witnesses": [],
+        "nonclaims": [
+            "This successor closes the full M8 inventory boundary without selecting a new authority source.",
+            "The reviewed pilot evidence remains available only through the immutable predecessor chain.",
+            "Implementation sites, checker behavior, and discovery closure do not establish normativity by consensus.",
+            "No soundness relevance or Arena isolated-negative coverage is established by this lock."
+        ],
+    }
+
+
+def render_catalog(evidence_lock: dict[str, Any]) -> dict[str, Any]:
+    catalog = load(CATALOG_PATH)
+    registry = load(IDENTITY_PATH)
+    closure = load(CLOSURE_PATH)
+    source_lock = load(SOURCE_LOCK_PATH)
+    pilot = load_reviewed_pilot()
+    validator = load_validator()
+    identities = {row["id"]: row for row in registry["identities"]}
+    pilot_entries = {
+        row["characterization"]["id"]: row for row in pilot["entries"]
+    }
+    entries: list[dict[str, Any]] = []
+    for identity in registry["identities"]:
+        if identity["identity_status"] != "ACTIVE_PROVISIONAL":
+            continue
+        stable_id = identity["id"]
+        if stable_id in pilot_entries:
+            entries.append(pilot_entries[stable_id])
+        elif identity["intended_kind"] == "NORMATIVE_CANDIDATE_OBLIGATION":
+            entries.append(normative_entry(identity, validator))
+        elif identity["intended_kind"] == "EMPIRICAL_CONTRACT_SCENARIO":
+            entries.append(empirical_entry(identity, validator))
+        else:
+            raise RuntimeError(f"active identity has no admissible kind: {stable_id}")
+
+    entry_ids = {row["characterization"]["id"] for row in entries}
+    sources = {row["id"]: row for row in closure["sources"]}
+    pilot_sites = {
+        (row["stable_identity_id"], row["site_id"]): row
+        for row in pilot["site_dispositions"]
+    }
+    site_rows: list[dict[str, Any]] = []
+    for stable_id in sorted(entry_ids):
+        identity = identities[stable_id]
+        seed_keys = set(identity["source_seed_keys"])
+        for site in closure["sites"]:
+            if not seed_keys.intersection(site["seed_keys"]):
+                continue
+            pair = (stable_id, site["id"])
+            site_rows.append(
+                pilot_sites.get(pair)
+                or site_disposition(stable_id, identity, site, sources[site["source_id"]])
+            )
+
+    attach_source_mappings(
+        entries,
+        site_rows,
+        pilot_ids=set(pilot_entries),
+        closure_sources=sources,
+        locked_sources={row["id"]: row for row in source_lock["source_files"]},
+    )
+
+    identity_dispositions = []
+    for identity in registry["identities"]:
+        expected = {
+            "ACTIVE_PROVISIONAL": "CATALOG_ENTRY",
+            "DEFERRED_KIND": "DEFERRED_UNRESOLVED_KIND",
+            "RESERVED_OUT_OF_SCOPE": "OUT_OF_SCOPE",
+        }[identity["identity_status"]]
+        reasons = {
+            "CATALOG_ENTRY": (
+                "The frozen active identity is represented by one exact-denotation M8 catalog entry."
+            ),
+            "DEFERRED_UNRESOLVED_KIND": (
+                "The frozen identity registry defers its kind; M8 preserves that unresolved boundary "
+                "instead of forcing a normative or empirical classification."
+            ),
+            "OUT_OF_SCOPE": (
+                "The frozen identity registry reserves this item outside the first ordinary-declaration "
+                "slice, so M8 retains an explicit non-entry disposition."
+            ),
+        }
+        identity_dispositions.append(
+            {
+                "id": identity["id"],
+                "identity_statement_sha256": identity["statement_sha256"],
+                "disposition": expected,
+                "reason": reasons[expected],
+                "decision_ids": list(identity["decision_ids"]),
+            }
+        )
+
+    catalog["recorded_at"] = RECORDED_AT
+    catalog["status"] = "MILESTONE_8_CHARACTERIZATION_INVENTORY"
+    catalog["artifact_bindings"]["evidence_lock"] = {
+        "path": str(EVIDENCE_LOCK_PATH.relative_to(ROOT)),
+        "sha256": hashlib.sha256(document_bytes(evidence_lock)).hexdigest(),
+    }
+    catalog["entries"] = entries
+    catalog["site_dispositions"] = sorted(
+        site_rows, key=lambda row: (row["stable_identity_id"], row["site_id"])
+    )
+    catalog["identity_dispositions"] = identity_dispositions
+    catalog["completion_boundary"] = {
+        "canonical_data_authoritative": True,
+        "generated_report_required": True,
+        "inventory_populated": True,
+        "authority_assignments_created": True,
+        "next_milestone": "MILESTONE_9_ADVERSARIAL_REVIEW",
+    }
+    catalog["nonclaims"] = [
+        "Milestone 8 characterizes the complete frozen identity surface; it does not prove a universal Lean declaration contract.",
+        "All normative candidates remain PROVISIONAL because the frozen approved-authority-source registry is empty.",
+        "Profile-specific implementation observations and checker agreement do not establish normativity.",
+        "All soundness relevance remains NOT_ASSESSED under the frozen M8 qualification gate.",
+        "The M8 inventory is not an Arena negative-coverage denominator and does not begin Milestone 9 review."
+    ]
+    return catalog
+
+
+def main() -> int:
+    evidence_lock = render_evidence_lock()
+    catalog = render_catalog(evidence_lock)
+    EVIDENCE_LOCK_PATH.write_bytes(document_bytes(evidence_lock))
+    CATALOG_PATH.write_bytes(document_bytes(catalog))
+    print(EVIDENCE_LOCK_PATH.relative_to(ROOT))
+    print(CATALOG_PATH.relative_to(ROOT))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

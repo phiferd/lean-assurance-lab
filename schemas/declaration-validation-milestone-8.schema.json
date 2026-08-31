@@ -1,0 +1,180 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-8.schema.json",
+  "title": "Declaration Validation Milestone 8 Completion Record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "milestone",
+    "recorded_at",
+    "status",
+    "repository_state",
+    "artifacts",
+    "inventory_summary",
+    "qualification_boundary",
+    "validation",
+    "requirements_audit",
+    "completion_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "milestone": {"const": "declaration-validation-contract-slice-8"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PASS"},
+    "repository_state": {
+      "type": "object",
+      "required": ["head_at_milestone_start", "branch", "tree_clean_at_milestone_start", "prior_milestone_record"],
+      "properties": {
+        "head_at_milestone_start": {"const": "6e715f46262cdb97230afc4fbc4f6e17634c3726"},
+        "branch": {"const": "main"},
+        "tree_clean_at_milestone_start": {"const": true},
+        "prior_milestone_record": {"const": "results/research/declaration-validation-milestone-7.json"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "required": [
+        "catalog",
+        "catalog_schema",
+        "entry_schema",
+        "identity_registry",
+        "source_lock",
+        "evidence_lock",
+        "approved_authority_sources",
+        "generated_report",
+        "freeze_manifest",
+        "freeze_schema",
+        "freeze_renderer",
+        "completion_schema",
+        "completion_renderer",
+        "inventory_populator",
+        "catalog_validator",
+        "catalog_tests",
+        "historical_validator",
+        "pilot_validator",
+        "source_lock_validator",
+        "research_plan",
+        "research_status"
+      ],
+      "additionalProperties": {"$ref": "#/$defs/fileBinding"}
+    },
+    "inventory_summary": {
+      "type": "object",
+      "required": [
+        "frozen_identities",
+        "catalog_entries",
+        "normative_candidates",
+        "empirical_scenarios",
+        "deferred_kind",
+        "out_of_scope",
+        "site_dispositions",
+        "source_mappings",
+        "provisional_authority",
+        "not_assessed_soundness"
+      ],
+      "properties": {
+        "frozen_identities": {"const": 30},
+        "catalog_entries": {"const": 27},
+        "normative_candidates": {"const": 19},
+        "empirical_scenarios": {"const": 8},
+        "deferred_kind": {"const": 1},
+        "out_of_scope": {"const": 2},
+        "site_dispositions": {"const": 149},
+        "source_mappings": {"const": 104},
+        "provisional_authority": {"const": 27},
+        "not_assessed_soundness": {"const": 27}
+      },
+      "additionalProperties": false
+    },
+    "qualification_boundary": {
+      "type": "object",
+      "required": [
+        "approved_normative_sources",
+        "approved_mechanized_sources",
+        "established_authority_entries",
+        "provisional_authority_entries",
+        "soundness_relevance",
+        "checker_consensus_establishes_normativity",
+        "llm_judgment_is_evidence"
+      ],
+      "properties": {
+        "approved_normative_sources": {"const": 0},
+        "approved_mechanized_sources": {"const": 0},
+        "established_authority_entries": {"const": 0},
+        "provisional_authority_entries": {"const": 27},
+        "soundness_relevance": {"const": "NOT_ASSESSED_ONLY"},
+        "checker_consensus_establishes_normativity": {"const": false},
+        "llm_judgment_is_evidence": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "validation": {
+      "type": "object",
+      "required": [
+        "catalog_command",
+        "source_lock_command",
+        "historical_command",
+        "pilot_command",
+        "test_command"
+      ],
+      "properties": {
+        "catalog_command": {"const": "scripts/validate-declaration-validation-catalog"},
+        "source_lock_command": {"const": "scripts/validate-declaration-validation-source-lock"},
+        "historical_command": {"const": "scripts/validate-declaration-validation-historical"},
+        "pilot_command": {"const": "scripts/validate-declaration-validation-milestone-8-pilot"},
+        "test_command": {"const": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'"}
+      },
+      "additionalProperties": false
+    },
+    "requirements_audit": {
+      "type": "object",
+      "required": [
+        "historical_predecessors",
+        "identity_denotations",
+        "identity_disposition_closure",
+        "site_disposition_closure",
+        "role_qualified_evidence",
+        "implementation_mappings",
+        "authority_qualification",
+        "observer_attribution",
+        "generated_report",
+        "freeze_manifest"
+      ],
+      "additionalProperties": {"type": "string", "minLength": 1}
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": ["completed", "next_authorized_milestone", "deferred", "nonclaims"],
+      "properties": {
+        "completed": {"const": "Milestone 8 first characterization inventory"},
+        "next_authorized_milestone": {"const": "Milestone 9 — Adversarial Review as a Reproducible Artifact"},
+        "deferred": {
+          "type": "array",
+          "minItems": 3,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "nonclaims": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
