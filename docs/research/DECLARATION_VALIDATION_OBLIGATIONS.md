@@ -4,7 +4,7 @@
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
 - Catalog status: `MILESTONE_7_INFRASTRUCTURE_ONLY`
-- Catalog SHA-256: `6320d20bf436d9f8ddff76ecbcab384f07c82a6a9d2766316b09a96f216093a5`
+- Catalog SHA-256: `3254c5971115e61b085edb5db25e1fd3b4597905ae2cf27bb8c584c75747fe8e`
 - Catalog entries: 0
 
 This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. The Milestone 7 catalog is intentionally empty. Its schemas, qualification gates, versioned evidence-lock root, approved-authority-source registry, canonical semantic-denotation projection, and generated views are frozen before Milestone 8 performs per-identity adjudication.

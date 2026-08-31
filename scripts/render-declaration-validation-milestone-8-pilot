@@ -48,6 +48,8 @@ def render(pilot: dict[str, Any] | None = None) -> str:
         f"- Status: `{pilot['status']}`",
         f"- Pilot SHA-256: `{pilot_hash}`",
         f"- Candidate entries: {len(pilot['entries'])}",
+        f"- Bound authority registry: `{pilot['artifact_bindings']['approved_authority_sources']['registry_id']}`",
+        f"- M4 site dispositions: {len(pilot['site_dispositions'])}",
         "",
         "This is the separately reviewable five-entry candidate batch authorized before the complete Milestone 8 inventory. It does not change the canonical catalog status or disposition the remaining frozen identities.",
         "",
@@ -79,12 +81,41 @@ def render(pilot: dict[str, Any] | None = None) -> str:
                     for item in entry["source_mappings"]
                 ) or "none"
             ),
+            f"- Arena disposition: `{entry['arena_disposition']['disposition']}`" + (
+                f" — `{entry['arena_disposition']['case_id']}` at `{entry['arena_disposition']['case_path']}`"
+                if entry["arena_disposition"]["disposition"] == "LINKED"
+                else f" — {entry['arena_disposition']['notes']}"
+            ),
             "- Open questions: " + (
                 "; ".join(item["question"] for item in characterization["unknowns"])
                 or "none"
             ),
             "",
         ])
+
+    lines.extend([
+        "## M4 Implementation-Site Closure",
+        "",
+        "Every frozen M4 site relevant to one of these five frozen M5 identities has an explicit M8 characterization disposition. This is provenance and completeness of implementation characterization; it is not normative support.",
+        "",
+        "| Stable ID | M4 site | Implementation | M8 disposition |",
+        "| --- | --- | --- | --- |",
+    ])
+    for item in pilot["site_dispositions"]:
+        lines.append(
+            f"| `{item['stable_identity_id']}` | `{item['site_id']}` | `{item['implementation']}` | `{item['disposition']}` |"
+        )
+    lines.extend([
+        "",
+        "The two Kiota universe-ownership sites are retained as `OBSERVED_ABSENCE`: the frozen checking path has no current-declaration ownership context/check. This is neither an enforcement mapping nor an unsoundness claim.",
+        "",
+        "## Authority Provenance",
+        "",
+        f"The repaired pilot content-binds the empty historical registry snapshot at `{pilot['artifact_bindings']['approved_authority_sources']['path']}` (SHA-256 `{pilot['artifact_bindings']['approved_authority_sources']['sha256']}`). It also preserves the pre-hardening pilot provenance record at `{pilot['predecessor_pilot']['path']}`.",
+        "",
+        "A future registry successor must be separately approved against its predecessor before a later catalog can bind it; this pilot neither approves a source nor selects one.",
+        "",
+    ])
 
     lines.extend(["## Required Review", ""])
     for item in pilot["review_requirements"]:

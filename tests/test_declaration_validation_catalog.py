@@ -208,6 +208,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
                 for pointer in self.catalog["observer_order"]
             ],
             "source_mappings": [],
+            "arena_disposition": {
+                "disposition": "NOT_INSPECTED",
+                "evidence_refs": [],
+                "notes": "In-memory fixture; Arena linkage not inspected.",
+            },
         }
 
     def empirical_wrapper(self, stable_id="SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY"):
@@ -277,6 +282,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             "decision_ids": list(identity["decision_ids"]),
             "observer_vector": observations,
             "source_mappings": [],
+            "arena_disposition": {
+                "disposition": "NOT_INSPECTED",
+                "evidence_refs": [],
+                "notes": "In-memory fixture; Arena linkage not inspected.",
+            },
         }
 
     def test_schemas_are_valid_and_frozen_artifacts_pass(self):
@@ -604,12 +614,6 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             {
                 "id": "EVID.FIXTURE.CONTRADICTION",
                 "role": "CONTRADICTION",
-                "source_type": "LAB_EXPERIMENT",
-                "source_lock": {
-                    "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
-                    "lock_id": "LOCAL.CORE_DECL_MATRIX",
-                },
-                "exact_locator": {"kind": "JSON_POINTER", "value": "/cases/0"},
                 "claim_supported": {
                     "entry_json_pointer": "/statement/target_premise",
                     "predicate_id": "CLAIM.FIXTURE.CONTRADICTION",
@@ -620,6 +624,40 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         entry["characterization"]["evidence"].append(contradiction)
         errors = self.errors(self.populated_catalog(entry))
         self.assertTrue(any("active statement contradiction" in item for item in errors))
+
+    def test_checker_disagreement_does_not_block_independently_qualified_normative_authority(self):
+        entry = self.normative_wrapper()
+        observation = copy.deepcopy(entry["characterization"]["evidence"][0])
+        observation.update(
+            {
+                "id": "EVID.FIXTURE.CHECKER_DIFFERENCE",
+                "role": "IMPLEMENTATION_OBSERVATION",
+                "source_type": "CHECKER_RESULT",
+                "source_lock": {
+                    "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+                    "lock_id": "LOCAL.NONPROP_RESULTS",
+                },
+                "exact_locator": {
+                    "kind": "JSON_POINTER",
+                    "value": "results/cross-validation/m6-nonprop-theorem/results.json#/validators/2/result/normalized_outcome",
+                },
+                "claim_supported": {
+                    "entry_json_pointer": "/statement",
+                    "predicate_id": "CLAIM.FIXTURE.CHECKER_DIFFERENCE",
+                    "proposition": "A checker result differs from another implementation outcome.",
+                },
+                "assumptions": [],
+                "lineage": {
+                    "group": "FIXTURE_DISTINCT_CHECKER",
+                    "relationship_to_target": "DISTINCT_CODEBASE",
+                    "independence_scope": "DISTINCT_LINEAGE_ONLY",
+                    "basis": "Synthetic checker disagreement fixture.",
+                },
+            }
+        )
+        entry["characterization"]["evidence"].append(observation)
+        errors = self.errors(self.populated_catalog(entry))
+        self.assertEqual(errors, [])
 
     def test_soundness_claims_are_blocked_until_separately_qualified(self):
         entry = self.normative_wrapper()
@@ -669,6 +707,51 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertTrue(
             any("cannot extend the frozen pre-M8 approved" in item for item in errors)
         )
+
+    def test_successor_registry_cannot_self_approve_a_source(self):
+        root_path = module.APPROVED_AUTHORITY_SOURCES_PATH
+        successor = {
+            "schema_version": 1,
+            "registry_id": "ordinary-declaration-validation.approved-authority-sources.test.v2",
+            "sequence": 2,
+            "recorded_at": "2026-08-31T08:00:00-04:00",
+            "status": "FROZEN_VERSIONED_APPROVED_AUTHORITY_SOURCES",
+            "predecessor": {
+                "path": "config/declaration-validation-approved-authority-sources.json",
+                "sha256": module.sha256_file(root_path),
+                "registry_id": "ordinary-declaration-validation.approved-authority-sources.m7.v1",
+                "sequence": 1,
+            },
+            "approval_decision_bindings": [],
+            "normative_documentation": [
+                {
+                    "id": "APPROVED.NORMDOC.TEST.V2",
+                    "document_kind": "SPECIFICATION",
+                    "version_or_edition": "test",
+                    "stable_url_or_doi": "https://example.invalid/test",
+                    "authenticated_content_sha256": "0" * 64,
+                    "approval_decision": "DEC.AUTHORITY_SOURCE.TEST.V2",
+                }
+            ],
+            "mechanized_results": [],
+            "change_control": {
+                "catalog_adjudication_may_extend_registry": False,
+                "extension_requires": "SEPARATE_EXPLICIT_AUTHORITY_SOURCE_DECISION_BEFORE_CATALOG_ADJUDICATION",
+                "new_version_required": True,
+            },
+            "nonclaims": [
+                "Synthetic test fixture only.",
+                "The registry is not a catalog adjudication.",
+                "No source is actually approved by this test.",
+            ],
+        }
+        errors = module.validate_approved_authority_source_registry(
+            successor,
+            module.load_json(module.APPROVED_AUTHORITY_SOURCES_SUCCESSOR_SCHEMA_PATH),
+            ROOT / "config/declaration-validation-approved-authority-sources/test-v2.json",
+            check_generated=False,
+        )
+        self.assertTrue(any("lacks a separate predecessor-bound approval decision" in item for item in errors))
 
     def test_locally_forged_authoritative_document_cannot_establish_authority(self):
         entry = self.normative_wrapper()
@@ -945,6 +1028,17 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         errors = self.errors(self.populated_catalog(entry))
         self.assertTrue(any("does not belong to KIOTA" in item for item in errors))
         self.assertTrue(any("not bound by the source-lock locator" in item for item in errors))
+
+    def test_full_m8_site_closure_rejects_an_omitted_frozen_site(self):
+        entry = self.normative_wrapper()
+        errors = module.validate_site_dispositions(
+            [],
+            stable_ids={"DECL.THEOREM.TYPE_PROP"},
+            identities=self.identities,
+            discovery_closure=module.load_json(module.CLOSURE_PATH),
+            entries=[entry],
+        )
+        self.assertTrue(any("site-disposition closure omits frozen M4 site pairs" in item for item in errors))
 
     def test_milestone_8_requires_complete_identity_dispositions(self):
         catalog = self.populated_catalog(self.normative_wrapper())

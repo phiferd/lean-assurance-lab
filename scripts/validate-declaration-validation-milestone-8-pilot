@@ -18,6 +18,9 @@ PILOT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-8-pilot
 CATALOG_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
 REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-8-pilot"
 REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_8_PILOT.md"
+FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH = (
+    ROOT / "config" / "declaration-validation-approved-authority-sources" / "m7-pre-m8.json"
+)
 
 EXPECTED_IDS = {
     "DECL.THEOREM.TYPE_PROP",
@@ -28,10 +31,12 @@ EXPECTED_IDS = {
 }
 EXPECTED_BINDINGS = {
     "authority_rules": ROOT / "config" / "declaration-validation-authority-rules.json",
+    "approved_authority_sources_schema": ROOT / "schemas" / "declaration-validation-approved-authority-sources.schema.json",
     "catalog_schema": ROOT / "schemas" / "declaration-validation-catalog.schema.json",
     "characterization_model": ROOT / "config" / "declaration-validation-characterization-model.json",
+    "discovery_closure": ROOT / "config" / "declaration-validation-discovery-closure.json",
     "entry_schema": ROOT / "schemas" / "declaration-validation-characterization-entry.schema.json",
-    "evidence_lock": ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-8-pilot.json",
+    "evidence_lock": ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-8-pilot-repair.json",
     "evidence_lock_schema": ROOT / "schemas" / "declaration-validation-evidence-lock.schema.json",
     "identity_registry": ROOT / "config" / "declaration-validation-identity-registry.json",
     "semantic_target": ROOT / "config" / "declaration-validation-target.json",
@@ -75,12 +80,29 @@ def validate_document(
     elif pilot["predecessor_catalog"]["sha256"] != sha256_file(catalog.CATALOG_PATH):
         errors.append("pilot predecessor catalog hash is stale")
 
+    predecessor_pilot = pilot["predecessor_pilot"]
+    predecessor_pilot_path = ROOT / predecessor_pilot["path"]
+    if (
+        predecessor_pilot["path"]
+        != "results/research/declaration-validation-milestone-8-pilot-pre-hardening-provenance.json"
+    ):
+        errors.append("pilot pre-hardening provenance path is not canonical")
+    elif not predecessor_pilot_path.is_file() or predecessor_pilot["sha256"] != sha256_file(predecessor_pilot_path):
+        errors.append("pilot pre-hardening provenance binding is missing or stale")
+
     for name, path in EXPECTED_BINDINGS.items():
         binding = pilot["artifact_bindings"][name]
         if ROOT / binding["path"] != path:
             errors.append(f"pilot {name} binding path is not canonical")
         elif binding["sha256"] != sha256_file(path):
             errors.append(f"pilot {name} binding hash is stale")
+
+    approved_binding = pilot["artifact_bindings"]["approved_authority_sources"]
+    approved_path = ROOT / approved_binding["path"]
+    if approved_path != FROZEN_PRE_M8_AUTHORITY_REGISTRY_PATH:
+        errors.append("pilot approved authority-source registry path is not the content-bound frozen pre-M8 snapshot")
+    elif approved_binding["sha256"] != sha256_file(approved_path):
+        errors.append("pilot approved authority-source registry hash is stale")
 
     canonical_catalog = load_json(catalog.CATALOG_PATH)
     if canonical_catalog["status"] != "MILESTONE_7_INFRASTRUCTURE_ONLY":
@@ -108,8 +130,8 @@ def validate_document(
         check_git_tracking=check_generated,
     )
     errors.extend(evidence_errors)
-    if evidence_lock["sequence"] != 2 or evidence_lock["status"] != "MILESTONE_8_EVIDENCE_SELECTION":
-        errors.append("pilot must bind the sequence-2 Milestone 8 evidence-selection successor")
+    if evidence_lock["sequence"] != 3 or evidence_lock["status"] != "MILESTONE_8_EVIDENCE_SELECTION":
+        errors.append("repaired pilot must bind the sequence-3 Milestone 8 evidence-selection successor")
 
     catalog_schema = load_json(EXPECTED_BINDINGS["catalog_schema"])
     entry_schema = load_json(EXPECTED_BINDINGS["entry_schema"])
@@ -131,7 +153,17 @@ def validate_document(
     decision_ids = {row["id"] for row in prior_decisions["records"]}
     target = load_json(EXPECTED_BINDINGS["semantic_target"])
     model = load_json(EXPECTED_BINDINGS["characterization_model"])
-    approved_sources = load_json(catalog.APPROVED_AUTHORITY_SOURCES_PATH)
+    approved_sources = load_json(approved_path)
+    if approved_binding["registry_id"] != approved_sources["registry_id"]:
+        errors.append("pilot approved authority-source registry identity is stale")
+    errors.extend(
+        catalog.validate_approved_authority_source_registry(
+            approved_sources,
+            load_json(EXPECTED_BINDINGS["approved_authority_sources_schema"]),
+            approved_path,
+            check_generated=check_generated,
+        )
+    )
     if approved_sources["normative_documentation"] or approved_sources["mechanized_results"]:
         errors.append("pilot must use the frozen empty approved-authority-source registry")
 
@@ -158,6 +190,15 @@ def validate_document(
             )
         )
     errors.extend(catalog.lifecycle_cycle_errors(pilot["entries"]))
+    errors.extend(
+        catalog.validate_site_dispositions(
+            pilot["site_dispositions"],
+            stable_ids=selected_ids,
+            identities=identities,
+            discovery_closure=load_json(EXPECTED_BINDINGS["discovery_closure"]),
+            entries=pilot["entries"],
+        )
+    )
 
     if check_generated:
         renderer = load_module("declaration_m8_pilot_report_renderer", REPORT_RENDERER_PATH)

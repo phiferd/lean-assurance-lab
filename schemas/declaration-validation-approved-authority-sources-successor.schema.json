@@ -1,0 +1,111 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-approved-authority-sources-successor.schema.json",
+  "title": "Declaration Validation Approved Authority Sources Successor",
+  "description": "An immutable successor to the frozen M7 authority-source registry. A successor can only carry sources previously approved by separately content-bound decisions.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "registry_id",
+    "sequence",
+    "recorded_at",
+    "status",
+    "predecessor",
+    "approval_decision_bindings",
+    "normative_documentation",
+    "mechanized_results",
+    "change_control",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "registry_id": {"type": "string", "pattern": "^ordinary-declaration-validation\\.approved-authority-sources\\.[a-z0-9.-]+\\.v[0-9]+$"},
+    "sequence": {"type": "integer", "minimum": 2},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_VERSIONED_APPROVED_AUTHORITY_SOURCES"},
+    "predecessor": {"$ref": "#/$defs/registryBinding"},
+    "approval_decision_bindings": {
+      "type": "array",
+      "uniqueItems": true,
+      "items": {"$ref": "#/$defs/decisionBinding"}
+    },
+    "normative_documentation": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/normativeSource"}
+    },
+    "mechanized_results": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/mechanizedSource"}
+    },
+    "change_control": {"$ref": "#/$defs/changeControl"},
+    "nonclaims": {
+      "type": "array",
+      "minItems": 3,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "registryBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "registry_id", "sequence"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "registry_id": {"type": "string", "pattern": "^ordinary-declaration-validation\\.approved-authority-sources\\.[a-z0-9.-]+\\.v[0-9]+$"},
+        "sequence": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "decisionBinding": {
+      "type": "object",
+      "required": ["decision_id", "path", "sha256"],
+      "properties": {
+        "decision_id": {"type": "string", "pattern": "^DEC\\.AUTHORITY_SOURCE\\.[A-Z0-9_.]+$"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "changeControl": {
+      "type": "object",
+      "required": ["catalog_adjudication_may_extend_registry", "extension_requires", "new_version_required"],
+      "properties": {
+        "catalog_adjudication_may_extend_registry": {"const": false},
+        "extension_requires": {"const": "SEPARATE_EXPLICIT_AUTHORITY_SOURCE_DECISION_BEFORE_CATALOG_ADJUDICATION"},
+        "new_version_required": {"const": true}
+      },
+      "additionalProperties": false
+    },
+    "normativeSource": {
+      "type": "object",
+      "required": ["id", "document_kind", "version_or_edition", "stable_url_or_doi", "authenticated_content_sha256", "approval_decision"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^APPROVED\\.NORMDOC(\\.[A-Z0-9_]+)+$"},
+        "document_kind": {"enum": ["SPECIFICATION", "AUTHORITATIVE_DOCUMENTATION"]},
+        "version_or_edition": {"type": "string", "minLength": 1},
+        "stable_url_or_doi": {"type": "string", "minLength": 1},
+        "authenticated_content_sha256": {"$ref": "#/$defs/sha256"},
+        "approval_decision": {"type": "string", "pattern": "^DEC\\.AUTHORITY_SOURCE\\.[A-Z0-9_.]+$"}
+      },
+      "additionalProperties": false
+    },
+    "mechanizedSource": {
+      "type": "object",
+      "required": ["id", "repository_url", "revision", "path", "blob_sha256", "theorem_or_definition", "approval_decision"],
+      "properties": {
+        "id": {"type": "string", "pattern": "^APPROVED\\.MECH(\\.[A-Z0-9_]+)+$"},
+        "repository_url": {"type": "string", "minLength": 1},
+        "revision": {"$ref": "#/$defs/revision"},
+        "path": {"type": "string", "minLength": 1},
+        "blob_sha256": {"$ref": "#/$defs/sha256"},
+        "theorem_or_definition": {"type": "string", "minLength": 1},
+        "approval_decision": {"type": "string", "pattern": "^DEC\\.AUTHORITY_SOURCE\\.[A-Z0-9_.]+$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

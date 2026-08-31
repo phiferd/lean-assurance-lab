@@ -1068,17 +1068,31 @@ prepared_external_action_drafts: 5
    awaits review before any further identity adjudication. Its canonical
    candidate data is
    [bound separately](../config/declaration-validation-milestone-8-pilot.json),
-   its selected existing observer-result evidence is bound by the sequence-2
-   [successor lock](../config/declaration-validation-evidence-locks/milestone-8-pilot.json),
    and its generated review view is
    [available here](research/DECLARATION_VALIDATION_MILESTONE_8_PILOT.md).
-   After review, inspect and disposition every frozen identity into the first
-   complete characterization inventory. Do not claim Milestone 8 status for
-   the pilot or for any incomplete disposition vector. Continue toward the
-   adversarial review and frozen design for the later Arena
-   negative-coverage phase. This slice does not execute the broad Arena
-   coverage campaign, create a public conformance claim, or infer semantic
-   authority from checker agreement.
+   The pilot repair preserved its five frozen semantic identities and left all
+   authority dispositions `PROVISIONAL` and all soundness relevance
+   `NOT_ASSESSED`. Existing Lab witnesses are now discovery evidence rather
+   than unsupported isolation; Kiota acceptance/rejection differences are
+   implementation observations rather than authority contradictions. A
+   content-bound M4-to-M5-to-M8 site-disposition vector closes all 31 relevant
+   site/identity pairs for the five-entry scope, preserving Kiota's two
+   universe-ownership absences as absence findings. Every pilot identity now
+   has an explicit Arena disposition, with the existing
+   `tutorial/012_nonPropThm` linkage bound as empirical coverage only. The
+   repaired pilot binds the immutable empty pre-M8 authority registry snapshot
+   and uses a sequence-3
+   [repair successor lock](../config/declaration-validation-evidence-locks/milestone-8-pilot-repair.json).
+   Authority-source successors now require a separately content-bound,
+   predecessor-bound approval decision before a later catalog can bind them;
+   no source was approved here. Validation passed
+   `scripts/validate-declaration-validation-catalog`,
+   `scripts/validate-declaration-validation-source-lock`,
+   `scripts/validate-declaration-validation-milestone-8-pilot`, and all 123
+   declaration-validation tests. The exact next authorized action is an
+   independent adversarial review of this corrected five-entry pilot. Do not
+   populate the remaining 25 identities, claim Milestone 8 completion, perform
+   the planned Sol review, or begin Milestone 9 yet.
 
    A final residual exploit-first pass at
    `0bee1b71fe8d49ebe6a8adb5e4193c507ea2e43a` then demonstrated three remaining

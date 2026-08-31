@@ -12,6 +12,7 @@ import json
 import re
 import subprocess
 import sys
+from datetime import datetime
 from pathlib import Path
 from typing import Any
 
@@ -38,6 +39,10 @@ EVIDENCE_LOCK_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-evidence-
 M7_EVIDENCE_LOCK_PATH = ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-7.json"
 APPROVED_AUTHORITY_SOURCES_PATH = ROOT / "config" / "declaration-validation-approved-authority-sources.json"
 APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-approved-authority-sources.schema.json"
+APPROVED_AUTHORITY_SOURCES_SUCCESSOR_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-approved-authority-sources-successor.schema.json"
+AUTHORITY_SOURCE_APPROVAL_DECISION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-authority-source-approval-decision.schema.json"
+APPROVED_AUTHORITY_SOURCES_SUCCESSOR_DIR = ROOT / "config" / "declaration-validation-approved-authority-sources"
+FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH = APPROVED_AUTHORITY_SOURCES_SUCCESSOR_DIR / "m7-pre-m8.json"
 PRIOR_DECISIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-5-decisions.json"
 REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-report"
 FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-freeze"
@@ -88,8 +93,18 @@ IDENTITY_DENOTATION_PROFILE = {
 FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256 = (
     "f971f5ec8ca19ed29fef20c7d62a54aa78667080bf4d704836968dbaba713368"
 )
+NORMATIVE_CONTRADICTION_SOURCE_TYPES = {
+    "FORMAL_MECHANIZATION",
+    "NORMATIVE_SPECIFICATION",
+    "AUTHORITATIVE_DOCUMENTATION",
+}
+DISCOVERY_OBSERVER_IMPLEMENTATIONS = {
+    "OFFICIAL": "LOGICAL_TARGET",
+    "NANODA": "NANODA",
+    "LEAN4LEAN": "LEAN4LEAN",
+    "KIOTA": "KIOTA",
+}
 EXPECTED_BINDINGS = {
-    "approved_authority_sources_schema": APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH,
     "semantic_target": TARGET_PATH,
     "characterization_model": MODEL_PATH,
     "discovery_closure": CLOSURE_PATH,
@@ -377,6 +392,162 @@ def approved_authority_source_indices(
     return result, errors
 
 
+def parse_recorded_at(value: str, label: str, errors: list[str]) -> datetime | None:
+    try:
+        return datetime.fromisoformat(value)
+    except ValueError:
+        errors.append(f"{label}: recorded_at is not an ISO-8601 timestamp")
+        return None
+
+
+def registry_sequence(registry: dict[str, Any], path: Path) -> int:
+    return 1 if path.resolve() in {
+        APPROVED_AUTHORITY_SOURCES_PATH.resolve(),
+        FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH.resolve(),
+    } else registry["sequence"]
+
+
+def registry_schema_path(path: Path) -> Path:
+    if path.resolve() in {
+        APPROVED_AUTHORITY_SOURCES_PATH.resolve(),
+        FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH.resolve(),
+    }:
+        return APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH
+    return APPROVED_AUTHORITY_SOURCES_SUCCESSOR_SCHEMA_PATH
+
+
+def safe_registry_path(path: Path) -> bool:
+    try:
+        relative = path.resolve().relative_to(ROOT.resolve())
+    except ValueError:
+        return False
+    return (
+        path.resolve() == APPROVED_AUTHORITY_SOURCES_PATH.resolve()
+        or path.resolve() == FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH.resolve()
+        or str(relative).startswith("config/declaration-validation-approved-authority-sources/")
+    )
+
+
+def validate_approved_authority_source_registry(
+    registry: dict[str, Any],
+    registry_schema: dict[str, Any],
+    registry_path: Path,
+    *,
+    check_generated: bool,
+    allow_test_registry: bool = False,
+    seen_paths: set[Path] | None = None,
+) -> list[str]:
+    """Validate the immutable M7 root or a separately approved successor chain."""
+
+    errors: list[str] = []
+    resolved_path = registry_path.resolve()
+    seen_paths = set() if seen_paths is None else seen_paths
+    if resolved_path in seen_paths:
+        return [f"authority-source registry predecessor cycle at {registry_path}"]
+    seen_paths.add(resolved_path)
+    if not safe_registry_path(registry_path):
+        return ["authority-source registry path is not canonical and safe"]
+
+    errors.extend(schema_errors(registry, registry_schema, "approved authority sources"))
+    if errors:
+        return errors
+    if check_generated and not registry_path.is_file():
+        errors.append("approved authority-source registry file is missing")
+
+    if resolved_path in {
+        APPROVED_AUTHORITY_SOURCES_PATH.resolve(),
+        FROZEN_PRE_M8_AUTHORITY_SOURCES_SNAPSHOT_PATH.resolve(),
+    }:
+        if not allow_test_registry and document_sha256(registry) != FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256:
+            errors.append("frozen M7 approved authority-source registry bytes changed")
+        if registry["registry_id"] != "ordinary-declaration-validation.approved-authority-sources.m7.v1":
+            errors.append("frozen M7 approved authority-source registry identity changed")
+        if not allow_test_registry and (registry["normative_documentation"] or registry["mechanized_results"]):
+            errors.append("frozen M7 approved authority-source registry must remain empty")
+        return errors
+
+    predecessor = registry["predecessor"]
+    predecessor_path = ROOT / predecessor["path"]
+    if not safe_relative_path(predecessor["path"]) or not safe_registry_path(predecessor_path):
+        return errors + ["authority-source registry predecessor path is not canonical and safe"]
+    if not predecessor_path.is_file():
+        return errors + ["authority-source registry predecessor is missing"]
+    if sha256_file(predecessor_path) != predecessor["sha256"]:
+        return errors + ["authority-source registry predecessor hash is stale"]
+    predecessor_registry = load_json(predecessor_path)
+    predecessor_schema_path = registry_schema_path(predecessor_path)
+    predecessor_errors = validate_approved_authority_source_registry(
+        predecessor_registry,
+        load_json(predecessor_schema_path),
+        predecessor_path,
+        check_generated=check_generated,
+        allow_test_registry=allow_test_registry,
+        seen_paths=seen_paths,
+    )
+    errors.extend(f"authority-source registry predecessor: {error}" for error in predecessor_errors)
+    if predecessor["registry_id"] != predecessor_registry["registry_id"]:
+        errors.append("authority-source registry predecessor identity disagrees with predecessor bytes")
+    expected_predecessor_sequence = registry_sequence(predecessor_registry, predecessor_path)
+    if predecessor["sequence"] != expected_predecessor_sequence:
+        errors.append("authority-source registry predecessor sequence disagrees with predecessor bytes")
+    if registry["sequence"] != expected_predecessor_sequence + 1:
+        errors.append("authority-source registry successor sequence is not contiguous")
+    if registry["registry_id"] == predecessor_registry["registry_id"]:
+        errors.append("authority-source registry successor reuses predecessor identity")
+
+    registry_time = parse_recorded_at(registry["recorded_at"], "authority-source registry", errors)
+    predecessor_time = parse_recorded_at(
+        predecessor_registry["recorded_at"], "authority-source registry predecessor", errors
+    )
+    if registry_time and predecessor_time and registry_time <= predecessor_time:
+        errors.append("authority-source registry successor must be recorded after predecessor")
+
+    decision_rows: dict[str, dict[str, Any]] = {}
+    for binding in registry["approval_decision_bindings"]:
+        decision_path = ROOT / binding["path"]
+        if not safe_relative_path(binding["path"]) or not binding["path"].startswith(
+            "results/research/declaration-validation-authority-source-approvals/"
+        ):
+            errors.append(f"{binding['decision_id']}: authority-source approval decision path is not canonical")
+            continue
+        if not decision_path.is_file() or sha256_file(decision_path) != binding["sha256"]:
+            errors.append(f"{binding['decision_id']}: authority-source approval decision binding is missing or stale")
+            continue
+        decision = load_json(decision_path)
+        errors.extend(
+            schema_errors(
+                decision,
+                load_json(AUTHORITY_SOURCE_APPROVAL_DECISION_SCHEMA_PATH),
+                f"{binding['decision_id']} authority-source approval decision",
+            )
+        )
+        if decision.get("decision_id") != binding["decision_id"]:
+            errors.append(f"{binding['decision_id']}: authority-source approval decision identity disagrees with binding")
+            continue
+        if decision["predecessor_registry"] != predecessor:
+            errors.append(f"{binding['decision_id']}: authority-source approval did not review this predecessor registry")
+        decision_time = parse_recorded_at(decision["recorded_at"], binding["decision_id"], errors)
+        if registry_time and decision_time and decision_time >= registry_time:
+            errors.append(f"{binding['decision_id']}: authority-source approval must predate its registry successor")
+        decision_rows[binding["decision_id"]] = decision
+
+    predecessor_sources, predecessor_errors = approved_authority_source_indices(predecessor_registry)
+    successor_sources, successor_errors = approved_authority_source_indices(registry)
+    errors.extend(predecessor_errors)
+    errors.extend(successor_errors)
+    for source_id, (_, prior_row) in predecessor_sources.items():
+        successor = successor_sources.get(source_id)
+        if successor is None or successor[1] != prior_row:
+            errors.append(f"{source_id}: authority-source successor does not preserve predecessor approval")
+    for source_id, (_, source) in successor_sources.items():
+        if source_id in predecessor_sources:
+            continue
+        decision = decision_rows.get(source["approval_decision"])
+        if decision is None or source_id not in decision["approved_source_ids"]:
+            errors.append(f"{source_id}: source lacks a separate predecessor-bound approval decision")
+    return errors
+
+
 def pointer_is_within(pointer: str, allowed: set[str]) -> bool:
     return any(
         pointer == root or pointer.startswith(root.rstrip("/") + "/")
@@ -593,6 +764,13 @@ def evidence_source_errors(
         errors.append(
             f"{evidence['id']}: source type {evidence['source_type']} is incompatible "
             f"with locked record kind {kind}"
+        )
+    if (
+        evidence["role"] == "ISOLATION"
+        and row.get("source_role") == "EXISTING_LAB_EVIDENCE_ONLY"
+    ):
+        errors.append(
+            f"{evidence['id']}: an EXISTING_LAB_EVIDENCE_ONLY artifact cannot by itself serve as ISOLATION"
         )
     if kind == "normative_documentation":
         expected_type = (
@@ -879,6 +1057,8 @@ def validate_entry(
         all_evidence_refs.update(observation["evidence_refs"])
     for mapping in wrapper["source_mappings"]:
         all_evidence_refs.update(mapping["evidence_refs"])
+    if "arena_disposition" in wrapper:
+        all_evidence_refs.update(wrapper["arena_disposition"]["evidence_refs"])
     unknown_refs = all_evidence_refs - set(evidence_by_id)
     if unknown_refs:
         errors.append(f"{entry_id}: unresolved evidence refs {sorted(unknown_refs)}")
@@ -890,6 +1070,13 @@ def validate_entry(
         if evidence["source_type"] not in role_source_matrix[evidence["role"]]:
             errors.append(
                 f"{entry_id}/{evidence['id']}: evidence role/source-type combination is not qualified"
+            )
+        if (
+            evidence["role"] == "CONTRADICTION"
+            and evidence["source_type"] not in NORMATIVE_CONTRADICTION_SOURCE_TYPES
+        ):
+            errors.append(
+                f"{entry_id}/{evidence['id']}: CONTRADICTION requires a qualified normative interpretation source"
             )
         pointer = evidence["claim_supported"]["entry_json_pointer"]
         try:
@@ -974,6 +1161,16 @@ def validate_entry(
         ]
         if not matching_evidence:
             errors.append(f"{entry_id}: source mapping lacks exact source-bound implementation evidence")
+
+    arena_disposition = wrapper.get("arena_disposition")
+    if arena_disposition and arena_disposition["disposition"] == "LINKED":
+        arena_evidence = [
+            evidence_by_id[evidence_id]
+            for evidence_id in arena_disposition["evidence_refs"]
+            if evidence_id in evidence_by_id
+        ]
+        if not any(item["source_type"] == "ARENA_TEST" for item in arena_evidence):
+            errors.append(f"{entry_id}: linked Arena disposition lacks content-bound ARENA_TEST evidence")
 
     basis = entry["authority"]["basis"]
     rule = authority_rules.get(basis["qualification_rule"])
@@ -1099,11 +1296,13 @@ def validate_entry(
                 errors.append(f"{entry_id}: observed outcome attribution is not evidence-bound")
     active_authority_contradiction = any(
         item["role"] == "CONTRADICTION"
+        and item["source_type"] in NORMATIVE_CONTRADICTION_SOURCE_TYPES
         and item["claim_supported"]["entry_json_pointer"].startswith("/authority")
         for item in evidence_values
     )
     active_statement_contradiction = any(
         item["role"] == "CONTRADICTION"
+        and item["source_type"] in NORMATIVE_CONTRADICTION_SOURCE_TYPES
         and item["claim_supported"]["entry_json_pointer"].startswith("/statement")
         for item in evidence_values
     )
@@ -1180,6 +1379,101 @@ def lifecycle_cycle_errors(entries: list[dict[str, Any]]) -> list[str]:
 
     for node in graph:
         visit(node)
+    return errors
+
+
+def expected_discovery_site_pairs(
+    stable_ids: set[str],
+    identities: dict[str, dict[str, Any]],
+    discovery_closure: dict[str, Any],
+) -> set[tuple[str, str]]:
+    """Derive the frozen M4 site-to-M5 identity surface for a catalog scope."""
+
+    pairs: set[tuple[str, str]] = set()
+    for stable_id in stable_ids:
+        identity = identities.get(stable_id)
+        if identity is None:
+            continue
+        seed_keys = set(identity["source_seed_keys"])
+        for site in discovery_closure["sites"]:
+            if seed_keys.intersection(site["seed_keys"]):
+                pairs.add((stable_id, site["id"]))
+    return pairs
+
+
+def validate_site_dispositions(
+    site_dispositions: list[dict[str, Any]],
+    *,
+    stable_ids: set[str],
+    identities: dict[str, dict[str, Any]],
+    discovery_closure: dict[str, Any],
+    entries: list[dict[str, Any]],
+) -> list[str]:
+    """Require every frozen relevant M4 site to survive as an explicit M8 finding."""
+
+    errors: list[str] = []
+    sites, site_errors = unique_index(discovery_closure["sites"], "id", "discovery site")
+    errors.extend(site_errors)
+    source_rows, source_errors = unique_index(discovery_closure["sources"], "id", "discovery source")
+    errors.extend(source_errors)
+    expected_pairs = expected_discovery_site_pairs(stable_ids, identities, discovery_closure)
+    seen_pairs: set[tuple[str, str]] = set()
+    evidence_ids_by_identity = {
+        row["characterization"]["id"]: {
+            evidence["id"] for evidence in row["characterization"]["evidence"]
+        }
+        for row in entries
+    }
+    source_mappings_by_identity = {
+        row["characterization"]["id"]: row["source_mappings"] for row in entries
+    }
+    for row in site_dispositions:
+        stable_id = row["stable_identity_id"]
+        site_id = row["site_id"]
+        pair = (stable_id, site_id)
+        if pair in seen_pairs:
+            errors.append(f"{stable_id}/{site_id}: duplicate M8 site disposition")
+        seen_pairs.add(pair)
+        if stable_id not in stable_ids:
+            errors.append(f"{stable_id}/{site_id}: site disposition targets an identity outside this inventory")
+        site = sites.get(site_id)
+        if site is None:
+            errors.append(f"{stable_id}/{site_id}: unknown frozen M4 discovery site")
+            continue
+        if row["source_file_id"] != site["source_id"]:
+            errors.append(f"{stable_id}/{site_id}: source file identity differs from frozen M4 site")
+        if row["symbol_or_range"] != site["symbol_or_range"]:
+            errors.append(f"{stable_id}/{site_id}: exact source locator differs from frozen M4 site")
+        source = source_rows.get(site["source_id"])
+        if source is None:
+            errors.append(f"{stable_id}/{site_id}: M4 site source is absent from the frozen source list")
+        else:
+            expected_implementation = DISCOVERY_OBSERVER_IMPLEMENTATIONS.get(source["observer"])
+            if expected_implementation is None:
+                errors.append(f"{stable_id}/{site_id}: M4 source observer has no M8 implementation mapping")
+            elif row["implementation"] != expected_implementation:
+                errors.append(f"{stable_id}/{site_id}: implementation differs from frozen M4 observer attribution")
+        unknown_evidence = set(row["evidence_refs"]) - evidence_ids_by_identity.get(stable_id, set())
+        if unknown_evidence:
+            errors.append(f"{stable_id}/{site_id}: unresolved site-disposition evidence refs {sorted(unknown_evidence)}")
+        if row["disposition"] == "OBSERVED_ABSENCE":
+            evidence_text = " ".join([site["behavior"], site["rationale"]]).lower()
+            if not any(token in evidence_text for token in {"absence", "does not", "has no", "no allowed"}):
+                errors.append(f"{stable_id}/{site_id}: OBSERVED_ABSENCE is not supported by the frozen M4 inspection finding")
+            if any(
+                mapping["source_file_id"] == row["source_file_id"]
+                and mapping["symbol_or_range"] == row["symbol_or_range"]
+                and mapping["role"] == "ENFORCEMENT"
+                for mapping in source_mappings_by_identity.get(stable_id, [])
+            ):
+                errors.append(f"{stable_id}/{site_id}: observed absence cannot be represented as enforcement")
+    if seen_pairs != expected_pairs:
+        missing = sorted(expected_pairs - seen_pairs)
+        unexpected = sorted(seen_pairs - expected_pairs)
+        if missing:
+            errors.append(f"M8 site-disposition closure omits frozen M4 site pairs {missing}")
+        if unexpected:
+            errors.append(f"M8 site-disposition closure contains non-applicable site pairs {unexpected}")
     return errors
 
 
@@ -1479,13 +1773,6 @@ def validate_artifacts(
     errors.extend(schema_errors(authority, authority_schema, "authority rules"))
     errors.extend(schema_errors(decisions, decisions_schema, "catalog decisions"))
     errors.extend(schema_errors(freeze, freeze_schema, "freeze manifest"))
-    errors.extend(
-        schema_errors(
-            approved_authority_sources,
-            approved_authority_sources_schema,
-            "approved authority sources",
-        )
-    )
     if errors:
         return errors
 
@@ -1493,6 +1780,7 @@ def validate_artifacts(
     if set(bindings) != set(EXPECTED_BINDINGS) | {
         "evidence_lock",
         "approved_authority_sources",
+        "approved_authority_sources_schema",
     }:
         errors.append("catalog binding names are not exact")
     else:
@@ -1515,30 +1803,42 @@ def validate_artifacts(
             if not evidence_path.is_file() or sha256_file(evidence_path) != evidence_binding["sha256"]:
                 errors.append("catalog evidence-lock file binding is missing or stale")
         approved_binding = bindings["approved_authority_sources"]
-        if ROOT / approved_binding["path"] != APPROVED_AUTHORITY_SOURCES_PATH:
+        approved_path = ROOT / approved_binding["path"]
+        if not safe_relative_path(approved_binding["path"]) or not safe_registry_path(approved_path):
             errors.append("catalog approved authority-source registry path is not canonical")
-        expected_approved_hash = (
-            sha256_file(APPROVED_AUTHORITY_SOURCES_PATH)
-            if check_generated
-            else document_sha256(approved_authority_sources)
-        )
+        expected_approved_hash = sha256_file(approved_path) if check_generated and approved_path.is_file() else document_sha256(approved_authority_sources)
         if approved_binding["sha256"] != expected_approved_hash:
             errors.append("catalog approved authority-source registry hash is stale")
+        approved_schema_binding = bindings["approved_authority_sources_schema"]
+        expected_schema_path = registry_schema_path(approved_path)
+        if ROOT / approved_schema_binding["path"] != expected_schema_path:
+            errors.append("catalog approved authority-source registry schema does not match its version")
+        elif approved_schema_binding["sha256"] != sha256_file(expected_schema_path):
+            errors.append("catalog approved authority-source registry schema hash is stale")
     errors.extend(binding_errors(authority["bindings"], EXPECTED_AUTHORITY_BINDINGS, "authority"))
+    approved_path = ROOT / bindings["approved_authority_sources"]["path"]
+    errors.extend(
+        validate_approved_authority_source_registry(
+            approved_authority_sources,
+            approved_authority_sources_schema,
+            approved_path,
+            check_generated=check_generated,
+            allow_test_registry=allow_test_approved_sources,
+        )
+    )
     approved_indices, approved_errors = approved_authority_source_indices(
         approved_authority_sources
     )
     errors.extend(approved_errors)
-    if (
-        not allow_test_approved_sources
-        and document_sha256(approved_authority_sources)
-        != FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256
-    ):
-        errors.append(
-            "catalog adjudication cannot extend the frozen pre-M8 approved authority-source registry"
-        )
+    if not allow_test_approved_sources and approved_path.resolve() == APPROVED_AUTHORITY_SOURCES_PATH.resolve() and document_sha256(approved_authority_sources) != FROZEN_APPROVED_AUTHORITY_SOURCES_DOCUMENT_SHA256:
+        errors.append("catalog adjudication cannot extend the frozen pre-M8 approved authority-source registry")
     if catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY" and approved_indices:
         errors.append("Milestone 7 approved authority-source registry must remain empty")
+    if catalog["status"] != "MILESTONE_7_INFRASTRUCTURE_ONLY" and not allow_test_approved_sources:
+        catalog_time = parse_recorded_at(catalog["recorded_at"], "catalog", errors)
+        registry_time = parse_recorded_at(approved_authority_sources["recorded_at"], "authority-source registry", errors)
+        if catalog_time and registry_time and registry_time >= catalog_time:
+            errors.append("catalog adjudication must bind an authority-source registry recorded before the catalog")
     evidence_errors, evidence_locks = validate_evidence_lock_chain(
         evidence_lock,
         evidence_lock_schema,
@@ -1607,6 +1907,19 @@ def validate_artifacts(
             if record is not None and entry_id not in set(record["inputs"] + record["result"]):
                 errors.append(f"{entry_id}: post-catalog decision {decision_id} is unrelated")
     errors.extend(lifecycle_cycle_errors(entry_rows))
+    if catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY":
+        if catalog["site_dispositions"]:
+            errors.append("Milestone 7 infrastructure catalog must not disposition M4 implementation sites")
+    elif enforce_milestone_boundary:
+        errors.extend(
+            validate_site_dispositions(
+                catalog["site_dispositions"],
+                stable_ids=catalog_ids,
+                identities=identities,
+                discovery_closure=load_json(CLOSURE_PATH),
+                entries=entry_rows,
+            )
+        )
 
     if enforce_milestone_boundary and catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY":
         boundary = catalog["completion_boundary"]
@@ -1727,6 +2040,10 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
     catalog = load_json(CATALOG_PATH)
     evidence_binding = catalog["artifact_bindings"]["evidence_lock"]
     evidence_lock = load_json(ROOT / evidence_binding["path"])
+    authority_registry_binding = catalog["artifact_bindings"]["approved_authority_sources"]
+    authority_registry_path = ROOT / authority_registry_binding["path"]
+    authority_registry = load_json(authority_registry_path)
+    authority_registry_schema = load_json(registry_schema_path(authority_registry_path))
     source_validator = load_module("declaration_m6_source_validator", SOURCE_LOCK_VALIDATOR_PATH)
     source_errors, _ = source_validator.validate_all(require_completion=True, online=False)
     errors = [f"source-lock predecessor: {error}" for error in source_errors]
@@ -1747,8 +2064,8 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
             load_json(SOURCE_LOCK_PATH),
             evidence_lock,
             load_json(EVIDENCE_LOCK_SCHEMA_PATH),
-            load_json(APPROVED_AUTHORITY_SOURCES_PATH),
-            load_json(APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH),
+            authority_registry,
+            authority_registry_schema,
             load_json(PRIOR_DECISIONS_PATH),
         )
     )
@@ -1770,10 +2087,10 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
         "identity_dispositions": len(catalog["identity_dispositions"]),
         "evidence_lock_sequence": evidence_lock["sequence"],
         "approved_normative_sources": len(
-            load_json(APPROVED_AUTHORITY_SOURCES_PATH)["normative_documentation"]
+            authority_registry["normative_documentation"]
         ),
         "approved_mechanized_sources": len(
-            load_json(APPROVED_AUTHORITY_SOURCES_PATH)["mechanized_results"]
+            authority_registry["mechanized_results"]
         ),
     }
     return errors, summary
