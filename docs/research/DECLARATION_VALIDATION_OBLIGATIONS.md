@@ -3,13 +3,13 @@
 > Generated file. Edit `config/declaration-validation-catalog.json`, not this report.
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
-- Catalog status: `MILESTONE_8_CHARACTERIZATION_INVENTORY`
-- Catalog SHA-256: `b3e5b9f59de3600d2c42a1549af51e32e0a589be7484ad4dd0b85cab53c0207f`
+- Catalog status: `MILESTONE_9_REVIEWED_FREEZE`
+- Catalog SHA-256: `01bdfeb42a5cf2875474495fbcc0142c5af0f47af77629ccba83884f3219cb34`
 - Catalog entries: 27
 - Existing evidence/identity dispositions: 41
 
-This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the first closed Milestone 8 characterization inventory. Every frozen identity has an explicit catalog, deferred-kind, or out-of-scope disposition.
-The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.milestone-8-inventory.v1` at sequence 4.
+This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the frozen post-adversarial-review inventory.
+The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.milestone-9-reviewed.v1` at sequence 6.
 The separately frozen approved-authority-source registry contains 0 normative documents and 0 mechanized sources. Content addressing alone is not treated as authentication of external origin.
 Stable IDs bind the complete canonical semantic projection; observer outcomes and editorial prose remain non-identity research metadata.
 
@@ -23,7 +23,7 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | characterization_model | config/declaration-validation-characterization-model.json | `6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7` |
 | discovery_closure | config/declaration-validation-discovery-closure.json | `d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731` |
 | entry_schema | schemas/declaration-validation-characterization-entry.schema.json | `33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6` |
-| evidence_lock | config/declaration-validation-evidence-locks/milestone-8-inventory.json | `89884f199eb2f24612908f5b94202d6aa5e3580c340a96fa0046158f8aaaf899` |
+| evidence_lock | config/declaration-validation-evidence-locks/milestone-9-reviewed.json | `a335a29e856becb5b00570bb34022220244c71fdb69ac8a82f9b3e4d20738d36` |
 | evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `45e0c7a69be059a371f4d33445cb7cdbdad21c542a82b07a7f1dfb65a6416adf` |
 | identity_registry | config/declaration-validation-identity-registry.json | `68e8770c808518170a9a22766f8e2ea79d3d2bdf0b643101026d6ec55a69f230` |
 | semantic_target | config/declaration-validation-target.json | `4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa` |
@@ -1169,10 +1169,10 @@ Evidence:
 
 ## Milestone Boundary
 
-- Milestone 8 characterizes the complete frozen identity surface; it does not prove a universal Lean declaration contract.
-- All normative candidates remain PROVISIONAL because the frozen approved-authority-source registry is empty.
-- Profile-specific implementation observations and checker agreement do not establish normativity.
-- All soundness relevance remains NOT_ASSESSED under the frozen M8 qualification gate.
-- The M8 inventory is not an Arena negative-coverage denominator and does not begin Milestone 9 review.
+- M9 challenged all twelve mandated review classes and found no semantic catalog correction justified by the frozen evidence.
+- The review preserves incomplete independent observability, provisional authority, explicit cross-layer scenarios, exclusions, and unresolved boundaries rather than upgrading them.
+- No implementation behavior, checker agreement, adversarial-review result, or LLM judgment establishes normativity.
+- All 27 active entries remain PROVISIONAL and all soundness relevance remains NOT_ASSESSED.
+- The reviewed inventory is a frozen input for Milestone 10 design; it is not yet a negative-coverage denominator and no broad coverage study has begun.
 
-Next milestone: `MILESTONE_9_ADVERSARIAL_REVIEW`
+Next milestone: `MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY`

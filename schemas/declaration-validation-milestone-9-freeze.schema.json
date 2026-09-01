@@ -1,0 +1,119 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-9-freeze.schema.json",
+  "title": "Declaration Validation Milestone 9 Content Manifest",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "manifest_id",
+    "generated_at",
+    "status",
+    "predecessor_attestations",
+    "artifacts",
+    "review_summary",
+    "review_status",
+    "pre_review_catalog_sha256",
+    "reviewed_catalog_sha256",
+    "attestation_order",
+    "dependency_edges",
+    "acyclic"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {"const": "ordinary-declaration-validation.milestone-9-content-manifest.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FINAL_MILESTONE_9_CONTENT_MANIFEST"},
+    "predecessor_attestations": {
+      "type": "object",
+      "required": ["corrected_milestone_8"],
+      "additionalProperties": {"$ref": "#/$defs/tieredBinding"}
+    },
+    "artifacts": {
+      "type": "object",
+      "minProperties": 20,
+      "additionalProperties": {"$ref": "#/$defs/tieredBinding"}
+    },
+    "review_summary": {
+      "type": "object",
+      "required": [
+        "required_challenges",
+        "challenges_completed",
+        "catalog_corrections",
+        "semantic_statement_changes",
+        "authority_changes",
+        "layer_changes",
+        "lifecycle_changes",
+        "soundness_changes",
+        "remaining_provisional_entries",
+        "remaining_not_assessed_soundness",
+        "entries_with_incomplete_independent_observation"
+      ],
+      "properties": {
+        "required_challenges": {"const": 12},
+        "challenges_completed": {"const": 12},
+        "catalog_corrections": {"const": 0},
+        "semantic_statement_changes": {"const": 0},
+        "authority_changes": {"const": 0},
+        "layer_changes": {"const": 0},
+        "lifecycle_changes": {"const": 0},
+        "soundness_changes": {"const": 0},
+        "remaining_provisional_entries": {"const": 27},
+        "remaining_not_assessed_soundness": {"const": 27},
+        "entries_with_incomplete_independent_observation": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "review_status": {"const": "PASS_WITH_NO_CATALOG_CORRECTIONS"},
+    "pre_review_catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "reviewed_catalog_sha256": {"$ref": "#/$defs/sha256"},
+    "attestation_order": {
+      "const": [
+        "HISTORICAL_PREDECESSORS",
+        "SOURCE_AND_EVIDENCE_LOCKS",
+        "PRE_REVIEW_CATALOG",
+        "REVIEWED_CATALOG",
+        "ADVERSARIAL_REVIEW",
+        "GENERATED_REPORTS",
+        "DURABLE_RESEARCH_STATE"
+      ]
+    },
+    "dependency_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {
+          "from": {"type": "string", "minLength": 1},
+          "to": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "acyclic": {"const": true}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tieredBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "tier"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "tier": {
+          "enum": [
+            "HISTORICAL_PREDECESSORS",
+            "SOURCE_AND_EVIDENCE_LOCKS",
+            "PRE_REVIEW_CATALOG",
+            "REVIEWED_CATALOG",
+            "ADVERSARIAL_REVIEW",
+            "GENERATED_REPORTS",
+            "DURABLE_RESEARCH_STATE"
+          ]
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,382 @@
+#!/usr/bin/env python3
+"""Validate Milestone 9 adversarial review and its acyclic completion artifacts."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from collections import Counter
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+CATALOG_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-catalog"
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
+POPULATOR_PATH = ROOT / "scripts" / "populate-declaration-validation-milestone-9"
+REVIEW_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-9-review"
+FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-9-freeze"
+COMPLETION_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-9-completion"
+PRE_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-pre-review-catalog.json"
+REVIEWED_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+REVIEW_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-adversarial-review.json"
+REVIEW_REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_9_ADVERSARIAL_REVIEW.md"
+REVIEW_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-9-review.schema.json"
+FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-freeze.json"
+FREEZE_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-9-freeze.schema.json"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9.json"
+COMPLETION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-9.schema.json"
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def document_bytes(document: dict[str, Any]) -> bytes:
+    return (json.dumps(document, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def schema_errors(instance: Any, schema: dict[str, Any], label: str) -> list[str]:
+    validator = jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())
+    return [
+        f"{label} schema error at /{'/'.join(str(part) for part in error.absolute_path)}: {error.message}"
+        for error in sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path))
+    ]
+
+
+def safe_relative_path(value: str) -> bool:
+    path = Path(value)
+    return not path.is_absolute() and ".." not in path.parts and ":" not in value
+
+
+def bound_file_errors(bindings: dict[str, Any], label: str) -> list[str]:
+    errors: list[str] = []
+    for name, binding in bindings.items():
+        relative = binding["path"]
+        if not safe_relative_path(relative):
+            errors.append(f"{label} {name} path is not safe and relative")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            errors.append(f"{label} {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"{label} {name} artifact hash is stale")
+    return errors
+
+
+def cycle_errors(edges: list[dict[str, str]]) -> list[str]:
+    graph: dict[str, list[str]] = {}
+    for edge in edges:
+        graph.setdefault(edge["from"], []).append(edge["to"])
+        graph.setdefault(edge["to"], [])
+    active: set[str] = set()
+    done: set[str] = set()
+    errors: list[str] = []
+
+    def visit(node: str) -> None:
+        if node in active:
+            errors.append(f"Milestone 9 dependency graph contains a cycle at {node}")
+            return
+        if node in done:
+            return
+        active.add(node)
+        for target in graph[node]:
+            visit(target)
+        active.remove(node)
+        done.add(node)
+
+    for node in graph:
+        visit(node)
+    return errors
+
+
+def immutable_m8_catalog(history: Any) -> tuple[dict[str, Any] | None, list[str]]:
+    attestation = history.load_json(history.M8_ATTESTATION_PATH)
+    return history.historical_json(
+        attestation["artifacts"]["catalog"],
+        label="M9 immutable M8 catalog",
+        expected_commit=history.M8_COMMIT,
+    )
+
+
+def inventory_projection(catalog: dict[str, Any]) -> dict[str, Any]:
+    bindings = copy.deepcopy(catalog["artifact_bindings"])
+    bindings.pop("evidence_lock", None)
+    return {
+        "artifact_bindings_except_evidence_lock": bindings,
+        "id_evolution_rules": catalog["id_evolution_rules"],
+        "identity_denotation_profile": catalog["identity_denotation_profile"],
+        "observer_order": catalog["observer_order"],
+        "entries": catalog["entries"],
+        "site_dispositions": catalog["site_dispositions"],
+        "existing_evidence_dispositions": catalog["existing_evidence_dispositions"],
+        "identity_dispositions": catalog["identity_dispositions"],
+    }
+
+
+def catalog_artifact_errors(
+    catalog_validator: Any,
+    catalog: dict[str, Any],
+    evidence_lock: dict[str, Any],
+) -> list[str]:
+    supplied_catalog = copy.deepcopy(catalog)
+    approved_path = ROOT / catalog["artifact_bindings"]["approved_authority_sources"]["path"]
+    supplied_catalog["artifact_bindings"]["approved_authority_sources"]["sha256"] = (
+        catalog_validator.document_sha256(load_json(approved_path))
+    )
+    return catalog_validator.validate_artifacts(
+        supplied_catalog,
+        load_json(catalog_validator.CATALOG_SCHEMA_PATH),
+        load_json(catalog_validator.ENTRY_SCHEMA_PATH),
+        load_json(catalog_validator.AUTHORITY_PATH),
+        load_json(catalog_validator.AUTHORITY_SCHEMA_PATH),
+        load_json(catalog_validator.DECISIONS_PATH),
+        load_json(catalog_validator.DECISIONS_SCHEMA_PATH),
+        load_json(catalog_validator.TARGET_PATH),
+        load_json(catalog_validator.MODEL_PATH),
+        load_json(catalog_validator.IDENTITY_PATH),
+        load_json(catalog_validator.SOURCE_LOCK_PATH),
+        evidence_lock,
+        load_json(catalog_validator.EVIDENCE_LOCK_SCHEMA_PATH),
+        load_json(approved_path),
+        load_json(catalog_validator.registry_schema_path(approved_path)),
+        load_json(catalog_validator.PRIOR_DECISIONS_PATH),
+        check_generated=False,
+        enforce_milestone_boundary=True,
+    )
+
+
+def review_fact_errors(
+    pre: dict[str, Any], reviewed: dict[str, Any], review: dict[str, Any]
+) -> list[str]:
+    errors: list[str] = []
+    review_renderer = load_module("m9_review_fact_renderer", REVIEW_RENDERER_PATH)
+    if len(review["challenges"]) != 12:
+        errors.append("M9 review does not contain exactly twelve challenges")
+        return errors
+    expected_ids = [f"CHALLENGE.M9.{number:02d}." for number in range(1, 13)]
+    for prefix, row in zip(expected_ids, review["challenges"], strict=True):
+        if not row["id"].startswith(prefix):
+            errors.append("M9 challenge order or identity is not exact")
+        if row["challenge"] != review_renderer.QUESTIONS[int(prefix[13:15]) - 1]:
+            errors.append(f"{row['id']}: challenge question differs from the active plan")
+        before = review_renderer.target_hash(
+            pre, row["target"]["catalog_ids"], row["target"]["surface_ids"]
+        )
+        after = review_renderer.target_hash(
+            reviewed, row["target"]["catalog_ids"], row["target"]["surface_ids"]
+        )
+        if row["statement_hash_before"] != before or row["statement_hash_after"] != after:
+            errors.append(f"{row['id']}: statement hash does not match the targeted catalog projection")
+        if not row["correction_required"] and before != after:
+            errors.append(f"{row['id']}: unrecorded statement change")
+        if any(item["artifact"] not in review["artifact_bindings"] for item in row["evidence"]):
+            errors.append(f"{row['id']}: evidence references an unbound artifact")
+
+    entries = [row["characterization"] for row in pre["entries"]]
+    if len(entries) != 27 or Counter(row["kind"] for row in entries) != {
+        "NORMATIVE_CANDIDATE_OBLIGATION": 19,
+        "EMPIRICAL_CONTRACT_SCENARIO": 8,
+    }:
+        errors.append("M9 review does not preserve the 27-entry M8 kind boundary")
+    if any(row["authority"]["status"] != "PROVISIONAL" for row in entries):
+        errors.append("M9 review found or created a non-provisional authority state")
+    if any(row["soundness_relevance"]["status"] != "NOT_ASSESSED" for row in entries):
+        errors.append("M9 review found or created a soundness assessment")
+    if any(
+        row["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+        and row["layers"] != ["KERNEL_DECLARATION_VALIDITY"]
+        for row in entries
+    ):
+        errors.append("M9 review found a normative entry crossing the kernel/export layer boundary")
+    semantic_hashes = [row["semantic_denotation_sha256"] for row in pre["entries"]]
+    if len(semantic_hashes) != len(set(semantic_hashes)):
+        errors.append("M9 review found duplicate active semantic-denotation hashes")
+    identity_hashes = [row["identity_statement_sha256"] for row in pre["identity_dispositions"]]
+    if len(identity_hashes) != len(set(identity_hashes)):
+        errors.append("M9 review found duplicate frozen identity-statement hashes")
+    if review["corrections"] or review["summary"]["catalog_corrections"] != 0:
+        errors.append("M9 no-correction result contains a correction trail")
+    if review["status"] != "PASS_WITH_NO_CATALOG_CORRECTIONS":
+        errors.append("M9 status does not match the zero-correction review")
+    return errors
+
+
+def review_evidence_locator_errors(
+    review: dict[str, Any], catalog_validator: Any
+) -> list[str]:
+    errors: list[str] = []
+    parsed: dict[str, Any] = {}
+    for row in review["challenges"]:
+        for evidence in row["evidence"]:
+            artifact = evidence["artifact"]
+            binding = review["artifact_bindings"].get(artifact)
+            if binding is None:
+                continue
+            path = ROOT / binding["path"]
+            for locator in evidence["locators"]:
+                if locator.startswith("COMMAND:"):
+                    command = locator.removeprefix("COMMAND:")
+                    if not command.startswith(binding["path"]):
+                        errors.append(
+                            f"{row['id']}: command locator is not implemented by bound artifact {artifact}"
+                        )
+                    continue
+                if not locator.startswith("/"):
+                    errors.append(f"{row['id']}: unsupported review evidence locator {locator}")
+                    continue
+                try:
+                    document = parsed.setdefault(artifact, load_json(path))
+                    catalog_validator.resolve_pointer(document, locator)
+                except (json.JSONDecodeError, KeyError, TypeError, IndexError):
+                    errors.append(
+                        f"{row['id']}: evidence locator {locator} does not resolve in {artifact}"
+                    )
+    return errors
+
+
+def validate_document(
+    review: dict[str, Any] | None = None,
+    *,
+    check_generated: bool = True,
+    require_completion: bool = True,
+) -> list[str]:
+    errors: list[str] = []
+    catalog_validator = load_module("declaration_m9_catalog_validator", CATALOG_VALIDATOR_PATH)
+    history = load_module("declaration_m9_historical_validator", HISTORICAL_VALIDATOR_PATH)
+    populator = load_module("declaration_m9_populator", POPULATOR_PATH)
+    renderer = load_module("declaration_m9_review_renderer", REVIEW_RENDERER_PATH)
+    errors.extend(history.validate_m7_attestation())
+    errors.extend(history.validate_reviewed_m8_pilot())
+    errors.extend(history.validate_m8_attestation())
+    if errors:
+        return errors
+
+    pre = load_json(PRE_CATALOG_PATH)
+    reviewed = load_json(REVIEWED_CATALOG_PATH)
+    current = load_json(CATALOG_PATH)
+    pre_lock = load_json(populator.PRE_EVIDENCE_LOCK_PATH)
+    reviewed_lock = load_json(populator.REVIEWED_EVIDENCE_LOCK_PATH)
+    review = load_json(REVIEW_PATH) if review is None else review
+    errors.extend(schema_errors(review, load_json(REVIEW_SCHEMA_PATH), "Milestone 9 review"))
+    if errors:
+        return errors
+
+    m8_catalog, historical_errors = immutable_m8_catalog(history)
+    errors.extend(historical_errors)
+    if m8_catalog is None:
+        return errors
+    if inventory_projection(pre) != inventory_projection(m8_catalog):
+        errors.append("M9 pre-review inventory differs from immutable corrected M8 content")
+    if inventory_projection(reviewed) != inventory_projection(pre):
+        errors.append("M9 reviewed inventory changed without a recorded correction")
+    if current != reviewed:
+        errors.append("current canonical catalog differs from the frozen reviewed catalog")
+
+    chain_errors, _ = catalog_validator.validate_evidence_lock_chain(
+        reviewed_lock,
+        load_json(catalog_validator.EVIDENCE_LOCK_SCHEMA_PATH),
+        load_json(catalog_validator.SOURCE_LOCK_PATH),
+        check_git_tracking=check_generated,
+    )
+    errors.extend(chain_errors)
+    if pre_lock["sequence"] != 5 or reviewed_lock["sequence"] != 6:
+        errors.append("M9 evidence-lock sequence is not exactly 5 then 6")
+    errors.extend(catalog_artifact_errors(catalog_validator, pre, pre_lock))
+    errors.extend(catalog_artifact_errors(catalog_validator, reviewed, reviewed_lock))
+    errors.extend(review_fact_errors(pre, reviewed, review))
+    errors.extend(review_evidence_locator_errors(review, catalog_validator))
+
+    authority_sources = load_json(ROOT / "config" / "declaration-validation-approved-authority-sources.json")
+    if authority_sources["normative_documentation"] or authority_sources["mechanized_results"]:
+        errors.append("M9 review changed the frozen empty authority-source boundary")
+    closure = load_json(ROOT / "config" / "declaration-validation-discovery-closure.json")
+    if not all(closure["completion"].get(key) for key in [
+        "declared_sources_exhausted", "all_sites_disposed", "all_topics_closed", "all_dependencies_disposed"
+    ]):
+        errors.append("M9 missed-check review is not based on a closed discovery predecessor")
+    exclusion_rows = (
+        closure["exclusions"]
+        + closure["scope"]["excluded_declaration_kinds"]
+        + closure["scope"]["excluded_phases"]
+        + [row for row in closure["dependencies"] if row["treatment"] == "EXCLUDED"]
+    )
+    if any(not row.get("reason") for row in exclusion_rows):
+        errors.append("M9 exclusion review found an exclusion without a reason")
+
+    if check_generated:
+        expected_documents = populator.rendered_documents()
+        for path, document in expected_documents.items():
+            if not path.is_file() or path.read_bytes() != document_bytes(document):
+                errors.append(f"M9 generated catalog artifact is stale: {path.relative_to(ROOT)}")
+        if REVIEW_PATH.read_bytes() != document_bytes(renderer.render()):
+            errors.append("M9 adversarial-review record is not synchronized with its renderer")
+        if REVIEW_REPORT_PATH.read_text(encoding="utf-8") != renderer.render_markdown(review):
+            errors.append("M9 adversarial-review report is not synchronized with its renderer")
+        errors.extend(bound_file_errors(review["artifact_bindings"], "M9 review"))
+
+    if require_completion:
+        if not FREEZE_PATH.is_file() or not COMPLETION_PATH.is_file():
+            return errors + ["Milestone 9 freeze or completion artifact is missing"]
+        freeze = load_json(FREEZE_PATH)
+        completion = load_json(COMPLETION_PATH)
+        errors.extend(schema_errors(freeze, load_json(FREEZE_SCHEMA_PATH), "Milestone 9 freeze"))
+        errors.extend(schema_errors(completion, load_json(COMPLETION_SCHEMA_PATH), "Milestone 9 completion"))
+        if errors:
+            return errors
+        freeze_renderer = load_module("declaration_m9_freeze_renderer", FREEZE_RENDERER_PATH)
+        completion_renderer = load_module("declaration_m9_completion_renderer", COMPLETION_RENDERER_PATH)
+        if check_generated and FREEZE_PATH.read_bytes() != document_bytes(freeze_renderer.render()):
+            errors.append("Milestone 9 freeze manifest is not synchronized with its renderer")
+        if check_generated and COMPLETION_PATH.read_bytes() != document_bytes(completion_renderer.render()):
+            errors.append("Milestone 9 completion record is not synchronized with its renderer")
+        if check_generated:
+            errors.extend(bound_file_errors(freeze["predecessor_attestations"], "M9 predecessor"))
+            errors.extend(bound_file_errors(freeze["artifacts"], "M9 freeze"))
+            errors.extend(bound_file_errors(completion["artifacts"], "M9 completion"))
+        errors.extend(cycle_errors(freeze["dependency_edges"]))
+        if freeze["review_summary"] != review["summary"] or completion["review_summary"] != review["summary"]:
+            errors.append("M9 freeze/completion review summaries disagree")
+        if freeze["reviewed_catalog_sha256"] != sha256_file(REVIEWED_CATALOG_PATH):
+            errors.append("M9 freeze does not bind the reviewed catalog")
+        if completion["artifacts"]["freeze_manifest"]["sha256"] != sha256_file(FREEZE_PATH):
+            errors.append("M9 completion does not bind the final content manifest")
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--artifacts-only", action="store_true")
+    args = parser.parse_args()
+    errors = validate_document(require_completion=not args.artifacts_only)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    print("declaration-validation Milestone 9 adversarial review: PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

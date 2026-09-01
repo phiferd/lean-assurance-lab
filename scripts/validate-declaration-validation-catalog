@@ -2163,8 +2163,14 @@ def validate_artifacts(
         if evidence_lock["sequence"] != 1:
             errors.append("Milestone 7 must bind the sequence-1 empty evidence lock")
 
-    if enforce_milestone_boundary and catalog["status"] == "MILESTONE_8_CHARACTERIZATION_INVENTORY":
+    if enforce_milestone_boundary and catalog["status"] in {
+        "MILESTONE_8_CHARACTERIZATION_INVENTORY",
+        "MILESTONE_9_PRE_REVIEW_FREEZE",
+        "MILESTONE_9_REVIEWED_FREEZE",
+    }:
         errors.extend(validate_reviewed_pilot_reuse(catalog))
+
+    if enforce_milestone_boundary and catalog["status"] == "MILESTONE_8_CHARACTERIZATION_INVENTORY":
         boundary = catalog["completion_boundary"]
         if not boundary["inventory_populated"] or not boundary["authority_assignments_created"]:
             errors.append("Milestone 8 completion flags do not assert the completed inventory")
@@ -2182,6 +2188,22 @@ def validate_artifacts(
             errors.append("Milestone 9 status cannot discard the completed Milestone 8 inventory")
         if evidence_lock["sequence"] < 3:
             errors.append("Milestone 9 must bind a successor of the Milestone 8 evidence lock")
+        expected_sequence = {
+            "MILESTONE_9_PRE_REVIEW_FREEZE": 5,
+            "MILESTONE_9_REVIEWED_FREEZE": 6,
+        }[catalog["status"]]
+        if evidence_lock["sequence"] != expected_sequence:
+            errors.append(
+                f"{catalog['status']} must bind exact evidence-lock sequence {expected_sequence}"
+            )
+        expected_next = {
+            "MILESTONE_9_PRE_REVIEW_FREEZE": "MILESTONE_9_ADVERSARIAL_REVIEW",
+            "MILESTONE_9_REVIEWED_FREEZE": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
+        }[catalog["status"]]
+        if boundary["next_milestone"] != expected_next:
+            errors.append(
+                f"{catalog['status']} does not authorize exactly {expected_next} next"
+            )
 
     if check_generated:
         report_renderer = load_module("declaration_m7_report_renderer", REPORT_RENDERER_PATH)

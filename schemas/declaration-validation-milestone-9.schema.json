@@ -1,0 +1,88 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-9.schema.json",
+  "title": "Declaration Validation Milestone 9 Completion Record",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "milestone",
+    "recorded_at",
+    "status",
+    "repository_state",
+    "artifacts",
+    "review_summary",
+    "qualification_boundary",
+    "validation",
+    "requirements_audit",
+    "completion_boundary"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "milestone": {"const": "declaration-validation-contract-slice-9"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PASS"},
+    "repository_state": {
+      "type": "object",
+      "required": ["head_at_milestone_start", "branch", "tree_clean_at_milestone_start", "prior_milestone_attestation"],
+      "properties": {
+        "head_at_milestone_start": {"const": "15c76f236b82077ba1fdb65e6b6165d5c7bdf5f1"},
+        "branch": {"const": "main"},
+        "tree_clean_at_milestone_start": {"const": true},
+        "prior_milestone_attestation": {"const": "results/research/declaration-validation-milestone-8-historical.json"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {"type": "object", "minProperties": 20, "additionalProperties": {"$ref": "#/$defs/fileBinding"}},
+    "review_summary": {"type": "object"},
+    "qualification_boundary": {
+      "type": "object",
+      "required": [
+        "approved_normative_sources",
+        "approved_mechanized_sources",
+        "established_authority_entries",
+        "provisional_authority_entries",
+        "soundness_relevance",
+        "catalog_corrections",
+        "checker_consensus_establishes_normativity",
+        "llm_judgment_is_evidence"
+      ],
+      "properties": {
+        "approved_normative_sources": {"const": 0},
+        "approved_mechanized_sources": {"const": 0},
+        "established_authority_entries": {"const": 0},
+        "provisional_authority_entries": {"const": 27},
+        "soundness_relevance": {"const": "NOT_ASSESSED_ONLY"},
+        "catalog_corrections": {"const": 0},
+        "checker_consensus_establishes_normativity": {"const": false},
+        "llm_judgment_is_evidence": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "validation": {"type": "object"},
+    "requirements_audit": {"type": "object", "minProperties": 13, "additionalProperties": {"type": "string", "minLength": 1}},
+    "completion_boundary": {
+      "type": "object",
+      "required": ["completed", "next_authorized_milestone", "deferred", "nonclaims"],
+      "properties": {
+        "completed": {"const": "Milestone 9 adversarial review as a reproducible artifact"},
+        "next_authorized_milestone": {"const": "Milestone 10 — Design the next phase against the frozen inventory"},
+        "deferred": {"type": "array", "minItems": 4, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "nonclaims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

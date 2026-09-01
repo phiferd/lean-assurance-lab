@@ -322,8 +322,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             jsonschema.Draft202012Validator.check_schema(schema)
         self.assertEqual(self.errors(enforce_milestone_boundary=True), [])
 
-    def test_milestone_8_catalog_is_authoritative_and_complete(self):
-        self.assertEqual(self.catalog["status"], "MILESTONE_8_CHARACTERIZATION_INVENTORY")
+    def test_milestone_9_reviewed_catalog_is_authoritative_and_complete(self):
+        self.assertEqual(self.catalog["status"], "MILESTONE_9_REVIEWED_FREEZE")
         self.assertEqual(len(self.catalog["entries"]), 27)
         self.assertEqual(len(self.catalog["identity_dispositions"]), 30)
         self.assertEqual(len(self.catalog["site_dispositions"]), 149)
@@ -332,6 +332,10 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             self.catalog["completion_boundary"]["canonical_data_authoritative"]
         )
         self.assertTrue(self.catalog["completion_boundary"]["inventory_populated"])
+        self.assertEqual(
+            self.catalog["completion_boundary"]["next_milestone"],
+            "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
+        )
 
     def current_evidence_chain(self):
         errors, chain = module.validate_evidence_lock_chain(
@@ -457,12 +461,15 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertEqual(summary["observer_outcomes_by_profile"]["nanoda"]["NOT_INSPECTED"], 27)
         self.assertEqual(summary["arena_dispositions"]["LINKED"], 1)
 
-    def test_milestone_8_freeze_is_acyclic_and_binds_the_catalog(self):
+    def test_milestone_8_freeze_is_acyclic_and_binds_its_historical_catalog(self):
         freeze = module.load_json(module.M8_FREEZE_PATH)
+        attestation = module.load_json(
+            ROOT / "results" / "research" / "declaration-validation-milestone-8-historical.json"
+        )
         self.assertEqual(module.dependency_cycle_errors(freeze["dependency_edges"]), [])
         self.assertEqual(
             freeze["artifacts"]["catalog"]["sha256"],
-            module.sha256_file(module.CATALOG_PATH),
+            attestation["artifacts"]["catalog"]["sha256"],
         )
 
     def test_valid_normative_fixture_satisfies_established_rule(self):

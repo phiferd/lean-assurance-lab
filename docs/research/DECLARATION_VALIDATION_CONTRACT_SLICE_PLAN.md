@@ -4,7 +4,7 @@
 
 - Plan revision: 2
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 8 recorded
+- Status: active execution mandate; Milestones 0 through 9 recorded
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -66,6 +66,12 @@
   `scripts/validate-declaration-validation-catalog`
 - Milestone 8 record:
   results/research/declaration-validation-milestone-8.json
+- Milestone 9 adversarial-review record:
+  results/research/declaration-validation-milestone-9-adversarial-review.json
+- Milestone 9 validation command:
+  `scripts/validate-declaration-validation-milestone-9`
+- Milestone 9 record:
+  results/research/declaration-validation-milestone-9.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -1064,6 +1070,34 @@ Preserve the correction trail.
 
 Bind the pre-review catalog, reviewed catalog, adversarial-review record, and
 generated reports through the acyclic freeze manifest defined in Milestone 7.
+
+### Milestone 9 Completion — 2026-09-01
+
+The corrected Milestone 8 Git-blob attestation is the immutable predecessor.
+The sequence-5 pre-review evidence freeze and pre-review catalog preserve its
+complete semantic inventory unchanged; the sequence-6 reviewed successor adds
+no normative document, mechanized result, checker observation, or witness.
+
+The canonical adversarial-review record executes all twelve required challenge
+classes over the frozen inventory. It found zero evidence-supported catalog
+corrections: all 19 normative candidates remain provisional, kernel-validity
+entries remain separated from export and reconstruction scenarios, every
+multi-layer scenario remains explicit, official/Lean4Lean shared lineage is
+preserved, and all 27 soundness-relevance states remain `NOT_ASSESSED`.
+Incomplete independent observation is retained as a negative result rather
+than inferred away. The review also mechanically rechecks unique semantic
+denotations, the 22-source/59-site discovery closure, all 149 relevant
+identity/site dispositions, explicit exclusion rationales, and deterministic
+catalog reconstruction without LLM authority.
+
+The reviewed catalog advances only its milestone envelope and evidence-lock
+successor; its entries, site and evidence dispositions, identity dispositions,
+and frozen semantic denotations are byte-identical to the pre-review inventory.
+The generated catalog report, adversarial-review report, final acyclic content
+manifest, completion record, validator, and mutation tests bind the result.
+No authority source was approved, no soundness claim was made, and no Arena
+coverage denominator or broad coverage study was started. The next authorized
+milestone is Milestone 10.
 
 ## Milestone 10 — Design the Next Phase Against the Frozen Inventory
 

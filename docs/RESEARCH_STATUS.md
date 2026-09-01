@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-08-31
+Last updated: 2026-09-01
 
 ## How Status Is Tracked
 
@@ -1238,10 +1238,27 @@ prepared_external_action_drafts: 5
    historical commit, or completion/content-manifest binding fails. The final
    Phase-B gate passed the source-lock, historical M7/reviewed-pilot/corrected-
    M8, reviewed-pilot, and canonical-catalog validators plus all 139
-   declaration-validation tests with zero failures or errors. The exact next
-   authorized action is: **Conduct Milestone 9 as a separate reproducible
-   adversarial review of the immutable corrected M8 inventory. Milestone 9 is
-   not started.**
+   declaration-validation tests with zero failures or errors.
+
+   Milestone 9 is now complete. A sequence-5 pre-review evidence successor and
+   catalog snapshot preserve the immutable corrected M8 semantic inventory;
+   the sequence-6 reviewed successor selects no new authority or behavioral
+   evidence. The machine-readable adversarial review closes all twelve plan
+   challenges with zero evidence-supported catalog corrections. All 27 entries
+   remain `PROVISIONAL`, all soundness relevance remains `NOT_ASSESSED`, the
+   empty approved-authority-source registry is unchanged, and incomplete
+   independent observation remains an explicit negative result. Kernel/export
+   separation, multi-layer scenarios, shared official/Lean4Lean lineage,
+   unique semantic denotations, the frozen discovery/site surface, exclusions,
+   and deterministic non-LLM reconstruction are mechanically rechecked.
+
+   The reviewed catalog changes only its milestone envelope and evidence-lock
+   successor; its semantic inventory is unchanged from the pre-review snapshot.
+   The adversarial-review record, two generated reports, acyclic final content
+   manifest, completion record, validator, and mutation tests bind the result.
+   No Arena negative-coverage denominator was created and no broad coverage
+   study began. The exact next authorized action is: **Execute Milestone 10 —
+   design the next phase against the frozen reviewed inventory.**
 
 ### Waiting
 

@@ -31,6 +31,20 @@ pilot_validator = load_module(
 
 
 class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
+    def test_actual_m9_reviewed_catalog_leaves_m8_history_valid(self):
+        attestation = history.load_json(history.M8_ATTESTATION_PATH)
+        current = history.load_json(ROOT / "config" / "declaration-validation-catalog.json")
+        self.assertEqual(current["status"], "MILESTONE_9_REVIEWED_FREEZE")
+        self.assertNotEqual(
+            hashlib.sha256(
+                (json.dumps(current, indent=2, sort_keys=True) + "\n").encode("utf-8")
+            ).hexdigest(),
+            attestation["artifacts"]["catalog"]["sha256"],
+        )
+        self.assertEqual(history.validate_m7_attestation(), [])
+        self.assertEqual(history.validate_reviewed_m8_pilot(), [])
+        self.assertEqual(history.validate_m8_attestation(), [])
+
     def test_m9_current_catalog_transition_leaves_m8_historical_attestation_unchanged(self):
         """A future current catalog cannot redefine the corrected M8 content state."""
 

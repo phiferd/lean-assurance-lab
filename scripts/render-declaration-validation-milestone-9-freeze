@@ -1,0 +1,121 @@
+#!/usr/bin/env python3
+"""Render the acyclic final Milestone 9 content manifest."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+REVIEW_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-adversarial-review.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-9-freeze.json"
+
+PREDECESSORS = {
+    "corrected_milestone_8": "results/research/declaration-validation-milestone-8-historical.json"
+}
+ARTIFACTS = {
+    "pre_review_evidence_lock": ("config/declaration-validation-evidence-locks/milestone-9-pre-review.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "reviewed_evidence_lock": ("config/declaration-validation-evidence-locks/milestone-9-reviewed.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "approved_authority_sources": ("config/declaration-validation-approved-authority-sources.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "authority_rules": ("config/declaration-validation-authority-rules.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "discovery_closure": ("config/declaration-validation-discovery-closure.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "identity_registry": ("config/declaration-validation-identity-registry.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "source_lock": ("config/declaration-validation-source-lock.json", "SOURCE_AND_EVIDENCE_LOCKS"),
+    "pre_review_catalog": ("results/research/declaration-validation-milestone-9-pre-review-catalog.json", "PRE_REVIEW_CATALOG"),
+    "reviewed_catalog": ("results/research/declaration-validation-milestone-9-reviewed-catalog.json", "REVIEWED_CATALOG"),
+    "canonical_catalog": ("config/declaration-validation-catalog.json", "REVIEWED_CATALOG"),
+    "adversarial_review": ("results/research/declaration-validation-milestone-9-adversarial-review.json", "ADVERSARIAL_REVIEW"),
+    "generated_catalog_report": ("docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md", "GENERATED_REPORTS"),
+    "generated_review_report": ("docs/research/DECLARATION_VALIDATION_MILESTONE_9_ADVERSARIAL_REVIEW.md", "GENERATED_REPORTS"),
+    "catalog_schema": ("schemas/declaration-validation-catalog.schema.json", "DURABLE_RESEARCH_STATE"),
+    "review_schema": ("schemas/declaration-validation-milestone-9-review.schema.json", "DURABLE_RESEARCH_STATE"),
+    "freeze_schema": ("schemas/declaration-validation-milestone-9-freeze.schema.json", "DURABLE_RESEARCH_STATE"),
+    "completion_schema": ("schemas/declaration-validation-milestone-9.schema.json", "DURABLE_RESEARCH_STATE"),
+    "catalog_populator": ("scripts/populate-declaration-validation-milestone-9", "DURABLE_RESEARCH_STATE"),
+    "review_renderer": ("scripts/render-declaration-validation-milestone-9-review", "DURABLE_RESEARCH_STATE"),
+    "freeze_renderer": ("scripts/render-declaration-validation-milestone-9-freeze", "DURABLE_RESEARCH_STATE"),
+    "completion_renderer": ("scripts/render-declaration-validation-milestone-9-completion", "DURABLE_RESEARCH_STATE"),
+    "catalog_validator": ("scripts/validate-declaration-validation-catalog", "DURABLE_RESEARCH_STATE"),
+    "historical_validator": ("scripts/validate-declaration-validation-historical", "DURABLE_RESEARCH_STATE"),
+    "milestone_9_validator": ("scripts/validate-declaration-validation-milestone-9", "DURABLE_RESEARCH_STATE"),
+    "historical_transition_tests": ("tests/test_declaration_validation_historical_transition.py", "DURABLE_RESEARCH_STATE"),
+    "milestone_9_tests": ("tests/test_declaration_validation_milestone_9.py", "DURABLE_RESEARCH_STATE"),
+    "research_plan": ("docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md", "DURABLE_RESEARCH_STATE"),
+    "research_status": ("docs/RESEARCH_STATUS.md", "DURABLE_RESEARCH_STATE"),
+}
+
+ATTESTATION_ORDER = [
+    "HISTORICAL_PREDECESSORS",
+    "SOURCE_AND_EVIDENCE_LOCKS",
+    "PRE_REVIEW_CATALOG",
+    "REVIEWED_CATALOG",
+    "ADVERSARIAL_REVIEW",
+    "GENERATED_REPORTS",
+    "DURABLE_RESEARCH_STATE",
+]
+DEPENDENCY_EDGES = [
+    {"from": "pre_review_catalog", "to": "corrected_milestone_8"},
+    {"from": "pre_review_catalog", "to": "pre_review_evidence_lock"},
+    {"from": "reviewed_catalog", "to": "pre_review_catalog"},
+    {"from": "reviewed_catalog", "to": "reviewed_evidence_lock"},
+    {"from": "adversarial_review", "to": "pre_review_catalog"},
+    {"from": "adversarial_review", "to": "reviewed_catalog"},
+    {"from": "generated_catalog_report", "to": "reviewed_catalog"},
+    {"from": "generated_review_report", "to": "adversarial_review"},
+    {"from": "research_plan", "to": "adversarial_review"},
+    {"from": "research_status", "to": "adversarial_review"},
+]
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def binding(relative: str, tier: str) -> dict[str, str]:
+    return {"path": relative, "sha256": sha256_file(ROOT / relative), "tier": tier}
+
+
+def render() -> dict[str, Any]:
+    review = load(REVIEW_PATH)
+    return {
+        "schema_version": 1,
+        "manifest_id": "ordinary-declaration-validation.milestone-9-content-manifest.v1",
+        "generated_at": review["recorded_at"],
+        "status": "FINAL_MILESTONE_9_CONTENT_MANIFEST",
+        "predecessor_attestations": {
+            name: binding(relative, "HISTORICAL_PREDECESSORS")
+            for name, relative in PREDECESSORS.items()
+        },
+        "artifacts": {
+            name: binding(relative, tier) for name, (relative, tier) in ARTIFACTS.items()
+        },
+        "review_summary": review["summary"],
+        "review_status": review["status"],
+        "pre_review_catalog_sha256": review["artifact_bindings"]["pre_review_catalog"]["sha256"],
+        "reviewed_catalog_sha256": review["artifact_bindings"]["reviewed_catalog"]["sha256"],
+        "attestation_order": ATTESTATION_ORDER,
+        "dependency_edges": DEPENDENCY_EDGES,
+        "acyclic": True,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

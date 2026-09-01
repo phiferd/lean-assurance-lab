@@ -1,0 +1,237 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-9-review.schema.json",
+  "title": "Declaration Validation Milestone 9 Adversarial Review",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "review_id",
+    "recorded_at",
+    "status",
+    "artifact_bindings",
+    "method",
+    "challenges",
+    "corrections",
+    "summary",
+    "conclusion",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "review_id": {"const": "ordinary-declaration-validation.milestone-9-adversarial-review.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"enum": ["PASS_WITH_NO_CATALOG_CORRECTIONS", "PASS_WITH_CATALOG_CORRECTIONS"]},
+    "artifact_bindings": {
+      "type": "object",
+      "additionalProperties": {"$ref": "#/$defs/fileBinding"},
+      "minProperties": 10
+    },
+    "method": {
+      "type": "object",
+      "required": [
+        "challenge_set",
+        "predecessor_boundary",
+        "review_independence",
+        "statement_hash_projection",
+        "reconstruction_command"
+      ],
+      "properties": {
+        "challenge_set": {"const": "EXACT_PLAN_M9_MINIMUM_TWELVE"},
+        "predecessor_boundary": {"const": "IMMUTABLE_CORRECTED_M8_GIT_BLOB_ATTESTATION"},
+        "review_independence": {"const": "SEPARATE_M9_RECORD_NOT_CATALOG_AUTHORITY"},
+        "statement_hash_projection": {"type": "string", "minLength": 1},
+        "reconstruction_command": {"const": "scripts/populate-declaration-validation-milestone-9 --check"}
+      },
+      "additionalProperties": false
+    },
+    "challenges": {
+      "type": "array",
+      "minItems": 12,
+      "maxItems": 12,
+      "items": {"$ref": "#/$defs/challenge"}
+    },
+    "corrections": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/correction"}
+    },
+    "summary": {
+      "type": "object",
+      "required": [
+        "required_challenges",
+        "challenges_completed",
+        "catalog_corrections",
+        "semantic_statement_changes",
+        "authority_changes",
+        "layer_changes",
+        "lifecycle_changes",
+        "soundness_changes",
+        "remaining_provisional_entries",
+        "remaining_not_assessed_soundness",
+        "entries_with_incomplete_independent_observation"
+      ],
+      "properties": {
+        "required_challenges": {"const": 12},
+        "challenges_completed": {"const": 12},
+        "catalog_corrections": {"type": "integer", "minimum": 0},
+        "semantic_statement_changes": {"type": "integer", "minimum": 0},
+        "authority_changes": {"type": "integer", "minimum": 0},
+        "layer_changes": {"type": "integer", "minimum": 0},
+        "lifecycle_changes": {"type": "integer", "minimum": 0},
+        "soundness_changes": {"type": "integer", "minimum": 0},
+        "remaining_provisional_entries": {"type": "integer", "minimum": 0},
+        "remaining_not_assessed_soundness": {"type": "integer", "minimum": 0},
+        "entries_with_incomplete_independent_observation": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "conclusion": {
+      "type": "object",
+      "required": ["catalog_disposition", "reviewed_catalog_sha256", "next_authorized_milestone", "reason"],
+      "properties": {
+        "catalog_disposition": {"enum": ["RETAIN_M8_SEMANTIC_CONTENT_UNCHANGED", "APPLY_RECORDED_CORRECTIONS"]},
+        "reviewed_catalog_sha256": {"$ref": "#/$defs/sha256"},
+        "next_authorized_milestone": {"const": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "semanticId": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(\\.[A-Z][A-Z0-9_]*)+$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "target": {
+      "type": "object",
+      "required": ["catalog_ids", "surface_ids"],
+      "properties": {
+        "catalog_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticId"}
+        },
+        "surface_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false,
+      "anyOf": [
+        {"properties": {"catalog_ids": {"minItems": 1}}},
+        {"properties": {"surface_ids": {"minItems": 1}}}
+      ]
+    },
+    "reviewEvidence": {
+      "type": "object",
+      "required": ["artifact", "locators", "finding"],
+      "properties": {
+        "artifact": {"type": "string", "minLength": 1},
+        "locators": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "finding": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "challenge": {
+      "type": "object",
+      "required": [
+        "id",
+        "challenge",
+        "target",
+        "disposition",
+        "evidence",
+        "facts",
+        "statement_hash_before",
+        "statement_hash_after",
+        "correction_required",
+        "correction_decision_ids",
+        "limitations"
+      ],
+      "properties": {
+        "id": {"type": "string", "pattern": "^CHALLENGE\\.M9\\.(0[1-9]|1[0-2])\\.[A-Z0-9_]+$"},
+        "challenge": {"type": "string", "minLength": 1},
+        "target": {"$ref": "#/$defs/target"},
+        "disposition": {
+          "enum": [
+            "RETAINED_PROVISIONAL_IMPLEMENTATION_ONLY",
+            "KERNEL_EXPORT_BOUNDARY_SEPARATED",
+            "MULTI_LAYER_SCENARIOS_EXPLICIT",
+            "NO_CONSENSUS_BASED_AUTHORITY",
+            "SHARED_LINEAGE_EXPLICIT",
+            "INDEPENDENT_OBSERVABILITY_INCOMPLETE",
+            "NO_DUPLICATE_CANONICAL_DENOTATIONS",
+            "NO_ESTABLISHED_ENTRY_TO_DOWNGRADE",
+            "NO_OMISSION_WITHIN_FROZEN_DISCOVERY_SURFACE",
+            "EXCLUSIONS_SCOPED_AND_JUSTIFIED",
+            "NO_SOUNDNESS_OVERREACH",
+            "RECONSTRUCTABLE_WITHOUT_LLM_AUTHORITY",
+            "CORRECTION_REQUIRED"
+          ]
+        },
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/reviewEvidence"}
+        },
+        "facts": {
+          "type": "object",
+          "minProperties": 1,
+          "additionalProperties": {"type": "string"}
+        },
+        "statement_hash_before": {"$ref": "#/$defs/sha256"},
+        "statement_hash_after": {"$ref": "#/$defs/sha256"},
+        "correction_required": {"type": "boolean"},
+        "correction_decision_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^DEC\\.CATALOG\\.[A-Z0-9_.]+$"}
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {"properties": {"correction_required": {"const": true}}, "required": ["correction_required"]},
+          "then": {"properties": {"correction_decision_ids": {"minItems": 1}}},
+          "else": {"properties": {"correction_decision_ids": {"maxItems": 0}}}
+        }
+      ]
+    },
+    "correction": {
+      "type": "object",
+      "required": ["decision_id", "target_ids", "reason", "catalog_hash_before", "catalog_hash_after"],
+      "properties": {
+        "decision_id": {"type": "string", "pattern": "^DEC\\.CATALOG\\.[A-Z0-9_.]+$"},
+        "target_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/semanticId"}},
+        "reason": {"type": "string", "minLength": 1},
+        "catalog_hash_before": {"$ref": "#/$defs/sha256"},
+        "catalog_hash_after": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,0 +1,993 @@
+{
+  "artifact_bindings": {
+    "approved_authority_sources": {
+      "path": "config/declaration-validation-approved-authority-sources.json",
+      "sha256": "1c151df258514fd46f868593e09b18fe0b02e8dfe1c27fa4b92bcc682a830708"
+    },
+    "authority_rules": {
+      "path": "config/declaration-validation-authority-rules.json",
+      "sha256": "de56148f267eca9f1fd91c6f9a8d42f7786e1b946eb7565f704ccaa193838ea0"
+    },
+    "catalog_validator": {
+      "path": "scripts/validate-declaration-validation-catalog",
+      "sha256": "c48236e25a5618ab5d4f61aa4e4c276ae68345a5c69347f455c10f5a69916d21"
+    },
+    "discovery_closure": {
+      "path": "config/declaration-validation-discovery-closure.json",
+      "sha256": "d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731"
+    },
+    "historical_validator": {
+      "path": "scripts/validate-declaration-validation-historical",
+      "sha256": "2ba610f9315ae84dcde8d6ff33c9933f26ee263c7046025aca51a617721a88bd"
+    },
+    "identity_registry": {
+      "path": "config/declaration-validation-identity-registry.json",
+      "sha256": "68e8770c808518170a9a22766f8e2ea79d3d2bdf0b643101026d6ec55a69f230"
+    },
+    "m8_historical_attestation": {
+      "path": "results/research/declaration-validation-milestone-8-historical.json",
+      "sha256": "54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a"
+    },
+    "m8_inventory_populator": {
+      "path": "scripts/populate-declaration-validation-milestone-8",
+      "sha256": "e10502c92c0c01781076ec8579aba38eccba69255b3479bf4768d857c8f22604"
+    },
+    "m9_inventory_populator": {
+      "path": "scripts/populate-declaration-validation-milestone-9",
+      "sha256": "57f4604c0b7077cc861f89e8a968d60ede182ef60ae1316c5e9081119a1aa8dc"
+    },
+    "pre_review_catalog": {
+      "path": "results/research/declaration-validation-milestone-9-pre-review-catalog.json",
+      "sha256": "7c728dce122951dfe3bebfee95f350b3c5ef7773c3e049cf05550df0ea0d5a83"
+    },
+    "pre_review_evidence_lock": {
+      "path": "config/declaration-validation-evidence-locks/milestone-9-pre-review.json",
+      "sha256": "bef99bff866f79deffef723852b636a22acf14a7ac9e4bd7d91eac55988838e0"
+    },
+    "reviewed_catalog": {
+      "path": "results/research/declaration-validation-milestone-9-reviewed-catalog.json",
+      "sha256": "01bdfeb42a5cf2875474495fbcc0142c5af0f47af77629ccba83884f3219cb34"
+    },
+    "reviewed_evidence_lock": {
+      "path": "config/declaration-validation-evidence-locks/milestone-9-reviewed.json",
+      "sha256": "a335a29e856becb5b00570bb34022220244c71fdb69ac8a82f9b3e4d20738d36"
+    },
+    "semantic_target": {
+      "path": "config/declaration-validation-target.json",
+      "sha256": "4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa"
+    },
+    "source_lock": {
+      "path": "config/declaration-validation-source-lock.json",
+      "sha256": "2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b"
+    }
+  },
+  "challenges": [
+    {
+      "challenge": "Which normative entries merely restate implementation checks?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "RETAINED_PROVISIONAL_IMPLEMENTATION_ONLY",
+      "evidence": [
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "All 19 normative candidates are explicitly provisional; implementation-source evidence targets discovery or layer metadata and supplies no normative support.",
+          "locators": [
+            "/entries"
+          ]
+        },
+        {
+          "artifact": "approved_authority_sources",
+          "finding": "The frozen approved-source registry is empty.",
+          "locators": [
+            "/normative_documentation",
+            "/mechanized_results"
+          ]
+        }
+      ],
+      "facts": {
+        "established_normative_entries": "0",
+        "normative_candidates_reviewed": "19",
+        "normative_support_evidence_items": "0"
+      },
+      "id": "CHALLENGE.M9.01.IMPLEMENTATION_RESTATEMENT",
+      "limitations": [
+        "Implementation sites motivate candidate retention but do not establish the modeled requirement."
+      ],
+      "statement_hash_after": "b40b78af4f498ef29e27e63c5c2265738d1162d00e1f760f5c27396db490252e",
+      "statement_hash_before": "b40b78af4f498ef29e27e63c5c2265738d1162d00e1f760f5c27396db490252e",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which entries confuse kernel validity with export behavior?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "KERNEL_EXPORT_BOUNDARY_SEPARATED",
+      "evidence": [
+        {
+          "artifact": "semantic_target",
+          "finding": "The modeled checked-addition judgment explicitly excludes parsing and reconstruction while separately pinning the export contract.",
+          "locators": [
+            "/logical_target/modeled_judgment",
+            "/export_contract"
+          ]
+        },
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "Normative entries use only KERNEL_DECLARATION_VALIDITY; export-format boundaries remain empirical scenarios.",
+          "locators": [
+            "/entries"
+          ]
+        }
+      ],
+      "facts": {
+        "catalog_entries_reviewed": "27",
+        "empirical_export_scenarios": "3",
+        "normative_entries_with_non_kernel_layer": "0"
+      },
+      "id": "CHALLENGE.M9.02.KERNEL_EXPORT_BOUNDARY",
+      "limitations": [
+        "Layer separation characterizes the pinned profiles; it is not a universal serialization theorem."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which scenarios cross multiple layers?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "MULTI_LAYER_SCENARIOS_EXPLICIT",
+      "evidence": [
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "Every scenario spanning more than one layer records the complete layer set instead of being forced into one layer.",
+          "locators": [
+            "/entries"
+          ]
+        }
+      ],
+      "facts": {
+        "empirical_scenarios_reviewed": "8",
+        "multi_layer_scenarios": "7"
+      },
+      "id": "CHALLENGE.M9.03.MULTI_LAYER_SCENARIOS",
+      "limitations": [
+        "Layer membership is a bounded characterization and remains non-normative."
+      ],
+      "statement_hash_after": "e260e30cfbf4645149113a9ab199c5b290ee89658487772d86c37964e7dca23a",
+      "statement_hash_before": "e260e30cfbf4645149113a9ab199c5b290ee89658487772d86c37964e7dca23a",
+      "target": {
+        "catalog_ids": [
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which authority claims rely on implementation consensus?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "NO_CONSENSUS_BASED_AUTHORITY",
+      "evidence": [
+        {
+          "artifact": "authority_rules",
+          "finding": "The qualification rules forbid checker majority and implementation consensus as normativity.",
+          "locators": [
+            "/global_prohibitions",
+            "/rules"
+          ]
+        },
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "All 27 authority states remain provisional with named unmet requirements.",
+          "locators": [
+            "/entries"
+          ]
+        }
+      ],
+      "facts": {
+        "entries_reviewed": "27",
+        "established_entries": "0",
+        "provisional_entries": "27"
+      },
+      "id": "CHALLENGE.M9.04.CONSENSUS_AUTHORITY",
+      "limitations": [
+        "The review does not decide whether a future preapproved source could establish a candidate."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which supposedly independent sources share lineage?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "SHARED_LINEAGE_EXPLICIT",
+      "evidence": [
+        {
+          "artifact": "semantic_target",
+          "finding": "Lean4Lean is recorded as derived from the official C++ kernel; official, Nanoda, and Kiota profiles retain their distinct scoped lineage labels.",
+          "locators": [
+            "/observer_profiles"
+          ]
+        },
+        {
+          "artifact": "source_lock",
+          "finding": "Each executable observer configuration repeats the pinned lineage group.",
+          "locators": [
+            "/observer_configurations"
+          ]
+        }
+      ],
+      "facts": {
+        "derived_or_target_profiles": "2",
+        "lineage_groups": "4",
+        "observer_profiles": "4"
+      },
+      "id": "CHALLENGE.M9.05.SHARED_LINEAGE",
+      "limitations": [
+        "Distinct lineage is not statistical or semantic independence."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which entries cannot be observed independently?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "INDEPENDENT_OBSERVABILITY_INCOMPLETE",
+      "evidence": [
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "Concrete outcomes exist for only a bounded subset; all missing profile/entry observations remain NOT_INSPECTED rather than inferred.",
+          "locators": [
+            "/entries"
+          ]
+        },
+        {
+          "artifact": "source_lock",
+          "finding": "Existing observations and witnesses are content-bound but do not provide complete independent observation of every entry.",
+          "locators": [
+            "/tracked_evidence",
+            "/generated_witnesses"
+          ]
+        }
+      ],
+      "facts": {
+        "entries_with_any_concrete_outcome": "8",
+        "entries_without_concrete_outcome": "19",
+        "unobserved_ids": "DECL.ENV.NAME_FRESHNESS,DECL.EXPR.NO_LOOSE_BOUND_VARS,DECL.TYPE.NO_FREE_VARS,DECL.TYPE.NO_METAVARS,DECL.TYPE.SORT_VALUED,DECL.TYPE.WELL_FORMED,DECL.UNIVERSE.PARAM_UNIQUENESS,DECL.VALUE.TYPE_MATCH,DECL.VALUE.WELL_FORMED,EXPR.APP.ARGUMENT_TYPE_MATCH,EXPR.APP.FUNCTION_TYPE,EXPR.BINDER.DOMAIN_SORT,EXPR.CONST.UNIVERSE_ARITY,EXPR.LET.ANNOTATION_SORT,EXPR.PI.CODOMAIN_SORT,SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY,SCENARIO.EXPORT.METAVAR_REPRESENTABILITY,SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION,SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+      },
+      "id": "CHALLENGE.M9.06.INDEPENDENT_OBSERVABILITY",
+      "limitations": [
+        "Incomplete observability is preserved as a negative result and blocks empirical establishment where applicable."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which entries are duplicates?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "NO_DUPLICATE_CANONICAL_DENOTATIONS",
+      "evidence": [
+        {
+          "artifact": "identity_registry",
+          "finding": "Frozen merge and split decisions give each of the 30 identities a distinct statement digest.",
+          "locators": [
+            "/identities",
+            "/seed_resolutions"
+          ]
+        },
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "All identity and semantic-denotation hashes are unique within their respective surfaces.",
+          "locators": [
+            "/identity_dispositions",
+            "/entries"
+          ]
+        }
+      ],
+      "facts": {
+        "duplicate_active_semantic_hash_groups": "0",
+        "duplicate_identity_statement_hash_groups": "0",
+        "stable_identities_reviewed": "30"
+      },
+      "id": "CHALLENGE.M9.07.DUPLICATE_IDENTITIES",
+      "limitations": [
+        "Uniqueness of canonical denotations does not prove that no future evidence will justify a merge or split."
+      ],
+      "statement_hash_after": "31ad9602419467a3b22371d1ad234a1a88d592a5c63b159c2eee8b9b503b7f53",
+      "statement_hash_before": "31ad9602419467a3b22371d1ad234a1a88d592a5c63b159c2eee8b9b503b7f53",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.SAFETY.SAFE_DEPENDENCY",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "EXPR.PROJECTION.TYPING",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.LITERAL.AVAILABILITY_POLICY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which established entries lack sufficient normative support?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "NO_ESTABLISHED_ENTRY_TO_DOWNGRADE",
+      "evidence": [
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "The inventory contains zero ESTABLISHED entries of either kind.",
+          "locators": [
+            "/entries"
+          ]
+        },
+        {
+          "artifact": "approved_authority_sources",
+          "finding": "No source is approved to support an established normative claim.",
+          "locators": [
+            "/normative_documentation",
+            "/mechanized_results"
+          ]
+        }
+      ],
+      "facts": {
+        "established_entries": "0",
+        "provisional_entries": "27"
+      },
+      "id": "CHALLENGE.M9.08.ESTABLISHED_SUPPORT",
+      "limitations": [
+        "This is a bounded absence finding, not evidence that the provisional candidates are true."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Which checks in the declared discovery surface were missed?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "NO_OMISSION_WITHIN_FROZEN_DISCOVERY_SURFACE",
+      "evidence": [
+        {
+          "artifact": "discovery_closure",
+          "finding": "The frozen boundary contains 22 exhausted sources, 59 disposed sites, closed topics, and disposed helper dependencies.",
+          "locators": [
+            "/sources",
+            "/sites",
+            "/topics",
+            "/dependencies",
+            "/completion"
+          ]
+        },
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "The catalog exactly dispositions all 30 identities and all 149 relevant identity/site pairs.",
+          "locators": [
+            "/identity_dispositions",
+            "/site_dispositions"
+          ]
+        }
+      ],
+      "facts": {
+        "dependencies": "13",
+        "site_identity_pairs": "149",
+        "sites": "59",
+        "sources": "22",
+        "topics": "22"
+      },
+      "id": "CHALLENGE.M9.09.DISCOVERY_SURFACE_OMISSIONS",
+      "limitations": [
+        "No-omission applies only to the declared frozen surface, not all Lean declaration validation."
+      ],
+      "statement_hash_after": "682e66bd07a4e28f9edc4f5c4dcadc007656f01b5c109ef3380c2aeea16a66bb",
+      "statement_hash_before": "682e66bd07a4e28f9edc4f5c4dcadc007656f01b5c109ef3380c2aeea16a66bb",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.SAFETY.SAFE_DEPENDENCY",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "EXPR.PROJECTION.TYPING",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.LITERAL.AVAILABILITY_POLICY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": [
+          "DEP.DECLARATION_REPRESENTATION",
+          "DEP.DEFINITIONAL_EQUALITY",
+          "DEP.ENVIRONMENT_LOOKUP",
+          "DEP.EXCLUDED_DECLARATION_CHECKERS",
+          "DEP.EXPORT_PARSER",
+          "DEP.EXPRESSION_CHECKING",
+          "DEP.LITERAL_TYPES",
+          "DEP.LOCAL_CONTEXT",
+          "DEP.PROJECTION_METADATA",
+          "DEP.PROPOSITION_TEST",
+          "DEP.REPLAY_ORDER",
+          "DEP.TRUST_CONFIGURATION",
+          "DEP.UNIVERSE_LEVEL_JUDGMENT",
+          "SITE.KIOTA.ENV.MAP",
+          "SITE.KIOTA.EXPR.REPRESENTATION",
+          "SITE.KIOTA.LEVEL.NO_OWNERSHIP_CONTEXT",
+          "SITE.KIOTA.MAIN.OPERATIONAL",
+          "SITE.KIOTA.PARSER.DUPLICATE",
+          "SITE.KIOTA.PARSER.EXCLUDED",
+          "SITE.KIOTA.PARSER.INSERT_BEFORE_CHECK",
+          "SITE.KIOTA.PARSER.REPRESENTATION",
+          "SITE.KIOTA.TC.APP_LET",
+          "SITE.KIOTA.TC.BINDERS",
+          "SITE.KIOTA.TC.CONST",
+          "SITE.KIOTA.TC.DECL",
+          "SITE.KIOTA.TC.PROJ",
+          "SITE.KIOTA.TC.UNIVERSE_ABSENCE",
+          "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS",
+          "SITE.LEAN4LEAN.DECL.DELTA",
+          "SITE.LEAN4LEAN.ENV.AXIOM",
+          "SITE.LEAN4LEAN.ENV.DEF",
+          "SITE.LEAN4LEAN.ENV.EXCLUDED",
+          "SITE.LEAN4LEAN.ENV.HEADER",
+          "SITE.LEAN4LEAN.ENV.OPAQUE",
+          "SITE.LEAN4LEAN.ENV.THEOREM",
+          "SITE.LEAN4LEAN.REPLAY.EXCLUDED",
+          "SITE.LEAN4LEAN.REPLAY.ORDER",
+          "SITE.LEAN4LEAN.REPLAY.SKIPS",
+          "SITE.LEAN4LEAN.TC.APP_LET",
+          "SITE.LEAN4LEAN.TC.BINDERS",
+          "SITE.LEAN4LEAN.TC.CONST",
+          "SITE.LEAN4LEAN.TC.DISPATCH",
+          "SITE.LEAN4LEAN.TC.PROJ",
+          "SITE.NANODA.ENV.CUTOFF",
+          "SITE.NANODA.EXPR.UARG_ARITY",
+          "SITE.NANODA.LEVEL.PARAMS",
+          "SITE.NANODA.PARSER.EXCLUDED",
+          "SITE.NANODA.PARSER.ORDINARY",
+          "SITE.NANODA.PARSER.POLICY",
+          "SITE.NANODA.PARSER.REPRESENTATION",
+          "SITE.NANODA.TC.APP_LET",
+          "SITE.NANODA.TC.BINDERS",
+          "SITE.NANODA.TC.CONST",
+          "SITE.NANODA.TC.DECL",
+          "SITE.NANODA.TC.DISPATCH",
+          "SITE.NANODA.TC.HEADER",
+          "SITE.NANODA.TC.PROJ",
+          "SITE.NANODA.UTIL.CURRENT_VISIBILITY",
+          "SITE.OFFICIAL.DECL.SHAPES",
+          "SITE.OFFICIAL.ENV.AXIOM",
+          "SITE.OFFICIAL.ENV.DEF",
+          "SITE.OFFICIAL.ENV.EXCLUDED_DISPATCH",
+          "SITE.OFFICIAL.ENV.HEADER",
+          "SITE.OFFICIAL.ENV.OPAQUE",
+          "SITE.OFFICIAL.ENV.THEOREM",
+          "SITE.OFFICIAL.IMPORTER.REPLAY",
+          "SITE.OFFICIAL.TC.APP_LET",
+          "SITE.OFFICIAL.TC.BINDERS",
+          "SITE.OFFICIAL.TC.CONST",
+          "SITE.OFFICIAL.TC.DISPATCH",
+          "SITE.OFFICIAL.TC.HEADER",
+          "SITE.OFFICIAL.TC.PROJ",
+          "SRC.KIOTA.ENV",
+          "SRC.KIOTA.EXPR",
+          "SRC.KIOTA.LEVEL",
+          "SRC.KIOTA.MAIN",
+          "SRC.KIOTA.PARSER",
+          "SRC.KIOTA.TC",
+          "SRC.LEAN4LEAN.DECLARATION",
+          "SRC.LEAN4LEAN.ENVIRONMENT",
+          "SRC.LEAN4LEAN.ENVIRONMENT_BASIC",
+          "SRC.LEAN4LEAN.REPLAY",
+          "SRC.LEAN4LEAN.TYPECHECKER",
+          "SRC.NANODA.ENV",
+          "SRC.NANODA.EXPR",
+          "SRC.NANODA.LEVEL",
+          "SRC.NANODA.PARSER",
+          "SRC.NANODA.TC",
+          "SRC.NANODA.UTIL",
+          "SRC.OFFICIAL.ARENA_MAIN",
+          "SRC.OFFICIAL.DECLARATION_HEADER",
+          "SRC.OFFICIAL.ENVIRONMENT",
+          "SRC.OFFICIAL.TYPECHECKER",
+          "SRC.OFFICIAL.TYPECHECKER_HEADER",
+          "TOPIC.APPLICATION_TYPING",
+          "TOPIC.AXIOM_ADMISSION_POLICY",
+          "TOPIC.BODY_TYPE_MATCH",
+          "TOPIC.BODY_WELL_FORMED",
+          "TOPIC.CONSTANT_UNIVERSE_ARITY",
+          "TOPIC.CURRENT_DECL_VISIBILITY",
+          "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+          "TOPIC.EXCLUDED_DECLARATION_KINDS",
+          "TOPIC.FVAR_CLOSURE",
+          "TOPIC.LET_ANNOTATION_VALUE",
+          "TOPIC.LITERAL_EXTENSIONS",
+          "TOPIC.LOCAL_BINDER_SORT",
+          "TOPIC.LOOSE_BOUND_VARIABLE",
+          "TOPIC.MVAR_CLOSURE",
+          "TOPIC.NAME_FRESHNESS",
+          "TOPIC.PROJECTION_EXPRESSION_TYPING",
+          "TOPIC.REPLAY_AND_CHECK_PHASE",
+          "TOPIC.SAFE_UNSAFE_DEPENDENCY",
+          "TOPIC.SERIALIZED_SAFETY",
+          "TOPIC.THEOREM_TYPE_PROP",
+          "TOPIC.TYPE_WELL_FORMED_SORT",
+          "TOPIC.UNIVERSE_OWNERSHIP"
+        ]
+      }
+    },
+    {
+      "challenge": "Which exclusions are poorly justified?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "EXCLUSIONS_SCOPED_AND_JUSTIFIED",
+      "evidence": [
+        {
+          "artifact": "discovery_closure",
+          "finding": "Every declared exclusion, excluded phase, and excluded dependency has a non-empty bounded rationale and source linkage where applicable.",
+          "locators": [
+            "/scope/excluded_declaration_kinds",
+            "/scope/excluded_phases",
+            "/dependencies",
+            "/exclusions"
+          ]
+        },
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "The deferred-kind and two out-of-scope identities remain explicit non-entry dispositions rather than disappearing.",
+          "locators": [
+            "/identity_dispositions"
+          ]
+        }
+      ],
+      "facts": {
+        "declared_exclusion_records": "6",
+        "excluded_declaration_kinds": "8",
+        "excluded_dependencies": "4",
+        "excluded_phases": "4",
+        "non_entry_identities": "3"
+      },
+      "id": "CHALLENGE.M9.10.EXCLUSION_JUSTIFICATION",
+      "limitations": [
+        "A justified exclusion is a scope decision, not a claim that the excluded area lacks assurance value."
+      ],
+      "statement_hash_after": "0add695d0fa2357f5fa163a946f96241f226e52758bb26ef42838954ab5bd5da",
+      "statement_hash_before": "0add695d0fa2357f5fa163a946f96241f226e52758bb26ef42838954ab5bd5da",
+      "target": {
+        "catalog_ids": [
+          "DECL.SAFETY.SAFE_DEPENDENCY",
+          "EXPR.PROJECTION.TYPING",
+          "SCENARIO.LITERAL.AVAILABILITY_POLICY"
+        ],
+        "surface_ids": [
+          "ARENA_NORMALIZATION",
+          "DEP.EXCLUDED_DECLARATION_CHECKERS",
+          "DEP.LITERAL_TYPES",
+          "DEP.PROJECTION_METADATA",
+          "DEP.TRUST_CONFIGURATION",
+          "ELABORATION",
+          "EXCL.GENERAL_REDUCTION",
+          "EXCL.INDUCTIVE_QUOTIENT",
+          "EXCL.LITERALS_NATIVE",
+          "EXCL.MALFORMED_STREAM",
+          "EXCL.PROJECTION_METADATA",
+          "EXCL.UNSAFE_PARTIAL_MUTUAL",
+          "GENERAL_REDUCTION",
+          "INDUCTIVE_FAMILY",
+          "JSON_SYNTAX",
+          "MUTUAL_DEFINITION",
+          "NATIVE_EXTENSION",
+          "PARTIAL_DEFINITION",
+          "PROJECTION_METADATA",
+          "QUOTIENT_PRIMITIVES",
+          "UNSAFE_DEFINITION",
+          "UNSAFE_OPAQUE"
+        ]
+      }
+    },
+    {
+      "challenge": "Which soundness_relevance claims overreach the evidence?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "NO_SOUNDNESS_OVERREACH",
+      "evidence": [
+        {
+          "artifact": "pre_review_catalog",
+          "finding": "All 27 entries retain soundness_relevance=NOT_ASSESSED with no basis evidence reference.",
+          "locators": [
+            "/entries"
+          ]
+        }
+      ],
+      "facts": {
+        "entries_reviewed": "27",
+        "not_assessed": "27",
+        "positive_soundness_claims": "0"
+      },
+      "id": "CHALLENGE.M9.11.SOUNDNESS_OVERREACH",
+      "limitations": [
+        "No soundness conclusion, favorable or unfavorable, is drawn."
+      ],
+      "statement_hash_after": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "statement_hash_before": "225cae193ed5faa1b9c6f595d18591f22bb93ab162948df4bc9a8a6e0b2ce19f",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    },
+    {
+      "challenge": "Could another researcher reconstruct the catalog without trusting the LLM?",
+      "correction_decision_ids": [],
+      "correction_required": false,
+      "disposition": "RECONSTRUCTABLE_WITHOUT_LLM_AUTHORITY",
+      "evidence": [
+        {
+          "artifact": "m8_historical_attestation",
+          "finding": "Corrected M8 inputs resolve through exact Git blobs rather than mutable paths or conversational state.",
+          "locators": [
+            "/artifacts",
+            "/evidence_records"
+          ]
+        },
+        {
+          "artifact": "m9_inventory_populator",
+          "finding": "The M9 pre-review and reviewed catalog bytes are deterministically reproduced from the immutable M8 predecessor.",
+          "locators": [
+            "COMMAND:scripts/populate-declaration-validation-milestone-9 --check"
+          ]
+        },
+        {
+          "artifact": "catalog_validator",
+          "finding": "Schema, evidence, authority, identity, observer, site, report, and historical gates are executable without LLM judgment.",
+          "locators": [
+            "COMMAND:scripts/validate-declaration-validation-catalog"
+          ]
+        }
+      ],
+      "facts": {
+        "active_entries_reconstructed": "27",
+        "existing_evidence_pairs_reconstructed": "41",
+        "site_identity_pairs_reconstructed": "149",
+        "stable_identities_reconstructed": "30"
+      },
+      "id": "CHALLENGE.M9.12.LLM_INDEPENDENT_RECONSTRUCTION",
+      "limitations": [
+        "Mechanical reconstruction proves reproducibility of the recorded catalog, not semantic truth."
+      ],
+      "statement_hash_after": "31ad9602419467a3b22371d1ad234a1a88d592a5c63b159c2eee8b9b503b7f53",
+      "statement_hash_before": "31ad9602419467a3b22371d1ad234a1a88d592a5c63b159c2eee8b9b503b7f53",
+      "target": {
+        "catalog_ids": [
+          "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "DECL.ENV.NAME_FRESHNESS",
+          "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "DECL.SAFETY.SAFE_DEPENDENCY",
+          "DECL.THEOREM.TYPE_PROP",
+          "DECL.TYPE.NO_FREE_VARS",
+          "DECL.TYPE.NO_METAVARS",
+          "DECL.TYPE.SORT_VALUED",
+          "DECL.TYPE.WELL_FORMED",
+          "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "DECL.VALUE.TYPE_MATCH",
+          "DECL.VALUE.WELL_FORMED",
+          "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "EXPR.APP.FUNCTION_TYPE",
+          "EXPR.BINDER.DOMAIN_SORT",
+          "EXPR.CONST.UNIVERSE_ARITY",
+          "EXPR.LET.ANNOTATION_SORT",
+          "EXPR.LET.VALUE_TYPE_MATCH",
+          "EXPR.PI.CODOMAIN_SORT",
+          "EXPR.PROJECTION.TYPING",
+          "SCENARIO.AXIOM.ADMISSION_POLICY",
+          "SCENARIO.AXIOM.SAFETY_FLAG",
+          "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION",
+          "SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY",
+          "SCENARIO.EXPORT.METAVAR_REPRESENTABILITY",
+          "SCENARIO.LITERAL.AVAILABILITY_POLICY",
+          "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+          "SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION",
+          "SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER"
+        ],
+        "surface_ids": []
+      }
+    }
+  ],
+  "conclusion": {
+    "catalog_disposition": "RETAIN_M8_SEMANTIC_CONTENT_UNCHANGED",
+    "next_authorized_milestone": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
+    "reason": "The review found bounded incompleteness and limitations already represented by provisional, not-inspected, deferred, out-of-scope, cross-layer, lineage, and not-assessed states; the frozen evidence did not justify a semantic correction or epistemic upgrade.",
+    "reviewed_catalog_sha256": "01bdfeb42a5cf2875474495fbcc0142c5af0f47af77629ccba83884f3219cb34"
+  },
+  "corrections": [],
+  "method": {
+    "challenge_set": "EXACT_PLAN_M9_MINIMUM_TWELVE",
+    "predecessor_boundary": "IMMUTABLE_CORRECTED_M8_GIT_BLOB_ATTESTATION",
+    "reconstruction_command": "scripts/populate-declaration-validation-milestone-9 --check",
+    "review_independence": "SEPARATE_M9_RECORD_NOT_CATALOG_AUTHORITY",
+    "statement_hash_projection": "TARGET_STABLE_ID_TO_FROZEN_SEMANTIC_OR_IDENTITY_HASH_PLUS_NAMED_SURFACE_IDS"
+  },
+  "nonclaims": [
+    "A no-correction review result does not prove the catalog complete beyond its frozen discovery surface.",
+    "The review does not establish any normative candidate, empirical scenario, or soundness relevance.",
+    "Incomplete independent observation remains visible and is not treated as a favorable result.",
+    "No Arena coverage denominator or broad negative-test study is created by Milestone 9.",
+    "The adversarial review is reproducible audit evidence, not semantic authority."
+  ],
+  "recorded_at": "2026-09-01T01:30:00-04:00",
+  "review_id": "ordinary-declaration-validation.milestone-9-adversarial-review.v1",
+  "schema_version": 1,
+  "status": "PASS_WITH_NO_CATALOG_CORRECTIONS",
+  "summary": {
+    "authority_changes": 0,
+    "catalog_corrections": 0,
+    "challenges_completed": 12,
+    "entries_with_incomplete_independent_observation": 19,
+    "layer_changes": 0,
+    "lifecycle_changes": 0,
+    "remaining_not_assessed_soundness": 27,
+    "remaining_provisional_entries": 27,
+    "required_challenges": 12,
+    "semantic_statement_changes": 0,
+    "soundness_changes": 0
+  }
+}
