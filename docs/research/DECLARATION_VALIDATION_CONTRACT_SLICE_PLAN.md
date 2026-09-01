@@ -5,8 +5,8 @@
 - Plan revision: 3
 - Recorded: 2026-08-30
 - Amended: 2026-09-01 (pre-Milestone-10 specification clarification)
-- Status: active execution mandate; Milestones 0 through 9 recorded;
-  Milestone 10 Phase-A design finalized; Phase-B historical attestation pending
+- Status: Milestones 0 through 10 recorded; Milestone 10 stop condition reached;
+  no successor experiment is authorized by this mandate
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -84,6 +84,8 @@
   `scripts/validate-declaration-validation-milestone-10`
 - Milestone 10 Phase-A record:
   results/research/declaration-validation-milestone-10.json
+- Milestone 10 historical attestation:
+  results/research/declaration-validation-milestone-10-historical.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -1510,9 +1512,30 @@ checker attribution, a three-tier synthesis hierarchy, and ten gates that block
 substantive successor execution until a separately authorized plan binds this
 protocol and freezes a new input-derived denominator. No authority source was
 approved, no catalog entry was promoted, and no Arena, checker, mutation, or
-witness-synthesis campaign was executed. Phase B must still bind the committed
-Phase-A artifacts as exact Git blobs and pass the successor-transition and
-tampering regressions before the M10 stop condition is met.
+witness-synthesis campaign was executed. At the Phase-A boundary, Phase B still
+had to bind the committed artifacts as exact Git blobs and pass the successor-
+transition and tampering regressions.
+
+### M10 Historical Freeze Completion — 2026-09-01
+
+The Phase-A design content is commit
+`2811fdbbe146009775ebdb1bd3b153f59ae503eb`. The separate Phase-B
+`results/research/declaration-validation-milestone-10-historical.json`
+attestation has SHA-256
+`976d450f9f1afd6f1a41c388c5bb623ce524d28aa1d1ac6c6634316eb3a31120`
+and binds 24 exact Git blobs at that commit. Historical validation reconstructs
+the immutable M9 predecessor, authored M10 design, derived populations,
+generated report, content manifest, completion record, schemas, renderers,
+validators, tests, and authority documents from those blobs rather than from
+mutable successor paths.
+
+The M10-to-successor transition regression permits later mutable study inputs
+and research plans to change while the frozen protocol continues to validate.
+Wrong study blob, population SHA-256, historical commit, and completion/content-
+manifest bindings fail. The complete declaration-validation suite passes all
+175 tests with no skips. Milestone 10 has reached its stop condition. No broad
+coverage, synthesis, mutation, checker, or authority-resolution work is
+authorized by this completed mandate.
 
 ### M10 Stop Condition
 

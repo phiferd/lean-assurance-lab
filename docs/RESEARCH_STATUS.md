@@ -1307,9 +1307,23 @@ prepared_external_action_drafts: 5
    attribution, synthesis tiers, and ten successor execution gates. No
    authority or soundness state changed and no substantive campaign ran.
 
-   The Phase-A content manifest and completion record are ready for the required
-   separate Git-blob attestation. **Milestone 10 remains incomplete until Phase
-   B proves that successor mutable state cannot redefine this design.**
+   The Phase-A design content is commit
+   `2811fdbbe146009775ebdb1bd3b153f59ae503eb`. The separate
+   [M10 historical attestation](../results/research/declaration-validation-milestone-10-historical.json)
+   has SHA-256
+   `976d450f9f1afd6f1a41c388c5bb623ce524d28aa1d1ac6c6634316eb3a31120`
+   and binds 24 exact Git blobs at that commit. Historical validation rebuilds
+   the M9 predecessor binding, M10 design, populations, report, content
+   manifest, completion, schemas, renderers, validators, and tests from those
+   blobs rather than mutable successor paths.
+
+   The M10→successor transition permits later current study inputs and plans to
+   evolve without redefining the frozen protocol. Wrong study blob, population
+   SHA-256, historical commit, and completion/content-manifest bindings fail.
+   The complete Phase-B declaration-validation suite passes all 175 tests with
+   no skips. **Milestone 10 has reached its stop condition. This mandate
+   authorizes no coverage, synthesis, mutation, checker, authority-resolution,
+   or successor experiment; any such work requires a separately governed plan.**
 
 ### Waiting
 

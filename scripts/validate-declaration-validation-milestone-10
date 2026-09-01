@@ -290,16 +290,20 @@ def validate_document(
         if unknown:
             errors.append(f"{row['entry_id']}: unknown exclusion reasons {sorted(unknown)}")
 
+    phase_b_frozen = bool(history.M10_COMMIT and history.M10_ATTESTATION_PATH.is_file())
     if check_generated:
         if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != report_renderer.render():
             errors.append("M10 generated study report is stale")
-        if freeze != freeze_renderer.render():
-            errors.append("M10 content manifest is stale")
-        if completion != completion_renderer.render():
-            errors.append("M10 completion record is stale")
-        errors.extend(bound_file_errors(freeze["predecessor_attestations"], "M10 predecessor"))
-        errors.extend(bound_file_errors(freeze["artifacts"], "M10 content manifest"))
-        errors.extend(bound_file_errors(completion["artifacts"], "M10 completion"))
+        if phase_b_frozen:
+            errors.extend(history.validate_m10_attestation())
+        else:
+            if freeze != freeze_renderer.render():
+                errors.append("M10 content manifest is stale")
+            if completion != completion_renderer.render():
+                errors.append("M10 completion record is stale")
+            errors.extend(bound_file_errors(freeze["predecessor_attestations"], "M10 predecessor"))
+            errors.extend(bound_file_errors(freeze["artifacts"], "M10 content manifest"))
+            errors.extend(bound_file_errors(completion["artifacts"], "M10 completion"))
     errors.extend(cycle_errors(freeze["dependency_edges"]))
     if freeze["population_summary"] != completion["population_summary"]:
         errors.append("M10 content manifest and completion population summaries disagree")

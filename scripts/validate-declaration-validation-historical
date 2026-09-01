@@ -35,8 +35,8 @@ FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb08
 FROZEN_M8_ATTESTATION_SHA256 = "54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a"
 M9_COMMIT: str | None = "69dad9d13e4802e5ef29c958c60d2ee387293847"
 FROZEN_M9_ATTESTATION_SHA256: str | None = "6a26aff21d26284b5e6298a33bc0977c9c20b0c063d42aafcf0e33210d821a89"
-M10_COMMIT: str | None = None
-FROZEN_M10_ATTESTATION_SHA256: str | None = None
+M10_COMMIT: str | None = "2811fdbbe146009775ebdb1bd3b153f59ae503eb"
+FROZEN_M10_ATTESTATION_SHA256: str | None = "976d450f9f1afd6f1a41c388c5bb623ce524d28aa1d1ac6c6634316eb3a31120"
 
 M7_COMPLETION_ARTIFACTS = {
     "approved_authority_sources",
@@ -1069,7 +1069,8 @@ def validate_m10_attestation(document: dict[str, Any] | None = None) -> list[str
         errors.append("historical M10 empirical context changed")
     if populations["deferred_or_reserved_identities"]["count"] != 3:
         errors.append("historical M10 deferred/reserved closure changed")
-    if populations["study_design_sha256"] != sha256_bytes(contents["study_design"]):
+    canonical_study_bytes = (json.dumps(study, indent=2, sort_keys=True) + "\n").encode("utf-8")
+    if populations["study_design_sha256"] != sha256_bytes(canonical_study_bytes):
         errors.append("historical M10 populations do not bind the study design")
     if populations["immutable_m9_attestation_sha256"] != sha256_bytes(contents["m9_historical_attestation"]):
         errors.append("historical M10 populations do not bind immutable M9")
