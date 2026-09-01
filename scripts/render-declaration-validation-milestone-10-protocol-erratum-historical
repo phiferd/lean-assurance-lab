@@ -1,0 +1,90 @@
+#!/usr/bin/env python3
+"""Render a non-self-referential Git-blob attestation for the M10 erratum."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1-historical.json"
+RECORDED_AT = "2026-09-01T18:56:24-04:00"
+ARTIFACTS = {
+    "constitution": "CONSTITUTION.md",
+    "operating_guide": "AGENTS.md",
+    "m10_historical_attestation": "results/research/declaration-validation-milestone-10-historical.json",
+    "protocol_erratum": "results/research/declaration-validation-milestone-10-protocol-erratum-1.json",
+    "erratum_schema": "schemas/declaration-validation-milestone-10-protocol-erratum.schema.json",
+    "generated_report": "docs/research/DECLARATION_VALIDATION_MILESTONE_10_PROTOCOL_ERRATUM_1.md",
+    "report_renderer": "scripts/render-declaration-validation-milestone-10-protocol-erratum",
+    "erratum_validator": "scripts/validate-declaration-validation-milestone-10-protocol-erratum",
+    "erratum_tests": "tests/test_declaration_validation_milestone_10_protocol_erratum.py",
+    "historical_attestation_schema": "schemas/declaration-validation-milestone-10-protocol-erratum-historical.schema.json",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-10-protocol-erratum-historical",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+}
+
+
+def git_output(args: list[str]) -> bytes:
+    result = subprocess.run(["git", *args], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if result.returncode:
+        raise RuntimeError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def binding(commit: str, relative: str) -> dict[str, str]:
+    content = git_output(["show", f"{commit}:{relative}"])
+    return {
+        "path": relative,
+        "sha256": hashlib.sha256(content).hexdigest(),
+        "git_commit": commit,
+        "git_blob": git_output(["rev-parse", "--verify", f"{commit}:{relative}"]).decode().strip(),
+    }
+
+
+def render(content_commit: str, tests_run: int) -> dict[str, object]:
+    resolved = git_output(["rev-parse", "--verify", f"{content_commit}^{{commit}}"] ).decode().strip()
+    if resolved != content_commit:
+        raise RuntimeError("Phase-A erratum content commit must be an exact full commit ID")
+    return {
+        "schema_version": 1,
+        "attestation_id": "ordinary-declaration-validation.milestone-10.protocol-erratum.1.historical.v1",
+        "recorded_at": RECORDED_AT,
+        "status": "FROZEN_HISTORICAL_PROTOCOL_ERRATUM_ATTESTATION",
+        "historical_commit": content_commit,
+        "phase": {
+            "attestation_design": "TWO_PHASE_NON_SELF_REFERENTIAL_GIT_BLOB_ATTESTATION",
+            "content_commit": content_commit,
+            "reason": "Phase A committed the complete protocol correction and validation content; this separate Phase B record binds those exact Git blobs and cannot attest to itself.",
+        },
+        "artifacts": {name: binding(content_commit, relative) for name, relative in ARTIFACTS.items()},
+        "phase_a_validation": {"tests_run": tests_run, "failures": 0, "errors": 0, "result": "PASS"},
+        "nonclaims": [
+            "This attestation preserves rather than rewrites the immutable M10 historical predecessor.",
+            "The erratum changes no M10 denominator, readiness status, population, or stop condition.",
+            "The erratum neither approves an authority source nor promotes a provisional catalog entry.",
+            "The erratum executes no coverage, synthesis, mutation, checker, or authority-resolution experiment.",
+            "The definition-form artifact remains auxiliary and cannot count as the matched theorem positive control."
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--content-commit", required=True)
+    parser.add_argument("--tests-run", required=True, type=int)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(args.content_commit, args.tests_run), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

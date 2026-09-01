@@ -1,0 +1,91 @@
+#!/usr/bin/env python3
+"""Render the M10 theorem-control protocol erratum from canonical JSON."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ERRATUM_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1.json"
+DEFAULT_OUTPUT = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_10_PROTOCOL_ERRATUM_1.md"
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def render(document: dict[str, Any] | None = None) -> str:
+    document = load(ERRATUM_PATH) if document is None else document
+    correction = document["operative_protocol_correction"]
+    clarification = document["related_readiness_clarification"]
+    auxiliary = document["auxiliary_control_classification"]
+    successor = document["successor_execution_requirement"]
+    impact = document["impact"]
+    lines = [
+        "# Declaration Validation Milestone 10 Protocol Erratum 1",
+        "",
+        f"Canonical erratum SHA-256: `{hashlib.sha256(ERRATUM_PATH.read_bytes()).hexdigest()}`",
+        f"Immutable M10 attestation SHA-256: `{document['immutable_m10_predecessor']['historical_attestation_sha256']}`",
+        f"Immutable M10 Phase-A commit: `{document['immutable_m10_predecessor']['historical_commit']}`",
+        "",
+        "This successor erratum corrects one future-control rule without rewriting or regenerating any historically attested M10 byte.",
+        "",
+        "## Operative Correction",
+        "",
+        f"Entry: `{correction['entry_id']}`",
+        "",
+        f"Frozen target: `{correction['target_json_pointer']}`",
+        "",
+        f"Frozen wording: {correction['frozen_value']}",
+        "",
+        f"Corrected rule: **{correction['corrected_value']}**",
+        "",
+        correction["reason"],
+        "",
+        "## Definition-Form Artifact",
+        "",
+        f"The definition-form artifact is retained as `{auxiliary['allowed_role']}`. It is explicitly prohibited from serving as `{auxiliary['prohibited_role']}`.",
+        "",
+        f"The related frozen readiness basis at `{clarification['target_json_pointer']}` is therefore interpreted as follows: {clarification['corrected_interpretation']}",
+        "",
+        "## Successor Requirement",
+        "",
+        successor["matched_positive_control"],
+        "",
+        "Any successor must bind both the immutable M10 historical attestation and this erratum's historical attestation before execution. This erratum authorizes no successor execution.",
+        "",
+        "## Unchanged M10 Results",
+        "",
+    ]
+    unchanged = [
+        "primary_denominator_unchanged",
+        "readiness_statuses_unchanged",
+        "exploratory_set_unchanged",
+        "empirical_context_set_unchanged",
+        "deferred_reserved_set_unchanged",
+        "m10_stop_condition_unchanged",
+    ]
+    lines.extend(f"- `{name}`: `{str(impact[name]).lower()}`" for name in unchanged)
+    lines.extend(["", "## Nonclaims", ""])
+    lines.extend(f"- {item}" for item in document["nonclaims"])
+    lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(render(), encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

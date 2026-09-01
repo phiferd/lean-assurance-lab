@@ -1,0 +1,130 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-10-protocol-erratum.schema.json",
+  "title": "Declaration Validation Milestone 10 Protocol Erratum",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "erratum_id",
+    "recorded_at",
+    "status",
+    "immutable_m10_predecessor",
+    "operative_protocol_correction",
+    "related_readiness_clarification",
+    "auxiliary_control_classification",
+    "successor_execution_requirement",
+    "impact",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "erratum_id": {"const": "ordinary-declaration-validation.milestone-10.protocol-erratum.1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "ACTIVE_PROTOCOL_ERRATUM"},
+    "immutable_m10_predecessor": {
+      "type": "object",
+      "required": ["historical_attestation_path", "historical_attestation_sha256", "historical_commit", "study_design_binding"],
+      "properties": {
+        "historical_attestation_path": {"const": "results/research/declaration-validation-milestone-10-historical.json"},
+        "historical_attestation_sha256": {"$ref": "#/$defs/sha256"},
+        "historical_commit": {"$ref": "#/$defs/gitObjectId"},
+        "study_design_binding": {"$ref": "#/$defs/gitBlobBinding"}
+      },
+      "additionalProperties": false
+    },
+    "operative_protocol_correction": {
+      "type": "object",
+      "required": ["entry_id", "target_json_pointer", "related_contract_json_pointer", "frozen_value", "corrected_value", "reason"],
+      "properties": {
+        "entry_id": {"const": "DECL.THEOREM.TYPE_PROP"},
+        "target_json_pointer": {"const": "/readiness/13/future_witness_strategy/positive_control"},
+        "related_contract_json_pointer": {"const": "/future_isolated_negative_coverage_contract/positive_control/same_construction_family"},
+        "frozen_value": {"const": "Use the matched definition-form control or a Prop-valued theorem repair with minimized differences."},
+        "corrected_value": {"const": "Use a Prop-valued theorem in the same construction family, with a matching valid proof."},
+        "reason": {"type": "string", "minLength": 100}
+      },
+      "additionalProperties": false
+    },
+    "related_readiness_clarification": {
+      "type": "object",
+      "required": ["target_json_pointer", "frozen_value", "corrected_interpretation"],
+      "properties": {
+        "target_json_pointer": {"const": "/readiness/13/isolation_feasibility/basis"},
+        "frozen_value": {"const": "The existing family demonstrates a well-formed candidate and a matched definition-form control."},
+        "corrected_interpretation": {"type": "string", "minLength": 100}
+      },
+      "additionalProperties": false
+    },
+    "auxiliary_control_classification": {
+      "type": "object",
+      "required": ["artifact_family", "allowed_role", "prohibited_role"],
+      "properties": {
+        "artifact_family": {"const": "definition-form artifact"},
+        "allowed_role": {"const": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL"},
+        "prohibited_role": {"const": "MATCHED_POSITIVE_CONTROL_FOR_ISOLATED_DECL.THEOREM.TYPE_PROP_COVERAGE"}
+      },
+      "additionalProperties": false
+    },
+    "successor_execution_requirement": {
+      "type": "object",
+      "required": ["matched_positive_control", "required_predecessors", "execution_authorized"],
+      "properties": {
+        "matched_positive_control": {"type": "string", "minLength": 100},
+        "required_predecessors": {
+          "const": [
+            "results/research/declaration-validation-milestone-10-historical.json",
+            "results/research/declaration-validation-milestone-10-protocol-erratum-1-historical.json"
+          ]
+        },
+        "execution_authorized": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "impact": {
+      "type": "object",
+      "required": [
+        "m10_historical_bytes_unchanged",
+        "primary_denominator_unchanged",
+        "readiness_statuses_unchanged",
+        "exploratory_set_unchanged",
+        "empirical_context_set_unchanged",
+        "deferred_reserved_set_unchanged",
+        "m10_stop_condition_unchanged",
+        "successor_experiment_authorized"
+      ],
+      "properties": {
+        "m10_historical_bytes_unchanged": {"const": true},
+        "primary_denominator_unchanged": {"const": true},
+        "readiness_statuses_unchanged": {"const": true},
+        "exploratory_set_unchanged": {"const": true},
+        "empirical_context_set_unchanged": {"const": true},
+        "deferred_reserved_set_unchanged": {"const": true},
+        "m10_stop_condition_unchanged": {"const": true},
+        "successor_experiment_authorized": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 20}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObjectId": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gitBlobBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObjectId"},
+        "git_blob": {"$ref": "#/$defs/gitObjectId"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

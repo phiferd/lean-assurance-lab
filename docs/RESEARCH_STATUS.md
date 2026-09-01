@@ -1325,6 +1325,17 @@ prepared_external_action_drafts: 5
    authorizes no coverage, synthesis, mutation, checker, authority-resolution,
    or successor experiment; any such work requires a separately governed plan.**
 
+   A post-M10 protocol erratum now corrects the future matched-positive-control
+   rule for `DECL.THEOREM.TYPE_PROP` without changing any frozen M10 byte. A
+   definition-form artifact removes applicability of the theorem-specific
+   proposition-type premise, so it remains only auxiliary representability and
+   well-formedness evidence. Any future isolated-coverage claim must instead
+   bind a Prop-valued theorem in the same construction family with a matching
+   valid proof. The erratum preserves the empty primary denominator, all
+   readiness statuses and populations, and the M10 stop condition. It
+   authorizes no successor experiment. Phase-A correction content is finalized;
+   its separate non-self-referential Git-blob attestation remains to be created.
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

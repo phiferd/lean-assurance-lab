@@ -1,0 +1,216 @@
+#!/usr/bin/env python3
+"""Validate the M10 theorem-control protocol erratum and its historical freeze."""
+
+from __future__ import annotations
+
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import sys
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
+REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-10-protocol-erratum"
+ERRATUM_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1.json"
+ERRATUM_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-protocol-erratum.schema.json"
+REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_10_PROTOCOL_ERRATUM_1.md"
+ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1-historical.json"
+ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-protocol-erratum-historical.schema.json"
+ERRATUM_COMMIT: str | None = None
+FROZEN_ERRATUM_ATTESTATION_SHA256: str | None = None
+EXPECTED_ATTESTATION_ARTIFACTS = {
+    "constitution",
+    "operating_guide",
+    "m10_historical_attestation",
+    "protocol_erratum",
+    "erratum_schema",
+    "generated_report",
+    "report_renderer",
+    "erratum_validator",
+    "erratum_tests",
+    "historical_attestation_schema",
+    "historical_attestation_renderer",
+    "research_plan",
+    "research_status",
+}
+FROZEN_M10_CURRENT_PATHS = {
+    "study_design": ROOT / "config" / "declaration-validation-milestone-10-study.json",
+    "derived_populations": ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json",
+    "generated_report": ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_10_STUDY.md",
+    "freeze_manifest": ROOT / "results" / "research" / "declaration-validation-milestone-10-freeze.json",
+    "completion_record": ROOT / "results" / "research" / "declaration-validation-milestone-10.json",
+}
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_bytes(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
+def schema_errors(instance: Any, schema: dict[str, Any], label: str) -> list[str]:
+    validator = jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())
+    return [
+        f"{label} schema error at /{'/'.join(str(item) for item in error.absolute_path)}: {error.message}"
+        for error in sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path))
+    ]
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    node = document
+    if not pointer.startswith("/"):
+        raise ValueError("not an RFC 6901 pointer")
+    for token in pointer[1:].split("/"):
+        token = token.replace("~1", "/").replace("~0", "~")
+        node = node[int(token)] if isinstance(node, list) else node[token]
+    return node
+
+
+def validate_document(document: dict[str, Any] | None = None, *, check_generated: bool = True) -> list[str]:
+    history = load_module("declaration_erratum_m10_history", HISTORICAL_VALIDATOR_PATH)
+    renderer = load_module("declaration_erratum_report_renderer", REPORT_RENDERER_PATH)
+    errors = history.validate_m10_attestation()
+    if errors:
+        return [f"immutable M10 predecessor: {item}" for item in errors]
+    document = load_json(ERRATUM_PATH) if document is None else document
+    errors.extend(schema_errors(document, load_json(ERRATUM_SCHEMA_PATH), "M10 protocol erratum"))
+    if errors:
+        return errors
+
+    m10_attestation = load_json(history.M10_ATTESTATION_PATH)
+    predecessor = document["immutable_m10_predecessor"]
+    if predecessor["historical_attestation_sha256"] != sha256_bytes(history.M10_ATTESTATION_PATH.read_bytes()):
+        errors.append("erratum immutable M10 attestation SHA-256 is stale")
+    if predecessor["historical_commit"] != history.M10_COMMIT:
+        errors.append("erratum immutable M10 historical commit is stale")
+    if predecessor["study_design_binding"] != m10_attestation["artifacts"]["study_design"]:
+        errors.append("erratum immutable M10 study-design binding is not exact")
+
+    study, study_errors = history.historical_json(
+        predecessor["study_design_binding"],
+        label="erratum immutable M10 study design",
+        expected_commit=history.M10_COMMIT,
+    )
+    errors.extend(study_errors)
+    if study is None:
+        return errors
+    correction = document["operative_protocol_correction"]
+    clarification = document["related_readiness_clarification"]
+    try:
+        frozen_positive = resolve_pointer(study, correction["target_json_pointer"])
+        contract_family = resolve_pointer(study, correction["related_contract_json_pointer"])
+        frozen_basis = resolve_pointer(study, clarification["target_json_pointer"])
+    except (KeyError, IndexError, TypeError, ValueError):
+        return errors + ["erratum pointer does not resolve in immutable M10"]
+    if study["readiness"][13]["entry_id"] != correction["entry_id"]:
+        errors.append("erratum target pointer does not identify DECL.THEOREM.TYPE_PROP")
+    if frozen_positive != correction["frozen_value"]:
+        errors.append("erratum frozen positive-control wording differs from immutable M10")
+    if frozen_basis != clarification["frozen_value"]:
+        errors.append("erratum frozen readiness-basis wording differs from immutable M10")
+    if contract_family is not True:
+        errors.append("immutable M10 same-construction-family contract is not true")
+    if study["readiness"][13]["isolation_feasibility"]["status"] != "YES":
+        errors.append("erratum must preserve the immutable M10 isolation-feasibility status")
+
+    expected_control = "Use a Prop-valued theorem in the same construction family, with a matching valid proof."
+    if correction["corrected_value"] != expected_control:
+        errors.append("erratum matched positive control is not the required Prop-valued theorem repair")
+    auxiliary = document["auxiliary_control_classification"]
+    if auxiliary["allowed_role"] != "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL":
+        errors.append("definition-form artifact is not restricted to the auxiliary role")
+    if auxiliary["prohibited_role"] != "MATCHED_POSITIVE_CONTROL_FOR_ISOLATED_DECL.THEOREM.TYPE_PROP_COVERAGE":
+        errors.append("definition-form artifact is not prohibited as the matched theorem control")
+    if document["successor_execution_requirement"]["execution_authorized"]:
+        errors.append("erratum improperly authorizes successor execution")
+
+    for name, path in FROZEN_M10_CURRENT_PATHS.items():
+        expected = m10_attestation["artifacts"][name]["sha256"]
+        if sha256_bytes(path.read_bytes()) != expected:
+            errors.append(f"frozen current M10 {name} bytes changed")
+
+    if check_generated:
+        if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != renderer.render(document):
+            errors.append("generated M10 protocol erratum report is stale")
+    return errors
+
+
+def validate_historical_attestation(document: dict[str, Any] | None = None) -> list[str]:
+    history = load_module("declaration_erratum_historical_helpers", HISTORICAL_VALIDATOR_PATH)
+    if document is None:
+        if ERRATUM_COMMIT is None and not ATTESTATION_PATH.exists():
+            return []
+        if ERRATUM_COMMIT is None or FROZEN_ERRATUM_ATTESTATION_SHA256 is None:
+            return ["M10 protocol erratum historical constants are not configured"]
+        if not ATTESTATION_PATH.is_file():
+            return ["M10 protocol erratum historical attestation is missing"]
+        if sha256_bytes(ATTESTATION_PATH.read_bytes()) != FROZEN_ERRATUM_ATTESTATION_SHA256:
+            return ["M10 protocol erratum historical attestation bytes changed"]
+        document = load_json(ATTESTATION_PATH)
+    errors: list[str] = []
+    expected_commit = ERRATUM_COMMIT or document.get("historical_commit")
+    if document.get("historical_commit") != expected_commit:
+        errors.append("M10 protocol erratum historical commit is incorrect")
+    if document.get("phase", {}).get("content_commit") != expected_commit:
+        errors.append("M10 protocol erratum phase content commit is incorrect")
+    if set(document.get("artifacts", {})) != EXPECTED_ATTESTATION_ARTIFACTS:
+        return errors + ["M10 protocol erratum historical artifact set is not exact"]
+    contents: dict[str, bytes] = {}
+    for name, binding in document["artifacts"].items():
+        content, binding_errors = history.git_blob_bytes(
+            binding,
+            label=f"M10 protocol erratum {name}",
+            expected_commit=expected_commit,
+        )
+        errors.extend(binding_errors)
+        if content is not None:
+            contents[name] = content
+    if errors:
+        return errors
+    try:
+        attestation_schema = json.loads(contents["historical_attestation_schema"])
+        erratum_schema = json.loads(contents["erratum_schema"])
+        erratum = json.loads(contents["protocol_erratum"])
+        m10_attestation = json.loads(contents["m10_historical_attestation"])
+    except json.JSONDecodeError:
+        return ["M10 protocol erratum historical JSON artifact is invalid"]
+    errors.extend(schema_errors(document, attestation_schema, "M10 protocol erratum historical attestation"))
+    errors.extend(schema_errors(erratum, erratum_schema, "historical M10 protocol erratum"))
+    errors.extend(f"historical M10 predecessor: {item}" for item in history.validate_m10_attestation(m10_attestation))
+    if erratum["immutable_m10_predecessor"]["historical_attestation_sha256"] != sha256_bytes(contents["m10_historical_attestation"]):
+        errors.append("historical erratum does not bind exact immutable M10 attestation bytes")
+    if erratum["immutable_m10_predecessor"]["study_design_binding"] != m10_attestation["artifacts"]["study_design"]:
+        errors.append("historical erratum study-design binding differs from immutable M10")
+    return errors
+
+
+def main() -> int:
+    errors = validate_document() + validate_historical_attestation()
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}", file=sys.stderr)
+        return 1
+    print("Declaration-validation M10 protocol erratum validation passed.")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

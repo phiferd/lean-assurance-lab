@@ -1537,6 +1537,33 @@ manifest bindings fail. The complete declaration-validation suite passes all
 coverage, synthesis, mutation, checker, or authority-resolution work is
 authorized by this completed mandate.
 
+### M10 Protocol Erratum 1 — 2026-09-01
+
+The frozen future-witness strategy for `DECL.THEOREM.TYPE_PROP` incorrectly
+allowed the matched positive control to be the existing definition-form
+artifact. Changing a theorem to a definition removes applicability of the
+theorem-specific requirement that the type be a proposition; it does not repair
+that premise. The historically attested M10 bytes remain unchanged.
+
+The operative successor rule is: use a Prop-valued theorem in the same
+construction family, with a matching valid proof. The definition-form artifact
+may remain as auxiliary representability and well-formedness evidence, but it
+must not count as the matched positive control for isolated
+`DECL.THEOREM.TYPE_PROP` coverage. The related M10 isolation-feasibility result
+remains `YES` as a future construction judgment. The denominator, readiness
+statuses, exploratory set, empirical context, deferred/reserved set, and M10
+stop condition are unchanged.
+
+The canonical correction is
+`results/research/declaration-validation-milestone-10-protocol-erratum-1.json`.
+It binds the exact M10 historical attestation and exact frozen study-design Git
+blob. Phase A must validate the correction, generated report, unchanged M10
+bytes, and negative regressions. Phase B must separately bind the Phase-A
+erratum content as exact Git blobs. A future execution plan must bind both the
+M10 historical attestation and the erratum historical attestation. This erratum
+authorizes no coverage, synthesis, mutation, checker, authority-resolution, or
+other successor experiment.
+
 ### M10 Stop Condition
 
 Milestone 10 ends when:
