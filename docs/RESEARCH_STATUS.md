@@ -1333,8 +1333,13 @@ prepared_external_action_drafts: 5
    bind a Prop-valued theorem in the same construction family with a matching
    valid proof. The erratum preserves the empty primary denominator, all
    readiness statuses and populations, and the M10 stop condition. It
-   authorizes no successor experiment. Phase-A correction content is finalized;
-   its separate non-self-referential Git-blob attestation remains to be created.
+   authorizes no successor experiment. The Phase-A correction content is commit
+   `3f8d88ad4df80d746dbb3415156a1d31a01053e5`. Its separate historical
+   attestation has SHA-256
+   `1480e214881bc45c10f23bdac27663c8f31bc2dee6b0e50558c002cae4cdc786`
+   and binds 13 exact Git blobs at that commit. The complete Phase-B
+   declaration-validation suite passes 185 tests with no skips. M10 remains at
+   its stop condition and no successor research is authorized.
 
 ### Waiting
 

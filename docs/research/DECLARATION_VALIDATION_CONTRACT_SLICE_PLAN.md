@@ -1557,12 +1557,20 @@ stop condition are unchanged.
 The canonical correction is
 `results/research/declaration-validation-milestone-10-protocol-erratum-1.json`.
 It binds the exact M10 historical attestation and exact frozen study-design Git
-blob. Phase A must validate the correction, generated report, unchanged M10
-bytes, and negative regressions. Phase B must separately bind the Phase-A
-erratum content as exact Git blobs. A future execution plan must bind both the
-M10 historical attestation and the erratum historical attestation. This erratum
-authorizes no coverage, synthesis, mutation, checker, authority-resolution, or
-other successor experiment.
+blob. Phase A validated the correction, generated report, unchanged M10 bytes,
+and negative regressions at commit
+`3f8d88ad4df80d746dbb3415156a1d31a01053e5`. The separate Phase-B
+`results/research/declaration-validation-milestone-10-protocol-erratum-1-historical.json`
+attestation has SHA-256
+`1480e214881bc45c10f23bdac27663c8f31bc2dee6b0e50558c002cae4cdc786`
+and binds 13 exact Git blobs at that commit. Historical validation rejects
+wrong erratum blobs, SHA-256 values, and commits, and it does not read mutable
+current erratum content. The complete Phase-B declaration-validation suite
+passes 185 tests with no skips.
+
+A future execution plan must bind both the M10 historical attestation and the
+erratum historical attestation. This erratum authorizes no coverage, synthesis,
+mutation, checker, authority-resolution, or other successor experiment.
 
 ### M10 Stop Condition
 
