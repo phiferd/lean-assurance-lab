@@ -1260,12 +1260,22 @@ prepared_external_action_drafts: 5
    sources remain zero; all soundness relevance remains `NOT_ASSESSED`; and no
    Arena denominator or broad study has begun. The M9 start binding now verifies
    corrected M8 attestation commit
-   `15c76f27479dafc4213774b0acffb0d1d84fa2ed`. Phase A will commit the exact
-   repaired content before Phase B creates its separate Git-blob attestation.
-   Its content gate passes 158 declaration-validation tests and the 11-test
-   historical-transition module; the two M9-attestation tests are intentionally
-   skipped until Phase B creates the attestation. **Milestone 10 has not
-   started.**
+   `15c76f27479dafc4213774b0acffb0d1d84fa2ed`. The repaired Phase-A content is
+   commit `69dad9d13e4802e5ef29c958c60d2ee387293847`; its content gate passed 158
+   declaration-validation tests and the 11-test transition module with the two
+   Phase-B-only tests skipped.
+
+   The separate Phase-B
+   [M9 historical attestation](../results/research/declaration-validation-milestone-9-historical.json)
+   has SHA-256
+   `6a26aff21d26284b5e6298a33bc0977c9c20b0c063d42aafcf0e33210d821a89`
+   and binds 46 exact Git blobs at the Phase-A commit. Historical M9 validation
+   uses those blobs rather than mutable M9 paths. The active M9→M10 transition
+   and tampering module passes all 11 tests with no skips; the complete Phase-B
+   declaration-validation suite passes all 158 tests. Wrong reviewed-catalog
+   blob or SHA, historical commit, review blob, and completion/content-manifest
+   binding are rejected. Milestone 9 is now an immutable historical
+   predecessor. **Milestone 10 has not started.**
 
 ### Waiting
 

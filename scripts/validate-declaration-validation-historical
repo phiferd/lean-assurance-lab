@@ -31,8 +31,8 @@ M8_ATTESTATION_COMMIT = "15c76f27479dafc4213774b0acffb0d1d84fa2ed"
 FROZEN_M7_ATTESTATION_SHA256 = "2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8"
 FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb089a146dbc8e27b5595a00"
 FROZEN_M8_ATTESTATION_SHA256 = "54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a"
-M9_COMMIT: str | None = None
-FROZEN_M9_ATTESTATION_SHA256: str | None = None
+M9_COMMIT: str | None = "69dad9d13e4802e5ef29c958c60d2ee387293847"
+FROZEN_M9_ATTESTATION_SHA256: str | None = "6a26aff21d26284b5e6298a33bc0977c9c20b0c063d42aafcf0e33210d821a89"
 
 M7_COMPLETION_ARTIFACTS = {
     "approved_authority_sources",
@@ -881,7 +881,7 @@ def validate_m9_attestation(document: dict[str, Any] | None = None) -> list[str]
     if errors:
         return errors
 
-    m8_attestation = load_json(M8_ATTESTATION_PATH)
+    m8_attestation = json.loads(contents["m8_historical_attestation"])
     m8_catalog, m8_errors = historical_json(
         m8_attestation["artifacts"]["catalog"],
         label="M9 immutable M8 predecessor catalog",

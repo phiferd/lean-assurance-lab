@@ -1111,6 +1111,26 @@ validation tests and the 11-test historical-transition module (two Phase-B
 tests intentionally skipped until the attestation exists). Milestone 10 has
 not started.
 
+### Milestone 9 Immutable Historical Attestation — 2026-09-01
+
+The repaired Phase-A reviewed content is commit
+`69dad9d13e4802e5ef29c958c60d2ee387293847`. The separate Phase-B
+`results/research/declaration-validation-milestone-9-historical.json`
+attestation has SHA-256
+`6a26aff21d26284b5e6298a33bc0977c9c20b0c063d42aafcf0e33210d821a89`
+and binds 46 exact Git blobs at that commit. Historical validation reconstructs
+the immutable M8 predecessor, pre-review and reviewed catalogs, authored review,
+evidence locks, reports, content manifest, completion, schemas, renderers,
+validators, tests, and discovery/identity/source inputs from those blobs.
+
+The M9→M10 regression permits a simulated future current catalog to differ
+while historical M7, the reviewed pilot, corrected M8, and reviewed M9 all
+validate unchanged. Wrong reviewed-catalog blob, reviewed-catalog SHA,
+historical commit, adversarial-review blob, and completion/content-manifest
+bindings fail. The active transition module passes all 11 tests with no skips,
+and the Phase-B declaration-validation suite passes all 158 tests. Milestone 9
+is now an immutable historical predecessor. **Milestone 10 has not started.**
+
 ## Milestone 10 — Design the Next Phase Against the Frozen Inventory
 
 Do not yet execute the broad Arena coverage study.
