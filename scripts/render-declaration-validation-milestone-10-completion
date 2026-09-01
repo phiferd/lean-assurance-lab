@@ -1,0 +1,131 @@
+#!/usr/bin/env python3
+"""Render the Milestone 10 Phase-A completion record."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STUDY_PATH = ROOT / "config" / "declaration-validation-milestone-10-study.json"
+POPULATIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json"
+FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-freeze.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-10.json"
+TESTS_RUN = 175
+
+ARTIFACTS = {
+    "m9_historical_attestation": "results/research/declaration-validation-milestone-9-historical.json",
+    "study_design": "config/declaration-validation-milestone-10-study.json",
+    "derived_populations": "results/research/declaration-validation-milestone-10-populations.json",
+    "generated_report": "docs/research/DECLARATION_VALIDATION_MILESTONE_10_STUDY.md",
+    "study_schema": "schemas/declaration-validation-milestone-10-study.schema.json",
+    "populations_schema": "schemas/declaration-validation-milestone-10-populations.schema.json",
+    "freeze_manifest": "results/research/declaration-validation-milestone-10-freeze.json",
+    "freeze_schema": "schemas/declaration-validation-milestone-10-freeze.schema.json",
+    "completion_schema": "schemas/declaration-validation-milestone-10.schema.json",
+    "historical_attestation_schema": "schemas/declaration-validation-milestone-10-historical.schema.json",
+    "populations_renderer": "scripts/render-declaration-validation-milestone-10-populations",
+    "report_renderer": "scripts/render-declaration-validation-milestone-10-study",
+    "freeze_renderer": "scripts/render-declaration-validation-milestone-10-freeze",
+    "completion_renderer": "scripts/render-declaration-validation-milestone-10-completion",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-10-historical",
+    "milestone_10_validator": "scripts/validate-declaration-validation-milestone-10",
+    "milestone_10_tests": "tests/test_declaration_validation_milestone_10.py",
+    "historical_validator": "scripts/validate-declaration-validation-historical",
+    "historical_transition_tests": "tests/test_declaration_validation_historical_transition.py",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+}
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def file_binding(relative: str) -> dict[str, str]:
+    return {"path": relative, "sha256": hashlib.sha256((ROOT / relative).read_bytes()).hexdigest()}
+
+
+def render() -> dict[str, Any]:
+    study = load(STUDY_PATH)
+    populations = load(POPULATIONS_PATH)
+    freeze = load(FREEZE_PATH)
+    return {
+        "schema_version": 1,
+        "milestone": "declaration-validation-contract-slice-10",
+        "recorded_at": study["recorded_at"],
+        "status": "PASS",
+        "repository_state": {
+            "head_at_milestone_start": "e81ed39c61993421e1c50f91ede05ef1f2a1b18a",
+            "branch": "main",
+            "tree_clean_at_milestone_start": True,
+            "prior_milestone_attestation": "results/research/declaration-validation-milestone-9-historical.json",
+        },
+        "artifacts": {name: file_binding(relative) for name, relative in ARTIFACTS.items()},
+        "population_summary": freeze["population_summary"],
+        "qualification_boundary": {
+            "approved_normative_sources": 0,
+            "approved_mechanized_sources": 0,
+            "established_authority_entries": 0,
+            "provisional_authority_entries": 27,
+            "primary_denominator": populations["primary_normative_denominator"]["count"],
+            "normative_percentage_reported": False,
+            "authority_resolution_performed": False,
+            "substantive_experiment_executed": False,
+        },
+        "validation": {
+            "source_lock_command": "scripts/validate-declaration-validation-source-lock",
+            "historical_command": "scripts/validate-declaration-validation-historical",
+            "catalog_command": "scripts/validate-declaration-validation-catalog",
+            "milestone_9_command": "scripts/validate-declaration-validation-milestone-9",
+            "milestone_10_command": "scripts/validate-declaration-validation-milestone-10",
+            "test_command": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'",
+            "recorded_results": {
+                "source_lock": "PASS",
+                "historical_m7_through_m9": "PASS",
+                "canonical_m9_catalog": "PASS",
+                "milestone_9_predecessor": "PASS",
+                "milestone_10_study_design": "PASS",
+                "declaration_validation_tests": {"tests_run": TESTS_RUN, "failures": 0, "errors": 0, "result": "PASS"},
+            },
+        },
+        "requirements_audit": {
+            "immutable_predecessor": "Eligibility resolves the reviewed M9 catalog and identity registry only through exact Git blobs in the M9 historical attestation.",
+            "input_closure": "All 30 frozen identities have one readiness record, including one deferred and two reserved identities.",
+            "independent_readiness": "Every record contains kind, authority, layer, scope, semantic testability, Arena representability, isolation, and lifecycle determinations without authority short-circuiting.",
+            "mechanical_derivation": "The strict denominator, provisional exploratory set, empirical context, exclusions, and no-percentage result are generated from the frozen classifications and authored determinations.",
+            "future_protocol": "Reach(x) AND NOT P(x), positive controls, competing obligations, attribution, synthesis tiers, and ten execution gates are frozen.",
+            "historical_pattern": "Phase A binds acyclic content; Phase B must separately bind exact Git blobs and prove successor-state independence.",
+        },
+        "completion_boundary": {
+            "completed": "Milestone 10 study design and Phase-A historical-freeze content",
+            "next_action_requires_separate_authorization": True,
+            "deferred": [
+                "approval or selection of any normative authority source",
+                "promotion of any provisional catalog entry",
+                "execution of Arena negative or isolated-negative coverage",
+                "execution of witness synthesis or mutation campaigns",
+                "execution of new checker characterization",
+                "reporting any normative coverage percentage",
+            ],
+            "nonclaims": study["nonclaims"],
+        },
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

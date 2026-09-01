@@ -23,6 +23,8 @@ M7_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-mi
 M8_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-8-historical.json"
 M9_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-historical.json"
 M9_ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-9-historical.schema.json"
+M10_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-historical.json"
+M10_ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-historical.schema.json"
 ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-historical-attestation.schema.json"
 REVIEWED_PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
 M7_COMMIT = "da6b56af92ce2bcbfa6f2f29a6f699b2f0b24c19"
@@ -33,6 +35,8 @@ FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb08
 FROZEN_M8_ATTESTATION_SHA256 = "54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a"
 M9_COMMIT: str | None = "69dad9d13e4802e5ef29c958c60d2ee387293847"
 FROZEN_M9_ATTESTATION_SHA256: str | None = "6a26aff21d26284b5e6298a33bc0977c9c20b0c063d42aafcf0e33210d821a89"
+M10_COMMIT: str | None = None
+FROZEN_M10_ATTESTATION_SHA256: str | None = None
 
 M7_COMPLETION_ARTIFACTS = {
     "approved_authority_sources",
@@ -139,6 +143,15 @@ M9_ATTESTATION_ARTIFACTS = {
     "review_renderer", "review_schema", "reviewed_catalog", "reviewed_evidence_lock",
     "semantic_target", "semantic_target_schema", "source_lock", "source_lock_schema",
     "source_lock_tests", "source_lock_validator",
+}
+M10_ATTESTATION_ARTIFACTS = {
+    "constitution", "operating_guide", "m9_historical_attestation", "study_design",
+    "derived_populations", "generated_report", "study_schema", "populations_schema",
+    "freeze_manifest", "freeze_schema", "completion_record", "completion_schema",
+    "historical_attestation_schema", "populations_renderer", "report_renderer",
+    "freeze_renderer", "completion_renderer", "historical_attestation_renderer",
+    "milestone_10_validator", "milestone_10_tests", "historical_validator",
+    "historical_transition_tests", "research_plan", "research_status",
 }
 
 
@@ -934,6 +947,165 @@ def validate_m9_attestation(document: dict[str, Any] | None = None) -> list[str]
     return errors
 
 
+def validate_m10_attestation(document: dict[str, Any] | None = None) -> list[str]:
+    """Validate M10 only from the separately attested Phase-A Git blobs."""
+
+    if document is None:
+        if M10_COMMIT is None and not M10_ATTESTATION_PATH.exists():
+            return []
+        if M10_COMMIT is None or FROZEN_M10_ATTESTATION_SHA256 is None:
+            return ["Milestone 10 historical constants are not configured"]
+        if not M10_ATTESTATION_PATH.is_file():
+            return ["Milestone 10 historical attestation is missing"]
+        if sha256_bytes(M10_ATTESTATION_PATH.read_bytes()) != FROZEN_M10_ATTESTATION_SHA256:
+            return ["Milestone 10 historical attestation bytes changed"]
+        document = load_json(M10_ATTESTATION_PATH)
+    errors: list[str] = []
+    expected_commit = M10_COMMIT or document.get("historical_commit")
+    if document.get("attestation_id") != "ordinary-declaration-validation.milestone-10.historical.v1":
+        errors.append("Milestone 10 historical attestation identity is incorrect")
+    if document.get("historical_commit") != expected_commit:
+        errors.append("Milestone 10 historical attestation commit is incorrect")
+    if document.get("phase", {}).get("content_commit") != expected_commit:
+        errors.append("Milestone 10 phase content commit is incorrect")
+    artifacts = document.get("artifacts", {})
+    if set(artifacts) != M10_ATTESTATION_ARTIFACTS:
+        return errors + ["Milestone 10 historical attestation artifact set is not exact"]
+    contents: dict[str, bytes] = {}
+    for name, binding in artifacts.items():
+        content, binding_errors = git_blob_bytes(
+            binding, label=f"Milestone 10 {name}", expected_commit=expected_commit
+        )
+        errors.extend(binding_errors)
+        if content is not None:
+            contents[name] = content
+    if errors:
+        return errors
+    try:
+        historical_schema = json.loads(contents["historical_attestation_schema"])
+        study_schema = json.loads(contents["study_schema"])
+        populations_schema = json.loads(contents["populations_schema"])
+        freeze_schema = json.loads(contents["freeze_schema"])
+        completion_schema = json.loads(contents["completion_schema"])
+        m9_attestation = json.loads(contents["m9_historical_attestation"])
+        study = json.loads(contents["study_design"])
+        populations = json.loads(contents["derived_populations"])
+        freeze = json.loads(contents["freeze_manifest"])
+        completion = json.loads(contents["completion_record"])
+    except json.JSONDecodeError:
+        return ["Milestone 10 historical JSON artifact is not valid JSON"]
+    errors.extend(schema_errors(document, historical_schema, "Milestone 10 historical attestation"))
+    errors.extend(schema_errors(study, study_schema, "historical M10 study"))
+    errors.extend(schema_errors(populations, populations_schema, "historical M10 populations"))
+    errors.extend(schema_errors(freeze, freeze_schema, "historical M10 freeze"))
+    errors.extend(schema_errors(completion, completion_schema, "historical M10 completion"))
+    errors.extend(f"historical M10 M9 predecessor: {item}" for item in validate_m9_attestation(m9_attestation))
+    if errors:
+        return errors
+
+    if study["immutable_m9_input"]["attestation_sha256"] != sha256_bytes(contents["m9_historical_attestation"]):
+        errors.append("historical M10 study does not bind the attested M9 predecessor bytes")
+    m9_binding_map = {
+        "reviewed_catalog_binding": "reviewed_catalog",
+        "identity_registry_binding": "identity_registry",
+        "approved_authority_sources_binding": "approved_authority_sources",
+    }
+    for study_name, m9_name in m9_binding_map.items():
+        if study["immutable_m9_input"][study_name] != m9_attestation["artifacts"][m9_name]:
+            errors.append(f"historical M10 {study_name} differs from immutable M9")
+    catalog, catalog_errors = historical_json(
+        m9_attestation["artifacts"]["reviewed_catalog"],
+        label="historical M10 immutable M9 catalog",
+        expected_commit=M9_COMMIT,
+    )
+    identities, identity_errors = historical_json(
+        m9_attestation["artifacts"]["identity_registry"],
+        label="historical M10 immutable M9 identities",
+        expected_commit=M9_COMMIT,
+    )
+    errors.extend(catalog_errors + identity_errors)
+    if catalog is None or identities is None:
+        return errors
+    expected_ids = [row["id"] for row in identities["identities"]]
+    if [row["entry_id"] for row in study["readiness"]] != expected_ids:
+        errors.append("historical M10 readiness identity closure changed")
+    if [row["entry_id"] for row in populations["entries"]] != expected_ids:
+        errors.append("historical M10 population identity closure changed")
+    catalog_by_id = {row["characterization"]["id"]: row["characterization"] for row in catalog["entries"]}
+    for identity, readiness in zip(identities["identities"], study["readiness"], strict=True):
+        characterization = catalog_by_id.get(identity["id"])
+        expected = {
+            "kind": characterization["kind"] if characterization else identity["intended_kind"],
+            "layers": characterization["layers"] if characterization else [],
+            "authority_status": characterization["authority"]["status"] if characterization else None,
+            "lifecycle_status": characterization["lifecycle"]["status"] if characterization else (
+                "OUT_OF_SCOPE" if identity["identity_status"] == "RESERVED_OUT_OF_SCOPE" else None
+            ),
+            "identity_status": identity["identity_status"],
+        }
+        if readiness["frozen_classification"] != expected:
+            errors.append(f"{identity['id']}: historical M10 classification differs from immutable M9")
+        if characterization is not None and characterization["authority"]["status"] != "PROVISIONAL":
+            errors.append(f"{identity['id']}: historical M10 predecessor authority is not provisional")
+        for name in (
+            "kind_eligible", "authority_eligible", "kernel_layer_eligible", "study_scope",
+            "semantic_negative_testability", "arena_representability", "isolation_feasibility",
+            "lifecycle_eligible",
+        ):
+            determination = readiness[name]
+            if not determination["basis"] or not determination["evidence"]:
+                errors.append(f"{identity['id']}: historical M10 {name} is incomplete")
+    expected_primary = {
+        "count": 0,
+        "entry_ids": [],
+        "coverage_percentage": None,
+        "coverage_percentage_status": "NOT_REPORTED_EMPTY_DENOMINATOR",
+    }
+    if populations["primary_normative_denominator"] != expected_primary:
+        errors.append("historical M10 primary denominator is not empty without a percentage")
+    if populations["provisional_exploratory_candidate_set"]["count"] != 19:
+        errors.append("historical M10 exploratory population changed")
+    if populations["empirical_characterization_context"]["count"] != 8:
+        errors.append("historical M10 empirical context changed")
+    if populations["deferred_or_reserved_identities"]["count"] != 3:
+        errors.append("historical M10 deferred/reserved closure changed")
+    if populations["study_design_sha256"] != sha256_bytes(contents["study_design"]):
+        errors.append("historical M10 populations do not bind the study design")
+    if populations["immutable_m9_attestation_sha256"] != sha256_bytes(contents["m9_historical_attestation"]):
+        errors.append("historical M10 populations do not bind immutable M9")
+    if freeze["population_summary"] != completion["population_summary"]:
+        errors.append("historical M10 freeze and completion population summaries disagree")
+    if freeze["predecessor_attestations"]["reviewed_milestone_9"]["sha256"] != artifacts["m9_historical_attestation"]["sha256"]:
+        errors.append("historical M10 freeze/M9 predecessor binding is stale")
+    if completion["artifacts"]["freeze_manifest"]["sha256"] != artifacts["freeze_manifest"]["sha256"]:
+        errors.append("historical M10 completion/freeze binding is stale")
+    if completion["qualification_boundary"]["substantive_experiment_executed"]:
+        errors.append("historical M10 claims a substantive experiment")
+    if completion["qualification_boundary"]["authority_resolution_performed"]:
+        errors.append("historical M10 claims authority resolution")
+    if document["phase_a_validation"] != completion["validation"]["recorded_results"]["declaration_validation_tests"]:
+        errors.append("historical M10 Phase-A test count disagrees with completion")
+    report = contents["generated_report"].decode("utf-8", errors="replace")
+    if f"Study design SHA-256: `{artifacts['study_design']['sha256']}`" not in report:
+        errors.append("historical M10 report does not bind the historical study design")
+    for stable_id in expected_ids:
+        if stable_id not in report:
+            errors.append(f"{stable_id}: historical M10 report omits frozen identity")
+    completion_map = {
+        "m9_historical_attestation": "m9_historical_attestation",
+        "study_design": "study_design",
+        "derived_populations": "derived_populations",
+        "generated_report": "generated_report",
+        "freeze_manifest": "freeze_manifest",
+    }
+    for completion_name, artifact_name in completion_map.items():
+        errors.extend(match_artifact_binding(
+            completion["artifacts"][completion_name], artifacts[artifact_name],
+            f"historical M10 completion {completion_name}",
+        ))
+    return errors
+
+
 def validate_reviewed_m8_pilot() -> list[str]:
     """Validate the reviewed pilot through its own immutable Git-blob attestation."""
 
@@ -949,13 +1121,15 @@ def main() -> int:
     errors.extend(validate_m8_attestation())
     errors.extend(validate_m8_attestation_predecessor_commit())
     errors.extend(validate_m9_attestation())
+    errors.extend(validate_m10_attestation())
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
     print(
         "declaration-validation historical M7 attestation, reviewed M8 pilot, "
-        "corrected M8 attestation, and reviewed M9 attestation (when present): PASS"
+        "corrected M8 attestation, reviewed M9 attestation, and M10 design attestation "
+        "(when present): PASS"
     )
     return 0
 

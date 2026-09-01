@@ -1,0 +1,98 @@
+#!/usr/bin/env python3
+"""Render the acyclic Milestone 10 Phase-A content manifest."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STUDY_PATH = ROOT / "config" / "declaration-validation-milestone-10-study.json"
+POPULATIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-10-freeze.json"
+
+PREDECESSORS = {"reviewed_milestone_9": "results/research/declaration-validation-milestone-9-historical.json"}
+ARTIFACTS = {
+    "study_design": ("config/declaration-validation-milestone-10-study.json", "STUDY_DESIGN"),
+    "derived_populations": ("results/research/declaration-validation-milestone-10-populations.json", "DERIVED_POPULATIONS"),
+    "generated_report": ("docs/research/DECLARATION_VALIDATION_MILESTONE_10_STUDY.md", "GENERATED_REPORTS"),
+    "study_schema": ("schemas/declaration-validation-milestone-10-study.schema.json", "DURABLE_RESEARCH_STATE"),
+    "populations_schema": ("schemas/declaration-validation-milestone-10-populations.schema.json", "DURABLE_RESEARCH_STATE"),
+    "freeze_schema": ("schemas/declaration-validation-milestone-10-freeze.schema.json", "DURABLE_RESEARCH_STATE"),
+    "completion_schema": ("schemas/declaration-validation-milestone-10.schema.json", "DURABLE_RESEARCH_STATE"),
+    "historical_attestation_schema": ("schemas/declaration-validation-milestone-10-historical.schema.json", "DURABLE_RESEARCH_STATE"),
+    "populations_renderer": ("scripts/render-declaration-validation-milestone-10-populations", "DURABLE_RESEARCH_STATE"),
+    "report_renderer": ("scripts/render-declaration-validation-milestone-10-study", "DURABLE_RESEARCH_STATE"),
+    "freeze_renderer": ("scripts/render-declaration-validation-milestone-10-freeze", "DURABLE_RESEARCH_STATE"),
+    "completion_renderer": ("scripts/render-declaration-validation-milestone-10-completion", "DURABLE_RESEARCH_STATE"),
+    "historical_attestation_renderer": ("scripts/render-declaration-validation-milestone-10-historical", "DURABLE_RESEARCH_STATE"),
+    "milestone_10_validator": ("scripts/validate-declaration-validation-milestone-10", "DURABLE_RESEARCH_STATE"),
+    "milestone_10_tests": ("tests/test_declaration_validation_milestone_10.py", "DURABLE_RESEARCH_STATE"),
+    "historical_validator": ("scripts/validate-declaration-validation-historical", "DURABLE_RESEARCH_STATE"),
+    "historical_transition_tests": ("tests/test_declaration_validation_historical_transition.py", "DURABLE_RESEARCH_STATE"),
+    "constitution": ("CONSTITUTION.md", "DURABLE_RESEARCH_STATE"),
+    "operating_guide": ("AGENTS.md", "DURABLE_RESEARCH_STATE"),
+    "research_plan": ("docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md", "DURABLE_RESEARCH_STATE"),
+    "research_status": ("docs/RESEARCH_STATUS.md", "DURABLE_RESEARCH_STATE"),
+}
+ATTESTATION_ORDER = ["HISTORICAL_PREDECESSORS", "STUDY_DESIGN", "DERIVED_POPULATIONS", "GENERATED_REPORTS", "DURABLE_RESEARCH_STATE"]
+DEPENDENCY_EDGES = [
+    {"from": "study_design", "to": "reviewed_milestone_9"},
+    {"from": "derived_populations", "to": "study_design"},
+    {"from": "derived_populations", "to": "reviewed_milestone_9"},
+    {"from": "generated_report", "to": "study_design"},
+    {"from": "generated_report", "to": "derived_populations"},
+    {"from": "research_plan", "to": "study_design"},
+    {"from": "research_status", "to": "study_design"},
+]
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def binding(relative: str, tier: str) -> dict[str, str]:
+    return {"path": relative, "sha256": hashlib.sha256((ROOT / relative).read_bytes()).hexdigest(), "tier": tier}
+
+
+def render() -> dict[str, Any]:
+    study = load(STUDY_PATH)
+    populations = load(POPULATIONS_PATH)
+    return {
+        "schema_version": 1,
+        "manifest_id": "ordinary-declaration-validation.milestone-10-content-manifest.v1",
+        "generated_at": study["recorded_at"],
+        "status": "FINAL_MILESTONE_10_CONTENT_MANIFEST",
+        "predecessor_attestations": {name: binding(relative, "HISTORICAL_PREDECESSORS") for name, relative in PREDECESSORS.items()},
+        "artifacts": {name: binding(relative, tier) for name, (relative, tier) in ARTIFACTS.items()},
+        "population_summary": {
+            "frozen_identities": 30,
+            "readiness_entries": len(study["readiness"]),
+            "primary_denominator": populations["primary_normative_denominator"]["count"],
+            "provisional_exploratory": populations["provisional_exploratory_candidate_set"]["count"],
+            "empirical_context": populations["empirical_characterization_context"]["count"],
+            "deferred_or_reserved": populations["deferred_or_reserved_identities"]["count"],
+            "coverage_percentage_status": populations["primary_normative_denominator"]["coverage_percentage_status"],
+        },
+        "attestation_order": ATTESTATION_ORDER,
+        "dependency_edges": DEPENDENCY_EDGES,
+        "acyclic": True,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

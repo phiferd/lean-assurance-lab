@@ -1,0 +1,59 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-10-freeze.schema.json",
+  "title": "Declaration Validation Milestone 10 Content Manifest",
+  "type": "object",
+  "required": ["schema_version", "manifest_id", "generated_at", "status", "predecessor_attestations", "artifacts", "population_summary", "attestation_order", "dependency_edges", "acyclic"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "manifest_id": {"const": "ordinary-declaration-validation.milestone-10-content-manifest.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FINAL_MILESTONE_10_CONTENT_MANIFEST"},
+    "predecessor_attestations": {
+      "type": "object",
+      "required": ["reviewed_milestone_9"],
+      "additionalProperties": {"$ref": "#/$defs/tieredBinding"}
+    },
+    "artifacts": {"type": "object", "minProperties": 18, "additionalProperties": {"$ref": "#/$defs/tieredBinding"}},
+    "population_summary": {
+      "type": "object",
+      "required": ["frozen_identities", "readiness_entries", "primary_denominator", "provisional_exploratory", "empirical_context", "deferred_or_reserved", "coverage_percentage_status"],
+      "properties": {
+        "frozen_identities": {"const": 30},
+        "readiness_entries": {"const": 30},
+        "primary_denominator": {"const": 0},
+        "provisional_exploratory": {"const": 19},
+        "empirical_context": {"const": 8},
+        "deferred_or_reserved": {"const": 3},
+        "coverage_percentage_status": {"const": "NOT_REPORTED_EMPTY_DENOMINATOR"}
+      },
+      "additionalProperties": false
+    },
+    "attestation_order": {"const": ["HISTORICAL_PREDECESSORS", "STUDY_DESIGN", "DERIVED_POPULATIONS", "GENERATED_REPORTS", "DURABLE_RESEARCH_STATE"]},
+    "dependency_edges": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "object",
+        "required": ["from", "to"],
+        "properties": {"from": {"type": "string", "minLength": 1}, "to": {"type": "string", "minLength": 1}},
+        "additionalProperties": false
+      }
+    },
+    "acyclic": {"const": true}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "tieredBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "tier"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "tier": {"enum": ["HISTORICAL_PREDECESSORS", "STUDY_DESIGN", "DERIVED_POPULATIONS", "GENERATED_REPORTS", "DURABLE_RESEARCH_STATE"]}
+      },
+      "additionalProperties": false
+    }
+  }
+}

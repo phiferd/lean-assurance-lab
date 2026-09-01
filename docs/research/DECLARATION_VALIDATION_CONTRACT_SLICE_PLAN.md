@@ -6,7 +6,7 @@
 - Recorded: 2026-08-30
 - Amended: 2026-09-01 (pre-Milestone-10 specification clarification)
 - Status: active execution mandate; Milestones 0 through 9 recorded;
-  Milestone 10 not started
+  Milestone 10 Phase-A design finalized; Phase-B historical attestation pending
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -74,6 +74,16 @@
   `scripts/validate-declaration-validation-milestone-9`
 - Milestone 9 record:
   results/research/declaration-validation-milestone-9.json
+- Milestone 10 study design:
+  config/declaration-validation-milestone-10-study.json
+- Milestone 10 derived populations:
+  results/research/declaration-validation-milestone-10-populations.json
+- Milestone 10 generated report:
+  docs/research/DECLARATION_VALIDATION_MILESTONE_10_STUDY.md
+- Milestone 10 validation command:
+  `scripts/validate-declaration-validation-milestone-10`
+- Milestone 10 Phase-A record:
+  results/research/declaration-validation-milestone-10.json
 
 The adversarial review of the initial plan is accepted.
 
@@ -1480,6 +1490,29 @@ M8 and repaired M9:
 The Phase-B attestation must validate from the bound historical blobs rather
 than mutable current paths. This milestone specification requires that
 machinery; this pre-M10 amendment does not build it.
+
+### M10 Phase-A Design Freeze — 2026-09-01
+
+Phase A consumes the immutable reviewed M9 catalog and identity registry only
+through the exact Git blobs bound by the M9 historical attestation at commit
+`69dad9d13e4802e5ef29c958c60d2ee387293847`. The authored study design records
+all eight independent readiness determinations for all 30 frozen identities;
+it does not stop analysis after observing the frozen `PROVISIONAL` authority
+state. The derived populations contain an empty strict primary denominator,
+19 separately labeled provisional exploratory candidates, eight empirical
+characterization-context entries, and the one deferred plus two reserved
+identities. Because the strict denominator is empty, no normative percentage
+is computed or reported.
+
+The frozen protocol defines `Reach(x) AND NOT P(x)`, matched positive controls,
+competing-obligation dispositions, authority-scoped expected outcomes, exact
+checker attribution, a three-tier synthesis hierarchy, and ten gates that block
+substantive successor execution until a separately authorized plan binds this
+protocol and freezes a new input-derived denominator. No authority source was
+approved, no catalog entry was promoted, and no Arena, checker, mutation, or
+witness-synthesis campaign was executed. Phase B must still bind the committed
+Phase-A artifacts as exact Git blobs and pass the successor-transition and
+tampering regressions before the M10 stop condition is met.
 
 ### M10 Stop Condition
 

@@ -1,0 +1,76 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-10.schema.json",
+  "title": "Declaration Validation Milestone 10 Completion Record",
+  "type": "object",
+  "required": ["schema_version", "milestone", "recorded_at", "status", "repository_state", "artifacts", "population_summary", "qualification_boundary", "validation", "requirements_audit", "completion_boundary"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "milestone": {"const": "declaration-validation-contract-slice-10"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "PASS"},
+    "repository_state": {
+      "type": "object",
+      "required": ["head_at_milestone_start", "branch", "tree_clean_at_milestone_start", "prior_milestone_attestation"],
+      "properties": {
+        "head_at_milestone_start": {"const": "e81ed39c61993421e1c50f91ede05ef1f2a1b18a"},
+        "branch": {"const": "main"},
+        "tree_clean_at_milestone_start": {"const": true},
+        "prior_milestone_attestation": {"const": "results/research/declaration-validation-milestone-9-historical.json"}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {"type": "object", "minProperties": 18, "additionalProperties": {"$ref": "#/$defs/fileBinding"}},
+    "population_summary": {"type": "object"},
+    "qualification_boundary": {
+      "type": "object",
+      "required": ["approved_normative_sources", "approved_mechanized_sources", "established_authority_entries", "provisional_authority_entries", "primary_denominator", "normative_percentage_reported", "authority_resolution_performed", "substantive_experiment_executed"],
+      "properties": {
+        "approved_normative_sources": {"const": 0},
+        "approved_mechanized_sources": {"const": 0},
+        "established_authority_entries": {"const": 0},
+        "provisional_authority_entries": {"const": 27},
+        "primary_denominator": {"const": 0},
+        "normative_percentage_reported": {"const": false},
+        "authority_resolution_performed": {"const": false},
+        "substantive_experiment_executed": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "validation": {"type": "object"},
+    "requirements_audit": {
+      "type": "object",
+      "required": ["immutable_predecessor", "input_closure", "independent_readiness", "mechanical_derivation", "future_protocol", "historical_pattern"],
+      "properties": {
+        "immutable_predecessor": {"type": "string", "minLength": 20},
+        "input_closure": {"type": "string", "minLength": 20},
+        "independent_readiness": {"type": "string", "minLength": 20},
+        "mechanical_derivation": {"type": "string", "minLength": 20},
+        "future_protocol": {"type": "string", "minLength": 20},
+        "historical_pattern": {"type": "string", "minLength": 20}
+      },
+      "additionalProperties": false
+    },
+    "completion_boundary": {
+      "type": "object",
+      "required": ["completed", "next_action_requires_separate_authorization", "deferred", "nonclaims"],
+      "properties": {
+        "completed": {"const": "Milestone 10 study design and Phase-A historical-freeze content"},
+        "next_action_requires_separate_authorization": {"const": true},
+        "deferred": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "nonclaims": {"type": "array", "minItems": 6, "uniqueItems": true, "items": {"type": "string", "minLength": 20}}
+      },
+      "additionalProperties": false
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {"path": {"type": "string", "minLength": 1}, "sha256": {"$ref": "#/$defs/sha256"}},
+      "additionalProperties": false
+    }
+  }
+}

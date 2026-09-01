@@ -1,0 +1,85 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-10-populations.schema.json",
+  "title": "Declaration Validation Milestone 10 Derived Populations",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_id",
+    "generated_at",
+    "status",
+    "immutable_m9_attestation_sha256",
+    "study_design_sha256",
+    "algorithm_id",
+    "entries",
+    "primary_normative_denominator",
+    "provisional_exploratory_candidate_set",
+    "empirical_characterization_context",
+    "deferred_or_reserved_identities"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifact_id": {"const": "ordinary-declaration-validation.milestone-10-derived-populations.v1"},
+    "generated_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "DERIVED_FROM_IMMUTABLE_M9_AND_FROZEN_M10_PROTOCOL"},
+    "immutable_m9_attestation_sha256": {"$ref": "#/$defs/sha256"},
+    "study_design_sha256": {"$ref": "#/$defs/sha256"},
+    "algorithm_id": {"const": "M10.PRIMARY.NORMATIVE.NEGATIVE.COVERAGE.ELIGIBILITY.V1"},
+    "entries": {
+      "type": "array",
+      "minItems": 30,
+      "maxItems": 30,
+      "items": {
+        "type": "object",
+        "required": [
+          "entry_id",
+          "determination_statuses",
+          "primary_denominator_eligible",
+          "primary_exclusion_reasons",
+          "provisional_exploratory_candidate",
+          "empirical_characterization_context"
+        ],
+        "properties": {
+          "entry_id": {"type": "string", "minLength": 3},
+          "determination_statuses": {
+            "type": "object",
+            "required": ["kind_eligible", "authority_eligible", "kernel_layer_eligible", "study_scope", "semantic_negative_testability", "arena_representability", "isolation_feasibility", "lifecycle_eligible"],
+            "additionalProperties": {"enum": ["YES", "NO", "UNRESOLVED"]}
+          },
+          "primary_denominator_eligible": {"type": "boolean"},
+          "primary_exclusion_reasons": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}},
+          "provisional_exploratory_candidate": {"type": "boolean"},
+          "empirical_characterization_context": {"type": "boolean"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "primary_normative_denominator": {
+      "type": "object",
+      "required": ["count", "entry_ids", "coverage_percentage", "coverage_percentage_status"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "entry_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "coverage_percentage": {"type": ["number", "null"]},
+        "coverage_percentage_status": {"enum": ["NOT_REPORTED_EMPTY_DENOMINATOR", "AWAITING_SUCCESSOR_EXECUTION"]}
+      },
+      "additionalProperties": false
+    },
+    "provisional_exploratory_candidate_set": {"$ref": "#/$defs/idSet"},
+    "empirical_characterization_context": {"$ref": "#/$defs/idSet"},
+    "deferred_or_reserved_identities": {"$ref": "#/$defs/idSet"}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "idSet": {
+      "type": "object",
+      "required": ["count", "entry_ids"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0},
+        "entry_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 3}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

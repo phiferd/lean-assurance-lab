@@ -1,0 +1,184 @@
+#!/usr/bin/env python3
+"""Derive M10 study populations from immutable M9 Git blobs and authored readiness."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
+M9_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-historical.json"
+STUDY_PATH = ROOT / "config" / "declaration-validation-milestone-10-study.json"
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json"
+
+DETERMINATIONS = (
+    "kind_eligible",
+    "authority_eligible",
+    "kernel_layer_eligible",
+    "study_scope",
+    "semantic_negative_testability",
+    "arena_representability",
+    "isolation_feasibility",
+    "lifecycle_eligible",
+)
+
+STATUS_REASON = {
+    "kind_eligible": {"NO": "KIND_NOT_NORMATIVE", "UNRESOLVED": "KIND_UNRESOLVED"},
+    "authority_eligible": {"NO": "AUTHORITY_NOT_ESTABLISHED", "UNRESOLVED": "AUTHORITY_UNRESOLVED"},
+    "kernel_layer_eligible": {"NO": "KERNEL_LAYER_ABSENT", "UNRESOLVED": "KERNEL_LAYER_UNRESOLVED"},
+    "study_scope": {"NO": "STUDY_SCOPE_NO", "UNRESOLVED": "STUDY_SCOPE_UNRESOLVED"},
+    "semantic_negative_testability": {"NO": "SEMANTIC_NEGATIVE_TESTABILITY_NO", "UNRESOLVED": "SEMANTIC_NEGATIVE_TESTABILITY_UNRESOLVED"},
+    "arena_representability": {"NO": "ARENA_REPRESENTABILITY_NO", "UNRESOLVED": "ARENA_REPRESENTABILITY_UNRESOLVED"},
+    "isolation_feasibility": {"NO": "ISOLATION_FEASIBILITY_NO", "UNRESOLVED": "ISOLATION_FEASIBILITY_UNRESOLVED"},
+    "lifecycle_eligible": {"NO": "LIFECYCLE_NOT_ACTIVE", "UNRESOLVED": "LIFECYCLE_UNRESOLVED"},
+}
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def immutable_inputs() -> tuple[Any, dict[str, Any], dict[str, Any], dict[str, Any]]:
+    history = load_module("declaration_m10_history", HISTORICAL_VALIDATOR_PATH)
+    errors = history.validate_m9_attestation()
+    if errors:
+        raise RuntimeError("immutable M9 validation failed: " + "; ".join(errors))
+    attestation = load_json(M9_ATTESTATION_PATH)
+    catalog, errors = history.historical_json(
+        attestation["artifacts"]["reviewed_catalog"],
+        label="M10 immutable M9 reviewed catalog",
+        expected_commit=history.M9_COMMIT,
+    )
+    if errors or catalog is None:
+        raise RuntimeError("could not resolve immutable M9 catalog: " + "; ".join(errors))
+    identities, errors = history.historical_json(
+        attestation["artifacts"]["identity_registry"],
+        label="M10 immutable M9 identity registry",
+        expected_commit=history.M9_COMMIT,
+    )
+    if errors or identities is None:
+        raise RuntimeError("could not resolve immutable M9 identities: " + "; ".join(errors))
+    return history, attestation, catalog, identities
+
+
+def render(study: dict[str, Any] | None = None) -> dict[str, Any]:
+    _, attestation, catalog, identities = immutable_inputs()
+    study = load_json(STUDY_PATH) if study is None else study
+    entry_by_id = {row["characterization"]["id"]: row["characterization"] for row in catalog["entries"]}
+    disposition_by_id = {row["id"]: row for row in catalog["identity_dispositions"]}
+    readiness_by_id = {row["entry_id"]: row for row in study["readiness"]}
+    derived_entries: list[dict[str, Any]] = []
+    primary: list[str] = []
+    exploratory: list[str] = []
+    empirical: list[str] = []
+    deferred: list[str] = []
+
+    for identity in identities["identities"]:
+        stable_id = identity["id"]
+        readiness = readiness_by_id[stable_id]
+        characterization = entry_by_id.get(stable_id)
+        disposition = disposition_by_id[stable_id]["disposition"]
+        statuses = {name: readiness[name]["status"] for name in DETERMINATIONS}
+        eligible = characterization is not None and all(status == "YES" for status in statuses.values())
+        eligible = eligible and characterization["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+        eligible = eligible and characterization["authority"]["status"] == "ESTABLISHED"
+        eligible = eligible and "KERNEL_DECLARATION_VALIDITY" in characterization["layers"]
+        eligible = eligible and characterization["lifecycle"]["status"] == "ACTIVE"
+
+        reasons: list[str] = []
+        if characterization is None:
+            reasons.append("NO_FROZEN_CATALOG_ENTRY")
+        for name in DETERMINATIONS:
+            status = statuses[name]
+            if status != "YES":
+                reasons.append(STATUS_REASON[name][status])
+        if eligible:
+            primary.append(stable_id)
+        is_exploratory = bool(
+            characterization
+            and characterization["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+            and characterization["authority"]["status"] == "PROVISIONAL"
+            and "KERNEL_DECLARATION_VALIDITY" in characterization["layers"]
+            and characterization["lifecycle"]["status"] == "ACTIVE"
+            and statuses["study_scope"] == "YES"
+        )
+        is_empirical = bool(
+            characterization
+            and characterization["kind"] == "EMPIRICAL_CONTRACT_SCENARIO"
+            and characterization["lifecycle"]["status"] == "ACTIVE"
+        )
+        if is_exploratory:
+            exploratory.append(stable_id)
+        if is_empirical:
+            empirical.append(stable_id)
+        if disposition != "CATALOG_ENTRY":
+            deferred.append(stable_id)
+        derived_entries.append(
+            {
+                "entry_id": stable_id,
+                "determination_statuses": statuses,
+                "primary_denominator_eligible": eligible,
+                "primary_exclusion_reasons": reasons,
+                "provisional_exploratory_candidate": is_exploratory,
+                "empirical_characterization_context": is_empirical,
+            }
+        )
+
+    return {
+        "schema_version": 1,
+        "artifact_id": "ordinary-declaration-validation.milestone-10-derived-populations.v1",
+        "generated_at": study["recorded_at"],
+        "status": "DERIVED_FROM_IMMUTABLE_M9_AND_FROZEN_M10_PROTOCOL",
+        "immutable_m9_attestation_sha256": sha256_file(M9_ATTESTATION_PATH),
+        "study_design_sha256": hashlib.sha256(
+            (json.dumps(study, indent=2, sort_keys=True) + "\n").encode("utf-8")
+        ).hexdigest(),
+        "algorithm_id": study["eligibility_algorithm"]["algorithm_id"],
+        "entries": derived_entries,
+        "primary_normative_denominator": {
+            "count": len(primary),
+            "entry_ids": primary,
+            "coverage_percentage": None,
+            "coverage_percentage_status": (
+                "NOT_REPORTED_EMPTY_DENOMINATOR" if not primary else "AWAITING_SUCCESSOR_EXECUTION"
+            ),
+        },
+        "provisional_exploratory_candidate_set": {"count": len(exploratory), "entry_ids": exploratory},
+        "empirical_characterization_context": {"count": len(empirical), "entry_ids": empirical},
+        "deferred_or_reserved_identities": {"count": len(deferred), "entry_ids": deferred},
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

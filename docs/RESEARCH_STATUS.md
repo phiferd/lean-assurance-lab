@@ -1288,7 +1288,28 @@ prepared_external_action_drafts: 5
    exploratory set, specify the future protocol, and freeze that design through
    the corrected-M8/repaired-M9 two-phase historical pattern. This amendment
    changes no catalog state, evidence, authority, or research finding.
-   **Milestone 10 has not started.**
+   Milestone 10 Phase A is now finalized. The canonical
+   [study design](../config/declaration-validation-milestone-10-study.json)
+   resolves eligibility only from the exact reviewed-catalog and identity-
+   registry Git blobs in the immutable M9 attestation. It independently records
+   kind, authority, kernel-layer, study-scope, semantic-negative-testability,
+   Arena-representability, isolation-feasibility, and lifecycle determinations
+   for all 30 identities without authority short-circuiting.
+
+   The generated
+   [populations](../results/research/declaration-validation-milestone-10-populations.json)
+   mechanically derive an empty strict primary denominator, 19 provisional
+   exploratory candidates, eight empirical characterization-context entries,
+   and the complete three-identity deferred/reserved boundary. No normative
+   percentage is reported. The frozen future protocol defines the
+   `Reach(x) AND NOT P(x)` evidence contract, positive controls, competing-
+   obligation analysis, authority-scoped expected outcomes, checker
+   attribution, synthesis tiers, and ten successor execution gates. No
+   authority or soundness state changed and no substantive campaign ran.
+
+   The Phase-A content manifest and completion record are ready for the required
+   separate Git-blob attestation. **Milestone 10 remains incomplete until Phase
+   B proves that successor mutable state cannot redefine this design.**
 
 ### Waiting
 

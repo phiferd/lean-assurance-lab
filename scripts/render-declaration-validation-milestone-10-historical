@@ -1,0 +1,102 @@
+#!/usr/bin/env python3
+"""Render a non-self-referential Git-blob attestation for Phase-A M10 content."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-10-historical.json"
+RECORDED_AT = "2026-09-01T16:55:00-04:00"
+ARTIFACTS = {
+    "constitution": "CONSTITUTION.md",
+    "operating_guide": "AGENTS.md",
+    "m9_historical_attestation": "results/research/declaration-validation-milestone-9-historical.json",
+    "study_design": "config/declaration-validation-milestone-10-study.json",
+    "derived_populations": "results/research/declaration-validation-milestone-10-populations.json",
+    "generated_report": "docs/research/DECLARATION_VALIDATION_MILESTONE_10_STUDY.md",
+    "study_schema": "schemas/declaration-validation-milestone-10-study.schema.json",
+    "populations_schema": "schemas/declaration-validation-milestone-10-populations.schema.json",
+    "freeze_manifest": "results/research/declaration-validation-milestone-10-freeze.json",
+    "freeze_schema": "schemas/declaration-validation-milestone-10-freeze.schema.json",
+    "completion_record": "results/research/declaration-validation-milestone-10.json",
+    "completion_schema": "schemas/declaration-validation-milestone-10.schema.json",
+    "historical_attestation_schema": "schemas/declaration-validation-milestone-10-historical.schema.json",
+    "populations_renderer": "scripts/render-declaration-validation-milestone-10-populations",
+    "report_renderer": "scripts/render-declaration-validation-milestone-10-study",
+    "freeze_renderer": "scripts/render-declaration-validation-milestone-10-freeze",
+    "completion_renderer": "scripts/render-declaration-validation-milestone-10-completion",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-10-historical",
+    "milestone_10_validator": "scripts/validate-declaration-validation-milestone-10",
+    "milestone_10_tests": "tests/test_declaration_validation_milestone_10.py",
+    "historical_validator": "scripts/validate-declaration-validation-historical",
+    "historical_transition_tests": "tests/test_declaration_validation_historical_transition.py",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+}
+
+
+def git_output(args: list[str]) -> bytes:
+    result = subprocess.run(["git", *args], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if result.returncode:
+        raise RuntimeError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def binding(commit: str, relative: str) -> dict[str, str]:
+    content = git_output(["show", f"{commit}:{relative}"])
+    return {
+        "path": relative,
+        "sha256": hashlib.sha256(content).hexdigest(),
+        "git_commit": commit,
+        "git_blob": git_output(["rev-parse", "--verify", f"{commit}:{relative}"]).decode().strip(),
+    }
+
+
+def render(content_commit: str, tests_run: int) -> dict[str, object]:
+    resolved = git_output(["rev-parse", "--verify", f"{content_commit}^{{commit}}"]).decode().strip()
+    if resolved != content_commit:
+        raise RuntimeError("Phase-A M10 content commit must be an exact full commit ID")
+    return {
+        "schema_version": 1,
+        "attestation_id": "ordinary-declaration-validation.milestone-10.historical.v1",
+        "recorded_at": RECORDED_AT,
+        "status": "FROZEN_HISTORICAL_MILESTONE_ATTESTATION",
+        "historical_commit": content_commit,
+        "phase": {
+            "attestation_design": "TWO_PHASE_NON_SELF_REFERENTIAL_GIT_BLOB_ATTESTATION",
+            "content_commit": content_commit,
+            "reason": "Phase A committed the final M10 design, readiness, derivation, protocol, and validation content; this separate Phase B record binds those exact Git blobs and cannot attest to itself.",
+        },
+        "artifacts": {name: binding(content_commit, relative) for name, relative in ARTIFACTS.items()},
+        "phase_a_validation": {"tests_run": tests_run, "failures": 0, "errors": 0, "result": "PASS"},
+        "nonclaims": [
+            "This attestation freezes the M10 protocol and does not authorize or execute its future study.",
+            "The empty denominator characterizes immutable M9 and does not justify criterion weakening.",
+            "No authority source was approved and no provisional entry was promoted.",
+            "No Arena, checker, mutation, or witness-synthesis campaign was executed in M10.",
+            "Later mutable study inputs or successor plans cannot redefine these Phase-A Git blobs.",
+            "The attestation creates no soundness or normative coverage claim."
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--content-commit", required=True)
+    parser.add_argument("--tests-run", required=True, type=int)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(render(args.content_commit, args.tests_run), indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

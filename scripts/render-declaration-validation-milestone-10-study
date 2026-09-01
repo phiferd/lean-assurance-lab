@@ -1,0 +1,130 @@
+#!/usr/bin/env python3
+"""Render the authored M10 design and mechanically derived study populations."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+STUDY_PATH = ROOT / "config" / "declaration-validation-milestone-10-study.json"
+POPULATIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json"
+DEFAULT_OUTPUT = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_10_STUDY.md"
+DETERMINATIONS = (
+    "kind_eligible", "authority_eligible", "kernel_layer_eligible", "study_scope",
+    "semantic_negative_testability", "arena_representability", "isolation_feasibility",
+    "lifecycle_eligible",
+)
+
+
+def load(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def render() -> str:
+    study = load(STUDY_PATH)
+    populations = load(POPULATIONS_PATH)
+    derived_by_id = {row["entry_id"]: row for row in populations["entries"]}
+    lines = [
+        "# Declaration Validation Milestone 10 Study Design",
+        "",
+        f"Study design SHA-256: `{hashlib.sha256(STUDY_PATH.read_bytes()).hexdigest()}`",
+        f"Immutable M9 attestation SHA-256: `{study['immutable_m9_input']['attestation_sha256']}`",
+        f"Immutable M9 Phase-A commit: `{study['immutable_m9_input']['historical_commit']}`",
+        "",
+        "This is a frozen protocol and readiness analysis, not an executed Arena study. It does not approve authority sources, promote provisional entries, generate semantic evidence, or report a normative coverage percentage.",
+        "",
+        "## Mechanically Derived Populations",
+        "",
+        f"- Primary normative negative-coverage denominator: **{populations['primary_normative_denominator']['count']}**",
+        f"- Coverage percentage: **{populations['primary_normative_denominator']['coverage_percentage_status']}**",
+        f"- Provisional exploratory candidates: **{populations['provisional_exploratory_candidate_set']['count']}**",
+        f"- Empirical characterization-context entries: **{populations['empirical_characterization_context']['count']}**",
+        f"- Deferred or reserved identities: **{populations['deferred_or_reserved_identities']['count']}**",
+        "",
+        "The primary denominator is empty because every active normative candidate has frozen `PROVISIONAL` authority. That result is preserved rather than repaired.",
+        "",
+        "## Complete Readiness Analysis",
+        "",
+        "| Identity | Kind | Authority | Kernel | Scope | Semantic negative | Arena | Isolation | Lifecycle | Primary | Exclusions |",
+        "|---|---:|---:|---:|---:|---:|---:|---:|---:|---:|---|",
+    ]
+    for row in study["readiness"]:
+        derived = derived_by_id[row["entry_id"]]
+        statuses = [row[name]["status"] for name in DETERMINATIONS]
+        exclusions = ", ".join(derived["primary_exclusion_reasons"]) or "—"
+        values = [row["entry_id"], *statuses, "YES" if derived["primary_denominator_eligible"] else "NO", exclusions]
+        lines.append("| " + " | ".join(values) + " |")
+
+    lines.extend(["", "## Provisional Exploratory Candidate Strategies", ""])
+    for row in study["readiness"]:
+        strategy = row["future_witness_strategy"]
+        if strategy is None:
+            continue
+        lines.extend([
+            f"### {row['entry_id']}",
+            "",
+            f"- Tier: {strategy['tier']}",
+            f"- Construction: {strategy['construction']}",
+            f"- Positive control: {strategy['positive_control']}",
+            f"- Competing obligations: {strategy['competing_obligation_focus']}",
+            f"- Blocking prerequisites: {'; '.join(strategy['blocking_prerequisites'])}",
+            "",
+        ])
+
+    contract = study["future_isolated_negative_coverage_contract"]
+    lines.extend([
+        "## Future Isolated-Negative Coverage Contract",
+        "",
+        f"Semantic obligation: `{contract['semantic_obligation']}`.",
+        "",
+        "A future primary case requires:",
+        "",
+    ])
+    lines.extend(f"- {item}" for item in contract["required_evidence"])
+    lines.extend([
+        "",
+        "Competing obligations must each be `SATISFIED` or `NOT_APPLICABLE`; any `UNRESOLVED` item blocks isolated coverage. Rejection alone proves neither the target violation nor isolation.",
+        "",
+        "## Checker Attribution",
+        "",
+        "Each observation binds artifact bytes, observer profile, configuration, pipeline stage, normalized outcome, and raw result. Pipeline stages are kept distinct: " + ", ".join(study["checker_attribution_contract"]["pipeline_stages"]) + ".",
+        "",
+        "Cross-checker agreement is not authority and is not an isolation oracle.",
+        "",
+        "## Synthesis Hierarchy",
+        "",
+    ])
+    lines.extend(f"{item['tier']}. `{item['name']}`" for item in study["synthesis_hierarchy"])
+    lines.extend(["", "## Successor Execution Gates", ""])
+    lines.extend(f"- `{gate['id']}` — {gate['requirement']}" for gate in study["execution_gates"])
+    lines.extend([
+        "",
+        "A successor must bind the immutable M10 attestation, freeze a new input snapshot, reapply the unchanged algorithm, and freeze the resulting denominator before substantive execution.",
+        "",
+        "## M10 Prohibitions and Nonclaims",
+        "",
+    ])
+    lines.extend(f"- `{item}`" for item in study["prohibitions"])
+    lines.append("")
+    lines.extend(f"- {item}" for item in study["nonclaims"])
+    lines.append("")
+    return "\n".join(lines)
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(render(), encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

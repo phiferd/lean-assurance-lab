@@ -1,0 +1,346 @@
+#!/usr/bin/env python3
+"""Validate the M10 design against immutable reviewed M9 Git blobs."""
+
+from __future__ import annotations
+
+import argparse
+import copy
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+
+ROOT = Path(__file__).resolve().parents[1]
+HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
+POPULATIONS_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-10-populations"
+REPORT_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-10-study"
+FREEZE_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-10-freeze"
+COMPLETION_RENDERER_PATH = ROOT / "scripts" / "render-declaration-validation-milestone-10-completion"
+M9_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-historical.json"
+STUDY_PATH = ROOT / "config" / "declaration-validation-milestone-10-study.json"
+STUDY_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-study.schema.json"
+POPULATIONS_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-populations.json"
+POPULATIONS_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-populations.schema.json"
+REPORT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_10_STUDY.md"
+FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-freeze.json"
+FREEZE_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10-freeze.schema.json"
+COMPLETION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10.json"
+COMPLETION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-milestone-10.schema.json"
+DETERMINATIONS = (
+    "kind_eligible", "authority_eligible", "kernel_layer_eligible", "study_scope",
+    "semantic_negative_testability", "arena_representability", "isolation_feasibility",
+    "lifecycle_eligible",
+)
+
+
+def load_module(name: str, path: Path) -> Any:
+    loader = importlib.machinery.SourceFileLoader(name, str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError(f"could not load {path}")
+    module = importlib.util.module_from_spec(spec)
+    loader.exec_module(module)
+    return module
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_file(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def document_bytes(value: dict[str, Any]) -> bytes:
+    return (json.dumps(value, indent=2, sort_keys=True) + "\n").encode("utf-8")
+
+
+def schema_errors(instance: Any, schema: dict[str, Any], label: str) -> list[str]:
+    validator = jsonschema.Draft202012Validator(schema, format_checker=jsonschema.FormatChecker())
+    return [
+        f"{label} schema error at /{'/'.join(str(item) for item in error.absolute_path)}: {error.message}"
+        for error in sorted(validator.iter_errors(instance), key=lambda item: list(item.absolute_path))
+    ]
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    node = document
+    if pointer == "":
+        return node
+    if not pointer.startswith("/"):
+        raise ValueError("not an RFC 6901 pointer")
+    for token in pointer[1:].split("/"):
+        token = token.replace("~1", "/").replace("~0", "~")
+        node = node[int(token)] if isinstance(node, list) else node[token]
+    return node
+
+
+def bound_file_errors(bindings: dict[str, Any], label: str) -> list[str]:
+    errors: list[str] = []
+    for name, binding in bindings.items():
+        relative = Path(binding["path"])
+        if relative.is_absolute() or ".." in relative.parts or ":" in binding["path"]:
+            errors.append(f"{label} {name} path is not safe and relative")
+            continue
+        path = ROOT / relative
+        if not path.is_file():
+            errors.append(f"{label} {name} artifact is missing")
+        elif sha256_file(path) != binding["sha256"]:
+            errors.append(f"{label} {name} artifact hash is stale")
+    return errors
+
+
+def cycle_errors(edges: list[dict[str, str]]) -> list[str]:
+    graph: dict[str, list[str]] = {}
+    for edge in edges:
+        graph.setdefault(edge["from"], []).append(edge["to"])
+        graph.setdefault(edge["to"], [])
+    active: set[str] = set()
+    done: set[str] = set()
+    errors: list[str] = []
+
+    def visit(node: str) -> None:
+        if node in active:
+            errors.append(f"M10 dependency graph contains a cycle at {node}")
+            return
+        if node in done:
+            return
+        active.add(node)
+        for target in graph[node]:
+            visit(target)
+        active.remove(node)
+        done.add(node)
+
+    for node in graph:
+        visit(node)
+    return errors
+
+
+def immutable_inputs(history: Any) -> tuple[dict[str, Any] | None, dict[str, Any] | None, dict[str, Any] | None, list[str]]:
+    errors = history.validate_m9_attestation()
+    if errors:
+        return None, None, None, errors
+    attestation = load_json(M9_ATTESTATION_PATH)
+    catalog, catalog_errors = history.historical_json(
+        attestation["artifacts"]["reviewed_catalog"],
+        label="M10 immutable M9 reviewed catalog",
+        expected_commit=history.M9_COMMIT,
+    )
+    identities, identity_errors = history.historical_json(
+        attestation["artifacts"]["identity_registry"],
+        label="M10 immutable M9 identity registry",
+        expected_commit=history.M9_COMMIT,
+    )
+    return attestation, catalog, identities, catalog_errors + identity_errors
+
+
+def validate_document(
+    study: dict[str, Any] | None = None,
+    populations: dict[str, Any] | None = None,
+    *,
+    check_generated: bool = True,
+) -> list[str]:
+    history = load_module("declaration_m10_history_validator", HISTORICAL_VALIDATOR_PATH)
+    population_renderer = load_module("declaration_m10_population_renderer", POPULATIONS_RENDERER_PATH)
+    report_renderer = load_module("declaration_m10_report_renderer", REPORT_RENDERER_PATH)
+    freeze_renderer = load_module("declaration_m10_freeze_renderer", FREEZE_RENDERER_PATH)
+    completion_renderer = load_module("declaration_m10_completion_renderer", COMPLETION_RENDERER_PATH)
+    attestation, catalog, identities, errors = immutable_inputs(history)
+    if errors or attestation is None or catalog is None or identities is None:
+        return errors or ["M10 immutable M9 inputs could not be resolved"]
+    study = load_json(STUDY_PATH) if study is None else study
+    populations = load_json(POPULATIONS_PATH) if populations is None else populations
+    freeze = load_json(FREEZE_PATH)
+    completion = load_json(COMPLETION_PATH)
+    errors.extend(schema_errors(study, load_json(STUDY_SCHEMA_PATH), "M10 study"))
+    errors.extend(schema_errors(populations, load_json(POPULATIONS_SCHEMA_PATH), "M10 populations"))
+    errors.extend(schema_errors(freeze, load_json(FREEZE_SCHEMA_PATH), "M10 freeze"))
+    errors.extend(schema_errors(completion, load_json(COMPLETION_SCHEMA_PATH), "M10 completion"))
+    if errors:
+        return errors
+
+    m9 = study["immutable_m9_input"]
+    if m9["attestation_sha256"] != sha256_file(M9_ATTESTATION_PATH):
+        errors.append("M10 immutable M9 attestation SHA-256 is stale")
+    if m9["historical_commit"] != history.M9_COMMIT:
+        errors.append("M10 immutable M9 commit binding is stale")
+    expected_bindings = {
+        "reviewed_catalog_binding": attestation["artifacts"]["reviewed_catalog"],
+        "identity_registry_binding": attestation["artifacts"]["identity_registry"],
+        "approved_authority_sources_binding": attestation["artifacts"]["approved_authority_sources"],
+    }
+    for name, expected in expected_bindings.items():
+        if m9[name] != expected:
+            errors.append(f"M10 {name} differs from immutable M9")
+
+    evidence_rows = study["evidence_index"]
+    evidence_by_id = {row["id"]: row for row in evidence_rows}
+    if len(evidence_by_id) != len(evidence_rows):
+        errors.append("M10 evidence IDs are not unique")
+    for evidence in evidence_rows:
+        document = catalog if evidence["artifact"] == "immutable_m9_reviewed_catalog" else identities
+        try:
+            resolved = resolve_pointer(document, evidence["json_pointer"])
+        except (KeyError, IndexError, TypeError, ValueError):
+            errors.append(f"{evidence['id']}: evidence pointer does not resolve in immutable M9")
+            continue
+        stable_id = resolved.get("characterization", {}).get("id") if isinstance(resolved, dict) else None
+        stable_id = stable_id or (resolved.get("id") if isinstance(resolved, dict) else None)
+        numeric = int(evidence["id"].rsplit(".", 1)[1])
+        if stable_id != identities["identities"][numeric]["id"]:
+            errors.append(f"{evidence['id']}: evidence pointer resolves to the wrong stable identity")
+
+    catalog_by_id = {row["characterization"]["id"]: row["characterization"] for row in catalog["entries"]}
+    disposition_by_id = {row["id"]: row["disposition"] for row in catalog["identity_dispositions"]}
+    expected_ids = [row["id"] for row in identities["identities"]]
+    readiness = study["readiness"]
+    if [row["entry_id"] for row in readiness] != expected_ids:
+        errors.append("M10 readiness does not preserve exact immutable identity order and closure")
+        return errors
+
+    for identity, row in zip(identities["identities"], readiness, strict=True):
+        stable_id = identity["id"]
+        characterization = catalog_by_id.get(stable_id)
+        if row["input_disposition"] != disposition_by_id[stable_id]:
+            errors.append(f"{stable_id}: M10 input disposition differs from immutable M9")
+        expected_classification = {
+            "kind": characterization["kind"] if characterization else identity["intended_kind"],
+            "layers": characterization["layers"] if characterization else [],
+            "authority_status": characterization["authority"]["status"] if characterization else None,
+            "lifecycle_status": (
+                characterization["lifecycle"]["status"] if characterization else
+                ("OUT_OF_SCOPE" if identity["identity_status"] == "RESERVED_OUT_OF_SCOPE" else None)
+            ),
+            "identity_status": identity["identity_status"],
+        }
+        if row["frozen_classification"] != expected_classification:
+            errors.append(f"{stable_id}: frozen classification differs from immutable M9")
+        for name in DETERMINATIONS:
+            determination = row[name]
+            for evidence_id in determination["evidence"]:
+                evidence = evidence_by_id.get(evidence_id)
+                if evidence is None:
+                    errors.append(f"{stable_id}: {name} references unknown evidence {evidence_id}")
+                    continue
+                resolved = resolve_pointer(
+                    catalog if evidence["artifact"] == "immutable_m9_reviewed_catalog" else identities,
+                    evidence["json_pointer"],
+                )
+                resolved_id = resolved.get("characterization", {}).get("id") or resolved.get("id")
+                if resolved_id != stable_id:
+                    errors.append(f"{stable_id}: {name} evidence is attributed to {resolved_id}")
+
+        expected_kind = "YES" if expected_classification["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION" else (
+            "NO" if expected_classification["kind"] == "EMPIRICAL_CONTRACT_SCENARIO" else "UNRESOLVED"
+        )
+        expected_authority = "YES" if expected_classification["authority_status"] == "ESTABLISHED" else (
+            "NO" if expected_classification["authority_status"] in {"PROVISIONAL", "UNRESOLVED"} else "UNRESOLVED"
+        )
+        expected_layer = "YES" if "KERNEL_DECLARATION_VALIDITY" in expected_classification["layers"] else (
+            "NO" if expected_classification["kind"] is not None else "UNRESOLVED"
+        )
+        expected_lifecycle = "YES" if expected_classification["lifecycle_status"] == "ACTIVE" else (
+            "NO" if expected_classification["lifecycle_status"] in {"SUPERSEDED", "REDUNDANT", "OUT_OF_SCOPE"} else "UNRESOLVED"
+        )
+        for name, expected in {
+            "kind_eligible": expected_kind,
+            "authority_eligible": expected_authority,
+            "kernel_layer_eligible": expected_layer,
+            "lifecycle_eligible": expected_lifecycle,
+        }.items():
+            if row[name]["status"] != expected:
+                errors.append(f"{stable_id}: {name} does not follow immutable M9")
+        strategy_required = bool(
+            characterization
+            and characterization["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+            and characterization["authority"]["status"] == "PROVISIONAL"
+            and characterization["lifecycle"]["status"] == "ACTIVE"
+            and row["study_scope"]["status"] == "YES"
+        )
+        if (row["future_witness_strategy"] is not None) != strategy_required:
+            errors.append(f"{stable_id}: future witness strategy does not match exploratory membership")
+
+    expected_populations = population_renderer.render(study)
+    if populations != expected_populations:
+        errors.append("M10 derived populations differ from the canonical derivation")
+    primary = populations["primary_normative_denominator"]
+    if primary != {
+        "count": 0,
+        "entry_ids": [],
+        "coverage_percentage": None,
+        "coverage_percentage_status": "NOT_REPORTED_EMPTY_DENOMINATOR",
+    }:
+        errors.append("M10 must preserve the mechanically empty primary denominator without a percentage")
+    if populations["provisional_exploratory_candidate_set"]["count"] != 19:
+        errors.append("M10 provisional exploratory set is not the complete 19-candidate set")
+    if populations["empirical_characterization_context"]["count"] != 8:
+        errors.append("M10 empirical characterization context is not the complete eight-entry set")
+    if populations["deferred_or_reserved_identities"]["count"] != 3:
+        errors.append("M10 deferred/reserved identity closure is not three")
+    reason_codes = set(study["eligibility_algorithm"]["controlled_exclusion_reasons"])
+    for row in populations["entries"]:
+        if not row["primary_denominator_eligible"] and not row["primary_exclusion_reasons"]:
+            errors.append(f"{row['entry_id']}: excluded entry has no controlled reason")
+        unknown = set(row["primary_exclusion_reasons"]) - reason_codes
+        if unknown:
+            errors.append(f"{row['entry_id']}: unknown exclusion reasons {sorted(unknown)}")
+
+    if check_generated:
+        if not REPORT_PATH.is_file() or REPORT_PATH.read_text(encoding="utf-8") != report_renderer.render():
+            errors.append("M10 generated study report is stale")
+        if freeze != freeze_renderer.render():
+            errors.append("M10 content manifest is stale")
+        if completion != completion_renderer.render():
+            errors.append("M10 completion record is stale")
+        errors.extend(bound_file_errors(freeze["predecessor_attestations"], "M10 predecessor"))
+        errors.extend(bound_file_errors(freeze["artifacts"], "M10 content manifest"))
+        errors.extend(bound_file_errors(completion["artifacts"], "M10 completion"))
+    errors.extend(cycle_errors(freeze["dependency_edges"]))
+    if freeze["population_summary"] != completion["population_summary"]:
+        errors.append("M10 content manifest and completion population summaries disagree")
+    if completion["qualification_boundary"] != {
+        "approved_normative_sources": 0,
+        "approved_mechanized_sources": 0,
+        "established_authority_entries": 0,
+        "provisional_authority_entries": 27,
+        "primary_denominator": 0,
+        "normative_percentage_reported": False,
+        "authority_resolution_performed": False,
+        "substantive_experiment_executed": False,
+    }:
+        errors.append("M10 completion qualification boundary overstates the design milestone")
+    recorded_tests = completion["validation"]["recorded_results"]["declaration_validation_tests"]
+    if recorded_tests != {"tests_run": 175, "failures": 0, "errors": 0, "result": "PASS"}:
+        errors.append("M10 Phase-A declaration-validation test record is stale")
+    return errors
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--no-generated", action="store_true")
+    args = parser.parse_args()
+    errors = validate_document(check_generated=not args.no_generated)
+    if errors:
+        for error in errors:
+            print(f"ERROR: {error}")
+        return 1
+    populations = load_json(POPULATIONS_PATH)
+    print("declaration-validation Milestone 10 study design: PASS")
+    print(json.dumps({
+        "immutable_m9_commit": load_json(STUDY_PATH)["immutable_m9_input"]["historical_commit"],
+        "readiness_entries": len(populations["entries"]),
+        "primary_denominator": populations["primary_normative_denominator"]["count"],
+        "provisional_exploratory": populations["provisional_exploratory_candidate_set"]["count"],
+        "empirical_context": populations["empirical_characterization_context"]["count"],
+        "deferred_or_reserved": populations["deferred_or_reserved_identities"]["count"],
+    }, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
