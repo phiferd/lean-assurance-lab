@@ -1,11 +1,12 @@
 #!/usr/bin/env python3
-"""Render the acyclic Milestone 8 declaration-validation freeze manifest."""
+"""Render the acyclic final M8 content manifest for later Git-blob attestation."""
 
 from __future__ import annotations
 
 import argparse
 import hashlib
 import json
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -71,6 +72,14 @@ ARTIFACTS = {
         "scripts/populate-declaration-validation-milestone-8",
         "DURABLE_RESEARCH_STATE",
     ),
+    "historical_attestation_schema": (
+        "schemas/declaration-validation-historical-attestation.v2.schema.json",
+        "DURABLE_RESEARCH_STATE",
+    ),
+    "historical_attestation_renderer": (
+        "scripts/render-declaration-validation-milestone-8-historical",
+        "DURABLE_RESEARCH_STATE",
+    ),
     "research_plan": (
         "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
         "DURABLE_RESEARCH_STATE",
@@ -120,11 +129,20 @@ def render() -> dict[str, Any]:
     catalog = load(CATALOG_PATH)
     entries = catalog["entries"]
     dispositions = catalog["identity_dispositions"]
+    evidence_dispositions = catalog["existing_evidence_dispositions"]
+    evidence_counts = Counter(row["disposition"] for row in evidence_dispositions)
+    arena_counts = Counter(row["arena_disposition"]["disposition"] for row in entries)
+    observer_counts: dict[str, Counter[str]] = {
+        pointer: Counter() for pointer in catalog["observer_order"]
+    }
+    for entry in entries:
+        for observation in entry["observer_vector"]:
+            observer_counts[observation["profile_pointer"]][observation["outcome"]] += 1
     return {
         "schema_version": 1,
-        "manifest_id": "ordinary-declaration-validation.milestone-8-freeze.v1",
+        "manifest_id": "ordinary-declaration-validation.milestone-8-content-manifest.v2",
         "generated_at": catalog["recorded_at"],
-        "status": "FROZEN_MILESTONE_8_CHARACTERIZATION_INVENTORY",
+        "status": "FINAL_MILESTONE_8_CONTENT_MANIFEST",
         "predecessor_attestations": {
             name: binding(*value) for name, value in PREDECESSORS.items()
         },
@@ -146,6 +164,36 @@ def render() -> dict[str, Any]:
             "out_of_scope": sum(row["disposition"] == "OUT_OF_SCOPE" for row in dispositions),
             "site_dispositions": len(catalog["site_dispositions"]),
             "source_mappings": sum(len(row["source_mappings"]) for row in entries),
+            "existing_evidence_dispositions": len(evidence_dispositions),
+            "un_dispositioned_existing_evidence": 0,
+            "existing_evidence_linked": evidence_counts["LINKED"],
+            "existing_evidence_explicit_negative": len(evidence_dispositions)
+            - evidence_counts["LINKED"],
+            "observer_outcomes_by_profile": {
+                pointer.rsplit("/", 1)[-1]: {
+                    outcome: observer_counts[pointer][outcome]
+                    for outcome in [
+                        "ACCEPT",
+                        "REJECT",
+                        "ERROR",
+                        "TIMEOUT",
+                        "NOT_INSPECTED",
+                        "NOT_APPLICABLE",
+                        "UNRESOLVED",
+                    ]
+                }
+                for pointer in catalog["observer_order"]
+            },
+            "arena_dispositions": {
+                disposition: arena_counts[disposition]
+                for disposition in [
+                    "LINKED",
+                    "NO_EXISTING_CASE_FOUND",
+                    "NOT_INSPECTED",
+                    "NOT_APPLICABLE",
+                    "DEFERRED",
+                ]
+            },
             "provisional_authority": sum(
                 row["characterization"]["authority"]["status"] == "PROVISIONAL"
                 for row in entries

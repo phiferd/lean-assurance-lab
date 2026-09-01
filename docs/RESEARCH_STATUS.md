@@ -1203,6 +1203,26 @@ prepared_external_action_drafts: 5
    next authorized action is: **Conduct Milestone 9 as a separate reproducible
    adversarial review of the frozen M8 inventory.**
 
+   A bounded M8 correction pass has now finalized its Phase-A content. The
+   validator derives 41 exact frozen existing-evidence/identity pairs: 18 from
+   direct witness/control `relevant_case_id` tags, 22 from tracked evidence
+   containing those exact witness paths or SHA-256 values, and one from the
+   immutable reviewed-pilot Arena link. Twenty-four pairs are linked and 17
+   are explicitly dispositioned; deleting any row or redirecting it to an
+   unrelated identity fails validation. Existing structured rows add concrete
+   official, Lean4Lean, and Kiota outcomes to the replay-visibility,
+   axiom-admission, and declaration-safety-reconstruction scenarios. Nanoda
+   remains `NOT_INSPECTED` for those cases. The five reviewed pilot entries are
+   still reused byte-for-byte.
+
+   Authority did not strengthen: all 27 entries remain `PROVISIONAL`, the
+   approved normative and mechanized source counts remain zero, and all
+   soundness relevance remains `NOT_ASSESSED`. The prior path-hashed M8
+   "freeze" is corrected to a final content manifest. The exact next action is
+   to commit this Phase-A content and create the separate Git-blob historical
+   M8 attestation. **Milestone 9 remains not started and unauthorized until
+   that attestation validates.**
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

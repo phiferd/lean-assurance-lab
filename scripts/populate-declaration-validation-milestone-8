@@ -50,6 +50,12 @@ IMPLEMENTATIONS = {
     "LEAN4LEAN": "LEAN4LEAN",
     "KIOTA": "KIOTA",
 }
+CHECKER_PROFILES = {
+    "official": ("/observer_profiles/official_importer", "OFFICIAL_IMPORTER"),
+    "nanoda": ("/observer_profiles/nanoda", "NANODA"),
+    "lean4lean": ("/observer_profiles/lean4lean", "LEAN4LEAN"),
+    "kiota": ("/observer_profiles/kiota", "KIOTA"),
+}
 LINEAGE = {
     "LOGICAL_TARGET": {
         "group": "LEAN4_OFFICIAL_CPP_KERNEL_V4_33_0",
@@ -105,6 +111,77 @@ EMPIRICAL_LAYERS = {
         "RECONSTRUCTION",
         "IMPLEMENTATION_POLICY",
     ],
+}
+EXISTING_EMPIRICAL_RESULTS = {
+    "SCENARIO.AXIOM.ADMISSION_POLICY": {
+        "candidate": "WITNESS.AXIOM_UNSAFE_ONLY",
+        "control": "WITNESS.AXIOM_UNSAFE_ONLY_CONTROL",
+        "result": "LOCAL.AXIOM_ONLY_RESULTS",
+    },
+    "SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION": {
+        "candidate": "WITNESS.AXIOM_UNSAFE_FLAG",
+        "control": "WITNESS.AXIOM_UNSAFE_FLAG_CONTROL",
+        "result": "LOCAL.AXIOM_FLAG_RESULTS",
+    },
+    "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY": {
+        "candidate": "WITNESS.SELF_REFERENCE",
+        "control": "WITNESS.SELF_REFERENCE_CONTROL",
+        "result": "LOCAL.SELF_REFERENCE_RESULTS",
+    },
+}
+EXPLICIT_NEGATIVE_EVIDENCE_DISPOSITIONS = {
+    "LOCAL.CORE_DECL_MATRIX": (
+        "INSUFFICIENT_FOR_CLAIM",
+        "DISCOVERY",
+        "The aggregate matrix is relevant discovery context, but it is not the prescribed structured result-row surface for a concrete M8 observer attribution.",
+    ),
+    "LOCAL.DECL_ENV_MATRIX": (
+        "INSUFFICIENT_FOR_CLAIM",
+        "DISCOVERY",
+        "The aggregate matrix is relevant discovery context, but exact scenario results and witnesses provide the claim-specific M8 bindings.",
+    ),
+    "LOCAL.SELF_REFERENCE_METADATA": (
+        "OUTSIDE_THIS_ENTRY_LAYER",
+        "PROVENANCE_ONLY",
+        "This record preserves witness-generation provenance; the exact witness and structured checker-result bytes carry the catalog-layer links.",
+    ),
+    "LOCAL.UNIVERSE_OWNERSHIP_METADATA": (
+        "OUTSIDE_THIS_ENTRY_LAYER",
+        "PROVENANCE_ONLY",
+        "This record preserves witness-generation provenance; the immutable reviewed pilot binds the exact witness and selected observer result bytes.",
+    ),
+    "LOCAL.AXIOM_MATERIALIZATION": (
+        "OUTSIDE_THIS_ENTRY_LAYER",
+        "PROVENANCE_ONLY",
+        "This record preserves the candidate/control materialization transformation; it does not itself establish a checker outcome or normative claim.",
+    ),
+    "LOCAL.KIOTA_UNIVERSE": (
+        "DEFERRED_TO_LATER_STUDY",
+        "IMPLEMENTATION_OBSERVATION",
+        "This reproduction targets a later Kiota upstream revision rather than the pinned M8 observer profile, so it cannot establish the M8 observer outcome.",
+    ),
+    "LOCAL.KIOTA_SELF_REFERENCE": (
+        "DEFERRED_TO_LATER_STUDY",
+        "IMPLEMENTATION_OBSERVATION",
+        "This reproduction targets a later Kiota upstream revision rather than the pinned M8 observer profile, so it cannot establish the M8 observer outcome.",
+    ),
+}
+PAIR_SPECIFIC_NEGATIVE_EVIDENCE_DISPOSITIONS = {
+    ("SCENARIO.AXIOM.SAFETY_FLAG", "WITNESS.AXIOM_UNSAFE_ONLY"): (
+        "SUPERSEDED_BY_STRONGER_EVIDENCE",
+        "DISCOVERY",
+        "The reviewed pilot selected the more specific safety-flag reconstruction witness; this unsafe-axiom-only candidate is retained under the separate admission-policy scenario.",
+    ),
+    ("SCENARIO.AXIOM.SAFETY_FLAG", "WITNESS.AXIOM_UNSAFE_ONLY_CONTROL"): (
+        "SUPERSEDED_BY_STRONGER_EVIDENCE",
+        "CONTROL",
+        "The reviewed pilot selected the matched control for the more specific safety-flag reconstruction witness; this control remains linked under the admission-policy scenario.",
+    ),
+    ("SCENARIO.AXIOM.SAFETY_FLAG", "LOCAL.AXIOM_ONLY_RESULTS"): (
+        "SUPERSEDED_BY_STRONGER_EVIDENCE",
+        "IMPLEMENTATION_OBSERVATION",
+        "The reviewed pilot binds the claim-specific safety-flag structured results; the axiom-only result remains linked under the separate admission-policy scenario.",
+    ),
 }
 
 
@@ -188,6 +265,297 @@ def observer_vector() -> list[dict[str, Any]]:
         }
         for pointer in OBSERVER_ORDER
     ]
+
+
+def witness_evidence(
+    stable_id: str,
+    witness: dict[str, Any],
+    *,
+    role: str,
+) -> dict[str, Any]:
+    suffix = "CONTROL" if role == "CONTROL" else "WITNESS"
+    return {
+        "id": f"EVID.M8.INVENTORY.{token(stable_id)}.{suffix}",
+        "role": role,
+        "source_type": "WITNESS_ARTIFACT",
+        "source_lock": {
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": witness["id"],
+        },
+        "exact_locator": {
+            "kind": "ARTIFACT_SHA256",
+            "value": witness["artifact_sha256"],
+        },
+        "claim_supported": {
+            "entry_json_pointer": "/statement/stimulus",
+            "predicate_id": f"PRED.M8.INVENTORY.{token(stable_id)}.{suffix}",
+            "proposition": (
+                "The frozen existing Lab artifact supplies the matched control for this "
+                "scenario without establishing isolation."
+                if role == "CONTROL"
+                else "The frozen existing Lab artifact exposes this exact empirical boundary as discovery evidence without establishing isolation."
+            ),
+        },
+        "assumptions": [],
+        "limitations": [
+            "Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness."
+        ],
+    }
+
+
+def result_evidence(
+    stable_id: str,
+    result_record: dict[str, Any],
+    *,
+    index: int,
+    checker: str,
+    outcome: str,
+    lineage_key: str,
+) -> dict[str, Any]:
+    checker_token = checker.upper()
+    return {
+        "id": f"EVID.M8.INVENTORY.{token(stable_id)}.RESULT.{checker_token}",
+        "role": "IMPLEMENTATION_OBSERVATION",
+        "source_type": "CHECKER_RESULT",
+        "source_lock": {
+            "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
+            "lock_id": result_record["id"],
+        },
+        "exact_locator": {
+            "kind": "JSON_POINTER",
+            "value": f"{result_record['path']}#/validators/{index}/result/normalized_outcome",
+        },
+        "claim_supported": {
+            "entry_json_pointer": "/statement/profile_specific_effects",
+            "predicate_id": f"PRED.M8.INVENTORY.{token(stable_id)}.RESULT.{checker_token}",
+            "proposition": (
+                f"The content-bound structured {checker} result row records {outcome} for "
+                "this exact scenario and pinned compatible profile."
+            ),
+        },
+        "assumptions": [],
+        "lineage": LINEAGE[lineage_key],
+        "limitations": [
+            "This is a profile-specific implementation observation, not normative authority or a soundness conclusion."
+        ],
+    }
+
+
+def attach_existing_empirical_evidence(
+    entries: list[dict[str, Any]], source_lock: dict[str, Any]
+) -> None:
+    """Reuse only exact frozen witness/control/result bytes for three non-pilot scenarios."""
+
+    entry_by_id = {row["characterization"]["id"]: row for row in entries}
+    witnesses = {row["id"]: row for row in source_lock["generated_witnesses"]}
+    tracked = {row["id"]: row for row in source_lock["tracked_evidence"]}
+    for stable_id, selection in EXISTING_EMPIRICAL_RESULTS.items():
+        entry = entry_by_id[stable_id]
+        characterization = entry["characterization"]
+        candidate = witness_evidence(
+            stable_id, witnesses[selection["candidate"]], role="DISCOVERY"
+        )
+        control = witness_evidence(
+            stable_id, witnesses[selection["control"]], role="CONTROL"
+        )
+        characterization["evidence"].extend([candidate, control])
+
+        result_record = tracked[selection["result"]]
+        result_document = load(ROOT / result_record["path"])
+        concrete_by_pointer: dict[str, tuple[str, str]] = {}
+        for index, validator_row in enumerate(result_document["validators"]):
+            checker = validator_row["checker"]
+            profile = CHECKER_PROFILES.get(checker)
+            if profile is None or validator_row.get("compatibility", {}).get("status") != "COMPATIBLE":
+                continue
+            pointer, lineage_key = profile
+            outcome = validator_row["result"]["normalized_outcome"]
+            evidence = result_evidence(
+                stable_id,
+                result_record,
+                index=index,
+                checker=checker,
+                outcome=outcome,
+                lineage_key=lineage_key,
+            )
+            characterization["evidence"].append(evidence)
+            concrete_by_pointer[pointer] = (outcome, evidence["id"])
+
+        for observation in entry["observer_vector"]:
+            concrete = concrete_by_pointer.get(observation["profile_pointer"])
+            if concrete is None:
+                continue
+            observation["outcome"] = concrete[0]
+            observation["evidence_refs"] = [concrete[1]]
+            observation["attribution"] = (
+                "Extracted from the exact structured normalized-outcome field in the "
+                "content-bound compatible checker result row."
+            )
+        for effect in characterization["statement"]["profile_specific_effects"]:
+            concrete = concrete_by_pointer.get(effect["observer_profile_pointer"])
+            if concrete is None:
+                continue
+            effect["outcome"] = concrete[0]
+            effect["attribution"] = (
+                "Profile-specific normalized outcome extracted from the bound structured result row."
+            )
+        characterization["notes"].append(
+            "Existing candidate/control evidence remains DISCOVERY/CONTROL; concrete outcomes are implementation observations only."
+        )
+
+
+def document_strings(value: Any) -> set[str]:
+    if isinstance(value, dict):
+        return {item for child in value.values() for item in document_strings(child)}
+    if isinstance(value, list):
+        return {item for child in value for item in document_strings(child)}
+    return {value} if isinstance(value, str) else set()
+
+
+def base_existing_evidence_associations(
+    source_lock: dict[str, Any]
+) -> tuple[dict[str, set[str]], dict[str, str]]:
+    """Derive the M6-frozen identity/evidence surface from exact witness metadata."""
+
+    witnesses = source_lock["generated_witnesses"]
+    associations = {
+        row["id"]: set(row["relevant_case_id"])
+        for row in witnesses
+    }
+    kinds = {row["id"]: "GENERATED_WITNESS" for row in witnesses}
+    for row in source_lock["tracked_evidence"]:
+        if row["source_role"] not in {"EXISTING_LAB_EVIDENCE", "WITNESS_ORIGIN"}:
+            continue
+        strings = document_strings(load(ROOT / row["path"]))
+        related: set[str] = set()
+        for witness in witnesses:
+            if (
+                witness["path"] in strings
+                or witness["artifact_sha256"] in strings
+                or witness["generator_or_origin"] == row["path"]
+            ):
+                related.update(witness["relevant_case_id"])
+        if related:
+            associations[row["id"]] = related
+            kinds[row["id"]] = "TRACKED_EVIDENCE"
+    return associations, kinds
+
+
+def locked_records(
+    source_lock: dict[str, Any], evidence_locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, dict[str, Any]]]:
+    result: dict[str, tuple[str, dict[str, Any]]] = {}
+    for row in source_lock["tracked_evidence"]:
+        result[row["id"]] = ("TRACKED_EVIDENCE", row)
+    for row in source_lock["generated_witnesses"]:
+        result[row["id"]] = ("GENERATED_WITNESS", row)
+    for lock in evidence_locks:
+        for row in lock["tracked_evidence"]:
+            result[row["id"]] = ("TRACKED_EVIDENCE", row)
+        for row in lock["generated_witnesses"]:
+            result[row["id"]] = ("GENERATED_WITNESS", row)
+    return result
+
+
+def locked_records_related(
+    first: tuple[str, dict[str, Any]], second: tuple[str, dict[str, Any]]
+) -> bool:
+    first_kind, first_row = first
+    second_kind, second_row = second
+    if first_row["id"] == second_row["id"]:
+        return True
+    if first_kind == second_kind == "TRACKED_EVIDENCE":
+        return (
+            first_row["path"] == second_row["path"]
+            and first_row["file_sha256"] == second_row["file_sha256"]
+        )
+    if first_kind == second_kind == "GENERATED_WITNESS":
+        return (
+            first_row["path"] == second_row["path"]
+            and first_row["artifact_sha256"] == second_row["artifact_sha256"]
+        )
+    witness = first_row if first_kind == "GENERATED_WITNESS" else second_row
+    tracked = first_row if first_kind == "TRACKED_EVIDENCE" else second_row
+    strings = document_strings(load(ROOT / tracked["path"]))
+    return witness["path"] in strings or witness["artifact_sha256"] in strings
+
+
+def render_existing_evidence_dispositions(
+    entries: list[dict[str, Any]],
+    source_lock: dict[str, Any],
+    evidence_lock: dict[str, Any],
+    validator: Any,
+) -> list[dict[str, Any]]:
+    associations, kinds = base_existing_evidence_associations(source_lock)
+    evidence_errors, chain = validator.validate_evidence_lock_chain(
+        evidence_lock,
+        load(ROOT / "schemas/declaration-validation-evidence-lock.schema.json"),
+        source_lock,
+        check_git_tracking=False,
+    )
+    if evidence_errors:
+        raise RuntimeError("cannot derive existing-evidence dispositions: " + "; ".join(evidence_errors))
+    records = locked_records(source_lock, chain)
+    entries_by_id = {row["characterization"]["id"]: row for row in entries}
+
+    for stable_id, entry in entries_by_id.items():
+        for evidence in entry["characterization"]["evidence"]:
+            if evidence["source_type"] != "ARENA_TEST":
+                continue
+            source_id = evidence["source_lock"]["lock_id"]
+            associations.setdefault(source_id, set()).add(stable_id)
+            kinds[source_id] = "ARENA_EVIDENCE"
+
+    rows: list[dict[str, Any]] = []
+    for source_id, stable_ids in associations.items():
+        for stable_id in stable_ids:
+            entry = entries_by_id[stable_id]
+            links: list[str] = []
+            pair_negative = PAIR_SPECIFIC_NEGATIVE_EVIDENCE_DISPOSITIONS.get(
+                (stable_id, source_id)
+            )
+            if source_id not in EXPLICIT_NEGATIVE_EVIDENCE_DISPOSITIONS and pair_negative is None:
+                source_record = records[source_id]
+                for evidence in entry["characterization"]["evidence"]:
+                    linked = records.get(evidence["source_lock"]["lock_id"])
+                    if linked is not None and locked_records_related(source_record, linked):
+                        links.append(evidence["id"])
+            if pair_negative is not None:
+                disposition, relevance, rationale = pair_negative
+                links = []
+            elif source_id in EXPLICIT_NEGATIVE_EVIDENCE_DISPOSITIONS:
+                disposition, relevance, rationale = EXPLICIT_NEGATIVE_EVIDENCE_DISPOSITIONS[source_id]
+                links = []
+            else:
+                if not links:
+                    raise RuntimeError(f"{stable_id}/{source_id}: expected existing evidence has no catalog link")
+                disposition = "LINKED"
+                if kinds[source_id] == "ARENA_EVIDENCE":
+                    relevance = "ARENA_LINKAGE"
+                    rationale = "The immutable reviewed pilot already binds this existing Arena case as empirical coverage provenance only."
+                elif kinds[source_id] == "GENERATED_WITNESS":
+                    relevance = "CONTROL" if source_id.endswith("_CONTROL") else "DISCOVERY"
+                    rationale = (
+                        "The exact frozen control is linked without promotion to isolation."
+                        if relevance == "CONTROL"
+                        else "The exact frozen witness is linked as discovery evidence without promotion to isolation."
+                    )
+                else:
+                    relevance = "IMPLEMENTATION_OBSERVATION"
+                    rationale = "The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority."
+            rows.append(
+                {
+                    "stable_identity_id": stable_id,
+                    "source_lock_id": source_id,
+                    "source_record_kind": kinds[source_id],
+                    "disposition": disposition,
+                    "linked_catalog_evidence_ids": sorted(set(links)),
+                    "claim_relevance": relevance,
+                    "layer_relevance": list(entry["characterization"]["layers"]),
+                    "rationale": rationale,
+                }
+            )
+    return sorted(rows, key=lambda row: (row["stable_identity_id"], row["source_lock_id"]))
 
 
 def normative_entry(identity: dict[str, Any], validator: Any) -> dict[str, Any]:
@@ -598,6 +966,7 @@ def render_catalog(evidence_lock: dict[str, Any]) -> dict[str, Any]:
         closure_sources=sources,
         locked_sources={row["id"]: row for row in source_lock["source_files"]},
     )
+    attach_existing_empirical_evidence(entries, source_lock)
 
     identity_dispositions = []
     for identity in registry["identities"]:
@@ -638,6 +1007,9 @@ def render_catalog(evidence_lock: dict[str, Any]) -> dict[str, Any]:
     catalog["entries"] = entries
     catalog["site_dispositions"] = sorted(
         site_rows, key=lambda row: (row["stable_identity_id"], row["site_id"])
+    )
+    catalog["existing_evidence_dispositions"] = render_existing_evidence_dispositions(
+        entries, source_lock, evidence_lock, validator
     )
     catalog["identity_dispositions"] = identity_dispositions
     catalog["completion_boundary"] = {

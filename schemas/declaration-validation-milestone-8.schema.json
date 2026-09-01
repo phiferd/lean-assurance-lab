@@ -49,6 +49,8 @@
         "completion_schema",
         "completion_renderer",
         "inventory_populator",
+        "historical_attestation_schema",
+        "historical_attestation_renderer",
         "catalog_validator",
         "catalog_tests",
         "historical_validator",
@@ -70,6 +72,12 @@
         "out_of_scope",
         "site_dispositions",
         "source_mappings",
+        "existing_evidence_dispositions",
+        "un_dispositioned_existing_evidence",
+        "existing_evidence_linked",
+        "existing_evidence_explicit_negative",
+        "observer_outcomes_by_profile",
+        "arena_dispositions",
         "provisional_authority",
         "not_assessed_soundness"
       ],
@@ -82,6 +90,33 @@
         "out_of_scope": {"const": 2},
         "site_dispositions": {"const": 149},
         "source_mappings": {"const": 104},
+        "existing_evidence_dispositions": {"type": "integer", "minimum": 1},
+        "un_dispositioned_existing_evidence": {"const": 0},
+        "existing_evidence_linked": {"type": "integer", "minimum": 0},
+        "existing_evidence_explicit_negative": {"type": "integer", "minimum": 0},
+        "observer_outcomes_by_profile": {
+          "type": "object",
+          "required": ["official_importer", "nanoda", "lean4lean", "kiota"],
+          "properties": {
+            "official_importer": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "nanoda": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "lean4lean": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "kiota": {"$ref": "#/$defs/observerOutcomeCounts"}
+          },
+          "additionalProperties": false
+        },
+        "arena_dispositions": {
+          "type": "object",
+          "required": ["LINKED", "NO_EXISTING_CASE_FOUND", "NOT_INSPECTED", "NOT_APPLICABLE", "DEFERRED"],
+          "properties": {
+            "LINKED": {"type": "integer", "minimum": 0},
+            "NO_EXISTING_CASE_FOUND": {"type": "integer", "minimum": 0},
+            "NOT_INSPECTED": {"type": "integer", "minimum": 0},
+            "NOT_APPLICABLE": {"type": "integer", "minimum": 0},
+            "DEFERRED": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
         "provisional_authority": {"const": 27},
         "not_assessed_soundness": {"const": 27}
       },
@@ -116,14 +151,36 @@
         "source_lock_command",
         "historical_command",
         "pilot_command",
-        "test_command"
+        "test_command",
+        "recorded_results"
       ],
       "properties": {
         "catalog_command": {"const": "scripts/validate-declaration-validation-catalog"},
         "source_lock_command": {"const": "scripts/validate-declaration-validation-source-lock"},
         "historical_command": {"const": "scripts/validate-declaration-validation-historical"},
         "pilot_command": {"const": "scripts/validate-declaration-validation-milestone-8-pilot"},
-        "test_command": {"const": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'"}
+        "test_command": {"const": "python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'"},
+        "recorded_results": {
+          "type": "object",
+          "required": ["source_lock", "historical_m7_and_reviewed_pilot", "canonical_catalog", "declaration_validation_tests"],
+          "properties": {
+            "source_lock": {"const": "PASS"},
+            "historical_m7_and_reviewed_pilot": {"const": "PASS"},
+            "canonical_catalog": {"const": "PASS"},
+            "declaration_validation_tests": {
+              "type": "object",
+              "required": ["tests_run", "failures", "errors", "result"],
+              "properties": {
+                "tests_run": {"const": 137},
+                "failures": {"const": 0},
+                "errors": {"const": 0},
+                "result": {"const": "PASS"}
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
       },
       "additionalProperties": false
     },
@@ -134,6 +191,7 @@
         "identity_denotations",
         "identity_disposition_closure",
         "site_disposition_closure",
+        "existing_evidence_closure",
         "role_qualified_evidence",
         "implementation_mappings",
         "authority_qualification",
@@ -167,6 +225,20 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "observerOutcomeCounts": {
+      "type": "object",
+      "required": ["ACCEPT", "REJECT", "ERROR", "TIMEOUT", "NOT_INSPECTED", "NOT_APPLICABLE", "UNRESOLVED"],
+      "properties": {
+        "ACCEPT": {"type": "integer", "minimum": 0},
+        "REJECT": {"type": "integer", "minimum": 0},
+        "ERROR": {"type": "integer", "minimum": 0},
+        "TIMEOUT": {"type": "integer", "minimum": 0},
+        "NOT_INSPECTED": {"type": "integer", "minimum": 0},
+        "NOT_APPLICABLE": {"type": "integer", "minimum": 0},
+        "UNRESOLVED": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
     "fileBinding": {
       "type": "object",
       "required": ["path", "sha256"],

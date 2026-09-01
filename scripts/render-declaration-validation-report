@@ -105,6 +105,10 @@ def render(
     ).hexdigest()
     entries = sorted(catalog["entries"], key=lambda row: characterization(row)["id"])
     dispositions = sorted(catalog["identity_dispositions"], key=lambda row: row["id"])
+    evidence_dispositions = sorted(
+        catalog["existing_evidence_dispositions"],
+        key=lambda row: (row["stable_identity_id"], row["source_lock_id"]),
+    )
     source_by_id = {row["id"]: row for row in source_lock["source_files"]}
 
     kind_counts = Counter(characterization(row)["kind"] for row in entries)
@@ -147,6 +151,7 @@ def render(
         f"- Catalog status: `{catalog['status']}`",
         f"- Catalog SHA-256: `{catalog_hash}`",
         f"- Catalog entries: {len(entries)}",
+        f"- Existing evidence/identity dispositions: {len(evidence_dispositions)}",
         "",
         "This report is a deterministic view of the canonical machine-readable catalog. "
         f"Its catalog hash is checked mechanically. {status_summary}",
@@ -245,6 +250,57 @@ def render(
         )
     else:
         lines.append("No identity dispositions have been assigned at this milestone.")
+
+    lines.extend(["", "## Existing Evidence Dispositions", ""])
+    if evidence_dispositions:
+        evidence_disposition_counts = Counter(
+            row["disposition"] for row in evidence_dispositions
+        )
+        lines.extend(
+            table(
+                ["Disposition", "Count"],
+                [
+                    [name, evidence_disposition_counts[name]]
+                    for name in [
+                        "LINKED",
+                        "NOT_APPLICABLE",
+                        "SUPERSEDED_BY_STRONGER_EVIDENCE",
+                        "DUPLICATE",
+                        "OUTSIDE_THIS_ENTRY_LAYER",
+                        "INSUFFICIENT_FOR_CLAIM",
+                        "DEFERRED_TO_LATER_STUDY",
+                    ]
+                ],
+            )
+        )
+        lines.extend(["", "Every frozen existing-evidence record mechanically associated with an active stable identity is listed below; silence is not a disposition.", ""])
+        lines.extend(
+            table(
+                [
+                    "Identity",
+                    "Source-lock evidence",
+                    "Kind",
+                    "Disposition",
+                    "Claim relevance",
+                    "Catalog evidence",
+                    "Rationale",
+                ],
+                [
+                    [
+                        row["stable_identity_id"],
+                        row["source_lock_id"],
+                        row["source_record_kind"],
+                        row["disposition"],
+                        row["claim_relevance"],
+                        row["linked_catalog_evidence_ids"] or "—",
+                        row["rationale"],
+                    ]
+                    for row in evidence_dispositions
+                ],
+            )
+        )
+    else:
+        lines.append("No identity-associated existing evidence is present at this milestone.")
 
     unresolved = [
         row

@@ -1,7 +1,7 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-8-freeze.schema.json",
-  "title": "Declaration Validation Milestone 8 Freeze Manifest",
+  "title": "Declaration Validation Milestone 8 Final Content Manifest",
   "type": "object",
   "required": [
     "schema_version",
@@ -17,9 +17,9 @@
   ],
   "properties": {
     "schema_version": {"const": 1},
-    "manifest_id": {"const": "ordinary-declaration-validation.milestone-8-freeze.v1"},
+    "manifest_id": {"const": "ordinary-declaration-validation.milestone-8-content-manifest.v2"},
     "generated_at": {"type": "string", "format": "date-time"},
-    "status": {"const": "FROZEN_MILESTONE_8_CHARACTERIZATION_INVENTORY"},
+    "status": {"const": "FINAL_MILESTONE_8_CONTENT_MANIFEST"},
     "predecessor_attestations": {
       "type": "object",
       "required": ["milestone_7", "reviewed_pilot"],
@@ -43,6 +43,8 @@
         "prior_identity_decisions",
         "post_catalog_decisions",
         "inventory_populator",
+        "historical_attestation_schema",
+        "historical_attestation_renderer",
         "research_plan",
         "research_status"
       ],
@@ -59,6 +61,12 @@
         "out_of_scope",
         "site_dispositions",
         "source_mappings",
+        "existing_evidence_dispositions",
+        "un_dispositioned_existing_evidence",
+        "existing_evidence_linked",
+        "existing_evidence_explicit_negative",
+        "observer_outcomes_by_profile",
+        "arena_dispositions",
         "provisional_authority",
         "not_assessed_soundness"
       ],
@@ -71,6 +79,33 @@
         "out_of_scope": {"const": 2},
         "site_dispositions": {"const": 149},
         "source_mappings": {"const": 104},
+        "existing_evidence_dispositions": {"type": "integer", "minimum": 1},
+        "un_dispositioned_existing_evidence": {"const": 0},
+        "existing_evidence_linked": {"type": "integer", "minimum": 0},
+        "existing_evidence_explicit_negative": {"type": "integer", "minimum": 0},
+        "observer_outcomes_by_profile": {
+          "type": "object",
+          "required": ["official_importer", "nanoda", "lean4lean", "kiota"],
+          "properties": {
+            "official_importer": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "nanoda": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "lean4lean": {"$ref": "#/$defs/observerOutcomeCounts"},
+            "kiota": {"$ref": "#/$defs/observerOutcomeCounts"}
+          },
+          "additionalProperties": false
+        },
+        "arena_dispositions": {
+          "type": "object",
+          "required": ["LINKED", "NO_EXISTING_CASE_FOUND", "NOT_INSPECTED", "NOT_APPLICABLE", "DEFERRED"],
+          "properties": {
+            "LINKED": {"type": "integer", "minimum": 0},
+            "NO_EXISTING_CASE_FOUND": {"type": "integer", "minimum": 0},
+            "NOT_INSPECTED": {"type": "integer", "minimum": 0},
+            "NOT_APPLICABLE": {"type": "integer", "minimum": 0},
+            "DEFERRED": {"type": "integer", "minimum": 0}
+          },
+          "additionalProperties": false
+        },
         "provisional_authority": {"const": 27},
         "not_assessed_soundness": {"const": 27}
       },
@@ -103,6 +138,20 @@
   },
   "additionalProperties": false,
   "$defs": {
+    "observerOutcomeCounts": {
+      "type": "object",
+      "required": ["ACCEPT", "REJECT", "ERROR", "TIMEOUT", "NOT_INSPECTED", "NOT_APPLICABLE", "UNRESOLVED"],
+      "properties": {
+        "ACCEPT": {"type": "integer", "minimum": 0},
+        "REJECT": {"type": "integer", "minimum": 0},
+        "ERROR": {"type": "integer", "minimum": 0},
+        "TIMEOUT": {"type": "integer", "minimum": 0},
+        "NOT_INSPECTED": {"type": "integer", "minimum": 0},
+        "NOT_APPLICABLE": {"type": "integer", "minimum": 0},
+        "UNRESOLVED": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
     "fileBinding": {
       "type": "object",
       "required": ["path", "sha256", "tier"],

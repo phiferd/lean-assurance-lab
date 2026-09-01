@@ -973,6 +973,33 @@ test suite. This milestone does not perform the independent adversarial review
 or construct an Arena negative-coverage denominator. The next authorized
 milestone is Milestone 9.
 
+### Milestone 8 Corrective Content Finalization — 2026-08-31
+
+The independent completion review found that the initial inventory closed the
+frozen identity and implementation-site surfaces but did not close the frozen
+pre-existing-evidence surface. The corrected canonical catalog now derives 41
+identity/evidence pairs from exact source-lock witness tags, witness paths and
+SHA-256 values in tracked evidence, and the immutable reviewed-pilot Arena
+link. Twenty-four pairs are linked to claim-specific catalog evidence; the
+remaining 17 have explicit `INSUFFICIENT_FOR_CLAIM`,
+`OUTSIDE_THIS_ENTRY_LAYER`, `DEFERRED_TO_LATER_STUDY`, or
+`SUPERSEDED_BY_STRONGER_EVIDENCE` dispositions. Silence is mechanically
+rejected.
+
+Existing structured result bytes add profile-scoped observations to
+`SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY`,
+`SCENARIO.AXIOM.ADMISSION_POLICY`, and
+`SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION`. Candidate/control artifacts remain
+`DISCOVERY`/`CONTROL`; no existing Lab evidence is promoted to isolation,
+normative authority, or soundness evidence. All 27 authority assignments remain
+`PROVISIONAL`, the approved-source registry remains empty, and all soundness
+relevance remains `NOT_ASSESSED`.
+
+The path-hashed M8 artifact is now labeled a final content manifest rather than
+an immutable freeze. This Phase-A content state must be committed and then
+attested in a separate Phase-B Git-blob historical record before Milestone 9 is
+authorized. Do not rewrite the Phase-A commit after attestation.
+
 ## Milestone 9 — Adversarial Review as a Reproducible Artifact
 
 Freeze the pre-review catalog.

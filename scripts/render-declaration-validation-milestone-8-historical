@@ -1,0 +1,197 @@
+#!/usr/bin/env python3
+"""Render a two-phase immutable M8 attestation from an exact content commit."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = (
+    ROOT / "results" / "research" / "declaration-validation-milestone-8-historical.json"
+)
+RECORDED_AT = "2026-08-31T18:30:00-04:00"
+
+ARTIFACTS = {
+    "approved_authority_sources": "config/declaration-validation-approved-authority-sources.json",
+    "approved_authority_sources_schema": "schemas/declaration-validation-approved-authority-sources.schema.json",
+    "authority_rules": "config/declaration-validation-authority-rules.json",
+    "authority_rules_schema": "schemas/declaration-validation-authority-rules.schema.json",
+    "catalog": "config/declaration-validation-catalog.json",
+    "catalog_schema": "schemas/declaration-validation-catalog.schema.json",
+    "catalog_tests": "tests/test_declaration_validation_catalog.py",
+    "catalog_validator": "scripts/validate-declaration-validation-catalog",
+    "characterization_model": "config/declaration-validation-characterization-model.json",
+    "characterization_model_schema": "schemas/declaration-validation-characterization-model.schema.json",
+    "characterization_model_tests": "tests/test_declaration_validation_characterization_model.py",
+    "characterization_model_validator": "scripts/validate-declaration-validation-characterization-model",
+    "completion_record": "results/research/declaration-validation-milestone-8.json",
+    "completion_renderer": "scripts/render-declaration-validation-milestone-8-completion",
+    "completion_schema": "schemas/declaration-validation-milestone-8.schema.json",
+    "discovery_closure": "config/declaration-validation-discovery-closure.json",
+    "discovery_closure_schema": "schemas/declaration-validation-discovery-closure.schema.json",
+    "discovery_closure_tests": "tests/test_declaration_validation_discovery_closure.py",
+    "discovery_closure_validator": "scripts/validate-declaration-validation-discovery-closure",
+    "entry_schema": "schemas/declaration-validation-characterization-entry.schema.json",
+    "evidence_lock": "config/declaration-validation-evidence-locks/milestone-8-inventory.json",
+    "evidence_lock_milestone_7": "config/declaration-validation-evidence-locks/milestone-7.json",
+    "evidence_lock_pilot": "config/declaration-validation-evidence-locks/milestone-8-pilot.json",
+    "evidence_lock_pilot_repair": "config/declaration-validation-evidence-locks/milestone-8-pilot-repair.json",
+    "evidence_lock_schema": "schemas/declaration-validation-evidence-lock.schema.json",
+    "freeze_manifest": "results/research/declaration-validation-milestone-8-freeze.json",
+    "freeze_renderer": "scripts/render-declaration-validation-milestone-8-freeze",
+    "freeze_schema": "schemas/declaration-validation-milestone-8-freeze.schema.json",
+    "generated_report": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-8-historical",
+    "historical_attestation_schema": "schemas/declaration-validation-historical-attestation.v2.schema.json",
+    "historical_transition_tests": "tests/test_declaration_validation_historical_transition.py",
+    "historical_validator": "scripts/validate-declaration-validation-historical",
+    "identity_registry": "config/declaration-validation-identity-registry.json",
+    "identity_registry_schema": "schemas/declaration-validation-identity-registry.schema.json",
+    "inventory_populator": "scripts/populate-declaration-validation-milestone-8",
+    "milestone_5_tests": "tests/test_declaration_validation_milestone_5.py",
+    "milestone_5_validator": "scripts/validate-declaration-validation-milestone-5",
+    "m7_historical_attestation": "results/research/declaration-validation-milestone-7-historical.json",
+    "pilot_schema": "schemas/declaration-validation-milestone-8-pilot.v2.schema.json",
+    "pilot_tests": "tests/test_declaration_validation_milestone_8_pilot.py",
+    "pilot_validator": "scripts/validate-declaration-validation-milestone-8-pilot",
+    "post_catalog_decisions": "results/research/declaration-validation-catalog-decisions.json",
+    "post_catalog_decisions_schema": "schemas/declaration-validation-catalog-decisions.schema.json",
+    "prior_identity_decisions": "results/research/declaration-validation-milestone-5-decisions.json",
+    "report_renderer": "scripts/render-declaration-validation-report",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+    "reviewed_pilot_attestation": "results/research/declaration-validation-milestone-8-pilot-reviewed-historical.json",
+    "semantic_target": "config/declaration-validation-target.json",
+    "semantic_target_schema": "schemas/declaration-validation-target.schema.json",
+    "semantic_target_validator": "scripts/validate-declaration-validation-target",
+    "source_lock": "config/declaration-validation-source-lock.json",
+    "source_lock_schema": "schemas/declaration-validation-source-lock.schema.json",
+    "source_lock_tests": "tests/test_declaration_validation_source_lock.py",
+    "source_lock_validator": "scripts/validate-declaration-validation-source-lock",
+}
+
+EVIDENCE_LOCK_ARTIFACTS = [
+    "evidence_lock_milestone_7",
+    "evidence_lock_pilot",
+    "evidence_lock_pilot_repair",
+    "evidence_lock",
+]
+
+
+def git_output(args: list[str]) -> bytes:
+    result = subprocess.run(
+        ["git", *args], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def committed_bytes(commit: str, relative: str) -> bytes:
+    return git_output(["show", f"{commit}:{relative}"])
+
+
+def committed_json(commit: str, relative: str) -> dict[str, Any]:
+    return json.loads(committed_bytes(commit, relative))
+
+
+def binding(commit: str, relative: str) -> dict[str, str]:
+    content = committed_bytes(commit, relative)
+    blob = git_output(["rev-parse", "--verify", f"{commit}:{relative}"]).decode().strip()
+    return {
+        "path": relative,
+        "sha256": hashlib.sha256(content).hexdigest(),
+        "git_commit": commit,
+        "git_blob": blob,
+    }
+
+
+def evidence_record_index(commit: str) -> dict[str, tuple[str, dict[str, Any]]]:
+    source_lock = committed_json(commit, ARTIFACTS["source_lock"])
+    result: dict[str, tuple[str, dict[str, Any]]] = {}
+    for row in source_lock["tracked_evidence"]:
+        result[row["id"]] = ("tracked_evidence", row)
+    for row in source_lock["generated_witnesses"]:
+        result[row["id"]] = ("generated_witness", row)
+    for artifact_name in EVIDENCE_LOCK_ARTIFACTS:
+        lock = committed_json(commit, ARTIFACTS[artifact_name])
+        for row in lock["tracked_evidence"]:
+            result[row["id"]] = ("tracked_evidence", row)
+        for row in lock["generated_witnesses"]:
+            result[row["id"]] = ("generated_witness", row)
+    return result
+
+
+def selected_evidence_ids(commit: str, records: dict[str, tuple[str, dict[str, Any]]]) -> set[str]:
+    catalog = committed_json(commit, ARTIFACTS["catalog"])
+    selected = {
+        row["source_lock_id"] for row in catalog["existing_evidence_dispositions"]
+    }
+    for entry in catalog["entries"]:
+        for evidence in entry["characterization"]["evidence"]:
+            source_id = evidence["source_lock"]["lock_id"]
+            if source_id in records:
+                selected.add(source_id)
+    return selected
+
+
+def render(commit: str) -> dict[str, Any]:
+    resolved = git_output(["rev-parse", "--verify", f"{commit}^{{commit}}"]).decode().strip()
+    if resolved != commit:
+        raise RuntimeError("content commit must be the exact 40-character commit object ID")
+    records = evidence_record_index(commit)
+    selected = selected_evidence_ids(commit, records)
+    missing = selected - set(records)
+    if missing:
+        raise RuntimeError(f"selected evidence records do not resolve: {sorted(missing)}")
+    evidence_records = {
+        source_id: binding(commit, records[source_id][1]["path"])
+        for source_id in sorted(selected)
+    }
+    return {
+        "schema_version": 2,
+        "attestation_id": "ordinary-declaration-validation.milestone-8.historical.v2",
+        "recorded_at": RECORDED_AT,
+        "status": "FROZEN_HISTORICAL_MILESTONE_ATTESTATION",
+        "historical_commit": commit,
+        "phase": {
+            "content_commit": commit,
+            "attestation_design": "TWO_PHASE_NON_SELF_REFERENTIAL_GIT_BLOB_ATTESTATION",
+            "reason": (
+                "Phase A committed the final corrected M8 content. This separate Phase B record "
+                "binds those exact Git blobs and is not part of the content commit it attests."
+            ),
+        },
+        "artifacts": {
+            name: binding(commit, relative) for name, relative in sorted(ARTIFACTS.items())
+        },
+        "evidence_records": evidence_records,
+        "nonclaims": [
+            "This attestation freezes the corrected Milestone 8 inventory; it does not begin Milestone 9.",
+            "No implementation observation, witness, or Arena case becomes normative authority through this binding.",
+            "No soundness relevance is assessed by this binding.",
+            "Later mutable catalog, report, plan, status, schema, validator, or test paths cannot redefine these historical Git blobs."
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--commit", required=True)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    document = render(args.commit)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

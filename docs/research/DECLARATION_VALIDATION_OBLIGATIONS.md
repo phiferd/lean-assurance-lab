@@ -4,8 +4,9 @@
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
 - Catalog status: `MILESTONE_8_CHARACTERIZATION_INVENTORY`
-- Catalog SHA-256: `5249d14ef1e6832788debcc7c071f2ef98f0ad579be1a279be0352b7df93073c`
+- Catalog SHA-256: `b3e5b9f59de3600d2c42a1549af51e32e0a589be7484ad4dd0b85cab53c0207f`
 - Catalog entries: 27
+- Existing evidence/identity dispositions: 41
 
 This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the first closed Milestone 8 characterization inventory. Every frozen identity has an explicit catalog, deferred-kind, or out-of-scope disposition.
 The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.milestone-8-inventory.v1` at sequence 4.
@@ -76,10 +77,10 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 
 | Observer | ACCEPT | REJECT | ERROR | TIMEOUT | NOT_INSPECTED | NOT_APPLICABLE | UNRESOLVED |
 | --- | --- | --- | --- | --- | --- | --- | --- |
-| /observer_profiles/official_importer | 0 | 5 | 0 | 0 | 22 | 0 | 0 |
+| /observer_profiles/official_importer | 1 | 7 | 0 | 0 | 19 | 0 | 0 |
 | /observer_profiles/nanoda | 0 | 0 | 0 | 0 | 27 | 0 | 0 |
-| /observer_profiles/lean4lean | 0 | 5 | 0 | 0 | 22 | 0 | 0 |
-| /observer_profiles/kiota | 3 | 2 | 0 | 0 | 22 | 0 | 0 |
+| /observer_profiles/lean4lean | 1 | 7 | 0 | 0 | 19 | 0 | 0 |
+| /observer_profiles/kiota | 6 | 2 | 0 | 0 | 19 | 0 | 0 |
 
 ## Catalog Summary Table
 
@@ -104,12 +105,12 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | EXPR.LET.ANNOTATION_SORT | Let annotation sort-valued requirement | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.EXPR.LET.ANNOTATION_SORT.DISCOVERY |
 | EXPR.LET.VALUE_TYPE_MATCH | Let value and annotation compatibility | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.LET_VALUE.WITNESS |
 | EXPR.PI.CODOMAIN_SORT | Dependent-function codomain sort-valued requirement | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.EXPR.PI.CODOMAIN_SORT.DISCOVERY |
-| SCENARIO.AXIOM.ADMISSION_POLICY | Axiom admission policy | EMPIRICAL_CONTRACT_SCENARIO | TRUST_POLICY, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.DISCOVERY |
+| SCENARIO.AXIOM.ADMISSION_POLICY | Axiom admission policy | EMPIRICAL_CONTRACT_SCENARIO | TRUST_POLICY, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.CONTROL, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.DISCOVERY, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.WITNESS |
 | SCENARIO.AXIOM.SAFETY_FLAG | Axiom safety-flag treatment | EMPIRICAL_CONTRACT_SCENARIO | EXPORT_FORMAT, RECONSTRUCTION, TRUST_POLICY, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.AXIOM.WITNESS |
-| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | Ordinary declaration safety reconstruction | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.DISCOVERY |
+| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | Ordinary declaration safety reconstruction | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.CONTROL, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.DISCOVERY, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.WITNESS |
 | SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY | Export free-variable representability | EMPIRICAL_CONTRACT_SCENARIO | EXPORT_FORMAT, RECONSTRUCTION | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY.DISCOVERY |
 | SCENARIO.EXPORT.METAVAR_REPRESENTABILITY | Export metavariable representability | EMPIRICAL_CONTRACT_SCENARIO | EXPORT_FORMAT, RECONSTRUCTION | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.EXPORT.METAVAR_REPRESENTABILITY.DISCOVERY |
-| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | Observer current-declaration visibility | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.DISCOVERY |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | Observer current-declaration visibility | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.CONTROL, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.DISCOVERY, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.WITNESS |
 | SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION | Observer replay environment construction | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION.DISCOVERY |
 | SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER | Unsafe and partial replay filtering | EMPIRICAL_CONTRACT_SCENARIO | RECONSTRUCTION, TRUST_POLICY, IMPLEMENTATION_POLICY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER.DISCOVERY |
 
@@ -147,6 +148,64 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | CATALOG_ENTRY | The frozen active identity is represented by one exact-denotation M8 catalog entry. | DEC.M5.020 |
 | SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION | CATALOG_ENTRY | The frozen active identity is represented by one exact-denotation M8 catalog entry. | DEC.M5.020 |
 | SCENARIO.REPLAY.UNSAFE_PARTIAL_FILTER | CATALOG_ENTRY | The frozen active identity is represented by one exact-denotation M8 catalog entry. | DEC.M5.019 |
+
+## Existing Evidence Dispositions
+
+| Disposition | Count |
+| --- | --- |
+| LINKED | 24 |
+| NOT_APPLICABLE | 0 |
+| SUPERSEDED_BY_STRONGER_EVIDENCE | 3 |
+| DUPLICATE | 0 |
+| OUTSIDE_THIS_ENTRY_LAYER | 6 |
+| INSUFFICIENT_FOR_CLAIM | 5 |
+| DEFERRED_TO_LATER_STUDY | 3 |
+
+Every frozen existing-evidence record mechanically associated with an active stable identity is listed below; silence is not a disposition.
+
+| Identity | Source-lock evidence | Kind | Disposition | Claim relevance | Catalog evidence | Rationale |
+| --- | --- | --- | --- | --- | --- | --- |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | LOCAL.DECL_ENV_MATRIX | TRACKED_EVIDENCE | INSUFFICIENT_FOR_CLAIM | DISCOVERY | — | The aggregate matrix is relevant discovery context, but exact scenario results and witnesses provide the claim-specific M8 bindings. |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | LOCAL.KIOTA_SELF_REFERENCE | TRACKED_EVIDENCE | DEFERRED_TO_LATER_STUDY | IMPLEMENTATION_OBSERVATION | — | This reproduction targets a later Kiota upstream revision rather than the pinned M8 observer profile, so it cannot establish the M8 observer outcome. |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | LOCAL.SELF_REFERENCE_METADATA | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves witness-generation provenance; the exact witness and structured checker-result bytes carry the catalog-layer links. |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | LOCAL.SELF_REFERENCE_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.SELF_REFERENCE.KIOTA, EVID.M8.SELF_REFERENCE.LEAN4LEAN, EVID.M8.SELF_REFERENCE.OFFICIAL, EVID.M8.SELF_REFERENCE.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | WITNESS.SELF_REFERENCE | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.SELF_REFERENCE.KIOTA, EVID.M8.SELF_REFERENCE.LEAN4LEAN, EVID.M8.SELF_REFERENCE.OFFICIAL, EVID.M8.SELF_REFERENCE.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| DECL.ENV.CURRENT_DECL_NOT_VISIBLE | WITNESS.SELF_REFERENCE_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.SELF_REFERENCE.KIOTA, EVID.M8.SELF_REFERENCE.LEAN4LEAN, EVID.M8.SELF_REFERENCE.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| DECL.THEOREM.TYPE_PROP | LOCAL.CORE_DECL_MATRIX | TRACKED_EVIDENCE | INSUFFICIENT_FOR_CLAIM | DISCOVERY | — | The aggregate matrix is relevant discovery context, but it is not the prescribed structured result-row surface for a concrete M8 observer attribution. |
+| DECL.THEOREM.TYPE_PROP | LOCAL.M8.PILOT.REPAIR.ARENA_NONPROP_CASE | ARENA_EVIDENCE | LINKED | ARENA_LINKAGE | EVID.M8.THEOREM.ARENA | The immutable reviewed pilot already binds this existing Arena case as empirical coverage provenance only. |
+| DECL.THEOREM.TYPE_PROP | LOCAL.NONPROP_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.THEOREM.KIOTA, EVID.M8.THEOREM.LEAN4LEAN, EVID.M8.THEOREM.OFFICIAL, EVID.M8.THEOREM.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| DECL.THEOREM.TYPE_PROP | WITNESS.NONPROP_DEFINITION_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.THEOREM.KIOTA, EVID.M8.THEOREM.LEAN4LEAN, EVID.M8.THEOREM.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| DECL.THEOREM.TYPE_PROP | WITNESS.NONPROP_THEOREM | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.THEOREM.KIOTA, EVID.M8.THEOREM.LEAN4LEAN, EVID.M8.THEOREM.OFFICIAL, EVID.M8.THEOREM.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| DECL.UNIVERSE.PARAM_OWNERSHIP | LOCAL.DECL_ENV_MATRIX | TRACKED_EVIDENCE | INSUFFICIENT_FOR_CLAIM | DISCOVERY | — | The aggregate matrix is relevant discovery context, but exact scenario results and witnesses provide the claim-specific M8 bindings. |
+| DECL.UNIVERSE.PARAM_OWNERSHIP | LOCAL.KIOTA_UNIVERSE | TRACKED_EVIDENCE | DEFERRED_TO_LATER_STUDY | IMPLEMENTATION_OBSERVATION | — | This reproduction targets a later Kiota upstream revision rather than the pinned M8 observer profile, so it cannot establish the M8 observer outcome. |
+| DECL.UNIVERSE.PARAM_OWNERSHIP | LOCAL.UNIVERSE_OWNERSHIP_METADATA | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves witness-generation provenance; the immutable reviewed pilot binds the exact witness and selected observer result bytes. |
+| DECL.UNIVERSE.PARAM_OWNERSHIP | WITNESS.UNIVERSE_OWNERSHIP | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.UNIVERSE.KIOTA, EVID.M8.UNIVERSE.LEAN4LEAN, EVID.M8.UNIVERSE.OFFICIAL, EVID.M8.UNIVERSE.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| DECL.UNIVERSE.PARAM_OWNERSHIP | WITNESS.UNIVERSE_OWNERSHIP_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.UNIVERSE.KIOTA, EVID.M8.UNIVERSE.LEAN4LEAN, EVID.M8.UNIVERSE.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| EXPR.LET.VALUE_TYPE_MATCH | LOCAL.CORE_DECL_MATRIX | TRACKED_EVIDENCE | INSUFFICIENT_FOR_CLAIM | DISCOVERY | — | The aggregate matrix is relevant discovery context, but it is not the prescribed structured result-row surface for a concrete M8 observer attribution. |
+| EXPR.LET.VALUE_TYPE_MATCH | LOCAL.LET_VALUE_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.LET_VALUE.KIOTA, EVID.M8.LET_VALUE.LEAN4LEAN, EVID.M8.LET_VALUE.OFFICIAL, EVID.M8.LET_VALUE.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| EXPR.LET.VALUE_TYPE_MATCH | WITNESS.LET_VALUE_TYPE | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.LET_VALUE.KIOTA, EVID.M8.LET_VALUE.LEAN4LEAN, EVID.M8.LET_VALUE.OFFICIAL, EVID.M8.LET_VALUE.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| EXPR.LET.VALUE_TYPE_MATCH | WITNESS.LET_VALUE_TYPE_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.LET_VALUE.KIOTA, EVID.M8.LET_VALUE.LEAN4LEAN, EVID.M8.LET_VALUE.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| SCENARIO.AXIOM.ADMISSION_POLICY | LOCAL.AXIOM_MATERIALIZATION | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves the candidate/control materialization transformation; it does not itself establish a checker outcome or normative claim. |
+| SCENARIO.AXIOM.ADMISSION_POLICY | LOCAL.AXIOM_ONLY_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.CONTROL, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| SCENARIO.AXIOM.ADMISSION_POLICY | WITNESS.AXIOM_UNSAFE_ONLY | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| SCENARIO.AXIOM.ADMISSION_POLICY | WITNESS.AXIOM_UNSAFE_ONLY_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.CONTROL, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| SCENARIO.AXIOM.SAFETY_FLAG | LOCAL.AXIOM_FLAG_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.AXIOM.KIOTA, EVID.M8.AXIOM.LEAN4LEAN, EVID.M8.AXIOM.OFFICIAL, EVID.M8.AXIOM.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| SCENARIO.AXIOM.SAFETY_FLAG | LOCAL.AXIOM_MATERIALIZATION | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves the candidate/control materialization transformation; it does not itself establish a checker outcome or normative claim. |
+| SCENARIO.AXIOM.SAFETY_FLAG | LOCAL.AXIOM_ONLY_RESULTS | TRACKED_EVIDENCE | SUPERSEDED_BY_STRONGER_EVIDENCE | IMPLEMENTATION_OBSERVATION | — | The reviewed pilot binds the claim-specific safety-flag structured results; the axiom-only result remains linked under the separate admission-policy scenario. |
+| SCENARIO.AXIOM.SAFETY_FLAG | WITNESS.AXIOM_UNSAFE_FLAG | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.AXIOM.KIOTA, EVID.M8.AXIOM.LEAN4LEAN, EVID.M8.AXIOM.OFFICIAL, EVID.M8.AXIOM.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| SCENARIO.AXIOM.SAFETY_FLAG | WITNESS.AXIOM_UNSAFE_FLAG_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.AXIOM.KIOTA, EVID.M8.AXIOM.LEAN4LEAN, EVID.M8.AXIOM.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| SCENARIO.AXIOM.SAFETY_FLAG | WITNESS.AXIOM_UNSAFE_ONLY | GENERATED_WITNESS | SUPERSEDED_BY_STRONGER_EVIDENCE | DISCOVERY | — | The reviewed pilot selected the more specific safety-flag reconstruction witness; this unsafe-axiom-only candidate is retained under the separate admission-policy scenario. |
+| SCENARIO.AXIOM.SAFETY_FLAG | WITNESS.AXIOM_UNSAFE_ONLY_CONTROL | GENERATED_WITNESS | SUPERSEDED_BY_STRONGER_EVIDENCE | CONTROL | — | The reviewed pilot selected the matched control for the more specific safety-flag reconstruction witness; this control remains linked under the admission-policy scenario. |
+| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | LOCAL.AXIOM_FLAG_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.CONTROL, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | LOCAL.AXIOM_MATERIALIZATION | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves the candidate/control materialization transformation; it does not itself establish a checker outcome or normative claim. |
+| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | WITNESS.AXIOM_UNSAFE_FLAG | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION | WITNESS.AXIOM_UNSAFE_FLAG_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.CONTROL, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | LOCAL.DECL_ENV_MATRIX | TRACKED_EVIDENCE | INSUFFICIENT_FOR_CLAIM | DISCOVERY | — | The aggregate matrix is relevant discovery context, but exact scenario results and witnesses provide the claim-specific M8 bindings. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | LOCAL.KIOTA_SELF_REFERENCE | TRACKED_EVIDENCE | DEFERRED_TO_LATER_STUDY | IMPLEMENTATION_OBSERVATION | — | This reproduction targets a later Kiota upstream revision rather than the pinned M8 observer profile, so it cannot establish the M8 observer outcome. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | LOCAL.SELF_REFERENCE_METADATA | TRACKED_EVIDENCE | OUTSIDE_THIS_ENTRY_LAYER | PROVENANCE_ONLY | — | This record preserves witness-generation provenance; the exact witness and structured checker-result bytes carry the catalog-layer links. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | LOCAL.SELF_REFERENCE_RESULTS | TRACKED_EVIDENCE | LINKED | IMPLEMENTATION_OBSERVATION | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.CONTROL, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.WITNESS | The exact content-bound record is linked to claim-specific catalog evidence without creating normative authority. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | WITNESS.SELF_REFERENCE | GENERATED_WITNESS | LINKED | DISCOVERY | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.OFFICIAL, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.WITNESS | The exact frozen witness is linked as discovery evidence without promotion to isolation. |
+| SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY | WITNESS.SELF_REFERENCE_CONTROL | GENERATED_WITNESS | LINKED | CONTROL | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.CONTROL, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.KIOTA, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.LEAN4LEAN, EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.OFFICIAL | The exact frozen control is linked without promotion to isolation. |
 
 ## Unresolved Items
 
@@ -873,10 +932,10 @@ Observer vector:
 
 | Profile | Outcome | Attribution | Evidence |
 | --- | --- | --- | --- |
-| /observer_profiles/official_importer | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/official_importer | ACCEPT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.OFFICIAL |
 | /observer_profiles/nanoda | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/lean4lean | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/kiota | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/lean4lean | ACCEPT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.LEAN4LEAN |
+| /observer_profiles/kiota | ACCEPT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.KIOTA |
 
 Evidence:
 
@@ -884,6 +943,11 @@ Evidence:
 - `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.SOURCE.SRC.LEAN4LEAN.ENVIRONMENT` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.SOURCE.SRC.NANODA.PARSER` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.SOURCE.SRC.OFFICIAL.ENVIRONMENT` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.WITNESS` — `DISCOVERY` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact exposes this exact empirical boundary as discovery evidence without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.CONTROL` — `CONTROL` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact supplies the matched control for this scenario without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.OFFICIAL` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured official result row records ACCEPT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.KIOTA` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured kiota result row records ACCEPT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.AXIOM.ADMISSION_POLICY.RESULT.LEAN4LEAN` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured lean4lean result row records ACCEPT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
 
 ### `SCENARIO.AXIOM.SAFETY_FLAG` — Axiom safety-flag treatment
 
@@ -931,10 +995,10 @@ Observer vector:
 
 | Profile | Outcome | Attribution | Evidence |
 | --- | --- | --- | --- |
-| /observer_profiles/official_importer | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/official_importer | REJECT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.OFFICIAL |
 | /observer_profiles/nanoda | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/lean4lean | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/kiota | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/lean4lean | REJECT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.LEAN4LEAN |
+| /observer_profiles/kiota | ACCEPT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.KIOTA |
 
 Evidence:
 
@@ -944,6 +1008,11 @@ Evidence:
 - `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.SOURCE.SRC.LEAN4LEAN.REPLAY` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.SOURCE.SRC.NANODA.PARSER` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.SOURCE.SRC.OFFICIAL.ENVIRONMENT` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.WITNESS` — `DISCOVERY` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact exposes this exact empirical boundary as discovery evidence without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.CONTROL` — `CONTROL` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact supplies the matched control for this scenario without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.OFFICIAL` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured official result row records REJECT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.KIOTA` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured kiota result row records ACCEPT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION.RESULT.LEAN4LEAN` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured lean4lean result row records REJECT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
 
 ### `SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY` — Export free-variable representability
 
@@ -1017,10 +1086,10 @@ Observer vector:
 
 | Profile | Outcome | Attribution | Evidence |
 | --- | --- | --- | --- |
-| /observer_profiles/official_importer | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/official_importer | REJECT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.OFFICIAL |
 | /observer_profiles/nanoda | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/lean4lean | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
-| /observer_profiles/kiota | NOT_INSPECTED | No content-bound concrete outcome was selected for this identity in the Milestone 8 inventory. | — |
+| /observer_profiles/lean4lean | REJECT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.LEAN4LEAN |
+| /observer_profiles/kiota | ACCEPT | Extracted from the exact structured normalized-outcome field in the content-bound compatible checker result row. | EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.KIOTA |
 
 Evidence:
 
@@ -1031,6 +1100,11 @@ Evidence:
 - `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.SOURCE.SRC.NANODA.ENV` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.SOURCE.SRC.NANODA.PARSER` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
 - `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.SOURCE.SRC.OFFICIAL.ARENA_MAIN` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned source file implements, reconstructs, or observes part of this bounded catalog boundary without establishing authority. Assumptions: `—`. Contradiction: `—`. Limitations: `Implementation-source attribution is not a normative or soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.WITNESS` — `DISCOVERY` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact exposes this exact empirical boundary as discovery evidence without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.CONTROL` — `CONTROL` / `WITNESS_ARTIFACT`: The frozen existing Lab artifact supplies the matched control for this scenario without establishing isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `Existing Lab evidence alone does not establish isolation, negative coverage, normativity, or soundness.`.
+- `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.OFFICIAL` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured official result row records REJECT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.KIOTA` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured kiota result row records ACCEPT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
+- `EVID.M8.INVENTORY.SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY.RESULT.LEAN4LEAN` — `IMPLEMENTATION_OBSERVATION` / `CHECKER_RESULT`: The content-bound structured lean4lean result row records REJECT for this exact scenario and pinned compatible profile. Assumptions: `—`. Contradiction: `—`. Limitations: `This is a profile-specific implementation observation, not normative authority or a soundness conclusion.`.
 
 ### `SCENARIO.REPLAY.ENVIRONMENT_CONSTRUCTION` — Observer replay environment construction
 

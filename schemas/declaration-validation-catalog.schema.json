@@ -14,6 +14,7 @@
     "observer_order",
     "entries",
     "site_dispositions",
+    "existing_evidence_dispositions",
     "identity_dispositions",
     "completion_boundary",
     "nonclaims"
@@ -76,6 +77,10 @@
     "site_dispositions": {
       "type": "array",
       "items": {"$ref": "#/$defs/siteDisposition"}
+    },
+    "existing_evidence_dispositions": {
+      "type": "array",
+      "items": {"$ref": "#/$defs/existingEvidenceDisposition"}
     },
     "identity_dispositions": {
       "type": "array",
@@ -376,6 +381,88 @@
         "notes": {"type": "string", "minLength": 1}
       },
       "additionalProperties": false
+    },
+    "existingEvidenceDisposition": {
+      "type": "object",
+      "required": [
+        "stable_identity_id",
+        "source_lock_id",
+        "source_record_kind",
+        "disposition",
+        "linked_catalog_evidence_ids",
+        "claim_relevance",
+        "layer_relevance",
+        "rationale"
+      ],
+      "properties": {
+        "stable_identity_id": {"$ref": "#/$defs/semanticId"},
+        "source_lock_id": {
+          "type": "string",
+          "pattern": "^(LOCAL|WITNESS)(\\.[A-Z0-9_]+)+$"
+        },
+        "source_record_kind": {
+          "enum": [
+            "TRACKED_EVIDENCE",
+            "GENERATED_WITNESS",
+            "ARENA_EVIDENCE"
+          ]
+        },
+        "disposition": {
+          "enum": [
+            "LINKED",
+            "NOT_APPLICABLE",
+            "SUPERSEDED_BY_STRONGER_EVIDENCE",
+            "DUPLICATE",
+            "OUTSIDE_THIS_ENTRY_LAYER",
+            "INSUFFICIENT_FOR_CLAIM",
+            "DEFERRED_TO_LATER_STUDY"
+          ]
+        },
+        "linked_catalog_evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidenceId"}
+        },
+        "claim_relevance": {
+          "enum": [
+            "DISCOVERY",
+            "CONTROL",
+            "IMPLEMENTATION_OBSERVATION",
+            "ARENA_LINKAGE",
+            "PROVENANCE_ONLY",
+            "NONE"
+          ]
+        },
+        "layer_relevance": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {
+            "enum": [
+              "KERNEL_DECLARATION_VALIDITY",
+              "EXPORT_FORMAT",
+              "RECONSTRUCTION",
+              "TRUST_POLICY",
+              "IMPLEMENTATION_POLICY"
+            ]
+          }
+        },
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false,
+      "allOf": [
+        {
+          "if": {
+            "properties": {"disposition": {"const": "LINKED"}},
+            "required": ["disposition"]
+          },
+          "then": {
+            "properties": {"linked_catalog_evidence_ids": {"minItems": 1}}
+          },
+          "else": {
+            "properties": {"linked_catalog_evidence_ids": {"maxItems": 0}}
+          }
+        }
+      ]
     },
     "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "normativeCanonicalSemantics": {

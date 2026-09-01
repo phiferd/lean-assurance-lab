@@ -1,0 +1,68 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-historical-attestation.v2.schema.json",
+  "title": "Declaration Validation Two-Phase Historical Attestation",
+  "description": "Binds a separately committed milestone content state to exact Git blobs without self-reference.",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "attestation_id",
+    "recorded_at",
+    "status",
+    "historical_commit",
+    "phase",
+    "artifacts",
+    "evidence_records",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 2},
+    "attestation_id": {"const": "ordinary-declaration-validation.milestone-8.historical.v2"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_HISTORICAL_MILESTONE_ATTESTATION"},
+    "historical_commit": {"$ref": "#/$defs/gitObjectId"},
+    "phase": {
+      "type": "object",
+      "required": ["content_commit", "attestation_design", "reason"],
+      "properties": {
+        "content_commit": {"$ref": "#/$defs/gitObjectId"},
+        "attestation_design": {"const": "TWO_PHASE_NON_SELF_REFERENTIAL_GIT_BLOB_ATTESTATION"},
+        "reason": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "artifacts": {
+      "type": "object",
+      "minProperties": 1,
+      "additionalProperties": {"$ref": "#/$defs/gitBlobBinding"}
+    },
+    "evidence_records": {
+      "type": "object",
+      "minProperties": 1,
+      "propertyNames": {"pattern": "^(LOCAL|WITNESS)(\\.[A-Z0-9_]+)+$"},
+      "additionalProperties": {"$ref": "#/$defs/gitBlobBinding"}
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 4,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObjectId": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gitBlobBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObjectId"},
+        "git_blob": {"$ref": "#/$defs/gitObjectId"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

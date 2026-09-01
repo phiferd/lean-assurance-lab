@@ -61,6 +61,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         cls.m7_catalog["status"] = "MILESTONE_7_INFRASTRUCTURE_ONLY"
         cls.m7_catalog["entries"] = []
         cls.m7_catalog["site_dispositions"] = []
+        cls.m7_catalog["existing_evidence_dispositions"] = []
         cls.m7_catalog["identity_dispositions"] = []
         cls.m7_catalog["artifact_bindings"]["evidence_lock"] = {
             "path": str(module.M7_EVIDENCE_LOCK_PATH.relative_to(ROOT)),
@@ -231,7 +232,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             },
         }
 
-    def empirical_wrapper(self, stable_id="SCENARIO.EXPORT.FREE_VAR_REPRESENTABILITY"):
+    def empirical_wrapper(self, stable_id="SCENARIO.AXIOM.SAFETY_FLAG"):
         identity = self.identities[stable_id]
         entry = model_module.empirical_fixture(self.model)
         entry["id"] = stable_id
@@ -248,7 +249,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             module.empirical_observation_statement(identity)
         )
         entry["statement"]["profile_specific_effects"][0]["outcome"] = "REJECT"
-        witness = self.source_lock["generated_witnesses"][0]
+        witness = next(
+            item
+            for item in self.source_lock["generated_witnesses"]
+            if item["id"] == "WITNESS.AXIOM_UNSAFE_FLAG_CONTROL"
+        )
         control = next(item for item in entry["evidence"] if item["role"] == "CONTROL")
         control["source_lock"] = {
             "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
@@ -263,11 +268,11 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         )
         observation["source_lock"] = {
             "registry": "DECLARATION_VALIDATION_SOURCE_LOCK",
-            "lock_id": "LOCAL.NONPROP_RESULTS",
+            "lock_id": "LOCAL.AXIOM_FLAG_RESULTS",
         }
         observation["exact_locator"] = {
             "kind": "JSON_POINTER",
-            "value": "results/cross-validation/m6-nonprop-theorem/results.json#/validators/2/result/normalized_outcome",
+            "value": "results/cross-validation/axiom-unsafe-flag/results.json#/validators/2/result/normalized_outcome",
             "secondary": [
                 "observer_profile=/observer_profiles/lean4lean",
                 "outcome=REJECT",
@@ -322,10 +327,85 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertEqual(len(self.catalog["entries"]), 27)
         self.assertEqual(len(self.catalog["identity_dispositions"]), 30)
         self.assertEqual(len(self.catalog["site_dispositions"]), 149)
+        self.assertEqual(len(self.catalog["existing_evidence_dispositions"]), 41)
         self.assertTrue(
             self.catalog["completion_boundary"]["canonical_data_authoritative"]
         )
         self.assertTrue(self.catalog["completion_boundary"]["inventory_populated"])
+
+    def current_evidence_chain(self):
+        errors, chain = module.validate_evidence_lock_chain(
+            self.current_evidence_lock,
+            self.evidence_lock_schema,
+            self.source_lock,
+            check_git_tracking=False,
+        )
+        self.assertEqual(errors, [])
+        return chain
+
+    def evidence_disposition_errors(self, rows):
+        return module.validate_existing_evidence_dispositions(
+            rows,
+            source_lock=self.source_lock,
+            evidence_locks=self.current_evidence_chain(),
+            entries=self.catalog["entries"],
+        )
+
+    def test_existing_evidence_closure_rejects_silent_omission(self):
+        rows = copy.deepcopy(self.catalog["existing_evidence_dispositions"])
+        rows.pop()
+        self.assertTrue(
+            any(
+                "existing-evidence closure omits" in item
+                for item in self.evidence_disposition_errors(rows)
+            )
+        )
+
+    def test_existing_evidence_cannot_be_linked_to_wrong_identity(self):
+        rows = copy.deepcopy(self.catalog["existing_evidence_dispositions"])
+        row = next(
+            item
+            for item in rows
+            if item["source_lock_id"] == "WITNESS.SELF_REFERENCE"
+            and item["stable_identity_id"] == "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY"
+        )
+        row["stable_identity_id"] = "SCENARIO.AXIOM.ADMISSION_POLICY"
+        self.assertTrue(
+            any(
+                "not frozen as relevant to this identity" in item
+                for item in self.evidence_disposition_errors(rows)
+            )
+        )
+
+    def test_explicit_multi_identity_witness_is_dispositioned_for_both(self):
+        rows = [
+            item
+            for item in self.catalog["existing_evidence_dispositions"]
+            if item["source_lock_id"] == "WITNESS.SELF_REFERENCE"
+        ]
+        self.assertEqual(
+            {item["stable_identity_id"] for item in rows},
+            {
+                "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+                "SCENARIO.REPLAY.CURRENT_DECL_VISIBILITY",
+            },
+        )
+        self.assertEqual(self.evidence_disposition_errors(self.catalog["existing_evidence_dispositions"]), [])
+
+    def test_reviewed_pilot_entries_remain_exact_historical_inputs(self):
+        catalog = copy.deepcopy(self.catalog)
+        pilot_entry = next(
+            row
+            for row in catalog["entries"]
+            if row["characterization"]["id"] == "DECL.THEOREM.TYPE_PROP"
+        )
+        pilot_entry["characterization"]["name"] = "Mutated reviewed entry"
+        self.assertTrue(
+            any(
+                "changes immutable reviewed-pilot bytes" in item
+                for item in module.validate_reviewed_pilot_reuse(catalog)
+            )
+        )
 
     def test_six_authority_rules_cover_both_kinds_and_all_statuses(self):
         errors, rules = module.validate_rule_set(self.authority)
@@ -364,6 +444,18 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
 
     def test_milestone_8_freeze_and_completion_are_synchronized(self):
         self.assertEqual(module.validate_current_m8_completion(self.catalog), [])
+
+    def test_milestone_8_completion_derives_evidence_observer_and_arena_counts(self):
+        freeze = module.load_json(module.M8_FREEZE_PATH)
+        summary = freeze["inventory_summary"]
+        self.assertEqual(summary["existing_evidence_dispositions"], 41)
+        self.assertEqual(summary["existing_evidence_linked"], 24)
+        self.assertEqual(summary["existing_evidence_explicit_negative"], 17)
+        self.assertEqual(summary["un_dispositioned_existing_evidence"], 0)
+        self.assertEqual(summary["observer_outcomes_by_profile"]["official_importer"]["ACCEPT"], 1)
+        self.assertEqual(summary["observer_outcomes_by_profile"]["official_importer"]["REJECT"], 7)
+        self.assertEqual(summary["observer_outcomes_by_profile"]["nanoda"]["NOT_INSPECTED"], 27)
+        self.assertEqual(summary["arena_dispositions"]["LINKED"], 1)
 
     def test_milestone_8_freeze_is_acyclic_and_binds_the_catalog(self):
         freeze = module.load_json(module.M8_FREEZE_PATH)
