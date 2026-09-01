@@ -1218,10 +1218,30 @@ prepared_external_action_drafts: 5
    Authority did not strengthen: all 27 entries remain `PROVISIONAL`, the
    approved normative and mechanized source counts remain zero, and all
    soundness relevance remains `NOT_ASSESSED`. The prior path-hashed M8
-   "freeze" is corrected to a final content manifest. The exact next action is
-   to commit this Phase-A content and create the separate Git-blob historical
-   M8 attestation. **Milestone 9 remains not started and unauthorized until
-   that attestation validates.**
+   "freeze" is corrected to a final content manifest.
+
+   The corrected Phase-A content is commit
+   `714d0466a9f3e0ed1c8a8c6d20508324a48b3a1d`; its catalog SHA-256 is
+   `b3e5b9f59de3600d2c42a1549af51e32e0a589be7484ad4dd0b85cab53c0207f`
+   and its recorded gate is 137 declaration-validation tests with zero
+   failures or errors. The separate Phase-B
+   [M8 historical attestation](../results/research/declaration-validation-milestone-8-historical.json)
+   has SHA-256
+   `54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a`.
+   It resolves 56 core artifacts and 31 evidence records exclusively as exact
+   Git blobs at the Phase-A commit. Current path edits therefore cannot
+   redefine M8.
+
+   The M8→M9 transition regression simulates a different future current
+   catalog while proving that M7, the reviewed pilot, and corrected M8 still
+   validate unchanged. Tampering with the M8 catalog blob, catalog SHA-256,
+   historical commit, or completion/content-manifest binding fails. The final
+   Phase-B gate passed the source-lock, historical M7/reviewed-pilot/corrected-
+   M8, reviewed-pilot, and canonical-catalog validators plus all 139
+   declaration-validation tests with zero failures or errors. The exact next
+   authorized action is: **Conduct Milestone 9 as a separate reproducible
+   adversarial review of the immutable corrected M8 inventory. Milestone 9 is
+   not started.**
 
 ### Waiting
 

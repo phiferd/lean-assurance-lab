@@ -996,9 +996,31 @@ normative authority, or soundness evidence. All 27 authority assignments remain
 relevance remains `NOT_ASSESSED`.
 
 The path-hashed M8 artifact is now labeled a final content manifest rather than
-an immutable freeze. This Phase-A content state must be committed and then
-attested in a separate Phase-B Git-blob historical record before Milestone 9 is
-authorized. Do not rewrite the Phase-A commit after attestation.
+an immutable freeze. Phase A is commit
+`714d0466a9f3e0ed1c8a8c6d20508324a48b3a1d`, with canonical catalog SHA-256
+`b3e5b9f59de3600d2c42a1549af51e32e0a589be7484ad4dd0b85cab53c0207f`
+and a 137-test passing content gate. Do not rewrite that commit.
+
+### Milestone 8 Immutable Historical Attestation — 2026-08-31
+
+The separate Phase-B
+`results/research/declaration-validation-milestone-8-historical.json`
+attestation has SHA-256
+`54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a`.
+It binds 56 core artifacts and 31 selected evidence records to exact Git blobs
+at the Phase-A commit. The historical validator loads the Phase-A schema and
+content from those blobs, re-derives the critical identity, evidence, site,
+mapping, observer, and Arena boundaries, and verifies that the five pilot
+entries remain byte-exact. It does not use mutable current paths to define M8.
+
+The M8→M9 transition regression proves that a simulated future current catalog
+can differ while the historical M7, reviewed pilot, and corrected M8 continue
+to validate unchanged. Wrong catalog blob, catalog SHA-256, historical commit,
+and completion/content-manifest bindings are rejected. The final Phase-B gate
+passed all required validators and 139 declaration-validation tests with zero
+failures or errors. Corrected Milestone 8 is now an immutable historical
+predecessor. The next authorized action is a separate Milestone 9 adversarial
+review; **Milestone 9 has not started.**
 
 ## Milestone 9 — Adversarial Review as a Reproducible Artifact
 

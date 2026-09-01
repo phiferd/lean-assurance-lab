@@ -7,8 +7,11 @@ import hashlib
 import importlib.machinery
 import importlib.util
 import json
+import copy
+import re
 import subprocess
 import sys
+from collections import Counter
 from pathlib import Path
 from typing import Any
 
@@ -17,11 +20,14 @@ import jsonschema
 
 ROOT = Path(__file__).resolve().parents[1]
 M7_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-7-historical.json"
+M8_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-8-historical.json"
 ATTESTATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-historical-attestation.schema.json"
 REVIEWED_PILOT_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-8-pilot"
 M7_COMMIT = "da6b56af92ce2bcbfa6f2f29a6f699b2f0b24c19"
+M8_COMMIT = "714d0466a9f3e0ed1c8a8c6d20508324a48b3a1d"
 FROZEN_M7_ATTESTATION_SHA256 = "2970a01211e51475a02e4c031725d228a008e568804b34f1df5baf3250f4bef8"
 FROZEN_ATTESTATION_SCHEMA_SHA256 = "e439d95f6029d12b0e85c82c2e1a798bb220c624bb089a146dbc8e27b5595a00"
+FROZEN_M8_ATTESTATION_SHA256 = "54facd2b732e612f21d0016b2525cb61a950cf78811b62b9ac8374fa9e15985a"
 
 M7_COMPLETION_ARTIFACTS = {
     "approved_authority_sources",
@@ -53,6 +59,64 @@ M7_COMPLETION_ARTIFACTS = {
 M7_ATTESTATION_ARTIFACTS = M7_COMPLETION_ARTIFACTS | {
     "completion_record",
     "prior_identity_decisions",
+}
+M8_ATTESTATION_ARTIFACTS = {
+    "approved_authority_sources",
+    "approved_authority_sources_schema",
+    "authority_rules",
+    "authority_rules_schema",
+    "catalog",
+    "catalog_schema",
+    "catalog_tests",
+    "catalog_validator",
+    "characterization_model",
+    "characterization_model_schema",
+    "characterization_model_tests",
+    "characterization_model_validator",
+    "completion_record",
+    "completion_renderer",
+    "completion_schema",
+    "discovery_closure",
+    "discovery_closure_schema",
+    "discovery_closure_tests",
+    "discovery_closure_validator",
+    "entry_schema",
+    "evidence_lock",
+    "evidence_lock_milestone_7",
+    "evidence_lock_pilot",
+    "evidence_lock_pilot_repair",
+    "evidence_lock_schema",
+    "freeze_manifest",
+    "freeze_renderer",
+    "freeze_schema",
+    "generated_report",
+    "historical_attestation_renderer",
+    "historical_attestation_schema",
+    "historical_transition_tests",
+    "historical_validator",
+    "identity_registry",
+    "identity_registry_schema",
+    "inventory_populator",
+    "m7_historical_attestation",
+    "milestone_5_tests",
+    "milestone_5_validator",
+    "pilot_schema",
+    "pilot_tests",
+    "pilot_validator",
+    "post_catalog_decisions",
+    "post_catalog_decisions_schema",
+    "prior_identity_decisions",
+    "report_renderer",
+    "research_plan",
+    "research_status",
+    "reviewed_pilot_attestation",
+    "semantic_target",
+    "semantic_target_schema",
+    "semantic_target_validator",
+    "source_lock",
+    "source_lock_schema",
+    "source_lock_tests",
+    "source_lock_validator",
 }
 
 
@@ -228,6 +292,476 @@ def validate_m7_attestation(
     return errors
 
 
+def json_strings(value: Any) -> set[str]:
+    if isinstance(value, dict):
+        return {item for child in value.values() for item in json_strings(child)}
+    if isinstance(value, list):
+        return {item for child in value for item in json_strings(child)}
+    return {value} if isinstance(value, str) else set()
+
+
+def m8_evidence_index(
+    source_lock: dict[str, Any], evidence_locks: list[dict[str, Any]]
+) -> dict[str, tuple[str, dict[str, Any]]]:
+    result: dict[str, tuple[str, dict[str, Any]]] = {}
+    for row in source_lock["tracked_evidence"]:
+        result[row["id"]] = ("tracked_evidence", row)
+    for row in source_lock["generated_witnesses"]:
+        result[row["id"]] = ("generated_witness", row)
+    for lock in evidence_locks:
+        for row in lock["tracked_evidence"]:
+            result[row["id"]] = ("tracked_evidence", row)
+        for row in lock["generated_witnesses"]:
+            result[row["id"]] = ("generated_witness", row)
+    return result
+
+
+def m8_evidence_associations(
+    source_lock: dict[str, Any],
+    evidence_locks: list[dict[str, Any]],
+    evidence_documents: dict[str, bytes],
+    *,
+    include_successors: bool,
+) -> dict[str, set[str]]:
+    witnesses = list(source_lock["generated_witnesses"])
+    if include_successors:
+        witnesses.extend(
+            row for lock in evidence_locks for row in lock["generated_witnesses"]
+        )
+    associations = {
+        row["id"]: set(row["relevant_case_id"]) for row in witnesses
+    }
+    tracked = [
+        row
+        for row in source_lock["tracked_evidence"]
+        if row["source_role"] in {"EXISTING_LAB_EVIDENCE", "WITNESS_ORIGIN"}
+    ]
+    if include_successors:
+        tracked.extend(row for lock in evidence_locks for row in lock["tracked_evidence"])
+    for row in tracked:
+        content = evidence_documents.get(row["id"])
+        if content is None:
+            continue
+        try:
+            strings = json_strings(json.loads(content))
+        except json.JSONDecodeError:
+            continue
+        related: set[str] = set()
+        for witness in witnesses:
+            if (
+                witness["path"] in strings
+                or witness["artifact_sha256"] in strings
+                or witness["generator_or_origin"] == row["path"]
+            ):
+                related.update(witness["relevant_case_id"])
+        if related:
+            associations[row["id"]] = related
+    return associations
+
+
+def validate_m8_attestation(document: dict[str, Any] | None = None) -> list[str]:
+    """Validate corrected M8 exclusively from its Phase-A Git blobs."""
+
+    errors: list[str] = []
+    if document is None:
+        if not M8_ATTESTATION_PATH.is_file():
+            return ["Milestone 8 historical attestation is missing"]
+        if sha256_bytes(M8_ATTESTATION_PATH.read_bytes()) != FROZEN_M8_ATTESTATION_SHA256:
+            return ["Milestone 8 historical attestation bytes changed"]
+        document = load_json(M8_ATTESTATION_PATH)
+    if not isinstance(document.get("artifacts"), dict):
+        return ["Milestone 8 historical attestation artifacts are missing"]
+    schema_binding = document["artifacts"].get("historical_attestation_schema")
+    if not isinstance(schema_binding, dict):
+        return ["Milestone 8 historical attestation omits its Phase-A schema"]
+    schema_content, schema_binding_errors = git_blob_bytes(
+        schema_binding,
+        label="Milestone 8 historical-attestation schema",
+        expected_commit=M8_COMMIT,
+    )
+    errors.extend(schema_binding_errors)
+    if schema_content is None:
+        return errors
+    try:
+        attestation_schema = json.loads(schema_content)
+    except json.JSONDecodeError:
+        return errors + ["Milestone 8 historical-attestation schema blob is not JSON"]
+    errors.extend(schema_errors(document, attestation_schema, "Milestone 8 historical attestation"))
+    if errors:
+        return errors
+    if document["attestation_id"] != "ordinary-declaration-validation.milestone-8.historical.v2":
+        errors.append("Milestone 8 historical attestation identity is incorrect")
+    if document["historical_commit"] != M8_COMMIT:
+        errors.append("Milestone 8 historical attestation commit is incorrect")
+    if document["phase"]["content_commit"] != M8_COMMIT:
+        errors.append("Milestone 8 Phase-A content commit is incorrect")
+    if set(document["artifacts"]) != M8_ATTESTATION_ARTIFACTS:
+        errors.append("Milestone 8 historical attestation artifact set is not exact")
+        return errors
+
+    contents: dict[str, bytes] = {}
+    for name, binding in document["artifacts"].items():
+        content, binding_errors = git_blob_bytes(
+            binding, label=f"Milestone 8 {name}", expected_commit=M8_COMMIT
+        )
+        errors.extend(binding_errors)
+        if content is not None:
+            contents[name] = content
+    evidence_contents: dict[str, bytes] = {}
+    for source_id, binding in document["evidence_records"].items():
+        content, binding_errors = git_blob_bytes(
+            binding,
+            label=f"Milestone 8 evidence {source_id}",
+            expected_commit=M8_COMMIT,
+        )
+        errors.extend(binding_errors)
+        if content is not None:
+            evidence_contents[source_id] = content
+    if errors:
+        return errors
+
+    parsed: dict[str, dict[str, Any]] = {}
+    json_names = {
+        "approved_authority_sources",
+        "approved_authority_sources_schema",
+        "authority_rules",
+        "authority_rules_schema",
+        "catalog",
+        "catalog_schema",
+        "characterization_model",
+        "characterization_model_schema",
+        "completion_record",
+        "completion_schema",
+        "discovery_closure",
+        "discovery_closure_schema",
+        "entry_schema",
+        "evidence_lock",
+        "evidence_lock_milestone_7",
+        "evidence_lock_pilot",
+        "evidence_lock_pilot_repair",
+        "evidence_lock_schema",
+        "freeze_manifest",
+        "freeze_schema",
+        "identity_registry",
+        "identity_registry_schema",
+        "post_catalog_decisions",
+        "post_catalog_decisions_schema",
+        "semantic_target",
+        "semantic_target_schema",
+        "source_lock",
+        "source_lock_schema",
+    }
+    for name in json_names:
+        try:
+            parsed[name] = json.loads(contents[name])
+        except json.JSONDecodeError:
+            errors.append(f"historical M8 {name} blob is not JSON")
+    if errors:
+        return errors
+
+    catalog_schema = copy.deepcopy(parsed["catalog_schema"])
+    catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = parsed[
+        "entry_schema"
+    ]
+    schema_pairs = [
+        ("catalog", catalog_schema),
+        ("approved_authority_sources", parsed["approved_authority_sources_schema"]),
+        ("authority_rules", parsed["authority_rules_schema"]),
+        ("characterization_model", parsed["characterization_model_schema"]),
+        ("completion_record", parsed["completion_schema"]),
+        ("discovery_closure", parsed["discovery_closure_schema"]),
+        ("evidence_lock", parsed["evidence_lock_schema"]),
+        ("evidence_lock_milestone_7", parsed["evidence_lock_schema"]),
+        ("evidence_lock_pilot", parsed["evidence_lock_schema"]),
+        ("evidence_lock_pilot_repair", parsed["evidence_lock_schema"]),
+        ("freeze_manifest", parsed["freeze_schema"]),
+        ("identity_registry", parsed["identity_registry_schema"]),
+        ("post_catalog_decisions", parsed["post_catalog_decisions_schema"]),
+        ("semantic_target", parsed["semantic_target_schema"]),
+        ("source_lock", parsed["source_lock_schema"]),
+    ]
+    for name, schema in schema_pairs:
+        errors.extend(schema_errors(parsed[name], schema, f"historical M8 {name}"))
+    if errors:
+        return errors
+
+    catalog = parsed["catalog"]
+    freeze = parsed["freeze_manifest"]
+    completion = parsed["completion_record"]
+    source_lock = parsed["source_lock"]
+    evidence_locks = [
+        parsed["evidence_lock_milestone_7"],
+        parsed["evidence_lock_pilot"],
+        parsed["evidence_lock_pilot_repair"],
+        parsed["evidence_lock"],
+    ]
+    if catalog["status"] != "MILESTONE_8_CHARACTERIZATION_INVENTORY":
+        errors.append("historical M8 catalog does not preserve the completed inventory status")
+    if freeze["status"] != "FINAL_MILESTONE_8_CONTENT_MANIFEST":
+        errors.append("historical M8 content manifest is incorrectly labeled")
+    if completion["status"] != "PASS":
+        errors.append("historical M8 completion record does not preserve PASS")
+    recorded_tests = completion.get("validation", {}).get("recorded_results", {}).get(
+        "declaration_validation_tests", {}
+    )
+    if recorded_tests != {
+        "errors": 0,
+        "failures": 0,
+        "result": "PASS",
+        "tests_run": 137,
+    }:
+        errors.append("historical M8 completion does not preserve the Phase-A 137-test PASS")
+
+    for name, binding in catalog["artifact_bindings"].items():
+        artifact_name = name
+        if artifact_name not in document["artifacts"]:
+            errors.append(f"historical M8 catalog references unbound artifact {name}")
+            continue
+        errors.extend(
+            match_artifact_binding(
+                binding, document["artifacts"][artifact_name], f"historical M8 catalog {name}"
+            )
+        )
+    for name, binding in freeze["artifacts"].items():
+        if name not in document["artifacts"]:
+            errors.append(f"historical M8 content manifest references unbound artifact {name}")
+            continue
+        errors.extend(
+            match_artifact_binding(
+                binding, document["artifacts"][name], f"historical M8 content manifest {name}"
+            )
+        )
+    predecessor_map = {
+        "milestone_7": "m7_historical_attestation",
+        "reviewed_pilot": "reviewed_pilot_attestation",
+    }
+    for name, artifact_name in predecessor_map.items():
+        errors.extend(
+            match_artifact_binding(
+                freeze["predecessor_attestations"][name],
+                document["artifacts"][artifact_name],
+                f"historical M8 predecessor {name}",
+            )
+        )
+    for name, binding in completion["artifacts"].items():
+        if name not in document["artifacts"]:
+            errors.append(f"historical M8 completion references unbound artifact {name}")
+            continue
+        errors.extend(
+            match_artifact_binding(
+                binding, document["artifacts"][name], f"historical M8 completion {name}"
+            )
+        )
+    if freeze["inventory_summary"] != completion["inventory_summary"]:
+        errors.append("historical M8 content and completion summaries disagree")
+    if completion["artifacts"]["freeze_manifest"]["sha256"] != document["artifacts"]["freeze_manifest"]["sha256"]:
+        errors.append("historical M8 completion/freeze binding is stale")
+    if f"Catalog SHA-256: `{document['artifacts']['catalog']['sha256']}`" not in contents[
+        "generated_report"
+    ].decode("utf-8"):
+        errors.append("historical M8 report does not bind the historical catalog")
+
+    entries = catalog["entries"]
+    dispositions = catalog["identity_dispositions"]
+    evidence_dispositions = catalog["existing_evidence_dispositions"]
+    summary = freeze["inventory_summary"]
+    expected_summary = {
+        "frozen_identities": 30,
+        "catalog_entries": 27,
+        "normative_candidates": 19,
+        "empirical_scenarios": 8,
+        "deferred_kind": 1,
+        "out_of_scope": 2,
+        "site_dispositions": 149,
+        "source_mappings": 104,
+        "existing_evidence_dispositions": 41,
+        "un_dispositioned_existing_evidence": 0,
+        "existing_evidence_linked": 24,
+        "existing_evidence_explicit_negative": 17,
+        "provisional_authority": 27,
+        "not_assessed_soundness": 27,
+    }
+    for key, expected in expected_summary.items():
+        if summary.get(key) != expected:
+            errors.append(f"historical M8 summary {key} is not {expected}")
+    identity_counts = Counter(row["disposition"] for row in dispositions)
+    if identity_counts != {
+        "CATALOG_ENTRY": 27,
+        "DEFERRED_UNRESOLVED_KIND": 1,
+        "OUT_OF_SCOPE": 2,
+    }:
+        errors.append("historical M8 identity dispositions do not preserve the exact boundary")
+    if Counter(row["characterization"]["kind"] for row in entries) != {
+        "NORMATIVE_CANDIDATE_OBLIGATION": 19,
+        "EMPIRICAL_CONTRACT_SCENARIO": 8,
+    }:
+        errors.append("historical M8 entry-kind counts changed")
+    if len(catalog["site_dispositions"]) != 149:
+        errors.append("historical M8 site-disposition closure changed")
+    if sum(len(row["source_mappings"]) for row in entries) != 104:
+        errors.append("historical M8 source-mapping closure changed")
+    evidence_disposition_counts = Counter(
+        row["disposition"] for row in evidence_dispositions
+    )
+    if evidence_disposition_counts != {
+        "LINKED": 24,
+        "DEFERRED_TO_LATER_STUDY": 3,
+        "INSUFFICIENT_FOR_CLAIM": 5,
+        "OUTSIDE_THIS_ENTRY_LAYER": 6,
+        "SUPERSEDED_BY_STRONGER_EVIDENCE": 3,
+    }:
+        errors.append("historical M8 evidence-disposition partition changed")
+    arena_counts = Counter(row["arena_disposition"]["disposition"] for row in entries)
+    if arena_counts != {
+        "DEFERRED": 22,
+        "LINKED": 1,
+        "NOT_APPLICABLE": 1,
+        "NOT_INSPECTED": 3,
+    }:
+        errors.append("historical M8 Arena disposition partition changed")
+    for profile_pointer in catalog["observer_order"]:
+        profile_name = profile_pointer.rsplit("/", 1)[-1]
+        observed = Counter(
+            next(
+                item["outcome"]
+                for item in row["observer_vector"]
+                if item["profile_pointer"] == profile_pointer
+            )
+            for row in entries
+        )
+        recorded = {
+            outcome: count
+            for outcome, count in summary["observer_outcomes_by_profile"][profile_name].items()
+            if count
+        }
+        if dict(observed) != recorded:
+            errors.append(f"historical M8 observer summary changed for {profile_name}")
+    if len(dispositions) != 30 or len(entries) != 27:
+        errors.append("historical M8 identity/catalog closure counts changed")
+    if any(row["characterization"]["authority"]["status"] != "PROVISIONAL" for row in entries):
+        errors.append("historical M8 improperly strengthens catalog authority")
+    if any(row["characterization"]["soundness_relevance"]["status"] != "NOT_ASSESSED" for row in entries):
+        errors.append("historical M8 improperly assesses soundness relevance")
+    if parsed["approved_authority_sources"]["normative_documentation"] or parsed[
+        "approved_authority_sources"
+    ]["mechanized_results"]:
+        errors.append("historical M8 approved authority-source registry is not empty")
+
+    record_index = m8_evidence_index(source_lock, evidence_locks)
+    selected_ids = {row["source_lock_id"] for row in evidence_dispositions}
+    for entry in entries:
+        for evidence in entry["characterization"]["evidence"]:
+            if evidence["source_lock"]["lock_id"] in record_index:
+                selected_ids.add(evidence["source_lock"]["lock_id"])
+    if set(document["evidence_records"]) != selected_ids:
+        errors.append("Milestone 8 historical evidence-record binding set is not exact")
+    for source_id in selected_ids & set(record_index):
+        kind, row = record_index[source_id]
+        binding = document["evidence_records"].get(source_id)
+        if binding is None:
+            continue
+        expected_sha = row["file_sha256"] if kind == "tracked_evidence" else row["artifact_sha256"]
+        if binding["path"] != row["path"] or binding["sha256"] != expected_sha:
+            errors.append(f"{source_id}: historical evidence binding differs from its frozen lock record")
+
+    base_associations = m8_evidence_associations(
+        source_lock, evidence_locks, evidence_contents, include_successors=False
+    )
+    entry_by_id = {row["characterization"]["id"]: row for row in entries}
+    for stable_id, entry in entry_by_id.items():
+        for evidence in entry["characterization"]["evidence"]:
+            if evidence["source_type"] == "ARENA_TEST":
+                base_associations.setdefault(evidence["source_lock"]["lock_id"], set()).add(
+                    stable_id
+                )
+    expected_pairs = {
+        (stable_id, source_id)
+        for source_id, stable_ids in base_associations.items()
+        for stable_id in stable_ids
+        if stable_id in entry_by_id
+    }
+    actual_pairs = {
+        (row["stable_identity_id"], row["source_lock_id"])
+        for row in evidence_dispositions
+    }
+    if actual_pairs != expected_pairs:
+        errors.append("historical M8 existing-evidence closure differs from frozen evidence metadata")
+
+    all_associations = m8_evidence_associations(
+        source_lock, evidence_locks, evidence_contents, include_successors=True
+    )
+    profile_checkers = {
+        "/observer_profiles/official_importer": "official",
+        "/observer_profiles/nanoda": "nanoda",
+        "/observer_profiles/lean4lean": "lean4lean",
+        "/observer_profiles/kiota": "kiota",
+    }
+    for stable_id, entry in entry_by_id.items():
+        evidence_by_id = {
+            row["id"]: row for row in entry["characterization"]["evidence"]
+        }
+        for observation in entry["observer_vector"]:
+            if observation["outcome"] not in {"ACCEPT", "REJECT", "ERROR", "TIMEOUT"}:
+                continue
+            matched = False
+            for evidence_id in observation["evidence_refs"]:
+                evidence = evidence_by_id.get(evidence_id)
+                if evidence is None or evidence["source_type"] != "CHECKER_RESULT":
+                    continue
+                source_id = evidence["source_lock"]["lock_id"]
+                locator = evidence["exact_locator"]["value"]
+                pointer = locator.split("#", 1)[-1]
+                pointer_match = re.fullmatch(
+                    r"/validators/(0|[1-9][0-9]*)/result/normalized_outcome", pointer
+                )
+                content = evidence_contents.get(source_id)
+                if pointer_match is None or content is None or stable_id not in all_associations.get(source_id, set()):
+                    continue
+                result_document = json.loads(content)
+                validator_row = result_document["validators"][int(pointer_match.group(1))]
+                profile_name = observation["profile_pointer"].rsplit("/", 1)[-1]
+                target_profile = parsed["semantic_target"]["observer_profiles"][profile_name]
+                checker_identity = validator_row.get("compatibility", {}).get(
+                    "checker_identity", {}
+                )
+                exact_profile = (
+                    checker_identity.get("arena_definition_sha256")
+                    == target_profile["arena_integration"]["definition_sha256"]
+                )
+                if validator_row["checker"] == "official":
+                    exact_profile = exact_profile and (
+                        checker_identity.get("built_toolchain")
+                        == target_profile["configuration"]["built_toolchain"]
+                    )
+                else:
+                    exact_profile = exact_profile and (
+                        checker_identity.get("source_revision")
+                        == target_profile["implementation"]["revision"]
+                    )
+                if (
+                    validator_row["checker"] == profile_checkers[observation["profile_pointer"]]
+                    and validator_row["result"]["normalized_outcome"] == observation["outcome"]
+                    and validator_row.get("compatibility", {}).get("status") == "COMPATIBLE"
+                    and exact_profile
+                ):
+                    matched = True
+                    break
+            if not matched:
+                errors.append(f"{stable_id}: historical concrete observer outcome is not bound to exact result bytes")
+
+    pilot_validator = load_module(
+        "declaration_historical_m8_reviewed_pilot", REVIEWED_PILOT_VALIDATOR_PATH
+    )
+    pilot_context, pilot_errors = pilot_validator.reviewed_pilot_context()
+    errors.extend(f"historical M8 reviewed pilot: {error}" for error in pilot_errors)
+    if pilot_context is not None:
+        for reviewed in pilot_context["pilot"]["entries"]:
+            stable_id = reviewed["characterization"]["id"]
+            if entry_by_id.get(stable_id) != reviewed:
+                errors.append(f"{stable_id}: historical M8 changes immutable reviewed-pilot bytes")
+    return errors
+
+
 def validate_reviewed_m8_pilot() -> list[str]:
     """Validate the reviewed pilot through its own immutable Git-blob attestation."""
 
@@ -240,11 +774,15 @@ def validate_reviewed_m8_pilot() -> list[str]:
 def main() -> int:
     errors = validate_m7_attestation()
     errors.extend(validate_reviewed_m8_pilot())
+    errors.extend(validate_m8_attestation())
     if errors:
         for error in errors:
             print(f"ERROR: {error}")
         return 1
-    print("declaration-validation historical M7 attestation and reviewed M8 pilot: PASS")
+    print(
+        "declaration-validation historical M7 attestation, reviewed M8 pilot, "
+        "and corrected M8 attestation: PASS"
+    )
     return 0
 
 

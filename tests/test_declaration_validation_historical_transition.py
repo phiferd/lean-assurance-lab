@@ -5,6 +5,7 @@ import importlib.util
 import json
 import tempfile
 import unittest
+from unittest import mock
 from pathlib import Path
 
 
@@ -30,6 +31,101 @@ pilot_validator = load_module(
 
 
 class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
+    def test_m9_current_catalog_transition_leaves_m8_historical_attestation_unchanged(self):
+        """A future current catalog cannot redefine the corrected M8 content state."""
+
+        attestation = history.load_json(history.M8_ATTESTATION_PATH)
+        before_blobs = {}
+        for name in ("catalog", "freeze_manifest", "completion_record"):
+            content, errors = history.git_blob_bytes(
+                attestation["artifacts"][name],
+                label=f"M8 transition before {name}",
+                expected_commit=history.M8_COMMIT,
+            )
+            self.assertEqual(errors, [])
+            self.assertIsNotNone(content)
+            assert content is not None
+            before_blobs[name] = hashlib.sha256(content).hexdigest()
+
+        historical_catalog = json.loads(
+            history.git_blob_bytes(
+                attestation["artifacts"]["catalog"],
+                label="M8 transition catalog",
+                expected_commit=history.M8_COMMIT,
+            )[0]
+        )
+        future_catalog = copy.deepcopy(historical_catalog)
+        future_catalog["status"] = "MILESTONE_9_PRE_REVIEW_FREEZE"
+        future_catalog["completion_boundary"]["next_milestone"] = (
+            "MILESTONE_9_ADVERSARIAL_REVIEW"
+        )
+
+        with tempfile.TemporaryDirectory() as directory:
+            current_catalog = Path(directory) / "declaration-validation-catalog.json"
+            current_catalog.write_text(
+                json.dumps(future_catalog, indent=2, sort_keys=True) + "\n",
+                encoding="utf-8",
+            )
+            future_sha = hashlib.sha256(current_catalog.read_bytes()).hexdigest()
+            self.assertNotEqual(future_sha, attestation["artifacts"]["catalog"]["sha256"])
+
+            live_catalog = ROOT / "config" / "declaration-validation-catalog.json"
+            original_read_text = Path.read_text
+            original_read_bytes = Path.read_bytes
+
+            def reject_live_catalog_text(path, *args, **kwargs):
+                if path == live_catalog:
+                    raise AssertionError("historical validation read the mutable catalog path")
+                return original_read_text(path, *args, **kwargs)
+
+            def reject_live_catalog_bytes(path, *args, **kwargs):
+                if path == live_catalog:
+                    raise AssertionError("historical validation read the mutable catalog path")
+                return original_read_bytes(path, *args, **kwargs)
+
+            with mock.patch.object(Path, "read_text", reject_live_catalog_text), mock.patch.object(
+                Path, "read_bytes", reject_live_catalog_bytes
+            ):
+                self.assertEqual(history.validate_m7_attestation(), [])
+                self.assertEqual(history.validate_reviewed_m8_pilot(), [])
+                self.assertEqual(history.validate_m8_attestation(), [])
+
+        for name, expected_sha in before_blobs.items():
+            content, errors = history.git_blob_bytes(
+                attestation["artifacts"][name],
+                label=f"M8 transition after {name}",
+                expected_commit=history.M8_COMMIT,
+            )
+            self.assertEqual(errors, [])
+            self.assertIsNotNone(content)
+            assert content is not None
+            self.assertEqual(hashlib.sha256(content).hexdigest(), expected_sha)
+
+    def test_m8_historical_attestation_tampering_fails(self):
+        attestation = history.load_json(history.M8_ATTESTATION_PATH)
+
+        wrong_blob = copy.deepcopy(attestation)
+        wrong_blob["artifacts"]["catalog"]["git_blob"] = "0" * 40
+        errors = history.validate_m8_attestation(wrong_blob)
+        self.assertTrue(any("blob identity is stale" in item for item in errors))
+
+        wrong_sha = copy.deepcopy(attestation)
+        wrong_sha["artifacts"]["catalog"]["sha256"] = "0" * 64
+        errors = history.validate_m8_attestation(wrong_sha)
+        self.assertTrue(any("SHA-256 is stale" in item for item in errors))
+
+        wrong_commit = copy.deepcopy(attestation)
+        wrong_commit["historical_commit"] = "0" * 40
+        errors = history.validate_m8_attestation(wrong_commit)
+        self.assertTrue(any("attestation commit is incorrect" in item for item in errors))
+
+        wrong_completion_freeze = copy.deepcopy(attestation)
+        wrong_completion_freeze["artifacts"]["freeze_manifest"] = copy.deepcopy(
+            wrong_completion_freeze["artifacts"]["catalog"]
+        )
+        errors = history.validate_m8_attestation(wrong_completion_freeze)
+        self.assertTrue(errors)
+
     def test_m8_current_catalog_transition_leaves_historical_attestations_unchanged(self):
         """This would fail when M7 or the reviewed pilot followed config/catalog.json."""
 

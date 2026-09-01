@@ -2213,6 +2213,15 @@ def validate_historical_m8_pilot() -> list[str]:
     return historical.validate_reviewed_m8_pilot()
 
 
+def validate_historical_m8_attestation() -> list[str]:
+    """Require corrected M8 through its immutable two-phase Git-blob record."""
+
+    historical = load_module(
+        "declaration_m8_historical_attestation_validator", HISTORICAL_VALIDATOR_PATH
+    )
+    return historical.validate_m8_attestation()
+
+
 def validate_bound_files(bindings: dict[str, Any], label: str) -> list[str]:
     errors: list[str] = []
     for name, binding in bindings.items():
@@ -2362,8 +2371,7 @@ def validate_all(*, require_completion: bool = True) -> tuple[list[str], dict[st
     if require_completion:
         errors.extend(validate_historical_m7_attestation())
         errors.extend(validate_historical_m8_pilot())
-        if catalog["status"] == "MILESTONE_8_CHARACTERIZATION_INVENTORY":
-            errors.extend(validate_current_m8_completion(catalog))
+        errors.extend(validate_historical_m8_attestation())
     entries = catalog["entries"]
     summary = {
         "catalog_sha256": sha256_file(CATALOG_PATH),

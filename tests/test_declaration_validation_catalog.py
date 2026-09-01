@@ -442,8 +442,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
     def test_reviewed_m8_pilot_attestation_is_required_by_completion_validation(self):
         self.assertEqual(module.validate_historical_m8_pilot(), [])
 
-    def test_milestone_8_freeze_and_completion_are_synchronized(self):
-        self.assertEqual(module.validate_current_m8_completion(self.catalog), [])
+    def test_corrected_milestone_8_historical_attestation_is_required(self):
+        self.assertEqual(module.validate_historical_m8_attestation(), [])
 
     def test_milestone_8_completion_derives_evidence_observer_and_arena_counts(self):
         freeze = module.load_json(module.M8_FREEZE_PATH)
