@@ -1277,6 +1277,19 @@ prepared_external_action_drafts: 5
    binding are rejected. Milestone 9 is now an immutable historical
    predecessor. **Milestone 10 has not started.**
 
+   A pre-M10 specification amendment now makes the next milestone's design-only
+   boundary explicit. Immutable reviewed M9 Git blobs are the eligibility
+   input; the strict normative denominator is expected to be empty because all
+   active entries remain `PROVISIONAL`; and M10 may neither resolve authority
+   nor execute Arena, checker, mutation, witness-synthesis, or cross-validation
+   research. M10 must still analyze every frozen entry across separate semantic
+   negative-testability, Arena-representability, and isolation-feasibility
+   dimensions, derive both the strict denominator and separately labeled
+   exploratory set, specify the future protocol, and freeze that design through
+   the corrected-M8/repaired-M9 two-phase historical pattern. This amendment
+   changes no catalog state, evidence, authority, or research finding.
+   **Milestone 10 has not started.**
+
 ### Waiting
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on

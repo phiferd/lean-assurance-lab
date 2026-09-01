@@ -2,9 +2,11 @@
 
 ## Revised Execution Mandate
 
-- Plan revision: 2
+- Plan revision: 3
 - Recorded: 2026-08-30
-- Status: active execution mandate; Milestones 0 through 9 recorded
+- Amended: 2026-09-01 (pre-Milestone-10 specification clarification)
+- Status: active execution mandate; Milestones 0 through 9 recorded;
+  Milestone 10 not started
 - Planning authority: F-DECLARATION-VALIDATION-CONTRACT-SLICE in
   docs/RESEARCH_STATUS.md
 - Milestone 0 record:
@@ -1131,52 +1133,235 @@ bindings fail. The active transition module passes all 11 tests with no skips,
 and the Phase-B declaration-validation suite passes all 158 tests. Milestone 9
 is now an immutable historical predecessor. **Milestone 10 has not started.**
 
-## Milestone 10 — Design the Next Phase Against the Frozen Inventory
+## Milestone 10 — Design the Next Phase Against the Immutable Reviewed M9 Inventory
 
-Do not yet execute the broad Arena coverage study.
+### Milestone Boundary and Frozen Input
 
-Design it precisely.
+Milestone 10 is a study-design milestone. It must not execute the Arena study
+that it specifies or create new substantive semantic evidence.
 
-The reviewed inventory hash becomes the frozen denominator input.
+The immutable reviewed M9 inventory is the frozen eligibility input. Milestone
+10 derives the future coverage denominator from that inventory according to the
+eligibility rules below. The input must be resolved through
+`results/research/declaration-validation-milestone-9-historical.json` and its
+exact Git-blob bindings at the M9 Phase-A commit, not through whatever bytes
+later occupy mutable current catalog, review, schema, report, or evidence-lock
+paths. A mutable current catalog is not an M10 eligibility input.
 
-Only entries satisfying all of the following may enter the primary
-negative-coverage denominator:
+The frozen M9 state contains no `ESTABLISHED` entry: all 27 active entries are
+`PROVISIONAL`, and the frozen approved-authority-source registry is empty. The
+current primary normative negative-coverage denominator is therefore expected
+to be empty. An empty denominator is a valid Milestone 10 result, not a defect
+to repair. No normative coverage percentage may be reported when that
+denominator is empty.
+
+If no frozen entry satisfies the complete eligibility conjunction, record the
+primary normative negative-coverage denominator as empty. Do not weaken a
+criterion, infer authority, perform authority-resolution work, or reinterpret
+an unresolved determination to make the denominator nonempty.
+
+This pre-M10 amendment clarifies the future milestone only. It does not start
+Milestone 10.
+
+### Authority Is an Input Gate, Not M10 Work
+
+Milestone 10 may define the authority gate that a future primary normative
+study requires, but it may not satisfy that gate. Authority resolution remains
+a separate governed process. In particular, M10 must not:
+
+- approve normative documentation;
+- approve mechanized results;
+- create a new version of the approved-authority-source registry;
+- promote `PROVISIONAL` to `ESTABLISHED`;
+- use checker agreement, consensus, or majority as authority; or
+- conduct literature, documentation, source, or mechanization research for the
+  purpose of making the denominator nonempty.
+
+Implementation observations remain implementation observations. Checker
+agreement and LLM judgment remain non-authoritative. The plan-wide deliverable
+named **Research authority resolution** records the Milestone 0 frontier
+decision and any separately governed future authority process; it is not
+authorization to resolve catalog authority during M10.
+
+### Complete Per-Entry Future-Study Readiness Analysis
+
+Evaluate every entry in the complete frozen reviewed M9 inventory. Preserve an
+explicit disposition for frozen deferred or reserved identities so input
+closure remains reproducible. Do not short-circuit an entry's analysis because
+its authority is `PROVISIONAL` or because another criterion already excludes
+it. Logic equivalent to `authority is provisional -> excluded -> stop
+analysis` is forbidden.
+
+For every relevant frozen entry, record independent structured determinations
+for the study criteria. Reuse frozen catalog vocabulary for kind, layers,
+authority (`ESTABLISHED | PROVISIONAL | UNRESOLVED`), and lifecycle (`ACTIVE |
+SUPERSEDED | REDUNDANT | OUT_OF_SCOPE`). New readiness determinations must use
+the controlled status vocabulary `YES | NO | UNRESOLVED` and carry at least:
+
+~~~yaml
+status: YES | NO | UNRESOLVED
+basis:
+evidence:
+blocking_reason_if_any:
+~~~
+
+For `study_scope`, `YES` means in scope for the frozen future study, `NO` means
+out of that study scope, and `UNRESOLVED` preserves an undecided boundary. This
+derived study-scope determination does not alter the entry's frozen catalog
+lifecycle.
+
+Do not collapse distinct questions into one overloaded `negative_testable`
+Boolean. At minimum, record these three separate dimensions:
+
+`semantic_negative_testability`
+: Can an object exist in the modeled semantics that satisfies the applicability
+  and reach prerequisites while violating the target predicate?
+
+`arena_representability`
+: Can such an object be encoded, exported, transported, parsed, and
+  reconstructed through the pinned Arena/export pipeline sufficiently to reach
+  the intended observation point?
+
+`isolation_feasibility`
+: Can the target violation be exercised without another violated obligation
+  independently accounting for rejection?
+
+The per-entry record must be structurally equivalent to:
+
+~~~yaml
+entry_id:
+kind_eligible:
+authority_eligible:
+kernel_layer_eligible:
+study_scope:
+semantic_negative_testability:
+arena_representability:
+isolation_feasibility:
+lifecycle_eligible:
+primary_denominator_eligible:
+primary_exclusion_reasons:
+~~~
+
+Equivalent repository naming is permitted, but the semantic separation is
+mandatory. `primary_denominator_eligible` must be mechanically derived from
+the individual determinations and frozen catalog values; it must not be entered
+as an unexplained Boolean. Every failed or unresolved conjunct must produce an
+explicit controlled exclusion reason.
+
+### Two Separate Study Populations
+
+#### A. Primary Normative Negative-Coverage Denominator
+
+This is the strict epistemic denominator for the future Arena normative
+negative/isolated-negative coverage study. Membership is derived as `YES` if
+and only if the complete conjunction below holds:
 
 ~~~text
 kind = NORMATIVE_CANDIDATE_OBLIGATION
-authority.status = ESTABLISHED
-KERNEL_DECLARATION_VALIDITY is in layers
-in scope for the frozen study
-negative-testable
-not superseded, redundant, or out of scope
+AND authority.status = ESTABLISHED
+AND KERNEL_DECLARATION_VALIDITY is in layers
+AND study_scope.status = YES
+AND semantic_negative_testability.status = YES
+AND arena_representability.status = YES
+AND isolation_feasibility.status = YES
+AND lifecycle.status = ACTIVE
 ~~~
 
-Study inclusion and negative-testability must be structured determinations, not
-bare Boolean assertions. Record:
+`SUPERSEDED`, `REDUNDANT`, and `OUT_OF_SCOPE` are not lifecycle eligible. A
+`NO` or `UNRESOLVED` readiness conjunct excludes the entry from this frozen
+denominator while preserving the exact determination and reason. Reconstruction,
+export-format, trust-policy, and implementation-policy observations do not
+become normative kernel obligations merely because they are testable.
 
-~~~yaml
-status:
-basis:
-evidence:
-exclusion_reason_if_any:
+The strict denominator is currently expected to be empty because no frozen M9
+entry satisfies the authority conjunct. M10 must derive and report that result
+without epistemic promotion, denominator substitution, criterion weakening, or
+percentage manufacture.
+
+#### B. Provisional Exploratory Candidate Set
+
+Separately identify the provisional normative candidates that may inform a
+later, clearly labeled exploratory study. Even though they cannot enter the
+primary denominator, analyze them for:
+
+- semantic negative-testability;
+- Arena representability;
+- isolation feasibility;
+- future witness-construction strategy; and
+- likely blocking prerequisites.
+
+The exploratory candidate set must never contribute to a normative coverage
+percentage, be described as established normative coverage, strengthen
+authority, or act as a substitute denominator. Empirical contract scenarios
+and profile-specific observations remain separately labeled characterization
+context rather than entering either normative population.
+
+Exclusion from the primary denominator does not prohibit later clearly labeled
+exploratory testing. Such testing belongs to the successor execution plan and
+must preserve its provisional, empirical, and profile-scoped labels.
+
+### Future Isolated-Negative Coverage Contract
+
+For a future negative artifact `x` targeting predicate `P`, the intended
+semantic proof obligation is conceptually:
+
+~~~text
+Reach(x) AND NOT P(x)
 ~~~
 
-Reconstruction, trust-policy, implementation-policy, provisional, unresolved,
-and empirical-only scenarios remain visible but are excluded with explicit
-machine-readable reasons.
+`Reach(x)` means the evidence-backed applicability and prerequisite conditions
+needed to reach the target rule premise. Do not use the word `ESTABLISHED` for
+reach or applicability unless referring to the formal authority-status enum.
 
-A test may count as isolated negative coverage only when it has:
+A future artifact may count as primary normative isolated-negative coverage
+only when it has all of the following:
 
 1. a content-bound negative artifact;
-2. a matched positive control;
-3. established applicability and reach conditions;
-4. evidence that the target predicate is violated;
-5. competing-obligation analysis;
-6. an authority-scoped expected outcome;
+2. evidence-backed `Reach(x)` applicability and prerequisite conditions;
+3. evidence that `NOT P(x)` holds;
+4. a matched positive control;
+5. complete competing-obligation analysis;
+6. an authority-scoped expected normative rejection; and
 7. per-checker rejection attribution where obtainable.
 
-Merely observing that a checker rejects an artifact does not establish isolated
-coverage.
+Competing-obligation analysis must identify every other obligation capable of
+independently explaining rejection and classify it as:
+
+- satisfied;
+- not applicable; or
+- unresolved.
+
+If any relevant competing obligation remains unresolved, the artifact may be
+recorded as an observed negative case but must not count as isolated negative
+coverage. Rejection alone does not establish `Reach(x)`, `NOT P(x)`, or
+isolation.
+
+The matched positive control must come from the same construction family where
+practicable, repair the target violation, and minimize unrelated semantic
+differences. Every unavoidable unrelated difference must be explicit and
+justified.
+
+For the authority-scoped expected outcome required by primary normative
+isolated-negative coverage:
+
+- an `ESTABLISHED` normative obligation may support an expected normative
+  rejection;
+- a `PROVISIONAL` normative candidate may not support that expected normative
+  rejection; and
+- an implementation profile may have evidence-backed profile-specific expected
+  behavior, but that behavior is not the normative expected outcome required
+  for primary coverage.
+
+Under the immutable M9 state, no provisional candidate has the
+authority-scoped expected normative rejection needed to count toward primary
+normative isolated-negative coverage. This is not a problem M10 must solve.
+
+Checker attribution rules must bind each observation to the exact artifact,
+observer profile, configuration, pipeline stage, and normalized outcome. They
+must distinguish export, transport, parse, reconstruction, validation, and
+policy behavior where those stages can explain an outcome. Cross-checker
+agreement is not a majority oracle and must not be used to infer either
+normativity or isolation.
 
 Design the future representation for:
 
@@ -1185,20 +1370,152 @@ obligation
  ↕
 positive control
  ↕
-negative artifact
+negative artifact satisfying Reach(x) AND NOT P(x)
  ↕
 competing obligations
  ↕
-Arena tests
+Arena/export pipeline
  ↕
-checker observations
+attributed checker observations
 ~~~
 
-Stop before executing a large synthesis or coverage campaign.
+### Future Witness-Synthesis Design, Not Execution
+
+Specify a future witness-synthesis hierarchy without generating a campaign:
+
+1. **Tier 1 — deterministic premise-specific templates**
+2. **Tier 2 — structure-preserving transformations of known-valid artifacts**
+3. **Tier 3 — constraint-driven constructors targeting `Reach(x) AND NOT
+   P(x)`**
+
+"Fuzz until a checker disagrees" is not a definition of semantic negative-test
+generation. It neither establishes the target violation nor isolates its cause.
+
+M10 may inspect and reference existing frozen evidence. It may create only
+synthetic fixtures strictly necessary to test M10 schemas, validators, and
+derivation logic. Such fixtures must be unmistakably labeled as synthetic
+validation fixtures and must not be represented as research findings,
+semantic witnesses, Arena coverage, or checker-characterization evidence.
+
+M10 must not create new substantive semantic evidence by running:
+
+- new Arena test campaigns;
+- new checker comparison campaigns;
+- mutation campaigns;
+- generated Lean witness campaigns;
+- broad witness synthesis; or
+- new cross-validation intended to characterize checker semantics.
+
+No broad negative-coverage, isolated-negative-coverage, synthesis, mutation,
+or checker experiment may begin during M10.
+
+### Durable M10 Output and Execution Gates
+
+The durable scientific output must have this derivation structure:
+
+~~~text
+immutable reviewed M9 inventory
+        ↓
+per-entry future-study readiness analysis
+        ↓
+derived primary normative denominator
+        ↓
+provisional exploratory candidate set
+        ↓
+frozen future experiment protocol
+~~~
+
+The frozen future experiment protocol must define at least:
+
+- the denominator eligibility algorithm;
+- explicit exclusion reasons;
+- the exploratory-candidate policy;
+- semantic negative-testability;
+- Arena representability;
+- isolation feasibility;
+- the `Reach(x) AND NOT P(x)` evidence contract;
+- the matched positive-control contract;
+- competing-obligation analysis;
+- authority-scoped expected-outcome rules;
+- checker attribution rules;
+- the synthesis hierarchy; and
+- study execution gates.
+
+M10 is responsible for the frozen next-phase study specification, complete
+per-entry eligibility/readiness analysis, mechanical denominator derivation,
+future isolated-negative coverage contract, future synthesis and attribution
+rules, execution gates, and the minimum schemas, validators, generated reports,
+content manifests, and historical-freeze machinery needed to make that design
+durable. It must verify and consume the completed M0–M9 artifacts, not recreate
+their semantic target lock, source lock, characterization schema, inventory,
+decision records, or adversarial review.
+
+The future experiment may execute only under a separately authorized successor
+plan or milestone after the M10 protocol is historically frozen. That successor
+must bind the M10 attestation as its immutable protocol input and satisfy the
+protocol's execution gates before producing substantive evidence.
+
+### M10 Historical Freeze
+
+Completion must follow the same two-phase historical pattern used for corrected
+M8 and repaired M9:
+
+**Phase A**
+
+1. finalize the complete M10 study-design state;
+2. run its required schemas, validators, derivation checks, and transition
+   regressions; and
+3. commit the exact required content.
+
+**Phase B**
+
+1. create a separate Git-blob historical attestation;
+2. bind the Phase-A commit and every exact artifact required to reconstruct and
+   validate M10; and
+3. prove that later mutable current files and successor research plans may
+   evolve without redefining M10.
+
+The Phase-B attestation must validate from the bound historical blobs rather
+than mutable current paths. This milestone specification requires that
+machinery; this pre-M10 amendment does not build it.
+
+### M10 Stop Condition
+
+Milestone 10 ends when:
+
+- the complete immutable M9 inventory has been evaluated for future-study
+  readiness without authority short-circuiting;
+- the strict primary normative denominator has been mechanically derived, even
+  if empty;
+- the provisional exploratory set has been identified without epistemic
+  promotion;
+- the future Arena negative/isolated-negative coverage experiment has been
+  specified precisely;
+- execution gates are explicit; and
+- the specification has been durably validated and historically frozen through
+  the two-phase pattern above.
+
+Then stop. The actual broad coverage, synthesis, mutation, or checker experiment
+belongs to a successor plan or milestone and must not begin during M10.
 
 ## Required Deliverables
 
-The first slice should leave durable artifacts for:
+This is the cumulative, plan-wide deliverable list for the complete contract
+slice. It is not a fresh M10 work list. Items completed during M0–M9 are
+immutable predecessor artifacts for M10 to verify and consume. M10 must not
+redo the semantic target lock, source lock, canonical characterization schema,
+canonical inventory, prior decision records, generated predecessor reports, or
+prior adversarial review.
+
+For M10, this list primarily requires the frozen next-phase study
+specification, complete per-entry readiness analysis, mechanically derived
+denominator and exploratory set, future isolated-negative coverage contract,
+synthesis and attribution rules, execution gates, and the minimum new
+schemas/validators/reports/content manifest/historical attestation required to
+make that design durable. **Research authority resolution** below does not
+authorize M10 to approve sources or resolve catalog authority.
+
+The first slice should cumulatively leave durable artifacts for:
 
 1. **Research authority resolution**
 
