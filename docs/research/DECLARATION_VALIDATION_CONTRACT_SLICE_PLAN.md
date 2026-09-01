@@ -1455,6 +1455,8 @@ plan or milestone after the M10 protocol is historically frozen. That successor
 must bind the M10 attestation as its immutable protocol input and satisfy the
 protocol's execution gates before producing substantive evidence.
 
+The empty denominator derived during M10 characterizes the immutable M9 input; it does not permanently define the denominator of every successor study. If a separately governed later process changes authority or other eligibility-relevant state, an execution milestone must create a new immutable study-input snapshot, bind the unchanged M10 protocol, re-apply the frozen M10 eligibility algorithm to that snapshot, freeze the resulting denominator, and only then execute coverage. The M10 protocol may not be rewritten merely because eligibility state later changes.
+
 ### M10 Historical Freeze
 
 Completion must follow the same two-phase historical pattern used for corrected
