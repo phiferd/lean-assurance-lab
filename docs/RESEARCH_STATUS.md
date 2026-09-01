@@ -1240,25 +1240,32 @@ prepared_external_action_drafts: 5
    M8, reviewed-pilot, and canonical-catalog validators plus all 139
    declaration-validation tests with zero failures or errors.
 
-   Milestone 9 is now complete. A sequence-5 pre-review evidence successor and
-   catalog snapshot preserve the immutable corrected M8 semantic inventory;
-   the sequence-6 reviewed successor selects no new authority or behavioral
-   evidence. The machine-readable adversarial review closes all twelve plan
-   challenges with zero evidence-supported catalog corrections. All 27 entries
-   remain `PROVISIONAL`, all soundness relevance remains `NOT_ASSESSED`, the
-   empty approved-authority-source registry is unchanged, and incomplete
-   independent observation remains an explicit negative result. Kernel/export
-   separation, multi-layer scenarios, shared official/Lean4Lean lineage,
-   unique semantic denotations, the frozen discovery/site surface, exclusions,
-   and deterministic non-LLM reconstruction are mechanically rechecked.
+   Milestone 9 is being repaired at its own frontier. The prior renderer had
+   synthesized all twelve favorable dispositions and the zero-correction
+   conclusion, so that state was only a reproducible M8 self-consistency audit.
+   The replacement architecture treats immutable M8 as data, the M9 JSON review
+   as canonical authored judgment, and renderers/validators as presentation and
+   procedural enforcement only.
 
-   The reviewed catalog changes only its milestone envelope and evidence-lock
-   successor; its semantic inventory is unchanged from the pre-review snapshot.
-   The adversarial-review record, two generated reports, acyclic final content
-   manifest, completion record, validator, and mutation tests bind the result.
-   No Arena negative-coverage denominator was created and no broad coverage
-   study began. The exact next authorized action is: **Execute Milestone 10 —
-   design the next phase against the frozen reviewed inventory.**
+   The primary reviewer performed the bounded semantic attacks over every
+   normative candidate and empirical scenario, all four lineages, independent
+   observability, duplicate/merge/split clusters, established-state vacuity,
+   exact pinned discovery entrypoints and helper chains, exclusions, soundness
+   language, and reconstruction. The authored result is zero catalog
+   corrections. The result was not predetermined: regressions prove an authored
+   failed challenge with a matching catalog correction can validate and that a
+   changed authored disposition/rationale survives rendering unchanged.
+
+   All 27 active entries remain `PROVISIONAL`; approved normative and mechanized
+   sources remain zero; all soundness relevance remains `NOT_ASSESSED`; and no
+   Arena denominator or broad study has begun. The M9 start binding now verifies
+   corrected M8 attestation commit
+   `15c76f27479dafc4213774b0acffb0d1d84fa2ed`. Phase A will commit the exact
+   repaired content before Phase B creates its separate Git-blob attestation.
+   Its content gate passes 158 declaration-validation tests and the 11-test
+   historical-transition module; the two M9-attestation tests are intentionally
+   skipped until Phase B creates the attestation. **Milestone 10 has not
+   started.**
 
 ### Waiting
 

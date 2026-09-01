@@ -25,7 +25,7 @@
       "type": "object",
       "required": ["head_at_milestone_start", "branch", "tree_clean_at_milestone_start", "prior_milestone_attestation"],
       "properties": {
-        "head_at_milestone_start": {"const": "15c76f236b82077ba1fdb65e6b6165d5c7bdf5f1"},
+        "head_at_milestone_start": {"const": "15c76f27479dafc4213774b0acffb0d1d84fa2ed"},
         "branch": {"const": "main"},
         "tree_clean_at_milestone_start": {"const": true},
         "prior_milestone_attestation": {"const": "results/research/declaration-validation-milestone-8-historical.json"}
@@ -59,7 +59,18 @@
       "additionalProperties": false
     },
     "validation": {"type": "object"},
-    "requirements_audit": {"type": "object", "minProperties": 13, "additionalProperties": {"type": "string", "minLength": 1}},
+    "requirements_audit": {
+      "type": "object",
+      "required": ["pre_review_freeze", "challenge_dispositions", "review_decisions", "reconstruction", "freeze_manifest"],
+      "properties": {
+        "pre_review_freeze": {"type": "string", "minLength": 1},
+        "challenge_dispositions": {"type": "object", "minProperties": 12, "maxProperties": 12, "additionalProperties": {"type": "string", "minLength": 1}},
+        "review_decisions": {"type": "string", "minLength": 1},
+        "reconstruction": {"type": "string", "minLength": 1},
+        "freeze_manifest": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
     "completion_boundary": {
       "type": "object",
       "required": ["completed", "next_authorized_milestone", "deferred", "nonclaims"],

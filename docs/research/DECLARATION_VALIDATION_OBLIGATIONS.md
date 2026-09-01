@@ -4,7 +4,7 @@
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
 - Catalog status: `MILESTONE_9_REVIEWED_FREEZE`
-- Catalog SHA-256: `01bdfeb42a5cf2875474495fbcc0142c5af0f47af77629ccba83884f3219cb34`
+- Catalog SHA-256: `ee46af8fbc760026351960baa000649a31fbaf6ed925b07cff1350b4b89320c3`
 - Catalog entries: 27
 - Existing evidence/identity dispositions: 41
 
@@ -23,7 +23,7 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | characterization_model | config/declaration-validation-characterization-model.json | `6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7` |
 | discovery_closure | config/declaration-validation-discovery-closure.json | `d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731` |
 | entry_schema | schemas/declaration-validation-characterization-entry.schema.json | `33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6` |
-| evidence_lock | config/declaration-validation-evidence-locks/milestone-9-reviewed.json | `a335a29e856becb5b00570bb34022220244c71fdb69ac8a82f9b3e4d20738d36` |
+| evidence_lock | config/declaration-validation-evidence-locks/milestone-9-reviewed.json | `3b48a3c68900011dc3431382f3fe1bbb87b730f188428d4579dbc32631e3f6bf` |
 | evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `45e0c7a69be059a371f4d33445cb7cdbdad21c542a82b07a7f1dfb65a6416adf` |
 | identity_registry | config/declaration-validation-identity-registry.json | `68e8770c808518170a9a22766f8e2ea79d3d2bdf0b643101026d6ec55a69f230` |
 | semantic_target | config/declaration-validation-target.json | `4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa` |

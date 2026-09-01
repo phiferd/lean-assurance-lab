@@ -1078,26 +1078,38 @@ The sequence-5 pre-review evidence freeze and pre-review catalog preserve its
 complete semantic inventory unchanged; the sequence-6 reviewed successor adds
 no normative document, mechanized result, checker observation, or witness.
 
-The canonical adversarial-review record executes all twelve required challenge
-classes over the frozen inventory. It found zero evidence-supported catalog
-corrections: all 19 normative candidates remain provisional, kernel-validity
-entries remain separated from export and reconstruction scenarios, every
-multi-layer scenario remains explicit, official/Lean4Lean shared lineage is
-preserved, and all 27 soundness-relevance states remain `NOT_ASSESSED`.
-Incomplete independent observation is retained as a negative result rather
-than inferred away. The review also mechanically rechecks unique semantic
-denotations, the 22-source/59-site discovery closure, all 149 relevant
-identity/site dispositions, explicit exclusion rationales, and deterministic
-catalog reconstruction without LLM authority.
+The original M9 implementation was repaired because its renderer had
+manufactured favorable challenge dispositions and a zero-correction result.
+The canonical adversarial-review record is now an explicitly authored research
+decision artifact. It records the counterargument attempted, item-level
+adjudications, rationale, evidence, limitations, correction flag, and
+before/after statement hashes for all twelve challenges. The presentation
+renderer cannot write or regenerate those semantic fields; the validator checks
+coverage, evidence resolution, correction consistency, and reviewed-catalog
+state without selecting a disposition.
+
+The primary reviewer independently inspected all 19 normative candidates, all
+8 empirical layer assignments, the four observer lineages, observability and
+duplicate clusters, established-state vacuity, the exact 22-module discovery
+boundary and helper call chains, exclusions, soundness language, and non-LLM
+reconstruction. That review found zero catalog corrections. This is the
+authored outcome of the recorded attacks, not a renderer constant. Incomplete
+independent observation and shared semantic lineage remain limitations rather
+than favorable evidence; all authority remains `PROVISIONAL` and all soundness
+relevance remains `NOT_ASSESSED`.
 
 The reviewed catalog advances only its milestone envelope and evidence-lock
 successor; its entries, site and evidence dispositions, identity dispositions,
 and frozen semantic denotations are byte-identical to the pre-review inventory.
-The generated catalog report, adversarial-review report, final acyclic content
-manifest, completion record, validator, and mutation tests bind the result.
-No authority source was approved, no soundness claim was made, and no Arena
-coverage denominator or broad coverage study was started. The next authorized
-milestone is Milestone 10.
+The milestone-start binding now mechanically verifies the exact corrected M8
+attestation commit `15c76f27479dafc4213774b0acffb0d1d84fa2ed`.
+The Phase-A content includes a separate Phase-B Git-blob attestation renderer,
+historical validator, and M9→M10 transition/tampering regressions. No authority
+source was approved, no soundness claim was made, and no Arena denominator or
+broad coverage study was started. The Phase-A gate passed 158 declaration-
+validation tests and the 11-test historical-transition module (two Phase-B
+tests intentionally skipped until the attestation exists). Milestone 10 has
+not started.
 
 ## Milestone 10 — Design the Next Phase Against the Frozen Inventory
 

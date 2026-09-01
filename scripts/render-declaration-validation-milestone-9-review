@@ -1,38 +1,32 @@
 #!/usr/bin/env python3
-"""Render the canonical M9 adversarial-review record and its human view."""
+"""Render the authored M9 adversarial-review decisions as Markdown.
+
+The canonical JSON record is research input. This renderer never creates or
+changes semantic dispositions, rationales, correction flags, or conclusions.
+"""
 
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 from pathlib import Path
 from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-PRE_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-pre-review-catalog.json"
-REVIEWED_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
-DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-9-adversarial-review.json"
-DEFAULT_REPORT = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_MILESTONE_9_ADVERSARIAL_REVIEW.md"
-
-ARTIFACTS = {
-    "m8_historical_attestation": "results/research/declaration-validation-milestone-8-historical.json",
-    "pre_review_catalog": "results/research/declaration-validation-milestone-9-pre-review-catalog.json",
-    "reviewed_catalog": "results/research/declaration-validation-milestone-9-reviewed-catalog.json",
-    "discovery_closure": "config/declaration-validation-discovery-closure.json",
-    "identity_registry": "config/declaration-validation-identity-registry.json",
-    "semantic_target": "config/declaration-validation-target.json",
-    "source_lock": "config/declaration-validation-source-lock.json",
-    "authority_rules": "config/declaration-validation-authority-rules.json",
-    "approved_authority_sources": "config/declaration-validation-approved-authority-sources.json",
-    "pre_review_evidence_lock": "config/declaration-validation-evidence-locks/milestone-9-pre-review.json",
-    "reviewed_evidence_lock": "config/declaration-validation-evidence-locks/milestone-9-reviewed.json",
-    "m8_inventory_populator": "scripts/populate-declaration-validation-milestone-8",
-    "m9_inventory_populator": "scripts/populate-declaration-validation-milestone-9",
-    "catalog_validator": "scripts/validate-declaration-validation-catalog",
-    "historical_validator": "scripts/validate-declaration-validation-historical",
-}
+RENDERER_ROLE = "PRESENTATION_ONLY"
+DEFAULT_REVIEW = (
+    ROOT
+    / "results"
+    / "research"
+    / "declaration-validation-milestone-9-adversarial-review.json"
+)
+DEFAULT_REPORT = (
+    ROOT
+    / "docs"
+    / "research"
+    / "DECLARATION_VALIDATION_MILESTONE_9_ADVERSARIAL_REVIEW.md"
+)
 
 QUESTIONS = [
     "Which normative entries merely restate implementation checks?",
@@ -50,568 +44,51 @@ QUESTIONS = [
 ]
 
 
-def load(path: Path) -> dict[str, Any]:
+def load_review(path: Path = DEFAULT_REVIEW) -> dict[str, Any]:
     return json.loads(path.read_text(encoding="utf-8"))
 
 
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def binding(relative: str) -> dict[str, str]:
-    return {"path": relative, "sha256": sha256_file(ROOT / relative)}
-
-
-def stable_ids(catalog: dict[str, Any]) -> list[str]:
-    return [row["id"] for row in catalog["identity_dispositions"]]
-
-
-def entry_ids(catalog: dict[str, Any]) -> list[str]:
-    return [row["characterization"]["id"] for row in catalog["entries"]]
-
-
-def target_hash(
-    catalog: dict[str, Any], catalog_ids: list[str], surface_ids: list[str]
-) -> str:
-    entries = {
-        row["characterization"]["id"]: row["semantic_denotation_sha256"]
-        for row in catalog["entries"]
-    }
-    dispositions = {
-        row["id"]: row["identity_statement_sha256"]
-        for row in catalog["identity_dispositions"]
-    }
-    projection = {
-        "catalog": {
-            stable_id: entries.get(stable_id, dispositions[stable_id])
-            for stable_id in sorted(catalog_ids)
-        },
-        "surface_ids": sorted(surface_ids),
-    }
-    encoded = json.dumps(projection, sort_keys=True, separators=(",", ":")).encode("utf-8")
-    return hashlib.sha256(encoded).hexdigest()
-
-
-def evidence(
-    artifact: str, locators: list[str], finding: str
-) -> dict[str, Any]:
-    return {"artifact": artifact, "locators": locators, "finding": finding}
-
-
-def challenge(
-    *,
-    number: int,
-    slug: str,
-    disposition: str,
-    catalog_ids: list[str],
-    surface_ids: list[str],
-    evidence_items: list[dict[str, Any]],
-    facts: dict[str, str],
-    pre_catalog: dict[str, Any],
-    reviewed_catalog: dict[str, Any],
-    limitations: list[str],
-) -> dict[str, Any]:
-    before = target_hash(pre_catalog, catalog_ids, surface_ids)
-    after = target_hash(reviewed_catalog, catalog_ids, surface_ids)
-    return {
-        "id": f"CHALLENGE.M9.{number:02d}.{slug}",
-        "challenge": QUESTIONS[number - 1],
-        "target": {
-            "catalog_ids": sorted(catalog_ids),
-            "surface_ids": sorted(surface_ids),
-        },
-        "disposition": disposition,
-        "evidence": evidence_items,
-        "facts": facts,
-        "statement_hash_before": before,
-        "statement_hash_after": after,
-        "correction_required": False,
-        "correction_decision_ids": [],
-        "limitations": limitations,
-    }
-
-
-def render() -> dict[str, Any]:
-    pre = load(PRE_CATALOG_PATH)
-    reviewed = load(REVIEWED_CATALOG_PATH)
-    closure = load(ROOT / ARTIFACTS["discovery_closure"])
-    all_entry_ids = entry_ids(pre)
-    all_stable_ids = stable_ids(pre)
-    normative_ids = [
-        row["characterization"]["id"]
-        for row in pre["entries"]
-        if row["characterization"]["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
-    ]
-    empirical_ids = [
-        row["characterization"]["id"]
-        for row in pre["entries"]
-        if row["characterization"]["kind"] == "EMPIRICAL_CONTRACT_SCENARIO"
-    ]
-    multi_layer_ids = [
-        row["characterization"]["id"]
-        for row in pre["entries"]
-        if len(row["characterization"]["layers"]) > 1
-    ]
-    concrete_ids = [
-        row["characterization"]["id"]
-        for row in pre["entries"]
-        if any(
-            observation["outcome"] in {"ACCEPT", "REJECT", "ERROR", "TIMEOUT"}
-            for observation in row["observer_vector"]
-        )
-    ]
-    unobserved_ids = sorted(set(all_entry_ids) - set(concrete_ids))
-    non_entry_ids = [
-        row["id"]
-        for row in pre["identity_dispositions"]
-        if row["disposition"] != "CATALOG_ENTRY"
-    ]
-    excluded_dependency_ids = [
-        row["id"] for row in closure["dependencies"] if row["treatment"] == "EXCLUDED"
-    ]
-    exclusion_surface_ids = (
-        [row["id"] for row in closure["exclusions"]]
-        + [row["id"] for row in closure["scope"]["excluded_declaration_kinds"]]
-        + [row["id"] for row in closure["scope"]["excluded_phases"]]
-        + excluded_dependency_ids
-    )
-    discovery_surface_ids = (
-        [row["id"] for row in closure["sources"]]
-        + [row["id"] for row in closure["sites"]]
-        + [row["id"] for row in closure["topics"]]
-        + [row["id"] for row in closure["dependencies"]]
-    )
-
-    challenges = [
-        challenge(
-            number=1,
-            slug="IMPLEMENTATION_RESTATEMENT",
-            disposition="RETAINED_PROVISIONAL_IMPLEMENTATION_ONLY",
-            catalog_ids=normative_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "All 19 normative candidates are explicitly provisional; implementation-source evidence targets discovery or layer metadata and supplies no normative support.",
-                ),
-                evidence(
-                    "approved_authority_sources",
-                    ["/normative_documentation", "/mechanized_results"],
-                    "The frozen approved-source registry is empty.",
-                ),
-            ],
-            facts={
-                "normative_candidates_reviewed": str(len(normative_ids)),
-                "established_normative_entries": "0",
-                "normative_support_evidence_items": "0",
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Implementation sites motivate candidate retention but do not establish the modeled requirement."
-            ],
-        ),
-        challenge(
-            number=2,
-            slug="KERNEL_EXPORT_BOUNDARY",
-            disposition="KERNEL_EXPORT_BOUNDARY_SEPARATED",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "semantic_target",
-                    ["/logical_target/modeled_judgment", "/export_contract"],
-                    "The modeled checked-addition judgment explicitly excludes parsing and reconstruction while separately pinning the export contract.",
-                ),
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "Normative entries use only KERNEL_DECLARATION_VALIDITY; export-format boundaries remain empirical scenarios.",
-                ),
-            ],
-            facts={
-                "catalog_entries_reviewed": str(len(all_entry_ids)),
-                "normative_entries_with_non_kernel_layer": "0",
-                "empirical_export_scenarios": str(
-                    sum(
-                        "EXPORT_FORMAT" in row["characterization"]["layers"]
-                        for row in pre["entries"]
-                    )
-                ),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Layer separation characterizes the pinned profiles; it is not a universal serialization theorem."
-            ],
-        ),
-        challenge(
-            number=3,
-            slug="MULTI_LAYER_SCENARIOS",
-            disposition="MULTI_LAYER_SCENARIOS_EXPLICIT",
-            catalog_ids=multi_layer_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "Every scenario spanning more than one layer records the complete layer set instead of being forced into one layer.",
-                )
-            ],
-            facts={
-                "empirical_scenarios_reviewed": str(len(empirical_ids)),
-                "multi_layer_scenarios": str(len(multi_layer_ids)),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Layer membership is a bounded characterization and remains non-normative."
-            ],
-        ),
-        challenge(
-            number=4,
-            slug="CONSENSUS_AUTHORITY",
-            disposition="NO_CONSENSUS_BASED_AUTHORITY",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "authority_rules",
-                    ["/global_prohibitions", "/rules"],
-                    "The qualification rules forbid checker majority and implementation consensus as normativity.",
-                ),
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "All 27 authority states remain provisional with named unmet requirements.",
-                ),
-            ],
-            facts={
-                "entries_reviewed": str(len(all_entry_ids)),
-                "provisional_entries": str(len(all_entry_ids)),
-                "established_entries": "0",
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "The review does not decide whether a future preapproved source could establish a candidate."
-            ],
-        ),
-        challenge(
-            number=5,
-            slug="SHARED_LINEAGE",
-            disposition="SHARED_LINEAGE_EXPLICIT",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "semantic_target",
-                    ["/observer_profiles"],
-                    "Lean4Lean is recorded as derived from the official C++ kernel; official, Nanoda, and Kiota profiles retain their distinct scoped lineage labels.",
-                ),
-                evidence(
-                    "source_lock",
-                    ["/observer_configurations"],
-                    "Each executable observer configuration repeats the pinned lineage group.",
-                ),
-            ],
-            facts={
-                "observer_profiles": "4",
-                "lineage_groups": "4",
-                "derived_or_target_profiles": "2",
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Distinct lineage is not statistical or semantic independence."
-            ],
-        ),
-        challenge(
-            number=6,
-            slug="INDEPENDENT_OBSERVABILITY",
-            disposition="INDEPENDENT_OBSERVABILITY_INCOMPLETE",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "Concrete outcomes exist for only a bounded subset; all missing profile/entry observations remain NOT_INSPECTED rather than inferred.",
-                ),
-                evidence(
-                    "source_lock",
-                    ["/tracked_evidence", "/generated_witnesses"],
-                    "Existing observations and witnesses are content-bound but do not provide complete independent observation of every entry.",
-                ),
-            ],
-            facts={
-                "entries_with_any_concrete_outcome": str(len(concrete_ids)),
-                "entries_without_concrete_outcome": str(len(unobserved_ids)),
-                "unobserved_ids": ",".join(unobserved_ids),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Incomplete observability is preserved as a negative result and blocks empirical establishment where applicable."
-            ],
-        ),
-        challenge(
-            number=7,
-            slug="DUPLICATE_IDENTITIES",
-            disposition="NO_DUPLICATE_CANONICAL_DENOTATIONS",
-            catalog_ids=all_stable_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "identity_registry",
-                    ["/identities", "/seed_resolutions"],
-                    "Frozen merge and split decisions give each of the 30 identities a distinct statement digest.",
-                ),
-                evidence(
-                    "pre_review_catalog",
-                    ["/identity_dispositions", "/entries"],
-                    "All identity and semantic-denotation hashes are unique within their respective surfaces.",
-                ),
-            ],
-            facts={
-                "stable_identities_reviewed": str(len(all_stable_ids)),
-                "duplicate_identity_statement_hash_groups": "0",
-                "duplicate_active_semantic_hash_groups": "0",
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Uniqueness of canonical denotations does not prove that no future evidence will justify a merge or split."
-            ],
-        ),
-        challenge(
-            number=8,
-            slug="ESTABLISHED_SUPPORT",
-            disposition="NO_ESTABLISHED_ENTRY_TO_DOWNGRADE",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "The inventory contains zero ESTABLISHED entries of either kind.",
-                ),
-                evidence(
-                    "approved_authority_sources",
-                    ["/normative_documentation", "/mechanized_results"],
-                    "No source is approved to support an established normative claim.",
-                ),
-            ],
-            facts={
-                "established_entries": "0",
-                "provisional_entries": str(len(all_entry_ids)),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "This is a bounded absence finding, not evidence that the provisional candidates are true."
-            ],
-        ),
-        challenge(
-            number=9,
-            slug="DISCOVERY_SURFACE_OMISSIONS",
-            disposition="NO_OMISSION_WITHIN_FROZEN_DISCOVERY_SURFACE",
-            catalog_ids=all_stable_ids,
-            surface_ids=discovery_surface_ids,
-            evidence_items=[
-                evidence(
-                    "discovery_closure",
-                    ["/sources", "/sites", "/topics", "/dependencies", "/completion"],
-                    "The frozen boundary contains 22 exhausted sources, 59 disposed sites, closed topics, and disposed helper dependencies.",
-                ),
-                evidence(
-                    "pre_review_catalog",
-                    ["/identity_dispositions", "/site_dispositions"],
-                    "The catalog exactly dispositions all 30 identities and all 149 relevant identity/site pairs.",
-                ),
-            ],
-            facts={
-                "sources": str(len(closure["sources"])),
-                "sites": str(len(closure["sites"])),
-                "topics": str(len(closure["topics"])),
-                "dependencies": str(len(closure["dependencies"])),
-                "site_identity_pairs": str(len(pre["site_dispositions"])),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "No-omission applies only to the declared frozen surface, not all Lean declaration validation."
-            ],
-        ),
-        challenge(
-            number=10,
-            slug="EXCLUSION_JUSTIFICATION",
-            disposition="EXCLUSIONS_SCOPED_AND_JUSTIFIED",
-            catalog_ids=non_entry_ids,
-            surface_ids=exclusion_surface_ids,
-            evidence_items=[
-                evidence(
-                    "discovery_closure",
-                    ["/scope/excluded_declaration_kinds", "/scope/excluded_phases", "/dependencies", "/exclusions"],
-                    "Every declared exclusion, excluded phase, and excluded dependency has a non-empty bounded rationale and source linkage where applicable.",
-                ),
-                evidence(
-                    "pre_review_catalog",
-                    ["/identity_dispositions"],
-                    "The deferred-kind and two out-of-scope identities remain explicit non-entry dispositions rather than disappearing.",
-                ),
-            ],
-            facts={
-                "non_entry_identities": str(len(non_entry_ids)),
-                "declared_exclusion_records": str(len(closure["exclusions"])),
-                "excluded_declaration_kinds": str(len(closure["scope"]["excluded_declaration_kinds"])),
-                "excluded_phases": str(len(closure["scope"]["excluded_phases"])),
-                "excluded_dependencies": str(len(excluded_dependency_ids)),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "A justified exclusion is a scope decision, not a claim that the excluded area lacks assurance value."
-            ],
-        ),
-        challenge(
-            number=11,
-            slug="SOUNDNESS_OVERREACH",
-            disposition="NO_SOUNDNESS_OVERREACH",
-            catalog_ids=all_entry_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "pre_review_catalog",
-                    ["/entries"],
-                    "All 27 entries retain soundness_relevance=NOT_ASSESSED with no basis evidence reference.",
-                )
-            ],
-            facts={
-                "entries_reviewed": str(len(all_entry_ids)),
-                "not_assessed": str(len(all_entry_ids)),
-                "positive_soundness_claims": "0",
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "No soundness conclusion, favorable or unfavorable, is drawn."
-            ],
-        ),
-        challenge(
-            number=12,
-            slug="LLM_INDEPENDENT_RECONSTRUCTION",
-            disposition="RECONSTRUCTABLE_WITHOUT_LLM_AUTHORITY",
-            catalog_ids=all_stable_ids,
-            surface_ids=[],
-            evidence_items=[
-                evidence(
-                    "m8_historical_attestation",
-                    ["/artifacts", "/evidence_records"],
-                    "Corrected M8 inputs resolve through exact Git blobs rather than mutable paths or conversational state.",
-                ),
-                evidence(
-                    "m9_inventory_populator",
-                    ["COMMAND:scripts/populate-declaration-validation-milestone-9 --check"],
-                    "The M9 pre-review and reviewed catalog bytes are deterministically reproduced from the immutable M8 predecessor.",
-                ),
-                evidence(
-                    "catalog_validator",
-                    ["COMMAND:scripts/validate-declaration-validation-catalog"],
-                    "Schema, evidence, authority, identity, observer, site, report, and historical gates are executable without LLM judgment.",
-                ),
-            ],
-            facts={
-                "stable_identities_reconstructed": str(len(all_stable_ids)),
-                "active_entries_reconstructed": str(len(all_entry_ids)),
-                "site_identity_pairs_reconstructed": str(len(pre["site_dispositions"])),
-                "existing_evidence_pairs_reconstructed": str(len(pre["existing_evidence_dispositions"])),
-            },
-            pre_catalog=pre,
-            reviewed_catalog=reviewed,
-            limitations=[
-                "Mechanical reconstruction proves reproducibility of the recorded catalog, not semantic truth."
-            ],
-        ),
-    ]
-
-    return {
-        "schema_version": 1,
-        "review_id": "ordinary-declaration-validation.milestone-9-adversarial-review.v1",
-        "recorded_at": reviewed["recorded_at"],
-        "status": "PASS_WITH_NO_CATALOG_CORRECTIONS",
-        "artifact_bindings": {
-            name: binding(relative) for name, relative in ARTIFACTS.items()
-        },
-        "method": {
-            "challenge_set": "EXACT_PLAN_M9_MINIMUM_TWELVE",
-            "predecessor_boundary": "IMMUTABLE_CORRECTED_M8_GIT_BLOB_ATTESTATION",
-            "review_independence": "SEPARATE_M9_RECORD_NOT_CATALOG_AUTHORITY",
-            "statement_hash_projection": "TARGET_STABLE_ID_TO_FROZEN_SEMANTIC_OR_IDENTITY_HASH_PLUS_NAMED_SURFACE_IDS",
-            "reconstruction_command": "scripts/populate-declaration-validation-milestone-9 --check",
-        },
-        "challenges": challenges,
-        "corrections": [],
-        "summary": {
-            "required_challenges": 12,
-            "challenges_completed": len(challenges),
-            "catalog_corrections": 0,
-            "semantic_statement_changes": 0,
-            "authority_changes": 0,
-            "layer_changes": 0,
-            "lifecycle_changes": 0,
-            "soundness_changes": 0,
-            "remaining_provisional_entries": len(all_entry_ids),
-            "remaining_not_assessed_soundness": len(all_entry_ids),
-            "entries_with_incomplete_independent_observation": len(unobserved_ids),
-        },
-        "conclusion": {
-            "catalog_disposition": "RETAIN_M8_SEMANTIC_CONTENT_UNCHANGED",
-            "reviewed_catalog_sha256": sha256_file(REVIEWED_CATALOG_PATH),
-            "next_authorized_milestone": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
-            "reason": "The review found bounded incompleteness and limitations already represented by provisional, not-inspected, deferred, out-of-scope, cross-layer, lineage, and not-assessed states; the frozen evidence did not justify a semantic correction or epistemic upgrade.",
-        },
-        "nonclaims": [
-            "A no-correction review result does not prove the catalog complete beyond its frozen discovery surface.",
-            "The review does not establish any normative candidate, empirical scenario, or soundness relevance.",
-            "Incomplete independent observation remains visible and is not treated as a favorable result.",
-            "No Arena coverage denominator or broad negative-test study is created by Milestone 9.",
-            "The adversarial review is reproducible audit evidence, not semantic authority.",
-        ],
-    }
-
-
-def render_markdown(review: dict[str, Any] | None = None) -> str:
-    review = review or render()
+def render_markdown(review: dict[str, Any]) -> str:
+    summary = review["summary"]
+    baseline = review["baseline"]
     lines = [
-        "# Declaration Validation Milestone 9 Adversarial Review",
+        "# Declaration-Validation Milestone 9 Adversarial Review",
         "",
-        "> Generated file. Edit the canonical inputs and renderer, not this report.",
+        "This report is rendered from canonical, explicitly authored review decisions. "
+        "The renderer supplies no semantic disposition or rationale.",
         "",
-        f"- Review ID: `{review['review_id']}`",
-        f"- Status: `{review['status']}`",
-        f"- Pre-review catalog SHA-256: `{review['artifact_bindings']['pre_review_catalog']['sha256']}`",
-        f"- Reviewed catalog SHA-256: `{review['artifact_bindings']['reviewed_catalog']['sha256']}`",
-        f"- Challenges completed: {review['summary']['challenges_completed']} of {review['summary']['required_challenges']}",
-        f"- Catalog corrections: {review['summary']['catalog_corrections']}",
+        f"- Review status: `{review['status']}`",
+        f"- Baseline commit: `{baseline['repository_head']}`",
+        f"- Baseline declaration-validation tests: {baseline['tests']['tests_run']}",
+        f"- Challenges completed: {summary['challenges_completed']} of "
+        f"{summary['required_challenges']}",
+        f"- Catalog corrections: {summary['catalog_corrections']}",
+        f"- Remaining provisional entries: {summary['remaining_provisional_entries']}",
+        f"- Remaining soundness states `NOT_ASSESSED`: "
+        f"{summary['remaining_not_assessed_soundness']}",
         "",
-        review["conclusion"]["reason"],
+        "## Review Method",
         "",
-        "## Challenge Results",
+        f"- Predecessor boundary: `{review['method']['predecessor_boundary']}`",
+        f"- Semantic decision origin: `{review['authorship']['semantic_decision_origin']}`",
+        f"- Renderer role: `{review['authorship']['renderer_role']}`",
+        f"- Semantic authority claimed by review: "
+        f"`{str(review['authorship']['semantic_authority_claimed']).lower()}`",
         "",
     ]
-    for row in review["challenges"]:
+    for index, row in enumerate(review["challenges"], start=1):
         target_count = len(row["target"]["catalog_ids"])
         surface_count = len(row["target"]["surface_ids"])
         lines.extend(
             [
-                f"### `{row['id']}`",
+                f"## {index}. {row['challenge']}",
                 "",
-                f"- Challenge: {row['challenge']}",
+                f"- Decision ID: `{row['id']}`",
+                f"- Attack performed: {row['attack']}",
                 f"- Disposition: `{row['disposition']}`",
+                f"- Rationale: {row['rationale']}",
                 f"- Catalog targets: {target_count}",
-                f"- Additional surface targets: {surface_count}",
+                f"- Surface targets: {surface_count}",
                 f"- Statement hash before: `{row['statement_hash_before']}`",
                 f"- Statement hash after: `{row['statement_hash_after']}`",
                 f"- Correction required: `{str(row['correction_required']).lower()}`",
@@ -621,7 +98,19 @@ def render_markdown(review: dict[str, Any] | None = None) -> str:
         for item in row["evidence"]:
             lines.append(f"- Evidence `{item['artifact']}`: {item['finding']}")
         for limitation in row["limitations"]:
-            lines.append(f"- Limitation: {limitation}")
+            lines.append(f"- Challenge limitation: {limitation}")
+        lines.extend(["", "### Item-level adjudications", ""])
+        for item in row["assessments"]:
+            targets = ", ".join(f"`{target}`" for target in item["target_ids"])
+            lines.extend(
+                [
+                    f"- {targets} — `{item['disposition']}`",
+                    f"  - Attack: {item['attack']}",
+                    f"  - Rationale: {item['rationale']}",
+                ]
+            )
+            for limitation in item["limitations"]:
+                lines.append(f"  - Limitation: {limitation}")
         lines.append("")
     lines.extend(["## Preserved Nonclaims", ""])
     lines.extend(f"- {item}" for item in review["nonclaims"])
@@ -637,15 +126,19 @@ def render_markdown(review: dict[str, Any] | None = None) -> str:
 
 def main() -> int:
     parser = argparse.ArgumentParser()
-    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    parser.add_argument("--review", type=Path, default=DEFAULT_REVIEW)
     parser.add_argument("--report", type=Path, default=DEFAULT_REPORT)
+    parser.add_argument("--check", action="store_true")
     args = parser.parse_args()
-    review = render()
-    args.output.parent.mkdir(parents=True, exist_ok=True)
-    args.output.write_text(json.dumps(review, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    expected = render_markdown(load_review(args.review))
+    if args.check:
+        if not args.report.is_file() or args.report.read_text(encoding="utf-8") != expected:
+            print("ERROR: M9 authored-review report is stale")
+            return 1
+        print("declaration-validation M9 authored-review report: PASS")
+        return 0
     args.report.parent.mkdir(parents=True, exist_ok=True)
-    args.report.write_text(render_markdown(review), encoding="utf-8")
-    print(args.output)
+    args.report.write_text(expected, encoding="utf-8")
     print(args.report)
     return 0
 

@@ -1,0 +1,133 @@
+#!/usr/bin/env python3
+"""Render a non-self-referential Git-blob attestation for Phase-A M9 content."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-9-historical.json"
+RECORDED_AT = "2026-09-01T05:30:00-04:00"
+
+ARTIFACTS = {
+    "approved_authority_sources": "config/declaration-validation-approved-authority-sources.json",
+    "approved_authority_sources_schema": "schemas/declaration-validation-approved-authority-sources.schema.json",
+    "authority_rules": "config/declaration-validation-authority-rules.json",
+    "authority_rules_schema": "schemas/declaration-validation-authority-rules.schema.json",
+    "canonical_catalog": "config/declaration-validation-catalog.json",
+    "catalog_schema": "schemas/declaration-validation-catalog.schema.json",
+    "catalog_entry_schema": "schemas/declaration-validation-characterization-entry.schema.json",
+    "catalog_tests": "tests/test_declaration_validation_catalog.py",
+    "catalog_validator": "scripts/validate-declaration-validation-catalog",
+    "completion_record": "results/research/declaration-validation-milestone-9.json",
+    "completion_renderer": "scripts/render-declaration-validation-milestone-9-completion",
+    "completion_schema": "schemas/declaration-validation-milestone-9.schema.json",
+    "discovery_closure": "config/declaration-validation-discovery-closure.json",
+    "discovery_closure_schema": "schemas/declaration-validation-discovery-closure.schema.json",
+    "evidence_lock_schema": "schemas/declaration-validation-evidence-lock.schema.json",
+    "freeze_manifest": "results/research/declaration-validation-milestone-9-freeze.json",
+    "freeze_renderer": "scripts/render-declaration-validation-milestone-9-freeze",
+    "freeze_schema": "schemas/declaration-validation-milestone-9-freeze.schema.json",
+    "generated_catalog_report": "docs/research/DECLARATION_VALIDATION_OBLIGATIONS.md",
+    "generated_review_report": "docs/research/DECLARATION_VALIDATION_MILESTONE_9_ADVERSARIAL_REVIEW.md",
+    "historical_attestation_schema": "schemas/declaration-validation-milestone-9-historical.schema.json",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-9-historical",
+    "historical_transition_tests": "tests/test_declaration_validation_historical_transition.py",
+    "historical_validator": "scripts/validate-declaration-validation-historical",
+    "identity_registry": "config/declaration-validation-identity-registry.json",
+    "identity_registry_schema": "schemas/declaration-validation-identity-registry.schema.json",
+    "m5_identity_decisions": "results/research/declaration-validation-milestone-5-decisions.json",
+    "m8_historical_attestation": "results/research/declaration-validation-milestone-8-historical.json",
+    "milestone_9_tests": "tests/test_declaration_validation_milestone_9.py",
+    "milestone_9_validator": "scripts/validate-declaration-validation-milestone-9",
+    "pre_review_catalog": "results/research/declaration-validation-milestone-9-pre-review-catalog.json",
+    "pre_review_evidence_lock": "config/declaration-validation-evidence-locks/milestone-9-pre-review.json",
+    "pre_review_populator": "scripts/populate-declaration-validation-milestone-9",
+    "research_plan": "docs/research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md",
+    "research_status": "docs/RESEARCH_STATUS.md",
+    "review_record": "results/research/declaration-validation-milestone-9-adversarial-review.json",
+    "review_renderer": "scripts/render-declaration-validation-milestone-9-review",
+    "review_schema": "schemas/declaration-validation-milestone-9-review.schema.json",
+    "reviewed_catalog": "results/research/declaration-validation-milestone-9-reviewed-catalog.json",
+    "reviewed_evidence_lock": "config/declaration-validation-evidence-locks/milestone-9-reviewed.json",
+    "semantic_target": "config/declaration-validation-target.json",
+    "semantic_target_schema": "schemas/declaration-validation-target.schema.json",
+    "source_lock": "config/declaration-validation-source-lock.json",
+    "source_lock_schema": "schemas/declaration-validation-source-lock.schema.json",
+    "source_lock_tests": "tests/test_declaration_validation_source_lock.py",
+    "source_lock_validator": "scripts/validate-declaration-validation-source-lock",
+}
+
+
+def git_output(args: list[str]) -> bytes:
+    result = subprocess.run(
+        ["git", *args], cwd=ROOT, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False
+    )
+    if result.returncode:
+        raise RuntimeError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def binding(commit: str, relative: str) -> dict[str, str]:
+    content = git_output(["show", f"{commit}:{relative}"])
+    return {
+        "path": relative,
+        "sha256": hashlib.sha256(content).hexdigest(),
+        "git_commit": commit,
+        "git_blob": git_output(["rev-parse", "--verify", f"{commit}:{relative}"]).decode().strip(),
+    }
+
+
+def render(content_commit: str, tests_run: int) -> dict[str, object]:
+    resolved = git_output(["rev-parse", "--verify", f"{content_commit}^{{commit}}"]).decode().strip()
+    if resolved != content_commit:
+        raise RuntimeError("Phase-A M9 content commit must be an exact full commit ID")
+    return {
+        "schema_version": 1,
+        "attestation_id": "ordinary-declaration-validation.milestone-9.historical.v1",
+        "recorded_at": RECORDED_AT,
+        "status": "FROZEN_HISTORICAL_MILESTONE_ATTESTATION",
+        "historical_commit": content_commit,
+        "phase": {
+            "attestation_design": "TWO_PHASE_NON_SELF_REFERENTIAL_GIT_BLOB_ATTESTATION",
+            "content_commit": content_commit,
+            "reason": "Phase A committed the final independently reviewed M9 content; this separate Phase B record binds those exact Git blobs and cannot attest to itself.",
+        },
+        "artifacts": {
+            name: binding(content_commit, relative) for name, relative in ARTIFACTS.items()
+        },
+        "phase_a_validation": {
+            "tests_run": tests_run,
+            "failures": 0,
+            "errors": 0,
+            "result": "PASS",
+        },
+        "nonclaims": [
+            "This attestation freezes reviewed Milestone 9 and does not begin Milestone 10.",
+            "It preserves authored semantic judgments without making the reviewer or an LLM semantic authority.",
+            "Later mutable M9 paths may change without redefining the exact Phase-A Git blobs.",
+            "No normative authority or soundness qualification is introduced by this binding."
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--content-commit", required=True)
+    parser.add_argument("--tests-run", required=True, type=int)
+    parser.add_argument("--output", type=Path, default=DEFAULT_OUTPUT)
+    args = parser.parse_args()
+    document = render(args.content_commit, args.tests_run)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(args.output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

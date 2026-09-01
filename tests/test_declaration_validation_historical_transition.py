@@ -31,6 +31,102 @@ pilot_validator = load_module(
 
 
 class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
+    @unittest.skipUnless(history.M9_COMMIT, "Phase-B M9 attestation not created yet")
+    def test_m9_to_m10_current_state_transition_preserves_all_history(self):
+        """A future current state may change without redefining reviewed M9."""
+
+        attestation = history.load_json(history.M9_ATTESTATION_PATH)
+        names = ("reviewed_catalog", "review_record", "freeze_manifest", "completion_record")
+        before = {}
+        for name in names:
+            content, errors = history.git_blob_bytes(
+                attestation["artifacts"][name],
+                label=f"M9 transition before {name}",
+                expected_commit=history.M9_COMMIT,
+            )
+            self.assertEqual(errors, [])
+            self.assertIsNotNone(content)
+            before[name] = hashlib.sha256(content).hexdigest()
+
+        future = json.loads(
+            history.git_blob_bytes(
+                attestation["artifacts"]["reviewed_catalog"],
+                label="M9 transition reviewed catalog",
+                expected_commit=history.M9_COMMIT,
+            )[0]
+        )
+        future["status"] = "FUTURE_M10_CURRENT_STATE_FIXTURE"
+        future["completion_boundary"]["next_milestone"] = "FUTURE_PHASE_FIXTURE"
+        self.assertNotEqual(
+            hashlib.sha256((json.dumps(future, indent=2, sort_keys=True) + "\n").encode()).hexdigest(),
+            attestation["artifacts"]["reviewed_catalog"]["sha256"],
+        )
+        live_catalog = ROOT / "config" / "declaration-validation-catalog.json"
+        original_read_text = Path.read_text
+        original_read_bytes = Path.read_bytes
+
+        def reject_live_text(path, *args, **kwargs):
+            if path == live_catalog:
+                raise AssertionError("historical M9 validation read mutable current catalog")
+            return original_read_text(path, *args, **kwargs)
+
+        def reject_live_bytes(path, *args, **kwargs):
+            if path == live_catalog:
+                raise AssertionError("historical M9 validation read mutable current catalog")
+            return original_read_bytes(path, *args, **kwargs)
+
+        with mock.patch.object(Path, "read_text", reject_live_text), mock.patch.object(
+            Path, "read_bytes", reject_live_bytes
+        ):
+            self.assertEqual(history.validate_m7_attestation(), [])
+            self.assertEqual(history.validate_reviewed_m8_pilot(), [])
+            self.assertEqual(history.validate_m8_attestation(), [])
+            self.assertEqual(history.validate_m9_attestation(), [])
+
+        for name, expected in before.items():
+            content, errors = history.git_blob_bytes(
+                attestation["artifacts"][name],
+                label=f"M9 transition after {name}",
+                expected_commit=history.M9_COMMIT,
+            )
+            self.assertEqual(errors, [])
+            self.assertEqual(hashlib.sha256(content).hexdigest(), expected)
+
+    @unittest.skipUnless(history.M9_COMMIT, "Phase-B M9 attestation not created yet")
+    def test_m9_historical_attestation_tampering_fails(self):
+        attestation = history.load_json(history.M9_ATTESTATION_PATH)
+
+        wrong_blob = copy.deepcopy(attestation)
+        wrong_blob["artifacts"]["reviewed_catalog"]["git_blob"] = "0" * 40
+        self.assertTrue(any(
+            "blob identity is stale" in item
+            for item in history.validate_m9_attestation(wrong_blob)
+        ))
+
+        wrong_sha = copy.deepcopy(attestation)
+        wrong_sha["artifacts"]["reviewed_catalog"]["sha256"] = "0" * 64
+        self.assertTrue(any(
+            "SHA-256 is stale" in item
+            for item in history.validate_m9_attestation(wrong_sha)
+        ))
+
+        wrong_commit = copy.deepcopy(attestation)
+        wrong_commit["historical_commit"] = "0" * 40
+        self.assertTrue(any(
+            "attestation commit is incorrect" in item
+            for item in history.validate_m9_attestation(wrong_commit)
+        ))
+
+        wrong_review_blob = copy.deepcopy(attestation)
+        wrong_review_blob["artifacts"]["review_record"]["git_blob"] = "0" * 40
+        self.assertTrue(history.validate_m9_attestation(wrong_review_blob))
+
+        wrong_completion = copy.deepcopy(attestation)
+        wrong_completion["artifacts"]["completion_record"] = copy.deepcopy(
+            wrong_completion["artifacts"]["freeze_manifest"]
+        )
+        self.assertTrue(history.validate_m9_attestation(wrong_completion))
+
     def test_actual_m9_reviewed_catalog_leaves_m8_history_valid(self):
         attestation = history.load_json(history.M8_ATTESTATION_PATH)
         current = history.load_json(ROOT / "config" / "declaration-validation-catalog.json")

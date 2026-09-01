@@ -14,7 +14,8 @@ ROOT = Path(__file__).resolve().parents[1]
 REVIEW_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-adversarial-review.json"
 FREEZE_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-freeze.json"
 DEFAULT_OUTPUT = ROOT / "results" / "research" / "declaration-validation-milestone-9.json"
-TESTS_RUN = 153
+TESTS_RUN = 158
+M8_ATTESTATION_PREDECESSOR_COMMIT = "15c76f27479dafc4213774b0acffb0d1d84fa2ed"
 
 ARTIFACTS = {
     "canonical_catalog": "config/declaration-validation-catalog.json",
@@ -30,10 +31,12 @@ ARTIFACTS = {
     "freeze_manifest": "results/research/declaration-validation-milestone-9-freeze.json",
     "freeze_schema": "schemas/declaration-validation-milestone-9-freeze.schema.json",
     "completion_schema": "schemas/declaration-validation-milestone-9.schema.json",
+    "historical_attestation_schema": "schemas/declaration-validation-milestone-9-historical.schema.json",
     "catalog_populator": "scripts/populate-declaration-validation-milestone-9",
     "review_renderer": "scripts/render-declaration-validation-milestone-9-review",
     "freeze_renderer": "scripts/render-declaration-validation-milestone-9-freeze",
     "completion_renderer": "scripts/render-declaration-validation-milestone-9-completion",
+    "historical_attestation_renderer": "scripts/render-declaration-validation-milestone-9-historical",
     "catalog_validator": "scripts/validate-declaration-validation-catalog",
     "historical_validator": "scripts/validate-declaration-validation-historical",
     "milestone_9_validator": "scripts/validate-declaration-validation-milestone-9",
@@ -61,7 +64,7 @@ def render() -> dict[str, Any]:
         "recorded_at": review["recorded_at"],
         "status": "PASS",
         "repository_state": {
-            "head_at_milestone_start": "15c76f236b82077ba1fdb65e6b6165d5c7bdf5f1",
+            "head_at_milestone_start": M8_ATTESTATION_PREDECESSOR_COMMIT,
             "branch": "main",
             "tree_clean_at_milestone_start": True,
             "prior_milestone_attestation": "results/research/declaration-validation-milestone-8-historical.json",
@@ -77,7 +80,7 @@ def render() -> dict[str, Any]:
             "established_authority_entries": 0,
             "provisional_authority_entries": 27,
             "soundness_relevance": "NOT_ASSESSED_ONLY",
-            "catalog_corrections": 0,
+            "catalog_corrections": review["summary"]["catalog_corrections"],
             "checker_consensus_establishes_normativity": False,
             "llm_judgment_is_evidence": False,
         },
@@ -92,6 +95,13 @@ def render() -> dict[str, Any]:
                 "historical_m7_reviewed_pilot_and_corrected_m8": "PASS",
                 "canonical_reviewed_catalog": "PASS",
                 "milestone_9_adversarial_review": "PASS",
+                "historical_transition_tests": {
+                    "tests_run": 11,
+                    "skipped": 2,
+                    "failures": 0,
+                    "errors": 0,
+                    "result": "PASS",
+                },
                 "declaration_validation_tests": {
                     "tests_run": TESTS_RUN,
                     "failures": 0,
@@ -102,18 +112,11 @@ def render() -> dict[str, Any]:
         },
         "requirements_audit": {
             "pre_review_freeze": "M8_GIT_BLOB_PREDECESSOR_PLUS_SEQUENCE_5_EVIDENCE_AND_PRE_REVIEW_CATALOG",
-            "implementation_restatement": "ALL_19_NORMATIVE_CANDIDATES_REVIEWED_WITHOUT_AUTHORITY_PROMOTION",
-            "kernel_export_boundary": "NORMATIVE_KERNEL_LAYER_SEPARATED_FROM_EMPIRICAL_EXPORT_AND_RECONSTRUCTION",
-            "multi_layer_scenarios": "EVERY_MULTI_LAYER_SCENARIO_EXPLICIT",
-            "consensus_authority": "ZERO_CONSENSUS_BASED_AUTHORITY_ASSIGNMENTS",
-            "lineage": "OFFICIAL_AND_LEAN4LEAN_SHARED_LINEAGE_EXPLICIT",
-            "independent_observability": "INCOMPLETE_OBSERVATION_PRESERVED_AS_NEGATIVE_RESULT",
-            "duplicates": "ZERO_DUPLICATE_FROZEN_DENOTATION_HASH_GROUPS",
-            "established_support": "ZERO_ESTABLISHED_ENTRIES_TO_DOWNGRADE",
-            "discovery_omissions": "FROZEN_22_SOURCE_59_SITE_149_PAIR_SURFACE_EXACTLY_CLOSED",
-            "exclusions": "ALL_DECLARED_EXCLUSIONS_AND_NON_ENTRY_IDENTITIES_EXPLICITLY_JUSTIFIED",
-            "soundness": "ALL_27_ENTRIES_REMAIN_NOT_ASSESSED",
-            "reconstruction": "M8_AND_M9_CATALOG_BYTES_REPRODUCIBLE_WITHOUT_LLM_AUTHORITY",
+            "challenge_dispositions": {
+                row["id"]: row["disposition"] for row in review["challenges"]
+            },
+            "review_decisions": "CANONICAL_AUTHORED_INPUT_NOT_DERIVED_BY_RENDERER",
+            "reconstruction": "M8_PRE_REVIEW_STATE_MECHANICALLY_REPRODUCIBLE_AND_M9_REVIEW_STATE_CONTENT_BOUND",
             "freeze_manifest": "ACYCLIC_PRE_REVIEW_REVIEWED_CATALOG_REVIEW_AND_REPORT_BINDING",
         },
         "completion_boundary": {

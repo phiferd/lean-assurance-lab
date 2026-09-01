@@ -9,6 +9,7 @@ import hashlib
 import importlib.machinery
 import importlib.util
 import json
+import re
 from collections import Counter
 from pathlib import Path
 from typing import Any
@@ -135,6 +136,56 @@ def inventory_projection(catalog: dict[str, Any]) -> dict[str, Any]:
     }
 
 
+def target_hash(
+    catalog: dict[str, Any], catalog_ids: list[str], surface_ids: list[str]
+) -> str:
+    entries = {
+        row["characterization"]["id"]: hashlib.sha256(
+            json.dumps(row, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        for row in catalog["entries"]
+    }
+    dispositions = {
+        row["id"]: hashlib.sha256(
+            json.dumps(row, sort_keys=True, separators=(",", ":")).encode()
+        ).hexdigest()
+        for row in catalog["identity_dispositions"]
+    }
+    projection = {
+        "catalog": {
+            stable_id: entries.get(stable_id, dispositions.get(stable_id, "MISSING"))
+            for stable_id in sorted(catalog_ids)
+        },
+        "surface_ids": sorted(surface_ids),
+    }
+    encoded = json.dumps(projection, sort_keys=True, separators=(",", ":")).encode()
+    return hashlib.sha256(encoded).hexdigest()
+
+
+def projection_sha256(catalog: dict[str, Any]) -> str:
+    return hashlib.sha256(document_bytes(inventory_projection(catalog))).hexdigest()
+
+
+def resolve_pointer(document: Any, pointer: str) -> Any:
+    node = document
+    if pointer == "":
+        return node
+    for part in pointer.removeprefix("/").split("/"):
+        part = part.replace("~1", "/").replace("~0", "~")
+        node = node[int(part)] if isinstance(node, list) else node[part]
+    return node
+
+
+def recursive_strings(value: Any) -> set[str]:
+    if isinstance(value, str):
+        return {value}
+    if isinstance(value, list):
+        return set().union(*(recursive_strings(item) for item in value), set())
+    if isinstance(value, dict):
+        return set().union(*(recursive_strings(item) for item in value.values()), set())
+    return set()
+
+
 def catalog_artifact_errors(
     catalog_validator: Any,
     catalog: dict[str, Any],
@@ -167,60 +218,165 @@ def catalog_artifact_errors(
     )
 
 
+EXPECTED_CHALLENGES = [
+    ("CHALLENGE.M9.01.IMPLEMENTATION_RESTATEMENT", "Which normative entries merely restate implementation checks?"),
+    ("CHALLENGE.M9.02.KERNEL_EXPORT_BOUNDARY", "Which entries confuse kernel validity with export behavior?"),
+    ("CHALLENGE.M9.03.MULTI_LAYER_SCENARIOS", "Which scenarios cross multiple layers?"),
+    ("CHALLENGE.M9.04.CONSENSUS_AUTHORITY", "Which authority claims rely on implementation consensus?"),
+    ("CHALLENGE.M9.05.SHARED_LINEAGE", "Which supposedly independent sources share lineage?"),
+    ("CHALLENGE.M9.06.INDEPENDENT_OBSERVABILITY", "Which entries cannot be observed independently?"),
+    ("CHALLENGE.M9.07.DUPLICATE_IDENTITIES", "Which entries are duplicates?"),
+    ("CHALLENGE.M9.08.ESTABLISHED_SUPPORT", "Which established entries lack sufficient normative support?"),
+    ("CHALLENGE.M9.09.DISCOVERY_SURFACE_OMISSIONS", "Which checks in the declared discovery surface were missed?"),
+    ("CHALLENGE.M9.10.EXCLUSION_JUSTIFICATION", "Which exclusions are poorly justified?"),
+    ("CHALLENGE.M9.11.SOUNDNESS_OVERREACH", "Which soundness_relevance claims overreach the evidence?"),
+    ("CHALLENGE.M9.12.LLM_INDEPENDENT_RECONSTRUCTION", "Could another researcher reconstruct the catalog without trusting the LLM?"),
+]
+
+
+def correction_errors(
+    pre: dict[str, Any], reviewed: dict[str, Any], review: dict[str, Any]
+) -> list[str]:
+    errors: list[str] = []
+    corrections = {row["decision_id"]: row for row in review["corrections"]}
+    if len(corrections) != len(review["corrections"]):
+        errors.append("M9 correction decision IDs are not unique")
+    linked: set[str] = set()
+    challenge_ids = {row["id"] for row in review["challenges"]}
+    for challenge in review["challenges"]:
+        decision_ids = challenge["correction_decision_ids"]
+        if challenge["correction_required"] != bool(decision_ids):
+            errors.append(f"{challenge['id']}: correction flag and decision links disagree")
+        for decision_id in decision_ids:
+            linked.add(decision_id)
+            decision = corrections.get(decision_id)
+            if decision is None or challenge["id"] not in decision["challenge_ids"]:
+                errors.append(f"{challenge['id']}: correction decision link is unresolved")
+    if linked != set(corrections):
+        errors.append("M9 correction decisions are not linked exactly from challenges")
+
+    before_projection = inventory_projection(pre)
+    after_projection = inventory_projection(reviewed)
+    changed = before_projection != after_projection
+    if changed != bool(corrections):
+        errors.append("M9 reviewed catalog change and correction trail disagree")
+    if review["summary"]["catalog_corrections"] != len(corrections):
+        errors.append("M9 correction summary count is stale")
+    expected_before = projection_sha256(pre)
+    expected_after = projection_sha256(reviewed)
+    for decision in corrections.values():
+        if any(challenge_id not in challenge_ids for challenge_id in decision["challenge_ids"]):
+            errors.append(f"{decision['decision_id']}: unknown challenge link")
+        if decision["catalog_hash_before"] != expected_before or decision["catalog_hash_after"] != expected_after:
+            errors.append(f"{decision['decision_id']}: catalog before/after hash is stale")
+        before = target_hash(pre, decision["target_ids"], [])
+        after = target_hash(reviewed, decision["target_ids"], [])
+        if decision["statement_hash_before"] != before or decision["statement_hash_after"] != after:
+            errors.append(f"{decision['decision_id']}: statement before/after hash is stale")
+        if before == after:
+            errors.append(f"{decision['decision_id']}: correction does not change its targeted statement")
+        for pointer in decision["effect_paths"]:
+            try:
+                old_value = resolve_pointer(pre, pointer)
+                new_value = resolve_pointer(reviewed, pointer)
+            except (KeyError, IndexError, TypeError, ValueError):
+                errors.append(f"{decision['decision_id']}: effect path does not resolve: {pointer}")
+                continue
+            if old_value == new_value:
+                errors.append(f"{decision['decision_id']}: effect path records no change: {pointer}")
+        if any(item["artifact"] not in review["artifact_bindings"] for item in decision["evidence"]):
+            errors.append(f"{decision['decision_id']}: correction evidence is unbound")
+    return errors
+
+
 def review_fact_errors(
     pre: dict[str, Any], reviewed: dict[str, Any], review: dict[str, Any]
 ) -> list[str]:
     errors: list[str] = []
-    review_renderer = load_module("m9_review_fact_renderer", REVIEW_RENDERER_PATH)
-    if len(review["challenges"]) != 12:
-        errors.append("M9 review does not contain exactly twelve challenges")
+    if [(row.get("id"), row.get("challenge")) for row in review["challenges"]] != EXPECTED_CHALLENGES:
+        errors.append("M9 challenge IDs, order, or questions differ from the active plan")
         return errors
-    expected_ids = [f"CHALLENGE.M9.{number:02d}." for number in range(1, 13)]
-    for prefix, row in zip(expected_ids, review["challenges"], strict=True):
-        if not row["id"].startswith(prefix):
-            errors.append("M9 challenge order or identity is not exact")
-        if row["challenge"] != review_renderer.QUESTIONS[int(prefix[13:15]) - 1]:
-            errors.append(f"{row['id']}: challenge question differs from the active plan")
-        before = review_renderer.target_hash(
-            pre, row["target"]["catalog_ids"], row["target"]["surface_ids"]
-        )
-        after = review_renderer.target_hash(
-            reviewed, row["target"]["catalog_ids"], row["target"]["surface_ids"]
-        )
+    active = {
+        row["characterization"]["id"]: row["characterization"] for row in pre["entries"]
+    }
+    normative = {item_id for item_id, row in active.items() if row["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"}
+    empirical = set(active) - normative
+    closure = load_json(ROOT / "config" / "declaration-validation-discovery-closure.json")
+    discovery_surface = {
+        row["id"]
+        for group in ("sources", "sites", "topics", "dependencies")
+        for row in closure[group]
+    }
+    required_targets = {1: normative, 3: empirical, 6: set(active), 9: discovery_surface}
+    for number, row in enumerate(review["challenges"], start=1):
+        before = target_hash(pre, row["target"]["catalog_ids"], row["target"]["surface_ids"])
+        after = target_hash(reviewed, row["target"]["catalog_ids"], row["target"]["surface_ids"])
         if row["statement_hash_before"] != before or row["statement_hash_after"] != after:
             errors.append(f"{row['id']}: statement hash does not match the targeted catalog projection")
-        if not row["correction_required"] and before != after:
-            errors.append(f"{row['id']}: unrecorded statement change")
+        if not row["attack"].strip() or not row["rationale"].strip() or not row["assessments"]:
+            errors.append(f"{row['id']}: authored attack, rationale, or assessments are missing")
         if any(item["artifact"] not in review["artifact_bindings"] for item in row["evidence"]):
             errors.append(f"{row['id']}: evidence references an unbound artifact")
-
-    entries = [row["characterization"] for row in pre["entries"]]
-    if len(entries) != 27 or Counter(row["kind"] for row in entries) != {
-        "NORMATIVE_CANDIDATE_OBLIGATION": 19,
-        "EMPIRICAL_CONTRACT_SCENARIO": 8,
-    }:
-        errors.append("M9 review does not preserve the 27-entry M8 kind boundary")
+        if number in required_targets:
+            target_field = "surface_ids" if number == 9 else "catalog_ids"
+            if set(row["target"][target_field]) != required_targets[number]:
+                errors.append(f"{row['id']}: required complete target coverage is stale")
+            assessed = {target for item in row["assessments"] for target in item["target_ids"]}
+            if not required_targets[number].issubset(assessed):
+                errors.append(f"{row['id']}: item-level assessment coverage is incomplete")
+        if number in {2, 4, 7, 8, 10, 11}:
+            required = set(row["target"]["catalog_ids"]) | set(row["target"]["surface_ids"])
+            assessed = {target for item in row["assessments"] for target in item["target_ids"]}
+            if not required.issubset(assessed):
+                errors.append(f"{row['id']}: item-level assessment coverage is incomplete")
+    lineage_targets = {
+        target for item in review["challenges"][4]["assessments"] for target in item["target_ids"]
+    }
+    if lineage_targets != {"observer:official", "observer:lean4lean", "observer:nanoda", "observer:kiota"}:
+        errors.append("M9 observer-lineage review does not cover the four frozen profiles")
+    entries = [row["characterization"] for row in reviewed["entries"]]
     if any(row["authority"]["status"] != "PROVISIONAL" for row in entries):
         errors.append("M9 review found or created a non-provisional authority state")
     if any(row["soundness_relevance"]["status"] != "NOT_ASSESSED" for row in entries):
         errors.append("M9 review found or created a soundness assessment")
-    if any(
-        row["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
-        and row["layers"] != ["KERNEL_DECLARATION_VALIDITY"]
-        for row in entries
-    ):
-        errors.append("M9 review found a normative entry crossing the kernel/export layer boundary")
-    semantic_hashes = [row["semantic_denotation_sha256"] for row in pre["entries"]]
-    if len(semantic_hashes) != len(set(semantic_hashes)):
-        errors.append("M9 review found duplicate active semantic-denotation hashes")
-    identity_hashes = [row["identity_statement_sha256"] for row in pre["identity_dispositions"]]
-    if len(identity_hashes) != len(set(identity_hashes)):
-        errors.append("M9 review found duplicate frozen identity-statement hashes")
-    if review["corrections"] or review["summary"]["catalog_corrections"] != 0:
-        errors.append("M9 no-correction result contains a correction trail")
-    if review["status"] != "PASS_WITH_NO_CATALOG_CORRECTIONS":
-        errors.append("M9 status does not match the zero-correction review")
+    errors.extend(correction_errors(pre, reviewed, review))
     return errors
+
+
+def renderer_separation_errors() -> list[str]:
+    source = REVIEW_RENDERER_PATH.read_text(encoding="utf-8")
+    errors: list[str] = []
+    for forbidden in (
+        "def render(",
+        "DEFAULT_OUTPUT",
+        '"correction_required":',
+        '"correction_decision_ids":',
+        '"disposition":',
+        '"rationale":',
+    ):
+        if forbidden in source:
+            errors.append(f"M9 renderer contains semantic-decision construction token: {forbidden}")
+    if "PRESENTATION_ONLY" not in source or "render_markdown" not in source:
+        errors.append("M9 renderer does not declare its presentation-only role")
+    populator_source = POPULATOR_PATH.read_text(encoding="utf-8")
+    for forbidden in ("render_reviewed_catalog", "REVIEWED_CATALOG_PATH", "render_reviewed_evidence_lock"):
+        if forbidden in populator_source:
+            errors.append(f"M9 pre-review reconstructor can manufacture reviewed state: {forbidden}")
+    return errors
+
+
+def plan_challenge_errors() -> list[str]:
+    plan = (ROOT / "docs" / "research" / "DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md").read_text(
+        encoding="utf-8"
+    )
+    try:
+        block = plan.split("Challenge at minimum:", 1)[1].split("Each challenge receives:", 1)[0]
+    except IndexError:
+        return ["M9 challenge block is missing from the active plan"]
+    questions = re.findall(r"^[0-9]+\. (.+)$", block, flags=re.MULTILINE)
+    if questions != [question for _, question in EXPECTED_CHALLENGES]:
+        return ["M9 validator challenge questions differ from the active plan"]
+    return []
 
 
 def review_evidence_locator_errors(
@@ -228,7 +384,19 @@ def review_evidence_locator_errors(
 ) -> list[str]:
     errors: list[str] = []
     parsed: dict[str, Any] = {}
+    known_refs = set(review["artifact_bindings"])
+    for artifact, binding in review["artifact_bindings"].items():
+        path = ROOT / binding["path"]
+        try:
+            document = parsed.setdefault(artifact, load_json(path))
+        except json.JSONDecodeError:
+            continue
+        known_refs.update(recursive_strings(document))
     for row in review["challenges"]:
+        for assessment in row["assessments"]:
+            for evidence_ref in assessment["evidence_refs"]:
+                if evidence_ref not in known_refs:
+                    errors.append(f"{row['id']}: assessment evidence reference is unresolved: {evidence_ref}")
         for evidence in row["evidence"]:
             artifact = evidence["artifact"]
             binding = review["artifact_bindings"].get(artifact)
@@ -270,14 +438,19 @@ def validate_document(
     errors.extend(history.validate_m7_attestation())
     errors.extend(history.validate_reviewed_m8_pilot())
     errors.extend(history.validate_m8_attestation())
+    errors.extend(history.validate_m8_attestation_predecessor_commit())
     if errors:
         return errors
+    if history.M9_COMMIT is not None:
+        return history.validate_m9_attestation()
 
     pre = load_json(PRE_CATALOG_PATH)
     reviewed = load_json(REVIEWED_CATALOG_PATH)
     current = load_json(CATALOG_PATH)
     pre_lock = load_json(populator.PRE_EVIDENCE_LOCK_PATH)
-    reviewed_lock = load_json(populator.REVIEWED_EVIDENCE_LOCK_PATH)
+    reviewed_lock = load_json(
+        ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-9-reviewed.json"
+    )
     review = load_json(REVIEW_PATH) if review is None else review
     errors.extend(schema_errors(review, load_json(REVIEW_SCHEMA_PATH), "Milestone 9 review"))
     if errors:
@@ -289,8 +462,6 @@ def validate_document(
         return errors
     if inventory_projection(pre) != inventory_projection(m8_catalog):
         errors.append("M9 pre-review inventory differs from immutable corrected M8 content")
-    if inventory_projection(reviewed) != inventory_projection(pre):
-        errors.append("M9 reviewed inventory changed without a recorded correction")
     if current != reviewed:
         errors.append("current canonical catalog differs from the frozen reviewed catalog")
 
@@ -307,6 +478,8 @@ def validate_document(
     errors.extend(catalog_artifact_errors(catalog_validator, reviewed, reviewed_lock))
     errors.extend(review_fact_errors(pre, reviewed, review))
     errors.extend(review_evidence_locator_errors(review, catalog_validator))
+    errors.extend(renderer_separation_errors())
+    errors.extend(plan_challenge_errors())
 
     authority_sources = load_json(ROOT / "config" / "declaration-validation-approved-authority-sources.json")
     if authority_sources["normative_documentation"] or authority_sources["mechanized_results"]:
@@ -330,8 +503,6 @@ def validate_document(
         for path, document in expected_documents.items():
             if not path.is_file() or path.read_bytes() != document_bytes(document):
                 errors.append(f"M9 generated catalog artifact is stale: {path.relative_to(ROOT)}")
-        if REVIEW_PATH.read_bytes() != document_bytes(renderer.render()):
-            errors.append("M9 adversarial-review record is not synchronized with its renderer")
         if REVIEW_REPORT_PATH.read_text(encoding="utf-8") != renderer.render_markdown(review):
             errors.append("M9 adversarial-review report is not synchronized with its renderer")
         errors.extend(bound_file_errors(review["artifact_bindings"], "M9 review"))
@@ -362,6 +533,8 @@ def validate_document(
             errors.append("M9 freeze does not bind the reviewed catalog")
         if completion["artifacts"]["freeze_manifest"]["sha256"] != sha256_file(FREEZE_PATH):
             errors.append("M9 completion does not bind the final content manifest")
+        if completion["repository_state"]["head_at_milestone_start"] != history.M8_ATTESTATION_COMMIT:
+            errors.append("M9 completion milestone-start commit does not bind immutable M8 attestation")
     return errors
 
 

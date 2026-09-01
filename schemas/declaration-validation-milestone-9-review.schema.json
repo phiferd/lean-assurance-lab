@@ -1,13 +1,15 @@
 {
   "$schema": "https://json-schema.org/draft/2020-12/schema",
   "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-milestone-9-review.schema.json",
-  "title": "Declaration Validation Milestone 9 Adversarial Review",
+  "title": "Declaration Validation Milestone 9 Authored Adversarial Review",
   "type": "object",
   "required": [
     "schema_version",
     "review_id",
     "recorded_at",
     "status",
+    "authorship",
+    "baseline",
     "artifact_bindings",
     "method",
     "challenges",
@@ -17,10 +19,74 @@
     "nonclaims"
   ],
   "properties": {
-    "schema_version": {"const": 1},
-    "review_id": {"const": "ordinary-declaration-validation.milestone-9-adversarial-review.v1"},
+    "schema_version": {"const": 2},
+    "review_id": {"const": "ordinary-declaration-validation.milestone-9-adversarial-review.v2"},
     "recorded_at": {"type": "string", "format": "date-time"},
-    "status": {"enum": ["PASS_WITH_NO_CATALOG_CORRECTIONS", "PASS_WITH_CATALOG_CORRECTIONS"]},
+    "status": {
+      "enum": [
+        "PASS_WITH_NO_CATALOG_CORRECTIONS",
+        "PASS_WITH_CATALOG_CORRECTIONS"
+      ]
+    },
+    "authorship": {
+      "type": "object",
+      "required": [
+        "semantic_decision_origin",
+        "renderer_role",
+        "generated_from_catalog",
+        "semantic_authority_claimed",
+        "reviewer_responsibility"
+      ],
+      "properties": {
+        "semantic_decision_origin": {"const": "EXPLICIT_PRIMARY_REVIEWER_JUDGMENT"},
+        "renderer_role": {"const": "PRESENTATION_ONLY"},
+        "generated_from_catalog": {"const": false},
+        "semantic_authority_claimed": {"const": false},
+        "reviewer_responsibility": {"type": "string", "minLength": 20}
+      },
+      "additionalProperties": false
+    },
+    "baseline": {
+      "type": "object",
+      "required": [
+        "repository_head",
+        "repository_clean",
+        "validators",
+        "tests"
+      ],
+      "properties": {
+        "repository_head": {"$ref": "#/$defs/gitObjectId"},
+        "repository_clean": {"const": true},
+        "validators": {
+          "type": "array",
+          "minItems": 4,
+          "uniqueItems": true,
+          "items": {
+            "type": "object",
+            "required": ["command", "result"],
+            "properties": {
+              "command": {"type": "string", "minLength": 1},
+              "result": {"const": "PASS"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "tests": {
+          "type": "object",
+          "required": ["command", "result", "tests_run", "failures", "errors", "elapsed_seconds"],
+          "properties": {
+            "command": {"type": "string", "minLength": 1},
+            "result": {"const": "PASS"},
+            "tests_run": {"type": "integer", "minimum": 1},
+            "failures": {"const": 0},
+            "errors": {"const": 0},
+            "elapsed_seconds": {"type": "number", "exclusiveMinimum": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
     "artifact_bindings": {
       "type": "object",
       "additionalProperties": {"$ref": "#/$defs/fileBinding"},
@@ -33,14 +99,16 @@
         "predecessor_boundary",
         "review_independence",
         "statement_hash_projection",
-        "reconstruction_command"
+        "reconstruction_command",
+        "source_inspection_method"
       ],
       "properties": {
         "challenge_set": {"const": "EXACT_PLAN_M9_MINIMUM_TWELVE"},
         "predecessor_boundary": {"const": "IMMUTABLE_CORRECTED_M8_GIT_BLOB_ATTESTATION"},
-        "review_independence": {"const": "SEPARATE_M9_RECORD_NOT_CATALOG_AUTHORITY"},
+        "review_independence": {"const": "AUTHORED_DECISIONS_NOT_DERIVED_FROM_CATALOG_STATE"},
         "statement_hash_projection": {"type": "string", "minLength": 1},
-        "reconstruction_command": {"const": "scripts/populate-declaration-validation-milestone-9 --check"}
+        "reconstruction_command": {"const": "scripts/populate-declaration-validation-milestone-9 --check"},
+        "source_inspection_method": {"type": "string", "minLength": 20}
       },
       "additionalProperties": false
     },
@@ -86,12 +154,22 @@
     },
     "conclusion": {
       "type": "object",
-      "required": ["catalog_disposition", "reviewed_catalog_sha256", "next_authorized_milestone", "reason"],
+      "required": [
+        "catalog_disposition",
+        "reviewed_catalog_sha256",
+        "next_authorized_milestone",
+        "reason"
+      ],
       "properties": {
-        "catalog_disposition": {"enum": ["RETAIN_M8_SEMANTIC_CONTENT_UNCHANGED", "APPLY_RECORDED_CORRECTIONS"]},
+        "catalog_disposition": {
+          "enum": [
+            "RETAIN_M8_SEMANTIC_CONTENT_UNCHANGED",
+            "APPLY_RECORDED_CORRECTIONS"
+          ]
+        },
         "reviewed_catalog_sha256": {"$ref": "#/$defs/sha256"},
         "next_authorized_milestone": {"const": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY"},
-        "reason": {"type": "string", "minLength": 1}
+        "reason": {"type": "string", "minLength": 20}
       },
       "additionalProperties": false
     },
@@ -105,6 +183,7 @@
   "additionalProperties": false,
   "$defs": {
     "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObjectId": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
     "semanticId": {"type": "string", "pattern": "^[A-Z][A-Z0-9]*(\\.[A-Z][A-Z0-9_]*)+$"},
     "fileBinding": {
       "type": "object",
@@ -147,7 +226,42 @@
           "uniqueItems": true,
           "items": {"type": "string", "minLength": 1}
         },
-        "finding": {"type": "string", "minLength": 1}
+        "finding": {"type": "string", "minLength": 10}
+      },
+      "additionalProperties": false
+    },
+    "assessment": {
+      "type": "object",
+      "required": [
+        "target_ids",
+        "attack",
+        "disposition",
+        "rationale",
+        "evidence_refs",
+        "limitations"
+      ],
+      "properties": {
+        "target_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "attack": {"type": "string", "minLength": 20},
+        "disposition": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "rationale": {"type": "string", "minLength": 20},
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "limitations": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        }
       },
       "additionalProperties": false
     },
@@ -157,8 +271,11 @@
         "id",
         "challenge",
         "target",
+        "attack",
         "disposition",
+        "rationale",
         "evidence",
+        "assessments",
         "facts",
         "statement_hash_before",
         "statement_hash_after",
@@ -170,27 +287,18 @@
         "id": {"type": "string", "pattern": "^CHALLENGE\\.M9\\.(0[1-9]|1[0-2])\\.[A-Z0-9_]+$"},
         "challenge": {"type": "string", "minLength": 1},
         "target": {"$ref": "#/$defs/target"},
-        "disposition": {
-          "enum": [
-            "RETAINED_PROVISIONAL_IMPLEMENTATION_ONLY",
-            "KERNEL_EXPORT_BOUNDARY_SEPARATED",
-            "MULTI_LAYER_SCENARIOS_EXPLICIT",
-            "NO_CONSENSUS_BASED_AUTHORITY",
-            "SHARED_LINEAGE_EXPLICIT",
-            "INDEPENDENT_OBSERVABILITY_INCOMPLETE",
-            "NO_DUPLICATE_CANONICAL_DENOTATIONS",
-            "NO_ESTABLISHED_ENTRY_TO_DOWNGRADE",
-            "NO_OMISSION_WITHIN_FROZEN_DISCOVERY_SURFACE",
-            "EXCLUSIONS_SCOPED_AND_JUSTIFIED",
-            "NO_SOUNDNESS_OVERREACH",
-            "RECONSTRUCTABLE_WITHOUT_LLM_AUTHORITY",
-            "CORRECTION_REQUIRED"
-          ]
-        },
+        "attack": {"type": "string", "minLength": 40},
+        "disposition": {"type": "string", "pattern": "^[A-Z][A-Z0-9_]+$"},
+        "rationale": {"type": "string", "minLength": 40},
         "evidence": {
           "type": "array",
           "minItems": 1,
           "items": {"$ref": "#/$defs/reviewEvidence"}
+        },
+        "assessments": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/assessment"}
         },
         "facts": {
           "type": "object",
@@ -215,7 +323,10 @@
       "additionalProperties": false,
       "allOf": [
         {
-          "if": {"properties": {"correction_required": {"const": true}}, "required": ["correction_required"]},
+          "if": {
+            "properties": {"correction_required": {"const": true}},
+            "required": ["correction_required"]
+          },
           "then": {"properties": {"correction_decision_ids": {"minItems": 1}}},
           "else": {"properties": {"correction_decision_ids": {"maxItems": 0}}}
         }
@@ -223,11 +334,65 @@
     },
     "correction": {
       "type": "object",
-      "required": ["decision_id", "target_ids", "reason", "catalog_hash_before", "catalog_hash_after"],
+      "required": [
+        "decision_id",
+        "challenge_ids",
+        "target_ids",
+        "change_type",
+        "previous_interpretation",
+        "corrected_interpretation",
+        "why_previous_failed",
+        "evidence",
+        "effect_paths",
+        "statement_hash_before",
+        "statement_hash_after",
+        "catalog_hash_before",
+        "catalog_hash_after"
+      ],
       "properties": {
         "decision_id": {"type": "string", "pattern": "^DEC\\.CATALOG\\.[A-Z0-9_.]+$"},
-        "target_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/semanticId"}},
-        "reason": {"type": "string", "minLength": 1},
+        "challenge_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^CHALLENGE\\.M9\\.(0[1-9]|1[0-2])\\.[A-Z0-9_]+$"}
+        },
+        "target_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticId"}
+        },
+        "change_type": {
+          "enum": [
+            "KIND_CHANGE",
+            "LAYER_CHANGE",
+            "MERGE",
+            "SPLIT",
+            "EXCLUSION_CHANGE",
+            "AUTHORITY_CHANGE",
+            "LIFECYCLE_CHANGE",
+            "OBSERVABILITY_CHANGE",
+            "DISCOVERY_SURFACE_CHANGE",
+            "OTHER"
+          ]
+        },
+        "previous_interpretation": {"type": "string", "minLength": 20},
+        "corrected_interpretation": {"type": "string", "minLength": 20},
+        "why_previous_failed": {"type": "string", "minLength": 20},
+        "evidence": {
+          "type": "array",
+          "minItems": 1,
+          "items": {"$ref": "#/$defs/reviewEvidence"}
+        },
+        "effect_paths": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^/"}
+        },
+        "statement_hash_before": {"$ref": "#/$defs/sha256"},
+        "statement_hash_after": {"$ref": "#/$defs/sha256"},
         "catalog_hash_before": {"$ref": "#/$defs/sha256"},
         "catalog_hash_after": {"$ref": "#/$defs/sha256"}
       },

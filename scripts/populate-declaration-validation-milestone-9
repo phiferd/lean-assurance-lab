@@ -1,5 +1,9 @@
 #!/usr/bin/env python3
-"""Populate the two M9 catalog states from the immutable corrected M8 catalog."""
+"""Reconstruct only M9's frozen pre-review input from immutable corrected M8.
+
+The reviewed evidence lock and reviewed catalog are authored review outcomes.
+This script deliberately cannot manufacture either of them.
+"""
 
 from __future__ import annotations
 
@@ -21,18 +25,10 @@ M8_EVIDENCE_LOCK_PATH = (
 PRE_EVIDENCE_LOCK_PATH = (
     ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-9-pre-review.json"
 )
-REVIEWED_EVIDENCE_LOCK_PATH = (
-    ROOT / "config" / "declaration-validation-evidence-locks" / "milestone-9-reviewed.json"
-)
 PRE_CATALOG_PATH = (
     ROOT / "results" / "research" / "declaration-validation-milestone-9-pre-review-catalog.json"
 )
-CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
-REVIEWED_CATALOG_PATH = (
-    ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
-)
 PRE_RECORDED_AT = "2026-09-01T00:15:00-04:00"
-REVIEWED_AT = "2026-09-01T01:30:00-04:00"
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -104,34 +100,6 @@ def render_pre_review_evidence_lock() -> dict[str, Any]:
     }
 
 
-def render_reviewed_evidence_lock(
-    pre_review_lock: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    pre_review_lock = pre_review_lock or render_pre_review_evidence_lock()
-    return {
-        "schema_version": 1,
-        "lock_id": "ordinary-declaration-validation.evidence-lock.milestone-9-reviewed.v1",
-        "sequence": 6,
-        "recorded_at": REVIEWED_AT,
-        "status": "MILESTONE_9_REVIEWED_EVIDENCE_FREEZE",
-        "predecessor": {
-            "kind": "EVIDENCE_LOCK",
-            "path": str(PRE_EVIDENCE_LOCK_PATH.relative_to(ROOT)),
-            "sha256": document_sha256(pre_review_lock),
-        },
-        "normative_documentation": [],
-        "mechanized_results": [],
-        "tracked_evidence": [],
-        "generated_witnesses": [],
-        "nonclaims": [
-            "M9 review selected no new normative document, mechanized result, checker result, or witness.",
-            "The empty reviewed successor records a negative evidence-selection result rather than silently inheriting new authority.",
-            "All catalog authority remains provisional and all soundness relevance remains not assessed.",
-            "The adversarial-review record is a post-catalog audit artifact, not semantic authority.",
-        ],
-    }
-
-
 def render_pre_review_catalog(
     pre_review_lock: dict[str, Any] | None = None,
 ) -> dict[str, Any]:
@@ -160,47 +128,12 @@ def render_pre_review_catalog(
     return catalog
 
 
-def render_reviewed_catalog(
-    pre_review_catalog: dict[str, Any] | None = None,
-    reviewed_lock: dict[str, Any] | None = None,
-) -> dict[str, Any]:
-    pre_review_catalog = pre_review_catalog or render_pre_review_catalog()
-    reviewed_lock = reviewed_lock or render_reviewed_evidence_lock()
-    catalog = copy.deepcopy(pre_review_catalog)
-    catalog["recorded_at"] = REVIEWED_AT
-    catalog["status"] = "MILESTONE_9_REVIEWED_FREEZE"
-    catalog["artifact_bindings"]["evidence_lock"] = {
-        "path": str(REVIEWED_EVIDENCE_LOCK_PATH.relative_to(ROOT)),
-        "sha256": document_sha256(reviewed_lock),
-    }
-    catalog["completion_boundary"] = {
-        "canonical_data_authoritative": True,
-        "generated_report_required": True,
-        "inventory_populated": True,
-        "authority_assignments_created": True,
-        "next_milestone": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
-    }
-    catalog["nonclaims"] = [
-        "M9 challenged all twelve mandated review classes and found no semantic catalog correction justified by the frozen evidence.",
-        "The review preserves incomplete independent observability, provisional authority, explicit cross-layer scenarios, exclusions, and unresolved boundaries rather than upgrading them.",
-        "No implementation behavior, checker agreement, adversarial-review result, or LLM judgment establishes normativity.",
-        "All 27 active entries remain PROVISIONAL and all soundness relevance remains NOT_ASSESSED.",
-        "The reviewed inventory is a frozen input for Milestone 10 design; it is not yet a negative-coverage denominator and no broad coverage study has begun.",
-    ]
-    return catalog
-
-
 def rendered_documents() -> dict[Path, dict[str, Any]]:
     pre_lock = render_pre_review_evidence_lock()
-    reviewed_lock = render_reviewed_evidence_lock(pre_lock)
     pre_catalog = render_pre_review_catalog(pre_lock)
-    reviewed_catalog = render_reviewed_catalog(pre_catalog, reviewed_lock)
     return {
         PRE_EVIDENCE_LOCK_PATH: pre_lock,
-        REVIEWED_EVIDENCE_LOCK_PATH: reviewed_lock,
         PRE_CATALOG_PATH: pre_catalog,
-        CATALOG_PATH: reviewed_catalog,
-        REVIEWED_CATALOG_PATH: reviewed_catalog,
     }
 
 
