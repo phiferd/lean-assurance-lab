@@ -223,6 +223,21 @@ The preregistration validator must rederive this list from the exact historical
 M10 study blob and reject additions, omissions, reordering-based semantic
 changes, or mutable-current substitution.
 
+### Technical-Readiness Holdouts
+
+Four other M10 exploratory identities are deliberately outside this authority
+cohort because M10 recorded unresolved representability or isolation readiness
+for them:
+
+- `DECL.TYPE.NO_FREE_VARS`;
+- `DECL.TYPE.NO_METAVARS`;
+- `DECL.TYPE.WELL_FORMED`; and
+- `DECL.VALUE.WELL_FORMED`.
+
+They remain visible as `TECHNICAL_READINESS_HELDOUT`. They may not be repaired,
+added, or substituted later to rescue a weak authority or experimental result.
+Any future work on them requires a separate successor plan.
+
 ### Semantic Family Labels
 
 Family labels are descriptive strata for analysis, not authority or eligibility
@@ -286,6 +301,11 @@ machine-readable preregistration that binds:
 - publication thresholds; and
 - the rule that checker behavior and implementation source cannot qualify
   normativity.
+
+Before source discovery begins, the preregistration must operationalize every
+publication outcome class into mechanically decidable criteria wherever
+possible. The final publication recommendation may interpret the frozen
+results, but it may not redefine an outcome class after seeing those results.
 
 The source-discovery surface should include, where exact provenance permits:
 
@@ -463,6 +483,12 @@ membership:
 
 These are transparent study-planning thresholds, not claims that five rules are
 semantically representative or that one threshold proves adequacy.
+
+A `BOUNDED_PILOT` may execute the exact low-cost study needed to answer its
+bounded question, but it may not trigger Tier 3 construction or a new broad
+comparator campaign unless that work was separately preregistered before
+execution as necessary for the pilot. Pilot scope and cost may not expand in
+response to early results.
 
 ## Experimental Protocol
 
@@ -668,6 +694,30 @@ The publication decision must state:
 
 No new sprawling frontier may begin before this decision is durable.
 
+### Paper Skeleton Before Execution
+
+Before Gate 7 and any primary experiment execution, create a lightweight living
+manuscript skeleton containing the frozen research questions and methodology,
+threats to validity, and empty primary result tables:
+
+1. problem and motivation;
+2. bounded Lean trust-boundary model;
+3. related work;
+4. normative authority methodology;
+5. obligation-sensitive negative coverage;
+6. experimental design;
+7. empty baseline and synthesis tables;
+8. threats to validity;
+9. results;
+10. ecosystem consequences;
+11. reproducibility; and
+12. limitations and future formalization.
+
+This is a presentation artifact, not semantic authority. Any substantial new
+experiment that does not populate a preregistered result, satisfy a
+constitutional requirement, or support an ecosystem recommendation requires
+explicit justification before it enters this frontier.
+
 ## External Action Policy
 
 Every mature study finding must enter the schema-backed action recommendation
@@ -707,6 +757,12 @@ At minimum, an activated study requires machine-readable successors for:
 12. final analysis and action recommendations;
 13. generated human report; and
 14. content manifest plus Git-blob historical attestation.
+
+These are information and lifecycle requirements, not a requirement for
+fourteen separate artifact, schema, renderer, or validator families. Co-locate
+related records when doing so preserves one canonical authority and acyclic
+provenance. Create a separate artifact or tool only when independent lifecycle,
+validation, or historical binding requires it.
 
 Suggested paths may be chosen during implementation, but canonical facts must
 have exactly one machine-readable authority and all prose must derive from it.
