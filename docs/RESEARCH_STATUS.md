@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-01
+Last updated: 2026-09-02
 
 ## How Status Is Tracked
 
@@ -961,7 +961,7 @@ prepared_external_action_drafts: 5
   remain intact. This transition does not authorize a broad axiom campaign or
   permit trust-policy behavior into the primary kernel-validity denominator.
 
-### Active
+### Completed Predecessor — Declaration Validation Contract Slice
 
 1. `F-DECLARATION-VALIDATION-CONTRACT-SLICE`: execute the revised
    [declaration-validation mandate](research/DECLARATION_VALIDATION_CONTRACT_SLICE_PLAN.md).
@@ -1340,6 +1340,44 @@ prepared_external_action_drafts: 5
    and binds 13 exact Git blobs at that commit. The complete Phase-B
    declaration-validation suite passes 185 tests with no skips. M10 remains at
    its stop condition and no successor research is authorized.
+
+### Frontier Transition — 2026-09-01
+
+- The human-authorized
+  [Declaration-Validation Obligation-Sensitive Coverage Study](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
+  activates `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY` from the exact
+  pushed plan at commit `34304bd39b6d0416b4c2a2fcb3c72f2d7b30c08a`
+  (SHA-256
+  `7beae5f915511005b7e6e601c610265b2ff11534b98394e2e205c0f63cf0e92c`).
+- `F-DECLARATION-VALIDATION-CONTRACT-SLICE` is complete at its M10 stop
+  condition and is an immutable predecessor, not an active source of successor
+  semantics. The successor must resolve M10 through
+  `results/research/declaration-validation-milestone-10-historical.json`
+  (SHA-256
+  `976d450f9f1afd6f1a41c388c5bb623ce524d28aa1d1ac6c6634316eb3a31120`)
+  and protocol erratum 1 through
+  `results/research/declaration-validation-milestone-10-protocol-erratum-1-historical.json`
+  (SHA-256
+  `1480e214881bc45c10f23bdac27663c8f31bc2dee6b0e50558c002cae4cdc786`).
+- This transition authorizes the bounded publication study, including the
+  separately staged authority-source process. It does not authorize external
+  publication or contact, adaptive cohort substitution, authority inference
+  from implementations/checkers/LLMs, or reinterpretation of M10 through
+  mutable current files.
+
+### Active
+
+1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
+   authorized
+   [publication study plan](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
+   to determine whether obligation-sensitive negative coverage adds measurable
+   assurance over existing Lean kernel testing on the frozen declaration-
+   validation slice. Preregister the mechanically derived 15-candidate cohort,
+   freeze bounded authority-source discovery before any approval, preserve
+   negative/null outcomes, and use the unchanged M10 eligibility and isolation
+   contracts. Authority-source approval is a separate human decision; no
+   catalog adjudication, denominator execution, Arena baseline measurement,
+   synthesis, mutation, or checker campaign may cross that gate implicitly.
 
 ### Waiting
 

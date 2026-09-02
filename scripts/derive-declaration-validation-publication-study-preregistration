@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""Derive the publication-study cohort from immutable M10 Git blobs."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+PREREGISTRATION_PATH = ROOT / "config" / "declaration-validation-publication-study-preregistration.json"
+M10_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-historical.json"
+ERRATUM_ATTESTATION_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1-historical.json"
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def git_blob(binding: dict[str, str]) -> dict[str, Any]:
+    resolved = subprocess.run(
+        ["git", "rev-parse", f"{binding['git_commit']}:{binding['path']}"],
+        cwd=ROOT,
+        check=True,
+        text=True,
+        stdout=subprocess.PIPE,
+    ).stdout.strip()
+    if resolved != binding["git_blob"]:
+        raise ValueError(f"{binding['path']}: Git blob differs from preregistered binding")
+    data = subprocess.run(
+        ["git", "cat-file", "blob", binding["git_blob"]],
+        cwd=ROOT,
+        check=True,
+        stdout=subprocess.PIPE,
+    ).stdout
+    if sha256_bytes(data) != binding["sha256"]:
+        raise ValueError(f"{binding['path']}: SHA-256 differs from preregistered binding")
+    return json.loads(data)
+
+
+def derive(preregistration: dict[str, Any]) -> tuple[list[dict[str, Any]], list[dict[str, Any]]]:
+    m10 = git_blob(preregistration["m10_inputs"]["study_design"])
+    catalog = git_blob(preregistration["m10_inputs"]["reviewed_m9_catalog"])
+    identities = git_blob(preregistration["m10_inputs"]["m9_identity_registry"])
+
+    if m10["immutable_m9_input"]["reviewed_catalog_binding"] != preregistration["m10_inputs"]["reviewed_m9_catalog"]:
+        raise ValueError("M10 reviewed-catalog binding differs from the preregistration")
+    if m10["immutable_m9_input"]["identity_registry_binding"] != preregistration["m10_inputs"]["m9_identity_registry"]:
+        raise ValueError("M10 identity-registry binding differs from the preregistration")
+
+    family_by_id: dict[str, str] = {}
+    for family in preregistration["semantic_families"]:
+        for candidate_id in family["candidate_ids"]:
+            if candidate_id in family_by_id:
+                raise ValueError(f"{candidate_id}: appears in multiple semantic families")
+            family_by_id[candidate_id] = family["id"]
+
+    catalog_index = {
+        row["characterization"]["id"]: (index, row)
+        for index, row in enumerate(catalog["entries"])
+    }
+    identity_index = {row["id"]: (index, row) for index, row in enumerate(identities["identities"])}
+
+    candidates: list[dict[str, Any]] = []
+    holdouts: list[dict[str, Any]] = []
+    for readiness_index, row in enumerate(m10["readiness"]):
+        classification = row["frozen_classification"]
+        common = (
+            row["input_disposition"] == "CATALOG_ENTRY"
+            and classification["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+            and classification["authority_status"] == "PROVISIONAL"
+            and classification["lifecycle_status"] == "ACTIVE"
+            and row["study_scope"]["status"] == "YES"
+            and row["semantic_negative_testability"]["status"] == "YES"
+        )
+        if not common:
+            continue
+        stable_id = row["entry_id"]
+        catalog_position, catalog_row = catalog_index[stable_id]
+        identity_position, _ = identity_index[stable_id]
+        base = {
+            "id": stable_id,
+            "m10_readiness_index": readiness_index,
+            "m9_catalog_json_pointer": f"/entries/{catalog_position}",
+            "m9_identity_registry_json_pointer": f"/identities/{identity_position}",
+            "identity_statement_sha256": catalog_row["identity_statement_sha256"],
+            "semantic_denotation_sha256": catalog_row["semantic_denotation_sha256"],
+        }
+        if row["arena_representability"]["status"] == "YES" and row["isolation_feasibility"]["status"] == "YES":
+            if stable_id not in family_by_id:
+                raise ValueError(f"{stable_id}: missing preregistered semantic-family label")
+            candidates.append({**base, "semantic_family": family_by_id[stable_id]})
+        else:
+            holdouts.append({
+                **base,
+                "exclusion_label": "TECHNICAL_READINESS_HELDOUT",
+                "arena_representability_status": row["arena_representability"]["status"],
+                "isolation_feasibility_status": row["isolation_feasibility"]["status"],
+            })
+
+    if len(candidates) != 15:
+        raise ValueError(f"immutable M10 derivation produced {len(candidates)} candidates, expected 15")
+    if len(holdouts) != 4:
+        raise ValueError(f"immutable M10 derivation produced {len(holdouts)} readiness holdouts, expected 4")
+    if set(family_by_id) != {row["id"] for row in candidates}:
+        raise ValueError("semantic-family labels do not exactly cover the derived cohort")
+    return candidates, holdouts
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--write", action="store_true")
+    parser.add_argument("--path", type=Path, default=PREREGISTRATION_PATH)
+    args = parser.parse_args()
+    preregistration = load_json(args.path)
+    candidates, holdouts = derive(preregistration)
+    if args.write:
+        preregistration["cohort_derivation"]["candidates"] = candidates
+        preregistration["cohort_derivation"]["technical_readiness_holdouts"] = holdouts
+        args.path.write_text(json.dumps(preregistration, indent=2, sort_keys=True) + "\n", encoding="utf-8")
+    print(json.dumps({
+        "candidates": [row["id"] for row in candidates],
+        "candidate_count": len(candidates),
+        "technical_readiness_holdouts": [row["id"] for row in holdouts],
+        "holdout_count": len(holdouts),
+    }, indent=2, sort_keys=True))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
