@@ -33,6 +33,7 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
     @classmethod
     def setUpClass(cls):
         cls.preregistration = validator.load_json(validator.PREREGISTRATION_PATH)
+        cls.discovery = validator.load_json(validator.DISCOVERY_PATH)
         cls.schema = validator.load_json(validator.SCHEMA_PATH)
 
     def test_schema_is_valid_draft_2020_12(self):
@@ -40,6 +41,29 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
+
+    def test_actual_frozen_discovery_and_review_packet_validate(self):
+        self.assertEqual(validator.validate_discovery(), [])
+        self.assertEqual(self.discovery["execution_summary"]["closure_status"], "CLOSED")
+        self.assertEqual(len(self.discovery["sources"]), 18)
+
+    def test_discovery_query_removal_is_rejected(self):
+        changed = copy.deepcopy(self.discovery)
+        changed["query_log"].pop()
+        errors = validator.validate_discovery(changed)
+        self.assertTrue(any("exact required query inventory" in item for item in errors))
+
+    def test_discovery_evidence_tamper_is_rejected(self):
+        changed = copy.deepcopy(self.discovery)
+        changed["sources"][0]["retrieved_content_sha256"] = "0" * 64
+        errors = validator.validate_discovery(changed)
+        self.assertTrue(any("evidence SHA-256 is stale" in item for item in errors))
+
+    def test_discovery_does_not_approve_sources(self):
+        approved = validator.load_json(validator.APPROVED_SOURCES_PATH)
+        self.assertFalse(approved.get("normative_documentation"))
+        self.assertFalse(approved.get("mechanized_results"))
+        self.assertEqual(self.discovery["status"], "FROZEN_BEFORE_AUTHORITY_SOURCE_APPROVAL")
 
     def test_cohort_is_mechanically_derived_from_immutable_m10(self):
         candidates, holdouts = deriver.derive(self.preregistration)

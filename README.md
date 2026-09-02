@@ -64,11 +64,12 @@ The Declaration Validation Contract Slice has completed Milestones 0 through
 publication study. M10's empty strict normative denominator, 19 provisional
 candidates, eight empirical scenarios, and `Reach(x) AND NOT P(x)` contract are
 resolved through its historical attestation and the separately frozen theorem-
-control erratum, not mutable current files. The active study preregisters the
-mechanically derived 15-candidate technically ready cohort, keeps four readiness
-holdouts outside it, and freezes bounded authority-source discovery before a
-separate human approval decision. No baseline, synthesis, mutation, checker, or
-catalog-adjudication campaign is authorized before that gate.
+control erratum, not mutable current files. The active study has preregistered
+the mechanically derived 15-candidate technically ready cohort, kept four
+readiness holdouts outside it, and frozen bounded authority-source discovery.
+Its 18 retained source candidates now await a separate human approval decision.
+No baseline, synthesis, mutation, checker, or catalog-adjudication campaign is
+authorized before that gate.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

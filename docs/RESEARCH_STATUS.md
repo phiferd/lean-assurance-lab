@@ -1365,6 +1365,24 @@ prepared_external_action_drafts: 5
   from implementations/checkers/LLMs, or reinterpretation of M10 through
   mutable current files.
 
+### Source-Discovery Freeze — 2026-09-02
+
+- The exact 15-candidate preregistration is frozen at commit
+  `c420e451b50fbbb56bb5ba89fb7faa4b65ac9a9a`, Git blob
+  `0acc79081f6b81ea9b3ee59f029ee64b88474377`, and SHA-256
+  `94f2a293407b6917b44361ca4b173c7e74972867c52d127ce336e10c1ed7592a`.
+- Bounded authority-source discovery is `CLOSED`: all 30 preregistered queries
+  executed with no access failure, and the canonical result retains 18
+  content-bound source candidates. The discovery record and compact review
+  packet are frozen before approval; neither records a human authority
+  decision.
+- The study is stopped at the separately governed source-approval boundary.
+  The fixed post-approval process sentinels remain
+  `DECL.THEOREM.TYPE_PROP` and `EXPR.LET.VALUE_TYPE_MATCH`. No catalog entry,
+  denominator, baseline, synthesis, mutation, or checker work is authorized
+  until the retained source-to-claim mappings receive explicit human
+  `APPROVE`, `REJECT`, or `DEFER` decisions.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1372,10 +1390,10 @@ prepared_external_action_drafts: 5
    [publication study plan](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
    to determine whether obligation-sensitive negative coverage adds measurable
    assurance over existing Lean kernel testing on the frozen declaration-
-   validation slice. Preregister the mechanically derived 15-candidate cohort,
-   freeze bounded authority-source discovery before any approval, preserve
-   negative/null outcomes, and use the unchanged M10 eligibility and isolation
-   contracts. Authority-source approval is a separate human decision; no
+   validation slice. The mechanically derived 15-candidate cohort and bounded
+   authority-source discovery are frozen; preserve negative/null outcomes and
+   use the unchanged M10 eligibility and isolation contracts. Authority-source
+   approval is now the next separate human decision; no
    catalog adjudication, denominator execution, Arena baseline measurement,
    synthesis, mutation, or checker campaign may cross that gate implicitly.
 

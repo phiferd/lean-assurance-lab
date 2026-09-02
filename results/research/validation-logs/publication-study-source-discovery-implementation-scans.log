@@ -1,0 +1,2627 @@
+{
+  "closure_id": "ordinary-declaration-validation.discovery-closure.v1",
+  "status": "FROZEN_EXHAUSTED",
+  "predecessor_bindings": {
+    "target_profile": {
+      "path": "config/declaration-validation-target.json",
+      "sha256": "4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa"
+    },
+    "characterization_model": {
+      "path": "config/declaration-validation-characterization-model.json",
+      "sha256": "6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7"
+    }
+  },
+  "scans": [
+    {
+      "query_id": "QUERY.IMPLEMENTATION.ENVIRONMENT",
+      "topic_ids": [
+        "TOPIC.NAME_FRESHNESS",
+        "TOPIC.CURRENT_DECL_VISIBILITY"
+      ],
+      "topics": [
+        {
+          "id": "TOPIC.NAME_FRESHNESS",
+          "name": "declaration name freshness",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.HEADER"
+              ],
+              "note": "Checked against the pre-declaration kernel environment."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.PARSER.ORDINARY"
+              ],
+              "note": "Parser rejects duplicate insertion."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS"
+              ],
+              "note": "checkName rejects an existing constant."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.PARSER.DUPLICATE"
+              ],
+              "note": "Parser rejects duplicates before insertion."
+            }
+          ],
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS"
+          ],
+          "disposition": "Candidate seed retained; layer placement awaits Milestone 5/8."
+        },
+        {
+          "id": "TOPIC.CURRENT_DECL_VISIBILITY",
+          "name": "current declaration visibility during validation",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.DEF",
+                "SITE.OFFICIAL.ENV.THEOREM",
+                "SITE.OFFICIAL.ENV.OPAQUE"
+              ],
+              "note": "Safe bodies checked in the pre-insertion environment."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.ENV.CUTOFF",
+                "SITE.NANODA.UTIL.CURRENT_VISIBILITY"
+              ],
+              "note": "ByName cutoff hides the current declaration."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.ENV.DEF",
+                "SITE.LEAN4LEAN.ENV.THEOREM",
+                "SITE.LEAN4LEAN.ENV.OPAQUE"
+              ],
+              "note": "Safe bodies checked before insertion."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "OBSERVED_DIFFERENCE",
+              "site_ids": [
+                "SITE.KIOTA.PARSER.INSERT_BEFORE_CHECK",
+                "SITE.KIOTA.ENV.MAP"
+              ],
+              "note": "Parser inserts before check_decl, making current entry visible."
+            }
+          ],
+          "seed_keys": [
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "Candidate and empirical disagreement retained without unsoundness claim."
+        }
+      ],
+      "sites": [
+        {
+          "id": "SITE.OFFICIAL.ENV.HEADER",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "check_no_fvar/check_no_metavar_no_fvar/check_name/check_duplicated_univ_params/check_declaration lines 92-133",
+          "behavior": "Checks freshness, duplicate universe parameters, declaration-type metavariable/free-variable closure, full type checking, and sorthood.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Externally distinguishable header predicates are provisional split candidates even though one helper bundles them."
+        },
+        {
+          "id": "SITE.NANODA.PARSER.ORDINARY",
+          "source_id": "SRC.NANODA.PARSER",
+          "symbol_or_range": "axiom/definition/theorem/opaque arms lines 765-810",
+          "behavior": "Reconstructs and inserts ordinary declarations, rejects duplicate names, and rejects unsupported unsafe/partial ordinary definitions/opaques.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.SERIALIZED_SAFETY",
+            "TOPIC.REPLAY_AND_CHECK_PHASE"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.SAFETY_RECONSTRUCTION",
+            "SEED.REPLAY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.EXPORT_PARSER",
+            "DEP.REPLAY_ORDER"
+          ],
+          "rationale": "Name freshness maps to a candidate; safety and insertion are observer reconstruction behavior."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT_BASIC",
+          "symbol_or_range": "checkDuplicatedUnivParams/checkNoMVar/checkNoFVar/checkName lines 14-60",
+          "behavior": "Implements common header freshness, universe-list uniqueness, and expression closure helpers.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE"
+          ],
+          "dependency_ids": [
+            "DEP.DECLARATION_REPRESENTATION"
+          ],
+          "rationale": "Helper sites map to the same provisional semantic groups as checkConstantVal."
+        },
+        {
+          "id": "SITE.KIOTA.PARSER.DUPLICATE",
+          "source_id": "SRC.KIOTA.PARSER",
+          "symbol_or_range": "reject_if_dup lines 193-204",
+          "behavior": "Rejects a serialized declaration name already present in the parser environment.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS"
+          ],
+          "dependency_ids": [
+            "DEP.EXPORT_PARSER",
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Maps a representation-layer enforcement to the same provisional externally observable boundary."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.DEF",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_definition lines 160-190",
+          "behavior": "Safe definitions are checked against the pre-insertion environment; unsafe definitions are inserted as axioms before body checking.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY",
+            "TOPIC.SERIALIZED_SAFETY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.SAFETY_DEPENDENCY",
+            "SEED.SAFETY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "The safe path is primary. The unsafe self-visible branch is retained only as a contrast and excluded kind."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.THEOREM",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_theorem lines 192-209",
+          "behavior": "Checks the common header, proposition-valued type, proof closure and type, then proof/declaration type definitional equality in the pre-insertion environment.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Produces separable primary seeds; it does not make the implementation their normative authority."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.OPAQUE",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_opaque lines 211-223",
+          "behavior": "Checks the common header, value closure and type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Same externally visible safe-declaration predicates as definitions except reducibility semantics, which is not reopened."
+        },
+        {
+          "id": "SITE.NANODA.ENV.CUTOFF",
+          "source_id": "SRC.NANODA.ENV",
+          "symbol_or_range": "EnvLimit::ByName/get_old_declar lines 204-276",
+          "behavior": "Restricts old-declaration lookup to indices before the current declaration cutoff.",
+          "topic_ids": [
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.REPLAY_AND_CHECK_PHASE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.REPLAY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP",
+            "DEP.REPLAY_ORDER"
+          ],
+          "rationale": "Mechanism becomes primary only through with_tc_and_declar; cutoff/replay assumptions remain explicit."
+        },
+        {
+          "id": "SITE.NANODA.UTIL.CURRENT_VISIBILITY",
+          "source_id": "SRC.NANODA.UTIL",
+          "symbol_or_range": "with_tc_and_declar lines 218-247",
+          "behavior": "Runs checking with EnvLimit::ByName(current declaration), preventing the declaration from serving as evidence for itself.",
+          "topic_ids": [
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Direct source mapping for the current-declaration visibility boundary."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.DEF",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addDefinition lines 26-48",
+          "behavior": "Checks safe definitions before insertion and unsafe definitions against a self-visible axiom placeholder.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.SERIALIZED_SAFETY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.SAFETY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Safe path is primary; unsafe contrast stays empirical/excluded."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.THEOREM",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addTheorem lines 50-62",
+          "behavior": "Checks header, Prop-valued type, value closure/type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Direct Lean4Lean mapping with declared lineage."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.OPAQUE",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addOpaque lines 64-73",
+          "behavior": "Checks header, value closure/type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Direct Lean4Lean safe opaque mapping."
+        },
+        {
+          "id": "SITE.KIOTA.PARSER.INSERT_BEFORE_CHECK",
+          "source_id": "SRC.KIOTA.PARSER",
+          "symbol_or_range": "handle_def_like/check_last lines 206-275, 586-611",
+          "behavior": "Inserts the ordinary declaration into the environment and only then constructs Checker and calls check_decl.",
+          "topic_ids": [
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.REPLAY_AND_CHECK_PHASE",
+            "TOPIC.SERIALIZED_SAFETY",
+            "TOPIC.AXIOM_ADMISSION_POLICY"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.REPLAY_RECONSTRUCTION",
+            "SEED.SAFETY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.REPLAY_ORDER",
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Explicit empirical divergence from pre-insertion safe checked-addition; catalog authority remains unresolved."
+        },
+        {
+          "id": "SITE.KIOTA.ENV.MAP",
+          "source_id": "SRC.KIOTA.ENV",
+          "symbol_or_range": "Environment::get/insert lines 145-151",
+          "behavior": "Single mutable map makes parser insertion immediately visible to subsequent check_decl lookups.",
+          "topic_ids": [
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.REPLAY_AND_CHECK_PHASE"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.REPLAY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Mechanism supporting the pre-check insertion observation."
+        }
+      ],
+      "sources": [
+        {
+          "id": "SRC.KIOTA.ENV",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/env.rs",
+          "blob_sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "ConstantInfo and Environment get/insert",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.ENV.MAP"
+          ]
+        },
+        {
+          "id": "SRC.KIOTA.PARSER",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/parser.rs",
+          "blob_sha256": "c6c53ac6a364b9d318585ad7c51ad8dd9883c027cb9dc356c119373782c77392",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "expression arms, reject_if_dup, handle_def_like, handle_line, check_last; inductive/quotient arms excluded",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.PARSER.REPRESENTATION",
+            "SITE.KIOTA.PARSER.INSERT_BEFORE_CHECK",
+            "SITE.KIOTA.PARSER.DUPLICATE",
+            "SITE.KIOTA.PARSER.EXCLUDED"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/Environment.lean",
+          "blob_sha256": "8de5b7407e225c96ed4116bc46e2e3bad5009b6bfb0cb4f68d4ce2799eff4f11",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "checkConstantVal, addAxiom, addDefinition, addTheorem, addOpaque, excluded addMutual/dispatch lines 12-119",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.ENV.HEADER",
+            "SITE.LEAN4LEAN.ENV.AXIOM",
+            "SITE.LEAN4LEAN.ENV.DEF",
+            "SITE.LEAN4LEAN.ENV.THEOREM",
+            "SITE.LEAN4LEAN.ENV.OPAQUE",
+            "SITE.LEAN4LEAN.ENV.EXCLUDED"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.ENVIRONMENT_BASIC",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/Environment/Basic.lean",
+          "blob_sha256": "549c16d924d7840858935da71e60169ea3990cf484187e11a2382c39d89e7620",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "checkDuplicatedUnivParams, checkNoMVar, checkNoFVar, checkName lines 14-60",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.ENV",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/env.rs",
+          "blob_sha256": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "Env, EnvLimit, get_old_declar lines 204-276",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.ENV.CUTOFF"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.PARSER",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/parser.rs",
+          "blob_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "expression representability, universe reconstruction, axiom/def/theorem/opaque arms, excluded quotient/inductive arms lines 469-820",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.PARSER.REPRESENTATION",
+            "SITE.NANODA.PARSER.ORDINARY",
+            "SITE.NANODA.PARSER.POLICY",
+            "SITE.NANODA.PARSER.EXCLUDED"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.UTIL",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/util.rs",
+          "blob_sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "with_tc_and_declar lines 218-247",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.UTIL.CURRENT_VISIBILITY"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.ENVIRONMENT",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/environment.cpp",
+          "blob_sha256": "6748cf9368a16b7e4fd8546accc78f98874fb69323934b21c796e722dad136b2",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "lines 1-308; ordinary-declaration validation concentrated at 92-294",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.ENV.HEADER",
+            "SITE.OFFICIAL.ENV.AXIOM",
+            "SITE.OFFICIAL.ENV.DEF",
+            "SITE.OFFICIAL.ENV.THEOREM",
+            "SITE.OFFICIAL.ENV.OPAQUE",
+            "SITE.OFFICIAL.ENV.EXCLUDED_DISPATCH"
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.UNIVERSES",
+      "topic_ids": [
+        "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+        "TOPIC.UNIVERSE_OWNERSHIP",
+        "TOPIC.CONSTANT_UNIVERSE_ARITY"
+      ],
+      "topics": [
+        {
+          "id": "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+          "name": "duplicate declaration universe parameters",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.HEADER"
+              ],
+              "note": "Common header rejects duplicates."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.HEADER",
+                "SITE.NANODA.LEVEL.PARAMS"
+              ],
+              "note": "Header/helper reject duplicates."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS"
+              ],
+              "note": "Common helper rejects duplicates."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.DECL"
+              ],
+              "note": "check_decl rejects duplicates."
+            }
+          ],
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST"
+          ],
+          "disposition": "Candidate seed; exact split from ownership is provisional."
+        },
+        {
+          "id": "TOPIC.UNIVERSE_OWNERSHIP",
+          "name": "declaration universe-parameter ownership",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.CONST"
+              ],
+              "note": "check_level validates every referenced parameter against lparams."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.CONST",
+                "SITE.NANODA.LEVEL.PARAMS"
+              ],
+              "note": "all_params_defined validates sort/constant levels."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.CONST"
+              ],
+              "note": "checkLevel validates against Context.lparams."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "OBSERVED_DIFFERENCE",
+              "site_ids": [
+                "SITE.KIOTA.TC.CONST",
+                "SITE.KIOTA.TC.UNIVERSE_ABSENCE",
+                "SITE.KIOTA.LEVEL.NO_OWNERSHIP_CONTEXT"
+              ],
+              "note": "No current declaration lparam context or ownership check was found at the pinned revision."
+            }
+          ],
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP"
+          ],
+          "disposition": "Candidate plus explicit checker-difference scenario; no soundness claim."
+        },
+        {
+          "id": "TOPIC.CONSTANT_UNIVERSE_ARITY",
+          "name": "constant universe-argument arity",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.CONST"
+              ],
+              "note": "Explicit size equality."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.EXPR.UARG_ARITY"
+              ],
+              "note": "Equal-length substitution assertion."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.CONST"
+              ],
+              "note": "Explicit length check."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.CONST"
+              ],
+              "note": "Explicit length check."
+            }
+          ],
+          "seed_keys": [
+            "SEED.CONSTANT_UNIVERSE_ARITY"
+          ],
+          "disposition": "Candidate seed kept separate from ownership."
+        }
+      ],
+      "sites": [
+        {
+          "id": "SITE.OFFICIAL.ENV.HEADER",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "check_no_fvar/check_no_metavar_no_fvar/check_name/check_duplicated_univ_params/check_declaration lines 92-133",
+          "behavior": "Checks freshness, duplicate universe parameters, declaration-type metavariable/free-variable closure, full type checking, and sorthood.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Externally distinguishable header predicates are provisional split candidates even though one helper bundles them."
+        },
+        {
+          "id": "SITE.NANODA.TC.HEADER",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "check_declar_info lines 155-183",
+          "behavior": "Rejects duplicate universe parameters and free variables in the type, infers the type, ensures sorthood, and checks theorem Prop status.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Metavariables are not serialized by this input representation; the apparent header difference is preserved in the topic matrix."
+        },
+        {
+          "id": "SITE.NANODA.LEVEL.PARAMS",
+          "source_id": "SRC.NANODA.LEVEL",
+          "symbol_or_range": "no_duplicate/all_params_defined lines 83-147",
+          "behavior": "Implements duplicate parameter and declaration-owned universe checks used by declaration/type inference.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.UNIVERSE_OWNERSHIP"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.UNIVERSE_OWNERSHIP"
+          ],
+          "dependency_ids": [
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Helper mapping; full universe equality/normalization remains imported."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT_BASIC",
+          "symbol_or_range": "checkDuplicatedUnivParams/checkNoMVar/checkNoFVar/checkName lines 14-60",
+          "behavior": "Implements common header freshness, universe-list uniqueness, and expression closure helpers.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE"
+          ],
+          "dependency_ids": [
+            "DEP.DECLARATION_REPRESENTATION"
+          ],
+          "rationale": "Helper sites map to the same provisional semantic groups as checkConstantVal."
+        },
+        {
+          "id": "SITE.KIOTA.TC.DECL",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "Checker::check_decl lines 1096-1221",
+          "behavior": "Checks duplicate universe parameters, declaration type sorthood, theorem Prop status, value type checking, and body/type defeq.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Primary ordinary declaration checker, noting that parser insertion already occurred."
+        },
+        {
+          "id": "SITE.OFFICIAL.TC.CONST",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "check_level/infer_constant lines 77-115",
+          "behavior": "Looks up constants, checks universe-argument arity and declaration-owned universe levels, and rejects unsafe/partial dependencies in safe checking.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Three independently triggerable predicates are provisionally split."
+        },
+        {
+          "id": "SITE.NANODA.TC.CONST",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "infer_const lines 187-198 and infer_sort/check level helpers 518-524",
+          "behavior": "Looks up a constant, checks all universe arguments are owned by declaration parameters, and instantiates its type.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Arity is enforced by equal-length substitution in expr.rs; no safe/unsafe dependency rejection was found in this path."
+        },
+        {
+          "id": "SITE.NANODA.LEVEL.PARAMS",
+          "source_id": "SRC.NANODA.LEVEL",
+          "symbol_or_range": "no_duplicate/all_params_defined lines 83-147",
+          "behavior": "Implements duplicate parameter and declaration-owned universe checks used by declaration/type inference.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.UNIVERSE_OWNERSHIP"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.UNIVERSE_OWNERSHIP"
+          ],
+          "dependency_ids": [
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Helper mapping; full universe equality/normalization remains imported."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.CONST",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "checkLevel/inferConstant lines 101-129",
+          "behavior": "Checks universe ownership, constant universe arity, and safe/partial dependency restrictions.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP",
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Direct mapping; lineage prevents treating agreement with official as independent proof."
+        },
+        {
+          "id": "SITE.KIOTA.TC.CONST",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_const lines 1350-1361",
+          "behavior": "Looks up constants and enforces universe-argument arity, but carries no declaration universe-ownership or safety context.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP",
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Arity is enforced; ownership and safety restrictions were not found and remain observed differences."
+        },
+        {
+          "id": "SITE.KIOTA.TC.UNIVERSE_ABSENCE",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "Checker state and infer_type Sort arm lines 832-990, 1277-1283",
+          "behavior": "Checker has no current declaration universe-parameter set; Sort inference accepts represented levels without ownership checking.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP"
+          ],
+          "dependency_ids": [
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Durable negative inspection result paired with source representation; not proof of normativity or unsoundness."
+        },
+        {
+          "id": "SITE.KIOTA.LEVEL.NO_OWNERSHIP_CONTEXT",
+          "source_id": "SRC.KIOTA.LEVEL",
+          "symbol_or_range": "level representation/substitution/normalization complete file",
+          "behavior": "Represents parameter indices and level equality but does not accept an allowed-parameter context for ownership validation.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP"
+          ],
+          "dependency_ids": [
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Corroborates the absence found in Checker without making a semantic claim."
+        },
+        {
+          "id": "SITE.OFFICIAL.TC.CONST",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "check_level/infer_constant lines 77-115",
+          "behavior": "Looks up constants, checks universe-argument arity and declaration-owned universe levels, and rejects unsafe/partial dependencies in safe checking.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP"
+          ],
+          "rationale": "Three independently triggerable predicates are provisionally split."
+        },
+        {
+          "id": "SITE.NANODA.EXPR.UARG_ARITY",
+          "source_id": "SRC.NANODA.EXPR",
+          "symbol_or_range": "universe substitution lines 382-399",
+          "behavior": "Requires equal parameter/argument vector lengths when instantiating a constant type.",
+          "topic_ids": [
+            "TOPIC.CONSTANT_UNIVERSE_ARITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.CONSTANT_UNIVERSE_ARITY"
+          ],
+          "dependency_ids": [
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Completes the arity path not explicit in tc.rs."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.CONST",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "checkLevel/inferConstant lines 101-129",
+          "behavior": "Checks universe ownership, constant universe arity, and safe/partial dependency restrictions.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP",
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Direct mapping; lineage prevents treating agreement with official as independent proof."
+        },
+        {
+          "id": "SITE.KIOTA.TC.CONST",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_const lines 1350-1361",
+          "behavior": "Looks up constants and enforces universe-argument arity, but carries no declaration universe-ownership or safety context.",
+          "topic_ids": [
+            "TOPIC.UNIVERSE_OWNERSHIP",
+            "TOPIC.CONSTANT_UNIVERSE_ARITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_OWNERSHIP",
+            "SEED.CONSTANT_UNIVERSE_ARITY",
+            "SEED.SAFETY_DEPENDENCY"
+          ],
+          "dependency_ids": [
+            "DEP.ENVIRONMENT_LOOKUP",
+            "DEP.UNIVERSE_LEVEL_JUDGMENT"
+          ],
+          "rationale": "Arity is enforced; ownership and safety restrictions were not found and remain observed differences."
+        }
+      ],
+      "sources": [
+        {
+          "id": "SRC.KIOTA.LEVEL",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/level.rs",
+          "blob_sha256": "af5a1a5a18b1224130140296b4f5c811f11f28d244e7e9dcfcd6f4892c6f82ed",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "level representation, substitution, normalization, is_def_eq",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.LEVEL.NO_OWNERSHIP_CONTEXT"
+          ]
+        },
+        {
+          "id": "SRC.KIOTA.TC",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/tc.rs",
+          "blob_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_decl 1096-1221, ensure_sort 1247-1253, infer_type 1265-1361, infer_proj 1376-1448, is_prop 1574-1614; generalized defeq/reduction and inductives imported/excluded",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.TC.DECL",
+            "SITE.KIOTA.TC.CONST",
+            "SITE.KIOTA.TC.BINDERS",
+            "SITE.KIOTA.TC.APP_LET",
+            "SITE.KIOTA.TC.PROJ",
+            "SITE.KIOTA.TC.UNIVERSE_ABSENCE"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.ENVIRONMENT_BASIC",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/Environment/Basic.lean",
+          "blob_sha256": "549c16d924d7840858935da71e60169ea3990cf484187e11a2382c39d89e7620",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "checkDuplicatedUnivParams, checkNoMVar, checkNoFVar, checkName lines 14-60",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.BASIC.HEADER_HELPERS"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/TypeChecker.lean",
+          "blob_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensureSortCore, checkLevel, inferConstant, inferLambda/Forall/App/Let/Proj, inferType', isProp; generalized defeq/reduction imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.TC.CONST",
+            "SITE.LEAN4LEAN.TC.BINDERS",
+            "SITE.LEAN4LEAN.TC.APP_LET",
+            "SITE.LEAN4LEAN.TC.PROJ",
+            "SITE.LEAN4LEAN.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.EXPR",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/expr.rs",
+          "blob_sha256": "b66cc4483df55222fc69e11a260a9f23804d53aa43091d52b20e55d1870b0a66",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "universe substitution arity assertion lines 382-399 and expression variants",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.EXPR.UARG_ARITY"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.LEVEL",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/level.rs",
+          "blob_sha256": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "no duplicate/all-param helpers lines 83-147; level equality imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.LEVEL.PARAMS"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.TC",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/tc.rs",
+          "blob_sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_declar, check_declar_info, infer_const, ensure_sort, infer/check expression arms, infer_app/lambda/pi/let/proj, is_prop; defeq imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.TC.DECL",
+            "SITE.NANODA.TC.HEADER",
+            "SITE.NANODA.TC.CONST",
+            "SITE.NANODA.TC.BINDERS",
+            "SITE.NANODA.TC.APP_LET",
+            "SITE.NANODA.TC.PROJ",
+            "SITE.NANODA.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.ENVIRONMENT",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/environment.cpp",
+          "blob_sha256": "6748cf9368a16b7e4fd8546accc78f98874fb69323934b21c796e722dad136b2",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "lines 1-308; ordinary-declaration validation concentrated at 92-294",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.ENV.HEADER",
+            "SITE.OFFICIAL.ENV.AXIOM",
+            "SITE.OFFICIAL.ENV.DEF",
+            "SITE.OFFICIAL.ENV.THEOREM",
+            "SITE.OFFICIAL.ENV.OPAQUE",
+            "SITE.OFFICIAL.ENV.EXCLUDED_DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.TYPECHECKER",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/type_checker.cpp",
+          "blob_sha256": "e996524515626fea05fdfd998e48fec8955881b94528a7bee2f678e526602b2c",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensure_sort, check_level, infer_fvar, infer_constant, infer_lambda, infer_pi, infer_app, infer_let, infer_proj, check, is_prop; generalized reduction/defeq followed only as imported dependencies",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.TC.CONST",
+            "SITE.OFFICIAL.TC.BINDERS",
+            "SITE.OFFICIAL.TC.APP_LET",
+            "SITE.OFFICIAL.TC.PROJ",
+            "SITE.OFFICIAL.TC.DISPATCH"
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.DECLARATION_TYPING",
+      "topic_ids": [
+        "TOPIC.LOOSE_BOUND_VARIABLE",
+        "TOPIC.TYPE_WELL_FORMED_SORT",
+        "TOPIC.BODY_TYPE_MATCH",
+        "TOPIC.THEOREM_TYPE_PROP"
+      ],
+      "topics": [
+        {
+          "id": "TOPIC.LOOSE_BOUND_VARIABLE",
+          "name": "loose bound-variable closure",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.DISPATCH"
+              ],
+              "note": "Loose BVar rejected by checker dispatch."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.DISPATCH"
+              ],
+              "note": "Out-of-context BVar is rejected/panics validation."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.DISPATCH"
+              ],
+              "note": "hasLooseBVars guard rejects."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.EXPR.REPRESENTATION",
+                "SITE.KIOTA.TC.BINDERS"
+              ],
+              "note": "BVar lookup fails when out of local-context range."
+            }
+          ],
+          "seed_keys": [
+            "SEED.EXPRESSION_CLOSURE"
+          ],
+          "disposition": "Candidate seed; relationship to FVar/MVar closure must be decided audibly."
+        },
+        {
+          "id": "TOPIC.TYPE_WELL_FORMED_SORT",
+          "name": "declaration type well-formedness and sorthood",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.HEADER"
+              ],
+              "note": "Full check then ensure sort."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.HEADER"
+              ],
+              "note": "Infer then ensure sort."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.ENV.HEADER"
+              ],
+              "note": "checkType then ensureSort."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.DECL"
+              ],
+              "note": "infer_type then ensure_sort."
+            }
+          ],
+          "seed_keys": [
+            "SEED.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "Provisional merged seed; Milestone 5 must decide whether well-formedness and sorthood split observably."
+        },
+        {
+          "id": "TOPIC.BODY_TYPE_MATCH",
+          "name": "declaration value/declared-type compatibility",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.DEF",
+                "SITE.OFFICIAL.ENV.THEOREM",
+                "SITE.OFFICIAL.ENV.OPAQUE"
+              ],
+              "note": "Definitional equality required."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.DECL"
+              ],
+              "note": "Definitional equality required."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.ENV.DEF",
+                "SITE.LEAN4LEAN.ENV.THEOREM",
+                "SITE.LEAN4LEAN.ENV.OPAQUE"
+              ],
+              "note": "Definitional equality required."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.DECL"
+              ],
+              "note": "Definitional equality required."
+            }
+          ],
+          "seed_keys": [
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "disposition": "Candidate seed; defeq algorithm remains imported."
+        },
+        {
+          "id": "TOPIC.THEOREM_TYPE_PROP",
+          "name": "theorem proposition-valued type",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.ENV.THEOREM"
+              ],
+              "note": "is_prop required."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.HEADER"
+              ],
+              "note": "Theorem sort required to be zero."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.ENV.THEOREM"
+              ],
+              "note": "isProp required."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.DECL"
+              ],
+              "note": "Level defeq zero required, with additional implementation fallback in is_prop."
+            }
+          ],
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP"
+          ],
+          "disposition": "Candidate seed; implementation completeness differences do not alter authority."
+        }
+      ],
+      "sites": [
+        {
+          "id": "SITE.OFFICIAL.TC.DISPATCH",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "infer/check/is_prop lines 286-352",
+          "behavior": "Rejects loose bound variables and metavariables, checks levels/constants/composites, and computes proposition-valued status.",
+          "topic_ids": [
+            "TOPIC.LOOSE_BOUND_VARIABLE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.EXPRESSION_CLOSURE",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.THEOREM_TYPE_PROP"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.PROPOSITION_TEST",
+            "DEP.LITERAL_TYPES"
+          ],
+          "rationale": "Closes the expression dispatcher; literal/native support is separately excluded as implementation policy."
+        },
+        {
+          "id": "SITE.NANODA.TC.DISPATCH",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "infer/check dispatcher lines 479-516",
+          "behavior": "Rejects loose bound variables, dispatches all serialized expression forms, and applies configured literal extensions.",
+          "topic_ids": [
+            "TOPIC.LOOSE_BOUND_VARIABLE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.EXPRESSION_CLOSURE",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.LITERAL_POLICY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LITERAL_TYPES"
+          ],
+          "rationale": "Closes serialized expression forms; literal configuration remains empirical/policy."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.DISPATCH",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "inferType' and isProp lines 257-305, 217-225",
+          "behavior": "Rejects loose bound variables and metavariables; dispatches expression forms and determines proposition status.",
+          "topic_ids": [
+            "TOPIC.LOOSE_BOUND_VARIABLE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.EXPRESSION_CLOSURE",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.LITERAL_POLICY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.PROPOSITION_TEST",
+            "DEP.LITERAL_TYPES"
+          ],
+          "rationale": "Closes expression dispatcher while retaining literal availability as a policy seed."
+        },
+        {
+          "id": "SITE.KIOTA.EXPR.REPRESENTATION",
+          "source_id": "SRC.KIOTA.EXPR",
+          "symbol_or_range": "ExprData and loose_bvar_range/instantiation helpers",
+          "behavior": "Expression language represents bound variables and cached loose ranges, but no free/meta variable constructors.",
+          "topic_ids": [
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.LOOSE_BOUND_VARIABLE"
+          ],
+          "disposition": "EMPIRICAL_SCENARIO_SEED",
+          "seed_keys": [
+            "SEED.EXPORT_REPRESENTABILITY",
+            "SEED.EXPRESSION_CLOSURE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Representation and de Bruijn out-of-range behavior remain distinct from explicit closure guards."
+        },
+        {
+          "id": "SITE.KIOTA.TC.BINDERS",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_type_uncached lambda/Pi arms lines 1311-1333",
+          "behavior": "Checks lambda and Pi binder/codomain sorts under de Bruijn local contexts.",
+          "topic_ids": [
+            "TOPIC.LOCAL_BINDER_SORT",
+            "TOPIC.LOOSE_BOUND_VARIABLE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LOCAL_CONTEXT"
+          ],
+          "rationale": "Direct shared expression predicate."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.HEADER",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "check_no_fvar/check_no_metavar_no_fvar/check_name/check_duplicated_univ_params/check_declaration lines 92-133",
+          "behavior": "Checks freshness, duplicate universe parameters, declaration-type metavariable/free-variable closure, full type checking, and sorthood.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Externally distinguishable header predicates are provisional split candidates even though one helper bundles them."
+        },
+        {
+          "id": "SITE.NANODA.TC.HEADER",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "check_declar_info lines 155-183",
+          "behavior": "Rejects duplicate universe parameters and free variables in the type, infers the type, ensures sorthood, and checks theorem Prop status.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Metavariables are not serialized by this input representation; the apparent header difference is preserved in the topic matrix."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.HEADER",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "checkConstantVal lines 12-17",
+          "behavior": "Checks name, duplicate universe parameters, type metavariable/free-variable closure, full type checking, and sorthood.",
+          "topic_ids": [
+            "TOPIC.NAME_FRESHNESS",
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.NAME_FRESHNESS",
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Implementation observation with official-kernel lineage, not an independent semantic vote."
+        },
+        {
+          "id": "SITE.KIOTA.TC.DECL",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "Checker::check_decl lines 1096-1221",
+          "behavior": "Checks duplicate universe parameters, declaration type sorthood, theorem Prop status, value type checking, and body/type defeq.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Primary ordinary declaration checker, noting that parser insertion already occurred."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.DEF",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_definition lines 160-190",
+          "behavior": "Safe definitions are checked against the pre-insertion environment; unsafe definitions are inserted as axioms before body checking.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.SAFE_UNSAFE_DEPENDENCY",
+            "TOPIC.SERIALIZED_SAFETY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.SAFETY_DEPENDENCY",
+            "SEED.SAFETY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "The safe path is primary. The unsafe self-visible branch is retained only as a contrast and excluded kind."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.THEOREM",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_theorem lines 192-209",
+          "behavior": "Checks the common header, proposition-valued type, proof closure and type, then proof/declaration type definitional equality in the pre-insertion environment.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Produces separable primary seeds; it does not make the implementation their normative authority."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.OPAQUE",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_opaque lines 211-223",
+          "behavior": "Checks the common header, value closure and type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Same externally visible safe-declaration predicates as definitions except reducibility semantics, which is not reopened."
+        },
+        {
+          "id": "SITE.NANODA.TC.DECL",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "ExportFile::check_declar lines 80-105",
+          "behavior": "Checks ordinary headers; for definitions, theorems, and opaques infers the body and compares it definitionally to the declared type.",
+          "topic_ids": [
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Ordinary declaration entrypoint; non-ordinary match arms are disposed in parser/exclusion sites."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.DEF",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addDefinition lines 26-48",
+          "behavior": "Checks safe definitions before insertion and unsafe definitions against a self-visible axiom placeholder.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY",
+            "TOPIC.SERIALIZED_SAFETY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY",
+            "SEED.SAFETY_RECONSTRUCTION"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Safe path is primary; unsafe contrast stays empirical/excluded."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.THEOREM",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addTheorem lines 50-62",
+          "behavior": "Checks header, Prop-valued type, value closure/type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Direct Lean4Lean mapping with declared lineage."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.OPAQUE",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addOpaque lines 64-73",
+          "behavior": "Checks header, value closure/type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Direct Lean4Lean safe opaque mapping."
+        },
+        {
+          "id": "SITE.KIOTA.TC.DECL",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "Checker::check_decl lines 1096-1221",
+          "behavior": "Checks duplicate universe parameters, declaration type sorthood, theorem Prop status, value type checking, and body/type defeq.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Primary ordinary declaration checker, noting that parser insertion already occurred."
+        },
+        {
+          "id": "SITE.OFFICIAL.ENV.THEOREM",
+          "source_id": "SRC.OFFICIAL.ENVIRONMENT",
+          "symbol_or_range": "add_theorem lines 192-209",
+          "behavior": "Checks the common header, proposition-valued type, proof closure and type, then proof/declaration type definitional equality in the pre-insertion environment.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Produces separable primary seeds; it does not make the implementation their normative authority."
+        },
+        {
+          "id": "SITE.NANODA.TC.HEADER",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "check_declar_info lines 155-183",
+          "behavior": "Rejects duplicate universe parameters and free variables in the type, infers the type, ensures sorthood, and checks theorem Prop status.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.FVAR_CLOSURE",
+            "TOPIC.MVAR_CLOSURE",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_CLOSURE",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Metavariables are not serialized by this input representation; the apparent header difference is preserved in the topic matrix."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.ENV.THEOREM",
+          "source_id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "symbol_or_range": "addTheorem lines 50-62",
+          "behavior": "Checks header, Prop-valued type, value closure/type, and body/type definitional equality before insertion.",
+          "topic_ids": [
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.CURRENT_DECL_VISIBILITY"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH",
+            "SEED.CURRENT_DECL_VISIBILITY"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Direct Lean4Lean mapping with declared lineage."
+        },
+        {
+          "id": "SITE.KIOTA.TC.DECL",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "Checker::check_decl lines 1096-1221",
+          "behavior": "Checks duplicate universe parameters, declaration type sorthood, theorem Prop status, value type checking, and body/type defeq.",
+          "topic_ids": [
+            "TOPIC.DUPLICATE_UNIVERSE_PARAMS",
+            "TOPIC.TYPE_WELL_FORMED_SORT",
+            "TOPIC.THEOREM_TYPE_PROP",
+            "TOPIC.BODY_WELL_FORMED",
+            "TOPIC.BODY_TYPE_MATCH",
+            "TOPIC.LITERAL_EXTENSIONS"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.UNIVERSE_PARAM_LIST",
+            "SEED.TYPE_WELL_FORMED_SORT",
+            "SEED.THEOREM_TYPE_PROP",
+            "SEED.BODY_WELL_FORMED",
+            "SEED.BODY_TYPE_MATCH"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.PROPOSITION_TEST"
+          ],
+          "rationale": "Primary ordinary declaration checker, noting that parser insertion already occurred."
+        }
+      ],
+      "sources": [
+        {
+          "id": "SRC.KIOTA.EXPR",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/expr.rs",
+          "blob_sha256": "259d7e3de99786b4e6e9ec21434a1f282fd63c6666218bae65d32b388b52d7c2",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "ExprData variants, loose-bvar range, level substitution helpers",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.EXPR.REPRESENTATION"
+          ]
+        },
+        {
+          "id": "SRC.KIOTA.TC",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/tc.rs",
+          "blob_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_decl 1096-1221, ensure_sort 1247-1253, infer_type 1265-1361, infer_proj 1376-1448, is_prop 1574-1614; generalized defeq/reduction and inductives imported/excluded",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.TC.DECL",
+            "SITE.KIOTA.TC.CONST",
+            "SITE.KIOTA.TC.BINDERS",
+            "SITE.KIOTA.TC.APP_LET",
+            "SITE.KIOTA.TC.PROJ",
+            "SITE.KIOTA.TC.UNIVERSE_ABSENCE"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.ENVIRONMENT",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/Environment.lean",
+          "blob_sha256": "8de5b7407e225c96ed4116bc46e2e3bad5009b6bfb0cb4f68d4ce2799eff4f11",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "checkConstantVal, addAxiom, addDefinition, addTheorem, addOpaque, excluded addMutual/dispatch lines 12-119",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.ENV.HEADER",
+            "SITE.LEAN4LEAN.ENV.AXIOM",
+            "SITE.LEAN4LEAN.ENV.DEF",
+            "SITE.LEAN4LEAN.ENV.THEOREM",
+            "SITE.LEAN4LEAN.ENV.OPAQUE",
+            "SITE.LEAN4LEAN.ENV.EXCLUDED"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/TypeChecker.lean",
+          "blob_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensureSortCore, checkLevel, inferConstant, inferLambda/Forall/App/Let/Proj, inferType', isProp; generalized defeq/reduction imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.TC.CONST",
+            "SITE.LEAN4LEAN.TC.BINDERS",
+            "SITE.LEAN4LEAN.TC.APP_LET",
+            "SITE.LEAN4LEAN.TC.PROJ",
+            "SITE.LEAN4LEAN.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.TC",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/tc.rs",
+          "blob_sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_declar, check_declar_info, infer_const, ensure_sort, infer/check expression arms, infer_app/lambda/pi/let/proj, is_prop; defeq imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.TC.DECL",
+            "SITE.NANODA.TC.HEADER",
+            "SITE.NANODA.TC.CONST",
+            "SITE.NANODA.TC.BINDERS",
+            "SITE.NANODA.TC.APP_LET",
+            "SITE.NANODA.TC.PROJ",
+            "SITE.NANODA.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.ENVIRONMENT",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/environment.cpp",
+          "blob_sha256": "6748cf9368a16b7e4fd8546accc78f98874fb69323934b21c796e722dad136b2",
+          "inspection": {
+            "mode": "WHOLE_FILE_RELEVANCE_SCAN",
+            "locator": "lines 1-308; ordinary-declaration validation concentrated at 92-294",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.ENV.HEADER",
+            "SITE.OFFICIAL.ENV.AXIOM",
+            "SITE.OFFICIAL.ENV.DEF",
+            "SITE.OFFICIAL.ENV.THEOREM",
+            "SITE.OFFICIAL.ENV.OPAQUE",
+            "SITE.OFFICIAL.ENV.EXCLUDED_DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.TYPECHECKER",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/type_checker.cpp",
+          "blob_sha256": "e996524515626fea05fdfd998e48fec8955881b94528a7bee2f678e526602b2c",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensure_sort, check_level, infer_fvar, infer_constant, infer_lambda, infer_pi, infer_app, infer_let, infer_proj, check, is_prop; generalized reduction/defeq followed only as imported dependencies",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.TC.CONST",
+            "SITE.OFFICIAL.TC.BINDERS",
+            "SITE.OFFICIAL.TC.APP_LET",
+            "SITE.OFFICIAL.TC.PROJ",
+            "SITE.OFFICIAL.TC.DISPATCH"
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.BINDER.LET",
+      "topic_ids": [
+        "TOPIC.LOCAL_BINDER_SORT",
+        "TOPIC.LET_ANNOTATION_VALUE"
+      ],
+      "topics": [
+        {
+          "id": "TOPIC.LOCAL_BINDER_SORT",
+          "name": "local lambda/Pi binder and codomain sort validity",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.BINDERS"
+              ],
+              "note": "Binder and Pi codomain sorts checked."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.BINDERS"
+              ],
+              "note": "Binder and Pi codomain sorts checked."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.BINDERS"
+              ],
+              "note": "Binder and Pi codomain sorts checked."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.BINDERS"
+              ],
+              "note": "Binder and Pi codomain sorts checked."
+            }
+          ],
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "disposition": "Directly relevant candidate seed."
+        },
+        {
+          "id": "TOPIC.LET_ANNOTATION_VALUE",
+          "name": "local let annotation sort and value compatibility",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.APP_LET"
+              ],
+              "note": "Annotation sort and value defeq checked."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.APP_LET"
+              ],
+              "note": "Annotation sort and value defeq checked."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.APP_LET"
+              ],
+              "note": "Annotation sort and value defeq checked."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.APP_LET"
+              ],
+              "note": "Annotation sort and value defeq checked."
+            }
+          ],
+          "seed_keys": [
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "Candidate seed; sort and value predicates may split in Milestone 5."
+        }
+      ],
+      "sites": [
+        {
+          "id": "SITE.OFFICIAL.TC.BINDERS",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "infer_lambda/infer_pi lines 117-158",
+          "behavior": "Requires lambda domains and Pi domains/codomains to have sort-valued types under the appropriate local context.",
+          "topic_ids": [
+            "TOPIC.LOCAL_BINDER_SORT",
+            "TOPIC.TYPE_WELL_FORMED_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LOCAL_CONTEXT"
+          ],
+          "rationale": "Directly relevant shared expression predicate reached from declaration type and body checking."
+        },
+        {
+          "id": "SITE.NANODA.TC.BINDERS",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "infer_lambda/infer_pi lines 591-640",
+          "behavior": "Checks lambda binder and Pi domain/codomain sorthood.",
+          "topic_ids": [
+            "TOPIC.LOCAL_BINDER_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LOCAL_CONTEXT"
+          ],
+          "rationale": "Directly reached shared expression predicate."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.BINDERS",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "inferLambda/inferForall lines 138-165",
+          "behavior": "Checks local binder domains and Pi codomains as sorts.",
+          "topic_ids": [
+            "TOPIC.LOCAL_BINDER_SORT"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LOCAL_CONTEXT"
+          ],
+          "rationale": "Directly reached shared expression predicate."
+        },
+        {
+          "id": "SITE.KIOTA.TC.BINDERS",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_type_uncached lambda/Pi arms lines 1311-1333",
+          "behavior": "Checks lambda and Pi binder/codomain sorts under de Bruijn local contexts.",
+          "topic_ids": [
+            "TOPIC.LOCAL_BINDER_SORT",
+            "TOPIC.LOOSE_BOUND_VARIABLE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.LOCAL_BINDER_SORT"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.LOCAL_CONTEXT"
+          ],
+          "rationale": "Direct shared expression predicate."
+        },
+        {
+          "id": "SITE.OFFICIAL.TC.APP_LET",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "infer_app/infer_let lines 165-222",
+          "behavior": "Checks application argument/domain compatibility and let annotation sorthood plus value/annotation compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Both are directly reachable local expression obligations and remain distinct provisional seeds."
+        },
+        {
+          "id": "SITE.NANODA.TC.APP_LET",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "infer_app lines 526-565 and infer_let lines 642-658",
+          "behavior": "Checks application arguments against domains and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Two independently triggerable local typing predicates."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.APP_LET",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "inferApp/inferLet/inferType' application arm lines 184-215, 285-301",
+          "behavior": "Checks application domain compatibility and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Two provisional predicate groups."
+        },
+        {
+          "id": "SITE.KIOTA.TC.APP_LET",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_type_uncached application/let arms lines 1284-1343",
+          "behavior": "Checks application argument/domain defeq and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Directly reached local typing predicates."
+        }
+      ],
+      "sources": [
+        {
+          "id": "SRC.KIOTA.TC",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/tc.rs",
+          "blob_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_decl 1096-1221, ensure_sort 1247-1253, infer_type 1265-1361, infer_proj 1376-1448, is_prop 1574-1614; generalized defeq/reduction and inductives imported/excluded",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.TC.DECL",
+            "SITE.KIOTA.TC.CONST",
+            "SITE.KIOTA.TC.BINDERS",
+            "SITE.KIOTA.TC.APP_LET",
+            "SITE.KIOTA.TC.PROJ",
+            "SITE.KIOTA.TC.UNIVERSE_ABSENCE"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/TypeChecker.lean",
+          "blob_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensureSortCore, checkLevel, inferConstant, inferLambda/Forall/App/Let/Proj, inferType', isProp; generalized defeq/reduction imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.TC.CONST",
+            "SITE.LEAN4LEAN.TC.BINDERS",
+            "SITE.LEAN4LEAN.TC.APP_LET",
+            "SITE.LEAN4LEAN.TC.PROJ",
+            "SITE.LEAN4LEAN.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.TC",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/tc.rs",
+          "blob_sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_declar, check_declar_info, infer_const, ensure_sort, infer/check expression arms, infer_app/lambda/pi/let/proj, is_prop; defeq imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.TC.DECL",
+            "SITE.NANODA.TC.HEADER",
+            "SITE.NANODA.TC.CONST",
+            "SITE.NANODA.TC.BINDERS",
+            "SITE.NANODA.TC.APP_LET",
+            "SITE.NANODA.TC.PROJ",
+            "SITE.NANODA.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.TYPECHECKER",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/type_checker.cpp",
+          "blob_sha256": "e996524515626fea05fdfd998e48fec8955881b94528a7bee2f678e526602b2c",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensure_sort, check_level, infer_fvar, infer_constant, infer_lambda, infer_pi, infer_app, infer_let, infer_proj, check, is_prop; generalized reduction/defeq followed only as imported dependencies",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.TC.CONST",
+            "SITE.OFFICIAL.TC.BINDERS",
+            "SITE.OFFICIAL.TC.APP_LET",
+            "SITE.OFFICIAL.TC.PROJ",
+            "SITE.OFFICIAL.TC.DISPATCH"
+          ]
+        }
+      ]
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.APPLICATION",
+      "topic_ids": [
+        "TOPIC.APPLICATION_TYPING"
+      ],
+      "topics": [
+        {
+          "id": "TOPIC.APPLICATION_TYPING",
+          "name": "application function/domain and argument compatibility",
+          "treatment": "PRIMARY",
+          "observer_matrix": [
+            {
+              "observer": "OFFICIAL",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.OFFICIAL.TC.APP_LET"
+              ],
+              "note": "Function type and argument defeq checked."
+            },
+            {
+              "observer": "NANODA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.NANODA.TC.APP_LET"
+              ],
+              "note": "Function type and argument defeq checked."
+            },
+            {
+              "observer": "LEAN4LEAN",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.LEAN4LEAN.TC.APP_LET"
+              ],
+              "note": "Full check path validates arguments."
+            },
+            {
+              "observer": "KIOTA",
+              "state": "ENFORCED",
+              "site_ids": [
+                "SITE.KIOTA.TC.APP_LET"
+              ],
+              "note": "Declaration check uses infer_only=false and validates arguments."
+            }
+          ],
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING"
+          ],
+          "disposition": "Directly reached candidate seed."
+        }
+      ],
+      "sites": [
+        {
+          "id": "SITE.OFFICIAL.TC.APP_LET",
+          "source_id": "SRC.OFFICIAL.TYPECHECKER",
+          "symbol_or_range": "infer_app/infer_let lines 165-222",
+          "behavior": "Checks application argument/domain compatibility and let annotation sorthood plus value/annotation compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.DEFINITIONAL_EQUALITY",
+            "DEP.EXPRESSION_CHECKING"
+          ],
+          "rationale": "Both are directly reachable local expression obligations and remain distinct provisional seeds."
+        },
+        {
+          "id": "SITE.NANODA.TC.APP_LET",
+          "source_id": "SRC.NANODA.TC",
+          "symbol_or_range": "infer_app lines 526-565 and infer_let lines 642-658",
+          "behavior": "Checks application arguments against domains and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Two independently triggerable local typing predicates."
+        },
+        {
+          "id": "SITE.LEAN4LEAN.TC.APP_LET",
+          "source_id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "symbol_or_range": "inferApp/inferLet/inferType' application arm lines 184-215, 285-301",
+          "behavior": "Checks application domain compatibility and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Two provisional predicate groups."
+        },
+        {
+          "id": "SITE.KIOTA.TC.APP_LET",
+          "source_id": "SRC.KIOTA.TC",
+          "symbol_or_range": "infer_type_uncached application/let arms lines 1284-1343",
+          "behavior": "Checks application argument/domain defeq and let annotation sort/value compatibility.",
+          "topic_ids": [
+            "TOPIC.APPLICATION_TYPING",
+            "TOPIC.LET_ANNOTATION_VALUE"
+          ],
+          "disposition": "CANDIDATE_SEED",
+          "seed_keys": [
+            "SEED.APPLICATION_TYPING",
+            "SEED.LET_ANNOTATION_VALUE"
+          ],
+          "dependency_ids": [
+            "DEP.EXPRESSION_CHECKING",
+            "DEP.DEFINITIONAL_EQUALITY"
+          ],
+          "rationale": "Directly reached local typing predicates."
+        }
+      ],
+      "sources": [
+        {
+          "id": "SRC.KIOTA.TC",
+          "observer": "KIOTA",
+          "repository_url": "https://github.com/sankalpsthakur/kiota",
+          "revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+          "path": "src/tc.rs",
+          "blob_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_decl 1096-1221, ensure_sort 1247-1253, infer_type 1265-1361, infer_proj 1376-1448, is_prop 1574-1614; generalized defeq/reduction and inductives imported/excluded",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.KIOTA.TC.DECL",
+            "SITE.KIOTA.TC.CONST",
+            "SITE.KIOTA.TC.BINDERS",
+            "SITE.KIOTA.TC.APP_LET",
+            "SITE.KIOTA.TC.PROJ",
+            "SITE.KIOTA.TC.UNIVERSE_ABSENCE"
+          ]
+        },
+        {
+          "id": "SRC.LEAN4LEAN.TYPECHECKER",
+          "observer": "LEAN4LEAN",
+          "repository_url": "https://github.com/digama0/lean4lean",
+          "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+          "path": "Lean4Lean/TypeChecker.lean",
+          "blob_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensureSortCore, checkLevel, inferConstant, inferLambda/Forall/App/Let/Proj, inferType', isProp; generalized defeq/reduction imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.LEAN4LEAN.TC.CONST",
+            "SITE.LEAN4LEAN.TC.BINDERS",
+            "SITE.LEAN4LEAN.TC.APP_LET",
+            "SITE.LEAN4LEAN.TC.PROJ",
+            "SITE.LEAN4LEAN.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.NANODA.TC",
+          "observer": "NANODA",
+          "repository_url": "https://github.com/ammkrn/nanoda_lib",
+          "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+          "path": "src/tc.rs",
+          "blob_sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "check_declar, check_declar_info, infer_const, ensure_sort, infer/check expression arms, infer_app/lambda/pi/let/proj, is_prop; defeq imported",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.NANODA.TC.DECL",
+            "SITE.NANODA.TC.HEADER",
+            "SITE.NANODA.TC.CONST",
+            "SITE.NANODA.TC.BINDERS",
+            "SITE.NANODA.TC.APP_LET",
+            "SITE.NANODA.TC.PROJ",
+            "SITE.NANODA.TC.DISPATCH"
+          ]
+        },
+        {
+          "id": "SRC.OFFICIAL.TYPECHECKER",
+          "observer": "OFFICIAL",
+          "repository_url": "https://github.com/leanprover/lean4",
+          "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+          "path": "src/kernel/type_checker.cpp",
+          "blob_sha256": "e996524515626fea05fdfd998e48fec8955881b94528a7bee2f678e526602b2c",
+          "inspection": {
+            "mode": "BOUNDED_SYMBOL_TRAVERSAL",
+            "locator": "ensure_sort, check_level, infer_fvar, infer_constant, infer_lambda, infer_pi, infer_app, infer_let, infer_proj, check, is_prop; generalized reduction/defeq followed only as imported dependencies",
+            "result": "EXHAUSTED_FOR_DECLARED_SLICE"
+          },
+          "site_ids": [
+            "SITE.OFFICIAL.TC.CONST",
+            "SITE.OFFICIAL.TC.BINDERS",
+            "SITE.OFFICIAL.TC.APP_LET",
+            "SITE.OFFICIAL.TC.PROJ",
+            "SITE.OFFICIAL.TC.DISPATCH"
+          ]
+        }
+      ]
+    }
+  ]
+}

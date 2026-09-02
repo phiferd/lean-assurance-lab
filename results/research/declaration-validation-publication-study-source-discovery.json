@@ -1,0 +1,1282 @@
+{
+  "schema_version": 1,
+  "artifact_type": "AUTHORITY_SOURCE_DISCOVERY_RESULT",
+  "discovery_id": "ordinary-declaration-validation.obligation-coverage-study.source-discovery.v1",
+  "recorded_at": "2026-09-02T05:53:07-04:00",
+  "status": "FROZEN_BEFORE_AUTHORITY_SOURCE_APPROVAL",
+  "preregistration_binding": {
+    "path": "config/declaration-validation-publication-study-preregistration.json",
+    "sha256": "94f2a293407b6917b44361ca4b173c7e74972867c52d127ce336e10c1ed7592a",
+    "git_commit": "c420e451b50fbbb56bb5ba89fb7faa4b65ac9a9a",
+    "git_blob": "0acc79081f6b81ea9b3ee59f029ee64b88474377"
+  },
+  "execution_summary": {
+    "closure_status": "CLOSED",
+    "required_queries_total": 30,
+    "required_queries_executed": 30,
+    "required_query_access_failures": 0,
+    "external_search_queries_executed": 25,
+    "primary_source_retrievals": 18,
+    "citation_chase_retrievals": 2,
+    "retained_source_candidates": 18,
+    "retrieved_bytes": 1471263,
+    "researcher_hours": 5.8,
+    "budget_exhausted": false
+  },
+  "query_log": [
+    {
+      "query_id": "QUERY.OFFICIAL.NAME_FRESHNESS",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over the Lean project reference-manual and official Lean repositories.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L102-L129",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/Lean/Environment.lean",
+        "https://lean-lang.org/doc/reference/latest/Definitions/",
+        "https://github.com/leanprover/reference-manual"
+      ],
+      "notes": "No exact-version official prose was found that independently states raw checked-addition name freshness; exact implementation sites were retained only for discovery and interpretation."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.UNIVERSE.PARAM_UNIQUENESS",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over the Lean language reference and official Lean repository.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Universes/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L420-L514",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean#L99-L119",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L111-L129"
+      ],
+      "notes": "The manual specifies universe bindings but did not state list uniqueness at the raw declaration boundary; the exact implementation check is non-normative."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.LOOSE_BOUND_VARS",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over official reference and Lean source surfaces.",
+      "results_inspected": 3,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L92-L132",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp"
+      ],
+      "notes": "No precise target-version official normative statement for absence of loose de Bruijn variables in raw declarations was found."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.UNIVERSE.OWNERSHIP",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release reference-manual material and official source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Universes/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L420-L514",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean#L99-L119",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp"
+      ],
+      "notes": "The manual directly states binding and out-of-scope rejection at the source-language layer; mapping that claim to serialized kernel declarations remains a human authority question."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.CONST.UNIVERSE_ARITY",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over official reference and exact Lean source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Universes/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L296-L314",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L93-L114",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/Lean/Expr.lean"
+      ],
+      "notes": "Official prose explains instantiation but not the exact raw arity predicate; exact code was retained as implementation-only."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.TYPE.SORT",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over the exact-release type-system source and official kernel source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L20-L39",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L205-L260",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L127-L132"
+      ],
+      "notes": "The manual gives a favorable general type/sort account, but does not state the exact checked-declaration predicate in those terms."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.VALUE.TYPE_MATCH",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release definition and conversion documentation and official source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L41-L94",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean#L486-L510",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L160-L223"
+      ],
+      "notes": "Conversion is stated precisely at a general level; the exact raw body-versus-declared-type obligation is explicit only in implementation evidence."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.THEOREM.PROP",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over the exact-release theorem documentation and official source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/Definitions/Theorems/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean#L575-L595",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L192-L209",
+        "https://lean-lang.org/papers/lean4.pdf"
+      ],
+      "notes": "An exact target-version, Lean-project-governed statement was found: a theorem statement must be a proposition."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.CURRENT_DECL.VISIBILITY",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over official definition documentation and exact kernel source.",
+      "results_inspected": 3,
+      "result_locators": [
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean#L575-L590",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp#L160-L223",
+        "https://lean-lang.org/doc/reference/latest/Definitions/"
+      ],
+      "notes": "The manual states header/body elaboration order for theorems but not pre-insertion kernel-environment visibility. Only implementation evidence states that distinction exactly."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.BINDER.DOMAIN",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release type-system/function sources and official kernel source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Functions/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L225-L260",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Language/Functions.lean#L18-L55",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L117-L158"
+      ],
+      "notes": "General dependent-function sort rules are documented; the lambda-domain rejection predicate is implementation-explicit."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.PI.CODOMAIN",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release type-system/function sources and official kernel source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Functions/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L225-L260",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Language/Functions.lean#L18-L55",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L136-L158"
+      ],
+      "notes": "The exact-release manual states the sort of a dependent function type from domain and codomain sorts; raw-expression mapping still needs review."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.LET.ANNOTATION",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release term/type-system sources and official kernel source.",
+      "results_inspected": 3,
+      "result_locators": [
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L20-L39",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Terms.lean",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L200-L222"
+      ],
+      "notes": "No precise normative manual rule for raw let-annotation sorthood was found; implementation and abstract typing sources were retained with limitations."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.LET.VALUE_MATCH",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release conversion/term sources and official kernel source.",
+      "results_inspected": 3,
+      "result_locators": [
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L41-L94",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Terms.lean",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L200-L222"
+      ],
+      "notes": "Conversion is documented generally, while the raw let value/annotation check is exact only in implementation or modeled semantics."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.APP.FUNCTION",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release function/type-system sources and official kernel source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/Functions/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Language/Functions.lean#L18-L55",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L20-L39",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L165-L198"
+      ],
+      "notes": "The manual gives a favorable core-function account but not a formal raw-expression rejection rule."
+    },
+    {
+      "query_id": "QUERY.OFFICIAL.APP.ARGUMENT",
+      "scope": "OFFICIAL_VERSIONED_REFERENCE",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen query executed over exact-release conversion/function sources and official kernel source.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://lean-lang.org/doc/reference/latest/The-Type-System/",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean#L41-L130",
+        "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Language/Functions.lean#L18-L55",
+        "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L165-L198"
+      ],
+      "notes": "The exact-release manual includes an application type-mismatch example and conversion rule; whether that suffices for the frozen raw obligation is deferred."
+    },
+    {
+      "query_id": "QUERY.MECH.ENVIRONMENT",
+      "scope": "MECHANIZED_SEMANTICS",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen Lean4Lean query over the pinned Arena revision and project paper.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Env.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean#L13-L183",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Boundaries.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+        "https://arxiv.org/abs/2403.14064v1"
+      ],
+      "notes": "Relevant WF theorems were found, but their modeled-judgment relation and axiom/sorry lineage are not closed strongly enough for approval."
+    },
+    {
+      "query_id": "QUERY.MECH.UNIVERSES",
+      "scope": "MECHANIZED_SEMANTICS",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen Lean4Lean query over the pinned Arena revision.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Basic.lean#L18-L44",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean#L69-L118",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+        "https://arxiv.org/abs/2403.14064v1"
+      ],
+      "notes": "The abstract const rule requires level-argument arity and well-formed levels; duplicate parameter rejection is explicitly operational and is not carried as a proved premise."
+    },
+    {
+      "query_id": "QUERY.MECH.DECLARATION_TYPING",
+      "scope": "MECHANIZED_SEMANTICS",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen Lean4Lean query over pinned theory, verification, and paper artifacts.",
+      "results_inspected": 6,
+      "result_locators": [
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Basic.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Env.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean#L69-L183",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Boundaries.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+        "https://arxiv.org/abs/2403.14064v1"
+      ],
+      "notes": "Strongly relevant theorems exist for sort-valued declarations, matching bodies, and Prop-valued theorems, but active assumptions and incomplete imported proofs block an approval recommendation."
+    },
+    {
+      "query_id": "QUERY.MECH.BINDER.LET",
+      "scope": "MECHANIZED_SEMANTICS",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen Lean4Lean query over pinned abstract typing and checker-verification sources.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Basic.lean#L32-L50",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+        "https://arxiv.org/abs/2403.14064v1"
+      ],
+      "notes": "The abstract rules are precise, but the source-to-target judgment correspondence and verification assumptions remain unresolved."
+    },
+    {
+      "query_id": "QUERY.MECH.APPLICATION",
+      "scope": "MECHANIZED_SEMANTICS",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen Lean4Lean query over pinned abstract typing and checker-verification sources.",
+      "results_inspected": 4,
+      "result_locators": [
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Basic.lean#L32-L35",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean",
+        "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+        "https://arxiv.org/abs/2403.14064v1"
+      ],
+      "notes": "The abstract application rule is exact, but it is a modeled rule rather than independently established target-version normativity."
+    },
+    {
+      "query_id": "QUERY.SCHOLARLY.ENVIRONMENT",
+      "scope": "PRIMARY_SCHOLARLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen scholarly search over arXiv, Lean-project papers, and author/project bibliographies.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://arxiv.org/abs/2403.14064v1",
+        "https://lean-lang.org/papers/lean4.pdf",
+        "https://lean-lang.org/papers/system.pdf",
+        "https://lean-lang.org/papers/thesis-sebastian.pdf",
+        "https://github.com/digama0/lean4lean"
+      ],
+      "notes": "No target-version paper states the exact environment-extension freshness and visibility obligations; the Lean4Lean paper calls its metatheory work initial."
+    },
+    {
+      "query_id": "QUERY.SCHOLARLY.UNIVERSES",
+      "scope": "PRIMARY_SCHOLARLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen scholarly search over primary Lean and Lean4Lean publications.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://arxiv.org/abs/2403.14064v1",
+        "https://lean-lang.org/papers/lean4.pdf",
+        "https://lean-lang.org/papers/system.pdf",
+        "https://lean-lang.org/papers/thesis-sebastian.pdf",
+        "https://github.com/digama0/lean4lean"
+      ],
+      "notes": "Primary sources describe Lean's dependent type theory and mechanization program but are version-mismatched or insufficiently precise for the three raw universe obligations."
+    },
+    {
+      "query_id": "QUERY.SCHOLARLY.DECLARATION_TYPING",
+      "scope": "PRIMARY_SCHOLARLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen scholarly search over primary Lean 4 and Lean4Lean publications.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://arxiv.org/abs/2403.14064v1",
+        "https://lean-lang.org/papers/lean4.pdf",
+        "https://lean-lang.org/papers/system.pdf",
+        "https://lean-lang.org/papers/thesis-sebastian.pdf",
+        "https://github.com/digama0/lean4lean"
+      ],
+      "notes": "The 2021 Lean 4 paper supports theorem-as-Proposition at its historical version; no source-authored compatibility proof to v4.33.0 was found."
+    },
+    {
+      "query_id": "QUERY.SCHOLARLY.BINDER.LET",
+      "scope": "PRIMARY_SCHOLARLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen scholarly search over primary type-theory and Lean mechanization publications.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://arxiv.org/abs/2403.14064v1",
+        "https://lean-lang.org/papers/lean4.pdf",
+        "https://lean-lang.org/papers/system.pdf",
+        "https://lean-lang.org/papers/thesis-sebastian.pdf",
+        "https://github.com/digama0/lean4lean"
+      ],
+      "notes": "General dependent-type-theory sources were not retained unless primary and Lean-specific; none precisely binds the four target-version raw binder/let predicates."
+    },
+    {
+      "query_id": "QUERY.SCHOLARLY.APPLICATION",
+      "scope": "PRIMARY_SCHOLARLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Frozen scholarly search over primary Lean and Lean4Lean publications.",
+      "results_inspected": 5,
+      "result_locators": [
+        "https://arxiv.org/abs/2403.14064v1",
+        "https://lean-lang.org/papers/lean4.pdf",
+        "https://lean-lang.org/papers/system.pdf",
+        "https://lean-lang.org/papers/thesis-sebastian.pdf",
+        "https://github.com/digama0/lean4lean"
+      ],
+      "notes": "No target-version primary paper states both frozen application predicates precisely; the exact abstract rule is in Lean4Lean source and remains a modeled judgment."
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.ENVIRONMENT",
+      "scope": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Pinned whole-file and bounded-symbol scans already content-bound by config/declaration-validation-discovery-closure.json, re-indexed without changing the surface.",
+      "results_inspected": 4,
+      "result_locators": [
+        "results/research/validation-logs/publication-study-source-discovery-implementation-scans.log#QUERY.IMPLEMENTATION.ENVIRONMENT",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT",
+        "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER",
+        "SOURCE.CANDIDATE.KIOTA.PARSER"
+      ],
+      "notes": "Official and Lean4Lean paths check in a pre-insertion environment; Kiota inserts before check_decl. This contradiction is implementation evidence only."
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.UNIVERSES",
+      "scope": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Pinned whole-file and bounded-symbol scans already content-bound by the predecessor closure, re-indexed without surface expansion.",
+      "results_inspected": 4,
+      "result_locators": [
+        "results/research/validation-logs/publication-study-source-discovery-implementation-scans.log#QUERY.IMPLEMENTATION.UNIVERSES",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER",
+        "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC"
+      ],
+      "notes": "The exact pinned source sites were exhausted for the three universe predicates; code behavior is not normative authority."
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.DECLARATION_TYPING",
+      "scope": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Pinned whole-file and bounded-symbol scans already content-bound by the predecessor closure, re-indexed without surface expansion.",
+      "results_inspected": 4,
+      "result_locators": [
+        "results/research/validation-logs/publication-study-source-discovery-implementation-scans.log#QUERY.IMPLEMENTATION.DECLARATION_TYPING",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER",
+        "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER"
+      ],
+      "notes": "The pinned implementation surface has exact sites for all four predicates; none is promoted to normativity."
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.BINDER.LET",
+      "scope": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Pinned whole-file and bounded-symbol scans already content-bound by the predecessor closure, re-indexed without surface expansion.",
+      "results_inspected": 4,
+      "result_locators": [
+        "results/research/validation-logs/publication-study-source-discovery-implementation-scans.log#QUERY.IMPLEMENTATION.BINDER.LET",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER",
+        "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC",
+        "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER"
+      ],
+      "notes": "The exact implementation sites were exhausted for lambda, Pi, and let checks; implementation agreement is not an authority vote."
+    },
+    {
+      "query_id": "QUERY.IMPLEMENTATION.APPLICATION",
+      "scope": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "executed_at": "2026-09-02T05:53:07-04:00",
+      "execution_status": "EXECUTED",
+      "search_surface": "Pinned whole-file and bounded-symbol scans already content-bound by the predecessor closure, re-indexed without surface expansion.",
+      "results_inspected": 4,
+      "result_locators": [
+        "results/research/validation-logs/publication-study-source-discovery-implementation-scans.log#QUERY.IMPLEMENTATION.APPLICATION",
+        "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER",
+        "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC",
+        "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER"
+      ],
+      "notes": "The exact implementation sites were exhausted for function-shape and argument/domain checks; they remain discovery evidence only."
+    }
+  ],
+  "sources": [
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.VERSION_BINDING",
+      "external_identity": "Lean Language Reference repository toolchain binding at 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "source_kind": "VERSION_PROVENANCE_RECORD",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["FAVORABLE", "LIMITING", "INSUFFICIENTLY_PRECISE"],
+      "version_or_revision": "reference-manual commit 02d0d61af6d344da5215eb2eb1efba0ca30ede68; leanprover/lean4:v4.33.0",
+      "stable_locator": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/lean-toolchain",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-02d0d61-lean-toolchain",
+      "retrieved_content_sha256": "302cd63c54178885b89e669f33b38f12f4dd7ae7e5cac537b3203e3768d8fb2b",
+      "retrieved_bytes": 25,
+      "git_repository": "https://github.com/leanprover/reference-manual",
+      "git_revision": "02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "git_path": "lean-toolchain",
+      "git_blob": "025e59548e48cf71f2744154e2890beefe30a258",
+      "authorship_or_governance_basis": "The Lean project governs the reference-manual repository; this exact commit's toolchain is v4.33.0.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.VERSION.V4_33_0",
+          "exact_claim": "The retained reference-manual source snapshot targets Lean v4.33.0.",
+          "exact_locator": "line 1",
+          "applicable_candidate_ids": [],
+          "relationship_to_frozen_denotation": "Authenticates version provenance for the companion manual sources but establishes no semantic obligation by itself."
+        }
+      ],
+      "assumptions_or_axioms": ["Repository governance and the toolchain string authenticate intended version; no semantic theorem is asserted."],
+      "modeled_judgment_mapping": "Version provenance only.",
+      "applicable_candidate_ids": [],
+      "lineage_and_independence": "Same Lean-project lineage as the target implementation; useful for provenance, not independent semantic support.",
+      "retrieval_method": "Raw GitHub content at the exact commit, downloaded after preregistration freeze.",
+      "discovery_disposition": "INSUFFICIENTLY_PRECISE",
+      "limitations": ["Contains only the target toolchain string.", "Must be paired with exact source-file identities."],
+      "version_match": "EXACT",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "Retain as version-binding evidence, but do not approve it as an obligation authority source."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM",
+      "external_identity": "Lean Language Reference, Manual/Types.lean at reference-manual commit 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "source_kind": "OFFICIAL_EXACT_VERSION_REFERENCE_SOURCE",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean v4.33.0 manual source at 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "stable_locator": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Types.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-02d0d61-Types.lean",
+      "retrieved_content_sha256": "29c61358d2dac0a663bd3749267e52cae66c91466816425f513f9ac90830a01b",
+      "retrieved_bytes": 20909,
+      "git_repository": "https://github.com/leanprover/reference-manual",
+      "git_revision": "02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "git_path": "Manual/Types.lean",
+      "git_blob": "6939b5f99e040a0207afd00759f51c962101e253",
+      "authorship_or_governance_basis": "Exact-version reference source governed by the Lean project, with type-checked manual examples.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.TYPES.CONVERSION",
+          "exact_claim": "If two terms are definitionally equal and a term has one as its type, it also has the other as its type.",
+          "exact_locator": "line 93",
+          "applicable_candidate_ids": ["DECL.VALUE.TYPE_MATCH", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "States the general conversion principle used by the three frozen type-match obligations, but not their raw checking sites."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.TYPES.PI_SORT",
+          "exact_claim": "If A : Sort u and B : Sort v, then (x : A) → B : Sort (imax u v).",
+          "exact_locator": "lines 225-251",
+          "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT"],
+          "relationship_to_frozen_denotation": "Directly describes the sort premises for dependent function types; it does not separately formalize lambda checking."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.TYPES.UNIVERSE_BINDING",
+          "exact_claim": "Universe-polymorphic definitions bind universe variables, and an unbound variable used only on a definition's right-hand side is rejected unless declared.",
+          "exact_locator": "lines 420-514",
+          "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP"],
+          "relationship_to_frozen_denotation": "Favorable for level-parameter ownership at the source-language layer; raw serialized declaration mapping remains to be approved."
+        }
+      ],
+      "assumptions_or_axioms": ["Prose/reference claims are governed and examples are type checked, but this is not a mechanized metatheory proof."],
+      "modeled_judgment_mapping": "Maps general core type-system and surface-language rules to six frozen raw declaration/expression obligations; exact layer equivalence is not stated by the source.",
+      "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP", "DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Official Lean-project documentation, not independent of the implementation lineage.",
+      "retrieval_method": "Raw GitHub content at exact commit; version authenticated by the companion lean-toolchain blob.",
+      "discovery_disposition": "CANDIDATE_FOR_APPROVAL",
+      "limitations": ["Some claims are source-language or general typing rules rather than raw declaration inference rules.", "Does not state current-declaration visibility, duplicate universe-parameter rejection, loose-bound-variable closure, or constant arity."],
+      "version_match": "EXACT",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "Approve only if human review accepts the stated layer mapping; otherwise defer rather than stretch general type-system prose into raw-kernel normativity."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS",
+      "external_identity": "Lean Language Reference, Manual/Defs.lean at reference-manual commit 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "source_kind": "OFFICIAL_EXACT_VERSION_REFERENCE_SOURCE",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean v4.33.0 manual source at 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "stable_locator": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-02d0d61-Defs.lean",
+      "retrieved_content_sha256": "46c08588bd4b9c62fc53dba65dcd39cd9a09a0ad2a37d9731f1aaeb24cb0e024",
+      "retrieved_bytes": 24304,
+      "git_repository": "https://github.com/leanprover/reference-manual",
+      "git_revision": "02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "git_path": "Manual/Defs.lean",
+      "git_blob": "d6b99f48428f6fbb55d496c4bd203f92f3457f8e",
+      "authorship_or_governance_basis": "Exact-version reference source governed by the Lean project.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP",
+          "exact_claim": "The theorem statement must be a proposition; definition types may inhabit any universe.",
+          "exact_locator": "lines 575-588, especially line 582",
+          "applicable_candidate_ids": ["DECL.THEOREM.TYPE_PROP"],
+          "relationship_to_frozen_denotation": "Direct statement of the frozen theorem-type obligation for the target release."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.DEFS.HEADER_BEFORE_BODY",
+          "exact_claim": "A theorem's header is completely elaborated before the body is elaborated.",
+          "exact_locator": "lines 584-586",
+          "applicable_candidate_ids": ["DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Limiting support only: elaboration order does not itself establish raw kernel environment visibility."
+        }
+      ],
+      "assumptions_or_axioms": ["Official reference prose; no mechanized derivation of the raw declaration checker is claimed."],
+      "modeled_judgment_mapping": "The theorem-Prop sentence maps directly; header/body elaboration order does not fully map to pre-insertion checked-addition semantics.",
+      "applicable_candidate_ids": ["DECL.THEOREM.TYPE_PROP", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Official Lean-project documentation; semantically authoritative candidate but not independent corroboration.",
+      "retrieval_method": "Raw GitHub content at exact commit; target version authenticated by companion toolchain blob.",
+      "discovery_disposition": "CANDIDATE_FOR_APPROVAL",
+      "limitations": ["The direct theorem claim is exact; the current-declaration visibility inference is not and should not be approved from this source alone."],
+      "version_match": "EXACT",
+      "recommended_disposition": "APPROVE",
+      "recommendation_rationale": "Recommend approval only for CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP and DECL.THEOREM.TYPE_PROP; reject the broader visibility inference."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.FUNCTIONS",
+      "external_identity": "Lean Language Reference, Manual/Language/Functions.lean at reference-manual commit 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "source_kind": "OFFICIAL_EXACT_VERSION_REFERENCE_SOURCE",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean v4.33.0 manual source at 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "stable_locator": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Language/Functions.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-02d0d61-Functions.lean",
+      "retrieved_content_sha256": "14cdbff4765457205438dc76f452645da85a49a2ffd8c4608dcee3932095082f",
+      "retrieved_bytes": 11287,
+      "git_repository": "https://github.com/leanprover/reference-manual",
+      "git_revision": "02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "git_path": "Manual/Language/Functions.lean",
+      "git_blob": "a1cbf166665121ba23474f816b11b3fbf50afdb1",
+      "authorship_or_governance_basis": "Exact-version reference source governed by the Lean project.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.FUNCTIONS.DEPENDENT_CORE",
+          "exact_claim": "All function types in Lean's core language are dependent; function types specify a domain and codomain.",
+          "exact_locator": "lines 18-53",
+          "applicable_candidate_ids": ["EXPR.APP.FUNCTION_TYPE", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT"],
+          "relationship_to_frozen_denotation": "Favorable conceptual mapping to Pi-shaped functions, but not a complete formal application or binder rule."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.FUNCTIONS.TYPE_CORRECT_ARGUMENTS",
+          "exact_claim": "Core functions map each domain element to a codomain element, and total-function values are defined for all type-correct arguments.",
+          "exact_locator": "lines 135 and 185-187",
+          "applicable_candidate_ids": ["EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Supports the need for domain-correct arguments informally, without spelling out the frozen definitional-equality judgment."
+        }
+      ],
+      "assumptions_or_axioms": ["Official reference prose and checked examples; not a formal metatheory proof."],
+      "modeled_judgment_mapping": "Maps the manual's core dependent-function account to the frozen Pi/application rules with an acknowledged precision gap.",
+      "applicable_candidate_ids": ["EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Official Lean-project documentation; shares target lineage.",
+      "retrieval_method": "Raw GitHub content at exact commit; target version authenticated by companion toolchain blob.",
+      "discovery_disposition": "CANDIDATE_FOR_APPROVAL",
+      "limitations": ["Does not state formal premises for raw Expr.app, Expr.lam, or Expr.forallE checking.", "Argument compatibility is described conceptually, not specifically as definitional equality."],
+      "version_match": "EXACT",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "The source is exact and official, but approval should await a human decision that its prose is precise enough for the frozen raw-expression denotations."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.TERMS",
+      "external_identity": "Lean Language Reference, Manual/Terms.lean at reference-manual commit 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "source_kind": "OFFICIAL_EXACT_VERSION_REFERENCE_SOURCE",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["LIMITING", "INSUFFICIENTLY_PRECISE"],
+      "version_or_revision": "Lean v4.33.0 manual source at 02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "stable_locator": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Terms.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-02d0d61-Terms.lean",
+      "retrieved_content_sha256": "d77336aaa07a0a55d4235c0fd0b0960be10c090955ef239a6056972dd0ff7950",
+      "retrieved_bytes": 76686,
+      "git_repository": "https://github.com/leanprover/reference-manual",
+      "git_revision": "02d0d61af6d344da5215eb2eb1efba0ca30ede68",
+      "git_path": "Manual/Terms.lean",
+      "git_blob": "48977769b7af57eb1c45cc931ce51f7a9aada1c1",
+      "authorship_or_governance_basis": "Exact-version reference source governed by the Lean project.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.TERMS.ASCRIPTION_MATCH",
+          "exact_claim": "An ascribed type must be definitionally equal to the type expected from the term's context.",
+          "exact_locator": "lines 1950-1970",
+          "applicable_candidate_ids": ["EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "A source-language elaboration rule, not the raw let or application kernel judgment."
+        }
+      ],
+      "assumptions_or_axioms": ["Official reference prose; examples exercise elaboration rather than raw serialized expressions."],
+      "modeled_judgment_mapping": "Only analogous source-language constraints were found.",
+      "applicable_candidate_ids": ["EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Official Lean-project documentation; same lineage as target.",
+      "retrieval_method": "Raw GitHub content at exact commit.",
+      "discovery_disposition": "INSUFFICIENTLY_PRECISE",
+      "limitations": ["Large source-language term chapter did not yield precise raw Expr.letE or Expr.app rules."],
+      "version_match": "EXACT",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Do not approve analogous elaboration prose as authority for the frozen raw-expression predicates."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.LATEST_MISMATCH",
+      "external_identity": "Lean Language Reference unversioned latest landing page retrieved 2026-09-02",
+      "source_kind": "UNVERSIONED_OFFICIAL_WEB_DOCUMENT",
+      "discovery_source_family": "OFFICIAL_VERSIONED_REFERENCE",
+      "evidence_character": ["VERSION_MISMATCH", "LIMITING"],
+      "version_or_revision": "latest page reports Lean 4.34.0-rc2",
+      "stable_locator": "https://lean-lang.org/doc/reference/latest/",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/reference-manual-latest-2026-09-02.html",
+      "retrieved_content_sha256": "494d1c89630a614ea754ddfc8d9e9c4cbd619cfd13e6bdc9bcf5b3d6ab9f78ef",
+      "retrieved_bytes": 97155,
+      "authorship_or_governance_basis": "Official Lean project website, but the locator is mutable and no longer targets v4.33.0.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.MANUAL.LATEST.VERSION_MISMATCH",
+          "exact_claim": "The unversioned latest manual covers Lean 4.34.0-rc2 at retrieval time.",
+          "exact_locator": "HTML line 2857",
+          "applicable_candidate_ids": [],
+          "relationship_to_frozen_denotation": "Disqualifies unversioned latest pages as exact v4.33.0 evidence."
+        }
+      ],
+      "assumptions_or_axioms": ["Retrieved bytes authenticate only the page state on the recorded date."],
+      "modeled_judgment_mapping": "No obligation mapping; retained as a provenance warning.",
+      "applicable_candidate_ids": [],
+      "lineage_and_independence": "Official source, mutable locator.",
+      "retrieval_method": "HTTPS retrieval of the unversioned latest landing page after preregistration.",
+      "discovery_disposition": "VERSION_MISMATCH",
+      "limitations": ["Targets 4.34.0-rc2 rather than 4.33.0.", "Mutable URL cannot serve as an immutable target-version identity."],
+      "version_match": "MISMATCH",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Reject for this study; use the exact repository commit and toolchain binding instead."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4.API.ENVIRONMENT",
+      "external_identity": "Lean.Environment API/source module at Lean revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "source_kind": "OFFICIAL_API_AND_IMPLEMENTATION_SOURCE",
+      "discovery_source_family": "OFFICIAL_VERSIONED_DESIGN_AND_API_DOCUMENTATION",
+      "evidence_character": ["FAVORABLE", "LIMITING", "IMPLEMENTATION_ONLY"],
+      "version_or_revision": "Lean v4.33.0 revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "stable_locator": "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/Lean/Environment.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4-d8b18978-Environment.lean",
+      "retrieved_content_sha256": "ee364e4788ce0560c87f621eeb3c4c3dfec62e8db4e15e099fd80e6adc533b86",
+      "retrieved_bytes": 137725,
+      "git_repository": "https://github.com/leanprover/lean4",
+      "git_revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "git_path": "src/Lean/Environment.lean",
+      "git_blob": "33928512dadcfa2e42a307499e9228596da0341a",
+      "authorship_or_governance_basis": "Official Lean API module at the exact target revision.",
+      "claims_extracted": [],
+      "assumptions_or_axioms": ["API types and docstrings describe implementation-facing environment data; they are not an external semantics specification."],
+      "modeled_judgment_mapping": "Provides terminology and representation context, not precise independent normativity for any frozen obligation.",
+      "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Direct target implementation lineage.",
+      "retrieval_method": "Raw GitHub content at exact target revision.",
+      "discovery_disposition": "IMPLEMENTATION_ONLY",
+      "limitations": ["Official status does not convert implementation/API material into normative authority.", "No exact frozen obligation claim was extracted."],
+      "version_match": "EXACT",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Retain for interpretation; reject as normative authority."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT",
+      "external_identity": "Lean kernel environment.cpp at revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "source_kind": "TARGET_IMPLEMENTATION_SOURCE",
+      "discovery_source_family": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "evidence_character": ["FAVORABLE", "LIMITING", "IMPLEMENTATION_ONLY"],
+      "version_or_revision": "Lean v4.33.0 revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "stable_locator": "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/environment.cpp",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4-d8b18978-environment.cpp",
+      "retrieved_content_sha256": "6748cf9368a16b7e4fd8546accc78f98874fb69323934b21c796e722dad136b2",
+      "retrieved_bytes": 12458,
+      "git_repository": "https://github.com/leanprover/lean4",
+      "git_revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "git_path": "src/kernel/environment.cpp",
+      "git_blob": "8e302240ad0a6394bad8e1b4125f63aff4b54a53",
+      "authorship_or_governance_basis": "Official target kernel implementation at the exact study revision.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4.ENV.IMPLEMENTED_HEADER_CHECKS",
+          "exact_claim": "The implementation checks name freshness, duplicate level parameters, expression closure, declaration-type checking, and sorthood before ordinary checked addition.",
+          "exact_locator": "lines 92-132",
+          "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.UNIVERSE.PARAM_UNIQUENESS", "DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.TYPE.SORT_VALUED"],
+          "relationship_to_frozen_denotation": "Direct implementation mapping only; cannot establish that the checks are normatively required."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4.ENV.IMPLEMENTED_BODY_CHECKS",
+          "exact_claim": "Safe definitions, theorems, and opaques check body closure/type match before insertion; theorems additionally require a proposition-valued type.",
+          "exact_locator": "lines 160-223",
+          "applicable_candidate_ids": ["DECL.VALUE.TYPE_MATCH", "DECL.THEOREM.TYPE_PROP", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Direct implementation mapping only."
+        }
+      ],
+      "assumptions_or_axioms": ["Executable implementation behavior is observed from source; no normative argument is supplied."],
+      "modeled_judgment_mapping": "Exact implementation sites align with seven frozen obligations.",
+      "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.UNIVERSE.PARAM_UNIQUENESS", "DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.THEOREM.TYPE_PROP", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "The target implementation itself; maximally circular as semantic authority.",
+      "retrieval_method": "Raw GitHub content at exact target revision; matches the predecessor content SHA-256.",
+      "discovery_disposition": "IMPLEMENTATION_ONLY",
+      "limitations": ["Implementation existence cannot establish normativity.", "Safe and unsafe declaration paths differ; the study slice is the safe ordinary path."],
+      "version_match": "EXACT",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Use for locator and mapping evidence only; reject as normative authority."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER",
+      "external_identity": "Lean kernel type_checker.cpp at revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "source_kind": "TARGET_IMPLEMENTATION_SOURCE",
+      "discovery_source_family": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "evidence_character": ["FAVORABLE", "LIMITING", "IMPLEMENTATION_ONLY"],
+      "version_or_revision": "Lean v4.33.0 revision d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "stable_locator": "https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4-d8b18978-type_checker.cpp",
+      "retrieved_content_sha256": "e996524515626fea05fdfd998e48fec8955881b94528a7bee2f678e526602b2c",
+      "retrieved_bytes": 48970,
+      "git_repository": "https://github.com/leanprover/lean4",
+      "git_revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "git_path": "src/kernel/type_checker.cpp",
+      "git_blob": "5287d22c5db67ceeb01231295c581382e1e78f3d",
+      "authorship_or_governance_basis": "Official target kernel implementation at the exact study revision.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4.TC.IMPLEMENTED_EXPR_CHECKS",
+          "exact_claim": "The implementation enforces constant level arity/ownership, lambda/Pi sort premises, application function/domain compatibility, and let annotation/value compatibility.",
+          "exact_locator": "infer_constant lines 93-114; infer_lambda/infer_pi lines 117-158; infer_app/infer_let lines 165-222",
+          "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.CONST.UNIVERSE_ARITY", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Exact implementation mapping only, prohibited from establishing normativity."
+        }
+      ],
+      "assumptions_or_axioms": ["Executable implementation behavior; no independent semantics proof or normative claim."],
+      "modeled_judgment_mapping": "Direct implementation sites align with eight frozen expression obligations.",
+      "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.CONST.UNIVERSE_ARITY", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "The target implementation itself.",
+      "retrieval_method": "Raw GitHub content at exact target revision; matches predecessor content SHA-256.",
+      "discovery_disposition": "IMPLEMENTATION_ONLY",
+      "limitations": ["Implementation behavior cannot establish normativity.", "Definitional equality and reduction are imported dependencies, not independently audited here."],
+      "version_match": "EXACT",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Retain for precise mappings and terminology; reject as normative authority."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION",
+      "external_identity": "The Lean 4 Theorem Prover and Programming Language (System Description), de Moura and Ullrich, 2021",
+      "source_kind": "PRIMARY_SCHOLARLY_PAPER",
+      "discovery_source_family": "PRIMARY_SCHOLARLY",
+      "evidence_character": ["FAVORABLE", "VERSION_MISMATCH", "INSUFFICIENTLY_PRECISE"],
+      "version_or_revision": "CADE 2021 Lean 4 system description; examples tied to historical cade2021 source",
+      "stable_locator": "https://lean-lang.org/papers/lean4.pdf",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4-system-description-2021.pdf",
+      "retrieved_content_sha256": "2b907e98552f5ff4fe77be717f9423311a4d6bf4ac866b143d99f34e83f39c4d",
+      "retrieved_bytes": 361568,
+      "authorship_or_governance_basis": "Primary system paper by Lean 4's authors.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4.PAPER.THEOREM_PROP",
+          "exact_claim": "A theorem is a definition whose result type is a proposition.",
+          "exact_locator": "PDF page 3 (printed page 3), paragraph preceding the or_true example",
+          "applicable_candidate_ids": ["DECL.THEOREM.TYPE_PROP"],
+          "relationship_to_frozen_denotation": "Historically favorable corroboration, but no source-authored compatibility binding to v4.33.0."
+        }
+      ],
+      "assumptions_or_axioms": ["Informal system description; no mechanized proof of declaration-checker completeness."],
+      "modeled_judgment_mapping": "Directly supports theorem-result-as-Proposition historically; other cohort obligations are not specified precisely.",
+      "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "DECL.THEOREM.TYPE_PROP", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Primary authors are also system designers; distinct publication artifact but not independent lineage.",
+      "retrieval_method": "Official Lean-project paper URL retrieved after preregistration.",
+      "discovery_disposition": "VERSION_MISMATCH",
+      "limitations": ["Published for an early Lean 4 release, not v4.33.0.", "Does not enumerate the bounded raw declaration obligations."],
+      "version_match": "MISMATCH",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Use as historical corroboration only; reject as target-version authority absent an explicit compatibility argument."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.PAPER",
+      "external_identity": "Lean4Lean: Towards a formalized metatheory for the Lean theorem prover, Mario Carneiro, arXiv:2403.14064v1",
+      "source_kind": "PRIMARY_SCHOLARLY_MECHANIZATION_PAPER",
+      "discovery_source_family": "PRIMARY_SCHOLARLY",
+      "evidence_character": ["FAVORABLE", "LIMITING", "VERSION_MISMATCH"],
+      "version_or_revision": "arXiv:2403.14064v1, 2024",
+      "stable_locator": "https://arxiv.org/abs/2403.14064v1",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-arxiv-2403.14064v1.pdf",
+      "retrieved_content_sha256": "56ba2ac2481c6aac8a89f0d88e64115c3d9d80f7ee7c45c8c4ce14f186b0f6e8",
+      "retrieved_bytes": 612729,
+      "authorship_or_governance_basis": "Primary paper by the Lean4Lean author.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.PAPER.INITIAL_METATHEORY",
+          "exact_claim": "The project reports initial steps toward abstractly formalizing Lean type theory and relating kernel functions to that theory.",
+          "exact_locator": "abstract",
+          "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.THEOREM.TYPE_PROP", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Favorable to using Lean4Lean as a discovery surface, but explicitly limits the result to initial metatheory work."
+        }
+      ],
+      "assumptions_or_axioms": ["The paper predates the pinned 2026 repository revision and does not authenticate its later proof dependencies."],
+      "modeled_judgment_mapping": "Describes the mechanization program broadly, not exact target-version theorem identities for the cohort.",
+      "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.THEOREM.TYPE_PROP", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Same author/project lineage as the Lean4Lean mechanization; not independent corroboration of its proofs.",
+      "retrieval_method": "Version-pinned arXiv PDF retrieved after preregistration.",
+      "discovery_disposition": "VERSION_MISMATCH",
+      "limitations": ["Predates Lean v4.33.0 and the pinned Lean4Lean revision.", "Characterizes formalization as initial steps rather than a closed verified checker theorem."],
+      "version_match": "MISMATCH",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "Useful for authorship, intent, and limitations; defer as normative support until repository theorem lineage and target compatibility are independently closed."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC",
+      "external_identity": "Lean4Lean abstract typing relation, Lean4Lean/Theory/Typing/Basic.lean at ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "source_kind": "MECHANIZED_ABSTRACT_SEMANTICS_DEFINITION",
+      "discovery_source_family": "MECHANIZED_SEMANTICS",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean4Lean ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "stable_locator": "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Basic.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Basic.lean",
+      "retrieved_content_sha256": "97eeaafbae07435d3a3d2cedffe04ca8aa37ac8ab812040aa6557cead97ca6be",
+      "retrieved_bytes": 2740,
+      "git_repository": "https://github.com/digama0/lean4lean",
+      "git_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "git_path": "Lean4Lean/Theory/Typing/Basic.lean",
+      "git_blob": "c7ae89a909b77f0e53453ca129fb9238f8ec8ee9",
+      "authorship_or_governance_basis": "Mechanized abstract type theory authored within Lean4Lean.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.BASIC.CONST_APP",
+          "exact_claim": "The abstract const rule requires well-formed level arguments and exact universe-argument arity; the app rule requires a Pi-typed function and an argument of the domain type.",
+          "exact_locator": "IsDefEq.constDF and IsDefEq.appDF, lines 25-35",
+          "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.CONST.UNIVERSE_ARITY", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Exact abstract-rule match, but the source defines the modeled relation rather than proving it is Lean v4.33.0's normative relation."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.BASIC.BINDERS",
+          "exact_claim": "The abstract lambda and Pi rules require sort-valued domains; Pi additionally requires a sort-valued codomain.",
+          "exact_locator": "IsDefEq.lamDF and IsDefEq.forallEDF, lines 36-43",
+          "applicable_candidate_ids": ["EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT"],
+          "relationship_to_frozen_denotation": "Exact abstract-rule match, with unresolved target normativity and mapping."
+        }
+      ],
+      "assumptions_or_axioms": ["This file defines a relation; equivalence with the target implementation is not established in this file.", "Imported metatheory includes incomplete results elsewhere in the pinned revision."],
+      "modeled_judgment_mapping": "High syntactic alignment to six obligations, but no source-authored exact Lean v4.33.0 conformance theorem was identified.",
+      "applicable_candidate_ids": ["DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.CONST.UNIVERSE_ARITY", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Abstract model is authored in the checker project and informed by Lean implementation behavior; not independent normative evidence by mere formalization.",
+      "retrieval_method": "Raw GitHub content at the exact preregistered Lean4Lean revision.",
+      "discovery_disposition": "JUDGMENT_MISMATCH",
+      "limitations": ["Defines the modeled judgment rather than externally establishing its normativity.", "No exact target-version compatibility proof was found."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "Do not reject the precise formal rules, but defer until a human accepts their normative standing and the implementation-to-theory mapping."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.ENVIRONMENT",
+      "external_identity": "Lean4Lean declaration well-formedness relation, Lean4Lean/Theory/Typing/Env.lean at ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "source_kind": "MECHANIZED_ABSTRACT_SEMANTICS_DEFINITION",
+      "discovery_source_family": "MECHANIZED_SEMANTICS",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean4Lean ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "stable_locator": "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Theory/Typing/Env.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Env.lean",
+      "retrieved_content_sha256": "b79aa5e1a5c670d2e0851e3e5ef44b62735043546573ac26fa6749c0ce50526d",
+      "retrieved_bytes": 1772,
+      "git_repository": "https://github.com/digama0/lean4lean",
+      "git_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "git_path": "Lean4Lean/Theory/Typing/Env.lean",
+      "git_blob": "e0eb8db59294f537876ae8c20be76b992e40e93e",
+      "authorship_or_governance_basis": "Mechanized declaration-WF relation authored within Lean4Lean.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.ENV.DECL_WF",
+          "exact_claim": "A well-formed constant has a well-formed type, a well-formed definition body has its declared type, and declaration addition uses addConst returning a successor environment.",
+          "exact_locator": "VDecl.WF constructors, lines 18-44",
+          "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Close abstract mapping, but addConst and VDecl.WF are modeled relations, not independently established target normativity."
+        }
+      ],
+      "assumptions_or_axioms": ["Defines abstract declaration WF against VEnv; no target-version equivalence theorem in this file."],
+      "modeled_judgment_mapping": "Close to four declaration obligations; raw checked-addition sequencing still requires mapping.",
+      "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Checker-project abstract model, not independent authority.",
+      "retrieval_method": "Raw GitHub content at exact preregistered Lean4Lean revision.",
+      "discovery_disposition": "JUDGMENT_MISMATCH",
+      "limitations": ["Modeled environment differs from the concrete Lean Environment.", "Normative status and exact correspondence are not self-authenticating."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "Defer until the human approval step decides whether the abstract model may establish normativity and under what mapping."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER",
+      "external_identity": "Lean4Lean declaration checker verification, Lean4Lean/Verify/Environment/Checker.lean at ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "source_kind": "MECHANIZED_CHECKER_SOUNDNESS_THEOREMS",
+      "discovery_source_family": "MECHANIZED_SEMANTICS",
+      "evidence_character": ["FAVORABLE", "LIMITING"],
+      "version_or_revision": "Lean4Lean ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "stable_locator": "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Checker.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Checker.lean",
+      "retrieved_content_sha256": "8f1136c70d4749412db060b0a8241b057e22c8ea56e490df839c470485bc53da",
+      "retrieved_bytes": 12906,
+      "git_repository": "https://github.com/digama0/lean4lean",
+      "git_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "git_path": "Lean4Lean/Verify/Environment/Checker.lean",
+      "git_blob": "60e6cdb79716c09d475b9ca023ae8b904799068e",
+      "authorship_or_governance_basis": "Mechanized theorems authored in Lean4Lean, directly relating checker functions to its abstract theory.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.CHECKER.HEADER_WF",
+          "exact_claim": "Successful checkName and checkConstantVal yield name absence, a well-formed sort-valued type, and a matching abstract constant.",
+          "exact_locator": "checkName.WF lines 13-31; checkConstantValCore.WF lines 69-118",
+          "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.TYPE.SORT_VALUED"],
+          "relationship_to_frozen_denotation": "Strong implementation-to-model theorem, conditional on its imported verification assumptions."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.CHECKER.BODY_WF",
+          "exact_claim": "Successful body checking yields a translated value with the declared abstract type.",
+          "exact_locator": "checkBodyCore.WF and checkBody.WF, lines 119-158",
+          "applicable_candidate_ids": ["DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.VALUE.TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Strong conditional soundness statement, with closure represented through the translation predicate and check helper."
+        },
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.CHECKER.THEOREM_WF",
+          "exact_claim": "Successful theorem checking yields a definition whose type has type sort zero, with a matching body and fresh name.",
+          "exact_locator": "checkTheorem.WF, lines 160-183",
+          "applicable_candidate_ids": ["DECL.THEOREM.TYPE_PROP", "DECL.VALUE.TYPE_MATCH", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Strong conditional match to theorem Prop/body/freshness, but concrete environment visibility and dependency closure require review."
+        }
+      ],
+      "assumptions_or_axioms": ["Imported Verify/Axioms.lean introduces implementation-bridging axioms.", "Pinned verification lineage contains explicit sorry-backed results, including environment boundary and type-checker proofs.", "No exact #print axioms closure for these three theorems was produced in this bounded phase."],
+      "modeled_judgment_mapping": "Directly proves successful checker functions satisfy Lean4Lean's modeled WF/typing relations; whether those relations are the normative v4.33.0 judgment is unresolved.",
+      "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH", "DECL.THEOREM.TYPE_PROP", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Checker implementation and verification live in the same Lean4Lean project; relation to official implementation is mediated by custom bridge axioms.",
+      "retrieval_method": "Raw GitHub content at exact preregistered Lean4Lean revision; imports and repository-wide sorry/axiom surface inspected to the preregistered resource limit.",
+      "discovery_disposition": "ACTIVE_ASSUMPTION_OR_AXIOM_GAP",
+      "limitations": ["Exact theorem dependency axioms are not closed.", "The project contains active admitted verification obligations.", "Successful checker verification does not itself establish the modeled judgment's external normativity."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "DEFER",
+      "recommendation_rationale": "This is the strongest mechanized candidate, but approval would be premature until the exact theorem axiom lineage and target-judgment correspondence are human-reviewed."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.BOUNDARIES",
+      "external_identity": "Lean4Lean verification boundary audit, Lean4Lean/Verify/Environment/Boundaries.lean at ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "source_kind": "MECHANIZED_ASSUMPTION_BOUNDARY_RECORD",
+      "discovery_source_family": "MECHANIZED_SEMANTICS",
+      "evidence_character": ["LIMITING"],
+      "version_or_revision": "Lean4Lean ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "stable_locator": "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Environment/Boundaries.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Boundaries.lean",
+      "retrieved_content_sha256": "31b5718f8dd64eab2fd3f9592175c49cfff2693284e37e638a8f0cab144d6e10",
+      "retrieved_bytes": 1635,
+      "git_repository": "https://github.com/digama0/lean4lean",
+      "git_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "git_path": "Lean4Lean/Verify/Environment/Boundaries.lean",
+      "git_blob": "5b800d2a5e9b2a2b1372f63f6a681a4c202c4ac3",
+      "authorship_or_governance_basis": "Lean4Lean's own verification-boundary source.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.BOUNDARIES.ACTIVE_SORRY",
+          "exact_claim": "The boundary module contains an explicit sorry-backed checkPrimitiveDef.WF proof.",
+          "exact_locator": "line 35",
+          "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "Adverse lineage evidence: a nearby declaration-verification boundary is admitted, so the proof surface is not globally closed."
+        }
+      ],
+      "assumptions_or_axioms": ["Explicit sorry at line 35."],
+      "modeled_judgment_mapping": "Does not establish an obligation; records a verification completeness gap relevant to source qualification.",
+      "applicable_candidate_ids": ["DECL.TYPE.SORT_VALUED", "DECL.VALUE.TYPE_MATCH"],
+      "lineage_and_independence": "Same project as proposed mechanized authority; adverse evidence is therefore directly relevant to its assurance boundary.",
+      "retrieval_method": "Raw GitHub content at exact preregistered revision.",
+      "discovery_disposition": "ACTIVE_ASSUMPTION_OR_AXIOM_GAP",
+      "limitations": ["The admitted theorem may not be a dependency of every proposed Checker theorem; exact dependency closure remains unresolved."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Reject as positive authority; retain as mandatory limiting evidence for any Lean4Lean approval decision."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS",
+      "external_identity": "Lean4Lean implementation bridge axioms, Lean4Lean/Verify/Axioms.lean at ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "source_kind": "MECHANIZED_CUSTOM_AXIOM_RECORD",
+      "discovery_source_family": "MECHANIZED_SEMANTICS",
+      "evidence_character": ["LIMITING"],
+      "version_or_revision": "Lean4Lean ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "stable_locator": "https://github.com/digama0/lean4lean/blob/ecb3b6661c14f8147be1069b126c629114baf4a8/Lean4Lean/Verify/Axioms.lean",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Axioms.lean",
+      "retrieved_content_sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "retrieved_bytes": 20498,
+      "git_repository": "https://github.com/digama0/lean4lean",
+      "git_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "git_path": "Lean4Lean/Verify/Axioms.lean",
+      "git_blob": "f620c1165715ec58d07ed498a75549713c9dd5e4",
+      "authorship_or_governance_basis": "Lean4Lean source explicitly declaring custom bridge axioms.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.LEAN4LEAN.AXIOMS.BRIDGES",
+          "exact_claim": "The verification uses custom axioms equating Lean implementation operations with total modeled operations, including loose-bound-variable and substitution functions.",
+          "exact_locator": "representative axioms at lines 360, 382, 402, 421-440, 463-485, and 505-508",
+          "applicable_candidate_ids": ["DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+          "relationship_to_frozen_denotation": "These bridge axioms are assumptions needed to connect executable functions to the model; they cannot be silently treated as proved correspondence."
+        }
+      ],
+      "assumptions_or_axioms": ["Multiple custom equality axioms for implementation primitives are declared in this file."],
+      "modeled_judgment_mapping": "Documents the unproved implementation/model bridge that qualifies related soundness theorems.",
+      "applicable_candidate_ids": ["DECL.EXPR.NO_LOOSE_BOUND_VARS", "DECL.UNIVERSE.PARAM_OWNERSHIP", "EXPR.BINDER.DOMAIN_SORT", "EXPR.PI.CODOMAIN_SORT", "EXPR.LET.ANNOTATION_SORT", "EXPR.LET.VALUE_TYPE_MATCH", "EXPR.APP.FUNCTION_TYPE", "EXPR.APP.ARGUMENT_TYPE_MATCH"],
+      "lineage_and_independence": "Same project as the proposed mechanized theorems; its assumptions are part of their qualification, not independent support.",
+      "retrieval_method": "Raw GitHub content at exact preregistered revision.",
+      "discovery_disposition": "ACTIVE_ASSUMPTION_OR_AXIOM_GAP",
+      "limitations": ["The exact subset used by each candidate theorem has not been closed with #print axioms.", "Custom axioms may be reasonable engineering bridges, but they are still assumptions."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Reject as positive authority; require it as limiting context for any approval of Lean4Lean theorems."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.KIOTA.PARSER",
+      "external_identity": "Kiota parser.rs at revision 58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "source_kind": "INDEPENDENT_CHECKER_IMPLEMENTATION_SOURCE",
+      "discovery_source_family": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "evidence_character": ["CONTRADICTORY", "LIMITING", "IMPLEMENTATION_ONLY"],
+      "version_or_revision": "Kiota 58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "stable_locator": "https://github.com/sankalpsthakur/kiota/blob/58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a/src/parser.rs",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/kiota-58e8636c-parser.rs",
+      "retrieved_content_sha256": "c6c53ac6a364b9d318585ad7c51ad8dd9883c027cb9dc356c119373782c77392",
+      "retrieved_bytes": 23839,
+      "git_repository": "https://github.com/sankalpsthakur/kiota",
+      "git_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "git_path": "src/parser.rs",
+      "git_blob": "cf6a5bb2c3467f24ecb3f72d14295d09db0d18ae",
+      "authorship_or_governance_basis": "Independent checker implementation pinned by the predecessor source lock.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.KIOTA.PARSER.INSERT_BEFORE_CHECK",
+          "exact_claim": "Kiota rejects duplicate names, inserts ordinary definitions/theorems/opaques into its environment in handle_def_like, and later invokes check_decl from check_last.",
+          "exact_locator": "reject_if_dup lines 193-204; handle_def_like lines 206-275; check_last lines 586-611",
+          "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Name freshness is implemented; current-declaration visibility contradicts the official pre-insertion safe path. Neither behavior establishes normativity."
+        }
+      ],
+      "assumptions_or_axioms": ["Source-order interpretation assumes handle_def_like precedes check_last in the parser flow, as recorded by the predecessor bounded scan."],
+      "modeled_judgment_mapping": "Direct implementation contrast for the two environment obligations.",
+      "applicable_candidate_ids": ["DECL.ENV.NAME_FRESHNESS", "DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Independent checker implementation, but checker behavior is prohibited as normative authority.",
+      "retrieval_method": "Raw GitHub content at exact predecessor-pinned revision.",
+      "discovery_disposition": "IMPLEMENTATION_ONLY",
+      "limitations": ["Implementation divergence may reflect a bug, reconstruction choice, or permitted semantics; it is not an authority decision.", "No soundness theorem is attached."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Retain as contradictory and scientifically relevant implementation evidence; reject as normative authority."
+    },
+    {
+      "source_candidate_id": "SOURCE.CANDIDATE.KIOTA.ENVIRONMENT",
+      "external_identity": "Kiota env.rs at revision 58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "source_kind": "INDEPENDENT_CHECKER_IMPLEMENTATION_SOURCE",
+      "discovery_source_family": "IMPLEMENTATION_DISCOVERY_ONLY",
+      "evidence_character": ["CONTRADICTORY", "LIMITING", "IMPLEMENTATION_ONLY"],
+      "version_or_revision": "Kiota 58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "stable_locator": "https://github.com/sankalpsthakur/kiota/blob/58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a/src/env.rs",
+      "retrieved_path": "results/research/evidence/declaration-validation-publication-study/kiota-58e8636c-env.rs",
+      "retrieved_content_sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b",
+      "retrieved_bytes": 4057,
+      "git_repository": "https://github.com/sankalpsthakur/kiota",
+      "git_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+      "git_path": "src/env.rs",
+      "git_blob": "689020bc5d7877e5339929a86a8976aa3cd41cdb",
+      "authorship_or_governance_basis": "Independent checker implementation pinned by the predecessor source lock.",
+      "claims_extracted": [
+        {
+          "claim_id": "CLAIM.SOURCE.KIOTA.ENV.SINGLE_MAP",
+          "exact_claim": "Kiota's Environment get and insert operations access one mutable constant map.",
+          "exact_locator": "lines 145-151",
+          "applicable_candidate_ids": ["DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+          "relationship_to_frozen_denotation": "Supports the parser-flow observation that insertion makes the current declaration visible to later check_decl lookup."
+        }
+      ],
+      "assumptions_or_axioms": ["Must be read with the pinned parser call order."],
+      "modeled_judgment_mapping": "Implementation mechanism for the contradictory current-visibility observation.",
+      "applicable_candidate_ids": ["DECL.ENV.CURRENT_DECL_NOT_VISIBLE"],
+      "lineage_and_independence": "Independent checker implementation, but behavior is non-normative.",
+      "retrieval_method": "Raw GitHub content at exact predecessor-pinned revision.",
+      "discovery_disposition": "IMPLEMENTATION_ONLY",
+      "limitations": ["Mechanism alone does not establish intended semantics or soundness impact."],
+      "version_match": "UNRESOLVED",
+      "recommended_disposition": "REJECT",
+      "recommendation_rationale": "Retain as adverse implementation evidence; reject as normative authority."
+    }
+  ],
+  "candidate_coverage": [
+    {
+      "candidate_id": "DECL.ENV.NAME_FRESHNESS",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER", "SOURCE.CANDIDATE.KIOTA.PARSER"],
+      "coverage_status": "ONLY_DISQUALIFIED_SOURCES",
+      "gap_or_basis": "Precise implementation/model evidence exists, but no approved-quality exact normative source was found."
+    },
+    {
+      "candidate_id": "DECL.UNIVERSE.PARAM_UNIQUENESS",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT"],
+      "coverage_status": "ONLY_DISQUALIFIED_SOURCES",
+      "gap_or_basis": "The manual establishes universe bindings but not list uniqueness; only non-normative implementation evidence precisely states this obligation."
+    },
+    {
+      "candidate_id": "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "ONLY_DISQUALIFIED_SOURCES",
+      "gap_or_basis": "Implementation and assumption-qualified mechanized evidence exist; no precise external normative source was found."
+    },
+    {
+      "candidate_id": "DECL.UNIVERSE.PARAM_OWNERSHIP",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Exact manual source-language binding rules exist; raw serialized-declaration mapping is deferred."
+    },
+    {
+      "candidate_id": "EXPR.CONST.UNIVERSE_ARITY",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC"],
+      "coverage_status": "ONLY_DISQUALIFIED_SOURCES",
+      "gap_or_basis": "The abstract rule is precise but its normativity and target mapping are unresolved; official prose was not exact."
+    },
+    {
+      "candidate_id": "DECL.TYPE.SORT_VALUED",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.BOUNDARIES"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "The exact manual provides general sort/type rules; mapping to the raw declaration predicate is a DEFER recommendation."
+    },
+    {
+      "candidate_id": "DECL.VALUE.TYPE_MATCH",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.BOUNDARIES"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "General exact-version conversion prose is available; the declaration-body mapping and mechanized assumption closure remain unresolved."
+    },
+    {
+      "candidate_id": "DECL.THEOREM.TYPE_PROP",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Exact v4.33.0 Lean-project-governed prose directly states the obligation; this is the sole APPROVE recommendation."
+    },
+    {
+      "candidate_id": "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS", "SOURCE.CANDIDATE.LEAN4.API.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.ENVIRONMENT", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.CHECKER", "SOURCE.CANDIDATE.KIOTA.PARSER", "SOURCE.CANDIDATE.KIOTA.ENVIRONMENT"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Manual elaboration order is only limiting support, while official and Kiota implementations contradict on pre-check insertion; recommend no approval from current evidence."
+    },
+    {
+      "candidate_id": "EXPR.BINDER.DOMAIN_SORT",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.FUNCTIONS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Exact manual and abstract rules are favorable, but lambda/raw-expression precision and model normativity are deferred."
+    },
+    {
+      "candidate_id": "EXPR.PI.CODOMAIN_SORT",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.FUNCTIONS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Exact manual states the Pi sort rule; applicability to the exact frozen raw obligation remains a DEFER recommendation."
+    },
+    {
+      "candidate_id": "EXPR.LET.ANNOTATION_SORT",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TERMS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "ONLY_DISQUALIFIED_SOURCES",
+      "gap_or_basis": "No exact normative raw let-annotation rule was found; available sources are analogous, implementation-only, or assumption-qualified."
+    },
+    {
+      "candidate_id": "EXPR.LET.VALUE_TYPE_MATCH",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.TERMS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "General conversion is exact-version official prose, but the raw let mapping and mechanized bridge are unresolved."
+    },
+    {
+      "candidate_id": "EXPR.APP.FUNCTION_TYPE",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.FUNCTIONS", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.TERMS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Official function prose and an exact abstract app rule exist; neither is recommended for approval without a precision/normativity decision."
+    },
+    {
+      "candidate_id": "EXPR.APP.ARGUMENT_TYPE_MATCH",
+      "source_candidate_ids": ["SOURCE.CANDIDATE.OFFICIAL.MANUAL.TYPE_SYSTEM", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.FUNCTIONS", "SOURCE.CANDIDATE.OFFICIAL.MANUAL.TERMS", "SOURCE.CANDIDATE.LEAN4.IMPLEMENTATION.TYPECHECKER", "SOURCE.CANDIDATE.LEAN4.PAPER.SYSTEM_DESCRIPTION", "SOURCE.CANDIDATE.LEAN4LEAN.PAPER", "SOURCE.CANDIDATE.LEAN4LEAN.THEORY.BASIC", "SOURCE.CANDIDATE.LEAN4LEAN.VERIFY.AXIOMS"],
+      "coverage_status": "HAS_APPROVAL_CANDIDATE",
+      "gap_or_basis": "Exact conversion prose and the abstract app rule are favorable; the precise raw-expression authority mapping is deferred."
+    }
+  ],
+  "source_search_gaps": [
+    "No exact-version independent normative source was found for declaration name freshness, duplicate universe-parameter rejection, loose-bound-variable closure, constant universe arity, or current-declaration invisibility.",
+    "The exact v4.33.0 manual directly supports theorem-Prop and gives general type-system rules, but many cohort obligations are raw serialized declaration/expression judgments one layer below the manual's prose.",
+    "The exact Lean4Lean theorem dependency axiom sets were not closed with #print axioms during this bounded phase; the pinned repository contains custom bridge axioms and active sorry-backed verification obligations.",
+    "No source-authored compatibility proof links the 2021 Lean 4 system paper or 2024 Lean4Lean paper to Lean v4.33.0.",
+    "No contradictory normative primary source was found. A concrete implementation contradiction was retained for current-declaration visibility: Kiota inserts before checking while the official safe path checks before insertion.",
+    "The unversioned latest Lean manual had advanced to 4.34.0-rc2 at retrieval time, so latest URLs are not acceptable target-version identities.",
+    "The search closed within bounds without cohort substitution, query addition, or outcome-driven surface expansion."
+  ],
+  "review_sentinels": [
+    "DECL.THEOREM.TYPE_PROP",
+    "EXPR.LET.VALUE_TYPE_MATCH"
+  ],
+  "nonclaims": [
+    "This frozen discovery result does not approve any authority source.",
+    "A recommended disposition is not the separately governed human approval decision.",
+    "No catalog entry or obligation authority adjudication has been performed.",
+    "Implementation, checker, Arena, mutation, and LLM evidence has not been used to establish normativity.",
+    "No Arena baseline, directed synthesis, mutation campaign, or checker campaign has started.",
+    "The source search does not establish that obligation-sensitive negative coverage adds measurable assurance.",
+    "A sparse or null authority result remains a valid scientific outcome and will not trigger cohort substitution."
+  ]
+}

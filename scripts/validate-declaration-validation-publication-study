@@ -24,6 +24,7 @@ ROOT = Path(__file__).resolve().parents[1]
 SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study.schema.json"
 PREREGISTRATION_PATH = ROOT / "config" / "declaration-validation-publication-study-preregistration.json"
 DISCOVERY_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-source-discovery.json"
+REVIEW_PACKET_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_PUBLICATION_STUDY_SOURCE_APPROVAL_REVIEW.md"
 DERIVER_PATH = ROOT / "scripts" / "derive-declaration-validation-publication-study-preregistration"
 HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
 ERRATUM_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-10-protocol-erratum"
@@ -406,6 +407,29 @@ def validate_discovery(
     approved = load_json(APPROVED_SOURCES_PATH)
     if approved.get("normative_documentation") or approved.get("mechanized_results"):
         errors.append("source discovery crossed the separate human approval boundary")
+    if not REVIEW_PACKET_PATH.is_file():
+        errors.append("human source-approval review packet is missing")
+    else:
+        review = REVIEW_PACKET_PATH.read_text(encoding="utf-8")
+        if "FROZEN BEFORE AUTHORITY-SOURCE APPROVAL" not in review:
+            errors.append("review packet does not preserve the authority-approval stop boundary")
+        for source in sources:
+            source_id = source["source_candidate_id"]
+            heading = f"### `{source_id}`"
+            start = review.find(heading)
+            if start < 0:
+                errors.append(f"{source_id}: review packet omits source identity")
+                continue
+            end = review.find("\n### ", start + len(heading))
+            section = review[start:] if end < 0 else review[start:end]
+            if source["retrieved_content_sha256"] not in section:
+                errors.append(f"{source_id}: review packet omits exact content binding")
+            recommendation = f"**{source['recommended_disposition']}"
+            if recommendation not in section:
+                errors.append(f"{source_id}: review packet omits recommended disposition vocabulary")
+        for sentinel in document["review_sentinels"]:
+            if sentinel not in review:
+                errors.append(f"review packet omits fixed sentinel {sentinel}")
     return errors
 
 
