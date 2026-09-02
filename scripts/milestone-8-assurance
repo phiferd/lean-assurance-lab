@@ -42,8 +42,8 @@ def main() -> int:
     snapshot, policy = load(snapshot_path), load(policy_path)
     snapshot_schema = load(ROOT / "schemas" / "current-assurance-snapshot.schema.json")
     policy_schema = load(ROOT / "schemas" / "assurance-policy.schema.json")
-    mutation_report = load(ROOT / "results" / "assurance" / "milestone-7-report.json")
-    m4 = load(ROOT / "results" / "assurance" / "milestone-4.json")
+    mutation_report = load(ROOT / "results" / "assurance" / "current-mutation-report.json")
+    regressions = load(ROOT / "corpus" / "regression-candidates" / "current.json")
     rotating = load(ROOT / "results" / "rotating-heldout" / "milestone-7" / "report.json")
     coverage = load(ROOT / "results" / "coverage" / "nanoda" / "manifest.json")
     coverage_metrics = load(ROOT / "results" / "coverage" / "nanoda" / "collection-metrics.json")
@@ -72,24 +72,34 @@ def main() -> int:
         "corpus_inventory_is_exact": snapshot["corpus"]["test_count"] == 197
         and snapshot["corpus"]["total_bytes"] == 9506646641
         and len(snapshot["corpus"]["identity_manifest_sha256"]) == 64,
-        "semantic_mutant_population_reconciles": snapshot["mutation_testing"]["total_semantic_mutants"] == 29
+        "semantic_mutant_population_reconciles": snapshot["mutation_testing"]["total_semantic_mutants"] == mutation_report["evaluated_mutants"]
         and snapshot["mutation_testing"]["killed_by_existing_corpus"] == mutation_report["killed_mutants"]
         and snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["surviving_mutants"]
-        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["surviving_mutants"] == 29,
-        "generated_corpus_kill_is_reported": snapshot["mutation_testing"]["killed_by_generated_corpus"] == 1,
-        "survivor_and_equivalence_states_are_reported": snapshot["mutation_testing"]["meaningful_survivors"] == 1
-        and snapshot["mutation_testing"]["equivalent_mutants"] == 0
-        and snapshot["mutation_testing"]["unreachable_mutants"] == 0
-        and snapshot["mutation_testing"]["unresolved_mutants"] == 19,
+        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["evaluated_mutants"],
+        "generated_corpus_kill_is_reported": snapshot["mutation_testing"]["killed_by_generated_corpus"] == mutation_report["generated_witness_kills"],
+        "survivor_and_equivalence_states_are_reported": snapshot["mutation_testing"]["meaningful_survivors"] == mutation_report["meaningful_survivors"]
+        and snapshot["mutation_testing"]["equivalent_mutants"] == mutation_report["classified_equivalent"]
+        and snapshot["mutation_testing"]["unreachable_mutants"] == mutation_report["classified_unreachable"]
+        and snapshot["mutation_testing"]["reference_aligned_mutants"] == mutation_report["classified_reference_aligned"]
+        and snapshot["mutation_testing"]["unresolved_mutants"] == mutation_report["survived_without_witness"],
         "subsystem_scores_are_complete": snapshot["mutation_testing"]["subsystem_scores"] == mutation_report["stratified_metrics"]["by_subsystem"],
-        "witness_success_rate_is_mechanical": snapshot["witness_synthesis"]["searches"] == m4["measurements"]["searches"]
-        and snapshot["witness_synthesis"]["witnesses_found"] == m4["measurements"]["witnesses_found"]
-        and snapshot["witness_synthesis"]["success_rate"] == 0.5,
-        "generated_regressions_and_evidence_are_visible": snapshot["generated_regressions"]["artifact_count"] == 2
-        and snapshot["generated_regressions"]["semantic_case_count"] == 1
-        and all("UNRESOLVED_DISAGREEMENT" in row["status"] for row in snapshot["generated_regressions"]["candidates"]),
-        "cross_validator_disagreements_are_not_hidden": snapshot["cross_validator_disagreements"]["semantic_unresolved_count"] == 2
-        and snapshot["cross_validator_disagreements"]["parse_behavior_count"] == 1
+        "witness_success_rate_is_mechanical": snapshot["witness_synthesis"]["searches"] == mutation_report["witnesses_found"] + mutation_report["witness_searches_without_result"]
+        and snapshot["witness_synthesis"]["witnesses_found"] == mutation_report["witnesses_found"]
+        and snapshot["witness_synthesis"]["witnesses_minimized"] == mutation_report["minimized_witnesses"]
+        and snapshot["witness_synthesis"]["bounded_searches_without_witness"] == mutation_report["witness_searches_without_result"]
+        and snapshot["witness_synthesis"]["success_rate"] == mutation_report["witnesses_found"] / (mutation_report["witnesses_found"] + mutation_report["witness_searches_without_result"]),
+        "generated_regressions_and_evidence_are_visible": snapshot["generated_regressions"]["artifact_count"] == len(regressions["candidates"])
+        and snapshot["generated_regressions"]["semantic_case_count"] == len(regressions["candidates"])
+        and snapshot["generated_regressions"]["candidates"] == [
+            {"case_id": row["case_id"], "status": row["status"], "expected_outcome": row["expected_outcome"]}
+            for row in regressions["candidates"]
+        ]
+        and all(row["status"].startswith("EXPECTED_OUTCOME_ESTABLISHED") for row in regressions["candidates"]),
+        "cross_validator_disagreements_are_not_hidden": snapshot["cross_validator_disagreements"]["semantic_unresolved_count"] == gate_checks["semantic_checker_disagreements"]["observed"]["unresolved"]
+        and snapshot["cross_validator_disagreements"]["semantic_unresolved_count"]
+        == sum(row["disagreement_kind"] == "SEMANTIC_OUTCOME" for row in snapshot["cross_validator_disagreements"]["cases"])
+        and snapshot["cross_validator_disagreements"]["parse_behavior_count"]
+        == sum(row["disagreement_kind"] == "PARSE_BEHAVIOR" for row in snapshot["cross_validator_disagreements"]["cases"])
         and snapshot["cross_validator_disagreements"]["majority_vote_used"] is False,
         "held_out_scores_and_scope_are_reported": snapshot["held_out_evaluation"]["score_change"] == 0.5
         and snapshot["held_out_evaluation"]["classification"] == rotating["classification"]
@@ -115,7 +125,10 @@ def main() -> int:
         and snapshot["gate"]["status"] == "FAIL"
         and snapshot["gate"]["failure_reasons"] == ["semantic_checker_disagreements"],
         "regressions_without_expected_outcomes_fail_hard": gate_checks["regression_expected_outcomes"]["status"] == "PASS"
-        and gate_checks["regression_expected_outcomes"]["observed"] == {"candidates": 2, "established": 2},
+        and gate_checks["regression_expected_outcomes"]["observed"] == {
+            "candidates": len(regressions["candidates"]),
+            "established": len(regressions["candidates"]),
+        },
         "stale_claim_evidence_fails_hard": gate_checks["artifact_freshness"]["status"] == "PASS"
         and gate_checks["artifact_freshness"]["observed"]["stale_nodes"] == [],
         "thresholds_are_configurable_and_contextual": threshold_result["assessment"] == "BELOW_CONTEXT_THRESHOLD"

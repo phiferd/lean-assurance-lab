@@ -59,15 +59,23 @@ implementation vote as semantic authority.
 
 ## Current Milestone
 
-Milestones 1 through 9 are complete. The project has a closed mechanical
-mutation loop for `nanoda`, content-addressed invalidation, and a structured
-semantic model spanning validation elision, predicate negation, relational
-boundaries, and equality discrimination. Witness search and structure-aware
-minimization are executable and auditable. Cross-validator execution preserves
-semantic and parse disagreements without majority voting. Rotating held-out
-evaluation now covers pinned Kiota and Lean4Lean folds in different semantic
-subsystems. The measured aggregate is one positive fold and one neutral fold,
-improving the modeled held-out score from 0.5 to 1.0.
+The Declaration Validation Contract Slice has completed Milestones 0 through
+10 and reached its design-only stop condition. Its immutable M10 study design
+derives an empty strict normative denominator from the reviewed M9 inventory,
+keeps 19 provisional candidates separate from eight empirical scenarios, and
+defines the future `Reach(x) AND NOT P(x)` isolated-negative contract without
+executing a coverage, synthesis, mutation, checker, or authority-resolution
+campaign. A separately frozen protocol erratum requires the theorem
+proposition-valued obligation to use a same-family Prop-valued theorem as its
+matched positive control. Any successor experiment must be separately
+authorized in `docs/RESEARCH_STATUS.md` and bind both historical attestations.
+
+The broader project also has a closed mechanical mutation loop for `nanoda`,
+content-addressed invalidation, executable witness search and minimization,
+cross-validator observations that preserve disagreements without majority
+voting, and rotating held-out evaluation over pinned Kiota and Lean4Lean folds.
+The measured rotating aggregate remains one positive fold and one neutral
+fold, improving the modeled held-out score from 0.5 to 1.0.
 
 The versioned current assurance snapshot reports `FAIL`: four of five hard
 checks pass, while 15 unresolved semantic disagreements fail the configured
