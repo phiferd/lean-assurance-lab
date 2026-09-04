@@ -1,0 +1,449 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-denominator.schema.json",
+  "title": "Declaration-Validation Publication Study Gate-7 Frozen Study Input and Denominator",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "study_input_id",
+    "artifact_type",
+    "recorded_at",
+    "status",
+    "bindings",
+    "authority_dispositions",
+    "authority_counts",
+    "eligibility_algorithm",
+    "cohort_eligibility",
+    "primary_normative_denominator",
+    "claim_tier",
+    "separate_populations",
+    "frozen_protocol",
+    "proposed_execution_inputs",
+    "prior_knowledge_register",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "study_input_id": {
+      "const": "ordinary-declaration-validation.obligation-coverage-study.gate-7-denominator.v1"
+    },
+    "artifact_type": {
+      "const": "PUBLICATION_STUDY_GATE_7_FROZEN_STUDY_INPUT_AND_DENOMINATOR"
+    },
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {
+      "const": "DENOMINATOR_AND_CLAIM_TIER_FROZEN_BEFORE_PRIMARY_EXECUTION"
+    },
+    "bindings": {
+      "type": "object",
+      "required": [
+        "preregistration",
+        "source_discovery",
+        "authority_source_approval",
+        "approved_authority_source_registry",
+        "gate6_adjudication",
+        "gate6_catalog",
+        "gate6_evidence_lock",
+        "m8_historical_attestation",
+        "m9_historical_attestation",
+        "m10_historical_attestation",
+        "m10_protocol_erratum_historical_attestation",
+        "m10_study_design",
+        "m10_protocol_erratum",
+        "semantic_target",
+        "manuscript_skeleton"
+      ],
+      "additionalProperties": {"$ref": "#/$defs/gitBinding"}
+    },
+    "authority_dispositions": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/authorityDisposition"}
+    },
+    "authority_counts": {"$ref": "#/$defs/authorityCounts"},
+    "eligibility_algorithm": {
+      "type": "object",
+      "required": [
+        "algorithm_id",
+        "primary_conjunction",
+        "controlled_exclusion_reasons",
+        "empty_denominator_policy",
+        "percentage_policy",
+        "exploratory_candidate_algorithm",
+        "empirical_context_policy"
+      ],
+      "properties": {
+        "algorithm_id": {
+          "const": "M10.PRIMARY.NORMATIVE.NEGATIVE.COVERAGE.ELIGIBILITY.V1"
+        },
+        "primary_conjunction": {
+          "const": [
+            "kind=NORMATIVE_CANDIDATE_OBLIGATION",
+            "authority.status=ESTABLISHED",
+            "layers contains KERNEL_DECLARATION_VALIDITY",
+            "study_scope.status=YES",
+            "semantic_negative_testability.status=YES",
+            "arena_representability.status=YES",
+            "isolation_feasibility.status=YES",
+            "lifecycle.status=ACTIVE"
+          ]
+        },
+        "controlled_exclusion_reasons": {"type": "object", "minProperties": 16},
+        "empty_denominator_policy": {"type": "string", "minLength": 1},
+        "percentage_policy": {"type": "string", "minLength": 1},
+        "exploratory_candidate_algorithm": {"type": "string", "minLength": 1},
+        "empirical_context_policy": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "cohort_eligibility": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/eligibilityRow"}
+    },
+    "primary_normative_denominator": {
+      "type": "object",
+      "required": ["count", "entry_ids", "coverage_percentage", "coverage_percentage_status"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0, "maximum": 15},
+        "entry_ids": {
+          "type": "array",
+          "maxItems": 15,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/candidateId"}
+        },
+        "coverage_percentage": {"type": "null"},
+        "coverage_percentage_status": {"const": "NOT_COMPUTED_BEFORE_GATE_8"}
+      },
+      "additionalProperties": false
+    },
+    "claim_tier": {
+      "type": "object",
+      "required": [
+        "id",
+        "denominator_count",
+        "represented_semantic_family_count",
+        "represented_semantic_family_ids",
+        "mechanical_rule",
+        "scope"
+      ],
+      "properties": {
+        "id": {
+          "enum": ["EMPTY_DENOMINATOR", "BOUNDED_PILOT", "NONTRIVIAL_BOUNDED_STUDY"]
+        },
+        "denominator_count": {"type": "integer", "minimum": 0, "maximum": 15},
+        "represented_semantic_family_count": {"type": "integer", "minimum": 0, "maximum": 5},
+        "represented_semantic_family_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/semanticFamily"}
+        },
+        "mechanical_rule": {"type": "string", "minLength": 1},
+        "scope": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "separate_populations": {
+      "type": "object",
+      "required": [
+        "provisional_exploratory_candidate_set",
+        "unresolved_exploratory_candidate_set",
+        "technical_readiness_holdouts",
+        "empirical_characterization_context",
+        "deferred_or_reserved_identities"
+      ],
+      "properties": {
+        "provisional_exploratory_candidate_set": {"$ref": "#/$defs/candidatePopulation"},
+        "unresolved_exploratory_candidate_set": {"$ref": "#/$defs/candidatePopulation"},
+        "technical_readiness_holdouts": {
+          "type": "object",
+          "required": ["count", "entries"],
+          "properties": {
+            "count": {"const": 4},
+            "entries": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"type": "object"}}
+          },
+          "additionalProperties": false
+        },
+        "empirical_characterization_context": {"$ref": "#/$defs/stringPopulation"},
+        "deferred_or_reserved_identities": {
+          "type": "object",
+          "required": ["count", "entries"],
+          "properties": {
+            "count": {"const": 3},
+            "entries": {
+              "type": "array",
+              "minItems": 3,
+              "maxItems": 3,
+              "items": {
+                "type": "object",
+                "required": ["entry_id", "input_disposition"],
+                "properties": {
+                  "entry_id": {"type": "string", "minLength": 1},
+                  "input_disposition": {"enum": ["DEFERRED_UNRESOLVED_KIND", "OUT_OF_SCOPE"]}
+                },
+                "additionalProperties": false
+              }
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "frozen_protocol": {
+      "type": "object",
+      "required": [
+        "m10_isolated_negative_coverage_contract",
+        "m10_synthesis_hierarchy",
+        "m10_checker_attribution_contract",
+        "m10_protocol_erratum_application",
+        "synthesis_budget_rules",
+        "comparator_budget_rules",
+        "bounded_pilot_restrictions",
+        "reporting_nonclaims"
+      ],
+      "properties": {
+        "m10_isolated_negative_coverage_contract": {"type": "object"},
+        "m10_synthesis_hierarchy": {"type": "array", "minItems": 3},
+        "m10_checker_attribution_contract": {"type": "object"},
+        "m10_protocol_erratum_application": {
+          "type": "object",
+          "required": ["operative_protocol_correction", "auxiliary_control_classification"],
+          "properties": {
+            "operative_protocol_correction": {"type": "object"},
+            "auxiliary_control_classification": {"type": "object"}
+          },
+          "additionalProperties": false
+        },
+        "synthesis_budget_rules": {"type": "object"},
+        "comparator_budget_rules": {"type": "object"},
+        "bounded_pilot_restrictions": {"type": "array", "minItems": 1, "items": {"type": "string"}},
+        "reporting_nonclaims": {"type": "array", "minItems": 1, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "proposed_execution_inputs": {
+      "type": "object",
+      "required": [
+        "status",
+        "arena_repository_revision",
+        "corpus_roots",
+        "exact_materialized_corpus_status",
+        "observer_profiles",
+        "exact_observer_binary_and_build_status"
+      ],
+      "properties": {
+        "status": {"const": "PROPOSED_FOR_EXACT_GATE_8_BASELINE_FREEZE"},
+        "arena_repository_revision": {"$ref": "#/$defs/gitObject"},
+        "corpus_roots": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "exact_materialized_corpus_status": {"const": "NOT_YET_FROZEN_GATE_8_REQUIRED"},
+        "observer_profiles": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {
+            "type": "object",
+            "required": ["profile_key", "observer_id", "profile_pointer"],
+            "properties": {
+              "profile_key": {"enum": ["official_importer", "nanoda", "lean4lean", "kiota"]},
+              "observer_id": {"type": "string", "minLength": 1},
+              "profile_pointer": {"type": "string", "pattern": "^/observer_profiles/"}
+            },
+            "additionalProperties": false
+          }
+        },
+        "exact_observer_binary_and_build_status": {"const": "NOT_YET_FROZEN_GATE_8_REQUIRED"}
+      },
+      "additionalProperties": false
+    },
+    "prior_knowledge_register": {
+      "type": "object",
+      "required": ["status", "input_binding_names", "permitted_role"],
+      "properties": {
+        "status": {"const": "INPUT_REFERENCES_FROZEN_BASELINE_CLASSIFICATION_NOT_STARTED"},
+        "input_binding_names": {
+          "const": ["m8_historical_attestation", "gate6_catalog"]
+        },
+        "permitted_role": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "scope_closure": {
+      "type": "object",
+      "required": [
+        "candidate_set_changed",
+        "authority_dispositions_changed",
+        "new_source_discovery_performed",
+        "source_approvals_changed",
+        "denominator_derived_and_frozen",
+        "claim_tier_derived_and_frozen",
+        "baseline_or_comparator_started",
+        "coverage_percentage_computed",
+        "synthesis_or_checker_work_started",
+        "next_gate"
+      ],
+      "properties": {
+        "candidate_set_changed": {"const": false},
+        "authority_dispositions_changed": {"const": false},
+        "new_source_discovery_performed": {"const": false},
+        "source_approvals_changed": {"const": false},
+        "denominator_derived_and_frozen": {"const": true},
+        "claim_tier_derived_and_frozen": {"const": true},
+        "baseline_or_comparator_started": {"const": false},
+        "coverage_percentage_computed": {"const": false},
+        "synthesis_or_checker_work_started": {"const": false},
+        "next_gate": {"const": "PUBLICATION_STUDY_GATE_8_BASELINE_AND_COMPARATOR_FREEZE"}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 6,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObject": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObject"},
+        "git_blob": {"$ref": "#/$defs/gitObject"}
+      },
+      "additionalProperties": false
+    },
+    "candidateId": {
+      "enum": [
+        "DECL.ENV.NAME_FRESHNESS",
+        "DECL.UNIVERSE.PARAM_UNIQUENESS",
+        "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+        "DECL.UNIVERSE.PARAM_OWNERSHIP",
+        "EXPR.CONST.UNIVERSE_ARITY",
+        "DECL.TYPE.SORT_VALUED",
+        "DECL.VALUE.TYPE_MATCH",
+        "DECL.THEOREM.TYPE_PROP",
+        "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+        "EXPR.BINDER.DOMAIN_SORT",
+        "EXPR.PI.CODOMAIN_SORT",
+        "EXPR.LET.ANNOTATION_SORT",
+        "EXPR.LET.VALUE_TYPE_MATCH",
+        "EXPR.APP.FUNCTION_TYPE",
+        "EXPR.APP.ARGUMENT_TYPE_MATCH"
+      ]
+    },
+    "semanticFamily": {
+      "enum": [
+        "ENVIRONMENT_BOUNDARIES",
+        "UNIVERSE_BOUNDARIES",
+        "DECLARATION_EXPRESSION_AND_TYPING_BOUNDARIES",
+        "BINDER_AND_LET_BOUNDARIES",
+        "APPLICATION_BOUNDARIES"
+      ]
+    },
+    "authorityDisposition": {
+      "type": "object",
+      "required": [
+        "entry_id",
+        "stage",
+        "identity_statement_sha256",
+        "semantic_denotation_sha256",
+        "gate4_claim_decision_counts",
+        "approved_claim_ids",
+        "authority_status",
+        "qualification_rule",
+        "authority_evidence_ids"
+      ],
+      "properties": {
+        "entry_id": {"$ref": "#/$defs/candidateId"},
+        "stage": {"enum": ["GATE_5_SENTINEL_PRESERVED", "GATE_6_REMAINING_COHORT"]},
+        "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
+        "semantic_denotation_sha256": {"$ref": "#/$defs/sha256"},
+        "gate4_claim_decision_counts": {"type": "object"},
+        "approved_claim_ids": {"type": "array", "uniqueItems": true, "items": {"type": "string"}},
+        "authority_status": {"enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]},
+        "qualification_rule": {"type": "string", "minLength": 1},
+        "authority_evidence_ids": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string"}}
+      },
+      "additionalProperties": false
+    },
+    "authorityCounts": {
+      "type": "object",
+      "required": ["total_candidates", "newly_adjudicated_at_gate6", "established", "provisional", "unresolved"],
+      "properties": {
+        "total_candidates": {"const": 15},
+        "newly_adjudicated_at_gate6": {"const": 13},
+        "established": {"type": "integer", "minimum": 0, "maximum": 15},
+        "provisional": {"type": "integer", "minimum": 0, "maximum": 15},
+        "unresolved": {"type": "integer", "minimum": 0, "maximum": 15}
+      },
+      "additionalProperties": false
+    },
+    "determinations": {
+      "type": "object",
+      "required": [
+        "kind_eligible",
+        "authority_eligible",
+        "kernel_layer_eligible",
+        "study_scope",
+        "semantic_negative_testability",
+        "arena_representability",
+        "isolation_feasibility",
+        "lifecycle_eligible"
+      ],
+      "additionalProperties": {"enum": ["YES", "NO", "UNRESOLVED"]}
+    },
+    "eligibilityRow": {
+      "type": "object",
+      "required": [
+        "entry_id",
+        "m10_readiness_index",
+        "semantic_family",
+        "authority_status",
+        "determination_statuses",
+        "primary_denominator_eligible",
+        "primary_exclusion_reasons"
+      ],
+      "properties": {
+        "entry_id": {"$ref": "#/$defs/candidateId"},
+        "m10_readiness_index": {"type": "integer", "minimum": 0, "maximum": 29},
+        "semantic_family": {"$ref": "#/$defs/semanticFamily"},
+        "authority_status": {"enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]},
+        "determination_statuses": {"$ref": "#/$defs/determinations"},
+        "primary_denominator_eligible": {"type": "boolean"},
+        "primary_exclusion_reasons": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^[A-Z0-9_]+$"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "candidatePopulation": {
+      "type": "object",
+      "required": ["count", "entry_ids"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0, "maximum": 15},
+        "entry_ids": {"type": "array", "maxItems": 15, "uniqueItems": true, "items": {"$ref": "#/$defs/candidateId"}}
+      },
+      "additionalProperties": false
+    },
+    "stringPopulation": {
+      "type": "object",
+      "required": ["count", "entry_ids"],
+      "properties": {
+        "count": {"type": "integer", "minimum": 0, "maximum": 30},
+        "entry_ids": {"type": "array", "maxItems": 30, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    }
+  }
+}

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate publication-study artifacts through complete authority adjudication.
+"""Validate publication-study artifacts through Gate-7 denominator freeze.
 
 This validator checks identity, provenance, closure, frozen human approvals,
 and authored catalog dispositions.  It enforces procedure and evidence
@@ -38,6 +38,10 @@ SENTINEL_EVIDENCE_LOCK_PATH = ROOT / "config" / "declaration-validation-evidence
 ADJUDICATION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-authority-adjudication.schema.json"
 ADJUDICATION_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-authority-adjudication.json"
 ADJUDICATION_EVIDENCE_LOCK_PATH = ROOT / "config" / "declaration-validation-evidence-locks" / "publication-study-complete-adjudication.json"
+DENOMINATOR_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-denominator.schema.json"
+DENOMINATOR_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-denominator.json"
+DENOMINATOR_DERIVER_PATH = ROOT / "scripts" / "derive-declaration-validation-publication-study-denominator"
+MANUSCRIPT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md"
 CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
 M9_REVIEWED_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
 AUTHORITY_RULES_PATH = ROOT / "config" / "declaration-validation-authority-rules.json"
@@ -86,6 +90,21 @@ EXPECTED_PREDECESSORS = {
         "3f8d88ad4df80d746dbb3415156a1d31a01053e5",
     ),
 }
+
+EXPECTED_MANUSCRIPT_HEADINGS = [
+    "## 1. Problem and Motivation",
+    "## 2. Bounded Lean Trust-Boundary Model",
+    "## 3. Related Work",
+    "## 4. Normative Authority Methodology",
+    "## 5. Obligation-Sensitive Negative Coverage",
+    "## 6. Experimental Design",
+    "## 7. Empty Baseline and Synthesis Tables",
+    "## 8. Threats to Validity",
+    "## 9. Results",
+    "## 10. Ecosystem Consequences",
+    "## 11. Reproducibility",
+    "## 12. Limitations and Future Formalization",
+]
 
 
 def load_module(name: str, path: Path) -> Any:
@@ -1225,12 +1244,91 @@ def validate_complete_adjudication(
     return errors
 
 
+def validate_manuscript(content: str | None = None) -> list[str]:
+    if content is None:
+        content = MANUSCRIPT_PATH.read_text(encoding="utf-8")
+    errors: list[str] = []
+    headings = [line for line in content.splitlines() if line.startswith("## ")]
+    if headings != EXPECTED_MANUSCRIPT_HEADINGS:
+        errors.append("manuscript does not contain the exact twelve required sections in order")
+    if "Presentation-only living manuscript" not in content or "not semantic\n> authority" not in content:
+        errors.append("manuscript does not disclaim semantic authority explicitly")
+    rq_positions = [content.find(f"**RQ{index} —") for index in range(1, 6)]
+    if any(position < 0 for position in rq_positions) or rq_positions != sorted(rq_positions):
+        errors.append("manuscript does not preserve all five frozen research questions in order")
+    section_start = content.find("## 7. Empty Baseline and Synthesis Tables")
+    section_end = content.find("## 8. Threats to Validity")
+    if section_start < 0 or section_end < 0:
+        errors.append("manuscript primary-table section is unavailable")
+    else:
+        section = content[section_start:section_end]
+        table_lines = [line for line in section.splitlines() if line.startswith("|")]
+        if len(table_lines) != 4:
+            errors.append("manuscript baseline and synthesis tables are not both empty")
+        if "Both primary tables are intentionally empty" not in section:
+            errors.append("manuscript does not preserve the pre-execution empty-table boundary")
+    if "No primary experimental result is\nreported in this skeleton." not in content:
+        errors.append("manuscript reports or permits a primary result before Gate 8")
+    return errors
+
+
+def validate_denominator(
+    document: dict[str, Any] | None = None, *, check_generated: bool = True
+) -> list[str]:
+    document = load_json(DENOMINATOR_PATH) if document is None else document
+    errors = schema_errors(
+        document,
+        "publication-study Gate-7 frozen study input and denominator",
+        DENOMINATOR_SCHEMA_PATH,
+    )
+    if errors:
+        return errors
+
+    errors.extend(
+        "Gate-6 predecessor: " + error
+        for error in validate_complete_adjudication(check_generated=check_generated)
+    )
+
+    deriver = load_module("publication_study_denominator_deriver", DENOMINATOR_DERIVER_PATH)
+    try:
+        expected = deriver.render(document["recorded_at"])
+    except (KeyError, OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
+        errors.append(f"Gate-7 denominator could not be rederived: {exc}")
+        expected = None
+    if expected is not None and document != expected:
+        errors.append(
+            "Gate-7 frozen study input, denominator, or claim tier is not the exact mechanical derivation"
+        )
+
+    manuscript_content, manuscript_errors = binding_bytes(
+        document["bindings"]["manuscript_skeleton"],
+        label="Gate-7 manuscript prerequisite",
+        require_live_match=True,
+    )
+    errors.extend(manuscript_errors)
+    if manuscript_content is not None:
+        errors.extend(
+            "Gate-7 manuscript prerequisite: " + error
+            for error in validate_manuscript(manuscript_content.decode("utf-8"))
+        )
+
+    denominator = document["primary_normative_denominator"]
+    if denominator["count"] != len(denominator["entry_ids"]):
+        errors.append("Gate-7 denominator count differs from its exact entry list")
+    if denominator["coverage_percentage"] is not None:
+        errors.append("Gate 7 computes a normative coverage percentage before Gate 8")
+    if document["claim_tier"]["denominator_count"] != denominator["count"]:
+        errors.append("Gate-7 claim tier does not use the derived denominator count")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-discovery", action="store_true")
     parser.add_argument("--require-approval", action="store_true")
     parser.add_argument("--require-sentinel", action="store_true")
     parser.add_argument("--require-adjudication", action="store_true")
+    parser.add_argument("--require-denominator", action="store_true")
     args = parser.parse_args()
     errors = validate_preregistration()
     if DISCOVERY_PATH.exists():
@@ -1249,6 +1347,10 @@ def main() -> int:
         errors.append("Gate-5 sentinel result is missing")
     if args.require_adjudication and not ADJUDICATION_PATH.exists():
         errors.append("Gate-6 complete adjudication result is missing")
+    if DENOMINATOR_PATH.exists():
+        errors.extend(validate_denominator())
+    elif args.require_denominator:
+        errors.append("Gate-7 frozen study input and denominator are missing")
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -1262,7 +1364,8 @@ def main() -> int:
         f"source discovery {'frozen' if DISCOVERY_PATH.exists() else 'not yet executed'}; "
         f"authority-source approval {'frozen' if APPROVAL_PATH.exists() else 'not yet recorded'}; "
         f"Gate-5 sentinel {'validated' if SENTINEL_PATH.exists() else 'not yet executed'}; "
-        f"Gate-6 complete adjudication {'validated' if ADJUDICATION_PATH.exists() else 'not yet executed'}."
+        f"Gate-6 complete adjudication {'validated' if ADJUDICATION_PATH.exists() else 'not yet executed'}; "
+        f"Gate-7 denominator {'validated' if DENOMINATOR_PATH.exists() else 'not yet derived'}."
     )
     return 0
 

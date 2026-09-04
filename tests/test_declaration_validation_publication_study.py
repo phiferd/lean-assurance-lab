@@ -27,6 +27,10 @@ deriver = load_module(
     "declaration_publication_study_deriver",
     ROOT / "scripts" / "derive-declaration-validation-publication-study-preregistration",
 )
+denominator_deriver = load_module(
+    "declaration_publication_study_denominator_deriver",
+    ROOT / "scripts" / "derive-declaration-validation-publication-study-denominator",
+)
 
 
 class DeclarationValidationPublicationStudyTests(unittest.TestCase):
@@ -41,6 +45,8 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         cls.sentinel_schema = validator.load_json(validator.SENTINEL_SCHEMA_PATH)
         cls.adjudication = validator.load_json(validator.ADJUDICATION_PATH)
         cls.adjudication_schema = validator.load_json(validator.ADJUDICATION_SCHEMA_PATH)
+        cls.denominator = validator.load_json(validator.DENOMINATOR_PATH)
+        cls.denominator_schema = validator.load_json(validator.DENOMINATOR_SCHEMA_PATH)
         cls.catalog = validator.load_json(validator.CATALOG_PATH)
         cls.evidence_lock = validator.load_json(validator.SENTINEL_EVIDENCE_LOCK_PATH)
         cls.current_evidence_lock = validator.load_json(
@@ -80,6 +86,7 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         jsonschema.Draft202012Validator.check_schema(self.approval_schema)
         jsonschema.Draft202012Validator.check_schema(self.sentinel_schema)
         jsonschema.Draft202012Validator.check_schema(self.adjudication_schema)
+        jsonschema.Draft202012Validator.check_schema(self.denominator_schema)
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
@@ -213,6 +220,76 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         self.assertFalse(closure["denominator_derived"])
         self.assertFalse(closure["baseline_or_coverage_started"])
         self.assertFalse(closure["synthesis_or_checker_work_started"])
+
+    def test_actual_gate_7_denominator_validates(self):
+        self.assertEqual(validator.validate_denominator(check_generated=False), [])
+        self.assertEqual(
+            self.denominator["primary_normative_denominator"],
+            {
+                "count": 1,
+                "coverage_percentage": None,
+                "coverage_percentage_status": "NOT_COMPUTED_BEFORE_GATE_8",
+                "entry_ids": ["DECL.THEOREM.TYPE_PROP"],
+            },
+        )
+        self.assertEqual(self.denominator["claim_tier"]["id"], "BOUNDED_PILOT")
+        self.assertEqual(
+            self.denominator["claim_tier"]["represented_semantic_family_ids"],
+            ["DECLARATION_EXPRESSION_AND_TYPING_BOUNDARIES"],
+        )
+
+    def test_gate_7_is_the_exact_mechanical_derivation(self):
+        self.assertEqual(
+            self.denominator,
+            denominator_deriver.render(self.denominator["recorded_at"]),
+        )
+
+    def test_gate_7_rejects_hand_selected_denominator(self):
+        changed = copy.deepcopy(self.denominator)
+        changed["primary_normative_denominator"]["entry_ids"] = [
+            "EXPR.LET.VALUE_TYPE_MATCH"
+        ]
+        errors = validator.validate_denominator(changed, check_generated=False)
+        self.assertTrue(any("exact mechanical derivation" in item for item in errors))
+
+    def test_gate_7_rejects_hand_selected_claim_tier(self):
+        changed = copy.deepcopy(self.denominator)
+        changed["claim_tier"]["id"] = "NONTRIVIAL_BOUNDED_STUDY"
+        errors = validator.validate_denominator(changed, check_generated=False)
+        self.assertTrue(any("exact mechanical derivation" in item for item in errors))
+
+    def test_gate_7_preserves_population_separation(self):
+        populations = self.denominator["separate_populations"]
+        self.assertEqual(
+            {
+                name: population["count"]
+                for name, population in populations.items()
+            },
+            {
+                "provisional_exploratory_candidate_set": 14,
+                "unresolved_exploratory_candidate_set": 0,
+                "technical_readiness_holdouts": 4,
+                "empirical_characterization_context": 8,
+                "deferred_or_reserved_identities": 3,
+            },
+        )
+
+    def test_gate_7_stops_before_gate_8(self):
+        closure = self.denominator["scope_closure"]
+        self.assertFalse(closure["baseline_or_comparator_started"])
+        self.assertFalse(closure["coverage_percentage_computed"])
+        self.assertFalse(closure["synthesis_or_checker_work_started"])
+        self.assertEqual(
+            closure["next_gate"],
+            "PUBLICATION_STUDY_GATE_8_BASELINE_AND_COMPARATOR_FREEZE",
+        )
+
+    def test_manuscript_is_a_pre_gate_7_presentation_skeleton(self):
+        self.assertEqual(validator.validate_manuscript(), [])
+        self.assertEqual(
+            self.denominator["bindings"]["manuscript_skeleton"]["git_commit"],
+            denominator_deriver.MANUSCRIPT_COMMIT,
+        )
 
     def test_approval_cannot_widen_theorem_prop_source_scope(self):
         changed = copy.deepcopy(self.approval)

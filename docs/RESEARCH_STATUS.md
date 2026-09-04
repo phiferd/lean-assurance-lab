@@ -1445,6 +1445,30 @@ prepared_external_action_drafts: 5
   source approval change, baseline, coverage, synthesis, mutation, or checker
   work occurred. Gate 7 denominator freeze is the next bounded activity.
 
+### Gate-7 Denominator Freeze — 2026-09-04
+
+- The required presentation-only living manuscript skeleton was committed
+  before Gate 7 at `e38b845e2ed0382f1682e509e089abf26ef9602e`. It contains
+  the five frozen research questions, preregistered methodology and threats,
+  all twelve required sections, and empty baseline and synthesis tables. It is
+  explicitly not semantic authority.
+- The exact Gate-6 adjudication, catalog, and evidence-lock Git blobs are bound
+  at commit `b2099c4008c836de873c09504e2e1fccae78c0fc`. Reapplying the
+  unchanged `M10.PRIMARY.NORMATIVE.NEGATIVE.COVERAGE.ELIGIBILITY.V1`
+  conjunction mechanically derives a one-entry strict primary denominator:
+  `DECL.THEOREM.TYPE_PROP`.
+- The other 14 cohort entries remain a separately labeled provisional
+  exploratory set; the unresolved cohort set is empty. Four technical-
+  readiness holdouts, eight empirical contexts, and three deferred or reserved
+  identities remain outside the normative denominator.
+- One established obligation in one preregistered semantic family mechanically
+  selects the `BOUNDED_PILOT` claim tier. This tier limits later claim scope; it
+  does not change denominator membership or establish representativeness.
+- No authority disposition or source approval changed. No baseline,
+  comparator, coverage percentage, synthesis, mutation, checker, or external-
+  action work began. Gate 8 baseline and comparator freeze is the next bounded
+  activity.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1460,9 +1484,11 @@ prepared_external_action_drafts: 5
    `ESTABLISHED`, while `EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`.
    Gate 6 complete adjudication has validated the exact cohort with one
    `ESTABLISHED`, fourteen `PROVISIONAL`, and zero `UNRESOLVED` dispositions.
-   Gate 7 mechanical denominator derivation and freeze is next; no Arena
-   baseline measurement, synthesis, mutation, or checker campaign may cross
-   that gate implicitly.
+   Gate 7 has mechanically frozen the strict denominator as
+   `DECL.THEOREM.TYPE_PROP` alone and selected the `BOUNDED_PILOT` tier from
+   one represented semantic family. Gate 8 baseline and comparator freeze is
+   next; no synthesis, mutation, new checker campaign, or later gate may cross
+   that boundary implicitly.
 
 ### Waiting
 

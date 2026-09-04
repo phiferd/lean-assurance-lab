@@ -74,8 +74,14 @@ adjudication for the exact 15-candidate cohort: `DECL.THEOREM.TYPE_PROP` is the
 sole `ESTABLISHED` obligation, while the other 14 remain `PROVISIONAL`; no
 candidate is `UNRESOLVED`. The Gate-5 repair continues to enforce the exact
 human-approved source/claim/candidate scope. Gate 7 denominator derivation is
-next. No denominator, baseline, synthesis, mutation, or checker campaign has
-begun.
+now frozen from exact Gate-6 Git inputs under the unchanged M10 algorithm. Its
+strict primary denominator contains only `DECL.THEOREM.TYPE_PROP`, representing
+one preregistered semantic family, so the mechanically selected claim tier is
+`BOUNDED_PILOT`. The other 14 candidates remain separately labeled
+`PROVISIONAL`. The required presentation-only manuscript skeleton was committed
+before derivation and carries no semantic authority. Gate 8 baseline and
+comparator work has not begun; neither has synthesis, mutation, or a checker
+campaign.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

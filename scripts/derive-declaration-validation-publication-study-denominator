@@ -1,0 +1,569 @@
+#!/usr/bin/env python3
+"""Derive the Gate-7 study input, denominator, and claim tier.
+
+The derivation consumes exact Git objects for the completed Gate-6 authority
+state, the preregistration, the M10 protocol and erratum, and the manuscript
+prerequisite.  It performs no source discovery, authority adjudication, or
+baseline/comparator work.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_PATH = (
+    ROOT
+    / "results"
+    / "research"
+    / "declaration-validation-publication-study-denominator.json"
+)
+PREREGISTRATION_PATH = Path(
+    "config/declaration-validation-publication-study-preregistration.json"
+)
+ADJUDICATION_PATH = Path(
+    "results/research/declaration-validation-publication-study-authority-adjudication.json"
+)
+CATALOG_PATH = Path("config/declaration-validation-catalog.json")
+EVIDENCE_LOCK_PATH = Path(
+    "config/declaration-validation-evidence-locks/publication-study-complete-adjudication.json"
+)
+MANUSCRIPT_PATH = Path(
+    "docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md"
+)
+
+PREREGISTRATION_COMMIT = "c420e451b50fbbb56bb5ba89fb7faa4b65ac9a9a"
+GATE6_COMMIT = "b2099c4008c836de873c09504e2e1fccae78c0fc"
+MANUSCRIPT_COMMIT = "e38b845e2ed0382f1682e509e089abf26ef9602e"
+
+DETERMINATIONS = (
+    "kind_eligible",
+    "authority_eligible",
+    "kernel_layer_eligible",
+    "study_scope",
+    "semantic_negative_testability",
+    "arena_representability",
+    "isolation_feasibility",
+    "lifecycle_eligible",
+)
+STATUS_REASON = {
+    "kind_eligible": {"NO": "KIND_NOT_NORMATIVE", "UNRESOLVED": "KIND_UNRESOLVED"},
+    "authority_eligible": {
+        "NO": "AUTHORITY_NOT_ESTABLISHED",
+        "UNRESOLVED": "AUTHORITY_UNRESOLVED",
+    },
+    "kernel_layer_eligible": {
+        "NO": "KERNEL_LAYER_ABSENT",
+        "UNRESOLVED": "KERNEL_LAYER_UNRESOLVED",
+    },
+    "study_scope": {"NO": "STUDY_SCOPE_NO", "UNRESOLVED": "STUDY_SCOPE_UNRESOLVED"},
+    "semantic_negative_testability": {
+        "NO": "SEMANTIC_NEGATIVE_TESTABILITY_NO",
+        "UNRESOLVED": "SEMANTIC_NEGATIVE_TESTABILITY_UNRESOLVED",
+    },
+    "arena_representability": {
+        "NO": "ARENA_REPRESENTABILITY_NO",
+        "UNRESOLVED": "ARENA_REPRESENTABILITY_UNRESOLVED",
+    },
+    "isolation_feasibility": {
+        "NO": "ISOLATION_FEASIBILITY_NO",
+        "UNRESOLVED": "ISOLATION_FEASIBILITY_UNRESOLVED",
+    },
+    "lifecycle_eligible": {
+        "NO": "LIFECYCLE_NOT_ACTIVE",
+        "UNRESOLVED": "LIFECYCLE_UNRESOLVED",
+    },
+}
+EXPECTED_PRIMARY_CONJUNCTION = [
+    "kind=NORMATIVE_CANDIDATE_OBLIGATION",
+    "authority.status=ESTABLISHED",
+    "layers contains KERNEL_DECLARATION_VALIDITY",
+    "study_scope.status=YES",
+    "semantic_negative_testability.status=YES",
+    "arena_representability.status=YES",
+    "isolation_feasibility.status=YES",
+    "lifecycle.status=ACTIVE",
+]
+
+
+def sha256_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def git_output(args: list[str]) -> bytes:
+    result = subprocess.run(
+        ["git", *args],
+        cwd=ROOT,
+        check=False,
+        stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    if result.returncode:
+        raise ValueError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def git_binding(path: Path, commit: str) -> tuple[dict[str, str], bytes]:
+    resolved_commit = git_output(["rev-parse", "--verify", f"{commit}^{{commit}}"]).decode().strip()
+    if resolved_commit != commit:
+        raise ValueError(f"{path}: commit does not resolve exactly")
+    blob = git_output(["rev-parse", "--verify", f"{commit}:{path.as_posix()}"]).decode().strip()
+    content = git_output(["cat-file", "blob", blob])
+    return (
+        {
+            "path": path.as_posix(),
+            "sha256": sha256_bytes(content),
+            "git_commit": commit,
+            "git_blob": blob,
+        },
+        content,
+    )
+
+
+def bound_bytes(binding: dict[str, str]) -> bytes:
+    path = Path(binding["path"])
+    actual, content = git_binding(path, binding["git_commit"])
+    if actual != binding:
+        raise ValueError(f"{path}: immutable Git binding is stale")
+    return content
+
+
+def bound_json(binding: dict[str, str]) -> dict[str, Any]:
+    return json.loads(bound_bytes(binding))
+
+
+def only_git_binding(binding: dict[str, Any]) -> dict[str, str]:
+    return {
+        key: binding[key]
+        for key in ("path", "sha256", "git_commit", "git_blob")
+    }
+
+
+def immutable_inputs() -> dict[str, Any]:
+    prereg_binding, prereg_bytes = git_binding(
+        PREREGISTRATION_PATH, PREREGISTRATION_COMMIT
+    )
+    adjudication_binding, adjudication_bytes = git_binding(
+        ADJUDICATION_PATH, GATE6_COMMIT
+    )
+    catalog_binding, catalog_bytes = git_binding(CATALOG_PATH, GATE6_COMMIT)
+    evidence_lock_binding, evidence_lock_bytes = git_binding(
+        EVIDENCE_LOCK_PATH, GATE6_COMMIT
+    )
+    manuscript_binding, manuscript_bytes = git_binding(
+        MANUSCRIPT_PATH, MANUSCRIPT_COMMIT
+    )
+
+    preregistration = json.loads(prereg_bytes)
+    adjudication = json.loads(adjudication_bytes)
+    catalog = json.loads(catalog_bytes)
+    evidence_lock = json.loads(evidence_lock_bytes)
+
+    if adjudication["bindings"]["current_catalog"] != {
+        "path": CATALOG_PATH.as_posix(),
+        "sha256": catalog_binding["sha256"],
+    }:
+        raise ValueError("Gate-6 adjudication does not bind the exact Gate-6 catalog")
+    if adjudication["bindings"]["current_evidence_lock"] != {
+        "path": EVIDENCE_LOCK_PATH.as_posix(),
+        "sha256": evidence_lock_binding["sha256"],
+    }:
+        raise ValueError("Gate-6 adjudication does not bind the exact Gate-6 evidence lock")
+    if adjudication["counts"] != {
+        "total_candidates": 15,
+        "newly_adjudicated_at_gate6": 13,
+        "established": 1,
+        "provisional": 14,
+        "unresolved": 0,
+    }:
+        raise ValueError("Gate-6 authority dispositions are not complete and exact")
+
+    approval_binding = adjudication["bindings"]["authority_source_approval"]
+    approval = bound_json(approval_binding)
+    source_discovery_binding = approval["frozen_discovery_binding"]
+    bound_bytes(source_discovery_binding)
+    approved_registry_binding = adjudication["bindings"][
+        "approved_authority_source_registry"
+    ]
+    bound_bytes(approved_registry_binding)
+
+    predecessor_by_id = {
+        row["attestation_id"]: row
+        for row in preregistration["immutable_predecessors"]
+    }
+    m8_historical_binding = only_git_binding(
+        predecessor_by_id["ordinary-declaration-validation.milestone-8.historical.v2"]
+    )
+    m9_historical_binding = only_git_binding(
+        predecessor_by_id["ordinary-declaration-validation.milestone-9.historical.v1"]
+    )
+    m10_historical_binding = only_git_binding(
+        predecessor_by_id["ordinary-declaration-validation.milestone-10.historical.v1"]
+    )
+    erratum_historical_binding = only_git_binding(
+        predecessor_by_id[
+            "ordinary-declaration-validation.milestone-10.protocol-erratum.1.historical.v1"
+        ]
+    )
+    for binding in (
+        m8_historical_binding,
+        m9_historical_binding,
+        m10_historical_binding,
+        erratum_historical_binding,
+    ):
+        bound_bytes(binding)
+
+    m9_historical = bound_json(m9_historical_binding)
+    m10_historical = bound_json(m10_historical_binding)
+    semantic_target_binding = m9_historical["artifacts"]["semantic_target"]
+    semantic_target = bound_json(semantic_target_binding)
+
+    m10_study_binding = preregistration["m10_inputs"]["study_design"]
+    m10_study = bound_json(m10_study_binding)
+    if m10_historical["artifacts"]["study_design"] != m10_study_binding:
+        raise ValueError("preregistered M10 study binding differs from its historical attestation")
+    erratum_binding = preregistration["m10_inputs"]["protocol_erratum"]
+    erratum = bound_json(erratum_binding)
+
+    return {
+        "bindings": {
+            "preregistration": prereg_binding,
+            "source_discovery": source_discovery_binding,
+            "authority_source_approval": approval_binding,
+            "approved_authority_source_registry": approved_registry_binding,
+            "gate6_adjudication": adjudication_binding,
+            "gate6_catalog": catalog_binding,
+            "gate6_evidence_lock": evidence_lock_binding,
+            "m8_historical_attestation": m8_historical_binding,
+            "m9_historical_attestation": m9_historical_binding,
+            "m10_historical_attestation": m10_historical_binding,
+            "m10_protocol_erratum_historical_attestation": erratum_historical_binding,
+            "m10_study_design": m10_study_binding,
+            "m10_protocol_erratum": erratum_binding,
+            "semantic_target": semantic_target_binding,
+            "manuscript_skeleton": manuscript_binding,
+        },
+        "preregistration": preregistration,
+        "adjudication": adjudication,
+        "catalog": catalog,
+        "evidence_lock": evidence_lock,
+        "m10_study": m10_study,
+        "erratum": erratum,
+        "semantic_target": semantic_target,
+        "manuscript": manuscript_bytes.decode("utf-8"),
+    }
+
+
+def derive_claim_tier(
+    denominator_count: int, represented_family_ids: list[str]
+) -> dict[str, Any]:
+    family_count = len(represented_family_ids)
+    if denominator_count == 0:
+        tier_id = "EMPTY_DENOMINATOR"
+    elif denominator_count <= 4 or family_count < 3:
+        tier_id = "BOUNDED_PILOT"
+    elif denominator_count >= 5 and family_count >= 3:
+        tier_id = "NONTRIVIAL_BOUNDED_STUDY"
+    else:  # pragma: no cover - the frozen rules are exhaustive
+        raise ValueError("preregistered claim-tier rules are not exhaustive")
+    return {
+        "id": tier_id,
+        "denominator_count": denominator_count,
+        "represented_semantic_family_count": family_count,
+        "represented_semantic_family_ids": represented_family_ids,
+    }
+
+
+def render(recorded_at: str) -> dict[str, Any]:
+    inputs = immutable_inputs()
+    preregistration = inputs["preregistration"]
+    adjudication = inputs["adjudication"]
+    catalog = inputs["catalog"]
+    m10 = inputs["m10_study"]
+    erratum = inputs["erratum"]
+    semantic_target = inputs["semantic_target"]
+
+    algorithm = m10["eligibility_algorithm"]
+    if algorithm["primary_conjunction"] != EXPECTED_PRIMARY_CONJUNCTION:
+        raise ValueError("M10 primary eligibility conjunction has changed")
+
+    candidates = preregistration["cohort_derivation"]["candidates"]
+    candidate_ids = [row["id"] for row in candidates]
+    decisions = adjudication["decisions"]
+    if [row["entry_id"] for row in decisions] != candidate_ids:
+        raise ValueError("Gate-6 decisions differ from the preregistered cohort")
+
+    catalog_by_id = {
+        row["characterization"]["id"]: row for row in catalog["entries"]
+    }
+    readiness = m10["readiness"]
+    readiness_by_id = {row["entry_id"]: row for row in readiness}
+    decision_by_id = {row["entry_id"]: row for row in decisions}
+
+    cohort_eligibility: list[dict[str, Any]] = []
+    primary_ids: list[str] = []
+    provisional_ids: list[str] = []
+    unresolved_ids: list[str] = []
+    for candidate in candidates:
+        entry_id = candidate["id"]
+        row = readiness_by_id[entry_id]
+        if readiness[candidate["m10_readiness_index"]]["entry_id"] != entry_id:
+            raise ValueError(f"{entry_id}: preregistered M10 readiness index is stale")
+        if row["input_disposition"] != "CATALOG_ENTRY":
+            raise ValueError(f"{entry_id}: no longer has the frozen catalog-entry disposition")
+        characterization = catalog_by_id[entry_id]["characterization"]
+        frozen = row["frozen_classification"]
+        if (
+            characterization["kind"] != frozen["kind"]
+            or characterization["layers"] != frozen["layers"]
+            or characterization["lifecycle"]["status"] != frozen["lifecycle_status"]
+        ):
+            raise ValueError(f"{entry_id}: Gate 6 changes a frozen M10 classification")
+        if (
+            catalog_by_id[entry_id]["identity_statement_sha256"]
+            != candidate["identity_statement_sha256"]
+            or catalog_by_id[entry_id]["semantic_denotation_sha256"]
+            != candidate["semantic_denotation_sha256"]
+        ):
+            raise ValueError(f"{entry_id}: Gate 6 changes a preregistered denotation")
+
+        authority_status = characterization["authority"]["status"]
+        if authority_status != decision_by_id[entry_id]["authority_status"]:
+            raise ValueError(f"{entry_id}: Gate-6 catalog and decision authority differ")
+        authority_eligible = {
+            "ESTABLISHED": "YES",
+            "PROVISIONAL": "NO",
+            "UNRESOLVED": "UNRESOLVED",
+        }[authority_status]
+        statuses = {
+            name: (
+                authority_eligible
+                if name == "authority_eligible"
+                else row[name]["status"]
+            )
+            for name in DETERMINATIONS
+        }
+        eligible = all(status == "YES" for status in statuses.values())
+        eligible = eligible and characterization["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+        eligible = eligible and "KERNEL_DECLARATION_VALIDITY" in characterization["layers"]
+        eligible = eligible and characterization["lifecycle"]["status"] == "ACTIVE"
+        reasons = [
+            STATUS_REASON[name][statuses[name]]
+            for name in DETERMINATIONS
+            if statuses[name] != "YES"
+        ]
+        if eligible:
+            primary_ids.append(entry_id)
+        elif authority_status == "PROVISIONAL":
+            provisional_ids.append(entry_id)
+        elif authority_status == "UNRESOLVED":
+            unresolved_ids.append(entry_id)
+        cohort_eligibility.append(
+            {
+                "entry_id": entry_id,
+                "m10_readiness_index": candidate["m10_readiness_index"],
+                "semantic_family": candidate["semantic_family"],
+                "authority_status": authority_status,
+                "determination_statuses": statuses,
+                "primary_denominator_eligible": eligible,
+                "primary_exclusion_reasons": reasons,
+            }
+        )
+
+    family_ids = [
+        family["id"]
+        for family in preregistration["semantic_families"]
+        if any(entry_id in primary_ids for entry_id in family["candidate_ids"])
+    ]
+    counts = adjudication["counts"]
+    if (
+        len(primary_ids) != counts["established"]
+        or len(provisional_ids) != counts["provisional"]
+        or len(unresolved_ids) != counts["unresolved"]
+    ):
+        raise ValueError(
+            "M10 cohort readiness and the Gate-6 authority counts do not reconcile"
+        )
+    claim_tier = derive_claim_tier(counts["established"], family_ids)
+    tier_rule = next(
+        row for row in preregistration["claim_tiers"] if row["id"] == claim_tier["id"]
+    )
+    claim_tier["mechanical_rule"] = tier_rule["mechanical_rule"]
+    claim_tier["scope"] = tier_rule["scope"]
+
+    holdouts = preregistration["cohort_derivation"]["technical_readiness_holdouts"]
+    holdout_ids = [row["id"] for row in holdouts]
+    empirical_ids = [
+        row["entry_id"]
+        for row in readiness
+        if row["input_disposition"] == "CATALOG_ENTRY"
+        and row["frozen_classification"]["kind"] == "EMPIRICAL_CONTRACT_SCENARIO"
+        and row["frozen_classification"]["lifecycle_status"] == "ACTIVE"
+    ]
+    deferred = [
+        {"entry_id": row["entry_id"], "input_disposition": row["input_disposition"]}
+        for row in readiness
+        if row["input_disposition"] != "CATALOG_ENTRY"
+    ]
+    population_ids = (
+        primary_ids
+        + provisional_ids
+        + unresolved_ids
+        + holdout_ids
+        + empirical_ids
+        + [row["entry_id"] for row in deferred]
+    )
+    if len(population_ids) != 30 or len(set(population_ids)) != 30:
+        raise ValueError("Gate-7 populations do not partition all 30 frozen M10 identities")
+
+    observer_rows = []
+    arena_revisions = set()
+    for profile_key, profile in semantic_target["observer_profiles"].items():
+        arena_revisions.add(profile["arena_integration"]["revision"])
+        observer_rows.append(
+            {
+                "profile_key": profile_key,
+                "observer_id": profile["observer_id"],
+                "profile_pointer": f"/observer_profiles/{profile_key}",
+            }
+        )
+    if len(arena_revisions) != 1:
+        raise ValueError("proposed observers do not share one frozen Arena revision")
+
+    return {
+        "schema_version": 1,
+        "study_input_id": (
+            "ordinary-declaration-validation.obligation-coverage-study."
+            "gate-7-denominator.v1"
+        ),
+        "artifact_type": "PUBLICATION_STUDY_GATE_7_FROZEN_STUDY_INPUT_AND_DENOMINATOR",
+        "recorded_at": recorded_at,
+        "status": "DENOMINATOR_AND_CLAIM_TIER_FROZEN_BEFORE_PRIMARY_EXECUTION",
+        "bindings": inputs["bindings"],
+        "authority_dispositions": decisions,
+        "authority_counts": adjudication["counts"],
+        "eligibility_algorithm": algorithm,
+        "cohort_eligibility": cohort_eligibility,
+        "primary_normative_denominator": {
+            "count": len(primary_ids),
+            "entry_ids": primary_ids,
+            "coverage_percentage": None,
+            "coverage_percentage_status": "NOT_COMPUTED_BEFORE_GATE_8",
+        },
+        "claim_tier": claim_tier,
+        "separate_populations": {
+            "provisional_exploratory_candidate_set": {
+                "count": len(provisional_ids),
+                "entry_ids": provisional_ids,
+            },
+            "unresolved_exploratory_candidate_set": {
+                "count": len(unresolved_ids),
+                "entry_ids": unresolved_ids,
+            },
+            "technical_readiness_holdouts": {
+                "count": len(holdout_ids),
+                "entries": holdouts,
+            },
+            "empirical_characterization_context": {
+                "count": len(empirical_ids),
+                "entry_ids": empirical_ids,
+            },
+            "deferred_or_reserved_identities": {
+                "count": len(deferred),
+                "entries": deferred,
+            },
+        },
+        "frozen_protocol": {
+            "m10_isolated_negative_coverage_contract": m10[
+                "future_isolated_negative_coverage_contract"
+            ],
+            "m10_synthesis_hierarchy": m10["synthesis_hierarchy"],
+            "m10_checker_attribution_contract": m10["checker_attribution_contract"],
+            "m10_protocol_erratum_application": {
+                "operative_protocol_correction": erratum[
+                    "operative_protocol_correction"
+                ],
+                "auxiliary_control_classification": erratum[
+                    "auxiliary_control_classification"
+                ],
+            },
+            "synthesis_budget_rules": preregistration["synthesis_budget_rules"],
+            "comparator_budget_rules": preregistration["comparator_budget_rules"],
+            "bounded_pilot_restrictions": preregistration[
+                "bounded_pilot_restrictions"
+            ],
+            "reporting_nonclaims": preregistration["nonclaims"],
+        },
+        "proposed_execution_inputs": {
+            "status": "PROPOSED_FOR_EXACT_GATE_8_BASELINE_FREEZE",
+            "arena_repository_revision": next(iter(arena_revisions)),
+            "corpus_roots": [
+                "external/lean-kernel-arena/_build/tests",
+                "corpus",
+            ],
+            "exact_materialized_corpus_status": "NOT_YET_FROZEN_GATE_8_REQUIRED",
+            "observer_profiles": observer_rows,
+            "exact_observer_binary_and_build_status": "NOT_YET_FROZEN_GATE_8_REQUIRED",
+        },
+        "prior_knowledge_register": {
+            "status": "INPUT_REFERENCES_FROZEN_BASELINE_CLASSIFICATION_NOT_STARTED",
+            "input_binding_names": [
+                "m8_historical_attestation",
+                "gate6_catalog",
+            ],
+            "permitted_role": (
+                "Existing cases, witnesses, Arena links, and mutation observations may be "
+                "classified at Gate 8 but do not establish authority or denominator membership."
+            ),
+        },
+        "scope_closure": {
+            "candidate_set_changed": False,
+            "authority_dispositions_changed": False,
+            "new_source_discovery_performed": False,
+            "source_approvals_changed": False,
+            "denominator_derived_and_frozen": True,
+            "claim_tier_derived_and_frozen": True,
+            "baseline_or_comparator_started": False,
+            "coverage_percentage_computed": False,
+            "synthesis_or_checker_work_started": False,
+            "next_gate": "PUBLICATION_STUDY_GATE_8_BASELINE_AND_COMPARATOR_FREEZE",
+        },
+        "nonclaims": [
+            "Gate 7 does not add, remove, split, merge, narrow, or broaden a candidate.",
+            "Gate 7 does not change a Gate-6 authority disposition or any Gate-4 source approval.",
+            "The denominator is the output of the unchanged M10 conjunction, not a hand-selected list.",
+            "The claim tier constrains reporting scope and does not establish semantic representativeness.",
+            "No baseline, comparator, coverage, synthesis, mutation, checker, or external-action work was performed.",
+            "The manuscript skeleton is a presentation artifact and not semantic authority.",
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
+    parser.add_argument(
+        "--recorded-at",
+        default=datetime.now(timezone.utc).isoformat(),
+        help="ISO-8601 timestamp for the new Gate-7 artifact only",
+    )
+    args = parser.parse_args()
+    output = args.output if args.output.is_absolute() else ROOT / args.output
+    output.parent.mkdir(parents=True, exist_ok=True)
+    output.write_text(
+        json.dumps(render(args.recorded_at), indent=2, sort_keys=True) + "\n",
+        encoding="utf-8",
+    )
+    print(output)
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
