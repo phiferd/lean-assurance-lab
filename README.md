@@ -69,10 +69,13 @@ the mechanically derived 15-candidate technically ready cohort, kept four
 readiness holdouts outside it, frozen bounded authority-source discovery, and
 recorded the separate human approval outcome. Only the exact v4.33 theorem-Prop
 manual claim is approved; all other candidate mappings remain deferred or
-rejected in their recorded evidentiary roles. The approved-source successor is
-frozen, while the required two-entry authority-process sentinel remains
-unstarted. No baseline, synthesis, mutation, checker, or catalog-adjudication
-campaign is authorized before that next gate.
+rejected in their recorded evidentiary roles. Gate 5 has now adjudicated only
+the two fixed sentinels: `DECL.THEOREM.TYPE_PROP` is `ESTABLISHED`, while
+`EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`. The sentinel found and
+repaired a missing mechanical guard between approved source identity and the
+exact human-approved claim/candidate scope. Gate 6 adjudication of the remaining
+13 candidates is next. No denominator, baseline, synthesis, mutation, or
+checker campaign is authorized before the later gates.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

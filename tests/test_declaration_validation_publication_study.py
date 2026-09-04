@@ -37,10 +37,16 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         cls.schema = validator.load_json(validator.SCHEMA_PATH)
         cls.approval = validator.load_json(validator.APPROVAL_PATH)
         cls.approval_schema = validator.load_json(validator.APPROVAL_SCHEMA_PATH)
+        cls.sentinel = validator.load_json(validator.SENTINEL_PATH)
+        cls.sentinel_schema = validator.load_json(validator.SENTINEL_SCHEMA_PATH)
+        cls.catalog = validator.load_json(validator.CATALOG_PATH)
+        cls.evidence_lock = validator.load_json(validator.SENTINEL_EVIDENCE_LOCK_PATH)
+        cls.registry = validator.load_json(validator.APPROVED_SUCCESSOR_PATH)
 
     def test_schema_is_valid_draft_2020_12(self):
         jsonschema.Draft202012Validator.check_schema(self.schema)
         jsonschema.Draft202012Validator.check_schema(self.approval_schema)
+        jsonschema.Draft202012Validator.check_schema(self.sentinel_schema)
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
@@ -60,6 +66,71 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
             self.approval["source_decisions"][2]["claim_decisions"][1]["disposition"],
             "REJECT",
         )
+
+    def test_actual_gate_5_sentinel_validates(self):
+        self.assertEqual(validator.validate_sentinel(check_generated=False), [])
+        self.assertEqual(
+            [row["entry_id"] for row in self.sentinel["sentinel_decisions"]],
+            validator.EXPECTED_SENTINELS,
+        )
+        self.assertEqual(
+            [row["authority_status"] for row in self.sentinel["sentinel_decisions"]],
+            ["ESTABLISHED", "PROVISIONAL"],
+        )
+        self.assertEqual(self.sentinel["architecture"]["verdict"], "PASS_AFTER_REPAIR")
+
+    def test_gate_5_scope_guard_rejects_cross_claim_source_reuse(self):
+        changed = copy.deepcopy(self.catalog)
+        theorem = next(
+            row for row in changed["entries"]
+            if row["characterization"]["id"] == "DECL.THEOREM.TYPE_PROP"
+        )
+        let_value = next(
+            row for row in changed["entries"]
+            if row["characterization"]["id"] == "EXPR.LET.VALUE_TYPE_MATCH"
+        )
+        forged = copy.deepcopy(next(
+            row for row in theorem["characterization"]["evidence"]
+            if row["id"] == validator.THEOREM_EVIDENCE_ID
+        ))
+        forged["id"] = "EVID.PUBLICATION_STUDY.LET_VALUE.NORMATIVE"
+        forged["claim_supported"]["predicate_id"] = (
+            "PRED.PUBLICATION_STUDY.LET_VALUE.NORMATIVE"
+        )
+        let_value["characterization"]["evidence"].append(forged)
+        errors = validator.claim_scope_errors(
+            changed,
+            self.evidence_lock,
+            self.approval,
+            self.registry,
+            self.sentinel,
+        )
+        self.assertTrue(any("outside the exact human-approved claim scope" in item for item in errors))
+
+    def test_gate_5_cannot_broaden_the_approved_candidate_scope(self):
+        changed = copy.deepcopy(self.sentinel)
+        changed["claim_scope_guard"]["candidate_ids"] = [
+            "EXPR.LET.VALUE_TYPE_MATCH"
+        ]
+        errors = validator.validate_sentinel(changed, check_generated=False)
+        self.assertTrue(any("schema error" in item or "broadens" in item for item in errors))
+
+    def test_gate_5_binds_the_m10_theorem_control_erratum(self):
+        changed = copy.deepcopy(self.sentinel)
+        changed["m10_erratum_application"]["matched_positive_control_rule"] = (
+            "Use the definition-form artifact."
+        )
+        errors = validator.validate_sentinel(changed, check_generated=False)
+        self.assertTrue(any("schema error" in item or "theorem-control correction" in item for item in errors))
+
+    def test_gate_5_scope_closure_stops_before_remaining_work(self):
+        closure = self.sentinel["scope_closure"]
+        self.assertEqual(closure["remaining_candidates_adjudicated"], 0)
+        self.assertFalse(closure["denominator_derived"])
+        self.assertFalse(closure["baseline_or_coverage_started"])
+        self.assertFalse(closure["synthesis_started"])
+        self.assertFalse(closure["mutation_or_checker_campaign_started"])
+        self.assertFalse(closure["new_source_discovery_performed"])
 
     def test_approval_cannot_widen_theorem_prop_source_scope(self):
         changed = copy.deepcopy(self.approval)

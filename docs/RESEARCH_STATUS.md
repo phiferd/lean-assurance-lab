@@ -1402,6 +1402,29 @@ prepared_external_action_drafts: 5
   baseline, synthesis, mutation, or checker campaign is authorized by the
   approval decision alone.
 
+### Gate-5 Sentinel Validation — 2026-09-04
+
+- The fixed sentinel adjudication is complete for exactly
+  `DECL.THEOREM.TYPE_PROP` and `EXPR.LET.VALUE_TYPE_MATCH`. The theorem
+  obligation is `ESTABLISHED` from the exact claim-scoped v4.33 Lean Language
+  Reference source. The let-value/type obligation remains `PROVISIONAL`
+  because all relevant Gate-4 mappings are deferred or rejected and no
+  approved source is scoped to its frozen raw-expression denotation.
+- The sentinel exposed an epistemic-boundary defect in the pre-sentinel
+  architecture: approved document identity was checked mechanically, but the
+  exact human-approved source-claim-candidate mapping was not. Gate 5 adds an
+  explicit claim-scope guard bound to the full frozen approval result; a
+  cross-claim attempt to use the theorem-only approval for the let obligation
+  is now rejected. The repaired sentinel architecture passes.
+- The M10 theorem-control erratum remains operative and content-bound: any
+  future matched positive control must be a Prop-valued theorem in the same
+  construction family with a matching valid proof. The definition-form
+  artifact remains auxiliary representability and well-formedness evidence.
+- The remaining 13 candidates have not been adjudicated. No denominator,
+  baseline, coverage, synthesis, mutation, or checker work has begun. The next
+  bounded activity is Gate 6 complete adjudication under the repaired
+  claim-scope architecture.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1412,9 +1435,12 @@ prepared_external_action_drafts: 5
    validation slice. The mechanically derived 15-candidate cohort and bounded
    authority-source discovery and human source approval are frozen; preserve
    negative/null outcomes and use the unchanged M10 eligibility and isolation
-   contracts. The fixed two-entry authority-process sentinel is next; no
-   catalog adjudication, denominator execution, Arena baseline measurement,
-   synthesis, mutation, or checker campaign may cross that gate implicitly.
+   contracts. The fixed two-entry authority-process sentinel has passed after
+   repairing claim-scope enforcement: `DECL.THEOREM.TYPE_PROP` is
+   `ESTABLISHED`, while `EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`.
+   Gate 6 adjudication of the remaining 13 candidates is next; no denominator
+   execution, Arena baseline measurement, synthesis, mutation, or checker
+   campaign may cross that gate implicitly.
 
 ### Waiting
 

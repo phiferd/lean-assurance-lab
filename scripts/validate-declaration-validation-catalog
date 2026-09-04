@@ -1929,6 +1929,7 @@ def validate_identity_dispositions(
         "MILESTONE_8_CHARACTERIZATION_INVENTORY",
         "MILESTONE_9_PRE_REVIEW_FREEZE",
         "MILESTONE_9_REVIEWED_FREEZE",
+        "PUBLICATION_STUDY_SENTINEL_VALIDATED",
     }:
         return errors
     if set(dispositions) != set(identities):
@@ -2055,7 +2056,13 @@ def validate_artifacts(
         errors.append("catalog adjudication cannot extend the frozen pre-M8 approved authority-source registry")
     if catalog["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY" and approved_indices:
         errors.append("Milestone 7 approved authority-source registry must remain empty")
-    if catalog["status"] != "MILESTONE_7_INFRASTRUCTURE_ONLY" and not allow_test_approved_sources:
+    if catalog["status"] not in {
+        "MILESTONE_7_INFRASTRUCTURE_ONLY",
+        # Gate 4 carries a known wall-clock defect.  Gate 5 preserves those
+        # timestamps and proves ordering from the immutable Gate-4 Git binding
+        # in the publication-study validator instead.
+        "PUBLICATION_STUDY_SENTINEL_VALIDATED",
+    } and not allow_test_approved_sources:
         catalog_time = parse_recorded_at(catalog["recorded_at"], "catalog", errors)
         registry_time = parse_recorded_at(approved_authority_sources["recorded_at"], "authority-source registry", errors)
         if catalog_time and registry_time and registry_time >= catalog_time:
@@ -2072,6 +2079,7 @@ def validate_artifacts(
         "MILESTONE_8_CHARACTERIZATION_INVENTORY": "MILESTONE_8_EVIDENCE_SELECTION",
         "MILESTONE_9_PRE_REVIEW_FREEZE": "MILESTONE_9_PRE_REVIEW_EVIDENCE_FREEZE",
         "MILESTONE_9_REVIEWED_FREEZE": "MILESTONE_9_REVIEWED_EVIDENCE_FREEZE",
+        "PUBLICATION_STUDY_SENTINEL_VALIDATED": "PUBLICATION_STUDY_SENTINEL_EVIDENCE_FREEZE",
     }[catalog["status"]]
     if evidence_lock["status"] != expected_evidence_status:
         errors.append("catalog status and evidence-lock successor status disagree")
@@ -2204,6 +2212,18 @@ def validate_artifacts(
             errors.append(
                 f"{catalog['status']} does not authorize exactly {expected_next} next"
             )
+
+    if (
+        enforce_milestone_boundary
+        and catalog["status"] == "PUBLICATION_STUDY_SENTINEL_VALIDATED"
+    ):
+        boundary = catalog["completion_boundary"]
+        if not boundary["inventory_populated"] or not boundary["authority_assignments_created"]:
+            errors.append("publication-study sentinel cannot discard the completed inventory")
+        if evidence_lock["sequence"] != 7:
+            errors.append("publication-study sentinel must bind exact evidence-lock sequence 7")
+        if boundary["next_milestone"] != "PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION":
+            errors.append("publication-study sentinel does not stop at Gate 6 adjudication")
 
     if check_generated:
         report_renderer = load_module("declaration_m7_report_renderer", REPORT_RENDERER_PATH)

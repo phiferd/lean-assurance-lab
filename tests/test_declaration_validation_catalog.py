@@ -56,6 +56,15 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         cls.approved_authority_sources_schema = module.load_json(
             module.APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH
         )
+        cls.current_approved_authority_sources_path = (
+            ROOT / cls.catalog["artifact_bindings"]["approved_authority_sources"]["path"]
+        )
+        cls.current_approved_authority_sources = module.load_json(
+            cls.current_approved_authority_sources_path
+        )
+        cls.current_approved_authority_sources_schema = module.load_json(
+            module.registry_schema_path(cls.current_approved_authority_sources_path)
+        )
         cls.prior_decisions = module.load_json(module.PRIOR_DECISIONS_PATH)
         cls.m7_catalog = copy.deepcopy(cls.catalog)
         cls.m7_catalog["status"] = "MILESTONE_7_INFRASTRUCTURE_ONLY"
@@ -66,6 +75,14 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         cls.m7_catalog["artifact_bindings"]["evidence_lock"] = {
             "path": str(module.M7_EVIDENCE_LOCK_PATH.relative_to(ROOT)),
             "sha256": module.sha256_file(module.M7_EVIDENCE_LOCK_PATH),
+        }
+        cls.m7_catalog["artifact_bindings"]["approved_authority_sources"] = {
+            "path": str(module.APPROVED_AUTHORITY_SOURCES_PATH.relative_to(ROOT)),
+            "sha256": module.sha256_file(module.APPROVED_AUTHORITY_SOURCES_PATH),
+        }
+        cls.m7_catalog["artifact_bindings"]["approved_authority_sources_schema"] = {
+            "path": str(module.APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH.relative_to(ROOT)),
+            "sha256": module.sha256_file(module.APPROVED_AUTHORITY_SOURCES_SCHEMA_PATH),
         }
         cls.m7_catalog["completion_boundary"] = {
             "canonical_data_authoritative": True,
@@ -135,11 +152,17 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             else:
                 evidence_lock = self.successor_evidence_lock()
         if approved_authority_sources is None:
-            approved_authority_sources = (
-                self.approved_authority_sources
-                if catalog_value["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY"
-                else self.approved_authority_sources_fixture()
-            )
+            if catalog is None:
+                approved_authority_sources = self.current_approved_authority_sources
+            elif catalog_value["status"] == "MILESTONE_7_INFRASTRUCTURE_ONLY":
+                approved_authority_sources = self.approved_authority_sources
+            else:
+                approved_authority_sources = self.approved_authority_sources_fixture()
+        approved_schema = (
+            self.current_approved_authority_sources_schema
+            if catalog is None
+            else self.approved_authority_sources_schema
+        )
         catalog_value["artifact_bindings"]["evidence_lock"]["sha256"] = (
             module.document_sha256(evidence_lock)
         )
@@ -161,7 +184,7 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             evidence_lock,
             self.evidence_lock_schema,
             approved_authority_sources,
-            self.approved_authority_sources_schema,
+            approved_schema,
             self.prior_decisions,
             check_generated=False,
             enforce_milestone_boundary=enforce_milestone_boundary,
@@ -322,8 +345,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             jsonschema.Draft202012Validator.check_schema(schema)
         self.assertEqual(self.errors(enforce_milestone_boundary=True), [])
 
-    def test_milestone_9_reviewed_catalog_is_authoritative_and_complete(self):
-        self.assertEqual(self.catalog["status"], "MILESTONE_9_REVIEWED_FREEZE")
+    def test_gate_5_catalog_successor_is_authoritative_and_complete(self):
+        self.assertEqual(self.catalog["status"], "PUBLICATION_STUDY_SENTINEL_VALIDATED")
         self.assertEqual(len(self.catalog["entries"]), 27)
         self.assertEqual(len(self.catalog["identity_dispositions"]), 30)
         self.assertEqual(len(self.catalog["site_dispositions"]), 149)
@@ -334,8 +357,13 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertTrue(self.catalog["completion_boundary"]["inventory_populated"])
         self.assertEqual(
             self.catalog["completion_boundary"]["next_milestone"],
-            "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY",
+            "PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION",
         )
+        authority_counts = {}
+        for row in self.catalog["entries"]:
+            status = row["characterization"]["authority"]["status"]
+            authority_counts[status] = authority_counts.get(status, 0) + 1
+        self.assertEqual(authority_counts, {"ESTABLISHED": 1, "PROVISIONAL": 26})
 
     def current_evidence_chain(self):
         errors, chain = module.validate_evidence_lock_chain(

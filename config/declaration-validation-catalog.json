@@ -1,12 +1,12 @@
 {
   "artifact_bindings": {
     "approved_authority_sources": {
-      "path": "config/declaration-validation-approved-authority-sources.json",
-      "sha256": "1c151df258514fd46f868593e09b18fe0b02e8dfe1c27fa4b92bcc682a830708"
+      "path": "config/declaration-validation-approved-authority-sources/publication-study-v2.json",
+      "sha256": "fbbd44ae330401cb9f13511be644ae208c3f9e02d3a44b783171883d6f168f23"
     },
     "approved_authority_sources_schema": {
-      "path": "schemas/declaration-validation-approved-authority-sources.schema.json",
-      "sha256": "d4e9c78ab35302d7a56b193d87226a7943b8e85db6fdf89dd19d891ae367b325"
+      "path": "schemas/declaration-validation-approved-authority-sources-successor.schema.json",
+      "sha256": "e89fe1c09acf06d62a758028204ca714a0a7741a17812a5815d37144b44a0510"
     },
     "authority_rules": {
       "path": "config/declaration-validation-authority-rules.json",
@@ -25,12 +25,12 @@
       "sha256": "33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6"
     },
     "evidence_lock": {
-      "path": "config/declaration-validation-evidence-locks/milestone-9-reviewed.json",
-      "sha256": "3b48a3c68900011dc3431382f3fe1bbb87b730f188428d4579dbc32631e3f6bf"
+      "path": "config/declaration-validation-evidence-locks/publication-study-sentinel.json",
+      "sha256": "eee625dd03118662e213e518007848c5536d6b344b5f5bf29be1d993c50bfdae"
     },
     "evidence_lock_schema": {
       "path": "schemas/declaration-validation-evidence-lock.schema.json",
-      "sha256": "45e0c7a69be059a371f4d33445cb7cdbdad21c542a82b07a7f1dfb65a6416adf"
+      "sha256": "4c82a9a68b3f7a90447615ddf79829ab4b247a61f17e6c04dbc86733bec52358"
     },
     "identity_registry": {
       "path": "config/declaration-validation-identity-registry.json",
@@ -51,7 +51,7 @@
     "canonical_data_authoritative": true,
     "generated_report_required": true,
     "inventory_populated": true,
-    "next_milestone": "MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY"
+    "next_milestone": "PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION"
   },
   "entries": [
     {
@@ -4149,19 +4149,39 @@
         "authority": {
           "basis": {
             "evidence_refs": [
-              "EVID.M8.THEOREM.SOURCE",
-              "EVID.M8.THEOREM.WITNESS"
+              "EVID.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE"
             ],
-            "qualification_rule": "AUTH.NORMATIVE.PROVISIONAL.V1",
-            "summary": "Existing source, witness, and observer evidence supports a bounded candidate, but the frozen approved-authority-source registry contains no qualifying normative source.",
-            "unmet_requirements": [
-              "A preapproved normative document or mechanized result that supports this modeled declaration-validity requirement is absent from the frozen authority-source registry."
-            ]
+            "qualification_rule": "AUTH.NORMATIVE.ESTABLISHED.V1",
+            "summary": "The exact Lean v4.33 Language Reference states that a theorem statement must be a proposition, directly supporting the frozen theorem-type obligation for the pinned modeled judgment under the claim-scoped Gate-4 approval.",
+            "unmet_requirements": []
           },
           "scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
-          "status": "PROVISIONAL"
+          "status": "ESTABLISHED"
         },
         "evidence": [
+          {
+            "assumptions": [],
+            "claim_supported": {
+              "entry_json_pointer": "/statement/target_premise",
+              "predicate_id": "PRED.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE",
+              "proposition": "The exact version-matched Lean Language Reference states that the theorem statement must be a proposition."
+            },
+            "exact_locator": {
+              "kind": "DOCUMENT_SECTION",
+              "value": "lines 575-588, especially line 582"
+            },
+            "id": "EVID.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE",
+            "limitations": [
+              "The source establishes only the approved theorem-Prop claim; it is not authority for other declaration or expression obligations.",
+              "No logical-soundness relevance is inferred from this authority adjudication."
+            ],
+            "role": "NORMATIVE_SUPPORT",
+            "source_lock": {
+              "lock_id": "NORMDOC.PUBLICATION_STUDY.THEOREM_PROP",
+              "registry": "DECLARATION_VALIDATION_SOURCE_LOCK"
+            },
+            "source_type": "AUTHORITATIVE_DOCUMENTATION"
+          },
           {
             "assumptions": [],
             "claim_supported": {
@@ -4333,7 +4353,9 @@
         "name": "Theorem proposition-valued type",
         "notes": [
           "Nanoda has no concrete outcome in the selected cross-validation result and remains explicitly uninspected.",
-          "Observer agreement is recorded as empirical behavior only."
+          "Observer agreement is recorded as empirical behavior only.",
+          "Gate 5 establishes authority only from the exact human-approved v4.33 manual claim; implementation and observer evidence did not contribute to the authority assignment.",
+          "M10 protocol erratum 1 remains operative: a future matched positive control must be a Prop-valued theorem in the same construction family with a matching valid proof."
         ],
         "schema_version": 1,
         "soundness_relevance": {
@@ -4362,15 +4384,7 @@
             "statement": "A theorem declaration's type satisfies the modeled proposition-valued predicate."
           }
         },
-        "unknowns": [
-          {
-            "blocking_for": [
-              "AUTHORITY_ESTABLISHMENT"
-            ],
-            "id": "ASSUMPTION.M8.THEOREM.NORMATIVE_SOURCE",
-            "question": "Which preapproved normative source, if any, qualifies this candidate as a requirement of the modeled judgment?"
-          }
-        ]
+        "unknowns": []
       },
       "decision_ids": [
         "DEC.M5.011"
@@ -5608,9 +5622,9 @@
               "EVID.M8.LET_VALUE.WITNESS"
             ],
             "qualification_rule": "AUTH.NORMATIVE.PROVISIONAL.V1",
-            "summary": "The selected witness and source mapping support a bounded candidate, but no qualifying normative source is in the frozen approved registry.",
+            "summary": "The Gate-5 adjudication reproduces the frozen approval decision: the exact let-related manual mappings are deferred or rejected, and the claim-scoped approved registry contains no source authorized for this obligation.",
             "unmet_requirements": [
-              "A preapproved normative document or mechanized result supporting local let value/type compatibility is absent from the frozen authority-source registry."
+              "A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen local let value/type compatibility obligation is absent from the Gate-4 approved registry."
             ]
           },
           "scope": "NORMATIVE_REQUIREMENT_FOR_MODELED_JUDGMENT",
@@ -5769,7 +5783,8 @@
         "name": "Let value and annotation compatibility",
         "notes": [
           "The selected evidence contains no pinned Nanoda baseline row; that observer remains explicitly uninspected.",
-          "Observed rejections are not treated as authority by agreement."
+          "Observed rejections are not treated as authority by agreement.",
+          "The approved theorem-Prop manual source is mechanically barred from cross-claim reuse for this let obligation."
         ],
         "schema_version": 1,
         "soundness_relevance": {
@@ -9933,11 +9948,11 @@
     }
   ],
   "nonclaims": [
-    "M9 challenged all twelve mandated review classes and found no semantic catalog correction justified by the frozen evidence.",
-    "The review preserves incomplete independent observability, provisional authority, explicit cross-layer scenarios, exclusions, and unresolved boundaries rather than upgrading them.",
-    "No implementation behavior, checker agreement, adversarial-review result, or LLM judgment establishes normativity.",
-    "All 27 active entries remain PROVISIONAL and all soundness relevance remains NOT_ASSESSED.",
-    "The reviewed inventory is a frozen input for Milestone 10 design; it is not yet a negative-coverage denominator and no broad coverage study has begun."
+    "Gate 5 adjudicates only DECL.THEOREM.TYPE_PROP and EXPR.LET.VALUE_TYPE_MATCH; the remaining thirteen preregistered candidates have not been adjudicated.",
+    "The theorem authority assignment uses only the exact claim-scoped Gate-4 approval and does not promote implementation behavior, checker agreement, Arena behavior, project prose, or LLM judgment.",
+    "The let-value candidate remains PROVISIONAL because no approved source is scoped to its exact frozen denotation.",
+    "All stable semantic IDs and denotations remain unchanged, and all soundness relevance remains NOT_ASSESSED.",
+    "No denominator, baseline, coverage, synthesis, mutation, or checker work has begun."
   ],
   "observer_order": [
     "/observer_profiles/official_importer",
@@ -11683,5 +11698,5 @@
       "symbol_or_range": "add_definition lines 160-190"
     }
   ],
-  "status": "MILESTONE_9_REVIEWED_FREEZE"
+  "status": "PUBLICATION_STUDY_SENTINEL_VALIDATED"
 }

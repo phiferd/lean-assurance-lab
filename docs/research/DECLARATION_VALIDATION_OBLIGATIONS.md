@@ -3,28 +3,28 @@
 > Generated file. Edit `config/declaration-validation-catalog.json`, not this report.
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
-- Catalog status: `MILESTONE_9_REVIEWED_FREEZE`
-- Catalog SHA-256: `ee46af8fbc760026351960baa000649a31fbaf6ed925b07cff1350b4b89320c3`
+- Catalog status: `PUBLICATION_STUDY_SENTINEL_VALIDATED`
+- Catalog SHA-256: `1806b1cbb7984697bf3998d7295c965caa6491b0e5a48743580dcff060544974`
 - Catalog entries: 27
 - Existing evidence/identity dispositions: 41
 
-This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the frozen post-adversarial-review inventory.
-The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.milestone-9-reviewed.v1` at sequence 6.
-The separately frozen approved-authority-source registry contains 0 normative documents and 0 mechanized sources. Content addressing alone is not treated as authentication of external origin.
+This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the Gate-5 catalog successor. Only the two fixed sentinels have received publication-study authority adjudication.
+The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.publication-study-sentinel.v1` at sequence 7.
+The separately frozen approved-authority-source registry contains 1 normative documents and 0 mechanized sources. Content addressing alone is not treated as authentication of external origin.
 Stable IDs bind the complete canonical semantic projection; observer outcomes and editorial prose remain non-identity research metadata.
 
 ## Bound Inputs
 
 | Input | Path | SHA-256 |
 | --- | --- | --- |
-| approved_authority_sources | config/declaration-validation-approved-authority-sources.json | `1c151df258514fd46f868593e09b18fe0b02e8dfe1c27fa4b92bcc682a830708` |
-| approved_authority_sources_schema | schemas/declaration-validation-approved-authority-sources.schema.json | `d4e9c78ab35302d7a56b193d87226a7943b8e85db6fdf89dd19d891ae367b325` |
+| approved_authority_sources | config/declaration-validation-approved-authority-sources/publication-study-v2.json | `fbbd44ae330401cb9f13511be644ae208c3f9e02d3a44b783171883d6f168f23` |
+| approved_authority_sources_schema | schemas/declaration-validation-approved-authority-sources-successor.schema.json | `e89fe1c09acf06d62a758028204ca714a0a7741a17812a5815d37144b44a0510` |
 | authority_rules | config/declaration-validation-authority-rules.json | `de56148f267eca9f1fd91c6f9a8d42f7786e1b946eb7565f704ccaa193838ea0` |
 | characterization_model | config/declaration-validation-characterization-model.json | `6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7` |
 | discovery_closure | config/declaration-validation-discovery-closure.json | `d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731` |
 | entry_schema | schemas/declaration-validation-characterization-entry.schema.json | `33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6` |
-| evidence_lock | config/declaration-validation-evidence-locks/milestone-9-reviewed.json | `3b48a3c68900011dc3431382f3fe1bbb87b730f188428d4579dbc32631e3f6bf` |
-| evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `45e0c7a69be059a371f4d33445cb7cdbdad21c542a82b07a7f1dfb65a6416adf` |
+| evidence_lock | config/declaration-validation-evidence-locks/publication-study-sentinel.json | `eee625dd03118662e213e518007848c5536d6b344b5f5bf29be1d993c50bfdae` |
+| evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `4c82a9a68b3f7a90447615ddf79829ab4b247a61f17e6c04dbc86733bec52358` |
 | identity_registry | config/declaration-validation-identity-registry.json | `68e8770c808518170a9a22766f8e2ea79d3d2bdf0b643101026d6ec55a69f230` |
 | semantic_target | config/declaration-validation-target.json | `4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa` |
 | source_lock | config/declaration-validation-source-lock.json | `2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b` |
@@ -52,8 +52,8 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 
 | Authority status | Count |
 | --- | --- |
-| ESTABLISHED | 0 |
-| PROVISIONAL | 27 |
+| ESTABLISHED | 1 |
+| PROVISIONAL | 26 |
 | UNRESOLVED | 0 |
 
 ### Counts by Lifecycle Status
@@ -89,7 +89,7 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | DECL.ENV.CURRENT_DECL_NOT_VISIBLE | Current declaration not visible during validation | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.SELF_REFERENCE.WITNESS |
 | DECL.ENV.NAME_FRESHNESS | Declaration name freshness | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.DECL.ENV.NAME_FRESHNESS.DISCOVERY |
 | DECL.EXPR.NO_LOOSE_BOUND_VARS | Declaration expression bound-variable closure | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.DECL.EXPR.NO_LOOSE_BOUND_VARS.DISCOVERY |
-| DECL.THEOREM.TYPE_PROP | Theorem proposition-valued type | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | EVID.M8.THEOREM.ARENA | EVID.M8.THEOREM.WITNESS |
+| DECL.THEOREM.TYPE_PROP | Theorem proposition-valued type | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | ESTABLISHED | ACTIVE | EVID.M8.THEOREM.ARENA | EVID.M8.THEOREM.WITNESS |
 | DECL.TYPE.NO_FREE_VARS | Declaration type free-variable closure | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.DECL.TYPE.NO_FREE_VARS.DISCOVERY |
 | DECL.TYPE.NO_METAVARS | Declaration type metavariable closure | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.DECL.TYPE.NO_METAVARS.DISCOVERY |
 | DECL.TYPE.SORT_VALUED | Declaration type sort-valued requirement | NORMATIVE_CANDIDATE_OBLIGATION | KERNEL_DECLARATION_VALIDITY | PROVISIONAL | ACTIVE | — | EVID.M8.INVENTORY.DECL.TYPE.SORT_VALUED.DISCOVERY |
@@ -212,7 +212,6 @@ Every frozen existing-evidence record mechanically associated with an active sta
 - `DECL.ENV.CURRENT_DECL_NOT_VISIBLE` — Which preapproved normative source, if any, qualifies this environment-visibility candidate?; A preapproved normative document or mechanized result supporting this modeled environment requirement is absent from the frozen authority-source registry.
 - `DECL.ENV.NAME_FRESHNESS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `DECL.EXPR.NO_LOOSE_BOUND_VARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `DECL.THEOREM.TYPE_PROP` — Which preapproved normative source, if any, qualifies this candidate as a requirement of the modeled judgment?; A preapproved normative document or mechanized result that supports this modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `DECL.TYPE.NO_FREE_VARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `DECL.TYPE.NO_METAVARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `DECL.TYPE.SORT_VALUED` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
@@ -226,7 +225,7 @@ Every frozen existing-evidence record mechanically associated with an active sta
 - `EXPR.BINDER.DOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `EXPR.CONST.UNIVERSE_ARITY` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `EXPR.LET.ANNOTATION_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.LET.VALUE_TYPE_MATCH` — Which preapproved normative source, if any, qualifies local let value/type compatibility for the modeled judgment?; A preapproved normative document or mechanized result supporting local let value/type compatibility is absent from the frozen authority-source registry.
+- `EXPR.LET.VALUE_TYPE_MATCH` — Which preapproved normative source, if any, qualifies local let value/type compatibility for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen local let value/type compatibility obligation is absent from the Gate-4 approved registry.
 - `EXPR.PI.CODOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `SCENARIO.AXIOM.ADMISSION_POLICY` — What content-bound result bytes establish the complete pinned-observer vector for this exact scenario?; Content-bound structured result evidence has not established concrete outcomes for all applicable pinned observer profiles.
 - `SCENARIO.AXIOM.SAFETY_FLAG` — What is the content-bound outcome of the pinned Nanoda observer for this exact scenario, and how should parser, reconstruction, and trust-policy effects be separated?; A content-bound result for the pinned Nanoda observer and a reviewed cross-layer reconstruction interpretation are not present in this pilot.
@@ -442,9 +441,9 @@ Evidence:
 
 - Statement: A theorem declaration's type satisfies the modeled proposition-valued predicate.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
-- Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: Existing source, witness, and observer evidence supports a bounded candidate, but the frozen approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result that supports this modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority: `ESTABLISHED` via `AUTH.NORMATIVE.ESTABLISHED.V1`
+- Authority basis: The exact Lean v4.33 Language Reference states that a theorem statement must be a proposition, directly supporting the frozen theorem-type obligation for the pinned modeled judgment under the claim-scoped Gate-4 approval.
+- Unmet authority requirements: `—`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -461,6 +460,7 @@ Observer vector:
 
 Evidence:
 
+- `EVID.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE` — `NORMATIVE_SUPPORT` / `AUTHORITATIVE_DOCUMENTATION`: The exact version-matched Lean Language Reference states that the theorem statement must be a proposition. Assumptions: `—`. Contradiction: `—`. Limitations: `The source establishes only the approved theorem-Prop claim; it is not authority for other declaration or expression obligations., No logical-soundness relevance is inferred from this authority adjudication.`.
 - `EVID.M8.THEOREM.DISCOVERY` — `DISCOVERY` / `OTHER`: The candidate is scoped to the frozen modeled judgment. Assumptions: `—`. Contradiction: `—`. Limitations: `—`.
 - `EVID.M8.THEOREM.SOURCE` — `IMPLEMENTATION_OBSERVATION` / `IMPLEMENTATION_SOURCE`: The pinned official implementation source is mapped as an implementation observation only. Assumptions: `—`. Contradiction: `—`. Limitations: `—`.
 - `EVID.M8.THEOREM.WITNESS` — `DISCOVERY` / `WITNESS_ARTIFACT`: The existing Lab artifact discovers a bounded non-proposition theorem candidate; it has not qualified isolation. Assumptions: `—`. Contradiction: `—`. Limitations: `—`.
@@ -859,8 +859,8 @@ Evidence:
 - Statement: The inferred type of a local let value is definitionally equal to its annotation.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The selected witness and source mapping support a bounded candidate, but no qualifying normative source is in the frozen approved registry.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting local let value/type compatibility is absent from the frozen authority-source registry.`
+- Authority basis: The Gate-5 adjudication reproduces the frozen approval decision: the exact let-related manual mappings are deferred or rejected, and the claim-scoped approved registry contains no source authorized for this obligation.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen local let value/type compatibility obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -1169,10 +1169,10 @@ Evidence:
 
 ## Milestone Boundary
 
-- M9 challenged all twelve mandated review classes and found no semantic catalog correction justified by the frozen evidence.
-- The review preserves incomplete independent observability, provisional authority, explicit cross-layer scenarios, exclusions, and unresolved boundaries rather than upgrading them.
-- No implementation behavior, checker agreement, adversarial-review result, or LLM judgment establishes normativity.
-- All 27 active entries remain PROVISIONAL and all soundness relevance remains NOT_ASSESSED.
-- The reviewed inventory is a frozen input for Milestone 10 design; it is not yet a negative-coverage denominator and no broad coverage study has begun.
+- Gate 5 adjudicates only DECL.THEOREM.TYPE_PROP and EXPR.LET.VALUE_TYPE_MATCH; the remaining thirteen preregistered candidates have not been adjudicated.
+- The theorem authority assignment uses only the exact claim-scoped Gate-4 approval and does not promote implementation behavior, checker agreement, Arena behavior, project prose, or LLM judgment.
+- The let-value candidate remains PROVISIONAL because no approved source is scoped to its exact frozen denotation.
+- All stable semantic IDs and denotations remain unchanged, and all soundness relevance remains NOT_ASSESSED.
+- No denominator, baseline, coverage, synthesis, mutation, or checker work has begun.
 
-Next milestone: `MILESTONE_10_DESIGN_FROZEN_INVENTORY_COVERAGE_STUDY`
+Next milestone: `PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION`

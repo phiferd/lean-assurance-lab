@@ -1,0 +1,229 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-sentinel.schema.json",
+  "title": "Declaration-Validation Publication Study Gate-5 Sentinel",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "artifact_type",
+    "sentinel_id",
+    "recorded_at",
+    "status",
+    "bindings",
+    "claim_scope_guard",
+    "sentinel_decisions",
+    "m10_erratum_application",
+    "architecture",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifact_type": {"const": "PUBLICATION_STUDY_GATE_5_SENTINEL_VALIDATION"},
+    "sentinel_id": {"const": "ordinary-declaration-validation.obligation-coverage-study.gate-5-sentinel.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "VALIDATED_AFTER_CLAIM_SCOPE_ARCHITECTURE_REPAIR"},
+    "bindings": {
+      "type": "object",
+      "required": [
+        "preregistration",
+        "source_discovery",
+        "authority_source_approval",
+        "approved_authority_source_registry",
+        "immutable_m9_catalog",
+        "sentinel_evidence_lock",
+        "sentinel_catalog",
+        "authority_rules",
+        "m10_protocol_erratum_historical"
+      ],
+      "properties": {
+        "preregistration": {"$ref": "#/$defs/gitBinding"},
+        "source_discovery": {"$ref": "#/$defs/gitBinding"},
+        "authority_source_approval": {"$ref": "#/$defs/gitBinding"},
+        "approved_authority_source_registry": {"$ref": "#/$defs/gitBinding"},
+        "immutable_m9_catalog": {"$ref": "#/$defs/gitBinding"},
+        "sentinel_evidence_lock": {"$ref": "#/$defs/fileBinding"},
+        "sentinel_catalog": {"$ref": "#/$defs/fileBinding"},
+        "authority_rules": {"$ref": "#/$defs/fileBinding"},
+        "m10_protocol_erratum_historical": {"$ref": "#/$defs/gitBinding"}
+      },
+      "additionalProperties": false
+    },
+    "claim_scope_guard": {
+      "type": "object",
+      "required": [
+        "status",
+        "approved_source_id",
+        "source_candidate_id",
+        "claim_id",
+        "candidate_ids",
+        "evidence_lock_id",
+        "catalog_evidence_id",
+        "enforcement"
+      ],
+      "properties": {
+        "status": {"const": "ACTIVE_REPAIR_SUCCESSOR"},
+        "approved_source_id": {"const": "APPROVED.NORMDOC.LEAN_REFERENCE_MANUAL.V4_33_THEOREM_PROP"},
+        "source_candidate_id": {"const": "SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS"},
+        "claim_id": {"const": "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP"},
+        "candidate_ids": {
+          "type": "array",
+          "prefixItems": [{"const": "DECL.THEOREM.TYPE_PROP"}],
+          "items": false
+        },
+        "evidence_lock_id": {"const": "NORMDOC.PUBLICATION_STUDY.THEOREM_PROP"},
+        "catalog_evidence_id": {"const": "EVID.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE"},
+        "enforcement": {"const": "EVERY_NORMATIVE_SUPPORT_MUST_MATCH_AN_APPROVED_SOURCE_CLAIM_AND_CANDIDATE_MAPPING"}
+      },
+      "additionalProperties": false
+    },
+    "sentinel_decisions": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/sentinelDecision"}
+    },
+    "m10_erratum_application": {
+      "type": "object",
+      "required": [
+        "entry_id",
+        "matched_positive_control_rule",
+        "definition_form_role",
+        "coverage_or_synthesis_performed"
+      ],
+      "properties": {
+        "entry_id": {"const": "DECL.THEOREM.TYPE_PROP"},
+        "matched_positive_control_rule": {"const": "Use a Prop-valued theorem in the same construction family, with a matching valid proof."},
+        "definition_form_role": {"const": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL"},
+        "coverage_or_synthesis_performed": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "architecture": {
+      "type": "object",
+      "required": ["verdict", "problem_discovered", "repair", "post_repair_scope_probe"],
+      "properties": {
+        "verdict": {"const": "PASS_AFTER_REPAIR"},
+        "problem_discovered": {
+          "type": "object",
+          "required": ["id", "classification", "description", "effect"],
+          "properties": {
+            "id": {"const": "PROBLEM.GATE5.APPROVED_SOURCE_CLAIM_SCOPE_NOT_MECHANICALLY_ENFORCED"},
+            "classification": {"const": "EPISTEMIC_BOUNDARY_FLAW"},
+            "description": {"type": "string", "minLength": 1},
+            "effect": {"const": "AN_APPROVED_DOCUMENT_IDENTITY_COULD_BE_REUSED_OUTSIDE_ITS_HUMAN_APPROVED_CLAIM_SCOPE"}
+          },
+          "additionalProperties": false
+        },
+        "repair": {"const": "GATE_5_BINDS_THE_FULL_APPROVAL_RESULT_AND_REJECTS_NORMATIVE_SUPPORT_OUTSIDE_THE_EXACT_APPROVED_SOURCE_CLAIM_CANDIDATE_MAPPING"},
+        "post_repair_scope_probe": {"const": "CROSS_CLAIM_THEOREM_SOURCE_TO_LET_VALUE_REJECTED"}
+      },
+      "additionalProperties": false
+    },
+    "scope_closure": {
+      "type": "object",
+      "required": [
+        "fixed_sentinel_order",
+        "remaining_candidates_adjudicated",
+        "denominator_derived",
+        "baseline_or_coverage_started",
+        "synthesis_started",
+        "mutation_or_checker_campaign_started",
+        "new_source_discovery_performed"
+      ],
+      "properties": {
+        "fixed_sentinel_order": {
+          "type": "array",
+          "prefixItems": [
+            {"const": "DECL.THEOREM.TYPE_PROP"},
+            {"const": "EXPR.LET.VALUE_TYPE_MATCH"}
+          ],
+          "items": false
+        },
+        "remaining_candidates_adjudicated": {"const": 0},
+        "denominator_derived": {"const": false},
+        "baseline_or_coverage_started": {"const": false},
+        "synthesis_started": {"const": false},
+        "mutation_or_checker_campaign_started": {"const": false},
+        "new_source_discovery_performed": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObject": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "semanticId": {"type": "string", "pattern": "^(DECL|EXPR)\\.[A-Z0-9_.]+$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObject"},
+        "git_blob": {"$ref": "#/$defs/gitObject"}
+      },
+      "additionalProperties": false
+    },
+    "sentinelDecision": {
+      "type": "object",
+      "required": [
+        "entry_id",
+        "m9_catalog_json_pointer",
+        "sentinel_catalog_json_pointer",
+        "identity_statement_sha256",
+        "semantic_denotation_sha256",
+        "previous_authority_status",
+        "authority_status",
+        "qualification_rule",
+        "approved_claim_ids",
+        "authority_evidence_ids",
+        "unmet_requirements",
+        "disposition_rationale"
+      ],
+      "properties": {
+        "entry_id": {"$ref": "#/$defs/semanticId"},
+        "m9_catalog_json_pointer": {"type": "string", "pattern": "^/entries/[0-9]+$"},
+        "sentinel_catalog_json_pointer": {"type": "string", "pattern": "^/entries/[0-9]+$"},
+        "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
+        "semantic_denotation_sha256": {"$ref": "#/$defs/sha256"},
+        "previous_authority_status": {"const": "PROVISIONAL"},
+        "authority_status": {"enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]},
+        "qualification_rule": {"type": "string", "pattern": "^AUTH\\.NORMATIVE\\.(ESTABLISHED|PROVISIONAL|UNRESOLVED)\\.V1$"},
+        "approved_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^CLAIM\\.SOURCE\\.[A-Z0-9_.]+$"}
+        },
+        "authority_evidence_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "pattern": "^EVID(\\.[A-Z][A-Z0-9_]*)+$"}
+        },
+        "unmet_requirements": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"type": "string", "minLength": 1}
+        },
+        "disposition_rationale": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}

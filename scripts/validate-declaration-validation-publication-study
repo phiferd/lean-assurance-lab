@@ -31,6 +31,12 @@ APPROVED_SUCCESSOR_PATH = ROOT / "config" / "declaration-validation-approved-aut
 COMPATIBILITY_DECISION_PATH = ROOT / "results" / "research" / "declaration-validation-authority-source-approvals" / "publication-study-v2.json"
 APPROVED_SUCCESSOR_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-approved-authority-sources-successor.schema.json"
 COMPATIBILITY_DECISION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-authority-source-approval-decision.schema.json"
+SENTINEL_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-sentinel.schema.json"
+SENTINEL_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-sentinel.json"
+SENTINEL_EVIDENCE_LOCK_PATH = ROOT / "config" / "declaration-validation-evidence-locks" / "publication-study-sentinel.json"
+CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
+M9_REVIEWED_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
+AUTHORITY_RULES_PATH = ROOT / "config" / "declaration-validation-authority-rules.json"
 DERIVER_PATH = ROOT / "scripts" / "derive-declaration-validation-publication-study-preregistration"
 HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
 ERRATUM_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-10-protocol-erratum"
@@ -51,6 +57,12 @@ EXPECTED_QUERY_SCOPES = {
     "IMPLEMENTATION_DISCOVERY_ONLY",
 }
 EXPECTED_SENTINELS = ["DECL.THEOREM.TYPE_PROP", "EXPR.LET.VALUE_TYPE_MATCH"]
+GATE4_COMMIT = "4b7ed4d6b2b1e65f9b71e64bbb03cf333ef4ccb9"
+THEOREM_APPROVED_SOURCE_ID = "APPROVED.NORMDOC.LEAN_REFERENCE_MANUAL.V4_33_THEOREM_PROP"
+THEOREM_SOURCE_CANDIDATE_ID = "SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS"
+THEOREM_CLAIM_ID = "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP"
+THEOREM_LOCK_ID = "NORMDOC.PUBLICATION_STUDY.THEOREM_PROP"
+THEOREM_EVIDENCE_ID = "EVID.PUBLICATION_STUDY.THEOREM_PROP.NORMATIVE"
 EXPECTED_PREDECESSORS = {
     "results/research/declaration-validation-milestone-8-historical.json": (
         "ordinary-declaration-validation.milestone-8.historical.v2",
@@ -584,10 +596,328 @@ def validate_discovery(
     return errors
 
 
+def file_binding_errors(
+    binding: dict[str, Any], expected_path: Path, label: str
+) -> list[str]:
+    relative = binding.get("path")
+    if not isinstance(relative, str) or not safe_relative_path(relative):
+        return [f"{label}: path is not safe and relative"]
+    if ROOT / relative != expected_path:
+        return [f"{label}: path is not canonical"]
+    if not expected_path.is_file():
+        return [f"{label}: file is missing"]
+    if binding.get("sha256") != sha256_bytes(expected_path.read_bytes()):
+        return [f"{label}: SHA-256 is stale"]
+    return []
+
+
+def claim_scope_errors(
+    catalog: dict[str, Any],
+    evidence_lock: dict[str, Any],
+    approval: dict[str, Any],
+    registry: dict[str, Any],
+    sentinel: dict[str, Any],
+) -> list[str]:
+    """Enforce the human-approved source/claim/candidate relation.
+
+    The Gate-4 compatibility registry authenticates source identities but does
+    not encode claim scope.  Gate 5 therefore binds the full approval result
+    and makes that missing relation mechanically mandatory.
+    """
+
+    errors: list[str] = []
+    guard = sentinel["claim_scope_guard"]
+    source_decision = next(
+        (
+            row
+            for row in approval["source_decisions"]
+            if row["source_candidate_id"] == guard["source_candidate_id"]
+        ),
+        None,
+    )
+    claim_decision = None
+    if source_decision is not None:
+        claim_decision = next(
+            (
+                row
+                for row in source_decision["claim_decisions"]
+                if row["claim_id"] == guard["claim_id"]
+            ),
+            None,
+        )
+    if source_decision is None or claim_decision is None:
+        errors.append("sentinel claim-scope guard does not resolve in the full Gate-4 approval")
+    elif (
+        source_decision["disposition"] != "APPROVE"
+        or claim_decision["disposition"] != "APPROVE"
+        or claim_decision["applicable_candidate_ids"] != guard["candidate_ids"]
+    ):
+        errors.append("sentinel claim-scope guard broadens or changes the human approval")
+
+    approved_source = next(
+        (
+            row
+            for row in registry["normative_documentation"]
+            if row["id"] == guard["approved_source_id"]
+        ),
+        None,
+    )
+    locked_source = next(
+        (
+            row
+            for row in evidence_lock["normative_documentation"]
+            if row["id"] == guard["evidence_lock_id"]
+        ),
+        None,
+    )
+    if approved_source is None or locked_source is None:
+        errors.append("sentinel claim-scope guard does not resolve through registry and evidence lock")
+    elif locked_source["approved_source_id"] != approved_source["id"]:
+        errors.append("sentinel evidence lock does not use the guarded approved source")
+
+    allowed = {
+        (
+            guard["candidate_ids"][0],
+            guard["evidence_lock_id"],
+            guard["catalog_evidence_id"],
+        )
+    }
+    observed: set[tuple[str, str, str]] = set()
+    for wrapper in catalog["entries"]:
+        entry = wrapper["characterization"]
+        for evidence in entry["evidence"]:
+            if evidence["role"] != "NORMATIVE_SUPPORT":
+                continue
+            row = (
+                entry["id"],
+                evidence["source_lock"]["lock_id"],
+                evidence["id"],
+            )
+            observed.add(row)
+            if row not in allowed:
+                errors.append(
+                    f"{entry['id']}/{evidence['id']}: normative support is outside the exact human-approved claim scope"
+                )
+    if observed != allowed:
+        errors.append("sentinel normative-support set does not exactly reproduce the approved claim scope")
+    return errors
+
+
+def validate_sentinel(
+    document: dict[str, Any] | None = None, *, check_generated: bool = True
+) -> list[str]:
+    document = load_json(SENTINEL_PATH) if document is None else document
+    errors = schema_errors(
+        document, "publication-study Gate-5 sentinel", SENTINEL_SCHEMA_PATH
+    )
+    if errors:
+        return errors
+
+    expected_git_bindings = {
+        "preregistration": (PREREGISTRATION_PATH, "c420e451b50fbbb56bb5ba89fb7faa4b65ac9a9a"),
+        "source_discovery": (DISCOVERY_PATH, "07ae08eff053959b28e7b0beb1ac7f5505ef9aac"),
+        "authority_source_approval": (APPROVAL_PATH, GATE4_COMMIT),
+        "approved_authority_source_registry": (APPROVED_SUCCESSOR_PATH, GATE4_COMMIT),
+        "immutable_m9_catalog": (M9_REVIEWED_CATALOG_PATH, "69dad9d13e4802e5ef29c958c60d2ee387293847"),
+        "m10_protocol_erratum_historical": (
+            ROOT / "results" / "research" / "declaration-validation-milestone-10-protocol-erratum-1-historical.json",
+            "296bcff8969996c48a0a06d29c254bbaef441bcf",
+        ),
+    }
+    immutable_documents: dict[str, dict[str, Any]] = {}
+    for name, (path, commit) in expected_git_bindings.items():
+        binding = document["bindings"][name]
+        content, binding_errors = binding_bytes(binding, label=f"sentinel {name}")
+        errors.extend(binding_errors)
+        if ROOT / binding["path"] != path:
+            errors.append(f"sentinel {name}: path is not canonical")
+        if binding["git_commit"] != commit:
+            errors.append(f"sentinel {name}: Git commit differs from frozen stage identity")
+        if content is not None:
+            immutable_documents[name] = json.loads(content)
+
+    errors.extend(
+        file_binding_errors(
+            document["bindings"]["sentinel_evidence_lock"],
+            SENTINEL_EVIDENCE_LOCK_PATH,
+            "sentinel evidence lock",
+        )
+    )
+    errors.extend(
+        file_binding_errors(
+            document["bindings"]["sentinel_catalog"],
+            CATALOG_PATH,
+            "sentinel catalog",
+        )
+    )
+    errors.extend(
+        file_binding_errors(
+            document["bindings"]["authority_rules"],
+            AUTHORITY_RULES_PATH,
+            "sentinel authority rules",
+        )
+    )
+
+    approval = immutable_documents.get("authority_source_approval", load_json(APPROVAL_PATH))
+    registry = immutable_documents.get(
+        "approved_authority_source_registry", load_json(APPROVED_SUCCESSOR_PATH)
+    )
+    catalog = load_json(CATALOG_PATH)
+    evidence_lock = load_json(SENTINEL_EVIDENCE_LOCK_PATH)
+    previous = immutable_documents.get("immutable_m9_catalog")
+    if previous is None:
+        return errors + ["immutable M9 catalog is unavailable"]
+
+    catalog_validator = load_module(
+        "publication_study_sentinel_catalog",
+        ROOT / "scripts" / "validate-declaration-validation-catalog",
+    )
+    errors.extend(
+        "sentinel catalog: " + error
+        for error in catalog_validator.validate_artifacts(
+            catalog,
+            load_json(catalog_validator.CATALOG_SCHEMA_PATH),
+            load_json(catalog_validator.ENTRY_SCHEMA_PATH),
+            load_json(catalog_validator.AUTHORITY_PATH),
+            load_json(catalog_validator.AUTHORITY_SCHEMA_PATH),
+            load_json(catalog_validator.DECISIONS_PATH),
+            load_json(catalog_validator.DECISIONS_SCHEMA_PATH),
+            load_json(catalog_validator.TARGET_PATH),
+            load_json(catalog_validator.MODEL_PATH),
+            load_json(catalog_validator.IDENTITY_PATH),
+            load_json(catalog_validator.SOURCE_LOCK_PATH),
+            evidence_lock,
+            load_json(catalog_validator.EVIDENCE_LOCK_SCHEMA_PATH),
+            registry,
+            load_json(catalog_validator.registry_schema_path(APPROVED_SUCCESSOR_PATH)),
+            load_json(catalog_validator.PRIOR_DECISIONS_PATH),
+            check_generated=check_generated,
+            enforce_milestone_boundary=True,
+        )
+    )
+
+    current_by_id = {
+        row["characterization"]["id"]: row for row in catalog["entries"]
+    }
+    previous_by_id = {
+        row["characterization"]["id"]: row for row in previous["entries"]
+    }
+    if set(current_by_id) != set(previous_by_id):
+        errors.append("sentinel catalog changes the immutable M9 entry inventory")
+    for entry_id in set(previous_by_id) - set(EXPECTED_SENTINELS):
+        if current_by_id.get(entry_id) != previous_by_id[entry_id]:
+            errors.append(f"{entry_id}: non-sentinel entry changed during Gate 5")
+    preserved_fields = (
+        "identity_denotation",
+        "identity_statement_sha256",
+        "semantic_denotation_sha256",
+        "observer_vector",
+        "source_mappings",
+        "arena_disposition",
+    )
+    preserved_characterization_fields = (
+        "id",
+        "kind",
+        "layers",
+        "lifecycle",
+        "name",
+        "schema_version",
+        "soundness_relevance",
+        "statement",
+    )
+    for entry_id in EXPECTED_SENTINELS:
+        current = current_by_id.get(entry_id)
+        prior = previous_by_id.get(entry_id)
+        if current is None or prior is None:
+            errors.append(f"{entry_id}: sentinel entry is missing")
+            continue
+        for field in preserved_fields:
+            if current[field] != prior[field]:
+                errors.append(f"{entry_id}: Gate 5 changes frozen {field}")
+        for field in preserved_characterization_fields:
+            if current["characterization"][field] != prior["characterization"][field]:
+                errors.append(f"{entry_id}: Gate 5 changes frozen characterization {field}")
+
+    decisions = document["sentinel_decisions"]
+    if [row["entry_id"] for row in decisions] != EXPECTED_SENTINELS:
+        errors.append("Gate-5 decisions differ from the fixed sentinel order")
+    for decision in decisions:
+        entry_id = decision["entry_id"]
+        try:
+            current = catalog_validator.resolve_pointer(
+                catalog, decision["sentinel_catalog_json_pointer"]
+            )
+            prior = catalog_validator.resolve_pointer(
+                previous, decision["m9_catalog_json_pointer"]
+            )
+        except (KeyError, IndexError, ValueError):
+            errors.append(f"{entry_id}: sentinel decision pointer does not resolve")
+            continue
+        if current["characterization"]["id"] != entry_id or prior["characterization"]["id"] != entry_id:
+            errors.append(f"{entry_id}: sentinel decision pointer resolves to another identity")
+        entry = current["characterization"]
+        authority = entry["authority"]
+        if authority["status"] != decision["authority_status"]:
+            errors.append(f"{entry_id}: decision authority status differs from catalog")
+        if authority["basis"]["qualification_rule"] != decision["qualification_rule"]:
+            errors.append(f"{entry_id}: decision qualification rule differs from catalog")
+        if authority["basis"]["evidence_refs"] != decision["authority_evidence_ids"]:
+            errors.append(f"{entry_id}: decision authority evidence differs from catalog")
+        if authority["basis"]["unmet_requirements"] != decision["unmet_requirements"]:
+            errors.append(f"{entry_id}: decision unmet requirements differ from catalog")
+        if current["identity_statement_sha256"] != decision["identity_statement_sha256"]:
+            errors.append(f"{entry_id}: decision identity hash differs from catalog")
+        if current["semantic_denotation_sha256"] != decision["semantic_denotation_sha256"]:
+            errors.append(f"{entry_id}: decision semantic hash differs from catalog")
+
+    theorem, let_value = decisions
+    if (
+        theorem["authority_status"] != "ESTABLISHED"
+        or theorem["approved_claim_ids"] != [THEOREM_CLAIM_ID]
+        or theorem["authority_evidence_ids"] != [THEOREM_EVIDENCE_ID]
+        or theorem["unmet_requirements"]
+    ):
+        errors.append("theorem sentinel does not record the exact established disposition")
+    if (
+        let_value["authority_status"] != "PROVISIONAL"
+        or let_value["approved_claim_ids"]
+        or not let_value["unmet_requirements"]
+    ):
+        errors.append("let-value sentinel does not preserve the unsupported provisional disposition")
+
+    errors.extend(claim_scope_errors(catalog, evidence_lock, approval, registry, document))
+    if len(evidence_lock["normative_documentation"]) != 1:
+        errors.append("sentinel evidence lock does not contain exactly one normative document")
+    if evidence_lock["mechanized_results"] or evidence_lock["tracked_evidence"] or evidence_lock["generated_witnesses"]:
+        errors.append("sentinel evidence lock adds out-of-scope evidence")
+
+    erratum_attestation = immutable_documents.get("m10_protocol_erratum_historical")
+    if erratum_attestation is not None:
+        binding = erratum_attestation["artifacts"]["protocol_erratum"]
+        content, item_errors = binding_bytes(
+            binding, label="sentinel immutable M10 protocol erratum", require_live_match=False
+        )
+        errors.extend(item_errors)
+        if content is not None:
+            erratum = json.loads(content)
+            expected_rule = erratum["operative_protocol_correction"]["corrected_value"]
+            expected_role = erratum["auxiliary_control_classification"]["allowed_role"]
+            applied = document["m10_erratum_application"]
+            if applied["matched_positive_control_rule"] != expected_rule:
+                errors.append("sentinel does not apply the immutable M10 theorem-control correction")
+            if applied["definition_form_role"] != expected_role:
+                errors.append("sentinel changes the immutable definition-form auxiliary role")
+
+    if document["architecture"]["verdict"] != "PASS_AFTER_REPAIR":
+        errors.append("sentinel architecture did not pass after the explicit scope repair")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-discovery", action="store_true")
     parser.add_argument("--require-approval", action="store_true")
+    parser.add_argument("--require-sentinel", action="store_true")
     args = parser.parse_args()
     errors = validate_preregistration()
     if DISCOVERY_PATH.exists():
@@ -598,6 +928,10 @@ def main() -> int:
         errors.extend(validate_approval())
     elif args.require_approval:
         errors.append("human authority-source approval result is missing")
+    if SENTINEL_PATH.exists():
+        errors.extend(validate_sentinel())
+    elif args.require_sentinel:
+        errors.append("Gate-5 sentinel result is missing")
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -609,7 +943,8 @@ def main() -> int:
         "Declaration-validation publication-study validation passed: "
         f"{len(candidates)} preregistered candidates, {len(holdouts)} readiness holdouts, "
         f"source discovery {'frozen' if DISCOVERY_PATH.exists() else 'not yet executed'}; "
-        f"authority-source approval {'frozen' if APPROVAL_PATH.exists() else 'not yet recorded'}."
+        f"authority-source approval {'frozen' if APPROVAL_PATH.exists() else 'not yet recorded'}; "
+        f"Gate-5 sentinel {'validated' if SENTINEL_PATH.exists() else 'not yet executed'}."
     )
     return 0
 

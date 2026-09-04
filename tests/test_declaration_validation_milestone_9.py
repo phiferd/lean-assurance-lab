@@ -69,7 +69,7 @@ class DeclarationValidationMilestone9Tests(unittest.TestCase):
             history.load_json(history.M8_ATTESTATION_PATH)["artifacts"]["catalog"]["sha256"],
         )
 
-    def test_reviewed_catalog_changes_only_milestone_envelope_when_no_correction_authored(self):
+    def test_reviewed_catalog_changes_only_milestone_envelope_and_remains_historically_bound(self):
         self.assertEqual(
             validator.inventory_projection(self.pre),
             validator.inventory_projection(self.reviewed),
@@ -77,7 +77,12 @@ class DeclarationValidationMilestone9Tests(unittest.TestCase):
         self.assertNotEqual(
             populator.document_sha256(self.pre), populator.document_sha256(self.reviewed)
         )
+        attestation = history.load_json(history.M9_ATTESTATION_PATH)
         self.assertEqual(
+            hashlib.sha256(validator.REVIEWED_CATALOG_PATH.read_bytes()).hexdigest(),
+            attestation["artifacts"]["reviewed_catalog"]["sha256"],
+        )
+        self.assertNotEqual(
             validator.document_bytes(self.reviewed), validator.CATALOG_PATH.read_bytes()
         )
 

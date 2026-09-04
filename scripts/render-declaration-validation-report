@@ -99,7 +99,9 @@ def render(
     if evidence_lock is None:
         evidence_lock = load_json(ROOT / catalog["artifact_bindings"]["evidence_lock"]["path"])
     if approved_authority_sources is None:
-        approved_authority_sources = load_json(APPROVED_AUTHORITY_SOURCES_PATH)
+        approved_authority_sources = load_json(
+            ROOT / catalog["artifact_bindings"]["approved_authority_sources"]["path"]
+        )
     catalog_hash = sha256_file(CATALOG_PATH) if catalog == load_json(CATALOG_PATH) else hashlib.sha256(
         (json.dumps(catalog, indent=2, sort_keys=True) + "\n").encode("utf-8")
     ).hexdigest()
@@ -141,6 +143,10 @@ def render(
         ),
         "MILESTONE_9_PRE_REVIEW_FREEZE": "This is the frozen pre-adversarial-review inventory.",
         "MILESTONE_9_REVIEWED_FREEZE": "This is the frozen post-adversarial-review inventory.",
+        "PUBLICATION_STUDY_SENTINEL_VALIDATED": (
+            "This is the Gate-5 catalog successor. Only the two fixed sentinels have "
+            "received publication-study authority adjudication."
+        ),
     }[catalog["status"]]
     lines = [
         "# Declaration Validation Obligations and Scenarios",
