@@ -296,6 +296,7 @@ def catalog() -> list[dict]:
                 "docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md",
                 "config/declaration-validation-publication-study-preregistration.json",
                 "schemas/declaration-validation-publication-study.schema.json",
+                "schemas/declaration-validation-publication-study-authority-source-approval.schema.json",
                 "scripts/derive-declaration-validation-publication-study-preregistration",
                 "scripts/validate-declaration-validation-publication-study",
                 "tests/test_declaration_validation_publication_study.py",
@@ -305,6 +306,19 @@ def catalog() -> list[dict]:
             dependencies=["configuration:community-workflow", "script:artifact-system"],
             required=True,
             notes="Frozen publication-study preregistration, exact immutable predecessors, governing plan, and minimal integrity machinery.",
+        ),
+        node(
+            "research:declaration-validation-publication-study-authority-source-approval",
+            "report",
+            locator=files(
+                ".",
+                "results/research/declaration-validation-publication-study-authority-source-approval.json",
+                "results/research/declaration-validation-authority-source-approvals/publication-study-v2.json",
+                "config/declaration-validation-approved-authority-sources/publication-study-v2.json",
+            ),
+            dependencies=["research:declaration-validation-publication-study-source-discovery"],
+            required=True,
+            notes="Human-approved, claim-scoped authority-source successor; no catalog adjudication or sentinel execution.",
         ),
         node(
             "research:declaration-validation-publication-study-source-discovery",

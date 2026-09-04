@@ -1383,6 +1383,25 @@ prepared_external_action_drafts: 5
   until the retained source-to-claim mappings receive explicit human
   `APPROVE`, `REJECT`, or `DEFER` decisions.
 
+### Human Authority-Source Approval — 2026-09-04
+
+- The separately human-approved source decision is frozen against the exact
+  source-discovery result. It approves only
+  `CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP` for
+  `DECL.THEOREM.TYPE_PROP` from the exact v4.33 Lean Language Reference
+  `Manual/Defs.lean` bytes. The same source's header-before-body statement is
+  rejected for current-declaration visibility; all other source mappings are
+  deferred or rejected as recorded.
+- The immutable M7 pre-M8 authority registry remains byte-for-byte empty. Its
+  versioned successor
+  `ordinary-declaration-validation.approved-authority-sources.publication-study.v2`
+  contains only the claim-scoped manual source and cannot be extended by
+  catalog adjudication.
+- The next separately bounded activity is the fixed two-entry authority-process
+  sentinel. It has not begun. No catalog adjudication, denominator freeze,
+  baseline, synthesis, mutation, or checker campaign is authorized by the
+  approval decision alone.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1391,9 +1410,9 @@ prepared_external_action_drafts: 5
    to determine whether obligation-sensitive negative coverage adds measurable
    assurance over existing Lean kernel testing on the frozen declaration-
    validation slice. The mechanically derived 15-candidate cohort and bounded
-   authority-source discovery are frozen; preserve negative/null outcomes and
-   use the unchanged M10 eligibility and isolation contracts. Authority-source
-   approval is now the next separate human decision; no
+   authority-source discovery and human source approval are frozen; preserve
+   negative/null outcomes and use the unchanged M10 eligibility and isolation
+   contracts. The fixed two-entry authority-process sentinel is next; no
    catalog adjudication, denominator execution, Arena baseline measurement,
    synthesis, mutation, or checker campaign may cross that gate implicitly.
 

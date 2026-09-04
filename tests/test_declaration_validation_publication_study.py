@@ -35,9 +35,12 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         cls.preregistration = validator.load_json(validator.PREREGISTRATION_PATH)
         cls.discovery = validator.load_json(validator.DISCOVERY_PATH)
         cls.schema = validator.load_json(validator.SCHEMA_PATH)
+        cls.approval = validator.load_json(validator.APPROVAL_PATH)
+        cls.approval_schema = validator.load_json(validator.APPROVAL_SCHEMA_PATH)
 
     def test_schema_is_valid_draft_2020_12(self):
         jsonschema.Draft202012Validator.check_schema(self.schema)
+        jsonschema.Draft202012Validator.check_schema(self.approval_schema)
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
@@ -46,6 +49,29 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         self.assertEqual(validator.validate_discovery(), [])
         self.assertEqual(self.discovery["execution_summary"]["closure_status"], "CLOSED")
         self.assertEqual(len(self.discovery["sources"]), 18)
+
+    def test_actual_human_authority_source_approval_validates(self):
+        self.assertEqual(validator.validate_approval(), [])
+        self.assertEqual(
+            self.approval["source_decisions"][2]["claim_decisions"][0]["disposition"],
+            "APPROVE",
+        )
+        self.assertEqual(
+            self.approval["source_decisions"][2]["claim_decisions"][1]["disposition"],
+            "REJECT",
+        )
+
+    def test_approval_cannot_widen_theorem_prop_source_scope(self):
+        changed = copy.deepcopy(self.approval)
+        changed["source_decisions"][2]["claim_decisions"][1]["disposition"] = "APPROVE"
+        errors = validator.validate_approval(changed)
+        self.assertTrue(any("HEADER_BEFORE_BODY" in item or "scope is not exactly" in item for item in errors))
+
+    def test_approval_cannot_change_discovered_source_bytes(self):
+        changed = copy.deepcopy(self.approval)
+        changed["source_decisions"][2]["source_content_sha256"] = "0" * 64
+        errors = validator.validate_approval(changed)
+        self.assertTrue(any("content binding differs" in item for item in errors))
 
     def test_discovery_query_removal_is_rejected(self):
         changed = copy.deepcopy(self.discovery)

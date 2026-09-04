@@ -25,6 +25,12 @@ SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study.schem
 PREREGISTRATION_PATH = ROOT / "config" / "declaration-validation-publication-study-preregistration.json"
 DISCOVERY_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-source-discovery.json"
 REVIEW_PACKET_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_PUBLICATION_STUDY_SOURCE_APPROVAL_REVIEW.md"
+APPROVAL_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-authority-source-approval.schema.json"
+APPROVAL_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-authority-source-approval.json"
+APPROVED_SUCCESSOR_PATH = ROOT / "config" / "declaration-validation-approved-authority-sources" / "publication-study-v2.json"
+COMPATIBILITY_DECISION_PATH = ROOT / "results" / "research" / "declaration-validation-authority-source-approvals" / "publication-study-v2.json"
+APPROVED_SUCCESSOR_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-approved-authority-sources-successor.schema.json"
+COMPATIBILITY_DECISION_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-authority-source-approval-decision.schema.json"
 DERIVER_PATH = ROOT / "scripts" / "derive-declaration-validation-publication-study-preregistration"
 HISTORICAL_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-historical"
 ERRATUM_VALIDATOR_PATH = ROOT / "scripts" / "validate-declaration-validation-milestone-10-protocol-erratum"
@@ -93,8 +99,8 @@ def safe_relative_path(value: str) -> bool:
     return not path.is_absolute() and ".." not in path.parts and ":" not in value
 
 
-def schema_errors(instance: Any, label: str) -> list[str]:
-    schema = load_json(SCHEMA_PATH)
+def schema_errors(instance: Any, label: str, schema_path: Path = SCHEMA_PATH) -> list[str]:
+    schema = load_json(schema_path)
     validator = jsonschema.Draft202012Validator(
         schema, format_checker=jsonschema.FormatChecker()
     )
@@ -280,6 +286,151 @@ def validate_preregistration(
     return errors
 
 
+def validate_approval(
+    document: dict[str, Any] | None = None,
+    discovery: dict[str, Any] | None = None,
+) -> list[str]:
+    """Validate the human review outcome without adjudicating any catalog entry."""
+
+    document = load_json(APPROVAL_PATH) if document is None else document
+    discovery = load_json(DISCOVERY_PATH) if discovery is None else discovery
+    errors = schema_errors(
+        document, "publication-study authority-source approval", APPROVAL_SCHEMA_PATH
+    )
+    if errors:
+        return errors
+
+    _, binding_errors = binding_bytes(
+        document["frozen_discovery_binding"], label="frozen source discovery"
+    )
+    errors.extend(binding_errors)
+    if document["frozen_discovery_binding"]["path"] != str(DISCOVERY_PATH.relative_to(ROOT)):
+        errors.append("authority-source approval discovery path is not canonical")
+    if document["frozen_discovery_binding"]["sha256"] != sha256_bytes(DISCOVERY_PATH.read_bytes()):
+        errors.append("authority-source approval does not bind the exact live frozen discovery")
+
+    predecessor = document["predecessor_authority_source_registry"]
+    expected_predecessor = {
+        "path": "config/declaration-validation-approved-authority-sources.json",
+        "sha256": sha256_bytes(APPROVED_SOURCES_PATH.read_bytes()),
+        "registry_id": "ordinary-declaration-validation.approved-authority-sources.m7.v1",
+        "sequence": 1,
+    }
+    if predecessor != expected_predecessor:
+        errors.append("authority-source approval does not bind the immutable empty M7 registry")
+
+    source_decisions = document["source_decisions"]
+    sources = discovery["sources"]
+    if len(source_decisions) != len(sources):
+        errors.append("authority-source approval does not decide every frozen discovered source")
+    for index, source in enumerate(sources):
+        if index >= len(source_decisions):
+            break
+        decision = source_decisions[index]
+        source_id = source["source_candidate_id"]
+        if decision["source_candidate_id"] != source_id:
+            errors.append(f"source decision {index}: source identity differs from frozen discovery")
+        if decision["frozen_source_index"] != index:
+            errors.append(f"{source_id}: source decision does not preserve frozen discovery order")
+        if decision["source_content_sha256"] != source["retrieved_content_sha256"]:
+            errors.append(f"{source_id}: approval source content binding differs from frozen discovery")
+        if decision["disposition"] != source["recommended_disposition"]:
+            errors.append(f"{source_id}: human source disposition differs from the approved recommendation")
+        claims = source["claims_extracted"]
+        claim_decisions = decision["claim_decisions"]
+        if len(claim_decisions) != len(claims):
+            errors.append(f"{source_id}: claim-decision inventory differs from frozen discovery")
+            continue
+        for claim, claim_decision in zip(claims, claim_decisions):
+            claim_id = claim["claim_id"]
+            if claim_decision["claim_id"] != claim_id:
+                errors.append(f"{source_id}: claim decision identity differs from frozen discovery")
+            if claim_decision["applicable_candidate_ids"] != claim["applicable_candidate_ids"]:
+                errors.append(f"{claim_id}: claim decision changes frozen candidate mapping")
+            expected_disposition = source["recommended_disposition"]
+            if source_id == "SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS":
+                expected_disposition = {
+                    "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP": "APPROVE",
+                    "CLAIM.SOURCE.MANUAL.DEFS.HEADER_BEFORE_BODY": "REJECT",
+                }.get(claim_id, "REJECT")
+            if claim_decision["disposition"] != expected_disposition:
+                errors.append(f"{claim_id}: human claim disposition differs from the approved recommendation")
+
+    approved_claims = [
+        claim
+        for decision in source_decisions
+        for claim in decision["claim_decisions"]
+        if claim["disposition"] == "APPROVE"
+    ]
+    if approved_claims != [{
+        "claim_id": "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP",
+        "applicable_candidate_ids": ["DECL.THEOREM.TYPE_PROP"],
+        "disposition": "APPROVE",
+    }]:
+        errors.append("authority-source approval scope is not exactly the theorem-Prop claim")
+
+    compatibility_binding = document["compatibility_approval_decision_binding"]
+    if compatibility_binding["path"] != str(COMPATIBILITY_DECISION_PATH.relative_to(ROOT)):
+        errors.append("compatibility approval decision path is not canonical")
+    elif not COMPATIBILITY_DECISION_PATH.is_file() or compatibility_binding["sha256"] != sha256_bytes(COMPATIBILITY_DECISION_PATH.read_bytes()):
+        errors.append("compatibility approval decision binding is missing or stale")
+    else:
+        compatibility = load_json(COMPATIBILITY_DECISION_PATH)
+        errors.extend(schema_errors(
+            compatibility,
+            "compatibility authority-source approval decision",
+            COMPATIBILITY_DECISION_SCHEMA_PATH,
+        ))
+        if compatibility.get("decision_id") != compatibility_binding["decision_id"]:
+            errors.append("compatibility approval decision identity disagrees with binding")
+        if compatibility.get("predecessor_registry") != expected_predecessor:
+            errors.append("compatibility approval decision does not bind the immutable empty M7 registry")
+        if compatibility.get("approved_source_ids") != [
+            "APPROVED.NORMDOC.LEAN_REFERENCE_MANUAL.V4_33_THEOREM_PROP"
+        ]:
+            errors.append("compatibility approval decision approves an unexpected source identity")
+
+    registry_binding = document["approved_registry_successor_binding"]
+    if (
+        registry_binding["registry_id"]
+        != "ordinary-declaration-validation.approved-authority-sources.publication-study.v2"
+        or registry_binding["sequence"] != 2
+    ):
+        errors.append("approved authority-source successor identity is not the frozen publication-study v2 registry")
+    if registry_binding["path"] != str(APPROVED_SUCCESSOR_PATH.relative_to(ROOT)):
+        errors.append("approved authority-source successor path is not canonical")
+    elif not APPROVED_SUCCESSOR_PATH.is_file() or registry_binding["sha256"] != sha256_bytes(APPROVED_SUCCESSOR_PATH.read_bytes()):
+        errors.append("approved authority-source successor binding is missing or stale")
+    else:
+        catalog = load_module("publication_study_catalog", ROOT / "scripts" / "validate-declaration-validation-catalog")
+        registry = load_json(APPROVED_SUCCESSOR_PATH)
+        errors.extend(
+            "approved authority-source successor: " + error
+            for error in catalog.validate_approved_authority_source_registry(
+                registry,
+                load_json(APPROVED_SUCCESSOR_SCHEMA_PATH),
+                APPROVED_SUCCESSOR_PATH,
+                check_generated=True,
+            )
+        )
+        expected_source = {
+            "id": "APPROVED.NORMDOC.LEAN_REFERENCE_MANUAL.V4_33_THEOREM_PROP",
+            "document_kind": "AUTHORITATIVE_DOCUMENTATION",
+            "version_or_edition": "Lean Language Reference Manual source snapshot at 02d0d61af6d344da5215eb2eb1efba0ca30ede68, bound by leanprover/lean4:v4.33.0",
+            "stable_url_or_doi": "https://github.com/leanprover/reference-manual/blob/02d0d61af6d344da5215eb2eb1efba0ca30ede68/Manual/Defs.lean",
+            "authenticated_content_sha256": "46c08588bd4b9c62fc53dba65dcd39cd9a09a0ad2a37d9731f1aaeb24cb0e024",
+            "approval_decision": "DEC.AUTHORITY_SOURCE.PUBLICATION_STUDY.V2",
+        }
+        if registry.get("normative_documentation") != [expected_source] or registry.get("mechanized_results"):
+            errors.append("approved authority-source successor scope is not exactly the theorem-Prop manual source")
+    status_text = RESEARCH_STATUS_PATH.read_text(encoding="utf-8")
+    if "### Human Authority-Source Approval — 2026-09-04" not in status_text:
+        errors.append("durable research status does not record the human authority-source approval")
+    if "The next separately bounded activity is the fixed two-entry authority-process" not in status_text:
+        errors.append("durable research status does not preserve the sentinel stop boundary")
+    return errors
+
+
 def validate_discovery(
     document: dict[str, Any] | None = None,
     preregistration: dict[str, Any] | None = None,
@@ -436,12 +587,17 @@ def validate_discovery(
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-discovery", action="store_true")
+    parser.add_argument("--require-approval", action="store_true")
     args = parser.parse_args()
     errors = validate_preregistration()
     if DISCOVERY_PATH.exists():
         errors.extend(validate_discovery())
     elif args.require_discovery:
         errors.append("frozen source-discovery result is missing")
+    if APPROVAL_PATH.exists():
+        errors.extend(validate_approval())
+    elif args.require_approval:
+        errors.append("human authority-source approval result is missing")
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -452,7 +608,8 @@ def main() -> int:
     print(
         "Declaration-validation publication-study validation passed: "
         f"{len(candidates)} preregistered candidates, {len(holdouts)} readiness holdouts, "
-        f"source discovery {'frozen' if DISCOVERY_PATH.exists() else 'not yet executed'}."
+        f"source discovery {'frozen' if DISCOVERY_PATH.exists() else 'not yet executed'}; "
+        f"authority-source approval {'frozen' if APPROVAL_PATH.exists() else 'not yet recorded'}."
     )
     return 0
 

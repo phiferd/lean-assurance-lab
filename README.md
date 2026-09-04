@@ -66,10 +66,13 @@ candidates, eight empirical scenarios, and `Reach(x) AND NOT P(x)` contract are
 resolved through its historical attestation and the separately frozen theorem-
 control erratum, not mutable current files. The active study has preregistered
 the mechanically derived 15-candidate technically ready cohort, kept four
-readiness holdouts outside it, and frozen bounded authority-source discovery.
-Its 18 retained source candidates now await a separate human approval decision.
-No baseline, synthesis, mutation, checker, or catalog-adjudication campaign is
-authorized before that gate.
+readiness holdouts outside it, frozen bounded authority-source discovery, and
+recorded the separate human approval outcome. Only the exact v4.33 theorem-Prop
+manual claim is approved; all other candidate mappings remain deferred or
+rejected in their recorded evidentiary roles. The approved-source successor is
+frozen, while the required two-entry authority-process sentinel remains
+unstarted. No baseline, synthesis, mutation, checker, or catalog-adjudication
+campaign is authorized before that next gate.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

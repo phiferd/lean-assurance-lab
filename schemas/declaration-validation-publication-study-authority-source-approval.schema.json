@@ -1,0 +1,94 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-authority-source-approval.schema.json",
+  "title": "Declaration-Validation Publication Study Authority-Source Approval",
+  "description": "A human-approved, content-bound successor to frozen source discovery. It records source and claim dispositions without adjudicating catalog entries.",
+  "type": "object",
+  "required": [
+    "schema_version", "artifact_type", "approval_id", "recorded_at", "status",
+    "approving_authority", "frozen_discovery_binding",
+    "predecessor_authority_source_registry", "compatibility_approval_decision_binding",
+    "approved_registry_successor_binding", "source_decisions", "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "artifact_type": {"const": "PUBLICATION_STUDY_AUTHORITY_SOURCE_APPROVAL"},
+    "approval_id": {"const": "ordinary-declaration-validation.obligation-coverage-study.authority-source-approval.v1"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "FROZEN_AFTER_HUMAN_AUTHORITY_SOURCE_REVIEW"},
+    "approving_authority": {"const": "HUMAN_USER_AUTHORIZATION"},
+    "frozen_discovery_binding": {"$ref": "#/$defs/gitBinding"},
+    "predecessor_authority_source_registry": {"$ref": "#/$defs/registryBinding"},
+    "compatibility_approval_decision_binding": {"$ref": "#/$defs/decisionBinding"},
+    "approved_registry_successor_binding": {"$ref": "#/$defs/registryBinding"},
+    "source_decisions": {
+      "type": "array", "minItems": 18, "maxItems": 18,
+      "items": {"$ref": "#/$defs/sourceDecision"}
+    },
+    "nonclaims": {
+      "type": "array", "minItems": 5, "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObject": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "semanticId": {"type": "string", "pattern": "^(DECL|EXPR)\\.[A-Z0-9_.]+$"},
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObject"},
+        "git_blob": {"$ref": "#/$defs/gitObject"}
+      },
+      "additionalProperties": false
+    },
+    "registryBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "registry_id", "sequence"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "registry_id": {"type": "string", "pattern": "^ordinary-declaration-validation\\.approved-authority-sources\\.[a-z0-9.-]+\\.v[0-9]+$"},
+        "sequence": {"type": "integer", "minimum": 1}
+      },
+      "additionalProperties": false
+    },
+    "decisionBinding": {
+      "type": "object",
+      "required": ["decision_id", "path", "sha256"],
+      "properties": {
+        "decision_id": {"type": "string", "pattern": "^DEC\\.AUTHORITY_SOURCE\\.[A-Z0-9_.]+$"},
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "claimDecision": {
+      "type": "object",
+      "required": ["claim_id", "applicable_candidate_ids", "disposition"],
+      "properties": {
+        "claim_id": {"type": "string", "pattern": "^CLAIM\\.SOURCE\\.[A-Z0-9_.]+$"},
+        "applicable_candidate_ids": {"type": "array", "uniqueItems": true, "items": {"$ref": "#/$defs/semanticId"}},
+        "disposition": {"enum": ["APPROVE", "REJECT", "DEFER"]}
+      },
+      "additionalProperties": false
+    },
+    "sourceDecision": {
+      "type": "object",
+      "required": ["source_candidate_id", "frozen_source_index", "source_content_sha256", "disposition", "claim_decisions", "rationale"],
+      "properties": {
+        "source_candidate_id": {"type": "string", "pattern": "^SOURCE\\.CANDIDATE\\.[A-Z0-9_.]+$"},
+        "frozen_source_index": {"type": "integer", "minimum": 0},
+        "source_content_sha256": {"$ref": "#/$defs/sha256"},
+        "disposition": {"enum": ["APPROVE", "REJECT", "DEFER"]},
+        "claim_decisions": {"type": "array", "items": {"$ref": "#/$defs/claimDecision"}},
+        "rationale": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    }
+  }
+}
