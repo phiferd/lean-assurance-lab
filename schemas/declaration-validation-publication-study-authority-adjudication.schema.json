@@ -1,0 +1,188 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-authority-adjudication.schema.json",
+  "title": "Declaration-Validation Publication Study Gate-6 Complete Authority Adjudication",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "adjudication_id",
+    "artifact_type",
+    "recorded_at",
+    "status",
+    "bindings",
+    "decisions",
+    "counts",
+    "m10_erratum_preserved_by_gate5_binding",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "adjudication_id": {"const": "ordinary-declaration-validation.obligation-coverage-study.gate-6-authority-adjudication.v1"},
+    "artifact_type": {"const": "PUBLICATION_STUDY_GATE_6_COMPLETE_AUTHORITY_ADJUDICATION"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "COMPLETE_VALIDATED_AUTHORITY_DISPOSITIONS"},
+    "bindings": {
+      "type": "object",
+      "required": [
+        "preregistration",
+        "authority_source_approval",
+        "approved_authority_source_registry",
+        "gate5_sentinel",
+        "gate5_catalog",
+        "gate5_evidence_lock",
+        "authority_rules",
+        "current_catalog",
+        "current_evidence_lock"
+      ],
+      "properties": {
+        "preregistration": {"$ref": "#/$defs/gitBinding"},
+        "authority_source_approval": {"$ref": "#/$defs/gitBinding"},
+        "approved_authority_source_registry": {"$ref": "#/$defs/gitBinding"},
+        "gate5_sentinel": {"$ref": "#/$defs/gitBinding"},
+        "gate5_catalog": {"$ref": "#/$defs/gitBinding"},
+        "gate5_evidence_lock": {"$ref": "#/$defs/gitBinding"},
+        "authority_rules": {"$ref": "#/$defs/fileBinding"},
+        "current_catalog": {"$ref": "#/$defs/fileBinding"},
+        "current_evidence_lock": {"$ref": "#/$defs/fileBinding"}
+      },
+      "additionalProperties": false
+    },
+    "decisions": {
+      "type": "array",
+      "minItems": 15,
+      "maxItems": 15,
+      "items": {"$ref": "#/$defs/decision"}
+    },
+    "counts": {
+      "type": "object",
+      "required": ["total_candidates", "newly_adjudicated_at_gate6", "established", "provisional", "unresolved"],
+      "properties": {
+        "total_candidates": {"const": 15},
+        "newly_adjudicated_at_gate6": {"const": 13},
+        "established": {"const": 1},
+        "provisional": {"const": 14},
+        "unresolved": {"const": 0}
+      },
+      "additionalProperties": false
+    },
+    "m10_erratum_preserved_by_gate5_binding": {"const": true},
+    "scope_closure": {
+      "type": "object",
+      "required": [
+        "candidate_set_changed",
+        "new_source_discovery_performed",
+        "source_approvals_changed",
+        "denominator_derived",
+        "baseline_or_coverage_started",
+        "synthesis_or_checker_work_started"
+      ],
+      "properties": {
+        "candidate_set_changed": {"const": false},
+        "new_source_discovery_performed": {"const": false},
+        "source_approvals_changed": {"const": false},
+        "denominator_derived": {"const": false},
+        "baseline_or_coverage_started": {"const": false},
+        "synthesis_or_checker_work_started": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 5,
+      "uniqueItems": true,
+      "items": {"type": "string", "minLength": 1}
+    }
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "gitObject": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/gitObject"},
+        "git_blob": {"$ref": "#/$defs/gitObject"}
+      },
+      "additionalProperties": false
+    },
+    "candidateId": {
+      "enum": [
+        "DECL.ENV.NAME_FRESHNESS",
+        "DECL.UNIVERSE.PARAM_UNIQUENESS",
+        "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+        "DECL.UNIVERSE.PARAM_OWNERSHIP",
+        "EXPR.CONST.UNIVERSE_ARITY",
+        "DECL.TYPE.SORT_VALUED",
+        "DECL.VALUE.TYPE_MATCH",
+        "DECL.THEOREM.TYPE_PROP",
+        "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+        "EXPR.BINDER.DOMAIN_SORT",
+        "EXPR.PI.CODOMAIN_SORT",
+        "EXPR.LET.ANNOTATION_SORT",
+        "EXPR.LET.VALUE_TYPE_MATCH",
+        "EXPR.APP.FUNCTION_TYPE",
+        "EXPR.APP.ARGUMENT_TYPE_MATCH"
+      ]
+    },
+    "claimId": {"type": "string", "pattern": "^CLAIM(\\.[A-Z0-9_]+)+$"},
+    "evidenceId": {"type": "string", "pattern": "^EVID(\\.[A-Z0-9_]+)+$"},
+    "decisionCounts": {
+      "type": "object",
+      "required": ["approve", "defer", "reject"],
+      "properties": {
+        "approve": {"type": "integer", "minimum": 0},
+        "defer": {"type": "integer", "minimum": 0},
+        "reject": {"type": "integer", "minimum": 0}
+      },
+      "additionalProperties": false
+    },
+    "decision": {
+      "type": "object",
+      "required": [
+        "entry_id",
+        "stage",
+        "identity_statement_sha256",
+        "semantic_denotation_sha256",
+        "gate4_claim_decision_counts",
+        "approved_claim_ids",
+        "authority_status",
+        "qualification_rule",
+        "authority_evidence_ids"
+      ],
+      "properties": {
+        "entry_id": {"$ref": "#/$defs/candidateId"},
+        "stage": {"enum": ["GATE_5_SENTINEL_PRESERVED", "GATE_6_REMAINING_COHORT"]},
+        "identity_statement_sha256": {"$ref": "#/$defs/sha256"},
+        "semantic_denotation_sha256": {"$ref": "#/$defs/sha256"},
+        "gate4_claim_decision_counts": {"$ref": "#/$defs/decisionCounts"},
+        "approved_claim_ids": {
+          "type": "array",
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/claimId"}
+        },
+        "authority_status": {"enum": ["ESTABLISHED", "PROVISIONAL", "UNRESOLVED"]},
+        "qualification_rule": {"enum": ["AUTH.NORMATIVE.ESTABLISHED.V1", "AUTH.NORMATIVE.PROVISIONAL.V1", "AUTH.NORMATIVE.UNRESOLVED.V1"]},
+        "authority_evidence_ids": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {"$ref": "#/$defs/evidenceId"}
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}

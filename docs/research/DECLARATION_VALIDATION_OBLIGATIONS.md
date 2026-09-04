@@ -3,13 +3,13 @@
 > Generated file. Edit `config/declaration-validation-catalog.json`, not this report.
 
 - Catalog ID: `ordinary-declaration-validation.catalog.v1`
-- Catalog status: `PUBLICATION_STUDY_SENTINEL_VALIDATED`
-- Catalog SHA-256: `1806b1cbb7984697bf3998d7295c965caa6491b0e5a48743580dcff060544974`
+- Catalog status: `PUBLICATION_STUDY_COMPLETE_ADJUDICATION`
+- Catalog SHA-256: `33992703c088bde0994fafe1050931b93c4273f36cee26d9fafab33005ff1a35`
 - Catalog entries: 27
 - Existing evidence/identity dispositions: 41
 
-This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the Gate-5 catalog successor. Only the two fixed sentinels have received publication-study authority adjudication.
-The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.publication-study-sentinel.v1` at sequence 7.
+This report is a deterministic view of the canonical machine-readable catalog. Its catalog hash is checked mechanically. This is the Gate-6 catalog successor. All fifteen preregistered candidates have validated authority dispositions, before denominator derivation.
+The bound evidence-lock successor is `ordinary-declaration-validation.evidence-lock.publication-study-complete-adjudication.v1` at sequence 8.
 The separately frozen approved-authority-source registry contains 1 normative documents and 0 mechanized sources. Content addressing alone is not treated as authentication of external origin.
 Stable IDs bind the complete canonical semantic projection; observer outcomes and editorial prose remain non-identity research metadata.
 
@@ -23,8 +23,8 @@ Stable IDs bind the complete canonical semantic projection; observer outcomes an
 | characterization_model | config/declaration-validation-characterization-model.json | `6633f1408a174e23136f79ba47d191fd09b4ccfa9e51dceb35b78490692c0ff7` |
 | discovery_closure | config/declaration-validation-discovery-closure.json | `d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731` |
 | entry_schema | schemas/declaration-validation-characterization-entry.schema.json | `33f39e95a6d7c55088f10d4eb9dffea82eff83d77397a4ec5bb688e7a2a57ce6` |
-| evidence_lock | config/declaration-validation-evidence-locks/publication-study-sentinel.json | `eee625dd03118662e213e518007848c5536d6b344b5f5bf29be1d993c50bfdae` |
-| evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `4c82a9a68b3f7a90447615ddf79829ab4b247a61f17e6c04dbc86733bec52358` |
+| evidence_lock | config/declaration-validation-evidence-locks/publication-study-complete-adjudication.json | `f6047eb4ffb16d10f33c1511ac0cc577250add5c0ce35ee1dd57f68c1098e025` |
+| evidence_lock_schema | schemas/declaration-validation-evidence-lock.schema.json | `f67ca8a0842d94d8bca3a104983b98339486f7319da8d69f3ec6bb3759d3d042` |
 | identity_registry | config/declaration-validation-identity-registry.json | `68e8770c808518170a9a22766f8e2ea79d3d2bdf0b643101026d6ec55a69f230` |
 | semantic_target | config/declaration-validation-target.json | `4fb46d5b3e078e54cf2731540329f6b14e5b9fa62d25284f78a93db1a27aa5fa` |
 | source_lock | config/declaration-validation-source-lock.json | `2ac3836b854392bc8302d78ed38d6a0f85b046fff8d16657a3a20af09d2fc88b` |
@@ -209,24 +209,24 @@ Every frozen existing-evidence record mechanically associated with an active sta
 
 ## Unresolved Items
 
-- `DECL.ENV.CURRENT_DECL_NOT_VISIBLE` — Which preapproved normative source, if any, qualifies this environment-visibility candidate?; A preapproved normative document or mechanized result supporting this modeled environment requirement is absent from the frozen authority-source registry.
-- `DECL.ENV.NAME_FRESHNESS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `DECL.EXPR.NO_LOOSE_BOUND_VARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
+- `DECL.ENV.CURRENT_DECL_NOT_VISIBLE` — Which preapproved normative source, if any, qualifies this environment-visibility candidate?; A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen current-declaration non-visibility obligation is absent from the Gate-4 approved registry.
+- `DECL.ENV.NAME_FRESHNESS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `DECL.EXPR.NO_LOOSE_BOUND_VARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
 - `DECL.TYPE.NO_FREE_VARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
 - `DECL.TYPE.NO_METAVARS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `DECL.TYPE.SORT_VALUED` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
+- `DECL.TYPE.SORT_VALUED` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
 - `DECL.TYPE.WELL_FORMED` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `DECL.UNIVERSE.PARAM_OWNERSHIP` — Which preapproved normative source, if any, qualifies universe-parameter ownership for the modeled judgment?; A preapproved normative document or mechanized result supporting declaration universe-parameter ownership is absent from the frozen authority-source registry.
-- `DECL.UNIVERSE.PARAM_UNIQUENESS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `DECL.VALUE.TYPE_MATCH` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
+- `DECL.UNIVERSE.PARAM_OWNERSHIP` — Which preapproved normative source, if any, qualifies universe-parameter ownership for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen declaration universe-parameter ownership obligation is absent from the Gate-4 approved registry.
+- `DECL.UNIVERSE.PARAM_UNIQUENESS` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `DECL.VALUE.TYPE_MATCH` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
 - `DECL.VALUE.WELL_FORMED` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.APP.ARGUMENT_TYPE_MATCH` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.APP.FUNCTION_TYPE` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.BINDER.DOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.CONST.UNIVERSE_ARITY` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
-- `EXPR.LET.ANNOTATION_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
+- `EXPR.APP.ARGUMENT_TYPE_MATCH` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `EXPR.APP.FUNCTION_TYPE` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `EXPR.BINDER.DOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `EXPR.CONST.UNIVERSE_ARITY` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
+- `EXPR.LET.ANNOTATION_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
 - `EXPR.LET.VALUE_TYPE_MATCH` — Which preapproved normative source, if any, qualifies local let value/type compatibility for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen local let value/type compatibility obligation is absent from the Gate-4 approved registry.
-- `EXPR.PI.CODOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.
+- `EXPR.PI.CODOMAIN_SORT` — Which preapproved normative source, if any, qualifies this exact candidate for the modeled judgment?; A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.
 - `SCENARIO.AXIOM.ADMISSION_POLICY` — What content-bound result bytes establish the complete pinned-observer vector for this exact scenario?; Content-bound structured result evidence has not established concrete outcomes for all applicable pinned observer profiles.
 - `SCENARIO.AXIOM.SAFETY_FLAG` — What is the content-bound outcome of the pinned Nanoda observer for this exact scenario, and how should parser, reconstruction, and trust-policy effects be separated?; A content-bound result for the pinned Nanoda observer and a reviewed cross-layer reconstruction interpretation are not present in this pilot.
 - `SCENARIO.DECL.SAFETY_FLAG_RECONSTRUCTION` — What content-bound result bytes establish the complete pinned-observer vector for this exact scenario?; Content-bound structured result evidence has not established concrete outcomes for all applicable pinned observer profiles.
@@ -353,8 +353,8 @@ Every frozen existing-evidence record mechanically associated with an active sta
 - Statement: The ordinary declaration currently being validated is absent from constant lookup in the modeled pre-declaration environment.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The selected witness and source mapping show a bounded implementation boundary, while normative support remains absent from the frozen approved registry.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this modeled environment requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 preserves the bounded implementation observation but finds every frozen Gate-4 source mapping for this exact candidate deferred or rejected under the repaired claim-scope architecture.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen current-declaration non-visibility obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -383,8 +383,8 @@ Evidence:
 - Statement: The name of an ordinary declaration being added is absent from the modeled pre-declaration environment.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -413,8 +413,8 @@ Evidence:
 - Statement: Every bound-variable occurrence in a declaration type or value is in scope at its occurrence.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -532,8 +532,8 @@ Evidence:
 - Statement: The inferred type of a declaration's declared type is definitionally equal to a sort.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -592,8 +592,8 @@ Evidence:
 - Statement: Every universe parameter referenced by a declaration type or value is owned by that declaration's universe-parameter list.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The selected witness and implementation mapping identify an observed boundary, but qualified normative support is absent from the frozen authority-source registry.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting declaration universe-parameter ownership is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 preserves the observed implementation boundary but finds every frozen Gate-4 source mapping for this exact candidate deferred or rejected under the repaired claim-scope architecture.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting the exact frozen declaration universe-parameter ownership obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -622,8 +622,8 @@ Evidence:
 - Statement: The declaration universe-parameter list contains no repeated parameter name.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -653,8 +653,8 @@ Evidence:
 - Statement: The inferred type of a declaration value is definitionally equal to the declaration's declared type.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -713,8 +713,8 @@ Evidence:
 - Statement: The inferred type of an application argument is definitionally equal to the function domain expected at that application.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -742,8 +742,8 @@ Evidence:
 - Statement: The inferred type of an application function is definitionally equal to a dependent-function type.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -771,8 +771,8 @@ Evidence:
 - Statement: The type annotation of a lambda or dependent-function binder has an inferred type definitionally equal to a sort.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -800,8 +800,8 @@ Evidence:
 - Statement: A constant expression supplies exactly one universe argument for each universe parameter of the referenced constant.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -830,8 +830,8 @@ Evidence:
 - Statement: A local let annotation has an inferred type definitionally equal to a sort.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -889,8 +889,8 @@ Evidence:
 - Statement: The codomain of a dependent-function expression has an inferred type definitionally equal to a sort in the extended local context.
 - Layers: `KERNEL_DECLARATION_VALIDITY`
 - Authority: `PROVISIONAL` via `AUTH.NORMATIVE.PROVISIONAL.V1`
-- Authority basis: The frozen discovery surface supports retaining this bounded candidate, but the pre-M8 approved-authority-source registry contains no qualifying normative source.
-- Unmet authority requirements: `A preapproved normative document or mechanized result supporting this exact modeled declaration-validity requirement is absent from the frozen authority-source registry.`
+- Authority basis: Gate 6 evaluates every frozen Gate-4 mapping for this exact candidate under the repaired claim-scope architecture; none is approved as normative support.
+- Unmet authority requirements: `A claim-scoped, preapproved normative document or mechanized result supporting this exact frozen obligation is absent from the Gate-4 approved registry.`
 - Active evidence assumptions: `—`
 - Lifecycle: `ACTIVE`
 - Soundness relevance: `NOT_ASSESSED`
@@ -1169,10 +1169,10 @@ Evidence:
 
 ## Milestone Boundary
 
-- Gate 5 adjudicates only DECL.THEOREM.TYPE_PROP and EXPR.LET.VALUE_TYPE_MATCH; the remaining thirteen preregistered candidates have not been adjudicated.
-- The theorem authority assignment uses only the exact claim-scoped Gate-4 approval and does not promote implementation behavior, checker agreement, Arena behavior, project prose, or LLM judgment.
-- The let-value candidate remains PROVISIONAL because no approved source is scoped to its exact frozen denotation.
+- Gate 6 records complete authority dispositions for the exact fifteen-candidate preregistered cohort: one ESTABLISHED, fourteen PROVISIONAL, and zero UNRESOLVED.
+- The theorem authority assignment remains limited to the exact claim-scoped Gate-4 approval; no other candidate has an approved normative source mapping.
+- Deferred and rejected Gate-4 source decisions remain limiting or contradictory provenance and are not promoted to normative support.
 - All stable semantic IDs and denotations remain unchanged, and all soundness relevance remains NOT_ASSESSED.
-- No denominator, baseline, coverage, synthesis, mutation, or checker work has begun.
+- No Gate-7 denominator, baseline, coverage, synthesis, mutation, or checker work has begun.
 
-Next milestone: `PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION`
+Next milestone: `PUBLICATION_STUDY_GATE_7_DENOMINATOR_FREEZE`

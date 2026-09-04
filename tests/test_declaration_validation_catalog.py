@@ -345,8 +345,8 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
             jsonschema.Draft202012Validator.check_schema(schema)
         self.assertEqual(self.errors(enforce_milestone_boundary=True), [])
 
-    def test_gate_5_catalog_successor_is_authoritative_and_complete(self):
-        self.assertEqual(self.catalog["status"], "PUBLICATION_STUDY_SENTINEL_VALIDATED")
+    def test_gate_6_catalog_successor_is_authoritative_and_complete(self):
+        self.assertEqual(self.catalog["status"], "PUBLICATION_STUDY_COMPLETE_ADJUDICATION")
         self.assertEqual(len(self.catalog["entries"]), 27)
         self.assertEqual(len(self.catalog["identity_dispositions"]), 30)
         self.assertEqual(len(self.catalog["site_dispositions"]), 149)
@@ -357,13 +357,14 @@ class DeclarationValidationCatalogTests(unittest.TestCase):
         self.assertTrue(self.catalog["completion_boundary"]["inventory_populated"])
         self.assertEqual(
             self.catalog["completion_boundary"]["next_milestone"],
-            "PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION",
+            "PUBLICATION_STUDY_GATE_7_DENOMINATOR_FREEZE",
         )
         authority_counts = {}
         for row in self.catalog["entries"]:
             status = row["characterization"]["authority"]["status"]
             authority_counts[status] = authority_counts.get(status, 0) + 1
         self.assertEqual(authority_counts, {"ESTABLISHED": 1, "PROVISIONAL": 26})
+        self.assertEqual(self.current_evidence_lock["sequence"], 8)
 
     def current_evidence_chain(self):
         errors, chain = module.validate_evidence_lock_chain(

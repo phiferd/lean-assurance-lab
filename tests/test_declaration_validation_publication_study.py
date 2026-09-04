@@ -39,14 +39,47 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         cls.approval_schema = validator.load_json(validator.APPROVAL_SCHEMA_PATH)
         cls.sentinel = validator.load_json(validator.SENTINEL_PATH)
         cls.sentinel_schema = validator.load_json(validator.SENTINEL_SCHEMA_PATH)
+        cls.adjudication = validator.load_json(validator.ADJUDICATION_PATH)
+        cls.adjudication_schema = validator.load_json(validator.ADJUDICATION_SCHEMA_PATH)
         cls.catalog = validator.load_json(validator.CATALOG_PATH)
         cls.evidence_lock = validator.load_json(validator.SENTINEL_EVIDENCE_LOCK_PATH)
+        cls.current_evidence_lock = validator.load_json(
+            validator.ADJUDICATION_EVIDENCE_LOCK_PATH
+        )
         cls.registry = validator.load_json(validator.APPROVED_SUCCESSOR_PATH)
+        cls.gate5_catalog_bytes, catalog_errors = validator.binding_bytes(
+            cls.adjudication["bindings"]["gate5_catalog"],
+            label="test Gate-5 catalog",
+            require_live_match=False,
+        )
+        cls.gate5_lock_bytes, lock_errors = validator.binding_bytes(
+            cls.adjudication["bindings"]["gate5_evidence_lock"],
+            label="test Gate-5 evidence lock",
+            require_live_match=False,
+        )
+        schema_bytes, schema_error = validator.git_output(
+            ["show", f"{validator.GATE5_COMMIT}:schemas/declaration-validation-evidence-lock.schema.json"]
+        )
+        if catalog_errors or lock_errors or schema_error or schema_bytes is None:
+            raise AssertionError(catalog_errors + lock_errors + [schema_error or "missing schema"])
+        cls.gate5_evidence_schema = json.loads(schema_bytes)
+        cls.gate5_evidence_schema_sha256 = validator.sha256_bytes(schema_bytes)
+
+    def historical_sentinel_errors(self, document):
+        return validator.validate_sentinel(
+            document,
+            check_generated=False,
+            catalog_bytes=self.gate5_catalog_bytes,
+            evidence_lock_bytes=self.gate5_lock_bytes,
+            evidence_lock_schema_document=self.gate5_evidence_schema,
+            evidence_lock_schema_sha256_override=self.gate5_evidence_schema_sha256,
+        )
 
     def test_schema_is_valid_draft_2020_12(self):
         jsonschema.Draft202012Validator.check_schema(self.schema)
         jsonschema.Draft202012Validator.check_schema(self.approval_schema)
         jsonschema.Draft202012Validator.check_schema(self.sentinel_schema)
+        jsonschema.Draft202012Validator.check_schema(self.adjudication_schema)
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
@@ -68,7 +101,7 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         )
 
     def test_actual_gate_5_sentinel_validates(self):
-        self.assertEqual(validator.validate_sentinel(check_generated=False), [])
+        self.assertEqual(self.historical_sentinel_errors(self.sentinel), [])
         self.assertEqual(
             [row["entry_id"] for row in self.sentinel["sentinel_decisions"]],
             validator.EXPECTED_SENTINELS,
@@ -100,10 +133,11 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         let_value["characterization"]["evidence"].append(forged)
         errors = validator.claim_scope_errors(
             changed,
-            self.evidence_lock,
+            self.current_evidence_lock,
             self.approval,
             self.registry,
             self.sentinel,
+            predecessor_locks=[self.evidence_lock],
         )
         self.assertTrue(any("outside the exact human-approved claim scope" in item for item in errors))
 
@@ -112,7 +146,7 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         changed["claim_scope_guard"]["candidate_ids"] = [
             "EXPR.LET.VALUE_TYPE_MATCH"
         ]
-        errors = validator.validate_sentinel(changed, check_generated=False)
+        errors = self.historical_sentinel_errors(changed)
         self.assertTrue(any("schema error" in item or "broadens" in item for item in errors))
 
     def test_gate_5_binds_the_m10_theorem_control_erratum(self):
@@ -120,7 +154,7 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         changed["m10_erratum_application"]["matched_positive_control_rule"] = (
             "Use the definition-form artifact."
         )
-        errors = validator.validate_sentinel(changed, check_generated=False)
+        errors = self.historical_sentinel_errors(changed)
         self.assertTrue(any("schema error" in item or "theorem-control correction" in item for item in errors))
 
     def test_gate_5_scope_closure_stops_before_remaining_work(self):
@@ -131,6 +165,54 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         self.assertFalse(closure["synthesis_started"])
         self.assertFalse(closure["mutation_or_checker_campaign_started"])
         self.assertFalse(closure["new_source_discovery_performed"])
+
+    def test_actual_gate_6_complete_adjudication_validates(self):
+        self.assertEqual(validator.validate_complete_adjudication(check_generated=False), [])
+        self.assertEqual(
+            self.adjudication["counts"],
+            {
+                "total_candidates": 15,
+                "newly_adjudicated_at_gate6": 13,
+                "established": 1,
+                "provisional": 14,
+                "unresolved": 0,
+            },
+        )
+        self.assertEqual(
+            sum(row["stage"] == "GATE_6_REMAINING_COHORT" for row in self.adjudication["decisions"]),
+            13,
+        )
+
+    def test_gate_6_rejects_candidate_reordering(self):
+        changed = copy.deepcopy(self.adjudication)
+        changed["decisions"][0], changed["decisions"][1] = (
+            changed["decisions"][1],
+            changed["decisions"][0],
+        )
+        errors = validator.validate_complete_adjudication(changed, check_generated=False)
+        self.assertTrue(any("preregistered cohort order" in item for item in errors))
+
+    def test_gate_6_reproduces_every_gate_4_claim_disposition(self):
+        changed = copy.deepcopy(self.adjudication)
+        changed["decisions"][0]["gate4_claim_decision_counts"]["defer"] = 1
+        errors = validator.validate_complete_adjudication(changed, check_generated=False)
+        self.assertTrue(any("claim-decision counts" in item for item in errors))
+
+    def test_gate_6_cannot_promote_an_unsupported_candidate(self):
+        changed = copy.deepcopy(self.adjudication)
+        changed["decisions"][0]["authority_status"] = "ESTABLISHED"
+        changed["decisions"][0]["qualification_rule"] = "AUTH.NORMATIVE.ESTABLISHED.V1"
+        errors = validator.validate_complete_adjudication(changed, check_generated=False)
+        self.assertTrue(any("differs from the catalog" in item for item in errors))
+
+    def test_gate_6_scope_closure_stops_before_denominator(self):
+        closure = self.adjudication["scope_closure"]
+        self.assertFalse(closure["candidate_set_changed"])
+        self.assertFalse(closure["new_source_discovery_performed"])
+        self.assertFalse(closure["source_approvals_changed"])
+        self.assertFalse(closure["denominator_derived"])
+        self.assertFalse(closure["baseline_or_coverage_started"])
+        self.assertFalse(closure["synthesis_or_checker_work_started"])
 
     def test_approval_cannot_widen_theorem_prop_source_scope(self):
         changed = copy.deepcopy(self.approval)

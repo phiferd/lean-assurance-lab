@@ -1425,6 +1425,26 @@ prepared_external_action_drafts: 5
   bounded activity is Gate 6 complete adjudication under the repaired
   claim-scope architecture.
 
+### Gate-6 Complete Authority Adjudication — 2026-09-04
+
+- All 15 preregistered candidates now have durable validated authority
+  dispositions. `DECL.THEOREM.TYPE_PROP` remains the sole `ESTABLISHED`
+  obligation. The other 14 candidates are `PROVISIONAL`; no candidate is
+  `UNRESOLVED`.
+- The 13 Gate-6 decisions reproduce every applicable frozen Gate-4 claim
+  disposition under the Gate-5 claim-scope repair. All relevant mappings are
+  `DEFER` or `REJECT`, so none supplies qualifying normative support. The exact
+  candidate order, identity hashes, semantic-denotation hashes, evidence
+  references, qualification rules, and disposition counts are mechanically
+  checked.
+- The Gate-5 catalog and evidence lock are preserved through exact Git-blob
+  bindings at commit `f1161457c9b1eb817f020021d8d39e8d95a6497d`; both
+  sentinel entry records remain unchanged. The sequence-8 evidence-lock
+  successor adds no evidence and inherits only the claim-scoped theorem source.
+- Gate 6 does not derive the denominator or claim tier. No source discovery,
+  source approval change, baseline, coverage, synthesis, mutation, or checker
+  work occurred. Gate 7 denominator freeze is the next bounded activity.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1438,9 +1458,11 @@ prepared_external_action_drafts: 5
    contracts. The fixed two-entry authority-process sentinel has passed after
    repairing claim-scope enforcement: `DECL.THEOREM.TYPE_PROP` is
    `ESTABLISHED`, while `EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`.
-   Gate 6 adjudication of the remaining 13 candidates is next; no denominator
-   execution, Arena baseline measurement, synthesis, mutation, or checker
-   campaign may cross that gate implicitly.
+   Gate 6 complete adjudication has validated the exact cohort with one
+   `ESTABLISHED`, fourteen `PROVISIONAL`, and zero `UNRESOLVED` dispositions.
+   Gate 7 mechanical denominator derivation and freeze is next; no Arena
+   baseline measurement, synthesis, mutation, or checker campaign may cross
+   that gate implicitly.
 
 ### Waiting
 

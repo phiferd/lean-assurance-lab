@@ -207,10 +207,10 @@ class DeclarationValidationHistoricalTransitionTests(unittest.TestCase):
         )
         self.assertTrue(history.validate_m9_attestation(wrong_completion))
 
-    def test_actual_gate_5_catalog_leaves_m8_history_valid(self):
+    def test_actual_gate_6_catalog_leaves_m8_history_valid(self):
         attestation = history.load_json(history.M8_ATTESTATION_PATH)
         current = history.load_json(ROOT / "config" / "declaration-validation-catalog.json")
-        self.assertEqual(current["status"], "PUBLICATION_STUDY_SENTINEL_VALIDATED")
+        self.assertEqual(current["status"], "PUBLICATION_STUDY_COMPLETE_ADJUDICATION")
         self.assertNotEqual(
             hashlib.sha256(
                 (json.dumps(current, indent=2, sort_keys=True) + "\n").encode("utf-8")

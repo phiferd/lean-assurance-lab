@@ -1930,6 +1930,7 @@ def validate_identity_dispositions(
         "MILESTONE_9_PRE_REVIEW_FREEZE",
         "MILESTONE_9_REVIEWED_FREEZE",
         "PUBLICATION_STUDY_SENTINEL_VALIDATED",
+        "PUBLICATION_STUDY_COMPLETE_ADJUDICATION",
     }:
         return errors
     if set(dispositions) != set(identities):
@@ -1989,6 +1990,7 @@ def validate_artifacts(
     check_generated: bool = True,
     enforce_milestone_boundary: bool = True,
     allow_test_approved_sources: bool = False,
+    evidence_lock_schema_sha256_override: str | None = None,
 ) -> list[str]:
     resolved_catalog_schema = copy.deepcopy(catalog_schema)
     resolved_catalog_schema["$defs"]["catalogEntry"]["properties"]["characterization"] = entry_schema
@@ -2006,13 +2008,24 @@ def validate_artifacts(
     }:
         errors.append("catalog binding names are not exact")
     else:
+        live_binding_names = {
+            name: path
+            for name, path in EXPECTED_BINDINGS.items()
+            if name != "evidence_lock_schema" or evidence_lock_schema_sha256_override is None
+        }
         errors.extend(
             binding_errors(
-                {name: bindings[name] for name in EXPECTED_BINDINGS},
-                EXPECTED_BINDINGS,
+                {name: bindings[name] for name in live_binding_names},
+                live_binding_names,
                 "catalog",
             )
         )
+        if evidence_lock_schema_sha256_override is not None:
+            schema_binding = bindings["evidence_lock_schema"]
+            if ROOT / schema_binding["path"] != EVIDENCE_LOCK_SCHEMA_PATH:
+                errors.append("catalog evidence_lock_schema path is not canonical")
+            elif schema_binding["sha256"] != evidence_lock_schema_sha256_override:
+                errors.append("catalog evidence_lock_schema hash differs from historical schema bytes")
         evidence_binding = bindings["evidence_lock"]
         if not safe_relative_path(evidence_binding["path"]) or not evidence_binding[
             "path"
@@ -2062,6 +2075,7 @@ def validate_artifacts(
         # timestamps and proves ordering from the immutable Gate-4 Git binding
         # in the publication-study validator instead.
         "PUBLICATION_STUDY_SENTINEL_VALIDATED",
+        "PUBLICATION_STUDY_COMPLETE_ADJUDICATION",
     } and not allow_test_approved_sources:
         catalog_time = parse_recorded_at(catalog["recorded_at"], "catalog", errors)
         registry_time = parse_recorded_at(approved_authority_sources["recorded_at"], "authority-source registry", errors)
@@ -2080,6 +2094,7 @@ def validate_artifacts(
         "MILESTONE_9_PRE_REVIEW_FREEZE": "MILESTONE_9_PRE_REVIEW_EVIDENCE_FREEZE",
         "MILESTONE_9_REVIEWED_FREEZE": "MILESTONE_9_REVIEWED_EVIDENCE_FREEZE",
         "PUBLICATION_STUDY_SENTINEL_VALIDATED": "PUBLICATION_STUDY_SENTINEL_EVIDENCE_FREEZE",
+        "PUBLICATION_STUDY_COMPLETE_ADJUDICATION": "PUBLICATION_STUDY_COMPLETE_ADJUDICATION_EVIDENCE_FREEZE",
     }[catalog["status"]]
     if evidence_lock["status"] != expected_evidence_status:
         errors.append("catalog status and evidence-lock successor status disagree")
@@ -2224,6 +2239,18 @@ def validate_artifacts(
             errors.append("publication-study sentinel must bind exact evidence-lock sequence 7")
         if boundary["next_milestone"] != "PUBLICATION_STUDY_GATE_6_COMPLETE_ADJUDICATION":
             errors.append("publication-study sentinel does not stop at Gate 6 adjudication")
+
+    if (
+        enforce_milestone_boundary
+        and catalog["status"] == "PUBLICATION_STUDY_COMPLETE_ADJUDICATION"
+    ):
+        boundary = catalog["completion_boundary"]
+        if not boundary["inventory_populated"] or not boundary["authority_assignments_created"]:
+            errors.append("publication-study complete adjudication cannot discard the completed inventory")
+        if evidence_lock["sequence"] != 8:
+            errors.append("publication-study complete adjudication must bind exact evidence-lock sequence 8")
+        if boundary["next_milestone"] != "PUBLICATION_STUDY_GATE_7_DENOMINATOR_FREEZE":
+            errors.append("publication-study complete adjudication does not stop at Gate 7 denominator freeze")
 
     if check_generated:
         report_renderer = load_module("declaration_m7_report_renderer", REPORT_RENDERER_PATH)
