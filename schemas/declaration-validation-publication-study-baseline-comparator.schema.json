@@ -1,0 +1,244 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-baseline-comparator.schema.json",
+  "title": "Declaration-Validation Publication Study Gate-8 Baseline and Comparator Freeze",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "result_id",
+    "artifact_type",
+    "recorded_at",
+    "status",
+    "bindings",
+    "denominator",
+    "baseline_results",
+    "baseline_summary",
+    "comparator_results",
+    "gate9_target_transition",
+    "problems_discovered",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "result_id": {"const": "ordinary-declaration-validation.publication-study.gate-8-baseline-comparator.v1"},
+    "artifact_type": {"const": "PUBLICATION_STUDY_GATE_8_BASELINE_AND_COMPARATOR_FREEZE"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "BASELINE_AND_COMPARATORS_FROZEN_BEFORE_DIRECTED_SYNTHESIS"},
+    "bindings": {
+      "type": "object",
+      "required": ["gate7_denominator", "gate8_input_freeze", "manuscript"],
+      "properties": {
+        "gate7_denominator": {"$ref": "#/$defs/gitBinding"},
+        "gate8_input_freeze": {"$ref": "#/$defs/fileBinding"},
+        "manuscript": {"$ref": "#/$defs/fileBinding"}
+      },
+      "additionalProperties": false
+    },
+    "denominator": {
+      "type": "object",
+      "required": ["count", "entry_ids", "claim_tier"],
+      "properties": {
+        "count": {"const": 1},
+        "entry_ids": {"const": ["DECL.THEOREM.TYPE_PROP"]},
+        "claim_tier": {"const": "BOUNDED_PILOT"}
+      },
+      "additionalProperties": false
+    },
+    "baseline_results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {"$ref": "#/$defs/baselineResult"}
+    },
+    "baseline_summary": {
+      "type": "object",
+      "required": ["denominator_count", "isolated_covered_count", "coverage_percentage", "status_counts"],
+      "properties": {
+        "denominator_count": {"const": 1},
+        "isolated_covered_count": {"const": 0},
+        "coverage_percentage": {"const": 0.0},
+        "status_counts": {
+          "type": "object",
+          "required": ["ISOLATED_COVERED", "OBSERVED_NEGATIVE_NOT_ISOLATED", "REACH_OR_TARGET_VIOLATION_UNRESOLVED", "NO_EXISTING_NEGATIVE_CASE", "PIPELINE_NOT_REPRESENTABLE_AT_EXECUTION", "EXECUTION_UNRESOLVED"],
+          "properties": {
+            "ISOLATED_COVERED": {"const": 0},
+            "OBSERVED_NEGATIVE_NOT_ISOLATED": {"const": 1},
+            "REACH_OR_TARGET_VIOLATION_UNRESOLVED": {"const": 0},
+            "NO_EXISTING_NEGATIVE_CASE": {"const": 0},
+            "PIPELINE_NOT_REPRESENTABLE_AT_EXECUTION": {"const": 0},
+            "EXECUTION_UNRESOLVED": {"const": 0}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "comparator_results": {
+      "type": "array",
+      "minItems": 1,
+      "maxItems": 1,
+      "items": {"$ref": "#/$defs/comparatorResult"}
+    },
+    "gate9_target_transition": {
+      "type": "object",
+      "required": ["target_count", "entry_ids", "status", "uncovered_element", "strategy_frozen", "budget_frozen", "control_created_or_modified"],
+      "properties": {
+        "target_count": {"const": 1},
+        "entry_ids": {"const": ["DECL.THEOREM.TYPE_PROP"]},
+        "status": {"const": "TARGET_IDENTIFIED_GATE_9_PLAN_NOT_YET_FROZEN"},
+        "uncovered_element": {"const": "M10_ERRATUM_COMPLIANT_MATCHED_POSITIVE_CONTROL"},
+        "strategy_frozen": {"const": false},
+        "budget_frozen": {"const": false},
+        "control_created_or_modified": {"const": false}
+      },
+      "additionalProperties": false
+    },
+    "problems_discovered": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "required": ["id", "disposition", "effect"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "disposition": {"type": "string", "minLength": 1},
+          "effect": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "scope_closure": {
+      "type": "object",
+      "required": ["baseline_complete", "comparators_complete", "input_freeze_complete", "denominator_changed", "authority_dispositions_changed", "source_approvals_changed", "new_source_discovery_performed", "witness_or_control_created_or_modified", "directed_synthesis_started", "new_checker_campaign_started", "new_coverage_campaign_started", "new_mutation_campaign_started", "next_gate"],
+      "properties": {
+        "baseline_complete": {"const": true},
+        "comparators_complete": {"const": true},
+        "input_freeze_complete": {"const": true},
+        "denominator_changed": {"const": false},
+        "authority_dispositions_changed": {"const": false},
+        "source_approvals_changed": {"const": false},
+        "new_source_discovery_performed": {"const": false},
+        "witness_or_control_created_or_modified": {"const": false},
+        "directed_synthesis_started": {"const": false},
+        "new_checker_campaign_started": {"const": false},
+        "new_coverage_campaign_started": {"const": false},
+        "new_mutation_campaign_started": {"const": false},
+        "next_gate": {"const": "PUBLICATION_STUDY_GATE_9_SYNTHESIS_FREEZE"}
+      },
+      "additionalProperties": false
+    },
+    "nonclaims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/sha1"},
+        "git_blob": {"$ref": "#/$defs/sha1"}
+      },
+      "additionalProperties": false
+    },
+    "evidenceElement": {
+      "type": "object",
+      "required": ["element", "status", "basis", "evidence_refs"],
+      "properties": {
+        "element": {"enum": ["CONTENT_BOUND_NEGATIVE_ARTIFACT", "REACH_AND_APPLICABILITY", "TARGET_VIOLATION_NOT_P", "MATCHED_SAME_FAMILY_POSITIVE_CONTROL", "COMPETING_OBLIGATION_ANALYSIS", "AUTHORITY_SCOPED_EXPECTED_REJECTION", "CHECKER_REJECTION_ATTRIBUTION"]},
+        "status": {"enum": ["SATISFIED", "NOT_APPLICABLE", "UNRESOLVED"]},
+        "basis": {"type": "string", "minLength": 1},
+        "evidence_refs": {"type": "array", "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "competingObligation": {
+      "type": "object",
+      "required": ["entry_id", "status", "basis"],
+      "properties": {
+        "entry_id": {"type": "string", "minLength": 1},
+        "status": {"enum": ["SATISFIED", "NOT_APPLICABLE", "UNRESOLVED"]},
+        "basis": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "checkerAttribution": {
+      "type": "object",
+      "required": ["profile", "artifact", "pipeline_stage", "normalized_outcome", "evidence_ref"],
+      "properties": {
+        "profile": {"enum": ["official_importer", "nanoda", "lean4lean", "kiota"]},
+        "artifact": {"type": "string", "minLength": 1},
+        "pipeline_stage": {"enum": ["PARSE", "RECONSTRUCTION", "VALIDATION", "POLICY"]},
+        "normalized_outcome": {"enum": ["ACCEPT", "REJECT", "DECLINE", "CRASH", "TIMEOUT", "PARSE_ERROR", "UNKNOWN"]},
+        "evidence_ref": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "baselineResult": {
+      "type": "object",
+      "required": ["entry_id", "primary_status", "counts_as_isolated_coverage", "negative_artifacts", "evidence_elements", "competing_obligations", "checker_attribution", "matched_control_disposition", "classification_basis"],
+      "properties": {
+        "entry_id": {"const": "DECL.THEOREM.TYPE_PROP"},
+        "primary_status": {"const": "OBSERVED_NEGATIVE_NOT_ISOLATED"},
+        "counts_as_isolated_coverage": {"const": false},
+        "negative_artifacts": {
+          "type": "array",
+          "minItems": 2,
+          "maxItems": 2,
+          "items": {"type": "object", "required": ["case_id", "path", "sha256"], "properties": {"case_id": {"type": "string"}, "path": {"type": "string"}, "sha256": {"$ref": "#/$defs/sha256"}}, "additionalProperties": false}
+        },
+        "evidence_elements": {"type": "array", "minItems": 7, "maxItems": 7, "items": {"$ref": "#/$defs/evidenceElement"}},
+        "competing_obligations": {"type": "array", "minItems": 18, "maxItems": 18, "items": {"$ref": "#/$defs/competingObligation"}},
+        "checker_attribution": {"type": "array", "minItems": 4, "maxItems": 4, "items": {"$ref": "#/$defs/checkerAttribution"}},
+        "matched_control_disposition": {
+          "type": "object",
+          "required": ["required_control", "known_definition_artifact_role", "status", "erratum_applied"],
+          "properties": {
+            "required_control": {"const": "Prop-valued theorem in the same construction family with a matching valid proof"},
+            "known_definition_artifact_role": {"const": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL"},
+            "status": {"const": "MISSING_FROM_FROZEN_PRIOR_KNOWLEDGE"},
+            "erratum_applied": {"const": true}
+          },
+          "additionalProperties": false
+        },
+        "classification_basis": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "comparatorObservation": {
+      "type": "object",
+      "required": ["classification", "evidence_refs", "limitations"],
+      "properties": {
+        "classification": {"type": "string", "minLength": 1},
+        "evidence_refs": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}},
+        "limitations": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+      },
+      "additionalProperties": false
+    },
+    "comparatorResult": {
+      "type": "object",
+      "required": ["entry_id", "source_coverage", "semantic_mutation", "existing_case_link", "cross_tabulation"],
+      "properties": {
+        "entry_id": {"const": "DECL.THEOREM.TYPE_PROP"},
+        "source_coverage": {"allOf": [{"$ref": "#/$defs/comparatorObservation"}, {"properties": {"classification": {"const": "SOURCE_REACHED"}}}]},
+        "semantic_mutation": {"allOf": [{"$ref": "#/$defs/comparatorObservation"}, {"properties": {"classification": {"const": "MUTANT_KILLED"}}}]},
+        "existing_case_link": {"allOf": [{"$ref": "#/$defs/comparatorObservation"}, {"properties": {"classification": {"const": "EXISTING_CASE_LINKED"}}}]},
+        "cross_tabulation": {"const": "OBSERVED_NEGATIVE_NOT_ISOLATED | SOURCE_REACHED | MUTANT_KILLED | EXISTING_CASE_LINKED"}
+      },
+      "additionalProperties": false
+    }
+  }
+}

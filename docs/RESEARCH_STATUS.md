@@ -1469,6 +1469,31 @@ prepared_external_action_drafts: 5
   action work began. Gate 8 baseline and comparator freeze is the next bounded
   activity.
 
+### Gate-8 Baseline and Comparator Freeze — 2026-09-04
+
+- The exact existing Arena and repository corpus inventories, exporter and
+  reconstruction pipeline identities, four observer profiles and binaries,
+  build recipes, test-to-artifact mappings, resource policy, classification
+  tooling, and prior-knowledge register are frozen against the Gate-7 content
+  commit. No checker, coverage, mutation, or synthesis execution was performed.
+- The sole denominator entry, `DECL.THEOREM.TYPE_PROP`, is classified
+  `OBSERVED_NEGATIVE_NOT_ISOLATED`. The exact existing non-Prop theorem case is
+  reachable, violates the established obligation, has complete competing-rule
+  analysis and exact four-checker rejection attribution, but the frozen inputs
+  contain no Prop-valued same-family theorem control satisfying M10 erratum 1.
+  Existing isolated-negative coverage is therefore 0/1 (0.0%).
+- Its separate contextual comparator classifications are `SOURCE_REACHED`,
+  `MUTANT_KILLED`, and `EXISTING_CASE_LINKED`. These labels do not establish
+  semantic coverage. The source-reach claim is limited to the exact unchanged
+  theorem artifact and reciprocal Nanoda line map because the legacy aggregate
+  coverage snapshot names an older Arena revision.
+- The ignored raw coverage maps are content-bound in the input freeze and the
+  relevant mapping is excerpted. Retaining or reproducibly regenerating those
+  local files remains necessary for later full-payload verification.
+- `DECL.THEOREM.TYPE_PROP` is the sole Gate-9 target because the required
+  matched theorem control is missing. Gate 9 has not begun: no strategy or
+  budget is frozen and no witness or control was created or modified.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1484,11 +1509,14 @@ prepared_external_action_drafts: 5
    `ESTABLISHED`, while `EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`.
    Gate 6 complete adjudication has validated the exact cohort with one
    `ESTABLISHED`, fourteen `PROVISIONAL`, and zero `UNRESOLVED` dispositions.
-   Gate 7 has mechanically frozen the strict denominator as
+   Gate 7 mechanically froze the strict denominator as
    `DECL.THEOREM.TYPE_PROP` alone and selected the `BOUNDED_PILOT` tier from
-   one represented semantic family. Gate 8 baseline and comparator freeze is
-   next; no synthesis, mutation, new checker campaign, or later gate may cross
-   that boundary implicitly.
+   one represented semantic family. Gate 8 freezes an
+   `OBSERVED_NEGATIVE_NOT_ISOLATED` baseline (0/1 isolated) together with the
+   separate `SOURCE_REACHED`, `MUTANT_KILLED`, and `EXISTING_CASE_LINKED`
+   contextual indicators. `DECL.THEOREM.TYPE_PROP` is the sole Gate-9 target.
+   Gate 9 synthesis freeze is next; no synthesis, mutation, new coverage or
+   checker campaign, or later gate may cross that boundary implicitly.
 
 ### Waiting
 

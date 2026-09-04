@@ -74,14 +74,22 @@ adjudication for the exact 15-candidate cohort: `DECL.THEOREM.TYPE_PROP` is the
 sole `ESTABLISHED` obligation, while the other 14 remain `PROVISIONAL`; no
 candidate is `UNRESOLVED`. The Gate-5 repair continues to enforce the exact
 human-approved source/claim/candidate scope. Gate 7 denominator derivation is
-now frozen from exact Gate-6 Git inputs under the unchanged M10 algorithm. Its
+frozen from exact Gate-6 Git inputs under the unchanged M10 algorithm. Its
 strict primary denominator contains only `DECL.THEOREM.TYPE_PROP`, representing
 one preregistered semantic family, so the mechanically selected claim tier is
 `BOUNDED_PILOT`. The other 14 candidates remain separately labeled
 `PROVISIONAL`. The required presentation-only manuscript skeleton was committed
-before derivation and carries no semantic authority. Gate 8 baseline and
-comparator work has not begun; neither has synthesis, mutation, or a checker
-campaign.
+before derivation and carries no semantic authority. Gate 8 now freezes the
+exact existing corpus, observer, build, configuration, mapping, resource, and
+prior-knowledge inputs. Its one baseline row is
+`OBSERVED_NEGATIVE_NOT_ISOLATED`: the existing non-Prop theorem negative is
+content-bound and attributable, but no M10-erratum-compliant same-family theorem
+control exists in the frozen prior inputs. Existing isolated coverage is
+therefore 0/1 (0.0%). The separate coarse indicators are `SOURCE_REACHED`,
+`MUTANT_KILLED`, and `EXISTING_CASE_LINKED`; none is semantic coverage. The
+theorem obligation becomes the sole Gate-9 synthesis target, but no synthesis
+strategy or budget has been frozen and no witness, control, mutation, coverage,
+or checker campaign has begun.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

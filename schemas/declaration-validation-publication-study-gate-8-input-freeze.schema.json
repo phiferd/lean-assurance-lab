@@ -1,0 +1,280 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/declaration-validation-publication-study-gate-8-input-freeze.schema.json",
+  "title": "Declaration-Validation Publication Study Gate-8 Existing-Input Freeze",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "freeze_id",
+    "artifact_type",
+    "recorded_at",
+    "status",
+    "gate7_content_commit",
+    "git_inputs",
+    "materialized_corpora",
+    "arena_repository",
+    "pipeline_identities",
+    "observer_profiles",
+    "comparator_profiles",
+    "test_to_artifact_mappings",
+    "existing_coverage_excerpt",
+    "timeout_and_resource_policy",
+    "prior_knowledge_inventory",
+    "classification_tooling",
+    "known_provenance_issue",
+    "freeze_summary",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "freeze_id": {"const": "ordinary-declaration-validation.publication-study.gate-8-inputs.v1"},
+    "artifact_type": {"const": "PUBLICATION_STUDY_GATE_8_EXISTING_INPUT_FREEZE"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "status": {"const": "EXACT_EXISTING_INPUTS_FROZEN_WITHOUT_EXECUTION"},
+    "gate7_content_commit": {"const": "a01102e784e21ed4d7f906435704bb0dc8e982a0"},
+    "git_inputs": {
+      "type": "object",
+      "minProperties": 18,
+      "additionalProperties": {"$ref": "#/$defs/gitBinding"}
+    },
+    "materialized_corpora": {
+      "type": "array",
+      "minItems": 2,
+      "maxItems": 2,
+      "items": {"$ref": "#/$defs/corpusInventory"}
+    },
+    "arena_repository": {
+      "type": "object",
+      "required": ["revision", "tutorial_source", "checker_definitions"],
+      "properties": {
+        "revision": {"$ref": "#/$defs/sha1"},
+        "tutorial_source": {"$ref": "#/$defs/externalGitBinding"},
+        "checker_definitions": {
+          "type": "array",
+          "minItems": 4,
+          "maxItems": 4,
+          "items": {"$ref": "#/$defs/externalGitBinding"}
+        }
+      },
+      "additionalProperties": false
+    },
+    "pipeline_identities": {
+      "type": "object",
+      "required": ["logical_target", "artifact_producer", "export_contract", "normalization"],
+      "properties": {
+        "logical_target": {"type": "object"},
+        "artifact_producer": {"type": "object"},
+        "export_contract": {"type": "object"},
+        "normalization": {
+          "type": "object",
+          "required": ["script", "controlled_outcomes"],
+          "properties": {
+            "script": {"$ref": "#/$defs/fileBinding"},
+            "controlled_outcomes": {"const": ["ACCEPT", "REJECT", "DECLINE", "CRASH"]}
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "observer_profiles": {
+      "type": "array",
+      "minItems": 4,
+      "maxItems": 4,
+      "items": {
+        "type": "object",
+        "required": ["observer", "observer_id", "configuration", "configuration_sha256", "entrypoint_source_file_id", "lineage_group", "binary", "build_recipe_sources"],
+        "properties": {
+          "observer": {"enum": ["OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"]},
+          "observer_id": {"type": "string", "minLength": 1},
+          "configuration": {"type": "object"},
+          "configuration_sha256": {"$ref": "#/$defs/sha256"},
+          "entrypoint_source_file_id": {"type": "string", "minLength": 1},
+          "lineage_group": {"type": "string", "minLength": 1},
+          "binary": {"$ref": "#/$defs/fileBinding"},
+          "build_recipe_sources": {"type": "array", "minItems": 3, "items": {"type": "object"}}
+        },
+        "additionalProperties": false
+      }
+    },
+    "comparator_profiles": {
+      "type": "object",
+      "required": ["nanoda_source_coverage_one_thread", "nanoda_theorem_prop_mutant"],
+      "properties": {
+        "nanoda_source_coverage_one_thread": {"type": "object"},
+        "nanoda_theorem_prop_mutant": {"type": "object"}
+      },
+      "additionalProperties": false
+    },
+    "test_to_artifact_mappings": {
+      "type": "array",
+      "minItems": 3,
+      "maxItems": 3,
+      "items": {
+        "type": "object",
+        "required": ["case_id", "artifact_path", "artifact_sha256", "expected_role"],
+        "properties": {
+          "case_id": {"type": "string", "minLength": 1},
+          "artifact_path": {"type": "string", "minLength": 1},
+          "artifact_sha256": {"$ref": "#/$defs/sha256"},
+          "origin": {"type": "string", "minLength": 1},
+          "expected_role": {"type": "string", "minLength": 1}
+        },
+        "additionalProperties": false
+      }
+    },
+    "existing_coverage_excerpt": {
+      "type": "object",
+      "required": ["line_to_tests_binding", "test_to_lines_binding", "source_location", "covering_test_count", "covering_tests", "theorem_case_lines"],
+      "properties": {
+        "line_to_tests_binding": {"$ref": "#/$defs/fileBinding"},
+        "test_to_lines_binding": {"$ref": "#/$defs/fileBinding"},
+        "source_location": {"const": "src/tc.rs:175"},
+        "covering_test_count": {"type": "integer", "minimum": 1},
+        "covering_tests": {"type": "array", "minItems": 1, "uniqueItems": true, "contains": {"const": "tutorial/012_nonPropThm"}},
+        "theorem_case_lines": {"type": "array", "minItems": 1, "uniqueItems": true, "contains": {"const": "src/tc.rs:175"}}
+      },
+      "additionalProperties": false
+    },
+    "timeout_and_resource_policy": {
+      "type": "object",
+      "required": ["gate8_new_checker_executions", "gate8_new_coverage_runs", "gate8_new_mutation_runs", "gate8_new_synthesis_attempts", "recorded_cross_validation_timeout_seconds", "kiota_profile_timeout_seconds", "classification_mode"],
+      "properties": {
+        "gate8_new_checker_executions": {"const": 0},
+        "gate8_new_coverage_runs": {"const": 0},
+        "gate8_new_mutation_runs": {"const": 0},
+        "gate8_new_synthesis_attempts": {"const": 0},
+        "recorded_cross_validation_timeout_seconds": {"const": 300.0},
+        "kiota_profile_timeout_seconds": {"const": 3600},
+        "classification_mode": {"const": "READ_AND_HASH_ALREADY_EXISTING_ARTIFACTS_ONLY"}
+      },
+      "additionalProperties": false
+    },
+    "prior_knowledge_inventory": {
+      "type": "array",
+      "minItems": 15,
+      "items": {
+        "type": "object",
+        "required": ["id", "binding", "role"],
+        "properties": {
+          "id": {"type": "string", "minLength": 1},
+          "binding": {"oneOf": [{"$ref": "#/$defs/gitBinding"}, {"$ref": "#/$defs/fileBinding"}]},
+          "role": {"const": "EXISTING_PRE_GATE_8_INPUT"}
+        },
+        "additionalProperties": false
+      }
+    },
+    "classification_tooling": {"type": "array", "minItems": 8, "maxItems": 8, "items": {"$ref": "#/$defs/fileBinding"}},
+    "known_provenance_issue": {
+      "type": "object",
+      "required": ["id", "legacy_snapshot_arena_revision", "legacy_reproducibility_arena_revision", "frozen_gate8_arena_revision", "disposition", "scope"],
+      "properties": {
+        "id": {"const": "LEGACY_COVERAGE_SNAPSHOT_ARENA_REVISION_MISMATCH"},
+        "legacy_snapshot_arena_revision": {"$ref": "#/$defs/sha1"},
+        "legacy_reproducibility_arena_revision": {"$ref": "#/$defs/sha1"},
+        "frozen_gate8_arena_revision": {"$ref": "#/$defs/sha1"},
+        "disposition": {"const": "PRESERVED_AS_LIMITATION_NOT_REWRITTEN"},
+        "scope": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "freeze_summary": {
+      "type": "object",
+      "required": ["arena_materialized_file_count", "lab_corpus_file_count", "observer_profile_count", "prior_knowledge_item_count", "classification_tool_count"],
+      "properties": {
+        "arena_materialized_file_count": {"type": "integer", "minimum": 1},
+        "lab_corpus_file_count": {"type": "integer", "minimum": 1},
+        "observer_profile_count": {"const": 4},
+        "prior_knowledge_item_count": {"type": "integer", "minimum": 15},
+        "classification_tool_count": {"const": 8}
+      },
+      "additionalProperties": false
+    },
+    "scope_closure": {"$ref": "#/$defs/scopeClosure"},
+    "nonclaims": {"type": "array", "minItems": 5, "uniqueItems": true, "items": {"type": "string", "minLength": 1}}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "sha1": {"type": "string", "pattern": "^[0-9a-f]{40}$"},
+    "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"},
+    "fileBinding": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"}
+      },
+      "additionalProperties": false
+    },
+    "gitBinding": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256", "git_commit", "git_blob"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_commit": {"$ref": "#/$defs/sha1"},
+        "git_blob": {"$ref": "#/$defs/sha1"}
+      },
+      "additionalProperties": false
+    },
+    "externalGitBinding": {
+      "type": "object",
+      "required": ["repository_path", "repository_revision", "path", "bytes", "sha256", "git_blob"],
+      "properties": {
+        "repository_path": {"const": "external/lean-kernel-arena"},
+        "repository_revision": {"$ref": "#/$defs/sha1"},
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 1},
+        "sha256": {"$ref": "#/$defs/sha256"},
+        "git_blob": {"$ref": "#/$defs/sha1"}
+      },
+      "additionalProperties": false
+    },
+    "corpusInventory": {
+      "type": "object",
+      "required": ["root", "include", "exclude", "file_count", "total_bytes", "file_set_sha256", "files"],
+      "properties": {
+        "root": {"enum": ["external/lean-kernel-arena/_build/tests", "corpus"]},
+        "include": {"const": ["**/*.ndjson"]},
+        "exclude": {"const": []},
+        "file_count": {"type": "integer", "minimum": 1},
+        "total_bytes": {"type": "integer", "minimum": 1},
+        "file_set_sha256": {"$ref": "#/$defs/sha256"},
+        "files": {
+          "type": "array",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["identity", "path", "bytes", "sha256"],
+            "properties": {
+              "identity": {"type": "string", "minLength": 1},
+              "path": {"type": "string", "pattern": "\\.ndjson$"},
+              "bytes": {"type": "integer", "minimum": 1},
+              "sha256": {"$ref": "#/$defs/sha256"}
+            },
+            "additionalProperties": false
+          }
+        }
+      },
+      "additionalProperties": false
+    },
+    "scopeClosure": {
+      "type": "object",
+      "required": ["new_source_discovery_performed", "source_approvals_changed", "authority_dispositions_changed", "witness_or_control_created_or_modified", "checker_campaign_started", "coverage_campaign_started", "mutation_campaign_started", "synthesis_started"],
+      "properties": {
+        "new_source_discovery_performed": {"const": false},
+        "source_approvals_changed": {"const": false},
+        "authority_dispositions_changed": {"const": false},
+        "witness_or_control_created_or_modified": {"const": false},
+        "checker_campaign_started": {"const": false},
+        "coverage_campaign_started": {"const": false},
+        "mutation_campaign_started": {"const": false},
+        "synthesis_started": {"const": false}
+      },
+      "additionalProperties": false
+    }
+  }
+}

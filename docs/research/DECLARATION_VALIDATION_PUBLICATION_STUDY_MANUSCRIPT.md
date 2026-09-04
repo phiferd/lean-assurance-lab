@@ -6,8 +6,11 @@
 > constitution, the authorized research frontier, the publication-study plan,
 > and their content-bound canonical artifacts.
 
-This pre-execution skeleton preserves the preregistered structure. It contains
-no new source discovery, authority decision, experiment, or result.
+This living skeleton preserves the preregistered structure. Gate 8 records one
+baseline classification and its coarse comparators from already-existing,
+content-bound evidence. It contains no new source discovery, authority
+decision, witness, control, checker execution, coverage collection, mutation
+campaign, or directed synthesis.
 
 ## 1. Problem and Motivation
 
@@ -85,14 +88,16 @@ and bounded-exhaustion outcomes remain valid results.
 
 | Obligation | Existing isolated-negative coverage | Source-line indicator | Mutation indicator | Evidence |
 |---|---|---|---|---|
+| `DECL.THEOREM.TYPE_PROP` | `OBSERVED_NEGATIVE_NOT_ISOLATED` | `SOURCE_REACHED` | `MUTANT_KILLED` | `EXISTING_CASE_LINKED`; missing M10-erratum-compliant matched theorem control |
 
 ### Directed Synthesis Results
 
 | Obligation | Strategy tier | Attempts | Isolated success | Control | Competing-obligation closure | Evidence |
 |---|---|---|---|---|---|---|
 
-Both primary tables are intentionally empty until their respective gates are
-authorized, executed, durably recorded, and validated.
+The baseline table is populated only from the canonical Gate-8 result.
+Synthesis remains empty until Gate 9 freezes its target-specific strategy,
+control transformation, prior inputs, and budget.
 
 ## 8. Threats to Validity
 
@@ -105,8 +110,12 @@ scope rather than changing denominator membership.
 
 ## 9. Results
 
-Reserved for schema-backed gate results. No primary experimental result is
-reported in this skeleton.
+The one-entry frozen denominator has zero existing isolated-negative cases:
+`DECL.THEOREM.TYPE_PROP` is `OBSERVED_NEGATIVE_NOT_ISOLATED`. Existing evidence
+shows the relevant Nanoda source location was reached, the mapped theorem-Prop
+mutant was killed, and an Arena case was linked. These are contextual
+indicators. The known definition-form artifact is auxiliary only and cannot
+serve as the required matched same-family theorem control under M10 erratum 1.
 
 ## 10. Ecosystem Consequences
 

@@ -1,0 +1,392 @@
+#!/usr/bin/env python3
+"""Freeze the already-existing Gate-8 corpus and execution inputs.
+
+This script inventories and hashes existing material only.  It does not run an
+observer, collect coverage, execute a mutant, synthesize a case, or select a
+baseline/comparator disposition.
+"""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from datetime import datetime, timezone
+from pathlib import Path
+from typing import Any
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT_PATH = (
+    ROOT
+    / "results"
+    / "research"
+    / "declaration-validation-publication-study-gate-8-input-freeze.json"
+)
+GATE7_COMMIT = "a01102e784e21ed4d7f906435704bb0dc8e982a0"
+ARENA_REVISION = "37f7525b732808a49b746dc6999d53c3717db124"
+
+GIT_INPUTS = {
+    "gate7_denominator": "results/research/declaration-validation-publication-study-denominator.json",
+    "gate6_catalog": "config/declaration-validation-catalog.json",
+    "semantic_target": "config/declaration-validation-target.json",
+    "source_lock": "config/declaration-validation-source-lock.json",
+    "validator_catalog": "config/validators.json",
+    "legacy_reproducibility_configuration": "config/reproducibility.json",
+    "gate7_artifact_graph": "results/artifacts/graph.json",
+    "legacy_coverage_identity_snapshot": "results/manifests/coverage-nanoda.json",
+    "m6_nonprop_candidate": "corpus/transfer/milestone-6/nonprop-theorem.ndjson",
+    "m6_definition_auxiliary_control": "corpus/transfer/milestone-6/nonprop-definition-control.ndjson",
+    "m6_nonprop_cross_validation": "results/cross-validation/m6-nonprop-theorem/results.json",
+    "m6_nonprop_expected_outcome": "results/expected-outcomes/m6-nonprop-theorem.json",
+    "nanoda_nonprop_observation": "results/investigations/nanoda-core-declaration-typing/nonprop-theorem-nanoda.json",
+    "nanoda_mutation_spec": "mutations/nanoda-0001.json",
+    "nanoda_mutation_schedule": "results/mutants/nanoda-0001/schedule.json",
+    "nanoda_mutation_comparison_full": "results/mutants/nanoda-0001/comparison.json",
+    "nanoda_mutation_comparison_theorem": "results/mutants/nanoda-0001/comparison-tutorial_012_nonPropThm.json",
+    "nanoda_reach_infection": "results/research/reach-infect/nanoda-0001.json",
+    "nanoda_parallel_reproduction": "results/investigations/nanoda-parallel-coverage-gap/reproduction.json",
+}
+
+LOCAL_INPUTS = {
+    "coverage_manifest": "results/coverage/nanoda/manifest.json",
+    "coverage_build_manifest": "results/coverage/nanoda/build-manifest.json",
+    "coverage_configuration": "results/coverage/nanoda/config.json",
+    "coverage_collection_state": "results/coverage/nanoda/collection-state.json",
+    "coverage_line_to_tests": "results/coverage/nanoda/line-to-tests.json",
+    "coverage_test_to_lines": "results/coverage/nanoda/test-to-lines.json",
+}
+
+CLASSIFICATION_TOOLING = [
+    "scripts/freeze-declaration-validation-publication-study-gate-8-inputs",
+    "scripts/normalize-arena-results",
+    "scripts/cross-validate",
+    "lib/cross_validation.py",
+    "schemas/declaration-validation-publication-study-gate-8-input-freeze.schema.json",
+    "schemas/declaration-validation-publication-study-baseline-comparator.schema.json",
+    "scripts/validate-declaration-validation-publication-study",
+    "tests/test_declaration_validation_publication_study.py",
+]
+
+
+def sha256_bytes(content: bytes) -> str:
+    return hashlib.sha256(content).hexdigest()
+
+
+def sha256_file(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as handle:
+        for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+            digest.update(chunk)
+    return digest.hexdigest()
+
+
+def git_output(args: list[str], *, cwd: Path = ROOT) -> bytes:
+    result = subprocess.run(
+        ["git", *args], cwd=cwd, stdout=subprocess.PIPE, stderr=subprocess.PIPE
+    )
+    if result.returncode:
+        raise ValueError(result.stderr.decode("utf-8", errors="replace").strip())
+    return result.stdout
+
+
+def git_binding(path: str, commit: str = GATE7_COMMIT) -> dict[str, Any]:
+    resolved = git_output(["rev-parse", "--verify", f"{commit}^{{commit}}"]).decode().strip()
+    if resolved != commit:
+        raise ValueError(f"{commit} does not resolve exactly")
+    blob = git_output(["rev-parse", "--verify", f"{commit}:{path}"]).decode().strip()
+    content = git_output(["cat-file", "blob", blob])
+    return {
+        "path": path,
+        "bytes": len(content),
+        "sha256": sha256_bytes(content),
+        "git_commit": commit,
+        "git_blob": blob,
+    }
+
+
+def file_binding(path_value: str) -> dict[str, Any]:
+    path = ROOT / path_value
+    if not path.is_file():
+        raise ValueError(f"missing existing Gate-8 input: {path_value}")
+    return {
+        "path": path_value,
+        "bytes": path.stat().st_size,
+        "sha256": sha256_file(path),
+    }
+
+
+def inventory(root_value: str, pattern: str) -> dict[str, Any]:
+    root = ROOT / root_value
+    paths = sorted(
+        (path for path in root.glob(pattern) if path.is_file()),
+        key=lambda path: path.relative_to(root).as_posix(),
+    )
+    if not paths:
+        raise ValueError(f"empty corpus root: {root_value}")
+    aggregate = hashlib.sha256()
+    files: list[dict[str, Any]] = []
+    for path in paths:
+        relative = path.relative_to(root).as_posix()
+        digest = hashlib.sha256()
+        aggregate.update(relative.encode())
+        aggregate.update(b"\0")
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(1024 * 1024), b""):
+                digest.update(chunk)
+                aggregate.update(chunk)
+        aggregate.update(b"\0")
+        files.append(
+            {
+                "identity": relative.removesuffix(".ndjson"),
+                "path": relative,
+                "bytes": path.stat().st_size,
+                "sha256": digest.hexdigest(),
+            }
+        )
+    return {
+        "root": root_value,
+        "include": [pattern],
+        "exclude": [],
+        "file_count": len(files),
+        "total_bytes": sum(row["bytes"] for row in files),
+        "file_set_sha256": aggregate.hexdigest(),
+        "files": files,
+    }
+
+
+def external_git_binding(path: str) -> dict[str, Any]:
+    arena = ROOT / "external" / "lean-kernel-arena"
+    resolved = git_output(["rev-parse", "--verify", f"{ARENA_REVISION}^{{commit}}"], cwd=arena).decode().strip()
+    if resolved != ARENA_REVISION:
+        raise ValueError("Arena revision does not resolve exactly")
+    blob = git_output(["rev-parse", "--verify", f"{ARENA_REVISION}:{path}"], cwd=arena).decode().strip()
+    content = git_output(["cat-file", "blob", blob], cwd=arena)
+    return {
+        "repository_path": "external/lean-kernel-arena",
+        "repository_revision": ARENA_REVISION,
+        "path": path,
+        "bytes": len(content),
+        "sha256": sha256_bytes(content),
+        "git_blob": blob,
+    }
+
+
+def canonical_sha256(value: Any) -> str:
+    return sha256_bytes(json.dumps(value, sort_keys=True, separators=(",", ":")).encode())
+
+
+def render(recorded_at: str) -> dict[str, Any]:
+    git_inputs = {name: git_binding(path) for name, path in GIT_INPUTS.items()}
+    local_inputs = {name: file_binding(path) for name, path in LOCAL_INPUTS.items()}
+    tooling = [file_binding(path) for path in CLASSIFICATION_TOOLING]
+    target = json.loads(git_output(["cat-file", "blob", git_inputs["semantic_target"]["git_blob"]]))
+    source_lock = json.loads(git_output(["cat-file", "blob", git_inputs["source_lock"]["git_blob"]]))
+    graph = json.loads(git_output(["cat-file", "blob", git_inputs["gate7_artifact_graph"]["git_blob"]]))
+    graph_nodes = {row["id"]: row for row in graph["nodes"]}
+
+    arena_revision = git_output(
+        ["-C", "external/lean-kernel-arena", "rev-parse", "HEAD"]
+    ).decode().strip()
+    if arena_revision != ARENA_REVISION:
+        raise ValueError("live Arena checkout is not the frozen target revision")
+
+    arena_corpus = inventory("external/lean-kernel-arena/_build/tests", "**/*.ndjson")
+    expected_corpus_digest = graph_nodes["corpus:arena-materialized"]["expected_sha256"]
+    if arena_corpus["file_set_sha256"] != expected_corpus_digest:
+        raise ValueError("live Arena materialization differs from the Gate-7 artifact graph")
+    lab_corpus = inventory("corpus", "**/*.ndjson")
+
+    optional_by_id = {row["id"]: row for row in source_lock["optional_local_observations"]}
+    source_by_id = {row["id"]: row for row in source_lock["source_files"]}
+    observer_profiles: list[dict[str, Any]] = []
+    for row in source_lock["observer_configurations"]:
+        binary_lock = optional_by_id[row["binary_observation_id"]]
+        binary = file_binding(binary_lock["path_hint"])
+        if binary["sha256"] != binary_lock["file_sha256"]:
+            raise ValueError(f"{row['observer']}: live binary differs from source lock")
+        observer_profiles.append(
+            {
+                "observer": row["observer"],
+                "observer_id": row["observer_id"],
+                "configuration": row["configuration"],
+                "configuration_sha256": row["configuration_sha256"],
+                "entrypoint_source_file_id": row["entrypoint_source_file_id"],
+                "lineage_group": row["lineage_group"],
+                "binary": binary,
+                "build_recipe_sources": [source_by_id[item] for item in row["configuration_source_file_ids"]],
+            }
+        )
+
+    coverage_manifest = json.loads((ROOT / LOCAL_INPUTS["coverage_manifest"]).read_text())
+    coverage_build = json.loads((ROOT / LOCAL_INPUTS["coverage_build_manifest"]).read_text())
+    line_map = json.loads((ROOT / LOCAL_INPUTS["coverage_line_to_tests"]).read_text())
+    test_map = json.loads((ROOT / LOCAL_INPUTS["coverage_test_to_lines"]).read_text())
+    theorem_tests = line_map.get("src/tc.rs:175", [])
+    if "tutorial/012_nonPropThm" not in theorem_tests:
+        raise ValueError("existing coverage map does not link the theorem case to src/tc.rs:175")
+    theorem_lines = test_map.get("tutorial/012_nonPropThm", [])
+    if "src/tc.rs:175" not in theorem_lines:
+        raise ValueError("existing reverse coverage map is not reciprocal for the theorem case")
+
+    legacy_snapshot = json.loads(
+        git_output(["cat-file", "blob", git_inputs["legacy_coverage_identity_snapshot"]["git_blob"]])
+    )
+    legacy_repro = json.loads(
+        git_output(["cat-file", "blob", git_inputs["legacy_reproducibility_configuration"]["git_blob"]])
+    )
+
+    return {
+        "schema_version": 1,
+        "freeze_id": "ordinary-declaration-validation.publication-study.gate-8-inputs.v1",
+        "artifact_type": "PUBLICATION_STUDY_GATE_8_EXISTING_INPUT_FREEZE",
+        "recorded_at": recorded_at,
+        "status": "EXACT_EXISTING_INPUTS_FROZEN_WITHOUT_EXECUTION",
+        "gate7_content_commit": GATE7_COMMIT,
+        "git_inputs": git_inputs,
+        "materialized_corpora": [arena_corpus, lab_corpus],
+        "arena_repository": {
+            "revision": ARENA_REVISION,
+            "tutorial_source": external_git_binding("tutorial/Tutorial.lean"),
+            "checker_definitions": [
+                external_git_binding("checkers/official.yaml"),
+                external_git_binding("checkers/nanoda.yaml"),
+                external_git_binding("checkers/lean4lean.yaml"),
+                external_git_binding("checkers/kiota.yaml"),
+            ],
+        },
+        "pipeline_identities": {
+            "logical_target": target["logical_target"],
+            "artifact_producer": target["artifact_producer"],
+            "export_contract": target["export_contract"],
+            "normalization": {
+                "script": next(row for row in tooling if row["path"] == "scripts/normalize-arena-results"),
+                "controlled_outcomes": ["ACCEPT", "REJECT", "DECLINE", "CRASH"],
+            },
+        },
+        "observer_profiles": observer_profiles,
+        "comparator_profiles": {
+            "nanoda_source_coverage_one_thread": {
+                "manifest": local_inputs["coverage_manifest"],
+                "build_manifest": local_inputs["coverage_build_manifest"],
+                "configuration": local_inputs["coverage_configuration"],
+                "collection_state": local_inputs["coverage_collection_state"],
+                "binary": coverage_manifest["binary"],
+                "checker_revision": coverage_manifest["checker_revision"],
+                "checker_threads": coverage_manifest["checker_threads"],
+                "source_sha256": coverage_manifest["source_sha256"],
+                "build_identity": coverage_build,
+                "profile_separation": "ONE_THREAD_INSTRUMENTED_COMPARATOR_NOT_THE_FOUR_THREAD_PRIMARY_NANODA_OBSERVER",
+            },
+            "nanoda_theorem_prop_mutant": {
+                "mutant_id": "nanoda-0001",
+                "source_location": "src/tc.rs:175",
+                "bindings": {
+                    name: git_inputs[name]
+                    for name in (
+                        "nanoda_mutation_spec",
+                        "nanoda_mutation_schedule",
+                        "nanoda_mutation_comparison_full",
+                        "nanoda_mutation_comparison_theorem",
+                        "nanoda_reach_infection",
+                        "nanoda_parallel_reproduction",
+                    )
+                },
+            },
+        },
+        "test_to_artifact_mappings": [
+            {
+                "case_id": "tutorial/012_nonPropThm",
+                "artifact_path": "external/lean-kernel-arena/_build/tests/tutorial/bad/012_nonPropThm.ndjson",
+                "artifact_sha256": "07c030b1e9ee321bb537f4f82f5238087cbed199f5e4f8673650c3190e54a33a",
+                "origin": "external/lean-kernel-arena/tutorial/Tutorial.lean",
+                "expected_role": "EXISTING_ARENA_NEGATIVE_CASE",
+            },
+            {
+                "case_id": "m6-nonprop-theorem",
+                "artifact_path": git_inputs["m6_nonprop_candidate"]["path"],
+                "artifact_sha256": git_inputs["m6_nonprop_candidate"]["sha256"],
+                "expected_role": "EXISTING_LAB_NEGATIVE_WITNESS",
+            },
+            {
+                "case_id": "m6-nonprop-definition-control",
+                "artifact_path": git_inputs["m6_definition_auxiliary_control"]["path"],
+                "artifact_sha256": git_inputs["m6_definition_auxiliary_control"]["sha256"],
+                "expected_role": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL_ONLY",
+            },
+        ],
+        "existing_coverage_excerpt": {
+            "line_to_tests_binding": local_inputs["coverage_line_to_tests"],
+            "test_to_lines_binding": local_inputs["coverage_test_to_lines"],
+            "source_location": "src/tc.rs:175",
+            "covering_test_count": len(theorem_tests),
+            "covering_tests": theorem_tests,
+            "theorem_case_lines": theorem_lines,
+        },
+        "timeout_and_resource_policy": {
+            "gate8_new_checker_executions": 0,
+            "gate8_new_coverage_runs": 0,
+            "gate8_new_mutation_runs": 0,
+            "gate8_new_synthesis_attempts": 0,
+            "recorded_cross_validation_timeout_seconds": 300.0,
+            "kiota_profile_timeout_seconds": 3600,
+            "classification_mode": "READ_AND_HASH_ALREADY_EXISTING_ARTIFACTS_ONLY",
+        },
+        "prior_knowledge_inventory": [
+            {"id": name, "binding": binding, "role": "EXISTING_PRE_GATE_8_INPUT"}
+            for name, binding in {**git_inputs, **local_inputs}.items()
+            if name not in {"gate7_denominator", "gate6_catalog", "semantic_target", "source_lock", "validator_catalog", "gate7_artifact_graph"}
+        ],
+        "classification_tooling": tooling,
+        "known_provenance_issue": {
+            "id": "LEGACY_COVERAGE_SNAPSHOT_ARENA_REVISION_MISMATCH",
+            "legacy_snapshot_arena_revision": legacy_snapshot["arena"]["revision"],
+            "legacy_reproducibility_arena_revision": legacy_repro["arena"]["revision"],
+            "frozen_gate8_arena_revision": ARENA_REVISION,
+            "disposition": "PRESERVED_AS_LIMITATION_NOT_REWRITTEN",
+            "scope": "The legacy aggregate snapshot cannot support a whole-corpus claim for the Gate-8 revision. The exact theorem artifact hash, Nanoda source identity, coverage binary/configuration, and reciprocal line mapping are frozen separately for the coarse per-case source-reach indicator.",
+        },
+        "freeze_summary": {
+            "arena_materialized_file_count": arena_corpus["file_count"],
+            "lab_corpus_file_count": lab_corpus["file_count"],
+            "observer_profile_count": len(observer_profiles),
+            "prior_knowledge_item_count": len(GIT_INPUTS) - 6 + len(LOCAL_INPUTS),
+            "classification_tool_count": len(tooling),
+        },
+        "scope_closure": {
+            "new_source_discovery_performed": False,
+            "source_approvals_changed": False,
+            "authority_dispositions_changed": False,
+            "witness_or_control_created_or_modified": False,
+            "checker_campaign_started": False,
+            "coverage_campaign_started": False,
+            "mutation_campaign_started": False,
+            "synthesis_started": False,
+        },
+        "nonclaims": [
+            "This input freeze contains no new semantic authority.",
+            "The one-thread Nanoda coverage profile is not interchangeable with the frozen four-thread primary Nanoda observer.",
+            "A source location reached by an exact input is not semantic isolated-negative coverage.",
+            "A killed mutant is a contextual comparator and not semantic authority or proof of isolation.",
+            "The definition-form artifact is not a matched positive control for DECL.THEOREM.TYPE_PROP under M10 erratum 1.",
+        ],
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--output", type=Path, default=OUTPUT_PATH)
+    parser.add_argument("--recorded-at")
+    args = parser.parse_args()
+    recorded_at = args.recorded_at or datetime.now(timezone.utc).isoformat()
+    document = render(recorded_at)
+    args.output.parent.mkdir(parents=True, exist_ok=True)
+    args.output.write_text(json.dumps(document, indent=2, sort_keys=True) + "\n")
+    print(args.output.relative_to(ROOT) if args.output.is_relative_to(ROOT) else args.output)
+    print(f"canonical_sha256={canonical_sha256(document)}")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

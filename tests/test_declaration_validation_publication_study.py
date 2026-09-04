@@ -47,6 +47,10 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         cls.adjudication_schema = validator.load_json(validator.ADJUDICATION_SCHEMA_PATH)
         cls.denominator = validator.load_json(validator.DENOMINATOR_PATH)
         cls.denominator_schema = validator.load_json(validator.DENOMINATOR_SCHEMA_PATH)
+        cls.gate8_input = validator.load_json(validator.GATE8_INPUT_PATH)
+        cls.gate8_input_schema = validator.load_json(validator.GATE8_INPUT_SCHEMA_PATH)
+        cls.gate8_result = validator.load_json(validator.GATE8_RESULT_PATH)
+        cls.gate8_result_schema = validator.load_json(validator.GATE8_RESULT_SCHEMA_PATH)
         cls.catalog = validator.load_json(validator.CATALOG_PATH)
         cls.evidence_lock = validator.load_json(validator.SENTINEL_EVIDENCE_LOCK_PATH)
         cls.current_evidence_lock = validator.load_json(
@@ -87,6 +91,8 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         jsonschema.Draft202012Validator.check_schema(self.sentinel_schema)
         jsonschema.Draft202012Validator.check_schema(self.adjudication_schema)
         jsonschema.Draft202012Validator.check_schema(self.denominator_schema)
+        jsonschema.Draft202012Validator.check_schema(self.gate8_input_schema)
+        jsonschema.Draft202012Validator.check_schema(self.gate8_result_schema)
 
     def test_actual_preregistration_validates(self):
         self.assertEqual(validator.validate_preregistration(), [])
@@ -222,7 +228,12 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         self.assertFalse(closure["synthesis_or_checker_work_started"])
 
     def test_actual_gate_7_denominator_validates(self):
-        self.assertEqual(validator.validate_denominator(check_generated=False), [])
+        self.assertEqual(
+            validator.validate_denominator(
+                check_generated=False, manuscript_live_match=False
+            ),
+            [],
+        )
         self.assertEqual(
             self.denominator["primary_normative_denominator"],
             {
@@ -285,10 +296,88 @@ class DeclarationValidationPublicationStudyTests(unittest.TestCase):
         )
 
     def test_manuscript_is_a_pre_gate_7_presentation_skeleton(self):
-        self.assertEqual(validator.validate_manuscript(), [])
+        content, errors = validator.binding_bytes(
+            self.denominator["bindings"]["manuscript_skeleton"],
+            label="historical pre-Gate-7 manuscript",
+            require_live_match=False,
+        )
+        self.assertEqual(errors, [])
+        self.assertIsNotNone(content)
+        self.assertEqual(
+            validator.validate_manuscript(content.decode("utf-8"), phase="PRE_GATE_7"),
+            [],
+        )
         self.assertEqual(
             self.denominator["bindings"]["manuscript_skeleton"]["git_commit"],
             denominator_deriver.MANUSCRIPT_COMMIT,
+        )
+
+    def test_actual_gate_8_input_freeze_validates(self):
+        self.assertEqual(validator.validate_gate8_input_freeze(check_generated=True), [])
+        self.assertEqual(
+            self.gate8_input["arena_repository"]["revision"],
+            "37f7525b732808a49b746dc6999d53c3717db124",
+        )
+        self.assertEqual(len(self.gate8_input["observer_profiles"]), 4)
+
+    def test_actual_gate_8_baseline_and_comparators_validate(self):
+        self.assertEqual(
+            validator.validate_gate8_baseline_comparator(check_generated=False), []
+        )
+        baseline = self.gate8_result["baseline_results"][0]
+        self.assertEqual(baseline["primary_status"], "OBSERVED_NEGATIVE_NOT_ISOLATED")
+        self.assertFalse(baseline["counts_as_isolated_coverage"])
+        comparator = self.gate8_result["comparator_results"][0]
+        self.assertEqual(comparator["source_coverage"]["classification"], "SOURCE_REACHED")
+        self.assertEqual(comparator["semantic_mutation"]["classification"], "MUTANT_KILLED")
+        self.assertEqual(comparator["existing_case_link"]["classification"], "EXISTING_CASE_LINKED")
+
+    def test_gate_8_rejects_isolated_status_without_erratum_control(self):
+        changed = copy.deepcopy(self.gate8_result)
+        changed["baseline_results"][0]["primary_status"] = "ISOLATED_COVERED"
+        changed["baseline_results"][0]["counts_as_isolated_coverage"] = True
+        errors = validator.validate_gate8_baseline_comparator(changed, check_generated=False)
+        self.assertTrue(any("schema error" in item or "improperly counts" in item for item in errors))
+
+    def test_gate_8_rejects_forged_source_reach(self):
+        changed = copy.deepcopy(self.gate8_input)
+        changed["existing_coverage_excerpt"]["covering_tests"].remove(
+            "tutorial/012_nonPropThm"
+        )
+        changed["existing_coverage_excerpt"]["covering_test_count"] -= 1
+        errors = validator.validate_gate8_input_freeze(changed, check_generated=False)
+        self.assertTrue(any("schema error" in item or "does not reach" in item for item in errors))
+
+    def test_gate_8_rejects_mutant_kill_without_frozen_difference(self):
+        changed = copy.deepcopy(self.gate8_result)
+        changed["comparator_results"][0]["semantic_mutation"]["classification"] = (
+            "MUTANT_NOT_KILLED"
+        )
+        errors = validator.validate_gate8_baseline_comparator(changed, check_generated=False)
+        self.assertTrue(any("schema error" in item or "mutation comparator" in item for item in errors))
+
+    def test_gate_8_stops_before_directed_synthesis(self):
+        closure = self.gate8_result["scope_closure"]
+        self.assertFalse(closure["witness_or_control_created_or_modified"])
+        self.assertFalse(closure["directed_synthesis_started"])
+        self.assertFalse(closure["new_checker_campaign_started"])
+        self.assertFalse(closure["new_coverage_campaign_started"])
+        self.assertFalse(closure["new_mutation_campaign_started"])
+        self.assertEqual(
+            self.gate8_result["gate9_target_transition"]["entry_ids"],
+            ["DECL.THEOREM.TYPE_PROP"],
+        )
+
+    def test_gate_7_historical_manuscript_survives_gate_8_living_update(self):
+        self.assertNotEqual(
+            validator.sha256_bytes(validator.MANUSCRIPT_PATH.read_bytes()),
+            self.denominator["bindings"]["manuscript_skeleton"]["sha256"],
+        )
+        self.assertEqual(
+            validator.validate_denominator(
+                check_generated=False, manuscript_live_match=False
+            ),
+            [],
         )
 
     def test_approval_cannot_widen_theorem_prop_source_scope(self):

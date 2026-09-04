@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Validate publication-study artifacts through Gate-7 denominator freeze.
+"""Validate publication-study artifacts through Gate-8 baseline freeze.
 
 This validator checks identity, provenance, closure, frozen human approvals,
 and authored catalog dispositions.  It enforces procedure and evidence
@@ -42,6 +42,11 @@ DENOMINATOR_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication
 DENOMINATOR_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-denominator.json"
 DENOMINATOR_DERIVER_PATH = ROOT / "scripts" / "derive-declaration-validation-publication-study-denominator"
 MANUSCRIPT_PATH = ROOT / "docs" / "research" / "DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md"
+GATE8_INPUT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-gate-8-input-freeze.schema.json"
+GATE8_INPUT_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-gate-8-input-freeze.json"
+GATE8_INPUT_FREEZER_PATH = ROOT / "scripts" / "freeze-declaration-validation-publication-study-gate-8-inputs"
+GATE8_RESULT_SCHEMA_PATH = ROOT / "schemas" / "declaration-validation-publication-study-baseline-comparator.schema.json"
+GATE8_RESULT_PATH = ROOT / "results" / "research" / "declaration-validation-publication-study-baseline-comparator.json"
 CATALOG_PATH = ROOT / "config" / "declaration-validation-catalog.json"
 M9_REVIEWED_CATALOG_PATH = ROOT / "results" / "research" / "declaration-validation-milestone-9-reviewed-catalog.json"
 AUTHORITY_RULES_PATH = ROOT / "config" / "declaration-validation-authority-rules.json"
@@ -67,6 +72,7 @@ EXPECTED_QUERY_SCOPES = {
 EXPECTED_SENTINELS = ["DECL.THEOREM.TYPE_PROP", "EXPR.LET.VALUE_TYPE_MATCH"]
 GATE4_COMMIT = "4b7ed4d6b2b1e65f9b71e64bbb03cf333ef4ccb9"
 GATE5_COMMIT = "f1161457c9b1eb817f020021d8d39e8d95a6497d"
+GATE7_COMMIT = "a01102e784e21ed4d7f906435704bb0dc8e982a0"
 THEOREM_APPROVED_SOURCE_ID = "APPROVED.NORMDOC.LEAN_REFERENCE_MANUAL.V4_33_THEOREM_PROP"
 THEOREM_SOURCE_CANDIDATE_ID = "SOURCE.CANDIDATE.OFFICIAL.MANUAL.DEFINITIONS"
 THEOREM_CLAIM_ID = "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP"
@@ -1244,7 +1250,9 @@ def validate_complete_adjudication(
     return errors
 
 
-def validate_manuscript(content: str | None = None) -> list[str]:
+def validate_manuscript(
+    content: str | None = None, *, phase: str = "PRE_GATE_7"
+) -> list[str]:
     if content is None:
         content = MANUSCRIPT_PATH.read_text(encoding="utf-8")
     errors: list[str] = []
@@ -1263,17 +1271,37 @@ def validate_manuscript(content: str | None = None) -> list[str]:
     else:
         section = content[section_start:section_end]
         table_lines = [line for line in section.splitlines() if line.startswith("|")]
-        if len(table_lines) != 4:
-            errors.append("manuscript baseline and synthesis tables are not both empty")
-        if "Both primary tables are intentionally empty" not in section:
-            errors.append("manuscript does not preserve the pre-execution empty-table boundary")
-    if "No primary experimental result is\nreported in this skeleton." not in content:
+        if phase == "PRE_GATE_7":
+            if len(table_lines) != 4:
+                errors.append("manuscript baseline and synthesis tables are not both empty")
+            if "Both primary tables are intentionally empty" not in section:
+                errors.append("manuscript does not preserve the pre-execution empty-table boundary")
+        elif phase == "GATE_8":
+            if len(table_lines) != 5:
+                errors.append("Gate-8 manuscript does not have one baseline row and an empty synthesis table")
+            required_tokens = [
+                "DECL.THEOREM.TYPE_PROP",
+                "OBSERVED_NEGATIVE_NOT_ISOLATED",
+                "SOURCE_REACHED",
+                "MUTANT_KILLED",
+                "EXISTING_CASE_LINKED",
+                "Synthesis remains empty until Gate 9",
+            ]
+            for token in required_tokens:
+                if token not in section:
+                    errors.append(f"Gate-8 manuscript is missing synchronized token {token}")
+        else:
+            errors.append(f"unknown manuscript validation phase {phase}")
+    if phase == "PRE_GATE_7" and "No primary experimental result is\nreported in this skeleton." not in content:
         errors.append("manuscript reports or permits a primary result before Gate 8")
+    if phase == "GATE_8" and "Gate 8 records one" not in content:
+        errors.append("manuscript does not identify the bounded Gate-8 result")
     return errors
 
 
 def validate_denominator(
-    document: dict[str, Any] | None = None, *, check_generated: bool = True
+    document: dict[str, Any] | None = None, *, check_generated: bool = True,
+    manuscript_live_match: bool = True,
 ) -> list[str]:
     document = load_json(DENOMINATOR_PATH) if document is None else document
     errors = schema_errors(
@@ -1303,7 +1331,7 @@ def validate_denominator(
     manuscript_content, manuscript_errors = binding_bytes(
         document["bindings"]["manuscript_skeleton"],
         label="Gate-7 manuscript prerequisite",
-        require_live_match=True,
+        require_live_match=manuscript_live_match,
     )
     errors.extend(manuscript_errors)
     if manuscript_content is not None:
@@ -1322,6 +1350,283 @@ def validate_denominator(
     return errors
 
 
+def live_file_binding_errors(binding: dict[str, Any], *, label: str) -> list[str]:
+    path_value = binding.get("path")
+    if not isinstance(path_value, str) or not safe_relative_path(path_value):
+        return [f"{label}: path is not safe and relative"]
+    path = ROOT / path_value
+    if not path.is_file():
+        return [f"{label}: live file is missing"]
+    content = path.read_bytes()
+    errors: list[str] = []
+    if sha256_bytes(content) != binding.get("sha256"):
+        errors.append(f"{label}: SHA-256 differs from live bytes")
+    if "bytes" in binding and len(content) != binding.get("bytes"):
+        errors.append(f"{label}: byte count differs from live bytes")
+    return errors
+
+
+def validate_gate8_input_freeze(
+    document: dict[str, Any] | None = None, *, check_generated: bool = True
+) -> list[str]:
+    document = load_json(GATE8_INPUT_PATH) if document is None else document
+    errors = schema_errors(
+        document,
+        "publication-study Gate-8 existing-input freeze",
+        GATE8_INPUT_SCHEMA_PATH,
+    )
+    if errors:
+        return errors
+
+    errors.extend(
+        "Gate-7 predecessor: " + error
+        for error in validate_denominator(
+            check_generated=check_generated, manuscript_live_match=False
+        )
+    )
+    if check_generated:
+        freezer = load_module("publication_study_gate8_input_freezer", GATE8_INPUT_FREEZER_PATH)
+        try:
+            expected = freezer.render(document["recorded_at"])
+        except (KeyError, OSError, RuntimeError, ValueError, subprocess.SubprocessError) as exc:
+            errors.append(f"Gate-8 input freeze could not be reproduced: {exc}")
+            expected = None
+        if expected is not None and document != expected:
+            errors.append("Gate-8 exact input freeze differs from the mechanical inventory")
+
+    gate7 = document["git_inputs"].get("gate7_denominator")
+    if gate7 is None:
+        errors.append("Gate-8 input freeze omits the Gate-7 denominator")
+    else:
+        _, item_errors = binding_bytes(gate7, label="Gate-8 frozen Gate-7 input")
+        errors.extend(item_errors)
+        if gate7.get("git_commit") != GATE7_COMMIT:
+            errors.append("Gate-8 input freeze does not start from the frozen Gate-7 commit")
+
+    corpora = {row["root"]: row for row in document["materialized_corpora"]}
+    if set(corpora) != {"external/lean-kernel-arena/_build/tests", "corpus"}:
+        errors.append("Gate-8 corpus roots differ from the Gate-7 proposed roots")
+    for root, inventory in corpora.items():
+        if inventory["file_count"] != len(inventory["files"]):
+            errors.append(f"Gate-8 corpus {root}: file count differs from inventory")
+        if inventory["total_bytes"] != sum(row["bytes"] for row in inventory["files"]):
+            errors.append(f"Gate-8 corpus {root}: byte count differs from inventory")
+        paths = [row["path"] for row in inventory["files"]]
+        if paths != sorted(paths) or len(paths) != len(set(paths)):
+            errors.append(f"Gate-8 corpus {root}: file identities are not unique and sorted")
+
+    observers = document["observer_profiles"]
+    if [row["observer"] for row in observers] != ["OFFICIAL", "NANODA", "LEAN4LEAN", "KIOTA"]:
+        errors.append("Gate-8 observer profiles differ from the frozen source-lock order")
+    for row in observers:
+        if check_generated:
+            errors.extend(
+                live_file_binding_errors(
+                    row["binary"], label=f"Gate-8 {row['observer']} binary"
+                )
+            )
+
+    coverage = document["existing_coverage_excerpt"]
+    if coverage["covering_test_count"] != len(coverage["covering_tests"]):
+        errors.append("Gate-8 source-coverage excerpt count differs from its exact tests")
+    if "tutorial/012_nonPropThm" not in coverage["covering_tests"]:
+        errors.append("Gate-8 source-coverage excerpt does not reach the theorem case")
+    if "src/tc.rs:175" not in coverage["theorem_case_lines"]:
+        errors.append("Gate-8 reverse coverage excerpt omits the mapped theorem source")
+
+    issue = document["known_provenance_issue"]
+    if issue["legacy_snapshot_arena_revision"] == issue["frozen_gate8_arena_revision"]:
+        errors.append("Gate-8 does not preserve the legacy coverage-revision mismatch")
+    if issue["legacy_reproducibility_arena_revision"] == issue["frozen_gate8_arena_revision"]:
+        errors.append("Gate-8 does not preserve the legacy reproducibility-revision mismatch")
+
+    closure = document["scope_closure"]
+    if any(closure.values()):
+        errors.append("Gate-8 input freeze records out-of-scope execution or semantic change")
+    return errors
+
+
+def validate_gate8_baseline_comparator(
+    document: dict[str, Any] | None = None, *, check_generated: bool = True
+) -> list[str]:
+    document = load_json(GATE8_RESULT_PATH) if document is None else document
+    errors = schema_errors(
+        document,
+        "publication-study Gate-8 baseline and comparator freeze",
+        GATE8_RESULT_SCHEMA_PATH,
+    )
+    if errors:
+        return errors
+
+    errors.extend(
+        "Gate-8 input predecessor: " + error
+        for error in validate_gate8_input_freeze(check_generated=check_generated)
+    )
+    gate7_content, gate7_errors = binding_bytes(
+        document["bindings"]["gate7_denominator"],
+        label="Gate-8 result Gate-7 denominator",
+        require_live_match=True,
+    )
+    errors.extend(gate7_errors)
+    if document["bindings"]["gate7_denominator"].get("git_commit") != GATE7_COMMIT:
+        errors.append("Gate-8 result does not bind the exact Gate-7 commit")
+    errors.extend(
+        live_file_binding_errors(
+            document["bindings"]["gate8_input_freeze"],
+            label="Gate-8 input-freeze binding",
+        )
+    )
+    errors.extend(
+        live_file_binding_errors(
+            document["bindings"]["manuscript"], label="Gate-8 manuscript binding"
+        )
+    )
+    errors.extend(validate_manuscript(phase="GATE_8"))
+
+    if gate7_content is not None:
+        gate7 = json.loads(gate7_content)
+        expected_denominator = {
+            "count": gate7["primary_normative_denominator"]["count"],
+            "entry_ids": gate7["primary_normative_denominator"]["entry_ids"],
+            "claim_tier": gate7["claim_tier"]["id"],
+        }
+        if document["denominator"] != expected_denominator:
+            errors.append("Gate-8 denominator or claim tier differs from frozen Gate 7")
+        cohort_ids = [row["entry_id"] for row in gate7["authority_dispositions"]]
+    else:
+        cohort_ids = []
+
+    freeze = load_json(GATE8_INPUT_PATH)
+    git_inputs = freeze["git_inputs"]
+    baseline = document["baseline_results"][0]
+    elements = baseline["evidence_elements"]
+    expected_element_order = [
+        "CONTENT_BOUND_NEGATIVE_ARTIFACT",
+        "REACH_AND_APPLICABILITY",
+        "TARGET_VIOLATION_NOT_P",
+        "MATCHED_SAME_FAMILY_POSITIVE_CONTROL",
+        "COMPETING_OBLIGATION_ANALYSIS",
+        "AUTHORITY_SCOPED_EXPECTED_REJECTION",
+        "CHECKER_REJECTION_ATTRIBUTION",
+    ]
+    if [row["element"] for row in elements] != expected_element_order:
+        errors.append("Gate-8 isolation evidence elements are not complete and ordered")
+    statuses = {row["element"]: row["status"] for row in elements}
+    if statuses != {
+        "CONTENT_BOUND_NEGATIVE_ARTIFACT": "SATISFIED",
+        "REACH_AND_APPLICABILITY": "SATISFIED",
+        "TARGET_VIOLATION_NOT_P": "SATISFIED",
+        "MATCHED_SAME_FAMILY_POSITIVE_CONTROL": "UNRESOLVED",
+        "COMPETING_OBLIGATION_ANALYSIS": "SATISFIED",
+        "AUTHORITY_SCOPED_EXPECTED_REJECTION": "SATISFIED",
+        "CHECKER_REJECTION_ATTRIBUTION": "SATISFIED",
+    }:
+        errors.append("Gate-8 theorem isolation-element statuses differ from the bound evidence")
+    if baseline["primary_status"] != "OBSERVED_NEGATIVE_NOT_ISOLATED" or baseline["counts_as_isolated_coverage"]:
+        errors.append("Gate-8 baseline improperly counts the theorem case as isolated")
+
+    expected_negative_artifacts = [
+        {
+            "case_id": "tutorial/012_nonPropThm",
+            "path": "external/lean-kernel-arena/_build/tests/tutorial/bad/012_nonPropThm.ndjson",
+            "sha256": "07c030b1e9ee321bb537f4f82f5238087cbed199f5e4f8673650c3190e54a33a",
+        },
+        {
+            "case_id": "m6-nonprop-theorem",
+            "path": git_inputs["m6_nonprop_candidate"]["path"],
+            "sha256": git_inputs["m6_nonprop_candidate"]["sha256"],
+        },
+    ]
+    if baseline["negative_artifacts"] != expected_negative_artifacts:
+        errors.append("Gate-8 baseline negative artifacts differ from the frozen inputs")
+
+    catalog_for_competitors = json.loads(
+        git_output(["cat-file", "blob", git_inputs["gate6_catalog"]["git_blob"]])[0]
+    )
+    normative_ids = [
+        row["characterization"]["id"]
+        for row in catalog_for_competitors["entries"]
+        if row["characterization"]["kind"] == "NORMATIVE_CANDIDATE_OBLIGATION"
+    ]
+    competitor_ids = [row["entry_id"] for row in baseline["competing_obligations"]]
+    if competitor_ids != [item for item in normative_ids if item != "DECL.THEOREM.TYPE_PROP"]:
+        errors.append("Gate-8 competing-obligation analysis does not cover the other 18 frozen normative candidates in order")
+    if any(row["status"] == "UNRESOLVED" for row in baseline["competing_obligations"]):
+        errors.append("Gate-8 claims complete competing-obligation analysis with an unresolved row")
+
+    if [row["profile"] for row in baseline["checker_attribution"]] != [
+        "official_importer", "nanoda", "lean4lean", "kiota"
+    ]:
+        errors.append("Gate-8 checker attribution does not cover all four frozen observers in order")
+    if any(row["normalized_outcome"] != "REJECT" for row in baseline["checker_attribution"]):
+        errors.append("Gate-8 checker attribution differs from the existing rejection records")
+
+    cross_validation = json.loads(
+        git_output(["cat-file", "blob", git_inputs["m6_nonprop_cross_validation"]["git_blob"]])[0]
+    )
+    expected_observer_outcomes = {
+        row["checker"]: row["result"]["normalized_outcome"]
+        for row in cross_validation["validators"]
+    }
+    if expected_observer_outcomes != {"official": "REJECT", "kiota": "REJECT", "lean4lean": "REJECT"}:
+        errors.append("Gate-8 cross-validator evidence no longer has the exact three rejections")
+    nanoda = json.loads(
+        git_output(["cat-file", "blob", git_inputs["nanoda_nonprop_observation"]["git_blob"]])[0]
+    )
+    if nanoda["candidate"]["result"]["normalized_outcome"] != "REJECT":
+        errors.append("Gate-8 Nanoda attribution differs from the existing result")
+
+    comparator = document["comparator_results"][0]
+    coverage = freeze["existing_coverage_excerpt"]
+    if comparator["source_coverage"]["classification"] != "SOURCE_REACHED" or "tutorial/012_nonPropThm" not in coverage["covering_tests"]:
+        errors.append("Gate-8 source comparator differs from the reciprocal coverage map")
+    mutant = json.loads(
+        git_output(["cat-file", "blob", git_inputs["nanoda_mutation_comparison_theorem"]["git_blob"]])[0]
+    )
+    expected_mutant_difference = {
+        "baseline": "REJECT",
+        "candidate": "ACCEPT",
+        "direction": "REJECT_TO_ACCEPT",
+        "test": "tutorial/012_nonPropThm",
+    }
+    if (
+        not mutant.get("killed")
+        or mutant.get("differences") != [expected_mutant_difference]
+        or comparator["semantic_mutation"]["classification"] != "MUTANT_KILLED"
+    ):
+        errors.append("Gate-8 mutation comparator differs from the frozen nanoda-0001 result")
+
+    catalog = catalog_for_competitors
+    theorem = next(
+        row for row in catalog["entries"]
+        if row["characterization"]["id"] == "DECL.THEOREM.TYPE_PROP"
+    )
+    if theorem["arena_disposition"]["disposition"] != "LINKED":
+        errors.append("Gate-8 existing-case comparator is not supported by the frozen catalog")
+    if comparator["existing_case_link"]["classification"] != "EXISTING_CASE_LINKED":
+        errors.append("Gate-8 existing-case comparator label differs from the frozen catalog")
+
+    summary = document["baseline_summary"]
+    actual_counts = {
+        name: sum(row["primary_status"] == name for row in document["baseline_results"])
+        for name in summary["status_counts"]
+    }
+    if summary["status_counts"] != actual_counts:
+        errors.append("Gate-8 baseline status counts are not derived from the exact rows")
+    covered = actual_counts["ISOLATED_COVERED"]
+    if summary["isolated_covered_count"] != covered or summary["coverage_percentage"] != 100.0 * covered / summary["denominator_count"]:
+        errors.append("Gate-8 baseline percentage is not mechanically derived")
+
+    transition = document["gate9_target_transition"]
+    expected_targets = [
+        row["entry_id"] for row in document["baseline_results"]
+        if row["primary_status"] != "ISOLATED_COVERED"
+    ]
+    if transition["entry_ids"] != expected_targets or transition["target_count"] != len(expected_targets):
+        errors.append("Gate-9 target does not derive from the uncovered established Gate-8 baseline")
+    return errors
+
+
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--require-discovery", action="store_true")
@@ -1329,6 +1634,7 @@ def main() -> int:
     parser.add_argument("--require-sentinel", action="store_true")
     parser.add_argument("--require-adjudication", action="store_true")
     parser.add_argument("--require-denominator", action="store_true")
+    parser.add_argument("--require-baseline", action="store_true")
     args = parser.parse_args()
     errors = validate_preregistration()
     if DISCOVERY_PATH.exists():
@@ -1348,9 +1654,17 @@ def main() -> int:
     if args.require_adjudication and not ADJUDICATION_PATH.exists():
         errors.append("Gate-6 complete adjudication result is missing")
     if DENOMINATOR_PATH.exists():
-        errors.extend(validate_denominator())
+        errors.extend(
+            validate_denominator(
+                manuscript_live_match=not GATE8_RESULT_PATH.exists()
+            )
+        )
     elif args.require_denominator:
         errors.append("Gate-7 frozen study input and denominator are missing")
+    if GATE8_RESULT_PATH.exists():
+        errors.extend(validate_gate8_baseline_comparator())
+    elif args.require_baseline:
+        errors.append("Gate-8 baseline and comparator freeze is missing")
     if errors:
         for error in errors:
             print(f"ERROR: {error}", file=sys.stderr)
@@ -1365,7 +1679,8 @@ def main() -> int:
         f"authority-source approval {'frozen' if APPROVAL_PATH.exists() else 'not yet recorded'}; "
         f"Gate-5 sentinel {'validated' if SENTINEL_PATH.exists() else 'not yet executed'}; "
         f"Gate-6 complete adjudication {'validated' if ADJUDICATION_PATH.exists() else 'not yet executed'}; "
-        f"Gate-7 denominator {'validated' if DENOMINATOR_PATH.exists() else 'not yet derived'}."
+        f"Gate-7 denominator {'validated' if DENOMINATOR_PATH.exists() else 'not yet derived'}; "
+        f"Gate-8 baseline/comparators {'validated' if GATE8_RESULT_PATH.exists() else 'not yet classified'}."
     )
     return 0
 
