@@ -1,0 +1,22 @@
+#!/bin/sh
+set -eu
+
+host="${GITHUB_HOST:-github.com}"
+repository="${1:-}"
+
+if ! command -v gh >/dev/null 2>&1; then
+  echo "FAIL: GitHub CLI is not installed" >&2
+  exit 1
+fi
+
+if ! gh auth status -h "$host" >/dev/null 2>&1; then
+  echo "FAIL: GitHub CLI authentication is unavailable for $host" >&2
+  echo "Repair with: gh auth login -h $host --web" >&2
+  exit 1
+fi
+
+if [ -n "$repository" ]; then
+  gh repo view "$repository" --json nameWithOwner,url --jq '"PASS: " + .nameWithOwner + " " + .url'
+else
+  echo "PASS: GitHub CLI authentication is available for $host"
+fi

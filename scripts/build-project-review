@@ -26,6 +26,7 @@ SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATIO
            SUCCESSOR_PLAN, 'scripts/run-campaign', 'lib/authorized_runs.py',
            'schemas/authorized-run.schema.json', 'scripts/materialize-run-inputs',
            'scripts/run-autonomous-campaigns',
+           'scripts/github-cli-preflight',
            'scripts/refresh-current-state', 'scripts/run-unit-tests',
            'scripts/validate-publication-study-snapshot', 'scripts/publication_study_snapshot.py',
            'scripts/build-project-review']
@@ -90,28 +91,28 @@ def build():
          'completion': 'A decision packet with finding dispositions, bounded triage, external_actions false and concrete next steps exists.',
          'mechanism': 'Read-only upstream inventory, exact local manifests and bounded local evidence.',
          'authorization': 'ACTIVE_SUCCESSOR_FRONTIER; external publication remains separately gated'}])
-    return {'schema_version': 1, 'review_scope': 'Current local canonical records; no fresh upstream status or completeness claim for all historical actions.',
+    return {'schema_version': 1, 'review_scope': 'Current local canonical records plus the bounded Arena submission and recent-commit preflight record; no completeness claim for all historical actions.',
             'inputs': [bound(p) for p in [*SOURCES, *([SUCCESSOR_PACKET] if packet is not None else [])]], 'metrics': metrics,
-            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The completed local successor converted two existing witnesses into durable regressions and prepared three exact owner decisions. The next value comes from resolving those decisions, then considering a separately authorized prospective transfer study; enlarging the closed one-obligation study remains lower value.',
+            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The completed successor converted two existing witnesses into durable regressions, submitted two focused Arena contributions, and deferred the Kiota clarification pending feedback. The next value comes from upstream disposition of those shared assets and an explicitly authorized independent successor; enlarging the closed one-obligation study remains lower value.',
             'constitutional_alignment': [
                 {'goal': 'Measured ecosystem trust', 'assessment': 'Aligned, with limited generalization',
                  'evidence': 'The current snapshot separates scoped mutation results, cross-validator observations and unresolved triage; the completed pilot does not establish general method strength.',
                  'next_improvement': 'Prefer additional shared regression value and independent transfer over a larger coverage percentage.'},
                 {'goal': 'Durable reproducibility', 'assessment': 'Historical evidence remains bound; successor runner is manifest-governed',
                  'evidence': 'The authorized-run manifest binds inputs, platform, finite budgets and completion condition; materialization verifies exact local donor bytes.',
-                 'next_improvement': 'Record owner dispositions against the bound packets and preserve their input bindings.'},
+                 'next_improvement': 'Record final upstream dispositions for Arena PRs #181 and #182 while preserving their input bindings.'},
                 {'goal': 'Scoped claims and preserved uncertainty', 'assessment': 'Aligned',
                  'evidence': 'The pilot retains its one-obligation denominator, provisional candidates and known-negative limitation. The broader FAIL state and unresolved survivors remain visible.',
                  'next_improvement': 'Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence.'},
-                {'goal': 'Improve shared assets', 'assessment': 'Action backlog limits realized benefit',
-                 'evidence': 'The selected action records include prepared implementation issues and corpus proposals, plus a completed imax corpus action. Other external actions remain gated or deferred.',
-                 'next_improvement': 'Close mature findings through concrete owner decisions and upstream dispositions before enlarging this study.'},
+                {'goal': 'Improve shared assets', 'assessment': 'Focused contributions are awaiting upstream review',
+                 'evidence': 'Arena PRs #181 and #182 submit separate, reproducible pairs; the Kiota clarification is deferred to avoid premature maintainer traffic.',
+                 'next_improvement': 'Respond to substantive Arena review and record final dispositions before proposing related external actions.'},
                 {'goal': 'Community visibility and participation', 'assessment': 'Useful entry points; status maintenance needs discipline',
                  'evidence': 'README, contribution rules, the investigation SOP and generated public status provide inspection paths. The hand-maintained metrics section had diverged from machine records.',
-                 'next_improvement': 'Generate current facts and keep decision packets short enough for a maintainer to review and reproduce.'},
+                 'next_improvement': 'Keep contribution packets focused and restore CLI-first GitHub operation before further external work.'},
                 {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
-                 'evidence': 'Schema-backed action records preserve targets, priorities, prerequisites and approval status; the pilot keeps its companion-control recommendation deferred.',
-                 'next_improvement': 'Automate evidence assembly and permissible preflight, then batch exact external approval choices for the owner.'},
+                 'evidence': 'Schema-backed action records now preserve approval, deferral, separate PR URLs, exact branch commits, and the latest-upstream duplicate preflight.',
+                 'next_improvement': 'Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control.'},
             ],
             'operational_findings': [
                 'The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.',
@@ -122,12 +123,13 @@ def build():
                 'run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.',
                 'The successor admitted two fixed witnesses without new checker execution, reducing the pending mechanical survivor queue from nine to seven while preserving unresolved semantic status.',
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
+                'Git pushes succeeded while GitHub CLI API authentication was invalid. `scripts/github-cli-preflight` now fails early with the repair command so duplicate checks, PR creation and status capture stay CLI-first.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
             ],
             'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
                                        'The corpus-integration successor completed two current-Arena package builds, an exact tutorial comparison, and a separate Ultra proof-parameter review.',
                                        'Two fixed survivor witnesses are admitted through an explicit v2 corpus successor; seven mechanically executed survivors remain pending.',
-                                       'Three current external-action drafts are concrete and remain owner-gated; no issue or pull request was created.',
+                                       'Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.',
                                        'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
                                        'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.'],
             'successor_decision_packet': ({'binding': bound(SUCCESSOR_PACKET), 'status': packet['status'],
@@ -163,7 +165,7 @@ def render(review):
     lines += ['- ' + value for value in review['operational_findings']]
     lines += ['', '## Efficiency rules', ''] + ['- ' + value for value in review['cost_policy']]
     lines += ['', '## Changes completed in this task', ''] + ['- ' + value for value in review['improvements_completed']]
-    lines += ['', 'This review does not activate a new campaign or contact an upstream project. Upstream observations are bounded to the dated, input-bound successor inventory; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.', '']
+    lines += ['', 'This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.', '']
     return '\n'.join(lines)
 
 

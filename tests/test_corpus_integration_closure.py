@@ -18,22 +18,35 @@ class CorpusIntegrationClosureTests(unittest.TestCase):
         with patch.object(closure, "verify", side_effect=lambda row: None if row["path"].startswith("external/") else real_verify(row)):
             return closure.build()
 
-    def test_renders_bounded_human_gated_successor_without_processes(self):
+    def test_renders_recorded_external_decisions_without_processes(self):
         with patch("subprocess.run", side_effect=AssertionError("closure must not launch a process")):
             outputs = self.clone_safe_build()
         packet = closure.json.loads(outputs[closure.PACKET])
-        self.assertEqual(packet["status"], "CORPUS_INTEGRATION_CLOSED_WITH_HUMAN_GATES")
+        self.assertEqual(packet["status"], "CORPUS_INTEGRATION_EXTERNAL_DECISIONS_RECORDED")
+        self.assertTrue(packet["external_actions"])
         self.assertEqual(len(packet["witness_admissions"]), 2)
-        self.assertEqual([row["disposition"] for row in packet["findings"]], ["ACTION_TAKEN", "NO_EXTERNAL_ACTION", "ACTION_RECOMMENDED", "ACTION_RECOMMENDED"])
+        self.assertEqual([row["disposition"] for row in packet["findings"]], ["ACTION_TAKEN", "NO_EXTERNAL_ACTION", "ACTION_TAKEN", "ACTION_TAKEN"])
         self.assertEqual([row["semantic_status"] for row in packet["triage"]], ["UNRESOLVED", "UNRESOLVED"])
-        self.assertEqual(len(packet["next_steps"]), 4)
+        self.assertEqual(len(packet["next_steps"]), 3)
         self.assertEqual(packet["arena_tutorial_comparison"]["exact_companion_matches"], 0)
         actions = closure.json.loads(outputs[closure.ACTIONS])
         self.assertEqual(actions["schema_version"], 1)
-        self.assertEqual(actions["findings"][2]["recommendations"][1]["execution_status"], "NOT_STARTED")
+        self.assertEqual(actions["findings"][2]["recommendations"][0]["execution_status"], "DEFERRED")
+        self.assertEqual(actions["findings"][2]["recommendations"][1]["external_reference"], "https://github.com/leanprover/lean-kernel-arena/pull/182")
+        self.assertEqual(actions["findings"][3]["recommendations"][0]["external_reference"], "https://github.com/leanprover/lean-kernel-arena/pull/181")
         self.assertNotIn("closure_packet", actions)
         self.assertEqual(sum(item["id"] == "positivity-no-implementation-issue" for item in actions["findings"][3]["recommendations"]), 1)
-        self.assertIn("proposed `reject`", outputs[closure.DRAFT])
+        self.assertIn("Arena PR #181", outputs[closure.DRAFT])
+
+    def test_rejects_external_action_record_tampering(self):
+        actual = closure.read
+        def changed(path):
+            value = actual(path)
+            if path == closure.FOLLOWTHROUGH:
+                value = copy.deepcopy(value); value["duplicate_preflight"]["exact_pair_matches"] = 1
+            return value
+        with patch.object(closure, "read", side_effect=changed), self.assertRaisesRegex(ValueError, "duplicate preflight changed"):
+            self.clone_safe_build()
 
     def test_rejects_checker_or_download_bound_changes(self):
         actual = closure.read

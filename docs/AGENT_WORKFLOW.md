@@ -17,7 +17,7 @@ by the task. Do not replace those sources with this page or a conversation.
 | Current-state artifact refresh | `scripts/build-artifact-graph`, `scripts/artifact-status`; affected generator and graph dependencies |
 | Publication-study Gates 11–12 | `scripts/close-declaration-validation-publication-study`, canonical closure decision, content manifest and historical attestation; use `validate-historical` after the freeze; `scripts/validate-publication-study-snapshot --require-full-payload` supplies the historical frontier for full-payload verification |
 | Project review and proposed next frontier | `docs/PROJECT_REVIEW.md`, `results/research/project-review.json`, `scripts/build-project-review --check`; proposals do not activate work |
-| External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft; publication still requires target-specific human authorization |
+| External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft, `scripts/github-cli-preflight <owner/repo>`; publication still requires target-specific human authorization |
 
 Use `rg` to find a section or artifact ID before opening large files. For JSON,
 inspect keys and the relevant records first. Follow bindings when the task
@@ -94,6 +94,14 @@ An available campaign script does not authorize a research frontier. Normative
 source approval and target-specific external submission remain explicit human
 boundaries. Finish a concrete draft and its permissible preflight first, and
 batch the remaining decisions for the owner.
+
+For GitHub actions, run `scripts/github-cli-preflight <owner/repo>` before
+creating branches or preparing a submission path. A successful Git push does
+not prove that `gh` API authentication works because the app may provide a
+separate Git transport credential. If the preflight reports invalid or missing
+authentication, stop and tell the owner the exact repair command. Do not switch
+to browser automation unless the owner chooses that fallback after seeing the
+CLI failure.
 
 The completed publication study's validators require its original Active
 frontier. After Gate 12, use the snapshot successor for full-payload checks;

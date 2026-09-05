@@ -19,6 +19,7 @@ PREDECESSOR = BASE + "/predecessor-actions.json"
 ACTIONS = "results/action-recommendations/current.json"
 REPORT = "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_REPORT.md"
 DRAFT = BASE + "/drafts/arena-reducible-positivity.md"
+FOLLOWTHROUGH = BASE + "/external-actions.json"
 PREDECESSOR_ACTIONS_SHA256 = "e284a5e336189e04c56944f2bb305681ebbee0d643aa29520c305233970837d9"
 WITNESSES = ("nanoda-gen-f19ffc8a2e9b", "nanoda-gen-21ef4d1d32a1")
 
@@ -144,6 +145,38 @@ def validate_witnesses() -> list[dict]:
     return rows
 
 
+def validate_followthrough() -> dict:
+    record = read(FOLLOWTHROUGH)
+    if record.get("schema_version") != 1 or record.get("status") != "COMPLETE":
+        raise ValueError("external-action follow-through is incomplete")
+    if record.get("repository") != "https://github.com/leanprover/lean-kernel-arena":
+        raise ValueError("external-action target changed")
+    preflight = record.get("duplicate_preflight", {})
+    if (preflight.get("baseline_revision"), preflight.get("latest_revision"), preflight.get("exact_pair_matches"), preflight.get("result")) != (
+        "abc55357aee17c59dfdbf39c8a2e19739e23dd10", "8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062", 0, "NEITHER_PAIR_ADDRESSED"
+    ):
+        raise ValueError("Arena duplicate preflight changed")
+    if preflight.get("recent_commit", {}).get("changed_paths") != ["checkers/sokonanoda.yaml"]:
+        raise ValueError("Arena recent-commit scope changed")
+    decisions = record.get("decisions", {})
+    expected = {
+        "proof_parameter_arena_pair": (182, "codex/proof-parameter-order", "1d1e808c73f9b650a6b2f4a40ee08c7da268267e"),
+        "reducible_positivity_arena_pair": (181, "codex/reducible-hidden-positivity", "1027fae9817509081cdfb9a7455eac424d0b1e4b"),
+    }
+    for key, (number, branch, commit) in expected.items():
+        row = decisions.get(key, {})
+        if (row.get("decision"), row.get("external_action"), row.get("pull_request"), row.get("branch"), row.get("commit")) != ("SUBMITTED", True, number, branch, commit):
+            raise ValueError("Arena submission record changed: " + key)
+        if row.get("url") != f"https://github.com/leanprover/lean-kernel-arena/pull/{number}":
+            raise ValueError("Arena pull-request URL changed: " + key)
+        if row.get("validation", {}).get("succeeded") != 2 or row["validation"].get("failed") != 0:
+            raise ValueError("Arena submission validation changed: " + key)
+    kiota = decisions.get("kiota_contract_clarification", {})
+    if (kiota.get("decision"), kiota.get("external_action")) != ("DEFERRED", False):
+        raise ValueError("Kiota deferral decision changed")
+    return record
+
+
 def no_external_action(identifier: str, target: str, rationale: str) -> dict:
     return {"id": identifier, "action": "NO_EXTERNAL_ACTION", "target": target, "priority": "LOW", "rationale": rationale, "prerequisites": [], "external_action": False, "human_gate": {"required": False, "status": "NOT_REQUIRED"}, "execution_status": "COMPLETED"}
 
@@ -154,56 +187,61 @@ def build() -> dict[str, str]:
     integration = validate_integration()
     tutorial = validate_tutorial()
     witnesses = validate_witnesses()
+    followthrough = validate_followthrough()
     findings = [
         {"id": "imax-right-successor-checker-disagreement", "disposition": "ACTION_TAKEN", "reason": "Earlier Arena corpus contribution remains recorded; this closure executes no new external action."},
         {"id": "possibly-prop-projection-overrejection", "disposition": "NO_EXTERNAL_ACTION", "reason": "Existing profile evidence and Arena policy remain non-normative; no new checker allegation follows."},
-        {"id": "proof-parameter-uniformity-disagreement", "disposition": "ACTION_RECOMMENDED", "reason": "Static Arena integration is complete, while Kiota clarification and any Arena submission remain human-gated."},
-        {"id": "reducible-hidden-positivity-corpus-gap", "disposition": "ACTION_RECOMMENDED", "reason": "Static package integration is complete; the proposed reject contract and external submission require human review."},
+        {"id": "proof-parameter-uniformity-disagreement", "disposition": "ACTION_TAKEN", "reason": "Arena PR #182 carries the either characterization pair; the separate Kiota clarification is owner-deferred pending Arena feedback."},
+        {"id": "reducible-hidden-positivity-corpus-gap", "disposition": "ACTION_TAKEN", "reason": "Arena PR #181 carries the complete-recursor positivity companion as a separate contribution."},
     ]
     triage = [{"mutant_id": row["id"], "semantic_status": "UNRESOLVED", "profile_status": "CONFIRMED_OFFICIAL_PROFILE_REJECTION", "classification": "MEANINGFUL_SEMANTIC"} for row in witnesses]
     next_steps = [
-        "Human decision: approve or decline the exact Kiota contract-clarification issue for the proof-parameter pair.",
-        "Human decision: approve or decline the exact Arena proof-parameter pair with control accept and candidate either.",
-        "Human decision: approve or decline the Arena reducible-hidden-positivity pair after reviewing its proposed reject contract.",
-        "Defer prospective transfer work until these corpus and external-action decisions are resolved.",
+        "Monitor Arena PR #181 and PR #182; record their final upstream dispositions without treating corpus policy as semantic authority.",
+        "Keep the Kiota contract clarification deferred unless Arena feedback supplies a concrete reason to reconsider it; obtain human approval before any issue is created.",
+        "Do not activate a new research frontier from these submissions; use the project review to select and authorize any successor work.",
     ]
-    packet = {"schema_version": 1, "status": "CORPUS_INTEGRATION_CLOSED_WITH_HUMAN_GATES", "external_actions": False,
+    packet = {"schema_version": 1, "status": "CORPUS_INTEGRATION_EXTERNAL_DECISIONS_RECORDED", "external_actions": True,
               "predecessor_action_register": {"path": PREDECESSOR, "sha256": PREDECESSOR_ACTIONS_SHA256, "bytes": len(predecessor_text.encode())},
               "proof_parameter_review": bind("results/research/proof-parameter-contract-review.json"),
               "arena_integration": bind(BASE + "/result.json"), "arena_tutorial_evidence": bind("results/research/evidence/corpus-integration-arena-tutorial/request.json"),
+              "external_action_record": bind(FOLLOWTHROUGH),
               "arena_tutorial_comparison": tutorial["duplicate_comparison"],
               "witness_admissions": witnesses,
               "findings": findings, "triage": triage, "next_steps": next_steps,
-              "limits": ["Arena outcomes are package-policy contracts, not normative semantic authority.", "The proof-parameter candidate remains an implementation-profile characterization with outcome either.", "The positivity candidate remains a proposed reject pending human expected-outcome and submission review.", "No checker, network, download, or external action occurred in this closure renderer."],
-              "recorded_at": tutorial["recorded_at"]}
+              "limits": ["Arena outcomes are package-policy contracts, not normative semantic authority.", "The proof-parameter candidate remains an implementation-profile characterization with outcome either.", "The positivity candidate's reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim.", "This renderer consumes the recorded submissions but has no checker, network, download, or external-action capability."],
+              "recorded_at": followthrough["recorded_at"]}
     packet_text = json.dumps(packet, indent=2, sort_keys=True) + "\n"
     actions = json.loads(json.dumps(predecessor))
-    actions["generated_at"] = tutorial["recorded_at"]
+    actions["generated_at"] = followthrough["recorded_at"]
     proof, positivity = actions["findings"][2], actions["findings"][3]
     closure_evidence = {"path": PACKET, "sha256": hashlib.sha256(packet_text.encode()).hexdigest()}
     action_evidence = lambda path: {key: value for key, value in bind(path).items() if key != "bytes"}
-    proof["evidence"].extend([closure_evidence, action_evidence("results/research/proof-parameter-contract-review.json"), action_evidence(BASE + "/result.json")])
-    proof["disposition"] = "ACTION_RECOMMENDED"
-    proof["summary"] = "Arena static integration completed with control accept and candidate either; the Kiota clarification remains human-gated and no universal rejection obligation is asserted."
-    proof["recommendations"][0]["rationale"] = "The recorded profile disagreement supports a Kiota contract clarification, subject to owner approval and without an unsoundness allegation."
-    proof["recommendations"][1].update(execution_status="NOT_STARTED", prerequisites=["Owner approval for the exact Arena submission.", "Draft: " + BASE + "/drafts/arena-proof-parameter.md", "Candidate remains either as implementation-profile characterization."])
-    proof["recommendations"][1]["rationale"] = "Static integration is complete; the candidate remains an either characterization and submission requires owner review."
-    positivity["disposition"] = "ACTION_RECOMMENDED"
-    positivity["evidence"].extend([closure_evidence, action_evidence(BASE + "/result.json"), action_evidence("results/research/evidence/corpus-integration-arena-tutorial/request.json")])
-    positivity["summary"] = "Arena static integration completed for the complete-recursor positivity pair. The candidate remains a proposed reject supported by bound prior evidence and requires human expected-outcome and submission review."
-    positivity["recommendations"][0].update(execution_status="NOT_STARTED", prerequisites=["Human expected-outcome review for the proposed reject candidate.", "Owner approval for the exact Arena submission.", "Draft: " + DRAFT])
-    positivity["recommendations"][0]["rationale"] = "Static integration is complete; bound prior evidence supports a proposed reject contract that remains subject to human review and submission approval."
+    proof["evidence"].extend([closure_evidence, action_evidence("results/research/proof-parameter-contract-review.json"), action_evidence(BASE + "/result.json"), action_evidence(FOLLOWTHROUGH)])
+    proof["disposition"] = "ACTION_TAKEN"
+    proof["summary"] = "Arena PR #182 submits the control-accept / candidate-either characterization. The separate Kiota clarification is owner-deferred pending Arena feedback; no universal rejection obligation is asserted."
+    proof["recommendations"][0].update(execution_status="DEFERRED", prerequisites=["Owner deferred this issue pending Arena feedback; new approval is required before filing."], human_gate={"required": True, "status": "DECLINED"})
+    proof["recommendations"][0]["rationale"] = "The owner deferred a separate Kiota clarification to avoid premature or duplicative maintainer traffic."
+    proof["recommendations"][1].update(execution_status="COMPLETED", prerequisites=["completed: exact duplicate and recent-commit preflight", "completed: owner approval", "completed: Arena build-test 2 succeeded, 0 failed"], human_gate={"required": True, "status": "APPROVED"}, external_reference="https://github.com/leanprover/lean-kernel-arena/pull/182")
+    proof["recommendations"][1]["rationale"] = "Submitted separately as an either characterization after the latest-upstream duplicate check found no exact match."
+    positivity["disposition"] = "ACTION_TAKEN"
+    positivity["evidence"].extend([closure_evidence, action_evidence(BASE + "/result.json"), action_evidence("results/research/evidence/corpus-integration-arena-tutorial/request.json"), action_evidence(FOLLOWTHROUGH)])
+    positivity["summary"] = "Arena PR #181 submits the complete-recursor positivity pair separately. The candidate reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim."
+    positivity["recommendations"][0].update(execution_status="COMPLETED", prerequisites=["completed: expected-outcome review", "completed: exact duplicate and recent-commit preflight", "completed: owner approval", "completed: Arena build-test 2 succeeded, 0 failed"], human_gate={"required": True, "status": "APPROVED"}, external_reference="https://github.com/leanprover/lean-kernel-arena/pull/181")
+    positivity["recommendations"][0]["rationale"] = "Submitted separately after current tutorial and recent-commit checks found no exact complete serialized recursor fixture."
     if not any(item.get("id") == "positivity-no-implementation-issue" for item in positivity["recommendations"]):
         positivity["recommendations"].append(no_external_action("positivity-integration-no-checker-allegation", "All observed validators", "Static package materialization does not establish a checker defect or normative semantics."))
+    for item in positivity["recommendations"]:
+        if item.get("id") == "positivity-no-implementation-issue":
+            item["rationale"] = "The focused Arena contribution records a corpus case without alleging a checker defect or universal semantic rule."
     draft = """# Consider the reducible-hidden-positivity companion pair
 
-Prepared locally; publication requires explicit approval for `leanprover/lean-kernel-arena`.
+Submitted as [Arena PR #181](https://github.com/leanprover/lean-kernel-arena/pull/181) after explicit owner approval.
 
 The pair now materializes successfully against Arena `abc55357aee17c59dfdbf39c8a2e19739e23dd10`: the control has outcome `accept`; the candidate is a proposed `reject`. The two `build-test` package invocations completed within their fixed bounds, with zero checker launches, downloads, or external writes.
 
 The control field is `Unit -> I`. The candidate changes the shared domain to `LALConstType Unit I`, where `LALConstType A B := A`, through the constructor and complete recursor metadata. Bound prior evidence records candidate rejection with accepted controls and a controlled Nanoda positivity mutation that accepts the candidate. Those observations support a focused corpus proposal; they do not establish universal Lean semantics or an implementation defect.
 
-The current Arena tutorial source was retrieved at the exact pinned revision and retained with its response binding. It is evidence for the current integration and duplicate review, not authority for the proposed `reject`. Before any submission, a human must approve the expected-outcome contract and the exact external target. No external action was executed.
+The current Arena tutorial source was retrieved at the exact pinned revision and retained with its response binding. A latest-upstream preflight at `8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062` found only a Sokobanoda revision bump since the integration baseline and no exact duplicate. This is integration and duplicate-review evidence, not authority for the `reject` contract.
 """
     report = """# Corpus integration and witness admission closure
 
@@ -211,7 +249,7 @@ The two fixed Nanoda survivor witnesses are now admitted through `nanoda-augment
 
 Arena static integration at `abc55357aee17c59dfdbf39c8a2e19739e23dd10` completed two bounded `build-test` invocations with zero checker launches and zero downloads. The proof-parameter control is `accept` and candidate `either`; the complete-recursor positivity control is `accept` and candidate remains proposed `reject` subject to human expected-outcome review.
 
-The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. The remaining Kiota clarification and either Arena submission remain human-gated. No external action was executed.
+The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. Arena PR #182 carries that pair as an `either` characterization, while Arena PR #181 separately carries the complete-recursor positivity companion. The owner deferred the Kiota clarification pending Arena feedback.
 """
     return {PREDECESSOR: predecessor_text, PACKET: packet_text, ACTIONS: json.dumps(actions, indent=2, sort_keys=True) + "\n", DRAFT: draft, REPORT: report}
 

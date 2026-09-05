@@ -40,6 +40,16 @@ research directions.
 
 ## Attempted
 
+- Completed owner-approved external follow-through for the corpus-integration
+  successor on 2026-09-05. A latest-upstream Arena preflight at `8ae1d84`
+  found one intervening Sokobanoda revision bump and no exact match for either
+  pair. The complete-recursor positivity pair was submitted separately as
+  [Arena PR #181](https://github.com/leanprover/lean-kernel-arena/pull/181),
+  and the proof-parameter `either` characterization as
+  [Arena PR #182](https://github.com/leanprover/lean-kernel-arena/pull/182).
+  Both branches pass their focused two-test Arena builds. The owner deferred
+  the separate Kiota clarification pending Arena feedback; no Kiota issue was
+  created.
 - Completed the authorized ecosystem-closure/autonomy successor on 2026-09-05.
   Validation passed 385 full-payload tests (312 current, 73 historical), with
   no skips; final focused and clean-clone checks also passed. Historical
@@ -1713,17 +1723,19 @@ prepared_external_action_drafts: 5
   issue, one Arena proof-parameter characterization pair, and one Arena
   complete-recursor positivity pair. No issue, comment, pull request, source
   approval, or publication was created by this successor.
+- Owner follow-through is now recorded in the explicit external-action
+  successor. The recent-commit check found neither pair already addressed.
+  Arena PRs #181 and #182 were submitted separately after their focused builds
+  passed. The Kiota packet is deferred pending Arena feedback.
 
 ### Active
 
-1. `F-CORPUS-INTEGRATION-AND-WITNESS-ADMISSION`: local completion conditions in
-   the [review successor](research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md)
-   are met. The authorized frontier is now limited to recording the owner's
-   decisions on the three exact external packets and, for any approved target,
-   executing only that reviewed submission. No external target is currently
-   authorized. Transfer work and the remaining survivor queue stay outside this
-   frontier. The ecosystem closure at `2136c65` and the original publication
-   study remain closed.
+No research frontier is currently active. The corpus-integration and witness-
+admission successor is complete, including the owner's external decisions and
+the two approved Arena submissions. Selecting prospective transfer work, more
+survivor triage, or any other successor requires a new explicit authorization.
+The ecosystem closure at `2136c65` and the original publication study remain
+closed.
 
 ### Waiting
 
@@ -1753,15 +1765,17 @@ prepared_external_action_drafts: 5
   spam and to determine whether one shared validation boundary explains them.
 - `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on current
   Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
-  contract-clarification issue; no demonstrated unsoundness is claimed.
-  Publication needs target-specific approval. The Arena pair now passes current
-  static integration as control `accept` / candidate `either`; its exact
-  characterization proposal also needs target-specific approval.
+  contract-clarification issue; no demonstrated unsoundness is claimed. The
+  owner deferred that issue pending Arena feedback. The separate Arena
+  characterization was submitted as PR #182 with control `accept` / candidate
+  `either`. Any future Kiota issue still requires target-specific approval.
 
 - `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor companion
-  proposal, supported by prior pinned evidence. Current tutorial-content
-  comparison and static integration are complete. The proposed candidate
-  `reject` outcome and exact submission require explicit human approval.
+  proposal, supported by prior pinned evidence, as submitted PR #181. Current
+  tutorial-content comparison, recent-commit duplicate preflight, static
+  integration, and owner approval are complete. Await upstream disposition;
+  the candidate `reject` outcome remains Arena corpus policy rather than
+  normative semantic authority.
 
 - `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on
   2026-08-30 with `outcome: either`; current source contains the corner cases.

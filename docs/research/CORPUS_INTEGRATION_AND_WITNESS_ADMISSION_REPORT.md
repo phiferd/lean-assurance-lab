@@ -4,4 +4,4 @@ The two fixed Nanoda survivor witnesses are now admitted through `nanoda-augment
 
 Arena static integration at `abc55357aee17c59dfdbf39c8a2e19739e23dd10` completed two bounded `build-test` invocations with zero checker launches and zero downloads. The proof-parameter control is `accept` and candidate `either`; the complete-recursor positivity control is `accept` and candidate remains proposed `reject` subject to human expected-outcome review.
 
-The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. The remaining Kiota clarification and either Arena submission remain human-gated. No external action was executed.
+The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. Arena PR #182 carries that pair as an `either` characterization, while Arena PR #181 separately carries the complete-recursor positivity companion. The owner deferred the Kiota clarification pending Arena feedback.
