@@ -1,0 +1,222 @@
+#!/usr/bin/env python3
+"""Build the input-bound successor interpretation of the proof-parameter pair."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = "results/research/proof-parameter-contract-review.json"
+REPORT = "docs/research/PROOF_PARAMETER_CONTRACT_REVIEW.md"
+DRAFT_ROOT = "results/investigations/corpus-integration-2026-09-05/drafts"
+CONTROL = "corpus/generated/lal-ordinary-inductive-proof-parameter-control.ndjson"
+CANDIDATE = "corpus/generated/lal-ordinary-inductive-proof-parameter-candidate.ndjson"
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def bound(path: str) -> dict:
+    source = ROOT / path
+    return {"path": path, "sha256": sha256(source), "bytes": source.stat().st_size}
+
+
+def records(path: str) -> list[dict]:
+    return [json.loads(line) for line in (ROOT / path).read_text().splitlines() if line]
+
+
+def expression_refs(record: dict) -> set[int]:
+    refs: set[int] = set()
+    for kind in ("app", "forallE", "lam", "letE"):
+        value = record.get(kind)
+        if isinstance(value, dict):
+            for key in ("fn", "arg", "type", "body", "value"):
+                if isinstance(value.get(key), int):
+                    refs.add(value[key])
+    return refs
+
+
+def follows(by_id: dict[int, dict], path: list[int]) -> bool:
+    return all(right in expression_refs(by_id[left]) for left, right in zip(path, path[1:]))
+
+
+def build() -> dict[str, str]:
+    control = records(CONTROL)
+    candidate = records(CANDIDATE)
+    if len(control) != 53 or len(candidate) != 53:
+        raise ValueError("proof-parameter pair must contain exactly 53 records")
+    differences = [index + 1 for index, (a, b) in enumerate(zip(control, candidate)) if a != b]
+    if differences != [18, 19]:
+        raise ValueError(f"unexpected record differences: {differences}")
+    changed_ids = [candidate[index - 1].get("ie") for index in differences]
+    if changed_ids != [10, 11]:
+        raise ValueError(f"unexpected changed expression IDs: {changed_ids}")
+    by_id = {row["ie"]: row for row in candidate if "ie" in row}
+    reachability = {
+        "constructor_type": [14, 13, 12, 11],
+        "recursor_type": [33, 32, 31, 30, 16, 11],
+        "recursor_rule_rhs": [38, 37, 36, 35, 16, 11],
+    }
+    if not all(follows(by_id, path) for path in reachability.values()):
+        raise ValueError("shared changed expression no longer reaches every recorded declaration component")
+
+    requests = json.loads((ROOT / "results/research/evidence/proof-parameter-contract-review/requests.json").read_text())
+    if requests["status"] != "COMPLETE" or len(requests["requests"]) != 2:
+        raise ValueError("implementation-source retrieval is incomplete")
+    for request in requests["requests"]:
+        for item in (request["response"], request["source"]):
+            if sha256(ROOT / item["path"]) != item["sha256"]:
+                raise ValueError("retrieved implementation source binding changed")
+    official = (ROOT / requests["requests"][0]["source"]["path"]).read_text()
+    kiota = (ROOT / requests["requests"][1]["source"]["path"]).read_text()
+    if "m_params[i] != args[i]" not in official:
+        raise ValueError("official structural parameter predicate changed")
+    if "self.is_def_eq(&c2, &args[i], &expected)?" not in kiota:
+        raise ValueError("Kiota conversion parameter predicate changed")
+    if "self.proofs_of_same_prop(ctx, a, b)?" not in kiota:
+        raise ValueError("Kiota proof-irrelevance behavior changed")
+
+    authority = json.loads((ROOT / "config/declaration-validation-authority-rules.json").read_text())
+    required_prohibitions = {
+        "LLM_JUDGMENT_AS_EVIDENCE", "CHECKER_MAJORITY_AS_NORMATIVITY",
+        "IMPLEMENTATION_CONSENSUS_AS_NORMATIVITY", "SILENT_AUTHORITY_INFERENCE",
+    }
+    if not required_prohibitions <= set(authority["global_prohibitions"]):
+        raise ValueError("authority prohibitions changed")
+    approved = json.loads((ROOT / "config/declaration-validation-approved-authority-sources/publication-study-v2.json").read_text())
+    if any("PROOF" in row["id"] or "INDUCT" in row["id"] for row in approved["normative_documentation"]):
+        raise ValueError("approved authority registry now needs fresh adjudication")
+    integration = json.loads((ROOT / "results/investigations/corpus-integration-2026-09-05/result.json").read_text())
+    if integration["status"] != "PASS" or integration["checker_launches"] != 0:
+        raise ValueError("current Arena static integration is not complete")
+
+    inputs = [
+        bound(CONTROL), bound(CANDIDATE),
+        bound("scripts/materialize-ordinary-inductive-proof-parameter"),
+        bound("results/expected-outcomes/ordinary-inductive-proof-parameter-uniformity.json"),
+        bound("results/investigations/ecosystem-closure-2026-09-05/proof-parameter-current/result.json"),
+        bound("results/research/evidence/proof-parameter-contract-review/requests.json"),
+        bound("config/declaration-validation-authority-rules.json"),
+        bound("config/declaration-validation-approved-authority-sources/publication-study-v2.json"),
+        bound("results/investigations/corpus-integration-2026-09-05/result.json"),
+        bound("docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md"),
+        bound("scripts/build-proof-parameter-contract-review"),
+    ]
+    review = {
+        "schema_version": 1,
+        "status": "COMPLETE",
+        "review_class": "SEPARATE_ULTRA_SCIENTIFIC_REVIEW",
+        "inputs": inputs,
+        "pair_structure": {
+            "record_count_each": 53,
+            "changed_record_numbers": differences,
+            "changed_expression_ids": changed_ids,
+            "shared_expression_reachability": reachability,
+            "corrected_description": (
+                "The complete recursor and declaration metadata remain present, but the two edited "
+                "expression nodes are shared into its motive domain and rule annotation."
+            ),
+        },
+        "implementation_predicates": {
+            "official_lean_4_33": "structural identity of constructor-result parameters",
+            "kiota_2d2a9fa": "definitional equality, including proof irrelevance for proofs of the same proposition",
+        },
+        "authority": {
+            "status": "UNRESOLVED_FOR_UNIVERSAL_CONFORMANCE",
+            "conclusion": (
+                "No currently approved qualified source makes exact proof-parameter order a universal "
+                "cross-validator obligation. The pair establishes an implementation-profile disagreement."
+            ),
+            "unmet_requirement": (
+                "A qualified contract must bind the raw declaration representation, permitted conversions, "
+                "target versions, rejection obligation, and source-to-claim correspondence."
+            ),
+            "prohibited_inferences_applied": sorted(required_prohibitions),
+        },
+        "arena_recommendation": {
+            "control": "accept",
+            "candidate": "either",
+            "purpose": "empirical characterization excluded from completeness and soundness scoring",
+            "integration_status": "PASS",
+            "external_action": False,
+            "human_gate": "REVIEW_REQUIRED_BEFORE_SUBMISSION",
+        },
+        "kiota_recommendation": {
+            "action": "CONTRACT_CLARIFICATION_ISSUE",
+            "framing": "appropriate after correcting shared-expression scope; no demonstrated unsoundness",
+            "external_action": False,
+            "human_gate": "REVIEW_REQUIRED_BEFORE_SUBMISSION",
+        },
+        "nonclaims": [
+            "Official rejection is not normative authority.",
+            "Proof irrelevance does not establish safety of arbitrary nonuniform inductives.",
+            "The pair is not syntactically isolated to the constructor result after expression decoding.",
+            "Arena either policy is characterization policy, not a universal semantic adjudication.",
+        ],
+    }
+
+    kiota_draft = """# Clarify constructor-result proof-parameter uniformity
+
+Prepared locally; publication requires explicit approval for `sankalpsthakur/kiota`.
+
+At Kiota main `2d2a9fa31cba31abdd49543c3bb667591207577e`, the default checker accepts both the unchanged control and a candidate that swaps `(p q : P)` to `(q p)` in the inductive application. The complete recursor and declaration metadata remain present. The two edited expression nodes are shared, so the swap also changes the recursor motive domain and its annotation in the rule RHS.
+
+Pinned official Lean 4.33.0 accepts the control and rejects the candidate with `invalid return type for LALProofParameterSwap.mk`. Current Kiota checks these constructor-result parameters with `is_def_eq`; its definitional equality recognizes proof irrelevance for proofs of the same proposition. The pair therefore records a concrete policy difference, not a demonstrated proof of `False`.
+
+Exact artifacts are `corpus/generated/lal-ordinary-inductive-proof-parameter-{control,candidate}.ndjson`. Input, binary and raw-output bindings are in `results/investigations/ecosystem-closure-2026-09-05/proof-parameter-current/result.json`. Current Arena static integration succeeds with control `accept` and candidate `either`.
+
+Would you clarify whether Kiota intends conversion or structural parameter identity at this raw inductive-declaration boundary? If structural identity is intended, would a focused regression be useful? The project has not identified a qualified universal contract requiring rejection, so this request deliberately does not allege unsoundness.
+"""
+    arena_draft = """# Add an `either` characterization pair for proof-parameter order
+
+Prepared locally; publication requires explicit approval for `leanprover/lean-kernel-arena`.
+
+This pair characterizes an ordinary inductive whose parameters include `(P : Prop) (p q : P)`. The candidate swaps `p` and `q` in the inductive application. The complete recursor and declaration metadata remain present, but the edited expression nodes are shared into the recursor motive domain and rule annotation. The control is unchanged.
+
+Pinned official Lean 4.33.0 accepts the control and rejects the candidate. Kiota `2d2a9fa` accepts both because its constructor-result check uses definitional equality, which recognizes proof irrelevance here. No qualified source reviewed by this project establishes a universal rejection obligation.
+
+Proposed outcomes: control `accept`, candidate `either`. This preserves the implementation-profile difference while excluding the unsettled candidate from completeness and soundness scoring. The current Arena harness at `abc55357` successfully materializes both static files. Arena's existing nested-nonuniform case uses a `W`-valued constant in a nested occurrence; it is useful context but not an exact duplicate or normative precedent.
+"""
+    report = """# Proof-parameter contract review
+
+The separate scientific review found no qualified authority for treating exact proof-parameter order as a universal cross-validator conformance obligation. The recorded pair establishes an implementation-profile disagreement: official Lean 4.33.0 uses structural parameter identity, while current Kiota uses definitional equality and proof irrelevance.
+
+The earlier isolation description was too strong. The two changed expression records are shared by the constructor type, the recursor motive domain, and the rule RHS annotation. The complete recursor and declaration metadata remain present, but its decoded expressions are not unchanged. This successor corrects live drafts while preserving historical bytes.
+
+For Arena, the supported posture is a control with `accept` and a candidate with `either`, as characterization outside completeness and soundness scoring. The current Arena harness materialized both exact files successfully without checker launches. A universal `reject` outcome would require a qualified contract covering raw syntax, allowed conversion, versions, and rejection scope.
+
+The Kiota issue remains appropriate as a contract clarification after this correction. It makes no soundness allegation and asks whether conversion or structural identity is intended. No external action was executed.
+"""
+    return {
+        OUTPUT: json.dumps(review, indent=2, sort_keys=True) + "\n",
+        REPORT: report,
+        DRAFT_ROOT + "/kiota-proof-parameter.md": kiota_draft,
+        DRAFT_ROOT + "/arena-proof-parameter.md": arena_draft,
+    }
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    mode = parser.add_mutually_exclusive_group(required=True)
+    mode.add_argument("--write", action="store_true")
+    mode.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    outputs = build()
+    for path, content in outputs.items():
+        target = ROOT / path
+        if args.write:
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text(content)
+        elif not target.exists() or target.read_text() != content:
+            raise SystemExit("stale proof-parameter review output: " + path)
+    print("PASS: proof-parameter contract review matches bound inputs")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
