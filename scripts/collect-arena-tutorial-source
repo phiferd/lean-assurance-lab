@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Collect the exact current Arena tutorial source using one GET request."""
+
+from __future__ import annotations
+
+import base64
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results/research/evidence/corpus-integration-arena-tutorial"
+ENDPOINT = (
+    "repos/leanprover/lean-kernel-arena/contents/tutorial/Tutorial.lean"
+    "?ref=abc55357aee17c59dfdbf39c8a2e19739e23dd10"
+)
+
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def main() -> int:
+    if OUTPUT.exists():
+        raise SystemExit(f"refusing to overwrite evidence: {OUTPUT}")
+    process = subprocess.run(
+        ["gh", "api", "--method", "GET", ENDPOINT],
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30, check=False,
+    )
+    if process.returncode:
+        raise SystemExit(process.stderr.decode(errors="replace"))
+    response = json.loads(process.stdout)
+    source = base64.b64decode(response["content"])
+    OUTPUT.mkdir(parents=True)
+    response_path = OUTPUT / "tutorial.json"
+    source_path = OUTPUT / "Tutorial.lean"
+    response_path.write_bytes(process.stdout)
+    source_path.write_bytes(source)
+    manifest = {
+        "schema_version": 1,
+        "status": "COMPLETE",
+        "method": "GET",
+        "endpoint": ENDPOINT,
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "response": {"path": str(response_path.relative_to(ROOT)), "sha256": digest(process.stdout)},
+        "source": {
+            "path": str(source_path.relative_to(ROOT)), "sha256": digest(source),
+            "bytes": len(source), "git_blob_sha": response["sha"],
+        },
+        "producer_sha256": digest(Path(__file__).read_bytes()),
+        "external_mutations": 0,
+    }
+    (OUTPUT / "request.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    print(json.dumps({"status": "COMPLETE", "bytes": len(source)}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
