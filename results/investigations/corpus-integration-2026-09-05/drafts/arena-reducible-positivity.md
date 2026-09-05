@@ -1,9 +1,7 @@
-# Arena PR #181 maintainer follow-up
+# Arena PR #181 current description
 
-## Replacement PR description
-
-This adds two static exports for Lean's strict-positivity check. The rejected
-case has the following shape:
+This adds one static export for Lean's strict-positivity check. The declaration
+has the following shape:
 
 ```lean
 def Ignore (A B : Type) : Type := A
@@ -13,28 +11,22 @@ inductive T : Type where
 ```
 
 `Ignore` takes a second type argument but does not use it, so `Ignore Unit T`
-reduces to `Unit`. For positivity checking, however, Lean conservatively counts
-the syntactic occurrence of `T` in the domain of the arrow instead of unfolding
-`Ignore` to erase that argument. It therefore rejects the declaration as
-non-positive.
+reduces to `Unit`. A checker that inspects the unreduced constructor field may
+reject the syntactic occurrence of `T` in the domain of the arrow. A checker
+that first weak-head-normalizes the field type may instead see `(Unit -> T) ->
+T` and accept it. The test therefore has outcome `either`.
 
-The accepted control replaces `Ignore Unit T` with `Unit`, giving the field
-type `(Unit -> T) -> T`.
-
-Both files contain the full exported inductive declaration, with constructor
-and recursor data matching each version. Arena's related tutorial example has
+The file contains the full exported inductive declaration, with matching
+constructor and recursor data. Arena's related tutorial example has
 placeholder recursor data and can be rejected for that independent reason.
-These tests isolate the positivity check: the control has outcome `accept`, and
-the version with the phantom `T` argument has outcome `reject`.
+This test therefore isolates the positivity behavior with an otherwise complete
+export.
+
+The test is placed at `tests/corner-cases/positivity-whnf`.
 
 Validation:
 
 ```text
-python lka.py build-test 'lal-reducible-hidden-positivity-*'
-Results: 2 succeeded, 0 failed
+python lka.py build-test corner-cases/positivity-whnf
+Results: 1 succeeded, 0 failed
 ```
-
-## Maintainer reply posted
-
-I replaced the description with a source-level explanation of the two
-declarations and why the second one is rejected.

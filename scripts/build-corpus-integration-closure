@@ -160,16 +160,16 @@ def validate_followthrough() -> dict:
         raise ValueError("Arena recent-commit scope changed")
     decisions = record.get("decisions", {})
     expected = {
-        "proof_parameter_arena_pair": (182, "codex/proof-parameter-order", "06e7350c2e5a92e5385f2602c683ae55c28a343c"),
-        "reducible_positivity_arena_pair": (181, "codex/reducible-hidden-positivity", "1027fae9817509081cdfb9a7455eac424d0b1e4b"),
+        "proof_parameter_arena_pair": (182, "codex/proof-parameter-order", "06e7350c2e5a92e5385f2602c683ae55c28a343c", 2),
+        "reducible_positivity_arena_pair": (181, "codex/reducible-hidden-positivity", "a23ade7a24cf33169a0ac532cb3009df9a3539c2", 1),
     }
-    for key, (number, branch, commit) in expected.items():
+    for key, (number, branch, commit, succeeded) in expected.items():
         row = decisions.get(key, {})
         if (row.get("decision"), row.get("external_action"), row.get("pull_request"), row.get("branch"), row.get("commit")) != ("SUBMITTED", True, number, branch, commit):
             raise ValueError("Arena submission record changed: " + key)
         if row.get("url") != f"https://github.com/leanprover/lean-kernel-arena/pull/{number}":
             raise ValueError("Arena pull-request URL changed: " + key)
-        if row.get("validation", {}).get("succeeded") != 2 or row["validation"].get("failed") != 0:
+        if row.get("validation", {}).get("succeeded") != succeeded or row["validation"].get("failed") != 0:
             raise ValueError("Arena submission validation changed: " + key)
     proof = decisions["proof_parameter_arena_pair"]
     if proof["validation"].get("command") != "python lka.py build-test 'corner-cases/proof-param-*'":
@@ -184,9 +184,16 @@ def validate_followthrough() -> dict:
     positivity = decisions["reducible_positivity_arena_pair"]
     if positivity.get("maintainer_followup") != {
         "comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554877783",
+        "control_status": "REMOVED",
         "description_status": "REPLACED_WITH_STANDALONE_EXPLANATION",
+        "maintainer_policy_comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554965541",
+        "outcome": "either",
+        "resolution": "MOVED_TO_CORNER_CASES_AS_SINGLE_TEST",
+        "test_names": ["corner-cases/positivity-whnf"],
     }:
         raise ValueError("Arena positivity maintainer follow-up changed")
+    if positivity.get("title") != "Add reducible-argument positivity corner case" or positivity["validation"].get("command") != "python lka.py build-test corner-cases/positivity-whnf":
+        raise ValueError("Arena positivity revision metadata changed")
     kiota = decisions.get("kiota_contract_clarification", {})
     if (kiota.get("decision"), kiota.get("external_action")) != ("DEFERRED", False):
         raise ValueError("Kiota deferral decision changed")
@@ -208,7 +215,7 @@ def build() -> dict[str, str]:
         {"id": "imax-right-successor-checker-disagreement", "disposition": "ACTION_TAKEN", "reason": "Earlier Arena corpus contribution remains recorded; this closure executes no new external action."},
         {"id": "possibly-prop-projection-overrejection", "disposition": "NO_EXTERNAL_ACTION", "reason": "Existing profile evidence and Arena policy remain non-normative; no new checker allegation follows."},
         {"id": "proof-parameter-uniformity-disagreement", "disposition": "ACTION_TAKEN", "reason": "Arena PR #182 carries the either characterization pair; the separate Kiota clarification is owner-deferred pending Arena feedback."},
-        {"id": "reducible-hidden-positivity-corpus-gap", "disposition": "ACTION_TAKEN", "reason": "Arena PR #181 carries the complete-recursor positivity companion as a separate contribution."},
+        {"id": "reducible-hidden-positivity-corpus-gap", "disposition": "ACTION_TAKEN", "reason": "Arena PR #181 carries one reducible-argument positivity corner case with outcome either after maintainer review."},
     ]
     triage = [{"mutant_id": row["id"], "semantic_status": "UNRESOLVED", "profile_status": "CONFIRMED_OFFICIAL_PROFILE_REJECTION", "classification": "MEANINGFUL_SEMANTIC"} for row in witnesses]
     next_steps = [
@@ -224,7 +231,7 @@ def build() -> dict[str, str]:
               "arena_tutorial_comparison": tutorial["duplicate_comparison"],
               "witness_admissions": witnesses,
               "findings": findings, "triage": triage, "next_steps": next_steps,
-              "limits": ["Arena outcomes are package-policy contracts, not normative semantic authority.", "The proof-parameter candidate remains an implementation-profile characterization with outcome either.", "The positivity candidate's reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim.", "This renderer consumes the recorded submissions but has no checker, network, download, or external-action capability."],
+              "limits": ["Arena outcomes are package-policy contracts, not normative semantic authority.", "The proof-parameter candidate remains an implementation-profile characterization with outcome either.", "The positivity artifact now has Arena outcome either; the original reject/control evidence remains historical profile evidence, not a universal semantic claim.", "This renderer consumes the recorded submissions but has no checker, network, download, or external-action capability."],
               "recorded_at": followthrough["recorded_at"]}
     packet_text = json.dumps(packet, indent=2, sort_keys=True) + "\n"
     actions = json.loads(json.dumps(predecessor))
@@ -241,20 +248,18 @@ def build() -> dict[str, str]:
     proof["recommendations"][1]["rationale"] = "Submitted separately as an either characterization after the latest-upstream duplicate check found no exact match."
     positivity["disposition"] = "ACTION_TAKEN"
     positivity["evidence"].extend([closure_evidence, action_evidence(BASE + "/result.json"), action_evidence("results/research/evidence/corpus-integration-arena-tutorial/request.json"), action_evidence(FOLLOWTHROUGH)])
-    positivity["summary"] = "Arena PR #181 submits the complete-recursor positivity pair separately. Maintainer feedback was addressed by replacing the description with a stand-alone source-level explanation. The candidate reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim."
+    positivity["summary"] = "Arena PR #181 now submits one reducible-argument positivity corner case with outcome either. Maintainer feedback was addressed by removing the control, moving the artifact to corner-cases/positivity-whnf, and explaining the permitted WHNF-dependent behaviors. The original reject/control observations remain preserved as implementation-profile evidence rather than a universal semantic claim."
     positivity["recommendations"][0].update(execution_status="COMPLETED", prerequisites=["completed: expected-outcome review", "completed: exact duplicate and recent-commit preflight", "completed: owner approval", "completed: Arena build-test 2 succeeded, 0 failed"], human_gate={"required": True, "status": "APPROVED"}, external_reference="https://github.com/leanprover/lean-kernel-arena/pull/181")
-    positivity["recommendations"][0]["rationale"] = "Submitted separately after current tutorial and recent-commit checks found no exact complete serialized recursor fixture."
+    positivity["recommendations"][0]["rationale"] = "Submitted separately after current tutorial and recent-commit checks found no exact complete serialized recursor fixture; maintainer review then narrowed it to one either corner case."
     if not any(item.get("id") == "positivity-no-implementation-issue" for item in positivity["recommendations"]):
         positivity["recommendations"].append(no_external_action("positivity-integration-no-checker-allegation", "All observed validators", "Static package materialization does not establish a checker defect or normative semantics."))
     for item in positivity["recommendations"]:
         if item.get("id") == "positivity-no-implementation-issue":
             item["rationale"] = "The focused Arena contribution records a corpus case without alleging a checker defect or universal semantic rule."
-    draft = """# Arena PR #181 maintainer follow-up
+    draft = """# Arena PR #181 current description
 
-## Replacement PR description
-
-This adds two static exports for Lean's strict-positivity check. The rejected
-case has the following shape:
+This adds one static export for Lean's strict-positivity check. The declaration
+has the following shape:
 
 ```lean
 def Ignore (A B : Type) : Type := A
@@ -264,39 +269,33 @@ inductive T : Type where
 ```
 
 `Ignore` takes a second type argument but does not use it, so `Ignore Unit T`
-reduces to `Unit`. For positivity checking, however, Lean conservatively counts
-the syntactic occurrence of `T` in the domain of the arrow instead of unfolding
-`Ignore` to erase that argument. It therefore rejects the declaration as
-non-positive.
+reduces to `Unit`. A checker that inspects the unreduced constructor field may
+reject the syntactic occurrence of `T` in the domain of the arrow. A checker
+that first weak-head-normalizes the field type may instead see `(Unit -> T) ->
+T` and accept it. The test therefore has outcome `either`.
 
-The accepted control replaces `Ignore Unit T` with `Unit`, giving the field
-type `(Unit -> T) -> T`.
-
-Both files contain the full exported inductive declaration, with constructor
-and recursor data matching each version. Arena's related tutorial example has
+The file contains the full exported inductive declaration, with matching
+constructor and recursor data. Arena's related tutorial example has
 placeholder recursor data and can be rejected for that independent reason.
-These tests isolate the positivity check: the control has outcome `accept`, and
-the version with the phantom `T` argument has outcome `reject`.
+This test therefore isolates the positivity behavior with an otherwise complete
+export.
+
+The test is placed at `tests/corner-cases/positivity-whnf`.
 
 Validation:
 
 ```text
-python lka.py build-test 'lal-reducible-hidden-positivity-*'
-Results: 2 succeeded, 0 failed
+python lka.py build-test corner-cases/positivity-whnf
+Results: 1 succeeded, 0 failed
 ```
-
-## Maintainer reply posted
-
-I replaced the description with a source-level explanation of the two
-declarations and why the second one is rejected.
 """
     report = """# Corpus integration and witness admission closure
 
 The two fixed Nanoda survivor witnesses are now admitted through `nanoda-augmented-v2`. Each preserves its exact candidate and control bytes, raw six-launch evidence, baseline/mutant distinction, and pinned official-profile rejection. Their classifications measure meaningful source-mutant distinctions; they do not establish universal Lean semantics.
 
-Arena static integration at `abc55357aee17c59dfdbf39c8a2e19739e23dd10` completed two bounded `build-test` invocations with zero checker launches and zero downloads. The proof-parameter control is `accept` and candidate `either`; the complete-recursor positivity control is `accept` and candidate remains proposed `reject` subject to human expected-outcome review.
+Arena static integration at `abc55357aee17c59dfdbf39c8a2e19739e23dd10` completed two bounded `build-test` invocations with zero checker launches and zero downloads. That frozen integration recorded the proof-parameter control as `accept` and candidate as `either`, and the positivity control as `accept` and candidate as proposed `reject`. Maintainer review later narrowed the live positivity submission to the candidate alone under `corner-cases/positivity-whnf` with outcome `either`; the original pair remains unchanged as historical profile evidence.
 
-The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. Arena PR #182 carries that pair as an `either` characterization, while Arena PR #181 separately carries the complete-recursor positivity companion. The owner deferred the Kiota clarification pending Arena feedback.
+The separate proof-parameter review preserves unresolved universal authority and corrects the pair description: edited expressions are shared into the recursor. Arena PR #182 carries that pair as an `either` characterization, while Arena PR #181 carries the single reducible-argument positivity corner case. The owner deferred the Kiota clarification pending Arena feedback.
 """
     return {PREDECESSOR: predecessor_text, PACKET: packet_text, ACTIONS: json.dumps(actions, indent=2, sort_keys=True) + "\n", DRAFT: draft, REPORT: report}
 

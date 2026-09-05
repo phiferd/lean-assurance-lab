@@ -43,11 +43,13 @@ research directions.
 - Completed owner-approved external follow-through for the corpus-integration
   successor on 2026-09-05. A latest-upstream Arena preflight at `8ae1d84`
   found one intervening Sokobanoda revision bump and no exact match for either
-  pair. The complete-recursor positivity pair was submitted separately as
+  pair. The complete-recursor positivity artifact was submitted separately as
   [Arena PR #181](https://github.com/leanprover/lean-kernel-arena/pull/181),
   and the proof-parameter `either` characterization as
   [Arena PR #182](https://github.com/leanprover/lean-kernel-arena/pull/182).
-  Both branches pass their focused two-test Arena builds. The owner deferred
+  Both initial pairs passed their focused two-test Arena builds. Maintainer
+  review later narrowed PR #181 to one `corner-cases/positivity-whnf` test with
+  outcome `either`; that revised test builds 1/1. The owner deferred
   the separate Kiota clarification pending Arena feedback; no Kiota issue was
   created.
 - Completed the authorized ecosystem-closure/autonomy successor on 2026-09-05.
@@ -1727,9 +1729,11 @@ prepared_external_action_drafts: 5
   successor. The recent-commit check found neither pair already addressed.
   Arena PRs #181 and #182 were submitted separately after their focused builds
   passed. Maintainer feedback was then addressed: both PR descriptions were
-  replaced with stand-alone source-level explanations, and PR #182 moved to
+  replaced with stand-alone source-level explanations, PR #182 moved to
   `tests/corner-cases/` as `proof-param-ok` and `proof-param-swap`; the renamed
-  pair builds 2/2. The Kiota packet is deferred pending Arena feedback.
+  pair builds 2/2, and PR #181 was narrowed to the single
+  `corner-cases/positivity-whnf` test with outcome `either`; it builds 1/1. The
+  Kiota packet is deferred pending Arena feedback.
 
 ### Active
 
@@ -1774,13 +1778,14 @@ closed.
   `either`; its maintainer-requested corner-case placement and shorter names are
   complete. Any future Kiota issue still requires target-specific approval.
 
-- `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor companion
-  proposal, supported by prior pinned evidence, as submitted PR #181. Current
+- `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor artifact,
+  supported by prior pinned evidence, as submitted PR #181. Current
   tutorial-content comparison, recent-commit duplicate preflight, static
-  integration, and owner approval are complete. Await upstream disposition;
-  the maintainer-requested stand-alone description is posted. The candidate
-  `reject` outcome remains Arena corpus policy rather than normative semantic
-  authority.
+  integration, and owner approval are complete. Maintainer review removed the
+  low-value control, moved the artifact to `corner-cases/positivity-whnf`, and
+  selected outcome `either` because acceptance after WHNF may be valid. Await
+  upstream disposition. The original reject/control observations remain
+  preserved as profile evidence rather than normative semantic authority.
 
 - `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on
   2026-08-30 with `outcome: either`; current source contains the corner cases.
