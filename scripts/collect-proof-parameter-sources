@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Collect two exact public implementation sources using GET only."""
+
+from __future__ import annotations
+
+import base64
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import subprocess
+
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = ROOT / "results/research/evidence/proof-parameter-contract-review"
+SOURCES = [
+    (
+        "lean4-v4.33.0-inductive",
+        "repos/leanprover/lean4/contents/src/kernel/inductive.cpp?ref=v4.33.0",
+        "lean4-v4.33.0-inductive.cpp",
+    ),
+    (
+        "kiota-2d2a9fa-tc",
+        "repos/sankalpsthakur/kiota/contents/src/tc.rs?ref=2d2a9fa31cba31abdd49543c3bb667591207577e",
+        "kiota-2d2a9fa-tc.rs",
+    ),
+]
+
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def main() -> int:
+    if OUTPUT.exists():
+        raise SystemExit(f"refusing to overwrite evidence: {OUTPUT}")
+    OUTPUT.mkdir(parents=True)
+    records = []
+    for source_id, endpoint, filename in SOURCES:
+        process = subprocess.run(
+            ["gh", "api", "--method", "GET", endpoint],
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=30, check=False,
+        )
+        if process.returncode:
+            raise SystemExit(process.stderr.decode(errors="replace"))
+        response = json.loads(process.stdout)
+        content = base64.b64decode(response["content"])
+        response_path = OUTPUT / (source_id + ".json")
+        source_path = OUTPUT / filename
+        response_path.write_bytes(process.stdout)
+        source_path.write_bytes(content)
+        records.append({
+            "id": source_id,
+            "method": "GET",
+            "endpoint": endpoint,
+            "recorded_at": datetime.now(timezone.utc).isoformat(),
+            "response": {"path": str(response_path.relative_to(ROOT)), "sha256": digest(process.stdout)},
+            "source": {
+                "path": str(source_path.relative_to(ROOT)),
+                "sha256": digest(content),
+                "git_blob_sha": response["sha"],
+                "size": len(content),
+            },
+        })
+    manifest = {
+        "schema_version": 1,
+        "status": "COMPLETE",
+        "requests": records,
+        "external_mutations": 0,
+        "producer_sha256": digest(Path(__file__).read_bytes()),
+    }
+    (OUTPUT / "requests.json").write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
+    print(json.dumps({"status": "COMPLETE", "sources": len(records)}, indent=2))
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
