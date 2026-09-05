@@ -160,7 +160,7 @@ def validate_followthrough() -> dict:
         raise ValueError("Arena recent-commit scope changed")
     decisions = record.get("decisions", {})
     expected = {
-        "proof_parameter_arena_pair": (182, "codex/proof-parameter-order", "1d1e808c73f9b650a6b2f4a40ee08c7da268267e"),
+        "proof_parameter_arena_pair": (182, "codex/proof-parameter-order", "06e7350c2e5a92e5385f2602c683ae55c28a343c"),
         "reducible_positivity_arena_pair": (181, "codex/reducible-hidden-positivity", "1027fae9817509081cdfb9a7455eac424d0b1e4b"),
     }
     for key, (number, branch, commit) in expected.items():
@@ -171,6 +171,22 @@ def validate_followthrough() -> dict:
             raise ValueError("Arena pull-request URL changed: " + key)
         if row.get("validation", {}).get("succeeded") != 2 or row["validation"].get("failed") != 0:
             raise ValueError("Arena submission validation changed: " + key)
+    proof = decisions["proof_parameter_arena_pair"]
+    if proof["validation"].get("command") != "python lka.py build-test 'corner-cases/proof-param-*'":
+        raise ValueError("Arena proof-parameter validation command changed")
+    if proof.get("maintainer_followup") != {
+        "comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/182#issuecomment-5554878492",
+        "description_status": "REPLACED_WITH_STANDALONE_EXPLANATION",
+        "layout_status": "MOVED_TO_CORNER_CASES_WITH_SHORT_NAMES",
+        "test_names": ["corner-cases/proof-param-ok", "corner-cases/proof-param-swap"],
+    }:
+        raise ValueError("Arena proof-parameter maintainer follow-up changed")
+    positivity = decisions["reducible_positivity_arena_pair"]
+    if positivity.get("maintainer_followup") != {
+        "comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554877783",
+        "description_status": "REPLACED_WITH_STANDALONE_EXPLANATION",
+    }:
+        raise ValueError("Arena positivity maintainer follow-up changed")
     kiota = decisions.get("kiota_contract_clarification", {})
     if (kiota.get("decision"), kiota.get("external_action")) != ("DEFERRED", False):
         raise ValueError("Kiota deferral decision changed")
@@ -218,14 +234,14 @@ def build() -> dict[str, str]:
     action_evidence = lambda path: {key: value for key, value in bind(path).items() if key != "bytes"}
     proof["evidence"].extend([closure_evidence, action_evidence("results/research/proof-parameter-contract-review.json"), action_evidence(BASE + "/result.json"), action_evidence(FOLLOWTHROUGH)])
     proof["disposition"] = "ACTION_TAKEN"
-    proof["summary"] = "Arena PR #182 submits the control-accept / candidate-either characterization. The separate Kiota clarification is owner-deferred pending Arena feedback; no universal rejection obligation is asserted."
+    proof["summary"] = "Arena PR #182 submits the control-accept / candidate-either characterization. Maintainer feedback was addressed by moving the pair to corner-cases with short names and replacing the description with a stand-alone explanation. The separate Kiota clarification is owner-deferred pending Arena feedback; no universal rejection obligation is asserted."
     proof["recommendations"][0].update(execution_status="DEFERRED", prerequisites=["Owner deferred this issue pending Arena feedback; new approval is required before filing."], human_gate={"required": True, "status": "DECLINED"})
     proof["recommendations"][0]["rationale"] = "The owner deferred a separate Kiota clarification to avoid premature or duplicative maintainer traffic."
     proof["recommendations"][1].update(execution_status="COMPLETED", prerequisites=["completed: exact duplicate and recent-commit preflight", "completed: owner approval", "completed: Arena build-test 2 succeeded, 0 failed"], human_gate={"required": True, "status": "APPROVED"}, external_reference="https://github.com/leanprover/lean-kernel-arena/pull/182")
     proof["recommendations"][1]["rationale"] = "Submitted separately as an either characterization after the latest-upstream duplicate check found no exact match."
     positivity["disposition"] = "ACTION_TAKEN"
     positivity["evidence"].extend([closure_evidence, action_evidence(BASE + "/result.json"), action_evidence("results/research/evidence/corpus-integration-arena-tutorial/request.json"), action_evidence(FOLLOWTHROUGH)])
-    positivity["summary"] = "Arena PR #181 submits the complete-recursor positivity pair separately. The candidate reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim."
+    positivity["summary"] = "Arena PR #181 submits the complete-recursor positivity pair separately. Maintainer feedback was addressed by replacing the description with a stand-alone source-level explanation. The candidate reject outcome remains a corpus contract supported by bound evidence, not a universal semantic claim."
     positivity["recommendations"][0].update(execution_status="COMPLETED", prerequisites=["completed: expected-outcome review", "completed: exact duplicate and recent-commit preflight", "completed: owner approval", "completed: Arena build-test 2 succeeded, 0 failed"], human_gate={"required": True, "status": "APPROVED"}, external_reference="https://github.com/leanprover/lean-kernel-arena/pull/181")
     positivity["recommendations"][0]["rationale"] = "Submitted separately after current tutorial and recent-commit checks found no exact complete serialized recursor fixture."
     if not any(item.get("id") == "positivity-no-implementation-issue" for item in positivity["recommendations"]):
@@ -247,16 +263,20 @@ inductive T : Type where
   | mk (f : Ignore Unit T -> T) : T
 ```
 
-`Ignore Unit T` reduces to `Unit`, but the recursive type `T` still occurs as
-an argument to `Ignore`. Lean therefore rejects the declaration as non-positive.
+`Ignore` takes a second type argument but does not use it, so `Ignore Unit T`
+reduces to `Unit`. For positivity checking, however, Lean conservatively counts
+the syntactic occurrence of `T` in the domain of the arrow instead of unfolding
+`Ignore` to erase that argument. It therefore rejects the declaration as
+non-positive.
+
 The accepted control replaces `Ignore Unit T` with `Unit`, giving the field
 type `(Unit -> T) -> T`.
 
-Both files contain the full exported inductive declaration, including valid
-constructor and recursor data. This matters because Arena's related tutorial
-example has placeholder recursor data and can be rejected for that independent
-reason. These tests isolate the positivity check: the control has outcome
-`accept`, and the version with the hidden occurrence has outcome `reject`.
+Both files contain the full exported inductive declaration, with constructor
+and recursor data matching each version. Arena's related tutorial example has
+placeholder recursor data and can be rejected for that independent reason.
+These tests isolate the positivity check: the control has outcome `accept`, and
+the version with the phantom `T` argument has outcome `reject`.
 
 Validation:
 
@@ -265,11 +285,10 @@ python lka.py build-test 'lal-reducible-hidden-positivity-*'
 Results: 2 succeeded, 0 failed
 ```
 
-## Proposed maintainer reply after replacing the PR description
+## Maintainer reply posted
 
-Yes — the original description was AI-assisted, and I should have rewritten it
-in plain language before submitting it. Sorry. I replaced it with a direct
-explanation of the two declarations and why the second one is rejected.
+I replaced the description with a source-level explanation of the two
+declarations and why the second one is rejected.
 """
     report = """# Corpus integration and witness admission closure
 

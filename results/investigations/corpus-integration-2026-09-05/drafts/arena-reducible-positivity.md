@@ -12,16 +12,20 @@ inductive T : Type where
   | mk (f : Ignore Unit T -> T) : T
 ```
 
-`Ignore Unit T` reduces to `Unit`, but the recursive type `T` still occurs as
-an argument to `Ignore`. Lean therefore rejects the declaration as non-positive.
+`Ignore` takes a second type argument but does not use it, so `Ignore Unit T`
+reduces to `Unit`. For positivity checking, however, Lean conservatively counts
+the syntactic occurrence of `T` in the domain of the arrow instead of unfolding
+`Ignore` to erase that argument. It therefore rejects the declaration as
+non-positive.
+
 The accepted control replaces `Ignore Unit T` with `Unit`, giving the field
 type `(Unit -> T) -> T`.
 
-Both files contain the full exported inductive declaration, including valid
-constructor and recursor data. This matters because Arena's related tutorial
-example has placeholder recursor data and can be rejected for that independent
-reason. These tests isolate the positivity check: the control has outcome
-`accept`, and the version with the hidden occurrence has outcome `reject`.
+Both files contain the full exported inductive declaration, with constructor
+and recursor data matching each version. Arena's related tutorial example has
+placeholder recursor data and can be rejected for that independent reason.
+These tests isolate the positivity check: the control has outcome `accept`, and
+the version with the phantom `T` argument has outcome `reject`.
 
 Validation:
 
@@ -30,8 +34,7 @@ python lka.py build-test 'lal-reducible-hidden-positivity-*'
 Results: 2 succeeded, 0 failed
 ```
 
-## Proposed maintainer reply after replacing the PR description
+## Maintainer reply posted
 
-Yes — the original description was AI-assisted, and I should have rewritten it
-in plain language before submitting it. Sorry. I replaced it with a direct
-explanation of the two declarations and why the second one is rejected.
+I replaced the description with a source-level explanation of the two
+declarations and why the second one is rejected.

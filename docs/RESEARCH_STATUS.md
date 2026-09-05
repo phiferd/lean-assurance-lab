@@ -1726,7 +1726,10 @@ prepared_external_action_drafts: 5
 - Owner follow-through is now recorded in the explicit external-action
   successor. The recent-commit check found neither pair already addressed.
   Arena PRs #181 and #182 were submitted separately after their focused builds
-  passed. The Kiota packet is deferred pending Arena feedback.
+  passed. Maintainer feedback was then addressed: both PR descriptions were
+  replaced with stand-alone source-level explanations, and PR #182 moved to
+  `tests/corner-cases/` as `proof-param-ok` and `proof-param-swap`; the renamed
+  pair builds 2/2. The Kiota packet is deferred pending Arena feedback.
 
 ### Active
 
@@ -1768,14 +1771,16 @@ closed.
   contract-clarification issue; no demonstrated unsoundness is claimed. The
   owner deferred that issue pending Arena feedback. The separate Arena
   characterization was submitted as PR #182 with control `accept` / candidate
-  `either`. Any future Kiota issue still requires target-specific approval.
+  `either`; its maintainer-requested corner-case placement and shorter names are
+  complete. Any future Kiota issue still requires target-specific approval.
 
 - `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor companion
   proposal, supported by prior pinned evidence, as submitted PR #181. Current
   tutorial-content comparison, recent-commit duplicate preflight, static
   integration, and owner approval are complete. Await upstream disposition;
-  the candidate `reject` outcome remains Arena corpus policy rather than
-  normative semantic authority.
+  the maintainer-requested stand-alone description is posted. The candidate
+  `reject` outcome remains Arena corpus policy rather than normative semantic
+  authority.
 
 - `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on
   2026-08-30 with `outcome: either`; current source contains the corner cases.
