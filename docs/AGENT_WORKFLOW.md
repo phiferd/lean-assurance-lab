@@ -103,6 +103,13 @@ authentication, stop and tell the owner the exact repair command. Do not switch
 to browser automation unless the owner chooses that fallback after seeing the
 CLI failure.
 
+Before presenting any issue, pull request, or maintainer reply for approval,
+apply the stand-alone external-draft review in `docs/INVESTIGATION_SOP.md`.
+Explain the source-level case and expected behavior before internal provenance
+or research terminology. Verify paths and names against the target's current
+tree and an accepted precedent. Keep the exact proposed external text separate
+from local evidence notes so the owner can approve what maintainers will see.
+
 The completed publication study's validators require its original Active
 frontier. After Gate 12, use the snapshot successor for full-payload checks;
 never restore an obsolete Active marker just to satisfy a live validator.

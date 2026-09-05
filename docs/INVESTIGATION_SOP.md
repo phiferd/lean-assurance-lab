@@ -76,6 +76,42 @@ must include:
 External recommendations remain clear while authorization is pending. Use
 `REVIEW_REQUIRED`, not a vague or empty recommendation.
 
+## External-Facing Draft Standard
+
+An issue or pull request description must stand on its own for a maintainer who
+has not read this repository, an agent conversation, or the underlying research
+ledger. Before requesting authorization to submit or revise it, read the exact
+proposed text without those sources and verify that it answers:
+
+1. What concrete declaration, input, or behavior is being added or reported?
+2. What is the smallest difference between the compared cases?
+3. What outcome is expected, and why is that outcome appropriate for the
+   target project?
+4. What value does the contribution add beyond existing tests or reports?
+5. How can the maintainer reproduce the result?
+
+Define `candidate`, `control`, implementation names, and project-specific terms
+when they are needed. Do not rely on unexplained Lab phrases such as “bound
+evidence,” “shared expression,” “complete recursor,” “profile
+characterization,” or “the reviewed pair.” Translate the relevant evidence
+into source-level examples or ordinary language first. Put hashes, internal
+artifact paths, frozen-frontier details, and broader scientific qualifications
+in a separate local evidence section unless the maintainer needs them to assess
+the contribution.
+
+Check the target repository's current layout, naming conventions, contribution
+guide, and the project's own previously accepted contributions before choosing
+paths or test names. Record the precedent used. Keep names short enough for the
+target's user interface. A local draft may contain internal notes, but it must
+place the exact external-facing body in a clearly delimited section that passes
+the stand-alone reading test above.
+
+AI-assisted prose requires the same author review as code: remove conversational
+context, internal shorthand, inflated claims, and wording the contributor could
+not explain directly. A successful schema check, build, or duplicate search
+does not establish that prose is clear; the final stand-alone reading is a
+required review step.
+
 ## Human Authorization Gate
 
 An LLM, automation, or contributor may investigate, recommend, search for

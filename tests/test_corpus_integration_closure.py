@@ -38,6 +38,13 @@ class CorpusIntegrationClosureTests(unittest.TestCase):
         self.assertEqual(sum(item["id"] == "positivity-no-implementation-issue" for item in actions["findings"][3]["recommendations"]), 1)
         self.assertIn("Arena PR #181", outputs[closure.DRAFT])
 
+    def test_external_pr_description_stands_alone(self):
+        draft = self.clone_safe_build()[closure.DRAFT]
+        for text in ("def Ignore", "inductive T", "Ignore Unit T", "related tutorial"):
+            self.assertIn(text, draft)
+        for internal_phrase in ("Bound prior evidence", "controlled Nanoda positivity mutation", "latest-upstream preflight", "shared domain"):
+            self.assertNotIn(internal_phrase, draft)
+
     def test_rejects_external_action_record_tampering(self):
         actual = closure.read
         def changed(path):

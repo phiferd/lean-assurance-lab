@@ -25,11 +25,17 @@ class ProofParameterContractReviewTests(unittest.TestCase):
 
     def test_drafts_disclose_shared_recursors_and_no_unsoundness(self):
         outputs = module.build()
-        for name in ("kiota-proof-parameter.md", "arena-proof-parameter.md"):
-            draft = outputs[module.DRAFT_ROOT + "/" + name]
-            self.assertIn("shared", draft)
-            self.assertNotIn("original complete recursor is retained", draft.lower())
-        self.assertIn("does not allege unsoundness", outputs[module.DRAFT_ROOT + "/kiota-proof-parameter.md"])
+        kiota = outputs[module.DRAFT_ROOT + "/kiota-proof-parameter.md"]
+        self.assertIn("shared", kiota)
+        self.assertNotIn("original complete recursor is retained", kiota.lower())
+        self.assertIn("does not allege unsoundness", kiota)
+
+    def test_arena_draft_stands_alone_and_records_accepted_layout(self):
+        arena = module.build()[module.DRAFT_ROOT + "/arena-proof-parameter.md"]
+        for text in ("mk : T P p q", "mk : T P q p", "tests/corner-cases/", "proof-param-ok", "proof-param-swap"):
+            self.assertIn(text, arena)
+        for internal_phrase in ("Pinned official", "qualified source reviewed by this project", "implementation-profile", "shared expression nodes"):
+            self.assertNotIn(internal_phrase, arena)
 
 
 if __name__ == "__main__":
