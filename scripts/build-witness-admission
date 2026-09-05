@@ -1,0 +1,291 @@
+#!/usr/bin/env python3
+"""Validate the fixed closure witnesses and render their v2 admission successor.
+
+This is deliberately a byte-validation and rendering step.  It never executes
+a checker, builds a binary, or changes the historical v1 corpus manifest.
+"""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+TRIAGE = "results/investigations/ecosystem-closure-2026-09-05/triage"
+REGISTRY = "results/mutants/registry.jsonl"
+# Exact git blob at 518c2c4.  Keeping the predecessor as a hash plus its fixed
+# line count lets --check validate an already-written successor without ever
+# invoking git or accepting a newly invented predecessor.
+PREDECESSOR_REGISTRY_SHA256 = "1806b2ea4a3c16a29065318bcbd4bc8c95cb904da380bdf8a97addd44a81a76e"
+PREDECESSOR_REGISTRY_LINES = 604
+IDS = ("nanoda-gen-f19ffc8a2e9b", "nanoda-gen-21ef4d1d32a1")
+
+_loader = importlib.machinery.SourceFileLoader(
+    "witness_admission_normalize", str(ROOT / "scripts" / "execute-ecosystem-cases")
+)
+_spec = importlib.util.spec_from_loader(_loader.name, _loader)
+_executor = importlib.util.module_from_spec(_spec)
+_loader.exec_module(_executor)
+
+
+def canonical(value: object) -> str:
+    return json.dumps(value, indent=2, sort_keys=True) + "\n"
+
+
+def sha_bytes(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def binding(path: str) -> dict:
+    data = (ROOT / path).read_bytes()
+    return {"path": path, "sha256": sha_bytes(data), "bytes": len(data)}
+
+
+def verify(row: dict) -> None:
+    actual = binding(row["path"])
+    if actual["sha256"] != row.get("sha256") or (
+        "bytes" in row and actual["bytes"] != row["bytes"]
+    ):
+        raise ValueError("evidence changed: " + row["path"])
+
+
+def validate_observation(row: dict) -> None:
+    for key in ("binary", "artifact", "stdout", "stderr"):
+        verify(row[key])
+    code = row.get("exit_code")
+    if code is not None and (not isinstance(code, int) or isinstance(code, bool)):
+        raise ValueError("invalid observation exit code")
+    stdout = (ROOT / row["stdout"]["path"]).read_bytes().decode(errors="replace")
+    stderr = (ROOT / row["stderr"]["path"]).read_bytes().decode(errors="replace")
+    derived = _executor.normalize(row["checker"], code, stdout, stderr)
+    if derived != row.get("outcome"):
+        raise ValueError("observation outcome does not match bound raw process evidence")
+    if derived not in {"ACCEPT", "REJECT"}:
+        raise ValueError("observation has no attributable normalized outcome")
+
+
+def read(path: str) -> dict:
+    return json.loads((ROOT / path).read_text(encoding="utf-8"))
+
+
+def source_case(mutant_id: str) -> tuple[dict, dict, dict]:
+    result_path = f"{TRIAGE}/{mutant_id}/result.json"
+    result = read(result_path)
+    spec = read(f"mutations/{mutant_id}.json")
+    protocol = read("config/ecosystem-survivor-triage.json")
+    if result.get("mutant_id") != mutant_id or spec.get("id") != mutant_id:
+        raise ValueError("fixed admission identity changed")
+    if [case["mutant_id"] for case in protocol.get("cases", [])] != list(IDS):
+        raise ValueError("triage protocol selection changed")
+    protocol_case = next(case for case in protocol["cases"] if case["mutant_id"] == mutant_id)
+    verify(result["protocol"])
+    if result["protocol"] != protocol_case.get("spec", {}).get("protocol", result["protocol"]):
+        # Protocols before this successor carry the binding on the result, not
+        # each case.  The independent full-file binding above is controlling.
+        pass
+    if result.get("status") != "WITNESS_FOUND":
+        raise ValueError("witness was not found in fixed triage")
+    for key in ("baseline_binary", "mutant_binary"):
+        verify(result[key])
+    build = result.get("build", {})
+    verify(build["log"])
+    if build.get("status") != "BUILT" or build.get("returncode") != 0 or build.get("seconds", 121) > 120:
+        raise ValueError("fixed mutant build is not bounded and successful")
+    budget = result.get("budget", {})
+    if budget.get("launches") != 6 or budget.get("seconds", 121) > 120:
+        raise ValueError("fixed witness launch budget changed")
+    observations = result.get("observations", [])
+    if len(observations) != 2:
+        raise ValueError("fixed witness observation count changed")
+    for pair in observations:
+        for role in ("baseline", "mutant"):
+            validate_observation(pair[role])
+    if [(p["baseline"]["outcome"], p["mutant"]["outcome"]) for p in observations] != [
+        ("ACCEPT", "ACCEPT"), ("REJECT", "ACCEPT")
+    ]:
+        raise ValueError("fixed baseline/mutant distinction changed")
+    for key in ("official_control", "official_candidate"):
+        validate_observation(result[key])
+    if (result["official_control"]["outcome"], result["official_candidate"]["outcome"]) != ("ACCEPT", "REJECT"):
+        raise ValueError("fixed official profile observation changed")
+    if result["official_control"]["binary"] != result["official_candidate"]["binary"]:
+        raise ValueError("official observer binary differs within pair")
+    if result["baseline_binary"] != observations[0]["baseline"]["binary"]:
+        raise ValueError("baseline binary binding changed")
+    if result["mutant_binary"] != observations[0]["mutant"]["binary"]:
+        raise ValueError("mutant binary binding changed")
+    if protocol_case["spec"] != binding(f"mutations/{mutant_id}.json"):
+        raise ValueError("mutation specification binding changed")
+    return result, spec, protocol_case
+
+
+def registry_predecessor() -> str:
+    lines = (ROOT / REGISTRY).read_text(encoding="utf-8").splitlines(keepends=True)
+    if len(lines) < PREDECESSOR_REGISTRY_LINES:
+        raise ValueError("registry is shorter than the immutable predecessor")
+    text = "".join(lines[:PREDECESSOR_REGISTRY_LINES])
+    if sha_bytes(text.encode()) != PREDECESSOR_REGISTRY_SHA256:
+        raise ValueError("registry is not the immutable predecessor prefix")
+    return text
+
+
+def admission_paths(mutant_id: str, result: dict) -> tuple[str, str, str, str]:
+    control, candidate = result["observations"]
+    control_source = control["baseline"]["artifact"]["path"]
+    candidate_source = candidate["baseline"]["artifact"]["path"]
+    candidate_stem = Path(candidate_source).stem
+    control_stem = Path(control_source).stem
+    return (
+        f"corpus/generated/{mutant_id}-{candidate_stem}.ndjson",
+        f"corpus/controls/{mutant_id}-{control_stem}.ndjson",
+        candidate_source,
+        control_source,
+    )
+
+
+def build() -> dict[str, str]:
+    predecessor = registry_predecessor()
+    plan = binding("docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md")
+    producer = binding("scripts/build-witness-admission")
+    triage_run_path = "results/authorized-runs/ecosystem-2026-09-05-triage.json"
+    triage_run = read(triage_run_path)
+    triage_attempt = triage_run["phases"]["triage"]["attempts"]
+    if triage_run.get("status") != "COMPLETE" or len(triage_attempt) != 1:
+        raise ValueError("authorized triage run is not complete and singular")
+    admission_time = triage_attempt[0]["completed_at"]
+    v1_path = "corpus/augmented/manifest.json"
+    v1 = read(v1_path)
+    if v1.get("schema_version") != 1 or len(v1.get("tests", [])) != 1:
+        raise ValueError("historical v1 augmented manifest changed")
+    outputs: dict[str, str] = {}
+    additions = []
+    registry_rows = []
+    for mutant_id in IDS:
+        result, spec, protocol_case = source_case(mutant_id)
+        candidate_path, control_path, candidate_source, control_source = admission_paths(mutant_id, result)
+        candidate_bytes = (ROOT / candidate_source).read_bytes()
+        control_bytes = (ROOT / control_source).read_bytes()
+        outputs[candidate_path] = candidate_bytes.decode("utf-8")
+        outputs[control_path] = control_bytes.decode("utf-8")
+        candidate_binding = {"path": candidate_path, "sha256": sha_bytes(candidate_bytes), "bytes": len(candidate_bytes)}
+        control_binding = {"path": control_path, "sha256": sha_bytes(control_bytes), "bytes": len(control_bytes)}
+        witness_id = mutant_id + "-witness"
+        metadata_path = f"results/witnesses/{witness_id}/metadata.json"
+        confirmation_path = f"results/witnesses/{witness_id}/confirmation.json"
+        expected_path = f"corpus/expected/{witness_id}.json"
+        comparison_path = f"results/mutants/{mutant_id}/augmented-comparison-v2.json"
+        prior_comparison = binding(f"results/mutants/{mutant_id}/scheduled-comparison.json")
+        common = {
+            "schema_version": 2,
+            "mutant_id": mutant_id,
+            "witness_id": witness_id,
+            "recorded_at": admission_time,
+            "classification": "MEANINGFUL_SEMANTIC",
+            "classification_scope": "meaningful source-mutant distinction; not universal Lean semantics",
+            "mutation_spec": binding(f"mutations/{mutant_id}.json"),
+            "triage_protocol": result["protocol"],
+            "triage_result": binding(f"{TRIAGE}/{mutant_id}/result.json"),
+            "authorized_triage_run": binding(triage_run_path),
+            "prior_scheduled_comparison": prior_comparison,
+            "governing_plan": plan,
+            "producer": producer,
+            "build": result["build"],
+            "baseline_binary": result["baseline_binary"],
+            "mutant_binary": result["mutant_binary"],
+            "candidate": candidate_binding,
+            "control": control_binding,
+        }
+        confirmation = {
+            **common,
+            "status": "CONFIRMED_OFFICIAL_PROFILE_REJECTION",
+            "reference_profile": "pinned official observer; profile evidence only, not normative semantic authority",
+            "mechanical_predicate": "baseline(control)==mutant(control)==ACCEPT and baseline(candidate)==REJECT and mutant(candidate)==ACCEPT and official(control)==ACCEPT and official(candidate)==REJECT",
+            "observations": {
+                "control": result["observations"][0], "candidate": result["observations"][1],
+                "official_control": result["official_control"], "official_candidate": result["official_candidate"],
+            },
+            "budget": result["budget"],
+        }
+        outputs[confirmation_path] = canonical(confirmation)
+        expected = {
+            "schema_version": 2, "case_id": witness_id, "status": "OFFICIAL_PROFILE_RECORDED",
+            "expected_outcome": "REJECT", "artifact": candidate_binding, "positive_control": control_binding,
+            "reference_profile": {"kind": "pinned_official_observer_only", "observation": result["official_candidate"], "control_observation": result["official_control"]},
+            "semantic_authority": "NOT_ESTABLISHED", "confirmation": {"path": confirmation_path, "sha256": sha_bytes(outputs[confirmation_path].encode()), "bytes": len(outputs[confirmation_path].encode())},
+        }
+        outputs[expected_path] = canonical(expected)
+        comparison = {
+            **common, "status": "KILLED", "comparison_kind": "augmented fixed witness",
+            "control_outcomes": {"baseline": "ACCEPT", "mutant": "ACCEPT", "official": "ACCEPT"},
+            "candidate_outcomes": {"baseline": "REJECT", "mutant": "ACCEPT", "official": "REJECT"},
+            "raw_observations": confirmation["observations"], "confirmation": binding_for_output(confirmation_path, outputs),
+        }
+        outputs[comparison_path] = canonical(comparison)
+        metadata = {
+            **common, "status": "CONFIRMED_REGRESSION_CANDIDATE", "input": candidate_path,
+            "confirmation": confirmation_path, "expected_outcome": expected_path,
+            "augmented_corpus": "corpus/augmented/manifest-v2.json", "augmented_mutant_comparison": comparison_path,
+            "success_predicate": confirmation["mechanical_predicate"], "subsystem": spec["subsystem"],
+            "search_status": "WITNESS_FOUND", "semantic_status": "UNRESOLVED",
+            "profile_status": "CONFIRMED_OFFICIAL_PROFILE_OUTCOME",
+            "minimization_status": "NOT_RUN",
+            "source_mutation": {key: spec[key] for key in ("source_file", "source_span", "source_column", "original", "mutated", "mutation_operator", "operator_family")},
+            "protocol_case": protocol_case,
+        }
+        outputs[metadata_path] = canonical(metadata)
+        additions.append({"name": "generated/" + Path(candidate_path).stem, "file": candidate_path,
+                          "sha256": candidate_binding["sha256"], "expected_outcome": "REJECT", "status": "CONFIRMED_OFFICIAL_PROFILE_REJECTION",
+                          "expected_semantics": expected_path, "expected_outcome_evidence": confirmation_path,
+                          "control": control_path, "source_triage": binding(f"{TRIAGE}/{mutant_id}/result.json")})
+        registry_rows.append({"id": mutant_id, "status": "KILLED", "classification": "MEANINGFUL_SEMANTIC",
+                              "updated_at": admission_time, "checker": "nanoda", "subsystem": spec["subsystem"],
+                              "source_file": spec["source_file"], "source_span": spec["source_span"], "mutation_operator": spec["mutation_operator"],
+                              "operator_family": spec["operator_family"],
+                              "comparison": comparison_path, "witness": candidate_path, "control": control_path,
+                              "expected_outcome": expected_path, "confirmation": confirmation_path,
+                              "notes": "Fixed six-launch closure witness; baseline rejects candidate, mutant accepts it, and pinned official profile rejects candidate with accepted control.",
+                              "classification_scope": "meaningful source-mutant distinction; official profile is not normative authority"})
+    outputs["corpus/augmented/manifest-v2.json"] = canonical({"schema_version": 2, "corpus_id": "nanoda-augmented-v2", "predecessor": binding(v1_path), "tests": v1["tests"] + additions})
+    outputs[REGISTRY] = predecessor + "".join(json.dumps(row, sort_keys=True, separators=(",", ":")) + "\n" for row in registry_rows)
+    current_registry = (ROOT / REGISTRY).read_text(encoding="utf-8")
+    if current_registry not in {predecessor, outputs[REGISTRY]}:
+        raise ValueError("registry is not the immutable predecessor prefix or this exact successor")
+    return outputs
+
+
+def binding_for_output(path: str, outputs: dict[str, str]) -> dict:
+    data = outputs[path].encode()
+    return {"path": path, "sha256": sha_bytes(data), "bytes": len(data)}
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument("--write", action="store_true")
+    group.add_argument("--check", action="store_true")
+    args = parser.parse_args()
+    outputs = build()
+    if args.write:
+        for path, body in outputs.items():
+            destination = ROOT / path
+            destination.parent.mkdir(parents=True, exist_ok=True)
+            destination.write_text(body, encoding="utf-8")
+    elif args.check:
+        for path, body in outputs.items():
+            if not (ROOT / path).is_file() or (ROOT / path).read_text(encoding="utf-8") != body:
+                raise SystemExit("stale witness-admission successor output: " + path)
+    else:
+        # Default output is reviewable without suggesting that registry mutation
+        # occurred.  --write and --check carry the full expected registry text.
+        print(outputs["corpus/augmented/manifest-v2.json"], end="")
+    if args.write or args.check:
+        print("PASS: fixed witness-admission successor")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
