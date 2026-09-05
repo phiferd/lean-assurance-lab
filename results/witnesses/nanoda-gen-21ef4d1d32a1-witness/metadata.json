@@ -1,0 +1,127 @@
+{
+  "augmented_corpus": "corpus/augmented/manifest-v2.json",
+  "augmented_mutant_comparison": "results/mutants/nanoda-gen-21ef4d1d32a1/augmented-comparison-v2.json",
+  "authorized_triage_run": {
+    "bytes": 845,
+    "path": "results/authorized-runs/ecosystem-2026-09-05-triage.json",
+    "sha256": "f208eb889005d20315e9fef3cb9838f7c0d2a673fa848efd9d708816d603bd54"
+  },
+  "baseline_binary": {
+    "bytes": 1198176,
+    "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+    "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+  },
+  "build": {
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--offline",
+      "--locked"
+    ],
+    "log": {
+      "bytes": 640,
+      "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/build.log",
+      "sha256": "4295180e3fe3e7b1c09c55f43c1bccf107f78cb1c90c550e51a4a4f922dcb911"
+    },
+    "returncode": 0,
+    "seconds": 10.89681537495926,
+    "status": "BUILT",
+    "toolchain": {
+      "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+      "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)"
+    }
+  },
+  "candidate": {
+    "bytes": 601,
+    "path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+    "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+  },
+  "classification": "MEANINGFUL_SEMANTIC",
+  "classification_scope": "meaningful source-mutant distinction; not universal Lean semantics",
+  "confirmation": "results/witnesses/nanoda-gen-21ef4d1d32a1-witness/confirmation.json",
+  "control": {
+    "bytes": 601,
+    "path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+    "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"
+  },
+  "expected_outcome": "corpus/expected/nanoda-gen-21ef4d1d32a1-witness.json",
+  "governing_plan": {
+    "bytes": 3519,
+    "path": "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md",
+    "sha256": "eeae7bd94161c47e46d131608295a8cd2966e209ed92a02ee333fb8d93c66293"
+  },
+  "input": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+  "minimization_status": "NOT_RUN",
+  "mutant_binary": {
+    "bytes": 1198176,
+    "path": "external/ecosystem-triage-payloads/nanoda-gen-21ef4d1d32a1",
+    "sha256": "baafd4726597580a0ed1956c1c6f155a80c63d2c0ab994e5cf58607b766daf3b"
+  },
+  "mutant_id": "nanoda-gen-21ef4d1d32a1",
+  "mutation_spec": {
+    "bytes": 969,
+    "path": "mutations/nanoda-gen-21ef4d1d32a1.json",
+    "sha256": "40efef9b7ec5d05727faca461d724473e2fb8ce89f2d52e3be2e8d8c7c71b25d"
+  },
+  "prior_scheduled_comparison": {
+    "bytes": 985,
+    "path": "results/mutants/nanoda-gen-21ef4d1d32a1/scheduled-comparison.json",
+    "sha256": "31c8aa28f00d3824a773c15e91a25d3c8e1afa8adb31d02ea65ad2ea9de06770"
+  },
+  "producer": {
+    "bytes": 15838,
+    "path": "scripts/build-witness-admission",
+    "sha256": "64e1ef4f50d1f9bc39ab06cabafacf9df464b40f9aa55d6d5c3f79815a00be02"
+  },
+  "profile_status": "CONFIRMED_OFFICIAL_PROFILE_OUTCOME",
+  "protocol_case": {
+    "active_seconds": 120,
+    "batch": {
+      "bytes": 425650,
+      "path": "results/mutation-batches/nanoda-autonomous-0001.json",
+      "sha256": "a6a68f61ec704af4234110a678d90ddda3c2137e447e96381999358cf0ae48a5"
+    },
+    "max_candidate_attempts": 8,
+    "max_checker_launches": 16,
+    "mutant_id": "nanoda-gen-21ef4d1d32a1",
+    "offline_build_seconds": 120,
+    "prior_comparison": {
+      "bytes": 985,
+      "path": "results/mutants/nanoda-gen-21ef4d1d32a1/scheduled-comparison.json",
+      "sha256": "31c8aa28f00d3824a773c15e91a25d3c8e1afa8adb31d02ea65ad2ea9de06770"
+    },
+    "spec": {
+      "bytes": 969,
+      "path": "mutations/nanoda-gen-21ef4d1d32a1.json",
+      "sha256": "40efef9b7ec5d05727faca461d724473e2fb8ce89f2d52e3be2e8d8c7c71b25d"
+    }
+  },
+  "recorded_at": "2026-09-05T04:43:35.501905+00:00",
+  "schema_version": 2,
+  "search_status": "WITNESS_FOUND",
+  "semantic_status": "UNRESOLVED",
+  "source_mutation": {
+    "mutated": "(flag != Check)",
+    "mutation_operator": "REL_EQ_TO_NE",
+    "operator_family": "equality-discrimination",
+    "original": "flag == Check",
+    "source_column": 11,
+    "source_file": "src/tc.rs",
+    "source_span": "649"
+  },
+  "status": "CONFIRMED_REGRESSION_CANDIDATE",
+  "subsystem": "declaration-validation",
+  "success_predicate": "baseline(control)==mutant(control)==ACCEPT and baseline(candidate)==REJECT and mutant(candidate)==ACCEPT and official(control)==ACCEPT and official(candidate)==REJECT",
+  "triage_protocol": {
+    "bytes": 2670,
+    "path": "config/ecosystem-survivor-triage.json",
+    "sha256": "87695c20ed6fd9744b484d91126360624e12a81fa47781ac917cf59ee3a659d5"
+  },
+  "triage_result": {
+    "bytes": 9358,
+    "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/result.json",
+    "sha256": "3b3cf549fa1261d170be38897901c3320bd5b2a3cbca7dcff930c93fd335a17b"
+  },
+  "witness_id": "nanoda-gen-21ef4d1d32a1-witness"
+}

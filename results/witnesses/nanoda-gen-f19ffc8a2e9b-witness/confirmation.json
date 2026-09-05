@@ -1,0 +1,263 @@
+{
+  "authorized_triage_run": {
+    "bytes": 845,
+    "path": "results/authorized-runs/ecosystem-2026-09-05-triage.json",
+    "sha256": "f208eb889005d20315e9fef3cb9838f7c0d2a673fa848efd9d708816d603bd54"
+  },
+  "baseline_binary": {
+    "bytes": 1198176,
+    "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+    "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+  },
+  "budget": {
+    "launches": 6,
+    "max_launches": 16,
+    "max_seconds": 120,
+    "seconds": 0.25165908387862146
+  },
+  "build": {
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--offline",
+      "--locked"
+    ],
+    "log": {
+      "bytes": 786,
+      "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/build.log",
+      "sha256": "13b8af6285056b13cf3a9696ef607f2a04bc9c59078fc2bea907ef004de9fd2d"
+    },
+    "returncode": 0,
+    "seconds": 15.991786959115416,
+    "status": "BUILT",
+    "toolchain": {
+      "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+      "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)"
+    }
+  },
+  "candidate": {
+    "bytes": 619,
+    "path": "corpus/generated/nanoda-gen-f19ffc8a2e9b-distinct-imax-second-parameters.ndjson",
+    "sha256": "e5f1d7829e0d8b6e8843ebb667d83d0a55000a026ddd7b87f198c9bf94459842"
+  },
+  "classification": "MEANINGFUL_SEMANTIC",
+  "classification_scope": "meaningful source-mutant distinction; not universal Lean semantics",
+  "control": {
+    "bytes": 619,
+    "path": "corpus/controls/nanoda-gen-f19ffc8a2e9b-matching-imax-control.ndjson",
+    "sha256": "694eb3141103bf39eb58407b73c3cfc3c79cd86bc5b94b666a269df23a25ed3f"
+  },
+  "governing_plan": {
+    "bytes": 3519,
+    "path": "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md",
+    "sha256": "eeae7bd94161c47e46d131608295a8cd2966e209ed92a02ee333fb8d93c66293"
+  },
+  "mechanical_predicate": "baseline(control)==mutant(control)==ACCEPT and baseline(candidate)==REJECT and mutant(candidate)==ACCEPT and official(control)==ACCEPT and official(candidate)==REJECT",
+  "mutant_binary": {
+    "bytes": 1198176,
+    "path": "external/ecosystem-triage-payloads/nanoda-gen-f19ffc8a2e9b",
+    "sha256": "85509064f62d54b8da6cac1039c14512fe6c52f7504c5afed8e5f50a779fa057"
+  },
+  "mutant_id": "nanoda-gen-f19ffc8a2e9b",
+  "mutation_spec": {
+    "bytes": 943,
+    "path": "mutations/nanoda-gen-f19ffc8a2e9b.json",
+    "sha256": "7499292b7168c7e60ba14c107053b5a21cb852a75b5bc4f6c204b7df2df1d411"
+  },
+  "observations": {
+    "candidate": {
+      "baseline": {
+        "artifact": {
+          "bytes": 619,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/distinct-imax-second-parameters.ndjson",
+          "sha256": "e5f1d7829e0d8b6e8843ebb667d83d0a55000a026ddd7b87f198c9bf94459842"
+        },
+        "binary": {
+          "bytes": 1198176,
+          "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+          "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+        },
+        "checker": "nanoda",
+        "environment": "KIOTA_* unset; exact config for Nanoda",
+        "exit_code": 101,
+        "outcome": "REJECT",
+        "seconds": 0.0035062499810010195,
+        "stderr": {
+          "bytes": 302,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/1-baseline.stderr",
+          "sha256": "d2fb6fccf57548e69de3fc28815329226073842093add3d6383a5893c84de165"
+        },
+        "stdout": {
+          "bytes": 0,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/1-baseline.stdout",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        }
+      },
+      "mutant": {
+        "artifact": {
+          "bytes": 619,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/distinct-imax-second-parameters.ndjson",
+          "sha256": "e5f1d7829e0d8b6e8843ebb667d83d0a55000a026ddd7b87f198c9bf94459842"
+        },
+        "binary": {
+          "bytes": 1198176,
+          "path": "external/ecosystem-triage-payloads/nanoda-gen-f19ffc8a2e9b",
+          "sha256": "85509064f62d54b8da6cac1039c14512fe6c52f7504c5afed8e5f50a779fa057"
+        },
+        "checker": "nanoda",
+        "environment": "KIOTA_* unset; exact config for Nanoda",
+        "exit_code": 0,
+        "outcome": "ACCEPT",
+        "seconds": 0.003471416886895895,
+        "stderr": {
+          "bytes": 0,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/1-mutant.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 110,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/1-mutant.stdout",
+          "sha256": "0a71b2efda8d7ee74114196e589667bc12b5f598b05d08491491855e27a10762"
+        }
+      },
+      "name": "distinct-imax-second-parameters"
+    },
+    "control": {
+      "baseline": {
+        "artifact": {
+          "bytes": 619,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/matching-imax-control.ndjson",
+          "sha256": "694eb3141103bf39eb58407b73c3cfc3c79cd86bc5b94b666a269df23a25ed3f"
+        },
+        "binary": {
+          "bytes": 1198176,
+          "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+          "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+        },
+        "checker": "nanoda",
+        "environment": "KIOTA_* unset; exact config for Nanoda",
+        "exit_code": 0,
+        "outcome": "ACCEPT",
+        "seconds": 0.010789667023345828,
+        "stderr": {
+          "bytes": 0,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/0-baseline.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 110,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/0-baseline.stdout",
+          "sha256": "0a71b2efda8d7ee74114196e589667bc12b5f598b05d08491491855e27a10762"
+        }
+      },
+      "mutant": {
+        "artifact": {
+          "bytes": 619,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/matching-imax-control.ndjson",
+          "sha256": "694eb3141103bf39eb58407b73c3cfc3c79cd86bc5b94b666a269df23a25ed3f"
+        },
+        "binary": {
+          "bytes": 1198176,
+          "path": "external/ecosystem-triage-payloads/nanoda-gen-f19ffc8a2e9b",
+          "sha256": "85509064f62d54b8da6cac1039c14512fe6c52f7504c5afed8e5f50a779fa057"
+        },
+        "checker": "nanoda",
+        "environment": "KIOTA_* unset; exact config for Nanoda",
+        "exit_code": 0,
+        "outcome": "ACCEPT",
+        "seconds": 0.1554333339445293,
+        "stderr": {
+          "bytes": 0,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/0-mutant.stderr",
+          "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+        },
+        "stdout": {
+          "bytes": 110,
+          "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/0-mutant.stdout",
+          "sha256": "0a71b2efda8d7ee74114196e589667bc12b5f598b05d08491491855e27a10762"
+        }
+      },
+      "name": "matching-imax-control"
+    },
+    "official_candidate": {
+      "artifact": {
+        "bytes": 619,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/distinct-imax-second-parameters.ndjson",
+        "sha256": "e5f1d7829e0d8b6e8843ebb667d83d0a55000a026ddd7b87f198c9bf94459842"
+      },
+      "binary": {
+        "bytes": 100401632,
+        "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+        "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"
+      },
+      "checker": "official",
+      "environment": "KIOTA_* unset; exact config for Nanoda",
+      "exit_code": 1,
+      "outcome": "REJECT",
+      "seconds": 0.030119040980935097,
+      "stderr": {
+        "bytes": 194,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/official-candidate.stderr",
+        "sha256": "f5ecb8080fdc15b5c816a7180e5868b79f7604be5e0ba5aec8c878ee8c0924a7"
+      },
+      "stdout": {
+        "bytes": 0,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/official-candidate.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "official_control": {
+      "artifact": {
+        "bytes": 619,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/matching-imax-control.ndjson",
+        "sha256": "694eb3141103bf39eb58407b73c3cfc3c79cd86bc5b94b666a269df23a25ed3f"
+      },
+      "binary": {
+        "bytes": 100401632,
+        "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+        "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"
+      },
+      "checker": "official",
+      "environment": "KIOTA_* unset; exact config for Nanoda",
+      "exit_code": 0,
+      "outcome": "ACCEPT",
+      "seconds": 0.048339375061914325,
+      "stderr": {
+        "bytes": 0,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/official-control.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stdout": {
+        "bytes": 25,
+        "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/official-control.stdout",
+        "sha256": "8905b995ad1f24eaa3febbfb9690c1665d2a5d3cfad78923f5673495e0dd43f2"
+      }
+    }
+  },
+  "prior_scheduled_comparison": {
+    "bytes": 985,
+    "path": "results/mutants/nanoda-gen-f19ffc8a2e9b/scheduled-comparison.json",
+    "sha256": "51eee1a9b399721d32495656f13d9fd66c60f907f265bbe0a04d8e6abe4ec58d"
+  },
+  "producer": {
+    "bytes": 15838,
+    "path": "scripts/build-witness-admission",
+    "sha256": "64e1ef4f50d1f9bc39ab06cabafacf9df464b40f9aa55d6d5c3f79815a00be02"
+  },
+  "recorded_at": "2026-09-05T04:43:35.501905+00:00",
+  "reference_profile": "pinned official observer; profile evidence only, not normative semantic authority",
+  "schema_version": 2,
+  "status": "CONFIRMED_OFFICIAL_PROFILE_REJECTION",
+  "triage_protocol": {
+    "bytes": 2670,
+    "path": "config/ecosystem-survivor-triage.json",
+    "sha256": "87695c20ed6fd9744b484d91126360624e12a81fa47781ac917cf59ee3a659d5"
+  },
+  "triage_result": {
+    "bytes": 9396,
+    "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-f19ffc8a2e9b/result.json",
+    "sha256": "a359635871e24b915523d8624920abbe6694c2c2458804f5a986737fcb4662de"
+  },
+  "witness_id": "nanoda-gen-f19ffc8a2e9b-witness"
+}
