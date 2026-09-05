@@ -31,7 +31,7 @@ class RefreshCurrentStateTests(unittest.TestCase):
     def test_refresh_order_attests_changed_producers_before_dependents(self):
         expected = ['build-artifact-graph', 'current-assurance-snapshot', 'build-artifact-graph',
                     'milestone-8-assurance', 'build-artifact-graph', 'render-public-status',
-                    'build-artifact-graph', 'milestone-9-assurance', 'build-artifact-graph', 'artifact-status']
+                    'build-artifact-graph', 'milestone-9-assurance', 'build-project-review', 'build-artifact-graph', 'artifact-status']
         self.assertEqual([Path(c[0]).name for c in refresh.COMMANDS], expected)
         self.assertEqual(refresh.COMMANDS[-1][1:], ['--require-current'])
         self.assertFalse(any('run-campaign' in c[0] or 'run-mutant' in c[0] for c in refresh.COMMANDS))

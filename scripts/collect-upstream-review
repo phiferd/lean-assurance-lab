@@ -1,0 +1,84 @@
+#!/usr/bin/env python3
+"""Collect bounded public GitHub inventories using GET only; never publish."""
+import argparse
+from concurrent.futures import ThreadPoolExecutor
+from datetime import datetime, timezone
+import hashlib
+import json
+from pathlib import Path
+import re
+import subprocess
+
+REPOS = {"ammkrn/nanoda_lib": "master", "sankalpsthakur/kiota": "main",
+         "digama0/lean4lean": "arena", "leanprover/lean-kernel-arena": None}
+TERMS = {"imax": r"imax", "proof_parameter": r"proof.{0,30}param|uniform",
+         "projection": r"proj.{0,40}prop|possibly.prop|\b09[45]\b",
+         "positivity": r"positiv|hidden.{0,30}reduc"}
+
+def encode(value):
+    return json.dumps(value, indent=2, sort_keys=True) + "\n"
+
+def collect(repo, branch, output, run=subprocess.run):
+    directory = output / repo.replace("/", "--")
+    directory.mkdir()
+    record = {"repository": repo, "started_at": datetime.now(timezone.utc).isoformat(),
+              "requests": [], "issues_closed": False, "candidates": []}
+    def get(endpoint, name):
+        result = run(["gh", "api", "--method", "GET", endpoint], stdout=subprocess.PIPE,
+                     stderr=subprocess.PIPE, timeout=30, check=False)
+        item = {"method": "GET", "endpoint": endpoint, "returncode": result.returncode,
+                "recorded_at": datetime.now(timezone.utc).isoformat()}
+        record["requests"].append(item)
+        if result.returncode:
+            item["error"] = result.stderr.decode(errors="replace")
+            raise ValueError("GitHub GET failed: " + endpoint)
+        data = json.loads(result.stdout)
+        path = directory / name
+        path.write_bytes(result.stdout)
+        item.update(path=str(path.relative_to(output)), sha256=hashlib.sha256(result.stdout).hexdigest(), bytes=len(result.stdout))
+        return data
+    try:
+        metadata = get("repos/" + repo, "repository.json")
+        branch = branch or metadata["default_branch"]
+        head = get("repos/" + repo + "/commits/" + branch, "head.json")
+        record.update(branch=branch, revision=head["sha"])
+        for page in range(1, 11):
+            rows = get(f"repos/{repo}/issues?state=all&per_page=100&page={page}", f"issues-{page:02d}.json")
+            if not isinstance(rows, list):
+                raise ValueError("GitHub issue inventory is not a list")
+            for row in rows:
+                text = row["title"] + "\n" + (row.get("body") or "")
+                hits = [key for key, expression in TERMS.items() if re.search(expression, text, re.I)]
+                if hits or (repo.endswith("lean-kernel-arena") and row["number"] in [175, 176]):
+                    record["candidates"].append({"number": row["number"], "url": row["html_url"],
+                       "title": row["title"], "state": row["state"], "matches": hits,
+                       "kind": "PR" if "pull_request" in row else "ISSUE"})
+            if len(rows) < 100:
+                record["issues_closed"] = True
+                break
+        if not record["issues_closed"]:
+            raise ValueError("issue inventory exceeded ten-page bound")
+        record["status"] = "COMPLETE"
+    except (ValueError, KeyError, OSError, subprocess.SubprocessError) as error:
+        record.update(status="INCOMPLETE", error=str(error))
+    record["completed_at"] = datetime.now(timezone.utc).isoformat()
+    (directory / "inventory.json").write_text(encode(record))
+    return record
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--output", type=Path, required=True)
+    args = parser.parse_args()
+    args.output.mkdir(parents=True, exist_ok=False)
+    with ThreadPoolExecutor(max_workers=4) as workers:
+        records = list(workers.map(lambda item: collect(*item, args.output), REPOS.items()))
+    complete = all(row["status"] == "COMPLETE" for row in records)
+    document = {"schema_version": 1, "status": "COMPLETE" if complete else "INCOMPLETE",
+                "repositories": records, "scope": "GET-only branch and issue/PR inventories; keyword matches require review, not automatic duplicate adjudication.",
+                "external_mutations": 0}
+    (args.output / "manifest.json").write_text(encode(document))
+    print(encode({"status": document["status"], "repositories": [{k:r[k] for k in ["repository","status","issues_closed"]} for r in records]}))
+    return 0 if complete else 1
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,12 +1,7 @@
 {
-  "schema_version": 1,
-  "generated_at": "2026-08-28T20:56:00-04:00",
-  "policy": "docs/INVESTIGATION_SOP.md",
   "findings": [
     {
-      "id": "imax-right-successor-checker-disagreement",
-      "summary": "Nanoda and Kiota accept two IMax right-successor comparisons that official Lean and Lean4Lean reject; all matched controls pass.",
-      "disposition": "ACTION_RECOMMENDED",
+      "disposition": "ACTION_TAKEN",
       "evidence": [
         {
           "path": "results/investigations/nanoda-universe-definitional-equality-matrix.json",
@@ -15,60 +10,56 @@
         {
           "path": "results/investigations/upstream-action-preflight/report.json",
           "sha256": "39fd985944c6c5bf2a391117b1b55fc36e4100f84f134b9fc2ebba49ccaf4236"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/upstream/manifest.json",
+          "sha256": "a7dde6fe04ad1ca84ae83de995a14a025b5afaa14d437c5623ddffd308f5d70a"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/decision-packet.json",
+          "sha256": "5ff0b5b6a489a331b65d851e18770e4afb8107c22eacf9bf4730d14dbd32a0b7"
         }
       ],
+      "id": "imax-right-successor-checker-disagreement",
       "recommendations": [
         {
-          "id": "imax-validate-current-heads",
-          "action": "VALIDATE_CURRENT_UPSTREAM",
-          "target": "ammkrn/nanoda_lib master and sankalpsthakur/kiota main",
-          "priority": "HIGH",
-          "rationale": "Acceptance beyond the designated reference contract may affect trusted behavior and must be checked before reporting.",
-          "prerequisites": [],
-          "external_action": false,
-          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
-          "execution_status": "COMPLETED"
-        },
-        {
-          "id": "imax-file-nanoda-issue",
-          "action": "FILE_IMPLEMENTATION_ISSUE",
-          "target": "ammkrn/nanoda_lib",
-          "priority": "HIGH",
-          "rationale": "If current master still accepts both cases, Nanoda should receive one focused report containing the minimal and general witnesses.",
-          "prerequisites": ["completed: current-master reproduction persists", "completed: exact duplicate search found no match", "completed: public-report security assessment"],
-          "external_action": true,
-          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
-          "execution_status": "NOT_STARTED"
-        },
-        {
-          "id": "imax-file-kiota-issue",
-          "action": "FILE_IMPLEMENTATION_ISSUE",
-          "target": "sankalpsthakur/kiota",
-          "priority": "HIGH",
-          "rationale": "If current main still accepts both cases, Kiota should receive one focused report containing the minimal and general witnesses.",
-          "prerequisites": ["completed: current-main reproduction persists", "completed: exact duplicate search found no match", "completed: public-report security assessment"],
-          "external_action": true,
-          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
-          "execution_status": "NOT_STARTED"
-        },
-        {
-          "id": "imax-submit-arena-tests",
-          "action": "PROPOSE_CORPUS_TEST",
-          "target": "leanprover/lean-kernel-arena",
-          "priority": "HIGH",
-          "rationale": "Arena lacks direct reject coverage for the minimal and general right-successor comparisons; an issue requests contract clarification before proposing a corpus patch.",
-          "prerequisites": ["completed: current implementation reproductions", "completed: Arena duplicate search found no match", "completed: expected outcome established by official Lean"],
-          "external_action": true,
-          "human_gate": {"required": true, "status": "APPROVED"},
+          "action": "NO_EXTERNAL_ACTION",
           "execution_status": "COMPLETED",
-          "external_reference": "https://github.com/leanprover/lean-kernel-arena/issues/175"
+          "external_action": false,
+          "human_gate": {
+            "required": false,
+            "status": "NOT_REQUIRED"
+          },
+          "id": "imax-no-new-implementation-issues",
+          "prerequisites": [],
+          "priority": "LOW",
+          "rationale": "Arena PR #176 merged both imax corner cases with outcome either. Preserve the observed profile difference; withdraw the two old implementation-fault recommendations. Arena policy does not establish normative kernel semantics.",
+          "target": "Nanoda and Kiota"
+        },
+        {
+          "action": "PROPOSE_CORPUS_TEST",
+          "execution_status": "COMPLETED",
+          "external_action": true,
+          "external_reference": "https://github.com/leanprover/lean-kernel-arena/pull/176",
+          "human_gate": {
+            "required": true,
+            "status": "APPROVED"
+          },
+          "id": "imax-submit-arena-tests",
+          "prerequisites": [
+            "completed: current implementation reproductions",
+            "completed: Arena duplicate search found no match",
+            "completed: expected outcome established by official Lean"
+          ],
+          "priority": "HIGH",
+          "rationale": "Previously authorized contribution is now merged; GET-only confirmation in this successor. No new external action executed.",
+          "target": "leanprover/lean-kernel-arena"
         }
-      ]
+      ],
+      "summary": "Arena PR #176 merged both imax corner cases with outcome either. Preserve the observed profile difference; withdraw the two old implementation-fault recommendations. Arena policy does not establish normative kernel semantics."
     },
     {
-      "id": "possibly-prop-projection-overrejection",
-      "summary": "Nanoda and Lean4Lean reject Arena tutorial good tests 094 and 095 while official Lean and Kiota accept them; all checkers reject the definite-Prop data projection.",
-      "disposition": "ACTION_RECOMMENDED",
+      "disposition": "NO_EXTERNAL_ACTION",
       "evidence": [
         {
           "path": "results/investigations/nanoda-projection-typing-contract-matrix.json",
@@ -77,58 +68,36 @@
         {
           "path": "results/investigations/upstream-action-preflight/report.json",
           "sha256": "39fd985944c6c5bf2a391117b1b55fc36e4100f84f134b9fc2ebba49ccaf4236"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/upstream/manifest.json",
+          "sha256": "a7dde6fe04ad1ca84ae83de995a14a025b5afaa14d437c5623ddffd308f5d70a"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/decision-packet.json",
+          "sha256": "5ff0b5b6a489a331b65d851e18770e4afb8107c22eacf9bf4730d14dbd32a0b7"
         }
       ],
+      "id": "possibly-prop-projection-overrejection",
       "recommendations": [
         {
-          "id": "projection-validate-current-heads",
-          "action": "VALIDATE_CURRENT_UPSTREAM",
-          "target": "ammkrn/nanoda_lib master and digama0/lean4lean arena",
-          "priority": "MEDIUM",
-          "rationale": "The pinned checkers reject existing Arena-good tests; current upstream behavior must be confirmed before reporting.",
-          "prerequisites": [],
-          "external_action": false,
-          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
-          "execution_status": "COMPLETED"
-        },
-        {
-          "id": "projection-file-nanoda-issue",
-          "action": "FILE_IMPLEMENTATION_ISSUE",
-          "target": "ammkrn/nanoda_lib",
-          "priority": "MEDIUM",
-          "rationale": "If current master still rejects tests 094 and 095, Nanoda should receive one compatibility report covering both related cases.",
-          "prerequisites": ["completed: current-master reproduction persists", "completed: exact duplicate search found no match", "completed: public-report security assessment"],
-          "external_action": true,
-          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
-          "execution_status": "NOT_STARTED"
-        },
-        {
-          "id": "projection-file-lean4lean-issue",
-          "action": "FILE_IMPLEMENTATION_ISSUE",
-          "target": "digama0/lean4lean",
-          "priority": "MEDIUM",
-          "rationale": "If the current arena branch still rejects tests 094 and 095, Lean4Lean should receive one compatibility report covering both cases.",
-          "prerequisites": ["completed: current-arena-branch reproduction persists", "completed: exact duplicate search found no match", "completed: public-report security assessment"],
-          "external_action": true,
-          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
-          "execution_status": "NOT_STARTED"
-        },
-        {
-          "id": "projection-no-arena-duplicate",
           "action": "NO_EXTERNAL_ACTION",
-          "target": "leanprover/lean-kernel-arena",
-          "priority": "LOW",
-          "rationale": "Arena already contains and explains tutorial good tests 094 and 095, so another corpus proposal would duplicate existing coverage.",
-          "prerequisites": [],
+          "execution_status": "COMPLETED",
           "external_action": false,
-          "human_gate": {"required": false, "status": "NOT_REQUIRED"},
-          "execution_status": "COMPLETED"
+          "human_gate": {
+            "required": false,
+            "status": "NOT_REQUIRED"
+          },
+          "id": "projection-no-new-implementation-issues",
+          "prerequisites": [],
+          "priority": "LOW",
+          "rationale": "Arena PRs #167/#171 explicitly explain and permit the conservative possibly-Prop projection profile with outcome either. Withdraw the two old over-rejection issue recommendations; do not relabel the raw observations or assurance disagreements.",
+          "target": "Nanoda and Lean4Lean"
         }
-      ]
+      ],
+      "summary": "Arena PRs #167/#171 explicitly explain and permit the conservative possibly-Prop projection profile with outcome either. Withdraw the two old over-rejection issue recommendations; do not relabel the raw observations or assurance disagreements."
     },
     {
-      "id": "proof-parameter-uniformity-disagreement",
-      "summary": "A constructor can swap two proof-valued inductive parameters and remain definitionally consistent downstream; official Lean, Lean4Lean, and Nanoda reject the exact artifact while current Kiota accepts it.",
       "disposition": "ACTION_RECOMMENDED",
       "evidence": [
         {
@@ -142,65 +111,62 @@
         {
           "path": "results/cross-validation/ordinary-inductive-proof-parameter-uniformity/results.json",
           "sha256": "b39f92beaac3204dcd1f2b91d314261ba32832405f20a3a011dc90b58a8fd789"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/upstream/manifest.json",
+          "sha256": "a7dde6fe04ad1ca84ae83de995a14a025b5afaa14d437c5623ddffd308f5d70a"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/proof-parameter-current/result.json",
+          "sha256": "7d6c3a04fd0f850720d3ea94301b7c3cfbfad974ac49756866d4cef9bfc1cf38"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/decision-packet.json",
+          "sha256": "5ff0b5b6a489a331b65d851e18770e4afb8107c22eacf9bf4730d14dbd32a0b7"
         }
       ],
+      "id": "proof-parameter-uniformity-disagreement",
       "recommendations": [
         {
-          "id": "proof-parameter-validate-current-kiota",
-          "action": "VALIDATE_CURRENT_UPSTREAM",
-          "target": "sankalpsthakur/kiota main",
-          "priority": "HIGH",
-          "rationale": "The pinned Arena checker disagreement must reproduce on current upstream before any report is recommended.",
-          "prerequisites": [],
-          "external_action": false,
-          "human_gate": {
-            "required": false,
-            "status": "NOT_REQUIRED"
-          },
-          "execution_status": "COMPLETED"
-        },
-        {
-          "id": "proof-parameter-file-kiota-issue",
           "action": "FILE_IMPLEMENTATION_ISSUE",
-          "target": "sankalpsthakur/kiota",
-          "priority": "HIGH",
-          "rationale": "Current Kiota accepts an inductive declaration rejected by the designated reference and Lean4Lean; the proof-valued parameters isolate exact constructor-result uniformity from later definitional equality.",
-          "prerequisites": [
-            "completed: current-main reproduction persists",
-            "completed: duplicate issue search found no match",
-            "completed: focused draft prepared"
-          ],
+          "execution_status": "NOT_STARTED",
           "external_action": true,
           "human_gate": {
             "required": true,
             "status": "REVIEW_REQUIRED"
           },
-          "execution_status": "NOT_STARTED"
+          "id": "proof-parameter-current-kiota-contract-issue",
+          "prerequisites": [
+            "Owner approval for this exact Kiota issue and attached pair.",
+            "Review draft results/investigations/ecosystem-closure-2026-09-05/drafts/kiota-proof-parameter.md; frame as contract clarification, not demonstrated unsoundness."
+          ],
+          "priority": "MEDIUM",
+          "rationale": "The existing proof-parameter disagreement still reproduces on current Kiota 2d2a9fa after PR #8. Recommend one contract-clarification issue with the exact pair; defer the Arena submission pending current integration and expected-outcome review.",
+          "target": "https://github.com/sankalpsthakur/kiota"
         },
         {
-          "id": "proof-parameter-propose-arena-test",
           "action": "PROPOSE_CORPUS_TEST",
-          "target": "leanprover/lean-kernel-arena",
-          "priority": "HIGH",
-          "rationale": "The existing malformed result-parameter fixture uses a dummy recursor and does not isolate this proof-irrelevance boundary; the new full-recursor artifact distinguishes current Kiota.",
-          "prerequisites": [
-            "completed: official Lean expected rejection",
-            "completed: all-checker matched control",
-            "completed: focused draft prepared"
-          ],
+          "execution_status": "DEFERRED",
           "external_action": true,
           "human_gate": {
             "required": true,
             "status": "REVIEW_REQUIRED"
           },
-          "execution_status": "NOT_STARTED"
+          "id": "proof-parameter-arena-pair-successor",
+          "prerequisites": [
+            "Current Arena integration and expected-outcome review.",
+            "Owner approval for the exact Arena submission.",
+            "Draft: results/investigations/ecosystem-closure-2026-09-05/drafts/arena-proof-parameter.md"
+          ],
+          "priority": "MEDIUM",
+          "rationale": "The existing proof-parameter disagreement still reproduces on current Kiota 2d2a9fa after PR #8. Recommend one contract-clarification issue with the exact pair; defer the Arena submission pending current integration and expected-outcome review.",
+          "target": "https://github.com/leanprover/lean-kernel-arena"
         }
-      ]
+      ],
+      "summary": "The existing proof-parameter disagreement still reproduces on current Kiota 2d2a9fa after PR #8. Recommend one contract-clarification issue with the exact pair; defer the Arena submission pending current integration and expected-outcome review."
     },
     {
-      "id": "reducible-hidden-positivity-corpus-gap",
-      "summary": "A full-recursor reducible-hidden negative artifact kills Nanoda's strict-positivity omission, while Arena's existing dummy-recursor fixture remains rejected for independent reasons.",
-      "disposition": "ACTION_RECOMMENDED",
+      "disposition": "DEFERRED",
       "evidence": [
         {
           "path": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-README.md",
@@ -213,42 +179,55 @@
         {
           "path": "results/investigations/nanoda-ordinary-inductive/reducible-positivity-differential.json",
           "sha256": "ef2d38c29ee97061d32694123d28503cfce4c3c24fa37c0b131122295f1e8e5a"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/upstream/manifest.json",
+          "sha256": "a7dde6fe04ad1ca84ae83de995a14a025b5afaa14d437c5623ddffd308f5d70a"
+        },
+        {
+          "path": "results/investigations/ecosystem-closure-2026-09-05/decision-packet.json",
+          "sha256": "5ff0b5b6a489a331b65d851e18770e4afb8107c22eacf9bf4730d14dbd32a0b7"
         }
       ],
+      "id": "reducible-hidden-positivity-corpus-gap",
       "recommendations": [
         {
-          "id": "reducible-positivity-propose-arena-test",
           "action": "PROPOSE_CORPUS_TEST",
-          "target": "leanprover/lean-kernel-arena",
-          "priority": "HIGH",
-          "rationale": "The existing logical case does not isolate strict positivity because its dummy recursor supplies an independent rejection path; the full-recursor witness kills the exact omission and all reference checkers agree on rejection.",
-          "prerequisites": [
-            "completed: all-checker expected rejection",
-            "completed: matched control accepted by all checkers",
-            "completed: focused draft prepared"
-          ],
+          "execution_status": "DEFERRED",
           "external_action": true,
           "human_gate": {
             "required": true,
             "status": "REVIEW_REQUIRED"
           },
-          "execution_status": "NOT_STARTED"
+          "id": "positivity-arena-companion-successor",
+          "prerequisites": [
+            "Current-toolchain integration and current tutorial-content duplicate comparison.",
+            "Expected-outcome review and owner approval for exact submission.",
+            "Draft: results/investigations/ecosystem-closure-2026-09-05/drafts/arena-reducible-positivity.md"
+          ],
+          "priority": "MEDIUM",
+          "rationale": "The complete-recursor positivity companion remains a useful corpus proposal supported by prior pinned evidence. Current-toolchain integration and expected-outcome review remain concrete prerequisites; no checker defect is alleged.",
+          "target": "https://github.com/leanprover/lean-kernel-arena"
         },
         {
-          "id": "reducible-positivity-no-implementation-issue",
           "action": "NO_EXTERNAL_ACTION",
-          "target": "Nanoda, Kiota, official Lean, and Lean4Lean implementations",
-          "priority": "LOW",
-          "rationale": "Every unmodified checker rejects the candidate and accepts the control, so the finding concerns corpus isolation rather than an observed implementation defect.",
-          "prerequisites": [],
+          "execution_status": "COMPLETED",
           "external_action": false,
           "human_gate": {
             "required": false,
             "status": "NOT_REQUIRED"
           },
-          "execution_status": "COMPLETED"
+          "id": "positivity-no-implementation-issue",
+          "prerequisites": [],
+          "priority": "LOW",
+          "rationale": "The complete-recursor positivity companion remains a useful corpus proposal supported by prior pinned evidence. Current-toolchain integration and expected-outcome review remain concrete prerequisites; no checker defect is alleged.",
+          "target": "All observed validators"
         }
-      ]
+      ],
+      "summary": "The complete-recursor positivity companion remains a useful corpus proposal supported by prior pinned evidence. Current-toolchain integration and expected-outcome review remain concrete prerequisites; no checker defect is alleged."
     }
-  ]
+  ],
+  "generated_at": "2026-09-05T04:44:21.427063+00:00",
+  "policy": "docs/INVESTIGATION_SOP.md",
+  "schema_version": 1
 }

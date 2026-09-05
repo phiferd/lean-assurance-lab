@@ -6,14 +6,16 @@ Aligned in reproducibility, scoped claims and preserving uncertainty. The next i
 
 The publication study is closed through Gate 12: STRONG_POSITIVE / BOUNDED_PILOT / PUBLISH_BOUNDED. Its isolated result is 0/1 to 1/1, completing a known negative’s missing control.
 
-The broader assurance gate remains **FAIL**, with 15 unresolved semantic-disagreement artifacts and 1 parse-behavior artifact. These are not a count of distinct bugs. 9 mechanically executed survivors await triage. The two selected action registers contain 8 external actions requiring review across 5 findings.
+The broader assurance gate remains **FAIL**, with 15 unresolved semantic-disagreement artifacts and 1 parse-behavior artifact. These are not a count of distinct bugs. 9 survivors remain in the canonical pending-admission set; the successor separately records its two witnessed candidates without changing scores. The two selected action registers contain 4 external actions requiring review across 5 findings.
+
+The ecosystem-closure successor packet is **BOUNDED_WORK_COMPLETE_WITH_EXPLICIT_DEFERRALS**. It is summarized with an exact input binding below.
 
 ## Constitutional alignment
 
 | Goal | Assessment | Next improvement |
 |---|---|---|
 | Measured ecosystem trust | Aligned, with limited generalization | Prefer additional shared regression value and independent transfer over a larger coverage percentage. |
-| Durable reproducibility | Strong recorded evidence; incomplete execution portability | Make one approved bounded case reproducible from a clean clone with exact input hashes and finite budgets. |
+| Durable reproducibility | Historical evidence remains bound; successor runner is manifest-governed | Record the successor decision packet and preserve its input bindings. |
 | Scoped claims and preserved uncertainty | Aligned | Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence. |
 | Improve shared assets | Action backlog limits realized benefit | Close mature findings through concrete owner decisions and upstream dispositions before enlarging this study. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Generate current facts and keep decision packets short enough for a maintainer to review and reproduce. |
@@ -23,53 +25,65 @@ Evidence for each assessment is recorded in the canonical JSON alongside exact i
 
 ## Recommended order
 
-### 1. Close existing findings
+### 1. Successor packet next step 1
 
-**Target:** Existing imax, proof-parameter-uniformity, projection and positivity recommendations
+**Target:** Ecosystem closure successor
 
-Prepare one decision packet from the existing drafts: verify current upstream and duplicates where needed, present exact target-specific approval choices, then submit only authorized actions and track their disposition.
+Human decision: review the single current Kiota proof-parameter contract-clarification draft. No issue or other external message may be submitted without approval for that target.
 
-**Completion:** Every selected mature finding has an executed external reference, an explicit declined decision, or a concrete deferred prerequisite; no vague waiting item.
+**Completion:** Follow the recorded packet step within its stated authorization.
 
-**Execution:** Scripts collect hashes, existing evidence and status; a model handles semantic ambiguity and concise drafting; the owner approves external submission.
+**Execution:** Bounded local evidence and owner-gated external actions.
 
-**Boundary:** PROPOSED_NEXT_FRONTIER; external publication remains separately gated
+**Boundary:** SUCCESSOR_PACKET
 
-### 2. Make bounded runs portable and governed
+### 2. Successor packet next step 2
 
-**Target:** Materialization/preflight and scripts/run-campaign
+**Target:** Ecosystem closure successor
 
-Provide one exact-hash input materialization command and a machine-readable authorized-run manifest with explicit phase/total budgets, input digests, stop states and a completion predicate. Reuse the disk-backed runner; do not create a second scheduler.
+Next bounded local frontier proposal: package the two Arena companion pairs against the current toolchain, compare current declaration content, and settle expected outcomes before requesting submission approval. No large new build was authorized in this completed run.
 
-**Completion:** A clean clone materializes one approved bounded case and can validate, interrupt and resume it without changing inputs or exceeding budgets; unauthorized frontier/changed-input fixtures fail before launch.
+**Completion:** Follow the recorded packet step within its stated authorization.
 
-**Execution:** Deterministic scripts and regression tests; no model in the execution loop.
+**Execution:** Bounded local evidence and owner-gated external actions.
 
-**Boundary:** PROPOSED_ENGINEERING_PLAN; no new mutation or witness campaign activated
+**Boundary:** SUCCESSOR_PACKET
 
-### 3. Triage existing survivors
+### 3. Successor packet next step 3
 
-**Target:** A fixed subset of the 9 existing pending survivors; exact IDs are in the canonical JSON.
+**Target:** Ecosystem closure successor
 
-Select a small fixed subset using existing source/coverage evidence, preregister a finite witness budget, and terminate each as a regression candidate, characterized boundary, or bounded unresolved result.
+Separate Ultra review recommended: what qualified contract, if any, makes proof-parameter exact order a cross-validator conformance obligation despite proof irrelevance? Review should also distinguish Arena either policy from normative authority. No new Ultra review completed in this run.
 
-**Completion:** Every selected survivor has reproducible evidence and an ecosystem recommendation or explicit bounded negative result; unresolved cases are never called equivalent.
+**Completion:** Follow the recorded packet step within its stated authorization.
 
-**Execution:** Scripted candidate execution and minimization; model review only for scientific interpretation.
+**Execution:** Bounded local evidence and owner-gated external actions.
 
-**Boundary:** PROPOSED_RESEARCH_PLAN; fixed subset and budget required before execution
+**Boundary:** SUCCESSOR_PACKET
 
-### 4. Require transfer for a later study
+### 4. Successor packet next step 4
 
-**Target:** A separately chosen semantic slice or held-out validator experiment
+**Target:** Ecosystem closure successor
 
-Only after closing higher-value backlog, preregister a small prospective test of additional regression/corpus value or held-out transfer. Require sufficient independently qualified obligations and a falsifiable success/stop criterion before expanding authority-catalog work.
+Review the two new survivor witness candidates for controlled corpus admission and registry classification under the existing witness policy. Until admitted, preserve the canonical nine-survivor pending count and unchanged scores.
 
-**Completion:** A new shared regression, independently meaningful transfer result, characterized limitation, or preserved negative result—not merely another coverage percentage.
+**Completion:** Follow the recorded packet step within its stated authorization.
 
-**Execution:** Lead designs the bounded question; scripts execute; separate Ultra review only for a named consequential ambiguity.
+**Execution:** Bounded local evidence and owner-gated external actions.
 
-**Boundary:** FUTURE_PROPOSAL; current publication study remains stopped
+**Boundary:** SUCCESSOR_PACKET
+
+### 5. Successor packet next step 5
+
+**Target:** Ecosystem closure successor
+
+Keep the held-out/prospective transfer study deferred while mature corpus integration and human action decisions remain outstanding. Use manifest-bound scripts for future authorized runs; preserve finite accounting and stop on exceptions.
+
+**Completion:** Follow the recorded packet step within its stated authorization.
+
+**Execution:** Bounded local evidence and owner-gated external actions.
+
+**Boundary:** SUCCESSOR_PACKET
 
 ## Autonomous workflow
 
@@ -86,8 +100,10 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.
 - Frozen study tests and validators now run against their committed frontier through an explicit successor; current and future tests remain live, and both groups must pass.
 - Exact historical evidence can validate without local checker payloads; fresh execution still needs reproducible materialization of the ignored corpus/coverage/observer inputs.
-- run-campaign is disk-backed and useful, but its phase timeout defaults to zero (disabled); the reviewed supervisor binds batch selection rather than a separately authorized frontier and total experimental budget.
-- The outer run-autonomous-campaigns wrapper resets its state and overwrites logs on invocation, has no resume option, and supplies no phase or total timeout to run-campaign. Harden or retire this wrapper before treating it as an unattended workflow.
+- run-campaign now requires an authorized manifest that binds the active frontier, governing plan, exact inputs, declared platform, finite phase and total budgets, and a completion predicate before launch or resume.
+- materialize-run-inputs supports exact-hash local donor materialization for a clean clone; it refuses mismatched existing files and does not rebuild omitted payloads.
+- run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.
+- The successor frontier uses an already fixed bounded survivor triage; the decision packet records each selected mutant disposition when it is available.
 - A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.
 - No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.
 
@@ -102,7 +118,8 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 ## Changes completed in this task
 
 - Gates 11 and 12 closed with a generated decision/report and historical validator.
+- The successor frontier has an authorized manifest runner and exact local input materialization; this does not by itself complete successor research.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
 
-This review does not activate a new campaign, contact an upstream project or establish current upstream issue/PR status. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.
+This review does not activate a new campaign or contact an upstream project. Upstream observations are bounded to the dated, input-bound successor inventory; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

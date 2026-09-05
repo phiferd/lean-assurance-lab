@@ -40,6 +40,34 @@ research directions.
 
 ## Attempted
 
+- Completed the authorized ecosystem-closure/autonomy successor on 2026-09-05.
+  Validation passed 385 full-payload tests (312 current, 73 historical), with
+  no skips; final focused and clean-clone checks also passed. Historical
+  transition/tampering regressions preserve all frozen study content.
+  Fresh GET-only inventories cover all four named repositories. Arena #176 is
+  merged; four old imax/projection implementation-issue recommendations are
+  withdrawn in light of the documented `either` policy, without changing raw
+  disagreements or treating corpus policy as normative authority. Current
+  Kiota `2d2a9fa` still accepts the proof-parameter candidate while the pinned
+  official observer rejects it; both accept the control. One concrete Kiota
+  contract-clarification draft remains human-gated; two Arena companion
+  proposals are explicitly deferred pending current-toolchain integration.
+- Preregistered two existing survivors at `18bd47b` before execution. Both
+  yielded small distinguishing witnesses with accepted controls and pinned
+  official rejection of the candidates (six launches each). No new mutant,
+  registry promotion or score change was made. The nine-member canonical
+  pending set now includes two witnessed candidates awaiting admission review.
+  Three isolated offline builds and 16 total checker launches stayed within
+  the fixed bounds. See the generated [successor report](research/ECOSYSTEM_CLOSURE_REPORT.md)
+  and its bound decision packet for exact identities, raw outputs and limits.
+- Replaced unconstrained campaign entry with exact authorized manifests,
+  finite phase/total budgets, persisted attempt accounting, exclusive ownership,
+  interruption/resume and process-group termination. Retired the resetting
+  outer generator. A fresh full-history clone materialized and validated the
+  exact proof-pair inputs without rerunning checkers. Mechanical operation
+  assumes reviewed scripts and a trusted local filesystem; it is not a security
+  sandbox or automatic authorization for more research.
+
 - Closed publication-study Gates 11–12 with the literal preregistered
   `STRONG_POSITIVE / BOUNDED_PILOT / PUBLISH_BOUNDED` decision and a separate
   attestation of content commit `4cd21c6`. The bounded finding completes one
@@ -1662,14 +1690,14 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-ECOSYSTEM-CLOSURE-AND-AUTONOMY`: the owner's 2026-09-05 instruction
-   adopts the project-review recommendations under the bounded
-   [successor plan](research/ECOSYSTEM_CLOSURE_AND_AUTONOMY_PLAN.md). Complete
-   mature-finding decision packets, exact-input budgeted autonomous execution
-   and materialization, then at most two preregistered existing-survivor triages.
-   Do not create external issues or publish other actions without explicit
-   target-specific human approval. A later transfer study stays deferred while
-   mature action dispositions or sufficient evidence are outstanding. The
+1. `F-ECOSYSTEM-CLOSURE-AND-AUTONOMY`: bounded local execution and decision
+   packets are complete under the [successor plan](research/ECOSYSTEM_CLOSURE_AND_AUTONOMY_PLAN.md).
+   Preserve the result and perform only current-state validation or review of
+   the concrete pending decisions. New checker runs, corpus integration builds,
+   registry admission and a transfer study require an explicit successor scope
+   and finite protocol; the existing run budgets are spent and must not reset.
+   Human review of the Kiota draft and deferred Arena proposals is next. No
+   external issue, comment or publication is authorized. The original
    publication study remains historically closed.
 
 ### Waiting
@@ -1681,12 +1709,12 @@ prepared_external_action_drafts: 5
   followed by target-specific human authorization. No implementation issue or
   private disclosure is supported by this run.
 
-- `W-NANODA-NUMINDICES`: await maintainer guidance on
-  [Nanoda #29](https://github.com/ammkrn/nanoda_lib/issues/29). Do not propose an
-  Arena `accept` or `reject` test until the contract is adjudicated or Arena
-  explicitly chooses `either`. Then update the investigation terminology,
-  machine classification, assurance snapshot, and proposed test outcome
-  together.
+- `W-NANODA-NUMINDICES`: Nanoda #29 is closed. The retrieved maintainer
+  explanation retains serialized `numIndices` in the permanent environment,
+  with a possible future change deferred pending Lean #14977. This is an
+  explained implementation policy, not a new normative adjudication. Do not
+  propose a strict Arena outcome without qualified contract review.
+
 - `W-KIOTA-UNIVERSES`: await adjudication of
   [Kiota #3](https://github.com/sankalpsthakur/kiota/issues/3) for undeclared
   universe ownership.
@@ -1698,26 +1726,26 @@ prepared_external_action_drafts: 5
   recursor type, and constructor index. Official Lean and Lean4Lean reject all
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
-- `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: review the prepared single Kiota issue
-  and Arena reject-test proposal for the swapped proof-parameter witness. Both
-  reproduce on current Kiota main and have no matching issue, but publication
-  requires target-specific human approval.
-- `W-ARENA-REDUCIBLE-POSITIVITY`: review the prepared Arena proposal for the
-  full-recursor reducible-hidden positivity witness. It strengthens an existing
-  logical test rather than reporting an implementation defect; submission
-  requires explicit human approval.
-- `W-IMAX-RIGHT-SUCCESSOR`: await review and expected merge of the open,
-  mergeable [Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176),
-  which contributes the two adjacent tutorial corner cases authorized in
-  [#175](https://github.com/leanprover/lean-kernel-arena/issues/175). Do not
-  record the contribution as upstream corpus coverage until the PR actually
-  merges. Prepared Nanoda and Kiota implementation issues remain
-  `REVIEW_REQUIRED`; do not submit either without target-specific approval.
-- `W-POSSIBLY-PROP-PROJECTIONS`: discuss whether Nanoda and Lean4Lean should be
-  notified using the two prepared issue drafts. Current upstream reproduction
-  and duplicate searches are complete. Arena already contains and explains
-  both cases, so no Arena proposal is recommended. Both implementation issues
-  remain `REVIEW_REQUIRED`.
+- `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on current
+  Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
+  contract-clarification issue; no demonstrated unsoundness is claimed.
+  Publication needs target-specific approval. The Arena pair is deferred until
+  current-toolchain integration and expected-outcome review are complete.
+
+- `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor companion
+  proposal, supported by prior pinned evidence. Current tutorial-content
+  comparison, toolchain integration and expected-outcome review remain
+  prerequisites. Submission requires explicit human approval.
+
+- `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on
+  2026-08-30 with `outcome: either`; current source contains the corner cases.
+  The successor withdraws both old implementation-issue recommendations.
+  Preserve observed profile differences; no new external action is warranted.
+
+- `W-POSSIBLY-PROP-PROJECTIONS`: closed as an explained profile distinction.
+  Arena PRs #167/#171 document conservative rejection and `outcome: either`.
+  The successor withdraws the two old over-rejection issue recommendations.
+  Raw observations and unresolved assurance counts remain unchanged.
 
 ### Future Directions
 

@@ -101,3 +101,30 @@ never restore an obsolete Active marker just to satisfy a live validator.
 `scripts/run-unit-tests` runs the exact attested publication-study test modules
 in that committed tree and keeps current/future modules in the live tree.
 Both groups are required; a historical failure is an overall failure.
+
+## Ecosystem successor execution
+
+The 2026-09-05 successor is recorded by `scripts/build-ecosystem-closure --check`
+and `docs/research/ECOSYSTEM_CLOSURE_REPORT.md`. Read current Active status before
+using any run manifest; completed IDs must not be recycled. Prepare a new
+explicitly authorized ID for new work. The existing real runs are complete.
+
+For an authorized fresh run, use
+`scripts/run-campaign --authorization config/authorized-runs/<run>.json`.
+Resume requires the same manifest and `--resume`; failures and interruptions
+consume their persisted budget. A completed resume does not rerun phases.
+Each bound driver must enforce its domain-specific launch/candidate limits;
+the supervisor enforces finite phase time, total time and attempt count.
+
+In a same-platform clean clone, use
+`scripts/materialize-run-inputs --authorization <manifest> --source-root <donor>`.
+All donor hashes are checked before copying; mismatching destinations are
+refused. This assumes trusted local parent directories, not adversarial
+concurrent filesystem replacement. Bound scripts are reviewed local code;
+manifest validation is not a sandbox against malicious script contents.
+
+Current closure order: `scripts/build-ecosystem-closure --write`,
+`scripts/validate-action-recommendations`, `scripts/refresh-current-state`,
+which also regenerates the project review before its final graph check.
+Use `--check` on both generators for read-only drift detection. External issues and other messages remain
+human-gated, including when a mechanical preflight passes.
