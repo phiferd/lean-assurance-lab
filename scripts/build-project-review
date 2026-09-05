@@ -17,8 +17,8 @@ HISTORY = 'results/research/declaration-validation-publication-study-historical.
 DECISION = 'results/research/declaration-validation-publication-study-closure.json'
 RUN = 'results/research/publication-study-theorem-control-0001'
 ACTION_PATHS = ['results/action-recommendations/current.json', RUN + '/action-recommendations.json']
-SUCCESSOR_PLAN = 'docs/research/ECOSYSTEM_CLOSURE_AND_AUTONOMY_PLAN.md'
-SUCCESSOR_PACKET = 'results/investigations/ecosystem-closure-2026-09-05/decision-packet.json'
+SUCCESSOR_PLAN = 'docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md'
+SUCCESSOR_PACKET = 'results/investigations/corpus-integration-2026-09-05/decision-packet.json'
 SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATION_SOP.md',
            'docs/RESEARCH_STATUS.md', 'results/assurance/current.json',
            HISTORY, 'results/research/declaration-validation-publication-study-content-manifest.json',
@@ -75,11 +75,13 @@ def build():
         'modeled_mutation_score': snapshot['mutation_testing']['modeled_mutation_score'],
         'schema_backed_findings_in_selected_registers': sum(len(load(p)['findings']) for p in ACTION_PATHS),
         'external_actions_pending_review': len(pending),
+        'current_external_actions_pending_review': sum(r['source'] == ACTION_PATHS[0] for r in pending),
+        'historical_study_external_actions_pending_review': sum(r['source'] == ACTION_PATHS[1] for r in pending),
         'authorized_runner': 'manifest-required finite phase and total budgets, input bindings, immutable attempt logs and resume checks',
         'input_materialization': 'exact-hash local donor materialization on the declared platform',
         'successor_packet_status': packet['status'] if packet is not None else 'NOT_YET_RECORDED',
     }
-    next_steps = ([{'priority': index + 1, 'id': 'SUCCESSOR_PACKET_NEXT_STEP_' + str(index + 1), 'target': 'Ecosystem closure successor',
+    next_steps = ([{'priority': index + 1, 'id': 'SUCCESSOR_PACKET_NEXT_STEP_' + str(index + 1), 'target': 'Corpus integration successor',
                     'action': str(step), 'completion': 'Follow the recorded packet step within its stated authorization.',
                     'mechanism': 'Bounded local evidence and owner-gated external actions.',
                     'authorization': 'SUCCESSOR_PACKET'} for index, step in enumerate(packet['next_steps'])] if packet is not None else [
@@ -90,14 +92,14 @@ def build():
          'authorization': 'ACTIVE_SUCCESSOR_FRONTIER; external publication remains separately gated'}])
     return {'schema_version': 1, 'review_scope': 'Current local canonical records; no fresh upstream status or completeness claim for all historical actions.',
             'inputs': [bound(p) for p in [*SOURCES, *([SUCCESSOR_PACKET] if packet is not None else [])]], 'metrics': metrics,
-            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserving uncertainty. The next improvement should convert existing evidence into shared regressions and actionable closure, while reducing operational friction. Continuing to enlarge this one-obligation study would have lower expected value than its remaining ecosystem backlog.',
+            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The completed local successor converted two existing witnesses into durable regressions and prepared three exact owner decisions. The next value comes from resolving those decisions, then considering a separately authorized prospective transfer study; enlarging the closed one-obligation study remains lower value.',
             'constitutional_alignment': [
                 {'goal': 'Measured ecosystem trust', 'assessment': 'Aligned, with limited generalization',
                  'evidence': 'The current snapshot separates scoped mutation results, cross-validator observations and unresolved triage; the completed pilot does not establish general method strength.',
                  'next_improvement': 'Prefer additional shared regression value and independent transfer over a larger coverage percentage.'},
                 {'goal': 'Durable reproducibility', 'assessment': 'Historical evidence remains bound; successor runner is manifest-governed',
                  'evidence': 'The authorized-run manifest binds inputs, platform, finite budgets and completion condition; materialization verifies exact local donor bytes.',
-                 'next_improvement': 'Record the successor decision packet and preserve its input bindings.'},
+                 'next_improvement': 'Record owner dispositions against the bound packets and preserve their input bindings.'},
                 {'goal': 'Scoped claims and preserved uncertainty', 'assessment': 'Aligned',
                  'evidence': 'The pilot retains its one-obligation denominator, provisional candidates and known-negative limitation. The broader FAIL state and unresolved survivors remain visible.',
                  'next_improvement': 'Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence.'},
@@ -118,12 +120,14 @@ def build():
                 'run-campaign now requires an authorized manifest that binds the active frontier, governing plan, exact inputs, declared platform, finite phase and total budgets, and a completion predicate before launch or resume.',
                 'materialize-run-inputs supports exact-hash local donor materialization for a clean clone; it refuses mismatched existing files and does not rebuild omitted payloads.',
                 'run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.',
-                'The successor frontier uses an already fixed bounded survivor triage; the decision packet records each selected mutant disposition when it is available.',
+                'The successor admitted two fixed witnesses without new checker execution, reducing the pending mechanical survivor queue from nine to seven while preserving unresolved semantic status.',
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
             ],
             'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
-                                       'The successor frontier has an authorized manifest runner and exact local input materialization; this does not by itself complete successor research.',
+                                       'The corpus-integration successor completed two current-Arena package builds, an exact tutorial comparison, and a separate Ultra proof-parameter review.',
+                                       'Two fixed survivor witnesses are admitted through an explicit v2 corpus successor; seven mechanically executed survivors remain pending.',
+                                       'Three current external-action drafts are concrete and remain owner-gated; no issue or pull request was created.',
                                        'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
                                        'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.'],
             'successor_decision_packet': ({'binding': bound(SUCCESSOR_PACKET), 'status': packet['status'],
@@ -144,8 +148,8 @@ def render(review):
              'Generated by `scripts/build-project-review --write` from `results/research/project-review.json`. Planning judgments are proposals, not semantic authority or new experiment authorization.', '',
              review['constitutional_assessment'], '',
              f"The publication study is closed through Gate 12: {m['study_outcome']} / {m['study_tier']} / {m['study_publication_decision']}. Its isolated result is {m['study_existing_isolated']}/{m['study_denominator']} to {m['study_final_isolated']}/{m['study_denominator']}, completing a known negative’s missing control.", '',
-             f"The broader assurance gate remains **{m['assurance_gate']}**, with {m['semantic_disagreement_artifacts']} unresolved semantic-disagreement artifacts and {m['parse_disagreement_artifacts']} parse-behavior artifact. These are not a count of distinct bugs. {m['pending_survivor_triage']} survivors remain in the canonical pending-admission set; the successor separately records its two witnessed candidates without changing scores. The two selected action registers contain {m['external_actions_pending_review']} external actions requiring review across {m['schema_backed_findings_in_selected_registers']} findings.", '',
-             (f"The ecosystem-closure successor packet is **{m['successor_packet_status']}**. It is summarized with an exact input binding below." if review['successor_decision_packet'] is not None else "The ecosystem-closure successor packet is **NOT_YET_RECORDED**. The active successor frontier is still in progress; this review does not claim its objectives are complete."), '',
+             f"The broader assurance gate remains **{m['assurance_gate']}**, with {m['semantic_disagreement_artifacts']} unresolved semantic-disagreement artifacts and {m['parse_disagreement_artifacts']} parse-behavior artifact. These are not a count of distinct bugs. {m['pending_survivor_triage']} survivors remain in the canonical pending-admission set after two fixed profile witnesses were admitted; their semantic status remains unresolved. The current register contains {m['current_external_actions_pending_review']} exact external actions requiring review. One historical Gate-10 companion recommendation also remains deferred, for {m['external_actions_pending_review']} pending rows across both selected registers and {m['schema_backed_findings_in_selected_registers']} findings.", '',
+             (f"The corpus-integration successor packet is **{m['successor_packet_status']}**. It is summarized with an exact input binding below." if review['successor_decision_packet'] is not None else "The corpus-integration successor packet is **NOT_YET_RECORDED**. The active successor frontier is still in progress; this review does not claim its objectives are complete."), '',
              '## Constitutional alignment', '', '| Goal | Assessment | Next improvement |', '|---|---|---|']
     lines += ['| ' + row['goal'] + ' | ' + row['assessment'] + ' | ' + row['next_improvement'] + ' |' for row in review['constitutional_alignment']]
     lines += ['', 'Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.', '', '## Recommended order', '']

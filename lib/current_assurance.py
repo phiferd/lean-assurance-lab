@@ -162,6 +162,9 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
     coverage = load(paths["coverage_manifest"])
     coverage_metrics = load(paths["coverage_metrics"])
     report = load(paths["mutation_report"])
+    existing_corpus_kills = report["killed_mutants"] - report["generated_witness_kills"]
+    if existing_corpus_kills < 0:
+        raise ValueError("generated witness kills cannot exceed total killed mutants")
     batch_paths = [
         root / "results" / "mutation-batches" / "nanoda-semantic-0001.json",
         root / "results" / "mutation-batches" / "nanoda-semantic-0002.json",
@@ -350,7 +353,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
         "mutation_testing": {
             "population_scope": f"Canonical modeled population: {report['evaluated_mutants']} evaluated Nanoda mutants in the current mutation report. Equivalent and reference-aligned cases are excluded from modeled scores.",
             "total_semantic_mutants": report["evaluated_mutants"],
-            "killed_by_existing_corpus": report["killed_mutants"],
+            "killed_by_existing_corpus": existing_corpus_kills,
             "killed_by_generated_corpus": report["generated_witness_kills"],
             "surviving_mutants": report["surviving_mutants"],
             "meaningful_survivors": report["meaningful_survivors"],

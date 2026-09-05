@@ -1688,15 +1688,42 @@ prepared_external_action_drafts: 5
   explicitly historical. External publication and new source approvals retain
   their recorded human decision boundaries.
 
+### Corpus Integration and Witness Admission Closure — 2026-09-05
+
+- The bounded successor completed its local work. Two companion packages build
+  against Arena `abc55357aee17c59dfdbf39c8a2e19739e23dd10` in two bounded
+  `build-test` calls, with zero checker launches and zero toolchain downloads.
+  The proof-parameter package is control `accept` / candidate `either`; the
+  complete-recursor positivity package is control `accept` / proposed candidate
+  `reject`. Package outcomes are corpus policy, not normative authority.
+- A separate Ultra scientific review found no currently approved qualified
+  source that makes exact proof-parameter order a universal cross-validator
+  obligation. It records an implementation-profile disagreement and corrects
+  the pair description: the two edited expression nodes are shared into the
+  recursor motive and rule annotation even though complete recursor metadata
+  remains present.
+- The two fixed Nanoda witnesses `nanoda-gen-f19ffc8a2e9b` and
+  `nanoda-gen-21ef4d1d32a1` are admitted through the explicit
+  `nanoda-augmented-v2` successor without new checker execution. They reduce
+  `SURVIVED_WITHOUT_WITNESS` from 9 to 7. The current report records mutation
+  score `0.9781021897810219` and modeled score `0.9305555555555556`; the new
+  witnesses remain semantically `UNRESOLVED`, so the count of confirmed witness
+  semantics remains 3.
+- Three exact external review packets are ready: one Kiota contract-clarification
+  issue, one Arena proof-parameter characterization pair, and one Arena
+  complete-recursor positivity pair. No issue, comment, pull request, source
+  approval, or publication was created by this successor.
+
 ### Active
 
-1. `F-CORPUS-INTEGRATION-AND-WITNESS-ADMISSION`: execute the bounded
-   [review successor](research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md).
-   Persist the separate proof-parameter review, package two Arena companion
-   pairs without checker launches, and admit the two already witnessed
-   survivors through an explicit controlled-corpus successor. No external
-   issue, comment, pull request or publication is authorized. The ecosystem
-   closure at `2136c65` and the original publication study remain closed.
+1. `F-CORPUS-INTEGRATION-AND-WITNESS-ADMISSION`: local completion conditions in
+   the [review successor](research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md)
+   are met. The authorized frontier is now limited to recording the owner's
+   decisions on the three exact external packets and, for any approved target,
+   executing only that reviewed submission. No external target is currently
+   authorized. Transfer work and the remaining survivor queue stay outside this
+   frontier. The ecosystem closure at `2136c65` and the original publication
+   study remain closed.
 
 ### Waiting
 
@@ -1727,13 +1754,14 @@ prepared_external_action_drafts: 5
 - `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on current
   Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
   contract-clarification issue; no demonstrated unsoundness is claimed.
-  Publication needs target-specific approval. The Arena pair is deferred until
-  current-toolchain integration and expected-outcome review are complete.
+  Publication needs target-specific approval. The Arena pair now passes current
+  static integration as control `accept` / candidate `either`; its exact
+  characterization proposal also needs target-specific approval.
 
 - `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor companion
   proposal, supported by prior pinned evidence. Current tutorial-content
-  comparison, toolchain integration and expected-outcome review remain
-  prerequisites. Submission requires explicit human approval.
+  comparison and static integration are complete. The proposed candidate
+  `reject` outcome and exact submission require explicit human approval.
 
 - `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on
   2026-08-30 with `outcome: either`; current source contains the corner cases.

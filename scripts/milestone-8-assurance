@@ -73,9 +73,9 @@ def main() -> int:
         and snapshot["corpus"]["total_bytes"] == 9506646641
         and len(snapshot["corpus"]["identity_manifest_sha256"]) == 64,
         "semantic_mutant_population_reconciles": snapshot["mutation_testing"]["total_semantic_mutants"] == mutation_report["evaluated_mutants"]
-        and snapshot["mutation_testing"]["killed_by_existing_corpus"] == mutation_report["killed_mutants"]
+        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["killed_by_generated_corpus"] == mutation_report["killed_mutants"]
         and snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["surviving_mutants"]
-        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["evaluated_mutants"],
+        and snapshot["mutation_testing"]["killed_by_existing_corpus"] + snapshot["mutation_testing"]["killed_by_generated_corpus"] + snapshot["mutation_testing"]["surviving_mutants"] == mutation_report["evaluated_mutants"],
         "generated_corpus_kill_is_reported": snapshot["mutation_testing"]["killed_by_generated_corpus"] == mutation_report["generated_witness_kills"],
         "survivor_and_equivalence_states_are_reported": snapshot["mutation_testing"]["meaningful_survivors"] == mutation_report["meaningful_survivors"]
         and snapshot["mutation_testing"]["equivalent_mutants"] == mutation_report["classified_equivalent"]

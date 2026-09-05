@@ -128,7 +128,7 @@ fold, improving the modeled held-out score from 0.5 to 1.0.
 The versioned current assurance snapshot reports `FAIL`: four of five hard
 checks pass, while 15 unresolved semantic disagreements fail the configured
 disagreement check. One additional parse-behavior disagreement remains visible,
-and 9 mechanically executed survivors await semantic or witness triage outside
+and 7 mechanically executed survivors await semantic or witness triage outside
 the canonical modeled population. The exact current cases and evidence are
 generated in `docs/PUBLIC_STATUS.md`; the failure is the intended honest result,
 not a failed milestone implementation.
@@ -150,8 +150,8 @@ The project has submitted one small Lean Kernel Arena test contribution:
 [Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176). Its
 single tutorial-file change adds the two adjacent `imax` right-successor reject
 cases (`imax u 1` and `imax u (v + 1)`) developed from the project's checker
-disagreement evidence. The PR is open and mergeable as of 2026-08-29; expected
-merge is not recorded as completed. Current upstream status and the next local
+disagreement evidence. The PR merged on 2026-08-30; the successor evidence
+records the merged tests and their `outcome: either` policy. Current upstream status and the next local
 research frontier are tracked in
 [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md).
 

@@ -24,14 +24,15 @@ class RefreshCurrentStateTests(unittest.TestCase):
             self.assertEqual(refresh.refresh(log_dir, runner), 7)
             self.assertEqual(len(calls), 2)
             self.assertIn('FAILED', (log_dir / 'result.json').read_text())
-            self.assertEqual((log_dir / '02-current-assurance-snapshot.log').read_bytes(), b'mechanical diagnostic')
+            self.assertEqual((log_dir / '02-build-artifact-graph.log').read_bytes(), b'mechanical diagnostic')
             with self.assertRaises(FileExistsError):
                 refresh.refresh(log_dir, runner)
 
     def test_refresh_order_attests_changed_producers_before_dependents(self):
-        expected = ['build-artifact-graph', 'current-assurance-snapshot', 'build-artifact-graph',
+        expected = ['report', 'build-artifact-graph', 'current-assurance-snapshot', 'build-artifact-graph',
                     'milestone-8-assurance', 'build-artifact-graph', 'render-public-status',
                     'build-artifact-graph', 'milestone-9-assurance', 'build-project-review', 'build-artifact-graph', 'artifact-status']
         self.assertEqual([Path(c[0]).name for c in refresh.COMMANDS], expected)
         self.assertEqual(refresh.COMMANDS[-1][1:], ['--require-current'])
+        self.assertEqual(refresh.COMMANDS[0][1:], ['--allow-stale-artifacts', '--output', 'results/assurance/current-mutation-report.json'])
         self.assertFalse(any('run-campaign' in c[0] or 'run-mutant' in c[0] for c in refresh.COMMANDS))

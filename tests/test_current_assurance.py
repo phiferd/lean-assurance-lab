@@ -42,7 +42,14 @@ class CurrentAssuranceTests(unittest.TestCase):
 
     def test_generated_witness_kills_are_derived_from_current_evidence(self):
         snapshot = json.loads((ROOT / "results" / "assurance" / "current.json").read_text())
+        self.assertEqual(snapshot["mutation_testing"]["killed_by_existing_corpus"], 135)
         self.assertEqual(snapshot["mutation_testing"]["killed_by_generated_corpus"], 3)
+        self.assertEqual(
+            snapshot["mutation_testing"]["killed_by_existing_corpus"]
+            + snapshot["mutation_testing"]["killed_by_generated_corpus"]
+            + snapshot["mutation_testing"]["surviving_mutants"],
+            snapshot["mutation_testing"]["total_semantic_mutants"],
+        )
         self.assertEqual(snapshot["generated_regressions"]["artifact_count"], 25)
         self.assertEqual(snapshot["witness_synthesis"]["witnesses_minimized"], 3)
 
@@ -51,7 +58,7 @@ class CurrentAssuranceTests(unittest.TestCase):
         pending = snapshot["mutation_testing"]["pending_survivor_triage"]
         self.assertEqual(pending["classification"], "SURVIVED_WITHOUT_WITNESS")
         self.assertEqual(pending["count"], len(pending["mutant_ids"]))
-        self.assertEqual(pending["count"], 9)
+        self.assertEqual(pending["count"], 7)
         self.assertIn("not admitted", pending["scope"])
 
 
