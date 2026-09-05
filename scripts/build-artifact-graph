@@ -445,6 +445,32 @@ def catalog() -> list[dict]:
             notes="Gate 10 exact one-pair result: existing negative supplied with a matched theorem control; immutable pre-execution bindings, eight raw observations, bounded accounting, and deferred corpus recommendation. Gate 11 interpretation and Gate 12 historical freeze remain separate.",
         ),
         node(
+            "research:declaration-validation-publication-study-closure",
+            "report",
+            locator=files(
+                ".", "scripts/publication_study_closure.py", "scripts/publication_study_history.py",
+                "scripts/close-declaration-validation-publication-study",
+                "schemas/declaration-validation-publication-study-closure.schema.json",
+                "tests/test_declaration_validation_publication_study_closure.py",
+                "tests/test_publication_study_history.py",
+                "results/research/declaration-validation-publication-study-closure.json",
+                "results/research/declaration-validation-publication-study-content-manifest.json",
+                "results/research/declaration-validation-publication-study-historical.json",
+                "docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_FINAL_REPORT.md",
+            ),
+            dependencies=["research:declaration-validation-publication-study-gate-10-result"],
+            required=True,
+            notes="Literal preregistered Gate-11 decision and two-phase Gate-12 content/history closure; historical validation uses the exact committed validator and study facts, not current successors.",
+        ),
+        node(
+            "script:current-state-refresh",
+            "script",
+            locator=files(".", "scripts/refresh-current-state", "tests/test_refresh_current_state.py"),
+            dependencies=["configuration:assurance-policy", "script:artifact-system"],
+            required=True,
+            notes="Fail-fast dependency-ordered regeneration with durable command logs; performs no research experiment or external action.",
+        ),
+        node(
             "research:declaration-validation-publication-study-source-discovery",
             "report",
             locator=files(

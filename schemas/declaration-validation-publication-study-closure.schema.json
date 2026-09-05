@@ -1,0 +1,150 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Publication study Gate11 closure",
+  "type": "object",
+  "additionalProperties": false,
+  "properties": {
+    "claim": {
+      "type": "string",
+      "minLength": 1
+    },
+    "interpretation": {
+      "type": "string",
+      "minLength": 1
+    },
+    "secondary_specification_result": {
+      "type": "string",
+      "minLength": 1
+    },
+    "gate_12_requirement": {
+      "type": "string",
+      "minLength": 1
+    },
+    "schema_version": {
+      "const": 1
+    },
+    "artifact_type": {
+      "const": "PUBLICATION_STUDY_GATE_11_DECISION"
+    },
+    "status": {
+      "const": "GATE_11_COMPLETE"
+    },
+    "input_commit": {
+      "const": "193e95cdf7ae42eb022986e4655ed46427fa3240"
+    },
+    "claim_tier": {
+      "const": "BOUNDED_PILOT"
+    },
+    "publication_format": {
+      "const": "BOUNDED_TECHNICAL_REPORT"
+    },
+    "publication_execution": {
+      "const": "NOT_AUTHORIZED"
+    },
+    "frontier_recommendation": {
+      "const": "STOP_THIS_STUDY_AFTER_GATE_12"
+    },
+    "outcome_class": {
+      "enum": [
+        "STRONG_POSITIVE",
+        "MODERATE_POSITIVE",
+        "SPECIFICATION_RESULT",
+        "NEGATIVE_METHOD_RESULT",
+        "INCONCLUSIVE"
+      ]
+    },
+    "publication_decision": {
+      "enum": [
+        "STOP",
+        "PUBLISH_BOUNDED"
+      ]
+    },
+    "bindings": {
+      "type": "array",
+      "minItems": 8,
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "path",
+          "git_commit",
+          "git_blob",
+          "sha256",
+          "bytes"
+        ]
+      }
+    },
+    "facts": {
+      "type": "object"
+    },
+    "outcome_triggers": {
+      "type": "object"
+    },
+    "classification_priority": {
+      "const": [
+        "STRONG_POSITIVE",
+        "MODERATE_POSITIVE",
+        "SPECIFICATION_RESULT",
+        "NEGATIVE_METHOD_RESULT",
+        "INCONCLUSIVE"
+      ]
+    },
+    "scientific_review": {
+      "type": "object",
+      "required": [
+        "reviewer",
+        "role",
+        "disposition",
+        "construction",
+        "recommendation",
+        "evidence_paths"
+      ],
+      "properties": {
+        "role": {
+          "const": "ADVISORY_INTERPRETATION_NOT_NORMATIVE_AUTHORITY"
+        }
+      }
+    },
+    "recommendation_binding": {
+      "type": "object",
+      "required": [
+        "path",
+        "git_commit",
+        "git_blob",
+        "sha256",
+        "bytes"
+      ]
+    },
+    "limitations": {
+      "type": "array",
+      "minItems": 8,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "required": [
+    "claim",
+    "interpretation",
+    "secondary_specification_result",
+    "gate_12_requirement",
+    "schema_version",
+    "artifact_type",
+    "status",
+    "input_commit",
+    "claim_tier",
+    "publication_format",
+    "publication_execution",
+    "frontier_recommendation",
+    "outcome_class",
+    "publication_decision",
+    "bindings",
+    "facts",
+    "outcome_triggers",
+    "classification_priority",
+    "scientific_review",
+    "recommendation_binding",
+    "limitations"
+  ]
+}

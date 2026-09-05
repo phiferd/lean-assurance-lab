@@ -1,0 +1,54 @@
+#!/usr/bin/env python3
+"""Refresh current assurance outputs in dependency order, without experiments.
+
+No checker, mutation, source approval, publication, or research-frontier advance
+is performed. Every failure stops the chain and retains its command log.
+"""
+import argparse
+from datetime import datetime, timezone
+import json
+from pathlib import Path
+import subprocess
+
+ROOT = Path(__file__).resolve().parents[1]
+COMMANDS = [
+    ['scripts/build-artifact-graph'],
+    ['scripts/current-assurance-snapshot'],
+    ['scripts/build-artifact-graph'],
+    ['scripts/milestone-8-assurance'],
+    ['scripts/build-artifact-graph'],
+    ['scripts/render-public-status'],
+    ['scripts/build-artifact-graph'],
+    ['scripts/milestone-9-assurance'],
+    ['scripts/build-artifact-graph'],
+    ['scripts/artifact-status', '--require-current'],
+]
+
+
+def refresh(log_dir, run=subprocess.run):
+    log_dir.mkdir(parents=True, exist_ok=False)
+    records = []
+    for index, command in enumerate(COMMANDS, 1):
+        log = log_dir / f'{index:02d}-{Path(command[0]).name}.log'
+        with log.open('wb') as output:
+            process = run(command, cwd=ROOT, stdout=output, stderr=subprocess.STDOUT, check=False)
+        records.append({'command': command, 'returncode': process.returncode, 'log': str(log)})
+        (log_dir / 'result.json').write_text(json.dumps({'completed_commands': records,
+            'status': 'FAILED' if process.returncode else 'RUNNING' if index < len(COMMANDS) else 'COMPLETE'}, indent=2) + '\n')
+        if process.returncode:
+            return process.returncode
+    return 0
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--log-dir', type=Path)
+    parser.add_argument('--list', action='store_true', help='show commands without running them')
+    args = parser.parse_args()
+    if args.list:
+        print(json.dumps(COMMANDS, indent=2))
+    else:
+        directory = args.log_dir or ROOT / 'results/workflow-refresh' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
+        code = refresh(directory)
+        print(json.dumps({'status': 'PASS' if code == 0 else 'FAIL', 'logs': str(directory)}))
+        raise SystemExit(code)

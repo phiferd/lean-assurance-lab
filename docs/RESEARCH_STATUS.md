@@ -1572,46 +1572,43 @@ prepared_external_action_drafts: 5
   the separate scientific review flagged below; Gate 12 final study historical
   freeze and external publication have not begun.
 
+### Gate-11 Decision and Gate-12 Phase-A Preparation — 2026-09-04
+
+- The separately requested Ultra scientific review found no consequential
+  isolation defect or need for a Gate-10 erratum. The frozen machine-readable
+  preregistration requires `STRONG_POSITIVE` before the secondary specification
+  trigger. The derived decision is `STRONG_POSITIVE / BOUNDED_PILOT /
+  PUBLISH_BOUNDED`, with a bounded technical report recommended. This registered
+  label does not establish broad method strength, new defect discovery or a
+  general synthesis-performance result.
+- The final report preserves the 14 provisional candidates as a bounded
+  qualification gap, including target correspondence, raw-expression mapping,
+  and proof-dependency/axiom closure. It does not infer global absence of Lean
+  documentation. The Arena companion-control proposal remains deferred.
+- Gate 12 is prepared as a two-phase freeze: first commit the exact study
+  content and non-self-referential manifest, then create a separate Git-blob
+  attestation. Its validator reconstructs the committed tree and executes the
+  bound validator there, so later live facts and code cannot redefine history.
+  Phase-A verification passed all 367 full-payload unit tests without skips,
+  the full-payload closure validator, focused decision/history tests, and the
+  scripted assurance refresh with a current artifact graph. The actual Phase-B
+  attestation remains to be completed.
+
 ### Active
 
-1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
-   authorized
-   [publication study plan](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
-   to determine whether obligation-sensitive negative coverage adds measurable
-   assurance over existing Lean kernel testing on the frozen declaration-
-   validation slice. The mechanically derived 15-candidate cohort and bounded
-   authority-source discovery and human source approval are frozen; preserve
-   negative/null outcomes and use the unchanged M10 eligibility and isolation
-   contracts. The fixed two-entry authority-process sentinel has passed after
-   repairing claim-scope enforcement: `DECL.THEOREM.TYPE_PROP` is
-   `ESTABLISHED`, while `EXPR.LET.VALUE_TYPE_MATCH` remains `PROVISIONAL`.
-   Gate 6 complete adjudication has validated the exact cohort with one
-   `ESTABLISHED`, fourteen `PROVISIONAL`, and zero `UNRESOLVED` dispositions.
-   Gate 7 mechanically froze the strict denominator as
-   `DECL.THEOREM.TYPE_PROP` alone and selected the `BOUNDED_PILOT` tier from
-   one represented semantic family. Gate 8 freezes an
-   `OBSERVED_NEGATIVE_NOT_ISOLATED` baseline (0/1 isolated) together with the
-   separate `SOURCE_REACHED`, `MUTANT_KILLED`, and `EXISTING_CASE_LINKED`
-   contextual indicators. `DECL.THEOREM.TYPE_PROP` is the sole Gate-9 target.
-   Gate 9 now fixes the one-pair synthesis protocol and its strict execution
-   budget in `config/declaration-validation-publication-study-gate-9.json`.
-   Gate 10 bounded implementation and result/recommendation closure is now
-   complete: the [canonical result](../results/research/publication-study-theorem-control-0001/result.json)
-   records `ISOLATED_SUCCESS`, eight attributed outcomes, one matched control,
-   and 3.875 active seconds. Final isolated coverage is 1/1 (100.0%); the frozen
-   0/1 baseline and all predecessor bytes remain unchanged. No new negative,
-   defect, mutation or coverage campaign is claimed. The
-   [generated Gate-10 report](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_GATE_10_REPORT.md)
-   and [schema-backed recommendation](../results/research/publication-study-theorem-control-0001/action-recommendations.json)
-   defer an Arena companion-control proposal pending concrete review,
-   current-upstream/duplicate checks, and target-specific human authorization.
-   Gate 11 publish-or-kill interpretation is next; before that decision, a
-   separate Ultra review should assess whether completion of a retrospectively
-   known negative's control warrants a strong-positive label or only a bounded
-   control-completeness/specification result. Gate 11 has not started. Gate 12
-   final historical freeze and any later research slice remain unexecuted.
-   The run cannot be retried or extended. Broader research and external actions
-   remain outside this authorization.
+1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: Gates 0–11 of the
+   [authorized study](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
+   are complete. The [canonical decision](../results/research/declaration-validation-publication-study-closure.json)
+   derives `STRONG_POSITIVE / BOUNDED_PILOT / PUBLISH_BOUNDED` using the exact
+   preregistered priority, and the [final report](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_FINAL_REPORT.md)
+   limits the finding to control completeness for a known negative and the
+   separately qualified authority gap. Finish Gate 12's Phase-A content commit,
+   separate Phase-B attestation and historical-transition validation, then stop
+   this study. No new checker, candidate, source approval, broader semantic
+   slice or external action is authorized. After closure, the owner's current
+   request authorizes a project-wide constitutional and operational review and
+   concrete proposed next steps; proposals do not automatically activate a new
+   experiment.
 
 ### Waiting
 

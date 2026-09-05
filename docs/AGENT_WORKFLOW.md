@@ -15,6 +15,7 @@ by the task. Do not replace those sources with this page or a conversation.
 | Gate-10 recorded result and next review | `results/research/publication-study-theorem-control-0001/result.json`, `scripts/validate-declaration-validation-publication-study-gate-10`, generated Gate-10 report; Gate 11 and Gate 12 remain separate |
 | Authority, catalog, or declaration-validation evidence | `.agents/skills/declaration-validation-adjudication/SKILL.md`; follow its required evidence reads |
 | Current-state artifact refresh | `scripts/build-artifact-graph`, `scripts/artifact-status`; affected generator and graph dependencies |
+| Publication-study Gates 11–12 | `scripts/close-declaration-validation-publication-study`, canonical closure decision, content manifest and historical attestation; use `validate-historical` after the freeze |
 | External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft; publication still requires target-specific human authorization |
 
 Use `rg` to find a section or artifact ID before opening large files. For JSON,
@@ -65,3 +66,30 @@ to Luna and bounded implementation to Terra. Resume from the recorded gate.”
 
 Add a new skill only after a repeated procedure demonstrates a need. Prefer
 short navigation and existing validators over another overlapping rule set.
+
+## Autonomous work and cost discipline
+
+The owner requested maximum practical autonomy and script-first mechanical
+work on 2026-09-04. Continue all authorized local steps through the durable stop
+condition; do not spend model turns carrying command output between routine
+phases. `scripts/refresh-current-state` performs the ordered assurance refresh
+and final current-artifact check, stopping at the first failure and preserving
+its logs. It launches no checker or campaign.
+
+Use scripts for inventories, hashes, derivation, execution accounting, report
+generation and validation. Use Luna for narrow edits, Terra for bounded
+implementation, and the lead for research design, evidence interpretation and
+integration. Use a separate Ultra review only for a concrete consequential
+scientific ambiguity. Review and model agreement do not establish authority.
+
+Run focused tests while engineering, then the required complete suite at the
+gate boundary. Repeat broad checks only after relevant changes or unresolved
+failures. Prefer a durable exact-input checkpoint to rerunning completed work.
+Report progress at meaningful boundaries; unattended mechanical loops should
+stop on changed inputs, depleted budgets, an exceptional result or an action
+requiring human judgment.
+
+An available campaign script does not authorize a research frontier. Normative
+source approval and target-specific external submission remain explicit human
+boundaries. Finish a concrete draft and its permissible preflight first, and
+batch the remaining decisions for the owner.
