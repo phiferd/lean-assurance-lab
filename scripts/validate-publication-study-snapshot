@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+"""Validate the stopped study in its historical state, optionally with payloads.
+
+This successor leaves all frozen validators and tests unchanged. No checker or
+campaign executes. Full-payload mode mounts ignored local inputs for the bound
+validators to hash; frozen tests run in a separate process against the same tree.
+"""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+from publication_study_snapshot import materialized_study, subprocess_env
+
+ROOT = Path(__file__).resolve().parents[1]
+HISTORY = 'results/research/declaration-validation-publication-study-historical.json'
+
+# The committed runner retains its exact missing-payload boundary. This small
+# driver selects attested modules only and never edits the original test code.
+TEST_DRIVER = '''
+import pathlib, runpy, sys, unittest
+root = pathlib.Path.cwd()
+runner = runpy.run_path(str(root / "scripts/run-unit-tests"))
+_, missing = runner["_load_payload_status"]()
+required = sys.argv[1] == "full"
+if missing and (required or any(not p.is_relative_to(root / "external") and not p.is_relative_to(root / "results/coverage") for p in missing)):
+    raise SystemExit("frozen test payload preflight failed")
+sys.path.insert(0, str(root / "tests"))
+suite = unittest.defaultTestLoader.loadTestsFromNames(sys.argv[2:])
+suite = runner["_rewrite_suite"](suite, bool(missing))
+result = unittest.TextTestRunner(verbosity=2).run(suite)
+raise SystemExit(0 if result.wasSuccessful() else 1)
+'''
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--require-full-payload', action='store_true')
+    parser.add_argument('--tests', action='store_true')
+    args = parser.parse_args()
+    attestation = json.loads((ROOT / HISTORY).read_text())
+    modules = sorted({Path(row['path']).stem for row in attestation['artifacts']
+                      if Path(row['path']).parent == Path('tests')
+                      and Path(row['path']).match('test_declaration_validation_publication_study*.py')})
+    with materialized_study(ROOT, attach_payload=args.require_full_payload or args.tests,
+                            include_attestation=args.tests) as snapshot:
+        if args.tests:
+            if not modules:
+                raise SystemExit('no attested publication-study test modules')
+            command = [sys.executable, '-c', TEST_DRIVER,
+                       'full' if args.require_full_payload else 'optional', *modules]
+        else:
+            command = [str(snapshot / 'scripts/close-declaration-validation-publication-study'),
+                       'validate', '--content-only']
+            if args.require_full_payload:
+                command.append('--require-full-payload')
+        return subprocess.run(command, cwd=snapshot, env=subprocess_env(), check=False).returncode
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

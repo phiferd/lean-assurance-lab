@@ -5,6 +5,7 @@ from __future__ import annotations
 
 import argparse
 import json
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -82,6 +83,31 @@ def _rewrite_suite(suite: unittest.TestSuite, missing: bool) -> unittest.TestSui
     return rewritten
 
 
+HISTORICAL_ATTESTATION = ROOT / "results/research/declaration-validation-publication-study-historical.json"
+
+
+def _historical_modules() -> set[str]:
+    if not HISTORICAL_ATTESTATION.is_file():
+        return set()
+    document = json.loads(HISTORICAL_ATTESTATION.read_text())
+    return {
+        Path(row["path"]).stem for row in document["artifacts"]
+        if Path(row["path"]).parent == Path("tests")
+        and Path(row["path"]).match("test_declaration_validation_publication_study*.py")
+    }
+
+
+def _current_suite(suite: unittest.TestSuite, historical_modules: set[str]) -> unittest.TestSuite:
+    """Relocate only exact attested test modules; future tests remain current."""
+    current = unittest.TestSuite()
+    for test in suite:
+        if isinstance(test, unittest.TestSuite):
+            current.addTest(_current_suite(test, historical_modules))
+        elif test.id().split(".", 1)[0] not in historical_modules:
+            current.addTest(test)
+    return current
+
+
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument(
@@ -107,9 +133,18 @@ def main() -> int:
         return 2
 
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
+    historical_modules = _historical_modules()
+    suite = _current_suite(suite, historical_modules)
     suite = _rewrite_suite(suite, bool(missing))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
-    return 0 if result.wasSuccessful() else 1
+    historical_ok = True
+    if historical_modules:
+        command = [str(ROOT / "scripts/validate-publication-study-snapshot"), "--tests"]
+        if args.require_full_payload:
+            command.append("--require-full-payload")
+        print("Running frozen publication-study tests against their attested content and local payloads.", flush=True)
+        historical_ok = subprocess.run(command, cwd=ROOT, check=False).returncode == 0
+    return 0 if result.wasSuccessful() and historical_ok else 1
 
 
 if __name__ == "__main__":

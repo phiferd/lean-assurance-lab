@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-04
+Last updated: 2026-09-05
 
 ## How Status Is Tracked
 
@@ -40,6 +40,13 @@ research directions.
 
 ## Attempted
 
+- Closed publication-study Gates 11–12 with the literal preregistered
+  `STRONG_POSITIVE / BOUNDED_PILOT / PUBLISH_BOUNDED` decision and a separate
+  attestation of content commit `4cd21c6`. The bounded finding completes one
+  missing control for a known negative. Completed the constitutional and
+  operational [project review](PROJECT_REVIEW.md), added script-first refresh
+  and historical validation workflows, and stopped this research frontier.
+  Final validation passed 375 tests with full local payloads and no skips.
 - Completed publication-study Gate 10 under the exact frozen Gate-9 protocol
   from `3429ca1412dc5a33259ef432e9b64670a5be4f54`. Run
   `publication-study-theorem-control-0001` charged one pair and eight checker
@@ -525,7 +532,13 @@ Notes:
   after 73 of 147 covering tests. The other 11 mutants exhausted their full
   schedules and are classified `SURVIVED_WITHOUT_WITNESS`.
 
-## Current Metrics
+## Legacy Metrics Snapshot — Superseded
+
+The following numbers preserve an earlier working snapshot and are not current
+metrics. Current facts are generated in [PUBLIC_STATUS.md](PUBLIC_STATUS.md)
+from `results/assurance/current.json`; the final [project review](PROJECT_REVIEW.md)
+also binds its exact machine-readable inputs. Do not copy these legacy numbers
+into a new assurance claim.
 
 ```yaml
 mutation_score: 0.9375
@@ -663,8 +676,11 @@ prepared_external_action_drafts: 5
 
 ## Unresolved Problems
 
-- Twenty evaluated mutants remain classified `SURVIVED_WITHOUT_WITNESS`,
-  and four more retain unknown equivalence. They are not claimed equivalent.
+- Mechanically executed survivors await triage outside the current canonical
+  modeled population; `results/assurance/current.json` records the current count
+  and exact IDs.
+  Earlier campaign counts in the legacy snapshot above use a different state
+  and scope. Unresolved survivors are not claimed equivalent.
 - Coverage payloads remain ignored local files; their complete identities and
   corpus inputs are tracked and mechanically verified, but remote payload
   storage is not yet implemented.
@@ -1594,21 +1610,62 @@ prepared_external_action_drafts: 5
   scripted assurance refresh with a current artifact graph. The actual Phase-B
   attestation remains to be completed.
 
+### Gate-12 Historical Closure — 2026-09-04
+
+- Phase A committed the complete study content and 245-file manifest as
+  `4cd21c61b3252d325103d67afcd79a63e051f4c2`. Phase B created the separate
+  [historical attestation](../results/research/declaration-validation-publication-study-historical.json),
+  SHA-256 `df435204d56c77edb073c9cac9f167658eb2b76d561627eaa6018a241f5ff6f7`.
+  Creation validated exact committed blobs, reconstructed the committed tree,
+  and ran its bound closure validator, including the prior historical chain.
+- Gates 0–12 are closed. The final decision, report, manifest and attestation
+  are historical; do not regenerate them against later current state. Validate
+  with `scripts/close-declaration-validation-publication-study validate-historical`.
+  This live status file is a successor of the exact Phase-A status preserved in
+  the historical commit. The study's stop recommendation is now effective.
+- Initial post-transition full-payload verification exposed the old Gate-8
+  requirement that the study be the Active frontier. Historical validation
+  itself passed. The explicit successor `scripts/validate-publication-study-snapshot`
+  supplies the original committed state and exact local payloads to unchanged
+  validators. The unit runner likewise partitions exact attested study modules
+  into the historical tree and retains future tests in the live tree. The
+  obsolete frontier is not reactivated and no frozen guard is weakened.
+- Final verification on 2026-09-05 passed: 302 current tests and 73 unchanged
+  frozen study tests, all with full local payloads and no skips. The exact-study
+  transition changed and committed successor facts, schemas and validator code
+  while preserving validation against the original content. Snapshot full-payload
+  validation and the scripted assurance refresh also passed. The initial
+  post-transition run's two Active-frontier failures are resolved through the
+  explicit successor; the frozen validators, tests and attestation are unchanged.
+
+### Project Review Completed — 2026-09-05
+
+- The [generated review](PROJECT_REVIEW.md) and
+  [canonical input-bound review](../results/research/project-review.json) assess
+  the project against the constitution and give ranked next steps with targets,
+  prerequisites and falsifiable completion conditions. They use current local
+  records; they do not claim a fresh upstream status survey.
+- The project is aligned in reproducibility, scoped claims and preserved
+  uncertainty. The highest-value next work is ecosystem closure of existing
+  findings, coupled with portable, explicitly budgeted operation. More work on
+  this completed one-obligation study is not recommended.
+- Proposed order: close mature imax/proof-uniformity/projection/positivity
+  recommendations; harden materialization and authorized bounded execution;
+  triage a fixed subset of existing survivors; then consider a separately
+  preregistered prospective or held-out transfer study. These are proposals,
+  not automatic research activation.
+- Mechanical refresh and report generation now use scripts; the operating guide
+  preserves selective Luna/Terra delegation and separate Ultra review for named
+  consequential scientific questions. The old hand-maintained metrics block is
+  explicitly historical. External publication and new source approvals retain
+  their recorded human decision boundaries.
+
 ### Active
 
-1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: Gates 0–11 of the
-   [authorized study](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md)
-   are complete. The [canonical decision](../results/research/declaration-validation-publication-study-closure.json)
-   derives `STRONG_POSITIVE / BOUNDED_PILOT / PUBLISH_BOUNDED` using the exact
-   preregistered priority, and the [final report](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_FINAL_REPORT.md)
-   limits the finding to control completeness for a known negative and the
-   separately qualified authority gap. Finish Gate 12's Phase-A content commit,
-   separate Phase-B attestation and historical-transition validation, then stop
-   this study. No new checker, candidate, source approval, broader semantic
-   slice or external action is authorized. After closure, the owner's current
-   request authorizes a project-wide constitutional and operational review and
-   concrete proposed next steps; proposals do not automatically activate a new
-   experiment.
+No research experiment is active. The owner's requested Gates 0–12 closure and
+project review are complete. Adopt an explicit bounded plan from the ranked
+review proposals before starting a new frontier. Waiting actions below retain
+their exact prerequisites and approval states; the review does not execute them.
 
 ### Waiting
 

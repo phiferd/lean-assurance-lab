@@ -17,6 +17,7 @@ characterize validation boundaries.
 - Research priority and context: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)
 - Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - Agent workflow: [`docs/AGENT_WORKFLOW.md`](docs/AGENT_WORKFLOW.md)
+- Project review and proposed next steps: [`docs/PROJECT_REVIEW.md`](docs/PROJECT_REVIEW.md)
 - Current measured assurance state: [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md)
 
 The project is governed by `CONSTITUTION.md`.
@@ -61,11 +62,11 @@ implementation vote as semantic authority.
 ## Current Milestone
 
 The Declaration Validation Contract Slice has completed Milestones 0 through
-10 and is the immutable predecessor of the active obligation-sensitive coverage
+10 and is the immutable predecessor of the completed obligation-sensitive coverage
 publication study. M10's empty strict normative denominator, 19 provisional
 candidates, eight empirical scenarios, and `Reach(x) AND NOT P(x)` contract are
 resolved through its historical attestation and the separately frozen theorem-
-control erratum, not mutable current files. The active study has preregistered
+control erratum, not mutable current files. The study preregistered
 the mechanically derived 15-candidate technically ready cohort, kept four
 readiness holdouts outside it, frozen bounded authority-source discovery, and
 recorded the separate human approval outcome. Only the exact v4.33 theorem-Prop
@@ -98,7 +99,20 @@ isolated coverage is 1/1 (100.0%), while the frozen baseline remains 0/1. This
 completes missing control evidence for a known negative; it discovers no new
 negative or implementation defect. The Arena companion-control recommendation
 is deferred pending review, upstream/duplicate checks and human authorization.
-Gate 11 interpretation and Gate 12 historical freeze remain pending.
+[Gates 11–12 are complete](docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_FINAL_REPORT.md).
+The literal preregistered decision is `STRONG_POSITIVE / BOUNDED_PILOT /
+PUBLISH_BOUNDED`: a bounded technical report, with no broad method or new-defect
+claim. The final study is frozen at content commit `4cd21c6` and bound by a
+separate Git-blob attestation. This study is stopped; later research needs an
+explicit successor plan.
+
+Validate the complete historical study without checker execution using
+`scripts/close-declaration-validation-publication-study validate-historical`.
+For the local full-payload boundary after closure, use
+`scripts/validate-publication-study-snapshot --require-full-payload`. This
+successor checks the original validators against the historical frontier and
+exact local payloads; it does not reopen the study. Routine current assurance refresh is one logged, fail-fast command:
+`scripts/refresh-current-state`.
 
 Verify Gate-10 recorded evidence without launching a checker using
 `scripts/validate-declaration-validation-publication-study-gate-10`; add

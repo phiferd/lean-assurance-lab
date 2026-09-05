@@ -1,0 +1,187 @@
+#!/usr/bin/env python3
+"""Build a scoped constitutional/operational review from current local records.
+
+No upstream status lookup, checker launch or research authorization occurs.
+Proposed next steps are planning judgments, not assurance or normative facts.
+"""
+import argparse
+import ast
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+OUTPUT = 'results/research/project-review.json'
+REPORT = 'docs/PROJECT_REVIEW.md'
+HISTORY = 'results/research/declaration-validation-publication-study-historical.json'
+DECISION = 'results/research/declaration-validation-publication-study-closure.json'
+RUN = 'results/research/publication-study-theorem-control-0001'
+ACTION_PATHS = ['results/action-recommendations/current.json', RUN + '/action-recommendations.json']
+SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATION_SOP.md',
+           'docs/RESEARCH_STATUS.md', 'results/assurance/current.json',
+           HISTORY, 'results/research/declaration-validation-publication-study-content-manifest.json',
+           DECISION, RUN + '/result.json', *ACTION_PATHS,
+           'scripts/run-campaign', 'scripts/run-autonomous-campaigns',
+           'scripts/refresh-current-state', 'scripts/run-unit-tests',
+           'scripts/validate-publication-study-snapshot', 'scripts/publication_study_snapshot.py',
+           'scripts/build-project-review']
+
+
+def load(path):
+    return json.loads((ROOT / path).read_bytes())
+
+
+def bound(path):
+    data = (ROOT / path).read_bytes()
+    return {'path': path, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
+
+
+def timeout_default():
+    for node in ast.walk(ast.parse((ROOT / 'scripts/run-campaign').read_text())):
+        if isinstance(node, ast.Call) and node.args and isinstance(node.args[0], ast.Constant) and node.args[0].value == '--phase-timeout':
+            return next(k.value.value for k in node.keywords if k.arg == 'default' and isinstance(k.value, ast.Constant))
+    return None
+
+
+def build():
+    historical = load(HISTORY)  # Gate 12 must exist before this final review.
+    frozen = {row['path']: row for row in historical['artifacts']}
+    for path in [DECISION, RUN + '/result.json', RUN + '/action-recommendations.json']:
+        current = bound(path)
+        if any(current[key] != frozen[path][key] for key in ['sha256', 'bytes']):
+            raise ValueError('frozen study input changed; use an explicit successor: ' + path)
+    snapshot, decision, result = load('results/assurance/current.json'), load(DECISION), load(RUN + '/result.json')
+    recommendations = []
+    for path in ACTION_PATHS:
+        for finding in load(path)['findings']:
+            for rec in finding['recommendations']:
+                recommendations.append({'finding_id': finding['id'], 'source': path, **rec})
+    pending = [r for r in recommendations if r['external_action'] and r['human_gate']['status'] == 'REVIEW_REQUIRED' and r['execution_status'] != 'COMPLETED']
+    metrics = {
+        'study_gates_complete': 12,
+        'study_content_commit': historical['historical_commit'],
+        'study_outcome': decision['outcome_class'], 'study_tier': decision['claim_tier'],
+        'study_publication_decision': decision['publication_decision'],
+        'study_existing_isolated': result['counts']['existing_isolated_covered'],
+        'study_final_isolated': result['counts']['final_isolated_covered'],
+        'study_denominator': result['counts']['primary_denominator'],
+        'assurance_gate': snapshot['gate']['status'],
+        'semantic_disagreement_artifacts': snapshot['cross_validator_disagreements']['semantic_unresolved_count'],
+        'parse_disagreement_artifacts': snapshot['cross_validator_disagreements']['parse_behavior_count'],
+        'pending_survivor_triage': snapshot['mutation_testing']['pending_survivor_triage']['count'],
+        'modeled_semantic_mutants': snapshot['mutation_testing']['total_semantic_mutants'],
+        'modeled_mutation_score': snapshot['mutation_testing']['modeled_mutation_score'],
+        'schema_backed_findings_in_selected_registers': sum(len(load(p)['findings']) for p in ACTION_PATHS),
+        'external_actions_pending_review': len(pending),
+        'campaign_phase_timeout_default_seconds': timeout_default(),
+    }
+    next_steps = [
+        {'priority': 1, 'id': 'CLOSE_EXISTING_FINDINGS', 'target': 'Existing imax, proof-parameter-uniformity, projection and positivity recommendations',
+         'action': 'Prepare one decision packet from the existing drafts: verify current upstream and duplicates where needed, present exact target-specific approval choices, then submit only authorized actions and track their disposition.',
+         'completion': 'Every selected mature finding has an executed external reference, an explicit declined decision, or a concrete deferred prerequisite; no vague waiting item.',
+         'mechanism': 'Scripts collect hashes, existing evidence and status; a model handles semantic ambiguity and concise drafting; the owner approves external submission.',
+         'authorization': 'PROPOSED_NEXT_FRONTIER; external publication remains separately gated'},
+        {'priority': 2, 'id': 'MAKE_BOUNDED_RUNS_PORTABLE_AND_GOVERNED', 'target': 'Materialization/preflight and scripts/run-campaign',
+         'action': 'Provide one exact-hash input materialization command and a machine-readable authorized-run manifest with explicit phase/total budgets, input digests, stop states and a completion predicate. Reuse the disk-backed runner; do not create a second scheduler.',
+         'completion': 'A clean clone materializes one approved bounded case and can validate, interrupt and resume it without changing inputs or exceeding budgets; unauthorized frontier/changed-input fixtures fail before launch.',
+         'mechanism': 'Deterministic scripts and regression tests; no model in the execution loop.',
+         'authorization': 'PROPOSED_ENGINEERING_PLAN; no new mutation or witness campaign activated'},
+        {'priority': 3, 'id': 'TRIAGE_EXISTING_SURVIVORS', 'target': snapshot['mutation_testing']['pending_survivor_triage']['mutant_ids'],
+         'action': 'Select a small fixed subset using existing source/coverage evidence, preregister a finite witness budget, and terminate each as a regression candidate, characterized boundary, or bounded unresolved result.',
+         'completion': 'Every selected survivor has reproducible evidence and an ecosystem recommendation or explicit bounded negative result; unresolved cases are never called equivalent.',
+         'mechanism': 'Scripted candidate execution and minimization; model review only for scientific interpretation.',
+         'authorization': 'PROPOSED_RESEARCH_PLAN; fixed subset and budget required before execution'},
+        {'priority': 4, 'id': 'REQUIRE_TRANSFER_FOR_A_LATER_STUDY', 'target': 'A separately chosen semantic slice or held-out validator experiment',
+         'action': 'Only after closing higher-value backlog, preregister a small prospective test of additional regression/corpus value or held-out transfer. Require sufficient independently qualified obligations and a falsifiable success/stop criterion before expanding authority-catalog work.',
+         'completion': 'A new shared regression, independently meaningful transfer result, characterized limitation, or preserved negative result—not merely another coverage percentage.',
+         'mechanism': 'Lead designs the bounded question; scripts execute; separate Ultra review only for a named consequential ambiguity.',
+         'authorization': 'FUTURE_PROPOSAL; current publication study remains stopped'},
+    ]
+    return {'schema_version': 1, 'review_scope': 'Current local canonical records; no fresh upstream status or completeness claim for all historical actions.',
+            'inputs': [bound(p) for p in SOURCES], 'metrics': metrics,
+            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserving uncertainty. The next improvement should convert existing evidence into shared regressions and actionable closure, while reducing operational friction. Continuing to enlarge this one-obligation study would have lower expected value than its remaining ecosystem backlog.',
+            'constitutional_alignment': [
+                {'goal': 'Measured ecosystem trust', 'assessment': 'Aligned, with limited generalization',
+                 'evidence': 'The current snapshot separates scoped mutation results, cross-validator observations and unresolved triage; the completed pilot does not establish general method strength.',
+                 'next_improvement': 'Prefer additional shared regression value and independent transfer over a larger coverage percentage.'},
+                {'goal': 'Durable reproducibility', 'assessment': 'Strong recorded evidence; incomplete execution portability',
+                 'evidence': 'Content digests and committed historical validators preserve exact claims. Ignored checker/corpus/coverage payloads still require local materialization for full execution.',
+                 'next_improvement': 'Make one approved bounded case reproducible from a clean clone with exact input hashes and finite budgets.'},
+                {'goal': 'Scoped claims and preserved uncertainty', 'assessment': 'Aligned',
+                 'evidence': 'The pilot retains its one-obligation denominator, provisional candidates and known-negative limitation. The broader FAIL state and unresolved survivors remain visible.',
+                 'next_improvement': 'Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence.'},
+                {'goal': 'Improve shared assets', 'assessment': 'Action backlog limits realized benefit',
+                 'evidence': 'The selected action records include prepared implementation issues and corpus proposals, plus a completed imax corpus action. Other external actions remain gated or deferred.',
+                 'next_improvement': 'Close mature findings through concrete owner decisions and upstream dispositions before enlarging this study.'},
+                {'goal': 'Community visibility and participation', 'assessment': 'Useful entry points; status maintenance needs discipline',
+                 'evidence': 'README, contribution rules, the investigation SOP and generated public status provide inspection paths. The hand-maintained metrics section had diverged from machine records.',
+                 'next_improvement': 'Generate current facts and keep decision packets short enough for a maintainer to review and reproduce.'},
+                {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
+                 'evidence': 'Schema-backed action records preserve targets, priorities, prerequisites and approval status; the pilot keeps its companion-control recommendation deferred.',
+                 'next_improvement': 'Automate evidence assembly and permissible preflight, then batch exact external approval choices for the owner.'},
+            ],
+            'operational_findings': [
+                'The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.',
+                'Frozen study tests and validators now run against their committed frontier through an explicit successor; current and future tests remain live, and both groups must pass.',
+                'Exact historical evidence can validate without local checker payloads; fresh execution still needs reproducible materialization of the ignored corpus/coverage/observer inputs.',
+                'run-campaign is disk-backed and useful, but its phase timeout defaults to zero (disabled); the reviewed supervisor binds batch selection rather than a separately authorized frontier and total experimental budget.',
+                'The outer run-autonomous-campaigns wrapper resets its state and overwrites logs on invocation, has no resume option, and supplies no phase or total timeout to run-campaign. Harden or retire this wrapper before treating it as an unattended workflow.',
+                'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
+                'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
+            ],
+            'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
+                                       'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
+                                       'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.'],
+            'pending_external_actions': pending, 'proposed_next_steps': next_steps,
+            'autonomy_policy': {'automatic': ['Hash and inventory checks', 'Already-authorized bounded execution and checkpointing', 'Deterministic normalization, report generation and validation', 'Read-only evidence assembly and preparation of concrete drafts'],
+                                'model_review': ['Frontier design and novelty assessment', 'Unexplained checker differences and semantic ambiguity', 'Source-to-claim interpretation under frozen authority rules'],
+                                'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Activation of proposed new research scope beyond the completed study']},
+            'cost_policy': ['No model calls inside checker/build/minimization loops.', 'Batch independent mechanical work; stop on budget/input/semantic exceptions.', 'Use Luna for routine edits and Terra for bounded implementation; reserve Ultra for a named difficult question.', 'Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.', 'Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions per bounded investigation.'],
+            'new_research_authorized_by_this_review': False}
+
+
+def render(review):
+    m = review['metrics']
+    lines = ['# Project review and proposed next steps', '',
+             'Generated by `scripts/build-project-review --write` from `results/research/project-review.json`. Planning judgments are proposals, not semantic authority or new experiment authorization.', '',
+             review['constitutional_assessment'], '',
+             f"The publication study is closed through Gate 12: {m['study_outcome']} / {m['study_tier']} / {m['study_publication_decision']}. Its isolated result is {m['study_existing_isolated']}/{m['study_denominator']} to {m['study_final_isolated']}/{m['study_denominator']}, completing a known negative’s missing control.", '',
+             f"The broader assurance gate remains **{m['assurance_gate']}**, with {m['semantic_disagreement_artifacts']} unresolved semantic-disagreement artifacts and {m['parse_disagreement_artifacts']} parse-behavior artifact. These are not a count of distinct bugs. {m['pending_survivor_triage']} mechanically executed survivors await triage. The two selected action registers contain {m['external_actions_pending_review']} external actions requiring review across {m['schema_backed_findings_in_selected_registers']} findings.", '',
+             '## Constitutional alignment', '', '| Goal | Assessment | Next improvement |', '|---|---|---|']
+    lines += ['| ' + row['goal'] + ' | ' + row['assessment'] + ' | ' + row['next_improvement'] + ' |' for row in review['constitutional_alignment']]
+    lines += ['', 'Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.', '', '## Recommended order', '']
+    for step in review['proposed_next_steps']:
+        target = step['target'] if isinstance(step['target'], str) else f"A fixed subset of the {len(step['target'])} existing pending survivors; exact IDs are in the canonical JSON."
+        lines += [f"### {step['priority']}. {step['id'].replace('_', ' ').capitalize()}", '', '**Target:** ' + target, '', step['action'], '', '**Completion:** ' + step['completion'], '', '**Execution:** ' + step['mechanism'], '', '**Boundary:** ' + step['authorization'], '']
+    lines += ['## Autonomous workflow', '', '| Work | Default mechanism |', '|---|---|']
+    for category, values in review['autonomy_policy'].items():
+        lines.append('| ' + category.replace('_', ' ').capitalize() + ' | ' + '; '.join(values) + ' |')
+    lines += ['', 'Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/build-project-review --check` to detect stale review inputs. Each research run should have one exact manifest, finite budgets and an executable completion condition. Scripts run through the authorized work; models handle exceptions. Prepare a concrete review packet before requesting any required owner decision.', '', '## Operational findings', '']
+    lines += ['- ' + value for value in review['operational_findings']]
+    lines += ['', '## Efficiency rules', ''] + ['- ' + value for value in review['cost_policy']]
+    lines += ['', '## Changes completed in this task', ''] + ['- ' + value for value in review['improvements_completed']]
+    lines += ['', 'This review does not activate a new campaign, contact an upstream project or establish current upstream issue/PR status. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.', '']
+    return '\n'.join(lines)
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    group = parser.add_mutually_exclusive_group()
+    group.add_argument('--write', action='store_true')
+    group.add_argument('--check', action='store_true')
+    args = parser.parse_args()
+    subprocess.run([str(ROOT / 'scripts/close-declaration-validation-publication-study'),
+                    'validate-historical'], cwd=ROOT, check=True, stdout=subprocess.PIPE)
+    review = build()
+    encoded = json.dumps(review, indent=2, sort_keys=True) + '\n'
+    report = render(review)
+    if args.write:
+        (ROOT / OUTPUT).write_text(encoded)
+        (ROOT / REPORT).write_text(report)
+    elif args.check:
+        if (ROOT / OUTPUT).read_text() != encoded or (ROOT / REPORT).read_text() != report:
+            raise SystemExit('project review is stale; run scripts/build-project-review --write')
+        print('PASS: project review matches its current local inputs')
+    else:
+        print(encoded, end='')

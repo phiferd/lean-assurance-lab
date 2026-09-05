@@ -12,10 +12,11 @@ by the task. Do not replace those sources with this page or a conversation.
 | Clone-safe CI and test execution | README “Prerequisites And Clone-Safe Checks”, `.github/workflows/unit-tests.yml`, `scripts/run-unit-tests` |
 | Current publication-study work | `docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md`, current gate artifact named by Active |
 | Gate-9 synthesis protocol | `config/declaration-validation-publication-study-gate-9.json`, `scripts/validate-declaration-validation-publication-study-gate-9` |
-| Gate-10 recorded result and next review | `results/research/publication-study-theorem-control-0001/result.json`, `scripts/validate-declaration-validation-publication-study-gate-10`, generated Gate-10 report; Gate 11 and Gate 12 remain separate |
+| Gate-10 recorded result | `results/research/publication-study-theorem-control-0001/result.json`, `scripts/validate-declaration-validation-publication-study-gate-10`, generated Gate-10 report; final study closure uses the separate Gates 11–12 attestation |
 | Authority, catalog, or declaration-validation evidence | `.agents/skills/declaration-validation-adjudication/SKILL.md`; follow its required evidence reads |
 | Current-state artifact refresh | `scripts/build-artifact-graph`, `scripts/artifact-status`; affected generator and graph dependencies |
-| Publication-study Gates 11–12 | `scripts/close-declaration-validation-publication-study`, canonical closure decision, content manifest and historical attestation; use `validate-historical` after the freeze |
+| Publication-study Gates 11–12 | `scripts/close-declaration-validation-publication-study`, canonical closure decision, content manifest and historical attestation; use `validate-historical` after the freeze; `scripts/validate-publication-study-snapshot --require-full-payload` supplies the historical frontier for full-payload verification |
+| Project review and proposed next frontier | `docs/PROJECT_REVIEW.md`, `results/research/project-review.json`, `scripts/build-project-review --check`; proposals do not activate work |
 | External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft; publication still requires target-specific human authorization |
 
 Use `rg` to find a section or artifact ID before opening large files. For JSON,
@@ -93,3 +94,10 @@ An available campaign script does not authorize a research frontier. Normative
 source approval and target-specific external submission remain explicit human
 boundaries. Finish a concrete draft and its permissible preflight first, and
 batch the remaining decisions for the owner.
+
+The completed publication study's validators require its original Active
+frontier. After Gate 12, use the snapshot successor for full-payload checks;
+never restore an obsolete Active marker just to satisfy a live validator.
+`scripts/run-unit-tests` runs the exact attested publication-study test modules
+in that committed tree and keeps current/future modules in the live tree.
+Both groups are required; a historical failure is an overall failure.

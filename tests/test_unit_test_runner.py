@@ -35,6 +35,29 @@ class UnitRunnerBoundaryTests(unittest.TestCase):
         self.assertEqual(len(result.failures), 1)
         self.assertEqual(result.skipped, [])
 
+    def test_historical_partition_does_not_hide_future_tests(self):
+        old = unittest.FunctionTestCase(lambda: self.fail('must run in historical process'))
+        old.id = lambda: 'test_declaration_validation_publication_study.Case.old'
+        future = unittest.FunctionTestCase(lambda: None)
+        future.id = lambda: 'test_declaration_validation_publication_study_successor.Case.new'
+        suite = runner._current_suite(unittest.TestSuite([unittest.TestSuite([old, future])]),
+                                      {'test_declaration_validation_publication_study'})
+        result = unittest.TestResult()
+        suite.run(result)
+        self.assertEqual(result.testsRun, 1)
+        self.assertTrue(result.wasSuccessful())
+
+    def test_historical_failure_fails_complete_run(self):
+        from types import SimpleNamespace
+        with patch('sys.argv', ['run-unit-tests', '--require-full-payload']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner, '_historical_modules', return_value={'old_module'}), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover', return_value=unittest.TestSuite()), \
+             patch.object(runner.subprocess, 'run', return_value=SimpleNamespace(returncode=1)) as run, \
+             contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(runner.main(), 1)
+        self.assertEqual(run.call_args.args[0][1:], ['--tests', '--require-full-payload'])
+
     def test_missing_tracked_input_is_not_an_integration_skip(self):
         with patch('sys.argv', ['run-unit-tests']), \
              patch.object(runner, '_load_payload_status', return_value=(set(), [ROOT / 'corpus/missing.ndjson'])), \
