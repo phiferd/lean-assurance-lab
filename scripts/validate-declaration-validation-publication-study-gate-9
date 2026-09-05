@@ -1,0 +1,205 @@
+#!/usr/bin/env python3
+"""Validate the Gate-9 bounded synthesis protocol without executing it."""
+from __future__ import annotations
+
+import hashlib
+import importlib.machinery
+import importlib.util
+import json
+import subprocess
+from pathlib import Path
+from typing import Any
+
+import jsonschema
+
+ROOT = Path(__file__).resolve().parents[1]
+PLAN_PATH = ROOT / 'config/declaration-validation-publication-study-gate-9.json'
+SCHEMA_PATH = ROOT / 'schemas/declaration-validation-publication-study-gate-9.schema.json'
+PREDECESSOR = '6cb81b2e87651f5380272e8f59e53a6cb0142fc1'
+EXPECTED_BINDINGS = {
+    'gate8_baseline': 'results/research/declaration-validation-publication-study-baseline-comparator.json',
+    'gate8_input_freeze': 'results/research/declaration-validation-publication-study-gate-8-input-freeze.json',
+    'preregistration': 'config/declaration-validation-publication-study-preregistration.json',
+    'gate8_validator': 'scripts/validate-declaration-validation-publication-study',
+    'gate8_manuscript': 'docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md',
+}
+EXPECTED_PRIOR = {
+    'm6_nonprop_candidate', 'm6_definition_auxiliary_control',
+    'm6_nonprop_cross_validation', 'm6_nonprop_expected_outcome',
+    'nanoda_nonprop_observation', 'nanoda_reach_infection',
+}
+RUN_BUDGET = {
+    'tier_1_candidates': 1, 'tier_2_candidates': 0, 'tier_3_candidates': 0,
+    'total_candidates': 1, 'checker_executions': 8, 'minimization_checks': 0,
+    'wall_seconds': 600, 'checker_timeout_seconds': 30,
+    'new_mutants': 0, 'new_coverage_runs': 0,
+}
+
+
+def load_json(path: Path) -> dict[str, Any]:
+    return json.loads(path.read_text(encoding='utf-8'))
+
+
+def git(args: list[str]) -> tuple[bytes | None, str | None]:
+    run = subprocess.run(
+        ['git', *args], cwd=ROOT, stdout=subprocess.PIPE,
+        stderr=subprocess.PIPE, check=False,
+    )
+    if run.returncode:
+        return None, run.stderr.decode(errors='replace').strip()
+    return run.stdout, None
+
+
+def bound_bytes(
+    binding: dict[str, Any], label: str, *, expected_commit: str = PREDECESSOR,
+) -> tuple[bytes | None, list[str]]:
+    path, commit, blob = (binding.get(k) for k in ('path', 'git_commit', 'git_blob'))
+    if not isinstance(path, str) or Path(path).is_absolute() or '..' in Path(path).parts or ':' in path:
+        return None, [f'{label}: unsafe path']
+    if commit != expected_commit:
+        return None, [f'{label}: binding does not use exact predecessor commit']
+    resolved, failure = git(['rev-parse', '--verify', f'{commit}^{{commit}}'])
+    if failure or resolved is None or resolved.decode().strip() != commit:
+        return None, [f'{label}: commit is unavailable or inexact']
+    actual_blob, failure = git(['rev-parse', '--verify', f'{commit}:{path}'])
+    if failure or actual_blob is None or actual_blob.decode().strip() != blob:
+        return None, [f'{label}: blob is unavailable or differs from binding']
+    content, failure = git(['cat-file', 'blob', blob])
+    if failure or content is None:
+        return None, [f'{label}: blob content is unavailable']
+    if hashlib.sha256(content).hexdigest() != binding.get('sha256'):
+        return None, [f'{label}: SHA-256 differs from bound blob bytes']
+    return content, []
+
+
+def load_gate8_module() -> Any:
+    path = ROOT / EXPECTED_BINDINGS['gate8_validator']
+    loader = importlib.machinery.SourceFileLoader('gate8_publication_validator', str(path))
+    spec = importlib.util.spec_from_loader(loader.name, loader)
+    if spec is None:
+        raise RuntimeError('Cannot load the bound Gate-8 validator')
+    value = importlib.util.module_from_spec(spec)
+    loader.exec_module(value)
+    return value
+
+
+def validate_gate9(
+    document: dict[str, Any] | None = None, *, full_chain: bool = True,
+) -> list[str]:
+    """full_chain=False checks tracked protocol bindings only, not local payloads."""
+    document = load_json(PLAN_PATH) if document is None else document
+    schema = jsonschema.Draft202012Validator(
+        load_json(SCHEMA_PATH), format_checker=jsonschema.FormatChecker(),
+    )
+    errors = [
+        f"Gate-9 schema at /{'/'.join(map(str, e.absolute_path))}: {e.message}"
+        for e in schema.iter_errors(document)
+    ]
+    if errors:
+        return errors
+    if document['predecessor_commit'] != PREDECESSOR:
+        errors.append('Gate-9 predecessor commit differs from the exact Gate-8 commit')
+    if set(document['bindings']) != set(EXPECTED_BINDINGS):
+        return errors + ['Gate-9 bindings do not close the exact predecessor set']
+    bound: dict[str, bytes] = {}
+    for name, binding in document['bindings'].items():
+        if binding['path'] != EXPECTED_BINDINGS[name]:
+            errors.append(f'Gate-9 {name}: unexpected binding path')
+            continue
+        content, item_errors = bound_bytes(binding, f'Gate-9 {name}')
+        errors.extend(item_errors)
+        if content is not None:
+            bound[name] = content
+    if errors:
+        return errors
+
+    # Do not execute a mutable substitute for the historically bound validator.
+    if full_chain:
+        for name, content in bound.items():
+            path = ROOT / EXPECTED_BINDINGS[name]
+            if not path.is_file() or path.read_bytes() != content:
+                errors.append(f'Gate-9 {name}: live predecessor differs from bound bytes')
+        if errors:
+            return errors
+        old = load_gate8_module()
+        errors.extend('Gate-8 full-chain: ' + item for item in old.validate_preregistration())
+        errors.extend('Gate-8 full-chain: ' + item for item in old.validate_gate8_baseline_comparator())
+        if errors:
+            return errors
+
+    baseline, freeze, prereg = (
+        json.loads(bound[x]) for x in ('gate8_baseline', 'gate8_input_freeze', 'preregistration')
+    )
+    target = document['targets'][0]
+    transition = baseline['gate9_target_transition']
+    if [target['entry_id']] != transition['entry_ids'] or transition['target_count'] != 1:
+        errors.append('Gate-9 target does not derive from frozen Gate-8 transition')
+    if document['claim_tier'] != baseline['denominator']['claim_tier']:
+        errors.append('Gate-9 claim tier differs from frozen Gate-8 denominator')
+    baseline_row = baseline['baseline_results'][0]
+    if target['baseline_status'] != baseline_row['primary_status']:
+        errors.append('Gate-9 baseline status differs from frozen result')
+    expected_competitors = [r['entry_id'] for r in baseline_row['competing_obligations']]
+    if target['competing_obligation_ids'] != expected_competitors:
+        errors.append('Gate-9 must preserve all 18 frozen competing obligations in order')
+
+    gate6 = freeze['git_inputs']['gate6_catalog']
+    catalog_bytes, item_errors = bound_bytes(
+        gate6, 'frozen Gate-6 catalog', expected_commit=gate6['git_commit'],
+    )
+    errors.extend(item_errors)
+    if catalog_bytes is not None:
+        catalog = json.loads(catalog_bytes)
+        entry = next((x for x in catalog['entries'] if x['characterization']['id'] == target['entry_id']), None)
+        if entry is None:
+            errors.append('Gate-9 target is absent from exact frozen catalog')
+        else:
+            for key in ('identity_statement_sha256', 'semantic_denotation_sha256'):
+                if target[key] != entry[key]:
+                    errors.append(f'Gate-9 {key} differs from exact catalog')
+            if target['predicate'] != entry['identity_denotation']['canonical_semantics']:
+                errors.append('Gate-9 predicate differs from exact catalog')
+
+    if set(document['permitted_prior_input_ids']) != EXPECTED_PRIOR:
+        errors.append('Gate-9 permitted prior inputs differ from declared input set')
+    for name in EXPECTED_PRIOR:
+        binding = freeze['git_inputs'][name]
+        _, item_errors = bound_bytes(binding, name, expected_commit=binding['git_commit'])
+        errors.extend(item_errors)
+    if (target['negative_input_id'], target['auxiliary_input_id'], target['negative_policy']) != (
+        'm6_nonprop_candidate', 'm6_definition_auxiliary_control', 'REUSE_EXACT_FROZEN_BYTES',
+    ):
+        errors.append('Gate-9 negative/auxiliary input identities or reuse policy changed')
+    control = target['matched_control']
+    expected_control = {
+        'declaration_kind': 'thm',
+        'type_expression': 'forall (p : Prop), p -> p',
+        'proof_expression': 'fun (p : Prop) (h : p) => h',
+        'definition_form_role': 'AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL',
+    }
+    if any(control[key] != value for key, value in expected_control.items()):
+        errors.append('Gate-9 control differs from the planned theorem-control repair')
+    ceiling = prereg['synthesis_budget_rules']['bounded_pilot_per_target_ceiling']
+    budget = document['budget']
+    for key, maximum in ceiling.items():
+        if budget[key] > maximum:
+            errors.append(f'Gate-9 budget exceeds BOUNDED_PILOT ceiling for {key}')
+    if any(budget[key] != value for key, value in RUN_BUDGET.items()):
+        errors.append('Gate-9 plan does not retain its one-pair bounded budget')
+    observers = [row['observer_id'] for row in freeze['observer_profiles']]
+    if document['execution_protocol']['observer_ids'] != observers:
+        errors.append('Gate-9 observer order differs from frozen profiles')
+    return errors
+
+
+def main() -> int:
+    errors = validate_gate9()
+    if errors:
+        print('Gate-9 validation failed:', *[f'- {x}' for x in errors], sep='\n')
+        return 1
+    print('Gate-9 synthesis protocol validated against the full predecessor chain and local payloads; no candidate generation or execution performed.')
+    return 0
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())

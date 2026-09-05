@@ -276,6 +276,9 @@ def catalog() -> list[dict]:
                 "docs/INTRODUCTION.md",
                 "docs/INVESTIGATION_SOP.md",
                 "docs/PUBLICATION_AUDIT.md",
+                "docs/AGENT_WORKFLOW.md",
+                "scripts/run-unit-tests",
+                "tests/test_unit_test_runner.py",
                 "requirements-dev.txt",
                 "config/contribution-types.json",
                 "schemas/contribution-types.schema.json",
@@ -399,6 +402,23 @@ def catalog() -> list[dict]:
             ],
             required=True,
             notes="Frozen Gate-8 existing inputs, one-row isolated-negative baseline, separate coarse comparators, provenance limitations, and exact transition target with an explicit stop before Gate 9.",
+        ),
+        node(
+            "research:declaration-validation-publication-study-gate-9-synthesis",
+            "configuration",
+            locator=files(
+                ".",
+                "config/declaration-validation-publication-study-gate-9.json",
+                "schemas/declaration-validation-publication-study-gate-9.schema.json",
+                "scripts/validate-declaration-validation-publication-study-gate-9",
+                "tests/test_declaration_validation_publication_study_gate_9.py",
+            ),
+            dependencies=[
+                "configuration:declaration-validation-publication-study",
+                "research:declaration-validation-publication-study-gate-8-baseline",
+            ],
+            required=True,
+            notes="One-target bounded synthesis protocol with exact Gate-8 Git bindings; no candidate generation or new checker feedback at Gate 9.",
         ),
         node(
             "research:declaration-validation-publication-study-source-discovery",

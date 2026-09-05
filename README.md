@@ -16,6 +16,7 @@ characterize validation boundaries.
 - Claimable work: [GitHub Issues](https://github.com/phiferd/lean-assurance-lab/issues)
 - Research priority and context: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)
 - Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)
+- Agent workflow: [`docs/AGENT_WORKFLOW.md`](docs/AGENT_WORKFLOW.md)
 - Current measured assurance state: [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md)
 
 The project is governed by `CONSTITUTION.md`.
@@ -87,9 +88,12 @@ content-bound and attributable, but no M10-erratum-compliant same-family theorem
 control exists in the frozen prior inputs. Existing isolated coverage is
 therefore 0/1 (0.0%). The separate coarse indicators are `SOURCE_REACHED`,
 `MUTANT_KILLED`, and `EXISTING_CASE_LINKED`; none is semantic coverage. The
-theorem obligation becomes the sole Gate-9 synthesis target, but no synthesis
-strategy or budget has been frozen and no witness, control, mutation, coverage,
-or checker campaign has begun.
+theorem obligation is the sole Gate-9 synthesis target. Its frozen protocol
+allows one negative/control pair, reusing the known negative and constructing
+a matched Prop-valued theorem control, with at most eight checker launches and
+600 seconds of active run time. No candidate or control has been generated and
+no new checker, mutation or coverage campaign has begun. Gate 10 implementation
+and result closure follow the protocol commit and pre-execution bindings.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,
@@ -218,11 +222,19 @@ packages in `requirements-dev.txt`:
 ```sh
 python3 -m venv .venv
 .venv/bin/python -m pip install --requirement requirements-dev.txt
-.venv/bin/python -m unittest discover -s tests -v
+.venv/bin/python scripts/run-unit-tests
 ```
 
-The unit suite works without ignored external checkouts. One integration test
-is skipped until Lean Kernel Arena checker profiles have been materialized.
+The clone-safe runner executes the unchanged unit suite and skips only the
+frozen Gate-8 input-freeze test when its inventoried observer binaries,
+coverage files, or corpus files are absent. The skip is reported as
+`full-payload integration unavailable`. Missing tracked inputs fail preflight;
+when all payloads are present, the original test runs and hash mismatches fail. CI uses this clone-safe mode. Use `--require-full-payload`
+when all frozen inputs are expected locally. This mode does not replace the
+full-payload assurance validator. Existing materialization-dependent tests
+retain their explicit skips. The publication-study tests also
+inspect immutable predecessor commits, so retain complete Git history (use
+`fetch-depth: 0` in CI); shallow clones can fail during test setup.
 
 Full experiments additionally require Git, Cargo, Rust, Elan, `uv`, the Arena
 system prerequisites, and substantial disk space. `scripts/setup-arena` clones

@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Run the repository unit suite with an explicit Gate-8 payload boundary."""
+
+from __future__ import annotations
+
+import argparse
+import json
+import sys
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+GATE8_INPUT_PATH = (
+    ROOT
+    / "results"
+    / "research"
+    / "declaration-validation-publication-study-gate-8-input-freeze.json"
+)
+GATE8_TEST_ID = (
+    "test_declaration_validation_publication_study."
+    "DeclarationValidationPublicationStudyTests.test_actual_gate_8_input_freeze_validates"
+)
+SKIP_REASON = (
+    "full-payload integration unavailable: frozen Gate-8 observer, coverage, "
+    "or corpus input is missing"
+)
+
+
+class _SkippedGate8PayloadTest(unittest.TestCase):
+    """Keep the exact frozen test visible as a skip when payload is absent."""
+
+    def __init__(self, test_id: str, reason: str):
+        super().__init__()
+        self._test_id = test_id
+        self._reason = reason
+
+    def id(self) -> str:
+        return self._test_id
+
+    def runTest(self) -> None:
+        self.skipTest(self._reason)
+
+
+def _required_payload_paths(document: dict) -> set[Path]:
+    """Derive the full-payload existence boundary from the frozen inventory."""
+
+    paths: set[Path] = set()
+    for observer in document["observer_profiles"]:
+        paths.add(ROOT / observer["binary"]["path"])
+
+    coverage = document["existing_coverage_excerpt"]
+    for key in ("line_to_tests_binding", "test_to_lines_binding"):
+        paths.add(ROOT / coverage[key]["path"])
+    for profile in document["comparator_profiles"].values():
+        for key in ("manifest", "build_manifest", "collection_state", "configuration"):
+            binding = profile.get(key)
+            if binding and "path" in binding:
+                paths.add(ROOT / binding["path"])
+
+    for inventory in document["materialized_corpora"]:
+        corpus_root = ROOT / inventory["root"]
+        paths.update(corpus_root / row["path"] for row in inventory["files"])
+    return paths
+
+
+def _load_payload_status() -> tuple[set[Path], list[Path]]:
+    document = json.loads(GATE8_INPUT_PATH.read_text(encoding="utf-8"))
+    required = _required_payload_paths(document)
+    return required, sorted(path for path in required if not path.is_file())
+
+
+def _rewrite_suite(suite: unittest.TestSuite, missing: bool) -> unittest.TestSuite:
+    rewritten = unittest.TestSuite()
+    for test in suite:
+        if isinstance(test, unittest.TestSuite):
+            rewritten.addTest(_rewrite_suite(test, missing))
+        elif missing and test.id() == GATE8_TEST_ID:
+            rewritten.addTest(_SkippedGate8PayloadTest(GATE8_TEST_ID, SKIP_REASON))
+        else:
+            rewritten.addTest(test)
+    return rewritten
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--require-full-payload",
+        action="store_true",
+        help="fail before running tests when any frozen Gate-8 payload is missing",
+    )
+    args = parser.parse_args()
+
+    _, missing = _load_payload_status()
+    missing_tracked = [
+        path for path in missing
+        if not path.is_relative_to(ROOT / "external")
+        and not path.is_relative_to(ROOT / "results/coverage")
+    ]
+    if missing and (args.require_full_payload or missing_tracked):
+        print(
+            "full-payload preflight failed; missing frozen Gate-8 inputs:",
+            file=sys.stderr,
+        )
+        for path in missing:
+            print(f"  {path.relative_to(ROOT)}", file=sys.stderr)
+        return 2
+
+    suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
+    suite = _rewrite_suite(suite, bool(missing))
+    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    return 0 if result.wasSuccessful() else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,197 @@
+{
+  "schema_version": 1,
+  "plan_id": "ordinary-declaration-validation.publication-study.gate-9-synthesis.v1",
+  "run_id": "publication-study-theorem-control-0001",
+  "status": "FROZEN_PROTOCOL_BEFORE_CANDIDATE_GENERATION",
+  "recorded_at": "2026-09-05T01:00:58.027353+00:00",
+  "predecessor_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+  "bindings": {
+    "gate8_baseline": {
+      "path": "results/research/declaration-validation-publication-study-baseline-comparator.json",
+      "git_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+      "git_blob": "96c92d2a53d83980d9f4af2dfcc81c2300a69173",
+      "sha256": "0c0bb495903d2d3b8dc4dd545194b5b0719f2afbd8a0f8399bd7958938ea12bf"
+    },
+    "gate8_input_freeze": {
+      "path": "results/research/declaration-validation-publication-study-gate-8-input-freeze.json",
+      "git_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+      "git_blob": "e004cb52075cc33639df1fb1ba533cd091441a89",
+      "sha256": "717a39c79ba14312b77e2d78a899b4f96cf0602f6f0a545f2114244ac91a8b2c"
+    },
+    "preregistration": {
+      "path": "config/declaration-validation-publication-study-preregistration.json",
+      "git_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+      "git_blob": "0acc79081f6b81ea9b3ee59f029ee64b88474377",
+      "sha256": "94f2a293407b6917b44361ca4b173c7e74972867c52d127ce336e10c1ed7592a"
+    },
+    "gate8_validator": {
+      "path": "scripts/validate-declaration-validation-publication-study",
+      "git_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+      "git_blob": "b118cfab4873e97baf75cdef0e58a1478f67141b",
+      "sha256": "f6c461a39ca5cd6deec1cc43f8a29219584681563bd2fe557915a47f32b566d1"
+    },
+    "gate8_manuscript": {
+      "path": "docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md",
+      "git_commit": "6cb81b2e87651f5380272e8f59e53a6cb0142fc1",
+      "git_blob": "09c63db10280e84fba33a7fec942a3c4e25b403a",
+      "sha256": "c1770504e3f7844e412340eeda444252e3bd8a528cee367a7aa1728ce66590b0"
+    }
+  },
+  "claim_tier": "BOUNDED_PILOT",
+  "targets": [
+    {
+      "entry_id": "DECL.THEOREM.TYPE_PROP",
+      "identity_statement_sha256": "6e2f689d4b1ce641ddeeca0cda1bef38eb01aa8c63e4e8d9f084481200a348cd",
+      "semantic_denotation_sha256": "9fc59564a572318feb3b28fa08b1271ccda537eaf91c0e304ad2cb13c4d9485a",
+      "predicate": {
+        "applicability": [
+          "Theorem declarations only, after declaration-type well-formedness and sorthood are established."
+        ],
+        "kind": "NORMATIVE_CANDIDATE_OBLIGATION",
+        "modeled_judgment_target_profile_pointer": "/logical_target/modeled_judgment",
+        "premises": [],
+        "target_premise": "A theorem declaration's type satisfies the modeled proposition-valued predicate.",
+        "violation_expectation": "REJECT"
+      },
+      "baseline_status": "OBSERVED_NEGATIVE_NOT_ISOLATED",
+      "negative_input_id": "m6_nonprop_candidate",
+      "auxiliary_input_id": "m6_definition_auxiliary_control",
+      "negative_policy": "REUSE_EXACT_FROZEN_BYTES",
+      "construction_family": "One closed theorem, empty universe parameters, empty-environment replay, and dependent binders over Prop; no constants, axioms, lets, applications, inductives, or extensions.",
+      "strategy": {
+        "tier_order": [
+          1
+        ],
+        "tier_1": "Reuse the frozen M6 non-Prop theorem unchanged. Construct one matched theorem control using the same metadata, theorem name, empty level parameters, declaration wrapper, and default binder convention. Replace the declared type and its value together with the closed proposition forall (p : Prop), p -> p and its proof fun (p : Prop) (h : p) => h.",
+        "tier_2": "DISABLED_FOR_THIS_RUN",
+        "tier_3": "FORBIDDEN_IN_BOUNDED_PILOT",
+        "randomness": "NONE",
+        "adaptive_repair": "FORBIDDEN_WITHIN_THIS_RUN",
+        "construction_note": "This specifies a future artifact, not an executed construction or established isolation result. The family relation and all competing obligations must be justified against the produced bytes before counting success."
+      },
+      "matched_control": {
+        "declaration_kind": "thm",
+        "type_expression": "forall (p : Prop), p -> p",
+        "proof_expression": "fun (p : Prop) (h : p) => h",
+        "must_remain_theorem": true,
+        "must_be_prop_valued": true,
+        "must_have_matching_valid_proof": true,
+        "definition_form_role": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL",
+        "matching_contract": "Preserve theorem applicability, construction family, environment, metadata, name, universe parameters and binder conventions. Record exact changed expression records. Close type sorthood, proof typing, binding scope and every other frozen competing obligation for both artifacts; observer acceptance alone is insufficient.",
+        "minimizes_unrelated_differences": true,
+        "documents_unavoidable_differences": true,
+        "unavoidable_differences": "The non-Prop negative declares Sort 0 and supplies the proposition forall (p : Prop), p as its value. A valid Prop-valued theorem control must change both the declared type and its proof value: retaining the old value after changing the type would introduce a competing type mismatch. Use the binder-only identity proposition and proof, retain all compatible wrapper/metadata fields, and record newly required binders and expression nodes. This is a proposed minimal family repair, not a proof of global edit minimality."
+      },
+      "competing_obligation_ids": [
+        "DECL.ENV.NAME_FRESHNESS",
+        "DECL.UNIVERSE.PARAM_UNIQUENESS",
+        "DECL.TYPE.NO_FREE_VARS",
+        "DECL.TYPE.NO_METAVARS",
+        "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+        "DECL.UNIVERSE.PARAM_OWNERSHIP",
+        "EXPR.CONST.UNIVERSE_ARITY",
+        "DECL.TYPE.WELL_FORMED",
+        "DECL.TYPE.SORT_VALUED",
+        "DECL.VALUE.WELL_FORMED",
+        "DECL.VALUE.TYPE_MATCH",
+        "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+        "EXPR.BINDER.DOMAIN_SORT",
+        "EXPR.PI.CODOMAIN_SORT",
+        "EXPR.LET.ANNOTATION_SORT",
+        "EXPR.LET.VALUE_TYPE_MATCH",
+        "EXPR.APP.FUNCTION_TYPE",
+        "EXPR.APP.ARGUMENT_TYPE_MATCH"
+      ],
+      "competing_analysis_policy": "Re-evaluate all listed obligations for both negative and control using exact expression records and existing admissible evidence. Reuse a baseline argument only when its premises are unchanged. The new lambda and nested binder require explicit scope and domain checks. Any unclosed competing violation prevents an isolated-coverage claim.",
+      "authority_policy": "Reuse only the frozen Gate-6 theorem-Prop authority carried by Gate 7 and Gate 8. No new authority inference or source approval; mathematical construction reasoning and checker observations do not promote any other obligation."
+    }
+  ],
+  "permitted_prior_input_ids": [
+    "m6_nonprop_candidate",
+    "m6_definition_auxiliary_control",
+    "m6_nonprop_cross_validation",
+    "m6_nonprop_expected_outcome",
+    "nanoda_nonprop_observation",
+    "nanoda_reach_infection"
+  ],
+  "budget": {
+    "tier_1_candidates": 1,
+    "tier_2_candidates": 0,
+    "tier_3_candidates": 0,
+    "total_candidates": 1,
+    "checker_executions": 8,
+    "minimization_checks": 0,
+    "wall_seconds": 600,
+    "candidate_unit": "One negative/control pair; the negative is reused and the control is the sole new serialized artifact. Charge the pair before materialization, including a failed construction.",
+    "checker_timeout_seconds": 30,
+    "checker_accounting": "Charge every launched checker process, including timeout, crash and interrupted attempts. Four observers times two artifacts consumes the entire eight-execution budget. No feedback-driven retries.",
+    "wall_accounting": "Cumulative active-run wall time from first candidate reservation through result persistence, including generation, evidence checks, execution and minimization; process downtime is excluded and recorded. Preregistration engineering and protocol validation are outside the experimental budget.",
+    "new_mutants": 0,
+    "new_coverage_runs": 0
+  },
+  "execution_protocol": {
+    "observer_ids": [
+      "arena-official-importer.lean4-4.33.0",
+      "arena-nanoda.6ae1f0c.default-four-thread",
+      "arena-lean4lean.ecb3b66",
+      "arena-kiota.58e8636"
+    ],
+    "observer_policy": "Use exact Gate-8 binaries, configurations and pipeline identities. No rebuild or substitution after mismatch. The run-specific timeout is 30 seconds, bounded by the remaining 600-second active budget.",
+    "order": "For each observer in frozen order, run the matched positive control and then the exact negative. Preserve every outcome; no early stop on favorable agreement. Stop launching if any resource budget is exhausted.",
+    "artifact_freeze_before_feedback": true,
+    "freeze_requirements": [
+      "Commit this protocol and its validator/schema/tests before candidate materialization.",
+      "Bind the exact protocol commit, schema, validator and future constructor/runner bytes in a run manifest before materialization.",
+      "After construction, bind negative/control SHA-256, metadata, transformation, complete competing-obligation analysis and proposed expected outcomes in an immutable candidate manifest before the first checker launch."
+    ],
+    "expected_observations": {
+      "negative": "REJECT",
+      "control": "ACCEPT"
+    },
+    "outcome_vocabulary": [
+      "ACCEPT",
+      "REJECT",
+      "DECLINE",
+      "CRASH",
+      "TIMEOUT",
+      "PARSE_ERROR",
+      "UNKNOWN"
+    ],
+    "attribution": "Record raw stdout/stderr, exit code or signal, elapsed time, artifact hash, observer identity, configuration and parse/reconstruction/validation attribution. Unattributable failure is not evidence of the target obligation.",
+    "resume": "Resume only exact protocol, constructor, runner, observer, candidate and prior-attempt hashes. Atomically reserve each candidate/process before work. Preserve an interrupted reservation as consumed; never overwrite prior attempts. Reconcile elapsed time conservatively and report EXECUTION_UNRESOLVED if it cannot be bounded.",
+    "success_contract": [
+      "All seven frozen M10 isolation elements satisfied under erratum 1.",
+      "All competing obligations closed as SATISFIED or NOT_APPLICABLE for the exact pair.",
+      "A same-family Prop-valued theorem control has a matching valid proof and attributed acceptance in the designated reference observer.",
+      "Every compatible frozen observer has a raw and normalized result or an explicit unresolved/incompatible disposition.",
+      "Authority and expected rejection are established independently of checker agreement."
+    ],
+    "terminal_states": [
+      "ISOLATED_SUCCESS",
+      "BOUNDED_FAILURE_ATTEMPT_OR_TIME_BUDGET_EXHAUSTED",
+      "PIPELINE_NOT_REPRESENTABLE_AT_EXECUTION",
+      "EXECUTION_UNRESOLVED",
+      "ISOLATION_UNRESOLVED"
+    ],
+    "failure_policy": "Preserve the single attempted pair and all diagnostics. No alternate control, seed replacement, Tier-2 escalation, extra checker run or budget expansion under this run ID. Characterize failure and recommend a separately governed successor only if justified."
+  },
+  "reporting": {
+    "primary_counts": "Preserve the frozen baseline 0/1; derive any final covered count from validated result evidence only.",
+    "incremental_value": "Separately report a newly generated negative versus an existing negative supplied with a matched control. This run reuses a known four-observer rejection; 0/1 to 1/1 alone is not a newly discovered defect or evidence of general bug-finding superiority.",
+    "recommendation": "At result closure recommend a specific shared-corpus/control contribution, further investigation, or evidence-based no external action. Publication and contact remain separately human-authorized.",
+    "nonclaims": [
+      "No checker execution or candidate/control generation has occurred in Gate 9.",
+      "No authority, denominator, baseline or frozen historical byte changes.",
+      "No general methodology, Lean-wide adequacy, prospective discovery or soundness claim."
+    ]
+  },
+  "scope_closure": {
+    "candidate_generation_started": false,
+    "checker_feedback_obtained": false,
+    "catalog_changed": false,
+    "denominator_changed": false,
+    "baseline_changed": false,
+    "external_action_authorized": false,
+    "next_gate": "PUBLICATION_STUDY_GATE_10_RESULT_AND_RECOMMENDATION_CLOSURE"
+  }
+}

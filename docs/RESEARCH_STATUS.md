@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-02
+Last updated: 2026-09-04
 
 ## How Status Is Tracked
 
@@ -1494,6 +1494,47 @@ prepared_external_action_drafts: 5
   matched theorem control is missing. Gate 9 has not begun: no strategy or
   budget is frozen and no witness or control was created or modified.
 
+### Gate-9 Synthesis Protocol — 2026-09-04
+
+- The [bounded synthesis protocol](../config/declaration-validation-publication-study-gate-9.json)
+  binds the exact Gate-8 baseline, input freeze, preregistration, validator and
+  manuscript Git blobs at `6cb81b2e87651f5380272e8f59e53a6cb0142fc1`.
+  Its sole target remains `DECL.THEOREM.TYPE_PROP`; the denominator, authority
+  dispositions, baseline and all predecessor bytes remain unchanged.
+- Run `publication-study-theorem-control-0001` permits one Tier-1 pair: reuse
+  the exact M6 negative and construct a same-family Prop-valued theorem with
+  a matching identity proof. The definition-form artifact remains auxiliary.
+  All 18 competing obligations must be re-evaluated for the exact pair.
+- The protocol caps execution at eight checker launches, 30 seconds per
+  launch and 600 seconds cumulative active run time. It permits no Tier-2/3
+  fallback, minimization, new mutants, coverage collection or feedback-driven
+  repair. Failed construction and interrupted launches consume budget.
+- The new Gate-9 validator and tampering/transition tests check the protocol
+  against immutable inputs. Commit the protocol before materialization; bind
+  the future constructor and runner before generation and the exact candidate
+  pair before checker feedback. Gate 10 execution has not started.
+- Verification passed: the Gate-9 full-chain/payload validator, canonical
+  catalog validator, 331-test local full-payload run (no skips), and four
+  runner-boundary tests. The fresh full-history clone passed its 331-test run
+  with three explicit materialization-dependent skips; its strict payload
+  preflight failed as expected. Historical transition/tampering tests are
+  included in the unit runs. Community gates passed 24/24 and 30/30 checks.
+- The result must distinguish completion of a missing matched control from
+  discovery of a new negative or implementation defect. A possible 0/1 to 1/1
+  change alone cannot support broad methodological or bug-finding claims.
+
+### Reproduction and Agent Workflow Repair — 2026-09-04
+
+- CI now fetches complete Git history for historical evidence validation.
+  `scripts/run-unit-tests` preserves the frozen tests and reports an explicit
+  skip for the exact Gate-8 full-payload integration test when inventoried
+  local payloads are absent. `--require-full-payload` instead fails preflight;
+  present payloads retain the original validation and hash checks. The full
+  assurance validators are unchanged.
+- [Agent task navigation](AGENT_WORKFLOW.md) records the owner's delegation
+  preferences, progressive evidence loading, file ownership and context
+  handoff procedure. It is an operational index, not research authority.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1515,8 +1556,12 @@ prepared_external_action_drafts: 5
    `OBSERVED_NEGATIVE_NOT_ISOLATED` baseline (0/1 isolated) together with the
    separate `SOURCE_REACHED`, `MUTANT_KILLED`, and `EXISTING_CASE_LINKED`
    contextual indicators. `DECL.THEOREM.TYPE_PROP` is the sole Gate-9 target.
-   Gate 9 synthesis freeze is next; no synthesis, mutation, new coverage or
-   checker campaign, or later gate may cross that boundary implicitly.
+   Gate 9 now fixes the one-pair synthesis protocol and its strict execution
+   budget in `config/declaration-validation-publication-study-gate-9.json`.
+   Gate 10 bounded implementation and result/recommendation closure is next,
+   after the protocol commit and required pre-execution bindings. No candidate
+   generation, new checker execution, mutation or coverage campaign has begun.
+   Broader research and external actions remain outside this authorization.
 
 ### Waiting
 
