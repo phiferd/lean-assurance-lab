@@ -1,0 +1,360 @@
+{
+  "authority": {
+    "binding": {
+      "bytes": 563265,
+      "git_blob": "3dfb08e86d0386bd0c22ef8789be6b1ead8ba2ed",
+      "git_commit": "a01102e784e21ed4d7f906435704bb0dc8e982a0",
+      "path": "config/declaration-validation-catalog.json",
+      "sha256": "33992703c088bde0994fafe1050931b93c4273f36cee26d9fafab33005ff1a35"
+    },
+    "claim": "CLAIM.SOURCE.MANUAL.DEFS.THEOREM_PROP",
+    "scope": "Only theorem proposition-valued type; no other authority promoted.",
+    "source": "gate6_catalog"
+  },
+  "competing_obligations": [
+    {
+      "basis": "Single fresh m6TransferNonPropTheorem in empty-environment replay; no prior declarations or constants. Wrapper and name equal the frozen M6 auxiliary evidence.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.ENV.NAME_FRESHNESS",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "The exact levelParams list is empty in both wrappers.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.UNIVERSE.PARAM_UNIQUENESS",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Binder-only AST contains no free-variable constructor; recursive scope/type checks succeed.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.TYPE.NO_FREE_VARS",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Every expression record is sort, bvar, forallE or lam; no metavariable constructor.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.TYPE.NO_METAVARS",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Negative bvar 0 is under one Pi. Control Pi domain bvar 0 denotes outer x, Pi body bvar 1 denotes x under h, lambda body bvar 0 denotes h; all are checked at their actual context depths.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Only implicit universe zero; no universe parameter or constant arguments occur.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "DECL.UNIVERSE.PARAM_OWNERSHIP",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "No constant expression occurs.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "EXPR.CONST.UNIVERSE_ARITY",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "Recursive binder-only inference checks the exact type AST and all domains/codomains.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.TYPE.WELL_FORMED",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Negative Sort 0 : Sort 1. Control forall (x : Prop), x -> x : Sort 0 by imax(_,0)=0.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.TYPE.SORT_VALUED",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Negative forall (x : Prop), x is a well-formed proposition. Control fun (x : Prop) (h : x) => h is well typed by variable and lambda rules in the displayed contexts.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.VALUE.WELL_FORMED",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Structural equality between inferred value type and declared type is checked for each exact AST; no reduction or unchecked constant is needed.",
+      "control": "SATISFIED",
+      "entry_id": "DECL.VALUE.TYPE_MATCH",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Neither member contains any constant reference, including self-reference.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "Outer domain Prop : Sort 1. Each inner domain x : Sort 0 under x : Prop, for Pi and lambda. Recursive inference checks each occurrence.",
+      "control": "SATISFIED",
+      "entry_id": "EXPR.BINDER.DOMAIN_SORT",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "Negative body x : Sort 0. Control inner body x : Sort 0 under x,h; inner and outer Pi are Sort 0 by imax. Scope shifting preserves outer x under h.",
+      "control": "SATISFIED",
+      "entry_id": "EXPR.PI.CODOMAIN_SORT",
+      "negative": "SATISFIED"
+    },
+    {
+      "basis": "No let expression occurs.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "EXPR.LET.ANNOTATION_SORT",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "No let expression occurs.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "EXPR.LET.VALUE_TYPE_MATCH",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "No application expression occurs.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "EXPR.APP.FUNCTION_TYPE",
+      "negative": "NOT_APPLICABLE"
+    },
+    {
+      "basis": "No application expression occurs.",
+      "control": "NOT_APPLICABLE",
+      "entry_id": "EXPR.APP.ARGUMENT_TYPE_MATCH",
+      "negative": "NOT_APPLICABLE"
+    }
+  ],
+  "control": {
+    "declaration": {
+      "all": [
+        1
+      ],
+      "levelParams": [],
+      "name": 1,
+      "type": 5,
+      "value": 7
+    },
+    "declaration_name": "m6TransferNonPropTheorem",
+    "expression_records": [
+      {
+        "ie": 0,
+        "sort": 0
+      },
+      {
+        "bvar": 0,
+        "ie": 1
+      },
+      {
+        "forallE": {
+          "binderInfo": "default",
+          "body": 1,
+          "name": 2,
+          "type": 0
+        },
+        "ie": 2
+      },
+      {
+        "bvar": 1,
+        "ie": 3
+      },
+      {
+        "forallE": {
+          "binderInfo": "default",
+          "body": 3,
+          "name": 3,
+          "type": 1
+        },
+        "ie": 4
+      },
+      {
+        "forallE": {
+          "binderInfo": "default",
+          "body": 4,
+          "name": 2,
+          "type": 0
+        },
+        "ie": 5
+      },
+      {
+        "ie": 6,
+        "lam": {
+          "binderInfo": "default",
+          "body": 1,
+          "name": 3,
+          "type": 1
+        }
+      },
+      {
+        "ie": 7,
+        "lam": {
+          "binderInfo": "default",
+          "body": 6,
+          "name": 2,
+          "type": 0
+        }
+      }
+    ],
+    "metadata": {
+      "exporter": {
+        "name": "lean4export",
+        "version": "3.1.0"
+      },
+      "format": {
+        "version": "3.1.0"
+      },
+      "lean": {
+        "githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+        "version": "4.29.1"
+      }
+    },
+    "type_ast": [
+      "pi",
+      [
+        "sort",
+        0
+      ],
+      [
+        "pi",
+        [
+          "bvar",
+          0
+        ],
+        [
+          "bvar",
+          1
+        ]
+      ]
+    ],
+    "type_inferred_sort": [
+      "sort",
+      0
+    ],
+    "value_ast": [
+      "lam",
+      [
+        "sort",
+        0
+      ],
+      [
+        "lam",
+        [
+          "bvar",
+          0
+        ],
+        [
+          "bvar",
+          0
+        ]
+      ]
+    ],
+    "value_inferred_type": [
+      "pi",
+      [
+        "sort",
+        0
+      ],
+      [
+        "pi",
+        [
+          "bvar",
+          0
+        ],
+        [
+          "bvar",
+          1
+        ]
+      ]
+    ]
+  },
+  "entry_id": "DECL.THEOREM.TYPE_PROP",
+  "evidence_scope": "Exact binder-only construction calculation plus frozen admissible evidence; not a general verified Lean kernel or new normative authority.",
+  "expected_outcomes": {
+    "control": "ACCEPT",
+    "negative": "REJECT"
+  },
+  "negative": {
+    "declaration": {
+      "all": [
+        1
+      ],
+      "levelParams": [],
+      "name": 1,
+      "type": 0,
+      "value": 2
+    },
+    "declaration_name": "m6TransferNonPropTheorem",
+    "expression_records": [
+      {
+        "ie": 0,
+        "sort": 0
+      },
+      {
+        "bvar": 0,
+        "ie": 1
+      },
+      {
+        "forallE": {
+          "binderInfo": "default",
+          "body": 1,
+          "name": 2,
+          "type": 0
+        },
+        "ie": 2
+      }
+    ],
+    "metadata": {
+      "exporter": {
+        "name": "lean4export",
+        "version": "3.1.0"
+      },
+      "format": {
+        "version": "3.1.0"
+      },
+      "lean": {
+        "githash": "f72c35b3f637c8c6571d353742168ab66cc22c00",
+        "version": "4.29.1"
+      }
+    },
+    "type_ast": [
+      "sort",
+      0
+    ],
+    "type_inferred_sort": [
+      "sort",
+      1
+    ],
+    "value_ast": [
+      "pi",
+      [
+        "sort",
+        0
+      ],
+      [
+        "bvar",
+        0
+      ]
+    ],
+    "value_inferred_type": [
+      "sort",
+      0
+    ]
+  },
+  "transformation": {
+    "added_expression_ids": [
+      3,
+      4,
+      5,
+      6,
+      7
+    ],
+    "added_name": "h",
+    "alpha_renaming": "The proposed p is serialized with the original binder name x.",
+    "minimality": "Preserves all compatible records; no global edit-minimality claim.",
+    "preserved_prefix_records": 6,
+    "replaced_declaration_fields": [
+      "type",
+      "value"
+    ],
+    "retained_unused_expression_ids": [
+      2
+    ],
+    "unavoidable_differences": "The non-Prop negative declares Sort 0 and supplies the proposition forall (p : Prop), p as its value. A valid Prop-valued theorem control must change both the declared type and its proof value: retaining the old value after changing the type would introduce a competing type mismatch. Use the binder-only identity proposition and proof, retain all compatible wrapper/metadata fields, and record newly required binders and expression nodes. This is a proposed minimal family repair, not a proof of global edit minimality."
+  }
+}

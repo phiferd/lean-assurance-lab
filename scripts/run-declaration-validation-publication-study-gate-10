@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+"""Execute the single frozen Gate-10 pair, or regenerate presentation only."""
+import argparse
+from publication_study_gate10 import run_once, render_outputs
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--render', action='store_true', help='derive result/report/actions from persisted evidence; no checker launch')
+    args = parser.parse_args()
+    result = render_outputs() if args.render else run_once()
+    print(result['status'])

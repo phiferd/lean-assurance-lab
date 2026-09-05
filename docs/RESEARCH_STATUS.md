@@ -40,6 +40,14 @@ research directions.
 
 ## Attempted
 
+- Completed publication-study Gate 10 under the exact frozen Gate-9 protocol
+  from `3429ca1412dc5a33259ef432e9b64670a5be4f54`. Run
+  `publication-study-theorem-control-0001` charged one pair and eight checker
+  launches, used 3.875 active seconds, and persisted `ISOLATED_SUCCESS`.
+  All four frozen observers accepted the new matched theorem control and
+  rejected the unchanged M6 negative with theorem-Prop attribution. The
+  incremental result is completion of a missing control for a known negative,
+  not discovery of a new negative or implementation defect.
 - Added a disk-backed `scripts/run-campaign` supervisor for already-generated
   bounded mutation batches. It binds the selected mutants and source inputs,
   records phase-level interruptions and logs, adopts pre-existing completed
@@ -1535,6 +1543,35 @@ prepared_external_action_drafts: 5
   preferences, progressive evidence loading, file ownership and context
   handoff procedure. It is an operational index, not research authority.
 
+### Gate-10 Result and Recommendation Closure — 2026-09-04
+
+- The protocol, schema, validator, constructor and runner bytes were bound
+  before reserving the single candidate pair. The exact negative/control,
+  metadata, transformation, expected outcomes and all 18 competing-obligation
+  analyses were frozen before the first of eight launches. Raw process bytes,
+  reservations and the completed active interval are retained under
+  `results/research/publication-study-theorem-control-0001/`.
+- The canonical result is `ISOLATED_SUCCESS`: every frozen observer accepted
+  the identity-theorem control and rejected the unchanged M6 negative with
+  target attribution. The paired construction closes all seven M10 isolation
+  elements under erratum 1. The 3.875-second run did not use repairs, retries,
+  minimization, new mutants or new coverage collection.
+- Validation passed: Gate-10 full-chain/full-payload entrypoint, canonical
+  catalog validator, 353-test local full-payload suite without skips, and the
+  final 16-test focused Gate-10 suite. The full suite includes historical
+  transition/tampering regressions and the bounded runner tests. A fresh
+  full-history clone with the exact working changes overlaid passed the
+  tracked-result validator and all 16 focused tests without local observer
+  payloads; its strict payload preflight failed as expected. Community gates
+  passed 24/24 and 30/30. The artifact graph is current; the broader assurance
+  gate retains its pre-existing failure on 15 unresolved semantic disagreements.
+- The generated Gate-10 report is an explicit successor presentation artifact;
+  the manuscript bound by Gate 9 and all frozen predecessor bytes remain
+  unchanged. An Arena companion-control recommendation is deferred with
+  concrete unmet prerequisites. Gate 11 publication interpretation requires
+  the separate scientific review flagged below; Gate 12 final study historical
+  freeze and external publication have not begun.
+
 ### Active
 
 1. `F-DECLARATION-VALIDATION-OBLIGATION-COVERAGE-STUDY`: execute the exact
@@ -1558,12 +1595,32 @@ prepared_external_action_drafts: 5
    contextual indicators. `DECL.THEOREM.TYPE_PROP` is the sole Gate-9 target.
    Gate 9 now fixes the one-pair synthesis protocol and its strict execution
    budget in `config/declaration-validation-publication-study-gate-9.json`.
-   Gate 10 bounded implementation and result/recommendation closure is next,
-   after the protocol commit and required pre-execution bindings. No candidate
-   generation, new checker execution, mutation or coverage campaign has begun.
-   Broader research and external actions remain outside this authorization.
+   Gate 10 bounded implementation and result/recommendation closure is now
+   complete: the [canonical result](../results/research/publication-study-theorem-control-0001/result.json)
+   records `ISOLATED_SUCCESS`, eight attributed outcomes, one matched control,
+   and 3.875 active seconds. Final isolated coverage is 1/1 (100.0%); the frozen
+   0/1 baseline and all predecessor bytes remain unchanged. No new negative,
+   defect, mutation or coverage campaign is claimed. The
+   [generated Gate-10 report](research/DECLARATION_VALIDATION_PUBLICATION_STUDY_GATE_10_REPORT.md)
+   and [schema-backed recommendation](../results/research/publication-study-theorem-control-0001/action-recommendations.json)
+   defer an Arena companion-control proposal pending concrete review,
+   current-upstream/duplicate checks, and target-specific human authorization.
+   Gate 11 publish-or-kill interpretation is next; before that decision, a
+   separate Ultra review should assess whether completion of a retrospectively
+   known negative's control warrants a strong-positive label or only a bounded
+   control-completeness/specification result. Gate 11 has not started. Gate 12
+   final historical freeze and any later research slice remain unexecuted.
+   The run cannot be retried or extended. Broader research and external actions
+   remain outside this authorization.
 
 ### Waiting
+
+- `W-ARENA-THEOREM-CONTROL`: review the exact identity-theorem accept control as
+  a companion to Arena's existing `tutorial/012_nonPropThm` reject case. The
+  low-priority Gate-10 recommendation is `DEFERRED`, not action-ready: current
+  Arena duplicate checks and corpus-integration validation remain prerequisites,
+  followed by target-specific human authorization. No implementation issue or
+  private disclosure is supported by this run.
 
 - `W-NANODA-NUMINDICES`: await maintainer guidance on
   [Nanoda #29](https://github.com/ammkrn/nanoda_lib/issues/29). Do not propose an

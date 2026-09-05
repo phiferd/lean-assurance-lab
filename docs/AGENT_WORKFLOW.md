@@ -12,6 +12,7 @@ by the task. Do not replace those sources with this page or a conversation.
 | Clone-safe CI and test execution | README “Prerequisites And Clone-Safe Checks”, `.github/workflows/unit-tests.yml`, `scripts/run-unit-tests` |
 | Current publication-study work | `docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_PLAN.md`, current gate artifact named by Active |
 | Gate-9 synthesis protocol | `config/declaration-validation-publication-study-gate-9.json`, `scripts/validate-declaration-validation-publication-study-gate-9` |
+| Gate-10 recorded result and next review | `results/research/publication-study-theorem-control-0001/result.json`, `scripts/validate-declaration-validation-publication-study-gate-10`, generated Gate-10 report; Gate 11 and Gate 12 remain separate |
 | Authority, catalog, or declaration-validation evidence | `.agents/skills/declaration-validation-adjudication/SKILL.md`; follow its required evidence reads |
 | Current-state artifact refresh | `scripts/build-artifact-graph`, `scripts/artifact-status`; affected generator and graph dependencies |
 | External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft; publication still requires target-specific human authorization |

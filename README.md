@@ -91,9 +91,18 @@ therefore 0/1 (0.0%). The separate coarse indicators are `SOURCE_REACHED`,
 theorem obligation is the sole Gate-9 synthesis target. Its frozen protocol
 allows one negative/control pair, reusing the known negative and constructing
 a matched Prop-valued theorem control, with at most eight checker launches and
-600 seconds of active run time. No candidate or control has been generated and
-no new checker, mutation or coverage campaign has begun. Gate 10 implementation
-and result closure follow the protocol commit and pre-execution bindings.
+600 seconds of active run time. [Gate 10 is complete](docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_GATE_10_REPORT.md):
+all four frozen observers accepted the matched theorem control and rejected the
+unchanged M6 negative, using eight launches and 3.875 active seconds. Final
+isolated coverage is 1/1 (100.0%), while the frozen baseline remains 0/1. This
+completes missing control evidence for a known negative; it discovers no new
+negative or implementation defect. The Arena companion-control recommendation
+is deferred pending review, upstream/duplicate checks and human authorization.
+Gate 11 interpretation and Gate 12 historical freeze remain pending.
+
+Verify Gate-10 recorded evidence without launching a checker using
+`scripts/validate-declaration-validation-publication-study-gate-10`; add
+`--require-full-payload` to verify the complete local predecessor payloads.
 
 The broader project also has a closed mechanical mutation loop for `nanoda`,
 content-addressed invalidation, executable witness search and minimization,

@@ -1,0 +1,14 @@
+#!/usr/bin/env python3
+"""Verify the Gate-10 evidence and predecessor chain without checker execution."""
+import argparse
+from publication_study_gate10 import validate_result
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('--require-full-payload', action='store_true')
+    args = parser.parse_args()
+    errors = validate_result(full_payload=args.require_full_payload)
+    if errors:
+        print('Gate-10 validation failed:', *errors, sep='\n- ')
+        raise SystemExit(1)
+    print('Gate-10 result, exact candidate analysis, raw outcomes, budgets, recommendations and generated report validated; no checker launched.')

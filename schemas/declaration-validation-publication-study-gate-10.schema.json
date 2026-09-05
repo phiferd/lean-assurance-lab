@@ -1,0 +1,353 @@
+{
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "run_id",
+    "entry_id",
+    "status",
+    "claim_tier",
+    "inputs",
+    "isolation_elements",
+    "observer_results",
+    "budget",
+    "counts",
+    "incremental_value",
+    "scientific_review",
+    "scope_closure",
+    "nonclaims"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "run_id": {
+      "const": "publication-study-theorem-control-0001"
+    },
+    "entry_id": {
+      "const": "DECL.THEOREM.TYPE_PROP"
+    },
+    "status": {
+      "enum": [
+        "ISOLATED_SUCCESS",
+        "BOUNDED_FAILURE_ATTEMPT_OR_TIME_BUDGET_EXHAUSTED",
+        "PIPELINE_NOT_REPRESENTABLE_AT_EXECUTION",
+        "EXECUTION_UNRESOLVED",
+        "ISOLATION_UNRESOLVED"
+      ]
+    },
+    "claim_tier": {
+      "const": "BOUNDED_PILOT"
+    },
+    "inputs": {
+      "type": "array",
+      "minItems": 3,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "path",
+          "sha256",
+          "bytes"
+        ],
+        "properties": {
+          "path": {
+            "type": "string",
+            "minLength": 1
+          },
+          "sha256": {
+            "type": "string",
+            "pattern": "^[0-9a-f]{64}$"
+          },
+          "bytes": {
+            "type": "integer",
+            "minimum": 0
+          }
+        }
+      }
+    },
+    "isolation_elements": {
+      "type": "array",
+      "minItems": 7,
+      "maxItems": 7,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": [
+          "element",
+          "status",
+          "evidence"
+        ],
+        "properties": {
+          "element": {
+            "type": "string",
+            "minLength": 1
+          },
+          "status": {
+            "enum": [
+              "SATISFIED",
+              "UNRESOLVED"
+            ]
+          },
+          "evidence": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      }
+    },
+    "observer_results": {
+      "type": "array",
+      "maxItems": 8,
+      "items": {
+        "type": "object",
+        "required": [
+          "sequence",
+          "observer_id",
+          "artifact_id",
+          "artifact_sha256",
+          "outcome",
+          "pipeline_stage",
+          "basis"
+        ],
+        "properties": {
+          "outcome": {
+            "enum": [
+              "ACCEPT",
+              "REJECT",
+              "DECLINE",
+              "CRASH",
+              "TIMEOUT",
+              "PARSE_ERROR",
+              "UNKNOWN"
+            ]
+          }
+        }
+      }
+    },
+    "budget": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "candidate_pairs_charged",
+        "checker_launches_charged",
+        "checker_results_persisted",
+        "new_negatives",
+        "new_controls",
+        "minimization_checks",
+        "new_mutants",
+        "new_coverage_runs",
+        "active_seconds",
+        "downtime_seconds"
+      ],
+      "properties": {
+        "candidate_pairs_charged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checker_launches_charged": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checker_results_persisted": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_negatives": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_controls": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "minimization_checks": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_mutants": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "new_coverage_runs": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "active_seconds": {
+          "type": "number",
+          "minimum": 0
+        },
+        "downtime_seconds": {
+          "type": "number",
+          "minimum": 0
+        }
+      }
+    },
+    "counts": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "qualification_candidates",
+        "authority_established",
+        "authority_provisional",
+        "authority_unresolved",
+        "primary_denominator",
+        "existing_isolated_covered",
+        "existing_observed_not_isolated",
+        "existing_uncovered_or_unresolved",
+        "synthesis_targets",
+        "synthesis_isolated_successes",
+        "synthesis_bounded_failures",
+        "synthesis_unresolved",
+        "final_isolated_covered",
+        "coarse_positive_but_not_isolated_at_baseline",
+        "checker_disagreement_cases",
+        "external_actions_recommended"
+      ],
+      "properties": {
+        "qualification_candidates": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "authority_established": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "authority_provisional": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "authority_unresolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "primary_denominator": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "existing_isolated_covered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "existing_observed_not_isolated": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "existing_uncovered_or_unresolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "synthesis_targets": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "synthesis_isolated_successes": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "synthesis_bounded_failures": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "synthesis_unresolved": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "final_isolated_covered": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "coarse_positive_but_not_isolated_at_baseline": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "checker_disagreement_cases": {
+          "type": "integer",
+          "minimum": 0
+        },
+        "external_actions_recommended": {
+          "type": "integer",
+          "minimum": 0
+        }
+      }
+    },
+    "incremental_value": {
+      "enum": [
+        "COMPLETED_MISSING_MATCHED_CONTROL_FOR_KNOWN_NEGATIVE",
+        "NO_VALIDATED_INCREMENTAL_ISOLATED_COVERAGE"
+      ]
+    },
+    "scientific_review": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "separate_ultra_review",
+        "question",
+        "reason"
+      ],
+      "properties": {
+        "separate_ultra_review": {
+          "const": "RECOMMENDED_BEFORE_GATE_11_PUBLICATION_DECISION"
+        },
+        "question": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reason": {
+          "type": "string",
+          "minLength": 1
+        }
+      }
+    },
+    "scope_closure": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "gate_10_closed",
+        "next_gate",
+        "gate_11_publication_decision",
+        "gate_12_historical_freeze",
+        "external_action_authorized",
+        "authority_changed",
+        "denominator_changed",
+        "baseline_changed"
+      ],
+      "properties": {
+        "gate_10_closed": {
+          "const": true
+        },
+        "next_gate": {
+          "const": 11
+        },
+        "gate_11_publication_decision": {
+          "const": "NOT_STARTED"
+        },
+        "gate_12_historical_freeze": {
+          "const": "NOT_STARTED"
+        },
+        "external_action_authorized": {
+          "const": false
+        },
+        "authority_changed": {
+          "const": false
+        },
+        "denominator_changed": {
+          "const": false
+        },
+        "baseline_changed": {
+          "const": false
+        }
+      }
+    },
+    "nonclaims": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "type": "string",
+        "minLength": 1
+      }
+    }
+  },
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Gate 10 bounded result and recommendation closure"
+}
