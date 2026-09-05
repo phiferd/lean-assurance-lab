@@ -1,196 +1,171 @@
 #!/usr/bin/env python3
-"""Run a bounded mutation batch as a resumable, disk-backed campaign.
-
-The underlying build and execution scripts retain their own fine-grained
-checkpoints.  This supervisor records the campaign-level phase boundary,
-command identity, and interruption state so unattended work can be resumed
-without relying on a conversational context window.
-"""
-
+"""Run an exact authorized local campaign with crash-safe phase supervision."""
 from __future__ import annotations
-
 import argparse
+import fcntl
 import hashlib
 import json
 import os
 import signal
 import subprocess
+import sys
+import time
 from datetime import datetime, timezone
 from pathlib import Path
 
-
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.authorized_runs import terminate_group, validate_manifest
+
 CAMPAIGNS = ROOT / "results" / "campaigns"
 PHASES = ("build_validation", "execution", "assurance")
 
+def now(): return datetime.now(timezone.utc).isoformat()
+def sha256_file(path): return hashlib.sha256(path.read_bytes()).hexdigest()
+def atomic_save(path, value):
+ path.parent.mkdir(parents=True, exist_ok=True)
+ temp = path.with_name("." + path.name + ".tmp")
+ temp.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
+ temp.replace(path)
+def batch_binding(batch_id, manifest):
+ return {"batch_id": batch_id, "source_sha256": manifest["source_sha256"], "mutants": [{"id": r["id"], "identity": r.get("identity")} for r in manifest["mutants"]], "mutation_model_sha256": manifest.get("mutation_model_sha256"), "coverage_manifest_sha256": manifest.get("coverage_manifest_sha256")}
+def make_campaign(campaign_id, batch_id, binding):
+ return {"schema_version": 1, "campaign_id": campaign_id, "created_at": now(), "updated_at": now(), "status": "PENDING", "binding": binding, "phases": {p: {"status": "PENDING", "attempts": []} for p in PHASES}}
+def reconcile_interruption(campaign):
+ for phase in campaign["phases"].values():
+  if phase["status"] == "RUNNING": phase.update(status="INTERRUPTED", interrupted_at=now())
+def reconcile_completed_phases(campaign, manifest):
+ count = len(manifest["mutants"])
+ for name in ("build_validation", "execution"):
+  prior = manifest.get(name, {})
+  if campaign["phases"][name]["status"] == "PENDING" and prior.get("status", "COMPLETE") == "COMPLETE" and len(prior.get("results", [])) == count: campaign["phases"][name].update(status="COMPLETE", adopted_at=now())
+def command_for(phase, batch_id):
+ if phase == "build_validation": return [str(ROOT / "scripts" / "validate-mutation-batch"), batch_id, "--resume"]
+ if phase == "execution": return [str(ROOT / "scripts" / "run-mutation-batch"), batch_id, "--resume"]
+ if phase == "assurance": return [str(ROOT / "scripts" / "current-assurance-snapshot")]
+ raise ValueError(phase)
 
-def now() -> str:
-    return datetime.now(timezone.utc).isoformat()
-
-
-def sha256_file(path: Path) -> str:
-    return hashlib.sha256(path.read_bytes()).hexdigest()
-
-
-def atomic_save(path: Path, value: dict) -> None:
-    path.parent.mkdir(parents=True, exist_ok=True)
-    temporary = path.with_name(f".{path.name}.tmp")
-    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n", encoding="utf-8")
-    temporary.replace(path)
-
-
-def batch_binding(batch_id: str, manifest: dict) -> dict:
-    """Return immutable selection inputs; execution fields may change on resume."""
-    return {
-        "batch_id": batch_id,
-        "source_sha256": manifest["source_sha256"],
-        "mutants": [
-            {"id": row["id"], "identity": row.get("identity")}
-            for row in manifest["mutants"]
-        ],
-        "mutation_model_sha256": manifest.get("mutation_model_sha256"),
-        "coverage_manifest_sha256": manifest.get("coverage_manifest_sha256"),
-    }
-
-
-def make_campaign(campaign_id: str, batch_id: str, binding: dict) -> dict:
-    return {
-        "schema_version": 1,
-        "campaign_id": campaign_id,
-        "created_at": now(),
-        "updated_at": now(),
-        "status": "PENDING",
-        "binding": binding,
-        "phases": {phase: {"status": "PENDING", "attempts": []} for phase in PHASES},
-    }
-
-
-def reconcile_interruption(campaign: dict) -> None:
-    for phase in campaign["phases"].values():
-        if phase["status"] == "RUNNING":
-            phase["status"] = "INTERRUPTED"
-            phase["interrupted_at"] = now()
-
-
-def reconcile_completed_phases(campaign: dict, manifest: dict) -> None:
-    """Adopt durable work done before the supervisor was started."""
-    mutant_count = len(manifest["mutants"])
-    build = manifest.get("build_validation", {})
-    execution = manifest.get("execution", {})
-    if (
-        campaign["phases"]["build_validation"]["status"] == "PENDING"
-        and len(build.get("results", [])) == mutant_count
-        and build.get("status", "COMPLETE") == "COMPLETE"
-    ):
-        campaign["phases"]["build_validation"]["status"] = "COMPLETE"
-        campaign["phases"]["build_validation"]["adopted_at"] = now()
-    if (
-        campaign["phases"]["execution"]["status"] == "PENDING"
-        and len(execution.get("results", [])) == mutant_count
-        and execution.get("status") == "COMPLETE"
-    ):
-        campaign["phases"]["execution"]["status"] = "COMPLETE"
-        campaign["phases"]["execution"]["adopted_at"] = now()
-
-
-def command_for(phase: str, batch_id: str) -> list[str]:
-    if phase == "build_validation":
-        return [str(ROOT / "scripts" / "validate-mutation-batch"), batch_id, "--resume"]
-    if phase == "execution":
-        return [str(ROOT / "scripts" / "run-mutation-batch"), batch_id, "--resume"]
-    if phase == "assurance":
-        return [str(ROOT / "scripts" / "current-assurance-snapshot")]
-    raise ValueError(phase)
-
-
-def run_phase(command: list[str], log_path: Path, timeout: float | None) -> tuple[int, bool]:
-    log_path.parent.mkdir(parents=True, exist_ok=True)
-    with log_path.open("w", encoding="utf-8") as log:
-        process = subprocess.Popen(
-            command,
-            cwd=ROOT,
-            stdout=log,
-            stderr=subprocess.STDOUT,
-            text=True,
-            start_new_session=True,
-        )
-        try:
-            return process.wait(timeout=timeout), False
-        except subprocess.TimeoutExpired:
-            os.killpg(process.pid, signal.SIGTERM)
-            process.wait()
-            return process.returncode, True
-
-
-def main() -> int:
-    parser = argparse.ArgumentParser()
-    parser.add_argument("campaign_id")
-    parser.add_argument("--batch-id", required=True)
-    parser.add_argument("--resume", action="store_true")
-    parser.add_argument("--through", choices=PHASES, default="assurance")
-    parser.add_argument(
-        "--phase-timeout",
-        type=float,
-        default=0,
-        help="seconds per phase; zero disables the supervisor timeout",
-    )
-    args = parser.parse_args()
-    if args.phase_timeout < 0:
-        raise SystemExit("--phase-timeout must be non-negative")
-
-    manifest_path = ROOT / "results" / "mutation-batches" / f"{args.batch_id}.json"
-    if not manifest_path.exists():
-        raise SystemExit(f"batch manifest not found: {manifest_path}")
-    manifest = json.loads(manifest_path.read_text(encoding="utf-8"))
-    binding = batch_binding(args.batch_id, manifest)
-    campaign_path = CAMPAIGNS / f"{args.campaign_id}.json"
-    if campaign_path.exists():
-        if not args.resume:
-            raise SystemExit(f"campaign already exists: {campaign_path}; pass --resume")
-        campaign = json.loads(campaign_path.read_text(encoding="utf-8"))
-        if campaign["binding"] != binding:
-            raise SystemExit("campaign binding differs from the batch selection; create a new campaign")
-        reconcile_interruption(campaign)
-    else:
-        campaign = make_campaign(args.campaign_id, args.batch_id, binding)
-    reconcile_completed_phases(campaign, manifest)
-    atomic_save(campaign_path, campaign)
-
-    timeout = args.phase_timeout or None
-    last_phase = PHASES.index(args.through)
-    for phase in PHASES[: last_phase + 1]:
-        state = campaign["phases"][phase]
-        if state["status"] == "COMPLETE":
-            continue
-        command = command_for(phase, args.batch_id)
-        attempt = {
-            "started_at": now(),
-            "command": command,
-            "command_sha256": hashlib.sha256("\0".join(command).encode()).hexdigest(),
-        }
-        state["status"] = "RUNNING"
-        state["attempts"].append(attempt)
-        campaign["status"] = "RUNNING"
-        campaign["updated_at"] = now()
-        atomic_save(campaign_path, campaign)
-
-        log_path = CAMPAIGNS / "logs" / args.campaign_id / f"{phase}-{len(state['attempts']):03d}.log"
-        returncode, timed_out = run_phase(command, log_path, timeout)
-        attempt.update({
-            "completed_at": now(),
-            "returncode": returncode,
-            "timed_out": timed_out,
-            "log": str(log_path.relative_to(ROOT)),
-        })
-        state["status"] = "COMPLETE" if returncode == 0 and not timed_out else "FAILED"
-        campaign["status"] = "COMPLETE" if phase == PHASES[last_phase] and state["status"] == "COMPLETE" else state["status"]
-        campaign["updated_at"] = now()
-        atomic_save(campaign_path, campaign)
-        print(json.dumps({"phase": phase, "status": state["status"], "log": attempt["log"]}, sort_keys=True))
-        if state["status"] != "COMPLETE":
-            return 1
-    return 0
-
-
-if __name__ == "__main__":
-    raise SystemExit(main())
+def load(path): return json.loads(path.read_text())
+def group_alive(pgid):
+ try: os.killpg(int(pgid), 0); return True
+ except ProcessLookupError: return False
+ except PermissionError: return True
+def acquire_lock(path):
+ path.parent.mkdir(parents=True, exist_ok=True)
+ handle = path.open("a+")
+ try: fcntl.flock(handle.fileno(), fcntl.LOCK_EX | fcntl.LOCK_NB)
+ except BlockingIOError:
+  handle.close()
+  raise ValueError("run is already owned by a live supervisor")
+ return handle
+def wrapper(args):
+ # Every descendant stays in the wrapper's process group, including the narrow
+ # spawn/signal-handler window. Either supervisor can terminate the whole tree.
+ gate = int(args.gate_fd)
+ try:
+  if os.read(gate, 1) != b"G": return 125
+ finally:
+  os.close(gate)
+ child = subprocess.Popen(args.command)
+ def stop(signum, frame):
+  signal.signal(signal.SIGTERM, signal.SIG_IGN)
+  terminate_group(os.getpgrp())
+  os._exit(124)
+ signal.signal(signal.SIGTERM, stop)
+ try:
+  return child.wait(timeout=args.timeout)
+ except subprocess.TimeoutExpired:
+  stop(signal.SIGTERM, None)
+def make_state(manifest, identity):
+ return {"schema_version": 1, "run_id": manifest["run_id"], "manifest_sha256": identity, "status": "PENDING", "elapsed_seconds": 0.0, "attempt_count": 0, "phases": {p["id"]: {"status": "PENDING", "attempts": []} for p in manifest["phases"]}}
+def reconcile_running(state):
+ running = [row for row in state["phases"].values() if row["status"] == "RUNNING"]
+ if not running: return
+ pgid = state.get("running_pgid")
+ if not pgid: raise ValueError("running phase has unknown process group; refusing unsafe resume")
+ if group_alive(pgid): raise ValueError("recorded orphan process group is still alive; refusing resume")
+ for row in running:
+  row["status"] = "INTERRUPTED"
+  state["elapsed_seconds"] += row.pop("reserved_seconds", 0)
+ state.pop("running_pgid", None)
+def charge_interruption(state, row):
+ if row and row.get("status") == "RUNNING":
+  state["elapsed_seconds"] += row.pop("reserved_seconds", 0)
+  row["status"] = "INTERRUPTED"
+ state.pop("running_pgid", None)
+def authorized(path, resume=False):
+ manifest = load(path)
+ identity = validate_manifest(manifest, ROOT, path)
+ out = ROOT / "results" / "authorized-runs"
+ state_path = out / (manifest["run_id"] + ".json")
+ lock = acquire_lock(out / (manifest["run_id"] + ".lock"))
+ live = None
+ row = None
+ try:
+  # State is read only after acquiring the kernel lock.
+  state = load(state_path) if state_path.exists() else None
+  if state is not None and not resume: raise ValueError("run exists; pass --resume")
+  if state is None and resume: raise ValueError("--resume requires an existing run")
+  if state is None: state = make_state(manifest, identity)
+  elif state.get("manifest_sha256") != identity: raise ValueError("manifest identity differs; create a new run")
+  validate_manifest(manifest, ROOT, path)
+  reconcile_running(state)
+  atomic_save(state_path, state)
+  for phase in manifest["phases"]:
+   row = state["phases"][phase["id"]]
+   if row["status"] == "COMPLETE": continue
+   if row["status"] == "FAILED": state["status"] = "FAILED"; atomic_save(state_path, state); return 1
+   if state["attempt_count"] >= manifest["max_attempts"] or state["elapsed_seconds"] >= manifest["total_budget_seconds"]:
+    state["status"] = "BUDGET_EXHAUSTED"; atomic_save(state_path, state); return 1
+   reservation = min(float(phase["timeout_seconds"]), manifest["total_budget_seconds"] - state["elapsed_seconds"])
+   if reservation <= 0: state["status"] = "BUDGET_EXHAUSTED"; atomic_save(state_path, state); return 1
+   validate_manifest(manifest, ROOT, path)
+   number = state["attempt_count"] + 1
+   log = out / "logs" / manifest["run_id"] / f"{phase['id']}-{number:03d}.log"
+   log.parent.mkdir(parents=True, exist_ok=True)
+   attempt = {"number": number, "started_at": now(), "command": phase["command"], "reserved_seconds": reservation, "log": str(log.relative_to(ROOT))}
+   row["status"] = "RUNNING"; row["reserved_seconds"] = reservation; row["attempts"].append(attempt)
+   state.update(status="RUNNING", attempt_count=number, running_pgid=None)
+   atomic_save(state_path, state)
+   read_fd, write_fd = os.pipe()
+   started = time.monotonic()
+   with log.open("x") as handle:
+    live = subprocess.Popen([sys.executable, str(Path(__file__)), "--_phase-wrapper", "--gate-fd", str(read_fd), "--timeout", str(reservation), "--", *phase["command"]], cwd=ROOT, stdout=handle, stderr=subprocess.STDOUT, start_new_session=True, pass_fds=(read_fd,))
+   os.close(read_fd)
+   state["running_pgid"] = live.pid
+   atomic_save(state_path, state)
+   os.write(write_fd, b"G"); os.close(write_fd)
+   try: returncode = live.wait(timeout=reservation + 2); timed_out = returncode == 124 or (returncode < 0 and time.monotonic() - started >= reservation)
+   except subprocess.TimeoutExpired: terminate_group(live.pid); returncode = live.wait(); timed_out = True
+   if group_alive(live.pid):
+    terminate_group(live.pid)
+    returncode = returncode or 125
+   live = None
+   charged = reservation if timed_out else min(reservation, time.monotonic() - started)
+   state["elapsed_seconds"] += charged; state.pop("running_pgid", None); row.pop("reserved_seconds", None)
+   attempt.update(completed_at=now(), returncode=returncode, timed_out=timed_out, charged_seconds=charged)
+   row["status"] = "COMPLETE" if returncode == 0 and not timed_out else "FAILED"
+   state["status"] = "RUNNING" if row["status"] == "COMPLETE" else "FAILED"
+   atomic_save(state_path, state)
+   if row["status"] != "COMPLETE": return 1
+  state["status"] = "COMPLETE"; atomic_save(state_path, state); return 0
+ except (KeyboardInterrupt, BaseException):
+  if live is not None: terminate_group(live.pid)
+  if 'state' in locals() and row is not None and row.get('status') == 'RUNNING':
+   charge_interruption(state, row); state["status"] = "INTERRUPTED"; atomic_save(state_path, state)
+  raise
+ finally:
+  lock.close()
+def main():
+ if "--_phase-wrapper" in sys.argv:
+  marker = sys.argv.index("--")
+  return wrapper(argparse.Namespace(gate_fd=sys.argv[sys.argv.index("--gate-fd") + 1], timeout=float(sys.argv[sys.argv.index("--timeout") + 1]), command=sys.argv[marker + 1:]))
+ parser = argparse.ArgumentParser()
+ parser.add_argument("campaign_id", nargs="?"); parser.add_argument("--authorization", type=Path); parser.add_argument("--resume", action="store_true"); parser.add_argument("--batch-id"); parser.add_argument("--through"); parser.add_argument("--phase-timeout")
+ parser.add_argument("--_phase-wrapper", action="store_true"); parser.add_argument("--gate-fd"); parser.add_argument("--timeout", type=float); parser.add_argument("command", nargs=argparse.REMAINDER)
+ args = parser.parse_args()
+ if not args.authorization: parser.error("an exact --authorization manifest is required")
+ if args.campaign_id or args.batch_id or args.through or args.phase_timeout: parser.error("legacy campaign arguments conflict with authorization mode")
+ try: return authorized(args.authorization.resolve(), args.resume)
+ except (ValueError, OSError, json.JSONDecodeError) as e: print(f"authorized run refused: {e}", file=sys.stderr); return 2
+if __name__ == "__main__": raise SystemExit(main())

@@ -1,0 +1,215 @@
+#!/usr/bin/env python3
+"""Finite, recorded successor reproductions; no publication or historical edits."""
+import argparse
+import hashlib
+import json
+import os
+from pathlib import Path
+import re
+import shutil
+import subprocess
+import time
+
+ROOT = Path(__file__).resolve().parents[1]
+BASE = ROOT / 'results/investigations/ecosystem-closure-2026-09-05'
+NANODA = ROOT / 'external/ecosystem-triage-nanoda'
+KIOTA = ROOT / 'external/ecosystem-closure-kiota'
+BASELINE = ROOT / 'external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin'
+OFFICIAL = ROOT / 'external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel'
+CONFIG = ROOT / 'config/ecosystem-nanoda.json'
+
+
+def sha(path):
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def bind(path):
+    return {'path': str(path.relative_to(ROOT)), 'sha256': sha(path), 'bytes': path.stat().st_size}
+
+
+def save(path, data):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temp = path.with_name('.' + path.name + '.tmp')
+    temp.write_text(json.dumps(data, indent=2, sort_keys=True) + '\n')
+    temp.replace(path)
+
+
+def normalize(checker, rc, stdout, stderr):
+    if rc is None:
+        return 'TIMEOUT'
+    if rc < 0:
+        return 'CRASH'
+    if rc == 0:
+        if checker == 'kiota':
+            return 'ACCEPT'  # Exact main.rs contract: Ok(check_export) -> exit 0.
+        return 'ACCEPT' if re.search(r'(?:Checked|Accepted) [1-9][0-9]* declarations', stdout) else 'UNATTRIBUTED_SUCCESS'
+    if checker == 'kiota':
+        return 'REJECT' if rc == 1 and stderr.startswith('REJECT:') else 'DECLINE' if rc == 2 and stderr.startswith('DECLINE:') else 'CRASH' if rc == 101 else 'UNKNOWN'
+    if checker == 'nanoda':
+        if rc == 101 and ('assertion failed: self.def_eq' in stderr or 'infer_sort_of could not infer a sort' in stderr):
+            return 'REJECT'
+        return 'CRASH' if rc == 101 else 'UNKNOWN'
+    return 'REJECT' if rc == 1 and ('(kernel)' in stderr or 'kernel exception' in stderr) else 'UNKNOWN'
+
+
+def observe(checker, binary, artifact, directory, label, budget):
+    if budget['launches'] >= budget['max_launches'] or budget['seconds'] >= budget['max_seconds']:
+        raise RuntimeError('checker budget exhausted')
+    budget['launches'] += 1  # Reserve before Popen, including exceptional launches.
+    save(directory / 'budget.json', budget)
+    command = [str(binary), str(CONFIG)] if checker == 'nanoda' else [str(binary), str(artifact)]
+    env = {k:v for k,v in os.environ.items() if not k.startswith('KIOTA_')}
+    started = time.monotonic()
+    timeout = min(15, budget['max_seconds'] - budget['seconds'])
+    try:
+        process = subprocess.run(command, cwd=ROOT, input=artifact.read_bytes() if checker == 'nanoda' else None,
+                                 stdout=subprocess.PIPE, stderr=subprocess.PIPE, timeout=timeout, env=env)
+        rc, stdout, stderr = process.returncode, process.stdout, process.stderr
+    except subprocess.TimeoutExpired as error:
+        rc, stdout, stderr = None, error.stdout or b'', error.stderr or b''
+    elapsed = time.monotonic() - started
+    budget['seconds'] += elapsed
+    save(directory / 'budget.json', budget)
+    out, err = directory / (label + '.stdout'), directory / (label + '.stderr')
+    with out.open('xb') as f: f.write(stdout)
+    with err.open('xb') as f: f.write(stderr)
+    return {'checker': checker, 'binary': bind(binary), 'artifact': bind(artifact),
+            'exit_code': rc, 'seconds': elapsed,
+            'outcome': normalize(checker, rc, stdout.decode(errors='replace'), stderr.decode(errors='replace')),
+            'stdout': bind(out), 'stderr': bind(err), 'environment': 'KIOTA_* unset; exact config for Nanoda'}
+
+
+def build(checkout, output):
+    toolchain = {tool: subprocess.run([tool, '--version'], capture_output=True, text=True, timeout=10, check=True).stdout.strip() for tool in ['cargo','rustc']}
+    started = time.monotonic()
+    command = ['cargo', 'build', '--release', '--offline', '--locked']
+    with output.open('xb') as log:
+        try:
+            result = subprocess.run(command, cwd=checkout, stdout=log, stderr=subprocess.STDOUT, timeout=120)
+            status = 'BUILT' if result.returncode == 0 else 'BUILD_FAILED'
+            code = result.returncode
+        except subprocess.TimeoutExpired:
+            status, code = 'BUILD_TIMEOUT', None
+    return {'status': status, 'returncode': code, 'seconds': time.monotonic()-started, 'command': command, 'toolchain': toolchain, 'log': bind(output)}
+
+
+def metadata():
+    return json.loads((ROOT / 'corpus/generated/universe-imax-right-one.ndjson').read_text().splitlines()[0])
+
+
+def cases(mutant):
+    prefix = [metadata(), {'in':1,'str':{'pre':0,'str':'EcosystemCase'}},
+              {'in':2,'str':{'pre':0,'str':'u'}}, {'in':3,'str':{'pre':0,'str':'v'}},
+              {'in':4,'str':{'pre':0,'str':'w'}}]
+    if mutant.endswith('f19ffc8a2e9b'):
+        common = prefix + [{'il':1,'param':2}, {'il':2,'param':3}, {'il':3,'param':4},
+                           {'il':4,'imax':[1,2]}, {'il':5,'imax':[1,3]},
+                           {'il':6,'succ':4}, {'il':7,'succ':5},
+                           {'ie':0,'sort':4}, {'ie':1,'sort':6}, {'ie':2,'sort':7}]
+        values = [(1,'matching-imax-control'), (2,'distinct-imax-second-parameters')]
+        return [(name, common + [{'def':{'all':[1],'hints':'opaque','levelParams':[2,3,4],
+                        'name':1,'safety':'safe','type':ty,'value':0}}]) for ty,name in values]
+    common = prefix + [{'il':1,'succ':0}, {'il':2,'succ':1},
+                       {'ie':0,'sort':0}, {'ie':1,'sort':1}, {'ie':2,'sort':2}, {'ie':3,'bvar':0}]
+    values = [(0,1,'matching-let-control'), (1,2,'let-value-type-mismatch')]
+    return [(name, common + [{'ie':4,'letE':{'name':2,'type':1,'value':value,'body':3,'nondep':False}},
+                            {'def':{'all':[1],'hints':'opaque','levelParams':[],'name':1,'safety':'safe','type':ty,'value':4}}])
+            for value,ty,name in values]
+
+
+def triage():
+    protocol = json.loads((ROOT / 'config/ecosystem-survivor-triage.json').read_text())
+    output = BASE / 'triage'
+    output.mkdir(exist_ok=False)
+    baseline_hash = sha(BASELINE)
+    results = []
+    for specrow in protocol['cases']:
+        spec = json.loads((ROOT / specrow['spec']['path']).read_text())
+        directory = output / spec['id']; directory.mkdir()
+        source = NANODA / spec['source_file']
+        original = source.read_text()
+        lines = original.splitlines(keepends=True)
+        line = int(spec['source_span']) - 1
+        if lines[line].count(spec['original']) != 1:
+            raise ValueError('exact mutation source site changed')
+        lines[line] = lines[line].replace(spec['original'], spec['mutated'], 1)
+        row = {'mutant_id': spec['id'], 'protocol': bind(ROOT / 'config/ecosystem-survivor-triage.json'),
+               'baseline_binary': bind(BASELINE), 'source_before_sha256': hashlib.sha256(original.encode()).hexdigest()}
+        try:
+            source.write_text(''.join(lines))
+            row['source_mutated_sha256'] = sha(source)
+            row['build'] = build(NANODA, directory / 'build.log')
+            if row['build']['status'] != 'BUILT':
+                row.update(status='UNRESOLVED', reason=row['build']['status'], recommendation='Restore exact offline build inputs before a separately budgeted retry; do not infer equivalence.')
+                results.append(row); save(directory/'result.json',row); continue
+            binary = ROOT / 'external/ecosystem-triage-payloads' / spec['id']
+            binary.parent.mkdir(parents=True, exist_ok=True)
+            if binary.exists(): raise ValueError('mutant payload already exists')
+            shutil.copy2(NANODA / 'target/release/nanoda_bin', binary)
+            row['mutant_binary'] = bind(binary)
+            fixed = []
+            for index,(name, records) in enumerate(cases(spec['id'])):
+                candidate = directory / (name + '.ndjson')
+                candidate.write_text('\n'.join(json.dumps(r,sort_keys=True,separators=(',',':')) for r in records)+'\n')
+                fixed.append(candidate)
+            save(directory/'candidate-manifest.json', [bind(p) for p in fixed])
+            budget={'launches':0,'seconds':0.0,'max_launches':16,'max_seconds':120}
+            observations=[]; witness=None
+            for index,candidate in enumerate(fixed):
+                base=observe('nanoda',BASELINE,candidate,directory,f'{index}-baseline',budget)
+                changed=observe('nanoda',binary,candidate,directory,f'{index}-mutant',budget)
+                observations.append({'name':candidate.stem,'baseline':base,'mutant':changed})
+                save(directory/'observations.json',observations)
+                if index == 0 and (base['outcome'],changed['outcome']) != ('ACCEPT','ACCEPT'):
+                    break
+                if index and (base['outcome'],changed['outcome']) == ('REJECT','ACCEPT'):
+                    witness=index;break
+            row.update(observations=observations,budget=budget)
+            if witness is not None:
+                row['official_control']=observe('official',OFFICIAL,fixed[0],directory,'official-control',budget)
+                row['official_candidate']=observe('official',OFFICIAL,fixed[witness],directory,'official-candidate',budget)
+                confirmed=(row['official_control']['outcome'],row['official_candidate']['outcome']) == ('ACCEPT','REJECT')
+                row.update(status='WITNESS_FOUND' if confirmed else 'DIFFERENCE_REQUIRES_REVIEW',
+                           reason='Exact baseline/mutant distinction; separately recorded pinned official pair.',
+                           recommendation='Prepare shared-corpus regression proposal after duplicate/integration and expected-semantics review; no implementation issue against the unmodified checker.')
+            else:
+                row.update(status='UNRESOLVED',reason='NO_ATTRIBUTABLE_WITNESS_IN_FIXED_CANDIDATES',
+                           recommendation='Retain bounded unresolved status; do not infer equivalence or expand the candidate set in this run.')
+        finally:
+            source.write_text(original)
+            if sha(BASELINE) != baseline_hash: raise ValueError('historical baseline binary changed')
+        results.append(row);save(directory/'result.json',row)
+    save(output/'results.json', {'schema_version':1,'cases':results,'external_actions':False,'registry_promotions':0})
+    return 0
+
+
+def kiota_build():
+    output = BASE / 'kiota-build';output.mkdir(exist_ok=False)
+    result = build(KIOTA, output/'build.log')
+    if result['status']=='BUILT': result['binary']=bind(KIOTA/'target/release/kiota')
+    result['revision']='2d2a9fa31cba31abdd49543c3bb667591207577e'
+    save(output/'result.json',result)
+    return 0 if result['status']=='BUILT' else 1
+
+
+def proof_pair():
+    output=BASE/'proof-parameter-current';output.mkdir(exist_ok=False)
+    budget={'launches':0,'seconds':0.0,'max_launches':4,'max_seconds':120}
+    rows=[]
+    for checker,binary in [('kiota',KIOTA/'target/release/kiota'),('official',OFFICIAL)]:
+        for label in ['control','candidate']:
+            artifact=ROOT/f'corpus/generated/lal-ordinary-inductive-proof-parameter-{label}.ndjson'
+            rows.append(observe(checker,binary,artifact,output,checker+'-'+label,budget))
+    save(output/'result.json', {'schema_version':1,'observations':rows,'budget':budget,
+                               'kiota_revision':'2d2a9fa31cba31abdd49543c3bb667591207577e','external_actions':False})
+    return 0 if all(r['outcome'] in ['ACCEPT','REJECT'] for r in rows) else 1
+
+
+def main():
+    parser=argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('mode',choices=['triage','kiota-build','proof-pair'])
+    args=parser.parse_args()
+    return {'triage':triage,'kiota-build':kiota_build,'proof-pair':proof_pair}[args.mode]()
+
+if __name__=='__main__':
+    raise SystemExit(main())
