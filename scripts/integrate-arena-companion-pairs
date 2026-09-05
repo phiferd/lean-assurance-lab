@@ -1,0 +1,192 @@
+#!/usr/bin/env python3
+"""Package and build two bounded static Arena companion pairs."""
+
+from __future__ import annotations
+
+import hashlib
+import json
+import shutil
+import subprocess
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+ARENA = ROOT / "external" / "ecosystem-arena-current"
+OUTPUT = ROOT / "results" / "investigations" / "corpus-integration-2026-09-05"
+REVISION = "abc55357aee17c59dfdbf39c8a2e19739e23dd10"
+PAIRS = {
+    "proof-parameter-uniformity": {
+        "control": ROOT / "corpus/generated/lal-ordinary-inductive-proof-parameter-control.ndjson",
+        "candidate": ROOT / "corpus/generated/lal-ordinary-inductive-proof-parameter-candidate.ndjson",
+        "outcomes": {"control": "accept", "candidate": "either"},
+        "description": (
+            "Ordinary constructor-result proof-parameter order characterization. "
+            "The edited expressions are shared with the complete recursor motive and rule annotation."
+        ),
+    },
+    "reducible-hidden-positivity": {
+        "control": ROOT / "corpus/generated/lal-ordinary-inductive-reducible-positivity-control.ndjson",
+        "candidate": ROOT / "corpus/generated/lal-ordinary-inductive-reducible-positivity-candidate.ndjson",
+        "outcomes": {"control": "accept", "candidate": "reject"},
+        "description": (
+            "Complete-recursor companion for a recursive occurrence hidden behind a reducible definition."
+        ),
+    },
+}
+
+
+def sha256(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def binding(path: Path) -> dict:
+    return {
+        "path": str(path.relative_to(ROOT)),
+        "sha256": sha256(path),
+        "bytes": path.stat().st_size,
+    }
+
+
+def save(path: Path, value: dict) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    temporary = path.with_name("." + path.name + ".tmp")
+    temporary.write_text(json.dumps(value, indent=2, sort_keys=True) + "\n")
+    temporary.replace(path)
+
+
+def yaml_text(description: str, artifact: str, outcome: str) -> str:
+    return (
+        "description: |\n"
+        f"  {description}\n"
+        f"file: tests/{artifact}\n"
+        f"outcome: {outcome}\n"
+    )
+
+
+def main() -> int:
+    if OUTPUT.exists():
+        raise SystemExit(f"refusing to overwrite integration output: {OUTPUT}")
+    revision = subprocess.run(
+        ["git", "rev-parse", "HEAD"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE, timeout=10,
+    ).stdout.strip()
+    if revision != REVISION:
+        raise SystemExit(f"Arena revision changed: {revision}")
+    if subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE, timeout=10,
+    ).stdout.strip():
+        raise SystemExit("isolated Arena checkout must be clean")
+
+    package = OUTPUT / "arena-package"
+    package.mkdir(parents=True)
+    staged: list[Path] = []
+    records = []
+    started_all = time.monotonic()
+    try:
+        for pair_id, pair in PAIRS.items():
+            package_bindings = []
+            for role in ("control", "candidate"):
+                artifact_name = f"lal-{pair_id}-{role}.ndjson"
+                yaml_name = f"lal-{pair_id}-{role}.yaml"
+                packaged_artifact = package / artifact_name
+                packaged_yaml = package / yaml_name
+                shutil.copyfile(pair[role], packaged_artifact)
+                packaged_yaml.write_text(
+                    yaml_text(pair["description"], artifact_name, pair["outcomes"][role])
+                )
+                arena_artifact = ARENA / "tests" / artifact_name
+                arena_yaml = ARENA / "tests" / yaml_name
+                shutil.copyfile(packaged_artifact, arena_artifact)
+                shutil.copyfile(packaged_yaml, arena_yaml)
+                staged.extend([arena_artifact, arena_yaml])
+                package_bindings.append({
+                    "role": role,
+                    "expected_outcome": pair["outcomes"][role],
+                    "source": binding(pair[role]),
+                    "artifact": binding(packaged_artifact),
+                    "definition": binding(packaged_yaml),
+                })
+
+            log = OUTPUT / f"{pair_id}-build.log"
+            command = [
+                str(ROOT / ".venv-arena/bin/python"),
+                "lka.py", "build-test", f"lal-{pair_id}-*",
+            ]
+            began = time.monotonic()
+            with log.open("xb") as output:
+                try:
+                    result = subprocess.run(
+                        command, cwd=ARENA, stdout=output,
+                        stderr=subprocess.STDOUT, timeout=120, check=False,
+                    )
+                    returncode = result.returncode
+                    status = "PASS" if returncode == 0 else "UNRESOLVED_BUILD_FAILURE"
+                except subprocess.TimeoutExpired:
+                    returncode = None
+                    status = "UNRESOLVED_BUILD_TIMEOUT"
+            elapsed = time.monotonic() - began
+            built = []
+            if status == "PASS":
+                for row in package_bindings:
+                    name = Path(row["artifact"]["path"]).name
+                    path = ARENA / "_build" / "tests" / name
+                    if not path.is_file() or sha256(path) != row["artifact"]["sha256"]:
+                        status = "UNRESOLVED_OUTPUT_MISMATCH"
+                        break
+                    built.append({"path": str(path.relative_to(ARENA)), "sha256": sha256(path)})
+            records.append({
+                "pair_id": pair_id,
+                "status": status,
+                "command": command,
+                "returncode": returncode,
+                "active_seconds": elapsed,
+                "maximum_seconds": 120,
+                "checker_launches": 0,
+                "package": package_bindings,
+                "built": built,
+                "log": binding(log),
+            })
+    finally:
+        for path in staged:
+            path.unlink(missing_ok=True)
+
+    clean_after = not subprocess.run(
+        ["git", "status", "--porcelain"], cwd=ARENA, check=True,
+        text=True, stdout=subprocess.PIPE, timeout=10,
+    ).stdout.strip()
+    report = {
+        "schema_version": 1,
+        "status": "PASS" if all(row["status"] == "PASS" for row in records) else "BOUNDED_UNRESOLVED",
+        "recorded_at": datetime.now(timezone.utc).isoformat(),
+        "governing_plan": binding(ROOT / "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md"),
+        "producer": binding(Path(__file__).resolve()),
+        "arena": {
+            "repository": "https://github.com/leanprover/lean-kernel-arena",
+            "revision": revision,
+            "harness": binding(ARENA / "lka.py"),
+            "test_schema": binding(ARENA / "schemas/test.json"),
+            "official_profile": binding(ARENA / "checkers/official.yaml"),
+        },
+        "pairs": records,
+        "active_seconds": time.monotonic() - started_all,
+        "build_test_invocations": len(records),
+        "checker_launches": 0,
+        "toolchain_downloads": 0,
+        "external_actions": False,
+        "checkout_clean_after": clean_after,
+        "interpretation": {
+            "proof_parameter": "control accept; candidate either as an empirical profile characterization",
+            "reducible_positivity": "control accept; candidate proposed reject, conditional on bound prior evidence",
+            "authority": "Arena policy and observer behavior are not normative semantic authority",
+        },
+    }
+    save(OUTPUT / "result.json", report)
+    print(json.dumps({"status": report["status"], "pairs": records}, indent=2))
+    return 0 if report["status"] in {"PASS", "BOUNDED_UNRESOLVED"} else 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
