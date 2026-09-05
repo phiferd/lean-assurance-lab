@@ -1662,10 +1662,15 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-No research experiment is active. The owner's requested Gates 0–12 closure and
-project review are complete. Adopt an explicit bounded plan from the ranked
-review proposals before starting a new frontier. Waiting actions below retain
-their exact prerequisites and approval states; the review does not execute them.
+1. `F-ECOSYSTEM-CLOSURE-AND-AUTONOMY`: the owner's 2026-09-05 instruction
+   adopts the project-review recommendations under the bounded
+   [successor plan](research/ECOSYSTEM_CLOSURE_AND_AUTONOMY_PLAN.md). Complete
+   mature-finding decision packets, exact-input budgeted autonomous execution
+   and materialization, then at most two preregistered existing-survivor triages.
+   Do not create external issues or publish other actions without explicit
+   target-specific human approval. A later transfer study stays deferred while
+   mature action dispositions or sufficient evidence are outstanding. The
+   publication study remains historically closed.
 
 ### Waiting
 
