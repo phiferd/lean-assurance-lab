@@ -1690,15 +1690,13 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-1. `F-ECOSYSTEM-CLOSURE-AND-AUTONOMY`: bounded local execution and decision
-   packets are complete under the [successor plan](research/ECOSYSTEM_CLOSURE_AND_AUTONOMY_PLAN.md).
-   Preserve the result and perform only current-state validation or review of
-   the concrete pending decisions. New checker runs, corpus integration builds,
-   registry admission and a transfer study require an explicit successor scope
-   and finite protocol; the existing run budgets are spent and must not reset.
-   Human review of the Kiota draft and deferred Arena proposals is next. No
-   external issue, comment or publication is authorized. The original
-   publication study remains historically closed.
+1. `F-CORPUS-INTEGRATION-AND-WITNESS-ADMISSION`: execute the bounded
+   [review successor](research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md).
+   Persist the separate proof-parameter review, package two Arena companion
+   pairs without checker launches, and admit the two already witnessed
+   survivors through an explicit controlled-corpus successor. No external
+   issue, comment, pull request or publication is authorized. The ecosystem
+   closure at `2136c65` and the original publication study remain closed.
 
 ### Waiting
 
