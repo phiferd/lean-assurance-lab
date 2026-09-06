@@ -1,0 +1,518 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-PREP-1",
+  "date": "2026-09-06",
+  "status": "PASS",
+  "research_outcome": "BOUNDED_UNRESOLVED",
+  "required_final_checks": [
+    "01-historical",
+    "03-predecessor",
+    "04-snapshot",
+    "12-controller-tests",
+    "15-stop-regression",
+    "16-full-unit-suite",
+    "17-contribution",
+    "20-final-queue-tests",
+    "24-refresh",
+    "26-project-review",
+    "27-artifact-status",
+    "28-final-queue",
+    "29-evidence-final",
+    "30-final-handoff",
+    "31-diff"
+  ],
+  "commands": [
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/01-historical.json",
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "started_at": "2026-09-06T19:34:20.792787+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/01-historical.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:34:47.340341+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/02-binding-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep_binding.py"
+      ],
+      "started_at": "2026-09-06T19:34:21.965881+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/02-binding-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:34:22.091327+00:00",
+      "log_sha256": "489d8fec4214192d21ef621f802a943fb57007a29204410d590ff3ceb58c5003"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/03-predecessor.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T19:35:02.065664+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/03-predecessor.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:35:02.768754+00:00",
+      "log_sha256": "8cda47aa2f74e3032e10e3887c9b6922b8979401c7ab7ceb0de191a72c59de4c"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/04-snapshot.json",
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T19:35:02.849664+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/04-snapshot.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:36:16.009075+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/05-runtime-check.json",
+      "command": [
+        "scripts/bind-cvc-u1-inputs",
+        "check-runtime"
+      ],
+      "started_at": "2026-09-06T19:35:55.108800+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/05-runtime-check.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:35:59.893141+00:00",
+      "log_sha256": "1661d6ca276fe72f0cc289ded8caca0bd8c1cc1a282d1d33bfe743cc379aee84"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/06-queue-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "started_at": "2026-09-06T19:35:56.285510+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/06-queue-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:35:56.386252+00:00",
+      "log_sha256": "bf4ab6e51ff31d68afa6805e966138563e118a5ef74788d1dded3f9b0b292bbc"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/07-source-review.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/inspect-sources.py"
+      ],
+      "started_at": "2026-09-06T19:37:07.799374+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/07-source-review.log",
+      "returncode": 1,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T19:37:07.854216+00:00",
+      "log_sha256": "79544aa411e4e5979973ee2ada2d4e03be862eae543ba0f6bf80e3dde9255944"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/08-source-review.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/inspect-sources.py"
+      ],
+      "started_at": "2026-09-06T19:37:25.864802+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/08-source-review.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:37:25.919010+00:00",
+      "log_sha256": "d66f78dc0390752e3c1f500fbc6c901322abc6a02bb395abe1eea0678e981fb3"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/09-source-review-final.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/inspect-sources.py"
+      ],
+      "started_at": "2026-09-06T19:37:50.958149+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/09-source-review-final.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:37:51.020729+00:00",
+      "log_sha256": "d66f78dc0390752e3c1f500fbc6c901322abc6a02bb395abe1eea0678e981fb3"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/10-controller-tests.json",
+      "command": [
+        "env",
+        "CVC_PREP_FIXTURE_LEDGER=results/research/conditional-validation-contracts/cvc-prep-1/fixture-ledger.jsonl",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep.py"
+      ],
+      "started_at": "2026-09-06T19:48:46.630369+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/10-controller-tests.log",
+      "returncode": 1,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T19:48:47.371835+00:00",
+      "log_sha256": "f72d630a4be37105a25b2585b8707fafddcacb2ee3889158b0db381a42668591"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/11-controller-tests.json",
+      "command": [
+        "env",
+        "CVC_PREP_FIXTURE_LEDGER=results/research/conditional-validation-contracts/cvc-prep-1/fixture-ledger.jsonl",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep.py"
+      ],
+      "started_at": "2026-09-06T19:49:34.837160+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/11-controller-tests.log",
+      "returncode": 1,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T19:49:39.427262+00:00",
+      "log_sha256": "2b85d3dcb6dd3663274020e67a8f9ee67118b92330befbf44d711fdebca59af4"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/12-controller-tests.json",
+      "command": [
+        "env",
+        "CVC_PREP_FIXTURE_LEDGER=results/research/conditional-validation-contracts/cvc-prep-1/fixture-ledger.jsonl",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep.py"
+      ],
+      "started_at": "2026-09-06T19:50:12.572829+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/12-controller-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:50:17.315330+00:00",
+      "log_sha256": "8d514adebd05488e43ebcedecb3d08f57c7bbccc6b706dc78885f4b6a129a2b3"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/13-preflight.json",
+      "command": [
+        "scripts/prepare-cvc-u1-dependencies",
+        "preflight",
+        "--manifest",
+        "config/cvc-u1-dependencies-0001.json"
+      ],
+      "started_at": "2026-09-06T19:51:56.204463+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/13-preflight.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:52:00.819865+00:00",
+      "log_sha256": "bd03f265d098151382cfb1a8a9d5e56082d0b9b4947c02e869b9559b85ee217b"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/14-preparation-run.json",
+      "command": [
+        "scripts/prepare-cvc-u1-dependencies",
+        "run",
+        "--manifest",
+        "config/cvc-u1-dependencies-0001.json"
+      ],
+      "started_at": "2026-09-06T19:52:54.499645+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/14-preparation-run.log",
+      "returncode": 2,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T19:54:43.210275+00:00",
+      "log_sha256": "5254b46b8cfec613b5ba58c8fb7510f13246b02204c9fe4a34ef34c17328ee63"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/15-stop-regression.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep_closure.py"
+      ],
+      "started_at": "2026-09-06T19:59:07.085657+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/15-stop-regression.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:59:07.219138+00:00",
+      "log_sha256": "372ee57a30b8a8b17bb056a0814266786a922da7dcf4139f4f9a2457745d6424"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/16-full-unit-suite.json",
+      "command": [
+        "env",
+        "CVC_PREP_FIXTURE_LEDGER=results/research/conditional-validation-contracts/cvc-prep-1/fixture-ledger.jsonl",
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T19:59:24.854009+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/16-full-unit-suite.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:06:14.174755+00:00",
+      "log_sha256": "ae2895491e98b8b26e337d0c85e7e4ff39042d020d6a1c3de527dbfaa2fe1727"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/17-contribution.json",
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "started_at": "2026-09-06T19:59:26.035028+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/17-contribution.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:59:26.123455+00:00",
+      "log_sha256": "82f44934bcf41b0a29c8d18108949fd840f6ace199888131fb25d8ac81040200"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/18-evidence-write.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "--write",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T20:01:31.036345+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/18-evidence-write.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:01:36.402087+00:00",
+      "log_sha256": "cff8c31ba2e4cb99841f333144cb3604393e4fa8effbadf0c14f15445bf103f5"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/19-queue.json",
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T20:03:51.159210+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/19-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:03:51.199460+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/20-final-queue-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "started_at": "2026-09-06T20:04:09.459259+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/20-final-queue-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:04:09.558462+00:00",
+      "log_sha256": "cdd2173eba220c80ceb6deb3ed8af6e5c715dafccc8ec86a8944266788f29646"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/21-evidence-check.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T20:04:17.376859+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/21-evidence-check.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:04:22.551973+00:00",
+      "log_sha256": "cff8c31ba2e4cb99841f333144cb3604393e4fa8effbadf0c14f15445bf103f5"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/22-count-corrected-evidence.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "--write",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T20:05:22.995583+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/22-count-corrected-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:05:28.233338+00:00",
+      "log_sha256": "cff8c31ba2e4cb99841f333144cb3604393e4fa8effbadf0c14f15445bf103f5"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/23-final-evidence-write.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "--write",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T20:06:22.748611+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/23-final-evidence-write.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:06:27.731523+00:00",
+      "log_sha256": "cff8c31ba2e4cb99841f333144cb3604393e4fa8effbadf0c14f15445bf103f5"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/24-refresh.json",
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/cvc-prep-1-2026-09-06/refresh"
+      ],
+      "started_at": "2026-09-06T20:06:57.687354+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/24-refresh.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:08:22.241958+00:00",
+      "log_sha256": "6333b14291235285edb060ef181a47d6b9f4503647a75c881030ca459f8ffa53"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/25-handoff.json",
+      "command": [
+        "python3",
+        "results/workflow-refresh/cvc-prep-1-2026-09-06/verify-handoff.py"
+      ],
+      "started_at": "2026-09-06T20:07:47.113984+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/25-handoff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:07:47.211983+00:00",
+      "log_sha256": "06ccf5210e4af8297311b1673ace63e7e6a3a0d4dfb8551b126faadeaf7a4458"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/26-project-review.json",
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "started_at": "2026-09-06T20:08:53.407256+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/26-project-review.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:09:21.792432+00:00",
+      "log_sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/27-artifact-status.json",
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T20:08:54.582919+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/27-artifact-status.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:09:05.815413+00:00",
+      "log_sha256": "dde695d8cdfb6c09b1c73d01c675498847428c03f1e67d4aa8893a735ddf93ad"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/28-final-queue.json",
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T20:08:55.764464+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/28-final-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:08:55.806384+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/29-evidence-final.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "--write",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T20:09:43.919739+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/29-evidence-final.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:09:49.301785+00:00",
+      "log_sha256": "cff8c31ba2e4cb99841f333144cb3604393e4fa8effbadf0c14f15445bf103f5"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/30-final-handoff.json",
+      "command": [
+        "python3",
+        "results/workflow-refresh/cvc-prep-1-2026-09-06/verify-handoff.py"
+      ],
+      "started_at": "2026-09-06T20:10:12.506705+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/30-final-handoff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:10:12.598157+00:00",
+      "log_sha256": "06ccf5210e4af8297311b1673ace63e7e6a3a0d4dfb8551b126faadeaf7a4458"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/31-diff.json",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-06T20:10:12.629587+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/31-diff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T20:10:12.653496+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preserved_nonpassing_records": {
+    "07-source-review": "Initial extractor did not filter core-runtime rows; fixed before checkpoint, final source extraction passed.",
+    "10-controller-tests": "Initial integration exposed missing fresh-workspace parent handling and unavailable ps fixture inspection; corrected before checkpoint.",
+    "11-controller-tests": "Socket-based fixture inspection unavailable in the sandbox; replaced with FIFO EOF before checkpoint. Process control was tested without network access.",
+    "14-preparation-run": "Authorized research stopped BOUNDED_UNRESOLVED on the characterized Path/string ordering defect after27 successful compilations. This failure is preserved, not relabeled a passing build."
+  },
+  "unit_suite": {
+    "current_tests": 402,
+    "historical_tests": 73,
+    "total": 475,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED_AND_PASSING"
+  },
+  "prelaunch_receipt_correction": "20 controller tests and8 runtime tests passed. The checkpoint receipt said9 runtime tests; original bytes and raw log remain, with a separate prelaunch-receipt-erratum.json.",
+  "preserved_assurance_boundary": {
+    "status": "FAIL",
+    "unresolved_semantic_disagreements": 15,
+    "change": "UNCHANGED"
+  },
+  "refresh": {
+    "status": "PASS",
+    "record": "results/workflow-refresh/cvc-prep-1-2026-09-06/refresh/result.json"
+  },
+  "research_execution_note": "27 upstream module compilations only;119 products verified,10 modules unstarted. No Lab elaboration, proof, checker, Lake, native compiler, download or external message. CVC-PREP-2 is selected READY and has not started.",
+  "completed_at": "2026-09-06T20:10:55.301779+00:00"
+}
