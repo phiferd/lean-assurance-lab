@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-06",
+  "scope": "Owner-requested delivery correction only; no research queue item executed.",
+  "owner_direction": "Always work and push on main for this repository; correct the repair-branch delivery and update durable instructions.",
+  "repository": "https://github.com/phiferd/lean-assurance-lab.git",
+  "required_branch": "main",
+  "repair_commits_preserved": [
+    "a9a07010a202c84674cc5bbcb7cb0b959df7f55e",
+    "8c3a69eb60323f72960612ac4a510642596cfcae"
+  ],
+  "integration": "main fast-forwarded from 2e0214a to 8c3a69e; original research checkpoints retained unchanged.",
+  "corrects_delivery_note": "results/workflow-refresh/cvc-prep-2-2026-09-06/validation.json#/delivery_note",
+  "historical_note": "The previous delivery note records the earlier branch choice. It is retained as history and supplies no authority for future non-main delivery.",
+  "instructions": [
+    "AGENTS.md",
+    "docs/AGENT_WORKFLOW.md",
+    "docs/RESEARCH_WORKFLOW.md"
+  ],
+  "mechanical_guard": "scripts/push-main rejects a non-main branch, dirty tree, wrong or multiple remotes, and extra arguments; it uses a fixed ordinary push and verifies origin/main afterward.",
+  "research_state": "CVC-PREP-2 remains SUCCESS with all 37 modules and141 products. CVC-RUNNER-1 remains selected READY and unstarted.",
+  "prior_research_validation": "results/workflow-refresh/cvc-prep-2-2026-09-06/validation.json",
+  "delivery": "The corrective commit must be pushed to origin/main using scripts/push-main. Do not deliver on the earlier repair branch.",
+  "validation_status": "PASS",
+  "validations": [
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/01-guard-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_push_main.py"
+      ],
+      "started_at": "2026-09-06T21:43:42.688266+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/01-guard-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:43:42.757108+00:00",
+      "log_sha256": "75ff54e727b57e4bd7b88956ed0c92c4b9a416e6f0976707e8fb54aa385ac0bd"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/02-historical.json",
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "started_at": "2026-09-06T21:43:42.688421+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/02-historical.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:44:10.956671+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/03-artifact-status.json",
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T21:43:42.745296+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/03-artifact-status.log",
+      "returncode": 1,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T21:43:55.864003+00:00",
+      "log_sha256": "06bd1d36ef208d28e3e3df92fba6e5651e2b604327f20799b22042db02fe80e5"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/04-queue.json",
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T21:43:42.701758+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/04-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:43:42.749726+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/05-repair-evidence.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-2/validate-evidence.py"
+      ],
+      "started_at": "2026-09-06T21:43:42.723397+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/05-repair-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:43:44.379171+00:00",
+      "log_sha256": "ab37e6c49415fb8ea2d3ae7f2c4ad882b336c3277728eef8d03ec91455a11a0f"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/06-refresh.json",
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/main-delivery-2026-09-06/refresh"
+      ],
+      "started_at": "2026-09-06T21:44:52.378804+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/06-refresh.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:46:17.061550+00:00",
+      "log_sha256": "e4edb319ef1d85a64c54e4d1f1ccf14efdbf34523654c5c2ba5cf544e1f96a31"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/07-artifact-status-final.json",
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T21:46:55.995592+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/07-artifact-status-final.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:47:07.741107+00:00",
+      "log_sha256": "1b78a16b950812501cabd1fab4642f92a0d783bad6389caaa176b38801a9cc0a"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/08-project-review.json",
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "started_at": "2026-09-06T21:46:55.995584+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/08-project-review.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:47:24.844452+00:00",
+      "log_sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "record": "results/workflow-refresh/main-delivery-2026-09-06/09-diff.json",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-06T21:46:55.995577+00:00",
+      "log": "results/workflow-refresh/main-delivery-2026-09-06/09-diff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T21:46:56.031510+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preserved_diagnostic": "03-artifact-status detected stale generated bindings after the instruction edits. The defined refresh path regenerated current artifacts; final artifact and review checks pass. Historical evidence validates unchanged.",
+  "guard_tests": {
+    "count": 8,
+    "status": "PASS",
+    "network_requests": 0,
+    "git_processes": 0
+  },
+  "implementation_bindings": [
+    {
+      "path": "AGENTS.md",
+      "sha256": "296c695f8aee4a7edf478bae066af8e678e8dda0d53492507c53021fca66fabc"
+    },
+    {
+      "path": "docs/AGENT_WORKFLOW.md",
+      "sha256": "e6cdb7ba94f8100d93e3f5e4456b5bac74ace9b5d472861dadc30ecf24e0fc0e"
+    },
+    {
+      "path": "docs/RESEARCH_WORKFLOW.md",
+      "sha256": "c350ba51a6218a8e9d1d3599819f9b167e24abbd9969fbfa1bec9d6b50fa827e"
+    },
+    {
+      "path": "scripts/push-main",
+      "sha256": "c7d59f7a9afda6ce75ea5476095398b80d09834ecb69ae66e4667196dbdc3d85"
+    },
+    {
+      "path": "tests/test_push_main.py",
+      "sha256": "d0ebe66c5b9c510d67e2b7bea26a1ac9d29144d82a8f3d695e55ac839f30e010"
+    }
+  ]
+}

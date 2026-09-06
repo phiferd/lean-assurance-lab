@@ -34,14 +34,24 @@ subsequent milestone unless durable research state authorizes it.
 
 ## Repository delivery and external actions
 
-After authorized work reaches its stopping condition and all required checks
-pass, commit only the in-scope changes and push the current branch to `origin`.
-Do not report the work as delivered until the push succeeds. If pushing fails,
-preserve the local commit and report the blocker; do not rewrite history,
-bypass branch protections, or discard work.
+The owner requires **main-only delivery** for the Lean Assurance Lab repository
+at `https://github.com/phiferd/lean-assurance-lab.git`. Work on `main`, commit
+only the in-scope changes after required checks pass, and run
+`scripts/push-main` to push `main` to `origin/main`. The command refuses a
+different branch, dirty working tree, unexpected remote, or alternate push
+arguments, and verifies the remote commit after pushing.
 
-This authorization applies only to the Lean Assurance Lab repository at
-`https://github.com/phiferd/lean-assurance-lab.git`.
+Do not create or push task, feature, or repair branches, or substitute a pull
+request for delivery. If work is already on another branch, preserve its
+commits and integrate them into `main` before delivery. Prefer a fast-forward
+when possible; never rewrite bound research checkpoints.
+
+Use the repository's existing permissions for an ordinary push to `main`.
+An accepted push that prints a branch-rule notice is not a rejection and does
+not authorize switching branches. If the push is rejected, preserve the local
+commits and report the actual blocker. Do not force-push, rewrite history,
+change protection settings, use administrative bypass commands, or discard
+work. Do not report delivery until `origin/main` contains the completed commit.
 
 For every other repository, agents may investigate, prepare local changes,
 draft issues or pull requests, and perform read-only preflights. Creating or

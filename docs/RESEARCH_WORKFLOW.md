@@ -106,6 +106,9 @@ exists, record the authorization or external-state blocker and the exact next
 decision needed. Pause execution instead of inventing activity. The validator
 will refuse to present an empty/blocked queue as operationally ready.
 
+Deliver the completed item on `main` using `scripts/push-main`, as required by
+`AGENTS.md`. A push to a task branch is not completed repository delivery.
+
 ## Literature is a first-class task
 
 Perform a bounded literature and existing-tool search before a new theory,

@@ -24,6 +24,18 @@ Use `rg` to find a section or artifact ID before opening large files. For JSON,
 inspect keys and the relevant records first. Follow bindings when the task
 requires evidence; summaries never substitute for those bytes.
 
+## Repository delivery
+
+For this repository, the owner requires work and delivery on `main`. Follow
+`AGENTS.md`: preserve existing work, integrate it into `main`, complete the
+required checks, commit in-scope changes, and run `scripts/push-main`. Never
+substitute a task branch or pull request because a normal push prints a
+branch-rule notice. A rejected push is a blocker to report with commits intact.
+
+This ordinary Git delivery uses the existing Git transport credentials; it is
+not gated on `gh` API authentication. The CLI preflight below applies to GitHub
+API work and external submissions, not the authorized push to `origin/main`.
+
 ## Delegation policy
 
 The project owner authorized cheaper-agent delegation on 2026-09-04 in the
@@ -103,8 +115,9 @@ source approval and target-specific external submission remain explicit human
 boundaries. Finish a concrete draft and its permissible preflight first, and
 batch the remaining decisions for the owner.
 
-For GitHub actions, run `scripts/github-cli-preflight <owner/repo>` before
-creating branches or preparing a submission path. A successful Git push does
+For GitHub API actions and work on external repositories, run
+`scripts/github-cli-preflight <owner/repo>` before creating external branches
+or preparing a submission path. A successful Git push does
 not prove that `gh` API authentication works because the app may provide a
 separate Git transport credential. If the preflight reports invalid or missing
 authentication, stop and tell the owner the exact repair command. Do not switch

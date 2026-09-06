@@ -1,0 +1,49 @@
+#!/usr/bin/env python3
+"""Deliver this repository to origin/main with fixed, non-forced push arguments."""
+from pathlib import Path
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+ORIGIN = 'https://github.com/phiferd/lean-assurance-lab.git'
+PUSH = ['git', 'push', 'origin', 'refs/heads/main:refs/heads/main']
+
+
+def read_git(*args):
+    return subprocess.check_output(['git', *args], cwd=ROOT, text=True,
+                                   stderr=subprocess.STDOUT).strip()
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def main(argv=None):
+    args = sys.argv[1:] if argv is None else argv
+    try:
+        require(not args, 'push-main accepts no arguments; branch and destination are fixed')
+        require(read_git('symbolic-ref', '--quiet', '--short', 'HEAD') == 'main',
+                'delivery requires the main branch; integrate existing work into main first')
+        require(not read_git('status', '--porcelain'), 'commit in-scope work before delivery; working tree is dirty')
+        require(read_git('remote', 'get-url', 'origin') == ORIGIN
+                and read_git('remote', 'get-url', '--push', '--all', 'origin').splitlines() == [ORIGIN],
+                'origin must have exactly the authorized repository as its fetch and push destination')
+        commit = read_git('rev-parse', 'HEAD')
+        result = subprocess.run(PUSH, cwd=ROOT, check=False)
+        if result.returncode:
+            print('Push rejected or failed; keep commits on main and report the blocker. Do not switch delivery branches.',
+                  file=sys.stderr)
+            return result.returncode
+        remote = read_git('ls-remote', '--exit-code', 'origin', 'refs/heads/main').split()
+        require(remote == [commit, 'refs/heads/main'],
+                'push returned success but origin/main verification differs; inspect remote state before reporting delivery')
+        print('PASS: origin/main contains ' + commit)
+        return 0
+    except (ValueError, subprocess.CalledProcessError, OSError) as error:
+        print('Main delivery refused: ' + str(error), file=sys.stderr)
+        return 1
+
+
+if __name__ == '__main__':
+    raise SystemExit(main())
