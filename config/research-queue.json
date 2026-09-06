@@ -3,7 +3,7 @@
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
   "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
   "updated_at": "2026-09-06",
-  "selected_item": "CVC-2",
+  "selected_item": "OPS-UPSTREAM-1",
   "items": [
     {
       "id": "CVC-1",
@@ -58,7 +58,7 @@
       "completion": "Formal signature/judgment, exact acceptance obligation, source mappings, positive and negative examples, assumption ledger, and exact proof target/protocol.",
       "stop_condition": "Two sessions or inability to state a non-circular target; record missing definition/theorem and rerank.",
       "kind": "CONTRACT",
-      "status": "READY",
+      "status": "COMPLETE",
       "depends_on": [
         "CVC-1"
       ],
@@ -75,18 +75,92 @@
         "results/research/queue-reviews/2026-09-06-cvc-1.json"
       ],
       "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/conditional-validation-contracts/cvc-2/contract.json",
+          "results/research/conditional-validation-contracts/cvc-2/examples.json",
+          "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+          "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+          "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+          "results/research/conditional-validation-contracts/cvc-2/report.md",
+          "results/research/conditional-validation-contracts/cvc-2/work-record.json",
+          "results/research/conditional-validation-contracts/cvc-2/evidence-manifest.json",
+          "results/research/queue-reviews/2026-09-06-cvc-2.json"
+        ],
+        "recommendation": "Contract CVC-U1 is an uncompiled specification proposal with one non-circular preservation target and two exact required accepts. Select OPS-UPSTREAM-1 for one bounded GET-only Arena disposition check; prioritize an isolated dependency-bundle proposal through ALT-PAYLOADS afterward. CVC-3 remains PLANNED because the compiled proof environment and tested successor runner are unavailable. No proof, observer or external action occurred."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "OPS-UPSTREAM-1",
+      "priority": 3,
+      "title": "Check pending Arena dispositions once",
+      "target": "Arena PRs #181 and #182 and deferred Kiota clarification",
+      "action": "Perform one GET-only disposition/duplicate inventory and record any new actionable feedback.",
+      "expected_value": "Closes existing community contributions and may unblock a concrete clarification.",
+      "rank_rationale": "Highest eligible at this stop: a six-GET maintenance check has remained ready through two research completions, while CVC-3 lacks a complete compiled proof bundle and tested successor runner. Existing contributions may yield actionable feedback; no new urgency or unseen outcome is presumed.",
+      "entry_gate": "Read-only scope only; run CLI preflight and preserve the existing Kiota deferral.",
+      "completion": "One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.",
+      "stop_condition": "One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.",
+      "kind": "MAINTENANCE",
+      "status": "READY",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
+        "docs/RESEARCH_STATUS.md"
+      ],
+      "issue_urls": [
+        "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "https://github.com/leanprover/lean-kernel-arena/pull/182"
+      ],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "ALT-PAYLOADS",
+      "priority": 4,
+      "title": "Plan an isolated universe-proof dependency bundle",
+      "target": "CVC-U1: pinned Lean4Lean 8223d22 verification import closure, Batteries 76e1c11, installed Lean 4.33.0-rc2 and the CVC3-U1-PROOF-0001 runner prerequisite",
+      "action": "Use the CVC-2 inventory to prepare an exact isolated materialization/compilation proposal with commands, source and runtime identities, finite cost bounds and successor-runner prerequisites. Resolve remaining build-closure and accounting choices; do not repeat the existence inventory as the whole result.",
+      "expected_value": "Enables reproduction when a real dependency is missing.",
+      "rank_rationale": "Next eligible local alternative: a concrete compiled-dependency blocker is now evidenced. Its small proposal can make subsequent work reproducible; the already-deferred bounded upstream check goes first at this stop.",
+      "entry_gate": "CVC-2 records missing compiled Lean4Lean/Batteries dependencies and an unimplemented protocol runner. This promotes one diagnostic/proposal session only; no compilation, downloads, toolchain installation, proof attempt or checker execution.",
+      "completion": "One reproducible dependency-bundle repair proposal with exact donor/source pins, isolated paths, build closure, commands, bounded compilation/runner implementation budget, and entry/stop conditions ready for a separately ranked implementation item.",
+      "stop_condition": "One diagnostic session, no builds or checker launches, no general infrastructure; stop with a concrete proposal or named unresolved prerequisite.",
+      "kind": "OPERATIONS",
+      "status": "READY",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "docs/AGENT_WORKFLOW.md",
+        "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+        "results/research/conditional-validation-contracts/cvc-2/assumptions.json"
+      ],
+      "issue_urls": [],
       "closure": null,
       "blocked_reason": ""
     },
     {
       "id": "CVC-3",
-      "priority": 3,
+      "priority": 5,
       "title": "Prove or refute one preservation claim",
       "target": "The single CVC-2 contract and pinned formalization",
       "action": "Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.",
       "expected_value": "Establishes a scoped semantic result or exposes the exact formal obstacle.",
-      "rank_rationale": "Only worth its proof cost after contract/reuse feasibility is demonstrated.",
-      "entry_gate": "CVC-2 succeeds; exact available runtime, assumptions and new-phase execution protocol are bound before attempts.",
+      "rank_rationale": "Potentially useful next scientific step, but source review and an installed Lean executable do not satisfy the missing compiled dependency and successor-runner gates. Resolve the concrete prerequisites before its proof cost.",
+      "entry_gate": "CVC-2 contract succeeds; exact source/runtime/compiled dependencies and tested protocol-specific runner are bound before promotion and proof attempts under CVC3-U1-PROOF-0001. The CVC-2 runtime inventory records missing compiled prerequisites; this item remains PLANNED.",
       "completion": "Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.",
       "stop_condition": "Four sessions or 12 proof builds of at most five minutes each; no new family or broad kernel proof.",
       "kind": "PROOF",
@@ -100,7 +174,10 @@
         "checker_launches": 0
       },
       "evidence_refs": [
-        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md"
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "results/research/conditional-validation-contracts/cvc-2/contract.json",
+        "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+        "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json"
       ],
       "issue_urls": [],
       "closure": null,
@@ -108,7 +185,7 @@
     },
     {
       "id": "CVC-4",
-      "priority": 4,
+      "priority": 6,
       "title": "Connect the contract to real validation behavior",
       "target": "At most two implementation lineages and four fixed pairs",
       "action": "Map parsing, reconstruction, validation and semantic use; execute only the bound comparison.",
@@ -137,7 +214,7 @@
     },
     {
       "id": "CVC-5",
-      "priority": 5,
+      "priority": 7,
       "title": "Prepare shared evidence and decide the next phase",
       "target": "The scoped result and the ecosystem target it benefits",
       "action": "Prepare a regression/formalization/clarification draft or justified no-action result, then compare successor options.",
@@ -165,38 +242,8 @@
       "blocked_reason": ""
     },
     {
-      "id": "OPS-UPSTREAM-1",
-      "priority": 6,
-      "title": "Check pending Arena dispositions once",
-      "target": "Arena PRs #181 and #182 and deferred Kiota clarification",
-      "action": "Perform one GET-only disposition/duplicate inventory and record any new actionable feedback.",
-      "expected_value": "Closes existing community contributions and may unblock a concrete clarification.",
-      "rank_rationale": "Second eligible item; promote at a stopping boundary if substantive feedback or a deadline makes it more valuable than research.",
-      "entry_gate": "Read-only scope only; run CLI preflight and preserve the existing Kiota deferral.",
-      "completion": "One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.",
-      "stop_condition": "One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.",
-      "kind": "MAINTENANCE",
-      "status": "READY",
-      "depends_on": [],
-      "budget": {
-        "max_sessions": 1,
-        "session_minutes": 90,
-        "checker_launches": 0
-      },
-      "evidence_refs": [
-        "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
-        "docs/RESEARCH_STATUS.md"
-      ],
-      "issue_urls": [
-        "https://github.com/leanprover/lean-kernel-arena/pull/181",
-        "https://github.com/leanprover/lean-kernel-arena/pull/182"
-      ],
-      "closure": null,
-      "blocked_reason": ""
-    },
-    {
       "id": "ALT-SURVIVORS",
-      "priority": 7,
+      "priority": 8,
       "title": "Design the next fixed survivor triage",
       "target": "One selected member of the seven pending survivors",
       "action": "Prepare an evidence-based fixed-candidate triage proposal and finite execution manifest.",
@@ -223,7 +270,7 @@
     },
     {
       "id": "ALT-TRANSFER",
-      "priority": 8,
+      "priority": 9,
       "title": "Assess a prospective transfer study",
       "target": "One independent or held-out transfer question",
       "action": "Design one falsifiable transfer comparison after reviewing relevant methods and prior knowledge.",
@@ -247,33 +294,6 @@
       "issue_urls": [],
       "closure": null,
       "blocked_reason": "Independent successor research remains deferred; not activated by this plan."
-    },
-    {
-      "id": "ALT-PAYLOADS",
-      "priority": 9,
-      "title": "Characterize one materialization blocker",
-      "target": "A specific missing proof or assurance dependency",
-      "action": "If a selected item is blocked, isolate one portability/materialization repair with exact inputs and cost.",
-      "expected_value": "Enables reproduction when a real dependency is missing.",
-      "rank_rationale": "Promote only for an observed blocker; building a general storage service now has weak demonstrated value.",
-      "entry_gate": "A selected item records a concrete missing-input blocker; any network/write permissions remain explicit.",
-      "completion": "Reproduction or repair proposal for one named missing dependency, with a finite implementation budget.",
-      "stop_condition": "One diagnostic session, no checker launches or broad infrastructure build.",
-      "kind": "OPERATIONS",
-      "status": "DEFERRED",
-      "depends_on": [],
-      "budget": {
-        "max_sessions": 1,
-        "session_minutes": 90,
-        "checker_launches": 0
-      },
-      "evidence_refs": [
-        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
-        "docs/AGENT_WORKFLOW.md"
-      ],
-      "issue_urls": [],
-      "closure": null,
-      "blocked_reason": "No new materialization blocker has been demonstrated for the unexecuted phase."
     }
   ]
 }

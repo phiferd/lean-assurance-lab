@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-2",
+  "status": "REVIEWED_FOR_TARGET_NOT_TRANSITIVELY_AUDITED",
+  "model_choices": [
+    {
+      "id": "A-MEANING",
+      "claim": "Universes range over Nat; imax x 0 = 0, otherwise imax x y = max x y. Sort l has type Sort (l+1).",
+      "status": "NAMED_RESEARCH_MODEL",
+      "source_refs": [
+        "E1",
+        "E2"
+      ]
+    },
+    {
+      "id": "A-ENV",
+      "claim": "Distinct owned flat parameter names, no input constants, constraints, axioms or ambient context.",
+      "status": "EXPLICIT_SUPPORTED_FRAGMENT"
+    },
+    {
+      "id": "A-BYTES",
+      "claim": "The exact bound byte strings correspond to the displayed ASTs under the strict structural extraction rules.",
+      "status": "MECHANICAL_EXTRACTION_NOT_FORMAL_PARSER_PROOF"
+    }
+  ],
+  "proof_runtime": {
+    "lean4lean_revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+    "lean_toolchain": "leanprover/lean4:v4.33.0-rc2",
+    "batteries_revision": "76e1c118b0700b4ceafe99532e887d6431625e1a",
+    "runtime_inventory": "runtime-inventory.json",
+    "trust": [
+      "Lean kernel and runtime executing proof checking",
+      "Compiler, compiled imports, filesystem and hashes used for reproduction"
+    ],
+    "status": "COMPILED_DEPENDENCY_BUNDLE_NOT_AVAILABLE"
+  },
+  "conditional_axiom_policy": {
+    "standard_allowed": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound"
+    ],
+    "source_helpers_allowed": [
+      "Std.TreeMap.all_eq_all_toList",
+      "Std.TreeMap.any_eq_any_toList",
+      "Lean.Level.normalize_eq"
+    ],
+    "source_helper_bindings": [
+      "E8",
+      "E9"
+    ],
+    "meaning": "These are explicit conditional assumptions, not established facts or normative-source approvals. Report only the actual transitive subset used by each checked result.",
+    "forbidden": [
+      "sorryAx",
+      "New axioms in Lab proof files",
+      "Assumed EncodingTarget or PreservationTarget",
+      "Unlisted axioms, including Lean.Level.mkData_eq unless reviewed in an explicit successor before more feedback",
+      "Native evaluation or external result assertions used as proof trust"
+    ],
+    "closure_status": "NOT_PRINTED; each target and reused comparator must produce its exact #print axioms output before SUCCESS."
+  },
+  "missing_proofs": [
+    "Owned-name encoding yields successful VLevel.ofLevel conversion with correct positional lookup and WF.",
+    "For all assignments, encoded positional evaluation equals independent named meaning.",
+    "Pinned comparator soundness composes with that bridge to give PreservationTarget.",
+    "Both acceptance obligations and both boundary obligations are checked."
+  ],
+  "negative_evidence_preserved": [
+    "CVC-1 inductive-model holes and inconsistent divergence prose remain in the unchanged predecessor assessment.",
+    "A source theorem is not a compiled proof or an NDJSON/whole-validator refinement result."
+  ]
+}

@@ -1,0 +1,202 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-2",
+  "model_id": "CVC-U1",
+  "outcome": "SUCCESS",
+  "scientific_status": "SPECIFICATION_PROPOSAL_UNCHECKED",
+  "signature": {
+    "path": "research/conditional-validation-contracts/cvc2/Contract.lean",
+    "sha256": "20f3c65a3bfcd3a491f58a9562d203eeb91084f88c728206a725e252e533e5d3"
+  },
+  "fragment": "One safe, opaque-hinted nonrecursive definition with supplied value Sort l and declared type Sort t; universe expressions zero/succ/max/imax/owned parameter only.",
+  "independent_judgment": "Supported(a) and for every named Nat assignment rho, meaning(rho,a.valueLevel)+1 = meaning(rho,a.typeLevel). The definition body is fixed; another inhabitant is irrelevant.",
+  "environment": {
+    "input_constants": [],
+    "input_axioms": [],
+    "local_context": [],
+    "level_parameters": "Ordered, duplicate-free declared names; every referenced level name owned. Name encoding is flat Lean.Name.str anonymous, with no defaulting or renaming.",
+    "dependency_environment": "Empty object-language environment for this isolated sort judgment. No environment extension or whole declaration admission theorem is claimed. The host proof runtime dependencies are separately conditional."
+  },
+  "byte_interpretation": {
+    "domain": "Exactly the two input_binding byte strings in examples.json. Outside this finite byte domain no acceptance promise or raw-parser theorem is claimed.",
+    "rule": "Hash and byte identity bind the supplied artifact; the strict structural decoder expands ordered name/level/expression references and extracts the sole definition without comparison or normalization. Its result must equal the independently specified AST in examples.json.",
+    "decoder": "lib/cvc2_artifact.py",
+    "trust_boundary": "Python/JSON extraction and the correspondence of these decoded ASTs to the Lean signature are inspectable, mechanically cross-checked data mappings, not a proved general NDJSON parser. The target theorem quantifies structured ASTs, not arbitrary bytes.",
+    "metadata": "Exporter/format 3.1.0 identifies the narrow grammar. The recorded Lean 4.29.1 version/hash is provenance, not semantic authority. Name, parameter order, raw level nodes, safe status and opaque hint remain bound.",
+    "required_acceptance_ids": [
+      "E-POS",
+      "E-CONTROL"
+    ]
+  },
+  "strategies": [
+    {
+      "id": "S1",
+      "name": "Structural encoding plus pinned Lean4Lean complete level comparison",
+      "definition": "Lab.CVC2.Accepts",
+      "allowed_reconstruction": "Expand serialized sharing; encode constructors and parameter names structurally; compare succ(valueLevel) against the declared typeLevel. Normalization may occur internally in the comparator.",
+      "forbidden_reconstruction": [
+        "Replace the submitted body",
+        "Infer or add a missing universe parameter",
+        "Erase or reinterpret imax right-zero behavior",
+        "Change declared type, metadata, dependencies or requested judgment"
+      ]
+    }
+  ],
+  "proof_target": {
+    "name": "Lab.CVC2.PreservationTarget",
+    "statement": "forall a, Accepts a -> Contract a",
+    "domain": "All finite SortDefinition ASTs admitted by Supported; larger than the two-element required acceptance set.",
+    "intermediate_target": "Lab.CVC2.EncodingTarget",
+    "acceptance_target": "Lab.CVC2.AcceptanceTarget",
+    "boundary_target": "Lab.CVC2.BoundaryTarget",
+    "non_circularity": "The sole premise contains syntactic support and actual comparator true. Semantic equality and encoding correctness are conclusions/lemmas to prove, never checker-correctness premises."
+  },
+  "acceptance_obligation": {
+    "ids": [
+      "E-POS",
+      "E-CONTROL"
+    ],
+    "promise": "Prove both exact Accepts propositions and bind them to the exact supplied bytes. Acceptance of one is insufficient.",
+    "broader_completeness": "NOT_PROMISED; a future proof may reuse isEquiv_complete but cannot claim full artifact coverage from this set."
+  },
+  "resource_outcomes": {
+    "ACCEPT": "Only successful supported comparison; preservation obligation applies.",
+    "MODEL_INVALID": "A counterassignment/proof refutes the contract, independently of refusal.",
+    "UNSUPPORTED": "Input outside the fixed grammar, ownership conditions or byte domain.",
+    "REFUSED": "A strategy did not accept; no general claim of invalidity.",
+    "TIMEOUT": "Budget exhausted during process execution; no logical judgment.",
+    "ERROR": "Tool or reconstruction failure; retained without semantic relabeling.",
+    "INTERRUPTED": "Reservation consumed; outputs and active time retained before resume."
+  },
+  "exclusions": [
+    "Arbitrary NDJSON parser correctness",
+    "Proofs other than the fixed supplied sort value",
+    "Theorem derivability or consistency of Lean",
+    "Inductive/recursor/projection/constant declarations",
+    "Metavariables, aliases or ambient universe constraints",
+    "Whole-validator refinement or kernel soundness",
+    "Normative-source approval, catalog promotion or a new implementation defect"
+  ],
+  "source_mappings": [
+    {
+      "target": "meaning, Owned, Contract",
+      "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+      "excerpts": [
+        {
+          "id": "E1",
+          "path": "Lean4Lean/Theory/VLevel.lean",
+          "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+          "start_line": 8,
+          "end_line": 39,
+          "excerpt_sha256": "68ac62e1f57956af7457888707229d62fc32dd95ed81da921542c9179bb2e69f"
+        },
+        {
+          "id": "E2",
+          "path": "Lean4Lean/Theory/VLevel.lean",
+          "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+          "start_line": 58,
+          "end_line": 63,
+          "excerpt_sha256": "c3d20ee1b66e015a0d0e9caea3653f730ae3c96cba43c5412a94fd547d0b7209"
+        }
+      ],
+      "gap": "Independent named-parameter semantics must be related to positional VLevel semantics; equality is for all assignments, not samples."
+    },
+    {
+      "target": "encode, names, EncodingTarget",
+      "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+      "excerpts": [
+        {
+          "id": "E3",
+          "path": "Lean4Lean/Theory/VLevel.lean",
+          "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+          "start_line": 168,
+          "end_line": 183,
+          "excerpt_sha256": "b38bec7998f0c6b050a0b7927ba0d9ea01c1866d87f1cb828e98ed7da89939e7"
+        }
+      ],
+      "gap": "Prove the injective name mapping, successful owned-name lookup, WF and evaluation correspondence; do not assume them."
+    },
+    {
+      "target": "Accepts, PreservationTarget, AcceptanceTarget",
+      "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+      "excerpts": [
+        {
+          "id": "E5",
+          "path": "Lean4Lean/Verify/Level.lean",
+          "source_sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+          "start_line": 3808,
+          "end_line": 3815,
+          "excerpt_sha256": "3e8816fa8f739a8c11e9731a85e46092bf7c422799bd132de36e4c27a8100dd9"
+        },
+        {
+          "id": "E6",
+          "path": "Lean4Lean/Verify/Level.lean",
+          "source_sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+          "start_line": 3858,
+          "end_line": 3864,
+          "excerpt_sha256": "fafcd5f936621bacf475ea4f5195245ee93b520a430ee05393cb577ab484fc6f"
+        },
+        {
+          "id": "E16",
+          "path": "Lean4Lean/Level.lean",
+          "source_sha256": "80307669b5ed2e8e7ff00dadd25f4b514cbec1914cff69412ed11967b8e86934",
+          "start_line": 346,
+          "end_line": 359,
+          "excerpt_sha256": "7e0696e80f29dba5295afbedc04015e530ca074a10586796a8b35574ddf80406"
+        }
+      ],
+      "gap": "Reuse source comparator soundness and completeness only after encoding correspondence; the current file is not compiled."
+    },
+    {
+      "target": "conditional axiom ledger",
+      "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+      "excerpts": [
+        {
+          "id": "E8",
+          "path": "Lean4Lean/Verify/Axioms.lean",
+          "source_sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+          "start_line": 6,
+          "end_line": 15,
+          "excerpt_sha256": "c95460e065ab4c4b657606d2001148a8dee6b5a1a63e6ee1720447c5f18b974e"
+        },
+        {
+          "id": "E9",
+          "path": "Lean4Lean/Verify/Axioms.lean",
+          "source_sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+          "start_line": 255,
+          "end_line": 269,
+          "excerpt_sha256": "d817651b41aa1edbe4bbb9506910af195ae42109f21012c290f31ed115198d9e"
+        }
+      ],
+      "gap": "Actual transitive closure is unprinted. Imported modules and inspected helper axioms alone cannot establish final proof dependencies."
+    }
+  ],
+  "assumptions_ledger": "assumptions.json",
+  "execution_protocol": "execution-protocol.json",
+  "stop_reason": "A non-circular target and exact finite acceptance obligation are stated within the specification budget. No formal proof was attempted.",
+  "recommendation": {
+    "action": "Execute the existing bounded read-only disposition check, then prepare the isolated proof-dependency repair proposal before considering CVC-3 promotion.",
+    "target": "OPS-UPSTREAM-1: Arena PRs #181/#182 and existing deferred Kiota clarification; ALT-PAYLOADS: the pinned CVC-U1 dependency bundle.",
+    "priority": 3,
+    "prerequisites": [
+      "CVC-2 artifact and repository validators pass; commit and push this item.",
+      "OPS-UPSTREAM-1 runs the CLI preflight and stays within six GET requests; no external message.",
+      "Any proof continuation needs the exact compiled bundle, tested successor runner and a new stopping-point promotion."
+    ],
+    "evidence_refs": [
+      "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+      "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+      "results/research/queue-reviews/2026-09-06-cvc-2.json"
+    ]
+  },
+  "external_action": {
+    "decision": "NO_EXTERNAL_ACTION_NOW",
+    "target": "Potential future Lean4Lean reuse contribution or artifact-boundary clarification",
+    "reason": "This is an uncompiled specification. A checked result and useful implementation connection are prerequisites; existing withdrawn imax defect recommendations stay withdrawn.",
+    "prerequisites": [
+      "Usable checked CVC-3 result or characterized counterexample",
+      "Separately promoted CVC-4 artifact/implementation connection when valuable",
+      "Target-specific human submission authorization"
+    ]
+  }
+}

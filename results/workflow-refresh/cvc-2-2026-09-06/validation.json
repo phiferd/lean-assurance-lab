@@ -1,0 +1,194 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "command": [
+        "scripts/validate-cvc1-assessment"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:50.188983+00:00",
+      "ended_at": "2026-09-06T17:47:50.393084+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/01-validate-cvc1-assessment.log"
+    },
+    {
+      "command": [
+        "scripts/validate-cvc2-contract"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:50.393446+00:00",
+      "ended_at": "2026-09-06T17:47:50.558520+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/02-validate-cvc2-contract.log"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:50.558864+00:00",
+      "ended_at": "2026-09-06T17:47:50.594436+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/03-validate-research-queue.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc2*.py"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:50.594978+00:00",
+      "ended_at": "2026-09-06T17:47:51.019243+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/04-focused-cvc2-tests.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:51.019620+00:00",
+      "ended_at": "2026-09-06T17:47:51.107019+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/05-queue-tests.log"
+    },
+    {
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:47:51.107366+00:00",
+      "ended_at": "2026-09-06T17:48:18.255632+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/06-close-declaration-validation-publication-study.log"
+    },
+    {
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:48:18.256284+00:00",
+      "ended_at": "2026-09-06T17:49:34.519135+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/07-validate-publication-study-snapshot.log"
+    },
+    {
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:49:34.519579+00:00",
+      "ended_at": "2026-09-06T17:56:59.822148+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/08-run-unit-tests.log"
+    },
+    {
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:56:59.822583+00:00",
+      "ended_at": "2026-09-06T17:56:59.940113+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/09-validate-contribution.log"
+    },
+    {
+      "command": [
+        "scripts/validate-cvc2-contract"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:52:09.699896+00:00",
+      "ended_at": "2026-09-06T17:52:09.893158+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/10-final-protocol-check.log",
+      "reason": "Final focused verification after clarifying and enforcing signature/preparation accounting; no change to historical or shared assurance logic."
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc2*.py"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:52:09.893233+00:00",
+      "ended_at": "2026-09-06T17:52:10.395722+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/11-final-protocol-check.log",
+      "reason": "Final focused verification after clarifying and enforcing signature/preparation accounting; no change to historical or shared assurance logic."
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:59:29.014601+00:00",
+      "ended_at": "2026-09-06T17:59:29.054876+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/12-final-validate-research-queue.log"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:59:29.055306+00:00",
+      "ended_at": "2026-09-06T17:59:57.552008+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/13-final-build-project-review.log"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T17:59:57.552591+00:00",
+      "ended_at": "2026-09-06T18:00:09.028056+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/14-final-artifact-status.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T18:00:09.028578+00:00",
+      "ended_at": "2026-09-06T18:00:09.053977+00:00",
+      "log": "results/workflow-refresh/cvc-2-2026-09-06/15-final-git.log"
+    }
+  ],
+  "unit_suite": {
+    "current_tests": 371,
+    "historical_tests": 73,
+    "total": 444,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED",
+    "final_focused_cvc2_tests": 27
+  },
+  "input_note": "The full suite ran during the final protocol-accounting clarification. The only code correction was isolated to the CVC-2 integrity validator and its existing protocol test; all 27 CVC-2 tests and the root validator were rerun successfully against final content. Shared assurance logic and all historical code were unchanged.",
+  "refresh": {
+    "status": "PASS",
+    "command": [
+      "scripts/refresh-current-state",
+      "--log-dir",
+      "results/workflow-refresh/cvc-2-2026-09-06/refresh"
+    ],
+    "record": "results/workflow-refresh/cvc-2-2026-09-06/refresh/result.json"
+  },
+  "preserved_assurance_boundary": {
+    "status": "FAIL",
+    "unresolved_semantic_disagreements": 15,
+    "change": "UNCHANGED"
+  }
+}

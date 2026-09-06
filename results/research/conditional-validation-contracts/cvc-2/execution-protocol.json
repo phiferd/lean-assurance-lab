@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "protocol_id": "CVC3-U1-PROOF-0001",
+  "item_id": "CVC-3",
+  "status": "SPECIFIED_NOT_EXECUTABLE",
+  "contract_id": "CVC-U1",
+  "run_directory": "results/research/conditional-validation-contracts/cvc-3/run-0001",
+  "workspace": "external/cvc3-u1-proof-0001",
+  "signature": {
+    "path": "research/conditional-validation-contracts/cvc2/Contract.lean",
+    "sha256": "20f3c65a3bfcd3a491f58a9562d203eeb91084f88c728206a725e252e533e5d3"
+  },
+  "entry_gates": [
+    "CVC-2 is committed, closure validated and pushed; queue stopping-point review promotes CVC-3 separately.",
+    "Exact pinned Lean, Lean4Lean and Batteries source and compiled import bundle materialized and hashed under a separately ranked, explicitly budgeted preparation item. This prerequisite excludes compilation of the Lab signature or Lab proof; no automatic network materialization.",
+    "Implement and validate a new protocol-specific runner with the reservation, failure and process-group controls below. Old ecosystem manifests/run IDs are inapplicable.",
+    "Commit the runner, protocol, immutable signature/examples and runtime/dependency manifest before any proof attempt. Fix the axiom allowlist; no post-feedback weakening."
+  ],
+  "limits": {
+    "max_sessions": 4,
+    "session_minutes": 90,
+    "max_active_seconds": 21600,
+    "proof_build_attempts": 12,
+    "attempt_timeout_seconds": 300,
+    "checker_launches": 0,
+    "toolchain_installs": 0,
+    "network_requests_during_attempts": 0,
+    "candidate_families": 1
+  },
+  "attempt_command": {
+    "argv": [
+      "{bound_lean_binary}",
+      "-o",
+      "{attempt_directory}/CVC2Proof.olean",
+      "CVC2Proof.lean"
+    ],
+    "cwd": "external/cvc3-u1-proof-0001",
+    "environment": "Sanitized environment with LEAN_PATH listing only the content-bound core, Batteries, Lean4Lean and signature module roots; bind platform and runtime shared libraries. No elan/lake wrappers or implicit installs.",
+    "input_file": "CVC2Proof.lean",
+    "mutable_inputs": "Only the proof implementation may change between counted attempts. Bind its exact bytes before every launch. Contract, examples, axiom allowlist and source/runtime pins remain fixed. Any signature elaboration repair stops the run for an explicit successor review; do not silently repair the promised judgment."
+  },
+  "accounting": {
+    "exclusive_owner": "Acquire one filesystem lock per run; fail if held. Trusted local filesystem, not an adversarial sandbox.",
+    "before_launch": "Atomically persist attempt number, RESERVED status, session, exact argv/env/input hashes, monotonic and UTC starts, and remaining cumulative budget before creating the process.",
+    "counting": "Exactly one signature elaboration (attempt 1) and at most eleven proof-module invocations share the 12-attempt cap. Every attempted launch, including failed start, timeout or interruption, consumes its reservation. Dependency compilation is forbidden in this run and belongs only to the separately budgeted preparation item. No free retry, debug command or reset run ID.",
+    "timeout": "Set each deadline to min(300 seconds, remaining session time, remaining total time). Terminate the entire process group on deadline or cancellation, then reap it and hash retained stdout/stderr.",
+    "resume": "Validate all immutable hashes and the append-only prior attempt ledger. Completed attempts never rerun; orphan RESERVED/RUNNING attempts become INTERRUPTED and consume the full reserved timeout unless bounded elapsed evidence proves a smaller charge.",
+    "session_time": "All active CVC-3 design, runtime diagnosis and proof effort counts toward four 90-minute sessions. Separately authorized prior dependency preparation retains its own linked ledger and is included in aggregate phase cost. Persist checkpoints before handoff; resume cumulative counters.",
+    "crash_safety": "Atomically replace current state only after append-only attempt evidence is durable; missing/malformed accounting fails closed.",
+    "failure_evidence": "Record return code or signal, elapsed time, raw stdout/stderr hashes, source/compiled output hashes, and remaining attempts/time after every launch."
+  },
+  "required_result_declarations": [
+    {
+      "name": "Lab.CVC2.encoding_preserves",
+      "type": "Lab.CVC2.EncodingTarget"
+    },
+    {
+      "name": "Lab.CVC2.preservation",
+      "type": "Lab.CVC2.PreservationTarget"
+    },
+    {
+      "name": "Lab.CVC2.required_acceptance",
+      "type": "Lab.CVC2.AcceptanceTarget"
+    },
+    {
+      "name": "Lab.CVC2.boundary",
+      "type": "Lab.CVC2.BoundaryTarget"
+    }
+  ],
+  "axiom_audit": "The fixed proof module must include #print axioms for all four result declarations, Lean.Level.isEquiv'_wf and Lean.Level.isEquiv'_complete. Preserve stdout and parse each full transitive list against assumptions.json. Imports alone do not establish dependence; no sorry warnings or forbidden/unlisted axioms permitted.",
+  "runner_acceptance_tests": [
+    "Reject absent promotion, changed input/runtime/protocol hashes or old run IDs before launch.",
+    "Reserve and consume failed starts, timeouts and interruptions exactly once; reject attempts 13 and session/total overrun.",
+    "Reject concurrent ownership; resume cannot reset counters or rerun a complete attempt.",
+    "Terminate child process groups on timeout/cancellation and retain raw outputs.",
+    "Reject missing required theorem declarations, wrong theorem types, sorryAx, omitted axiom printouts or an unlisted axiom. Use inert fixture processes for runner tests, not Lean.",
+    "Require signature elaboration as counted attempt 1, then bind its output before proof attempts; disallow dependency compilation or a free signature preflight. Preserve links to prerequisite preparation costs."
+  ],
+  "stop_outcomes": {
+    "SUCCESS": "Checked PreservationTarget plus EncodingTarget, exact AcceptanceTarget and BoundaryTarget, with permitted printed transitive assumptions and all bindings. Claim remains conditional model proof.",
+    "NEGATIVE": "Checked counterexample to PreservationTarget under Supported/Accepts, with exact input and assumptions; retain negative outcome and replace theorem-dependent successors. Expected zeroBoundary invalidity alone is not a counterexample to preservation.",
+    "BOUNDED_UNRESOLVED": "Budget, unavailable runtime, signature elaboration defect, missing lemma or unapproved transitive axiom prevents the exact obligations. Name the blocker and rerank."
+  },
+  "observer_protocol": "CVC-4 is not activated or specified for launch here. It requires its own exact pre-feedback artifact/profile protocol if a usable CVC-3 result earns promotion. CVC-3 permits zero observer launches.",
+  "current_execution": {
+    "proof_attempts": 0,
+    "checker_launches": 0,
+    "runner_implemented": false
+  },
+  "preparation_accounting": {
+    "owner": "A separately ranked preparation item with its own committed finite execution manifest and append-only ledger; ALT-PAYLOADS may propose it but currently authorizes diagnostics only.",
+    "scope": "Compile only pinned upstream dependency modules and materialize the immutable Lab signature source. Do not elaborate Contract.lean, CVC2Proof.lean, any Lab target or the fixed acceptance/boundary examples in preparation.",
+    "relationship_to_cvc3": "Dependency preparation consumes its own explicit budget, recorded and linked in the later CVC-3 work record. Its attempts and time are reported separately and in aggregate phase cost, never reset or silently charged as zero. It does not consume or expand the 12 CVC-3 attempts because it cannot check any Lab target.",
+    "failure": "Missing dependencies at CVC-3 preflight stop before execution and rerank; the CVC-3 runner does not build them implicitly.",
+    "compiled_input_scope": "UPSTREAM_DEPENDENCIES_ONLY",
+    "lab_elaboration_permitted": false,
+    "budget_source": "SEPARATELY_AUTHORIZED_ITEM",
+    "cvc3_attempts_charged": 0,
+    "aggregate_cost_reporting_required": true
+  },
+  "signature_attempt": {
+    "attempt_number": 1,
+    "argv": [
+      "{bound_lean_binary}",
+      "-o",
+      "{workspace}/Contract.olean",
+      "Contract.lean"
+    ],
+    "cwd": "external/cvc3-u1-proof-0001",
+    "source_binding": {
+      "path": "research/conditional-validation-contracts/cvc2/Contract.lean",
+      "sha256": "20f3c65a3bfcd3a491f58a9562d203eeb91084f88c728206a725e252e533e5d3"
+    },
+    "rule": "Copy the exact bound signature source to Contract.lean without edits. Its first elaboration is CVC-3 attempt 1, subject to the same reservation, 300-second deadline and cumulative accounting. A failed launch or compilation consumes the attempt and stops as BOUNDED_UNRESOLVED; signature repair requires an explicit successor review.",
+    "success": "Bind the resulting Contract.olean hash before any CVC2Proof.lean attempt; 11 of the 12 attempts remain. CVC2Proof.lean must import Contract. No uncounted signature preflight or recompilation."
+  }
+}

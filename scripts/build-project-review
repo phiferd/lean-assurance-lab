@@ -154,7 +154,7 @@ def build():
                                        'Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.',
                                        'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
                                        'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.',
-                                       'The owner-requested conditional-contract plan, canonical ranked queue, initial decision record and stopping-point/literature workflow are recorded; the first research item remains unexecuted.'],
+                                       'The conditional-contract plan and ranked queue are current. Completed queue items: ' + ', '.join(row['id'] for row in queue['items'] if row['status'] == 'COMPLETE') + '. Selected next item: ' + selected['id'] + ' (' + selected['status'] + ').'],
             'successor_decision_packet': ({'binding': bound(SUCCESSOR_PACKET), 'status': packet['status'],
                                            'findings': [{'id': row.get('id'), 'disposition': row.get('disposition'), 'reason': row.get('reason')} for row in packet['findings']],
                                            'triage': [{'mutant_id': row.get('mutant_id'), 'status': row.get('status'), 'reason': row.get('reason')} for row in packet['triage']],

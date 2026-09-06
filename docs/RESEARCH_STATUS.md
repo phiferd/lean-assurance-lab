@@ -50,6 +50,26 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-2` on 2026-09-06 with `SUCCESS` for one interpretation
+  contract and proof-target specification, labeled
+  `SPECIFICATION_PROPOSAL_UNCHECKED`. Model CVC-U1 fixes the supplied sort
+  value, has two exact required acceptance artifacts and two model boundary
+  examples, and states an encoding bridge and one preservation target without
+  assuming checker correctness. Structural extraction and integrity checks
+  bind the byte/AST/source mappings; no proof builds or checker launches ran.
+  The finite CVC-3 protocol is specified but not executable. A read-only
+  inventory found missing compiled verification dependencies despite an
+  installed matching Lean runtime. See the
+  [report](../results/research/conditional-validation-contracts/cvc-2/report.md)
+  and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-2.json).
+  `OPS-UPSTREAM-1` is selected READY; `ALT-PAYLOADS` is the second eligible
+  diagnostic proposal. Neither has started; CVC-3 through CVC-5 stay PLANNED.
+  The required full-payload validators, contribution catalog and 444 tests
+  (371 current, 73 unchanged historical; no skips) passed, with all 27 CVC-2
+  tests also passing after the final protocol-accounting clarification. Exact
+  commands and outcomes are retained in the
+  [validation record](../results/workflow-refresh/cvc-2-2026-09-06/validation.json).
+
 - Completed `CVC-1` on 2026-09-06 with an evidence-backed `EXTEND` decision:
   reuse pinned Lean4Lean universe semantics/comparison results and define the
   missing Lab artifact-interpretation contract next. Compared all three bounded
@@ -1776,33 +1796,43 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-2`.
+Selected next item: `OPS-UPSTREAM-1`.
 
 The [ranked queue](../config/research-queue.json) is canonical for item order,
-status, dependencies, finite budgets, and closure records. `CVC-1` is COMPLETE
-with outcome `SUCCESS` for the assessment and decision `EXTEND`. Its
-[canonical result](../results/research/conditional-validation-contracts/cvc-1/assessment.json)
-selects universe-expression interpretation using Lean4Lean `8223d22` source
-results. No proof was reproduced and no new implementation outcome is claimed.
+status, dependencies, finite budgets and closure records. `CVC-1` remains
+COMPLETE with the source-only `EXTEND` reuse decision. `CVC-2` is COMPLETE with
+outcome `SUCCESS` for the specification and scientific status
+`SPECIFICATION_PROPOSAL_UNCHECKED`. The
+[canonical contract](../results/research/conditional-validation-contracts/cvc-2/contract.json)
+fixes the supplied sort body, independent universe interpretation, one strategy,
+two exact required accepts, two model boundary examples and a non-circular
+preservation target. No proof was elaborated or checked.
 
-`CVC-2` is READY and unstarted after the recorded
-[entry-gate review](../results/research/queue-reviews/2026-09-06-cvc-1.json).
-State one independent interpretation contract for the supplied universe artifact,
-an exact acceptance obligation, assumptions, examples, source mappings and one
-non-circular preservation or counterexample target. Define the bounded successor
-execution protocol before later proof or observer feedback. The existing
-normalizer theorem is a reuse target, not proof of the missing artifact bridge.
+The [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-2.json)
+selects `OPS-UPSTREAM-1` READY and unstarted: one GET-only Arena disposition
+check, at most six requests after CLI preflight, preserving the Kiota deferral.
+This maintenance alternative has remained eligible through two research stops.
+No fresh upstream feedback or urgency is assumed; the check was not executed
+as part of CVC-2.
 
-`CVC-3` through `CVC-5` remain conditional PLANNED stages. Reevaluate all
-candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
-The next eligible maintenance alternative remains one bounded read-only Arena
-disposition check. It was not executed as part of CVC-1; existing survivor and
-transfer campaigns remain deferred. The one-item completion stops here.
+`ALT-PAYLOADS` is promoted READY as the next eligible local alternative. Prepare
+one exact isolated materialization/compilation proposal for the recorded
+Lean4Lean/Batteries dependency gap and successor runner prerequisite, within
+one diagnostic session and with no builds. The
+[runtime inventory](../results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json)
+finds installed Lean 4.33.0-rc2 and matching source donors, but no complete
+compiled verification bundle. `CVC-3` remains PLANNED: its
+[finite protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
+is specified, not executable, pending the exact compiled dependencies and a
+tested protocol-specific runner. `CVC-4` and `CVC-5` remain conditional PLANNED
+stages. Reevaluate all candidates at each stop using
+[Research workflow](RESEARCH_WORKFLOW.md).
 
 The corpus-integration successor, ecosystem closure at `2136c65`, and original
 publication study remain complete and historically bound. This phase creates
 named research models; it changes no normative-source approval or old catalog
-disposition, and authorizes no external message or publication.
+disposition, and authorizes no external message or publication. The requested
+one-item execution stops after CVC-2 delivery; no next item has started.
 
 ### Waiting
 

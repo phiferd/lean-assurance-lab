@@ -1,0 +1,172 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-2",
+  "examples": [
+    {
+      "id": "E-POS",
+      "signature_definition": "rightSucc",
+      "artifact": {
+        "name": "universeIMaxRightSucc",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "imax",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "succ",
+            [
+              "param",
+              "v"
+            ]
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "max",
+            [
+              "param",
+              "u"
+            ],
+            [
+              "succ",
+              [
+                "param",
+                "v"
+              ]
+            ]
+          ]
+        ]
+      },
+      "expected": "REQUIRED_ACCEPT",
+      "reason": "For every assignment, succ(v)>0, so imax(u,succ(v))=max(u,succ(v)); adding one gives the declared sort level.",
+      "expectation_status": "SPECIFICATION_NOT_CHECKER_OBSERVATION",
+      "input_binding": {
+        "path": "corpus/generated/universe-imax-right-succ.ndjson",
+        "sha256": "a60a136378e4b920c63f90e64433daf7bd30c6a061436553871fd734b7ee9a6d"
+      }
+    },
+    {
+      "id": "E-CONTROL",
+      "signature_definition": "rightSuccControl",
+      "artifact": {
+        "name": "universeIMaxRightSuccControl",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "max",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "succ",
+            [
+              "param",
+              "v"
+            ]
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "max",
+            [
+              "param",
+              "u"
+            ],
+            [
+              "succ",
+              [
+                "param",
+                "v"
+              ]
+            ]
+          ]
+        ]
+      },
+      "expected": "REQUIRED_ACCEPT",
+      "reason": "The supplied sort body has exactly the successor level declared as its type.",
+      "expectation_status": "SPECIFICATION_NOT_CHECKER_OBSERVATION",
+      "input_binding": {
+        "path": "corpus/generated/universe-imax-right-succ-control.ndjson",
+        "sha256": "9244cb5e35f1fd462b62828415d51cb8c86818d3b8ebe8a11788efe6992c6de7"
+      }
+    },
+    {
+      "id": "E-ZERO",
+      "signature_definition": "zeroBoundary",
+      "artifact": {
+        "name": "cvc2ZeroBoundary",
+        "params": [
+          "u"
+        ],
+        "value_level": [
+          "imax",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "zero"
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "expected": "MODEL_INVALID",
+      "reason": "At u=1, the body sort has type level 1, while the declaration requests type level 2. This falsifies the tempting unconditional imax=max rewrite.",
+      "expectation_status": "SPECIFICATION_NOT_CHECKER_OBSERVATION",
+      "counterexample_assignment": {
+        "u": 1
+      },
+      "expected_value_type_level": 1,
+      "expected_declared_type_level": 2
+    },
+    {
+      "id": "E-UNOWNED",
+      "signature_definition": "unownedBoundary",
+      "artifact": {
+        "name": "cvc2UnownedBoundary",
+        "params": [
+          "v"
+        ],
+        "value_level": [
+          "param",
+          "u"
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "expected": "UNSUPPORTED",
+      "reason": "The level name u is absent from the declared parameter domain even though the algebraic equality holds. No default value or implicit parameter is allowed.",
+      "expectation_status": "SPECIFICATION_NOT_CHECKER_OBSERVATION"
+    }
+  ],
+  "required_acceptance_ids": [
+    "E-POS",
+    "E-CONTROL"
+  ],
+  "boundary_ids": [
+    "E-ZERO",
+    "E-UNOWNED"
+  ],
+  "scope": "Exact acceptance obligation only; model boundary examples are not newly executed witnesses."
+}

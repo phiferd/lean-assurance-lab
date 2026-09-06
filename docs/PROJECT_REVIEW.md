@@ -20,48 +20,63 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-2: State one contract and proof target; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete OPS-UPSTREAM-1: Check pending Arena dispositions once; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-2**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **OPS-UPSTREAM-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 2 | CVC-2: State one contract and proof target | READY |
-| 3 | CVC-3: Prove or refute one preservation claim | PLANNED |
-| 4 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 5 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 6 | OPS-UPSTREAM-1: Check pending Arena dispositions once | READY |
-| 7 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
-| 8 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
-| 9 | ALT-PAYLOADS: Characterize one materialization blocker | DEFERRED |
+| 3 | OPS-UPSTREAM-1: Check pending Arena dispositions once | READY |
+| 4 | ALT-PAYLOADS: Plan an isolated universe-proof dependency bundle | READY |
+| 5 | CVC-3: Prove or refute one preservation claim | PLANNED |
+| 6 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 7 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 8 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
+| 9 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
-### 2. CVC-2: State one contract and proof target
+### 3. OPS-UPSTREAM-1: Check pending Arena dispositions once
 
-**Target:** Universe-expression interpretation for existing Lab imax artifacts, using pinned Lean4Lean level judgments and at most two strategies
+**Target:** Arena PRs #181 and #182 and deferred Kiota clarification
 
-Fix input meaning, target judgment, assumptions, environment and reconstruction relation; define a finite successor execution protocol.
+Perform one GET-only disposition/duplicate inventory and record any new actionable feedback.
 
-**Why this rank:** Highest eligible successor: existing source soundness/completeness statements and small Lab imax artifacts support a bounded interpretation question; an explicit contract can expose the adapter/axiom gap before proof costs. No urgent Arena deadline is recorded in the bound state; disposition checking remains the next eligible alternative.
+**Why this rank:** Highest eligible at this stop: a six-GET maintenance check has remained ready through two research completions, while CVC-3 lacks a complete compiled proof bundle and tested successor runner. Existing contributions may yield actionable feedback; no new urgency or unseen outcome is presumed.
 
-**Completion:** Formal signature/judgment, exact acceptance obligation, source mappings, positive and negative examples, assumption ledger, and exact proof target/protocol.
+**Completion:** One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.
 
-**Stop:** Two sessions or inability to state a non-circular target; record missing definition/theorem and rerank.
+**Stop:** One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.
 
-**Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: CVC-1 completed SUCCESS with EXTEND recommendation and source-bound universe-comparison targets; entry gate accepted by results/research/queue-reviews/2026-09-06-cvc-1.json. This promotes contract definition only; no CVC-3 proof or CVC-4 observer execution is authorized.
+**Boundary:** READY: Read-only scope only; run CLI preflight and preserve the existing Kiota deferral.
 
-### 3. CVC-3: Prove or refute one preservation claim
+### 4. ALT-PAYLOADS: Plan an isolated universe-proof dependency bundle
+
+**Target:** CVC-U1: pinned Lean4Lean 8223d22 verification import closure, Batteries 76e1c11, installed Lean 4.33.0-rc2 and the CVC3-U1-PROOF-0001 runner prerequisite
+
+Use the CVC-2 inventory to prepare an exact isolated materialization/compilation proposal with commands, source and runtime identities, finite cost bounds and successor-runner prerequisites. Resolve remaining build-closure and accounting choices; do not repeat the existence inventory as the whole result.
+
+**Why this rank:** Next eligible local alternative: a concrete compiled-dependency blocker is now evidenced. Its small proposal can make subsequent work reproducible; the already-deferred bounded upstream check goes first at this stop.
+
+**Completion:** One reproducible dependency-bundle repair proposal with exact donor/source pins, isolated paths, build closure, commands, bounded compilation/runner implementation budget, and entry/stop conditions ready for a separately ranked implementation item.
+
+**Stop:** One diagnostic session, no builds or checker launches, no general infrastructure; stop with a concrete proposal or named unresolved prerequisite.
+
+**Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
+
+**Boundary:** READY: CVC-2 records missing compiled Lean4Lean/Batteries dependencies and an unimplemented protocol runner. This promotes one diagnostic/proposal session only; no compilation, downloads, toolchain installation, proof attempt or checker execution.
+
+### 5. CVC-3: Prove or refute one preservation claim
 
 **Target:** The single CVC-2 contract and pinned formalization
 
 Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.
 
-**Why this rank:** Only worth its proof cost after contract/reuse feasibility is demonstrated.
+**Why this rank:** Potentially useful next scientific step, but source review and an installed Lean executable do not satisfy the missing compiled dependency and successor-runner gates. Resolve the concrete prerequisites before its proof cost.
 
 **Completion:** Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.
 
@@ -69,9 +84,9 @@ Reuse/reproduce an existing result or attempt one preservation theorem and its n
 
 **Execution:** At most 4 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: CVC-2 succeeds; exact available runtime, assumptions and new-phase execution protocol are bound before attempts.
+**Boundary:** PLANNED: CVC-2 contract succeeds; exact source/runtime/compiled dependencies and tested protocol-specific runner are bound before promotion and proof attempts under CVC3-U1-PROOF-0001. The CVC-2 runtime inventory records missing compiled prerequisites; this item remains PLANNED.
 
-### 4. CVC-4: Connect the contract to real validation behavior
+### 6. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -87,7 +102,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 5. CVC-5: Prepare shared evidence and decide the next phase
+### 7. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -103,23 +118,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 6. OPS-UPSTREAM-1: Check pending Arena dispositions once
-
-**Target:** Arena PRs #181 and #182 and deferred Kiota clarification
-
-Perform one GET-only disposition/duplicate inventory and record any new actionable feedback.
-
-**Why this rank:** Second eligible item; promote at a stopping boundary if substantive feedback or a deadline makes it more valuable than research.
-
-**Completion:** One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.
-
-**Stop:** One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.
-
-**Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: Read-only scope only; run CLI preflight and preserve the existing Kiota deferral.
-
-### 7. ALT-SURVIVORS: Design the next fixed survivor triage
+### 8. ALT-SURVIVORS: Design the next fixed survivor triage
 
 **Target:** One selected member of the seven pending survivors
 
@@ -135,7 +134,7 @@ Prepare an evidence-based fixed-candidate triage proposal and finite execution m
 
 **Boundary:** DEFERRED: Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.
 
-### 8. ALT-TRANSFER: Assess a prospective transfer study
+### 9. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -150,22 +149,6 @@ Design one falsifiable transfer comparison after reviewing relevant methods and 
 **Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
 **Boundary:** DEFERRED: Separate phase authorization; fresh literature check; independent target and preregistration are prerequisites.
-
-### 9. ALT-PAYLOADS: Characterize one materialization blocker
-
-**Target:** A specific missing proof or assurance dependency
-
-If a selected item is blocked, isolate one portability/materialization repair with exact inputs and cost.
-
-**Why this rank:** Promote only for an observed blocker; building a general storage service now has weak demonstrated value.
-
-**Completion:** Reproduction or repair proposal for one named missing dependency, with a finite implementation budget.
-
-**Stop:** One diagnostic session, no checker launches or broad infrastructure build.
-
-**Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** DEFERRED: A selected item records a concrete missing-input blocker; any network/write permissions remain explicit.
 
 ## Autonomous workflow
 
@@ -207,6 +190,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The owner-requested conditional-contract plan, canonical ranked queue, initial decision record and stopping-point/literature workflow are recorded; the first research item remains unexecuted.
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2. Selected next item: OPS-UPSTREAM-1 (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.
