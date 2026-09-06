@@ -1,0 +1,175 @@
+{
+  "schema_version": 1,
+  "item_id": "OPS-UPSTREAM-1",
+  "date": "2026-09-06",
+  "status": "PASS",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "results/research/ops-upstream-1/validate-evidence.py"
+      ],
+      "started_at": "2026-09-06T18:08:48.118638+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/01-python3.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:08:48.263084+00:00"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T18:08:48.263381+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/02-validate-research-queue.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:08:48.300694+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "started_at": "2026-09-06T18:08:48.300995+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/03-python3.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:08:48.476230+00:00"
+    },
+    {
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "started_at": "2026-09-06T18:08:48.476565+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/04-close-declaration-validation-publication-study.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:09:17.585346+00:00"
+    },
+    {
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T18:09:17.585715+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/05-validate-publication-study-snapshot.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:10:34.898936+00:00"
+    },
+    {
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T18:10:34.899327+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/06-run-unit-tests.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:18:07.957006+00:00"
+    },
+    {
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "started_at": "2026-09-06T18:18:07.957449+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/07-validate-contribution.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:18:08.065918+00:00"
+    },
+    {
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/ops-upstream-1-2026-09-06/refresh"
+      ],
+      "started_at": "2026-09-06T18:18:49.467779+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/08-refresh-current-state.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:16.324248+00:00"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "started_at": "2026-09-06T18:20:16.324602+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/09-build-project-review.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:44.657749+00:00"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T18:20:44.658162+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/10-artifact-status.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:55.847813+00:00"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T18:20:55.848310+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/11-validate-research-queue.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:55.889492+00:00"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/ops-upstream-1/validate-evidence.py"
+      ],
+      "started_at": "2026-09-06T18:20:55.889927+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/12-python3.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:56.042514+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-06T18:20:56.042949+00:00",
+      "log": "results/workflow-refresh/ops-upstream-1-2026-09-06/13-git.log",
+      "status": "PASS",
+      "returncode": 0,
+      "ended_at": "2026-09-06T18:20:56.066258+00:00"
+    }
+  ],
+  "research_execution_note": "These are offline repository assurance/evidence checks. No upstream request or research checker/build experiment is authorized by this validation.",
+  "unit_suite": {
+    "current_tests": 371,
+    "historical_tests": 73,
+    "total": 444,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED"
+  },
+  "preserved_assurance_boundary": {
+    "status": "FAIL",
+    "unresolved_semantic_disagreements": 15,
+    "change": "UNCHANGED"
+  },
+  "refresh": {
+    "status": "PASS",
+    "record": "results/workflow-refresh/ops-upstream-1-2026-09-06/refresh/result.json"
+  },
+  "completed_at": "2026-09-06T18:20:56.081604+00:00"
+}

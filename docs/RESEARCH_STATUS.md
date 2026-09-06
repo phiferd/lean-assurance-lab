@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Closed `OPS-UPSTREAM-1` on 2026-09-06 with `BOUNDED_UNRESOLVED`:
+  the required GitHub CLI preflight failed authentication, so no disposition or
+  duplicate-inventory GET request ran. Current Arena changes are unknown; the
+  last known PR #181/#182 submissions and the owner-deferred Kiota clarification
+  are preserved. Repair access with `gh auth login -h github.com --web`, then
+  rank a fresh bounded check after successful preflight. No browser fallback,
+  checker launch, build, external message, or repeated polling occurred. See the
+  [status packet](../results/research/ops-upstream-1/status-packet.json),
+  [report](../results/research/ops-upstream-1/report.md), and
+  [stopping-point review](../results/research/queue-reviews/2026-09-06-ops-upstream-1.json).
+  `ALT-PAYLOADS` is selected READY and has not started. The full-payload suite
+  passed 444 tests (371 current, 73 unchanged historical; no skips), along with
+  historical/snapshot, queue, evidence and contribution-catalog checks. Exact
+  commands and outcomes are retained in the
+  [validation record](../results/workflow-refresh/ops-upstream-1-2026-09-06/validation.json).
+
 - Completed `CVC-2` on 2026-09-06 with `SUCCESS` for one interpretation
   contract and proof-target specification, labeled
   `SPECIFICATION_PROPOSAL_UNCHECKED`. Model CVC-U1 fixes the supplied sort
@@ -1796,7 +1812,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `OPS-UPSTREAM-1`.
+Selected next item: `ALT-PAYLOADS`.
 
 The [ranked queue](../config/research-queue.json) is canonical for item order,
 status, dependencies, finite budgets and closure records. `CVC-1` remains
@@ -1808,14 +1824,16 @@ fixes the supplied sort body, independent universe interpretation, one strategy,
 two exact required accepts, two model boundary examples and a non-circular
 preservation target. No proof was elaborated or checked.
 
-The [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-2.json)
-selects `OPS-UPSTREAM-1` READY and unstarted: one GET-only Arena disposition
-check, at most six requests after CLI preflight, preserving the Kiota deferral.
-This maintenance alternative has remained eligible through two research stops.
-No fresh upstream feedback or urgency is assumed; the check was not executed
-as part of CVC-2.
+The [stopping-point review](../results/research/queue-reviews/2026-09-06-ops-upstream-1.json)
+closes `OPS-UPSTREAM-1` with `BOUNDED_UNRESOLVED`. Required CLI preflight failed
+with authentication unavailable; zero post-preflight GET requests ran. The
+[status packet](../results/research/ops-upstream-1/status-packet.json) retains the
+last known Arena submissions and Kiota deferral. Current upstream dispositions,
+duplicates, and new feedback are unknown. Repair access with
+`gh auth login -h github.com --web`; after confirmed repair, rank a fresh bounded
+check at a stopping-point review. No repeated polling or automation is enabled.
 
-`ALT-PAYLOADS` is promoted READY as the next eligible local alternative. Prepare
+`ALT-PAYLOADS` is selected READY and unstarted. Prepare
 one exact isolated materialization/compilation proposal for the recorded
 Lean4Lean/Batteries dependency gap and successor runner prerequisite, within
 one diagnostic session and with no builds. The
@@ -1832,9 +1850,18 @@ The corpus-integration successor, ecosystem closure at `2136c65`, and original
 publication study remain complete and historically bound. This phase creates
 named research models; it changes no normative-source approval or old catalog
 disposition, and authorizes no external message or publication. The requested
-one-item execution stops after CVC-2 delivery; no next item has started.
+one-item execution stops after OPS-UPSTREAM-1 closure delivery; no next item has
+started.
 
 ### Waiting
+
+- `W-ARENA-DISPOSITION-ACCESS`: the 2026-09-06 `OPS-UPSTREAM-1` CLI
+  preflight failed authentication before any disposition query. PR #181/#182
+  states below remain dated last-known records, not fresh observations. Restore
+  CLI access with `gh auth login -h github.com --web`; confirmed repair or
+  owner-supplied substantive feedback triggers review and ranking of a fresh
+  bounded check with successful preflight. Preserve the Kiota deferral. Do not
+  repeat the completed item or poll while access is unavailable.
 
 - `W-ARENA-THEOREM-CONTROL`: review the exact identity-theorem accept control as
   a companion to Arena's existing `tutorial/012_nonPropThm` reject case. The

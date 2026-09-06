@@ -3,7 +3,7 @@
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
   "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
   "updated_at": "2026-09-06",
-  "selected_item": "OPS-UPSTREAM-1",
+  "selected_item": "ALT-PAYLOADS",
   "items": [
     {
       "id": "CVC-1",
@@ -104,7 +104,7 @@
       "completion": "One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.",
       "stop_condition": "One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.",
       "kind": "MAINTENANCE",
-      "status": "READY",
+      "status": "COMPLETE",
       "depends_on": [],
       "budget": {
         "max_sessions": 1,
@@ -119,7 +119,18 @@
         "https://github.com/leanprover/lean-kernel-arena/pull/181",
         "https://github.com/leanprover/lean-kernel-arena/pull/182"
       ],
-      "closure": null,
+      "closure": {
+        "outcome": "BOUNDED_UNRESOLVED",
+        "evidence_refs": [
+          "results/research/ops-upstream-1/status-packet.json",
+          "results/research/ops-upstream-1/work-record.json",
+          "results/research/ops-upstream-1/preflight.log",
+          "results/research/ops-upstream-1/report.md",
+          "results/research/ops-upstream-1/validate-evidence.py",
+          "results/research/queue-reviews/2026-09-06-ops-upstream-1.json"
+        ],
+        "recommendation": "Required CLI preflight failed authentication; no disposition or duplicate GET ran and current upstream changes are UNKNOWN. Preserve the last known Arena submissions and Kiota deferral. Repair access with gh auth login -h github.com --web, then rank a fresh bounded check with successful preflight; no polling or external action. Select ALT-PAYLOADS READY next and leave it unstarted."
+      },
       "blocked_reason": ""
     },
     {
@@ -129,7 +140,7 @@
       "target": "CVC-U1: pinned Lean4Lean 8223d22 verification import closure, Batteries 76e1c11, installed Lean 4.33.0-rc2 and the CVC3-U1-PROOF-0001 runner prerequisite",
       "action": "Use the CVC-2 inventory to prepare an exact isolated materialization/compilation proposal with commands, source and runtime identities, finite cost bounds and successor-runner prerequisites. Resolve remaining build-closure and accounting choices; do not repeat the existence inventory as the whole result.",
       "expected_value": "Enables reproduction when a real dependency is missing.",
-      "rank_rationale": "Next eligible local alternative: a concrete compiled-dependency blocker is now evidenced. Its small proposal can make subsequent work reproducible; the already-deferred bounded upstream check goes first at this stop.",
+      "rank_rationale": "Highest remaining eligible local item: the CVC-2 inventory establishes a concrete dependency gap and this bounded proposal can specify a reproducible repair. OPS-UPSTREAM-1 stopped on CLI authentication failure with no new upstream evidence; a fresh Arena check must wait for repaired access. CVC-3 still lacks compiled dependencies and a tested runner, and other research alternatives remain gated.",
       "entry_gate": "CVC-2 records missing compiled Lean4Lean/Batteries dependencies and an unimplemented protocol runner. This promotes one diagnostic/proposal session only; no compilation, downloads, toolchain installation, proof attempt or checker execution.",
       "completion": "One reproducible dependency-bundle repair proposal with exact donor/source pins, isolated paths, build closure, commands, bounded compilation/runner implementation budget, and entry/stop conditions ready for a separately ranked implementation item.",
       "stop_condition": "One diagnostic session, no builds or checker launches, no general infrastructure; stop with a concrete proposal or named unresolved prerequisite.",

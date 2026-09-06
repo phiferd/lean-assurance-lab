@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "item_id": "OPS-UPSTREAM-1",
+  "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
+  "status": "COMPLETE",
+  "owner": "Codex lead; read-only baseline review delegated to Luna",
+  "input_commit": "dfeb4ce08da2e540329cad80120f498ae9f660ae",
+  "execution_authority": "User requested highest-priority eligible canonical queue item; queue and plan authorize one GET-only check after CLI preflight. No external writes.",
+  "started_at": "2026-09-06T18:04:34.636762+00:00",
+  "ended_at": "2026-09-06T18:06:58.738701+00:00",
+  "active_minutes": 2.401699,
+  "budget": {
+    "max_sessions": 1,
+    "session_minutes": 90,
+    "max_get_requests_after_preflight": 6,
+    "request_timeout_seconds": 30,
+    "builds": 0,
+    "checker_launches": 0,
+    "external_messages": 0
+  },
+  "sessions": [
+    {
+      "started_at": "2026-09-06T18:04:34.636762+00:00",
+      "ended_at": "2026-09-06T18:06:58.738701+00:00"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "CONSTITUTION.md",
+      "sha256": "f8bd97b3be61d1c09e9062eea11d41006ef266ce0c244b65827a9bd7aa03df16",
+      "bytes": 7995
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256": "f4692ead8f7eecdc1394d6518a289ea2f4b2df4166c851f7932381f39298ebe3",
+      "bytes": 122485
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "sha256": "cf1852ea1ceeb8294f4cbf1bca46cca2ae43382334ecbdfdc8cac238b996773b",
+      "bytes": 14727
+    },
+    {
+      "path": "docs/RESEARCH_WORKFLOW.md",
+      "sha256": "9c2191680b986a72edc70eda8a66be8673c544e52b4a288dbc0926d673155986",
+      "bytes": 8565
+    },
+    {
+      "path": "config/research-queue.json",
+      "sha256": "937c9c2e6987e177d2eb8e03fea95bec09aafc00bbaaf583312ce05bff8ac746",
+      "bytes": 18289
+    },
+    {
+      "path": "results/investigations/corpus-integration-2026-09-05/external-actions.json",
+      "sha256": "6b4b377c9118715e2dc8714aa66c71241caf6280c4912a11aaae3da7724d0d41",
+      "bytes": 2814
+    },
+    {
+      "path": "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
+      "sha256": "f7f43601714f07192cee22f48af609c14719be4c787e649a9aea96e90aa89d7f",
+      "bytes": 5549
+    },
+    {
+      "path": "scripts/github-cli-preflight",
+      "sha256": "7cc62f9ae8458334df7c2b53dc8fe1476aebcd134a303573364c6c33ed4018cb",
+      "bytes": 568
+    }
+  ],
+  "preflight": {
+    "command": [
+      "scripts/github-cli-preflight",
+      "leanprover/lean-kernel-arena"
+    ],
+    "status": "FAIL",
+    "started_at": "2026-09-06T18:04:34.738476+00:00",
+    "returncode": 1,
+    "ended_at": "2026-09-06T18:04:34.876353+00:00",
+    "log": "results/research/ops-upstream-1/preflight.log",
+    "sha256": "b43258dcad252e1add6056cacb8db5d4aae10c2cecbf735deda2172eb626ba37"
+  },
+  "requests": [],
+  "consumed": {
+    "sessions": 1,
+    "get_requests_after_preflight": 0,
+    "builds": 0,
+    "checker_launches": 0,
+    "external_messages": 0
+  },
+  "remaining_get_requests": 6,
+  "outcome": "BOUNDED_UNRESOLVED",
+  "stop_reason": "Required CLI preflight failed authentication; repository workflow requires stopping upstream access without switching to browser automation.",
+  "accounting_note": "Conservative elapsed wall time from reservation through evidence closure is charged as active research time. Subsequent offline validation and repository delivery are recorded separately. No post-preflight GET was attempted; unused request budget is not permission to resume this completed item."
+}

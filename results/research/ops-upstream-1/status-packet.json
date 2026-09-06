@@ -1,0 +1,169 @@
+{
+  "schema_version": 1,
+  "item_id": "OPS-UPSTREAM-1",
+  "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
+  "recorded_at": "2026-09-06T18:06:58.738701+00:00",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "scientific_status": "NO_NEW_UPSTREAM_OR_SEMANTIC_EVIDENCE",
+  "upstream_change_assessment": "UNKNOWN",
+  "reason": "Required CLI preflight failed authentication; repository workflow requires stopping upstream access without switching to browser automation.",
+  "work_record": {
+    "path": "results/research/ops-upstream-1/work-record.json",
+    "sha256": "7cc3068b9e5b966fff3d54fe4df4a5c12b9a5bade71f5401faa830d8d32f2846",
+    "bytes": 3481
+  },
+  "preflight": {
+    "command": [
+      "scripts/github-cli-preflight",
+      "leanprover/lean-kernel-arena"
+    ],
+    "status": "FAIL",
+    "started_at": "2026-09-06T18:04:34.738476+00:00",
+    "returncode": 1,
+    "ended_at": "2026-09-06T18:04:34.876353+00:00",
+    "log": "results/research/ops-upstream-1/preflight.log",
+    "sha256": "b43258dcad252e1add6056cacb8db5d4aae10c2cecbf735deda2172eb626ba37"
+  },
+  "get_requests_after_preflight": 0,
+  "last_known_record": {
+    "binding": {
+      "path": "results/investigations/corpus-integration-2026-09-05/external-actions.json",
+      "sha256": "6b4b377c9118715e2dc8714aa66c71241caf6280c4912a11aaae3da7724d0d41",
+      "bytes": 2814
+    },
+    "recorded_at": "2026-09-05T21:56:24Z",
+    "decisions": {
+      "kiota_contract_clarification": {
+        "decision": "DEFERRED",
+        "external_action": false,
+        "reason": "Owner chose to wait for Arena feedback before deciding whether a separate Kiota contract clarification would add value."
+      },
+      "proof_parameter_arena_pair": {
+        "branch": "codex/proof-parameter-order",
+        "commit": "06e7350c2e5a92e5385f2602c683ae55c28a343c",
+        "decision": "SUBMITTED",
+        "external_action": true,
+        "maintainer_followup": {
+          "comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/182#issuecomment-5554878492",
+          "description_status": "REPLACED_WITH_STANDALONE_EXPLANATION",
+          "layout_status": "MOVED_TO_CORNER_CASES_WITH_SHORT_NAMES",
+          "test_names": [
+            "corner-cases/proof-param-ok",
+            "corner-cases/proof-param-swap"
+          ]
+        },
+        "pull_request": 182,
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/182",
+        "validation": {
+          "command": "python lka.py build-test 'corner-cases/proof-param-*'",
+          "failed": 0,
+          "succeeded": 2
+        }
+      },
+      "reducible_positivity_arena_pair": {
+        "branch": "codex/reducible-hidden-positivity",
+        "commit": "a23ade7a24cf33169a0ac532cb3009df9a3539c2",
+        "decision": "SUBMITTED",
+        "external_action": true,
+        "maintainer_followup": {
+          "comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554877783",
+          "control_status": "REMOVED",
+          "description_status": "REPLACED_WITH_STANDALONE_EXPLANATION",
+          "maintainer_policy_comment_url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554965541",
+          "outcome": "either",
+          "resolution": "MOVED_TO_CORNER_CASES_AS_SINGLE_TEST",
+          "test_names": [
+            "corner-cases/positivity-whnf"
+          ]
+        },
+        "pull_request": 181,
+        "title": "Add reducible-argument positivity corner case",
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "validation": {
+          "command": "python lka.py build-test corner-cases/positivity-whnf",
+          "failed": 0,
+          "succeeded": 1
+        }
+      }
+    },
+    "duplicate_preflight": {
+      "baseline_revision": "abc55357aee17c59dfdbf39c8a2e19739e23dd10",
+      "exact_pair_matches": 0,
+      "latest_revision": "8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062",
+      "recent_commit": {
+        "changed_paths": [
+          "checkers/sokonanoda.yaml"
+        ],
+        "sha": "8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062",
+        "subject": "chore: bump sokonanoda rev (#180)"
+      },
+      "result": "NEITHER_PAIR_ADDRESSED"
+    }
+  },
+  "findings": [
+    {
+      "target": "Arena PR #181",
+      "current_disposition": "NOT_RETRIEVED",
+      "last_known_disposition": "SUBMITTED",
+      "change_since_last_record": "UNKNOWN",
+      "reason": "No authenticated disposition query ran; retain the prior single positivity-whnf test and either policy as dated evidence."
+    },
+    {
+      "target": "Arena PR #182",
+      "current_disposition": "NOT_RETRIEVED",
+      "last_known_disposition": "SUBMITTED",
+      "change_since_last_record": "UNKNOWN",
+      "reason": "No authenticated disposition query ran; retain the prior proof-param-ok/proof-param-swap pair as dated evidence."
+    },
+    {
+      "target": "Arena duplicate inventory",
+      "current_result": "NOT_RETRIEVED",
+      "change_since_last_record": "UNKNOWN",
+      "reason": "The 2026-09-05 exact_pair_matches=0 record is not a current duplicate check."
+    },
+    {
+      "target": "Kiota contract clarification",
+      "local_disposition": "DEFERRED",
+      "change_to_local_decision": "NONE",
+      "reason": "Owner chose to wait for Arena feedback before deciding whether a separate Kiota contract clarification would add value."
+    }
+  ],
+  "recommendations": [
+    {
+      "action": "REPAIR_CLI_AUTHENTICATION_THEN_RANK_A_FRESH_BOUNDED_CHECK",
+      "target": "GitHub CLI on the repository workstation, followed by leanprover/lean-kernel-arena PRs #181 and #182",
+      "priority": "Maintenance prerequisite; does not displace eligible local ALT-PAYLOADS work",
+      "repair_command": "gh auth login -h github.com --web",
+      "prerequisites": [
+        "Owner restores CLI authentication.",
+        "Required scripts/github-cli-preflight leanprover/lean-kernel-arena succeeds for a newly ranked check.",
+        "A fresh queue item carries its own finite budget; do not rerun the completed OPS-UPSTREAM-1."
+      ],
+      "next_check_trigger": "Confirmed CLI authentication repair at a stopping-point review, or substantive maintainer feedback supplied by the owner. No repeated polling or automation is created.",
+      "evidence_refs": [
+        "results/research/ops-upstream-1/work-record.json",
+        "results/research/ops-upstream-1/preflight.log",
+        "results/investigations/corpus-integration-2026-09-05/external-actions.json"
+      ]
+    },
+    {
+      "action": "RETAIN_KIOTA_DEFERRAL_AND_TAKE_NO_EXTERNAL_ACTION",
+      "target": "sankalpsthakur/kiota proof-parameter contract clarification and existing Arena submissions",
+      "priority": "No external action supported by this failed retrieval",
+      "prerequisites": [
+        "Fresh Arena feedback must be available and reviewed before revisiting the Kiota deferral.",
+        "Any external issue, PR modification, or maintainer message requires exact action/target owner approval."
+      ],
+      "evidence_refs": [
+        "results/investigations/corpus-integration-2026-09-05/external-actions.json",
+        "results/research/ops-upstream-1/preflight.log"
+      ]
+    }
+  ],
+  "limits": [
+    "CLI preflight failure establishes a local access blocker, not an upstream disposition.",
+    "No fresh changed/no-change finding or exhaustive duplicate conclusion is available.",
+    "Prior source observations and corpus either policy remain profile evidence, not normative semantic authority.",
+    "One session; zero post-preflight GET requests, builds, research checker launches, or external messages."
+  ]
+}
