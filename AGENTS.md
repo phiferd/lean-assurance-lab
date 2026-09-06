@@ -32,6 +32,24 @@ When work changes the frontier, update the durable state and its canonical
 derived artifacts through their defined generation paths. Never advance into a
 subsequent milestone unless durable research state authorizes it.
 
+## Repository delivery and external actions
+
+After authorized work reaches its stopping condition and all required checks
+pass, commit only the in-scope changes and push the current branch to `origin`.
+Do not report the work as delivered until the push succeeds. If pushing fails,
+preserve the local commit and report the blocker; do not rewrite history,
+bypass branch protections, or discard work.
+
+This authorization applies only to the Lean Assurance Lab repository at
+`https://github.com/phiferd/lean-assurance-lab.git`.
+
+For every other repository, agents may investigate, prepare local changes,
+draft issues or pull requests, and perform read-only preflights. Creating or
+modifying an external issue, pull request, branch, comment, review, release,
+disclosure, or pushed commit requires explicit human approval for that exact
+action and target. Prior approval for one action is not blanket authorization
+for later actions.
+
 ## Durable epistemic invariants
 
 - LLM output is not semantic authority, and checker consensus or majority is
