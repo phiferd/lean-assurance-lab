@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-05
+Last updated: 2026-09-06
 
 ## How Status Is Tracked
 
@@ -8,8 +8,10 @@ This document is the canonical human-readable research tracker:
 
 - `Attempted` is the append-only record of completed experiments and durable
   engineering work.
-- `Research Frontier` is the ranked queue. Only its `Active` subsection defines
-  what should be investigated next.
+- `Research Frontier` selects the authorized theme. Only its `Active` subsection
+  defines what should be investigated next. The linked
+  [canonical work queue](../config/research-queue.json) ranks bounded items
+  beneath that theme and retains explicitly deferred alternatives.
 - `Waiting` records work blocked on upstream adjudication without allowing it to
   displace executable local work.
 - `Future Directions` preserves promising ideas that have not yet outranked the
@@ -21,6 +23,14 @@ planning document. GitHub Issues coordinate bounded, claimable work beneath the
 Active frontier and track upstream conversations; an Issue does not activate a
 research direction or establish project truth. This file retains the project's
 own priorities and completion conditions.
+
+Use [Research workflow](RESEARCH_WORKFLOW.md) to rank by expected ecosystem
+value, information gained, transfer, feasibility/cost, and urgency. Complete a
+bounded item before reevaluating; record exceptions and preserve consumed
+budgets. Every stopping-point review leaves a selected executable next item or
+an explicit blocker requiring a decision. Literature/reuse assessments are
+first-class queue items before new methods and at periodic review boundaries.
+Validate queue/status agreement with `scripts/validate-research-queue`.
 
 Research activity is not progress merely because it produces another document,
 taxonomy, or abstraction. Every Active frontier item must have a falsifiable
@@ -39,6 +49,14 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- Recorded the owner-requested conditional-validation-contracts phase plan and
+  ranked work queue on 2026-09-06. The first selected item is a bounded literature
+  and reuse assessment; the proposed formal fragment is deliberately undecided.
+  Added stopping-point ranking, finite item budgets, explicit entry gates,
+  subordinate GitHub coordination, and queue-integrity validation. This is a
+  planning transition, not execution or a new semantic result. See the
+  [initial ranking decision](../results/research/queue-reviews/2026-09-06-initial.json).
 
 - Completed owner-approved external follow-through for the corpus-integration
   successor on 2026-09-05. A latest-upstream Arena preflight at `8ae1d84`
@@ -1737,12 +1755,32 @@ prepared_external_action_drafts: 5
 
 ### Active
 
-No research frontier is currently active. The corpus-integration and witness-
-admission successor is complete, including the owner's external decisions and
-the two approved Arena submissions. Selecting prospective transfer work, more
-survivor triage, or any other successor requires a new explicit authorization.
-The ecosystem closure at `2136c65` and the original publication study remain
-closed.
+1. `F-CONDITIONAL-VALIDATION-CONTRACTS` — assess whether a small conditional
+   formal contract can explain a real validation boundary and improve a shared
+   assurance asset. Owner-selected successor on 2026-09-06, governed by
+   [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
+
+Selected next item: `CVC-1`.
+
+The [ranked queue](../config/research-queue.json) is canonical for item order,
+status, dependencies, finite budgets, and closure records. `CVC-1` is READY and
+unstarted: perform a bounded literature/reuse assessment and choose REUSE,
+EXTEND, BUILD_SMALL, or STOP using inspectable source and gap evidence. No
+checker or proof build is part of that first item. Its completion is the dated
+search record, candidate comparison, and concrete next-action recommendation,
+or an explicitly bounded unresolved decision when its search budget is spent.
+
+`CVC-2` through `CVC-5` are conditional PLANNED stages, not automatic execution
+authority. Reevaluate all candidates at each item's stop using
+[Research workflow](RESEARCH_WORKFLOW.md). The next eligible maintenance item is
+one bounded read-only Arena disposition check; pending upstream decisions do
+not prevent local research. Existing survivor/transfer campaigns remain
+deferred. This planning update executes none of those items.
+
+The corpus-integration successor, ecosystem closure at `2136c65`, and original
+publication study remain complete and historically bound. This phase creates
+named research models; it changes no normative-source approval or old catalog
+disposition, and authorizes no external message or publication.
 
 ### Waiting
 
@@ -1799,12 +1837,11 @@ closed.
 
 ### Future Directions
 
-- `D-IMPLEMENTATION-SPECS`: independently reverse engineer the accepted export
-  contract from official Lean, Nanoda, Kiota, and Lean4Lean, then compare the
-  frozen profiles. Start with inductive and recursor metadata. Record parser,
-  reconstruction, validation, and semantic-use behavior separately. Translate
-  observations into characterization tests first; promote them to conformance
-  tests only after an `accept`, `reject`, or `either` contract is justified.
+- `D-IMPLEMENTATION-SPECS`: the conditional-contract feasibility phase now
+  examines a bounded subset of this idea, beginning with literature/reuse and
+  fragment selection. A full four-implementation reverse-engineered export
+  specification remains deferred. Preserve parser, reconstruction, validation,
+  and semantic-use distinctions; behavior alone does not establish normativity.
 - `D-UNDIRECTED-CAMPAIGN`: run a broader unattended mutant campaign only after
   the targeted frontier stops producing higher-value source-directed work.
   Keep generation, checker execution, minimization, and result persistence

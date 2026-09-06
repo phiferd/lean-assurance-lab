@@ -19,8 +19,9 @@ repository's [Apache License, Version 2.0](LICENSE).
    [Investigation and Upstream Action SOP](docs/INVESTIGATION_SOP.md),
    [Public Status](docs/PUBLIC_STATUS.md), and the relevant section of the
    [Design](docs/DESIGN.md).
-3. Open the matching issue form for substantial work so assumptions and expected
-   evidence are visible before expensive execution.
+3. Record substantial work as a bounded repository queue item; use the matching
+   issue form to coordinate contributions when external publication is
+   authorized. Assumptions and expected evidence precede expensive execution.
 4. Pin every source revision, configuration, corpus input, and random seed.
 5. Preserve raw exceptional outcomes and unresolved states.
 6. Run the repository tests and current assurance commands before submitting.
@@ -44,6 +45,14 @@ the gate pass.
 questions are Active. GitHub Issues split those questions into independently
 executable units and coordinate ownership. For substantial work, assignment or
 an explicit claim on the Issue is the coordination mechanism.
+
+The [canonical queue](config/research-queue.json) ranks eligible bounded tasks;
+follow [Research workflow](docs/RESEARCH_WORKFLOW.md) to complete the selected
+item and reevaluate at its stopping point. Literature/reuse searches are valid
+tasks, especially before new methods or tools. An Issue mirrors the queue ID,
+budget, deliverables, and stop condition. Local authorized work can proceed
+with a repository ownership record while an Issue is unpublished; agents must
+not publish a tracking Issue without the constitution's external authorization.
 
 An Issue is not project truth. Closing an Issue does not establish a result
 until the required evidence and conclusion are represented in repository

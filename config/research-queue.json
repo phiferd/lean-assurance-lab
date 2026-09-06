@@ -1,0 +1,264 @@
+{
+  "schema_version": 1,
+  "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
+  "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+  "updated_at": "2026-09-06",
+  "selected_item": "CVC-1",
+  "items": [
+    {
+      "id": "CVC-1",
+      "priority": 1,
+      "title": "Assess literature and reuse before choosing a fragment",
+      "target": "Existing formal judgments and at most three candidate Lab boundaries",
+      "action": "Inspect primary literature and relevant formal artifacts; recommend REUSE, EXTEND, BUILD_SMALL, or STOP.",
+      "expected_value": "Avoid duplicated work and select a tractable bridge to a real assurance question.",
+      "rank_rationale": "Highest eligible value: can change the method and fragment before implementation; existing upstream follow-through has no recorded urgent deadline.",
+      "entry_gate": "Owner-selected planning successor; execution is a read-only assessment under the plan's finite bounds.",
+      "completion": "Dated search log, source/version/claim/gap table, candidate comparison and evidence-backed recommendation under results/research/conditional-validation-contracts/cvc-1/.",
+      "stop_condition": "Decision supported or three sessions exhausted; at most 18 queries, 12 primary sources and six code inspections; zero builds/checker launches.",
+      "kind": "LITERATURE",
+      "status": "READY",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 3,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "results/research/declaration-validation-publication-study-closure.json",
+        "config/declaration-validation-target.json",
+        "results/investigations/corpus-integration-2026-09-05/decision-packet.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-2",
+      "priority": 2,
+      "title": "State one contract and proof target",
+      "target": "One fragment selected by CVC-1 and at most two strategies",
+      "action": "Fix input meaning, target judgment, assumptions, environment and reconstruction relation; define a finite successor execution protocol.",
+      "expected_value": "Turns a real ambiguity into a precise, challengeable formal question.",
+      "rank_rationale": "First conditional successor if the search supports formal work; smaller and more decisive than broad specification discovery.",
+      "entry_gate": "Successful CVC-1 artifact recommends proceeding; record entry-gate and ranking decision before READY.",
+      "completion": "Formal signature/judgment, exact acceptance obligation, source mappings, positive and negative examples, assumption ledger, and exact proof target/protocol.",
+      "stop_condition": "Two sessions or inability to state a non-circular target; record missing definition/theorem and rerank.",
+      "kind": "CONTRACT",
+      "status": "PLANNED",
+      "depends_on": [
+        "CVC-1"
+      ],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "results/research/declaration-validation-publication-study-closure.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-3",
+      "priority": 3,
+      "title": "Prove or refute one preservation claim",
+      "target": "The single CVC-2 contract and pinned formalization",
+      "action": "Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.",
+      "expected_value": "Establishes a scoped semantic result or exposes the exact formal obstacle.",
+      "rank_rationale": "Only worth its proof cost after contract/reuse feasibility is demonstrated.",
+      "entry_gate": "CVC-2 succeeds; exact available runtime, assumptions and new-phase execution protocol are bound before attempts.",
+      "completion": "Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.",
+      "stop_condition": "Four sessions or 12 proof builds of at most five minutes each; no new family or broad kernel proof.",
+      "kind": "PROOF",
+      "status": "PLANNED",
+      "depends_on": [
+        "CVC-2"
+      ],
+      "budget": {
+        "max_sessions": 4,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-4",
+      "priority": 4,
+      "title": "Connect the contract to real validation behavior",
+      "target": "At most two implementation lineages and four fixed pairs",
+      "action": "Map parsing, reconstruction, validation and semantic use; execute only the bound comparison.",
+      "expected_value": "Shows whether the formal result actually explains an ecosystem ambiguity.",
+      "rank_rationale": "Conditional on a usable proof result; speculative adapters or a broad checker survey would have lower value.",
+      "entry_gate": "CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.",
+      "completion": "Exact bytes, observer profiles, raw outcomes and source-to-contract mapping; explicitly retain any unproved implementation bridge.",
+      "stop_condition": "Three sessions, four pairs or 16 launches of at most 30 seconds; stop on invalid inputs or unresolved adapter boundary.",
+      "kind": "IMPLEMENTATION",
+      "status": "PLANNED",
+      "depends_on": [
+        "CVC-3"
+      ],
+      "budget": {
+        "max_sessions": 3,
+        "session_minutes": 90,
+        "checker_launches": 16
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "config/declaration-validation-target.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-5",
+      "priority": 5,
+      "title": "Prepare shared evidence and decide the next phase",
+      "target": "The scoped result and the ecosystem target it benefits",
+      "action": "Prepare a regression/formalization/clarification draft or justified no-action result, then compare successor options.",
+      "expected_value": "Converts completed research into a reusable asset and a ranked next action.",
+      "rank_rationale": "Closure is required at every earlier stop; this final packaging item applies only if the full path succeeds.",
+      "entry_gate": "CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.",
+      "completion": "Stand-alone contribution or no-action recommendation plus phase decision and updated ranked queue.",
+      "stop_condition": "Two sessions with existing evidence only; external publication is not part of local completion.",
+      "kind": "CONTRIBUTION",
+      "status": "PLANNED",
+      "depends_on": [
+        "CVC-4"
+      ],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "docs/INVESTIGATION_SOP.md"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "OPS-UPSTREAM-1",
+      "priority": 6,
+      "title": "Check pending Arena dispositions once",
+      "target": "Arena PRs #181 and #182 and deferred Kiota clarification",
+      "action": "Perform one GET-only disposition/duplicate inventory and record any new actionable feedback.",
+      "expected_value": "Closes existing community contributions and may unblock a concrete clarification.",
+      "rank_rationale": "Second eligible item; promote at a stopping boundary if substantive feedback or a deadline makes it more valuable than research.",
+      "entry_gate": "Read-only scope only; run CLI preflight and preserve the existing Kiota deferral.",
+      "completion": "One dated bounded status packet, changed/no-change findings, and recommendation with next check trigger.",
+      "stop_condition": "One session and at most six GET requests after preflight; zero checker launches or external messages; no repeated polling.",
+      "kind": "MAINTENANCE",
+      "status": "READY",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
+        "docs/RESEARCH_STATUS.md"
+      ],
+      "issue_urls": [
+        "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "https://github.com/leanprover/lean-kernel-arena/pull/182"
+      ],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "ALT-SURVIVORS",
+      "priority": 7,
+      "title": "Design the next fixed survivor triage",
+      "target": "One selected member of the seven pending survivors",
+      "action": "Prepare an evidence-based fixed-candidate triage proposal and finite execution manifest.",
+      "expected_value": "Potential small shared regression using existing campaign assets.",
+      "rank_rationale": "Fallback if formal-contract work has poor feasibility or a survivor has stronger concrete evidence.",
+      "entry_gate": "Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.",
+      "completion": "One exact candidate, evidence rationale, budget and stopping predicate ready for authorization.",
+      "stop_condition": "One planning session; no checker execution under this queue entry.",
+      "kind": "EXPERIMENT",
+      "status": "DEFERRED",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
+        "results/assurance/current.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": "Outside the selected contract phase; no new survivor campaign is authorized."
+    },
+    {
+      "id": "ALT-TRANSFER",
+      "priority": 8,
+      "title": "Assess a prospective transfer study",
+      "target": "One independent or held-out transfer question",
+      "action": "Design one falsifiable transfer comparison after reviewing relevant methods and prior knowledge.",
+      "expected_value": "Could test generalization beyond the retrospective single-obligation study.",
+      "rank_rationale": "Lower near-term feasibility and higher dependency cost than a decisive contract/reuse assessment.",
+      "entry_gate": "Separate phase authorization; fresh literature check; independent target and preregistration are prerequisites.",
+      "completion": "Bounded design with frozen comparison, resource estimate, leakage controls and go/no-go recommendation.",
+      "stop_condition": "One design session, no checker execution; stop if independence cannot be established.",
+      "kind": "EXPERIMENT",
+      "status": "DEFERRED",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/research/declaration-validation-publication-study-closure.json",
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": "Independent successor research remains deferred; not activated by this plan."
+    },
+    {
+      "id": "ALT-PAYLOADS",
+      "priority": 9,
+      "title": "Characterize one materialization blocker",
+      "target": "A specific missing proof or assurance dependency",
+      "action": "If a selected item is blocked, isolate one portability/materialization repair with exact inputs and cost.",
+      "expected_value": "Enables reproduction when a real dependency is missing.",
+      "rank_rationale": "Promote only for an observed blocker; building a general storage service now has weak demonstrated value.",
+      "entry_gate": "A selected item records a concrete missing-input blocker; any network/write permissions remain explicit.",
+      "completion": "Reproduction or repair proposal for one named missing dependency, with a finite implementation budget.",
+      "stop_condition": "One diagnostic session, no checker launches or broad infrastructure build.",
+      "kind": "OPERATIONS",
+      "status": "DEFERRED",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "docs/AGENT_WORKFLOW.md"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": "No new materialization blocker has been demonstrated for the unexecuted phase."
+    }
+  ]
+}

@@ -15,6 +15,7 @@ characterize validation boundaries.
 
 - Claimable work: [GitHub Issues](https://github.com/phiferd/lean-assurance-lab/issues)
 - Research priority and context: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)
+- Ranked work and selection process: [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md)
 - Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - Agent workflow: [`docs/AGENT_WORKFLOW.md`](docs/AGENT_WORKFLOW.md)
 - Project review and proposed next steps: [`docs/PROJECT_REVIEW.md`](docs/PROJECT_REVIEW.md)
@@ -23,6 +24,9 @@ characterize validation boundaries.
 The project is governed by `CONSTITUTION.md`.
 [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md) is the research-planning
 authority: its Active frontier says what the project should investigate next.
+The [canonical work queue](config/research-queue.json) ranks bounded items below
+that frontier. Finish an item at its stopping criterion, then reevaluate value,
+cost, dependencies, and literature/reuse needs before selecting the next one.
 GitHub Issues coordinate bounded, claimable work beneath that frontier;
 creating an Issue does not independently activate a research direction or
 establish a result. [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md) is a

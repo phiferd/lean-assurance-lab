@@ -8,9 +8,12 @@ import argparse
 import hashlib
 import json
 import subprocess
+import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'lib'))
+from research_queue import load_queue
 OUTPUT = 'results/research/project-review.json'
 REPORT = 'docs/PROJECT_REVIEW.md'
 HISTORY = 'results/research/declaration-validation-publication-study-historical.json'
@@ -30,6 +33,9 @@ SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATIO
            'scripts/refresh-current-state', 'scripts/run-unit-tests',
            'scripts/validate-publication-study-snapshot', 'scripts/publication_study_snapshot.py',
            'scripts/build-project-review']
+SOURCES += ['config/research-queue.json', 'docs/RESEARCH_WORKFLOW.md',
+            'lib/research_queue.py', 'scripts/validate-research-queue',
+            'tests/test_research_queue.py']
 
 
 def load(path):
@@ -42,6 +48,7 @@ def bound(path):
 
 
 def build():
+    queue = load_queue(ROOT)
     historical = load(HISTORY)  # Gate 12 must exist before this final review.
     frozen = {row['path']: row for row in historical['artifacts']}
     for path in [DECISION, RUN + '/result.json', RUN + '/action-recommendations.json']:
@@ -82,18 +89,29 @@ def build():
         'input_materialization': 'exact-hash local donor materialization on the declared platform',
         'successor_packet_status': packet['status'] if packet is not None else 'NOT_YET_RECORDED',
     }
-    next_steps = ([{'priority': index + 1, 'id': 'SUCCESSOR_PACKET_NEXT_STEP_' + str(index + 1), 'target': 'Corpus integration successor',
-                    'action': str(step), 'completion': 'Follow the recorded packet step within its stated authorization.',
-                    'mechanism': 'Bounded local evidence and owner-gated external actions.',
-                    'authorization': 'SUCCESSOR_PACKET'} for index, step in enumerate(packet['next_steps'])] if packet is not None else [
-        {'priority': 1, 'id': 'RECORD_SUCCESSOR_DECISION_PACKET', 'target': 'Four mature findings and selected existing survivors',
-         'action': 'The authorized successor frontier is active. Record its bounded upstream packet, fixed survivor triage and recommendations before claiming any closure.',
-         'completion': 'A decision packet with finding dispositions, bounded triage, external_actions false and concrete next steps exists.',
-         'mechanism': 'Read-only upstream inventory, exact local manifests and bounded local evidence.',
-         'authorization': 'ACTIVE_SUCCESSOR_FRONTIER; external publication remains separately gated'}])
+    next_steps = []
+    for item in sorted(queue['items'], key=lambda row: row['priority']):
+        if item['status'] == 'COMPLETE':
+            continue
+        budget = item['budget']
+        next_steps.append({
+            'priority': item['priority'], 'id': item['id'], 'title': item['title'],
+            'status': item['status'], 'target': item['target'], 'action': item['action'],
+            'completion': item['completion'], 'stop_condition': item['stop_condition'],
+            'rank_rationale': item['rank_rationale'], 'entry_gate': item['entry_gate'],
+            'mechanism': f"At most {budget['max_sessions']} sessions of {budget['session_minutes']} active minutes; {budget['checker_launches']} validator launches. Additional plan limits apply.",
+            'authorization': item['status'] + ': ' + item['entry_gate'],
+        })
+    selected = next(row for row in queue['items'] if row['id'] == queue['selected_item'])
+    queue_sources = [queue['plan'], *[str(p.relative_to(ROOT)) for p in sorted((ROOT / 'results/research/queue-reviews').glob('*.json'))]]
+    for item in queue['items']:
+        queue_sources.extend(item['evidence_refs'])
+        if item['closure']:
+            queue_sources.extend(item['closure']['evidence_refs'])
     return {'schema_version': 1, 'review_scope': 'Current local canonical records plus the bounded Arena submission and recent-commit preflight record; no completeness claim for all historical actions.',
-            'inputs': [bound(p) for p in [*SOURCES, *([SUCCESSOR_PACKET] if packet is not None else [])]], 'metrics': metrics,
-            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The completed successor converted two existing witnesses into durable regressions, submitted two focused Arena contributions, and deferred the Kiota clarification pending feedback. The next value comes from upstream disposition of those shared assets and an explicitly authorized independent successor; enlarging the closed one-obligation study remains lower value.',
+            'inputs': [bound(p) for p in dict.fromkeys([*SOURCES, *queue_sources, *([SUCCESSOR_PACKET] if packet is not None else [])])], 'metrics': metrics,
+            'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The owner selected a bounded conditional-contract feasibility phase, beginning with literature and reuse before choosing a formal fragment. The ranked queue compares shared assurance value, information gain, feasibility and urgency at item stopping points. This planning transition establishes no new semantic result. Historical study claims and pending upstream follow-through remain separately recorded.',
+            'work_queue': queue,
             'constitutional_alignment': [
                 {'goal': 'Measured ecosystem trust', 'assessment': 'Aligned, with limited generalization',
                  'evidence': 'The current snapshot separates scoped mutation results, cross-validator observations and unresolved triage; the completed pilot does not establish general method strength.',
@@ -113,6 +131,9 @@ def build():
                 {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
                  'evidence': 'Schema-backed action records now preserve approval, deferral, separate PR URLs, exact branch commits, and the latest-upstream duplicate preflight.',
                  'next_improvement': 'Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control.'},
+                {'goal': 'Highest-value bounded work and replaceable strategy', 'assessment': 'Explicit ranked operational successor',
+                 'evidence': 'The queue retains finite items, dependencies, stop conditions and deferred alternatives; the first item assesses existing literature and reuse before committing to a fragment.',
+                 'next_improvement': 'Complete ' + selected['id'] + ': ' + selected['title'] + '; record the result and rerank before the next item.'},
             ],
             'operational_findings': [
                 'The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.',
@@ -125,13 +146,15 @@ def build():
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
                 'Git pushes succeeded while GitHub CLI API authentication was invalid. `scripts/github-cli-preflight` now fails early with the repair command so duplicate checks, PR creation and status capture stay CLI-first.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
+                'Queue validation checks bounded readiness and status agreement; ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
             ],
             'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
                                        'The corpus-integration successor completed two current-Arena package builds, an exact tutorial comparison, and a separate Ultra proof-parameter review.',
                                        'Two fixed survivor witnesses are admitted through an explicit v2 corpus successor; seven mechanically executed survivors remain pending.',
                                        'Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.',
                                        'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
-                                       'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.'],
+                                       'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.',
+                                       'The owner-requested conditional-contract plan, canonical ranked queue, initial decision record and stopping-point/literature workflow are recorded; the first research item remains unexecuted.'],
             'successor_decision_packet': ({'binding': bound(SUCCESSOR_PACKET), 'status': packet['status'],
                                            'findings': [{'id': row.get('id'), 'disposition': row.get('disposition'), 'reason': row.get('reason')} for row in packet['findings']],
                                            'triage': [{'mutant_id': row.get('mutant_id'), 'status': row.get('status'), 'reason': row.get('reason')} for row in packet['triage']],
@@ -139,7 +162,7 @@ def build():
             'pending_external_actions': pending, 'proposed_next_steps': next_steps,
             'autonomy_policy': {'automatic': ['Hash and inventory checks', 'Already-authorized bounded execution and checkpointing', 'Deterministic normalization, report generation and validation', 'Read-only evidence assembly and preparation of concrete drafts'],
                                 'model_review': ['Frontier design and novelty assessment', 'Unexplained checker differences and semantic ambiguity', 'Source-to-claim interpretation under frozen authority rules'],
-                                'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Activation of proposed new research scope beyond the completed study']},
+                                'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Activation of proposed new research scope beyond the current authorized phase']},
             'cost_policy': ['No model calls inside checker/build/minimization loops.', 'Batch independent mechanical work; stop on budget/input/semantic exceptions.', 'Use Luna for routine edits and Terra for bounded implementation; reserve Ultra for a named difficult question.', 'Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.', 'Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions per bounded investigation.'],
             'new_research_authorized_by_this_review': False}
 
@@ -155,9 +178,13 @@ def render(review):
              '## Constitutional alignment', '', '| Goal | Assessment | Next improvement |', '|---|---|---|']
     lines += ['| ' + row['goal'] + ' | ' + row['assessment'] + ' | ' + row['next_improvement'] + ' |' for row in review['constitutional_alignment']]
     lines += ['', 'Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.', '', '## Recommended order', '']
+    lines += ['Selected next item: **' + review['work_queue']['selected_item'] + '**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.', '',
+              '| Rank | Item | Status |', '|---|---|---|']
+    lines += [f"| {s['priority']} | {s['id']}: {s['title']} | {s['status']} |" for s in review['proposed_next_steps']]
+    lines.append('')
     for step in review['proposed_next_steps']:
         target = step['target'] if isinstance(step['target'], str) else f"A fixed subset of the {len(step['target'])} existing pending survivors; exact IDs are in the canonical JSON."
-        lines += [f"### {step['priority']}. {step['id'].replace('_', ' ').capitalize()}", '', '**Target:** ' + target, '', step['action'], '', '**Completion:** ' + step['completion'], '', '**Execution:** ' + step['mechanism'], '', '**Boundary:** ' + step['authorization'], '']
+        lines += [f"### {step['priority']}. {step['id']}: {step['title']}", '', '**Target:** ' + target, '', step['action'], '', '**Why this rank:** ' + step['rank_rationale'], '', '**Completion:** ' + step['completion'], '', '**Stop:** ' + step['stop_condition'], '', '**Execution:** ' + step['mechanism'], '', '**Boundary:** ' + step['authorization'], '']
     lines += ['## Autonomous workflow', '', '| Work | Default mechanism |', '|---|---|']
     for category, values in review['autonomy_policy'].items():
         lines.append('| ' + category.replace('_', ' ').capitalize() + ' | ' + '; '.join(values) + ' |')

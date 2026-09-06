@@ -17,6 +17,7 @@ by the task. Do not replace those sources with this page or a conversation.
 | Current-state artifact refresh | `scripts/build-artifact-graph`, `scripts/artifact-status`; affected generator and graph dependencies |
 | Publication-study Gates 11–12 | `scripts/close-declaration-validation-publication-study`, canonical closure decision, content manifest and historical attestation; use `validate-historical` after the freeze; `scripts/validate-publication-study-snapshot --require-full-payload` supplies the historical frontier for full-payload verification |
 | Project review and proposed next frontier | `docs/PROJECT_REVIEW.md`, `results/research/project-review.json`, `scripts/build-project-review --check`; proposals do not activate work |
+| Ranked work and stopping-point review | `docs/RESEARCH_WORKFLOW.md`, `config/research-queue.json`, `scripts/validate-research-queue`; the Active frontier selects the governing phase plan |
 | External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft, `scripts/github-cli-preflight <owner/repo>`; publication still requires target-specific human authorization |
 
 Use `rg` to find a section or artifact ID before opening large files. For JSON,
@@ -53,6 +54,13 @@ successful work. Independent semantic review is reserved for consequential
 claims and cannot establish authority by consensus.
 
 ## Context handoff
+
+The 2026-09-06 operating successor adds a ranked queue beneath the authorized
+frontier; historical operating-guide bytes remain bound in their original Git
+trees. Follow `docs/RESEARCH_WORKFLOW.md`: keep one item active through its stop,
+then record the result and comparative ranking before selecting the next item.
+Check literature/reuse needs at that boundary. Queue IDs and repository evidence
+control work selection; GitHub Issues coordinate claims and external follow-up.
 
 Prefer a fresh conversation at a verified gate boundary, after changes and
 validation outcomes are durable. Reset sooner if unrelated work has accumulated

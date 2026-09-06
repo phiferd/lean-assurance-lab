@@ -1,0 +1,64 @@
+{
+  "date": "2026-09-06",
+  "status": "PASS",
+  "scope": "Planning/frontier transition and queue integration only; no research item executed.",
+  "unit_tests": {
+    "current": 337,
+    "historical": 73,
+    "total": 410,
+    "skips": 0,
+    "full_payload": true,
+    "log": "unit-tests.log"
+  },
+  "checks": [
+    "scripts/validate-research-queue",
+    "focused queue and refresh tests",
+    "scripts/close-declaration-validation-publication-study validate-historical",
+    "scripts/validate-publication-study-snapshot --require-full-payload",
+    "scripts/validate-contribution --check-catalog",
+    "scripts/refresh-current-state",
+    "scripts/build-project-review --check",
+    "scripts/artifact-status --require-current",
+    "git diff --check"
+  ],
+  "artifact_counts": {
+    "CURRENT": 168,
+    "HISTORICAL": 10,
+    "SUPERSEDED": 4
+  },
+  "existing_assurance_gate": "FAIL: existing unresolved evidence remains unchanged",
+  "bindings": [
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "sha256": "cf1852ea1ceeb8294f4cbf1bca46cca2ae43382334ecbdfdc8cac238b996773b"
+    },
+    {
+      "path": "docs/RESEARCH_WORKFLOW.md",
+      "sha256": "9c2191680b986a72edc70eda8a66be8673c544e52b4a288dbc0926d673155986"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256": "d832f475d10920011748250561915255cff3e59615822275aeac4ba6a592f072"
+    },
+    {
+      "path": "config/research-queue.json",
+      "sha256": "66b9b58be4611a3263683c802aec792e1c5211da586b1ccb5b95f8f8e688ca15"
+    },
+    {
+      "path": "lib/research_queue.py",
+      "sha256": "84c75de4e9776d06cdd606aed48f77bda64bf24dd9e40bfd622db9f53fae4150"
+    },
+    {
+      "path": "scripts/validate-research-queue",
+      "sha256": "85f07de216f490c3095469eabe8218a6a1e5460ffd349a6cc2fe73e369c34877"
+    },
+    {
+      "path": "scripts/build-project-review",
+      "sha256": "a32f87df482e1f6d6eed9c2f2be61f4deac44533c3bef17d36f29080bc029bed"
+    },
+    {
+      "path": "scripts/refresh-current-state",
+      "sha256": "1524ad3956e46e54e6c447231790b396380fc3a1f88216fcce0f6e329f8fe978"
+    }
+  ]
+}
