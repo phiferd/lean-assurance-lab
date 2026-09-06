@@ -1,0 +1,204 @@
+"""Independent adversarial controls for the fixed CVC-3 runner; no Lean runs."""
+import copy
+from datetime import datetime, timedelta, timezone
+import json
+import math
+import os
+from pathlib import Path
+import signal
+import sys
+import tempfile
+import unittest
+from unittest.mock import patch
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+sys.path.insert(0, str(ROOT / 'tests'))
+from lib import cvc_runner as p
+from cvc_runner_fixtures import reserved_fixture
+
+
+def proof_text():
+    return 'import Contract\n\n' + '\n\n'.join(
+        f'theorem {name} : {typ} := by\n  exact True.intro' for name, typ in p.TARGETS) + '\n'
+
+
+def axiom_output():
+    return '\n'.join(f"'{name}' depends on axioms: [propext, Classical.choice, Quot.sound]"
+                     for name in p.AXIOM_TARGETS) + '\n'
+
+
+def reservation(n=1, seconds=300):
+    return {'kind': 'RESERVED', 'number': n, 'reserved_seconds': seconds,
+            'phase': 'SIGNATURE' if n == 1 else 'PROOF'}
+
+
+def terminal(n=1, status='COMPLETE', seconds=1):
+    return {'kind': 'TERMINAL', 'number': n, 'status': status, 'charged_seconds': seconds}
+
+
+class LedgerTests(unittest.TestCase):
+    def test_tampered_truncated_and_invalid_chain_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'events'
+            p.append(path, reservation())
+            p.append(path, terminal())
+            self.assertEqual(p.derive(p.read_events(path))[1]['terminal']['status'], 'COMPLETE')
+            original = path.read_bytes()
+            for data in [original[:-1], original.replace(b'COMPLETE', b'FAILED'), b'{}\n']:
+                path.write_bytes(data)
+                with self.assertRaises(ValueError):
+                    p.read_events(path)
+
+    def test_duplicate_and_nonconsecutive_attempts_rejected(self):
+        for events in [[reservation(2)], [reservation(), reservation()],
+                       [reservation(), terminal(), terminal()],
+                       [reservation(), reservation(2)],
+                       [reservation(seconds=0)], [reservation(seconds=301)],
+                       [reservation(), terminal(seconds=math.inf)]]:
+            with self.subTest(events=events), self.assertRaises(ValueError):
+                p.derive(events)
+
+    def test_signature_failure_cannot_be_retried(self):
+        for status in ['FAILED', 'TIMED_OUT', 'INTERRUPTED']:
+            with self.subTest(status=status), self.assertRaises(ValueError):
+                p.derive([reservation(), terminal(status=status), reservation(2)])
+
+    def test_failed_proof_may_spend_a_new_attempt(self):
+        events = [reservation(), terminal(), reservation(2), terminal(2, 'FAILED'), reservation(3)]
+        self.assertEqual(len(p.derive(events)), 3)
+
+    def test_concurrent_ownership_rejected(self):
+        with tempfile.TemporaryDirectory() as temp:
+            path = Path(temp) / 'owner.lock'
+            owner = p.lock(path)
+            try:
+                with self.assertRaisesRegex(ValueError, 'concurrent'):
+                    p.lock(path)
+            finally:
+                owner.close()
+
+
+class BudgetTests(unittest.TestCase):
+    def setUp(self):
+        self.current = datetime(2026, 9, 6, 20, tzinfo=timezone.utc)
+        self.work = {'sessions': [{'started_at': self.current.isoformat(), 'ended_at': None}]}
+
+    def test_session_deadline_is_minimum(self):
+        self.assertEqual(p.budget(self.work, {}, self.current), 300)
+        self.work['sessions'][0]['started_at'] = (self.current - timedelta(seconds=5399)).isoformat()
+        self.assertEqual(p.budget(self.work, {}, self.current), 1)
+
+    def test_thirteenth_attempt_and_fifth_session_rejected(self):
+        with self.assertRaises(ValueError):
+            p.budget(self.work, {n: {'reserved_seconds': 1} for n in range(1, 13)}, self.current)
+        self.work['sessions'] *= 5
+        with self.assertRaises(ValueError):
+            p.budget(self.work, {}, self.current)
+
+    def test_reversed_naive_overlong_closed_and_nonfinite_rejected(self):
+        bad = [
+            {'started_at': (self.current + timedelta(seconds=1)).isoformat(), 'ended_at': None},
+            {'started_at': self.current.replace(tzinfo=None).isoformat(), 'ended_at': None},
+            {'started_at': (self.current - timedelta(seconds=5401)).isoformat(), 'ended_at': None},
+            {'started_at': self.current.isoformat(), 'ended_at': self.current.isoformat()},
+        ]
+        for session in bad:
+            with self.subTest(session=session), self.assertRaises(ValueError):
+                p.budget({'sessions': [session]}, {}, self.current)
+        with self.assertRaises(ValueError):
+            p.budget(self.work, {1: {'reserved_seconds': math.nan}}, self.current)
+
+    def test_four_sessions_cannot_exceed_total(self):
+        start = self.current - timedelta(seconds=21600)
+        sessions = [{'started_at': (start + timedelta(seconds=5400*n)).isoformat(),
+                     'ended_at': (start + timedelta(seconds=5400*(n+1))).isoformat() if n < 3 else None}
+                    for n in range(4)]
+        with self.assertRaises(ValueError):
+            p.budget({'sessions': sessions}, {}, self.current)
+
+
+class AuditTests(unittest.TestCase):
+    def audit(self, data, err=''):
+        with tempfile.TemporaryDirectory() as temp:
+            stdout, stderr = Path(temp) / 'stdout', Path(temp) / 'stderr'
+            stdout.write_text(data); stderr.write_text(err)
+            return p.audit(stdout, stderr, json.loads((ROOT / p.ASSUMPTIONS).read_text()))
+
+    def test_six_full_transitive_reports_and_empty_axioms(self):
+        self.audit(axiom_output())
+        self.audit('\n'.join(f"'{name}' does not depend on any axioms" for name in p.AXIOM_TARGETS))
+        self.audit(axiom_output().replace('[propext, Classical.choice, Quot.sound]',
+                                        '[propext,\n Classical.choice, Quot.sound]'))
+
+    def test_missing_duplicate_malformed_and_unlisted_axioms_rejected(self):
+        data = axiom_output()
+        for bad in ['\n'.join(data.splitlines()[:-1]), data + data.splitlines()[0] + '\n',
+                    data.replace('Quot.sound', 'Lean.Level.mkData_eq'),
+                    data.replace('Quot.sound', 'sorryAx'),
+                    data.replace('Quot.sound', 'Lab.assumedTarget'),
+                    data.replace('Quot.sound]', 'Quot.sound'),
+                    data.replace('depends on axioms:', 'look at these axioms:')]:
+            with self.subTest(data=bad), self.assertRaises(ValueError):
+                self.audit(bad)
+
+    def test_stderr_sorry_warning_rejected(self):
+        with self.assertRaises(ValueError):
+            self.audit(axiom_output(), "warning: declaration uses 'sorry'\n")
+
+    def test_exact_theorem_skeleton_and_contract_import(self):
+        p.validate_proof_source(proof_text())
+        for bad in [proof_text().replace('import Contract', '-- import Contract'),
+                    proof_text().replace(p.TARGETS[0][1], 'True'),
+                    proof_text().replace('theorem Lab.CVC2.boundary', 'theorem Lab.CVC2.other'),
+                    proof_text() + '\naxiom extra : False\n',
+                    proof_text().replace('True.intro', 'sorry'),
+                    proof_text().replace('True.intro', 'by native_decide'),
+                    proof_text() + '\n#eval IO.println "forged axioms"\n']:
+            with self.subTest(text=bad), self.assertRaises(ValueError):
+                p.validate_proof_source(bad)
+
+
+class ProcessTests(unittest.TestCase):
+    """Six finite fixture reservations per run, including a child and failed start."""
+    def fixture(self, code, missing=False, children=0, timeout=.8):
+        with tempfile.TemporaryDirectory() as temp, reserved_fixture(self.id(), 1 + children) as receipt:
+            root = Path(temp)
+            argv = ['/definitely/absent/cvc-runner-fixture'] if missing else [sys.executable, '-c', code]
+            result = p.run_process(argv, root, {'PATH': '/usr/bin:/bin'}, root/'stdout', root/'stderr', timeout)
+            receipt['status'] = result['status']
+            return result, (root/'stdout').read_text(), (root/'stderr').read_text()
+
+    def test_success_and_failed_start_preserve_raw_streams(self):
+        result, out, err = self.fixture('import sys; print("inert"); print("raw-error", file=sys.stderr)')
+        self.assertEqual((result['status'], out, err), ('COMPLETE', 'inert\n', 'raw-error\n'))
+        self.assertLessEqual(result['started_at'], result['ended_at'])
+        result, _, _ = self.fixture('', missing=True)
+        self.assertEqual(result['status'], 'FAILED')
+        self.assertIsNone(result['returncode'])
+
+    def test_timeout_kills_descendant_group(self):
+        code = ('import subprocess,sys,time\n'
+                'p=subprocess.Popen([sys.executable,"-c","import time; time.sleep(20)"])\n'
+                'print(p.pid,flush=True)\n'
+                'time.sleep(20)\n')
+        result, out, _ = self.fixture(code, children=1)
+        self.assertEqual(result['status'], 'TIMED_OUT')
+        child = int(out.strip())
+        # On this macOS runtime orphaned terminated descendants are reaped by init.
+        try:
+            os.kill(child, 0)
+        except ProcessLookupError:
+            pass
+        else:
+            self.fail('fixture descendant remains alive after timeout cleanup')
+
+    def test_sigterm_cancels_and_reaps(self):
+        code = 'import os,signal,time\nprint("started",flush=True)\nos.kill(os.getppid(),signal.SIGTERM)\ntime.sleep(20)\n'
+        result, out, _ = self.fixture(code)
+        self.assertEqual(result['status'], 'INTERRUPTED')
+        self.assertEqual(out, 'started\n')
+
+
+if __name__ == '__main__':
+    unittest.main()

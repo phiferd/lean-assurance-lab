@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-RUNNER-1",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "stopped_at": "2026-09-06T22:33:31.506587+00:00",
+  "reason": "SIGTERM cancellation fixture terminated the test controller and left an orphan reservation. No reliable fixture duration or cleanup receipt survived. Additional uninstrumented delegated discovery runs make complete launch accounting unreproducible. Runner inputs were still changing and not bound before the failed test. Stop implementation; no proof execution or further item-specific process tests.",
+  "root_attempt": {
+    "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/06-pure-controls.json",
+    "returncode": -15,
+    "reserved_launches": 1,
+    "reserved_seconds": 5,
+    "terminal_receipt": null,
+    "counting": "Consumes one fixture reservation in full; actual process elapsed and per-fixture cap compliance remain unknown. The orphan is not rewritten as a passing or measured terminal."
+  },
+  "worker_attempts": {
+    "reported_fixture_launches": 2,
+    "instrumentation": "UNRECORDED; worker self-report, no independently retained exit statuses or UTC timestamps",
+    "record": "worker-accounting.json",
+    "violation": "Worker ran complete discovery despite a no-fixture instruction. Root also ran discovery before confirming the SIGTERM handler. No successful test completion is inferred."
+  },
+  "cleanup_check": {
+    "command": "ps -axo pid,ppid,pgid,command | rg 'os.kill\\(os.getppid\\(\\),signal.SIGTERM\\)|time.sleep\\(20\\)'",
+    "observation": "No matching fixture process at the post-failure process-list check. The initial sandboxed ps failed; the approved read-only process inspection succeeded and the filter returned 1 with no matches.",
+    "checked_at": "2026-09-06T22:33:31.506671+00:00",
+    "limitation": "This confirms no matching process at inspection time, not elapsed process cost or immediate group cleanup."
+  },
+  "draft_status": "UNTESTED_POST_FAILURE_DRAFT; latest worker changes include a SIGTERM handler but have not been validated. Exact bytes executed by earlier live-edit test runs were not bound.",
+  "gaps": [
+    "Cancellation-safe process supervision and raw output receipts",
+    "Parent-independent finite timeout in every inert fixture and descendant",
+    "No parallel edits of tested files; bind the exact runner and tests before each test batch",
+    "Single launch owner with shared durable fixture reservations, including delegated work",
+    "Complete immutable runtime, dependency, protocol, signature, example, axiom and exact-command bindings",
+    "Signature output binding before proof; proof-success stop and no completed replay",
+    "Session and attempt ledger reconciliation with anti-reset state and monotonic accounting",
+    "Correct exact theorem skeleton and complete six-report axiom parser; failure output already showed audit errors"
+  ],
+  "out_of_scope_launches": {
+    "lean": 0,
+    "lake": 0,
+    "signature_elaborations": 0,
+    "proof_builds": 0,
+    "checkers": 0,
+    "network_requests": 0
+  },
+  "next_item": "CVC-RUNNER-2"
+}

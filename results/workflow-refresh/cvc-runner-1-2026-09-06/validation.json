@@ -1,0 +1,369 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-RUNNER-1",
+  "date": "2026-09-06",
+  "status": "PASS",
+  "research_outcome": "BOUNDED_UNRESOLVED",
+  "runner_acceptance_status": "FAILED_AND_INCOMPLETE",
+  "required_final_checks": [
+    "01-prep-evidence",
+    "02-historical",
+    "03-snapshot",
+    "04-contribution",
+    "05-contract",
+    "07-disabled-tests",
+    "08-closure-tests",
+    "09-full-suite",
+    "10-close-evidence",
+    "11-queue",
+    "12-queue-tests",
+    "13-final-evidence",
+    "14-refresh",
+    "15-handoff",
+    "16-evidence-check",
+    "17-diff",
+    "18-project-review",
+    "19-artifact-status",
+    "20-final-queue"
+  ],
+  "commands": [
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/01-prep-evidence.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-prep-2/validate-evidence.py",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T22:26:33.820654+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/01-prep-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:26:40.476119+00:00",
+      "log_sha256": "ab37e6c49415fb8ea2d3ae7f2c4ad882b336c3277728eef8d03ec91455a11a0f"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/02-historical.json",
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "started_at": "2026-09-06T22:26:33.837292+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/02-historical.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:27:01.509440+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/03-snapshot.json",
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T22:26:33.807489+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/03-snapshot.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:27:47.821667+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/04-contribution.json",
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "started_at": "2026-09-06T22:26:33.857529+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/04-contribution.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:26:34.074422+00:00",
+      "log_sha256": "82f44934bcf41b0a29c8d18108949fd840f6ace199888131fb25d8ac81040200"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/05-contract.json",
+      "command": [
+        "scripts/validate-cvc2-contract"
+      ],
+      "started_at": "2026-09-06T22:26:33.877168+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/05-contract.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:26:34.070771+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/06-pure-controls.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_runner.py"
+      ],
+      "started_at": "2026-09-06T22:29:55.261313+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/06-pure-controls.log",
+      "returncode": -15,
+      "status": "FAIL",
+      "ended_at": "2026-09-06T22:29:55.405779+00:00",
+      "log_sha256": "147107b829995b0c6a9935f69d6d76a3ab46172df78aa32cee710fd8f575fe85"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/07-disabled-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_runner.py"
+      ],
+      "started_at": "2026-09-06T22:34:42.423639+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/07-disabled-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:34:42.484038+00:00",
+      "log_sha256": "921b60a7fd52e978fbb551cacd29df2d6708879400278e1fcc70fceeb0c6f8e0"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/08-closure-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_runner*.py"
+      ],
+      "started_at": "2026-09-06T22:37:14.438325+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/08-closure-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:37:14.510910+00:00",
+      "log_sha256": "74c03fc16fde9a2dfeff03db0ec8f472a5a8dfed04e9e982a912b4b7f64faee3"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/09-full-suite.json",
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T22:37:07.047269+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/09-full-suite.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:44:06.903904+00:00",
+      "log_sha256": "6a927f76a6ab3ebbf84594f34aa8c8393b38ba0dc2cf55cbc8543a05abe8793b"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/10-close-evidence.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-runner-1/validate-evidence.py",
+        "--write"
+      ],
+      "started_at": "2026-09-06T22:38:05.895656+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/10-close-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:38:06.006456+00:00",
+      "log_sha256": "24742cc98d03797f03ad2b6a39f7c93a12db564e074872201f2980bd2e932374"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/11-queue.json",
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T22:39:40.886163+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/11-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:39:40.933510+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/12-queue-tests.json",
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "started_at": "2026-09-06T22:39:41.036844+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/12-queue-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:39:41.136354+00:00",
+      "log_sha256": "fb6f76994c6a616dd603233e98a16878de350a28414f7c7ae0cd03b7f3359a7c"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/13-final-evidence.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-runner-1/validate-evidence.py",
+        "--write"
+      ],
+      "started_at": "2026-09-06T22:40:43.458950+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/13-final-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:40:43.561891+00:00",
+      "log_sha256": "24742cc98d03797f03ad2b6a39f7c93a12db564e074872201f2980bd2e932374"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/14-refresh.json",
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/cvc-runner-1-2026-09-06/refresh"
+      ],
+      "started_at": "2026-09-06T22:40:43.639611+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/14-refresh.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:42:10.002039+00:00",
+      "log_sha256": "97b975a7be1590ce83d425d4286c021a484c477dd10baa621e038421246dd850"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/15-handoff.json",
+      "command": [
+        "python3",
+        "results/workflow-refresh/cvc-runner-1-2026-09-06/verify-handoff.py"
+      ],
+      "started_at": "2026-09-06T22:41:34.574911+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/15-handoff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:41:34.614374+00:00",
+      "log_sha256": "c26e82c98e3470af65a471c936f8a8dfd85c75023b1f3afc63686a9a4d9ab525"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/16-evidence-check.json",
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/cvc-runner-1/validate-evidence.py"
+      ],
+      "started_at": "2026-09-06T22:41:34.550407+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/16-evidence-check.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:41:34.667063+00:00",
+      "log_sha256": "24742cc98d03797f03ad2b6a39f7c93a12db564e074872201f2980bd2e932374"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/17-diff.json",
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-06T22:41:34.531271+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/17-diff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:41:34.555609+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/18-project-review.json",
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "started_at": "2026-09-06T22:42:39.903383+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/18-project-review.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:43:08.293886+00:00",
+      "log_sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/19-artifact-status.json",
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T22:42:39.922498+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/19-artifact-status.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:42:51.416831+00:00",
+      "log_sha256": "8c73e095075ad745e04460e4adb0e281941875fe187d16bc6a53009eead82e41"
+    },
+    {
+      "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/20-final-queue.json",
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T22:42:39.946094+00:00",
+      "log": "results/workflow-refresh/cvc-runner-1-2026-09-06/20-final-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T22:42:39.991066+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    }
+  ],
+  "preserved_failed_check": {
+    "record": "06-pure-controls.json",
+    "returncode": -15,
+    "meaning": "Original full discovery was misnamed pure-controls; it reached SIGTERM ProcessTests and terminated. The failure and orphan remain unchanged."
+  },
+  "unit_suite": {
+    "current_tests": 450,
+    "historical_tests": 73,
+    "total": 523,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED_AND_PASSING"
+  },
+  "closure_regressions": {
+    "tests": 7,
+    "meaning": "Disabled endpoint and preservation of unresolved evidence; no passing runner claim"
+  },
+  "costs": {
+    "runner_active_seconds": 839.414304,
+    "recorded_fixture_reservations": 1,
+    "worker_reported_uninstrumented_fixture_launches": 2,
+    "root_orphan_charge_seconds": 5,
+    "worker_conservative_reservation_charge_seconds": 10,
+    "actual_failed_fixture_process_seconds": null,
+    "failed_fixture_cap_compliance": "NOT_ESTABLISHED",
+    "required_validation_fixtures": {
+      "reserved_launches": 8,
+      "measured_seconds": 0.6936950816307217,
+      "orphan_reserved_seconds": 0,
+      "orphan_count": 0
+    },
+    "preparation_active_seconds": 3030.60362,
+    "aggregate_runner_and_preparation_active_seconds": 3870.0179239999998,
+    "preparation_compilation_seconds": 49.75494166649878,
+    "accounting_note": "Reservation charges do not establish actual process duration. Raw orphan and worker-reported missing receipts are retained. Required unchanged repository regression fixtures are separately measured after the research stop."
+  },
+  "preserved_assurance_boundary": {
+    "status": "FAIL",
+    "unresolved_semantic_disagreements": 15,
+    "change": "UNCHANGED"
+  },
+  "refresh": {
+    "status": "PASS",
+    "record": "results/workflow-refresh/cvc-runner-1-2026-09-06/refresh/result.json"
+  },
+  "next_item": {
+    "id": "CVC-RUNNER-2",
+    "status": "READY",
+    "started": false
+  },
+  "proof_stages": "CVC-3 through CVC-5 remain PLANNED; no Lab signature, proof or checker ran",
+  "delivery_policy": "Commit on main and use scripts/push-main; no task branch or PR",
+  "completed_at": "2026-09-06T22:44:37.159892+00:00"
+}

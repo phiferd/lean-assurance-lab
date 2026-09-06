@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "evidence_kind": "DELEGATED_WORKER_SELF_REPORT_NOT_RAW_PROCESS_RECEIPT",
+  "commands": [
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "tests.test_cvc_runner.AuditTests",
+        "tests.test_cvc_runner.BudgetTests",
+        "tests.test_cvc_runner.LedgerTests"
+      ],
+      "result": "ModuleNotFoundError: No module named tests.test_cvc_runner; no fixtures launched"
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_runner.py"
+      ],
+      "reported_tool_wall_seconds": 0.2,
+      "exit_status": null,
+      "raw_output_retained": false,
+      "reported_progress": "E; FutureWarning Possible nested set in axiom regex; .E..........; no summary",
+      "fixture_launches_reported": 1
+    },
+    {
+      "argv": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_runner.py",
+        "-v"
+      ],
+      "reported_tool_wall_seconds": 0.2,
+      "exit_status": null,
+      "raw_output_retained": false,
+      "reported_progress": "Exact theorem skeleton ERROR; six full reports ERROR; 11 other pure tests ok; reached ProcessTests.test_sigterm_cancels_and_reaps then parent terminated",
+      "fixture_launches_reported": 1
+    }
+  ],
+  "utc_timestamps": null,
+  "fixture_ledger_environment": "Not inspected by worker; shared durable ledger contains only the root reservation.",
+  "subsequent_patch": "SIGTERM handler and regex/import patches saved after failed discovery; never fixture-tested. Archived as unverified draft."
+}

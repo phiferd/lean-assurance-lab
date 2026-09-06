@@ -1,0 +1,58 @@
+"""Finite inert-process receipts for CVC-RUNNER-1 engineering checks."""
+from contextlib import contextmanager
+from datetime import datetime, timezone
+import fcntl
+import json
+import os
+from pathlib import Path
+import time
+
+
+@contextmanager
+def reserved_fixture(test, launches=1):
+    """Persist before spawn; interrupted tests retain their full reservation.
+
+    CVC_PREP_FIXTURE_LEDGER also charges unchanged predecessor controller tests
+    to the current item's shared 80-launch/400-second fixture allowance.
+    """
+    name = os.environ.get('CVC_PREP_FIXTURE_LEDGER')
+    path = Path(name) if name else None
+    owner = None
+    def append(row):
+        if path:
+            with path.open('a') as stream:
+                stream.write(json.dumps({**row, 'test': test,
+                    'at': datetime.now(timezone.utc).isoformat()}) + '\n')
+                stream.flush()
+                os.fsync(stream.fileno())
+    if path:
+        owner = Path(str(path) + '.lock').open('a')
+        fcntl.flock(owner, fcntl.LOCK_EX | fcntl.LOCK_NB)
+        rows = [json.loads(line) for line in path.read_text().splitlines()]
+        pending, count, charged = None, 0, 0.
+        for row in rows:
+            if row['kind'] == 'RESERVED':
+                if pending:
+                    raise AssertionError('unreconciled fixture reservation')
+                pending = row
+                count += row['reserved_launches']
+            else:
+                if not pending or row['test'] != pending['test']:
+                    raise AssertionError('invalid fixture terminal')
+                charged += row['charged_seconds']
+                pending = None
+        if pending or not 0 < launches <= 80 or count + launches > 80 or charged + 5 * launches > 400:
+            owner.close()
+            raise AssertionError('fixture budget exhausted or orphan reservation')
+    append({'kind': 'RESERVED', 'reserved_launches': launches, 'reserved_seconds': 5 * launches})
+    begin = time.monotonic()
+    receipt = {'status': 'INTERRUPTED'}
+    try:
+        yield receipt
+    finally:
+        elapsed = time.monotonic() - begin
+        append({'kind': 'TERMINAL', 'charged_seconds': elapsed, 'status': receipt['status']})
+        if owner:
+            owner.close()
+        if elapsed > 5 * launches:
+            raise AssertionError('fixture duration exceeded bound')

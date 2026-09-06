@@ -20,46 +20,46 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-RUNNER-1: Implement the fixed CVC-3 proof runner; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-RUNNER-2: Repair and complete the fixed proof-runner controls; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-RUNNER-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-RUNNER-2**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 7 | CVC-RUNNER-1: Implement the fixed CVC-3 proof runner | READY |
-| 8 | CVC-3: Prove or refute one preservation claim | PLANNED |
-| 9 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 10 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 11 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
-| 12 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
+| 8 | CVC-RUNNER-2: Repair and complete the fixed proof-runner controls | READY |
+| 9 | CVC-3: Prove or refute one preservation claim | PLANNED |
+| 10 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 11 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 12 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
+| 13 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
-### 7. CVC-RUNNER-1: Implement the fixed CVC-3 proof runner
+### 8. CVC-RUNNER-2: Repair and complete the fixed proof-runner controls
 
-**Target:** CVC3-U1-PROOF-0001 reservation, signature sequencing, axiom/result checks and cost ledger
+**Target:** CVC3-U1-PROOF-0001 runner and supervised inert fixture harness
 
-Implement a dedicated protocol-specific runner and validate it with inert fixture processes; preserve old closed-frontier authorization.
+Build parent-independent bounded fixture supervision and single-owner durable accounting first; finish and adversarially test the unchanged protocol controls in an explicit successor.
 
-**Why this rank:** Highest eligible local work: the fixed 37-module dependency bundle is complete and exact bytes are bound. A small protocol-specific runner can now enable a controlled check of the existing contract. Unchecked proofs, blocked upstream access and deferred new semantic themes provide less actionable next work.
+**Why this rank:** Highest eligible local work: a concrete cancellation failure and missing receipts block the existing fixed-contract experiment. Repair is bounded and directly testable; upstream access remains unconfirmed and other semantic themes remain deferred.
 
-**Completion:** Passing adversarial fixture tests for all CVC-2 protocol controls; committed runner and immutable input/dependency/audit bindings ready for separate CVC-3 entry review.
+**Completion:** All fixed CVC-2 protocol controls pass using inert processes against committed exact runner/input/dependency/audit bindings, or a named bounded implementation gap.
 
-**Stop:** Two 90-minute sessions, at most 80 inert fixture process launches, 5 seconds per fixture and 400 process seconds total. Zero Lean/Lake, dependency builds, proofs, checkers or network. Stop at passing controls or a named bounded implementation gap.
+**Stop:** Two 90-minute sessions, at most 80 inert fixture launches, five seconds per fixture and 400 process seconds. Parent-independent timeout first; single launch owner; bind test inputs before feedback; retain all prior costs and uncertainty. Zero Lean/Lake, compilation, signature elaboration, proof, checker or network.
 
 **Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: CVC-PREP-2 closes SUCCESS: ten successor compilations plus 27 preserved predecessor successes yield 141 exact products for all 37 required upstream modules. The 2026-09-06 stopping-point review validates this bundle and selects only runner implementation with inert fixtures. CVC-PREP-1 stays BOUNDED_UNRESOLVED. No Lean, dependency compilation, signature elaboration or proof execution under CVC-RUNNER-1.
+**Boundary:** READY: CVC-RUNNER-1 closes BOUNDED_UNRESOLVED with a failed SIGTERM fixture, one raw orphan and two reported uninstrumented fixtures. Its immutable failure/draft evidence is preserved, not counted as success. The CVC-PREP-2 complete 37-module bundle remains available. The stopping-point review selects this explicit implementation successor only, with zero Lean or proof execution.
 
-### 8. CVC-3: Prove or refute one preservation claim
+### 9. CVC-3: Prove or refute one preservation claim
 
 **Target:** The single CVC-2 contract and pinned formalization
 
 Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.
 
-**Why this rank:** The complete pinned dependency bundle is available, but the fixed protocol-specific proof runner has not been implemented or tested. Finish CVC-RUNNER-1 and perform separate CVC-3 promotion before spending any proof attempt.
+**Why this rank:** Runner implementation stopped with a demonstrated cancellation/accounting gap and unverified audit controls. Complete the explicit CVC-RUNNER-2 repair and separate entry review before any proof attempt.
 
 **Completion:** Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.
 
@@ -67,9 +67,9 @@ Reuse/reproduce an existing result or attempt one preservation theorem and its n
 
 **Execution:** At most 4 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: CVC-2 fixed contract, CVC-PREP-2 complete dependency/runtime bundle and CVC-RUNNER-1 tested protocol-specific runner all close SUCCESS. The CVC-PREP-1 partial bundle is insufficient. Separate review promotes CVC-3 only after immutable protocol/signature/examples/allowlist/runner/runtime bindings are committed. Signature elaboration remains counted attempt 1 under CVC3-U1-PROOF-0001. Remains PLANNED.
+**Boundary:** PLANNED: CVC-2 fixed contract, CVC-PREP-2 complete dependency/runtime bundle and CVC-RUNNER-2 tested protocol-specific successor must close SUCCESS. CVC-RUNNER-1 remains BOUNDED_UNRESOLVED and cannot satisfy this dependency. A separate review promotes CVC-3 only after immutable protocol/signature/examples/allowlist/runner/runtime bindings are committed. Signature elaboration remains counted attempt 1 under CVC3-U1-PROOF-0001. Remains PLANNED.
 
-### 9. CVC-4: Connect the contract to real validation behavior
+### 10. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -85,7 +85,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 10. CVC-5: Prepare shared evidence and decide the next phase
+### 11. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -101,7 +101,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 11. ALT-SURVIVORS: Design the next fixed survivor triage
+### 12. ALT-SURVIVORS: Design the next fixed survivor triage
 
 **Target:** One selected member of the seven pending survivors
 
@@ -117,7 +117,7 @@ Prepare an evidence-based fixed-candidate triage proposal and finite execution m
 
 **Boundary:** DEFERRED: Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.
 
-### 12. ALT-TRANSFER: Assess a prospective transfer study
+### 13. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -173,6 +173,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2. Selected next item: CVC-RUNNER-1 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1. Selected next item: CVC-RUNNER-2 (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

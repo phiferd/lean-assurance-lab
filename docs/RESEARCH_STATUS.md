@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Closed `CVC-RUNNER-1` on 2026-09-06 with `BOUNDED_UNRESOLVED`.
+  A SIGTERM cancellation fixture terminated the root test controller and left
+  one five-second reservation without a terminal receipt. The worker reported
+  two additional discovery runs without durable fixture receipts. Actual process
+  duration and cap compliance are unknown; exact tested bytes were not bound
+  before concurrent edits. Preserve these failures and the untested later draft.
+  The live endpoint now refuses execution and session start. No Lean, signature,
+  proof or checker ran. See the
+  [result](../results/research/conditional-validation-contracts/cvc-runner-1/result.json),
+  [report](../results/research/conditional-validation-contracts/cvc-runner-1/report.md),
+  and [review](../results/research/queue-reviews/2026-09-06-cvc-runner-1.json).
+  `CVC-RUNNER-2` is selected READY and unstarted for an explicit supervised
+  fixture/accounting repair and completion of the fixed runner controls.
+  CVC-3 through CVC-5 remain PLANNED. Required closure verification is recorded
+  in the [validation record](../results/workflow-refresh/cvc-runner-1-2026-09-06/validation.json).
+
 - Completed `CVC-PREP-2` on 2026-09-06 with `SUCCESS`. The explicit
   controller successor fixes the path-ordering defect and compiled all 10
   remaining upstream modules once (24.381 compilation seconds) under committed
@@ -1862,49 +1878,57 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-RUNNER-1`.
+Selected next item: `CVC-RUNNER-2`.
 
 The [ranked queue](../config/research-queue.json) governs item order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
 decision; CVC-2 retains `SUCCESS` for a `SPECIFICATION_PROPOSAL_UNCHECKED`.
-No Lab proof has been checked. Historical studies and completed ecosystem/corpus
-successors remain closed and unchanged.
+No Lab proof has been checked. Historical studies remain closed and unchanged.
 
-`CVC-PREP-2` is COMPLETE with `SUCCESS`: its explicit controller successor fixes
-the module-versus-namespace ordering defect and compiled all 10 remaining
-upstream modules once under checkpoint `a9a0701`, charging 24.381 compilation
-seconds. The isolated complete 37-module bundle contains 141 exact output files,
-including the 119 unchanged products from the 27 CVC-PREP-1 successes. No prior
-module was replayed. `CVC-PREP-1` remains `BOUNDED_UNRESOLVED` with its original
-checkpoint `a28939b`, source/runtime/controller bytes and failure evidence intact.
-Combined preparation cost is 50.51 active minutes and 49.755 compilation seconds.
-See the [result](../results/research/conditional-validation-contracts/cvc-prep-2/result.json),
-[report](../results/research/conditional-validation-contracts/cvc-prep-2/report.md),
-and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-prep-2.json).
-This establishes dependency availability only; no Lab signature was elaborated.
+`CVC-RUNNER-1` is COMPLETE with `BOUNDED_UNRESOLVED`. The first recorded
+cancellation fixture killed the test controller with SIGTERM and left an orphan
+five-second reservation. The worker reported two further discovery runs without
+durable fixture receipts. Actual failed-fixture elapsed cost, timely process-group
+cleanup and five-second cap compliance are unknown. A later process inspection
+found no matching fixture; it does not supply the missing duration evidence.
+Concurrent draft edits also prevented an exact pre-test byte binding. The final
+untested draft and failed tests are archived; the live runner refuses every
+execution/session mode. See the
+[result](../results/research/conditional-validation-contracts/cvc-runner-1/result.json),
+[diagnostic](../results/research/conditional-validation-contracts/cvc-runner-1/stop-diagnostic.json),
+and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-runner-1.json).
+Closure tests establish refusal and preserved failure, not a passing runner.
 
-`CVC-RUNNER-1` is selected READY and unstarted. Implement the dedicated runner
-for the unchanged [CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
-and test it using inert fixture processes. Preserve the exact contract, examples,
-axiom allowlist, full runtime, complete dependency bundle and prior cost ledgers.
-The bound is two 90-minute sessions, at most 80 inert fixture launches, five
-seconds per fixture and 400 process seconds. This item permits zero Lean/Lake,
-dependency compilation, signature elaboration, proofs, checkers or network.
-Stop at passing protocol controls or a named bounded implementation gap.
+`CVC-RUNNER-2` is selected READY and unstarted. Use the
+[explicit successor proposal](../results/research/conditional-validation-contracts/cvc-runner-1/successor-proposal.json)
+to repair supervision/accounting and complete the unchanged
+[CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json).
+First establish parent-independent fixture timeouts and one durable launch owner;
+bind runner/test bytes before each batch and keep test execution separate from
+concurrent edits. Preserve the original orphan, worker uncertainty, costs and
+failed draft. Bound: two 90-minute sessions, at most 80 inert fixtures, five
+seconds per fixture and 400 process seconds. Zero Lean/Lake, dependency builds,
+signature elaboration, proofs, checkers or network. Stop at passing controls or
+a named bounded implementation gap. Selection does not start this successor.
 
-CVC-3 stays PLANNED until CVC-RUNNER-1 succeeds and a separate entry review
-promotes proof execution with committed exact inputs. The first elaboration of
-the unchanged CVC-2 signature remains counted attempt 1 of 12. Dependency
-availability alone is not a checked contract, theorem or executable-validator
-refinement. CVC-4 and CVC-5 remain conditional PLANNED stages.
+`CVC-PREP-2` remains SUCCESS: the exact 37-module dependency bundle contains
+141 products, including all 119 unchanged predecessor products. `CVC-PREP-1`
+remains `BOUNDED_UNRESOLVED`. Combined preparation cost stays 50.51 active minutes
+and 49.755 compilation seconds. Availability alone is not a checked contract.
+
+CVC-3 stays PLANNED until CVC-RUNNER-2 succeeds and a separate entry review
+promotes proof execution with committed exact inputs. This explicitly replaces
+the failed CVC-RUNNER-1 prerequisite without treating its result as success.
+The first elaboration of the unchanged CVC-2 signature remains counted attempt
+1 of 12. CVC-4 and CVC-5 remain conditional PLANNED stages.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena
-feedback/dispositions are unknown; retain the last-known submissions and Kiota
-deferral. Repair access with `gh auth login -h github.com --web`, then rank a
-fresh bounded check after successful preflight. No repeated polling is enabled.
+feedback/dispositions are unknown. Repair access with
+`gh auth login -h github.com --web`, then rank a fresh bounded check after
+successful preflight. No repeated polling is enabled.
 
-This execution closes the requested controller repair and selects CVC-RUNNER-1
+This execution closes one unresolved implementation item and selects its repair
 without starting it. It changes no normative-source approval or old catalog
 disposition and authorizes no external message or publication. Reevaluate
 candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).

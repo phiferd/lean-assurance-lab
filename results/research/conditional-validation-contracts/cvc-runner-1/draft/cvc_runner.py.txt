@@ -1,0 +1,485 @@
+"""Bounded runner for the fixed CVC3-U1-PROOF-0001 protocol.
+
+The production entry points deliberately have no command, fixture, or input
+override.  ``run_process`` is public only so unit tests can exercise process
+group cleanup with inert commands; ``execute`` always obtains its command from
+the content-bound manifest.
+
+This runner treats the local proof source as reviewed, trusted source code.  It
+is not a sandbox for hostile Lean code.  In particular, printed axiom reports
+are retained as evidence and parsed conservatively; they are not independent
+semantic authority over Lean elaboration.
+"""
+from __future__ import annotations
+
+from datetime import datetime, timezone
+import argparse
+import fcntl
+import hashlib
+import json
+import math
+import os
+from pathlib import Path
+import re
+import signal
+import subprocess
+import time
+
+ITEM = 'CVC-RUNNER-1'
+CVC_ITEM = 'CVC-3'
+PROTOCOL_ID = 'CVC3-U1-PROOF-0001'
+RUN = 'CVC-U1-PROOF-0001'
+MANIFEST = 'config/cvc-u1-proof-0001.json'
+PROTOCOL = 'results/research/conditional-validation-contracts/cvc-2/execution-protocol.json'
+ASSUMPTIONS = 'results/research/conditional-validation-contracts/cvc-2/assumptions.json'
+OUT = 'results/research/conditional-validation-contracts/cvc-3/run-0001'
+COUNT = 12
+LIMITS = {'max_sessions': 4, 'session_seconds': 5400, 'max_active_seconds': 21600,
+          'proof_build_attempts': 12, 'attempt_timeout_seconds': 300}
+TARGETS = [('Lab.CVC2.encoding_preserves', 'Lab.CVC2.EncodingTarget'),
+           ('Lab.CVC2.preservation', 'Lab.CVC2.PreservationTarget'),
+           ('Lab.CVC2.required_acceptance', 'Lab.CVC2.AcceptanceTarget'),
+           ('Lab.CVC2.boundary', 'Lab.CVC2.BoundaryTarget')]
+AXIOM_TARGETS = [name for name, _ in TARGETS] + ['Lean.Level.isEquiv\'_wf', 'Lean.Level.isEquiv\'_complete']
+
+
+def require(ok, message):
+    if not ok:
+        raise ValueError(message)
+
+
+def now():
+    return datetime.now(timezone.utc).isoformat()
+
+
+def sha(path):
+    h = hashlib.sha256()
+    with Path(path).open('rb') as stream:
+        for chunk in iter(lambda: stream.read(1048576), b''):
+            h.update(chunk)
+    return h.hexdigest()
+
+
+def canonical(value):
+    return json.dumps(value, sort_keys=True, separators=(',', ':')).encode()
+
+
+def js(path):
+    return json.loads(Path(path).read_text())
+
+
+def safe(root, name, exists=True):
+    require(isinstance(name, str) and name and not Path(name).is_absolute() and '..' not in Path(name).parts,
+            'unsafe repository path')
+    p = Path(root)
+    for part in Path(name).parts:
+        p = p / part
+        require(not p.is_symlink(), 'symlink path refused: ' + name)
+    require(not exists or p.exists(), 'missing path: ' + name)
+    return p
+
+
+def bind(root, row):
+    require(set(row) == {'path', 'sha256'} and re.fullmatch('[0-9a-f]{64}', row['sha256']) is not None,
+            'invalid binding')
+    p = safe(root, row['path'])
+    require(p.is_file() and sha(p) == row['sha256'], 'binding changed: ' + row['path'])
+    return p
+
+
+def committed(root, rel):
+    p = safe(root, rel)
+    try:
+        blob = subprocess.check_output(['git', 'show', 'HEAD:' + rel], cwd=root, stderr=subprocess.DEVNULL)
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise ValueError('uncommitted required file: ' + rel) from error
+    require(blob == p.read_bytes(), 'required file differs from HEAD: ' + rel)
+
+
+def lock(path):
+    path.parent.mkdir(parents=True, exist_ok=True)
+    require(not path.is_symlink(), 'symlink lock')
+    stream = path.open('a+')
+    try:
+        fcntl.flock(stream, fcntl.LOCK_EX | fcntl.LOCK_NB)
+    except BlockingIOError:
+        stream.close()
+        raise ValueError('concurrent controller refused')
+    return stream
+
+
+def read_events(path):
+    if not path.exists():
+        return []
+    require(not path.is_symlink(), 'symlink ledger')
+    data = path.read_bytes()
+    require(not data or data.endswith(b'\n'), 'truncated ledger')
+    previous, rows = '0' * 64, []
+    for line in data.splitlines():
+        try:
+            row = json.loads(line)
+        except json.JSONDecodeError as error:
+            raise ValueError('malformed ledger') from error
+        checksum = row.pop('event_sha256', None)
+        require(row.get('previous_sha256') == previous and checksum == hashlib.sha256(canonical(row)).hexdigest(),
+                'ledger chain invalid')
+        row['event_sha256'] = checksum
+        rows.append(row)
+        previous = checksum
+    return rows
+
+
+def append(path, event):
+    rows = read_events(path)
+    row = {**event, 'previous_sha256': rows[-1]['event_sha256'] if rows else '0' * 64}
+    row['event_sha256'] = hashlib.sha256(canonical(row)).hexdigest()
+    with path.open('ab') as stream:
+        stream.write(canonical(row) + b'\n')
+        stream.flush()
+        os.fsync(stream.fileno())
+
+
+def session_state(events, current):
+    """Derive immutable CVC-3 design-session time from an append-only ledger."""
+    sessions, opened = [], None
+    for row in events:
+        kind = row.get('kind')
+        if kind == 'SESSION_STARTED':
+            require(opened is None and len(sessions) < 4, 'invalid session start')
+            require(type(row.get('number')) is int and row['number'] == len(sessions) + 1, 'session number')
+            opened = row
+        elif kind == 'SESSION_ENDED':
+            require(opened is not None and row.get('number') == opened['number'], 'invalid session end')
+            sessions.append({'number': opened['number'], 'started_at': opened['started_at'], 'ended_at': row['ended_at']})
+            opened = None
+        else:
+            raise ValueError('invalid session event')
+    if opened:
+        sessions.append({'number': opened['number'], 'started_at': opened['started_at']})
+    # Validate chronology and caps through the same budget logic when open. A
+    # closed ledger is valid state but cannot authorize an attempt.
+    if opened:
+        budget({'sessions': sessions}, {}, current)
+    return sessions
+
+
+def start_session(root):
+    root = Path(root).resolve(); owner = lock(safe(root, OUT + '/execution/controller.lock', False))
+    try:
+        validate_manifest(root, True); gate(root)
+        path = safe(root, OUT + '/execution/sessions.jsonl', False); path.parent.mkdir(parents=True, exist_ok=True)
+        prior = session_state(read_events(path), datetime.now(timezone.utc)) if path.exists() else []
+        require(not prior or prior[-1].get('ended_at'), 'session already open')
+        append(path, {'kind':'SESSION_STARTED','number':len(prior) + 1,'started_at':now(),'monotonic_started':time.monotonic()})
+        return len(prior) + 1
+    finally: owner.close()
+
+
+def end_session(root):
+    root = Path(root).resolve(); owner = lock(safe(root, OUT + '/execution/controller.lock', False))
+    try:
+        path = safe(root, OUT + '/execution/sessions.jsonl')
+        prior = session_state(read_events(path), datetime.now(timezone.utc))
+        require(prior and not prior[-1].get('ended_at'), 'no open session')
+        append(path, {'kind':'SESSION_ENDED','number':prior[-1]['number'],'ended_at':now(),'monotonic_ended':time.monotonic()})
+    finally: owner.close()
+
+
+def finite(v):
+    return isinstance(v, (int, float)) and not isinstance(v, bool) and math.isfinite(v) and v >= 0
+
+
+def derive(events):
+    state = {}
+    for row in events:
+        n = row.get('number')
+        require(type(n) is int and 1 <= n <= COUNT, 'invalid attempt number')
+        if row.get('kind') == 'RESERVED':
+            require(n == len(state) + 1 and n not in state, 'duplicate or nonconsecutive reservation')
+            if state:
+                prior = state[n - 1].get('terminal')
+                require(prior is not None, 'reservation after orphan')
+                require(not (n == 2 and prior.get('status') != 'COMPLETE'),
+                        'signature failure is terminal')
+            require(finite(row.get('reserved_seconds')) and 0 < row['reserved_seconds'] <= 300,
+                    'invalid reservation duration')
+            state[n] = dict(row)
+        elif row.get('kind') == 'TERMINAL':
+            require(n in state and n == max(state) and 'terminal' not in state[n], 'invalid terminal')
+            require(row.get('status') in {'COMPLETE', 'FAILED', 'TIMED_OUT', 'INTERRUPTED'} and
+                    finite(row.get('charged_seconds')), 'invalid terminal')
+            state[n]['terminal'] = row
+        else:
+            raise ValueError('unknown event')
+    return state
+
+
+def budget(work, state, current):
+    sessions = work.get('sessions')
+    require(isinstance(sessions, list) and 1 <= len(sessions) <= 4, 'session count')
+    total, live_left, previous = 0., None, None
+    for i, session in enumerate(sessions):
+        start = datetime.fromisoformat(session['started_at'])
+        end = datetime.fromisoformat(session['ended_at']) if session.get('ended_at') else current
+        require(start.tzinfo and end.tzinfo and (previous is None or start >= previous), 'invalid session chronology')
+        used = (end - start).total_seconds()
+        require(0 <= used <= 5400, 'session exhausted or reversed')
+        total += used
+        if not session.get('ended_at'):
+            require(i == len(sessions) - 1, 'non-final open session')
+            live_left = 5400 - used
+        previous = end
+    require(live_left is not None and total <= 21600 and len(state) < COUNT, 'attempt or active-time cap exhausted')
+    charged = sum(r.get('terminal', {}).get('charged_seconds', r['reserved_seconds']) for r in state.values())
+    require(finite(charged) and charged <= COUNT * 300, 'invalid prior charge')
+    left = min(300., live_left, 21600. - total, COUNT * 300. - charged)
+    require(left > 0, 'no remaining attempt time')
+    return left
+
+
+work_budget = budget  # Backward-compatible private spelling used by early callers.
+
+
+def kill(proc):
+    try: os.killpg(proc.pid, signal.SIGTERM)
+    except ProcessLookupError: pass
+    try: proc.wait(timeout=.1)
+    except subprocess.TimeoutExpired: pass
+    try: os.killpg(proc.pid, signal.SIGKILL)
+    except ProcessLookupError: pass
+    try: proc.wait(timeout=1)
+    except subprocess.TimeoutExpired as error: raise ValueError('process group could not be reaped') from error
+
+
+def run_process(argv, cwd, env, stdout, stderr, deadline):
+    """Run a process in a new group, retaining raw streams even on failure."""
+    begin, proc, rc, error = time.monotonic(), None, None, None
+    status = 'FAILED'
+    def interrupted(_signum, _frame):
+        raise KeyboardInterrupt
+    old_handler = signal.signal(signal.SIGTERM, interrupted)
+    try:
+        with stdout.open('xb') as so, stderr.open('xb') as se:
+            proc = subprocess.Popen(argv, cwd=cwd, env=env, stdout=so, stderr=se, start_new_session=True)
+            rc = proc.wait(timeout=max(.001, deadline - .2))
+            status = 'COMPLETE' if rc == 0 else 'FAILED'
+    except subprocess.TimeoutExpired:
+        status, error = 'TIMED_OUT', 'process deadline reached'
+    except KeyboardInterrupt:
+        status, error = 'INTERRUPTED', 'controller interrupted'
+    except OSError as exc:
+        error = 'failed start or IO: ' + str(exc)
+    finally:
+        try:
+            if proc is not None:
+                kill(proc); rc = proc.returncode
+        finally:
+            signal.signal(signal.SIGTERM, old_handler)
+    elapsed = time.monotonic() - begin
+    if elapsed > deadline: status, error = 'TIMED_OUT', 'elapsed including cleanup exceeded reservation'
+    result = {'status': status, 'returncode': rc, 'charged_seconds': elapsed, 'started_at': now(), 'ended_at': now(),
+              'stdout_sha256': sha(stdout) if stdout.is_file() else None,
+              'stderr_sha256': sha(stderr) if stderr.is_file() else None}
+    if error: result['error'] = error
+    return result
+
+
+def gate(root):
+    from lib.research_queue import load_queue
+    q = load_queue(root)
+    require(q['frontier_id'] == 'F-CONDITIONAL-VALIDATION-CONTRACTS', 'wrong frontier')
+    rows = {row['id']: row for row in q['items']}
+    require(rows.get(CVC_ITEM, {}).get('status') in {'READY', 'ACTIVE'}, 'CVC-3 not separately promoted')
+    require(rows.get('CVC-PREP-2', {}).get('status') == 'COMPLETE', 'preparation not complete')
+    # Promotion is a durable project-state transition, not a mutable runner
+    # switch.  Both records must be the committed versions when execution is
+    # requested.
+    committed(root, 'config/research-queue.json')
+    committed(root, 'docs/RESEARCH_STATUS.md')
+
+
+def validate_manifest(root, require_commit=False):
+    root = Path(root).resolve(); path = root / MANIFEST
+    m = js(path)
+    required = {'schema_version', 'item_id', 'protocol_id', 'run_id', 'protocol', 'assumptions', 'signature',
+                'preparation_result', 'runtime_manifest', 'source_closure', 'immutable_bindings', 'workspace',
+                'ledger_root', 'limits', 'lean', 'preparation_costs', 'work_record_path'}
+    require(set(m) == required and m['schema_version'] == 1 and m['item_id'] == ITEM and
+            m['protocol_id'] == PROTOCOL_ID and m['run_id'] == RUN, 'wrong runner manifest')
+    for key, exact in [('protocol', PROTOCOL), ('assumptions', ASSUMPTIONS)]:
+        require(m[key].get('path') == exact, 'wrong ' + key); bind(root, m[key])
+    protocol, assumptions = js(bind(root, m['protocol'])), js(bind(root, m['assumptions']))
+    require(protocol['protocol_id'] == PROTOCOL_ID and protocol['limits']['proof_build_attempts'] == COUNT and
+            protocol['limits']['max_active_seconds'] == 21600, 'protocol differs')
+    require(protocol['required_result_declarations'] == [{'name': n, 'type': t} for n, t in TARGETS], 'target contract differs')
+    require(m['limits'] == LIMITS and m['ledger_root'] == OUT + '/execution' and m['workspace'] == 'external/cvc3-u1-proof-0001',
+            'fixed runner locations or limits differ')
+    require(m['signature'] == protocol['signature'] and bind(root, m['signature']), 'signature binding differs')
+    for key in ['preparation_result', 'runtime_manifest', 'source_closure']:
+        bind(root, m[key])
+    prep = js(bind(root, m['preparation_result']))
+    require(prep.get('outcome') == 'SUCCESS' or prep.get('status') == 'SUCCESS', 'preparation did not succeed')
+    require(isinstance(m['preparation_costs'], dict) and m['preparation_costs'], 'prior preparation cost link missing')
+    require(isinstance(m['immutable_bindings'], list), 'immutable bindings required')
+    immutable = {x.get('path') for x in m['immutable_bindings']}
+    required_immutable = {'lib/cvc_runner.py', 'scripts/run-cvc-u1-proof', PROTOCOL, ASSUMPTIONS}
+    require(len(immutable) == len(m['immutable_bindings']) and required_immutable <= immutable, 'missing immutable binding')
+    for row in m['immutable_bindings']: bind(root, row)
+    require(isinstance(m['work_record_path'], str) and m['work_record_path'] == OUT + '/work-record.json',
+            'wrong CVC-3 work record path')
+    require(assumptions['conditional_axiom_policy']['forbidden'], 'axiom policy missing')
+    if require_commit:
+        for row in m['immutable_bindings']:
+            committed(root, row['path'])
+        committed(root, MANIFEST)
+    return m, protocol, assumptions
+
+
+def verify_runtime_and_dependencies(root, m):
+    """Recheck the prepared runtime and dependency evidence before a launch."""
+    from lib.cvc_prep_binding import verify_runtime
+    verify_runtime(root, js(bind(root, m['runtime_manifest'])))
+    closure = js(bind(root, m['source_closure']))
+    require(closure.get('protocol_id', 'CVC-U1-DEPS-0001') == 'CVC-U1-DEPS-0001', 'wrong dependency closure')
+    # The preparation result is the bound receipt for the complete output set.
+    # Reject a missing or malformed receipt rather than compiling dependencies.
+    prep = js(bind(root, m['preparation_result']))
+    outputs = prep.get('outputs')
+    require(isinstance(outputs, list) and outputs, 'preparation output receipt missing')
+    from lib.cvc_prep2 import verify_output_set
+    verify_output_set(root, safe(root, 'external/cvc-u1-dependencies-0002/build/lib/lean'), outputs)
+
+
+def validate_proof_source(text):
+    # These checks are deliberately narrow and fail closed.  They prevent obvious
+    # audit evasion in the trusted local proof source; the compiler remains the
+    # authority for declaration types.
+    forbidden = r'(?m)^\s*(axiom|opaque\s+.*:=\s*by\s+native_decide|#eval|#run|set_option\s+trace|unsafe\b)|\bsorry\b|\badmit\b|native_decide'
+    require(re.search(forbidden, text) is None, 'forbidden proof/audit construct')
+    require(re.search(r'(?m)^\s*import\s+Contract\s*$', text) is not None, 'proof must import generated Contract')
+    # The proof body is mutable, but the externally claimed declaration names
+    # and types are not.  Require an explicit declaration skeleton before the
+    # compiler-enforced generated examples below.  This is intentionally not a
+    # substitute for elaboration: aliases, namespace tricks, or bad bodies still
+    # fail the generated type checks.
+    for name, typ in TARGETS:
+        pattern = (r'(?s)theorem\\s+' + re.escape(name) + r'\\s*:\\s*' +
+                   re.escape(typ) + r'\\s*:=')
+        require(re.search(pattern, text) is not None, 'missing fixed theorem declaration: ' + name)
+
+
+def generated_source(source):
+    text = source.read_text()
+    validate_proof_source(text)
+    audit = ['\n\n-- CVC3-U1-PROOF-0001 immutable generated audit suffix.']
+    audit += [f'example : {typ} := {name}' for name, typ in TARGETS]
+    audit += [f'#print axioms {name}' for name in AXIOM_TARGETS]
+    return (text.rstrip() + '\n' + '\n'.join(audit) + '\n').encode()
+
+
+def audit(stdout, stderr, assumptions):
+    data = stdout.read_text(errors='replace')
+    err = stderr.read_text(errors='replace')
+    require(not re.search(r'(?i)declaration uses \"sorry\"|warning:.*sorry|sorryAx', data + err), 'sorry warning')
+    allowed = set(assumptions['conditional_axiom_policy']['standard_allowed'] +
+                  assumptions['conditional_axiom_policy']['source_helpers_allowed'])
+    allowed.update({'propext', 'Classical.choice', 'Quot.sound'})
+    # This is the exact local Lean 4.33 printer format: either one no-axioms
+    # line, or a `depends on axioms:` header followed by a bracketed list.  Do
+    # not accept merely target-shaped text elsewhere in stdout.
+    pattern = re.compile(r"^'([^']*(?:'[^']*)*)' (does not depend on any axioms|depends on axioms: (\[[\s\S]*?\]))$", re.M)
+    reports = list(pattern.finditer(data))
+    require(len(reports) == len(AXIOM_TARGETS), 'wrong number or format of axiom reports')
+    seen = set()
+    for report in reports:
+        target, kind, listing = report.group(1), report.group(2), report.group(3)
+        require(target in AXIOM_TARGETS and target not in seen, 'unexpected or duplicate axiom report')
+        seen.add(target)
+        if listing is not None:
+            names = re.findall(r"(?:[A-Za-z_][A-Za-z0-9_']*)(?:\\.[A-Za-z_][A-Za-z0-9_']*)+", listing)
+            require(len(names) == len(set(names)), 'duplicate axiom listing')
+            require(set(names) <= allowed, 'unlisted axiom in audit: ' + ', '.join(sorted(set(names) - allowed)))
+    require(seen == set(AXIOM_TARGETS), 'missing required axiom report')
+    return {'status': 'PARSED_CONSERVATIVELY', 'stdout_sha256': sha(stdout), 'stderr_sha256': sha(stderr),
+            'targets': AXIOM_TARGETS, 'allowlist': sorted(allowed)}
+
+
+def audit_stdout(stdout, assumptions):
+    """Compatibility helper for tests; production calls ``audit`` with both streams."""
+    return audit(stdout, stdout, assumptions)
+
+
+def preflight(root):
+    root = Path(root).resolve(); owner = lock(safe(root, OUT + '/execution/controller.lock', False))
+    try:
+        m, _, _ = validate_manifest(root, True)
+        # A CVC-3 work record is created only after promotion.  Preflight is
+        # therefore an immutable runner check, never a proof-start surrogate.
+        return {'protocol_id': PROTOCOL_ID, 'run_id': RUN, 'proof_launches': 0}
+    finally: owner.close()
+
+
+def execute(root, resume=False):
+    root = Path(root).resolve(); owner = lock(safe(root, OUT + '/execution/controller.lock', False))
+    try:
+        m, _, assumptions = validate_manifest(root, True); gate(root); verify_runtime_and_dependencies(root, m)
+        ledger = safe(root, m['ledger_root'], False) / 'attempts.jsonl'; ledger.parent.mkdir(parents=True, exist_ok=True)
+        events, state = read_events(ledger), derive(read_events(ledger))
+        orphans = [r for r in state.values() if 'terminal' not in r]
+        if orphans:
+            for row in orphans:
+                append(ledger, {'kind':'TERMINAL','number':row['number'],'status':'INTERRUPTED',
+                                'charged_seconds':row['reserved_seconds'],'at':now(),'reason':'orphan reservation charged in full'})
+            return 1
+        if state and not resume: raise ValueError('existing ledger requires --resume')
+        if state and state[1]['terminal']['status'] != 'COMPLETE': return 1
+        number = len(state) + 1
+        if number > COUNT: raise ValueError('attempt cap exhausted')
+        session_path = safe(root, OUT + '/execution/sessions.jsonl')
+        work = {'sessions': session_state(read_events(session_path), datetime.now(timezone.utc))}
+        deadline = budget(work, state, datetime.now(timezone.utc))
+        workspace = safe(root, m['workspace']); attempts = workspace / 'attempts'; attempts.mkdir(exist_ok=True)
+        attempt_dir = attempts / f'{number:02d}'; attempt_dir.mkdir()
+        source = bind(root, m['signature']) if number == 1 else safe(root, m['workspace'] + '/proof-input.lean')
+        name = 'Contract.lean' if number == 1 else 'CVC2Proof.lean'
+        payload = source.read_bytes() if number == 1 else generated_source(source)
+        evidence_input = attempt_dir / name; evidence_input.write_bytes(payload)
+        proof_input = workspace / name
+        # CVC2Proof.lean is generated, not the mutable user body.  Replacing it
+        # atomically leaves proof-input.lean intact and records the exact bytes
+        # that the fixed protocol argv elaborates.
+        temporary = workspace / (name + '.new')
+        require(not temporary.exists(), 'stale generated input')
+        temporary.write_bytes(payload)
+        os.replace(temporary, proof_input)
+        stdout, stderr = attempt_dir / 'stdout', attempt_dir / 'stderr'
+        argv = list(m['lean']['argv_signature' if number == 1 else 'argv_proof'])
+        argv = [str(x).replace('{attempt_directory}', str(attempt_dir)) for x in argv]
+        env = dict(m['lean']['environment'])
+        append(ledger, {'kind':'RESERVED','number':number,'status':'RESERVED','reserved_seconds':deadline,
+                        'session':len(work['sessions']),'argv':argv,'cwd':str(workspace),
+                        'environment':env,'input':str(evidence_input.relative_to(root)),'input_sha256':sha(evidence_input),
+                        'source_binding':m['signature'] if number == 1 else {'path': str(source.relative_to(root)), 'sha256': sha(source)}, 'at':now()})
+        term = run_process(argv, workspace, env, stdout, stderr, deadline)
+        output = workspace / ('Contract.olean' if number == 1 else 'CVC2Proof.olean')
+        term.update({'kind':'TERMINAL','number':number,'output_sha256':sha(output) if output.is_file() else None})
+        if term['status'] == 'COMPLETE' and number > 1:
+            try: term['axiom_audit'] = audit(stdout, stderr, assumptions)
+            except ValueError as error: term.update(status='FAILED', audit_error=str(error))
+        append(ledger, term)
+        return 0 if term['status'] == 'COMPLETE' else 1
+    finally: owner.close()
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description='fixed CVC3-U1 proof runner')
+    group = parser.add_mutually_exclusive_group(required=True)
+    group.add_argument('--preflight', action='store_true'); group.add_argument('--attempt', action='store_true'); group.add_argument('--resume', action='store_true'); group.add_argument('--start-session', action='store_true'); group.add_argument('--end-session', action='store_true')
+    args = parser.parse_args(argv); root = Path(__file__).resolve().parents[1]
+    if args.preflight: preflight(root); return 0
+    if args.start_session: start_session(root); return 0
+    if args.end_session: end_session(root); return 0
+    return execute(root, resume=args.resume)
+
+
+if __name__ == '__main__': raise SystemExit(main())
