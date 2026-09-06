@@ -1,0 +1,116 @@
+#!/usr/bin/env python3
+"""Bind the exact CVC-PREP-1 inputs without launching Lean or materializing sources."""
+import argparse
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT / 'lib'))
+from cvc_prep_binding import (digest, file_binding, linkage_inventory,
+                              platform_identity, reachable_libraries, require, runtime_files, verify_runtime)
+
+OUT = ROOT / 'results/research/conditional-validation-contracts/cvc-prep-1'
+ALT = ROOT / 'results/research/conditional-validation-contracts/alt-payloads'
+
+
+def write(path, obj):
+    path.write_text(json.dumps(obj, indent=2) + '\n')
+
+
+def runtime_manifest():
+    proposal = json.loads((ALT / 'proposal.json').read_text())
+    runtime = Path(proposal['runtime']['path'])
+    for name in ('lean_binary', 'version_header'):
+        row = proposal['runtime'][name]
+        require(file_binding(row['path']) == {k: row[k] for k in ('path', 'bytes', 'sha256')}, 'proposal identity: ' + name)
+    files = runtime_files(runtime)
+    linkage, unresolved, external = linkage_inventory(runtime, files)
+    reachable = reachable_libraries(linkage)
+    obj = {'schema_version': 1, 'item_id': 'CVC-PREP-1', 'runtime_root': str(runtime),
+           'platform': platform_identity(), 'files': files,
+           'version_header': file_binding(runtime / 'include/lean/version.h', 'include/lean/version.h'),
+           'linkage': linkage, 'unresolved_libraries': unresolved,
+           'lean_static_loader_closure': reachable,
+           'external_non_system_libraries': external,
+           'unresolved_inventory_interpretation': 'Preserve unresolved references in bundled tools outside the bin/lean static load graph. All installed bin/lib bytes remain bound. The permitted command uses OS /usr/lib/libc++.dylib; bundled lib/libc/libc++.dylib is not statically reachable. This is a static loader characterization, not a guarantee about arbitrary dynamic loading. A missing dynamic companion or native compiler requirement at launch is a charged first-failure stop.',
+           'trust_boundary': 'Installed runtime bytes, complete bin/lib trees and static Mach-O linkage are bound. OS loader/cache, Python, Git, hardware and local filesystem are trusted. No binary correctness or proof result is inferred.'}
+    write(OUT / 'runtime-manifest.json', obj)
+    require(not any(r['object'] in reachable for r in unresolved) and not external,
+            'unresolved reachable/external non-system linkage; stop before compiler launch')
+    print(json.dumps({'runtime_files': sum(r['type'] == 'file' for r in files),
+                      'runtime_bytes': sum(r.get('bytes', 0) for r in files),
+                      'native_objects': len(linkage), 'unresolved': unresolved}))
+
+
+def manifest():
+    proposal = json.loads((ALT / 'proposal.json').read_text())
+    closure = json.loads((ALT / 'source-closure.json').read_text())
+    runtime = proposal['runtime']['path']
+    base = 'external/cvc-u1-dependencies-0001'
+    def bind(path):
+        return {'path': str(path.relative_to(ROOT)), 'sha256': digest(path)}
+    donors = []
+    for kind in ('lean4lean', 'batteries'):
+        donor_root = proposal['source_materialization'][kind + '_donor']['path']
+        files = []
+        for row in closure['closure']['modules']:
+            if row['kind'] != kind:
+                continue
+            p = Path(row['source']['path'])
+            require(file_binding(p) == row['source'], 'changed donor source: ' + row['module'])
+            files.append({'module': row['module'], 'path': str(p.relative_to(donor_root)),
+                          'sha256': row['source']['sha256'], 'bytes': row['source']['bytes']})
+        donors.append({'root': donor_root, 'files': files})
+    immutable = ['lib/cvc_prep_binding.py', 'lib/research_queue.py', 'scripts/bind-cvc-u1-inputs',
+                 'scripts/prepare-cvc-u1-dependencies', 'tests/test_cvc_prep_binding.py',
+                 'results/research/conditional-validation-contracts/cvc-prep-1/inert-test-receipt.json',
+                 'results/research/conditional-validation-contracts/alt-payloads/proposal.json',
+                 'research/conditional-validation-contracts/cvc2/Contract.lean',
+                 'results/research/conditional-validation-contracts/cvc-2/execution-protocol.json',
+                 'results/research/conditional-validation-contracts/cvc-prep-1/source-launch-review.json',
+                 'results/research/conditional-validation-contracts/cvc-prep-1/inspect-sources.py',
+                 'results/research/conditional-validation-contracts/cvc-prep-1/binding-diagnostic.json']
+    command_manifest = OUT / 'command-manifest.json'
+    write(command_manifest, {'schema_version': 1, 'run_id': 'CVC-U1-DEPS-0001',
+          'commands': [{'number': n, 'module': module,
+                        'argv': [runtime + '/bin/lean', '-o',
+                                 str(ROOT / base / 'build/lib/lean' / (module.replace('.', '/') + '.olean')),
+                                 module.replace('.', '/') + '.lean'],
+                        'cwd': str(ROOT / base / 'src')}
+                       for n, module in enumerate(closure['closure']['topological_noncore_order'], 1)],
+          'environment': proposal['compilation']['environment'],
+          'environment_note': 'All placeholders are expanded in config/cvc-u1-dependencies-0001.json compiler.env; no environment is inherited.'})
+    immutable.append(str(command_manifest.relative_to(ROOT)))
+    obj = {'schema_version': 1, 'item_id': 'CVC-PREP-1', 'run_id': 'CVC-U1-DEPS-0001',
+           'source_closure': bind(ALT / 'source-closure.json'),
+           'runtime_manifest': bind(OUT / 'runtime-manifest.json'),
+           'work_record': bind(OUT / 'work-record.json'),
+           'materialization': {'root': base, 'source_root': base + '/src',
+                               'build_root': base + '/build/lib/lean', 'tmp_root': base + '/tmp', 'donors': donors},
+           'limits': {'max_sessions': 2, 'session_seconds': 5400, 'max_active_seconds': 10800,
+                      'max_compilation_attempts': 37, 'attempt_timeout_seconds': 300, 'max_compilation_seconds': 6600},
+           'compiler': {'path': runtime + '/bin/lean', 'sha256': proposal['runtime']['lean_binary']['sha256'],
+                        'argv_prefix': ['-o'], 'env': {
+                            'LEAN_SYSROOT': runtime,
+                            'LEAN_PATH': str(ROOT / base / 'build/lib/lean') + ':' + runtime + '/lib/lean',
+                            'PATH': runtime + '/bin:/usr/bin:/bin',
+                            'TMPDIR': str(ROOT / base / 'tmp'), 'LANG': 'C.UTF-8'}},
+           'controller': bind(ROOT / 'lib/cvc_prep.py'), 'tests': bind(ROOT / 'tests/test_cvc_prep.py'),
+           'immutable_bindings': [bind(ROOT / p) for p in immutable],
+           'ledger_root': str(OUT.relative_to(ROOT) / 'execution')}
+    write(ROOT / 'config/cvc-u1-dependencies-0001.json', obj)
+    print('PASS: exact execution manifest written; compilation still requires committed checkpoint')
+
+
+if __name__ == '__main__':
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument('action', choices=['runtime', 'manifest', 'check-runtime'])
+    args = parser.parse_args()
+    if args.action == 'runtime':
+        runtime_manifest()
+    elif args.action == 'manifest':
+        manifest()
+    else:
+        verify_runtime(ROOT, json.loads((OUT / 'runtime-manifest.json').read_text()))
+        print('PASS: complete runtime identities')

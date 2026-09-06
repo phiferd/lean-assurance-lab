@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-PREP-1",
+  "status": "PASS",
+  "controller_tests": 20,
+  "runtime_tests": 9,
+  "fixture_reserved_launches": 10,
+  "fixture_charged_seconds": 0.7102360010612756,
+  "compiler_launches": 0,
+  "lab_elaborations": 0,
+  "checks": [
+    {
+      "command": [
+        "env",
+        "CVC_PREP_FIXTURE_LEDGER=results/research/conditional-validation-contracts/cvc-prep-1/fixture-ledger.jsonl",
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep.py"
+      ],
+      "started_at": "2026-09-06T19:50:12.572829+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/12-controller-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:50:17.315330+00:00",
+      "log_sha256": "8d514adebd05488e43ebcedecb3d08f57c7bbccc6b706dc78885f4b6a129a2b3"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc_prep_binding.py"
+      ],
+      "started_at": "2026-09-06T19:34:21.965881+00:00",
+      "log": "results/workflow-refresh/cvc-prep-1-2026-09-06/02-binding-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:34:22.091327+00:00",
+      "log_sha256": "489d8fec4214192d21ef621f802a943fb57007a29204410d590ff3ceb58c5003"
+    }
+  ],
+  "tested_files": [
+    {
+      "path": "lib/cvc_prep.py",
+      "sha256": "2f16c3eb8ece976c51aa1eb143a571894b5004f20c7d7fb609a7d4b48075cb61"
+    },
+    {
+      "path": "lib/cvc_prep_binding.py",
+      "sha256": "513916dc1e1f1a67088c0496a6d72d2419dee7f83cbb9664be86604703623781"
+    },
+    {
+      "path": "scripts/prepare-cvc-u1-dependencies",
+      "sha256": "f15f6097e37a286a2d5e2305ca33ff3a4a1ad15901fed11022128bfc6f2660d3"
+    },
+    {
+      "path": "tests/test_cvc_prep.py",
+      "sha256": "4b1437f3f8b1071bed40221c0f3034ef3dd31c70b8f04d9f59e3139ebcff2141"
+    },
+    {
+      "path": "tests/test_cvc_prep_binding.py",
+      "sha256": "0ce9f4869e8336832e20a029832e0df7b1bca6439c922fbc02b102798ed2611e"
+    }
+  ],
+  "scope": "Before first Lean execution checkpoint. Inert fixtures and fake clock/process checks do not prove arbitrary Lean source safe. Full immutable source/runtime/command binding and trusted local code remain required."
+}

@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-PREP-1",
+  "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
+  "status": "ACTIVE",
+  "owner": "Codex lead with bounded controller worker",
+  "input_commit": "ca889906ab89b5d0fbebe949e32327883e4f547d",
+  "execution_authority": [
+    "AGENTS.md",
+    "docs/RESEARCH_STATUS.md",
+    "config/research-queue.json",
+    "results/research/conditional-validation-contracts/alt-payloads/proposal.json"
+  ],
+  "started_at": "2026-09-06T19:27:03.320995+00:00",
+  "ended_at": null,
+  "limits": {
+    "max_sessions": 2,
+    "session_minutes": 90,
+    "max_active_seconds": 10800,
+    "max_compilation_attempts": 37,
+    "attempt_timeout_seconds": 300,
+    "max_compilation_seconds": 6600,
+    "checker_launches": 0,
+    "lab_elaborations": 0,
+    "proof_attempts": 0,
+    "lake_executions": 0,
+    "native_compiler_invocations": 0,
+    "network_requests": 0,
+    "toolchain_installs": 0,
+    "max_fixture_process_launches": 80,
+    "fixture_timeout_seconds": 5,
+    "max_fixture_process_seconds": 400
+  },
+  "sessions": [
+    {
+      "number": 1,
+      "started_at": "2026-09-06T19:27:03.320995+00:00",
+      "ended_at": null
+    }
+  ],
+  "compilation_attempts": 0,
+  "compilation_seconds": 0,
+  "fixture_process_launches": 10,
+  "fixture_process_seconds": 0.7102360010612756,
+  "accounting_note": "Wall-clock active sessions cover design, delegated work, binding, implementation, tests and execution; overlapping delegation is not subtracted. Governance reads preceded item entry. No Lean invocation before committed manifest/controller/tests checkpoint.",
+  "inputs": [
+    {
+      "path": "CONSTITUTION.md",
+      "bytes": 7995,
+      "sha256": "f8bd97b3be61d1c09e9062eea11d41006ef266ce0c244b65827a9bd7aa03df16"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 125610,
+      "sha256": "e314dec5c48fdca38b34f0b632cb5596bbcc1c232435373bd28eea76d623f3a6"
+    },
+    {
+      "path": "config/research-queue.json",
+      "bytes": 26298,
+      "sha256": "4d171b37ef46c46a83efdb46338babaf544bf542000888253e02f47d8aa7681f"
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "bytes": 14727,
+      "sha256": "cf1852ea1ceeb8294f4cbf1bca46cca2ae43382334ecbdfdc8cac238b996773b"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/alt-payloads/proposal.json",
+      "bytes": 18607,
+      "sha256": "d38d614c02b1883116fe3fd28a8bcd1f9f86a813daebd7b7eb3d1dc0eacc2762"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/alt-payloads/source-closure.json",
+      "bytes": 70328,
+      "sha256": "2b5a2989059e0735922dc60fdcd3b3af3e7b44c2ab646af9f810fb28f1de4875"
+    }
+  ],
+  "diagnostics": [
+    {
+      "path": "binding-diagnostic.json",
+      "scope": "Read-only static runtime assembly; initial overbroad assertion retained; no Lean execution."
+    }
+  ],
+  "delegation": [
+    {
+      "task": "prep_controller",
+      "model": "gpt-5.6-terra",
+      "scope": "Controller and inert tests; no compiler execution; all overlapping wall time included."
+    },
+    {
+      "task": "source_launch_review",
+      "model": "gpt-5.6-luna",
+      "scope": "Read-only source/native-launch and static-loader review; no subprocess fixtures or compiler execution."
+    }
+  ],
+  "draft_engineering_checks": [
+    "Worker Python syntax checks passed; direct draft tests passed 3 then5 assertions with zero real fixtures. One dotted unittest invocation failed import before tests. Lead replaced incomplete draft controller and tests before any execution checkpoint.",
+    "Initial integration tests found missing fresh-workspace parent creation and sandbox-restricted ps/socket inspection in the fixture test. Parent creation was fixed and fixture death is now checked using FIFO EOF. Failed logs are preserved; final20 controller tests and9 runtime tests pass."
+  ]
+}

@@ -1843,9 +1843,12 @@ Its static closure has 37 upstream modules: 12 Lean4Lean and 25 Batteries,
 including four public-meta dependencies absent from the earlier inventory.
 All selected source bytes match the recorded target pins; no compilation ran.
 The [stopping-point review](../results/research/queue-reviews/2026-09-06-alt-payloads.json)
-selects `CVC-PREP-1` READY and unstarted. Implement and inert-test its narrow
-preparation controller, bind the complete runtime and source manifest, commit
-that exact execution checkpoint, then attempt the fixed upstream-only build
+selects `CVC-PREP-1`. It is now ACTIVE under the requested one-item execution.
+Preparation began at 2026-09-06T19:27:03Z; its
+[work record](../results/research/conditional-validation-contracts/cvc-prep-1/work-record.json)
+preserves the two-session bound. Implement and inert-test the narrow controller,
+bind the complete runtime and source manifest, commit that exact execution
+checkpoint, then attempt the fixed upstream-only build
 within two 90-minute sessions, 37 launches, 300 seconds per launch and 6600
 cumulative compilation seconds. All limits and first-failure stops apply.
 No Lab signature/proof elaboration, download or installation is included.
@@ -1865,8 +1868,8 @@ feedback/dispositions are unknown; retain the last known submissions and Kiota
 deferral. Repair access with `gh auth login -h github.com --web`, then rank a
 fresh bounded check after successful preflight. No repeated polling is enabled.
 
-This one-item execution closes ALT-PAYLOADS and selects its successor without
-starting it. The phase changes no normative-source approval or old catalog
+This one-item execution covers CVC-PREP-1 only; its stopping-point review
+will select a successor without starting it. The phase changes no normative-source approval or old catalog
 disposition and authorizes no external message or publication. Reevaluate
 candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
 
