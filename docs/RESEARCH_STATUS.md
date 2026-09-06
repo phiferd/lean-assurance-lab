@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-PREP-2` on 2026-09-06 with `SUCCESS`. The explicit
+  controller successor fixes the path-ordering defect and compiled all 10
+  remaining upstream modules once (24.381 compilation seconds) under committed
+  checkpoint `a9a0701`. The complete 37-module bundle contains 141 verified
+  products, including all 119 preserved products from CVC-PREP-1. The original
+  27 modules were not replayed; CVC-PREP-1 remains `BOUNDED_UNRESOLVED` with its
+  original evidence unchanged. All 60 prelaunch control checks and four closure
+  accounting regressions passed. No Lab signature, proof or checker ran.
+  See the [result](../results/research/conditional-validation-contracts/cvc-prep-2/result.json),
+  [report](../results/research/conditional-validation-contracts/cvc-prep-2/report.md),
+  and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-prep-2.json).
+  `CVC-RUNNER-1` is selected READY and unstarted; CVC-3 through CVC-5 remain
+  PLANNED. Combined preparation cost is 50.51 active minutes and 49.755
+  compilation seconds. Required full-payload, historical and current-state
+  checks are retained in the
+  [validation record](../results/workflow-refresh/cvc-prep-2-2026-09-06/validation.json).
+
 - Closed `CVC-PREP-1` on 2026-09-06 with `BOUNDED_UNRESOLVED` after
   27 successful upstream module compilations (25.374 compilation seconds).
   All 119 output products match their recorded identities. A controller
@@ -1845,7 +1862,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-PREP-2`.
+Selected next item: `CVC-RUNNER-1`.
 
 The [ranked queue](../config/research-queue.json) governs item order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -1853,39 +1870,33 @@ decision; CVC-2 retains `SUCCESS` for a `SPECIFICATION_PROPOSAL_UNCHECKED`.
 No Lab proof has been checked. Historical studies and completed ecosystem/corpus
 successors remain closed and unchanged.
 
-`CVC-PREP-1` is COMPLETE with `BOUNDED_UNRESOLVED`. Its committed execution
-checkpoint `a28939b` produced 27 successful upstream modules and 119 output
-files in 27 compiler launches, charging 25.374 compilation seconds. All output
-paths, sizes and hashes still match. The controller stopped before reserving
-module 28 because it compared Path-component order with path-string order after
-`Batteries.CodeAction` created files beside its namespace directory. This is a
-characterized controller defect; no module failed compilation and no retry ran.
-See the [result](../results/research/conditional-validation-contracts/cvc-prep-1/result.json),
-[report](../results/research/conditional-validation-contracts/cvc-prep-1/report.md),
-and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-prep-1.json).
-The original controller, inputs and execution records are retained unchanged.
+`CVC-PREP-2` is COMPLETE with `SUCCESS`: its explicit controller successor fixes
+the module-versus-namespace ordering defect and compiled all 10 remaining
+upstream modules once under checkpoint `a9a0701`, charging 24.381 compilation
+seconds. The isolated complete 37-module bundle contains 141 exact output files,
+including the 119 unchanged products from the 27 CVC-PREP-1 successes. No prior
+module was replayed. `CVC-PREP-1` remains `BOUNDED_UNRESOLVED` with its original
+checkpoint `a28939b`, source/runtime/controller bytes and failure evidence intact.
+Combined preparation cost is 50.51 active minutes and 49.755 compilation seconds.
+See the [result](../results/research/conditional-validation-contracts/cvc-prep-2/result.json),
+[report](../results/research/conditional-validation-contracts/cvc-prep-2/report.md),
+and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-prep-2.json).
+This establishes dependency availability only; no Lab signature was elaborated.
 
-`CVC-PREP-2` is selected ACTIVE. Its
-[work record](../results/research/conditional-validation-contracts/cvc-prep-2/work-record.json)
-records the owner-requested controller repair and remaining budget. Its
-[explicit successor proposal](../results/research/conditional-validation-contracts/cvc-prep-1/successor-proposal.json)
-requires a new controller, workspace and run ID `CVC-U1-DEPS-0002`, mixed
-module/namespace regression checks, and a committed execution checkpoint.
-Verify and copy the exact 119 outputs from the 27 prior successes, then compile
-only the remaining 10 upstream modules in their fixed order. All limits apply:
-two 90-minute sessions, 10 launches, 300 seconds each and 3000 compilation
-seconds, plus at most 80 inert fixture launches/5 seconds each/400 process
-seconds. Stop on the first failure, identity change, control defect or exhausted
-bound. Preserve predecessor costs and report the aggregate. No Lab elaboration,
-proof, checker, Lake, native compilation, download or installation is included.
+`CVC-RUNNER-1` is selected READY and unstarted. Implement the dedicated runner
+for the unchanged [CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
+and test it using inert fixture processes. Preserve the exact contract, examples,
+axiom allowlist, full runtime, complete dependency bundle and prior cost ledgers.
+The bound is two 90-minute sessions, at most 80 inert fixture launches, five
+seconds per fixture and 400 process seconds. This item permits zero Lean/Lake,
+dependency compilation, signature elaboration, proofs, checkers or network.
+Stop at passing protocol controls or a named bounded implementation gap.
 
-`CVC-RUNNER-1` remains PLANNED pending CVC-PREP-2 SUCCESS and a separate
-entry review. CVC-3 stays PLANNED until both the complete compiled bundle and
-its tested protocol-specific runner succeed. The unchanged
-[CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
-counts signature elaboration as attempt 1 of 12. An unresolved predecessor does
-not satisfy a downstream success dependency. CVC-4 and CVC-5 remain conditional
-PLANNED stages.
+CVC-3 stays PLANNED until CVC-RUNNER-1 succeeds and a separate entry review
+promotes proof execution with committed exact inputs. The first elaboration of
+the unchanged CVC-2 signature remains counted attempt 1 of 12. Dependency
+availability alone is not a checked contract, theorem or executable-validator
+refinement. CVC-4 and CVC-5 remain conditional PLANNED stages.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena
@@ -1893,10 +1904,10 @@ feedback/dispositions are unknown; retain the last-known submissions and Kiota
 deferral. Repair access with `gh auth login -h github.com --web`, then rank a
 fresh bounded check after successful preflight. No repeated polling is enabled.
 
-This one-item execution repairs the controller and completes the fixed
-CVC-PREP-2 dependency preparation, then selects the next eligible item. It changes no normative-source approval or old catalog disposition
-and authorizes no external message or publication. Reevaluate candidates at each
-stop using [Research workflow](RESEARCH_WORKFLOW.md).
+This execution closes the requested controller repair and selects CVC-RUNNER-1
+without starting it. It changes no normative-source approval or old catalog
+disposition and authorizes no external message or publication. Reevaluate
+candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
 
 ### Waiting
 

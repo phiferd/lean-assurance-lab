@@ -3,7 +3,7 @@
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
   "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
   "updated_at": "2026-09-06",
-  "selected_item": "CVC-PREP-2",
+  "selected_item": "CVC-RUNNER-1",
   "items": [
     {
       "id": "CVC-1",
@@ -245,7 +245,7 @@
       "completion": "Exact usable 37-module bundle jointly bound to27 predecessor successes and 10 successor successes, or first-failure bounded unresolved evidence. Passing tests alone do not authorize CVC-3.",
       "stop_condition": "Two 90-minute sessions (10800 active seconds), at most 10 compiler launches/300 seconds each/3000 cumulative compilation seconds; at most 80 inert fixture launches/5 seconds each/400 process seconds. Stop first failure, identity change, control defect or exhausted limit. No prior-module replay, Lab elaboration, proofs, checkers, Lake, native compiler, network, downloads or installations.",
       "kind": "OPERATIONS",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "ALT-PAYLOADS"
       ],
@@ -263,10 +263,35 @@
         "results/research/conditional-validation-contracts/cvc-prep-1/execution/events.jsonl",
         "results/research/conditional-validation-contracts/cvc-prep-1/successor-proposal.json",
         "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
-        "tests/test_cvc_prep_closure.py"
+        "tests/test_cvc_prep_closure.py",
+        "results/research/conditional-validation-contracts/cvc-prep-2/result.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/report.md",
+        "results/research/conditional-validation-contracts/cvc-prep-2/work-record.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/evidence-manifest.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/execution/events.jsonl",
+        "results/research/conditional-validation-contracts/cvc-prep-2/command-manifest.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/validate-evidence.py",
+        "config/cvc-u1-dependencies-0002.json",
+        "tests/test_cvc_prep2.py",
+        "tests/test_cvc_prep2_closure.py"
       ],
       "issue_urls": [],
-      "closure": null,
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/conditional-validation-contracts/cvc-prep-2/result.json",
+          "results/research/conditional-validation-contracts/cvc-prep-2/report.md",
+          "results/research/conditional-validation-contracts/cvc-prep-2/work-record.json",
+          "results/research/conditional-validation-contracts/cvc-prep-2/evidence-manifest.json",
+          "results/research/conditional-validation-contracts/cvc-prep-2/execution/events.jsonl",
+          "results/research/conditional-validation-contracts/cvc-prep-2/command-manifest.json",
+          "results/research/conditional-validation-contracts/cvc-prep-2/validate-evidence.py",
+          "config/cvc-u1-dependencies-0002.json",
+          "tests/test_cvc_prep2.py",
+          "tests/test_cvc_prep2_closure.py"
+        ],
+        "recommendation": "Select CVC-RUNNER-1 to implement and inert-test the fixed proof protocol; all 37 dependencies are available. No Lean or proof launch under the runner implementation item."
+      },
       "blocked_reason": ""
     },
     {
@@ -276,12 +301,12 @@
       "target": "CVC3-U1-PROOF-0001 reservation, signature sequencing, axiom/result checks and cost ledger",
       "action": "Implement a dedicated protocol-specific runner and validate it with inert fixture processes; preserve old closed-frontier authorization.",
       "expected_value": "Enables reproducible, explicitly budgeted checking of the fixed CVC-U1 contract without changing historical authority.",
-      "rank_rationale": "Keep the dedicated proof-runner implementation PLANNED until the explicit preparation successor completes the remaining 10 modules and a separate review checks the complete bundle.",
-      "entry_gate": "CVC-PREP-2 closes SUCCESS with a usable complete 37-module bundle bound jointly to its 10 successes and 27 CVC-PREP-1 successes; a separate review selects this implementation. CVC-PREP-1 is BOUNDED_UNRESOLVED and cannot satisfy a success dependency. No Lean/proof execution under CVC-RUNNER-1.",
+      "rank_rationale": "Highest eligible local work: the fixed 37-module dependency bundle is complete and exact bytes are bound. A small protocol-specific runner can now enable a controlled check of the existing contract. Unchecked proofs, blocked upstream access and deferred new semantic themes provide less actionable next work.",
+      "entry_gate": "CVC-PREP-2 closes SUCCESS: ten successor compilations plus 27 preserved predecessor successes yield 141 exact products for all 37 required upstream modules. The 2026-09-06 stopping-point review validates this bundle and selects only runner implementation with inert fixtures. CVC-PREP-1 stays BOUNDED_UNRESOLVED. No Lean, dependency compilation, signature elaboration or proof execution under CVC-RUNNER-1.",
       "completion": "Passing adversarial fixture tests for all CVC-2 protocol controls; committed runner and immutable input/dependency/audit bindings ready for separate CVC-3 entry review.",
       "stop_condition": "Two 90-minute sessions, at most 80 inert fixture process launches, 5 seconds per fixture and 400 process seconds total. Zero Lean/Lake, dependency builds, proofs, checkers or network. Stop at passing controls or a named bounded implementation gap.",
       "kind": "OPERATIONS",
-      "status": "PLANNED",
+      "status": "READY",
       "depends_on": [
         "CVC-PREP-2"
       ],
@@ -307,7 +332,17 @@
         "results/research/conditional-validation-contracts/cvc-prep-1/evidence-manifest.json",
         "results/research/conditional-validation-contracts/cvc-prep-1/execution/events.jsonl",
         "results/research/conditional-validation-contracts/cvc-prep-1/successor-proposal.json",
-        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py"
+        "results/research/conditional-validation-contracts/cvc-prep-1/validate-evidence.py",
+        "results/research/conditional-validation-contracts/cvc-prep-2/result.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/report.md",
+        "results/research/conditional-validation-contracts/cvc-prep-2/work-record.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/evidence-manifest.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/execution/events.jsonl",
+        "results/research/conditional-validation-contracts/cvc-prep-2/command-manifest.json",
+        "results/research/conditional-validation-contracts/cvc-prep-2/validate-evidence.py",
+        "config/cvc-u1-dependencies-0002.json",
+        "tests/test_cvc_prep2.py",
+        "tests/test_cvc_prep2_closure.py"
       ],
       "issue_urls": [],
       "closure": null,
@@ -320,7 +355,7 @@
       "target": "The single CVC-2 contract and pinned formalization",
       "action": "Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.",
       "expected_value": "Establishes a scoped semantic result or exposes the exact formal obstacle.",
-      "rank_rationale": "The exact dependency build is only27/37 complete after a characterized controller stop. Finish its explicit successor and the separate tested proof runner before any proof cost.",
+      "rank_rationale": "The complete pinned dependency bundle is available, but the fixed protocol-specific proof runner has not been implemented or tested. Finish CVC-RUNNER-1 and perform separate CVC-3 promotion before spending any proof attempt.",
       "entry_gate": "CVC-2 fixed contract, CVC-PREP-2 complete dependency/runtime bundle and CVC-RUNNER-1 tested protocol-specific runner all close SUCCESS. The CVC-PREP-1 partial bundle is insufficient. Separate review promotes CVC-3 only after immutable protocol/signature/examples/allowlist/runner/runtime bindings are committed. Signature elaboration remains counted attempt 1 under CVC3-U1-PROOF-0001. Remains PLANNED.",
       "completion": "Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.",
       "stop_condition": "Four sessions or 12 proof builds of at most five minutes each; no new family or broad kernel proof.",

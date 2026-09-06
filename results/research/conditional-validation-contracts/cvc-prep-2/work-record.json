@@ -2,7 +2,7 @@
   "schema_version": 1,
   "item_id": "CVC-PREP-2",
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
-  "status": "ACTIVE",
+  "status": "COMPLETE",
   "owner": "Codex lead; independent read-only Terra review",
   "input_commit": "2e0214acf4a41a0c9856ce67d0e83d7c2cdc3611",
   "execution_authority": [
@@ -12,7 +12,7 @@
     "results/research/conditional-validation-contracts/cvc-prep-1/successor-proposal.json"
   ],
   "started_at": "2026-09-06T21:12:30.400239+00:00",
-  "ended_at": null,
+  "ended_at": "2026-09-06T21:28:33.319849+00:00",
   "limits": {
     "max_sessions": 2,
     "session_minutes": 90,
@@ -35,13 +35,13 @@
     {
       "number": 1,
       "started_at": "2026-09-06T21:12:30.400239+00:00",
-      "ended_at": null
+      "ended_at": "2026-09-06T21:28:33.319849+00:00"
     }
   ],
-  "compilation_attempts": 0,
-  "compilation_seconds": 0,
-  "fixture_process_launches": 20,
-  "fixture_process_seconds": 1.7223233773838729,
+  "compilation_attempts": 10,
+  "compilation_seconds": 24.381133165443316,
+  "fixture_process_launches": 28,
+  "fixture_process_seconds": 2.4217993365600705,
   "inputs": [
     {
       "path": "CONSTITUTION.md",
@@ -74,8 +74,42 @@
       "task": "successor_review",
       "model": "gpt-5.6-terra",
       "scope": "Read-only adversarial controller and seed reuse review; no launches or writes."
+    },
+    {
+      "task": "successor_review",
+      "model": "gpt-5.6-terra",
+      "scope": "Bounded successor-only evidence validator implementation after independent control review. Lead reviewed and tightened accounting and added four pure closure regressions. No worker compiler or process fixture launches."
     }
   ],
   "accounting_note": "Wall-clock sessions include implementation, review, bindings and execution. A frozen initial-work-record.json is bound before Lean execution; this final work record adds actual costs. Historical CVC-PREP-1 costs remain unchanged and are aggregated at closure. Required delivery validation is recorded separately after the bounded item stop.",
-  "engineering_checks": "All focused test runs passed. Independent review prompted a later-failure regression and refusal to rebind or preflight a durably stopped controller. Exact logs retain each engineering run; no Lean has launched."
+  "engineering_checks": "All focused test runs passed. Independent review prompted a later-failure regression and refusal to rebind or preflight a durably stopped controller. Exact logs retain each engineering run; no Lean has launched.",
+  "execution_stopped_at": "2026-09-06T21:23:38.039822+00:00",
+  "stop_reason": "All ten remaining upstream modules compiled successfully once. The complete 37-module bundle contains 141 verified products, including 119 unchanged predecessor products. No predecessor module was recompiled and no Lab file was elaborated.",
+  "outcome": "SUCCESS",
+  "active_seconds": 962.91961,
+  "lab_elaborations": 0,
+  "proof_attempts": 0,
+  "checker_launches": 0,
+  "lake_executions": 0,
+  "native_compiler_invocations": 0,
+  "network_requests": 0,
+  "toolchain_installs": 0,
+  "downloads": 0,
+  "recommendation": {
+    "action": "Select CVC-RUNNER-1 to implement and inert-test the already specified proof-execution protocol. Stop this preparation item after validated delivery.",
+    "target": "CVC3-U1-PROOF-0001 dedicated protocol-specific runner",
+    "priority": "HIGHEST_ELIGIBLE_NEXT",
+    "prerequisites": [
+      "Validated complete 37-module bundle and immutable 27+10 execution evidence",
+      "Fixed CVC-2 contract, examples, axiom allowlist and execution protocol remain unchanged",
+      "Separate entry review selects runner implementation only; no Lean or proof execution under CVC-RUNNER-1"
+    ],
+    "evidence": [
+      "result.json",
+      "command-manifest.json",
+      "execution/events.jsonl",
+      "../cvc-2/execution-protocol.json"
+    ],
+    "external_action": "NONE"
+  }
 }

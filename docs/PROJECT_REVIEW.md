@@ -20,39 +20,22 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-PREP-2: Repair preparation inventory ordering and finish the fixed dependencies; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-RUNNER-1: Implement the fixed CVC-3 proof runner; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-PREP-2**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-RUNNER-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 6 | CVC-PREP-2: Repair preparation inventory ordering and finish the fixed dependencies | READY |
-| 7 | CVC-RUNNER-1: Implement the fixed CVC-3 proof runner | PLANNED |
+| 7 | CVC-RUNNER-1: Implement the fixed CVC-3 proof runner | READY |
 | 8 | CVC-3: Prove or refute one preservation claim | PLANNED |
 | 9 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 10 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 11 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
 | 12 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
-
-### 6. CVC-PREP-2: Repair preparation inventory ordering and finish the fixed dependencies
-
-**Target:** CVC-U1:119 bound prior outputs plus10 remaining modules under CVC-U1-DEPS-0002
-
-Implement and inert-test an explicit controller successor; revalidate and copy the exact 27 successful prior modules, commit a new immutable execution checkpoint, then compile only the remaining 10 upstream modules.
-
-**Why this rank:** Highest eligible local work: a deterministic controller ordering defect is reproduced, all 119 prior outputs still match, and only10 fixed modules remain. This targeted operational successor outranks speculative proof-runner work, blocked upstream access and deferred new research themes.
-
-**Completion:** Exact usable 37-module bundle jointly bound to27 predecessor successes and 10 successor successes, or first-failure bounded unresolved evidence. Passing tests alone do not authorize CVC-3.
-
-**Stop:** Two 90-minute sessions (10800 active seconds), at most 10 compiler launches/300 seconds each/3000 cumulative compilation seconds; at most 80 inert fixture launches/5 seconds each/400 process seconds. Stop first failure, identity change, control defect or exhausted limit. No prior-module replay, Lab elaboration, proofs, checkers, Lake, native compiler, network, downloads or installations.
-
-**Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: CVC-PREP-1 has a validated BOUNDED_UNRESOLVED closure with intact partial products; this review selects the explicit successor. Verify/copy all bound sources/runtime/prior outputs, pass mixed module/namespace and process/budget tests, and commit the exact CVC-U1-DEPS-0002 controller/manifests before any new Lean launch. The unresolved predecessor is not relabeled SUCCESS.
 
 ### 7. CVC-RUNNER-1: Implement the fixed CVC-3 proof runner
 
@@ -60,7 +43,7 @@ Implement and inert-test an explicit controller successor; revalidate and copy t
 
 Implement a dedicated protocol-specific runner and validate it with inert fixture processes; preserve old closed-frontier authorization.
 
-**Why this rank:** Keep the dedicated proof-runner implementation PLANNED until the explicit preparation successor completes the remaining 10 modules and a separate review checks the complete bundle.
+**Why this rank:** Highest eligible local work: the fixed 37-module dependency bundle is complete and exact bytes are bound. A small protocol-specific runner can now enable a controlled check of the existing contract. Unchecked proofs, blocked upstream access and deferred new semantic themes provide less actionable next work.
 
 **Completion:** Passing adversarial fixture tests for all CVC-2 protocol controls; committed runner and immutable input/dependency/audit bindings ready for separate CVC-3 entry review.
 
@@ -68,7 +51,7 @@ Implement a dedicated protocol-specific runner and validate it with inert fixtur
 
 **Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: CVC-PREP-2 closes SUCCESS with a usable complete 37-module bundle bound jointly to its 10 successes and 27 CVC-PREP-1 successes; a separate review selects this implementation. CVC-PREP-1 is BOUNDED_UNRESOLVED and cannot satisfy a success dependency. No Lean/proof execution under CVC-RUNNER-1.
+**Boundary:** READY: CVC-PREP-2 closes SUCCESS: ten successor compilations plus 27 preserved predecessor successes yield 141 exact products for all 37 required upstream modules. The 2026-09-06 stopping-point review validates this bundle and selects only runner implementation with inert fixtures. CVC-PREP-1 stays BOUNDED_UNRESOLVED. No Lean, dependency compilation, signature elaboration or proof execution under CVC-RUNNER-1.
 
 ### 8. CVC-3: Prove or refute one preservation claim
 
@@ -76,7 +59,7 @@ Implement a dedicated protocol-specific runner and validate it with inert fixtur
 
 Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.
 
-**Why this rank:** The exact dependency build is only27/37 complete after a characterized controller stop. Finish its explicit successor and the separate tested proof runner before any proof cost.
+**Why this rank:** The complete pinned dependency bundle is available, but the fixed protocol-specific proof runner has not been implemented or tested. Finish CVC-RUNNER-1 and perform separate CVC-3 promotion before spending any proof attempt.
 
 **Completion:** Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.
 
@@ -190,6 +173,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1. Selected next item: CVC-PREP-2 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2. Selected next item: CVC-RUNNER-1 (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.
