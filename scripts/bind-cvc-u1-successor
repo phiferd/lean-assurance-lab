@@ -1,0 +1,56 @@
+#!/usr/bin/env python3
+"""Bind CVC-PREP-2 to the frozen predecessor and exactly ten new commands."""
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib import cvc_prep2 as p
+
+
+def write(path, value):
+    path.write_text(json.dumps(value, indent=2) + '\n')
+
+
+def main():
+    out = ROOT / p.OUT
+    p.require(not any((out / 'execution' / name).exists() for name in ['start.json', 'stop.json', 'events.jsonl'])
+              and not (ROOT / p.BASE).exists(), 'cannot rebind a started or stopped run')
+    old = p.js(ROOT / 'config/cvc-u1-dependencies-0001.json')
+    bind = lambda rel: {'path': rel, 'sha256': p.sha(ROOT / rel)}
+    # Preserve the completed predecessor and bind its exact recorded input identities.
+    m = {**old, 'item_id': p.ITEM, 'run_id': p.RUN,
+         'runtime_manifest': bind(p.PRIOR + '/runtime-manifest.json'),
+         'work_record': bind(p.OUT + '/initial-work-record.json'),
+         'controller': bind('lib/cvc_prep2.py'), 'tests': bind('tests/test_cvc_prep2.py'),
+         'limits': p.LIMITS, 'ledger_root': p.OUT + '/execution',
+         'predecessor': bind(p.PRIOR + '/result.json')}
+    m['materialization'] = {**old['materialization'], 'root': p.BASE, 'source_root': p.BASE + '/src',
+                            'build_root': p.BASE + '/build/lib/lean', 'tmp_root': p.BASE + '/tmp'}
+    m['compiler'] = {**old['compiler'], 'env': {**old['compiler']['env'],
+            'LEAN_PATH': str(ROOT / p.BASE / 'build/lib/lean') + ':' + old['compiler']['env']['LEAN_SYSROOT'] + '/lib/lean',
+            'TMPDIR': str(ROOT / p.BASE / 'tmp')}}
+    prior = p.js(ROOT / p.PRIOR / 'result.json')
+    m['seed_outputs'] = p.relocated_outputs(prior['outputs'])
+    order = p.js(ROOT / p.SUCCESSOR)['remaining_order']
+    write(out / 'command-manifest.json', p.commands(ROOT, m, order))
+    m['commands'] = bind(p.OUT + '/command-manifest.json')
+    paths = [r['path'] for r in old['immutable_bindings']] + [
+        'lib/cvc_prep.py', 'tests/test_cvc_prep.py', 'tests/test_cvc_prep_closure.py',
+        'config/cvc-u1-dependencies-0001.json', p.PRIOR + '/evidence-manifest.json',
+        p.PRIOR + '/validate-evidence.py', p.SUCCESSOR,
+        'scripts/prepare-cvc-u1-successor', 'scripts/bind-cvc-u1-successor',
+        p.OUT + '/inert-test-receipt.json']
+    # Bind every predecessor evidence file, including its original completed work record.
+    paths += [p.PRIOR + '/' + r['path'] for r in p.js(ROOT / p.PRIOR / 'evidence-manifest.json')['files']]
+    m['immutable_bindings'] = [bind(rel) for rel in sorted(set(paths))]
+    modules = {r['module']: r for r in p.js(ROOT / p.CLOSURE)['closure']['modules'] if r['kind'] != 'core_runtime'}
+    p.runtime(ROOT, m); p.donors(m, modules); p.seed_inputs(ROOT, m)
+    write(ROOT / p.MANIFEST, m)
+    p.validate_manifest(ROOT, ROOT / p.MANIFEST)
+    print('PASS: all 37 sources, original runtime and 119 predecessor products; ten successor commands bound. No copies or Lean launches.')
+
+
+if __name__ == '__main__':
+    main()

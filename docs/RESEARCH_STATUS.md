@@ -1865,7 +1865,9 @@ See the [result](../results/research/conditional-validation-contracts/cvc-prep-1
 and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-prep-1.json).
 The original controller, inputs and execution records are retained unchanged.
 
-`CVC-PREP-2` is selected READY and unstarted. Its
+`CVC-PREP-2` is selected ACTIVE. Its
+[work record](../results/research/conditional-validation-contracts/cvc-prep-2/work-record.json)
+records the owner-requested controller repair and remaining budget. Its
 [explicit successor proposal](../results/research/conditional-validation-contracts/cvc-prep-1/successor-proposal.json)
 requires a new controller, workspace and run ID `CVC-U1-DEPS-0002`, mixed
 module/namespace regression checks, and a committed execution checkpoint.
@@ -1891,8 +1893,8 @@ feedback/dispositions are unknown; retain the last-known submissions and Kiota
 deferral. Repair access with `gh auth login -h github.com --web`, then rank a
 fresh bounded check after successful preflight. No repeated polling is enabled.
 
-This one-item execution closes CVC-PREP-1 and selects CVC-PREP-2 without
-starting it. It changes no normative-source approval or old catalog disposition
+This one-item execution repairs the controller and completes the fixed
+CVC-PREP-2 dependency preparation, then selects the next eligible item. It changes no normative-source approval or old catalog disposition
 and authorizes no external message or publication. Reevaluate candidates at each
 stop using [Research workflow](RESEARCH_WORKFLOW.md).
 
