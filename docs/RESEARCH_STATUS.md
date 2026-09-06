@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-1` on 2026-09-06 with an evidence-backed `EXTEND` decision:
+  reuse pinned Lean4Lean universe semantics/comparison results and define the
+  missing Lab artifact-interpretation contract next. Compared all three bounded
+  fragments using five queries, eight primary sources and four code inspections
+  in one session. Preserved explicit helper axioms, active inductive-model holes,
+  a source-document inconsistency, and version/import gaps. This is source review,
+  not proof reproduction or validator correctness. No builds, checker launches,
+  installations, authority promotions or external messages occurred. See the
+  [assessment](../results/research/conditional-validation-contracts/cvc-1/report.md)
+  and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-1.json).
+  `CVC-2` is selected READY; it has not started.
+  The required full-payload validators, contribution catalog, and 417 tests
+  (344 current, 73 unchanged historical; no skips) passed. Exact commands and
+  results are retained in the
+  [validation record](../results/workflow-refresh/cvc-1-2026-09-06/validation.json).
+
 - Recorded the owner-requested conditional-validation-contracts phase plan and
   ranked work queue on 2026-09-06. The first selected item is a bounded literature
   and reuse assessment; the proposed formal fragment is deliberately undecided.
@@ -1760,22 +1776,28 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-1`.
+Selected next item: `CVC-2`.
 
 The [ranked queue](../config/research-queue.json) is canonical for item order,
-status, dependencies, finite budgets, and closure records. `CVC-1` is READY and
-unstarted: perform a bounded literature/reuse assessment and choose REUSE,
-EXTEND, BUILD_SMALL, or STOP using inspectable source and gap evidence. No
-checker or proof build is part of that first item. Its completion is the dated
-search record, candidate comparison, and concrete next-action recommendation,
-or an explicitly bounded unresolved decision when its search budget is spent.
+status, dependencies, finite budgets, and closure records. `CVC-1` is COMPLETE
+with outcome `SUCCESS` for the assessment and decision `EXTEND`. Its
+[canonical result](../results/research/conditional-validation-contracts/cvc-1/assessment.json)
+selects universe-expression interpretation using Lean4Lean `8223d22` source
+results. No proof was reproduced and no new implementation outcome is claimed.
 
-`CVC-2` through `CVC-5` are conditional PLANNED stages, not automatic execution
-authority. Reevaluate all candidates at each item's stop using
-[Research workflow](RESEARCH_WORKFLOW.md). The next eligible maintenance item is
-one bounded read-only Arena disposition check; pending upstream decisions do
-not prevent local research. Existing survivor/transfer campaigns remain
-deferred. This planning update executes none of those items.
+`CVC-2` is READY and unstarted after the recorded
+[entry-gate review](../results/research/queue-reviews/2026-09-06-cvc-1.json).
+State one independent interpretation contract for the supplied universe artifact,
+an exact acceptance obligation, assumptions, examples, source mappings and one
+non-circular preservation or counterexample target. Define the bounded successor
+execution protocol before later proof or observer feedback. The existing
+normalizer theorem is a reuse target, not proof of the missing artifact bridge.
+
+`CVC-3` through `CVC-5` remain conditional PLANNED stages. Reevaluate all
+candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
+The next eligible maintenance alternative remains one bounded read-only Arena
+disposition check. It was not executed as part of CVC-1; existing survivor and
+transfer campaigns remain deferred. The one-item completion stops here.
 
 The corpus-integration successor, ecosystem closure at `2136c65`, and original
 publication study remain complete and historically bound. This phase creates

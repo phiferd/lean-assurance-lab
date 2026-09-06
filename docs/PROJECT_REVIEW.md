@@ -20,18 +20,17 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-1: Assess literature and reuse before choosing a fragment; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-2: State one contract and proof target; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-2**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 1 | CVC-1: Assess literature and reuse before choosing a fragment | READY |
-| 2 | CVC-2: State one contract and proof target | PLANNED |
+| 2 | CVC-2: State one contract and proof target | READY |
 | 3 | CVC-3: Prove or refute one preservation claim | PLANNED |
 | 4 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 5 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
@@ -40,29 +39,13 @@ Selected next item: **CVC-1**. Status, rank and bounds come from `config/researc
 | 8 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 | 9 | ALT-PAYLOADS: Characterize one materialization blocker | DEFERRED |
 
-### 1. CVC-1: Assess literature and reuse before choosing a fragment
-
-**Target:** Existing formal judgments and at most three candidate Lab boundaries
-
-Inspect primary literature and relevant formal artifacts; recommend REUSE, EXTEND, BUILD_SMALL, or STOP.
-
-**Why this rank:** Highest eligible value: can change the method and fragment before implementation; existing upstream follow-through has no recorded urgent deadline.
-
-**Completion:** Dated search log, source/version/claim/gap table, candidate comparison and evidence-backed recommendation under results/research/conditional-validation-contracts/cvc-1/.
-
-**Stop:** Decision supported or three sessions exhausted; at most 18 queries, 12 primary sources and six code inspections; zero builds/checker launches.
-
-**Execution:** At most 3 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: Owner-selected planning successor; execution is a read-only assessment under the plan's finite bounds.
-
 ### 2. CVC-2: State one contract and proof target
 
-**Target:** One fragment selected by CVC-1 and at most two strategies
+**Target:** Universe-expression interpretation for existing Lab imax artifacts, using pinned Lean4Lean level judgments and at most two strategies
 
 Fix input meaning, target judgment, assumptions, environment and reconstruction relation; define a finite successor execution protocol.
 
-**Why this rank:** First conditional successor if the search supports formal work; smaller and more decisive than broad specification discovery.
+**Why this rank:** Highest eligible successor: existing source soundness/completeness statements and small Lab imax artifacts support a bounded interpretation question; an explicit contract can expose the adapter/axiom gap before proof costs. No urgent Arena deadline is recorded in the bound state; disposition checking remains the next eligible alternative.
 
 **Completion:** Formal signature/judgment, exact acceptance obligation, source mappings, positive and negative examples, assumption ledger, and exact proof target/protocol.
 
@@ -70,7 +53,7 @@ Fix input meaning, target judgment, assumptions, environment and reconstruction 
 
 **Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: Successful CVC-1 artifact recommends proceeding; record entry-gate and ranking decision before READY.
+**Boundary:** READY: CVC-1 completed SUCCESS with EXTEND recommendation and source-bound universe-comparison targets; entry gate accepted by results/research/queue-reviews/2026-09-06-cvc-1.json. This promotes contract definition only; no CVC-3 proof or CVC-4 observer execution is authorized.
 
 ### 3. CVC-3: Prove or refute one preservation claim
 

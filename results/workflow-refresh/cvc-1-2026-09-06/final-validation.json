@@ -1,0 +1,61 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "command": [
+        "scripts/validate-cvc1-assessment"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/final-01-validate-cvc1-assessment.log",
+      "completed_at": "2026-09-06T16:29:44.557504+00:00"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/final-02-validate-research-queue.log",
+      "completed_at": "2026-09-06T16:29:44.596310+00:00"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/final-03-build-project-review.log",
+      "completed_at": "2026-09-06T16:30:15.573703+00:00"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/final-04-artifact-status.log",
+      "completed_at": "2026-09-06T16:30:27.637223+00:00"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/final-05-git.log",
+      "completed_at": "2026-09-06T16:30:27.665718+00:00"
+    }
+  ],
+  "preservation_check": {
+    "status": "PASS",
+    "predecessor_commit": "85ea34aff382c42e731e85f7bf765564003f0d20",
+    "unchanged_fields": [
+      "mutation_testing",
+      "cross_validator_disagreements",
+      "gate"
+    ],
+    "broader_assurance_gate": "FAIL",
+    "existing_unresolved_semantic_disagreements": 15,
+    "explanation": "Required CVC-1 and repository integrity checks passed. The pre-existing broader semantic-disagreement failure is preserved unchanged."
+  }
+}

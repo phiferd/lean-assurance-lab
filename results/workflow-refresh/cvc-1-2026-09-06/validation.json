@@ -1,0 +1,102 @@
+{
+  "status": "PASS",
+  "checks": [
+    {
+      "command": [
+        "scripts/validate-cvc1-assessment"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:03.152809+00:00",
+      "ended_at": "2026-09-06T16:18:03.354080+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/01-validate-cvc1-assessment.log"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:03.354489+00:00",
+      "ended_at": "2026-09-06T16:18:03.389672+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/02-validate-research-queue.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc1_assessment.py"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:03.390000+00:00",
+      "ended_at": "2026-09-06T16:18:04.622853+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/03-cvc1-tests.log"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:04.623176+00:00",
+      "ended_at": "2026-09-06T16:18:04.707630+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/04-queue-tests.log"
+    },
+    {
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:04.707913+00:00",
+      "ended_at": "2026-09-06T16:18:30.105917+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/05-close-declaration-validation-publication-study.log"
+    },
+    {
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:18:30.106272+00:00",
+      "ended_at": "2026-09-06T16:19:41.786795+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/06-validate-publication-study-snapshot.log"
+    },
+    {
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:19:41.787151+00:00",
+      "ended_at": "2026-09-06T16:27:12.876477+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/07-run-unit-tests.log"
+    },
+    {
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "returncode": 0,
+      "started_at": "2026-09-06T16:27:12.877656+00:00",
+      "ended_at": "2026-09-06T16:27:12.996590+00:00",
+      "log": "results/workflow-refresh/cvc-1-2026-09-06/08-validate-contribution.log"
+    }
+  ],
+  "unit_suite": {
+    "current_tests": 344,
+    "historical_tests": 73,
+    "total": 417,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED"
+  }
+}

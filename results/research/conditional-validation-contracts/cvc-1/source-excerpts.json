@@ -1,0 +1,173 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-1",
+  "scope": "Exact source-code excerpts, not proof validation. Retrieve full files at the ledger URLs and check SHA-256 before reproducing. Paper summaries are in the ledger/report; full papers are not redistributed.",
+  "excerpts": [
+    {
+      "id": "E1",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Theory/VLevel.lean",
+      "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+      "start_line": 8,
+      "end_line": 39,
+      "text": "inductive VLevel where\n  | zero  : VLevel\n  | succ  : VLevel \u2192 VLevel\n  | max   : VLevel \u2192 VLevel \u2192 VLevel\n  | imax  : VLevel \u2192 VLevel \u2192 VLevel\n  | param : Nat \u2192 VLevel\n\nnamespace VLevel\n\ninstance : Inhabited VLevel := \u27e8.zero\u27e9\n\nvariable (n : Nat) in\ndef WF : VLevel \u2192 Prop\n  | .zero => True\n  | .succ l => l.WF\n  | .max l\u2081 l\u2082 => l\u2081.WF \u2227 l\u2082.WF\n  | .imax l\u2081 l\u2082 => l\u2081.WF \u2227 l\u2082.WF\n  | .param i => i < n\n\ninstance decidable_WF : \u2200 {l}, Decidable (WF n l)\n  | .zero => instDecidableTrue\n  | .succ l => @decidable_WF _ l\n  | .max .. | .imax .. => @instDecidableAnd _ _ decidable_WF decidable_WF\n  | .param _ => Nat.decLt ..\n\nvariable (ls : List Nat) in\ndef eval : VLevel \u2192 Nat\n  | .zero => 0\n  | .succ l => l.eval + 1\n  | .max l\u2081 l\u2082 => l\u2081.eval.max l\u2082.eval\n  | .imax l\u2081 l\u2082 => Lean.Nat.imax l\u2081.eval l\u2082.eval\n  | .param i => ls.getD i 0\n",
+      "sha256": "68ac62e1f57956af7457888707229d62fc32dd95ed81da921542c9179bb2e69f"
+    },
+    {
+      "id": "E2",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Theory/VLevel.lean",
+      "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+      "start_line": 58,
+      "end_line": 63,
+      "text": "protected def Equiv (a b : VLevel) : Prop := a.eval = b.eval\n\ninstance : HasEquiv VLevel := \u27e8VLevel.Equiv\u27e9\n\ntheorem equiv_def' {a b : VLevel} : a \u2248 b \u2194 a.eval = b.eval := .rfl\ntheorem equiv_def {a b : VLevel} : a \u2248 b \u2194 \u2200 ls, a.eval ls = b.eval ls := funext_iff\n",
+      "sha256": "c3d20ee1b66e015a0d0e9caea3653f730ae3c96cba43c5412a94fd547d0b7209"
+    },
+    {
+      "id": "E3",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Theory/VLevel.lean",
+      "source_sha256": "a570dff7d2065ca64acd1bb920628ec332b4e39f18a2dc423cbf3a7bd469ba58",
+      "start_line": 168,
+      "end_line": 183,
+      "text": "def ofLevel : Lean.Level \u2192 Option VLevel\n  | .zero => return .zero\n  | .succ l => return .succ (\u2190 ofLevel l)\n  | .max l\u2081 l\u2082 => return .max (\u2190 ofLevel l\u2081) (\u2190 ofLevel l\u2082)\n  | .imax l\u2081 l\u2082 => return .imax (\u2190 ofLevel l\u2081) (\u2190 ofLevel l\u2082)\n  | .param n =>\n    let i := ls.idxOf n\n    if i < ls.length then some (.param i) else none\n  | .mvar _ => none\n\ntheorem WF.of_ofLevel (h : ofLevel ls l = some l') : l'.WF ls.length := by\n  induction l generalizing l' with simp [ofLevel, bind] at h\n  | zero => cases h; trivial\n  | succ _ ih => obtain \u27e8l', h, \u27e8\u27e9\u27e9 := h; exact @ih l' h\n  | max _ _ ih1 ih2 | imax _ _ ih1 ih2 => obtain \u27e8_, h1, _, h2, \u27e8\u27e9\u27e9 := h; exact \u27e8ih1 h1, ih2 h2\u27e9\n  | param n => exact h.2 \u25b8 h.1\n",
+      "sha256": "b38bec7998f0c6b050a0b7927ba0d9ea01c1866d87f1cb828e98ed7da89939e7"
+    },
+    {
+      "id": "E4",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Verify/Level.lean",
+      "source_sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+      "start_line": 3720,
+      "end_line": 3733,
+      "text": "/-- Semantically equal levels have `BEq`-equal normal forms. -/\ntheorem normalize_complete (hu : VLevel.ofLevel ls u = some u')\n    (hv : VLevel.ofLevel ls v = some v') : normalize u == normalize v \u2194 u' \u2248 v' := by\n  refine .trans \u27e8fun h ls => ?_, fun h => ?_\u27e9 VLevel.equiv_def.symm\n  \u00b7 rw [\u2190 normalize_eval hu, NormLevel.eval_congr h, normalize_eval hv]\n  have h\u2081 : \u2200 \u03c1, (normalize u).eval ls \u03c1 \u2264 (normalize v).eval ls \u03c1 := fun \u03c1 => by\n    rw [normalize_eval hu, normalize_eval hv, h \u03c1]; exact Nat.le_refl _\n  have h\u2082 : \u2200 \u03c1, (normalize v).eval ls \u03c1 \u2264 (normalize u).eval ls \u03c1 := fun \u03c1 => by\n    rw [normalize_eval hu, normalize_eval hv, h \u03c1]; exact Nat.le_refl _\n  exact NormLevel.eq_of_hasSub_iff normalize_sortedVars normalize_sortedVars\n    normalize_nonempty normalize_nonempty\n    (NormLevel.Reduced.hasSub_iff_hasSub normalize_reduced normalize_reduced\n      normalize_sorted normalize_sorted\n      (NormLevel.separation (normalize_keys hu) normalize_vars h\u2081)\n",
+      "sha256": "4a76b93ae2df3fb7cb4b258340b722613b95d4ea8e96f5b78a058f4efd0a8aea"
+    },
+    {
+      "id": "E5",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Verify/Level.lean",
+      "source_sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+      "start_line": 3808,
+      "end_line": 3815,
+      "text": "theorem isEquiv'_wf (h : isEquiv' u v)\n    (hu : VLevel.ofLevel ls u = some u') (hv : VLevel.ofLevel ls v = some v') : u' \u2248 v' := by\n  simp only [isEquiv', Bool.or_eq_true] at h\n  obtain h | h := h\n  \u00b7 exact isEquiv_wf h hu hv\n  \u00b7 refine VLevel.equiv_def.2 fun \u03c1 => ?_\n    rw [\u2190 Normalize.normalize_eval (\u03c1 := \u03c1) hu, \u2190 Normalize.normalize_eval (\u03c1 := \u03c1) hv]\n    exact Normalize.NormLevel.eval_congr h\n",
+      "sha256": "3e8816fa8f739a8c11e9731a85e46092bf7c422799bd132de36e4c27a8100dd9"
+    },
+    {
+      "id": "E6",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Verify/Level.lean",
+      "source_sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+      "start_line": 3858,
+      "end_line": 3864,
+      "text": "/-- Completeness of `isEquiv'`: semantically equal levels have equal normal forms. Both\nnormal forms are reduced (`subsumption_reduced`), mutually dominate each other's sublevels\n(`separation`), and reduced forms with the same sublevels are the same map. -/\ntheorem isEquiv'_complete (hu : VLevel.ofLevel ls u = some u')\n    (hv : VLevel.ofLevel ls v = some v') : isEquiv' u v \u2194 u' \u2248 v' := by\n  simp only [isEquiv', Bool.or_eq_true, Normalize.normalize_complete hu hv]\n  exact \u27e8fun h => h.elim (fun h => isEquiv_wf h hu hv) id, .inr\u27e9\n",
+      "sha256": "fafcd5f936621bacf475ea4f5195245ee93b520a430ee05393cb577ab484fc6f"
+    },
+    {
+      "id": "E7",
+      "inspection_id": "I4",
+      "path": "Lean4Lean/Verify/LevelStd.lean",
+      "source_sha256": "8aada81455e9c6a88eba0dcce86e30daf34ec9215e26ae4dfc9f396a49b8f57c",
+      "start_line": 494,
+      "end_line": 505,
+      "text": "theorem eval_normalize {\u03c1 \u03bc l} : eval \u03c1 \u03bc l.normalize = eval \u03c1 \u03bc l := by\n  rw [normalize_eq]; exact eval_normalize_total\n\ntheorem geq_eq_core : geq u v = geqCore (normalize u) (normalize v) := by\n  simp [geq, geqCore_eq_go]\n\ntheorem isEquiv_sound (h : isEquiv u v) : eval \u03c1 \u03bc u = eval \u03c1 \u03bc v := by\n  simp only [Level.isEquiv, Bool.or_eq_true, beq_iff_eq] at h\n  rcases h with rfl | h <;> [rfl; skip]\n  rw [\u2190 eval_normalize (l := u), \u2190 eval_normalize (l := v), h]\n\ntheorem geq_sound (h : geq u v) : eval \u03c1 \u03bc v \u2264 eval \u03c1 \u03bc u := by\n",
+      "sha256": "f65b5b77e89fc0c337a1ecf8ab60af298a6f714ab9aee0e9b20a94ee20ad980e"
+    },
+    {
+      "id": "E8",
+      "inspection_id": "I4",
+      "path": "Lean4Lean/Verify/Axioms.lean",
+      "source_sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "start_line": 6,
+      "end_line": 15,
+      "text": "\nvariable {\u03b1 : Type u} {\u03b2 : Type v} {cmp : \u03b1 \u2192 \u03b1 \u2192 Ordering} {t : TreeMap \u03b1 \u03b2 cmp}\n\n/-- https://github.com/leanprover/lean4/issues/12798 -/\naxiom all_eq_all_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.all p = t.toList.all fun a => p a.1 a.2\n\n/-- https://github.com/leanprover/lean4/issues/12798 -/\naxiom any_eq_any_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.any p = t.toList.any fun a => p a.1 a.2\n",
+      "sha256": "c95460e065ab4c4b657606d2001148a8dee6b5a1a63e6ee1720447c5f18b974e"
+    },
+    {
+      "id": "E9",
+      "inspection_id": "I4",
+      "path": "Lean4Lean/Verify/Axioms.lean",
+      "source_sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "start_line": 255,
+      "end_line": 269,
+      "text": "/-- `Lean.Level.normalize` is a `partial def`, so it is opaque;\n`Total.normalize` above is a total copy of it. -/\naxiom normalize_eq : normalize = Total.normalize\n\ndef mkData' (h : UInt64) (depth : Nat := 0) (hasMVar hasParam : Bool := false) : Level.Data :=\n  if depth > Nat.pow 2 24 - 1 then panic! \"universe level depth is too big\"\n  else\n    h.toUInt32.toUInt64 +\n    hasMVar.toUInt64.shiftLeft 32 +\n    hasParam.toUInt64.shiftLeft 33 +\n    depth.toUInt64.shiftLeft 40\n\n/-- This exists only for the bit-twiddling proofs, it shouldn't appear\nin the main results, which use the functions below instead -/\naxiom mkData_eq : @mkData = @mkData'\n",
+      "sha256": "d817651b41aa1edbe4bbb9506910af195ae42109f21012c290f31ed115198d9e"
+    },
+    {
+      "id": "E10",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Theory/Inductive.lean",
+      "source_sha256": "146add5b5904a3c0d47346be5784845c439573455b3d071147f315d05b54ca01",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "import Lean4Lean.Theory.VDecl\n\nnamespace Lean4Lean\n\ndef VInductDecl.WF (env : VEnv) (decl : VInductDecl) : Prop := sorry\n\ndef VEnv.addInduct (env : VEnv) (decl : VInductDecl) : Option VEnv := sorry\n",
+      "sha256": "146add5b5904a3c0d47346be5784845c439573455b3d071147f315d05b54ca01"
+    },
+    {
+      "id": "E11",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Theory/Typing/Env.lean",
+      "source_sha256": "b79aa5e1a5c670d2e0851e3e5ef44b62735043546573ac26fa6749c0ce50526d",
+      "start_line": 8,
+      "end_line": 38,
+      "text": "def VDefVal.WF (env : VEnv) (ci : VDefVal) : Prop := env.HasType ci.uvars [] ci.value ci.type\n\n/-- Add a block of constants, without their defining equations. -/\ndef VEnv.addConsts (env : VEnv) (cis : List VDefVal) : Option VEnv :=\n  cis.foldlM (fun env ci => env.addConst ci.name ci.toVConstant) env\n\n/-- Add the defining equations of a block, after all of its constants. -/\ndef VEnv.addDefEqs (env : VEnv) (cis : List VDefVal) : VEnv :=\n  cis.foldl (fun env ci => env.addDefEq ci.toDefEq) env\n\ninductive VDecl.WF : VEnv \u2192 VDecl \u2192 VEnv \u2192 Prop where\n  | axiom :\n    ci.WF env \u2192\n    env.addConst ci.name ci.toVConstant = some env' \u2192\n    VDecl.WF env (.axiom ci) env'\n  | def :\n    ci.WF env \u2192\n    env.addConst ci.name ci.toVConstant = some env' \u2192\n    VDecl.WF env (.def ci) (env'.addDefEq ci.toDefEq)\n  | mutualDef :\n    (\u2200 ci \u2208 cis, ci.toVConstant.WF env) \u2192\n    env.addConsts cis = some env' \u2192\n    (\u2200 ci \u2208 cis, ci.WF env') \u2192\n    VDecl.WF env (.mutualDef cis) (env'.addDefEqs cis)\n  | opaque :\n    ci.WF env \u2192\n    env.addConst ci.name ci.toVConstant = some env' \u2192\n    VDecl.WF env (.opaque ci) env'\n  | example :\n    ci.WF env \u2192\n    VDecl.WF env (.example ci) env\n",
+      "sha256": "02744299ce81470f3e713642575f97c7e574c508e4cc0dfc6afdf8f532f47d2a"
+    },
+    {
+      "id": "E12",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Verify/TypeChecker/InferType.lean",
+      "source_sha256": "74497c8c08165074604b622340507cedac4ec5262dbefbaccddf63f3cae4ca0f",
+      "start_line": 385,
+      "end_line": 391,
+      "text": "  refine (c.withMLC_self \u25b8 inferLet.loop.WF (Nat.zero_le _) [] rfl rfl rfl rfl rfl ?_ hr) hinf\n  exact fun P hP he => \u27e8(AllAbove.wf wf.trctx.wf.fvwf).2 hP, he.mono fun _ h _ => h, fun _ => id\u27e9\n\ntheorem inferProj.WF\n    (he : c.TrExprS e e') (hty : c.TrExprS ety ety') (hasty : c.HasType e' ty') :\n    (inferProj st i e ety).WF c s fun ty _ =>\n      \u2203 ty', c.TrTyping (.proj st i e) ty e' ty' := sorry\n",
+      "sha256": "66477fd8bcd1893978cb33a5b3e600a7f51b260ff5899d152cefaf700f953bf2"
+    },
+    {
+      "id": "E13",
+      "inspection_id": "I2",
+      "path": "safechecker/theories/PCUICSafeChecker.v",
+      "source_sha256": "45585561c27ba074fe049f9eee1faa863ed0a891500aec87dcf573fc2ce8b981",
+      "start_line": 2448,
+      "end_line": 2463,
+      "text": "  Definition check_type_wf_env_bool X_ext {normalization_in : forall \u03a3, wf_ext \u03a3 -> \u03a3 \u223c_ext X_ext -> NormalizationIn \u03a3} \u0393\n    (wf\u0393 : forall \u03a3,  abstract_env_ext_rel X_ext \u03a3 -> \u2225 wf_local \u03a3 \u0393 \u2225) t T : bool :=\n    match check_type_wf_env X_ext \u0393 wf\u0393 t T with\n    | Checked _ => true\n    | TypeError e => false\n    end.\n\n  Definition check_wf_env_bool_spec X_ext {normalization_in : forall \u03a3, wf_ext \u03a3 -> \u03a3 \u223c_ext X_ext -> NormalizationIn \u03a3} \u0393\n    (wf\u0393 : forall \u03a3,  abstract_env_ext_rel X_ext \u03a3 -> \u2225 wf_local \u03a3 \u0393 \u2225) t T :\n    check_type_wf_env_bool X_ext \u0393 wf\u0393 t T = true ->\n    forall \u03a3,  abstract_env_ext_rel X_ext \u03a3 -> \u2225 \u03a3 ;;; \u0393 |- t : T \u2225.\n  Proof using Type.\n    unfold check_type_wf_env_bool.\n    destruct check_type_wf_env ; auto.\n    discriminate.\n  Qed.\n",
+      "sha256": "7bc55da1792b64d34db54921e5e0f38e47c8661c4e0bfcfaa7a2a678e5bb0e44"
+    },
+    {
+      "id": "E14",
+      "inspection_id": "I2",
+      "path": "pcuic/theories/PCUICSN.v",
+      "source_sha256": "4d301c4c7283e31a754591dbe91f87c19fce8556beec800eaf26f39398314026",
+      "start_line": 43,
+      "end_line": 51,
+      "text": "\nClass NormalizationIn {cf : checker_flags} {no : normalizing_flags} (\u03a3 : global_env_ext) :=\n  normalization_in :\n    forall \u0393 t,\n      welltyped \u03a3 \u0393 t ->\n      Acc (cored \u03a3 \u0393) t.\nClass Normalization {cf : checker_flags} {no : normalizing_flags} :=\n  normalization : forall \u03a3, wf_ext \u03a3 -> NormalizationIn \u03a3.\n#[export] Hint Mode NormalizationIn - - + : typeclass_instances.\n",
+      "sha256": "362255bdeb89c6ee7b2e4a424d922caa552565d43287f7632040c74b56fd6598"
+    },
+    {
+      "id": "E15",
+      "inspection_id": "I3",
+      "path": "Lean4Less/Environment.lean",
+      "source_sha256": "83f6019c1cccd3686a8826c2ad6e0046cec68fef98bb2fbf69563863457da56f",
+      "start_line": 90,
+      "end_line": 91,
+      "text": "def patchTheorem (env : Kernel.Environment) (v : TheoremVal) (allowAxiomReplace := false) (opts : TypeCheckerOpts) :\n    Except Kernel.Exception ConstantInfo := do\n",
+      "sha256": "b2086e1aa6a1337c569d258e3ea641d28dc72d86e356734141a3ee0ff0f7482e"
+    },
+    {
+      "id": "E16",
+      "inspection_id": "I1",
+      "path": "Lean4Lean/Level.lean",
+      "source_sha256": "80307669b5ed2e8e7ff00dadd25f4b514cbec1914cff69412ed11967b8e86934",
+      "start_line": 346,
+      "end_line": 359,
+      "text": "def normalize' (l : Level) : Level :=\n  match Normalize.flatAux l 0 (0, []) with\n  | .ok (c, vs) => (Normalize.flatTree c vs).reify\n  | .error s => s.subsumption.toTree.reify\n\n/-- Core's `isEquiv` is sound but incomplete, so it can be used as a fast path: when it\naccepts, the levels really are equivalent, and when it rejects we fall back to the complete\ncheck. Over the 261k level comparisons performed while checking Lean+Std+Batteries this\nfilter decided every single real equivalence, leaving only the genuinely inequivalent 0.1%\nto the fallback \u2014 and it is roughly 20\u00d7 cheaper than normalizing. -/\ndef isEquiv' (u v : Level) : Bool :=\n  isEquiv u v || Normalize.normalize u == Normalize.normalize v\n\ndef isEquivList : List Level \u2192 List Level \u2192 Bool := List.all2 isEquiv'\n",
+      "sha256": "7e0696e80f29dba5295afbedc04015e530ca074a10586796a8b35574ddf80406"
+    }
+  ],
+  "lean4lean_license": {
+    "url": "https://raw.githubusercontent.com/digama0/lean4lean/8223d223ed98661882e95d9d6a7126df7097cd76/LICENSE",
+    "sha256": "c71d239df91726fc519c6eb72d318ec65820627232b2f796219e87dcf35d0ab4",
+    "text": "                                 Apache License\n                           Version 2.0, January 2004\n                        http://www.apache.org/licenses/\n\n   TERMS AND CONDITIONS FOR USE, REPRODUCTION, AND DISTRIBUTION\n\n   1. Definitions.\n\n      \"License\" shall mean the terms and conditions for use, reproduction,\n      and distribution as defined by Sections 1 through 9 of this document.\n\n      \"Licensor\" shall mean the copyright owner or entity authorized by\n      the copyright owner that is granting the License.\n\n      \"Legal Entity\" shall mean the union of the acting entity and all\n      other entities that control, are controlled by, or are under common\n      control with that entity. For the purposes of this definition,\n      \"control\" means (i) the power, direct or indirect, to cause the\n      direction or management of such entity, whether by contract or\n      otherwise, or (ii) ownership of fifty percent (50%) or more of the\n      outstanding shares, or (iii) beneficial ownership of such entity.\n\n      \"You\" (or \"Your\") shall mean an individual or Legal Entity\n      exercising permissions granted by this License.\n\n      \"Source\" form shall mean the preferred form for making modifications,\n      including but not limited to software source code, documentation\n      source, and configuration files.\n\n      \"Object\" form shall mean any form resulting from mechanical\n      transformation or translation of a Source form, including but\n      not limited to compiled object code, generated documentation,\n      and conversions to other media types.\n\n      \"Work\" shall mean the work of authorship, whether in Source or\n      Object form, made available under the License, as indicated by a\n      copyright notice that is included in or attached to the work\n      (an example is provided in the Appendix below).\n\n      \"Derivative Works\" shall mean any work, whether in Source or Object\n      form, that is based on (or derived from) the Work and for which the\n      editorial revisions, annotations, elaborations, or other modifications\n      represent, as a whole, an original work of authorship. For the purposes\n      of this License, Derivative Works shall not include works that remain\n      separable from, or merely link (or bind by name) to the interfaces of,\n      the Work and Derivative Works thereof.\n\n      \"Contribution\" shall mean any work of authorship, including\n      the original version of the Work and any modifications or additions\n      to that Work or Derivative Works thereof, that is intentionally\n      submitted to Licensor for inclusion in the Work by the copyright owner\n      or by an individual or Legal Entity authorized to submit on behalf of\n      the copyright owner. For the purposes of this definition, \"submitted\"\n      means any form of electronic, verbal, or written communication sent\n      to the Licensor or its representatives, including but not limited to\n      communication on electronic mailing lists, source code control systems,\n      and issue tracking systems that are managed by, or on behalf of, the\n      Licensor for the purpose of discussing and improving the Work, but\n      excluding communication that is conspicuously marked or otherwise\n      designated in writing by the copyright owner as \"Not a Contribution.\"\n\n      \"Contributor\" shall mean Licensor and any individual or Legal Entity\n      on behalf of whom a Contribution has been received by Licensor and\n      subsequently incorporated within the Work.\n\n   2. Grant of Copyright License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      copyright license to reproduce, prepare Derivative Works of,\n      publicly display, publicly perform, sublicense, and distribute the\n      Work and such Derivative Works in Source or Object form.\n\n   3. Grant of Patent License. Subject to the terms and conditions of\n      this License, each Contributor hereby grants to You a perpetual,\n      worldwide, non-exclusive, no-charge, royalty-free, irrevocable\n      (except as stated in this section) patent license to make, have made,\n      use, offer to sell, sell, import, and otherwise transfer the Work,\n      where such license applies only to those patent claims licensable\n      by such Contributor that are necessarily infringed by their\n      Contribution(s) alone or by combination of their Contribution(s)\n      with the Work to which such Contribution(s) was submitted. If You\n      institute patent litigation against any entity (including a\n      cross-claim or counterclaim in a lawsuit) alleging that the Work\n      or a Contribution incorporated within the Work constitutes direct\n      or contributory patent infringement, then any patent licenses\n      granted to You under this License for that Work shall terminate\n      as of the date such litigation is filed.\n\n   4. Redistribution. You may reproduce and distribute copies of the\n      Work or Derivative Works thereof in any medium, with or without\n      modifications, and in Source or Object form, provided that You\n      meet the following conditions:\n\n      (a) You must give any other recipients of the Work or\n          Derivative Works a copy of this License; and\n\n      (b) You must cause any modified files to carry prominent notices\n          stating that You changed the files; and\n\n      (c) You must retain, in the Source form of any Derivative Works\n          that You distribute, all copyright, patent, trademark, and\n          attribution notices from the Source form of the Work,\n          excluding those notices that do not pertain to any part of\n          the Derivative Works; and\n\n      (d) If the Work includes a \"NOTICE\" text file as part of its\n          distribution, then any Derivative Works that You distribute must\n          include a readable copy of the attribution notices contained\n          within such NOTICE file, excluding those notices that do not\n          pertain to any part of the Derivative Works, in at least one\n          of the following places: within a NOTICE text file distributed\n          as part of the Derivative Works; within the Source form or\n          documentation, if provided along with the Derivative Works; or,\n          within a display generated by the Derivative Works, if and\n          wherever such third-party notices normally appear. The contents\n          of the NOTICE file are for informational purposes only and\n          do not modify the License. You may add Your own attribution\n          notices within Derivative Works that You distribute, alongside\n          or as an addendum to the NOTICE text from the Work, provided\n          that such additional attribution notices cannot be construed\n          as modifying the License.\n\n      You may add Your own copyright statement to Your modifications and\n      may provide additional or different license terms and conditions\n      for use, reproduction, or distribution of Your modifications, or\n      for any such Derivative Works as a whole, provided Your use,\n      reproduction, and distribution of the Work otherwise complies with\n      the conditions stated in this License.\n\n   5. Submission of Contributions. Unless You explicitly state otherwise,\n      any Contribution intentionally submitted for inclusion in the Work\n      by You to the Licensor shall be under the terms and conditions of\n      this License, without any additional terms or conditions.\n      Notwithstanding the above, nothing herein shall supersede or modify\n      the terms of any separate license agreement you may have executed\n      with Licensor regarding such Contributions.\n\n   6. Trademarks. This License does not grant permission to use the trade\n      names, trademarks, service marks, or product names of the Licensor,\n      except as required for reasonable and customary use in describing the\n      origin of the Work and reproducing the content of the NOTICE file.\n\n   7. Disclaimer of Warranty. Unless required by applicable law or\n      agreed to in writing, Licensor provides the Work (and each\n      Contributor provides its Contributions) on an \"AS IS\" BASIS,\n      WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or\n      implied, including, without limitation, any warranties or conditions\n      of TITLE, NON-INFRINGEMENT, MERCHANTABILITY, or FITNESS FOR A\n      PARTICULAR PURPOSE. You are solely responsible for determining the\n      appropriateness of using or redistributing the Work and assume any\n      risks associated with Your exercise of permissions under this License.\n\n   8. Limitation of Liability. In no event and under no legal theory,\n      whether in tort (including negligence), contract, or otherwise,\n      unless required by applicable law (such as deliberate and grossly\n      negligent acts) or agreed to in writing, shall any Contributor be\n      liable to You for damages, including any direct, indirect, special,\n      incidental, or consequential damages of any character arising as a\n      result of this License or out of the use or inability to use the\n      Work (including but not limited to damages for loss of goodwill,\n      work stoppage, computer failure or malfunction, or any and all\n      other commercial damages or losses), even if such Contributor\n      has been advised of the possibility of such damages.\n\n   9. Accepting Warranty or Additional Liability. While redistributing\n      the Work or Derivative Works thereof, You may choose to offer,\n      and charge a fee for, acceptance of support, warranty, indemnity,\n      or other liability obligations and/or rights consistent with this\n      License. However, in accepting such obligations, You may act only\n      on Your own behalf and on Your sole responsibility, not on behalf\n      of any other Contributor, and only if You agree to indemnify,\n      defend, and hold each Contributor harmless for any liability\n      incurred by, or claims asserted against, such Contributor by reason\n      of your accepting any such warranty or additional liability.\n\n   END OF TERMS AND CONDITIONS\n\n   APPENDIX: How to apply the Apache License to your work.\n\n      To apply the Apache License to your work, attach the following\n      boilerplate notice, with the fields enclosed by brackets \"[]\"\n      replaced with your own identifying information. (Don't include\n      the brackets!)  The text should be enclosed in the appropriate\n      comment syntax for the file format. We also recommend that a\n      file or class name and description of purpose be included on the\n      same \"printed page\" as the copyright notice for easier\n      identification within third-party archives.\n\n   Copyright [yyyy] [name of copyright owner]\n\n   Licensed under the Apache License, Version 2.0 (the \"License\");\n   you may not use this file except in compliance with the License.\n   You may obtain a copy of the License at\n\n       http://www.apache.org/licenses/LICENSE-2.0\n\n   Unless required by applicable law or agreed to in writing, software\n   distributed under the License is distributed on an \"AS IS\" BASIS,\n   WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.\n   See the License for the specific language governing permissions and\n   limitations under the License.\n"
+  },
+  "metarocq_license_notice": "The inspected MetaRocq files state: Distributed under the terms of the MIT license. Copyright attribution and full repository sources remain at the pinned URLs in work-record.json."
+}
