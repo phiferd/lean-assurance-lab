@@ -1,0 +1,115 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-PAYLOADS",
+  "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
+  "status": "COMPLETE",
+  "owner": "Codex lead; bounded static closure analysis delegated to Terra",
+  "input_commit": "9c3b48966ddba0735bf694d6fd3bbaab988e836c",
+  "execution_authority": "User requests one highest-priority eligible queue item. ALT-PAYLOADS authorizes one diagnostic/proposal session only, no builds, downloads, toolchain installs, Lean/Lake executions, proof attempts or checker launches.",
+  "started_at": "2026-09-06T18:42:52.874081+00:00",
+  "ended_at": "2026-09-06T18:53:37.186588+00:00",
+  "active_minutes": 10.738542,
+  "budget": {
+    "max_sessions": 1,
+    "session_minutes": 90,
+    "builds": 0,
+    "checker_launches": 0,
+    "lean_executions": 0,
+    "lake_executions": 0,
+    "downloads": 0,
+    "toolchain_installs": 0
+  },
+  "sessions": [
+    {
+      "started_at": "2026-09-06T18:42:52.874081+00:00",
+      "ended_at": "2026-09-06T18:53:37.186588+00:00"
+    }
+  ],
+  "inputs": [
+    {
+      "path": "CONSTITUTION.md",
+      "sha256": "f8bd97b3be61d1c09e9062eea11d41006ef266ce0c244b65827a9bd7aa03df16",
+      "bytes": 7995
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256": "d6d146b02545cb31c3e59d16e29cdcb2a3fc16021a54035b019f1fb51a70535a",
+      "bytes": 124365
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "sha256": "cf1852ea1ceeb8294f4cbf1bca46cca2ae43382334ecbdfdc8cac238b996773b",
+      "bytes": 14727
+    },
+    {
+      "path": "docs/RESEARCH_WORKFLOW.md",
+      "sha256": "9c2191680b986a72edc70eda8a66be8673c544e52b4a288dbc0926d673155986",
+      "bytes": 8565
+    },
+    {
+      "path": "docs/AGENT_WORKFLOW.md",
+      "sha256": "c1169c6fd43a8d995fbaff0c6e742c4264d07cc7a547e86578311cccdcf20b2d",
+      "bytes": 9875
+    },
+    {
+      "path": "config/research-queue.json",
+      "sha256": "00538d8e41909d5a9faf02357673a26766bf388e11ae294286d7b831c35c5e6d",
+      "bytes": 19350
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+      "sha256": "1140681243f87cd47c4e86f5112c45b79b5ba4d391800220398e5f3ab47d447d",
+      "bytes": 66597
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+      "sha256": "5410789482c8474a367064b1d8ef047c76f2e9a74e3b3bce84d124a3dce5d6f0",
+      "bytes": 8994
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+      "sha256": "faaa491087375e7bb2fb55060a74d14efecdd4edf80edb9591351fed3a28133f",
+      "bytes": 2931
+    }
+  ],
+  "diagnostics": [
+    {
+      "action": "Inspect predecessor CVC-2 contract, inventory, protocol and assumptions; compare existing supervisor and materializer code.",
+      "result": "Old runner authorization is specific to the closed ecosystem frontier; preserve it and specify separate preparation/proof controllers."
+    },
+    {
+      "action": "Delegate static source-header closure and local Git/hash correspondence to Terra; lead reviews graph and command shape.",
+      "reproduction": [
+        "python3 results/research/conditional-validation-contracts/alt-payloads/inspect-source-closure.py --check"
+      ],
+      "result": "37 non-core modules (12 Lean4Lean, 25 Batteries), all source pins match. Four Batteries public meta import dependencies were absent from the CVC-2 inventory. Header includes both implicit Init modes."
+    },
+    {
+      "action": "Read installed Lean/Lake path/output/import/module-serialization code without launching either executable.",
+      "evidence": "results/research/conditional-validation-contracts/alt-payloads/source-closure.json",
+      "result": "Merged src root and direct -o invocation supported by source; retain all module/IR sidecars. Actual build/runtime closure remains unchecked."
+    }
+  ],
+  "consumed": {
+    "sessions": 1,
+    "builds": 0,
+    "checker_launches": 0,
+    "lean_executions": 0,
+    "lake_executions": 0,
+    "downloads": 0,
+    "toolchain_installs": 0
+  },
+  "accounting_note": "Elapsed wall time from reservation through proposal closure conservatively counts as active research time, including delegated analysis. Subsequent offline validation and delivery recorded separately. No unused budget may resume the completed item.",
+  "outcome": "SUCCESS",
+  "stop_reason": "Exact 37-module source subset, isolated direct-compiler commands, preparation and runner budgets, and separately ranked successors are specified; compilation remains unexecuted.",
+  "delegation": {
+    "task": "static_closure",
+    "model": "gpt-5.6-terra",
+    "reasoning": "medium",
+    "owned_files": [
+      "source-closure.json",
+      "inspect-source-closure.py"
+    ],
+    "review": "Lead corrected an initial duplicate -R command hypothesis before closure, unified command authority in proposal.json, and added implicit meta Init and serialization/cwd source excerpts. No proposed command was executed."
+  }
+}

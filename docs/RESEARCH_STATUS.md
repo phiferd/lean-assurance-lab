@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Completed `ALT-PAYLOADS` on 2026-09-06 with `SUCCESS` for an exact
+  isolated dependency preparation proposal, labeled
+  `STATIC_DEPENDENCY_REPAIR_PROPOSAL_UNEXECUTED`. The corrected static closure
+  contains 37 modules (12 Lean4Lean, 25 Batteries); four public-meta import
+  dependencies were absent from the prior inventory. All selected source
+  identities match their pinned evidence. Defined direct compiler commands,
+  isolated paths, complete-runtime binding prerequisites, and separate finite
+  preparation/runner budgets. No build, Lean/Lake invocation, download,
+  installation, Lab elaboration or checker execution ran. See the
+  [proposal](../results/research/conditional-validation-contracts/alt-payloads/proposal.json),
+  [report](../results/research/conditional-validation-contracts/alt-payloads/report.md), and
+  [stopping-point review](../results/research/queue-reviews/2026-09-06-alt-payloads.json).
+  `CVC-PREP-1` is selected READY and unstarted; `CVC-RUNNER-1` and CVC-3 through
+  CVC-5 remain PLANNED. Required validation results are retained in the
+  [validation record](../results/workflow-refresh/alt-payloads-2026-09-06/validation.json).
+
 - Closed `OPS-UPSTREAM-1` on 2026-09-06 with `BOUNDED_UNRESOLVED`:
   the required GitHub CLI preflight failed authentication, so no disposition or
   duplicate-inventory GET request ran. Current Arena changes are unknown; the
@@ -1812,46 +1828,47 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `ALT-PAYLOADS`.
+Selected next item: `CVC-PREP-1`.
 
-The [ranked queue](../config/research-queue.json) is canonical for item order,
-status, dependencies, finite budgets and closure records. `CVC-1` remains
-COMPLETE with the source-only `EXTEND` reuse decision. `CVC-2` is COMPLETE with
-outcome `SUCCESS` for the specification and scientific status
-`SPECIFICATION_PROPOSAL_UNCHECKED`. The
-[canonical contract](../results/research/conditional-validation-contracts/cvc-2/contract.json)
-fixes the supplied sort body, independent universe interpretation, one strategy,
-two exact required accepts, two model boundary examples and a non-circular
-preservation target. No proof was elaborated or checked.
+The [ranked queue](../config/research-queue.json) governs item order, eligibility,
+finite budgets and closure records. `CVC-1` remains COMPLETE with the source-only
+`EXTEND` reuse decision. `CVC-2` remains COMPLETE with `SUCCESS` for its fixed
+specification, labeled `SPECIFICATION_PROPOSAL_UNCHECKED`. No proof was checked.
+The historical publication study and completed ecosystem/corpus successors
+remain closed and unchanged.
 
-The [stopping-point review](../results/research/queue-reviews/2026-09-06-ops-upstream-1.json)
-closes `OPS-UPSTREAM-1` with `BOUNDED_UNRESOLVED`. Required CLI preflight failed
-with authentication unavailable; zero post-preflight GET requests ran. The
-[status packet](../results/research/ops-upstream-1/status-packet.json) retains the
-last known Arena submissions and Kiota deferral. Current upstream dispositions,
-duplicates, and new feedback are unknown. Repair access with
-`gh auth login -h github.com --web`; after confirmed repair, rank a fresh bounded
-check at a stopping-point review. No repeated polling or automation is enabled.
+`ALT-PAYLOADS` is COMPLETE with `SUCCESS` for the
+[exact dependency repair proposal](../results/research/conditional-validation-contracts/alt-payloads/proposal.json).
+Its static closure has 37 upstream modules: 12 Lean4Lean and 25 Batteries,
+including four public-meta dependencies absent from the earlier inventory.
+All selected source bytes match the recorded target pins; no compilation ran.
+The [stopping-point review](../results/research/queue-reviews/2026-09-06-alt-payloads.json)
+selects `CVC-PREP-1` READY and unstarted. Implement and inert-test its narrow
+preparation controller, bind the complete runtime and source manifest, commit
+that exact execution checkpoint, then attempt the fixed upstream-only build
+within two 90-minute sessions, 37 launches, 300 seconds per launch and 6600
+cumulative compilation seconds. All limits and first-failure stops apply.
+No Lab signature/proof elaboration, download or installation is included.
 
-`ALT-PAYLOADS` is selected READY and unstarted. Prepare
-one exact isolated materialization/compilation proposal for the recorded
-Lean4Lean/Batteries dependency gap and successor runner prerequisite, within
-one diagnostic session and with no builds. The
-[runtime inventory](../results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json)
-finds installed Lean 4.33.0-rc2 and matching source donors, but no complete
-compiled verification bundle. `CVC-3` remains PLANNED: its
-[finite protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
-is specified, not executable, pending the exact compiled dependencies and a
-tested protocol-specific runner. `CVC-4` and `CVC-5` remain conditional PLANNED
-stages. Reevaluate all candidates at each stop using
-[Research workflow](RESEARCH_WORKFLOW.md).
+`CVC-RUNNER-1` remains PLANNED for a separate two-session implementation with
+inert fixtures only. `CVC-3` remains PLANNED until both the exact compiled
+bundle and tested protocol-specific runner succeed and a separate review
+promotes it. The unchanged
+[CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json)
+counts signature elaboration as attempt 1 of 12. Preparation, runner and proof
+costs remain separate and must also be reported in aggregate. CVC-4 and CVC-5
+remain conditional PLANNED stages.
 
-The corpus-integration successor, ecosystem closure at `2136c65`, and original
-publication study remain complete and historically bound. This phase creates
-named research models; it changes no normative-source approval or old catalog
-disposition, and authorizes no external message or publication. The requested
-one-item execution stops after OPS-UPSTREAM-1 closure delivery; no next item has
-started.
+`OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
+preflight failed authentication and no post-preflight GET ran. Current Arena
+feedback/dispositions are unknown; retain the last known submissions and Kiota
+deferral. Repair access with `gh auth login -h github.com --web`, then rank a
+fresh bounded check after successful preflight. No repeated polling is enabled.
+
+This one-item execution closes ALT-PAYLOADS and selects its successor without
+starting it. The phase changes no normative-source approval or old catalog
+disposition and authorizes no external message or publication. Reevaluate
+candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
 
 ### Waiting
 

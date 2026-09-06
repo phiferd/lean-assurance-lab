@@ -3,7 +3,7 @@
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
   "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
   "updated_at": "2026-09-06",
-  "selected_item": "ALT-PAYLOADS",
+  "selected_item": "CVC-PREP-1",
   "items": [
     {
       "id": "CVC-1",
@@ -145,7 +145,7 @@
       "completion": "One reproducible dependency-bundle repair proposal with exact donor/source pins, isolated paths, build closure, commands, bounded compilation/runner implementation budget, and entry/stop conditions ready for a separately ranked implementation item.",
       "stop_condition": "One diagnostic session, no builds or checker launches, no general infrastructure; stop with a concrete proposal or named unresolved prerequisite.",
       "kind": "OPERATIONS",
-      "status": "READY",
+      "status": "COMPLETE",
       "depends_on": [],
       "budget": {
         "max_sessions": 1,
@@ -160,24 +160,111 @@
         "results/research/conditional-validation-contracts/cvc-2/assumptions.json"
       ],
       "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/conditional-validation-contracts/alt-payloads/proposal.json",
+          "results/research/conditional-validation-contracts/alt-payloads/source-closure.json",
+          "results/research/conditional-validation-contracts/alt-payloads/report.md",
+          "results/research/conditional-validation-contracts/alt-payloads/work-record.json",
+          "results/research/conditional-validation-contracts/alt-payloads/evidence-manifest.json",
+          "results/research/conditional-validation-contracts/alt-payloads/inspect-source-closure.py",
+          "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+          "results/research/queue-reviews/2026-09-06-alt-payloads.json"
+        ],
+        "recommendation": "Exact offline preparation proposal for 37 upstream modules; four Batteries public meta import dependencies extend the prior 33-module inventory. Select CVC-PREP-1 READY for a tested, committed preparation controller/manifest then bounded source-only dependency compilation. CVC-RUNNER-1 remains a separate PLANNED inert-test implementation item and CVC-3 remains PLANNED. No build, download, Lean/Lake/proof/checker execution or external action occurred."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-PREP-1",
+      "priority": 5,
+      "title": "Prepare the exact offline universe-proof dependencies",
+      "target": "CVC-U1: 37 bound source modules under CVC-U1-DEPS-0001",
+      "action": "Implement/test a narrow preparation controller; verify and copy the exact local source subset, bind runtime, commit execution checkpoint, then compile the upstream closure in order.",
+      "expected_value": "Enables reproducible, explicitly budgeted checking of the fixed CVC-U1 contract without changing historical authority.",
+      "rank_rationale": "Highest eligible local work: 37 exact source modules are available and an isolated bounded compilation route is now concrete. Preparing them tests the actual runtime boundary before proof effort. Arena access remains blocked without fresh feedback; the proof runner and CVC-3 stay gated, and other research themes remain deferred.",
+      "entry_gate": "ALT-PAYLOADS SUCCESS and this stopping-point review promote preparation only. No Lean launch until controller, exact source/runtime/command manifest and passing inert tests are committed. Verify all donors; no downloads or installations.",
+      "completion": "Exact source/runtime/output manifests, passing inert controller tests, append-only compilation ledger and success or bounded unresolved evidence; no Lab elaboration.",
+      "stop_condition": "Two 90-minute sessions; 37 compilation attempts maximum, 300 seconds each, 6600 cumulative compilation seconds; inert tests at most 80 launches/5 seconds each/400 process seconds within the same active-time bound. Stop first failed module, identity/import/native-compile problem or exhausted bound. Zero Lab elaborations, proof/checker launches or network.",
+      "kind": "OPERATIONS",
+      "status": "READY",
+      "depends_on": [
+        "ALT-PAYLOADS"
+      ],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/research/conditional-validation-contracts/alt-payloads/proposal.json",
+        "results/research/conditional-validation-contracts/alt-payloads/source-closure.json",
+        "results/research/conditional-validation-contracts/alt-payloads/report.md",
+        "results/research/conditional-validation-contracts/alt-payloads/work-record.json",
+        "results/research/conditional-validation-contracts/alt-payloads/evidence-manifest.json",
+        "results/research/conditional-validation-contracts/alt-payloads/inspect-source-closure.py",
+        "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+        "results/research/queue-reviews/2026-09-06-alt-payloads.json",
+        "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-RUNNER-1",
+      "priority": 6,
+      "title": "Implement the fixed CVC-3 proof runner",
+      "target": "CVC3-U1-PROOF-0001 reservation, signature sequencing, axiom/result checks and cost ledger",
+      "action": "Implement a dedicated protocol-specific runner and validate it with inert fixture processes; preserve old closed-frontier authorization.",
+      "expected_value": "Enables reproducible, explicitly budgeted checking of the fixed CVC-U1 contract without changing historical authority.",
+      "rank_rationale": "Separate the proof-runner implementation from dependency compilation; select only after the actual dependency bundle succeeds and stopping-point review still favors CVC-3.",
+      "entry_gate": "CVC-PREP-1 produces a usable exact bundle with SUCCESS; stopping-point review selects this implementation after reviewing preparation evidence. No Lean/proof execution under this item.",
+      "completion": "Passing adversarial fixture tests for all CVC-2 protocol controls; committed runner and immutable input/dependency/audit bindings ready for separate CVC-3 entry review.",
+      "stop_condition": "Two 90-minute sessions, at most 80 inert fixture process launches, 5 seconds per fixture and 400 process seconds total. Zero Lean/Lake, dependency builds, proofs, checkers or network. Stop at passing controls or a named bounded implementation gap.",
+      "kind": "OPERATIONS",
+      "status": "PLANNED",
+      "depends_on": [
+        "CVC-PREP-1"
+      ],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 90,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "results/research/conditional-validation-contracts/alt-payloads/proposal.json",
+        "results/research/conditional-validation-contracts/alt-payloads/source-closure.json",
+        "results/research/conditional-validation-contracts/alt-payloads/report.md",
+        "results/research/conditional-validation-contracts/alt-payloads/work-record.json",
+        "results/research/conditional-validation-contracts/alt-payloads/evidence-manifest.json",
+        "results/research/conditional-validation-contracts/alt-payloads/inspect-source-closure.py",
+        "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+        "results/research/queue-reviews/2026-09-06-alt-payloads.json",
+        "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json"
+      ],
+      "issue_urls": [],
       "closure": null,
       "blocked_reason": ""
     },
     {
       "id": "CVC-3",
-      "priority": 5,
+      "priority": 7,
       "title": "Prove or refute one preservation claim",
       "target": "The single CVC-2 contract and pinned formalization",
       "action": "Reuse/reproduce an existing result or attempt one preservation theorem and its non-vacuous examples.",
       "expected_value": "Establishes a scoped semantic result or exposes the exact formal obstacle.",
       "rank_rationale": "Potentially useful next scientific step, but source review and an installed Lean executable do not satisfy the missing compiled dependency and successor-runner gates. Resolve the concrete prerequisites before its proof cost.",
-      "entry_gate": "CVC-2 contract succeeds; exact source/runtime/compiled dependencies and tested protocol-specific runner are bound before promotion and proof attempts under CVC3-U1-PROOF-0001. The CVC-2 runtime inventory records missing compiled prerequisites; this item remains PLANNED.",
+      "entry_gate": "CVC-2 fixed contract, CVC-PREP-1 exact compiled dependency/runtime bundle and CVC-RUNNER-1 tested protocol-specific runner all close SUCCESS. Separate review promotes CVC-3 only after immutable protocol/signature/examples/allowlist/runner/runtime bindings are committed. Signature elaboration remains counted attempt 1 under CVC3-U1-PROOF-0001. Remains PLANNED.",
       "completion": "Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.",
       "stop_condition": "Four sessions or 12 proof builds of at most five minutes each; no new family or broad kernel proof.",
       "kind": "PROOF",
       "status": "PLANNED",
       "depends_on": [
-        "CVC-2"
+        "CVC-2",
+        "CVC-PREP-1",
+        "CVC-RUNNER-1"
       ],
       "budget": {
         "max_sessions": 4,
@@ -188,7 +275,8 @@
         "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
         "results/research/conditional-validation-contracts/cvc-2/contract.json",
         "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
-        "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json"
+        "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "results/research/conditional-validation-contracts/alt-payloads/proposal.json"
       ],
       "issue_urls": [],
       "closure": null,
@@ -196,7 +284,7 @@
     },
     {
       "id": "CVC-4",
-      "priority": 6,
+      "priority": 8,
       "title": "Connect the contract to real validation behavior",
       "target": "At most two implementation lineages and four fixed pairs",
       "action": "Map parsing, reconstruction, validation and semantic use; execute only the bound comparison.",
@@ -225,7 +313,7 @@
     },
     {
       "id": "CVC-5",
-      "priority": 7,
+      "priority": 9,
       "title": "Prepare shared evidence and decide the next phase",
       "target": "The scoped result and the ecosystem target it benefits",
       "action": "Prepare a regression/formalization/clarification draft or justified no-action result, then compare successor options.",
@@ -254,7 +342,7 @@
     },
     {
       "id": "ALT-SURVIVORS",
-      "priority": 8,
+      "priority": 10,
       "title": "Design the next fixed survivor triage",
       "target": "One selected member of the seven pending survivors",
       "action": "Prepare an evidence-based fixed-candidate triage proposal and finite execution manifest.",
@@ -281,7 +369,7 @@
     },
     {
       "id": "ALT-TRANSFER",
-      "priority": 9,
+      "priority": 11,
       "title": "Assess a prospective transfer study",
       "target": "One independent or held-out transfer question",
       "action": "Design one falsifiable transfer comparison after reviewing relevant methods and prior knowledge.",

@@ -1,0 +1,214 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-PAYLOADS",
+  "date": "2026-09-06",
+  "status": "PASS",
+  "commands": [
+    {
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "started_at": "2026-09-06T18:45:35.644311+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/01-historical.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:46:02.176156+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T18:46:02.209433+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/02-snapshot.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:47:14.617958+00:00",
+      "log_sha256": "f36df09a97369126a0f8ee7d7a08c6094fa58a931c104c899936cfe31fc8a732"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T18:53:53.912305+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/03-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:53:54.583406+00:00",
+      "log_sha256": "8cda47aa2f74e3032e10e3887c9b6922b8979401c7ab7ceb0de191a72c59de4c"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T18:53:54.614502+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/04-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:53:54.651673+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "started_at": "2026-09-06T18:53:54.683960+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/05-queue-tests.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:53:54.777809+00:00",
+      "log_sha256": "fb6f76994c6a616dd603233e98a16878de350a28414f7c7ae0cd03b7f3359a7c"
+    },
+    {
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "started_at": "2026-09-06T18:53:54.809342+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/06-contribution.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:53:54.894545+00:00",
+      "log_sha256": "82f44934bcf41b0a29c8d18108949fd840f6ace199888131fb25d8ac81040200"
+    },
+    {
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "started_at": "2026-09-06T18:53:53.926757+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/07-full-unit-suite.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:01:02.905100+00:00",
+      "log_sha256": "98c5a14a1eada4aabea94c66c3a8052775f36d8efcc448f7d1b3a5c30be144ae"
+    },
+    {
+      "command": [
+        "python3",
+        "results/workflow-refresh/alt-payloads-2026-09-06/verify-handoff.py"
+      ],
+      "started_at": "2026-09-06T18:55:36.635334+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/08-handoff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:55:36.660952+00:00",
+      "log_sha256": "1aeb4dec8e9e07a0070b75eb122dfadbb66f80e7534a993c9d8b8f58f1bd4099"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/conditional-validation-contracts/alt-payloads/validate-evidence.py",
+        "--check-local"
+      ],
+      "started_at": "2026-09-06T18:59:52.812877+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/09-final-evidence.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T18:59:53.545182+00:00",
+      "log_sha256": "8cda47aa2f74e3032e10e3887c9b6922b8979401c7ab7ceb0de191a72c59de4c"
+    },
+    {
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/alt-payloads-2026-09-06/refresh"
+      ],
+      "started_at": "2026-09-06T19:01:13.133351+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/10-refresh.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:02:37.167767+00:00",
+      "log_sha256": "5ec3e6f7c7ae767feacfde3a7e2159e315a6c2b32afea645d54781aba546276a"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "started_at": "2026-09-06T19:02:37.201955+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/11-project-review.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:03:04.485684+00:00",
+      "log_sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "started_at": "2026-09-06T19:03:04.521097+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/12-artifact-status.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:03:15.835847+00:00",
+      "log_sha256": "2364e3fcc85880e841cfb8540718f092950c35979aceb2b608f69413cde603c5"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "started_at": "2026-09-06T19:03:15.922306+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/13-final-queue.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:03:15.960820+00:00",
+      "log_sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "python3",
+        "results/workflow-refresh/alt-payloads-2026-09-06/verify-handoff.py"
+      ],
+      "started_at": "2026-09-06T19:03:15.992692+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/14-final-handoff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:03:16.017549+00:00",
+      "log_sha256": "1aeb4dec8e9e07a0070b75eb122dfadbb66f80e7534a993c9d8b8f58f1bd4099"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "started_at": "2026-09-06T19:03:16.049172+00:00",
+      "log": "results/workflow-refresh/alt-payloads-2026-09-06/15-diff.log",
+      "returncode": 0,
+      "status": "PASS",
+      "ended_at": "2026-09-06T19:03:16.073034+00:00",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "unit_suite": {
+    "current_tests": 371,
+    "historical_tests": 73,
+    "total": 444,
+    "skips": 0,
+    "historical_transition_and_tampering_regressions": "INCLUDED"
+  },
+  "preserved_assurance_boundary": {
+    "status": "FAIL",
+    "unresolved_semantic_disagreements": 15,
+    "change": "UNCHANGED"
+  },
+  "refresh": {
+    "status": "PASS",
+    "record": "results/workflow-refresh/alt-payloads-2026-09-06/refresh/result.json"
+  },
+  "research_execution_note": "Offline repository assurance/evidence checks are separate from the completed diagnostic session. No upstream request or Lean/dependency/proof/checker experiment was run. All preparation and CVC-3 commands remain proposals. The selected CVC-PREP-1 workspace and controller do not exist.",
+  "completed_at": "2026-09-06T19:03:43.879423+00:00"
+}

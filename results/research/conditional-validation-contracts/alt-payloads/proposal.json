@@ -1,0 +1,258 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-PAYLOADS",
+  "outcome": "SUCCESS",
+  "scientific_status": "STATIC_DEPENDENCY_REPAIR_PROPOSAL_UNEXECUTED",
+  "decision": "MATERIALIZE_EXACT_SOURCE_SUBSET_AND_COMPILE_OFFLINE",
+  "scope": "One diagnostic proposal. No dependency compilation, Lab signature elaboration, proof attempt, Lean/Lake invocation, download or checker execution occurred.",
+  "contract_id": "CVC-U1",
+  "predecessor_protocol": {
+    "path": "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+    "bytes": 8994,
+    "sha256": "5410789482c8474a367064b1d8ef047c76f2e9a74e3b3bce84d124a3dce5d6f0"
+  },
+  "pins": {
+    "repository": "https://github.com/digama0/lean4lean",
+    "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+    "lean_toolchain": "leanprover/lean4:v4.33.0-rc2",
+    "batteries_tag": "v4.33.0-rc2",
+    "batteries_revision": "76e1c118b0700b4ceafe99532e887d6431625e1a"
+  },
+  "source_materialization": {
+    "mode": "PINNED_TARGET_BYTE_SUBSET_FROM_LOCAL_DONORS",
+    "target_root_module": "Lean4Lean.Verify.Level",
+    "closure": "source-closure.json",
+    "lean4lean_donor": {
+      "path": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/lean4lean/src",
+      "checkout_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "target_revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+      "claim": "Selected source files match the retained target tree blobs; the donor is not the target checkout. No claim about unselected target files."
+    },
+    "batteries_donor": {
+      "path": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/packages/batteries",
+      "revision": "76e1c118b0700b4ceafe99532e887d6431625e1a"
+    },
+    "workspace": "external/cvc-u1-dependencies-0001",
+    "source_root": "external/cvc-u1-dependencies-0001/src",
+    "output_root": "external/cvc-u1-dependencies-0001/build/lib/lean",
+    "materialization_steps": [
+      "Verify all source bytes/SHA-256 and Git blob correspondence in source-closure.json before writing any destination. Require exact Batteries committed blobs; refuse modified/missing source or target-tree mismatch.",
+      "Require a fresh isolated workspace. On resume permit only files bound to the existing manifest/ledger; reject unrecorded, mismatching or symlinked destinations. Copy all selected .lean files preserving module-relative paths; do not link into mutable donors.",
+      "Do not copy donor .olean/.ir products. Recompile every selected upstream source module, including those already compiled in the older donor. Preserve all emitted companion artifacts.",
+      "Do not run Lake or copy its donor configuration. The target manifest requires only Batteries; the donor additionally requires Lean4Export. Module selection and direct compiler argv, not Lake dependency resolution, define this subset build.",
+      "Materialize the exact immutable Contract.lean source only for later handoff, outside the upstream source/output roots. Its first elaboration remains CVC-3 attempt 1. Do not copy it into the preparation compiler input set."
+    ],
+    "network_requests": 0,
+    "downloads": 0,
+    "toolchain_installs": 0,
+    "missing_donor_rule": "Stop with BOUNDED_UNRESOLVED and name the absent binding. Do not fetch or substitute a revision. A different donor may be proposed only if every bound file matches before any launch.",
+    "source_layout": "src/Lean4Lean/... and src/Batteries/... share one module root; commands run with cwd src."
+  },
+  "runtime": {
+    "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2",
+    "version": "4.33.0-rc2",
+    "platform": "arm64-apple-darwin24.6.0",
+    "lean_binary": {
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/bin/lean",
+      "exists": true,
+      "bytes": 49968,
+      "sha256": "1b370cfcbf44e80d1b004ab1b1ab9a4c73951f9f7c242140bcff9bc577576554",
+      "executable": true
+    },
+    "version_header": {
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/include/lean/version.h",
+      "exists": true,
+      "bytes": 411,
+      "sha256": "8ed60852e94d3005e8460cabea8ea74da2145516b8c0dba6a4305f8869dfb4a3"
+    },
+    "binding_status": "BINARY_AND_HEADER_BOUND_COMPLETE_RUNTIME_MANIFEST_REQUIRED_BEFORE_PREPARATION_LAUNCH",
+    "prelaunch_manifest_requirements": [
+      "Record host system, machine, OS build and absolute resolved runtime path; compare binary/header hashes with this proposal.",
+      "Before first compilation, enumerate and hash the entire installed runtime bin and lib trees, recording file sizes, modes and symlink targets and hashing resolved file content; reject symlinks escaping that runtime unless explicitly included and reviewed before launch. This conservatively binds transitive core imports, .olean sidecars, IR and bundled dynamic libraries without assuming explicit-import closure suffices.",
+      "Use the same bound runtime path for every compile. Check the complete runtime and previously completed outputs on resume and before launches; changed identities stop the run. Runtime is a read-only external input, not copied or installed.",
+      "Record platform loader dependencies from a read-only Mach-O linkage inventory, binding non-system resolved libraries. OS-provided dynamic-cache libraries remain explicit platform trust; do not claim the runtime manifest verifies the OS or proves binary correctness.",
+      "Commit the exact preparation manifest, source closure, runtime manifest, controller and passing inert tests before the first Lean launch. Do not use a version/import smoke invocation as a free preflight."
+    ],
+    "materialization_limitations": "Static source closure does not prove dynamic library completeness, elaboration success or proof axiom closure. Runtime/source mismatch or a missing companion discovered at launch is a charged failure, not permission to install or expand the module set."
+  },
+  "compilation": {
+    "status": "PROPOSED_NOT_RUN",
+    "item_id": "CVC-PREP-1",
+    "run_id": "CVC-U1-DEPS-0001",
+    "driver_interface": [
+      "scripts/prepare-cvc-u1-dependencies",
+      "--manifest",
+      "config/cvc-u1-dependencies-0001.json"
+    ],
+    "driver_interface_status": "NOT_IMPLEMENTED; to be implemented and inert-tested in separately selected CVC-PREP-1 before its committed execution checkpoint",
+    "cwd": "{repository}/external/cvc-u1-dependencies-0001/src",
+    "argv_template": [
+      "{bound_lean_binary}",
+      "-o",
+      "{repository}/external/cvc-u1-dependencies-0001/build/lib/lean/{module_path}.olean",
+      "{module_path}.lean"
+    ],
+    "environment": {
+      "inherit_environment": false,
+      "LEAN_SYSROOT": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2",
+      "LEAN_PATH": "{repository}/external/cvc-u1-dependencies-0001/build/lib/lean:/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/lib/lean",
+      "PATH": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/bin:/usr/bin:/bin",
+      "TMPDIR": "{repository}/external/cvc-u1-dependencies-0001/tmp",
+      "LANG": "C.UTF-8"
+    },
+    "environment_rules": "Create isolated tmp first; bind exact expanded argv/cwd/env. No user LEAN_PATH, LEAN_SRC_PATH, LEAN_OPTIONS, Lake/elan wrappers or dynamic-loader overrides are inherited. System process infrastructure remains trusted.",
+    "order": "Use exactly source-closure.json closure.topological_noncore_order; create output parent directories offline. One launch per module, no parallel compiles and no uncounted imports, native compilation or smoke tests.",
+    "output_rule": "For every module bind the .olean and all emitted companions (.olean.server, .olean.private, .ir, .ir.sig or other observed outputs), their hashes and sizes. Record output inventory after each launch. Retain partial products and logs separately on failure; partial products never satisfy dependency completion.",
+    "limits": {
+      "max_sessions": 2,
+      "session_minutes": 90,
+      "max_active_seconds": 10800,
+      "max_compilation_attempts": 37,
+      "attempt_timeout_seconds": 300,
+      "max_compilation_seconds": 6600,
+      "checker_launches": 0,
+      "lab_elaborations": 0,
+      "proof_attempts": 0,
+      "lake_executions": 0,
+      "native_compiler_invocations": 0,
+      "network_requests": 0,
+      "toolchain_installs": 0,
+      "max_fixture_process_launches": 80,
+      "fixture_timeout_seconds": 5,
+      "max_fixture_process_seconds": 400
+    },
+    "accounting": [
+      "One filesystem lock covers manifest/state validation, materialization and execution. Atomically reserve the numbered module attempt, exact input/runtime/output-dependency hashes, stdout/stderr paths and deadline before spawning; count failed starts and interrupted launches.",
+      "Deadline is min(300 seconds, remaining session time, remaining active time, remaining compilation time). Charge all preparation design, diagnosis, implementation, source copying and build effort to the two-session work ledger; charge launch elapsed time separately within its 6600-second subcap.",
+      "On timeout/cancellation terminate and reap the entire process group. Persist append-only launch evidence before replacing current state; record exit status, signal, raw output hashes, elapsed charge and remaining counters.",
+      "Resume verifies immutable inputs and ledger, cannot reset totals or rerun successful modules. Orphan RESERVED/RUNNING entries consume their reserved deadline unless durable bounded elapsed evidence proves a smaller charge; reconcile to INTERRUPTED and stop. No failed-module retries under this item.",
+      "Stop on the first failed start, timeout, interrupted compile, missing runtime/import artifact, unexpected need for native compilation, output binding failure, or exhausted bound. Retain bounded unresolved result; do not add modules, change sources or expand limits after feedback."
+    ],
+    "success": "Every one of the 37 upstream modules completes in the fixed dependency order, with an exact manifest of source/runtime/commands/outputs/logs and cumulative cost. No Lab file has been elaborated. Success establishes availability of this dependency bundle, not the CVC-U1 theorem or source-helper axiom audit.",
+    "next_step_on_success": "Review and select CVC-RUNNER-1; CVC-3 still waits for its tested protocol-specific runner and committed runtime/dependency manifest.",
+    "negative_or_unresolved": "Name the first missing artifact, compilation diagnostic, process/control defect or budget boundary and rerank. Preserve all attempts, including partial successful dependencies.",
+    "preparation_controller_acceptance_tests": [
+      "Reject missing or uncommitted manifest/controller and non-selected item before any compiler launch.",
+      "Reject altered source, runtime or dependency output; unknown modules, Lab files, extra command arguments, native compiler or a network command.",
+      "Fixture-only checks cover exactly-once reservations, failed spawn, timeout, interruption, malformed/orphan ledgers, concurrent ownership and no completed-module replay.",
+      "Enforce 37 attempts, the 300-second per-attempt deadline, 6600-second compilation cap and both 90-minute sessions using inert fixture processes and a fake clock.",
+      "Persist successful output sidecars and raw logs; refuse partial/unrecorded output as a completed dependency."
+    ],
+    "limits_note": "All caps apply simultaneously; 37 times 300 seconds is not an entitlement because the 6600-second compilation and 10800-second total bounds are tighter. Inert driver tests consume the same item active time and their own fixture subcaps. No retry after a failed module."
+  },
+  "runner_prerequisite": {
+    "item_id": "CVC-RUNNER-1",
+    "status": "PROPOSED_PLANNED_UNIMPLEMENTED",
+    "protocol_id": "CVC3-U1-PROOF-0001",
+    "implementation_scope": "One dedicated CVC-3 runner and result validator; fixture processes only. Do not launch Lean, compile dependencies, repair the signature or attempt a proof while implementing/testing it.",
+    "limits": {
+      "max_sessions": 2,
+      "session_minutes": 90,
+      "max_active_seconds": 10800,
+      "max_fixture_process_launches": 80,
+      "fixture_timeout_seconds": 5,
+      "max_fixture_process_seconds": 400,
+      "lean_executions": 0,
+      "checker_launches": 0,
+      "proof_attempts": 0
+    },
+    "reuse_assessment": [
+      {
+        "path": "scripts/run-campaign",
+        "reuse": "Filesystem ownership, persist-before-spawn gate, process-group termination and conservative interruption accounting are useful patterns.",
+        "gap": "Existing phase supervisor is tied through validate_manifest to the closed ecosystem frontier; lacks CVC signature/proof sequencing, session budgets and result/axiom validation. Do not broaden its old authorization or reuse run IDs."
+      },
+      {
+        "path": "lib/authorized_runs.py",
+        "reuse": "Content hashing, safe path checks and terminate_group may be imported or narrowly extracted with regression coverage.",
+        "gap": "FRONTIER and manifest schema authorize only the historical ecosystem successor; not a CVC authorization path."
+      },
+      {
+        "path": "scripts/materialize-run-inputs",
+        "reuse": "Verify every donor first, copy without replacement and rehash destination.",
+        "gap": "Requires the old frontier-specific manifest. Reuse the copy pattern under a new dependency manifest instead of weakening old validation."
+      }
+    ],
+    "acceptance_tests": [
+      "Reject absent selected CVC-3 promotion, changed source/protocol/axiom/runtime/dependency hashes, old run IDs and mismatching prior state before launch.",
+      "Exactly one signature elaboration is attempt 1; failure consumes its reservation and closes unresolved. Bind successful Contract.olean before attempts 2-12. No free signature preflight or recompile.",
+      "Failed spawn, timeout, interruption, orphan reconciliation and resume each consume one persisted reservation. Reject attempt 13, session five, and all time overruns; do not reset counters after malformed/missing ledger.",
+      "Reject concurrent ownership; kill and reap fixture child process groups on cancellation/deadline and preserve output evidence. Completed attempts cannot rerun.",
+      "Check required theorem names/types plus all six exact axiom reports against immutable assumptions.json. Reject missing/duplicate/ambiguous audit records, sorry warnings/sorryAx, new Lab axioms, unlisted helpers and unapproved native-evaluation trust.",
+      "Bind the complete proof source and audit harness before each future attempt. Inspect source/declaration trust as well as printed output: a fixture can test rejection logic but cannot prove arbitrary Lean text honestly emits its report. Commit the controlled audit construction before proof feedback.",
+      "Report dependency preparation, runner development and CVC-3 proof costs separately and in aggregate; no preparation cost is erased or charged as zero."
+    ],
+    "future_commands": [
+      [
+        "scripts/run-cvc3-u1-proof",
+        "--protocol",
+        "results/research/conditional-validation-contracts/cvc-2/execution-protocol.json",
+        "--runtime-manifest",
+        "results/research/conditional-validation-contracts/cvc-prep-1/runtime-manifest.json"
+      ]
+    ],
+    "command_status": "INTERFACE_PROPOSAL_ONLY; future execution additionally needs validated CVC-3 promotion and committed runner/protocol/dependencies/signature/examples/allowlist",
+    "cvc3_budget_unchanged": {
+      "proof_build_attempts": 12,
+      "signature_attempts_included": 1,
+      "remaining_proof_invocations": 11,
+      "attempt_timeout_seconds": 300,
+      "max_sessions": 4,
+      "session_minutes": 90
+    },
+    "stop": "Stop when all inert runner acceptance tests pass or the two-session/fixture bounds are reached. A passing test suite enables entry review, not an automatic proof launch."
+  },
+  "recommendation": {
+    "action": "Implement the bounded offline dependency preparation controller, commit its exact execution manifest and inert checks, then compile only the selected upstream closure under CVC-PREP-1.",
+    "target": "CVC-U1 exact Lean4Lean/Batteries dependency bundle",
+    "priority": "HIGHEST_ELIGIBLE_NEXT",
+    "prerequisites": [
+      "ALT-PAYLOADS closure validated, committed and pushed; stopping-point review selects CVC-PREP-1.",
+      "No compile until the controller, exact source/runtime manifest and inert control tests are committed.",
+      "All donor/source/runtime identities match; no toolchain or network acquisition."
+    ],
+    "evidence": [
+      "source-closure.json",
+      "proposal.json",
+      "../cvc-2/runtime-inventory.json",
+      "../cvc-2/execution-protocol.json"
+    ],
+    "external_action": "NONE; this result supports local reproduction, not an upstream defect or publication."
+  },
+  "remaining_uncertainty": [
+    "Actual upstream compilation and import compatibility are untested.",
+    "The complete runtime/native-library binding is a prelaunch output of preparation, not established by binary/header presence.",
+    "The dependency subset may compile yet the immutable Lab signature may fail; that remains a counted CVC-3 outcome.",
+    "Actual transitive theorem assumptions, encoding preservation and executable-validator correspondence are unproved."
+  ],
+  "inspected_reuse_bindings": [
+    {
+      "path": "scripts/run-campaign",
+      "bytes": 9633,
+      "sha256": "f459071685c80f4dbf3d9b3c2a43b8282643fc9aa1bc60d67bc0bbd9b38a4560"
+    },
+    {
+      "path": "lib/authorized_runs.py",
+      "bytes": 5863,
+      "sha256": "f377ad1a73e77f926f4e8cb99e53518a98ebea89bf49ddf32e6bce2fdb1b6c6f"
+    },
+    {
+      "path": "scripts/materialize-run-inputs",
+      "bytes": 2340,
+      "sha256": "cb17c8360712c873eabe64265900046b34602fb21cc8d96cd58b7673aa7ee360"
+    }
+  ],
+  "diagnostic_delta": {
+    "predecessor_noncore_count": 33,
+    "corrected_noncore_count": 37,
+    "lean4lean_count": 12,
+    "batteries_count": 25,
+    "previously_omitted_batteries": [
+      "Batteries.CodeAction.Deprecated",
+      "Batteries.Lean.Position",
+      "Batteries.Lean.Syntax",
+      "Batteries.Tactic.Lint.Basic"
+    ],
+    "cause": "The predecessor line regex omitted meta/public meta imports. Header-token traversal includes them and their transitive imports. The prior inventory remains unchanged historical input to this successor."
+  }
+}
