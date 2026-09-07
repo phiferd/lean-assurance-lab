@@ -2044,14 +2044,14 @@ below six builds and 7200 seconds. Including original CVC-3, seven builds were
 consumed. One A7 build is unused; the successful run is terminal. No dependency,
 observer or research-network launch ran. Closure tests are separately recorded.
 
-`CVC-4-CONDITIONAL` is selected READY and unstarted. This explicit successor
+`CVC-4-CONDITIONAL` is selected ACTIVE. This explicit successor
 connects the checked A7 result to exact artifact bytes and at most two
 implementation lineages. It inherits the original CVC-4 scientific scope and
 ceilings: four fixed candidate/control pairs, 16 validator launches of at most
 30 seconds, and 16200 actual active seconds in intervals of at most 90 minutes.
 Before any launch, bind and commit exact inputs, versions, expected hypotheses,
-source/runtime mapping and tested execution controls. No successor protocol,
-workspace or launch has started. Original CVC-4 and CVC-5 remain PLANNED with
+source/runtime mapping and tested execution controls. The [active work record](../results/research/conditional-validation-contracts/cvc-4-conditional/work-record.json)
+records the new item; no validator has launched. Original CVC-4 and CVC-5 remain PLANNED with
 their original dependencies; conditional success does not rewrite CVC-3.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert

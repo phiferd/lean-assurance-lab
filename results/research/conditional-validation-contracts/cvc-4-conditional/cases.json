@@ -1,0 +1,252 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-CONDITIONAL",
+  "model_id": "CVC-U1-A7",
+  "examples_binding": {
+    "path": "results/research/conditional-validation-contracts/cvc-2/examples.json",
+    "sha256": "1e3cd9a7b295e587b1f3146859799d820b3d8ea4e2907580a647696835a32a22"
+  },
+  "cases": [
+    {
+      "id": "E-CONTROL",
+      "pair_id": "right-succ",
+      "role": "control",
+      "artifact": {
+        "name": "universeIMaxRightSuccControl",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "max",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "succ",
+            [
+              "param",
+              "v"
+            ]
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "max",
+            [
+              "param",
+              "u"
+            ],
+            [
+              "succ",
+              [
+                "param",
+                "v"
+              ]
+            ]
+          ]
+        ]
+      },
+      "input": {
+        "path": "corpus/generated/universe-imax-right-succ-control.ndjson",
+        "sha256": "9244cb5e35f1fd462b62828415d51cb8c86818d3b8ebe8a11788efe6992c6de7"
+      },
+      "model_status": "CHECKED_REQUIRED_ACCEPTANCE",
+      "model_evidence": "Lab.CVC2.required_acceptance; Lab.CVC2.preservation",
+      "construction": "UNCHANGED_CVC2_BYTES",
+      "byte_mapping": "Unchanged strict structural decoder equals independently fixed AST; not a parser proof."
+    },
+    {
+      "id": "E-POS",
+      "pair_id": "right-succ",
+      "role": "candidate",
+      "artifact": {
+        "name": "universeIMaxRightSucc",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "imax",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "succ",
+            [
+              "param",
+              "v"
+            ]
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "max",
+            [
+              "param",
+              "u"
+            ],
+            [
+              "succ",
+              [
+                "param",
+                "v"
+              ]
+            ]
+          ]
+        ]
+      },
+      "input": {
+        "path": "corpus/generated/universe-imax-right-succ.ndjson",
+        "sha256": "a60a136378e4b920c63f90e64433daf7bd30c6a061436553871fd734b7ee9a6d"
+      },
+      "model_status": "CHECKED_REQUIRED_ACCEPTANCE",
+      "model_evidence": "Lab.CVC2.required_acceptance; Lab.CVC2.preservation",
+      "construction": "UNCHANGED_CVC2_BYTES",
+      "byte_mapping": "Unchanged strict structural decoder equals independently fixed AST; not a parser proof."
+    },
+    {
+      "id": "E-ZERO-CONTROL",
+      "pair_id": "right-zero",
+      "role": "control",
+      "artifact": {
+        "name": "cvc2ZeroBoundaryControl",
+        "params": [
+          "u"
+        ],
+        "value_level": [
+          "imax",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "zero"
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "zero"
+          ]
+        ]
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-zero-control.ndjson",
+        "sha256": "4496e258b804fb402d0545a9d70a5893b5b8ee563f190f111c63218e4efef7db"
+      },
+      "model_status": "MODEL_VALID_BY_DEFINITION",
+      "model_evidence": "meaning(imax u zero)=0; inferred and declared type levels are both 1 for every assignment.",
+      "construction": "LAB_SERIALIZATION_OF_FIXED_AST",
+      "byte_mapping": "Unchanged strict structural decoder equals independently fixed AST; not a parser proof."
+    },
+    {
+      "id": "E-ZERO",
+      "pair_id": "right-zero",
+      "role": "candidate",
+      "artifact": {
+        "name": "cvc2ZeroBoundary",
+        "params": [
+          "u"
+        ],
+        "value_level": [
+          "imax",
+          [
+            "param",
+            "u"
+          ],
+          [
+            "zero"
+          ]
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-zero.ndjson",
+        "sha256": "b0a4a518e538ef26c7a915cbdc2d8b729c132bc9b5f65ec9ce7bbfa2378a91c0"
+      },
+      "model_status": "CHECKED_MODEL_INVALID",
+      "model_evidence": "Lab.CVC2.boundary: Supported zeroBoundary and not Contract and not Accepts.",
+      "construction": "LAB_SERIALIZATION_OF_FIXED_AST",
+      "byte_mapping": "Unchanged strict structural decoder equals independently fixed AST; not a parser proof."
+    },
+    {
+      "id": "E-OWNED-CONTROL",
+      "pair_id": "ownership",
+      "role": "control",
+      "artifact": {
+        "name": "cvc2UnownedBoundaryControl",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "param",
+          "u"
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-owned-control.ndjson",
+        "sha256": "54d43141eb2c0a81c8045544cfe83426b128af39a6bbf42b6dbed3c0feca09b8"
+      },
+      "model_status": "MODEL_VALID_BY_DEFINITION",
+      "model_evidence": "All names are owned; both inferred and declared type levels equal rho(u)+1.",
+      "construction": "LAB_SERIALIZATION_OF_FIXED_AST",
+      "byte_mapping": "Unchanged strict structural decoder equals independently fixed AST; not a parser proof."
+    },
+    {
+      "id": "E-UNOWNED",
+      "pair_id": "ownership",
+      "role": "candidate",
+      "artifact": {
+        "name": "cvc2UnownedBoundary",
+        "params": [
+          "v"
+        ],
+        "value_level": [
+          "param",
+          "u"
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-unowned.ndjson",
+        "sha256": "5cd948669e72cfb7e0ef92df5e9d1e4118397358b3260dca1b629e042e6d2224"
+      },
+      "model_status": "CHECKED_UNSUPPORTED",
+      "model_evidence": "Lab.CVC2.boundary: not Supported unownedBoundary and not Accepts.",
+      "construction": "LAB_SERIALIZATION_OF_FIXED_AST",
+      "byte_mapping": "Exact deterministic serialization of E-UNOWNED AST; unchanged decoder refuses ownership, as required."
+    }
+  ],
+  "scope": "Six fixed byte streams in three matched pairs. Two original acceptance bytes remain unchanged; four new streams instantiate the same structured model. Only E-POS/E-CONTROL have the original checked finite acceptance promise.",
+  "metadata_provenance": "New streams reuse the fixed format 3.1.0 header solely for grammar compatibility; they were authored by this Lab serializer, not produced by the named Lean/exporter binary. Their construction and exact bytes are explicit.",
+  "nonclaims": [
+    "No arbitrary-byte parser proof.",
+    "No executable-validator refinement.",
+    "No assumption discharge or normative catalog promotion."
+  ]
+}

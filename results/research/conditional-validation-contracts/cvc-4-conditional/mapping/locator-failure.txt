@@ -1,0 +1,70 @@
+CVC-4-CONDITIONAL pure source-locator integrity failure
+
+Capture provenance
+------------------
+This file retrospectively preserves text available in this agent's earlier
+functions.exec / exec_command invocation and returned tool result. It was not
+created by the original failing process. No original on-disk stdout/stderr file
+was produced for that administrative command. The tool-returned output below is
+available and is copied verbatim; it is not reconstructed from the later
+file-integrity.json explanation.
+
+Command context
+---------------
+The shell command used `python3 - <<'PY'` in the repository workspace. It first
+extended the prospective mapping with Nanoda configuration/entrypoint sources
+and the file-input/count-message profile, wrote mapping.json, and then checked
+source-copy hashes, sizes, excerpt bounds/hashes and retained input bindings.
+The mapping changes had already been written when the pure integrity assertion
+failed. This command launched no compiler, validator, checker or test fixture.
+Earlier in the same administrative Python command, a read-only `git show`
+retrieved the exact pinned Nanoda main.rs blob to compare its bytes.
+
+The following is the exact verification suffix from that visible invocation:
+
+mp.write_text(json.dumps(d,indent=2)+'\n')
+# Pure file-integrity verification only; no repository validator or scientific process is started.
+for row in d['sources']:
+ b=(root/row['copy']['path']).read_bytes();assert sha(b)==row['source_sha256']==row['copy']['sha256'];assert len(b)==row['copy']['bytes']
+ for e in row['line_ranges']:
+  assert e['end_line']<=len(b.splitlines());assert sha(b''.join(b.splitlines(keepends=True)[e['start_line']-1:e['end_line']]))==e['excerpt_sha256']
+for row in d['bindings']+d['prior_observations']:
+ b=Path(row['path']).read_bytes();assert sha(b)==row['sha256'];assert len(b)==row['bytes']
+print(bind(mp));print('Verified',len(d['sources']),'source copies/ranges and',len(d['bindings']+d['prior_observations']),'retained bindings.')
+
+Actual returned tool-result metadata
+-----------------------------------
+chunk_id: 94109e
+wall_time_seconds: 0.000003375
+exit_code: 1
+original_token_count: 23
+
+Actual returned process output (verbatim)
+----------------------------------------
+Traceback (most recent call last):
+  File "<stdin>", line 18, in <module>
+AssertionError
+
+Subsequent read-only diagnostic output (verbatim)
+-----------------------------------------------
+OFFICIAL.INSTALLED.REPLAY 195 189
+5a87463bd09162d447563070637b54e629eaee8c5b19e36822106ffcc1c0fbfb
+
+The diagnostic printed the mapping source ID, requested end line, actual source
+line count, then the SHA-256 of the mapping at that diagnostic checkpoint.
+Its returned metadata was chunk_id fe7168, exit_code 0. The diagnostic script
+read mapping.json and printed each excerpt whose end_line exceeded the copied
+file's splitlines() length. The exact diagnostic loop was:
+
+for row in d['sources']:
+ b=Path(row['copy']['path']).read_bytes()
+ for e in row['line_ranges']:
+  if e['end_line']>len(b.splitlines()):print(row['id'],e['end_line'],len(b.splitlines()))
+print(hashlib.sha256(p.read_bytes()).hexdigest())
+
+Repair context
+--------------
+The later repair changed only that locator's end_line from 195 to 189 and
+repeated the pure integrity checks. The copied Replay.lean source bytes were
+unchanged. file-integrity.json separately records the failed and successful
+checks. No earlier scientific attempt or frozen research evidence was edited.

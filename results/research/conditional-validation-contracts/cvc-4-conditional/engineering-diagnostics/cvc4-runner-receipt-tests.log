@@ -1,0 +1,51 @@
+..F...E.F.........F.F.
+======================================================================
+ERROR: test_expected_nonzero_rejection_is_a_matched_observation (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 142, in test_expected_nonzero_rejection_is_a_matched_observation
+    state = runner.execute(self.root)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc4_runner.py", line 424, in execute
+    seconds = budget(state, current)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc4_runner.py", line 220, in budget
+    require(not state['control_stop'] and not state['hypothesis_mismatch'], 'run paused or hypothesis mismatch')
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc_prep.py", line 35, in require
+    raise ValueError(message)
+ValueError: run paused or hypothesis mismatch
+
+======================================================================
+FAIL: test_clone_safe_read_only_replay_excludes_payload_availability (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 383, in test_clone_safe_read_only_replay_excludes_payload_availability
+    self.assertTrue(summary['hypotheses_all_matched'])
+AssertionError: False is not true
+
+======================================================================
+FAIL: test_finite_matrix_completes_once_and_binds_prelaunch_reservations (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 120, in test_finite_matrix_completes_once_and_binds_prelaunch_reservations
+    self.assertEqual(self.process.call_count, 2)
+AssertionError: 1 != 2
+
+======================================================================
+FAIL: test_sixteen_launch_ceiling_is_enforced (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 273, in test_sixteen_launch_ceiling_is_enforced
+    self.assertEqual(len(state['attempts']), 16)
+AssertionError: 1 != 16
+
+======================================================================
+FAIL: test_strict_signature_mismatch_stops_sequence (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 152, in test_strict_signature_mismatch_stops_sequence
+    self.assertTrue(state['hypothesis_mismatch'])
+AssertionError: False is not true
+
+----------------------------------------------------------------------
+Ran 22 tests in 0.340s
+
+FAILED (failures=4, errors=1)

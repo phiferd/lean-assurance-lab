@@ -1,0 +1,29 @@
+...E..........F.........
+======================================================================
+ERROR: test_clone_safe_read_only_replay_excludes_payload_availability (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 391, in test_clone_safe_read_only_replay_excludes_payload_availability
+    summary = runner.validate_run(self.root, require_payloads=False)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc4_runner.py", line 533, in validate_run
+    work_continuation(state['work'], work, state['accounted_at'], current)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc4_runner.py", line 98, in work_continuation
+    elapsed(previous_time, current_time)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc4_runner.py", line 55, in elapsed
+    require(finite(wall) and finite(mono), 'clock rollback/reboot or invalid work charge')
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/cvc_prep.py", line 35, in require
+    raise ValueError(message)
+ValueError: clock rollback/reboot or invalid work charge
+
+======================================================================
+FAIL: test_output_signatures_do_not_normalize_crlf (test_cvc4_runner.ObserverRunnerTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_cvc4_runner.py", line 355, in test_output_signatures_do_not_normalize_crlf
+    self.assertFalse(state['attempts'][0]['terminal']['hypothesis_matched'])
+AssertionError: True is not false
+
+----------------------------------------------------------------------
+Ran 24 tests in 0.776s
+
+FAILED (failures=1, errors=1)

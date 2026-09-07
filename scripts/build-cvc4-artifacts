@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.cvc4_artifacts import build
+
+if sys.argv[1:] not in (['--write'], ['--check']):
+    raise SystemExit('usage: build-cvc4-artifacts --write|--check')
+value = build(ROOT, write=sys.argv[1] == '--write')
+print('PASS: six exact streams, three pairs, unchanged decoder and historical examples')
