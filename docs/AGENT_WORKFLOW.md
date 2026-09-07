@@ -123,6 +123,24 @@ or when a material change warrants it. Documentation checkpoints validate only
 affected state, generators and checks. These rules apply prospectively and do
 not reinterpret or reopen completed runs.
 
+On macOS, run the complete unit suite through
+`scripts/run-unit-tests-with-signal-retry --require-full-payload`. This invokes
+the original suite and its unchanged assertions with an explicit bounded OS
+adapter: after group `SIGTERM`, macOS can report `EPERM` for a following group
+signal when the leader has already disappeared. Retry that identical signal for
+at most 50 milliseconds; persistent denial, a present leader, and other errors
+still fail. The adapter does not assert cleanup or relax any deadline. Other
+platforms use the original signal behavior.
+
+Use existing process-control permissions for inert fixtures. Preserve a denied
+signal, missing receipt or failed cleanup as an engineering failure, retain
+unknown lifetimes, and verify current process absence before further launches.
+Keep administrative fixture allocations separate and finite. A locally chosen
+administrative allocation may have an explicit prospective successor within the
+authorized repair task; bind its sources and aggregate costs before launch.
+Do not rewrite an exhausted allocation, raise an owner scientific cap, or merge
+separate failed suites into a claimed passing suite.
+
 An available campaign script does not authorize a research frontier. Normative
 source approval and target-specific external submission remain explicit human
 boundaries. Finish a concrete draft and its permissible preflight first, and

@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Run the unchanged unit driver with the bounded Darwin signal retry adapter."""
+from pathlib import Path
+import runpy
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.cvc_signal_retry import signal_retry
+
+
+def main():
+    with signal_retry():
+        runpy.run_path(str(ROOT / 'scripts/run-unit-tests'), run_name='__main__')
+
+
+if __name__ == '__main__':
+    main()
