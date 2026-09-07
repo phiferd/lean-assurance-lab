@@ -50,6 +50,14 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-RUNNER-2` on 2026-09-06 with `SUCCESS` for the bounded runner
+  implementation and instruction repair. Required current/historical checks
+  pass; no Lean, signature, proof or checker ran. The exact manifest and
+  implementation checkpoint are bound by the
+  [entry review](../results/research/conditional-validation-contracts/cvc-runner-2/entry-review.json).
+  CVC-3 is selected READY and unstarted. The failed CVC-RUNNER-1 evidence and
+  broader assurance disagreements remain unchanged.
+
 - Closed `CVC-RUNNER-1` on 2026-09-06 with `BOUNDED_UNRESOLVED`.
   A SIGTERM cancellation fixture terminated the root test controller and left
   one five-second reservation without a terminal receipt. The worker reported
@@ -1878,49 +1886,41 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-RUNNER-2`.
+Selected next item: `CVC-3`.
 
 The [ranked queue](../config/research-queue.json) governs item order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
 decision; CVC-2 retains `SUCCESS` for a `SPECIFICATION_PROPOSAL_UNCHECKED`.
 No Lab proof has been checked. Historical studies remain closed and unchanged.
 
-`CVC-RUNNER-1` is COMPLETE with `BOUNDED_UNRESOLVED`. The first recorded
-cancellation fixture killed the test controller with SIGTERM and left an orphan
-five-second reservation. The worker reported two further discovery runs without
-durable fixture receipts. Actual failed-fixture elapsed cost, timely process-group
-cleanup and five-second cap compliance are unknown. A later process inspection
-found no matching fixture; it does not supply the missing duration evidence.
-Concurrent draft edits also prevented an exact pre-test byte binding. The final
-untested draft and failed tests are archived; the live runner refuses every
-execution/session mode. See the
-[result](../results/research/conditional-validation-contracts/cvc-runner-1/result.json),
-[diagnostic](../results/research/conditional-validation-contracts/cvc-runner-1/stop-diagnostic.json),
-and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-runner-1.json).
-Closure tests establish refusal and preserved failure, not a passing runner.
+`CVC-RUNNER-2` is COMPLETE with `SUCCESS` for the protocol implementation.
+The parent-independent supervisor, source-bound fixture ledger, fixed runtime and
+command manifest, signature-first sequencing, crash accounting, terminal-time
+budget stops and full axiom parser passed inert control tests and required
+current/historical validation. See the
+[result](../results/research/conditional-validation-contracts/cvc-runner-2/result.json),
+[report](../results/research/conditional-validation-contracts/cvc-runner-2/report.md),
+and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-runner-2.json).
+The instructions now require repair of solvable engineering failures within the
+same item and remaining budget, preserving raw failures and assurance gates.
 
-`CVC-RUNNER-2` is ACTIVE for the owner-requested persistent repair. Use the
-[explicit successor proposal](../results/research/conditional-validation-contracts/cvc-runner-1/successor-proposal.json)
-to repair supervision/accounting and complete the unchanged
-[CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json).
-First establish parent-independent fixture timeouts and one durable launch owner;
-bind runner/test bytes before each batch and keep test execution separate from
-concurrent edits. Preserve the original orphan, worker uncertainty, costs and
-failed draft. Bound: two 90-minute sessions, at most 80 inert fixtures, five
-seconds per fixture and 400 process seconds. Zero Lean/Lake, dependency builds,
-signature elaboration, proofs, checkers or network. Stop at passing controls or
-a named bounded implementation gap. Selection does not start this successor.
+`CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its failed cancellation, orphan,
+uninstrumented worker launches and unknown actual duration remain unchanged.
+Its original endpoint still refuses execution. `CVC-PREP-2` remains SUCCESS with
+37 upstream modules and 141 bound products, including the 119 unchanged
+predecessor products. `CVC-PREP-1` remains `BOUNDED_UNRESOLVED`. Combined
+preparation cost remains 3030.60362 active seconds and 49.75494 compilation seconds;
+runner costs and prior uncertainty are linked in the new result.
 
-`CVC-PREP-2` remains SUCCESS: the exact 37-module dependency bundle contains
-141 products, including all 119 unchanged predecessor products. `CVC-PREP-1`
-remains `BOUNDED_UNRESOLVED`. Combined preparation cost stays 50.51 active minutes
-and 49.755 compilation seconds. Availability alone is not a checked contract.
-
-CVC-3 stays PLANNED until CVC-RUNNER-2 succeeds and a separate entry review
-promotes proof execution with committed exact inputs. This explicitly replaces
-the failed CVC-RUNNER-1 prerequisite without treating its result as success.
-The first elaboration of the unchanged CVC-2 signature remains counted attempt
-1 of 12. CVC-4 and CVC-5 remain conditional PLANNED stages.
+`CVC-3` is selected READY and unstarted after the
+[separate committed-input entry review](../results/research/conditional-validation-contracts/cvc-runner-2/entry-review.json).
+Use `scripts/run-cvc-u1-proof-successor`, begin a design session before proof work,
+and retain the fixed CVC3-U1-PROOF-0001 identity and budgets. No signature or proof
+has been elaborated. The first elaboration of the unchanged CVC-2 signature is
+counted attempt 1 of 12. SUCCESS requires all four exact declarations and six
+axiom reports; the separately documented counterexample mode retains NEGATIVE.
+CVC-4 and CVC-5 remain conditional PLANNED stages. This handoff does not execute
+the next item or authorize observer launches.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena
