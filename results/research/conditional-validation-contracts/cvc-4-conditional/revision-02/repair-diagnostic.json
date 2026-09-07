@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-CONDITIONAL",
+  "kind": "REPAIR_PAUSE_DIAGNOSTIC_CONFIGURATION",
+  "at": "2026-09-07T15:05:48.040506+00:00",
+  "previous_run": "CVC4-U1-A7-0001",
+  "prior_attempts": 2,
+  "prior_process_seconds": 0.07013041595928371,
+  "evidence": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-conditional/run-0001/attempts/02/stdout",
+      "sha256": "0a71b2efda8d7ee74114196e589667bc12b5f598b05d08491491855e27a10762"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-conditional/run-0001/attempts/02/stderr",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-conditional/run-0001/attempts/02/supervisor.json",
+      "sha256": "96f727312042514188ea161973c6774a84ee84b0b3871d06a1e39568a8b7a97e"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-conditional/run-0001/attempts/02/request.json",
+      "sha256": "5a1add49a442b4caaa177209ff187ad991466f8e14d39e5f79e9f63c07452c73"
+    }
+  ],
+  "cause": "Nanoda print_axioms defaults true. With no pretty-printer destination, pp_selected_declars appends Unable to print axioms even for an empty axiom set. print_success_message then renders a successful typecheck with a pretty-printer error. The strict original output hypothesis fails, so no original Nanoda control acceptance is retroactively granted.",
+  "source": {
+    "binding": {
+      "path": "results/research/conditional-validation-contracts/cvc-4-conditional/revision-02/nanoda-pretty-printer.rs",
+      "sha256": "586755c34c56ed28f004918ebd872fe6358190dc819a3a5899f3cf06f278946b"
+    },
+    "upstream_path": "src/pretty_printer.rs",
+    "repository": "https://github.com/ammkrn/nanoda_lib",
+    "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "provenance": "Exact local pinned git blob equals copy; source-to-binary proof remains absent.",
+    "start_line": 348,
+    "end_line": 389
+  },
+  "repair": "Set only print_axioms=false in explicit successor configuration files. The input contains no axioms. Keep successful declaration count reporting, exact artifact ASTs/bytes, semantic options, binaries and expected ACCEPT/refusal hypotheses unchanged. New counted controls must pass. This is a diagnostic tooling change under the same active item.",
+  "remaining_scientific_launches": 14,
+  "fresh_matrix_cells": 12,
+  "combined_planned_launches": 14,
+  "work_accounting": "Continue the same work-record and paired clocks; no budget reset or item closure.",
+  "process_control": "Both existing processes completed within timeout with cleanup receipts and known durations. No orphan/process failure or unknown cost is introduced.",
+  "old_evidence": "Original manifest/configs/tooling/output signatures and both reservations remain unchanged; the original Nanoda control keeps hypothesis_matched=false and the original run keeps hypothesis_mismatch=true.",
+  "new_protocol": "config/cvc4-u1-a7-0002.json"
+}

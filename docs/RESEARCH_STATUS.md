@@ -2051,7 +2051,10 @@ ceilings: four fixed candidate/control pairs, 16 validator launches of at most
 30 seconds, and 16200 actual active seconds in intervals of at most 90 minutes.
 Before any launch, bind and commit exact inputs, versions, expected hypotheses,
 source/runtime mapping and tested execution controls. The [active work record](../results/research/conditional-validation-contracts/cvc-4-conditional/work-record.json)
-records the new item; no validator has launched. Original CVC-4 and CVC-5 remain PLANNED with
+records the new item. Two validator launches are retained; the first official
+control passed, and Nanoda returned typecheck success with an unexpected pretty-printer
+error. A same-item configuration/tooling revision preserves the failed output
+hypothesis and all consumed costs before fresh counted controls. Original CVC-4 and CVC-5 remain PLANNED with
 their original dependencies; conditional success does not rewrite CVC-3.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert

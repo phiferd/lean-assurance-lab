@@ -1,0 +1,8 @@
+Administrative entry-review creation was attempted before refresh-current-state finished.
+The guard correctly refused the incomplete refresh; no entry-review file or launch was created.
+Actual output:
+Traceback (most recent call last):
+  File "<stdin>", line 5, in <module>
+AssertionError
+Cause: asserted result.json status COMPLETE while refresh still RUNNING.
+Resolution: wait for the existing refresh to complete, then rerun only review creation.
