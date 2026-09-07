@@ -20,38 +20,21 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-CONDITIONAL-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-3-CONDITIONAL**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 11 | CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor | READY |
-| 12 | CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions | PLANNED |
+| 12 | CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions | READY |
 | 13 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 14 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 15 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
 | 16 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
-
-### 11. CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor
-
-**Target:** CVC-U1-A7 protocol and runner, preserving original semantic signature and exact acceptance/boundary examples
-
-Prepare the new A7 protocol and adapt the existing runner with only the changes needed for exact-seven imported baseline auditing; use only supervised inert control fixtures, with no Lean, dependency or observer launch. No materially new process-runner machinery in CVC-CONDITIONAL-1 unless the A7 baseline genuinely requires it.
-
-**Why this rank:** Highest eligible local work: the seven assumptions have exact source statements and a non-circular conditional interpretation, and the remaining Lab bridge is small. A new bound execution path is necessary at the immutable-input boundary. Pure-normal-form replacement needs a changed strategy and unprinted assumption audit; upstream access is unconfirmed and other research themes remain gated.
-
-**Completion:** New committed protocol/config/assumption envelope and minimal adaptation of the existing runner, regression evidence and exact bound entry review for CVC3-U1-A7-PROOF-0001; preserve all historical inputs and select the proof item without starting it. For any materially new process-runner machinery, record the concrete A7 baseline requirement and why the existing machinery cannot satisfy it.
-
-**Stop:** Two 60-minute sessions; at most 64 supervised fixture reservations, each at most five seconds and at most 320 reserved seconds together including required regression fixtures. Zero proof/dependency/observer launches, network requests or external messages. Repair ordinary defects within this item; stop at a real cap or immutable-input/authority boundary.
-
-**Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: CVC-AXIOMS-1 completes SUCCESS with SUCCESSOR, and CVC-2/CVC-PREP-2/CVC-RUNNER-2 remain SUCCESS. This promotes only explicit successor preparation under its new finite proposal; the old run is terminal and no proof baseline may run here.
 
 ### 12. CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions
 
@@ -59,7 +42,7 @@ Prepare the new A7 protocol and adapt the existing runner with only the changes 
 
 Run a new counted signature and imported-type/axiom baseline, then attempt the four original Lab obligations or a checked counterexample under the fixed conditional protocol.
 
-**Why this rank:** Conditional on a successful committed successor runner; six builds and the existing dependency bundle bound the incremental cost. No assumption is discharged by this proposal.
+**Why this rank:** Highest eligible local item: the minimal conditional protocol is tested, all original semantics and prepared payloads remain bound, and six counted builds cap the first checked bridge attempt. Upstream access remains unconfirmed; pure-normal-form replacement would change strategy, and other themes remain deferred.
 
 **Completion:** Checked EncodingTarget, PreservationTarget, AcceptanceTarget and BoundaryTarget with per-result axioms, checked counterexample or bounded unresolved evidence. No general parser or executable validator refinement claim.
 
@@ -67,7 +50,7 @@ Run a new counted signature and imported-type/axiom baseline, then attempt the f
 
 **Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: CVC-CONDITIONAL-1 SUCCESS and a separately committed stopping-point promotion bind the new exact manifest, commands, seven assumptions, signature/examples and payloads. A baseline must match exact imported types and both seven-axiom reports before Lab proof feedback.
+**Boundary:** READY: CVC-CONDITIONAL-1 SUCCESS with exact committed implementation checkpoint, manifest and separately committed entry review. Read-only payload verification precedes counted signature, then fixed imported-type/exact-A7 baseline; proof feedback requires both successes.
 
 ### 13. CVC-4: Connect the contract to real validation behavior
 
@@ -173,6 +156,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1. Selected next item: CVC-CONDITIONAL-1 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1. Selected next item: CVC-3-CONDITIONAL (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

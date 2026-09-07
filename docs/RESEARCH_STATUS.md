@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-CONDITIONAL-1` on 2026-09-07 with `SUCCESS` for the minimal
+  A7 protocol/runner preparation. No Lean, signature, baseline, Lab proof,
+  dependency or observer launch ran. All 607 full-payload tests pass (534
+  current and 73 unchanged historical; no skips), including 19 new pure A7
+  regressions. The existing process tests consumed 23 reserved launches / 115
+  reserved seconds within the 64 / 320 cap. Exact types, seven comparator
+  assumptions, original semantic inputs, runner and payloads are bound in the
+  [manifest](../config/cvc-u1-a7-proof-0001.json). See the
+  [result](../results/research/conditional-validation-contracts/cvc-conditional-1/result.json),
+  [report](../results/research/conditional-validation-contracts/cvc-conditional-1/report.md),
+  [entry review](../results/research/conditional-validation-contracts/cvc-conditional-1/entry-review.json),
+  and [queue review](../results/research/queue-reviews/2026-09-07-cvc-conditional-1.json).
+  `CVC-3-CONDITIONAL` is selected READY and unstarted. Its counted baseline
+  remains uncompiled; no assumptions are discharged and no Lab result is checked.
+  Final administrative closure validation is retained in the
+  [validation record](../results/workflow-refresh/cvc-conditional-1-2026-09-07/validation.json).
+
 - Completed `CVC-AXIOMS-1` on 2026-09-06 with `SUCCESS` for a source-only
   assumption review and `SUCCESSOR` recommendation. Both retained comparator
   reports contain the same seven assumptions. The two omitted helpers concern
@@ -1923,7 +1940,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-CONDITIONAL-1`.
+Selected next item: `CVC-3-CONDITIONAL`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -1952,28 +1969,31 @@ host envelope. Neither model selection nor independent review approves a
 normative source, proves helper truth or consistency, or establishes runtime
 refinement. The original CVC-2 allowlist remains frozen.
 
-`CVC-CONDITIONAL-1` is selected READY and unstarted. Prepare the new A7
-protocol and minimally adapt the existing runner for the exact imported-type/axiom
-baseline under the
-[finite successor proposal](../results/research/conditional-validation-contracts/cvc-axioms-1/successor-proposal.json).
-Owner scope restriction, 2026-09-07: no materially new process-runner machinery
-in CVC-CONDITIONAL-1 unless the A7 baseline genuinely requires it. Reuse existing
-process supervision, accounting, timeouts and cleanup. Any necessary addition
-must identify the concrete A7 baseline requirement and explain why existing
-machinery cannot satisfy it.
-Bound: two 60-minute sessions and at most 64 supervised inert fixture launches,
-each at most five seconds and together at most 320 reserved seconds, including
-required regression fixtures. It authorizes zero proof, dependency or observer
-launches, network requests, source approvals or external messages. Preserve all
-old runners, evidence and consumed costs; do not resume CVC3-U1-PROOF-0001.
+`CVC-CONDITIONAL-1` is COMPLETE with `SUCCESS` for protocol and minimal runner
+preparation, labeled `PROTOCOL_PREPARED_BASELINE_UNEXECUTED`. The new runner
+reuses existing process supervision, accounting, timeouts and cleanup, with
+successor paths, six-build/two-session limits, and an obligatory audited baseline
+stage. No materially new process machinery was introduced. Canonical reviewed
+type declarations generate the exact baseline source; both comparator axiom
+reports must equal A7, while per-Lab-result reports may use subsets. The
+607-test full-payload suite passes; 23 required inert fixture reservations use
+115 of the 320 reserved-second cap. No Lean, dependency or observer launch ran.
 
-`CVC-3-CONDITIONAL` is PLANNED and unstarted. A later committed entry review
-must promote its new run ID; its proposed bound is six counted builds in two
-60-minute sessions (signature, exact baseline, then normally at most four proof
-attempts), each at most 300 seconds. These are separately authorized successor
-reservations, never the old ten unused slots; original plus proposed proof
-builds are at most eight. CVC-4 and CVC-5 remain PLANNED with their original unmet
-dependencies. A usable conditional result would need an explicit CVC-4 successor.
+`CVC-3-CONDITIONAL` is selected READY and unstarted under its separately committed
+[entry review](../results/research/conditional-validation-contracts/cvc-conditional-1/entry-review.json).
+The exact [manifest](../config/cvc-u1-a7-proof-0001.json) binds new run ID
+`CVC3-U1-A7-PROOF-0001`, the original signature/examples, seven assumptions,
+source-typed baseline, complete prepared payloads and tested runner. Use
+`scripts/run-cvc-u1-a7-proof`. Its bound is six counted builds in two 60-minute
+sessions, at most 300 seconds each: signature, exact imported type/axiom
+baseline, then normally at most four proof builds. Baseline retries consume
+slots and remain baseline until an exact audited success; a fixed-input
+mismatch stops before proof feedback. The baseline is still uncompiled and its
+first actual elaboration belongs to this later item. These are separate
+successor reservations, never the old ten unused slots; original plus proposed
+proof builds are at most eight. No session, ledger or workspace for the new
+proof run has started. CVC-4/CVC-5 remain PLANNED; a usable conditional result
+would require an explicit CVC-4 successor.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
@@ -1981,12 +2001,11 @@ orphan, uninstrumented worker launches and unknown actual duration stay unchange
 Its original endpoint still refuses execution. CVC-PREP-2 remains SUCCESS with
 37 upstream modules and 141 products; CVC-PREP-1 remains `BOUNDED_UNRESOLVED`.
 CVC-3 adds 199.947382292 active seconds and 2.357550584 compilation seconds.
-Aggregate recorded preparation/runner/proof active time is 7174.931631292 seconds;
+Before CVC-CONDITIONAL-1, aggregate preparation/runner/proof active time was 7174.931631292 seconds;
 aggregate preparation/proof compilation time is 52.112492251 seconds. Prior
 unknown fixture duration remains unknown. CVC-AXIOMS-1 source-review time is
 recorded separately in its work record; it adds no research compilation or
-observer time. Required closure validation costs and regression fixtures are
-reported separately.
+observer time. CVC-CONDITIONAL-1 adds 1281.220193 active seconds, for a combined 8456.151824 seconds before its final administrative closure. Its 23 fixture reservations / 115 reserved seconds include the required full-suite fixtures. Final closure time is separately recorded and remains within this item’s total bound. Prior unknown fixture duration stays unknown.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena

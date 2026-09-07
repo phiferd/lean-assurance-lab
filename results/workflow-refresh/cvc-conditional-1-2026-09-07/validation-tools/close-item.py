@@ -1,6 +1,7 @@
 from pathlib import Path
 from datetime import datetime,timezone
-import time,json,hashlib,subprocess
+import time,json,hashlib,subprocess,sys
+sys.path.insert(0, str(Path.cwd()))
 root=Path.cwd();base=Path('results/research/conditional-validation-contracts/cvc-conditional-1');val=Path('results/workflow-refresh/cvc-conditional-1-2026-09-07')
 if (base/'result.json').exists() or (base/'entry-review.json').exists():
  raise SystemExit('Completed preparation closure is immutable; do not regenerate it')

@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "item_id": "CVC-CONDITIONAL-1",
-  "status": "IN_PROGRESS",
+  "status": "COMPLETE",
   "owner": "root",
   "launch_owner": "root only; delegated review must not launch fixtures or edit tested files",
   "started_at": "2026-09-07T11:42:42.567696+00:00",
@@ -40,7 +40,10 @@
     {
       "number": 1,
       "started_at": "2026-09-07T11:42:42.567696+00:00",
-      "started_monotonic": 2071481.159290625
+      "started_monotonic": 2071481.159290625,
+      "ended_at": "2026-09-07T12:04:03.787889+00:00",
+      "ended_monotonic": 2072762.377156208,
+      "charged_seconds": 1281.220193
     }
   ],
   "research_operations": {
@@ -51,5 +54,47 @@
     "source_approvals": 0,
     "external_messages": 0
   },
-  "scope": "Minimal A7 audit/stage adaptation; reuse unchanged supervision, accounting, timeout and cleanup. Required regression fixtures count within the same cap."
+  "scope": "Minimal A7 audit/stage adaptation; reuse unchanged supervision, accounting, timeout and cleanup. Required regression fixtures count within the same cap.",
+  "ended_at": "2026-09-07T12:04:03.787889+00:00",
+  "active_seconds": 1281.220193,
+  "outcome": "SUCCESS",
+  "stop_reason": "Minimal successor controls and bound payloads validated; preserve uncompiled baseline for the separately selected counted proof stage.",
+  "implementation_checkpoint": "40cac6066856a25c8ff5d66691a75b743673ec4a",
+  "delegation": [
+    {
+      "task": "runner_review",
+      "model": "gpt-5.6-terra",
+      "reasoning": "medium",
+      "scope": "read-only design review and tests/test_cvc_a7_runner.py; no launches"
+    },
+    {
+      "task": "baseline_audit",
+      "model": "gpt-5.6-terra",
+      "reasoning": "medium",
+      "scope": "independent source-typed baseline/audit and pure tests; no launches"
+    }
+  ],
+  "fixture_accounting": {
+    "reserved_launches": 23,
+    "reserved_seconds": 115,
+    "charged_seconds": 7.280142167117447,
+    "ledger_directory": "results/workflow-refresh/cvc-conditional-1-2026-09-07/15-full-tests-fixtures",
+    "prior_unknown_fixture_duration": null,
+    "scope": "Required unchanged process regression fixtures within this item cap; new stage/audit tests are pure mocks."
+  },
+  "review_repairs": [
+    "Replace inferred expected types with independent source-written annotations.",
+    "Generate Baseline.lean from canonical expectation declarations and validate exact source correspondence.",
+    "Reject unclaimed transcript output; preserve exact A7 sets and independent per-result subsets."
+  ],
+  "closure_note": "Implementation, source review and full required test run counted in this session. Final queue/report generation, validation and Git delivery are separately timed administrative closure, with zero additional fixture or proof launches.",
+  "administrative_diagnostics": [
+    {
+      "operation": "close-item.py final evidence manifest generation",
+      "outcome": "FAILED before manifest creation; result, entry review, queue and status writes completed",
+      "raw_failure": "results/workflow-refresh/cvc-conditional-1-2026-09-07/close-item-failure.log",
+      "cause": "Repository root missing from Python module search path when script is executed from its nested directory.",
+      "repair": "Add root to script import path. Preserve existing closure state and complete only the missing manifest tail through finish-manifest.py. No fixture, proof or network research launch occurred; no state or counters reset."
+    }
+  ]
 }
