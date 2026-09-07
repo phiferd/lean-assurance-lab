@@ -40,17 +40,17 @@ Selected next item: **CVC-A7-REPAIR-1**. Status, rank and bounds come from `conf
 
 **Target:** CVC-U1-A7 fixed types/assumptions and original EncodingTarget, PreservationTarget, AcceptanceTarget, BoundaryTarget
 
-Repair the transcript audit through an explicit immutable-input successor, then attempt the unchanged conditional obligations only after its committed baseline gates pass.
+Repair the transcript audit through a versioned tooling continuation within this item, then attempt the unchanged conditional obligations after its committed baseline gates pass.
 
 **Why this rank:** Highest eligible local work: actual baseline output exposes deterministic parser defects, with no scientific counterexample or new semantic gap. A bounded repair retains the original strategy and caps aggregate A7 builds at six. Upstream access is unconfirmed; replacing the semantic strategy or activating other themes has weaker feasibility.
 
 **Completion:** A new parser/protocol binding with pure transcript and rejection regressions; then checked original obligations, checked counterexample, or bounded unresolved evidence with exact retained costs and next recommendation.
 
-**Stop:** One remaining 60-minute session with at most 3600 additional active seconds including repair; four new builds of at most 300 seconds, signature then baseline then normally two proofs. All A7 attempts combined at most six; original CVC-3 plus A7 at most eight. Zero dependency/checker/network launches. Required inert tests are separately reserved and bounded. Stop at true cap, immutable-input/authority boundary or documented unrepairable gap; repair ordinary errors within scope.
+**Stop:** At most 7144.402256750036 additional active seconds including repair, across recorded intervals of at most 60 minutes without forfeiting unused time; four new builds of at most 300 seconds, signature then audited baseline then normally two proofs. Combined A7 at most six builds/7200 active seconds; original CVC-3 plus A7 at most eight builds. Zero dependencies/checkers/research network. Version tooling and repair ordinary failures within the same item; focused checks at repair checkpoints, full suite at logical closure. Stop only at real cap, scientific-input/authority boundary or documented unrepairable gap.
 
-**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: This stopping-point review authorizes local repair through new paths. Research launches require separately committed and tested successor controller, exact manifest and baseline gate review within this same bounded item. No existing terminal run may resume.
+**Boundary:** READY: Owner-authorized prospective repair policy in config/cvc-a7-repair-policy.json. Remain in this item through ordinary engineering repairs, using new per-attempt tooling bindings and preserved cumulative counters. Before Lean feedback, commit the tested continuation controller, manifest, baseline and entry review; historical terminal runs remain closed.
 
 ### 14. CVC-4: Connect the contract to real validation behavior
 

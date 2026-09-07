@@ -2006,21 +2006,24 @@ assumption discharge is established. No proof feedback or observer ran. The
 terminal ledger retains two attempts, four unspent slots, 55.59774324996397
 research seconds and 2.71219816734083 compilation seconds.
 
-`CVC-A7-REPAIR-1` is selected READY and unstarted. Local repair must use an
-explicit successor with new bindings and pure regressions from the exact raw
-transcript. The original seven assumptions, independent types, signature and
-four proof obligations stay fixed. Before any Lean feedback, commit the tested
-successor controller, manifest, baseline and entry review. Its bound is at most
-four new 300-second builds: signature, exact audited baseline, then normally two
-proofs; baseline retries consume slots. Combined A7 builds remain at most six,
-and original CVC-3 plus A7 at most eight. Carry the consumed research time:
-at most 3600 additional active seconds in the one remaining 60-minute session,
-including repair. Combined A7 sessions remain at most two; unused time in the
-closed first session is not recovered. No dependency, observer or research network
-launches are authorized. No successor manifest, workspace, session or proof
-source has started. CVC-4/CVC-5 remain PLANNED; a usable A7 result would require
-an explicit CVC-4 successor. See the
-[stopping-point review](../results/research/queue-reviews/2026-09-07-cvc-3-conditional.json).
+`CVC-A7-REPAIR-1` is selected READY and unstarted under the owner-authorized
+[prospective repair policy](../config/cvc-a7-repair-policy.json) and
+[policy decision](../results/research/queue-reviews/2026-09-07-repair-policy.json).
+Keep scientific inputs and historical attempts fixed; bind tooling revisions
+within this same item. Parser/audit implementation defects pause for repair
+without automatic closure. Exact baseline acceptance still precedes proof
+feedback, and each new attempt binds its tested controller/source revision.
+
+The remaining bound is four new 300-second builds and 7144.402256750036 actual
+active seconds, including repair. Recorded intervals are at most 60 minutes;
+checkpoints do not forfeit unused time. The original A7 totals remain six builds
+and 7200 active seconds; including original CVC-3, at most eight builds. This
+explicitly supersedes the previous prospective one-session/3600-second decision
+without rewriting that historical review or reopening either terminal run.
+No dependency, observer or research-network launch is authorized. Use focused
+checks at repair checkpoints and the required full suite at logical closure.
+Commit and push the policy documents before starting this item. CVC-4/CVC-5
+remain PLANNED; a usable A7 result would require an explicit CVC-4 successor.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
@@ -2047,9 +2050,10 @@ feedback/dispositions remain unknown. Repair access with
 `gh auth login -h github.com --web`, then rank a fresh bounded check after
 successful preflight. No repeated polling is enabled.
 
-This turn closes one bounded item and selects the next without starting it.
-It changes no normative-source approval or old catalog disposition and
-publishes no external message. Reevaluate at the next stop using
+At each logical research-item closure, select the next item without starting it
+unless the owner has explicitly requested continuation. This policy checkpoint
+changes no normative-source approval or catalog disposition and publishes no
+external research message. Reevaluate at the next stop using
 [Research workflow](RESEARCH_WORKFLOW.md).
 
 ### Waiting

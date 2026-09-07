@@ -74,19 +74,11 @@ record. Keep the commitment until its success, negative-result, unresolved,
 or budget stop. Record new ideas as candidates; novelty alone does not displace
 an active item. Checkpoints for breaks or context handoff resume the same item.
 
-An ordinary implementation or test failure stays inside that item while its
-authorized scope and remaining budget permit repair. Preserve raw evidence,
-diagnose the cause, add a minimal regression, repair it, and run affected
-validation. It is neither a scientific negative nor a completion condition, and
-does not justify a successor or a budget reset. Pause launches after an
-accounting, cleanup, timeout, or process-control fault; reconcile durable
-records conservatively before continuing safe repairs. Keep one launch owner
-and bind exact source/test inputs before each batch; independent delegated
-reviews may continue without launches. End or replace the item only for a real
-cap, authority or external blocker, immutable-input transition, or an implementation gap with no feasible
-authorized repair path remaining. Preserve attempted repairs and explain why
-other available paths are blocked; ordinary difficulty or one failed check is
-not sufficient.
+Ordinary implementation or test failures stay inside the active item while
+its scope and budget permit repair. Use the versioned repair procedure below;
+complete the item only at its scientific result, real cumulative cap, authority
+or external blocker, scientific-input transition, or a documented implementation
+gap for which no feasible authorized repair remains.
 
 At every stop:
 
@@ -122,6 +114,59 @@ will refuse to present an empty/blocked queue as operationally ready.
 
 Deliver the completed item on `main` using `scripts/push-main`, as required by
 `AGENTS.md`. A push to a task branch is not completed repository delivery.
+
+## Engineering repairs and evidence versions
+
+Owner-authorized correction, 2026-09-07. This policy applies prospectively to
+new execution protocols and the selected CVC-A7 repair. Completed protocols,
+failed attempts, frozen manifests and historical decisions retain their bytes
+and original interpretation.
+
+Freeze the scientific question: input meaning, target declarations, permitted
+assumptions, expected outcomes, selected runtime/dependency identities and total
+resource ceilings. Version the engineering implementation: output parsers,
+auditing code, runner controls, proof implementation and tests. A tooling defect
+is not a scientific mismatch or a reason to close the active research item.
+A parser or audit failure pauses new launches for diagnosis; only an actual
+change to a fixed scientific input or a demonstrated semantic mismatch invokes
+the corresponding scientific boundary.
+
+Before resuming after a repair, retain the raw failure, add the smallest useful
+regression and record a new exact tooling revision with its source/test hashes,
+validation evidence and reason. Every attempt binds the scientific manifest,
+tooling revision, exact source and generated compiler input before launch.
+Validate old attempts with their original bound tooling, not the latest parser.
+If a frozen controller cannot represent the repair, use a new controller or
+manifest revision under the SAME active research item; carry all consumed
+counters and time. A controller revision is not a new research item, a free
+attempt, or permission to reinterpret earlier evidence. Never reopen a terminal
+historical run; a separately identified continuation can inherit its costs.
+
+Charge actual cumulative active work, including implementation, diagnosis and
+proof work, using paired UTC/monotonic interval records. Breaks and checkpoints
+may subdivide the allowance without forfeiting unused time or resetting costs.
+For protocols adopting this policy, queue `max_sessions × session_minutes`
+specifies the cumulative time allocation; recorded work intervals do not consume
+whole allocations. The new protocol must enforce its explicit remaining-second
+ceiling and per-process timeout. Closed protocols retain their original session
+rules. Every actual build reservation still counts, including failures, setup,
+baselines and interrupted launches. Unknown costs stay unknown or receive the
+recorded conservative charge; they never become zero.
+
+Keep one launch owner. Pause and reconcile accounting, timeout, process-control
+or cleanup faults before any further launch. Tooling repair must preserve the
+acceptance predicate and reject missing, extra or malformed semantic evidence;
+changing an expected result, weakening a gate, or expanding an assumption list
+is not an engineering repair.
+
+Use focused regressions and affected validators at implementation checkpoints.
+Run the required complete current/historical suite at logical research-item
+closure, or earlier when a material change invalidates prior assurance. A
+routine tooling repair, documentation commit or bookkeeping checkpoint does not
+by itself trigger a full closure, reranking or full-suite replay. Documentation
+checkpoints require queue/status agreement, affected generation checks and diff
+checks. Preserve exact validation inputs and logs; reuse an unchanged input
+manifest rather than duplicating it for every command.
 
 ## Literature is a first-class task
 

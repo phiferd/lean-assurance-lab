@@ -110,18 +110,18 @@ Report progress at meaningful boundaries; unattended mechanical loops should
 stop on changed inputs, depleted budgets, an exceptional result or an action
 requiring human judgment.
 
-Keep repairing ordinary engineering defects within the active item while its
-scope and budget permit: preserve the failure, diagnose it, add a minimal
-regression, repair it, and rerun affected validation. A failed ordinary test is
-not a scientific negative, item completion, or a reason to reset accounting or
-create a successor. For accounting, cleanup, timeout, or process-control
-failures, pause launches, reconcile costs conservatively, and continue safe
-repairs. One launch owner binds exact source/test bytes before each batch;
-delegated reviews may run independently but do not launch fixtures or mutate
-the tested files. End the item only at a real bound, authority/external blocker,
-immutable-input transition, or an implementation gap with no feasible authorized repair path
-remaining. Preserve attempted repairs and explain why other available paths
-are blocked; ordinary difficulty or one failed check is not sufficient.
+Keep repairing ordinary engineering defects within the same active item.
+Follow the versioned repair procedure in `docs/RESEARCH_WORKFLOW.md`: scientific
+inputs and old evidence stay fixed, while new attempts may bind corrected
+tooling. A controller/manifest revision is an implementation checkpoint, not a
+new research item. Output-format/audit-code failures pause launches for repair
+without becoming scientific results. Preserve failed reservations and actual
+cumulative active time across checkpoints; do not forfeit unused time because
+a work interval ended. Reconcile process/accounting faults before resuming.
+Use focused checks for repairs and the required full suite at logical closure
+or when a material change warrants it. Documentation checkpoints validate only
+affected state, generators and checks. These rules apply prospectively and do
+not reinterpret or reopen completed runs.
 
 An available campaign script does not authorize a research frontier. Normative
 source approval and target-specific external submission remain explicit human

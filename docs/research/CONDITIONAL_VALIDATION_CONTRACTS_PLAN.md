@@ -227,9 +227,37 @@ assumptions as model choices. It preserves strategy replaceability by reviewing
 formalization against tactical alternatives after each bounded result. It
 preserves history through new paths and unchanged predecessor attestations.
 
+## Prospective repair-policy amendment — 2026-09-07
+
+The owner authorized the engineering corrections in
+[Research workflow](../RESEARCH_WORKFLOW.md#engineering-repairs-and-evidence-versions).
+Apply them to CVC-A7-REPAIR-1 and new protocols: preserve scientific inputs and
+old attempt bytes, version tooling within the same item, classify parser/audit
+implementation errors as repair pauses, and carry actual cumulative active
+seconds and every consumed build across controller revisions. A repair cannot
+weaken exact type/axiom auditing or permit proof feedback before the baseline.
+
+The original A7 total remains six builds and 7200 active seconds. The completed
+run consumed two builds and 55.59774324996397 seconds. Its explicit continuation
+therefore permits at most four new builds and 7144.402256750036 additional active
+seconds, including runner repair and proof work. Work intervals may be split or
+resumed without forfeiting time; each interval is at most 60 minutes. Retain
+300-second compiler timeouts and zero dependency/observer/research-network
+launches. Count the fresh signature and baseline; normally two proof attempts
+remain. No other scientific scope or resource ceiling increases. Old terminal
+runs and their historical session-count decisions remain unchanged.
+
+Implementation revisions must bind exact sources/tests and pass affected
+regressions before another launch; they do not require item closure or a new
+queue selection. Run the full required suite at logical item closure. The
+owner-requested documentation checkpoint preceding this continuation needs
+queue/status agreement, affected generator/currency checks and diff checks;
+it adds no proof or checker evidence and does not rerun the unchanged full suite.
+
 ## Validation and handoff
 
-For this planning/frontier transition, validate the queue, its focused tests,
+At a scientific frontier transition or logical research-item closure, validate
+the queue, its focused tests,
 the full-payload unit suite (including unchanged historical-transition tests),
 the historical publication study, contribution catalog, current derived
 artifacts, and final queue/review consistency:

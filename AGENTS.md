@@ -42,15 +42,28 @@ repair it, and rerun the affected validation. Do not reset counters, reuse a
 completed attempt, weaken a gate, or edit frozen evidence to make the repair
 pass.
 
-Pause further launches for an accounting, timeout, cleanup, or process-control
-failure. Reconcile the ledger conservatively, retain unknown costs as unknown,
-then continue safe local repairs and non-launch validation. Stop only for a
-real cap, an authority or external blocker, an immutable-input change requiring
-an explicit successor, or a named implementation gap for which no feasible authorized repair path
-remains. Record attempted repairs and why remaining options are blocked;
-ordinary difficulty or one failed check is not sufficient. One owner controls launches and binds the exact
-source/test inputs before each batch; delegated read-only review may proceed
-independently.
+Freeze scientific inputs and preserve every prior evidence/tooling binding.
+Parsers, audit implementations, runner controls and tests may be repaired within
+the SAME active item through a new exact tooling revision. A frozen controller
+may require a new execution-manifest revision, but that is not a new research
+item or a budget reset. Validate old attempts against their original tooling.
+Classify an output-format or audit-code defect as a repair pause, not as a
+scientific mismatch or automatic terminal result.
+
+Pause launches for accounting, timeout, cleanup or process-control failures;
+reconcile conservatively before resuming. One owner binds exact scientific,
+source, tooling and test inputs before each batch. Charge actual cumulative
+active work; checkpoints do not consume whole time allocations. Preserve all
+failed build reservations. Apply these rules prospectively through
+`docs/RESEARCH_WORKFLOW.md` and the current bound protocol; historical runs keep
+their original rules and are never reopened.
+
+Run focused checks during repairs and the required full suite at logical item
+closure, or earlier for a material assurance change. Documentation or tooling
+checkpoints do not automatically close or rerank research. Stop only for a real
+cap, authority/external blocker, scientific-input change or documented gap with
+no feasible authorized repair path. Preserve attempted repairs and explain the
+remaining blocker.
 
 ## Repository delivery and external actions
 
