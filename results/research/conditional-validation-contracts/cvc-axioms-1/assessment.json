@@ -1,0 +1,359 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-AXIOMS-1",
+  "outcome": "SUCCESS",
+  "scientific_status": "SOURCE_ASSUMPTION_REVIEW_ONLY",
+  "decision": "SUCCESSOR",
+  "question": "Can the exact imported comparator assumptions support a useful conditional contract without assuming the promised preservation result?",
+  "assumptions": [
+    {
+      "name": "propext",
+      "statement_excerpt_ids": [
+        "Core:1580-1591"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "STANDARD_ALLOWED",
+      "interpretation": "For propositions a and b, logical equivalence implies equality. This is a target-theory assumption, not a claim about executable comparison or object-language axioms in an input artifact.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "propext"
+          ],
+          "evidence_excerpt_ids": [],
+          "status": "TRANSITIVE_REPORT_ONLY"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "propext"
+          ],
+          "evidence_excerpt_ids": [],
+          "status": "TRANSITIVE_REPORT_ONLY"
+        }
+      ],
+      "discharge": "Retain as an explicit foundation of the named host theory. Avoiding it would require a separately checked constructive/relation-based development; source review cannot discharge a foundation axiom.",
+      "exact_source_statement_with_namespace_context": "axiom propext {a b : Prop} : (a \u2194 b) \u2192 a = b",
+      "declaration_text": "axiom propext {a b : Prop} : (a \u2194 b) \u2192 a = b"
+    },
+    {
+      "name": "Classical.choice",
+      "statement_excerpt_ids": [
+        "Prelude:781-818"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "STANDARD_ALLOWED",
+      "interpretation": "From Nonempty \u03b1 for any Sort u, select an \u03b1. It supplies classical reasoning in host proofs; it does not assert an algorithm for selecting data or approve new object-language axioms.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Classical.choice"
+          ],
+          "evidence_excerpt_ids": [],
+          "status": "TRANSITIVE_REPORT_ONLY"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "classical separation reasoning",
+            "Classical.choice"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:2598-2616",
+            "Classical:7-38"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        }
+      ],
+      "discharge": "Retain as an explicit foundation. Constructive separation/completeness may be an alternative, but a full proof-term dependency graph and choice-free replacement were not extracted in this bounded review.",
+      "exact_source_statement_with_namespace_context": "axiom Classical.choice {\u03b1 : Sort u} : Nonempty \u03b1 \u2192 \u03b1",
+      "declaration_text": "axiom Classical.choice {\u03b1 : Sort u} : Nonempty \u03b1 \u2192 \u03b1"
+    },
+    {
+      "name": "Quot.sound",
+      "statement_excerpt_ids": [
+        "Core:1767-1787"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "STANDARD_ALLOWED",
+      "interpretation": "Related elements are equal in the primitive quotient. It is a host-theory quotient principle. Function extensionality in Core uses it; no consistency proof follows.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Quot.sound"
+          ],
+          "evidence_excerpt_ids": [],
+          "status": "TRANSITIVE_REPORT_ONLY"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "Quot.sound"
+          ],
+          "evidence_excerpt_ids": [],
+          "status": "TRANSITIVE_REPORT_ONLY"
+        },
+        {
+          "nodes": [
+            "funext",
+            "Quot.sound"
+          ],
+          "evidence_excerpt_ids": [
+            "Core:2266-2288"
+          ],
+          "status": "SOURCE_VISIBLE_PATH"
+        }
+      ],
+      "discharge": "Retain the quotient foundation. Replacing function equalities with pointwise relations is a research alternative, not evidence that the pinned comparator reports no longer depend on this axiom.",
+      "exact_source_statement_with_namespace_context": "namespace Quot\naxiom sound : \u2200 {\u03b1 : Sort u} {r : \u03b1 \u2192 \u03b1 \u2192 Prop} {a b : \u03b1}, r a b \u2192 Quot.mk r a = Quot.mk r b",
+      "declaration_text": "axiom sound : \u2200 {\u03b1 : Sort u} {r : \u03b1 \u2192 \u03b1 \u2192 Prop} {a b : \u03b1}, r a b \u2192 Quot.mk r a = Quot.mk r b"
+    },
+    {
+      "name": "Lean.Level.instLawfulBEqLevel",
+      "statement_excerpt_ids": [
+        "Axioms:290-292",
+        "Core:781-804",
+        "RuntimeLevel:255-258"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "UNLISTED",
+      "interpretation": "Assumes LawfulBEq for the particular BEq Level instance: Boolean self-equality is true and Boolean equality implies actual Lean.Level equality. The implementation is an opaque extern lean_level_eq. This is stronger than saying levels have equal numerical denotations; it is an unproved host primitive correspondence assumption.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Lean.Level.isEquiv_wf",
+            "Lean.Level.instLawfulBEqLevel"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3808-3815",
+            "Axioms:290-292"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "Lean.Level.isEquiv_wf",
+            "Lean.Level.instLawfulBEqLevel"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3858-3864",
+            "Axioms:290-292"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        }
+      ],
+      "discharge": "No proof of the opaque extern is available in the inspected sources. A new transparent structural equality with a proved lawfulness instance could support a changed comparator; equivalence to the existing extern would still need a separate bridge. Testing equality cannot prove this universal axiom.",
+      "exact_source_statement_with_namespace_context": "namespace Lean.Level\n@[instance] axiom instLawfulBEqLevel : LawfulBEq Level",
+      "declaration_text": "@[instance] axiom instLawfulBEqLevel : LawfulBEq Level"
+    },
+    {
+      "name": "Lean.Level.isExplicitSubsumedAux_eq",
+      "statement_excerpt_ids": [
+        "Axioms:162-257",
+        "RuntimeLevel:311-411"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "UNLISTED",
+      "interpretation": "Extensional equality of the private partial array-scanning helper and its total copy, for all arrays, offsets and indices. The total recursion advances i and can use the remaining array length as a termination measure. The original helper is logically opaque; comparing the visible clauses is evidence for a correspondence hypothesis, not a Lean proof of that equality.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Lean.Level.isEquiv_wf",
+            "uninspected Verify.LevelStd interior",
+            "Lean.Level.isExplicitSubsumedAux_eq"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:1-7",
+            "VerifyLevel:3808-3815",
+            "Axioms:162-257"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "Lean.Level.isEquiv_wf",
+            "uninspected Verify.LevelStd interior",
+            "Lean.Level.isExplicitSubsumedAux_eq"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3858-3864",
+            "Axioms:162-257"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        }
+      ],
+      "discharge": "Use a total helper directly in an explicit new comparator/model or formalize a source-to-runtime refinement. A local induction about the total copy does not prove equality to the imported opaque partial constant. No such discharge was checked here.",
+      "exact_source_statement_with_namespace_context": "namespace Lean.Level\n@[simp] axiom isExplicitSubsumedAux_eq : isExplicitSubsumedAux = Total.isExplicitSubsumedAux",
+      "declaration_text": "@[simp] axiom isExplicitSubsumedAux_eq : isExplicitSubsumedAux = Total.isExplicitSubsumedAux"
+    },
+    {
+      "name": "Lean.Level.normalize_eq",
+      "statement_excerpt_ids": [
+        "Axioms:162-257",
+        "RuntimeLevel:311-411"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "HELPER_ALLOWED",
+      "interpretation": "Extensional equality between the core partial normalizer and Total.normalize. This is a substantial algorithm-to-logic bridge over every Level, not merely a termination annotation. The total body still calls private skipExplicit, isExplicitSubsumed and mkMaxAux; the axiom name does not imply that every helper bridge is proved or used by each target.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Lean.Level.isEquiv_wf",
+            "uninspected Verify.LevelStd interior",
+            "Lean.Level.normalize_eq"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3808-3815",
+            "Axioms:162-257"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "Lean.Level.isEquiv_wf",
+            "uninspected Verify.LevelStd interior",
+            "Lean.Level.normalize_eq"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3858-3864",
+            "Axioms:162-257"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        }
+      ],
+      "discharge": "A transparent total comparator could avoid the opaque normalizer, but would change the accepted strategy and require fresh proof and exact acceptance checks. Source similarity and finite tests are insufficient to discharge normalize_eq. Do not describe this assumption as already proved or trivial.",
+      "exact_source_statement_with_namespace_context": "namespace Lean.Level\naxiom normalize_eq : normalize = Total.normalize",
+      "declaration_text": "axiom normalize_eq : normalize = Total.normalize"
+    },
+    {
+      "name": "Std.TreeMap.all_eq_all_toList",
+      "statement_excerpt_ids": [
+        "Axioms:1-15"
+      ],
+      "observed_in": [
+        "Lean.Level.isEquiv'_wf",
+        "Lean.Level.isEquiv'_complete"
+      ],
+      "previous_policy": "HELPER_ALLOWED",
+      "interpretation": "For arbitrary key/value types, comparison function, map and Boolean predicate, TreeMap.all equals List.all over the map entry list. This is a data-structure traversal bridge. Its source links a historical upstream issue; no current disposition was queried.",
+      "dependency_paths": [
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_wf",
+            "Lean.Level.Normalize.NormLevel.eval_congr",
+            "Std.TreeMap.all_eq_all_toList"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3808-3815",
+            "VerifyLevel:1270-1290"
+          ],
+          "status": "SOURCE_VISIBLE_PATH"
+        },
+        {
+          "nodes": [
+            "Lean.Level.isEquiv'_complete",
+            "normal-form completeness and comparison traversal",
+            "Std.TreeMap.all_eq_all_toList"
+          ],
+          "evidence_excerpt_ids": [
+            "VerifyLevel:3858-3864",
+            "VerifyLevel:1236-1253"
+          ],
+          "status": "SOURCE_VISIBLE_PARTIAL_PATH"
+        }
+      ],
+      "discharge": "Prove the map traversal lemma against pinned implementation internals or explicitly use toList.all in a successor comparator. Those internals are outside this source allocation; existing calls and the printed reports justify retaining it as conditional, not asserting discharge.",
+      "exact_source_statement_with_namespace_context": "namespace Std.TreeMap\nvariable {\u03b1 : Type u} {\u03b2 : Type v} {cmp : \u03b1 \u2192 \u03b1 \u2192 Ordering} {t : TreeMap \u03b1 \u03b2 cmp}\naxiom all_eq_all_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.all p = t.toList.all fun a => p a.1 a.2",
+      "declaration_text": "axiom all_eq_all_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.all p = t.toList.all fun a => p a.1 a.2"
+    }
+  ],
+  "previous_allowed_not_observed": [
+    "Std.TreeMap.any_eq_any_toList"
+  ],
+  "dependency_evidence_scope": "The retained CVC-3 stdout mechanically establishes all seven transitive leaves for both imported comparators. Source-visible paths explain uses but are not a reconstructed proof-term DAG. Verify.LevelStd internals remain uninspected; printed membership must not be relabeled as a complete intermediate path.",
+  "noncircularity": "None of the seven exact statements mentions Lab.Accepts, Contract, EncodingTarget or PreservationTarget. The four helper axioms concern primitive equality, normalization/helper correspondence and map traversal. Conditional reuse still leaves owned-name encoding, positional evaluation and the fixed acceptance/boundary obligations to prove. Their lower-level scope does not establish their truth or joint consistency.",
+  "alternatives": [
+    {
+      "id": "EXPLICIT_CONDITIONAL_REUSE",
+      "decision": "SELECT",
+      "reason": "Keeps the exact semantic judgment and existing strategy while exposing the real assumption boundary. The minimal missing work is protocol/runner succession and the local proof, with finite ceilings and no new upstream compilation."
+    },
+    {
+      "id": "PURE_NORMAL_FORM_COMPARATOR",
+      "decision": "RETAIN_ALTERNATIVE",
+      "reason": "VerifyLevel exposes Normalize.normalize_eval/eval_congr and normalize_complete, suggesting a route that omits the core isEquiv fast path. No reduced axiom closure was printed, the acceptance definition would change, and all_eq_all_toList remains visibly used. Do not claim an assumption-free replacement."
+    },
+    {
+      "id": "DISCHARGE_OPAQUE_RUNTIME_BRIDGES",
+      "decision": "DEFER",
+      "reason": "Proving equality to opaque extern/partial constants needs more than Lab proof edits: a changed transparent implementation or an explicit refinement model and separate source scope. It is higher-cost and not necessary for a clearly conditional result."
+    },
+    {
+      "id": "STOP_CONTRACT_PHASE",
+      "decision": "NOT_SELECTED",
+      "reason": "A small non-circular encoding-to-comparator bridge remains useful for the existing imax artifact ambiguity. Stop remains mandatory if the new baseline differs, the finite proof bound is exhausted, or no useful scoped result remains."
+    }
+  ],
+  "provenance_limit": "The two Lean4Lean files match earlier exact hashes. Four source files from the already-selected v4.33.0-rc2 installation are newly hashed local observations; the old runtime inventory binds compiled products, not those source bytes. Neither local hashes nor matching release labels prove source-to-binary correspondence. A future baseline must print the imported declaration types and compare them to the reviewed statements before claiming correspondence.",
+  "claim_limits": [
+    "No new Lean, proof, dependency, checker or research fixture launch.",
+    "No checked Lab theorem, counterexample, axiom discharge or joint-consistency claim.",
+    "No source-to-binary proof, general NDJSON parser proof, whole-validator refinement or universal Lean conformance claim.",
+    "The seven-axiom envelope is a proposed named-model condition; CVC-2 allowlist and CVC-3 outcome remain unchanged.",
+    "No normative-source approval, catalog promotion, new defect claim or upstream publication.",
+    "Required repository regression processes are administrative closure checks and are separately counted in validation.json; zero research launches is not a claim of zero validation processes."
+  ],
+  "recommendation": {
+    "action": "Prepare one explicit conditional protocol and runner successor, then stop for separate promotion of the bounded proof.",
+    "target": "CVC-CONDITIONAL-1 for model CVC-U1-A7",
+    "priority": 11,
+    "prerequisites": [
+      "This source review and required repository checks pass and are delivered on main.",
+      "Preserve old source/protocol/allowlist, terminal CVC-3 evidence and every previous cost/unknown.",
+      "Freeze the exact seven assumptions, required declaration types, baseline audit and new run identity before proof feedback."
+    ],
+    "evidence_refs": [
+      "results/research/conditional-validation-contracts/cvc-3/stop-diagnostic.json",
+      "results/research/conditional-validation-contracts/cvc-axioms-1/source-excerpts.json"
+    ]
+  },
+  "external_action": {
+    "decision": "NO_EXTERNAL_ACTION_NOW",
+    "target": "Potential later Lean4Lean conditional bridge/reuse contribution",
+    "priority": "AFTER_CHECKED_RESULT",
+    "reason": "Source review characterizes known axiom declarations and a Lab allowlist omission; it does not establish a new upstream defect.",
+    "prerequisites": [
+      "A usable checked result or useful precise unresolved result",
+      "An artifact/implementation connection when warranted",
+      "Target-specific human submission authorization"
+    ]
+  },
+  "successor_proposal": "successor-proposal.json",
+  "independent_review": "independent-review.json"
+}

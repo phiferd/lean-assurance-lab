@@ -1,0 +1,233 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-AXIOMS-1",
+  "scope": "Source observations only; line slices preserve exact statement context. Local runtime release-source provenance is weaker than the two predecessor hash-bound Lean4Lean files.",
+  "sources": [
+    {
+      "id": "Axioms",
+      "path": "external/cvc-u1-dependencies-0002/src/Lean4Lean/Verify/Axioms.lean",
+      "sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "bytes": 20498,
+      "prior_binding": {
+        "path": "config/cvc-u1-dependencies-0002.json",
+        "file": "Lean4Lean/Verify/Axioms.lean",
+        "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+        "status": "EXACT_PREDECESSOR_HASH_VERIFIED"
+      }
+    },
+    {
+      "id": "VerifyLevel",
+      "path": "external/cvc-u1-dependencies-0002/src/Lean4Lean/Verify/Level.lean",
+      "sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+      "bytes": 197856,
+      "prior_binding": {
+        "path": "config/cvc-u1-dependencies-0002.json",
+        "file": "Lean4Lean/Verify/Level.lean",
+        "revision": "8223d223ed98661882e95d9d6a7126df7097cd76",
+        "status": "EXACT_PREDECESSOR_HASH_VERIFIED"
+      }
+    },
+    {
+      "id": "Prelude",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Prelude.lean",
+      "sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+      "bytes": 235820,
+      "prior_binding": {
+        "path": "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "version": "leanprover/lean4:v4.33.0-rc2",
+        "status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW",
+        "limitation": "Prior runtime manifest covers executable/import bytes, not src/lean. This source observation does not establish source-to-binary correspondence or authenticate release contents."
+      }
+    },
+    {
+      "id": "Core",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Core.lean",
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "bytes": 102417,
+      "prior_binding": {
+        "path": "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "version": "leanprover/lean4:v4.33.0-rc2",
+        "status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW",
+        "limitation": "Prior runtime manifest covers executable/import bytes, not src/lean. This source observation does not establish source-to-binary correspondence or authenticate release contents."
+      }
+    },
+    {
+      "id": "Classical",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Classical.lean",
+      "sha256": "4e3bb021681d948c72dd3ab90d849e67999776dcabca4de55e8da14593474815",
+      "bytes": 9069,
+      "prior_binding": {
+        "path": "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "version": "leanprover/lean4:v4.33.0-rc2",
+        "status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW",
+        "limitation": "Prior runtime manifest covers executable/import bytes, not src/lean. This source observation does not establish source-to-binary correspondence or authenticate release contents."
+      }
+    },
+    {
+      "id": "RuntimeLevel",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Lean/Level.lean",
+      "sha256": "560a7b5fde58937f69e9cf85b96d33f0aafcac2a9aec64776347de5e611d1303",
+      "bytes": 23650,
+      "prior_binding": {
+        "path": "results/research/conditional-validation-contracts/cvc-2/runtime-inventory.json",
+        "version": "leanprover/lean4:v4.33.0-rc2",
+        "status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW",
+        "limitation": "Prior runtime manifest covers executable/import bytes, not src/lean. This source observation does not establish source-to-binary correspondence or authenticate release contents."
+      }
+    }
+  ],
+  "excerpts": [
+    {
+      "id": "Axioms:1-15",
+      "source_id": "Axioms",
+      "start_line": 1,
+      "end_line": 15,
+      "text": "import Batteries.Tactic.OpenPrivate\nimport Lean4Lean.Std.Basic\nimport Lean4Lean.Std.NodupKeys\n\nnamespace Std.TreeMap\n\nvariable {\u03b1 : Type u} {\u03b2 : Type v} {cmp : \u03b1 \u2192 \u03b1 \u2192 Ordering} {t : TreeMap \u03b1 \u03b2 cmp}\n\n/-- https://github.com/leanprover/lean4/issues/12798 -/\naxiom all_eq_all_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.all p = t.toList.all fun a => p a.1 a.2\n\n/-- https://github.com/leanprover/lean4/issues/12798 -/\naxiom any_eq_any_toList {p : \u03b1 \u2192 \u03b2 \u2192 Bool} :\n    t.any p = t.toList.any fun a => p a.1 a.2\n",
+      "sha256": "7ad1c991b6dc8e61dafc5d7406e2700aaf0a273a1f6719a65be0681f58d2a796"
+    },
+    {
+      "id": "Axioms:120-130",
+      "source_id": "Axioms",
+      "start_line": 120,
+      "end_line": 130,
+      "text": "/-!\n### A total copy of `Lean.Level.normalize`\n\n`Lean.Level.normalize` and four of its helpers are `partial def`s, so they are opaque and nothing\ncan be proved about them. The `Total` namespace below is a clause-by-clause copy of\n[Lean's `Lean/Level.lean`](https://github.com/leanprover/lean4/blob/v4.33.0-rc2/src/Lean/Level.lean#L319-L404),\nunder the same names, with the termination proofs supplied. That makes `normalize_eq` below a\npurely syntactic trust assumption, checkable by reading the two definitions side by side;\n`Lean4Lean.Tests.LevelStd` also checks it on a finite corpus of levels.\n-/\nnamespace Total\n",
+      "sha256": "583502c6bcf8141378e5b624124c3be0d0d70fa670fe18e1053ab3486f6e5461"
+    },
+    {
+      "id": "Axioms:162-257",
+      "source_id": "Axioms",
+      "start_line": 162,
+      "end_line": 257,
+      "text": "end Total\nopen private accMax mkIMaxAux mkMaxAux skipExplicit isExplicitSubsumedAux\n  isExplicitSubsumed from Lean.Level\n\ndef Total.mkMaxAux (lvls : Array Level) (extraK : Nat) (i : Nat)\n    (prev : Level) (prevK : Nat) (result : Level) : Level :=\n  if h : i < lvls.size then\n    let lvl   := lvls[i]\n    let curr  := lvl.getLevelOffset\n    let currK := lvl.getOffset\n    if curr == prev then mkMaxAux lvls extraK (i+1) curr currK result\n    else mkMaxAux lvls extraK (i+1) curr currK (accMax result prev (extraK + prevK))\n  else accMax result prev (extraK + prevK)\n\n/-- Patch for `partial def Lean.Level.mkMaxAux`. -/\n@[simp] axiom mkMaxAux_eq : mkMaxAux = Total.mkMaxAux\n\ndef Total.skipExplicit (lvls : Array Level) (i : Nat) : Nat :=\n  if h : i < lvls.size then\n    if lvls[i].getLevelOffset.isZero then skipExplicit lvls (i+1) else i\n  else i\n\n/-- Patch for `partial def Lean.Level.skipExplicit`. -/\n@[simp] axiom skipExplicit_eq : skipExplicit = Total.skipExplicit\n\ndef Total.isExplicitSubsumedAux (lvls : Array Level) (maxExplicit : Nat) (i : Nat) : Bool :=\n  if h : i < lvls.size then\n    if lvls[i].getOffset \u2265 maxExplicit then true\n    else isExplicitSubsumedAux lvls maxExplicit (i+1)\n  else false\n\n/-- Patch for `partial def Lean.Level.isExplicitSubsumedAux`. -/\n@[simp] axiom isExplicitSubsumedAux_eq : isExplicitSubsumedAux = Total.isExplicitSubsumedAux\n\nmutual\n\n/-- A total copy of `partial def Lean.Level.normalize`. -/\ndef Total.normalize (l : Level) : Level :=\n  if isAlreadyNormalizedCheap l then l else\n  let k := l.getOffset\n  match h : l.getLevelOffset with\n  | .max l\u2081 l\u2082 =>\n    let lvls  := getMaxArgsAux l\u2081 false #[]\n    let lvls  := getMaxArgsAux l\u2082 false lvls\n    let lvls  := lvls.qsort normLt\n    let firstNonExplicit := skipExplicit lvls 0\n    let i := if isExplicitSubsumed lvls firstNonExplicit then firstNonExplicit\n              else firstNonExplicit - 1\n    let lvl\u2081  := lvls[i]!\n    let prev  := lvl\u2081.getLevelOffset\n    let prevK := lvl\u2081.getOffset\n    mkMaxAux lvls k (i+1) prev prevK Level.zero\n  | .imax l\u2081 l\u2082 =>\n    if l\u2082.isNeverZero then addOffset (normalize (mkLevelMax l\u2081 l\u2082)) k\n    else addOffset (mkIMaxAux (normalize l\u2081) (normalize l\u2082)) k\n  | _ => unreachable!\ntermination_by (1, 3 * size l + tag l)\ndecreasing_by all_goals\n  refine .right _ ?_\n  have hsz := size_getLevelOffset l\n  rw [h] at hsz\n  simp only [size] at hsz\n  have := one_le_size l\u2081\n  have := one_le_size l\u2082\n  have := tag_le l\u2081\n  have := tag_le l\u2082\n  first\n  | omega\n  | have ht : tag l = 1 := by simp [tag, h]\n    have e1 : size (mkLevelMax l\u2081 l\u2082) = size l\u2081 + size l\u2082 + 1 := rfl\n    have e2 : tag (mkLevelMax l\u2081 l\u2082) = 0 := rfl\n    omega\n\ndef Total.getMaxArgsAux : Level \u2192 Bool \u2192 Array Level \u2192 Array Level\n  | .max l\u2081 l\u2082, norm, lvls => getMaxArgsAux l\u2082 norm (getMaxArgsAux l\u2081 norm lvls)\n  | l, false, lvls => getMaxArgsAux (normalize l) true lvls\n  | l, true, lvls => lvls.push l\ntermination_by l b => (if b then 0 else 1, 3 * size l + tag l + 1)\ndecreasing_by\n  any_goals cases norm\n  any_goals first | refine .right _ ?_ | exact .left _ _ (by decide)\n  all_goals first\n  | omega\n  | have e1 : size (Level.max l\u2081 l\u2082) = size l\u2081 + size l\u2082 + 1 := rfl\n    have e2 : tag (Level.max l\u2081 l\u2082) = 0 := rfl\n    have := one_le_size l\u2081\n    have := one_le_size l\u2082\n    have := tag_le l\u2081\n    have := tag_le l\u2082\n    omega\n\nend\n\n/-- `Lean.Level.normalize` is a `partial def`, so it is opaque;\n`Total.normalize` above is a total copy of it. -/\naxiom normalize_eq : normalize = Total.normalize\n",
+      "sha256": "a0fc53015b248565c4df6a16a21b07c5523df9f4fc3b78d97ad2c5cae22e6bfa"
+    },
+    {
+      "id": "Axioms:290-292",
+      "source_id": "Axioms",
+      "start_line": 290,
+      "end_line": 292,
+      "text": "\n/-- This is because the `BEq` instance is implemented in C++ -/\n@[instance] axiom instLawfulBEqLevel : LawfulBEq Level\n",
+      "sha256": "18aed62b42bffa5bea0227cb309c2b4acca74ae6f7cf82001659cd95a5970465"
+    },
+    {
+      "id": "VerifyLevel:1-7",
+      "source_id": "VerifyLevel",
+      "start_line": 1,
+      "end_line": 7,
+      "text": "import Lean4Lean.Theory.VLevel\nimport Lean4Lean.Level\nimport Lean4Lean.Verify.Name\nimport Lean4Lean.Verify.LevelStd\nimport Lean4Lean.Verify.Axioms\nimport Std.Tactic.BVDecide\nimport Std.Data.TreeMap.Lemmas\n",
+      "sha256": "90900f4b368bda8e98387e9683d0020e28d6de98f2818674cdfe6e5836244f99"
+    },
+    {
+      "id": "VerifyLevel:1236-1253",
+      "source_id": "VerifyLevel",
+      "start_line": 1236,
+      "end_line": 1253,
+      "text": "bounded by the total of `l\u2082`. -/\ntheorem NormLevel.le_eval {l\u2081 l\u2082 : NormLevel}\n    (wf\u2082 : \u2200 p n, l\u2082.get? p = some n \u2192 \u2200 v \u2208 n.var, v.var \u2208 p)\n    (h : l\u2081.le l\u2082) : l\u2081.eval ls \u03c1 \u2264 l\u2082.eval ls \u03c1 := by\n  refine NormLevel.eval_le.2 fun p\u2081 n\u2081 h\u2081 => evalPath_le.2 fun nz => ?_\n  -- an entry of `l\u2082` at a key below `p\u2081` is bounded by the total, on a live condition set\n  have hbd p\u2082 n\u2082 (h\u2082 : l\u2082.get? p\u2082 = some n\u2082) (hsub : subset compare p\u2082 p\u2081) :\n      (\u2200 v \u2208 n\u2082.var, 0 < evalParam ls \u03c1 v.var) \u2227 Node.eval ls \u03c1 n\u2082 \u2264 l\u2082.eval ls \u03c1 := by\n    have hnz : allNZ ls \u03c1 p\u2082 := allNZ_mono (fun _ h => subset_mem hsub h) nz\n    refine \u27e8fun v hv => ?_, ?_\u27e9\n    \u00b7 simp only [allNZ, List.all_eq_true, decide_eq_true_eq] at hnz\n      exact hnz _ (wf\u2082 _ _ h\u2082 _ hv)\n    \u00b7 have := evalPath_le.1 (NormLevel.eval_le.1 (Nat.le_refl (l\u2082.eval ls \u03c1)) _ _ h\u2082)\n      exact this hnz\n  rw [NormLevel.le, Std.TreeMap.all_eq_all_toList, List.all_eq_true] at h\n  have hf := h (p\u2081, n\u2081) (Std.TreeMap.mem_toList_iff_getElem?_eq_some.2 (by simpa using h\u2081))\n  simp only [Std.TreeMap.foldlM_eq_foldlM_toList, Option.isNone_iff_eq_none] at hf\n  have hmem pn (h : pn \u2208 l\u2082.toList) : l\u2082.get? pn.1 = some pn.2 :=\n",
+      "sha256": "6fac2955ded2f5b797b872744e68ead8f7023b9802c7af6cf23794c027da0584"
+    },
+    {
+      "id": "VerifyLevel:1270-1290",
+      "source_id": "VerifyLevel",
+      "start_line": 1270,
+      "end_line": 1290,
+      "text": "theorem Node.eval_congr {a b : Node} (H : a == b) : a.eval ls \u03c1 = b.eval ls \u03c1 := by\n  simp +instances [instBEqNode] at H; simp [H, eval]\n\ntheorem NormLevel.eval_congr {a b : NormLevel} (H : a == b) : a.eval ls \u03c1 = b.eval ls \u03c1 := by\n  simp +instances only [instBEqNormLevel, Std.TreeMap.all_eq_all_toList,\n    Bool.and_eq_true, List.all_eq_true] at H\n  suffices \u2200 {a b : NormLevel}, (\u2200 x \u2208 a.toList, b.get? x.1 == some x.2) \u2192\n      a.eval ls \u03c1 \u2264 b.eval ls \u03c1 from Nat.le_antisymm (this H.1) (this H.2)\n  clear a b H; intro a b H\n  simp only [eval, Std.TreeMap.foldl_eq_foldl_toList]\n  rw [\u2190 a.toList.reverse_reverse] at H \u22a2; generalize a.toList.reverse = a at H \u22a2\n  simp only [List.mem_reverse, Std.TreeMap.get?_eq_getElem?, List.foldl_reverse] at H \u22a2\n  induction a with | nil => exact Nat.zero_le _ | cons p l ih; let (x, y) := p\n  simp only [List.mem_cons, or_imp, forall_and, forall_eq, List.foldr_cons] at H \u22a2\n  refine Nat.max_le.2 \u27e8ih H.2, ?_\u27e9\n  let \u27e8y', h1, h2\u27e9 := Option.beq_some_iff.1 H.1\n  have H := Std.TreeMap.mem_toList_iff_getElem?_eq_some.2 h1\n  rw [\u2190 b.toList.reverse_reverse] at H \u22a2; generalize b.toList.reverse = b at H \u22a2\n  simp only [List.mem_reverse, List.foldl_reverse] at H \u22a2\n  induction b with | nil => cases H | cons p l ih; let (x, y) := p\n  simp; obtain \u27e8\u27e9 | \u27e8_, (H : _ \u2208 l)\u27e9 := H\n",
+      "sha256": "b0bb75d510f1840ae36a966db2429f881a524264da24eabe18c7301f3eb1014f"
+    },
+    {
+      "id": "VerifyLevel:2598-2616",
+      "source_id": "VerifyLevel",
+      "start_line": 2598,
+      "end_line": 2616,
+      "text": "  | .var _ _ _, \u27e8_, hn, hx\u27e9 =>\n    Nat.le_trans (evalPath_mono (Node.var_le_eval hx))\n      (NormLevel.eval_le.1 (Nat.le_refl _) _ _ hn)\n\ntheorem NormLevel.lt_eval {s : NormLevel} :\n    m < eval ls \u03c1 s \u2194 \u2203 p n, s.get? p = some n \u2227 m < evalPath ls \u03c1 p (Node.eval ls \u03c1 n) := by\n  refine \u27e8fun h => ?_, fun \u27e8p, n, hn, hlt\u27e9 =>\n    Nat.lt_of_lt_of_le hlt (NormLevel.eval_le.1 (Nat.le_refl _) _ _ hn)\u27e9\n  refine Classical.byContradiction fun hc => ?_\n  exact absurd (eval_le.2 fun p n hn => Nat.not_lt.1 fun hlt => hc \u27e8p, n, hn, hlt\u27e9)\n    (Nat.not_le.2 h)\n\ntheorem Node.lt_eval {n : Node} :\n    m < Node.eval ls \u03c1 n \u2194 m < n.const \u2228 \u2203 v \u2208 n.var, m < VarNode.eval ls \u03c1 v := by\n  refine \u27e8fun h => ?_, fun h => ?_\u27e9\n  \u00b7 refine Classical.byContradiction fun hc => ?_\n    rw [not_or] at hc; obtain \u27e8h\u2081, h\u2082\u27e9 := hc\n    refine absurd (Node.eval_le.2 \u27e8Nat.not_lt.1 h\u2081, fun v hv => Nat.not_lt.1 fun hlt => ?_\u27e9)\n      (Nat.not_le.2 h)\n",
+      "sha256": "96dabd1b98765957645d794e389164a364d1f739bfbb0e0fd14bc780fd292d42"
+    },
+    {
+      "id": "VerifyLevel:3588-3620",
+      "source_id": "VerifyLevel",
+      "start_line": 3588,
+      "end_line": 3620,
+      "text": "      \u00b7 split at h <;> [cases h; skip]\n        cases h\n        exact (hvsacc _ _ h\u2082).sublist minimize_var_sublist\n      \u00b7 exact hvsacc _ _ h\n    \u00b7 rw [hstep] at hp; split at hp <;> rename_i hpe\n      \u00b7 split at hp <;> [cases hp; skip]\n        cases hp; subst hpe\n        exact minimize_exact hsorta hvsacc h\u2082 t t' hnt (subsumption_step_hasSub h\u2082 ht') hle\n      \u00b7 refine hred p n hp ?_ t t' hnt (subsumption_step_hasSub h\u2082 ht') hle\n        simp only [List.map_cons, List.mem_cons, not_or]\n        exact \u27e8fun e => hpe e.symm, hnp\u27e9\n\ntheorem normalize_reduced : (normalize u).Reduced := by\n  refine NormLevel.subsumption_reduced ?_ (normalizeAux_sortedVars fun _ _ => by simp)\n  exact fun p n h => (normalizeAux_wf (by simp) (by simp [NormLevel.WF]) p n h).2.2\n\n/-! Canonicity: two reduced normal forms with the same semantics have the same sublevels,\nand hence are equal maps. -/\n\ninstance : LawfulBEq Node where\n  rfl {a} := by cases a <;> simp! +instances [instBEqNode]\n  eq_of_beq {a b} h := by\n    cases a; cases b\n    simp! +instances [instBEqNode] at h\n    simp [h.1, h.2]\n\ntheorem VarsSorted.eq_of_mem_iff : \u2200 {l\u2081 l\u2082 : List VarNode}, VarsSorted l\u2081 \u2192 VarsSorted l\u2082 \u2192\n    (\u2200 x, x \u2208 l\u2081 \u2194 x \u2208 l\u2082) \u2192 l\u2081 = l\u2082\n  | [], [], _, _, _ => rfl\n  | [], _ :: _, _, _, h => nomatch (h _).2 (.head _)\n  | _ :: _, [], _, _, h => nomatch (h _).1 (.head _)\n  | a :: l\u2081, b :: l\u2082, h\u2081, h\u2082, h => by\n    cases show a = b by\n",
+      "sha256": "b571a5c68153f0ce67c96b59dea057fac10875629bee3f0b9d7050bcb78e6f97"
+    },
+    {
+      "id": "VerifyLevel:3808-3815",
+      "source_id": "VerifyLevel",
+      "start_line": 3808,
+      "end_line": 3815,
+      "text": "theorem isEquiv'_wf (h : isEquiv' u v)\n    (hu : VLevel.ofLevel ls u = some u') (hv : VLevel.ofLevel ls v = some v') : u' \u2248 v' := by\n  simp only [isEquiv', Bool.or_eq_true] at h\n  obtain h | h := h\n  \u00b7 exact isEquiv_wf h hu hv\n  \u00b7 refine VLevel.equiv_def.2 fun \u03c1 => ?_\n    rw [\u2190 Normalize.normalize_eval (\u03c1 := \u03c1) hu, \u2190 Normalize.normalize_eval (\u03c1 := \u03c1) hv]\n    exact Normalize.NormLevel.eval_congr h\n",
+      "sha256": "3e8816fa8f739a8c11e9731a85e46092bf7c422799bd132de36e4c27a8100dd9"
+    },
+    {
+      "id": "VerifyLevel:3858-3864",
+      "source_id": "VerifyLevel",
+      "start_line": 3858,
+      "end_line": 3864,
+      "text": "/-- Completeness of `isEquiv'`: semantically equal levels have equal normal forms. Both\nnormal forms are reduced (`subsumption_reduced`), mutually dominate each other's sublevels\n(`separation`), and reduced forms with the same sublevels are the same map. -/\ntheorem isEquiv'_complete (hu : VLevel.ofLevel ls u = some u')\n    (hv : VLevel.ofLevel ls v = some v') : isEquiv' u v \u2194 u' \u2248 v' := by\n  simp only [isEquiv', Bool.or_eq_true, Normalize.normalize_complete hu hv]\n  exact \u27e8fun h => h.elim (fun h => isEquiv_wf h hu hv) id, .inr\u27e9\n",
+      "sha256": "fafcd5f936621bacf475ea4f5195245ee93b520a430ee05393cb577ab484fc6f"
+    },
+    {
+      "id": "Prelude:781-818",
+      "source_id": "Prelude",
+      "start_line": 781,
+      "end_line": 818,
+      "text": "\nexport Inhabited (default)\n\n/--\n`Nonempty \u03b1` is a typeclass that says that `\u03b1` is not an empty type,\nthat is, there exists an element in the type. It differs from `Inhabited \u03b1`\nin that `Nonempty \u03b1` is a `Prop`, which means that it does not actually carry\nan element of `\u03b1`, only a proof that *there exists* such an element.\nGiven `Nonempty \u03b1`, you can construct an element of `\u03b1` *nonconstructively*\nusing `Classical.choice`.\n-/\nclass inductive Nonempty (\u03b1 : Sort u) : Prop where\n  /-- If `val : \u03b1`, then `\u03b1` is nonempty. -/\n  | intro (val : \u03b1) : Nonempty \u03b1\n\n/--\n**The axiom of choice**. `Nonempty \u03b1` is a proof that `\u03b1` has an element,\nbut the element itself is erased. The axiom `choice` supplies a particular\nelement of `\u03b1` given only this proof.\n\nThe textbook axiom of choice normally makes a family of choices all at once,\nbut that is implied from this formulation, because if `\u03b1 : \u03b9 \u2192 Type` is a\nfamily of types and `h : \u2200 i, Nonempty (\u03b1 i)` is a proof that they are all\nnonempty, then `fun i => Classical.choice (h i) : \u2200 i, \u03b1 i` is a family of\nchosen elements. This is actually a bit stronger than the ZFC choice axiom;\nthis is sometimes called \"[global choice](https://en.wikipedia.org/wiki/Axiom_of_global_choice)\".\n\nIn Lean, we use the axiom of choice to derive the law of excluded middle\n(see `Classical.em`), so it will often show up in axiom listings where you\nmay not expect. You can use `#print axioms my_thm` to find out if a given\ntheorem depends on this or other axioms.\n\nThis axiom can be used to construct \"data\", but obviously there is no algorithm\nto compute it, so Lean will require you to mark any definition that would\ninvolve executing `Classical.choice` or other axioms as `noncomputable`, and\nwill not produce any executable code for such definitions.\n-/\naxiom Classical.choice {\u03b1 : Sort u} : Nonempty \u03b1 \u2192 \u03b1\n",
+      "sha256": "193127d49d552577eb137fef4e69136245b70e49e0e0291cd9db617f6d14adf6"
+    },
+    {
+      "id": "Core:781-804",
+      "source_id": "Core",
+      "start_line": 781,
+      "end_line": 804,
+      "text": "/-- `ReflBEq \u03b1` says that the `BEq` implementation is reflexive. -/\nclass ReflBEq (\u03b1) [BEq \u03b1] : Prop where\n  /-- `==` is reflexive, that is, `(a == a) = true`. -/\n  protected rfl {a : \u03b1} : a == a\n\n@[simp] theorem BEq.rfl [BEq \u03b1] [ReflBEq \u03b1] {a : \u03b1} : a == a := ReflBEq.rfl\ntheorem BEq.refl [BEq \u03b1] [ReflBEq \u03b1] (a : \u03b1) : a == a := BEq.rfl\n\ntheorem beq_of_eq [BEq \u03b1] [ReflBEq \u03b1] {a b : \u03b1} : a = b \u2192 a == b\n  | rfl => BEq.rfl\n\ntheorem not_eq_of_beq_eq_false [BEq \u03b1] [ReflBEq \u03b1] {a b : \u03b1} (h : (a == b) = false) : \u00aca = b := by\n  intro h'; subst h'; have : true = false := BEq.rfl.symm.trans h; contradiction\n\n/--\nA Boolean equality test coincides with propositional equality.\n\nIn other words:\n * `a == b` implies `a = b`.\n * `a == a` is true.\n-/\nclass LawfulBEq (\u03b1 : Type u) [BEq \u03b1] : Prop extends ReflBEq \u03b1 where\n  /-- If `a == b` evaluates to `true`, then `a` and `b` are equal in the logic. -/\n  eq_of_beq : {a b : \u03b1} \u2192 a == b \u2192 a = b\n",
+      "sha256": "46b440498b7f371f3a4e6b1799cfb305b28de4e10a5290f5ad78bfeccc94c544"
+    },
+    {
+      "id": "Core:1580-1591",
+      "source_id": "Core",
+      "start_line": 1580,
+      "end_line": 1591,
+      "text": "/-! # Propositional extensionality -/\n\n/--\nThe [axiom](lean-manual://section/axioms) of **propositional extensionality**. It asserts that if\npropositions `a` and `b` are logically equivalent (that is, if `a` can be proved from `b` and vice\nversa), then `a` and `b` are *equal*, meaning `a` can be replaced with `b` in all contexts.\n\nThe standard logical connectives provably respect propositional extensionality. However, an axiom is\nneeded for higher order expressions like `P a` where `P : Prop \u2192 Prop` is unknown, as well as for\nequality. Propositional extensionality is intuitionistically valid.\n-/\naxiom propext {a b : Prop} : (a \u2194 b) \u2192 a = b\n",
+      "sha256": "110d4e640c52aecb48b255b5389dac85df410f992949280cf144c93a84d9b310"
+    },
+    {
+      "id": "Core:1767-1787",
+      "source_id": "Core",
+      "start_line": 1767,
+      "end_line": 1787,
+      "text": "/-! # Quotients -/\n\nnamespace Quot\n/--\nThe **quotient axiom**, which asserts the equality of elements related by the quotient's relation.\n\nThe relation `r` does not need to be an equivalence relation to use this axiom. When `r` is not an\nequivalence relation, the quotient is with respect to the equivalence relation generated by `r`.\n\n`Quot.sound` is part of the built-in primitive quotient type:\n * `Quot` is the built-in quotient type.\n * `Quot.mk` places elements of the underlying type `\u03b1` into the quotient.\n * `Quot.lift` allows the definition of functions from the quotient to some other type.\n * `Quot.ind` is used to write proofs about quotients by assuming that all elements are constructed\n   with `Quot.mk`; it is analogous to the [recursor](lean-manual://section/recursors) for a\n   structure.\n\n[Quotient types](lean-manual://section/quotients) are described in more detail in the Lean Language\nReference.\n-/\naxiom sound : \u2200 {\u03b1 : Sort u} {r : \u03b1 \u2192 \u03b1 \u2192 Prop} {a b : \u03b1}, r a b \u2192 Quot.mk r a = Quot.mk r b\n",
+      "sha256": "22dcbee8242b08e63d79abb30f323269d130964d3cdf8138de026c29a73bd6ef"
+    },
+    {
+      "id": "Core:2266-2288",
+      "source_id": "Core",
+      "start_line": 2266,
+      "end_line": 2288,
+      "text": "        | isTrue h\u2081  => isTrue (Quotient.sound h\u2081)\n        | isFalse h\u2082 => isFalse fun h => absurd (Quotient.exact h) h\u2082\n\n/-! # Function extensionality -/\n\n/--\n**Function extensionality.** If two functions return equal results for all possible arguments, then\nthey are equal.\n\nIt is called \u201cextensionality\u201d because it provides a way to prove two objects equal based on the\nproperties of the underlying mathematical functions, rather than based on the syntax used to denote\nthem. Function extensionality is a theorem that can be [proved using quotient\ntypes](lean-manual://section/quotient-funext).\n-/\ntheorem funext {\u03b1 : Sort u} {\u03b2 : \u03b1 \u2192 Sort v} {f g : (x : \u03b1) \u2192 \u03b2 x}\n    (h : \u2200 x, f x = g x) : f = g := by\n  let eqv (f g : (x : \u03b1) \u2192 \u03b2 x) := \u2200 x, f x = g x\n  let extfunApp (f : Quot eqv) (x : \u03b1) : \u03b2 x :=\n    Quot.liftOn f\n      (fun (f : \u2200 (x : \u03b1), \u03b2 x) => f x)\n      (fun _ _ h => h x)\n  change extfunApp (Quot.mk eqv f) = extfunApp (Quot.mk eqv g)\n  exact congrArg extfunApp (Quot.sound h)\n",
+      "sha256": "592025fcf13f518fe2af3d676a9faccb5dfc72be1d9e49b1b4f2b19d27d2cfa3"
+    },
+    {
+      "id": "Classical:7-38",
+      "source_id": "Classical",
+      "start_line": 7,
+      "end_line": 38,
+      "text": "\nprelude\npublic import Init.PropLemmas\n\n@[expose] public section\n\nuniverse u v\n\n/-! # Classical reasoning support -/\n\nnamespace Classical\n\nnoncomputable def indefiniteDescription {\u03b1 : Sort u} (p : \u03b1 \u2192 Prop) (h : \u2203 x, p x) : {x // p x} :=\n  choice <| let \u27e8x, px\u27e9 := h; \u27e8\u27e8x, px\u27e9\u27e9\n\n/--\nGiven that there exists an element satisfying `p`, returns one such element.\n\nThis is a straightforward consequence of, and equivalent to, `Classical.choice`.\n\nSee also `choose_spec`, which asserts that the returned value has property `p`.\n-/\nnoncomputable def choose {\u03b1 : Sort u} {p : \u03b1 \u2192 Prop} (h : \u2203 x, p x) : \u03b1 :=\n  (indefiniteDescription p h).val\n\ntheorem choose_spec {\u03b1 : Sort u} {p : \u03b1 \u2192 Prop} (h : \u2203 x, p x) : p (choose h) :=\n  (indefiniteDescription p h).property\n\n/-- **Diaconescu's theorem**: excluded middle from choice, Function extensionality and propositional extensionality. -/\ntheorem em (p : Prop) : p \u2228 \u00acp :=\n  let U (x : Prop) : Prop := x = True \u2228 p\n  let V (x : Prop) : Prop := x = False \u2228 p\n",
+      "sha256": "5c6fe8b1f145421218936b983cac85575abacc8cab2c3fcdf692df2fba04b554"
+    },
+    {
+      "id": "RuntimeLevel:255-258",
+      "source_id": "RuntimeLevel",
+      "start_line": 255,
+      "end_line": 258,
+      "text": "@[extern \"lean_level_eq\"]\nprotected opaque beq (a : @& Level) (b : @& Level) : Bool\n\ninstance : BEq Level := \u27e8Level.beq\u27e9\n",
+      "sha256": "b4106dad3496bcb651e033d819c9f9f1e5599e2f68b5b197ea6aa43baa9eab0d"
+    },
+    {
+      "id": "RuntimeLevel:311-411",
+      "source_id": "RuntimeLevel",
+      "start_line": 311,
+      "end_line": 411,
+      "text": "/-- Auxiliary function used at `normalize` -/\nprivate def mkIMaxAux : Level \u2192 Level \u2192 Level\n  | _,    zero   => zero\n  | zero, u      => u\n  | succ zero, u => u\n  | u\u2081,   u\u2082     => if u\u2081 == u\u2082 then u\u2081 else mkLevelIMax u\u2081 u\u2082\n\n/-- Auxiliary function used at `normalize` -/\n@[specialize] private partial def getMaxArgsAux (normalize : Level \u2192 Level) : Level \u2192 Bool \u2192 Array Level \u2192 Array Level\n  | max l\u2081 l\u2082, alreadyNormalized, lvls => getMaxArgsAux normalize l\u2082 alreadyNormalized (getMaxArgsAux normalize l\u2081 alreadyNormalized lvls)\n  | l,           false,             lvls => getMaxArgsAux normalize (normalize l) true lvls\n  | l,           true,              lvls => lvls.push l\n\nprivate def accMax (result : Level) (prev : Level) (offset : Nat) : Level :=\n  if result.isZero then prev.addOffset offset\n  else mkLevelMax result (prev.addOffset offset)\n\n/--\n   Auxiliary function used at `normalize`.\n   Remarks:\n   - `lvls` are sorted using `normLt`\n   - `extraK` is the outer offset of the `max` term. We will push it inside.\n   - `i` is the current array index\n   - `prev + prevK` is the \"previous\" level that has not been added to `result` yet.\n   - `result` is the accumulator\n-/\nprivate partial def mkMaxAux (lvls : Array Level) (extraK : Nat) (i : Nat) (prev : Level) (prevK : Nat) (result : Level) : Level :=\n  if h : i < lvls.size then\n    let lvl   := lvls[i]\n    let curr  := lvl.getLevelOffset\n    let currK := lvl.getOffset\n    if curr == prev then\n      mkMaxAux lvls extraK (i+1) curr currK result\n    else\n      mkMaxAux lvls extraK (i+1) curr currK (accMax result prev (extraK + prevK))\n  else\n    accMax result prev (extraK + prevK)\n\n/--\n  Auxiliary function for `normalize`. It assumes `lvls` has been sorted using `normLt`.\n  It finds the first position that is not an explicit universe.\n-/\nprivate partial def skipExplicit (lvls : Array Level) (i : Nat) : Nat :=\n  if h : i < lvls.size then\n    let lvl := lvls[i]\n    if lvl.getLevelOffset.isZero then skipExplicit lvls (i+1) else i\n  else\n    i\n\n/--\nAuxiliary function for `normalize`.\n`maxExplicit` is the maximum explicit universe level at `lvls`.\nReturn true if it finds a level with offset \u2265 maxExplicit.\n`i` starts at the first non explicit level.\nIt assumes `lvls` has been sorted using `normLt`.\n-/\nprivate partial def isExplicitSubsumedAux (lvls : Array Level) (maxExplicit : Nat) (i : Nat) : Bool :=\n  if h : i < lvls.size then\n    let lvl := lvls[i]\n    if lvl.getOffset \u2265 maxExplicit then true\n    else isExplicitSubsumedAux lvls maxExplicit (i+1)\n  else\n    false\n\n/-- Auxiliary function for `normalize`. See `isExplicitSubsumedAux` -/\nprivate def isExplicitSubsumed (lvls : Array Level) (firstNonExplicit : Nat) : Bool :=\n  if firstNonExplicit == 0 then false\n  else\n    let max := lvls[firstNonExplicit - 1]!.getOffset\n    isExplicitSubsumedAux lvls max firstNonExplicit\n\npartial def normalize (l : Level) : Level :=\n  if isAlreadyNormalizedCheap l then l\n  else\n    let k := l.getOffset\n    let u := l.getLevelOffset\n    match u with\n    | max l\u2081 l\u2082 =>\n      let lvls  := getMaxArgsAux normalize l\u2081 false #[]\n      let lvls  := getMaxArgsAux normalize l\u2082 false lvls\n      let lvls  := lvls.qsort normLt\n      let firstNonExplicit := skipExplicit lvls 0\n      let i := if isExplicitSubsumed lvls firstNonExplicit then firstNonExplicit else firstNonExplicit - 1\n      let lvl\u2081  := lvls[i]!\n      let prev  := lvl\u2081.getLevelOffset\n      let prevK := lvl\u2081.getOffset\n      mkMaxAux lvls k (i+1) prev prevK Level.zero\n    | imax l\u2081 l\u2082 =>\n      if l\u2082.isNeverZero then addOffset (normalize (mkLevelMax l\u2081 l\u2082)) k\n      else\n        let l\u2081 := normalize l\u2081\n        let l\u2082 := normalize l\u2082\n        addOffset (mkIMaxAux l\u2081 l\u2082) k\n    | _ => unreachable!\n\n/--\nReturn true if `u` and `v` denote the same level.\nCheck is currently incomplete.\n-/\ndef isEquiv (u v : Level) : Bool :=\n  u == v || u.normalize == v.normalize\n",
+      "sha256": "36181d3a1c1a625272123a4d0479782ab418c1258d443a07e9702f28fa8ee184"
+    }
+  ]
+}

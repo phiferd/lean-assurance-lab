@@ -1,0 +1,265 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-AXIOMS-1",
+  "review_id": "CVC-AXIOMS-1-INDEPENDENT-REVIEW",
+  "reviewer": "assumption_review",
+  "review_type": "INDEPENDENT_SOURCE_ONLY_SCIENTIFIC_REVIEW",
+  "scientific_status": "CONDITIONAL_SUCCESSOR_RECOMMENDATION_NOT_PROOF",
+  "input_commit": "549bb3938bccb2ddd51460b4d58db8f042d7829d",
+  "inspected_source_ids": [
+    "Axioms",
+    "VerifyLevel",
+    "Prelude",
+    "Core",
+    "Classical",
+    "RuntimeLevel"
+  ],
+  "sources": [
+    {
+      "id": "Axioms",
+      "path": "external/cvc-u1-dependencies-0002/src/Lean4Lean/Verify/Axioms.lean",
+      "sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "bytes": 20498,
+      "prior_binding_status": "EXACT_PREDECESSOR_HASH_VERIFIED"
+    },
+    {
+      "id": "VerifyLevel",
+      "path": "external/cvc-u1-dependencies-0002/src/Lean4Lean/Verify/Level.lean",
+      "sha256": "2913c137c391f1dfe82f07f8c398d8d6e81797ad360669e57edc53dea41d2e6d",
+      "bytes": 197856,
+      "prior_binding_status": "EXACT_PREDECESSOR_HASH_VERIFIED"
+    },
+    {
+      "id": "Prelude",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Prelude.lean",
+      "sha256": "56de5780adc4358372fa9cfac270a70f2d03fd4f213a373aea4365483b31a544",
+      "bytes": 235820,
+      "prior_binding_status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW"
+    },
+    {
+      "id": "Core",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Core.lean",
+      "sha256": "8537e234659a281a8f49cc91e2f48c17b6faeacb852d1c4ba3a09b6b5e45ab20",
+      "bytes": 102417,
+      "prior_binding_status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW"
+    },
+    {
+      "id": "Classical",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Init/Classical.lean",
+      "sha256": "4e3bb021681d948c72dd3ab90d849e67999776dcabca4de55e8da14593474815",
+      "bytes": 9069,
+      "prior_binding_status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW"
+    },
+    {
+      "id": "RuntimeLevel",
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0-rc2/src/lean/Lean/Level.lean",
+      "sha256": "560a7b5fde58937f69e9cf85b96d33f0aafcac2a9aec64776347de5e611d1303",
+      "bytes": 23650,
+      "prior_binding_status": "PREVIOUSLY_PINNED_RELEASE_LOCAL_SOURCE_HASHED_NOW"
+    }
+  ],
+  "canonical_evidence_read": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-3/run-0001/attempts/02/stdout",
+      "sha256": "2485ea0ebb306eec5583f470d8d9ca8c50ea398a5b483f4609e6a55cacfd633e",
+      "bytes": 2557
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+      "sha256": "faaa491087375e7bb2fb55060a74d14efecdd4edf80edb9591351fed3a28133f",
+      "bytes": 2931
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/contract.json",
+      "sha256": "edc98f1ce33867a4c9debba61dc686dd5f7ade981fe9cf0fac0bf4d4cbaab2f0",
+      "bytes": 10784
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-1/source-excerpts.json",
+      "sha256": "11b73c8da23295b6182b8a6e3ea7fbf1b2295be8405dad95bab8660fdeffc07f",
+      "bytes": 28166
+    }
+  ],
+  "scope": {
+    "upstream_source_files": 6,
+    "additional_upstream_source_files": 0,
+    "proof_builds": 0,
+    "dependency_builds": 0,
+    "fixture_launches": 0,
+    "checker_launches": 0,
+    "network_requests": 0,
+    "external_messages": 0,
+    "source_approvals": 0,
+    "only_written_path": "results/research/conditional-validation-contracts/cvc-axioms-1/independent-review.json"
+  },
+  "timing": {
+    "owner_research_interval_started_at": "2026-09-07T01:58:51.728421+00:00",
+    "review_completed_at": "2026-09-07T02:05:29.903211+00:00",
+    "independent_start_timestamp": null,
+    "independent_elapsed_seconds": null,
+    "accounting": "Review ran inside the owner active research interval. No separate worker timer was recorded; do not invent a duration or add a new session. The owner work record controls aggregate active-session accounting."
+  },
+  "observed_imported_comparator_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound",
+    "Lean.Level.instLawfulBEqLevel",
+    "Lean.Level.isExplicitSubsumedAux_eq",
+    "Lean.Level.normalize_eq",
+    "Std.TreeMap.all_eq_all_toList"
+  ],
+  "assumption_assessment": [
+    {
+      "name": "propext",
+      "exact_statement": "axiom propext {a b : Prop} : (a ↔ b) → a = b",
+      "source_id": "Core",
+      "line": 1591,
+      "trust": "Background propositional extensionality in the proof theory; it is not an object-language axiom or checker-correctness premise.",
+      "dependency_evidence": "Membership in both exact imported reports is recorded; this review does not trace every intermediate theorem edge for foundational axioms.",
+      "discharge": "Retain as a named background-theory assumption. Eliminating particular uses would require a separately scoped constructive proof refactor; no general discharge is claimed."
+    },
+    {
+      "name": "Classical.choice",
+      "exact_statement": "axiom Classical.choice {α : Sort u} : Nonempty α → α",
+      "source_id": "Prelude",
+      "line": 818,
+      "trust": "Background nonconstructive choice. Classical.lean lines 19–35 exhibit derived choice/excluded-middle infrastructure. A proof-theoretic dependency does not mean that an executable comparator evaluates choice.",
+      "dependency_evidence": "Membership in both exact imported reports is recorded; use of particular classical lemmas along the comparator proof is not fully traced.",
+      "discharge": "Retain explicitly. A constructive refactor might remove particular uses, but feasibility and the resulting axiom report have not been checked."
+    },
+    {
+      "name": "Quot.sound",
+      "exact_statement": "axiom sound : ∀ {α : Sort u} {r : α → α → Prop} {a b : α}, r a b → Quot.mk r a = Quot.mk r b",
+      "source_id": "Core",
+      "line": 1787,
+      "trust": "Primitive quotient equality principle of the host proof theory, not an artifact-validation assumption. The host kernel and primitive implementation remain trusted.",
+      "dependency_evidence": "Both exact imported reports include it. Intermediate quotient/extensionality proof edges were not reconstructed.",
+      "discharge": "Keep as named background theory; reducing proof-specific dependence is a different proof-development task, not evidence that Lean or its kernel is sound."
+    },
+    {
+      "name": "Lean.Level.instLawfulBEqLevel",
+      "exact_statement": "@[instance] axiom instLawfulBEqLevel : LawfulBEq Level",
+      "source_id": "Axioms",
+      "line": 292,
+      "expanded_obligation": "For the installed Level BEq: a == a is true, and a == b being true entails propositional a = b. Core lines 782–804 provide the class fields.",
+      "trust": "RuntimeLevel lines 255–258 bind BEq to opaque Level.beq with extern lean_level_eq. This asserts structural/propositional equality correctness for all levels, which is stronger than merely preserving Nat evaluation. It does not establish correctness of the C++ implementation, cached representation, compiler or linked runtime.",
+      "dependency_evidence": "Canonical CVC-1 E7 uses beq_iff_eq in core isEquiv_sound; VerifyLevel lines 3808–3815 and 3861–3864 invoke isEquiv_wf in the core fast path. The complete interior LevelStd theorem path was not reread under this six-file allocation. Raw reports establish the actual terminal dependency membership.",
+      "discharge": "An explicit structural equality function with a proved LawfulBEq instance is a feasible design alternative; proving it refines the opaque extern still requires a runtime bridge. Neither the C++ source nor this equality-refinement proof was inspected or established. Removing the core fast path may avoid this particular branch dependency, but requires a new comparator contract and an exact future axiom audit."
+    },
+    {
+      "name": "Lean.Level.isExplicitSubsumedAux_eq",
+      "exact_statement": "@[simp] axiom isExplicitSubsumedAux_eq : isExplicitSubsumedAux = Total.isExplicitSubsumedAux",
+      "source_id": "Axioms",
+      "line": 194,
+      "expanded_obligation": "Extensional equality for every Array Level, maximum explicit Nat, and starting Nat index. The total function returns true upon finding an offset at least the threshold while advancing the index, and false after the array end.",
+      "trust": "Axiom bridges an opaque partial helper to its total counterpart. RuntimeLevel 367–373 and Axioms 187–194 have corresponding branch/advance/end behavior. This is source-level consistency evidence, not a checked equality or source-to-binary result. Sorted-array intent in comments is not a premise of the axiom.",
+      "dependency_evidence": "RuntimeLevel 375–404 places this helper inside isExplicitSubsumed and normalize; Axioms 196–257 supplies the total normalization copy and normalize_eq. Actual theorem membership is in both fixed reports. The intervening helper proof steps in LevelStd are not available in the allocated files and remain uninspected, so the algorithm call graph is not presented as a complete proof-term graph.",
+      "discharge": "A future upstream totalization or a theorem establishing a suitable refinement for the partial implementation could remove the assumption. The bound decreases as the index advances toward array size, making totalization plausible. Replacing definitions in a fresh strategy can avoid opaque equality but cannot prove the old opaque constant equal by textual inspection alone."
+    },
+    {
+      "name": "Lean.Level.normalize_eq",
+      "exact_statement": "axiom normalize_eq : normalize = Total.normalize",
+      "source_id": "Axioms",
+      "line": 257,
+      "trust": "Extensional identity between a full opaque partial normalization algorithm and its total copy is a substantial implementation bridge. It is not an axiom of universe semantic preservation, but source-side clause correspondence alone does not discharge it or authenticate binary behavior.",
+      "dependency_evidence": "Canonical CVC-1 E7 directly shows eval_normalize rewriting normalize_eq, then isEquiv_sound using eval_normalize. VerifyLevel wrappers retain the core branch. Axioms 196–253 contains the total copy and termination arguments.",
+      "discharge": "Use a total implementation with checked semantic theorems, or establish a separately reviewed refinement to the original implementation. A pure Normalize strategy is a promising alternative but its full reduced closure is not printed here."
+    },
+    {
+      "name": "Std.TreeMap.all_eq_all_toList",
+      "exact_statement": "axiom all_eq_all_toList {p : α → β → Bool} : t.all p = t.toList.all fun a => p a.1 a.2",
+      "source_id": "Axioms",
+      "line": 10,
+      "implicit_context": "{α : Type u} {β : Type v} {cmp : α → α → Ordering} {t : TreeMap α β cmp}",
+      "trust": "Container traversal equivalence used to connect Boolean map checks with entry-wise reasoning. It does not assume semantic universe equivalence. The relevant map implementation was not inspected in this bounded review.",
+      "dependency_evidence": "VerifyLevel NormLevel.eval_congr at 1273–1293 uses this axiom; isEquiv'_wf at 3815 invokes that result. NormLevel.le_eval at 1250 and later completeness machinery also use the bridge.",
+      "discharge": "A proof against the exact map implementation or a list-based successor strategy could eliminate the helper axiom. Feasibility is plausible but unverified and not a reason to drop the present dependency."
+    }
+  ],
+  "findings": [
+    {
+      "id": "IR-1",
+      "finding": "The seven-assumption envelope is an explicit conditional theory and implementation model, not circular assumption of the Lab target.",
+      "basis": "No inspected axiom states EncodingTarget, PreservationTarget, arbitrary checker correctness or equality of arbitrary level meanings. The nontrivial remaining Lab obligations are owned-name conversion, all-assignment evaluation correspondence, composition with the comparator, and exact acceptance/boundary checks.",
+      "qualification": "This does not establish joint consistency or truth of the seven assumptions. Their utility depends on preserving a visible distinction between model theorem and executable refinement."
+    },
+    {
+      "id": "IR-2",
+      "finding": "The new omitted assumptions are real boundary evidence, not a Lab proof-repair opportunity within the frozen predecessor.",
+      "basis": "Both mandatory imported reports in attempt 2 include the same two omitted assumptions without sorryAx. Failed Lab reports separately include sorryAx and cannot count as proofs. The imported theorem source handles the core fast path even if some individual examples might use the complete fallback.",
+      "qualification": "A particular execution path or finite test success cannot remove a transitive theorem assumption from its report. CVC-3 and its ten unused slots remain terminal."
+    },
+    {
+      "id": "IR-3",
+      "finding": "Source copying is a checkable plausibility argument, not a proof of opaque code identity.",
+      "basis": "The runtime helper and total helper have matching branch structure; the selected runtime Level source declares Boolean equality as an extern opaque function. The runtime release was previously selected, but local src/lean hashes were recorded only now and are outside the old executable/import manifest.",
+      "qualification": "No source-to-binary provenance, C++ equality proof, compiler refinement, total-runtime correctness or host-kernel soundness is established."
+    },
+    {
+      "id": "IR-4",
+      "finding": "Removing the core fast path is a plausible lower-assumption alternative, but its reduced assumption envelope remains unverified.",
+      "basis": "Canonical CVC-1 E16 shows isEquiv' as core isEquiv OR equality of Normalize normal forms. VerifyLevel 3808–3815 proves the second branch through Normalize.normalize_eval and NormLevel.eval_congr, and 3720 onward proves Normalize.normalize_complete.",
+      "qualification": "Changing S1 changes the acceptance definition, requires a successor contract/proof target and fresh exact reports, and may retain TreeMap or other transitive assumptions. It is not currently an assumption-free result."
+    },
+    {
+      "id": "IR-5",
+      "finding": "A successful conditional successor would add the artifact interpretation bridge, not new proof of the upstream comparator or general validator soundness.",
+      "basis": "CVC-2 fixes a supplied Sort body, a named Nat semantics, owned parameter encoding and a finite two-artifact acceptance set. The comparator theorems are reused, whereas the Lab encoding/evaluation bridge is still unproved.",
+      "qualification": "No result presently satisfies the CVC-4 gate. Broader acceptance coverage, parser correctness, whole declaration admission, normative conformance and implementation defects remain excluded."
+    }
+  ],
+  "recommendation": {
+    "decision": "SUCCESSOR",
+    "priority": "Highest eligible local continuation within the selected conditional-contract frontier",
+    "target": "CVC-CONDITIONAL-1 protocol and runner preparation, then conditionally CVC-3-CONDITIONAL under a fresh CVC-U1-A7 assumption envelope",
+    "action": "Prepare a new input-bound execution protocol and new assumption envelope for the unchanged semantic signature; after required controls and entry review pass, attempt the remaining Lab bridge and examples under a fresh run ID.",
+    "value": "Tests whether a precise interpretation bridge can connect the independently fixed submitted-sort meaning to a concrete reused comparator while exposing the runtime assumptions that the first audit found.",
+    "required_controls": [
+      "Keep CVC-2 allowlist, signature, previous results and the terminal CVC3-U1-PROOF-0001 run unchanged; successor wrapper/model identity must state the seven conditions explicitly.",
+      "Fix exactly the seven observed imported comparator assumptions before any new proof feedback. Remove the previously allowed but unobserved any_eq_any_toList from the new envelope; do not infer dependency membership from module imports.",
+      "Require both initial imported comparator reports to equal the exact seven-name set before Lab proof repair feedback. Later Lab results must carry individual exact dependency lists and use only the preregistered envelope.",
+      "Forbid sorryAx, new Lab axioms, assumed target propositions, native/external proof assertions and unlisted assumptions. An unexpected closure is a stop-and-rerank condition, not permission to expand an allowlist after feedback.",
+      "Prepare the protocol/runner first with zero proof, dependency or observer launches; source/fixture permissions must be independently specified for that preparation item.",
+      "Use at most six new proof builds including signature/audit elaboration, each with an explicit per-build timeout, in two sessions of at most 60 active minutes; preserve the two original consumed builds for an aggregate of at most eight. Failed or interrupted attempts consume the new finite ledger.",
+      "Continue ordinary lookup/decidability repair within the new fixed item when authorized and within budget; do not recycle predecessor counters or weaken success gates.",
+      "Keep CVC-4 and CVC-5 unstarted until a checked, usable result exists and a fresh stopping-point review records their exact entry conditions."
+    ],
+    "alternatives": [
+      {
+        "decision": "REUSE_ALTERNATIVE",
+        "target": "A fresh pure Normalize comparator strategy and contract",
+        "ranking": "Fallback if explicit runtime bridges make the conditional result insufficiently useful or the new proof attempt exposes a substantive obstacle.",
+        "prerequisites": [
+          "New fixed acceptance/strategy definition and proof target.",
+          "Exact transitive axiom reports for the chosen Normalize theorems.",
+          "Proof of the same independent encoding and exact acceptance/boundary obligations.",
+          "Separately bounded preparation/build authorization."
+        ]
+      },
+      {
+        "decision": "STOP",
+        "target": "This universe-comparator reuse path",
+        "ranking": "Appropriate if no interpretable runtime condition or feasible encoding repair remains within a genuine bound.",
+        "reason_not_selected": "Current evidence isolates explicit low-level bridges and routine failed proof obligations, without showing a semantic contradiction or infeasible Lab bridge."
+      }
+    ],
+    "external_action": "NO_EXTERNAL_ACTION_NOW; any future formalization or bridge clarification contribution needs a checked reusable result or a sufficiently concrete unresolved technical question, exact target preflight, and target-specific human authorization."
+  },
+  "unresolved_obligations": [
+    "No checked Lab encoding, preservation, acceptance or boundary theorem exists.",
+    "The runtime Level equality extern has not been inspected or proved correct.",
+    "Opaque helper/full-normalization extensional equality has not been discharged.",
+    "The exact internal proof chain through Verify.LevelStd for isExplicitSubsumedAux_eq was not reread under the six-file allocation; actual terminal membership is evidenced by the fixed reports.",
+    "Full intermediate foundational-axiom proof paths were not reconstructed.",
+    "Runtime src/lean files are locally hashed observations of the selected release; their source-to-binary identity and authenticity remain unproved.",
+    "The pure Normalize alternative has no newly audited reduced dependency closure or Lab acceptance proof.",
+    "Joint consistency of assumptions, host checker correctness and arbitrary byte-to-AST/whole-validator refinement remain outside the claim."
+  ],
+  "claim_limitations": [
+    "This is inspectable source review and a recommendation, not checked formal proof, semantic authority, normative source approval or a result established by model agreement.",
+    "Raw imported axiom reports from a failed overall attempt establish recorded dependency membership, not success of the failed Lab declarations.",
+    "Source-level paths marked partial or inferred are not a complete proof-term dependency graph.",
+    "Source hashes prove byte identity relative to this local observation and predecessor source bindings where available; they do not by themselves authenticate an upstream release.",
+    "No broad Lean correctness, consistency, complete artifact coverage or implementation defect is claimed."
+  ]
+}

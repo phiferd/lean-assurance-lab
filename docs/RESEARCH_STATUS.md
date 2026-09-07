@@ -50,6 +50,25 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-AXIOMS-1` on 2026-09-06 with `SUCCESS` for a source-only
+  assumption review and `SUCCESSOR` recommendation. Both retained comparator
+  reports contain the same seven assumptions. The two omitted helpers concern
+  opaque runtime equality and a partial-function bridge; all four helper axioms
+  remain substantive conditional trust assumptions, not discharged facts.
+  Six source files were reviewed; two match predecessor hashes and four are
+  newly hashed local sources under the already-selected runtime release, with
+  source-to-binary correspondence unproved. No checked Lab result or research
+  launch is claimed. See the
+  [assessment](../results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json),
+  [report](../results/research/conditional-validation-contracts/cvc-axioms-1/report.md),
+  and [review](../results/research/queue-reviews/2026-09-06-cvc-axioms-1.json).
+  `CVC-CONDITIONAL-1` is selected READY and unstarted for a new protocol/runner
+  under explicitly conditional model `CVC-U1-A7`; `CVC-3-CONDITIONAL` is PLANNED.
+  CVC-2's allowlist and the terminal CVC-3 failure remain unchanged. Required
+  closure validation and its separately instrumented regression fixtures are
+  retained in the
+  [validation record](../results/workflow-refresh/cvc-axioms-1-2026-09-06/validation.json).
+
 - Closed `CVC-3` on 2026-09-06 with `BOUNDED_UNRESOLVED` at an
   immutable assumption boundary. The unchanged signature compiled as attempt 1;
   proof attempt 2 failed with local proof errors and exposed two unlisted axioms
@@ -1904,7 +1923,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-AXIOMS-1`.
+Selected next item: `CVC-CONDITIONAL-1`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -1924,14 +1943,31 @@ and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-3.j
 The failed Lab declarations and their error-recovery `sorryAx` reports are raw
 failure evidence, not a checked theorem or counterexample. No observer ran.
 
-`CVC-AXIOMS-1` is selected READY and unstarted. Review the exact source statements,
-actual transitive assumptions, trust interpretation, and feasible discharge or
-alternative route using at most six already-pinned source files in two 60-minute
-sessions. Recommend an explicit justified successor, alternative reuse, or stop.
-This selection authorizes zero proof, dependency, fixture or observer launches,
-network requests, normative-source approvals or external messages. Do not edit
-CVC-2's allowlist or resume CVC3-U1-PROOF-0001. CVC-4 and CVC-5 remain PLANNED;
-the unsuccessful proof result does not satisfy their entry gates.
+`CVC-AXIOMS-1` is COMPLETE with `SUCCESS` for a source-only review, labeled
+`SOURCE_ASSUMPTION_REVIEW_ONLY`. Its input-bound table records all seven
+actually printed assumptions, their exact source statements, visible/partial
+paths and discharge alternatives. `SUCCESSOR` recommends model `CVC-U1-A7`:
+the same structured meaning and exact examples under an explicit seven-axiom
+host envelope. Neither model selection nor independent review approves a
+normative source, proves helper truth or consistency, or establishes runtime
+refinement. The original CVC-2 allowlist remains frozen.
+
+`CVC-CONDITIONAL-1` is selected READY and unstarted. Prepare the new
+protocol/runner and exact imported-type/axiom baseline under the
+[finite successor proposal](../results/research/conditional-validation-contracts/cvc-axioms-1/successor-proposal.json).
+Bound: two 60-minute sessions and at most 64 supervised inert fixture launches,
+each at most five seconds and together at most 320 reserved seconds, including
+required regression fixtures. It authorizes zero proof, dependency or observer
+launches, network requests, source approvals or external messages. Preserve all
+old runners, evidence and consumed costs; do not resume CVC3-U1-PROOF-0001.
+
+`CVC-3-CONDITIONAL` is PLANNED and unstarted. A later committed entry review
+must promote its new run ID; its proposed bound is six counted builds in two
+60-minute sessions (signature, exact baseline, then normally at most four proof
+attempts), each at most 300 seconds. These are separately authorized successor
+reservations, never the old ten unused slots; original plus proposed proof
+builds are at most eight. CVC-4 and CVC-5 remain PLANNED with their original unmet
+dependencies. A usable conditional result would need an explicit CVC-4 successor.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
@@ -1941,7 +1977,9 @@ Its original endpoint still refuses execution. CVC-PREP-2 remains SUCCESS with
 CVC-3 adds 199.947382292 active seconds and 2.357550584 compilation seconds.
 Aggregate recorded preparation/runner/proof active time is 7174.931631292 seconds;
 aggregate preparation/proof compilation time is 52.112492251 seconds. Prior
-unknown fixture duration remains unknown, and closure validation costs are
+unknown fixture duration remains unknown. CVC-AXIOMS-1 source-review time is
+recorded separately in its work record; it adds no research compilation or
+observer time. Required closure validation costs and regression fixtures are
 reported separately.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI

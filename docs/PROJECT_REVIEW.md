@@ -20,45 +20,62 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-AXIOMS-1: Review the comparator assumption gap before further proof feedback; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-AXIOMS-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-CONDITIONAL-1**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 10 | CVC-AXIOMS-1: Review the comparator assumption gap before further proof feedback | READY |
-| 11 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 12 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 13 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
-| 14 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
+| 11 | CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor | READY |
+| 12 | CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions | PLANNED |
+| 13 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 14 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 15 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
+| 16 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
-### 10. CVC-AXIOMS-1: Review the comparator assumption gap before further proof feedback
+### 11. CVC-CONDITIONAL-1: Prepare the explicit seven-assumption conditional successor
 
-**Target:** Lean.Level.instLawfulBEqLevel and Lean.Level.isExplicitSubsumedAux_eq in the pinned CVC-U1 comparator dependency closure
+**Target:** CVC-U1-A7 protocol and runner, preserving original semantic signature and exact acceptance/boundary examples
 
-Read the exact axiom statements and dependency paths; assess whether their semantic and runtime assumptions support a useful explicitly conditional successor, an alternative proved bridge, or stopping this path. Do not change the old allowlist.
+Create a new bound protocol/runner and entry review with exact-seven imported baseline auditing; use only supervised inert control fixtures, with no Lean, dependency or observer launch.
 
-**Why this rank:** Highest eligible local work: both mandatory comparator reports expose the same two omitted assumptions, so more proof edits under the frozen inputs cannot pass. A small source-only review can determine whether continuation is scientifically useful. Arena access remains unconfirmed; other themes require separate authorization.
+**Why this rank:** Highest eligible local work: the seven assumptions have exact source statements and a non-circular conditional interpretation, and the remaining Lab bridge is small. A new bound execution path is necessary at the immutable-input boundary. Pure-normal-form replacement needs a changed strategy and unprinted assumption audit; upstream access is unconfirmed and other research themes remain gated.
 
-**Completion:** An input-bound table for all actually printed comparator assumptions, each exact statement/dependency/trust interpretation and feasible discharge or alternative route; a justified SUCCESSOR, REUSE_ALTERNATIVE, or STOP recommendation with concrete prerequisites and finite successor proposal if warranted.
+**Completion:** New committed protocol/config/runner/assumption envelope, regression evidence and exact bound entry review for CVC3-U1-A7-PROOF-0001; preserve all historical inputs and select the proof item without starting it.
 
-**Stop:** At most two 60-minute sessions and six already-pinned source files; no builds, proof elaborations, fixtures, checkers, downloads, network searches, source approval or external messages. Stop on a supported decision or the bound; preserve unresolved obligations.
+**Stop:** Two 60-minute sessions; at most 64 supervised fixture reservations, each at most five seconds and at most 320 reserved seconds together including required regression fixtures. Zero proof/dependency/observer launches, network requests or external messages. Repair ordinary defects within this item; stop at a real cap or immutable-input/authority boundary.
 
 **Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: CVC-3 is closed BOUNDED_UNRESOLVED at an immutable assumption boundary, with exact failed-source/raw-output and source-axiom bindings. This review depends on the completed CVC-2 specification; it uses the unresolved CVC-3 result as evidence, not as a successful theorem dependency. It authorizes source review only.
+**Boundary:** READY: CVC-AXIOMS-1 completes SUCCESS with SUCCESSOR, and CVC-2/CVC-PREP-2/CVC-RUNNER-2 remain SUCCESS. This promotes only explicit successor preparation under its new finite proposal; the old run is terminal and no proof baseline may run here.
 
-### 11. CVC-4: Connect the contract to real validation behavior
+### 12. CVC-3-CONDITIONAL: Check the preservation bridge under the reviewed seven assumptions
+
+**Target:** CVC-U1-A7: original CVC2 meaning/signature with a separately fixed host-assumption envelope
+
+Run a new counted signature and imported-type/axiom baseline, then attempt the four original Lab obligations or a checked counterexample under the fixed conditional protocol.
+
+**Why this rank:** Conditional on a successful committed successor runner; six builds and the existing dependency bundle bound the incremental cost. No assumption is discharged by this proposal.
+
+**Completion:** Checked EncodingTarget, PreservationTarget, AcceptanceTarget and BoundaryTarget with per-result axioms, checked counterexample or bounded unresolved evidence. No general parser or executable validator refinement claim.
+
+**Stop:** Two 60-minute sessions and six builds total, each at most 300 seconds: signature, baseline and normally at most four proof builds. Failed reservations count; zero dependencies/checkers/network. Original run and its ten unused slots remain terminal. Repair ordinary proof errors within this item.
+
+**Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
+
+**Boundary:** PLANNED: CVC-CONDITIONAL-1 SUCCESS and a separately committed stopping-point promotion bind the new exact manifest, commands, seven assumptions, signature/examples and payloads. A baseline must match exact imported types and both seven-axiom reports before Lab proof feedback.
+
+### 13. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
 Map parsing, reconstruction, validation and semantic use; execute only the bound comparison.
 
-**Why this rank:** Retained conditional proposal: CVC-3 has no usable checked result, and the required observer protocol is absent. Its successful-theorem dependency is unmet; CVC-AXIOMS-1 must recommend any explicit replacement first.
+**Why this rank:** Retained original conditional proposal with unmet CVC-3 SUCCESS dependency. CVC-U1-A7 has no checked proof; if its separately planned proof succeeds, create an explicit CVC-4 successor scoped to that model instead of reinterpreting this dependency.
 
 **Completion:** Exact bytes, observer profiles, raw outcomes and source-to-contract mapping; explicitly retain any unproved implementation bridge.
 
@@ -68,7 +85,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 12. CVC-5: Prepare shared evidence and decide the next phase
+### 14. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -84,7 +101,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 13. ALT-SURVIVORS: Design the next fixed survivor triage
+### 15. ALT-SURVIVORS: Design the next fixed survivor triage
 
 **Target:** One selected member of the seven pending survivors
 
@@ -100,7 +117,7 @@ Prepare an evidence-based fixed-candidate triage proposal and finite execution m
 
 **Boundary:** DEFERRED: Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.
 
-### 14. ALT-TRANSFER: Assess a prospective transfer study
+### 16. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -156,6 +173,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3. Selected next item: CVC-AXIOMS-1 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1. Selected next item: CVC-CONDITIONAL-1 (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.
