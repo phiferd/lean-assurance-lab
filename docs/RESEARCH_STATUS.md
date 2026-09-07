@@ -1912,9 +1912,9 @@ predecessor products. `CVC-PREP-1` remains `BOUNDED_UNRESOLVED`. Combined
 preparation cost remains 3030.60362 active seconds and 49.75494 compilation seconds;
 runner costs and prior uncertainty are linked in the new result.
 
-`CVC-3` is selected READY and unstarted after the
+`CVC-3` is ACTIVE under CVC3-U1-PROOF-0001 after the
 [separate committed-input entry review](../results/research/conditional-validation-contracts/cvc-runner-2/entry-review.json).
-Use `scripts/run-cvc-u1-proof-successor`, begin a design session before proof work,
+Use `scripts/run-cvc-u1-proof-successor`; design session 1 is open before proof work,
 and retain the fixed CVC3-U1-PROOF-0001 identity and budgets. No signature or proof
 has been elaborated. The first elaboration of the unchanged CVC-2 signature is
 counted attempt 1 of 12. SUCCESS requires all four exact declarations and six
