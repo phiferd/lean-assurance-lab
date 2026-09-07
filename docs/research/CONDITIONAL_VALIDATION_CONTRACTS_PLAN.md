@@ -307,3 +307,24 @@ allocations and any explicit finite repair allocation.
 Do not rerun checkers to refresh planning documents. Preserve the broader
 assurance gate's unresolved failures. At handoff, record the completed item,
 its outcome and evidence, the ranking decision, and the next selected item.
+
+## Frozen-byte adapter boundary handoff — 2026-09-07
+
+CVC-4-CONDITIONAL closed `BOUNDED_UNRESOLVED` after two complete pairs and a
+source-characterized ownership-control parser failure. Its
+[stopping review](../../results/research/queue-reviews/2026-09-07-cvc-4-conditional.json) makes the immediate no-external-action
+and phase decision; it does not promote original CVC-5 or defer required closure.
+No repair preserves the selected bytes and pinned observer binaries. Adding a
+parameter-level record preserves the structured AST but changes the exact
+scientific artifact, so a distinct input-boundary decision must precede it.
+
+Select **CVC-4-ADAPTER-REVIEW**, READY and unstarted, for one existing-evidence
+review capped at 3600 actual active seconds. Decide a justified stop or exact
+scientific-input successor proposal, including scientific identity, intended
+representation change, expected value, reuse alternatives, prerequisites,
+finite cap and entry conditions. Generate no byte variant, run no observer,
+proof, setup or research-network process, and perform no external action.
+Preserve every existing artifact, failure, charge, assumption and withdrawn
+recommendation. This narrowly ranked decision stays in the conditional phase;
+it activates no new comparison or semantic family. Original CVC-4/CVC-5
+requirements remain unchanged. Only CVC-4-CONDITIONAL closes in this work.

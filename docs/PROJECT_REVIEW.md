@@ -20,39 +20,39 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-4-CONDITIONAL: Connect the checked conditional bridge to real validation behavior; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-4-ADAPTER-REVIEW: Decide the frozen-byte adapter boundary using existing evidence; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-4-CONDITIONAL**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+Selected next item: **CVC-4-ADAPTER-REVIEW**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 14 | CVC-4-CONDITIONAL: Connect the checked conditional bridge to real validation behavior | ACTIVE |
-| 15 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 16 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 17 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
-| 18 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
+| 15 | CVC-4-ADAPTER-REVIEW: Decide the frozen-byte adapter boundary using existing evidence | READY |
+| 16 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 17 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 18 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
+| 19 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
-### 14. CVC-4-CONDITIONAL: Connect the checked conditional bridge to real validation behavior
+### 15. CVC-4-ADAPTER-REVIEW: Decide the frozen-byte adapter boundary using existing evidence
 
-**Target:** CVC-U1-A7 owned-name level fragment, at most two implementation lineages and four fixed candidate/control pairs
+**Target:** The unused declared-parameter serialization/import prerequisite in CVC-U1-A7
 
-Bind exact artifact/implementation mappings and a finite successor protocol, then explain the fixed observed comparison using the checked conditional result.
+Review an explicit scientific-input successor proposal versus stopping. Define intended representation change, retained invariants, reuse value and finite entry conditions; do not generate byte variants or launch anything.
 
-**Why this rank:** A checked conditional bridge now exists. The highest-value next question is whether exact artifact and implementation behavior matches this scoped model; further proof polishing has lower information value. Upstream access has no new confirmed evidence, and broader themes remain deferred.
+**Why this rank:** The diagnosed gap needs a scientific-byte transition rather than another same-input tooling repair. One existing-evidence decision has greater immediate value than blind retries, success-only packaging or a new semantic family.
 
-**Completion:** Reproducible source-to-contract mapping and exact finite raw outcomes, or a characterized adapter boundary with a useful ecosystem recommendation. Testing instances does not prove refinement.
+**Completion:** A justified stop/no-additional-action decision or exact scientific-input successor proposal with value, prerequisites, finite cap and explicit entry gate; rank the next useful action without executing it.
 
-**Stop:** At most 16200 actual active seconds across recorded intervals of at most 90 minutes, four fixed pairs, two implementation lineages and 16 validator launches of at most 30 seconds. No broad fuzzing or semantic expansion. Bind any setup/fixture/dependency budget before launches; no implicit additional allowance. Same-item engineering repair preserves all counters and fixed scientific inputs.
+**Stop:** At most 3600 cumulative active seconds across recorded intervals, each at most 60 minutes; existing evidence only. Zero byte-variant generation, observer/proof/setup/research-network launches and external actions.
 
-**Execution:** At most 3 sessions of 90 active minutes; 16 validator launches. Additional plan limits apply.
+**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** ACTIVE: CVC-A7-REPAIR-1 SUCCESS. Before any new validator launch, commit exact bytes, versions, expected hypotheses, source/runtime mapping, tested launch controller and finite matrix. Keep assumptions explicit; no inherited terminal run may resume.
+**Boundary:** READY: CVC-A7-REPAIR-1 SUCCESS and documented CVC-4-CONDITIONAL BOUNDED_UNRESOLVED closure with required checks. Existing evidence only; current six streams, hypotheses and observer binaries remain frozen.
 
-### 15. CVC-4: Connect the contract to real validation behavior
+### 16. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -68,7 +68,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 16. CVC-5: Prepare shared evidence and decide the next phase
+### 17. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -84,7 +84,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 17. ALT-SURVIVORS: Design the next fixed survivor triage
+### 18. ALT-SURVIVORS: Design the next fixed survivor triage
 
 **Target:** One selected member of the seven pending survivors
 
@@ -100,7 +100,7 @@ Prepare an evidence-based fixed-candidate triage proposal and finite execution m
 
 **Boundary:** DEFERRED: Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.
 
-### 18. ALT-TRANSFER: Assess a prospective transfer study
+### 19. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -156,6 +156,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1. Selected next item: CVC-4-CONDITIONAL (ACTIVE).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL. Selected next item: CVC-4-ADAPTER-REVIEW (READY).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

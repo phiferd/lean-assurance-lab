@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import argparse
+import json
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.cvc4_evidence import validate
+
+parser = argparse.ArgumentParser(description='Derive or validate exact finite CVC-4 closure evidence.')
+parser.add_argument('--require-full-payload', action='store_true')
+parser.add_argument('--write', action='store_true', help='write the initial result/report once, after closing work')
+args = parser.parse_args()
+print(json.dumps(validate(ROOT, args.require_full_payload, args.write), indent=2))

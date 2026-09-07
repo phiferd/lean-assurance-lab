@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-4-CONDITIONAL` on 2026-09-07 with `BOUNDED_UNRESOLVED`
+  at a characterized frozen-byte/importer boundary. The right-successor and zero
+  pairs completed: Nanoda accepted E-POS while official Lean refused it, and both
+  refused the zero-invalid candidate after accepted controls. Nanoda's ownership
+  control failed in parsing because unused declared `v` lacks a parameter-level
+  record. Neither ownership candidate ran. The parser error is not a model
+  counterexample or ownership rejection. No same-byte/binary repair remains.
+  Original reporting failure and all twelve charges remain preserved, with four
+  launch slots unused, 2830.644582 active seconds and
+  0.386228 process seconds. No setup or research-network launch
+  ran. See the [result](../results/research/conditional-validation-contracts/cvc-4-conditional/result.json), [report](../results/research/conditional-validation-contracts/cvc-4-conditional/report.md),
+  [adapter diagnosis](../results/research/conditional-validation-contracts/cvc-4-conditional/adapter-boundary.json), [review](../results/research/queue-reviews/2026-09-07-cvc-4-conditional.json)
+  and [validation](../results/workflow-refresh/cvc-4-conditional-2026-09-07/validation.json).
+  `CVC-4-ADAPTER-REVIEW` is selected READY and unstarted. A7 and refinement gaps
+  remain explicit; withdrawn imax defect recommendations remain withdrawn.
+
 - Completed `CVC-A7-REPAIR-1` on 2026-09-07 with `SUCCESS`: all four original
   Lab obligations are checked under `CVC-U1-A7`. Fresh signature and exact
   nine-type-pair/seven-assumption baseline passed, then the first proof attempt
@@ -1972,7 +1988,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-4-CONDITIONAL`.
+Selected next item: `CVC-4-ADAPTER-REVIEW`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -2044,18 +2060,36 @@ below six builds and 7200 seconds. Including original CVC-3, seven builds were
 consumed. One A7 build is unused; the successful run is terminal. No dependency,
 observer or research-network launch ran. Closure tests are separately recorded.
 
-`CVC-4-CONDITIONAL` is selected ACTIVE. This explicit successor
-connects the checked A7 result to exact artifact bytes and at most two
-implementation lineages. It inherits the original CVC-4 scientific scope and
-ceilings: four fixed candidate/control pairs, 16 validator launches of at most
-30 seconds, and 16200 actual active seconds in intervals of at most 90 minutes.
-Before any launch, bind and commit exact inputs, versions, expected hypotheses,
-source/runtime mapping and tested execution controls. The [active work record](../results/research/conditional-validation-contracts/cvc-4-conditional/work-record.json)
-records the new item. Two validator launches are retained; the first official
-control passed, and Nanoda returned typecheck success with an unexpected pretty-printer
-error. A same-item configuration/tooling revision preserves the failed output
-hypothesis and all consumed costs before fresh counted controls. Original CVC-4 and CVC-5 remain PLANNED with
-their original dependencies; conditional success does not rewrite CVC-3.
+`CVC-4-CONDITIONAL` is COMPLETE with `BOUNDED_UNRESOLVED`. The fixed
+right-successor and zero pairs completed under A7: official Lean refused E-POS,
+Nanoda accepted it, and both refused the zero-invalid candidate after accepting
+controls. Both parsers preserve raw imax. Nanoda's comparator simplifies its
+right-successor case to max. Internal C++ comparator bytes and executable
+refinement remain unproved; no invalid accepted proof is demonstrated.
+
+The ownership comparison is unresolved. Official accepted its control, but
+Nanoda failed before typechecking because the stream declares unused `v`
+without a parameter-level record. Neither ownership candidate ran. Diagnosis
+found no configuration repair that preserves both frozen scientific bytes and
+observer binaries. A wrapper would change observed bytes; rebuilding would
+change the pinned binary and exceed the zero-build allowance. This is an
+explicit scientific-input boundary, not a semantic rejection or an automatic
+stop for an undiagnosed tooling error. Original evidence remains unchanged.
+
+The initial two-launch reporting pause was repaired within the same item by
+disabling only axiom printing. Its two charges plus ten revised launches total
+12/16, with 2830.644582/16200 active seconds and
+0.386228 process seconds. Four slots remain unused. No setup or
+research-network launch ran. See the [result](../results/research/conditional-validation-contracts/cvc-4-conditional/result.json),
+[adapter diagnosis](../results/research/conditional-validation-contracts/cvc-4-conditional/adapter-boundary.json) and [review](../results/research/queue-reviews/2026-09-07-cvc-4-conditional.json).
+
+`CVC-4-ADAPTER-REVIEW` is selected READY and unstarted. One existing-evidence
+review, capped at 3600 active seconds, must decide a justified stop or an exact
+scientific-input successor proposal with value, prerequisites and finite entry
+conditions. It authorizes no byte-variant generation, proof/observer/setup or
+research-network launch. Original CVC-4 and CVC-5 remain PLANNED under their unmet
+original dependencies. No success-only contribution stage is promoted, and
+withdrawn imax defect recommendations remain withdrawn.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
