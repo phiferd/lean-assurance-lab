@@ -30,7 +30,7 @@ Selected next item: **CVC-A7-REPAIR-1**. Status, rank and bounds come from `conf
 
 | Rank | Item | Status |
 |---|---|---|
-| 13 | CVC-A7-REPAIR-1: Repair the fixed baseline audit and finish the bounded conditional bridge | READY |
+| 13 | CVC-A7-REPAIR-1: Repair the fixed baseline audit and finish the bounded conditional bridge | ACTIVE |
 | 14 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 15 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 16 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
@@ -50,7 +50,7 @@ Repair the transcript audit through a versioned tooling continuation within this
 
 **Execution:** At most 2 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: Owner-authorized prospective repair policy in config/cvc-a7-repair-policy.json. Remain in this item through ordinary engineering repairs, using new per-attempt tooling bindings and preserved cumulative counters. Before Lean feedback, commit the tested continuation controller, manifest, baseline and entry review; historical terminal runs remain closed.
+**Boundary:** ACTIVE: Owner-authorized prospective repair policy in config/cvc-a7-repair-policy.json. Remain in this item through ordinary engineering repairs, using new per-attempt tooling bindings and preserved cumulative counters. Before Lean feedback, commit the tested continuation controller, manifest, baseline and entry review; historical terminal runs remain closed.
 
 ### 14. CVC-4: Connect the contract to real validation behavior
 
@@ -156,6 +156,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL. Selected next item: CVC-A7-REPAIR-1 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL. Selected next item: CVC-A7-REPAIR-1 (ACTIVE).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

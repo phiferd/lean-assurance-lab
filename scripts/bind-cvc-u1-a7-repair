@@ -1,0 +1,20 @@
+#!/usr/bin/env python3
+"""Bind initial CVC-A7-REPAIR-1 manifest before any run begins."""
+from pathlib import Path
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib import cvc_a7_repair_runner as runner
+from lib.cvc_process import atomic
+
+def main():
+    runner.require(not (ROOT / runner.OUT).exists() and not (ROOT / runner.BASE).exists(),
+                   'cannot rebind a started run; use an exact tooling revision')
+    manifest = runner.build_manifest(ROOT)
+    runner.verify_payloads(ROOT, manifest)
+    atomic(ROOT / runner.MANIFEST, manifest)
+    runner.validate_manifest(ROOT)
+    print('PASS: initial cumulative repair manifest bound; zero launches')
+
+if __name__ == '__main__':
+    main()

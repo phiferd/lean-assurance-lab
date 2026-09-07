@@ -2006,7 +2006,7 @@ assumption discharge is established. No proof feedback or observer ran. The
 terminal ledger retains two attempts, four unspent slots, 55.59774324996397
 research seconds and 2.71219816734083 compilation seconds.
 
-`CVC-A7-REPAIR-1` is selected READY and unstarted under the owner-authorized
+`CVC-A7-REPAIR-1` is selected ACTIVE under the owner-authorized
 [prospective repair policy](../config/cvc-a7-repair-policy.json) and
 [policy decision](../results/research/queue-reviews/2026-09-07-repair-policy.json).
 Keep scientific inputs and historical attempts fixed; bind tooling revisions
@@ -2022,7 +2022,8 @@ explicitly supersedes the previous prospective one-session/3600-second decision
 without rewriting that historical review or reopening either terminal run.
 No dependency, observer or research-network launch is authorized. Use focused
 checks at repair checkpoints and the required full suite at logical closure.
-Commit and push the policy documents before starting this item. CVC-4/CVC-5
+The policy documents are committed and pushed as `d6f156d`; this item is now
+active with its cumulative clock in the work record. CVC-4/CVC-5
 remain PLANNED; a usable A7 result would require an explicit CVC-4 successor.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
