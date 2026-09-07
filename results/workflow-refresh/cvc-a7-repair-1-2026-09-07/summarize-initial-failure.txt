@@ -1,0 +1,12 @@
+The first administrative summary invocation returned exit code 1:
+
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/results/workflow-refresh/cvc-a7-repair-1-2026-09-07/validation-tools/summarize.py", line 34, in <module>
+    refresh = load(base / 'final-current-state/result.json'); assert refresh['status'] == 'PASS'
+AssertionError
+
+Cause: the summary helper expected the CLI's PASS label in the durable refresh
+receipt. scripts/refresh-current-state writes COMPLETE to that receipt. The
+helper now requires COMPLETE, exactly 13 commands, and every return code zero.
+The retained receipt already met those conditions. The corrected summary
+invocation passed; no validator, evidence, or research launch was changed.

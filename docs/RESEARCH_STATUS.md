@@ -50,6 +50,21 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-A7-REPAIR-1` on 2026-09-07 with `SUCCESS`: all four original
+  Lab obligations are checked under `CVC-U1-A7`. Fresh signature and exact
+  nine-type-pair/seven-assumption baseline passed, then the first proof attempt
+  proved encoding, preservation, positive acceptance and boundary rejection.
+  The item used three builds, 1191.641326 active seconds including engineering,
+  and 4.791141 compiler seconds; A7 totals are five builds and 1247.239069 active
+  seconds. Neither cap was exhausted. Historical failures remain unchanged.
+  See the [result](../results/research/conditional-validation-contracts/cvc-a7-repair-1/result.json),
+  [report](../results/research/conditional-validation-contracts/cvc-a7-repair-1/report.md),
+  [queue review](../results/research/queue-reviews/2026-09-07-cvc-a7-repair-1.json), and
+  [validation](../results/workflow-refresh/cvc-a7-repair-1-2026-09-07/validation.json).
+  `CVC-4-CONDITIONAL` is selected READY and unstarted to map the checked result
+  to exact artifacts and implementation behavior. Assumptions remain explicit;
+  arbitrary-byte parsing and executable-validator refinement are unproved.
+
 - Closed `CVC-3-CONDITIONAL` on 2026-09-07 with `BOUNDED_UNRESOLVED` at
   an immutable baseline-audit implementation boundary. The unchanged signature
   compiled as attempt 1. Attempt 2's fixed baseline compiled, but the frozen
@@ -1957,12 +1972,13 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-A7-REPAIR-1`.
+Selected next item: `CVC-4-CONDITIONAL`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
 decision; CVC-2 retains its `SPECIFICATION_PROPOSAL_UNCHECKED` historical result.
-No Lab proof has been checked successfully. Historical studies stay closed.
+The four original Lab obligations are now checked under the separately named
+conditional model `CVC-U1-A7`. Historical studies and failed runs stay closed.
 
 `CVC-3` is COMPLETE with `BOUNDED_UNRESOLVED`. Its unchanged signature compiled
 in attempt 1; attempt 2 failed with repairable lookup/decidability errors. Both
@@ -2006,25 +2022,37 @@ assumption discharge is established. No proof feedback or observer ran. The
 terminal ledger retains two attempts, four unspent slots, 55.59774324996397
 research seconds and 2.71219816734083 compilation seconds.
 
-`CVC-A7-REPAIR-1` is selected ACTIVE under the owner-authorized
-[prospective repair policy](../config/cvc-a7-repair-policy.json) and
-[policy decision](../results/research/queue-reviews/2026-09-07-repair-policy.json).
-Keep scientific inputs and historical attempts fixed; bind tooling revisions
-within this same item. Parser/audit implementation defects pause for repair
-without automatic closure. Exact baseline acceptance still precedes proof
-feedback, and each new attempt binds its tested controller/source revision.
+`CVC-A7-REPAIR-1` is COMPLETE with `SUCCESS`. Its new source-bound tooling
+repaired transcript compatibility and proof implementation without changing the
+original scientific inputs. The fresh counted signature and baseline passed;
+all nine independent type pairs and both exact A7 comparator reports match.
+The first proof attempt checked `EncodingTarget`, `PreservationTarget`,
+`AcceptanceTarget` and `BoundaryTarget`. `encoding_preserves` uses `propext`
+and `Quot.sound`; the other three results use the full seven-assumption envelope.
+No assumptions, consistency, parser/importer refinement or runtime
+correspondence are thereby proved. See the
+[result](../results/research/conditional-validation-contracts/cvc-a7-repair-1/result.json)
+and [review](../results/research/queue-reviews/2026-09-07-cvc-a7-repair-1.json).
 
-The remaining bound is four new 300-second builds and 7144.402256750036 actual
-active seconds, including repair. Recorded intervals are at most 60 minutes;
-checkpoints do not forfeit unused time. The original A7 totals remain six builds
-and 7200 active seconds; including original CVC-3, at most eight builds. This
-explicitly supersedes the previous prospective one-session/3600-second decision
-without rewriting that historical review or reopening either terminal run.
-No dependency, observer or research-network launch is authorized. Use focused
-checks at repair checkpoints and the required full suite at logical closure.
-The policy documents are committed and pushed as `d6f156d`; this item is now
-active with its cumulative clock in the work record. CVC-4/CVC-5
-remain PLANNED; a usable A7 result would require an explicit CVC-4 successor.
+The owner-authorized [repair policy](../config/cvc-a7-repair-policy.json), pushed
+as `d6f156d`, keeps scientific inputs and prior evidence fixed while allowing
+tested tooling revisions within one item. Actual cumulative work includes
+engineering; short checkpoints do not forfeit a full session. The repair used
+1191.6413262079004 active seconds and three builds, including the fresh signature
+and baseline. Combined A7 totals are five builds and 1247.2390694578644 seconds,
+below six builds and 7200 seconds. Including original CVC-3, seven builds were
+consumed. One A7 build is unused; the successful run is terminal. No dependency,
+observer or research-network launch ran. Closure tests are separately recorded.
+
+`CVC-4-CONDITIONAL` is selected READY and unstarted. This explicit successor
+connects the checked A7 result to exact artifact bytes and at most two
+implementation lineages. It inherits the original CVC-4 scientific scope and
+ceilings: four fixed candidate/control pairs, 16 validator launches of at most
+30 seconds, and 16200 actual active seconds in intervals of at most 90 minutes.
+Before any launch, bind and commit exact inputs, versions, expected hypotheses,
+source/runtime mapping and tested execution controls. No successor protocol,
+workspace or launch has started. Original CVC-4 and CVC-5 remain PLANNED with
+their original dependencies; conditional success does not rewrite CVC-3.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
@@ -2043,6 +2071,9 @@ CVC-3-CONDITIONAL adds 55.59774324996397 research seconds and
 now 8511.749567541963 active seconds and
 54.82469041808508 compilation seconds; source-review and
 administrative closure costs remain separately visible in their records.
+CVC-A7-REPAIR-1 adds 1191.6413262079004 research seconds and
+4.791140998946503 compilation seconds. The same aggregate scope is now
+9703.390893749864 active seconds and 59.61583141703158 compilation seconds.
 Prior unknown fixture duration stays unknown.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI

@@ -254,6 +254,30 @@ owner-requested documentation checkpoint preceding this continuation needs
 queue/status agreement, affected generator/currency checks and diff checks;
 it adds no proof or checker evidence and does not rerun the unchanged full suite.
 
+## Conditional implementation successor — 2026-09-07
+
+CVC-A7-REPAIR-1 completed the four original obligations with `SUCCESS` under
+`CVC-U1-A7`. Its [stopping review](../../results/research/queue-reviews/2026-09-07-cvc-a7-repair-1.json)
+selects **CVC-4-CONDITIONAL**, READY and unstarted. This is an explicit successor
+to the original CVC-4 proposal; the original CVC-3 failure and CVC-4 dependency
+remain unchanged. No broader milestone or semantic family is activated.
+
+Apply the original CVC-4 artifact/mapping question, at most two implementation
+lineages, four fixed candidate/control pairs, and 16 validator launches of at
+most 30 seconds. The cumulative allocation is 16200 actual active seconds,
+including engineering, in recorded intervals of at most 90 minutes. Before any
+launch, commit the exact inputs, versions, expected hypotheses, source/runtime
+mapping, tested controls and finite launch matrix. Bind any necessary setup or
+fixture budget explicitly; the scientific launch allowance grants no implicit
+extra processes. Version tooling repairs within this item while retaining raw
+attempts, consumed costs and frozen scientific inputs.
+
+The output must explain a concrete implementation boundary using the checked
+conditional model. Finite testing does not establish parser, importer or
+executable-validator refinement, or discharge A7. Stop after the fixed comparison
+or a real cap/boundary, perform the required closure checks, and rerank. Do not
+start this successor during the CVC-A7-REPAIR-1 closure.
+
 ## Validation and handoff
 
 At a scientific frontier transition or logical research-item closure, validate
@@ -267,7 +291,7 @@ scripts/validate-research-queue
 python3 -m unittest discover -s tests -p 'test_research_queue.py'
 scripts/close-declaration-validation-publication-study validate-historical
 scripts/validate-publication-study-snapshot --require-full-payload
-scripts/run-unit-tests --require-full-payload
+scripts/run-unit-tests-with-signal-retry --require-full-payload
 scripts/validate-contribution --check-catalog
 scripts/refresh-current-state
 scripts/build-project-review --check
@@ -275,6 +299,11 @@ scripts/artifact-status --require-current
 ```
 
 Each research item adds its own exact proof/evidence checks before execution.
+The unit-suite wrapper invokes the unchanged complete suite; on macOS it binds
+the narrowly bounded group-signal retry described in `docs/AGENT_WORKFLOW.md`.
+It does not change test assertions or historical process receipts. Administrative
+fixture allocations remain separate and visible, including exhausted earlier
+allocations and any explicit finite repair allocation.
 Do not rerun checkers to refresh planning documents. Preserve the broader
 assurance gate's unresolved failures. At handoff, record the completed item,
 its outcome and evidence, the ranking decision, and the next selected item.

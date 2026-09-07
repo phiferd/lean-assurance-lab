@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "status": "RECONCILED_FOR_CONTINUATION",
+  "failed_batch": {
+    "path": "results/workflow-refresh/cvc-a7-repair-1-2026-09-07/06-full-tests.json",
+    "bytes": 812,
+    "sha256": "fc79f8efbd5d01f38340ef12729f48d61ea8cdf28b77fc8ab2bd34a6b51ee01d"
+  },
+  "raw_legacy_ledger": {
+    "path": "results/workflow-refresh/cvc-a7-repair-1-2026-09-07/06-full-tests-fixtures/preparation.jsonl",
+    "bytes": 2218,
+    "sha256": "bd0a61d3b1160552d8c65290c28060728c828cd42dae61b395547cb3491a1e6e"
+  },
+  "cleanup_inspection": {
+    "path": "results/workflow-refresh/cvc-a7-repair-1-2026-09-07/fixture-cleanup-inspection.json",
+    "bytes": 282,
+    "sha256": "293aaf758cab2538a4cbcc98dcd36ba22de94b9f42caaeae688e251d2ea8f62e"
+  },
+  "reserved_launches": 23,
+  "reserved_seconds": 115,
+  "known_actual_seconds": 6.960505961673334,
+  "unknown_actual_seconds": null,
+  "unknown_reservations": [
+    {
+      "kind": "RESERVED",
+      "reserved_launches": 2,
+      "reserved_seconds": 10,
+      "at": "2026-09-07T13:13:19.487388+00:00",
+      "test": "test_cvc_prep.ProcessTests.test_real_timeout_kills_process_group"
+    }
+  ],
+  "conservative_charged_seconds": 16.960505961673334,
+  "original_duration_cap_compliance": "NOT_ESTABLISHED",
+  "cause": "Sandbox denied legacy timeout fixture killpg(SIGKILL). Original ledger has no terminal receipt for that reservation. The unchanged suite continued before the owner observed the buffered failure; preserve this limitation.",
+  "repair": "Current matching processes are absent. Preserve the unknown original duration and charge its complete reservation. Retry the same source-bound suite with process-control permissions; do not alter the legacy test/controller or raw evidence."
+}

@@ -1,0 +1,23 @@
+#!/usr/bin/env python3
+"""Bind the fixed proof runner; refuse any started run or workspace."""
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib import cvc_a7_runner as runner
+from lib.cvc_process import atomic
+
+
+def main():
+    runner.require(not (ROOT / runner.OUT).exists() and not (ROOT / runner.BASE).exists(),
+                   'cannot rebind a started or partially started proof run')
+    manifest = runner.build_manifest(ROOT)
+    runner.verify_payloads(ROOT, manifest)
+    atomic(ROOT / runner.MANIFEST, manifest)
+    runner.validate_manifest(ROOT)
+    print('PASS: fixed protocol, sources, full runtime, complete dependency bundle and runner bound; no proof launch')
+
+
+if __name__ == '__main__':
+    main()
