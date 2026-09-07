@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "model_id": "CVC-U1-A7",
+  "status": "UNCOMPILED_UNTIL_CVC-3-CONDITIONAL_COUNTED_BASELINE",
+  "scope": "Imported comparator and assumption baseline only; no Lab proof source is admitted.",
+  "comparators": [
+    {
+      "name": "Lean.Level.isEquiv'_wf",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/source-excerpts.json#VerifyLevel:3808-3815",
+      "expected_alias": "cvcA7ExpectedIsEquivWf",
+      "expected_declaration": "noncomputable def cvcA7ExpectedIsEquivWf\n    (h : Lean.Level.isEquiv' u v)\n    (hu : VLevel.ofLevel ls u = some u') (hv : VLevel.ofLevel ls v = some v') : u' ≈ v' :=\n  Lean.Level.isEquiv'_wf h hu hv"
+    },
+    {
+      "name": "Lean.Level.isEquiv'_complete",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/source-excerpts.json#VerifyLevel:3858-3864",
+      "expected_alias": "cvcA7ExpectedIsEquivComplete",
+      "expected_declaration": "noncomputable def cvcA7ExpectedIsEquivComplete\n    (hu : VLevel.ofLevel ls u = some u') (hv : VLevel.ofLevel ls v = some v') :\n    Lean.Level.isEquiv' u v ↔ u' ≈ v' :=\n  Lean.Level.isEquiv'_complete hu hv"
+    }
+  ],
+  "assumptions": [
+    {
+      "name": "propext",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedPropext",
+      "expected_declaration": "noncomputable def cvcA7ExpectedPropext {a b : Prop} : (a ↔ b) → a = b := propext"
+    },
+    {
+      "name": "Classical.choice",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedChoice",
+      "expected_declaration": "noncomputable def cvcA7ExpectedChoice {α : Sort u} : Nonempty α → α := Classical.choice"
+    },
+    {
+      "name": "Quot.sound",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedQuotSound",
+      "expected_declaration": "noncomputable def cvcA7ExpectedQuotSound {α : Sort u} {r : α → α → Prop} {a b : α}\n    : r a b → Quot.mk r a = Quot.mk r b := Quot.sound"
+    },
+    {
+      "name": "Lean.Level.instLawfulBEqLevel",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedLawfulBEqLevel",
+      "expected_declaration": "noncomputable def cvcA7ExpectedLawfulBEqLevel : LawfulBEq Lean.Level := Lean.Level.instLawfulBEqLevel"
+    },
+    {
+      "name": "Lean.Level.isExplicitSubsumedAux_eq",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedExplicitSubsumed",
+      "expected_declaration": "noncomputable def cvcA7ExpectedExplicitSubsumed :\n    isExplicitSubsumedAux = Lean.Level.Total.isExplicitSubsumedAux :=\n  Lean.Level.isExplicitSubsumedAux_eq"
+    },
+    {
+      "name": "Lean.Level.normalize_eq",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/assessment.json",
+      "expected_alias": "cvcA7ExpectedNormalize",
+      "expected_declaration": "noncomputable def cvcA7ExpectedNormalize : Lean.Level.normalize = Lean.Level.Total.normalize :=\n  Lean.Level.normalize_eq"
+    },
+    {
+      "name": "Std.TreeMap.all_eq_all_toList",
+      "source": "results/research/conditional-validation-contracts/cvc-axioms-1/source-excerpts.json#Axioms:1-15",
+      "expected_alias": "cvcA7ExpectedTreeMapAll",
+      "expected_declaration": "noncomputable def cvcA7ExpectedTreeMapAll {α : Type u} {β : Type v}\n    {cmp : α → α → Ordering} {t : Std.TreeMap α β cmp} {p : α → β → Bool} :\n    t.all p = t.toList.all (fun a => p a.1 a.2) := Std.TreeMap.all_eq_all_toList"
+    }
+  ],
+  "exact_comparator_axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound",
+    "Lean.Level.instLawfulBEqLevel",
+    "Lean.Level.isExplicitSubsumedAux_eq",
+    "Lean.Level.normalize_eq",
+    "Std.TreeMap.all_eq_all_toList"
+  ],
+  "type_output": "Canonical expected_declaration fields are independent, source-reviewed typed aliases. Baseline.lean is generated exactly from these declarations, then prints imported and expected fully elaborated types under identical options. The audit compares every printed pair; successful compilation enforces the written type annotations. Formatting/compilation remains unchecked until the later counted baseline."
+}

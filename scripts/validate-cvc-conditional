@@ -1,0 +1,17 @@
+#!/usr/bin/env python3
+"""Validate the A7 preparation successor without launching Lean or fixtures."""
+import argparse
+from pathlib import Path
+import sys
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lib.cvc_conditional_evidence import validate
+
+p = argparse.ArgumentParser(description=__doc__)
+p.add_argument('--require-full-payload', action='store_true')
+p.add_argument('--closure', action='store_true')
+a = p.parse_args()
+try:
+    print(validate(Path(__file__).resolve().parents[1], a.require_full_payload, a.closure))
+except (ValueError, OSError, KeyError) as error:
+    print('FAIL: ' + str(error), file=sys.stderr)
+    raise SystemExit(1)

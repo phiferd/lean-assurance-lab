@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "protocol_id": "CVC3-U1-A7-PROOF-0001",
+  "item_id": "CVC-3-CONDITIONAL",
+  "preparation_item": "CVC-CONDITIONAL-1",
+  "contract_id": "CVC-U1-A7",
+  "status": "PREPARED_UNEXECUTED",
+  "workspace": "external/cvc3-u1-a7-proof-0001",
+  "run_directory": "results/research/conditional-validation-contracts/cvc-3-conditional/run-0001",
+  "signature": {
+    "path": "research/conditional-validation-contracts/cvc2/Contract.lean",
+    "sha256": "20f3c65a3bfcd3a491f58a9562d203eeb91084f88c728206a725e252e533e5d3",
+    "bytes": 3814
+  },
+  "semantic_inputs": [
+    {
+      "path": "research/conditional-validation-contracts/cvc2/Contract.lean",
+      "sha256": "20f3c65a3bfcd3a491f58a9562d203eeb91084f88c728206a725e252e533e5d3",
+      "bytes": 3814
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+      "sha256": "faaa491087375e7bb2fb55060a74d14efecdd4edf80edb9591351fed3a28133f",
+      "bytes": 2931
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/examples.json",
+      "sha256": "1e3cd9a7b295e587b1f3146859799d820b3d8ea4e2907580a647696835a32a22",
+      "bytes": 4111
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-2/contract.json",
+      "sha256": "edc98f1ce33867a4c9debba61dc686dd5f7ade981fe9cf0fac0bf4d4cbaab2f0",
+      "bytes": 10784
+    }
+  ],
+  "assumptions": "results/research/conditional-validation-contracts/cvc-conditional-1/assumptions.json",
+  "baseline_source": "research/conditional-validation-contracts/cvc-a7/Baseline.lean",
+  "baseline_expectations": "results/research/conditional-validation-contracts/cvc-conditional-1/baseline-expectations.json",
+  "limits": {
+    "max_sessions": 2,
+    "session_minutes": 60,
+    "max_active_seconds": 7200,
+    "proof_build_attempts": 6,
+    "attempt_timeout_seconds": 300,
+    "dependency_builds": 0,
+    "checker_launches": 0,
+    "network_requests": 0
+  },
+  "entry_gates": [
+    "CVC-CONDITIONAL-1 SUCCESS, committed/pushed exact runner and new manifest, preserved source/dependency products, explicit stopping-point PROMOTE decision.",
+    "Fixed A7 assumptions, original signature/examples/targets and read-only dependency/runtime preflight. No automatic materialization, download or compilation.",
+    "Prior CVC3-U1-PROOF-0001 remains terminal; new ledger and workspace start only under the new item, with no copied attempt counters."
+  ],
+  "stages": [
+    {
+      "stage": "SIGNATURE",
+      "attempt_rule": "First reservation, always counted",
+      "input": "Exact old Contract.lean bytes",
+      "argv": [
+        "{bound_lean}",
+        "-o",
+        "{new_workspace}/Contract.olean",
+        "Contract.lean"
+      ]
+    },
+    {
+      "stage": "BASELINE",
+      "attempt_rule": "Next reservation after signature success; failures/retries count within six",
+      "input": "Fixed Baseline.lean prints imported comparator axioms and fully elaborated types of both comparators and all seven assumptions; no Lab proof source.",
+      "argv": [
+        "{bound_lean}",
+        "-o",
+        "{attempt_dir}/Baseline.olean",
+        "Baseline.lean"
+      ],
+      "pass_rule": "Both comparator reports must exactly equal A7, with no missing/extra/duplicate report. Compare printed assumption and comparator types to the fixed reviewed expectations before accepting new Lab proof feedback."
+    },
+    {
+      "stage": "PROOF_OR_COUNTEREXAMPLE",
+      "attempt_rule": "Remaining reservations after the baseline, normally at most four",
+      "input": "Reviewed proof implementation; only implementation edits between attempts",
+      "argv": [
+        "{bound_lean}",
+        "-o",
+        "{attempt_dir}/CVC2Proof.olean",
+        "CVC2Proof.lean"
+      ],
+      "pass_rule": "All original required result declarations/types and exact acceptance/boundary obligations; print per-result transitive sets plus both comparator reports. Lab sets may be exact reported subsets of A7. Reject sorryAx, new Lab axioms, native evaluation trust, missing printouts or unlisted axioms."
+    }
+  ],
+  "runner": "scripts/run-cvc-u1-a7-proof",
+  "manifest": "config/cvc-u1-a7-proof-0001.json",
+  "required_result_declarations": [
+    {
+      "name": "Lab.CVC2.encoding_preserves",
+      "type": "Lab.CVC2.EncodingTarget"
+    },
+    {
+      "name": "Lab.CVC2.preservation",
+      "type": "Lab.CVC2.PreservationTarget"
+    },
+    {
+      "name": "Lab.CVC2.required_acceptance",
+      "type": "Lab.CVC2.AcceptanceTarget"
+    },
+    {
+      "name": "Lab.CVC2.boundary",
+      "type": "Lab.CVC2.BoundaryTarget"
+    }
+  ],
+  "counterexample_type": "∃ a : Lab.CVC2.SortDefinition, Lab.CVC2.Accepts a ∧ ¬ Lab.CVC2.Contract a",
+  "mutable_inputs": "Only external/cvc3-u1-a7-proof-0001/proof-input.lean implementation may change between attempts. Signature, baseline source/type expectations, assumptions, protocol, payloads and runner stay committed and bound. Fixed-input change requires explicit successor; baseline mismatch stops before proof feedback.",
+  "accounting": {
+    "reuse": "Unchanged lib/cvc_process.py, lib/cvc_prep.py lock/WAL and immutable predecessor process tests. Successor runner retains original session, ledger, receipt, deadline, recovery and workspace controls with new fixed limits and stage names.",
+    "counting": "Attempt 1 signature; subsequent attempts baseline until exact audited success; then proof or counterexample. Failed starts/timeouts/interruptions count once. Successful baseline has no scientific result. Normally four proof slots remain; retries reduce remaining slots.",
+    "orphan": "Full timeout plus conservative active-time charge; missing cleanup receipt stops launches. No completed attempt replay or counter reset.",
+    "session": "Two UTC/monotonic sessions of 3600 seconds each; 7200 total; each process reservation min(300, remaining session, remaining total).",
+    "budget_relationship": "Six newly authorized reservations in an explicit successor, not reuse of the predecessor ten unspent slots. Preserve original two attempts and 199.947382292 active seconds/2.357550584 compilation seconds; original-plus-proposed proof launches are at most eight. Preparation and required closure validation costs remain separately visible; prior unknown fixture duration remains unknown."
+  },
+  "repair_rule": "SUCCESS for the exact checked conditional theorem and all obligations, NEGATIVE for a checked counterexample, or BOUNDED_UNRESOLVED at a true cap/immutable-input/authority boundary or documented unrepairable implementation gap. Repair ordinary proof errors inside the same active item. A baseline assumption mismatch never expands the list after feedback.",
+  "nonclaims": "No axiom discharge or consistency, no arbitrary-byte parser proof, no executable whole-validator refinement, no automatic CVC-4 activation.",
+  "downstream": {
+    "cvc4": "Keep the original CVC-4 proposal PLANNED with its unmet CVC-3 SUCCESS dependency. If the new proof succeeds, create an explicit CVC-4 successor scoped to CVC-U1-A7; never reinterpret the old dependency as satisfied.",
+    "cvc5": "Retain PLANNED; every intermediate stop records its own contribution/no-action recommendation."
+  },
+  "preparation_limits": {
+    "max_sessions": 2,
+    "session_minutes": 60,
+    "proof_builds": 0,
+    "dependency_builds": 0,
+    "observer_launches": 0,
+    "network_requests": 0,
+    "fixture_launches_max": 64,
+    "fixture_timeout_seconds": 5,
+    "fixture_total_reserved_seconds_max": 320
+  },
+  "process_machinery_change": {
+    "materially_new": false,
+    "reason": "A7 needs a counted imported baseline and exact assumption/type audit. The historical runner hard-codes two stages and old budgets. A new stage-aware successor preserves the process engine and controls; no new supervisor, timeout, cleanup or execution override is introduced."
+  },
+  "launches_in_preparation": {
+    "proof": 0,
+    "dependencies": 0,
+    "observers": 0,
+    "network": 0
+  },
+  "external_action": "No external research message or source approval; authorized repository Git delivery only."
+}
