@@ -3,7 +3,7 @@
   "frontier_id": "F-CONDITIONAL-VALIDATION-CONTRACTS",
   "plan": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
   "updated_at": "2026-09-06",
-  "selected_item": "CVC-3",
+  "selected_item": "CVC-AXIOMS-1",
   "items": [
     {
       "id": "CVC-1",
@@ -441,7 +441,7 @@
       "completion": "Checked scoped theorem plus exact acceptance-obligation checks, checked counterexample, or bounded unresolved ledger; exact proof dependencies and reproducible commands. Counterexamples retain NEGATIVE outcome and trigger explicit replacement/reranking of theorem-dependent successors.",
       "stop_condition": "Four sessions or 12 proof builds of at most five minutes each; no new family or broad kernel proof.",
       "kind": "PROOF",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "CVC-2",
         "CVC-PREP-2",
@@ -489,17 +489,60 @@
         "scripts/validate-cvc-runner2"
       ],
       "issue_urls": [],
+      "closure": {
+        "outcome": "BOUNDED_UNRESOLVED",
+        "evidence_refs": [
+          "results/research/conditional-validation-contracts/cvc-3/result.json",
+          "results/research/conditional-validation-contracts/cvc-3/report.md",
+          "results/research/conditional-validation-contracts/cvc-3/work-record.json",
+          "results/research/conditional-validation-contracts/cvc-3/stop-diagnostic.json",
+          "results/research/conditional-validation-contracts/cvc-3/evidence-manifest.json",
+          "results/research/queue-reviews/2026-09-06-cvc-3.json"
+        ],
+        "recommendation": "Select CVC-AXIOMS-1 for source-only review of two unlisted mandatory comparator axioms and an evidence-based successor/reuse/stop decision. Preserve the exact failed run, signature, allowlist and 10 unspent slots; do not replay this ID. No checked Lab result or external action is warranted."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "CVC-AXIOMS-1",
+      "priority": 10,
+      "title": "Review the comparator assumption gap before further proof feedback",
+      "target": "Lean.Level.instLawfulBEqLevel and Lean.Level.isExplicitSubsumedAux_eq in the pinned CVC-U1 comparator dependency closure",
+      "action": "Read the exact axiom statements and dependency paths; assess whether their semantic and runtime assumptions support a useful explicitly conditional successor, an alternative proved bridge, or stopping this path. Do not change the old allowlist.",
+      "expected_value": "Resolve the concrete trust boundary exposed by the first proof attempt before spending more builds or implying an unsupported formal guarantee.",
+      "rank_rationale": "Highest eligible local work: both mandatory comparator reports expose the same two omitted assumptions, so more proof edits under the frozen inputs cannot pass. A small source-only review can determine whether continuation is scientifically useful. Arena access remains unconfirmed; other themes require separate authorization.",
+      "entry_gate": "CVC-3 is closed BOUNDED_UNRESOLVED at an immutable assumption boundary, with exact failed-source/raw-output and source-axiom bindings. This review depends on the completed CVC-2 specification; it uses the unresolved CVC-3 result as evidence, not as a successful theorem dependency. It authorizes source review only.",
+      "completion": "An input-bound table for all actually printed comparator assumptions, each exact statement/dependency/trust interpretation and feasible discharge or alternative route; a justified SUCCESSOR, REUSE_ALTERNATIVE, or STOP recommendation with concrete prerequisites and finite successor proposal if warranted.",
+      "stop_condition": "At most two 60-minute sessions and six already-pinned source files; no builds, proof elaborations, fixtures, checkers, downloads, network searches, source approval or external messages. Stop on a supported decision or the bound; preserve unresolved obligations.",
+      "kind": "LITERATURE",
+      "status": "READY",
+      "depends_on": [
+        "CVC-2"
+      ],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 60,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+        "results/research/conditional-validation-contracts/cvc-3/result.json",
+        "results/research/conditional-validation-contracts/cvc-3/stop-diagnostic.json",
+        "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+        "results/research/conditional-validation-contracts/cvc-1/assessment.json"
+      ],
+      "issue_urls": [],
       "closure": null,
       "blocked_reason": ""
     },
     {
       "id": "CVC-4",
-      "priority": 10,
+      "priority": 11,
       "title": "Connect the contract to real validation behavior",
       "target": "At most two implementation lineages and four fixed pairs",
       "action": "Map parsing, reconstruction, validation and semantic use; execute only the bound comparison.",
       "expected_value": "Shows whether the formal result actually explains an ecosystem ambiguity.",
-      "rank_rationale": "Conditional on a usable proof result; speculative adapters or a broad checker survey would have lower value.",
+      "rank_rationale": "Retained conditional proposal: CVC-3 has no usable checked result, and the required observer protocol is absent. Its successful-theorem dependency is unmet; CVC-AXIOMS-1 must recommend any explicit replacement first.",
       "entry_gate": "CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.",
       "completion": "Exact bytes, observer profiles, raw outcomes and source-to-contract mapping; explicitly retain any unproved implementation bridge.",
       "stop_condition": "Three sessions, four pairs or 16 launches of at most 30 seconds; stop on invalid inputs or unresolved adapter boundary.",
@@ -523,7 +566,7 @@
     },
     {
       "id": "CVC-5",
-      "priority": 11,
+      "priority": 12,
       "title": "Prepare shared evidence and decide the next phase",
       "target": "The scoped result and the ecosystem target it benefits",
       "action": "Prepare a regression/formalization/clarification draft or justified no-action result, then compare successor options.",
@@ -552,7 +595,7 @@
     },
     {
       "id": "ALT-SURVIVORS",
-      "priority": 12,
+      "priority": 13,
       "title": "Design the next fixed survivor triage",
       "target": "One selected member of the seven pending survivors",
       "action": "Prepare an evidence-based fixed-candidate triage proposal and finite execution manifest.",
@@ -579,7 +622,7 @@
     },
     {
       "id": "ALT-TRANSFER",
-      "priority": 13,
+      "priority": 14,
       "title": "Assess a prospective transfer study",
       "target": "One independent or held-out transfer question",
       "action": "Design one falsifiable transfer comparison after reviewing relevant methods and prior knowledge.",

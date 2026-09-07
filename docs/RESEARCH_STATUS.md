@@ -50,6 +50,24 @@ research directions.
 
 ## Attempted
 
+- Closed `CVC-3` on 2026-09-06 with `BOUNDED_UNRESOLVED` at an
+  immutable assumption boundary. The unchanged signature compiled as attempt 1;
+  proof attempt 2 failed with local proof errors and exposed two unlisted axioms
+  in both mandatory imported comparator reports: `Lean.Level.instLawfulBEqLevel`
+  and `Lean.Level.isExplicitSubsumedAux_eq`. No checked Lab result is claimed.
+  All two reservations and raw failures are retained; the run used 199.947 active
+  seconds and 2.358 compilation seconds. No observer or dependency launch ran.
+  The allowlist and all predecessor evidence remain unchanged. See the
+  [result](../results/research/conditional-validation-contracts/cvc-3/result.json),
+  [diagnostic](../results/research/conditional-validation-contracts/cvc-3/stop-diagnostic.json),
+  and [review](../results/research/queue-reviews/2026-09-06-cvc-3.json).
+  `CVC-AXIOMS-1` is selected READY and unstarted for a bounded source-only
+  assumption review. CVC-4 and CVC-5 remain conditional PLANNED stages.
+  Required full-payload verification passed 575 tests (502 current and 73
+  unchanged historical; no skips). The closure validator also passes in a
+  fresh full-history clone without proof payloads. Exact checks are retained in
+  the [validation record](../results/workflow-refresh/cvc-3-2026-09-06/validation.json).
+
 - Completed `CVC-RUNNER-2` on 2026-09-06 with `SUCCESS` for the bounded runner
   implementation and instruction repair. Required current/historical checks
   pass; no Lean, signature, proof or checker ran. The exact manifest and
@@ -1886,52 +1904,56 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-3`.
+Selected next item: `CVC-AXIOMS-1`.
 
-The [ranked queue](../config/research-queue.json) governs item order, eligibility,
+The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
-decision; CVC-2 retains `SUCCESS` for a `SPECIFICATION_PROPOSAL_UNCHECKED`.
-No Lab proof has been checked. Historical studies remain closed and unchanged.
+decision; CVC-2 retains its `SPECIFICATION_PROPOSAL_UNCHECKED` historical result.
+No Lab proof has been checked successfully. Historical studies stay closed.
 
-`CVC-RUNNER-2` is COMPLETE with `SUCCESS` for the protocol implementation.
-The parent-independent supervisor, source-bound fixture ledger, fixed runtime and
-command manifest, signature-first sequencing, crash accounting, terminal-time
-budget stops and full axiom parser passed inert control tests and required
-current/historical validation. See the
-[result](../results/research/conditional-validation-contracts/cvc-runner-2/result.json),
-[report](../results/research/conditional-validation-contracts/cvc-runner-2/report.md),
-and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-runner-2.json).
-The instructions now require repair of solvable engineering failures within the
-same item and remaining budget, preserving raw failures and assurance gates.
+`CVC-3` is COMPLETE with `BOUNDED_UNRESOLVED`. Its unchanged signature compiled
+in attempt 1; attempt 2 failed with repairable lookup/decidability errors. Both
+mandatory imported comparator reports independently exposed two axioms outside
+the frozen allowlist: `Lean.Level.instLawfulBEqLevel` and
+`Lean.Level.isExplicitSubsumedAux_eq`. These fixed reports are required in both
+proof and counterexample modes. Lab proof repair cannot remove that immutable
+input boundary, so the run is terminal and its 10 unspent slots are not reusable.
+See the [result](../results/research/conditional-validation-contracts/cvc-3/result.json),
+[diagnostic](../results/research/conditional-validation-contracts/cvc-3/stop-diagnostic.json),
+and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-3.json).
+The failed Lab declarations and their error-recovery `sorryAx` reports are raw
+failure evidence, not a checked theorem or counterexample. No observer ran.
 
-`CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its failed cancellation, orphan,
-uninstrumented worker launches and unknown actual duration remain unchanged.
-Its original endpoint still refuses execution. `CVC-PREP-2` remains SUCCESS with
-37 upstream modules and 141 bound products, including the 119 unchanged
-predecessor products. `CVC-PREP-1` remains `BOUNDED_UNRESOLVED`. Combined
-preparation cost remains 3030.60362 active seconds and 49.75494 compilation seconds;
-runner costs and prior uncertainty are linked in the new result.
+`CVC-AXIOMS-1` is selected READY and unstarted. Review the exact source statements,
+actual transitive assumptions, trust interpretation, and feasible discharge or
+alternative route using at most six already-pinned source files in two 60-minute
+sessions. Recommend an explicit justified successor, alternative reuse, or stop.
+This selection authorizes zero proof, dependency, fixture or observer launches,
+network requests, normative-source approvals or external messages. Do not edit
+CVC-2's allowlist or resume CVC3-U1-PROOF-0001. CVC-4 and CVC-5 remain PLANNED;
+the unsuccessful proof result does not satisfy their entry gates.
 
-`CVC-3` is ACTIVE under CVC3-U1-PROOF-0001 after the
-[separate committed-input entry review](../results/research/conditional-validation-contracts/cvc-runner-2/entry-review.json).
-Use `scripts/run-cvc-u1-proof-successor`; design session 1 is open before proof work,
-and retain the fixed CVC3-U1-PROOF-0001 identity and budgets. No signature or proof
-has been elaborated. The first elaboration of the unchanged CVC-2 signature is
-counted attempt 1 of 12. SUCCESS requires all four exact declarations and six
-axiom reports; the separately documented counterexample mode retains NEGATIVE.
-CVC-4 and CVC-5 remain conditional PLANNED stages. This handoff does not execute
-the next item or authorize observer launches.
+`CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
+control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
+orphan, uninstrumented worker launches and unknown actual duration stay unchanged.
+Its original endpoint still refuses execution. CVC-PREP-2 remains SUCCESS with
+37 upstream modules and 141 products; CVC-PREP-1 remains `BOUNDED_UNRESOLVED`.
+CVC-3 adds 199.947382292 active seconds and 2.357550584 compilation seconds.
+Aggregate recorded preparation/runner/proof active time is 7174.931631292 seconds;
+aggregate preparation/proof compilation time is 52.112492251 seconds. Prior
+unknown fixture duration remains unknown, and closure validation costs are
+reported separately.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena
-feedback/dispositions are unknown. Repair access with
+feedback/dispositions remain unknown. Repair access with
 `gh auth login -h github.com --web`, then rank a fresh bounded check after
 successful preflight. No repeated polling is enabled.
 
-This execution closes one unresolved implementation item and selects its repair
-without starting it. It changes no normative-source approval or old catalog
-disposition and authorizes no external message or publication. Reevaluate
-candidates at each stop using [Research workflow](RESEARCH_WORKFLOW.md).
+This turn closes one bounded item and selects the next without starting it.
+It changes no normative-source approval or old catalog disposition and
+publishes no external message. Reevaluate at the next stop using
+[Research workflow](RESEARCH_WORKFLOW.md).
 
 ### Waiting
 

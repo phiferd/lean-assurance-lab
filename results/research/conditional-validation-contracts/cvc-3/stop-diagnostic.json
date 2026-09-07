@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-3",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "stop_kind": "IMMUTABLE_ASSUMPTION_BOUNDARY",
+  "attempt": 2,
+  "compiler_returncode": 1,
+  "stdout": {
+    "path": "results/research/conditional-validation-contracts/cvc-3/run-0001/attempts/02/stdout",
+    "sha256": "2485ea0ebb306eec5583f470d8d9ca8c50ea398a5b483f4609e6a55cacfd633e",
+    "bytes": 2557
+  },
+  "frozen_allowlist": {
+    "path": "results/research/conditional-validation-contracts/cvc-2/assumptions.json",
+    "sha256": "faaa491087375e7bb2fb55060a74d14efecdd4edf80edb9591351fed3a28133f",
+    "bytes": 2931
+  },
+  "mandatory_comparator_reports": {
+    "Lean.Level.isEquiv'_wf": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound",
+      "Lean.Level.instLawfulBEqLevel",
+      "Lean.Level.isExplicitSubsumedAux_eq",
+      "Lean.Level.normalize_eq",
+      "Std.TreeMap.all_eq_all_toList"
+    ],
+    "Lean.Level.isEquiv'_complete": [
+      "propext",
+      "Classical.choice",
+      "Quot.sound",
+      "Lean.Level.instLawfulBEqLevel",
+      "Lean.Level.isExplicitSubsumedAux_eq",
+      "Lean.Level.normalize_eq",
+      "Std.TreeMap.all_eq_all_toList"
+    ]
+  },
+  "unlisted_axioms": [
+    "Lean.Level.instLawfulBEqLevel",
+    "Lean.Level.isExplicitSubsumedAux_eq"
+  ],
+  "source_binding": {
+    "path": "external/cvc-u1-dependencies-0002/src/Lean4Lean/Verify/Axioms.lean",
+    "sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+    "bytes": 20498
+  },
+  "source_evidence": [
+    {
+      "name": "Lean.Level.isExplicitSubsumedAux_eq",
+      "line": 194,
+      "excerpt": "\ndef Total.isExplicitSubsumedAux (lvls : Array Level) (maxExplicit : Nat) (i : Nat) : Bool :=\n  if h : i < lvls.size then\n    if lvls[i].getOffset \u2265 maxExplicit then true\n    else isExplicitSubsumedAux lvls maxExplicit (i+1)\n  else false\n\n/-- Patch for `partial def Lean.Level.isExplicitSubsumedAux`. -/\n@[simp] axiom isExplicitSubsumedAux_eq : isExplicitSubsumedAux = Total.isExplicitSubsumedAux",
+      "scope": "Axiom equating the partial explicit-subsumption helper with its total copy."
+    },
+    {
+      "name": "Lean.Level.instLawfulBEqLevel",
+      "line": 292,
+      "excerpt": "/-- This is because the `BEq` instance is implemented in C++ -/\n@[instance] axiom instLawfulBEqLevel : LawfulBEq Level",
+      "scope": "Lawfulness axiom for Lean.Level Boolean equality; source comment identifies its C++ implementation."
+    }
+  ],
+  "repair_assessment": {
+    "ordinary_errors": [
+      "Parameter lookup induction needs an explicit unequal-name Boolean-equality fact before simplifying idxOf.",
+      "Acceptance and Supported boundary goals need definition unfolding before decidability synthesis."
+    ],
+    "attempted": [
+      "Attempt 1 elaborated the unchanged signature successfully.",
+      "Attempt 2 attempted the structural bridge, comparator composition, exact accepts and boundaries together; raw failed source and diagnostics retained.",
+      "Read-only inspection located both additional axioms in the already-bound upstream Axioms.lean; compared both mandatory transitive reports to the frozen allowlist."
+    ],
+    "why_no_further_repair_launch": "These local proof errors appear repairable, but every successful proof or counterexample attempt must print both unchanged imported comparator reports. Both already expose disallowed axioms. Fixing the Lab proof cannot change those imports or the fixed allowlist. A new launch therefore cannot satisfy the existing gate; an explicit successor review of the immutable assumption/runtime boundary is required.",
+    "options_requiring_successor": [
+      "Justify a separately named conditional contract with fully reviewed transitive assumptions, without claiming the current run passed.",
+      "Find or prove an axiom-free replacement and define new bound comparator/runtime inputs.",
+      "Redirect or stop if neither path has enough ecosystem value."
+    ]
+  },
+  "claim_limits": [
+    "No checked Lab theorem or counterexample.",
+    "The printed sorryAx dependencies of failed Lab declarations are elaborator error recovery and are retained as failure evidence.",
+    "The two imported comparator reports do not contain sorryAx; they independently reveal the allowlist gap.",
+    "No evidence of unsoundness, universal conformance failure, or executable validator refinement."
+  ]
+}
