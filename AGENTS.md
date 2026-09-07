@@ -32,6 +32,26 @@ When work changes the frontier, update the durable state and its canonical
 derived artifacts through their defined generation paths. Never advance into a
 subsequent milestone unless durable research state authorizes it.
 
+## Engineering persistence within an active item
+
+Treat an ordinary engineering failure as work to diagnose and repair within the
+active item, not as a scientific negative, completion, or reason to create a
+successor. Within the authorized scope and remaining budget, preserve the raw
+failure evidence, identify the cause, add the smallest meaningful regression,
+repair it, and rerun the affected validation. Do not reset counters, reuse a
+completed attempt, weaken a gate, or edit frozen evidence to make the repair
+pass.
+
+Pause further launches for an accounting, timeout, cleanup, or process-control
+failure. Reconcile the ledger conservatively, retain unknown costs as unknown,
+then continue safe local repairs and non-launch validation. Stop only for a
+real cap, an authority or external blocker, an immutable-input change requiring
+an explicit successor, or a named implementation gap for which no feasible authorized repair path
+remains. Record attempted repairs and why remaining options are blocked;
+ordinary difficulty or one failed check is not sufficient. One owner controls launches and binds the exact
+source/test inputs before each batch; delegated read-only review may proceed
+independently.
+
 ## Repository delivery and external actions
 
 The owner requires **main-only delivery** for the Lean Assurance Lab repository

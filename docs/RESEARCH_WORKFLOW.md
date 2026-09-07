@@ -74,6 +74,20 @@ record. Keep the commitment until its success, negative-result, unresolved,
 or budget stop. Record new ideas as candidates; novelty alone does not displace
 an active item. Checkpoints for breaks or context handoff resume the same item.
 
+An ordinary implementation or test failure stays inside that item while its
+authorized scope and remaining budget permit repair. Preserve raw evidence,
+diagnose the cause, add a minimal regression, repair it, and run affected
+validation. It is neither a scientific negative nor a completion condition, and
+does not justify a successor or a budget reset. Pause launches after an
+accounting, cleanup, timeout, or process-control fault; reconcile durable
+records conservatively before continuing safe repairs. Keep one launch owner
+and bind exact source/test inputs before each batch; independent delegated
+reviews may continue without launches. End or replace the item only for a real
+cap, authority or external blocker, immutable-input transition, or an implementation gap with no feasible
+authorized repair path remaining. Preserve attempted repairs and explain why
+other available paths are blocked; ordinary difficulty or one failed check is
+not sufficient.
+
 At every stop:
 
 1. Preserve outputs, negative results, failed attempts, elapsed effort, and the

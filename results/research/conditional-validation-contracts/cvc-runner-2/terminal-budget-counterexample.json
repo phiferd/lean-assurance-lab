@@ -1,0 +1,161 @@
+{
+  "item_id": "CVC-RUNNER-2",
+  "observed_at": "2026-09-07T00:00:51.768826+00:00",
+  "code_binding": {
+    "path": "lib/cvc_runner2.py",
+    "sha256": "27ce2ec4035d62b06c2f36bdb4202b64b986efa0264c8228b4c8f9675a4a6516"
+  },
+  "kind": "PURE_SYNTHETIC_CONTROL_COUNTEREXAMPLE_NO_PROCESS",
+  "events": [
+    {
+      "kind": "START",
+      "run_id": "CVC3-U1-PROOF-0001",
+      "manifest_sha256": "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa",
+      "time": {
+        "at": "2026-09-06T00:00:00+00:00",
+        "monotonic": 1000
+      }
+    },
+    {
+      "kind": "SESSION_START",
+      "number": 1,
+      "time": {
+        "at": "2026-09-06T00:00:00+00:00",
+        "monotonic": 1000
+      }
+    },
+    {
+      "kind": "RESERVED",
+      "number": 1,
+      "phase": "signature",
+      "session": 1,
+      "mode": "proof",
+      "time": {
+        "at": "2026-09-06T00:00:01+00:00",
+        "monotonic": 1001
+      },
+      "reserved_seconds": 300
+    },
+    {
+      "kind": "TERMINAL",
+      "number": 1,
+      "status": "COMPLETE",
+      "charged_seconds": 1,
+      "returncode": 0,
+      "outputs": [
+        {
+          "path": "fixture.olean"
+        }
+      ]
+    },
+    {
+      "kind": "RESERVED",
+      "number": 2,
+      "phase": "proof",
+      "session": 1,
+      "mode": "proof",
+      "time": {
+        "at": "2026-09-06T01:29:59+00:00",
+        "monotonic": 6399
+      },
+      "reserved_seconds": 1
+    },
+    {
+      "kind": "TERMINAL",
+      "number": 2,
+      "status": "COMPLETE",
+      "charged_seconds": 1,
+      "returncode": 0,
+      "outputs": [
+        {
+          "path": "fixture.olean"
+        }
+      ],
+      "result": "SUCCESS",
+      "axiom_audit": {
+        "checked": true
+      },
+      "time": {
+        "at": "2026-09-06T01:30:01+00:00",
+        "monotonic": 6401
+      }
+    }
+  ],
+  "observed_state": {
+    "sessions": [
+      {
+        "number": 1,
+        "start": {
+          "at": "2026-09-06T00:00:00+00:00",
+          "monotonic": 1000
+        }
+      }
+    ],
+    "attempts": [
+      {
+        "reservation": {
+          "kind": "RESERVED",
+          "number": 1,
+          "phase": "signature",
+          "session": 1,
+          "mode": "proof",
+          "time": {
+            "at": "2026-09-06T00:00:01+00:00",
+            "monotonic": 1001
+          },
+          "reserved_seconds": 300
+        },
+        "terminal": {
+          "kind": "TERMINAL",
+          "number": 1,
+          "status": "COMPLETE",
+          "charged_seconds": 1,
+          "returncode": 0,
+          "outputs": [
+            {
+              "path": "fixture.olean"
+            }
+          ]
+        }
+      },
+      {
+        "reservation": {
+          "kind": "RESERVED",
+          "number": 2,
+          "phase": "proof",
+          "session": 1,
+          "mode": "proof",
+          "time": {
+            "at": "2026-09-06T01:29:59+00:00",
+            "monotonic": 6399
+          },
+          "reserved_seconds": 1
+        },
+        "terminal": {
+          "kind": "TERMINAL",
+          "number": 2,
+          "status": "COMPLETE",
+          "charged_seconds": 1,
+          "returncode": 0,
+          "outputs": [
+            {
+              "path": "fixture.olean"
+            }
+          ],
+          "result": "SUCCESS",
+          "axiom_audit": {
+            "checked": true
+          },
+          "time": {
+            "at": "2026-09-06T01:30:01+00:00",
+            "monotonic": 6401
+          }
+        }
+      }
+    ],
+    "outcome": "SUCCESS",
+    "control_stop": null
+  },
+  "required_behavior": "BOUNDED_UNRESOLVED with persistent active-budget control stop; retain terminal evidence",
+  "disposition": "Repair in same item; does not concern contract semantics."
+}

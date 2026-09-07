@@ -110,6 +110,19 @@ Report progress at meaningful boundaries; unattended mechanical loops should
 stop on changed inputs, depleted budgets, an exceptional result or an action
 requiring human judgment.
 
+Keep repairing ordinary engineering defects within the active item while its
+scope and budget permit: preserve the failure, diagnose it, add a minimal
+regression, repair it, and rerun affected validation. A failed ordinary test is
+not a scientific negative, item completion, or a reason to reset accounting or
+create a successor. For accounting, cleanup, timeout, or process-control
+failures, pause launches, reconcile costs conservatively, and continue safe
+repairs. One launch owner binds exact source/test bytes before each batch;
+delegated reviews may run independently but do not launch fixtures or mutate
+the tested files. End the item only at a real bound, authority/external blocker,
+immutable-input transition, or an implementation gap with no feasible authorized repair path
+remaining. Preserve attempted repairs and explain why other available paths
+are blocked; ordinary difficulty or one failed check is not sufficient.
+
 An available campaign script does not authorize a research frontier. Normative
 source approval and target-specific external submission remain explicit human
 boundaries. Finish a concrete draft and its permissible preflight first, and

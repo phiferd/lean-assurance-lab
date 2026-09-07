@@ -1899,7 +1899,7 @@ execution/session mode. See the
 and [stopping-point review](../results/research/queue-reviews/2026-09-06-cvc-runner-1.json).
 Closure tests establish refusal and preserved failure, not a passing runner.
 
-`CVC-RUNNER-2` is selected READY and unstarted. Use the
+`CVC-RUNNER-2` is ACTIVE for the owner-requested persistent repair. Use the
 [explicit successor proposal](../results/research/conditional-validation-contracts/cvc-runner-1/successor-proposal.json)
 to repair supervision/accounting and complete the unchanged
 [CVC-3 protocol](../results/research/conditional-validation-contracts/cvc-2/execution-protocol.json).
