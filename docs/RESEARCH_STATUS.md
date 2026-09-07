@@ -1979,7 +1979,7 @@ reports must equal A7, while per-Lab-result reports may use subsets. The
 607-test full-payload suite passes; 23 required inert fixture reservations use
 115 of the 320 reserved-second cap. No Lean, dependency or observer launch ran.
 
-`CVC-3-CONDITIONAL` is selected READY and unstarted under its separately committed
+`CVC-3-CONDITIONAL` is selected ACTIVE for its counted run under its separately committed
 [entry review](../results/research/conditional-validation-contracts/cvc-conditional-1/entry-review.json).
 The exact [manifest](../config/cvc-u1-a7-proof-0001.json) binds new run ID
 `CVC3-U1-A7-PROOF-0001`, the original signature/examples, seven assumptions,
@@ -1991,8 +1991,8 @@ slots and remain baseline until an exact audited success; a fixed-input
 mismatch stops before proof feedback. The baseline is still uncompiled and its
 first actual elaboration belongs to this later item. These are separate
 successor reservations, never the old ten unused slots; original plus proposed
-proof builds are at most eight. No session, ledger or workspace for the new
-proof run has started. CVC-4/CVC-5 remain PLANNED; a usable conditional result
+proof builds are at most eight. Execution is beginning from the committed activation checkpoint; the successor
+work record and runner ledger retain all sessions and counted attempts. CVC-4/CVC-5 remain PLANNED; a usable conditional result
 would require an explicit CVC-4 successor.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
