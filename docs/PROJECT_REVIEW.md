@@ -41,11 +41,11 @@ Selected next item: **CVC-CONDITIONAL-1**. Status, rank and bounds come from `co
 
 **Target:** CVC-U1-A7 protocol and runner, preserving original semantic signature and exact acceptance/boundary examples
 
-Create a new bound protocol/runner and entry review with exact-seven imported baseline auditing; use only supervised inert control fixtures, with no Lean, dependency or observer launch.
+Prepare the new A7 protocol and adapt the existing runner with only the changes needed for exact-seven imported baseline auditing; use only supervised inert control fixtures, with no Lean, dependency or observer launch. No materially new process-runner machinery in CVC-CONDITIONAL-1 unless the A7 baseline genuinely requires it.
 
 **Why this rank:** Highest eligible local work: the seven assumptions have exact source statements and a non-circular conditional interpretation, and the remaining Lab bridge is small. A new bound execution path is necessary at the immutable-input boundary. Pure-normal-form replacement needs a changed strategy and unprinted assumption audit; upstream access is unconfirmed and other research themes remain gated.
 
-**Completion:** New committed protocol/config/runner/assumption envelope, regression evidence and exact bound entry review for CVC3-U1-A7-PROOF-0001; preserve all historical inputs and select the proof item without starting it.
+**Completion:** New committed protocol/config/assumption envelope and minimal adaptation of the existing runner, regression evidence and exact bound entry review for CVC3-U1-A7-PROOF-0001; preserve all historical inputs and select the proof item without starting it. For any materially new process-runner machinery, record the concrete A7 baseline requirement and why the existing machinery cannot satisfy it.
 
 **Stop:** Two 60-minute sessions; at most 64 supervised fixture reservations, each at most five seconds and at most 320 reserved seconds together including required regression fixtures. Zero proof/dependency/observer launches, network requests or external messages. Repair ordinary defects within this item; stop at a real cap or immutable-input/authority boundary.
 

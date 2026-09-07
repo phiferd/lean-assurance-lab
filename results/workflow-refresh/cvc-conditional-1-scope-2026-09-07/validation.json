@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "change": "CVC-CONDITIONAL-1 owner scope restriction",
+  "recorded_at": "2026-09-07T11:39:53.069395+00:00",
+  "base_commit": "790fe44967c31d84e6ac24da028fb63ac9c422ad",
+  "status": "PASS",
+  "checks": [
+    {
+      "command": "scripts/validate-research-queue",
+      "returncode": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_research_queue.py'",
+      "returncode": 0,
+      "tests": 10
+    },
+    {
+      "command": "scripts/validate-cvc-axioms",
+      "returncode": 0
+    },
+    {
+      "command": "scripts/refresh-current-state",
+      "returncode": 0,
+      "evidence": "results/workflow-refresh/cvc-conditional-1-scope-2026-09-07/result.json"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "returncode": 0,
+      "evidence": "results/workflow-refresh/cvc-conditional-1-scope-2026-09-07/14-build-project-review-check.log"
+    },
+    {
+      "command": "git diff --check",
+      "returncode": 0
+    }
+  ],
+  "scope": "Description-only restriction. No implementation, source evidence, budget, status or selection changed; CVC-CONDITIONAL-1 remains READY and unstarted. The completed CVC-AXIOMS-1 evidence remains unchanged. No research item was executed or closed.",
+  "validation_scope": "Focused existing queue tests, predecessor evidence integrity and canonical generated-state checks; no milestone/frontier transition or implementation change requiring full-payload execution.",
+  "diagnostics": [
+    "Initial validation-summary construction incorrectly required stdout equal to standalone PASS; the successful command prints PASS: project review matches its current local inputs. Corrected receipt uses observed exit code 0 and preserves the full stdout log.",
+    "Initial default-sandbox git add/commit could not create .git/index.lock (Operation not permitted). No commit was created by those failed attempts; retry authorized main delivery with filesystem permission."
+  ],
+  "bindings": [
+    {
+      "path": "config/research-queue.json",
+      "sha256": "0f9848e8e3f80dc353bc861e658daca8180e499a49f6d7bd98a240c9b813d9db",
+      "bytes": 53975
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256": "3924033c117f70c13e51896ae56a00b4335ca98248f5480137b59990f643aa34",
+      "bytes": 134747
+    },
+    {
+      "path": "docs/PROJECT_REVIEW.md",
+      "sha256": "8b773cc921f36f514feeba93129b608746f4747350b237187fd3324a1ae15682",
+      "bytes": 16137
+    },
+    {
+      "path": "results/research/project-review.json",
+      "sha256": "8cf69c2c6ed075da55e52e1548b6ef9605f8330f632e0c4096615ca65ef7463b",
+      "bytes": 100620
+    },
+    {
+      "path": "results/artifacts/graph.json",
+      "sha256": "46cc93842e9418c99321bc36711e51e57f8a99ca12a25ceb8dce86e20caddace",
+      "bytes": 234862
+    }
+  ]
+}

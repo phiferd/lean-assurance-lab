@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-06
+Last updated: 2026-09-07
 
 ## How Status Is Tracked
 
@@ -1952,9 +1952,15 @@ host envelope. Neither model selection nor independent review approves a
 normative source, proves helper truth or consistency, or establishes runtime
 refinement. The original CVC-2 allowlist remains frozen.
 
-`CVC-CONDITIONAL-1` is selected READY and unstarted. Prepare the new
-protocol/runner and exact imported-type/axiom baseline under the
+`CVC-CONDITIONAL-1` is selected READY and unstarted. Prepare the new A7
+protocol and minimally adapt the existing runner for the exact imported-type/axiom
+baseline under the
 [finite successor proposal](../results/research/conditional-validation-contracts/cvc-axioms-1/successor-proposal.json).
+Owner scope restriction, 2026-09-07: no materially new process-runner machinery
+in CVC-CONDITIONAL-1 unless the A7 baseline genuinely requires it. Reuse existing
+process supervision, accounting, timeouts and cleanup. Any necessary addition
+must identify the concrete A7 baseline requirement and explain why existing
+machinery cannot satisfy it.
 Bound: two 60-minute sessions and at most 64 supervised inert fixture launches,
 each at most five seconds and together at most 320 reserved seconds, including
 required regression fixtures. It authorizes zero proof, dependency or observer
