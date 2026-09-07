@@ -1,0 +1,90 @@
+Baseline.lean:8:0: warning: Definition `cvcA7ExpectedIsEquivWf` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:13:0: warning: Definition `cvcA7ExpectedIsEquivComplete` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:18:0: warning: Definition `cvcA7ExpectedPropext` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:22:0: warning: Definition `cvcA7ExpectedQuotSound` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:25:0: warning: Definition `cvcA7ExpectedLawfulBEqLevel` of class type is semireducible. Most type class instances should be instance-reducible, so consider marking this
+definition with `@[instance_reducible]`. If it is intentionally semireducible, this warning can be disabled with `set_option warn.classDefReducibility false`.
+Baseline.lean:25:0: warning: Definition `cvcA7ExpectedLawfulBEqLevel` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:27:0: warning: Definition `cvcA7ExpectedExplicitSubsumed` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:31:0: warning: Definition `cvcA7ExpectedNormalize` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+Baseline.lean:34:0: warning: Definition `cvcA7ExpectedTreeMapAll` is a proposition; use `theorem` instead of `def`
+
+Note: This linter can be disabled with `set_option linter.defProp false`
+@Lean.Level.isEquiv'_wf : ∀ {u v : Lean.Level} {ls : List.{0} Lean.Name} {u' v' : Lean4Lean.VLevel}
+  (h : @Eq.{1} Bool (Lean.Level.isEquiv' u v) Bool.true)
+  (hu : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls u) (@Option.some.{0} Lean4Lean.VLevel u'))
+  (hv : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls v) (@Option.some.{0} Lean4Lean.VLevel v')),
+  @HasEquiv.Equiv.{1, 0} Lean4Lean.VLevel Lean4Lean.VLevel.instHasEquiv u' v'
+@cvcA7ExpectedIsEquivWf : ∀ {u v : Lean.Level} {ls : List.{0} Lean.Name} {u' v' : Lean4Lean.VLevel}
+  (h : @Eq.{1} Bool (Lean.Level.isEquiv' u v) Bool.true)
+  (hu : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls u) (@Option.some.{0} Lean4Lean.VLevel u'))
+  (hv : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls v) (@Option.some.{0} Lean4Lean.VLevel v')),
+  @HasEquiv.Equiv.{1, 0} Lean4Lean.VLevel Lean4Lean.VLevel.instHasEquiv u' v'
+@Lean.Level.isEquiv'_complete : ∀ {ls : List.{0} Lean.Name} {u : Lean.Level} {u' : Lean4Lean.VLevel} {v : Lean.Level}
+  {v' : Lean4Lean.VLevel}
+  (hu : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls u) (@Option.some.{0} Lean4Lean.VLevel u'))
+  (hv : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls v) (@Option.some.{0} Lean4Lean.VLevel v')),
+  Iff (@Eq.{1} Bool (Lean.Level.isEquiv' u v) Bool.true)
+    (@HasEquiv.Equiv.{1, 0} Lean4Lean.VLevel Lean4Lean.VLevel.instHasEquiv u' v')
+@cvcA7ExpectedIsEquivComplete : ∀ {ls : List.{0} Lean.Name} {u : Lean.Level} {u' : Lean4Lean.VLevel} {v : Lean.Level}
+  {v' : Lean4Lean.VLevel}
+  (hu : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls u) (@Option.some.{0} Lean4Lean.VLevel u'))
+  (hv : @Eq.{1} (Option.{0} Lean4Lean.VLevel) (Lean4Lean.VLevel.ofLevel ls v) (@Option.some.{0} Lean4Lean.VLevel v')),
+  Iff (@Eq.{1} Bool (Lean.Level.isEquiv' u v) Bool.true)
+    (@HasEquiv.Equiv.{1, 0} Lean4Lean.VLevel Lean4Lean.VLevel.instHasEquiv u' v')
+@propext : ∀ {a b : Prop}, Iff a b → @Eq.{1} Prop a b
+@cvcA7ExpectedPropext : ∀ {a b : Prop}, Iff a b → @Eq.{1} Prop a b
+@Classical.choice.{u_1} : {α : Sort u_1} → Nonempty.{u_1} α → α
+@cvcA7ExpectedChoice.{u_1} : {α : Sort u_1} → Nonempty.{u_1} α → α
+@Quot.sound.{u_1} : ∀ {α : Sort u_1} {r : α → α → Prop} {a b : α},
+  r a b → @Eq.{u_1} (@Quot.{u_1} α r) (@Quot.mk.{u_1} α r a) (@Quot.mk.{u_1} α r b)
+@cvcA7ExpectedQuotSound.{u_1} : ∀ {α : Sort u_1} {r : α → α → Prop} {a b : α},
+  r a b → @Eq.{u_1} (@Quot.{u_1} α r) (@Quot.mk.{u_1} α r a) (@Quot.mk.{u_1} α r b)
+Lean.Level.instLawfulBEqLevel : @LawfulBEq.{0} Lean.Level Lean.Level.instBEq
+cvcA7ExpectedLawfulBEqLevel : @LawfulBEq.{0} Lean.Level Lean.Level.instBEq
+Lean.Level.isExplicitSubsumedAux_eq : @Eq.{1} ((lvls : Array.{0} Lean.Level) → (maxExplicit i : Nat) → Bool)
+  _private.Lean.Level.0.Lean.Level.isExplicitSubsumedAux Lean.Level.Total.isExplicitSubsumedAux
+cvcA7ExpectedExplicitSubsumed : @Eq.{1} ((lvls : Array.{0} Lean.Level) → (maxExplicit i : Nat) → Bool)
+  _private.Lean.Level.0.Lean.Level.isExplicitSubsumedAux Lean.Level.Total.isExplicitSubsumedAux
+Lean.Level.normalize_eq : @Eq.{1} ((l : Lean.Level) → Lean.Level) Lean.Level.normalize Lean.Level.Total.normalize
+cvcA7ExpectedNormalize : @Eq.{1} ((l : Lean.Level) → Lean.Level) Lean.Level.normalize Lean.Level.Total.normalize
+@Std.TreeMap.all_eq_all_toList.{u_1,
+    u_2} : ∀ {α : Type u_1} {β : Type u_2} {cmp : α → α → Ordering} {t : Std.TreeMap.{u_1, u_2} α β cmp}
+  {p : α → β → Bool},
+  @Eq.{1} Bool (@Std.TreeMap.all.{u_1, u_2} α β cmp t p)
+    (@List.all.{max u_1 u_2} (Prod.{u_1, u_2} α β) (@Std.TreeMap.toList.{u_1, u_2} α β cmp t)
+      fun (a : Prod.{u_1, u_2} α β) => p (@Prod.fst.{u_1, u_2} α β a) (@Prod.snd.{u_1, u_2} α β a))
+@cvcA7ExpectedTreeMapAll.{u_1,
+    u_2} : ∀ {α : Type u_1} {β : Type u_2} {cmp : α → α → Ordering} {t : Std.TreeMap.{u_1, u_2} α β cmp}
+  {p : α → β → Bool},
+  @Eq.{1} Bool (@Std.TreeMap.all.{u_1, u_2} α β cmp t p)
+    (@List.all.{max u_1 u_2} (Prod.{u_1, u_2} α β) (@Std.TreeMap.toList.{u_1, u_2} α β cmp t)
+      fun (a : Prod.{u_1, u_2} α β) => p (@Prod.fst.{u_1, u_2} α β a) (@Prod.snd.{u_1, u_2} α β a))
+'Lean.Level.isEquiv'_wf' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u},
+ Lean.Level.instLawfulBEqLevel,
+ Lean.Level.isExplicitSubsumedAux_eq,
+ Lean.Level.normalize_eq,
+ Std.TreeMap.all_eq_all_toList.{u, v}]
+'Lean.Level.isEquiv'_complete' depends on axioms: [propext,
+ Classical.choice.{u},
+ Quot.sound.{u},
+ Lean.Level.instLawfulBEqLevel,
+ Lean.Level.isExplicitSubsumedAux_eq,
+ Lean.Level.normalize_eq,
+ Std.TreeMap.all_eq_all_toList.{u, v}]

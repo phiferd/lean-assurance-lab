@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-3-CONDITIONAL",
+  "run_id": "CVC3-U1-A7-PROOF-0001",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "failed_attempt": 2,
+  "baseline_audit_error": "malformed full axiom list",
+  "control_stop": "fixed imported type or A7 assumption baseline mismatch",
+  "stdout": {
+    "path": "results/research/conditional-validation-contracts/cvc-3-conditional/run-0001/attempts/02/stdout",
+    "sha256": "213b11ae530344b01cf07378639ae171b116d3880509a13c6b1f87becc724bda",
+    "bytes": 6615
+  },
+  "stderr": {
+    "path": "results/research/conditional-validation-contracts/cvc-3-conditional/run-0001/attempts/02/stderr",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "process_outcome": {
+    "status": "COMPLETE",
+    "returncode": 0,
+    "cleanup_completed": true,
+    "deadline_exceeded": false
+  },
+  "runner_terminal_status": "FAILED",
+  "cause": "The frozen pp.universes/pp.all baseline prints universe-annotated axiom identifiers. The audit assumes undecorated identifiers and splits every comma, including commas inside universe argument lists.",
+  "additional_incompatibilities": [
+    "The TreeMap declaration universe header wraps across a newline forbidden by the type-header regex.",
+    "Source-positioned linter warnings from typed def declarations remain before the first type report; the diagnostic matcher misses them and the type parser rejects the preamble."
+  ],
+  "semantic_interpretation": "Compiler success and visually matching printed types do not satisfy the frozen baseline audit. No new assumption or changed semantic type is established by this engineering failure; no baseline acceptance or checked Lab result is claimed.",
+  "repair_attempts": [
+    {
+      "action": "Replay frozen audit on the preserved raw transcript without compilation",
+      "result": "Reproduces malformed full axiom list; included in pure closure regression."
+    },
+    {
+      "action": "Read-only diagnosis of later transcript parsing stages",
+      "result": "Identifies independent wrapped-header and linter-preamble failures; diagnostic transformations never authorize proof feedback."
+    }
+  ],
+  "blocked_repair_options": [
+    {
+      "action": "Edit the current audit/baseline and retry",
+      "blocker": "Both are fixed inputs bound to committed checkpoint; the ledger is terminal. Changing them would invalidate the entry gate and prior evidence."
+    },
+    {
+      "action": "Retry identical baseline or repair Lab proof",
+      "blocker": "Identical baseline deterministically fails the same audit; proof feedback is forbidden until successful audit, and a terminal run cannot reserve another attempt."
+    },
+    {
+      "action": "Manually accept or alter the raw transcript/axiom envelope",
+      "blocker": "Would replace the fixed mechanical gate or frozen evidence; forbidden."
+    }
+  ],
+  "feasible_authorized_path": "Complete closure and select an explicit input/controller successor. Preserve consumed budget; remaining four slots are not replayable in this run.",
+  "diagnostic_reproduction": {
+    "path": "results/research/conditional-validation-contracts/cvc-3-conditional/parser-diagnostic.json",
+    "sha256": "1c2ee59454a1157aad6b9b48db73aecae635c23853a5988a518598f1f4dc70b7",
+    "bytes": 1245
+  }
+}

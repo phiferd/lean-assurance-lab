@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Closed `CVC-3-CONDITIONAL` on 2026-09-07 with `BOUNDED_UNRESOLVED` at
+  an immutable baseline-audit implementation boundary. The unchanged signature
+  compiled as attempt 1. Attempt 2's fixed baseline compiled, but the frozen
+  parser rejected universe-decorated axiom output; wrapped type headers and
+  linter warnings expose additional transcript incompatibilities. No Lab proof
+  or observer ran. Both reservations, raw failures, and the completed
+  55.597743-second session are retained in the
+  [result](../results/research/conditional-validation-contracts/cvc-3-conditional/result.json),
+  [diagnostic](../results/research/conditional-validation-contracts/cvc-3-conditional/stop-diagnostic.json),
+  [report](../results/research/conditional-validation-contracts/cvc-3-conditional/report.md), and
+  [queue review](../results/research/queue-reviews/2026-09-07-cvc-3-conditional.json).
+  `CVC-A7-REPAIR-1` is selected READY and unstarted for an explicit parser/protocol
+  successor followed by the original bridge, gated by a new counted baseline.
+  At most four new builds preserve the combined six-build A7 ceiling; consumed
+  research time carries forward. Required closure validation is retained in the
+  [validation record](../results/workflow-refresh/cvc-3-conditional-2026-09-07/validation.json).
+
 - Completed `CVC-CONDITIONAL-1` on 2026-09-07 with `SUCCESS` for the minimal
   A7 protocol/runner preparation. No Lean, signature, baseline, Lab proof,
   dependency or observer launch ran. All 607 full-payload tests pass (534
@@ -1940,7 +1957,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-3-CONDITIONAL`.
+Selected next item: `CVC-A7-REPAIR-1`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -1979,21 +1996,31 @@ reports must equal A7, while per-Lab-result reports may use subsets. The
 607-test full-payload suite passes; 23 required inert fixture reservations use
 115 of the 320 reserved-second cap. No Lean, dependency or observer launch ran.
 
-`CVC-3-CONDITIONAL` is selected ACTIVE for its counted run under its separately committed
-[entry review](../results/research/conditional-validation-contracts/cvc-conditional-1/entry-review.json).
-The exact [manifest](../config/cvc-u1-a7-proof-0001.json) binds new run ID
-`CVC3-U1-A7-PROOF-0001`, the original signature/examples, seven assumptions,
-source-typed baseline, complete prepared payloads and tested runner. Use
-`scripts/run-cvc-u1-a7-proof`. Its bound is six counted builds in two 60-minute
-sessions, at most 300 seconds each: signature, exact imported type/axiom
-baseline, then normally at most four proof builds. Baseline retries consume
-slots and remain baseline until an exact audited success; a fixed-input
-mismatch stops before proof feedback. The baseline is still uncompiled and its
-first actual elaboration belongs to this later item. These are separate
-successor reservations, never the old ten unused slots; original plus proposed
-proof builds are at most eight. Execution is beginning from the committed activation checkpoint; the successor
-work record and runner ledger retain all sessions and counted attempts. CVC-4/CVC-5 remain PLANNED; a usable conditional result
-would require an explicit CVC-4 successor.
+`CVC-3-CONDITIONAL` is COMPLETE with `BOUNDED_UNRESOLVED`. Its manifest,
+controller, baseline and semantic inputs remain unchanged. Both signature and
+baseline compiled, but attempt 2 failed the frozen baseline output audit with
+`malformed full axiom list`. The transcript includes universe-decorated axiom
+names, wrapped type headers and linter warnings. The diagnostic extraction does
+not replace the failed audit; no semantic mismatch, checked Lab result or
+assumption discharge is established. No proof feedback or observer ran. The
+terminal ledger retains two attempts, four unspent slots, 55.59774324996397
+research seconds and 2.71219816734083 compilation seconds.
+
+`CVC-A7-REPAIR-1` is selected READY and unstarted. Local repair must use an
+explicit successor with new bindings and pure regressions from the exact raw
+transcript. The original seven assumptions, independent types, signature and
+four proof obligations stay fixed. Before any Lean feedback, commit the tested
+successor controller, manifest, baseline and entry review. Its bound is at most
+four new 300-second builds: signature, exact audited baseline, then normally two
+proofs; baseline retries consume slots. Combined A7 builds remain at most six,
+and original CVC-3 plus A7 at most eight. Carry the consumed research time:
+at most 3600 additional active seconds in the one remaining 60-minute session,
+including repair. Combined A7 sessions remain at most two; unused time in the
+closed first session is not recovered. No dependency, observer or research network
+launches are authorized. No successor manifest, workspace, session or proof
+source has started. CVC-4/CVC-5 remain PLANNED; a usable A7 result would require
+an explicit CVC-4 successor. See the
+[stopping-point review](../results/research/queue-reviews/2026-09-07-cvc-3-conditional.json).
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,
@@ -2006,6 +2033,13 @@ aggregate preparation/proof compilation time is 52.112492251 seconds. Prior
 unknown fixture duration remains unknown. CVC-AXIOMS-1 source-review time is
 recorded separately in its work record; it adds no research compilation or
 observer time. CVC-CONDITIONAL-1 adds 1281.220193 active seconds, for a combined 8456.151824 seconds before its final administrative closure. Its 23 fixture reservations / 115 reserved seconds include the required full-suite fixtures. Final closure time is separately recorded and remains within this item’s total bound. Prior unknown fixture duration stays unknown.
+
+CVC-3-CONDITIONAL adds 55.59774324996397 research seconds and
+2.71219816734083 compilation seconds. The prior aggregate scope is
+now 8511.749567541963 active seconds and
+54.82469041808508 compilation seconds; source-review and
+administrative closure costs remain separately visible in their records.
+Prior unknown fixture duration stays unknown.
 
 `OPS-UPSTREAM-1` remains COMPLETE with `BOUNDED_UNRESOLVED`: required CLI
 preflight failed authentication and no post-preflight GET ran. Current Arena
