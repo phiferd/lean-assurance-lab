@@ -1,0 +1,38 @@
+{
+  "item_id": "SURVIVOR-LET-REUSE-1",
+  "recorded_at": "2026-09-08T14:29:55.368716+00:00",
+  "prelaunch_review": "G1-G4 validated locally; exact committed state required again by runner after checkpoint. G5 remains dependent on counted offline build.",
+  "focused_mocked_tests": 24,
+  "raw_supervisor_reuse": "Unchanged lib/cvc_process.py with bounded macOS signal adapter; current full suite at closure retains existing supervision tests.",
+  "research_launches": 0,
+  "source_variants": "Exactly one authorized 9face source materialization; zero new export variants.",
+  "offline_host_closure": "Target-specific wasi package absent locally; available locked source/archives plus exact isolated registry index bound. Only counted offline build can decide host closure.",
+  "checks": [
+    [
+      "queue",
+      [
+        "scripts/validate-research-queue",
+        "--require-ready"
+      ]
+    ],
+    [
+      "queue-tests",
+      [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue*.py"
+      ]
+    ],
+    [
+      "historical-proposal",
+      [
+        "scripts/validate-survivor-proposal"
+      ]
+    ]
+  ]
+}

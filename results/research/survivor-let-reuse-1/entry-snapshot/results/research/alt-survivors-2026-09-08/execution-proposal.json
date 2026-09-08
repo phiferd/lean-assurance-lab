@@ -1,0 +1,212 @@
+{
+  "schema_version": 1,
+  "kind": "FIXED_SURVIVOR_EXECUTION_PROPOSAL",
+  "proposal_id": "SURVIVOR-LET-REUSE-0001-PROPOSAL",
+  "planning_item": "ALT-SURVIVORS",
+  "proposed_item": "SURVIVOR-LET-REUSE-1",
+  "proposed_run": "survivor-let-reuse-0001",
+  "execution_authorized": false,
+  "launch_ready": false,
+  "approval_scope": "Planning only. A separate owner decision plus exact committed prelaunch gates is required to execute this proposal.",
+  "selected_mutant": "nanoda-gen-9face4e6a6f7",
+  "mutation_spec": {
+    "path": "mutations/nanoda-gen-9face4e6a6f7.json",
+    "bytes": 956,
+    "sha256": "fde62195b585faec91ada6b493b3d1c8940845f5bccbc296ac870aa884690886"
+  },
+  "source_lock": {
+    "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+    "bytes": 8495,
+    "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+  },
+  "control": {
+    "path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+    "bytes": 601,
+    "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"
+  },
+  "candidate": {
+    "path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+    "bytes": 601,
+    "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+  },
+  "pair_count": 1,
+  "baseline": {
+    "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+    "bytes": 1198176,
+    "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+  },
+  "selected_binary": null,
+  "question": "Does the existing 601-byte let mismatch/control regression distinguish the exact 9face guard-negation mutant from its pinned Nanoda baseline?",
+  "hypotheses": {
+    "control_baseline": "ACCEPT",
+    "control_selected_mutant": "ACCEPT",
+    "candidate_baseline": "TYPECHECK_REFUSAL_AT_LET_VALUE_TYPE",
+    "candidate_selected_mutant": "ACCEPT"
+  },
+  "matrix": [
+    {
+      "order": 1,
+      "id": "control-baseline",
+      "input": "control",
+      "observer": "baseline"
+    },
+    {
+      "order": 2,
+      "id": "control-mutant",
+      "input": "control",
+      "observer": "selected_mutant"
+    },
+    {
+      "order": 3,
+      "id": "candidate-baseline",
+      "input": "candidate",
+      "observer": "baseline"
+    },
+    {
+      "order": 4,
+      "id": "candidate-mutant",
+      "input": "candidate",
+      "observer": "selected_mutant"
+    }
+  ],
+  "limits": {
+    "active_seconds": 5400,
+    "interval_seconds": 5400,
+    "offline_build_reservations": 2,
+    "per_build_seconds": 120,
+    "checker_reservations": 8,
+    "per_checker_seconds": 30,
+    "fixed_pairs": 1,
+    "max_scientific_byte_variants": 0,
+    "research_network_requests": 0,
+    "proof_launches": 0,
+    "external_research_actions": 0
+  },
+  "limit_rationale": "Four primary cells plus at most four counted same-input repair replays. One isolated mutant build expected; one additional counted tooling/build repair reservation. These proposed caps are independent of closed historical allocations and are not authorized by this planning record.",
+  "output_root": "results/research/survivor-let-reuse-1/run-0001",
+  "isolated_build_root": "external/survivor-let-reuse-0001-nanoda",
+  "configuration": {
+    "base": {
+      "path": "config/ecosystem-nanoda.json",
+      "bytes": 207,
+      "sha256": "18e50e2de4b0c682485eae1202678c1a47d0760d1d07f9f9d4788c1fd7172c66"
+    },
+    "allowed_adapter_changes": {
+      "use_stdin": false,
+      "export_file_path": "Exact committed absolute path to the selected control or candidate",
+      "print_axioms": false
+    },
+    "preserve_all_other_settings": true,
+    "delivery": "One immutable per-input configuration; both observers use identical input-specific settings. lib/cvc_process.py uses DEVNULL for stdin.",
+    "new_config_files_created": false
+  },
+  "build_plan": {
+    "source": "Exact pinned-nanoda source snapshot; apply only the bound existing mutation spec after future authorization. Preserve all other source bytes.",
+    "command": [
+      "cargo",
+      "build",
+      "--release",
+      "--locked",
+      "--offline"
+    ],
+    "cwd": "external/survivor-let-reuse-0001-nanoda",
+    "target_dir": "external/survivor-let-reuse-0001-target",
+    "network": "forbidden",
+    "toolchain_prerequisite": "Bind exact installed rustc/cargo executable identities, dependency cache/lock and build environment before counted build. No install or dependency fetch. Missing payload stops the dependent launch.",
+    "derivation_receipt": "Bind source snapshot, exact patch and all resulting source bytes, Cargo files, toolchain/environment, reserved build number, command, raw logs and resulting mutant binary hash before observer cells.",
+    "baseline_source_prerequisite": "Verify source tree/revision and recorded baseline binary association; pin current baseline bytes to the existing historical receipt.",
+    "mutant_binary_prerequisite": "Must derive a fresh 9face product; do not use historical 21ef or any shared overwritten executable."
+  },
+  "tooling_reuse": {
+    "supervision": [
+      "lib/cvc_process.py",
+      "lib/cvc_signal_retry.py"
+    ],
+    "patterns": [
+      "lib/cvc4_ownership_runner.py",
+      "lib/cvc_prep.py"
+    ],
+    "historical_precursors": [
+      "config/authorized-runs/triage.json",
+      "scripts/execute-ecosystem-cases",
+      "scripts/run-mutant-scheduled"
+    ],
+    "unusable_as_endpoint": [
+      "scripts/run-frontier-survivors",
+      "scripts/execute-ecosystem-cases",
+      "scripts/run-campaign"
+    ],
+    "required_successor": "Minimal dedicated runner with current queue gate, prelaunch validation, raw logs and append-only reservations; no general scheduler and no edits to frozen historical tooling. This runner is not implemented by ALT-SURVIVORS."
+  },
+  "prelaunch_gates": [
+    {
+      "id": "G1",
+      "condition": "Explicit owner authorization of SURVIVOR-LET-REUSE-1 and this fixed proposal reflected in authoritative status/queue; selected ACTIVE with live work interval."
+    },
+    {
+      "id": "G2",
+      "condition": "All science inputs and exact new per-input configs committed and hashed; candidate/control match the bound historical bytes and matrix has exactly four primary cells."
+    },
+    {
+      "id": "G3",
+      "condition": "Exact source and baseline association, installed toolchain and offline dependencies validated; isolated source copy and single-spec patch validated; no historical checkout mutation."
+    },
+    {
+      "id": "G4",
+      "condition": "Dedicated tooling revision and negative tests bind authorization refusal, input drift, same-item accounting/repair, failed reservation retention, process supervision, controls-before-candidates and outcome attribution; passing focused tests and committed tooling before research launch."
+    },
+    {
+      "id": "G5",
+      "condition": "Before observer launch, counted offline build receipt binds exact selected mutation source to the immutable resulting binary and both executable hashes are checked."
+    },
+    {
+      "id": "G6",
+      "condition": "Single launch owner and append-only intact ledger; sufficient remaining cumulative time/build/checker budgets; no unknown active child or unreconciled timeout, cancellation, accounting or cleanup."
+    },
+    {
+      "id": "G7",
+      "condition": "Both fresh controls accepted with exact success output and clean process receipts before either candidate; parser/fatal/timeout results cannot count as expected typecheck refusal."
+    }
+  ],
+  "outcomes": [
+    "ACCEPT",
+    "TYPECHECK_REFUSAL",
+    "PARSE_ERROR",
+    "CRASH",
+    "TIMEOUT",
+    "UNSUPPORTED",
+    "INDETERMINATE"
+  ],
+  "attribution": "Require baseline candidate refusal to match the precise infer_let/assert_def_eq path with both controls accepted and verified binary derivation; an exit code alone is insufficient. Preserve each other outcome separately. No majority vote or model output establishes semantic authority.",
+  "stopping_rules": [
+    "Stop after the fixed matrix yields attributable comparison and a concrete local recommendation; no additional candidate or corpus campaign.",
+    "Ordinary tooling/build/audit faults pause dependent launches for smallest feasible same-item repair; retain original logs, reservations and scientific inputs, bind new tooling revisions and rerun affected checks within remaining caps.",
+    "Stop at actual cap, absent required local payload, changed scientific inputs, authority blocker, or diagnosed gap with no feasible authorized repair; retain BOUNDED_UNRESOLVED without inferring equivalence.",
+    "No fresh successful comparison: preserve selected SURVIVED_WITHOUT_WITNESS classification. An unexpected comparison is evidence to report, not permission to alter the pair or expectations.",
+    "A successful comparison supports associating the already admitted regression with this distinct mutation identity via the canonical append-only classification/admission route after its required evidence checks; no second corpus artifact or new upstream report."
+  ],
+  "historical_constraints": {
+    "old_runs_terminal": true,
+    "old_budgets_reset": false,
+    "prior_unknown_costs_unchanged": true,
+    "cvc_observer_reservations_consumed": 16,
+    "semantic_classification_transferred_from_alias": false
+  },
+  "closure_requirements": [
+    "Exact raw and normalized results and cost receipts",
+    "Local regression-association recommendation or bounded unresolved result",
+    "Required current/historical full-payload suite and historical transition checks",
+    "Canonical queue/status/review/current-artifact refresh",
+    "Main-only commit and scripts/push-main; select next item without executing it"
+  ],
+  "scientific_variant_scope": {
+    "max_scientific_byte_variants_means": "Zero new candidate/control export-stream variants; reuse both exact historical NDJSON files.",
+    "fixed_mutant_source_materializations": 1,
+    "source_materialization": "After future authorization only, derive exactly the bound 9face source patch from the pinned baseline. A repair rebuild uses the same resulting source bytes; no additional mutation identity or source variant."
+  },
+  "historical_official_result": {
+    "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/result.json",
+    "sha256": "3b3cf549fa1261d170be38897901c3320bd5b2a3cbca7dcff930c93fd335a17b",
+    "bytes": 9358
+  }
+}
