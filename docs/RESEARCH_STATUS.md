@@ -50,6 +50,17 @@ research directions.
 
 ## Attempted
 
+- Contributed declaration-level evidence on 2026-09-08 to the existing
+  [Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955)
+  normalization issue. The comment links the exact CVC-4 right-successor
+  artifact and replay, the corrected right-zero controls, the conditional A7
+  semantic evidence, and a source-only comparison through master commit
+  `c40679c`. It asks whether a focused C++ kernel regression or fix remains
+  useful relative to PRs #13366/#14356. No current-master execution, kernel
+  soundness claim, normative-source promotion, or new Nanoda/Kiota defect
+  recommendation is asserted. The public interaction is indexed in
+  [Upstream issue participation](UPSTREAM_ISSUES.md).
+
 - Completed `CVC-4-ADAPTER-REVIEW` on 2026-09-08 (UTC) with `SUCCESS`
   for an existing-evidence scientific-input review and `SUCCESSOR` decision.
   One exact unused `v` parameter-level insertion is proposed for each retained
@@ -2164,6 +2175,13 @@ external research message. Reevaluate at the next stop using
 [Research workflow](RESEARCH_WORKFLOW.md).
 
 ### Waiting
+
+- `W-LEAN-IMAX-NORMALIZATION`: await maintainer guidance on the
+  [declaration-level evidence contributed to Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955).
+  A reply indicating that a focused regression or kernel fix would be useful
+  triggers a new bounded proposal and target-specific contribution decision;
+  it does not authorize a PR by itself. Until then, retain the source-only
+  master comparison and do not claim a current-master execution result.
 
 - `W-ARENA-DISPOSITION-ACCESS`: the 2026-09-06 `OPS-UPSTREAM-1` CLI
   preflight failed authentication before any disposition query. PR #181/#182

@@ -148,15 +148,21 @@ then recreated the pre-fix/fixed nanoda projection-structure-identity
 distinction on attempt 1. The scoped report is
 [results/collatz-retrospective/REPORT.md](results/collatz-retrospective/REPORT.md).
 
-## Shared Ecosystem Contribution
+## Shared Ecosystem Contributions
 
-The project has submitted one small Lean Kernel Arena test contribution:
-[Arena PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176). Its
-single tutorial-file change adds the two adjacent `imax` right-successor reject
-cases (`imax u 1` and `imax u (v + 1)`) developed from the project's checker
-disagreement evidence. The PR merged on 2026-08-30; the successor evidence
-records the merged tests and their `outcome: either` policy. Current upstream status and the next local
-research frontier are tracked in
+The project has submitted three Lean Kernel Arena test contributions, all now
+merged: [PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176)
+records two adjacent `imax` right-successor cases,
+[PR #181](https://github.com/leanprover/lean-kernel-arena/pull/181) records the
+reducible-argument positivity corner case, and
+[PR #182](https://github.com/leanprover/lean-kernel-arena/pull/182) records the
+proof-parameter order characterization pair. Their Arena outcomes are corpus
+policy, not normative semantic authority.
+
+The project also opens upstream issues and contributes reproducible evidence to
+issues opened by others. The central
+[upstream issue participation index](docs/UPSTREAM_ISSUES.md) distinguishes
+those relationships. Current research state and upstream waits remain in
 [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md).
 
 ## Repository Layout
@@ -173,6 +179,7 @@ docs/
   MUTATION_MODEL.md
   PUBLIC_STATUS.md
   RESEARCH_STATUS.md
+  UPSTREAM_ISSUES.md
 results/
   baseline/
   collatz-retrospective/
