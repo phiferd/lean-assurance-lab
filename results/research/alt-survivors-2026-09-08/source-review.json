@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-SURVIVORS",
+  "selected_spec": {
+    "path": "mutations/nanoda-gen-9face4e6a6f7.json",
+    "bytes": 956,
+    "sha256": "fde62195b585faec91ada6b493b3d1c8940845f5bccbc296ac870aa884690886"
+  },
+  "prior_spec": {
+    "path": "mutations/nanoda-gen-21ef4d1d32a1.json",
+    "bytes": 969,
+    "sha256": "40efef9b7ec5d05727faca461d724473e2fb8ce89f2d52e3be2e8d8c7c71b25d"
+  },
+  "source": {
+    "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+    "bytes": 56602,
+    "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+  },
+  "source_claims": [
+    {
+      "lines": [
+        52,
+        56
+      ],
+      "claim": "InferFlag derives PartialEq and Eq and has InferOnly/Check variants."
+    },
+    {
+      "lines": [
+        638,
+        658
+      ],
+      "claim": "Both specs address the same Check guard, occurrence 1, that infers binder sort and checks the let value type. The two spellings negate the same equality predicate."
+    },
+    {
+      "lines": [
+        89,
+        92
+      ],
+      "claim": "Definition checking validates the declaration header/type first, infers the value in Check mode, then compares its inferred type with the declared type."
+    }
+  ],
+  "interpretation": "Source-supported predicate relationship only; no binary equivalence proof and no transfer of selected-mutant outcomes or classification.",
+  "prior_observations": {
+    "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/observations.json",
+    "bytes": 4893,
+    "sha256": "7c6fd3638b1d0534610c794312f26d187c2a9a9cd93b25e07c074e2df998b776"
+  },
+  "prior_mutant_id": "nanoda-gen-21ef4d1d32a1",
+  "prior_outcomes": [
+    {
+      "artifact": "matching-let-control",
+      "baseline": "ACCEPT",
+      "prior_mutant": "ACCEPT"
+    },
+    {
+      "artifact": "let-value-type-mismatch",
+      "baseline": "REJECT",
+      "prior_mutant": "ACCEPT"
+    }
+  ],
+  "selected_on_reused_pair": "NOT_EXECUTED",
+  "selected_old_run": {
+    "path": "results/mutants/nanoda-gen-9face4e6a6f7/scheduled-runs/20260829T032610Z/run.json",
+    "bytes": 799,
+    "sha256": "2d563d864c6c07565ffa77996c49c372a35bf2127f4395e162e9b0f95bd9383f"
+  },
+  "selected_binary": {
+    "status": "NOT_RETAINED_OR_ATTRIBUTED",
+    "evidence": "Old run records restore_after=changed and a restored rebuild; shared scheduled-run driver does not retain an individually bound 9face binary. Absent external/ecosystem-triage-payloads/nanoda-gen-9face4e6a6f7. Never substitute the prior 21ef binary."
+  },
+  "prior_costs_preserved": {
+    "apply_mutant": "changed",
+    "build_mutant_seconds": 10.823219299316406,
+    "build_restored_seconds": 10.656129598617554,
+    "restore_after": "changed",
+    "restore_before": "already"
+  },
+  "prior_complete_result": {
+    "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/result.json",
+    "sha256": "3b3cf549fa1261d170be38897901c3320bd5b2a3cbca7dcff930c93fd335a17b",
+    "bytes": 9358
+  },
+  "official_evidence_scope": "Historical official control ACCEPT/candidate REJECT is retained in prior_complete_result and its raw receipts; no fresh official execution is proposed."
+}

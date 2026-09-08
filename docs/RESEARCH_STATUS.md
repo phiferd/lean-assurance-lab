@@ -50,6 +50,20 @@ research directions.
 
 ## Attempted
 
+- Completed `ALT-SURVIVORS` on 2026-09-08 with `SUCCESS` for a fixed
+  existing-regression reuse proposal. It selects `nanoda-gen-9face4e6a6f7`,
+  preserving all seven pending classifications. The exact let pair, pinned
+  source, old observations, comparative rationale and finite future execution
+  gates are bound in the
+  [proposal package](../results/research/alt-survivors-2026-09-08/README.md).
+  No checker, proof, setup/build, scientific byte variant, research-network
+  request or external research action ran. Required closure verification is in
+  the [validation record](../results/workflow-refresh/alt-survivors-2026-09-08/validation.json).
+  `SURVIVOR-LET-REUSE-1` is selected WAITING and unstarted; execution is PAUSED
+  pending separate owner authorization and exact prelaunch gates. The prior
+  authorization placeholder was resolved directly by the owner's decision,
+  not executed as a second research item.
+
 - Completed `CVC-5-CONDITIONAL` on 2026-09-08 with `SUCCESS` for an
   existing-evidence reuse package and `REUSE` phase decision. The
   [entry point](../results/research/conditional-validation-contracts/cvc-5-conditional/README.md)
@@ -2033,7 +2047,11 @@ prepared_external_action_drafts: 5
   `corner-cases/positivity-whnf` test with outcome `either`; it builds 1/1. The
   Kiota packet is deferred pending Arena feedback.
 
-### Active
+### Completed predecessor — Conditional reuse handoff, 2026-09-08
+
+The following block records the completed conditional phase at entry to the
+owner-authorized survivor-planning successor. Its pause was superseded only
+for the planning scope in the Active section below.
 
 1. `F-CONDITIONAL-VALIDATION-CONTRACTS` — assess whether a small conditional
    formal contract can explain a real validation boundary and improve a shared
@@ -2238,6 +2256,55 @@ unless the owner has explicitly requested continuation. This policy checkpoint
 changes no normative-source approval or catalog disposition and publishes no
 external research message. Reevaluate at the next stop using
 [Research workflow](RESEARCH_WORKFLOW.md).
+
+### Active
+
+1. `F-SURVIVOR-TRIAGE-PROPOSAL` — the owner-authorized fixed planning item is
+   complete under
+   [docs/research/SURVIVOR_TRIAGE_PROPOSAL_PLAN.md](research/SURVIVOR_TRIAGE_PROPOSAL_PLAN.md).
+
+Selected next item: `SURVIVOR-LET-REUSE-1`.
+
+Queue handoff: PAUSED.
+
+`ALT-SURVIVORS` is COMPLETE with `SUCCESS` for one fixed, non-executable proposal.
+It selects `nanoda-gen-9face4e6a6f7` and reuses the exact 601-byte mismatch/control
+pair from the prior `21ef` investigation. The mutation negates the same let
+checking predicate with a different spelling. That source relationship and the
+old observations motivate a small attribution test; they do not supply a new
+selected-mutant outcome or semantic classification. All seven survivors and
+the modeled population remain unchanged. See the
+[entry point](../results/research/alt-survivors-2026-09-08/README.md),
+[result](../results/research/alt-survivors-2026-09-08/result.json),
+[execution proposal](../results/research/alt-survivors-2026-09-08/execution-proposal.json),
+[review](../results/research/queue-reviews/2026-09-08-alt-survivors.json), and
+[validation](../results/workflow-refresh/alt-survivors-2026-09-08/validation.json).
+
+`SURVIVOR-LET-REUSE-1` is selected WAITING and unstarted. The owner authorized
+planning only. Execution needs separate authorization of this exact proposal
+and all seven prelaunch gates. The proposal fixes four primary baseline/mutant
+cells, both controls before candidates, at most eight 30-second checker
+reservations, two 120-second offline build reservations and 5400 cumulative
+active seconds including engineering. The original selected-mutant binary was
+not retained with an attributable identity; an isolated counted build is a
+required future step. No new export-stream variants, proof, network requests
+or external research actions are proposed. These are proposed execution caps,
+not authority to launch. No runner or scientific process was started here.
+
+The owner supplied the previous `CVC-NEXT-AUTHORIZATION` decision by explicitly
+approving this one planning item. The exact prior placeholder and queue remain
+in the entry snapshot; no second research item was executed to resolve it.
+Historical conditional results, source assumptions, sixteen observer charges,
+failed runs, unknown costs and original CVC-4/CVC-5 dependencies remain intact.
+Current and historical transition checks preserve their original bindings.
+No new catalog or normative-source decision is made.
+
+The next owner decision is to authorize `SURVIVOR-LET-REUSE-1`, select another
+named bounded direction, or retain this pause. No external action is recommended:
+the proposed added value is association of an existing local regression with
+one pending identity, not a distinct upstream behavior. A new method or broader
+family requires its own scoped review. Existing Lean/Arena Waiting triggers and
+Kiota deferrals remain unchanged. Only `ALT-SURVIVORS` closes in this work.
 
 ### Waiting
 

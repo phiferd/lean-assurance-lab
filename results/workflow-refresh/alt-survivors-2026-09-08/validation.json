@@ -1,0 +1,381 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-SURVIVORS",
+  "outcome": "SUCCESS",
+  "status": "PASS",
+  "completed_at": "2026-09-08T14:06:05.364492+00:00",
+  "checks": [
+    {
+      "label": "01-queue",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/01-queue.json",
+        "bytes": 714,
+        "sha256": "7a4d7a757c94907ff9c914809cd17a89465d1f9e19e407af2e9d99fabbd16c71"
+      },
+      "command": [
+        "scripts/validate-research-queue",
+        "--require-ready"
+      ],
+      "elapsed_seconds": 0.06188166607171297
+    },
+    {
+      "label": "02-proposal",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/02-proposal.json",
+        "bytes": 699,
+        "sha256": "7e7623af99d4cfb914d47bbcf91cad94a793267dca16dd93dfe992b11baf3094"
+      },
+      "command": [
+        "scripts/validate-survivor-proposal"
+      ],
+      "elapsed_seconds": 0.19248783309012651
+    },
+    {
+      "label": "03-proposal-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/03-proposal-tests.json",
+        "bytes": 785,
+        "sha256": "d0d4effbb3e5979e26f1a9df253045a6d505afa0ff53465173b6e9a580a35560"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_survivor_proposal.py"
+      ],
+      "elapsed_seconds": 1.2682765000499785
+    },
+    {
+      "label": "04-historical",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/04-historical.json",
+        "bytes": 745,
+        "sha256": "7c11da592d5b929b97381a619e38076b19d0f14aea2318a718baeb8d13674bd6"
+      },
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "elapsed_seconds": 25.72771520819515
+    },
+    {
+      "label": "05-snapshot",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/05-snapshot.json",
+        "bytes": 735,
+        "sha256": "2e9f18cad209a2824877c6fff725e287464d2e54947cefd59f885ad7c9866c2a"
+      },
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 68.92027841694653
+    },
+    {
+      "label": "06-full-suite",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/06-full-suite.json",
+        "bytes": 854,
+        "sha256": "1af641a6b8af8be9861885b614c544aecf043e1745c1dfa662b14784e5f2f61f"
+      },
+      "command": [
+        "scripts/run-unit-tests-with-signal-retry",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 438.1455984581262
+    },
+    {
+      "label": "07-contribution",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/07-contribution.json",
+        "bytes": 721,
+        "sha256": "cfcc3142a0d69157aa8013d472e2e39156aa8912df1d1e9a6907a8f168ca86cb"
+      },
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "elapsed_seconds": 0.09504304174333811
+    },
+    {
+      "label": "08-conditional-history",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/08-conditional-history.json",
+        "bytes": 705,
+        "sha256": "7e8b25e8274902985c416f5be6abe91b64335a74568536806b2bd782e13a6419"
+      },
+      "command": [
+        "scripts/validate-cvc5-package"
+      ],
+      "elapsed_seconds": 0.21976412506774068
+    },
+    {
+      "label": "09-queue-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/09-queue-tests.json",
+        "bytes": 780,
+        "sha256": "a7b922684e9e81054c49cf22a985279c3766dddc90766d335b77cd395ec0b8f6"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue*.py"
+      ],
+      "elapsed_seconds": 0.1456832909025252
+    },
+    {
+      "label": "10-final-proposal",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/10-final-proposal.json",
+        "bytes": 705,
+        "sha256": "79c43a50f7d4fbcf75e0783ba65e9e844230fd489586eca4ebbe06672edf62e4"
+      },
+      "command": [
+        "scripts/validate-survivor-proposal"
+      ],
+      "elapsed_seconds": 0.06965516600757837
+    },
+    {
+      "label": "11-pause-gate",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/11-pause-gate.json",
+        "bytes": 1166,
+        "sha256": "ddff9805c0319b86570062f8d77c795c1de6a505392471fb17ab0243705b0ce8"
+      },
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess; a=subprocess.run([\"scripts/validate-research-queue\"],capture_output=True,text=True); print(a.stdout+a.stderr,end=\"\"); assert a.returncode==0 and \"PAUSED\" in a.stdout; b=subprocess.run([\"scripts/validate-research-queue\",\"--require-ready\"],capture_output=True,text=True); print(b.stdout+b.stderr,end=\"\"); assert b.returncode==1 and \"queue is PAUSED; no executable item\" in b.stderr; print(\"PASS: integrity valid; readiness refusal confirmed\")"
+      ],
+      "elapsed_seconds": 0.1281793750822544
+    },
+    {
+      "label": "12-current-state",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/12-current-state.json",
+        "bytes": 784,
+        "sha256": "38df64eb2c9480181b95b275997a09d47916601a0b36751a24591821efc60c40"
+      },
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/alt-survivors-2026-09-08/current-state"
+      ],
+      "elapsed_seconds": 82.20821791701019
+    },
+    {
+      "label": "13-project-review",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/13-project-review.json",
+        "bytes": 712,
+        "sha256": "0236caa0ee74ed215db1ac167f88c16ff761abe5be2db4db2a55c7d31e721c94"
+      },
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "elapsed_seconds": 27.327700667083263
+    },
+    {
+      "label": "14-artifact-status",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/14-artifact-status.json",
+        "bytes": 721,
+        "sha256": "3cb7e7c87e0742858a8d33d571b5a33a44d5f4e6727a5eb91d29088e7ffcaf92"
+      },
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "elapsed_seconds": 11.534528749994934
+    },
+    {
+      "label": "15-diff-check",
+      "receipt": {
+        "path": "results/workflow-refresh/alt-survivors-2026-09-08/15-diff-check.json",
+        "bytes": 707,
+        "sha256": "179a9930635ad8005137210376f407e30788f60bcbbde969651db9ef7c87962d"
+      },
+      "command": [
+        "git",
+        "diff",
+        "HEAD",
+        "--check"
+      ],
+      "elapsed_seconds": 0.04235875001177192
+    }
+  ],
+  "test_counts": {
+    "current": 738,
+    "unchanged_historical": 73,
+    "total": 811,
+    "skipped": 0
+  },
+  "fixture_accounting": {
+    "reserved_launches": 23,
+    "reserved_seconds": 115,
+    "known_instrumented_charge_seconds": 7.235848421230912,
+    "reconciled": true,
+    "allocation": {
+      "path": "results/workflow-refresh/alt-survivors-2026-09-08/administrative-fixture-allocation.json",
+      "bytes": 415,
+      "sha256": "1bad2bdebb1ee687f3a927143e8ea4f41876adf70ab5ca0172e2fbe74f0fddaf"
+    },
+    "historical_unknown_costs": "Unchanged; never reinterpreted as zero."
+  },
+  "active_accounting": {
+    "primary_seconds": 1639.815986,
+    "administrative_tail_seconds": 151.596676,
+    "combined_seconds": 1791.4126620000002,
+    "limit_seconds": 5400,
+    "work_record": {
+      "path": "results/research/alt-survivors-2026-09-08/work-record.json",
+      "bytes": 3969,
+      "sha256": "1d2911c72a28ba34e4c645b9dedb9feb2e9438c972ea5318da6f0e073cd30fc0"
+    },
+    "administrative_tail": {
+      "path": "results/workflow-refresh/alt-survivors-2026-09-08/administrative-tail.json",
+      "bytes": 299,
+      "sha256": "b9921ee49663e256e45801283cc42a9661a3275ea5714a5fa73a575553eb9438"
+    }
+  },
+  "state_bindings": [
+    {
+      "path": "config/research-queue.json",
+      "bytes": 80894,
+      "sha256": "05be20b7b3ad51147ec623c7389782ace1b686288d0873caa213f49948ba4876"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 157078,
+      "sha256": "fa891255721362fbe75f8cb42218e03c538f97609f77f871422be080ece8cea7"
+    },
+    {
+      "path": "docs/research/SURVIVOR_TRIAGE_PROPOSAL_PLAN.md",
+      "bytes": 5577,
+      "sha256": "536e502c419fa6468a1d2356d2a5377fd5df7b7c519701b6eb5917595f849086"
+    },
+    {
+      "path": "docs/PROJECT_REVIEW.md",
+      "bytes": 14101,
+      "sha256": "61756918e76f2737a8a9afc9104c44d682407ba3634d44a38a574fbb7adfa333"
+    },
+    {
+      "path": "results/research/project-review.json",
+      "bytes": 137984,
+      "sha256": "f86489c715a65a3922e9b0948eaa7d3481650d5f272fbbbaa4c353b1cbf820d7"
+    },
+    {
+      "path": "results/artifacts/graph.json",
+      "bytes": 234982,
+      "sha256": "7c9d553ce7df255a33c219e8ec8f67b34474f4fc6afedfd40390e98a78b3f4c8"
+    },
+    {
+      "path": "results/assurance/current.json",
+      "bytes": 39659,
+      "sha256": "605efa10ca44a208e9a0ca8d30df7012fe86760a396b288b74fe41f4f6770f74"
+    },
+    {
+      "path": "docs/PUBLIC_STATUS.md",
+      "bytes": 2680,
+      "sha256": "6d6ff1f462def2617eca09b87c2f542b2e492e88134fba3fa610cbb36f0a5925"
+    }
+  ],
+  "proposal_bindings": [
+    {
+      "path": "results/research/alt-survivors-2026-09-08/.gitattributes",
+      "bytes": 190,
+      "sha256": "4fa6dbd4386db9f9021e2c6d6b1b85a29c3deab32730954ba01f45da12129493"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/README.md",
+      "bytes": 7161,
+      "sha256": "2df9256ec6b72063ac80e2e31048950c0f5fa3623711aef2bdd84a3a68ab5186"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/active-queue.json",
+      "bytes": 76044,
+      "sha256": "cddca39f770d3b09a952f2d92b4f4f2550d0187e550c32a7ede613362f2cbe5a"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/active-status.md",
+      "bytes": 154578,
+      "sha256": "ba17341689762b96f03ce514c9ffd8c24bb1e1ab3c2596a37bf0e03ff13f64f2"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/entry-decision.json",
+      "bytes": 2961,
+      "sha256": "9f065f8974855b772c23d0999bd93c1067610c155fcb2c3f601bb33b776b9c45"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence-manifest.json",
+      "bytes": 18343,
+      "sha256": "53a171b5ffd4ad3c5efa5eca856edc2a000fef8c6f08d741c25cd853a1d8647b"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/execution-proposal.json",
+      "bytes": 10440,
+      "sha256": "7f77289c8a70fdcf59fb6f77d9847c25cc8a61fa4b9a7061b9c49148a3af6d6d"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/independent-review.md",
+      "bytes": 2223,
+      "sha256": "2f8e23a03ae17dae5d3504ffab7418e161cdf9d66976e67e8f81308f37ea7e6f"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/inventory.json",
+      "bytes": 8600,
+      "sha256": "bfae576af4bca86c1064eaa8d1efe08ae9090871185e4f0a93b09b26d5586308"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/result.json",
+      "bytes": 2474,
+      "sha256": "153e37297ea2b5804b95aa0f5beef885209a233046e3facdd0b323f0eeec8674"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/reuse-assessment.json",
+      "bytes": 1890,
+      "sha256": "5692a8cf208902bef87fbb01c79863fb5cfe4606f75fb35b4b236590e99908fa"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+      "bytes": 8495,
+      "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/source-review.json",
+      "bytes": 3246,
+      "sha256": "19662e371febf31cacd37843d85a0218426a5f388f93614f03a029bbe61a6a07"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/work-record.json",
+      "bytes": 3969,
+      "sha256": "1d2911c72a28ba34e4c645b9dedb9feb2e9438c972ea5318da6f0e073cd30fc0"
+    }
+  ],
+  "completed_items": [
+    "ALT-SURVIVORS"
+  ],
+  "next_item": "SURVIVOR-LET-REUSE-1",
+  "next_item_status": "WAITING",
+  "next_item_started": false,
+  "queue_execution": "PAUSED",
+  "research_counts": {
+    "checker_launches": 0,
+    "proof_builds": 0,
+    "setup_builds": 0,
+    "scientific_byte_variants": 0,
+    "research_network_requests": 0,
+    "external_research_actions": 0
+  },
+  "delivery": "Main-only commit and scripts/push-main verify delivery separately."
+}
