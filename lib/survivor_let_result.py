@@ -69,7 +69,6 @@ def validate_pre_admission(root):
     root = Path(root).resolve()
     events, state = run.Ledger(root).read()
     validate_chain(events)
-    run.verify_attempts(root, events, live=True)
     proposal = json.loads((root / run.PROPOSAL).read_text())
     require(proposal['limits'] == run.LIMITS and
             proposal['limits']['max_scientific_byte_variants'] == 0,
@@ -79,6 +78,12 @@ def validate_pre_admission(root):
         binding(root, historical)
         require((root / live).read_bytes() == (root / historical).read_bytes(),
                 'live classification state changed before successor admission: ' + live)
+    # Check the immutable pre-admission state before requiring the historical
+    # build payload.  A successor must be refused for its changed live
+    # classification even in a portable checkout that deliberately omits that
+    # heavyweight payload; an unchanged predecessor still reaches the strict
+    # receipt and binary verification below.
+    run.verify_attempts(root, events, live=True)
     inventory = json.loads((root / 'results/research/alt-survivors-2026-09-08/inventory.json').read_text())
     require('nanoda-gen-9face4e6a6f7' in inventory['pending_ids'] and
             inventory['classification'] == 'SURVIVED_WITHOUT_WITNESS' and
