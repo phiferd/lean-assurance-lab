@@ -1,10 +1,10 @@
 {
-  "generated_at": "2026-09-08T15:35:22.266022+00:00",
+  "generated_at": "2026-09-08T16:41:51.948775+00:00",
   "nodes": [
     {
       "artifact_type": "repository",
       "dependencies": [],
-      "expected_sha256": "38f720e98b42b5ef9528a1fbcb54bad181deae796f609a48f3a3158696f4656d",
+      "expected_sha256": "1319ab145c28c7c3bc13b787f904ba725b7ddccb123727378abdbc95ac45e20e",
       "id": "input:repository-revision",
       "lifecycle": "historical",
       "locator": {
@@ -452,7 +452,7 @@
     {
       "artifact_type": "script",
       "dependencies": [],
-      "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+      "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
       "id": "script:artifact-system",
       "lifecycle": "current",
       "locator": {
@@ -1401,6 +1401,80 @@
         "path": "results/audits/coverage-guidance-milestone-3.json"
       },
       "notes": "",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "classification",
+      "dependencies": [],
+      "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+      "id": "classification:registry-v2-historical",
+      "lifecycle": "current",
+      "locator": {
+        "kind": "file",
+        "path": "results/research/alt-survivors-2026-09-08/evidence/historical/results/mutants/registry.jsonl"
+      },
+      "notes": "Immutable 606-line registry successor bound to the historical f19/21ef admission.",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "comparison",
+      "dependencies": [
+        {
+          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "id": "classification:registry-v2-historical"
+        }
+      ],
+      "expected_sha256": "7d801abcf269261e1b9b856ce09ef2c390a0f932de88231574a351e7d7778a0f",
+      "id": "result:survivor-let-reuse-1",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "results/research/survivor-let-reuse-1/result.json",
+          "results/research/survivor-let-reuse-1/association-recommendation.json",
+          "results/research/survivor-let-reuse-1/report.md",
+          "results/research/survivor-let-reuse-1/evidence-manifest.json",
+          "results/research/survivor-let-reuse-1/run-0001/execution/events.jsonl"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "Frozen fixed-pair result that distinguishes the 9face mutant without itself changing canonical classification.",
+      "required_for_current_claims": true
+    },
+    {
+      "artifact_type": "classification",
+      "dependencies": [
+        {
+          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "id": "classification:registry-v2-historical"
+        },
+        {
+          "expected_sha256": "7d801abcf269261e1b9b856ce09ef2c390a0f932de88231574a351e7d7778a0f",
+          "id": "result:survivor-let-reuse-1"
+        }
+      ],
+      "expected_sha256": "80bb8470023202dccfd2ecf050cfdb225bed556f7a6b6cfe3e78e4cfe488ae5f",
+      "id": "classification:survivor-let-association",
+      "lifecycle": "current",
+      "locator": {
+        "exclude": [],
+        "include": [
+          "results/mutants/nanoda-gen-9face4e6a6f7/reuse-association-v1.json",
+          "results/mutants/nanoda-gen-9face4e6a6f7/reuse-association-confirmation-v1.json",
+          "results/research/survivor-let-association-1/historical-transition.json",
+          "results/research/survivor-let-association-1/result.json",
+          "results/research/survivor-let-association-1/report.md",
+          "results/research/survivor-let-association-1/evidence-manifest.json",
+          "lib/survivor_let_association.py",
+          "schemas/survivor-let-association.schema.json",
+          "scripts/build-survivor-let-association",
+          "tests/test_survivor_let_association.py"
+        ],
+        "kind": "file_set",
+        "root": "."
+      },
+      "notes": "No-duplicate association of the exact existing 21ef regression with the fresh 9face implementation distinction; no semantic authority.",
       "required_for_current_claims": true
     },
     {
@@ -3867,7 +3941,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -3885,7 +3959,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4023,11 +4097,11 @@
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+      "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
       "id": "configuration:declaration-validation-publication-study",
       "lifecycle": "current",
       "locator": {
@@ -4066,7 +4140,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4089,7 +4163,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+          "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
           "id": "configuration:declaration-validation-publication-study"
         }
       ],
@@ -4217,7 +4291,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         },
         {
@@ -4225,7 +4299,7 @@
           "id": "script:reporting"
         }
       ],
-      "expected_sha256": "ea8feff3e62a0ffcfbfd8fb4adc972a46451c0d4e44439eda16654ecb34bb548",
+      "expected_sha256": "ef0d19bc182bd5c9b7e285315b1c332be1ca61809d458dc92936034813ebe4c6",
       "id": "script:current-assurance",
       "lifecycle": "current",
       "locator": {
@@ -4250,11 +4324,11 @@
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "ea8feff3e62a0ffcfbfd8fb4adc972a46451c0d4e44439eda16654ecb34bb548",
+          "expected_sha256": "ef0d19bc182bd5c9b7e285315b1c332be1ca61809d458dc92936034813ebe4c6",
           "id": "script:current-assurance"
         }
       ],
-      "expected_sha256": "1f747d453b30e6b088324bf9761455d5bd3f8750d48f343f557d778f65868f39",
+      "expected_sha256": "1574c7e54c76c32f0b1bf33bd1d10881d3f9a9b3717cf229e1f378332b211646",
       "id": "script:community-workflow",
       "lifecycle": "current",
       "locator": {
@@ -4324,9 +4398,13 @@
         {
           "expected_sha256": "7518fb2adf346ea6635d89a9f5bbfcefd24404a50d09a590cc071f8f574d7f50",
           "id": "comparison:nanoda-imax-equality-references"
+        },
+        {
+          "expected_sha256": "80bb8470023202dccfd2ecf050cfdb225bed556f7a6b6cfe3e78e4cfe488ae5f",
+          "id": "classification:survivor-let-association"
         }
       ],
-      "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+      "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
       "id": "classification:registry",
       "lifecycle": "current",
       "locator": {
@@ -4691,7 +4769,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -4715,7 +4793,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4733,7 +4811,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -4765,7 +4843,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4783,7 +4861,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -4831,7 +4909,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4849,7 +4927,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -4905,7 +4983,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -4923,7 +5001,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -4987,7 +5065,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5017,7 +5095,7 @@
           "id": "comparison:coverage-guidance-audit-m3"
         },
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -5029,7 +5107,7 @@
           "id": "script:reporting"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5063,7 +5141,7 @@
           "id": "script:witness-search"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5113,7 +5191,7 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5155,7 +5233,7 @@
           "id": "script:transfer-experiment"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5205,7 +5283,7 @@
           "id": "script:rotating-heldout"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5247,7 +5325,7 @@
       "artifact_type": "classification",
       "dependencies": [
         {
-          "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+          "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
           "id": "configuration:declaration-validation-publication-study"
         },
         {
@@ -5299,7 +5377,7 @@
       "artifact_type": "classification",
       "dependencies": [
         {
-          "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+          "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
           "id": "configuration:declaration-validation-publication-study"
         },
         {
@@ -5321,7 +5399,7 @@
       "artifact_type": "classification",
       "dependencies": [
         {
-          "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+          "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
           "id": "configuration:declaration-validation-publication-study"
         },
         {
@@ -5388,7 +5466,7 @@
       "artifact_type": "configuration",
       "dependencies": [
         {
-          "expected_sha256": "94425b3911c2ae30654b6296614a16e7e654fd5df3ffcf8b297e13804b01508e",
+          "expected_sha256": "08e14d3eac58e8a2ee167c6a4e33fb0e70904dafbfe25c3d1b8385b850937620",
           "id": "configuration:declaration-validation-publication-study"
         },
         {
@@ -5555,7 +5633,7 @@
       "dependencies": [
         {
           "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
-          "id": "classification:registry"
+          "id": "classification:registry-v2-historical"
         },
         {
           "expected_sha256": "cb906b22db6342de46fd248d6e9a9ceceae8fbfc7b303dd499eb1eed9ec02844",
@@ -5566,7 +5644,7 @@
           "id": "investigation:ecosystem-closure-successor"
         }
       ],
-      "expected_sha256": "d0e8653e5ad8f93a485b98b95c2ff3672c3a09fa1c13e1d9daa9123e5fe523f7",
+      "expected_sha256": "669fa717820837332c067d15fdb8cc43b4342002ba3f45caf6e813559145ff95",
       "id": "classification:witness-admission-v2",
       "lifecycle": "current",
       "locator": {
@@ -5641,7 +5719,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dcd605397c53c52fab087117b02561d0c7b62c93629688753aa58c61af286944",
+          "expected_sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572",
           "id": "classification:registry"
         },
         {
@@ -5717,7 +5795,7 @@
           "id": "investigation:kiota-self-reference"
         },
         {
-          "expected_sha256": "d0e8653e5ad8f93a485b98b95c2ff3672c3a09fa1c13e1d9daa9123e5fe523f7",
+          "expected_sha256": "669fa717820837332c067d15fdb8cc43b4342002ba3f45caf6e813559145ff95",
           "id": "classification:witness-admission-v2"
         },
         {
@@ -5733,11 +5811,11 @@
           "id": "script:cross-validation"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "4cfb3757f5c361ab3a77609e54ba7ed06fc13c58cb1abea8e623ad9a959e801b",
+      "expected_sha256": "98645f939e656cc4b955b0f890b0104a3a67189be6eb505bea02c97e2cf389f1",
       "id": "report:mutation-summary-current",
       "lifecycle": "current",
       "locator": {
@@ -5755,7 +5833,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "ea8feff3e62a0ffcfbfd8fb4adc972a46451c0d4e44439eda16654ecb34bb548",
+          "expected_sha256": "ef0d19bc182bd5c9b7e285315b1c332be1ca61809d458dc92936034813ebe4c6",
           "id": "script:current-assurance"
         },
         {
@@ -5775,7 +5853,7 @@
           "id": "inventory:cross-validators"
         },
         {
-          "expected_sha256": "4cfb3757f5c361ab3a77609e54ba7ed06fc13c58cb1abea8e623ad9a959e801b",
+          "expected_sha256": "98645f939e656cc4b955b0f890b0104a3a67189be6eb505bea02c97e2cf389f1",
           "id": "report:mutation-summary-current"
         },
         {
@@ -5851,11 +5929,11 @@
           "id": "report:rotating-heldout-m7"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "dbb7e788a311d363fb0c6ca0ca842f3a65ff6ffe96bb023943951552e1a465ac",
+      "expected_sha256": "22a14a2c3c6c097ead98116517d15b959faa9070af4a32e5ba0278b4c7370225",
       "id": "report:current-assurance",
       "lifecycle": "current",
       "locator": {
@@ -5869,7 +5947,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dbb7e788a311d363fb0c6ca0ca842f3a65ff6ffe96bb023943951552e1a465ac",
+          "expected_sha256": "22a14a2c3c6c097ead98116517d15b959faa9070af4a32e5ba0278b4c7370225",
           "id": "report:current-assurance"
         },
         {
@@ -5877,7 +5955,7 @@
           "id": "configuration:assurance-policy"
         },
         {
-          "expected_sha256": "ea8feff3e62a0ffcfbfd8fb4adc972a46451c0d4e44439eda16654ecb34bb548",
+          "expected_sha256": "ef0d19bc182bd5c9b7e285315b1c332be1ca61809d458dc92936034813ebe4c6",
           "id": "script:current-assurance"
         },
         {
@@ -5885,7 +5963,7 @@
           "id": "report:milestone7-assurance"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
@@ -5903,7 +5981,7 @@
       "artifact_type": "report",
       "dependencies": [
         {
-          "expected_sha256": "dbb7e788a311d363fb0c6ca0ca842f3a65ff6ffe96bb023943951552e1a465ac",
+          "expected_sha256": "22a14a2c3c6c097ead98116517d15b959faa9070af4a32e5ba0278b4c7370225",
           "id": "report:current-assurance"
         },
         {
@@ -5911,11 +5989,11 @@
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "1f747d453b30e6b088324bf9761455d5bd3f8750d48f343f557d778f65868f39",
+          "expected_sha256": "1574c7e54c76c32f0b1bf33bd1d10881d3f9a9b3717cf229e1f378332b211646",
           "id": "script:community-workflow"
         }
       ],
-      "expected_sha256": "024c0755473c91c8b4bd67f2dfac57719ed4a6146993b850d7d2890df139c34d",
+      "expected_sha256": "8a0638434f7df43a7daa25ffd3576ac3f44ba47a4ca627e31b291283a2275b16",
       "id": "report:public-status",
       "lifecycle": "current",
       "locator": {
@@ -5933,7 +6011,7 @@
           "id": "investigation:ecosystem-closure-successor"
         },
         {
-          "expected_sha256": "d0e8653e5ad8f93a485b98b95c2ff3672c3a09fa1c13e1d9daa9123e5fe523f7",
+          "expected_sha256": "669fa717820837332c067d15fdb8cc43b4342002ba3f45caf6e813559145ff95",
           "id": "classification:witness-admission-v2"
         }
       ],
@@ -5975,7 +6053,7 @@
           "id": "investigation:corpus-integration-successor"
         }
       ],
-      "expected_sha256": "703c267681f3ed308ad330b8eb70d1a96f7b16de4868657ab9ee39a6d91dc6a0",
+      "expected_sha256": "e33032bf1e7ff35e6365a6760a0d00ae2733004b8cb58873cc856c26ea2bd210",
       "id": "configuration:conditional-validation-contracts",
       "lifecycle": "current",
       "locator": {
@@ -6014,11 +6092,11 @@
           "id": "investigation:corpus-integration-successor"
         },
         {
-          "expected_sha256": "703c267681f3ed308ad330b8eb70d1a96f7b16de4868657ab9ee39a6d91dc6a0",
+          "expected_sha256": "e33032bf1e7ff35e6365a6760a0d00ae2733004b8cb58873cc856c26ea2bd210",
           "id": "configuration:conditional-validation-contracts"
         }
       ],
-      "expected_sha256": "e4ca1d08947efb74572a6af2b486da251407257318ba027b310d5f40db841310",
+      "expected_sha256": "3fdb5f632f18dfd2aa7350c483c65314446388a54f3f0c8c2a1054f0c09ec67b",
       "id": "report:project-review",
       "lifecycle": "current",
       "locator": {
@@ -6110,7 +6188,7 @@
           "id": "investigation:upstream-action-preflight"
         },
         {
-          "expected_sha256": "1f747d453b30e6b088324bf9761455d5bd3f8750d48f343f557d778f65868f39",
+          "expected_sha256": "1574c7e54c76c32f0b1bf33bd1d10881d3f9a9b3717cf229e1f378332b211646",
           "id": "script:community-workflow"
         }
       ],
@@ -6132,7 +6210,7 @@
           "id": "report:milestone8-assurance"
         },
         {
-          "expected_sha256": "024c0755473c91c8b4bd67f2dfac57719ed4a6146993b850d7d2890df139c34d",
+          "expected_sha256": "8a0638434f7df43a7daa25ffd3576ac3f44ba47a4ca627e31b291283a2275b16",
           "id": "report:public-status"
         },
         {
@@ -6140,7 +6218,7 @@
           "id": "configuration:community-workflow"
         },
         {
-          "expected_sha256": "1f747d453b30e6b088324bf9761455d5bd3f8750d48f343f557d778f65868f39",
+          "expected_sha256": "1574c7e54c76c32f0b1bf33bd1d10881d3f9a9b3717cf229e1f378332b211646",
           "id": "script:community-workflow"
         },
         {
@@ -6148,11 +6226,11 @@
           "id": "report:action-recommendations-current"
         },
         {
-          "expected_sha256": "a416b79774f29b363eb5563331d6d1f0a587e17e912e35f801d219acb8598786",
+          "expected_sha256": "ca1ecf68a0ee110ea0edd93139f8b833482c50f4cb0e03c72db2736ea22b4aa7",
           "id": "script:artifact-system"
         }
       ],
-      "expected_sha256": "fa8ad31120d85d2002ff0d56d2cf7293073ae5a05e440f52aaf0a04c6ae7ec64",
+      "expected_sha256": "cca31e3e9112bcf0ff918750cfe899f4e5e7d8ee9c11e987db238655f14152f6",
       "id": "report:milestone9-assurance",
       "lifecycle": "current",
       "locator": {
@@ -6174,7 +6252,7 @@
       "witness": "4.29.1"
     },
     "mutation_specs_sha256": "9e8fd51902173ffbe6b856fcdcde8bfb9f3247c441ed9f52213611b81325b59b",
-    "repository_revision": "ec124de53c83c9256aa2aba0584c2ae59c3285d8",
+    "repository_revision": "195ff60b5786d3349785df7fc34b511d8f8b08a8",
     "scripts_sha256": "2c4ec2616e4ecac1350414a0342a752919e9abcb9beae06d69dc18b313dab37a",
     "validator_source_sha256": "e9df561eed4b32f4af5b5599b0e6e117d2adc87ceb2dba5badcba631e5d0e613"
   },

@@ -6,7 +6,7 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `dbb7e788a311d363fb0c6ca0ca842f3a65ff6ffe96bb023943951552e1a465ac`
+Snapshot SHA-256: `22a14a2c3c6c097ead98116517d15b959faa9070af4a32e5ba0278b4c7370225`
 
 ## Current Gate: FAIL
 
@@ -28,13 +28,14 @@ erase those states.
 - Corpus: 197 materialized tests,
   9506646641 content-addressed bytes.
 - Canonical modeled semantic population: 161 evaluated,
-  135 killed by the existing corpus,
+  136 killed by the existing corpus,
   3 additional source mutants killed by a
-  generated witness, and 7 surviving without a
+  generated witness, and 6 surviving without a
   witness.
 - Mechanically executed survivors awaiting semantic/witness triage:
-  7. They are not included in the
-  canonical modeled population or its mutation-score denominator.
+  6. Their measured survivals are
+  included in the modeled denominator while their semantic classification
+  remains unresolved.
 - Reference-aligned mutants: 5 excluded
   from mutation-score denominators because the mutant matches established
   expected behavior while baseline does not.

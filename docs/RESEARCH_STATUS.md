@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-LET-ASSOCIATION-1` on 2026-09-08 with `SUCCESS`.
+  The canonical registry now classifies `nanoda-gen-9face4e6a6f7` as
+  `KILLED` / `MEANINGFUL_SEMANTIC` from the fresh fixed-pair result while
+  reusing the exact existing 21ef candidate, control and expected-outcome
+  bytes. No 9face corpus artifact was created. The unchanged historical
+  admission producer re-renders its preserved 606-line successor, and the
+  prior reuse closure validates through an explicit historical substitution
+  map. Pending survivors move from seven to six; the modeled denominator stays
+  144 and its numerator moves from 134 to 135. The declaration-validation
+  catalog and authority state remain unchanged. See the
+  [result](../results/research/survivor-let-association-1/result.json),
+  [association](../results/mutants/nanoda-gen-9face4e6a6f7/reuse-association-v1.json),
+  and [transition](../results/research/survivor-let-association-1/historical-transition.json).
+  `ALT-TRANSFER` is selected WAITING for separate phase authorization and
+  fresh methods/independence review.
+
 - Completed `SURVIVOR-LET-REUSE-1` on 2026-09-08 with `SUCCESS` for the
   exact existing-regression comparison. Both the pinned baseline and freshly
   built `nanoda-gen-9face4e6a6f7` accepted the 601-byte control. The baseline
@@ -2322,11 +2338,11 @@ Kiota deferrals remain unchanged. Only `ALT-SURVIVORS` closes in this work.
 
 ### Active
 
-1. `F-SURVIVOR-LET-REUSE` — the owner-authorized fixed execution is complete
-   under
-   [docs/research/SURVIVOR_LET_REUSE_PLAN.md](research/SURVIVOR_LET_REUSE_PLAN.md).
+1. `F-SURVIVOR-LET-ASSOCIATION` — the owner-authorized no-duplicate canonical
+   association is complete under
+   [docs/research/SURVIVOR_LET_ASSOCIATION_PLAN.md](research/SURVIVOR_LET_ASSOCIATION_PLAN.md).
 
-Selected next item: `SURVIVOR-LET-ASSOCIATION-1`.
+Selected next item: `ALT-TRANSFER`.
 
 Queue handoff: PAUSED.
 
@@ -2338,16 +2354,17 @@ candidate accepted. One offline build and five checker reservations consumed
 No new scientific export bytes, proof, research network request, official
 observer run, external action or upstream report occurred.
 
-`SURVIVOR-LET-ASSOCIATION-1` is selected WAITING and unstarted. The historical
-admission producer is frozen around f19 and 21ef and accepts only its exact
-604-line predecessor or two-row successor. It cannot append 9face while reusing
-the existing pair without a new tested producer and historical-transition
-check. The next bounded item would implement that no-duplicate association
-route with zero research launches. It requires separate owner authorization;
-the successful comparison does not itself authorize canonical classification.
+`SURVIVOR-LET-ASSOCIATION-1` is COMPLETE with `SUCCESS`. Its tested successor
+reuses the existing 21ef pair, appends only the 9face classification, and
+creates no corpus bytes or research launches. The historical f19/21ef admission
+and completed reuse result validate unchanged. The canonical pending set is six.
 
-The seven pending survivors, live registry, modeled population and historical
-admission bytes remain unchanged. The planning proposal, prior CVC results,
+`ALT-TRANSFER` is selected WAITING and unstarted. It requires separate phase
+authorization, a fresh literature/reuse review, an independent target and
+preregistration. No transfer design or execution begins in this item.
+
+The six remaining pending survivors and all historical admission bytes remain
+unchanged. The planning proposal, prior CVC results,
 sixteen observer charges, failed/unknown costs and original CVC-4/CVC-5
 dependencies remain intact. Existing Lean/Arena Waiting triggers and Kiota
 deferrals are preserved.

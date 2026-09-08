@@ -11,6 +11,7 @@ loader = importlib.machinery.SourceFileLoader("witness_admission", str(ROOT / "s
 spec = importlib.util.spec_from_loader(loader.name, loader)
 admission = importlib.util.module_from_spec(spec)
 loader.exec_module(admission)
+HISTORICAL_REGISTRY = "results/research/alt-survivors-2026-09-08/evidence/historical/results/mutants/registry.jsonl"
 
 
 class WitnessAdmissionTests(unittest.TestCase):
@@ -23,20 +24,22 @@ class WitnessAdmissionTests(unittest.TestCase):
                 return
             real_verify(row)
 
-        with patch.object(admission, "verify", side_effect=verify_without_optional_payload):
+        with patch.object(admission, "REGISTRY", HISTORICAL_REGISTRY), patch.object(
+            admission, "verify", side_effect=verify_without_optional_payload
+        ):
             return admission.build()
 
     def test_fixed_evidence_renders_two_successors_without_launching_processes(self):
         with patch("subprocess.run", side_effect=AssertionError("admission must not launch a process")):
             outputs = self.clone_safe_build()
         self.assertIn("corpus/augmented/manifest-v2.json", outputs)
-        self.assertIn(admission.REGISTRY, outputs)
-        self.assertEqual(outputs[admission.REGISTRY].count("\n"), admission.PREDECESSOR_REGISTRY_LINES + 2)
+        self.assertIn(HISTORICAL_REGISTRY, outputs)
+        self.assertEqual(outputs[HISTORICAL_REGISTRY].count("\n"), admission.PREDECESSOR_REGISTRY_LINES + 2)
         manifest = admission.json.loads(outputs["corpus/augmented/manifest-v2.json"])
         self.assertEqual(manifest["schema_version"], 2)
         self.assertEqual(len(manifest["tests"]), 3)
         for mutant_id in admission.IDS:
-            row = admission.json.loads(outputs[admission.REGISTRY].splitlines()[admission.PREDECESSOR_REGISTRY_LINES + admission.IDS.index(mutant_id)])
+            row = admission.json.loads(outputs[HISTORICAL_REGISTRY].splitlines()[admission.PREDECESSOR_REGISTRY_LINES + admission.IDS.index(mutant_id)])
             self.assertEqual((row["id"], row["status"], row["classification"]), (mutant_id, "KILLED", "MEANINGFUL_SEMANTIC"))
             self.assertIn("updated_at", row)
             self.assertNotIn("recorded_at", row)
@@ -57,12 +60,12 @@ class WitnessAdmissionTests(unittest.TestCase):
             return value
 
         real_verify = admission.verify
-        with patch.object(admission, "read", side_effect=forged), patch.object(admission, "verify", side_effect=lambda row: None if row["path"].startswith("external/") else real_verify(row)):
+        with patch.object(admission, "REGISTRY", HISTORICAL_REGISTRY), patch.object(admission, "read", side_effect=forged), patch.object(admission, "verify", side_effect=lambda row: None if row["path"].startswith("external/") else real_verify(row)):
             with self.assertRaisesRegex(ValueError, "outcome does not match"):
                 admission.build()
 
     def test_changed_registry_is_not_accepted_as_a_predecessor(self):
-        registry = ROOT / admission.REGISTRY
+        registry = ROOT / HISTORICAL_REGISTRY
         original = registry.read_text(encoding="utf-8")
         real_read_text = Path.read_text
         with patch.object(Path, "read_text", autospec=True, side_effect=lambda path, *args, **kwargs: "{}\n" + original if path == registry else real_read_text(path, *args, **kwargs)):

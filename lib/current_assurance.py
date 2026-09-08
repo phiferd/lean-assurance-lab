@@ -364,7 +364,7 @@ def build_snapshot(root: Path, policy: dict[str, Any], created_at: str) -> dict[
             "pending_survivor_triage": {
                 "count": len(pending_survivor_ids),
                 "classification": "SURVIVED_WITHOUT_WITNESS",
-                "scope": "Mechanically executed survivors awaiting semantic classification or witness investigation. They are not admitted to the canonical modeled population or its mutation-score denominator.",
+                "scope": "Mechanically executed survivors awaiting a witness or another terminal classification. The current mutation report includes these measured survivals in its modeled denominator while keeping their semantic classification unresolved.",
                 "mutant_ids": pending_survivor_ids,
             },
             "modeled_mutation_score": report["modeled_mutation_score"],

@@ -1,5 +1,6 @@
 import copy, sys, unittest
 from pathlib import Path
+from unittest.mock import patch
 ROOT=Path(__file__).resolve().parents[1]; sys.path.insert(0,str(ROOT))
 from lib import survivor_let_result as r
 
@@ -24,4 +25,19 @@ class ClosureTests(unittest.TestCase):
  def test_artifacts_declare_successor_blocker(self):
   # Static output contract is exercised separately from filesystem validation.
   self.assertIn('scripts/build-witness-admission',r.artifacts.__code__.co_consts)
+ def test_successor_transition_preserves_frozen_reuse_closure(self):
+  with self.assertRaisesRegex(ValueError,'live classification state changed'):
+   r.validate_pre_admission(ROOT)
+  events,state,_=r.validate_historical_closure(ROOT)
+  self.assertEqual(r.validate_chain(events)['charged_seconds'],state['charged_seconds'])
+  self.assertEqual(set(r.build(ROOT)),set(r.OUTPUTS))
+ def test_later_registry_suffix_does_not_rebind_historical_reuse(self):
+  registry=ROOT/'results/mutants/registry.jsonl'; original=registry.read_bytes()
+  read_bytes=Path.read_bytes
+  with patch.object(Path,'read_bytes',autospec=True,side_effect=lambda path,*args,**kwargs: original+b'{}\n' if path==registry else read_bytes(path,*args,**kwargs)):
+   r.validate_historical_closure(ROOT)
+  changed=bytes([original[0]^1])+original[1:]
+  with patch.object(Path,'read_bytes',autospec=True,side_effect=lambda path,*args,**kwargs: changed if path==registry else read_bytes(path,*args,**kwargs)):
+   with self.assertRaisesRegex(ValueError,'registry prefix changed'):
+    r.validate_historical_closure(ROOT)
 if __name__=='__main__': unittest.main()

@@ -1,6 +1,7 @@
 """Validate and render the fixed survivor-reuse result without new launches."""
 from __future__ import annotations
 import argparse
+import hashlib
 import json
 from pathlib import Path
 from lib.cvc_prep import require, bind
@@ -11,6 +12,7 @@ BASE = run.BASE
 OUT = run.OUT
 OUTPUTS = ('result.json', 'association-recommendation.json', 'report.md',
            'evidence-manifest.json')
+TRANSITION = 'results/research/survivor-let-association-1/historical-transition.json'
 HISTORICAL = {
     'results/mutants/registry.jsonl':
         'results/research/alt-survivors-2026-09-08/evidence/historical/results/mutants/registry.jsonl',
@@ -63,7 +65,7 @@ def validate_chain(events):
     return state
 
 
-def validate(root):
+def validate_pre_admission(root):
     root = Path(root).resolve()
     events, state = run.Ledger(root).read()
     validate_chain(events)
@@ -92,6 +94,68 @@ def validate(root):
     return events, state, proposal
 
 
+def validate_historical_closure(root, require_full_payload=False):
+    """Validate the completed reuse result through its successor's bound overlay."""
+    root = Path(root).resolve()
+    transition = json.loads((root / TRANSITION).read_text())
+    require(transition.get('kind') == 'SURVIVOR_LET_ASSOCIATION_HISTORICAL_TRANSITION',
+            'wrong survivor-reuse historical transition')
+    frozen = {row['path']: row for row in transition['predecessor_reuse_outputs']}
+    require(set(frozen) == {BASE + '/' + name for name in OUTPUTS},
+            'historical transition does not bind every frozen reuse output')
+    for path, row in frozen.items():
+        require(binding(root, path) == row, 'frozen reuse output changed: ' + path)
+
+    substitutions = {row['live_path']: row for row in transition['historical_substitutions']}
+    require(set(substitutions) == set(HISTORICAL),
+            'historical transition substitution set changed')
+    manifest = json.loads((root / BASE / 'evidence-manifest.json').read_text())
+    manifest_inputs = {row['path']: row for row in manifest['inputs']}
+    for live, historical in HISTORICAL.items():
+        substitution = substitutions[live]
+        require(substitution['original_live_binding'] == manifest_inputs[live],
+                'historical transition does not reproduce old live binding: ' + live)
+        require(substitution['historical_binding']['path'] == historical and
+                binding(root, historical) == substitution['historical_binding'] ==
+                {**manifest_inputs[live], 'path': historical},
+                'historical substitution bytes changed: ' + live)
+    for path, row in manifest_inputs.items():
+        if path in HISTORICAL:
+            continue
+        if path.startswith('external/') and not require_full_payload:
+            continue
+        require(binding(root, path) == row, 'historical reuse evidence changed: ' + path)
+
+    events, state = run.Ledger(root).read()
+    validate_chain(events)
+    if require_full_payload:
+        run.verify_attempts(root, events, live=True)
+    proposal = json.loads((root / run.PROPOSAL).read_text())
+    successor = transition['successor_state']
+    registry = (root / successor['registry']['path']).read_bytes()
+    prefix_bytes = successor['registry']['bytes']
+    require(len(registry) >= prefix_bytes and
+            hashlib.sha256(registry[:prefix_bytes]).hexdigest() ==
+            successor['registry']['sha256'],
+            'successor registry prefix changed')
+    require(successor['survivor_inventory'] ==
+            substitutions['results/survivors/inventory.jsonl']['original_live_binding'],
+            'successor survivor inventory is not bound through the historical substitution')
+    for key in ('association', 'confirmation'):
+        require(binding(root, successor[key]['path']) == successor[key],
+                'successor association evidence changed: ' + key)
+    require(successor['new_corpus_byte_variants'] == 0,
+            'historical transition claims new corpus bytes')
+    return events, state, proposal
+
+
+def validate(root, require_full_payload=False):
+    root = Path(root).resolve()
+    if (root / TRANSITION).is_file():
+        return validate_historical_closure(root, require_full_payload)
+    return validate_pre_admission(root)
+
+
 def evidence_inputs(root, events, state, proposal):
     paths = {run.PROPOSAL, run.WORK, run.MANIFEST,
              'config/survivor-let-reuse-0001-r2.json',
@@ -117,7 +181,7 @@ def evidence_inputs(root, events, state, proposal):
 
 def artifacts(root):
     root = Path(root).resolve()
-    events, state, proposal = validate(root)
+    events, state, proposal = validate_pre_admission(root)
     evidence = evidence_inputs(root, events, state, proposal)
     build = state['attempts'][0]['terminal']
     final = {0: state['attempts'][1]['terminal'],
@@ -194,8 +258,16 @@ def artifacts(root):
             'report.md': report, 'evidence-manifest.json': manifest}
 
 
-def build(root, write=False):
+def build(root, write=False, require_full_payload=False):
     root = Path(root).resolve()
+    if (root / TRANSITION).is_file():
+        require(not write, 'completed reuse outputs are frozen after successor association')
+        validate_historical_closure(root, require_full_payload)
+        return {
+            name: ((root / BASE / name).read_text() if name == 'report.md'
+                   else json.loads((root / BASE / name).read_text()))
+            for name in OUTPUTS
+        }
     rows = artifacts(root)
     if write:
         for name, value in rows.items():
@@ -218,9 +290,10 @@ def main():
     parser = argparse.ArgumentParser()
     parser.add_argument('--write', action='store_true')
     parser.add_argument('--check', action='store_true')
+    parser.add_argument('--require-full-payload', action='store_true')
     args = parser.parse_args()
     require(args.write != args.check, 'choose --write or --check')
-    build(Path(__file__).resolve().parents[1], args.write)
+    build(Path(__file__).resolve().parents[1], args.write, args.require_full_payload)
     return 0
 
 

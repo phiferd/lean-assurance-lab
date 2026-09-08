@@ -1,0 +1,81 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://leanassurancelab.invalid/schemas/survivor-let-association.schema.json",
+  "title": "No-duplicate survivor reuse association",
+  "type": "object",
+  "required": [
+    "schema_version",
+    "kind",
+    "item_id",
+    "mutant_id",
+    "recorded_at",
+    "governing_plan",
+    "producer",
+    "fresh_result",
+    "fresh_execution",
+    "mutation_spec",
+    "source_mutation",
+    "reused_candidate",
+    "reused_control",
+    "reused_expected_outcome",
+    "historical_21ef_admission",
+    "historical_registry_predecessor",
+    "declaration_validation",
+    "status",
+    "classification",
+    "classification_scope",
+    "confirmation",
+    "no_duplicate_corpus_artifact",
+    "new_corpus_byte_variants"
+  ],
+  "properties": {
+    "schema_version": {"const": 1},
+    "kind": {"const": "SURVIVOR_LET_REUSE_ASSOCIATION"},
+    "item_id": {"const": "SURVIVOR-LET-ASSOCIATION-1"},
+    "mutant_id": {"const": "nanoda-gen-9face4e6a6f7"},
+    "recorded_at": {"type": "string", "format": "date-time"},
+    "governing_plan": {"$ref": "#/$defs/binding"},
+    "producer": {"type": "object"},
+    "fresh_result": {"$ref": "#/$defs/binding"},
+    "fresh_execution": {"$ref": "#/$defs/binding"},
+    "mutation_spec": {"$ref": "#/$defs/binding"},
+    "source_mutation": {"type": "object"},
+    "reused_candidate": {"$ref": "#/$defs/binding"},
+    "reused_control": {"$ref": "#/$defs/binding"},
+    "reused_expected_outcome": {"$ref": "#/$defs/binding"},
+    "historical_21ef_admission": {"type": "object"},
+    "historical_registry_predecessor": {"type": "object"},
+    "declaration_validation": {
+      "type": "object",
+      "required": ["stable_identity", "catalog", "evidence_lock", "authority_status", "normative_source_change", "scope"],
+      "properties": {
+        "stable_identity": {"const": "EXPR.LET.VALUE_TYPE_MATCH"},
+        "catalog": {"$ref": "#/$defs/binding"},
+        "evidence_lock": {"$ref": "#/$defs/binding"},
+        "authority_status": {"const": "PROVISIONAL_UNCHANGED"},
+        "normative_source_change": {"const": false},
+        "scope": {"type": "string", "minLength": 1}
+      },
+      "additionalProperties": false
+    },
+    "status": {"const": "KILLED"},
+    "classification": {"const": "MEANINGFUL_SEMANTIC"},
+    "classification_scope": {"type": "string", "minLength": 1},
+    "confirmation": {"$ref": "#/$defs/binding"},
+    "no_duplicate_corpus_artifact": {"const": true},
+    "new_corpus_byte_variants": {"const": 0}
+  },
+  "additionalProperties": false,
+  "$defs": {
+    "binding": {
+      "type": "object",
+      "required": ["path", "bytes", "sha256"],
+      "properties": {
+        "path": {"type": "string", "minLength": 1},
+        "bytes": {"type": "integer", "minimum": 0},
+        "sha256": {"type": "string", "pattern": "^[0-9a-f]{64}$"}
+      },
+      "additionalProperties": false
+    }
+  }
+}
