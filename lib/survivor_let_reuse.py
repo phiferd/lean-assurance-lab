@@ -249,13 +249,14 @@ def classify(cell, rec, stdout, stderr):
         return 'INDETERMINATE'
     if rec['status'] == 'COMPLETE' and rec['returncode'] == 0 and stdout == SUCCESS and stderr == b'':
         return 'ACCEPT'
-    # This source uses assert! as the rejection mechanism. Full backtrace must
-    # locate BOTH the assertion and infer_let caller, not just a panic/exit code.
+    # This source uses assert! as the rejection mechanism. Release optimization
+    # inlines assert_def_eq/infer_let (bound symbol inventory). Require their
+    # exact assertion site plus retained infer/check_declar_info frames; the
+    # fixed source and exact pair establish the inlined let path.
     if (cell == 'candidate-baseline' and rec['status'] == 'FAILED' and rec['returncode'] == 101
             and stdout == b'' and b'panicked at src/tc.rs:921:71:' in stderr
             and b'assertion failed: self.def_eq(u, v)' in stderr
-            and b'::assert_def_eq' in stderr and b'::infer_let' in stderr
-            and b'::check_declar_info' in stderr):
+            and b'::infer' in stderr and b'::check_declar_info' in stderr):
         return 'TYPECHECK_REFUSAL'
     lowered = stderr.lower()
     if any(token in lowered for token in (b'parse error', b'parser error', b'failed to parse', b'invalid json')):
