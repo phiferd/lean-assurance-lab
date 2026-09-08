@@ -20,39 +20,47 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete CVC-5-CONDITIONAL: Consolidate the conditional result for reuse and decide the phase; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | PAUSED: no executable item | Authorize a bounded ALT-SURVIVORS proposal, select another named direction with its method review and finite gates, or retain the pause. Substantive maintainer guidance may instead justify a scoped follow-up. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CVC-5-CONDITIONAL**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.
+**Queue execution is PAUSED; no executable item is selected.**
+
+**Blocker:** Owner selection and durable authorization of a named research successor are absent; no new substantive upstream trigger is recorded. Further execution is paused.
+
+**Required decision:** Authorize a bounded ALT-SURVIVORS proposal, select another named direction with its method review and finite gates, or retain the pause. Substantive maintainer guidance may instead justify a scoped follow-up.
+
+Selected blocked decision: **CVC-NEXT-AUTHORIZATION**. Resolve the recorded blocker and update the canonical queue before execution.
+
+Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 17 | CVC-5-CONDITIONAL: Consolidate the conditional result for reuse and decide the phase | READY |
-| 18 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 19 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 20 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
-| 21 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
+| 18 | CVC-NEXT-AUTHORIZATION: Authorize the next bounded research direction after conditional reuse | WAITING |
+| 19 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 20 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 21 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
+| 22 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
-### 17. CVC-5-CONDITIONAL: Consolidate the conditional result for reuse and decide the phase
+### 18. CVC-NEXT-AUTHORIZATION: Authorize the next bounded research direction after conditional reuse
 
-**Target:** The checked CVC-U1-A7 bridge, three fixed implementation boundaries, and exact ownership serialization regression
+**Target:** Owner selection of a named successor, considering ALT-SURVIVORS first, or continued pause
 
-Use existing evidence to produce one stand-alone reusable entry point and a continue/reuse/redirect/stop phase decision. Evaluate whether a concrete external contribution adds value beyond the local regression and existing Lean/Arena interactions; prepare a draft only when that value is supported.
+Wait for owner selection and durable authorization of a bounded successor; substantive maintainer feedback may instead trigger ranking a scoped follow-up. This entry records the missing decision and does not authorize autonomous planning or experiments.
 
-**Why this rank:** The proof and final ownership boundary are now available. A small existing-evidence consolidation directly serves the planned shared-value/phase decision at zero observer cost. A new semantic family lacks authorization and method review; another ownership pair exceeds the fixed comparison; waiting upstream work lacks a new substantive trigger.
+**Why this rank:** No valuable authorized local task remains after packaging. Survivor triage is the strongest concrete alternate direction but remains outside this phase; upstream follow-through lacks a new recorded trigger.
 
-**Completion:** One reproducible entry point tying exact conditional theorem, assumptions, streams and raw profile observations to the reusable regression; a concrete target/priority/prerequisite recommendation or justified no-external-action decision; comparative phase decision and ranked next queue.
+**Completion:** A durable decision names one bounded authorized successor with inputs, method-review prerequisites, budget and stop condition, or explicitly retains the pause.
 
-**Stop:** At most 3600 actual active seconds including engineering, recorded intervals at most 60 minutes. Existing evidence only; zero new byte variants, observer/proof/setup/build/research-network launches and external actions. No automatic new formal slice or implementation experiment. Stop with package/decision or explicit evidence/authority gap.
+**Stop:** No work starts while WAITING. If authorized as a decision item, at most 3600 active seconds with zero proof, observer, setup/build, scientific-byte or research-network launches; broader work needs its own named gate.
 
 **Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: CVC-A7-REPAIR-1 and CVC-4-OWNERSHIP-1 SUCCESS, with exact result and required closure validation delivered. This is a distinct conditional packaging successor, not satisfaction of original CVC-4/CVC-5 dependencies.
+**Boundary:** WAITING: Explicit owner selection and authorization reflected in durable state, or substantive maintainer feedback followed by an authorized scoped proposal. Replace or promote only after the actual gate is met; elapsed time is not authorization.
 
-### 18. CVC-4: Connect the contract to real validation behavior
+### 19. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -68,7 +76,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 19. CVC-5: Prepare shared evidence and decide the next phase
+### 20. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -84,7 +92,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 20. ALT-SURVIVORS: Design the next fixed survivor triage
+### 21. ALT-SURVIVORS: Design the next fixed survivor triage
 
 **Target:** One selected member of the seven pending survivors
 
@@ -100,7 +108,7 @@ Prepare an evidence-based fixed-candidate triage proposal and finite execution m
 
 **Boundary:** DEFERRED: Separate owner authorization for renewed survivor research; selection and manifest precede checker feedback.
 
-### 21. ALT-TRANSFER: Assess a prospective transfer study
+### 22. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -138,7 +146,7 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.
 - Git pushes succeeded while GitHub CLI API authentication was invalid. `scripts/github-cli-preflight` now fails early with the repair command so duplicate checks, PR creation and status capture stay CLI-first.
 - No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.
-- Queue validation checks bounded readiness and status agreement; ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.
+- Queue integrity validation checks bounded selection and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.
 
 ## Efficiency rules
 
@@ -156,6 +164,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1. Selected next item: CVC-5-CONDITIONAL (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL. Selected next item: CVC-NEXT-AUTHORIZATION (WAITING).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

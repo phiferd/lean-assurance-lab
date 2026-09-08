@@ -10,19 +10,25 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lib.research_queue import load_queue  # noqa: E402
+from lib.research_queue_v2 import handoff_status, load_queue  # noqa: E402
 
 
 def main() -> int:
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=ROOT)
+    parser.add_argument("--require-ready", action="store_true",
+                        help="require an executable READY or ACTIVE selection; reject an explicit pause")
     args = parser.parse_args()
     try:
-        load_queue(args.root)
+        queue = load_queue(args.root, require_ready=args.require_ready)
     except ValueError as error:
         print(f"FAIL: {error}", file=sys.stderr)
         return 1
-    print("PASS")
+    if handoff_status(queue) == "PAUSED":
+        print("PASS (PAUSED: queue integrity valid; no executable item; decision: "
+              + queue["handoff"]["required_decision"] + ")")
+    else:
+        print("PASS")
     return 0
 
 

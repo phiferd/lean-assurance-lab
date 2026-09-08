@@ -1,0 +1,52 @@
+#!/usr/bin/env python3
+"""Create once, or check, the CVC-5 projection from existing evidence and decision."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.cvc5_package import BASE, OUTPUT, REQUIRED, binding, projection, read, require
+
+p = argparse.ArgumentParser(description=__doc__)
+p.add_argument('--write', action='store_true')
+a = p.parse_args()
+work = read(ROOT, OUTPUT / 'work-record.json')
+manifest_path = ROOT / OUTPUT / 'evidence-manifest.json'
+if not manifest_path.exists():
+    require(a.write, 'manifest absent; initial --write required')
+    roots = [str(BASE / name) for name in ('cvc-1', 'cvc-2', 'cvc-axioms-1',
+             'cvc-3', 'cvc-3-conditional', 'cvc-a7-repair-1', 'cvc-4-conditional',
+             'cvc-4-adapter-review', 'cvc-4-ownership-1')]
+    roots += REQUIRED + ['research/conditional-validation-contracts/cvc2',
+        'config/cvc-u1-a7-proof-0002.json', 'config/cvc4-u1-a7-0002.json',
+        'config/cvc4-ownership-0001.json', 'config/declaration-validation-identity-registry.json',
+        'config/declaration-validation-approved-authority-sources/publication-study-v2.json',
+        'config/declaration-validation-evidence-locks/publication-study-complete-adjudication.json',
+        'results/action-recommendations/current.json', 'results/assurance/current.json',
+        'config/research-queue.json', 'docs/RESEARCH_STATUS.md',
+        'docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md',
+        'results/workflow-refresh/cvc-a7-repair-1-2026-09-07/validation.json',
+        'results/workflow-refresh/cvc-4-conditional-2026-09-07/validation.json',
+        'results/workflow-refresh/cvc-4-ownership-1-2026-09-08/validation.json']
+    paths = subprocess.check_output(['git', 'ls-tree', '-r', '--name-only', work['base_commit'], '--', *roots],
+                                    cwd=ROOT, text=True).splitlines()
+    mutable = {'docs/RESEARCH_STATUS.md', 'config/research-queue.json',
+               'docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md',
+               'docs/UPSTREAM_ISSUES.md', 'results/assurance/current.json'}
+    rows = []
+    import hashlib
+    for path in sorted(set(paths)):
+        raw = subprocess.check_output(['git', 'show', f"{work['base_commit']}:{path}"], cwd=ROOT)
+        rows.append({'path': path, 'bytes': len(raw), 'sha256': hashlib.sha256(raw).hexdigest(),
+                     'current_bytes_required': path not in mutable})
+    manifest_path.write_text(json.dumps({'schema_version': 1, 'item_id': 'CVC-5-CONDITIONAL',
+        'base_commit': work['base_commit'], 'inputs': rows,
+        'policy': 'All inputs are bound to the entry commit; scientific evidence remains byte-identical. Mutable planning/upstream snapshots retain their historical interpretation.'}, indent=2) + '\n')
+result = {**read(ROOT, OUTPUT / 'decision.json'), 'evidence': projection(ROOT)}
+dest = ROOT / OUTPUT / 'result.json'
+if a.write and not dest.exists():
+    dest.write_text(json.dumps(result, indent=2) + '\n')
+require(read(ROOT, OUTPUT / 'result.json') == result, 'canonical package projection drift')
+print('PASS: existing-evidence package projection is current')

@@ -112,6 +112,16 @@ exists, record the authorization or external-state blocker and the exact next
 decision needed. Pause execution instead of inventing activity. The validator
 will refuse to present an empty/blocked queue as operationally ready.
 
+The explicit schema-v2 handoff represents this case as `PAUSED`, with the
+highest-ranked WAITING/DEFERRED decision selected, no READY/ACTIVE items, a
+nonempty reason, exact required decision and existing evidence references.
+`Queue handoff: PAUSED.` must appear in Active status. Integrity validation
+reports PAUSED with no executable item; `scripts/validate-research-queue
+--require-ready` fails. Schema v1 retains its original requirement for eligible
+work and remains the bound interface for historical scientific tooling. A
+paused handoff is a durable blocker, not authorization for an agent to execute
+the selected waiting entry.
+
 Deliver the completed item on `main` using `scripts/push-main`, as required by
 `AGENTS.md`. A push to a task branch is not completed repository delivery.
 

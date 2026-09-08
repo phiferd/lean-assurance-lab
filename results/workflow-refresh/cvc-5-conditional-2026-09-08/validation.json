@@ -1,0 +1,434 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-5-CONDITIONAL",
+  "outcome": "SUCCESS",
+  "status": "PASS",
+  "completed_at": "2026-09-08T13:20:08.420793+00:00",
+  "checks": [
+    {
+      "label": "01-queue",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/01-queue.json",
+        "bytes": 702,
+        "sha256": "40a7f8e491d466a5e3966a9d7247973cffd4a427a70474e388fae5b8dc61c008"
+      },
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "elapsed_seconds": 0.053528625052422285
+    },
+    {
+      "label": "02-package",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/02-package.json",
+        "bytes": 701,
+        "sha256": "75a31abfa06113b4350f507c7dfb3f2997d69be1d11ba2d63b1a73a09bfa9bd0"
+      },
+      "command": [
+        "scripts/validate-cvc5-package"
+      ],
+      "elapsed_seconds": 0.17931454116478562
+    },
+    {
+      "label": "03-package-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/03-package-tests.json",
+        "bytes": 787,
+        "sha256": "acb59cfe80ab1066f7047510f08e800104142655b3b9549791fd4f7474b511b6"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc5_package.py"
+      ],
+      "elapsed_seconds": 0.1031910409219563
+    },
+    {
+      "label": "04-queue-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/04-queue-tests.json",
+        "bytes": 789,
+        "sha256": "1da5c7b5f1e81e27f976f66b184867069fad1ddbcda48e875a12b4ce285e59e1"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue*.py"
+      ],
+      "elapsed_seconds": 0.15261279186233878
+    },
+    {
+      "label": "05-historical",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/05-historical.json",
+        "bytes": 754,
+        "sha256": "a27106fc88d273916fc562403b40ec01ec7eb6213fe11bb512f949fa60d21297"
+      },
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "elapsed_seconds": 30.292648209258914
+    },
+    {
+      "label": "06-snapshot",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/06-snapshot.json",
+        "bytes": 743,
+        "sha256": "08a7232ea38049634e4330495148bc62fc503f4dec0c9e9a4bbf6af45f3155c6"
+      },
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 76.71381204109639
+    },
+    {
+      "label": "07-full-suite",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/07-full-suite.json",
+        "bytes": 863,
+        "sha256": "e570208597388d248b6900f2e3d1243c3247358f2230990a89e08a49a8b22275"
+      },
+      "command": [
+        "scripts/run-unit-tests-with-signal-retry",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 460.4418045412749
+    },
+    {
+      "label": "08-proof-evidence",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/08-proof-evidence.json",
+        "bytes": 754,
+        "sha256": "b9ce05433a4db7baf5c8b341798007506ff577c2ad284b574c31c5642e89e1c6"
+      },
+      "command": [
+        "scripts/validate-cvc-a7-repair",
+        "--closure",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 7.872333291918039
+    },
+    {
+      "label": "09-comparison",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/09-comparison.json",
+        "bytes": 733,
+        "sha256": "d5a2e93c1e402844f6454eb6f60ea1af64cdec50b8d7060c911ee970e98ee5c8"
+      },
+      "command": [
+        "scripts/validate-cvc4-evidence",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 6.056732666678727
+    },
+    {
+      "label": "10-ownership",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/10-ownership.json",
+        "bytes": 704,
+        "sha256": "cbbcf76cd9f77a52ae7a1ce5d18d24a52c4da9a08a20d0c4ee82f26ae0750b1a"
+      },
+      "command": [
+        "scripts/validate-cvc4-ownership"
+      ],
+      "elapsed_seconds": 10.966989750042558
+    },
+    {
+      "label": "11-contribution",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/11-contribution.json",
+        "bytes": 729,
+        "sha256": "b30e0f5f2ebbdbcd219a053d6a5e73a2558f1d93ac6f6fe2da2fae54735c979d"
+      },
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "elapsed_seconds": 0.15677341679111123
+    },
+    {
+      "label": "12-catalog",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/12-catalog.json",
+        "bytes": 718,
+        "sha256": "acaebb9d9b9389c8a5363d96607f82536dedc1963d350cbaf8e8fc1b9fe28c7a"
+      },
+      "command": [
+        "scripts/validate-declaration-validation-catalog"
+      ],
+      "elapsed_seconds": 12.304157750215381
+    },
+    {
+      "label": "13-projection",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/13-projection.json",
+        "bytes": 700,
+        "sha256": "160db5ba47e2a050d78f7f975dea287f126fa26123c62139eecd3fdd2d7d731d"
+      },
+      "command": [
+        "scripts/build-cvc5-package"
+      ],
+      "elapsed_seconds": 0.07939062500372529
+    },
+    {
+      "label": "14-regression",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/14-regression.json",
+        "bytes": 794,
+        "sha256": "7511281a9beff6c327f72319813842ca177820934667e9e36f5628b0d28e0aec"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc4_ownership_inputs.py"
+      ],
+      "elapsed_seconds": 0.09683341672644019
+    },
+    {
+      "label": "15-pause-gate",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/15-pause-gate.json",
+        "bytes": 1015,
+        "sha256": "130664aa8e7bf35770d7367c54f73a7b92f9e0fe93eeaba286ad6d544998fb5c"
+      },
+      "command": [
+        "python3",
+        "-c",
+        "import subprocess; p=subprocess.run(['scripts/validate-research-queue','--require-ready'],capture_output=True,text=True); print(p.stdout+p.stderr,end=''); assert p.returncode == 1 and 'queue is PAUSED; no executable item' in p.stderr, 'paused queue accepted for execution'; print('PASS: expected readiness refusal')"
+      ],
+      "elapsed_seconds": 0.08263029204681516
+    },
+    {
+      "label": "16-current-state",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/16-current-state.json",
+        "bytes": 796,
+        "sha256": "8134e54a8be3c8990a60d852ba986620c91b4a5ad9de4974a250b35d6879aef4"
+      },
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/cvc-5-conditional-2026-09-08/current-state"
+      ],
+      "elapsed_seconds": 85.06631754199043
+    },
+    {
+      "label": "17-project-review",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/17-project-review.json",
+        "bytes": 720,
+        "sha256": "c79613a009846bfa563897d54f39f69885e9c86afeadbc0606ceac01a10a6dc5"
+      },
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "elapsed_seconds": 28.264062624890357
+    },
+    {
+      "label": "18-artifact-status",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/18-artifact-status.json",
+        "bytes": 729,
+        "sha256": "1c0d318b0478a32c8616d4183dc661231e2ffca750665605020323378f2c83d8"
+      },
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "elapsed_seconds": 11.251887416932732
+    },
+    {
+      "label": "19-final-package",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/19-final-package.json",
+        "bytes": 706,
+        "sha256": "cf44784e25c3deb89bc1bc34b3f3ea09612963cc7d97db76e0fde8608adb3e32"
+      },
+      "command": [
+        "scripts/validate-cvc5-package"
+      ],
+      "elapsed_seconds": 0.2392962919548154
+    },
+    {
+      "label": "20-diff-check",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/20-diff-check.json",
+        "bytes": 703,
+        "sha256": "dc585846267d1aeba2e3e58f1b6e2aab211660d567b72817156b51ee09eed9fd"
+      },
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "elapsed_seconds": 0.04366237483918667
+    }
+  ],
+  "package": {
+    "item_id": "CVC-5-CONDITIONAL",
+    "outcome": "SUCCESS",
+    "bound_inputs": 348,
+    "active_seconds": 1187.2901949579827,
+    "phase": "REUSE; execution PAUSED",
+    "research_counts": {
+      "new_scientific_byte_variants": 0,
+      "observer_launches": 0,
+      "proof_launches": 0,
+      "setup_build_launches": 0,
+      "research_network_launches": 0,
+      "external_research_actions": 0
+    }
+  },
+  "test_counts": {
+    "current": 723,
+    "unchanged_historical": 73,
+    "total": 796,
+    "skipped": 0
+  },
+  "fixture_accounting": {
+    "reserved_launches": 23,
+    "reserved_seconds": 115,
+    "instrumented_charge_seconds": 7.2017809567041695,
+    "reconciled": true,
+    "allocation": {
+      "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/administrative-fixture-allocation.json",
+      "bytes": 574,
+      "sha256": "1f3f8b259d03008edb667303f04deaea38b7b39e484395c8d2e6828400854475"
+    },
+    "historical_unknown_costs": "Unchanged; no unknown historical duration is treated as zero."
+  },
+  "active_accounting": {
+    "primary_seconds": 1187.2901949579827,
+    "administrative_tail_seconds": 141.900533542037,
+    "combined_seconds": 1329.1907285000198,
+    "limit_seconds": 3600,
+    "work_record": {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/work-record.json",
+      "bytes": 1672,
+      "sha256": "583718a9f1c67283dfaed210c32582439d9f51958dd291cf5b4013236beec094"
+    },
+    "administrative_tail": {
+      "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/administrative-tail.json",
+      "bytes": 460,
+      "sha256": "8ef34e84d26b6b79c6b01c78b6806b5f58ff9281eb120300097f30b9f933606a"
+    }
+  },
+  "state_bindings": [
+    {
+      "path": "config/research-queue.json",
+      "bytes": 78736,
+      "sha256": "64a7844dc0e00179e7dcb32dec60aa7ce7a3d658169519a034bd8fee17af5865"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 152931,
+      "sha256": "f89c66183642b445cd8a55e5596b662f3fec81abc074bcab49038d8a6fb6c39d"
+    },
+    {
+      "path": "docs/RESEARCH_WORKFLOW.md",
+      "bytes": 13107,
+      "sha256": "455f06ae7809471df5f3cb36c7b75ff55843b185f17bdf71aeab30853ff33d76"
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "bytes": 25509,
+      "sha256": "c2bff96e13311194557b5d141ff9da9c386c2ef15cdd7a9e5bb45ee1afe2425b"
+    },
+    {
+      "path": "docs/PROJECT_REVIEW.md",
+      "bytes": 14706,
+      "sha256": "f79009e7ddb2a6afc08eb5bb241d7decb05b208efe3584dec6a5515dd81f3463"
+    },
+    {
+      "path": "docs/PUBLIC_STATUS.md",
+      "bytes": 2680,
+      "sha256": "28d9c9a53f74cedd9166bb55e91a1dbd4106097534fbbc0c3390069b1332fde6"
+    },
+    {
+      "path": "results/research/project-review.json",
+      "bytes": 134248,
+      "sha256": "29b234cfe571787eeada113fc2a867962d12c612c056b1314281152630bd0eae"
+    },
+    {
+      "path": "results/artifacts/graph.json",
+      "bytes": 234982,
+      "sha256": "389122b4e1c2c5b9fa1aee93463496bbfd3ad10d72479b285ea83195c9c21df9"
+    },
+    {
+      "path": "results/assurance/current.json",
+      "bytes": 39659,
+      "sha256": "a6b5c71f10808131130bbaaecf3410d197324af9b9420298fc18dd93ddef6a74"
+    },
+    {
+      "path": "results/assurance/milestone-9.json",
+      "bytes": 2243,
+      "sha256": "9b0eee1035b083b4cd36831a3140e3413eecc0d3d381d782a98dbdd0bf701545"
+    }
+  ],
+  "package_bindings": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/README.md",
+      "bytes": 9183,
+      "sha256": "4295ac956f94802f7864978915203d0d2b91c729a3b5cbcf40eb66225fc6e735"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/decision.json",
+      "bytes": 6251,
+      "sha256": "ceef617ab82c791e425a61be3d0544d051340237636f0ee8efa18642052426d9"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/evidence-manifest.json",
+      "bytes": 92936,
+      "sha256": "7630beda909073f6a3fb9dd0b0092a1c4e0f6cbf82dd37053a61629186bdde75"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/independent-review.md",
+      "bytes": 2172,
+      "sha256": "c715df05f2fdbf01f874ffa27f282480b5ae7c1f8b3939f740fa89567bfa69af"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/result.json",
+      "bytes": 48288,
+      "sha256": "2f592eafbdfd737d55b12b524562130d5cfa682e00b26c3fd01ff8f721808e64"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-5-conditional/work-record.json",
+      "bytes": 1672,
+      "sha256": "583718a9f1c67283dfaed210c32582439d9f51958dd291cf5b4013236beec094"
+    }
+  ],
+  "finalizer": {
+    "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/tools/finalize.py",
+    "bytes": 8868,
+    "sha256": "c2d70217b3b8cdb1edc7a10f2a1201dfc39282efc475caa37e77bac9bba64be2"
+  },
+  "completed_items": [
+    "CVC-5-CONDITIONAL"
+  ],
+  "next_selected_item": "CVC-NEXT-AUTHORIZATION",
+  "next_item_status": "WAITING",
+  "next_item_started": false,
+  "queue_execution": "PAUSED",
+  "readiness_gate": "Expected refusal confirmed by 15-pause-gate; integrity passing does not authorize execution.",
+  "external_research_action": "NONE",
+  "delivery": "main commit and scripts/push-main verify delivery separately.",
+  "declaration_test_context": "Complete current tests and unchanged historical modules ran through the required attested suite; no historical test was reinterpreted against current planning bytes."
+}

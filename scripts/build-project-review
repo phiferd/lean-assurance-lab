@@ -12,8 +12,8 @@ import sys
 from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
-sys.path.insert(0, str(ROOT / 'lib'))
-from research_queue import load_queue
+sys.path.insert(0, str(ROOT))
+from lib.research_queue_v2 import handoff_status, load_queue
 OUTPUT = 'results/research/project-review.json'
 REPORT = 'docs/PROJECT_REVIEW.md'
 HISTORY = 'results/research/declaration-validation-publication-study-historical.json'
@@ -35,7 +35,8 @@ SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATIO
            'scripts/build-project-review']
 SOURCES += ['config/research-queue.json', 'docs/RESEARCH_WORKFLOW.md',
             'lib/research_queue.py', 'scripts/validate-research-queue',
-            'tests/test_research_queue.py']
+            'tests/test_research_queue.py', 'lib/research_queue_v2.py',
+            'tests/test_research_queue_v2.py']
 
 
 def load(path):
@@ -103,11 +104,14 @@ def build():
             'authorization': item['status'] + ': ' + item['entry_gate'],
         })
     selected = next(row for row in queue['items'] if row['id'] == queue['selected_item'])
+    paused = handoff_status(queue) == 'PAUSED'
     queue_sources = [queue['plan'], *[str(p.relative_to(ROOT)) for p in sorted((ROOT / 'results/research/queue-reviews').glob('*.json'))]]
     for item in queue['items']:
         queue_sources.extend(item['evidence_refs'])
         if item['closure']:
             queue_sources.extend(item['closure']['evidence_refs'])
+    if paused:
+        queue_sources.extend(queue['handoff']['evidence_refs'])
     return {'schema_version': 1, 'review_scope': 'Current local canonical records plus the bounded Arena submission and recent-commit preflight record; no completeness claim for all historical actions.',
             'inputs': [bound(p) for p in dict.fromkeys([*SOURCES, *queue_sources, *([SUCCESSOR_PACKET] if packet is not None else [])])], 'metrics': metrics,
             'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The owner selected a bounded conditional-contract feasibility phase, beginning with literature and reuse before choosing a formal fragment. The ranked queue compares shared assurance value, information gain, feasibility and urgency at item stopping points. This planning transition establishes no new semantic result. Historical study claims and pending upstream follow-through remain separately recorded.',
@@ -131,9 +135,9 @@ def build():
                 {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
                  'evidence': 'Schema-backed action records now preserve approval, deferral, separate PR URLs, exact branch commits, and the latest-upstream duplicate preflight.',
                  'next_improvement': 'Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control.'},
-                {'goal': 'Highest-value bounded work and replaceable strategy', 'assessment': 'Explicit ranked operational successor',
+                {'goal': 'Highest-value bounded work and replaceable strategy', 'assessment': ('PAUSED: no executable item' if paused else 'Explicit ranked operational successor'),
                  'evidence': 'The queue retains finite items, dependencies, stop conditions and deferred alternatives; the first item assesses existing literature and reuse before committing to a fragment.',
-                 'next_improvement': 'Complete ' + selected['id'] + ': ' + selected['title'] + '; record the result and rerank before the next item.'},
+                 'next_improvement': (queue['handoff']['required_decision'] if paused else 'Complete ' + selected['id'] + ': ' + selected['title'] + '; record the result and rerank before the next item.')},
             ],
             'operational_findings': [
                 'The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.',
@@ -146,7 +150,7 @@ def build():
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
                 'Git pushes succeeded while GitHub CLI API authentication was invalid. `scripts/github-cli-preflight` now fails early with the repair command so duplicate checks, PR creation and status capture stay CLI-first.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
-                'Queue validation checks bounded readiness and status agreement; ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
+                'Queue integrity validation checks bounded selection and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
             ],
             'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
                                        'The corpus-integration successor completed two current-Arena package builds, an exact tutorial comparison, and a separate Ultra proof-parameter review.',
@@ -178,7 +182,15 @@ def render(review):
              '## Constitutional alignment', '', '| Goal | Assessment | Next improvement |', '|---|---|---|']
     lines += ['| ' + row['goal'] + ' | ' + row['assessment'] + ' | ' + row['next_improvement'] + ' |' for row in review['constitutional_alignment']]
     lines += ['', 'Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.', '', '## Recommended order', '']
-    lines += ['Selected next item: **' + review['work_queue']['selected_item'] + '**. Status, rank and bounds come from `config/research-queue.json`; PLANNED and DEFERRED entries are not executable merely because they appear here.', '',
+    queue = review['work_queue']
+    if handoff_status(queue) == 'PAUSED':
+        lines += ['**Queue execution is PAUSED; no executable item is selected.**', '',
+                  '**Blocker:** ' + queue['handoff']['reason'], '',
+                  '**Required decision:** ' + queue['handoff']['required_decision'], '',
+                  'Selected blocked decision: **' + queue['selected_item'] + '**. Resolve the recorded blocker and update the canonical queue before execution.', '']
+    else:
+        lines += ['Selected next item: **' + queue['selected_item'] + '**.', '']
+    lines += ['Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.', '',
               '| Rank | Item | Status |', '|---|---|---|']
     lines += [f"| {s['priority']} | {s['id']}: {s['title']} | {s['status']} |" for s in review['proposed_next_steps']]
     lines.append('')

@@ -388,3 +388,29 @@ authority/state blocker. Use existing evidence only: zero new scientific bytes,
 observer/proof/setup/build/research-network launches or external actions. Do not
 activate a new semantic family or research theme. Apply the same required
 closure validation and handoff procedure; do not start it in this closure.
+
+## Conditional reuse closure and paused handoff — 2026-09-08
+
+`CVC-5-CONDITIONAL` completes the shared-value decision with SUCCESS for an
+existing-evidence package and REUSE recommendation. The
+[entry point](../../results/research/conditional-validation-contracts/cvc-5-conditional/README.md)
+connects the exact checked model, assumptions, original failures and finite
+observations to the local serialization regression. No new science ran.
+
+Further scientific execution is PAUSED. The selected
+`CVC-NEXT-AUTHORIZATION` entry is WAITING and unstarted: owner selection and
+durable authorization of a named bounded successor are missing. Consider the
+existing survivor-triage alternative first, or retain the pause; substantive
+maintainer guidance may instead justify a scoped follow-up. This decision does
+not activate that theme, a new contract slice, polling or additional launches.
+The existing sixteen observer reservations remain consumed. Original CVC-4 and
+CVC-5 remain PLANNED with their unmet original dependencies.
+
+Use the explicit queue-v2 handoff for this non-operational state. Integrity
+validation must check the blocker, evidence and status marker; an executable
+readiness request must still fail. Preserve the original v1 validator and its
+historical source bindings. This representation implements the workflow's
+existing pause rule and does not weaken any scientific or eligibility gate.
+Run the full closure validation above plus package checks and focused successor
+queue tests. Future work needs its own durable authorization and finite entry
+conditions. No subsequent research item starts during this closure.

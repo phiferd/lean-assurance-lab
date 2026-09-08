@@ -1,0 +1,23 @@
+{
+  "command": [
+    "python3",
+    "-c",
+    "import subprocess; p=subprocess.run(['scripts/validate-research-queue','--require-ready'],capture_output=True,text=True); print(p.stdout+p.stderr,end=''); assert p.returncode == 1 and 'queue is PAUSED; no executable item' in p.stderr, 'paused queue accepted for execution'; print('PASS: expected readiness refusal')"
+  ],
+  "returncode": 0,
+  "started_at": "2026-09-08T13:11:45.738568+00:00",
+  "ended_at": "2026-09-08T13:11:45.821272+00:00",
+  "elapsed_seconds": 0.08263029204681516,
+  "source_manifest": {
+    "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/closure-code-bindings.json",
+    "bytes": 49953,
+    "sha256": "6cb9570ba4aebf2ca961cf9358f1bd0f6ffab9d737336c68f39fc66d06cbf186"
+  },
+  "log": {
+    "path": "results/workflow-refresh/cvc-5-conditional-2026-09-08/15-pause-gate.log",
+    "bytes": 285,
+    "sha256": "d12467726017d29ef04db5dbbfef027dee6eb4400ec8667df9a4f6cf8ced5b2f"
+  },
+  "tested_inputs_unchanged": true,
+  "status": "PASS"
+}

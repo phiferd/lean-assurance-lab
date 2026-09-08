@@ -50,6 +50,19 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-5-CONDITIONAL` on 2026-09-08 with `SUCCESS` for an
+  existing-evidence reuse package and `REUSE` phase decision. The
+  [entry point](../results/research/conditional-validation-contracts/cvc-5-conditional/README.md)
+  connects four checked A7 obligations, exact assumptions, all finite observations
+  and the existing two-stream serialization regression. No new scientific byte,
+  proof, observer, setup/build, research-network launch or external action ran.
+  See the [result](../results/research/conditional-validation-contracts/cvc-5-conditional/result.json),
+  [review](../results/research/queue-reviews/2026-09-08-cvc-5-conditional.json), and
+  [validation](../results/workflow-refresh/cvc-5-conditional-2026-09-08/validation.json).
+  `CVC-NEXT-AUTHORIZATION` is selected WAITING and unstarted; further execution
+  is PAUSED pending owner authorization of a named successor or substantive
+  upstream guidance. No READY item is manufactured to maintain activity.
+
 - Completed `CVC-4-OWNERSHIP-1` on 2026-09-08 with `SUCCESS`: both pinned
   observers accepted the exact parameter-record control and then refused the
   unowned candidate at their ownership checks. The serializer regression
@@ -2027,7 +2040,9 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-5-CONDITIONAL`.
+Selected next item: `CVC-NEXT-AUTHORIZATION`.
+
+Queue handoff: PAUSED.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -2150,13 +2165,36 @@ No proof, setup or research-network launch ran. See the
 [review](../results/research/queue-reviews/2026-09-08-cvc-4-ownership-1.json), and
 [validation](../results/workflow-refresh/cvc-4-ownership-1-2026-09-08/validation.json).
 
-`CVC-5-CONDITIONAL` is selected READY and unstarted: one existing-evidence
-consolidation and phase decision, capped at 3600 actual active seconds with zero
-new byte variants, observer/proof/setup/research-network launches or external
-actions. It will tie the checked conditional result, assumptions and finite
-boundaries to the reusable local regression and decide the phase's next value.
-No further scientific comparison or new semantic family is selected. Original
-CVC-4/CVC-5 dependencies remain unchanged.
+`CVC-5-CONDITIONAL` is COMPLETE with `SUCCESS` for an existing-evidence
+reuse package and `REUSE` phase decision. Its
+[entry point](../results/research/conditional-validation-contracts/cvc-5-conditional/README.md)
+and [canonical result](../results/research/conditional-validation-contracts/cvc-5-conditional/result.json)
+tie the checked theorem and exact A7 assumptions to every original observation,
+the distinct ownership successor, raw receipts and local serializer regression.
+The original two-member AcceptanceTarget remains unchanged; later controls are
+valid by definition and the unowned candidate remains CHECKED_UNSUPPORTED.
+All previous failures, charges and limitations stay visible. No scientific
+process or new variant ran. Actual active work and separately bounded closure
+fixtures are recorded in its work and validation records.
+
+`CVC-NEXT-AUTHORIZATION` is selected WAITING and unstarted. The phase now reuses
+its completed assets and pauses further scientific execution. No valuable
+currently authorized local successor remains: the finite comparison is complete,
+the sixteen observer reservations are consumed, other semantic families and
+research themes need authorization, and upstream work lacks a new recorded
+substantive trigger. Original CVC-4/CVC-5 dependencies remain unchanged.
+
+The next decision is owner authorization of a bounded `ALT-SURVIVORS` proposal
+(the strongest concrete alternative), another named direction with its method
+review and finite gates, or continued pause. Substantive maintainer guidance may
+instead justify a scoped follow-up. The September 6 review remains applicable
+to this unchanged slice; adopting a new method needs a fresh scoped assessment.
+No external contribution adds demonstrated value now beyond the local regression
+and existing Lean/Arena interactions. No new external action is recommended.
+
+The explicit schema-v2 queue handoff records this authorization/state blocker.
+Queue integrity can validate while execution is paused; readiness checks must
+refuse it. Schema-v1 behavior and historical bindings remain unchanged.
 
 The review created no new scientific bytes or observer outcome. A7, the checked
 proof, old parser/reporting failures and all prior costs remain unchanged.
