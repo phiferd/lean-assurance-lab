@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-EXPORT-1",
+  "mutation_id": "nanoda-gen-3365809b3c41",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "assessment": "ORDINARY_K_CARRIER_ORIGIN_AND_POINTER_IDENTITY_BOUNDARY",
+  "question": "Can one self-contained ordinary export cause K-recursor reduction to call InferOnly(E) before the same fresh declaration checker later calls Check(E) on the same interned expression?",
+  "internal_predecessor": {
+    "finding": "INTERNAL_CACHE_CONTRACT_DISTINCTION",
+    "result": {"path": "results/research/survivor-cache-1/result.json", "sha256": "3f523c43cea1255c6e5cd642293bdf20d9cfae9288d6bcf4f8b49a8a0c38a2b2"},
+    "scope_limit": "The direct crate-private harness creates one expression pointer and explicitly calls InferOnly then Check. It does not establish that ordinary export checking can create that order."
+  },
+  "source_supported_hypothetical_construction": {
+    "control_major": "E0 = let (_ : Type) := Prop; @Eq.refl.{1} Type Prop",
+    "candidate_major": "E1 = let (_ : Type) := Type; @Eq.refl.{1} Type Prop",
+    "k_recursor_type": "K(E) = @Eq.rec.{1,1} Type Prop (fun (b : Type) (_ : Eq Type Prop b) => Type) Prop Prop E",
+    "carrier": "q : K(E)",
+    "sequencer": "f : Prop -> Eq Type Prop Prop -> Prop; target value f q E",
+    "desired_order": [
+      "Infer q and obtain K(E) without visiting E.",
+      "Compare K(E) with the first binder Prop; WHNF invokes reduce_rec, then to_ctor_when_k, then InferOnly(E).",
+      "Check the second argument E on the same expression pointer."
+    ],
+    "why_the_internal_difference_would_matter": "InferOnly accepts both E0 and E1 and caches the inferred equality type. Baseline Check recomputes and rejects E1's Type-valued let against its Type annotation; the mutation permits Check to reuse the no-check cache entry."
+  },
+  "ordinary_export_boundaries": [
+    {
+      "id": "DIRECT_APPLICATION_ORDER",
+      "finding": "A direct Eq.rec ... E occurrence is strongly checked before it can be reduced.",
+      "mechanism": "infer_app flattens the application, then in Check mode infers each argument before assert_def_eq. The major E is therefore sent to Check before a later definitional-equality WHNF can enter reduce_rec and InferOnly(E).",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs:526-565"
+    },
+    {
+      "id": "CARRIER_HEADER_ORIGIN",
+      "finding": "The carrier q cannot be introduced by an earlier ordinary declaration without E being checked first.",
+      "mechanism": "Every axiom header calls check_declar_info, and every definition/theorem/opaque checks its header before its value. check_declar_info calls infer(info.ty, Check), so q : K(E1) rejects while strongly traversing the recursor major before a later target can use q.",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs:80-105,155-170"
+    },
+    {
+      "id": "FRESH_DECLARATION_CHECKER",
+      "finding": "A prior declaration cannot warm the target declaration's inference cache.",
+      "mechanism": "with_tc_and_declar allocates a fresh LeanDag, TcCtx, TypeChecker and TcCache for each ordinary declaration.",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs:239-246"
+    },
+    {
+      "id": "CONSTANT_TYPE_POINTER_REBUILD",
+      "finding": "Skipping the carrier's validation and checking only a later target still does not automatically supply the exact shared pointer.",
+      "mechanism": "infer_const substitutes declaration levels through subst_expr_levels. subst_aux rebuilds Sort, Const, App, Pi, Lambda, Let and Proj nodes in the current TcCtx. An E inside q's exported type is therefore a reconstructed checker-DAG pointer, while a repeated E in the target syntax remains the export-DAG pointer unless an additional construction makes both visits share the rebuilt node.",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/expr.rs:333-390"
+    },
+    {
+      "id": "STRUCTURAL_PROPAGATION",
+      "finding": "Pi, lambda and let syntax do not provide a hidden weak first visit.",
+      "mechanism": "Their Check paths validate binder types and let values before descending to later bodies; closed-body instantiation preserves its existing pointer but does not reverse that validation order.",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs:591-658; results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/expr.rs:165-190"
+    }
+  ],
+  "existing_export_support": {
+    "path": "corpus/generated/nanoda-gen-7b386d7135bb-quot-type-control.ndjson",
+    "sha256": "337e3c4aeec2db1a1fd042010f36b3653c6d7fad8084019bbe4d7b4d40baa4ec",
+    "fact": "The first inductive record exports Eq, Eq.refl and Eq.rec with k=true; the K environment itself is available, so it is not the unmet condition."
+  },
+  "decision": {
+    "outcome": "BOUNDED_UNRESOLVED",
+    "pair_frozen": false,
+    "why_no_pair_or_launch": "The plan accepts a precise construction/reachability boundary as a useful result. No self-contained ordinary carrier satisfied the strong-header and exact-pointer gates. Freezing an unchecked-environment or target-only pair would test a different scientific question, and running a direct application would only spend reservations to observe the source-determined earlier Check.",
+    "not_a_general_unreachability_proof": "The result is limited to the exact pinned source, the identified K-recursor-major route, ordinary declaration entry points and the assessed carrier constructions. It does not prove that every possible exported expression or a second independently justified validator defect cannot reach the cache history.",
+    "canonical_classification_change": false,
+    "external_action": "NO_ACTION_SUPPORTED",
+    "recommended_next_action": "Preserve the internal regression and this boundary. Do not claim exported impact or admit a corpus kill. Assess the next pending universe survivor's diff==0/right-Zero reachability before any checker launch."
+  },
+  "execution_accounting": {
+    "offline_builds": 0,
+    "checker_or_scientific_test_launches": 0,
+    "scientific_export_pairs": 0,
+    "proof_launches": 0,
+    "research_network_requests": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {"path": "mutations/nanoda-gen-3365809b3c41.json", "sha256": "c1af3a5fe559e4cf604b046c9b3dc37b9cebf599f05373789804f661c429e52c"},
+    {"path": "results/mutants/nanoda-gen-3365809b3c41/scheduled-comparison.json", "sha256": "f5376b76f07facee8313d45035d6c67ef189db6bd66b396bfb87c87b02f31069"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs", "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/expr.rs", "sha256": "b66cc4483df55222fc69e11a260a9f23804d53aa43091d52b20e55d1870b0a66"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs", "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/env.rs", "sha256": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs", "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"},
+    {"path": "results/research/survivor-cache-1/cache-contract-tests.rs", "sha256": "02369d4203cbcb9391b9a73cbeadaf25036a5fbc95943087ede5f6ed8b3adbe1"},
+    {"path": "corpus/generated/nanoda-gen-7b386d7135bb-quot-type-control.ndjson", "sha256": "337e3c4aeec2db1a1fd042010f36b3653c6d7fad8084019bbe4d7b4d40baa4ec"}
+  ]
+}

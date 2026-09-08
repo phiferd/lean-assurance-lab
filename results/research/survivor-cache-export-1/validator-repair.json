@@ -1,0 +1,52 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-EXPORT-1",
+  "classification": "CLOSURE_VALIDATOR_PRECISION_REPAIRS",
+  "scientific_launches_before_or_during_repair": 0,
+  "failures_preserved": [
+    {
+      "attempt": 1,
+      "failure": "application Check order: fragment is not unique: fn infer_app(&mut self, e: ExprPtr<'t>, flag: InferFlag)",
+      "cause": "The pinned source retains a commented-out legacy infer_app with the same signature text.",
+      "repair": "Restrict the mechanical ordering check to the live function body ending before the commented legacy implementation."
+    },
+    {
+      "attempt": 2,
+      "failure": "structural Check propagation: fragment is not unique: self.infer_sort_of(binder_type, flag);",
+      "cause": "The same expected operation occurs independently in live lambda and let implementations.",
+      "repair": "Check lambda, Pi and let bodies in separate exact source slices."
+    },
+    {
+      "attempt": 3,
+      "failure": "constant type reconstruction: fragment is not unique: self.mk_app(fun, arg)",
+      "cause": "Expression reconstruction helpers outside subst_aux legitimately contain the same constructor call.",
+      "repair": "Restrict reconstruction ordering checks to subst_aux and separately require the subst_expr_levels entry."
+    },
+    {
+      "attempt": 4,
+      "failure": "fresh declaration checker: fragment is not unique: let mut dag = LeanDag::new(&self.config);",
+      "cause": "with_ctx and with_tc also allocate fresh DAGs.",
+      "repair": "Restrict the fresh-checker check to with_tc_and_declar."
+    },
+    {
+      "attempt": 5,
+      "failure": "survivor-cache closure refused: closure binding drift: config/research-queue.json",
+      "cause": "The predecessor closure validator compares its frozen durable-state binding with the live queue, which has legitimately advanced after the predecessor completed.",
+      "repair": "Preserve the original validator and add a historical-transition validator that checks frozen durable state from the exact closure commit while validating current evidence and queue succession separately."
+    },
+    {
+      "attempt": 6,
+      "failure": "A detached archive lacked Git history; a temporary clone then refused with cell command drift.",
+      "cause": "The historical scientific ledger binds absolute execution paths in the original repository, so relocating the whole validator changes the audited command context.",
+      "repair": "Run the scientific ledger audit in its original repository path and read only frozen durable-state bytes from the exact Git snapshot."
+    }
+  ],
+  "regressions": [
+    "test_ordered_unique_rejects_reordering",
+    "test_ordered_unique_rejects_duplicate_anchor",
+    "test_current_boundary_validates",
+    "test_completed_result_survives_current_queue_transition"
+  ],
+  "final_status": "PASS",
+  "claim_effect": "None. The repairs narrow source locators or select the correct historical-binding context without changing the assessed construction, source identities, scientific bytes, observations, boundary, acceptance predicate, budget or claim limits."
+}

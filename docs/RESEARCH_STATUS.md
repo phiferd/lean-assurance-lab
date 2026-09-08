@@ -50,6 +50,21 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-CACHE-EXPORT-1` on 2026-09-08 with
+  `BOUNDED_UNRESOLVED`. Source and export-format analysis confirms the Eq
+  K-recursor weak-major route, but each assessed ordinary carrier origin
+  strongly checks the candidate major before the desired weak visit. A prior
+  constant carrier also has its type rebuilt into the fresh checker DAG, so it
+  does not automatically preserve the exact expression pointer required by the
+  cache key. This is an exact pinned-source construction boundary, not a general
+  impossibility proof. No build, checker, proof, network, scientific export
+  pair or external action ran, and the canonical survivor classification is
+  unchanged. See the [result](../results/research/survivor-cache-export-1/result.json),
+  [boundary](../results/research/survivor-cache-export-1/construction-boundary.json),
+  and [report](../results/research/survivor-cache-export-1/report.md).
+  `SURVIVOR-UNIVERSE-DIFF-1` is selected READY and unstarted after the
+  project-wide closure review.
+
 - Completed `SURVIVOR-CACHE-1` on 2026-09-08 with `SUCCESS` for an exact
   internal cache-contract comparison. Both controls and the baseline malformed
   let candidate passed; the mutant candidate failed at the frozen no-rejection
@@ -2436,34 +2451,31 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-CACHE-EXPORT` — test whether the established internal cache
-   distinction is reachable from an ordinary exported declaration, under
-   [docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md](research/SURVIVOR_CACHE_EXPORT_PLAN.md).
+1. `F-SURVIVOR-UNIVERSE-DIFF` — assess source-level reachability of the
+   `diff == 0` and right-`Zero` universe-comparison state under
+   [docs/research/SURVIVOR_UNIVERSE_DIFF_PLAN.md](research/SURVIVOR_UNIVERSE_DIFF_PLAN.md).
 
-Selected next item: `SURVIVOR-CACHE-EXPORT-1`.
+Selected next item: `SURVIVOR-UNIVERSE-DIFF-1`.
 
-The item is ACTIVE under the owner's 2026-09-08 request to execute the
-highest-priority eligible canonical queue item. Source and parser analysis is
-in progress. No build, checker, proof, network, scientific export-byte or
-external-action launch has occurred.
+The item is READY and unstarted. Its future source-only entry is bounded to one
+3,600-second session with zero build, checker, proof, network, scientific-byte
+or external-action launches.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-CACHE-1` completed with `SUCCESS`: both source-bound controls passed,
-the pinned baseline candidate caught the exact let annotation mismatch, and the
-mutant candidate failed at the frozen warmed-cache assertion. This is an
-internal same-checker cache-contract distinction. It does not establish an
-exported-input witness, production impact, semantic authority or a corpus kill;
-the canonical survivor classification remains unchanged.
+`SURVIVOR-CACHE-EXPORT-1` closed `BOUNDED_UNRESOLVED`: the exact source audit
+found an ordinary-carrier origin and expression-pointer boundary before a
+self-contained exported pair could be supported. It consumed no scientific
+launches and does not change the internal cache regression or canonical
+survivor classification.
 
-The project-wide entry review retains the cache export route above the next
-universe survivor, transfer intake, original conditional prerequisites and
-maintenance/upstream triggers. The exact internal mechanism and K-recursor
-major route are already bound. The active item is first testing whether a
-self-contained ordinary export can supply the required carrier without
-strongly checking the shared major earlier. Any launch still requires frozen
-bytes, expected cells, tooling/runtime identities and focused regressions in a
-committed successor entry state.
+The project-wide closure review ranks the universe survivor next because its
+exact predicate, pinned source and historical 163-test no-difference record are
+already available and a source-only reachability gate is cheap and
+falsifiable. Prospective transfer still lacks independently curated input,
+original conditional-validation prerequisites remain unmet, and no fresh
+upstream or maintenance trigger displaces this local work. Selection does not
+start the successor.
 
 ### Waiting
 

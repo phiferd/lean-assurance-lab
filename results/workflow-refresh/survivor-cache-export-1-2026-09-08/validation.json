@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-EXPORT-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-08T22:47:31.490405+00:00",
+  "checks": [
+    {"name": "cache export boundary closure", "command": "scripts/validate-survivor-cache-export-closure", "status": "PASS", "assessment": "ORDINARY_K_CARRIER_ORIGIN_AND_POINTER_IDENTITY_BOUNDARY", "manifest_inputs": 24, "scientific_launches": 0},
+    {"name": "cache predecessor historical transition", "command": "scripts/validate-survivor-cache-historical", "status": "PASS", "snapshot": "1194f3ef59d85196af40bf9c2703b41cc9f8d386", "scientific_cells": 4},
+    {"name": "cache predecessor evidence and accounting", "command": "scripts/execute-survivor-cache --evidence", "status": "PASS", "attempts": 6, "next_action": "DONE"},
+    {"name": "research queue v3", "command": "scripts/validate-research-queue --require-ready", "status": "PASS"},
+    {"name": "transfer historical package", "command": "scripts/validate-transfer-assessment", "status": "PASS", "gate_decision": "NO_GO"},
+    {"name": "survivor proposal historical package", "command": "scripts/validate-survivor-proposal", "status": "PASS"},
+    {"name": "survivor reuse evidence", "command": "scripts/validate-survivor-let-reuse --evidence", "status": "PASS"},
+    {"name": "survivor association transition", "command": "scripts/build-survivor-let-association --check --require-full-payload", "status": "PASS"},
+    {"name": "declaration-validation catalog", "command": "scripts/validate-declaration-validation-catalog", "status": "PASS"},
+    {"name": "declaration-validation history", "command": "scripts/validate-declaration-validation-historical", "status": "PASS"},
+    {"name": "full current and frozen suite", "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 856, "frozen_publication_tests": 73},
+    {"name": "publication historical snapshot", "command": "scripts/validate-publication-study-snapshot --require-full-payload --tests", "status": "PASS", "tests": 73},
+    {"name": "current-state refresh", "command": "scripts/refresh-current-state", "status": "PASS", "log_directory": "results/workflow-refresh/20260908T224556926015Z"},
+    {"name": "project review freshness", "command": "scripts/build-project-review --check", "status": "PASS"},
+    {"name": "artifact graph freshness", "command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "current": 171, "historical": 10, "superseded": 4}
+  ],
+  "repair_note": "The predecessor live closure validator correctly detected live queue drift, and a relocated archive/clone correctly failed because scientific commands bind the original absolute execution path. The successor historical-transition validator preserves the old validator and scientific evidence, reads frozen durable-state bytes from the exact closure commit, and validates the live transition separately.",
+  "result_limits": "Validation confirms bounded source claims, evidence integrity, historical preservation and generated-state freshness. It does not prove general export unreachability, semantic authority or production impact."
+}
