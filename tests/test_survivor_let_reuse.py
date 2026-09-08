@@ -15,7 +15,7 @@ def start(): return [{'kind':'START','run_id':p.RUN}]
 def reserve(n, phase, cell=None, active=0): return {'kind':'RESERVED','number':n,'phase':phase,'cell':cell,'reserved_seconds':120 if phase=='build' else 30,'active_seconds':active}
 def terminal(n, status='COMPLETE', classification=None, binary=False, cleanup=True, pause=False): return {'kind':'TERMINAL','number':n,'status':status,'charged_seconds':1,'classification':classification,'binary':{'path':'b','sha256':'a'*64} if binary else None,'cleanup_completed':cleanup,'engineering_pause':pause}
 def built(): return start()+[reserve(1,'build'),terminal(1,binary=True)]
-def trace(): return b"panicked at src/tc.rs:921:71: assertion failed: self.def_eq(u, v)\n::infer\n::check_declar_info\n"
+def trace(): return b"panicked at src/tc.rs:921:71: assertion failed: self.def_eq(u, v)\n::infer\n::check_declar\n"
 
 class ActiveTime(unittest.TestCase):
  def work(self): return {'started_utc':datetime(2026,1,1,tzinfo=timezone.utc).isoformat(),'started_monotonic':100.,'conservative_pre_record_seconds':120}
@@ -32,7 +32,7 @@ class Classification(unittest.TestCase):
   for cell in ('control-baseline','control-mutant','candidate-baseline','candidate-mutant'): self.assertEqual(p.classify(cell,self.rec(),p.SUCCESS,b''),'ACCEPT')
  def test_precise_baseline_refusal_requires_retained_backtrace(self):
   self.assertEqual(p.classify('candidate-baseline',self.rec(status='FAILED',returncode=101),b'',trace()),'TYPECHECK_REFUSAL')
-  for part in (b'::infer',b'::check_declar_info',b'assertion failed: self.def_eq(u, v)'):
+  for part in (b'::infer\n',b'::check_declar\n',b'assertion failed: self.def_eq(u, v)'):
    self.assertNotEqual(p.classify('candidate-baseline',self.rec(status='FAILED',returncode=101),b'',trace().replace(part,b'')),'TYPECHECK_REFUSAL')
  def test_refusal_not_transferred(self):
   for cell in ('candidate-mutant','control-baseline','control-mutant'): self.assertEqual(p.classify(cell,self.rec(status='FAILED',returncode=101),b'',trace()),'CRASH')
@@ -53,6 +53,8 @@ class Accounting(unittest.TestCase):
   self.assertEqual(p.derive(start()+[reserve(1,'build'),terminal(1,'FAILED')])['next_action'],('PAUSED',None))
   rows=built()+[reserve(2,'checker',0),terminal(2,'FAILED',classification='CRASH')]
   self.assertEqual(p.derive(rows)['next_action'],('STOP',None))
+  baseline=built()+[reserve(2,'checker',0),terminal(2,classification='ACCEPT'),reserve(3,'checker',1),terminal(3,classification='ACCEPT'),reserve(4,'checker',2),terminal(4,'FAILED',classification='CRASH')]
+  self.assertEqual(p.derive(baseline)['next_action'],('PAUSED',None))
  def test_repair_replays_same_cell_only_after_pause(self):
   rows=built()+[reserve(2,'checker',0),terminal(2,classification='INDETERMINATE',pause=True)]
   repair={'kind':'REPAIR','after_number':2,'phase':'checker','cell':0}
@@ -60,7 +62,7 @@ class Accounting(unittest.TestCase):
   with self.assertRaises(ValueError): p.derive(rows+[{**repair,'cell':1}])
  def test_caps_and_orphan_fail_closed(self):
   rows=built()
-  for n,c in enumerate((0,1,2,3),2): rows += [reserve(n,'checker',c),terminal(n,classification='ACCEPT')]
+  for n,c in enumerate((0,1,2,3),2): rows += [reserve(n,'checker',c),terminal(n,classification='TYPECHECK_REFUSAL' if c==2 else 'ACCEPT')]
   self.assertEqual(p.derive(rows)['next_action'],('DONE',None))
   with self.assertRaises(ValueError): p.derive(rows+[reserve(6,'checker',0)])
   orphan=built()+[reserve(2,'checker',0)]

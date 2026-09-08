@@ -208,6 +208,11 @@ def next_action(attempts, repairs):
     c = r['cell']
     if c < 2 and t['classification'] != 'ACCEPT':
         return ('STOP', None)
+    # The proposal requires a source-attributed baseline refusal before the
+    # mutant candidate can be interpreted. An output that cannot establish
+    # that attribution pauses for audit/tooling repair; it is not a mismatch.
+    if c == 2 and t['classification'] != 'TYPECHECK_REFUSAL':
+        return ('PAUSED', None)
     return ('DONE', None) if c == 3 else ('checker', c + 1)
 
 
@@ -251,12 +256,12 @@ def classify(cell, rec, stdout, stderr):
         return 'ACCEPT'
     # This source uses assert! as the rejection mechanism. Release optimization
     # inlines assert_def_eq/infer_let (bound symbol inventory). Require their
-    # exact assertion site plus retained infer/check_declar_info frames; the
+    # exact assertion site plus retained infer/check_declar frames; the
     # fixed source and exact pair establish the inlined let path.
     if (cell == 'candidate-baseline' and rec['status'] == 'FAILED' and rec['returncode'] == 101
             and stdout == b'' and b'panicked at src/tc.rs:921:71:' in stderr
             and b'assertion failed: self.def_eq(u, v)' in stderr
-            and b'::infer' in stderr and b'::check_declar_info' in stderr):
+            and b'::infer\n' in stderr and b'::check_declar\n' in stderr):
         return 'TYPECHECK_REFUSAL'
     lowered = stderr.lower()
     if any(token in lowered for token in (b'parse error', b'parser error', b'failed to parse', b'invalid json')):
