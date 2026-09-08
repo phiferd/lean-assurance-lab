@@ -1,0 +1,151 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-LET-REUSE-1",
+  "run_id": "survivor-let-reuse-0001",
+  "limits": {
+    "active_seconds": 5400,
+    "interval_seconds": 5400,
+    "offline_build_reservations": 2,
+    "per_build_seconds": 120,
+    "checker_reservations": 8,
+    "per_checker_seconds": 30,
+    "fixed_pairs": 1,
+    "max_scientific_byte_variants": 0,
+    "research_network_requests": 0,
+    "proof_launches": 0,
+    "external_research_actions": 0
+  },
+  "proposal": {
+    "path": "results/research/alt-survivors-2026-09-08/execution-proposal.json",
+    "sha256": "7f77289c8a70fdcf59fb6f77d9847c25cc8a61fa4b9a7061b9c49148a3af6d6d"
+  },
+  "work_record": {
+    "path": "results/research/survivor-let-reuse-1/work-record.json",
+    "sha256": "bbc206b7d0fbf4f66924dbd84a6ae8f94642b2fb6dc6dcb6582dc3efa9e88c2b"
+  },
+  "entry_decision": {
+    "path": "results/research/survivor-let-reuse-1/entry-decision.json",
+    "sha256": "c34a19b4133315ab9dc4e104cd5f0bbc7535781410017aeb99642529aedf717f"
+  },
+  "source_materialization": {
+    "path": "results/research/survivor-let-reuse-1/source-materialization.json",
+    "sha256": "63ff8e4b90acfc5f20cdb86a57a8e8a3952bb951956272ead9b290653973a956"
+  },
+  "runtime_manifest": {
+    "path": "results/research/survivor-let-reuse-1/runtime-manifest.json",
+    "sha256": "aa9fec0e5065c1035ef08f3de61d96f0efc34707033aacc5ffa6cc46ff8d29bb"
+  },
+  "fixed_inputs": [
+    {
+      "path": "mutations/nanoda-gen-9face4e6a6f7.json",
+      "sha256": "fde62195b585faec91ada6b493b3d1c8940845f5bccbc296ac870aa884690886"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+      "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+    },
+    {
+      "path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+      "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"
+    },
+    {
+      "path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+      "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+    },
+    {
+      "path": "results/investigations/ecosystem-closure-2026-09-05/triage/nanoda-gen-21ef4d1d32a1/result.json",
+      "sha256": "3b3cf549fa1261d170be38897901c3320bd5b2a3cbca7dcff930c93fd335a17b"
+    }
+  ],
+  "configs": {
+    "control": {
+      "path": "results/research/survivor-let-reuse-1/configs/control.json",
+      "sha256": "b95257f69a31b1d8e791ac2e899aa27dd2c30a9a25830fc126f24d149651b84d"
+    },
+    "candidate": {
+      "path": "results/research/survivor-let-reuse-1/configs/candidate.json",
+      "sha256": "7a316e295e871f0ccc1de65407cd517d1affab37791ae0cf4fc0e8cacbf923ac"
+    }
+  },
+  "matrix": [
+    {
+      "order": 1,
+      "id": "control-baseline",
+      "input": "control",
+      "observer": "baseline"
+    },
+    {
+      "order": 2,
+      "id": "control-mutant",
+      "input": "control",
+      "observer": "selected_mutant"
+    },
+    {
+      "order": 3,
+      "id": "candidate-baseline",
+      "input": "candidate",
+      "observer": "baseline"
+    },
+    {
+      "order": 4,
+      "id": "candidate-mutant",
+      "input": "candidate",
+      "observer": "selected_mutant"
+    }
+  ],
+  "observer_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "RUST_BACKTRACE": "full"
+  },
+  "tooling_inputs": [
+    {
+      "path": "lib/survivor_let_reuse.py",
+      "sha256": "82113570c37036d4496a18a516a445719a17f3e32a06fbfdd4ce0c9f440548f3"
+    },
+    {
+      "path": "lib/survivor_let_payload.py",
+      "sha256": "8c5578b462c0f2a55ec0b5c360b3571bdee8f2cf05e0461b742253c552d3cab4"
+    },
+    {
+      "path": "scripts/bind-survivor-let-payload",
+      "sha256": "bb35693f3a532b97644e5d9bc9846b6b8b9e4bdcd8de477d2446ccc028ab2ec7"
+    },
+    {
+      "path": "scripts/execute-survivor-let-reuse",
+      "sha256": "2d8f58f78a3f7936a42403c1a2fd404fcdbc78cf3c6bd554f82aeb5ae38233d4"
+    },
+    {
+      "path": "scripts/validate-survivor-let-reuse",
+      "sha256": "f83a5112b51455bbfd81a0669876d0078e176269303bcb5d9396977cebeca683"
+    },
+    {
+      "path": "tests/test_survivor_let_reuse.py",
+      "sha256": "90a5f8296d4ef445592509b2e187fa9daf6066c549538ea6b3a3a3f2cbac3849"
+    },
+    {
+      "path": "lib/cvc_process.py",
+      "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c"
+    },
+    {
+      "path": "lib/cvc_signal_retry.py",
+      "sha256": "5324c4214c57248198c28b9140864b4e0cd4c84b124396e6d0e5cf9e4aeb138f"
+    },
+    {
+      "path": "lib/cvc_prep.py",
+      "sha256": "2f16c3eb8ece976c51aa1eb143a571894b5004f20c7d7fb609a7d4b48075cb61"
+    },
+    {
+      "path": "lib/research_queue.py",
+      "sha256": "84c75de4e9776d06cdd606aed48f77bda64bf24dd9e40bfd622db9f53fae4150"
+    },
+    {
+      "path": "lib/research_queue_v2.py",
+      "sha256": "405a99b2c46c274e6b0d23d961422ae3def8fca08ce817f8338242b5c07d0c32"
+    }
+  ],
+  "focused_test_receipt": {
+    "path": "results/research/survivor-let-reuse-1/prelaunch-r3-fixed/focused-test-receipt.json",
+    "sha256": "bc0e57efe42ff10ff17bf0c34acd0813cdedca00fd9a53b000f80103c6583a81"
+  }
+}
