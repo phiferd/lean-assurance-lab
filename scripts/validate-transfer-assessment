@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Validate recorded ALT-TRANSFER evidence and accounting integrity only."""
+import argparse
+import json
+import sys
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lib.transfer_assessment import validate
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--check-current-preservation", action="store_true")
+args = parser.parse_args()
+try:
+    print(json.dumps(validate(check_current_preservation=args.check_current_preservation), sort_keys=True))
+except ValueError as error:
+    print(f"FAIL: {error}", file=sys.stderr)
+    sys.exit(1)

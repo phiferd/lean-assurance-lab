@@ -1,0 +1,132 @@
+{
+  "experiment_id": "m6-kiota-nonprop-theorem",
+  "experiment_spec": {
+    "path": "experiments/milestone-6/spec.json",
+    "sha256": "8e62c7bbb39b2ac4754fad946782d5c801454a98f30ef49cd1a6eb52316c5df7"
+  },
+  "frozen_at": "2026-08-24T01:59:43.788425+00:00",
+  "frozen_corpus": {
+    "candidate": {
+      "bytes": 438,
+      "path": "corpus/transfer/milestone-6/nonprop-theorem.ndjson",
+      "sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f"
+    },
+    "composite_sha256": "7667b780abdfbb23fcef7f7e85d65f01da402ab7a5b1656530e1b957497eef8f",
+    "positive_control": {
+      "bytes": 474,
+      "path": "corpus/transfer/milestone-6/nonprop-definition-control.ndjson",
+      "sha256": "5d2f93abb7b784c619471c465a14f5d534f3a01910098d4c94458326b36919ab"
+    }
+  },
+  "generator": {
+    "path": "scripts/freeze-transfer-experiment",
+    "seed": {
+      "bytes": 424,
+      "path": "external/lean-kernel-arena/_build/tests/tutorial/bad/012_nonPropThm.ndjson",
+      "sha256": "07c030b1e9ee321bb537f4f82f5238087cbed199f5e4f8673650c3190e54a33a"
+    },
+    "sha256": "609741a937797866aa4f0d9435f26ae37941240f749f08c2485ef126a1c1b79c",
+    "strategy": "rename-declaration-while-preserving-nonprop-theorem-shape"
+  },
+  "held_out_boundary": {
+    "mutation_declared_but_not_applied": true,
+    "mutation_id": "kiota-m6-skip-theorem-prop-validation",
+    "source_clean": true,
+    "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+    "source_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+    "validator": "kiota"
+  },
+  "protocol": {
+    "excluded_generation_inputs": [
+      "Kiota mutant outcomes",
+      "Kiota mutant logs"
+    ],
+    "generation_inputs": [
+      "nanoda mutation model",
+      "Arena seed",
+      "official reference"
+    ],
+    "held_out_mutant_execution_permitted_before_freeze": false,
+    "held_out_mutant_results_used_for_generation": false
+  },
+  "reference_evidence": {
+    "expected_outcome": "REJECT",
+    "path": "results/expected-outcomes/m6-nonprop-theorem.json",
+    "reference_checker": "official",
+    "sha256": "53c542faded9b864328e2dffd1de28f116f9e3c128ad6856d15e58a70db6a6e0"
+  },
+  "schema_version": 1,
+  "source_validator_evidence": {
+    "candidate": {
+      "artifact_bytes": 438,
+      "artifact_sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f",
+      "baseline": {
+        "exit_code": 101,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.13699350005481392,
+        "stderr_sha256": "250c55f832e04ec646464676f3888079fc4beabc1ab91c3ac70ad4ba0b4de242",
+        "stderr_tail": "\nthread 'thread_0' (26187738) panicked at src/tc.rs:90:45:\ncalled `Result::unwrap()` on an `Err` value: \"Theorem type for m6TransferNonPropTheorem must be `Prop` (sort 0); found type 1\"\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\n\nthread 'main' (26187732) panicked at src/tc.rs:139:26:\nA thread in `check_all_declars` panicked while being joined: Any { .. }\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "different": true,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.1297148329904303,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "checker_runs": 4,
+    "checker_seconds": 0.272454584017396,
+    "mutant_id": "nanoda-0001",
+    "mutation_spec_sha256": "396ff47ad9cd41e14443258c66d094c25fb6fee07dd1a6c89fbe9b5b17c9f982",
+    "positive_control": {
+      "artifact_bytes": 474,
+      "artifact_sha256": "5d2f93abb7b784c619471c465a14f5d534f3a01910098d4c94458326b36919ab",
+      "baseline": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0031187919666990638,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "different": false,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0026274590054526925,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    "preparation": {
+      "apply_mutant": "changed",
+      "baseline_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 0.131616749917157
+      },
+      "baseline_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+      "mutant_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 11.297199332970195
+      },
+      "restore_after": "changed",
+      "restore_before": "already",
+      "restored_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 10.659896916942671
+      },
+      "restored_source_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+      "source_restored": true
+    },
+    "validator": "nanoda"
+  },
+  "status": "FROZEN_BEFORE_HELD_OUT_EVALUATION"
+}

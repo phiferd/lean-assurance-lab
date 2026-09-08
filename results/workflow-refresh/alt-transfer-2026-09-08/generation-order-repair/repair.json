@@ -1,0 +1,19 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-TRANSFER",
+  "classification": "ADMINISTRATIVE_GENERATION_ORDER_REPAIR",
+  "cause": "Owner launched graph generation at 20:24:11 before project-review generation completed at 20:24:21 UTC. The graph bound the previous review bytes.",
+  "evidence": [
+    "results/workflow-refresh/alt-transfer-2026-09-08/final-artifact-freshness.json",
+    "results/workflow-refresh/alt-transfer-2026-09-08/final-artifact-freshness.log",
+    "results/workflow-refresh/alt-transfer-2026-09-08/final-review-generation.json",
+    "results/workflow-refresh/alt-transfer-2026-09-08/final-graph.json"
+  ],
+  "stale_graph_sha256": "7da4caabf1592c5d982a3a078d32d017c536e2609c52dadbe8fd0fc3e7a3350a",
+  "repair": "After confirming project-review generation and freshness check both completed successfully, rebuild the graph, wait for completion, then rerun artifact-status --require-current.",
+  "regression": "Existing artifact freshness gate caught the defect and is the focused regression; no code or gate change is needed.",
+  "tooling_revision": "No tooling bytes changed; owner command sequencing corrected. All failed and successful attempt receipts remain intact.",
+  "budget_reset": false,
+  "scientific_inputs_changed": false,
+  "scientific_counts_changed": false
+}

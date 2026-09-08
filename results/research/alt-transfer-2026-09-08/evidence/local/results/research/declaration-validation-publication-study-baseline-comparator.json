@@ -1,0 +1,349 @@
+{
+  "schema_version": 1,
+  "result_id": "ordinary-declaration-validation.publication-study.gate-8-baseline-comparator.v1",
+  "artifact_type": "PUBLICATION_STUDY_GATE_8_BASELINE_AND_COMPARATOR_FREEZE",
+  "recorded_at": "2026-09-04T13:45:00-04:00",
+  "status": "BASELINE_AND_COMPARATORS_FROZEN_BEFORE_DIRECTED_SYNTHESIS",
+  "bindings": {
+    "gate7_denominator": {
+      "path": "results/research/declaration-validation-publication-study-denominator.json",
+      "sha256": "34ef173c6483f8d3f9327e6e39f683406a19e4ed3621bc9e675d22d45cb15193",
+      "git_commit": "a01102e784e21ed4d7f906435704bb0dc8e982a0",
+      "git_blob": "44899bf25e3dfca2d01179cb94bbec55cf363cf3"
+    },
+    "gate8_input_freeze": {
+      "path": "results/research/declaration-validation-publication-study-gate-8-input-freeze.json",
+      "sha256": "717a39c79ba14312b77e2d78a899b4f96cf0602f6f0a545f2114244ac91a8b2c"
+    },
+    "manuscript": {
+      "path": "docs/research/DECLARATION_VALIDATION_PUBLICATION_STUDY_MANUSCRIPT.md",
+      "sha256": "c1770504e3f7844e412340eeda444252e3bd8a528cee367a7aa1728ce66590b0"
+    }
+  },
+  "denominator": {
+    "count": 1,
+    "entry_ids": [
+      "DECL.THEOREM.TYPE_PROP"
+    ],
+    "claim_tier": "BOUNDED_PILOT"
+  },
+  "baseline_results": [
+    {
+      "entry_id": "DECL.THEOREM.TYPE_PROP",
+      "primary_status": "OBSERVED_NEGATIVE_NOT_ISOLATED",
+      "counts_as_isolated_coverage": false,
+      "negative_artifacts": [
+        {
+          "case_id": "tutorial/012_nonPropThm",
+          "path": "external/lean-kernel-arena/_build/tests/tutorial/bad/012_nonPropThm.ndjson",
+          "sha256": "07c030b1e9ee321bb537f4f82f5238087cbed199f5e4f8673650c3190e54a33a"
+        },
+        {
+          "case_id": "m6-nonprop-theorem",
+          "path": "corpus/transfer/milestone-6/nonprop-theorem.ndjson",
+          "sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f"
+        }
+      ],
+      "evidence_elements": [
+        {
+          "element": "CONTENT_BOUND_NEGATIVE_ARTIFACT",
+          "status": "SATISFIED",
+          "basis": "The exact Arena tutorial case and its name-equivalent M6 transfer witness are both frozen by SHA-256.",
+          "evidence_refs": [
+            "arena_materialized:tutorial/bad/012_nonPropThm.ndjson",
+            "m6_nonprop_candidate"
+          ]
+        },
+        {
+          "element": "REACH_AND_APPLICABILITY",
+          "status": "SATISFIED",
+          "basis": "Both artifacts are theorem declarations; the official and Lean4Lean records say validation was reached, Nanoda infection occurs at the theorem-Prop guard, and the unchanged definition-form auxiliary artifact is accepted.",
+          "evidence_refs": [
+            "m6_nonprop_cross_validation",
+            "nanoda_reach_infection",
+            "m6_definition_auxiliary_control"
+          ]
+        },
+        {
+          "element": "TARGET_VIOLATION_NOT_P",
+          "status": "SATISFIED",
+          "basis": "The theorem type is Sort 0, whose inferred sort is nonzero; existing official, Nanoda, Lean4Lean, and Kiota diagnostics attribute rejection to the theorem type not being a proposition, and the mapped Nanoda infection marker fires.",
+          "evidence_refs": [
+            "m6_nonprop_cross_validation",
+            "nanoda_nonprop_observation",
+            "nanoda_reach_infection"
+          ]
+        },
+        {
+          "element": "MATCHED_SAME_FAMILY_POSITIVE_CONTROL",
+          "status": "UNRESOLVED",
+          "basis": "The frozen prior-knowledge inventory contains no Prop-valued theorem in the same construction family with a matching valid proof. The known definition-form artifact removes theorem applicability and is auxiliary only under M10 erratum 1.",
+          "evidence_refs": [
+            "m6_definition_auxiliary_control",
+            "gate7_denominator"
+          ]
+        },
+        {
+          "element": "COMPETING_OBLIGATION_ANALYSIS",
+          "status": "SATISFIED",
+          "basis": "All other 18 frozen normative candidates are explicitly classified below. The accepted definition-form artifact preserves the type and value while removing only theorem applicability, supporting the common well-formedness and typing rows; syntactically absent constructs are NOT_APPLICABLE.",
+          "evidence_refs": [
+            "m6_nonprop_cross_validation",
+            "m6_definition_auxiliary_control",
+            "gate6_catalog"
+          ]
+        },
+        {
+          "element": "AUTHORITY_SCOPED_EXPECTED_REJECTION",
+          "status": "SATISFIED",
+          "basis": "Gate 6 records ESTABLISHED authority for the exact theorem-Prop claim and Gate 7 admits only that obligation to the strict denominator.",
+          "evidence_refs": [
+            "gate7_denominator",
+            "gate6_catalog"
+          ]
+        },
+        {
+          "element": "CHECKER_REJECTION_ATTRIBUTION",
+          "status": "SATISFIED",
+          "basis": "Existing content-bound results attribute rejection to the exact official, Nanoda, Lean4Lean, and Kiota profiles without using their agreement as authority.",
+          "evidence_refs": [
+            "m6_nonprop_cross_validation",
+            "nanoda_nonprop_observation"
+          ]
+        }
+      ],
+      "competing_obligations": [
+        {
+          "entry_id": "DECL.ENV.NAME_FRESHNESS",
+          "status": "SATISFIED",
+          "basis": "The fresh declaration name is accepted in the auxiliary control under the same empty-environment replay."
+        },
+        {
+          "entry_id": "DECL.UNIVERSE.PARAM_UNIQUENESS",
+          "status": "SATISFIED",
+          "basis": "The level-parameter list is empty."
+        },
+        {
+          "entry_id": "DECL.TYPE.NO_FREE_VARS",
+          "status": "SATISFIED",
+          "basis": "The declared type is the closed Sort 0 expression."
+        },
+        {
+          "entry_id": "DECL.TYPE.NO_METAVARS",
+          "status": "SATISFIED",
+          "basis": "The frozen serialized type contains no metavariable representation."
+        },
+        {
+          "entry_id": "DECL.EXPR.NO_LOOSE_BOUND_VARS",
+          "status": "SATISFIED",
+          "basis": "The sole bound-variable occurrence is scoped by the serialized forall binder, and the unchanged auxiliary value is accepted."
+        },
+        {
+          "entry_id": "DECL.UNIVERSE.PARAM_OWNERSHIP",
+          "status": "NOT_APPLICABLE",
+          "basis": "The declaration has no universe parameters or constant universe arguments."
+        },
+        {
+          "entry_id": "EXPR.CONST.UNIVERSE_ARITY",
+          "status": "NOT_APPLICABLE",
+          "basis": "The artifact contains no constant expression."
+        },
+        {
+          "entry_id": "DECL.TYPE.WELL_FORMED",
+          "status": "SATISFIED",
+          "basis": "Sort 0 is well formed and the observer records reach beyond type inference."
+        },
+        {
+          "entry_id": "DECL.TYPE.SORT_VALUED",
+          "status": "SATISFIED",
+          "basis": "Sort 0 has inferred type Sort 1, satisfying declaration-type sorthood while violating proposition-valued theorem type."
+        },
+        {
+          "entry_id": "DECL.VALUE.WELL_FORMED",
+          "status": "SATISFIED",
+          "basis": "The same forall value is accepted in the definition-form auxiliary artifact."
+        },
+        {
+          "entry_id": "DECL.VALUE.TYPE_MATCH",
+          "status": "SATISFIED",
+          "basis": "The same value and declared type are accepted together in the definition-form auxiliary artifact."
+        },
+        {
+          "entry_id": "DECL.ENV.CURRENT_DECL_NOT_VISIBLE",
+          "status": "NOT_APPLICABLE",
+          "basis": "Neither the type nor value references the declaration being added."
+        },
+        {
+          "entry_id": "EXPR.BINDER.DOMAIN_SORT",
+          "status": "SATISFIED",
+          "basis": "The forall domain is Sort 0 and is sort-valued."
+        },
+        {
+          "entry_id": "EXPR.PI.CODOMAIN_SORT",
+          "status": "SATISFIED",
+          "basis": "The dependent body is the bound proposition variable and is sort-valued in its binder context."
+        },
+        {
+          "entry_id": "EXPR.LET.ANNOTATION_SORT",
+          "status": "NOT_APPLICABLE",
+          "basis": "The artifact contains no let expression."
+        },
+        {
+          "entry_id": "EXPR.LET.VALUE_TYPE_MATCH",
+          "status": "NOT_APPLICABLE",
+          "basis": "The artifact contains no let expression."
+        },
+        {
+          "entry_id": "EXPR.APP.FUNCTION_TYPE",
+          "status": "NOT_APPLICABLE",
+          "basis": "The artifact contains no application expression."
+        },
+        {
+          "entry_id": "EXPR.APP.ARGUMENT_TYPE_MATCH",
+          "status": "NOT_APPLICABLE",
+          "basis": "The artifact contains no application expression."
+        }
+      ],
+      "checker_attribution": [
+        {
+          "profile": "official_importer",
+          "artifact": "m6-nonprop-theorem",
+          "pipeline_stage": "VALIDATION",
+          "normalized_outcome": "REJECT",
+          "evidence_ref": "m6_nonprop_cross_validation#/validators/0/result"
+        },
+        {
+          "profile": "nanoda",
+          "artifact": "m6-nonprop-theorem",
+          "pipeline_stage": "VALIDATION",
+          "normalized_outcome": "REJECT",
+          "evidence_ref": "nanoda_nonprop_observation#/candidate/result"
+        },
+        {
+          "profile": "lean4lean",
+          "artifact": "m6-nonprop-theorem",
+          "pipeline_stage": "VALIDATION",
+          "normalized_outcome": "REJECT",
+          "evidence_ref": "m6_nonprop_cross_validation#/validators/2/result"
+        },
+        {
+          "profile": "kiota",
+          "artifact": "m6-nonprop-theorem",
+          "pipeline_stage": "VALIDATION",
+          "normalized_outcome": "REJECT",
+          "evidence_ref": "m6_nonprop_cross_validation#/validators/1/result"
+        }
+      ],
+      "matched_control_disposition": {
+        "required_control": "Prop-valued theorem in the same construction family with a matching valid proof",
+        "known_definition_artifact_role": "AUXILIARY_REPRESENTABILITY_AND_WELL_FORMEDNESS_CONTROL",
+        "status": "MISSING_FROM_FROZEN_PRIOR_KNOWLEDGE",
+        "erratum_applied": true
+      },
+      "classification_basis": "A content-bound reachable non-Prop theorem is rejected with the target guard infected and all competing frozen normative candidates closed, but the M10 erratum requires a same-family Prop-valued theorem control that is absent from the frozen prior inventory. Rejection therefore remains observed negative, not isolated coverage."
+    }
+  ],
+  "baseline_summary": {
+    "denominator_count": 1,
+    "isolated_covered_count": 0,
+    "coverage_percentage": 0.0,
+    "status_counts": {
+      "ISOLATED_COVERED": 0,
+      "OBSERVED_NEGATIVE_NOT_ISOLATED": 1,
+      "REACH_OR_TARGET_VIOLATION_UNRESOLVED": 0,
+      "NO_EXISTING_NEGATIVE_CASE": 0,
+      "PIPELINE_NOT_REPRESENTABLE_AT_EXECUTION": 0,
+      "EXECUTION_UNRESOLVED": 0
+    }
+  },
+  "comparator_results": [
+    {
+      "entry_id": "DECL.THEOREM.TYPE_PROP",
+      "source_coverage": {
+        "classification": "SOURCE_REACHED",
+        "evidence_refs": [
+          "existing_coverage_excerpt#src/tc.rs:175",
+          "nanoda_mutation_spec"
+        ],
+        "limitations": [
+          "This is exact per-case line reach for the one-thread instrumented Nanoda comparator profile, not the four-thread primary observer and not semantic coverage.",
+          "The legacy aggregate coverage snapshot and reproducibility configuration name Arena f0fe3b, so they cannot support a whole-corpus claim for the frozen 37f7525 revision; the exact unchanged theorem artifact hash and reciprocal line mapping are bound separately."
+        ]
+      },
+      "semantic_mutation": {
+        "classification": "MUTANT_KILLED",
+        "evidence_refs": [
+          "nanoda_mutation_spec",
+          "nanoda_mutation_comparison_theorem",
+          "nanoda_reach_infection"
+        ],
+        "limitations": [
+          "The mutant removes Nanoda's theorem-Prop guard at src/tc.rs:175 and the exact theorem case changes REJECT to ACCEPT; this is a Nanoda-specific contextual comparator, not semantic authority or isolation.",
+          "The historical full comparison used 197 tests; Gate 8 relies only on the exact scoped difference for the content-identical theorem artifact."
+        ]
+      },
+      "existing_case_link": {
+        "classification": "EXISTING_CASE_LINKED",
+        "evidence_refs": [
+          "gate6_catalog#/entries/DECL.THEOREM.TYPE_PROP/arena_disposition",
+          "arena_materialized:tutorial/bad/012_nonPropThm.ndjson"
+        ],
+        "limitations": [
+          "The prior catalog explicitly classifies the Arena link as empirical coverage provenance rather than normative authority or isolation."
+        ]
+      },
+      "cross_tabulation": "OBSERVED_NEGATIVE_NOT_ISOLATED | SOURCE_REACHED | MUTANT_KILLED | EXISTING_CASE_LINKED"
+    }
+  ],
+  "gate9_target_transition": {
+    "target_count": 1,
+    "entry_ids": [
+      "DECL.THEOREM.TYPE_PROP"
+    ],
+    "status": "TARGET_IDENTIFIED_GATE_9_PLAN_NOT_YET_FROZEN",
+    "uncovered_element": "M10_ERRATUM_COMPLIANT_MATCHED_POSITIVE_CONTROL",
+    "strategy_frozen": false,
+    "budget_frozen": false,
+    "control_created_or_modified": false
+  },
+  "problems_discovered": [
+    {
+      "id": "MISSING_M10_ERRATUM_COMPLIANT_MATCHED_THEOREM_CONTROL",
+      "disposition": "PRESERVED_AS_BASELINE_ISOLATION_DEFICIT_AND_GATE_9_TARGET_INPUT",
+      "effect": "The existing negative is not counted as isolated coverage; the definition-form artifact remains auxiliary only."
+    },
+    {
+      "id": "LEGACY_COVERAGE_SNAPSHOT_ARENA_REVISION_MISMATCH",
+      "disposition": "PRESERVED_WITH_PER_CASE_SCOPE_RESTRICTION",
+      "effect": "No whole-corpus source-coverage claim is made for revision 37f7525; SOURCE_REACHED is limited to the exact theorem artifact, matching Nanoda source/binary configuration, and reciprocal line mapping."
+    },
+    {
+      "id": "COVERAGE_PAYLOAD_NOT_TRACKED_IN_GIT",
+      "disposition": "HASHED_AND_EXCERPTED_IN_GATE_8_INPUT_FREEZE",
+      "effect": "The local raw coverage maps are bound by SHA-256 and their exact relevant mappings are preserved, but later full-payload verification requires retaining or reproducibly regenerating those ignored files."
+    }
+  ],
+  "scope_closure": {
+    "baseline_complete": true,
+    "comparators_complete": true,
+    "input_freeze_complete": true,
+    "denominator_changed": false,
+    "authority_dispositions_changed": false,
+    "source_approvals_changed": false,
+    "new_source_discovery_performed": false,
+    "witness_or_control_created_or_modified": false,
+    "directed_synthesis_started": false,
+    "new_checker_campaign_started": false,
+    "new_coverage_campaign_started": false,
+    "new_mutation_campaign_started": false,
+    "next_gate": "PUBLICATION_STUDY_GATE_9_SYNTHESIS_FREEZE"
+  },
+  "nonclaims": [
+    "SOURCE_REACHED is a contextual implementation indicator and not isolated-negative semantic coverage.",
+    "MUTANT_KILLED is a contextual Nanoda fault-model result and not semantic authority.",
+    "Observer agreement did not establish authority or baseline isolation.",
+    "The definition-form artifact is not a matched control for theorem-specific coverage.",
+    "The zero-of-one baseline is a BOUNDED_PILOT result and does not support a broad methodology or Lean-wide adequacy claim.",
+    "No Gate-9 strategy, control, budget, candidate, or checker feedback has been frozen or produced."
+  ]
+}

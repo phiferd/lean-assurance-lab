@@ -1,0 +1,206 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-SURVIVORS",
+  "assurance_snapshot": {
+    "path": "results/research/alt-survivors-2026-09-08/entry-snapshot/results/assurance/current.json",
+    "bytes": 39659,
+    "sha256": "a6b5c71f10808131130bbaaecf3410d197324af9b9420298fc18dd93ddef6a74"
+  },
+  "pending_ids": [
+    "nanoda-gen-2bdfe18a9ec2",
+    "nanoda-gen-3365809b3c41",
+    "nanoda-gen-399895fa0b72",
+    "nanoda-gen-93b21593b0d8",
+    "nanoda-gen-9face4e6a6f7",
+    "nanoda-gen-af1dac9744e9",
+    "nanoda-gen-e9648d8c028d"
+  ],
+  "classification": "SURVIVED_WITHOUT_WITNESS",
+  "count": 7,
+  "selected_mutant": "nanoda-gen-9face4e6a6f7",
+  "entries": [
+    {
+      "rank": 1,
+      "mutant_id": "nanoda-gen-9face4e6a6f7",
+      "selected": true,
+      "spec": {
+        "path": "mutations/nanoda-gen-9face4e6a6f7.json",
+        "bytes": 956,
+        "sha256": "fde62195b585faec91ada6b493b3d1c8940845f5bccbc296ac870aa884690886"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-9face4e6a6f7/scheduled-comparison.json",
+        "bytes": 985,
+        "sha256": "9c75a15b5fa13112fe0f6ae49e2cfadc6d7e28c8c39c630f9253340dfe2b48cd"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 649,
+      "function": "infer_let",
+      "original": "flag == Check",
+      "mutated": "!(flag == Check)",
+      "operator": "BOOL_NEGATE",
+      "replace_occurrence": 1,
+      "covering_tests_executed": 17,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Same tc.rs:649 occurrence-1 predicate inversion as previously witnessed 21ef, using !(flag == Check) instead of (flag != Check). Existing exact small pair makes one pending identity attributable with minimal new work; adds regression reuse, not novel semantics."
+    },
+    {
+      "rank": 2,
+      "mutant_id": "nanoda-gen-3365809b3c41",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-3365809b3c41.json",
+        "bytes": 995,
+        "sha256": "c1af3a5fe559e4cf604b046c9b3dc37b9cebf599f05373789804f661c429e52c"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-3365809b3c41/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "f5376b76f07facee8313d45035d6c67ef189db6bd66b396bfb87c87b02f31069"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 483,
+      "function": "infer",
+      "original": "flag == InferFlag::InferOnly",
+      "mutated": "(flag != InferFlag::InferOnly)",
+      "operator": "REL_EQ_TO_NE",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 184,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Cache-selection guard inversion can consult the no-check cache during Check; needs a carefully staged expression/cache history and fixed witness design. No equally direct existing pair is bound."
+    },
+    {
+      "rank": 3,
+      "mutant_id": "nanoda-gen-af1dac9744e9",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-af1dac9744e9.json",
+        "bytes": 982,
+        "sha256": "dd22959ea500d85d0aa5ce9f4d2890a602725ffd483c1d8f1cc7f236d905704f"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-af1dac9744e9/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "03ce4f02094863f601a0cf8d2a734e15400cbd9cf68832e92d99f03f862ea953"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 483,
+      "function": "infer",
+      "original": "flag == InferFlag::InferOnly",
+      "mutated": "!(flag == InferFlag::InferOnly)",
+      "operator": "BOOL_NEGATE",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 184,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Same infer cache site and source-equivalent negation alternative to 3365809b3c41; preserve separate identity but avoid starting both."
+    },
+    {
+      "rank": 4,
+      "mutant_id": "nanoda-gen-e9648d8c028d",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-e9648d8c028d.json",
+        "bytes": 946,
+        "sha256": "43ad36fe45889753a7c9be731cc1c69bbdcc3cf6b4ff84439997001975ca43b4"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-e9648d8c028d/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "a928f2a0e821f9c8f9d4d966b0a43536fabc9c3ddabc3a05409b69d4a6afc9df"
+      },
+      "source_file": "src/level.rs",
+      "source_line": 179,
+      "function": "leq_core",
+      "original": "diff < 0",
+      "mutated": "(diff <= 0)",
+      "operator": "REL_LT_TO_LE",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 163,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Universe <= guard broadens rejection at diff == 0 with right Zero. Surrounding earlier Zero case and simplification/recursion require a reachable normalized input argument before spending checker calls."
+    },
+    {
+      "rank": 5,
+      "mutant_id": "nanoda-gen-399895fa0b72",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-399895fa0b72.json",
+        "bytes": 1015,
+        "sha256": "0ccdfb5dd8c4c79a43cfebf66b7f4fbd97c35d5c6e41126d8c85225fea2fdc2f"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-399895fa0b72/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "d3d469e07570c92c62057b83e262628b24e3a892b8772ba3016eda93cfe84291"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 168,
+      "function": "check_declar_info",
+      "original": "assert!(!self.ctx.has_fvars(info.ty));",
+      "mutated": "if false { assert!(!self.ctx.has_fvars(info.ty)); }",
+      "operator": "SKIP_VALIDATION",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 184,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "has_fvars declaration-type guard elision may be protected by parser and internal-local representation. Source reachability and independent malformed-input meaning need qualification before a byte proposal."
+    },
+    {
+      "rank": 6,
+      "mutant_id": "nanoda-gen-2bdfe18a9ec2",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-2bdfe18a9ec2.json",
+        "bytes": 1003,
+        "sha256": "565dade1407732bed722b3db2758f77e6a3a8a3cd079ce526974d91b8347aca6"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-2bdfe18a9ec2/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "b0fca685bb6fdb5a1d49a2fcdcd6e3a3f9c01cb51713e9a1f0c6072332504abc"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 147,
+      "function": "check_all_declars",
+      "original": "self.config.num_threads > 1",
+      "mutated": "(self.config.num_threads >= 1)",
+      "operator": "REL_GT_TO_GE",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 187,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Switches num_threads=1 from serial to one-worker parallel checking; mainly dispatch/control-path concern and lower direct shared semantic value under existing num_threads=4 profile."
+    },
+    {
+      "rank": 7,
+      "mutant_id": "nanoda-gen-93b21593b0d8",
+      "selected": false,
+      "spec": {
+        "path": "mutations/nanoda-gen-93b21593b0d8.json",
+        "bytes": 993,
+        "sha256": "b4c04dcf5b1b7335a282d228d4279ee792995f1132db5553f426b05971816d71"
+      },
+      "comparison": {
+        "path": "results/mutants/nanoda-gen-93b21593b0d8/scheduled-comparison.json",
+        "bytes": 987,
+        "sha256": "58e2ddb34949c0fdd9ec2b0c3d814b97183db9f110af347f83be6a85e9ea621d"
+      },
+      "source_file": "src/tc.rs",
+      "source_line": 147,
+      "function": "check_all_declars",
+      "original": "self.config.num_threads > 1",
+      "mutated": "!(self.config.num_threads > 1)",
+      "operator": "BOOL_NEGATE",
+      "replace_occurrence": 0,
+      "covering_tests_executed": 187,
+      "prior_outcome": "SURVIVED",
+      "prior_difference_count": 0,
+      "selection_rationale": "Negates parallel dispatch condition. At num_threads=0 it can select an empty worker set, but that is a distinct configuration/coverage-surface question outside the fixed existing profile; do not silently classify it as equivalent."
+    }
+  ],
+  "interpretation": "Covering-test counts describe old schedules, not runtime predictions, equivalence proofs or corpus gaps. Classification and denominator remain unchanged."
+}

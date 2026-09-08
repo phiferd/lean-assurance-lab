@@ -1,0 +1,146 @@
+{
+  "experiment_id": "m7-lean4lean-let-type",
+  "experiment_spec": {
+    "bytes": 1936,
+    "path": "experiments/milestone-7/spec.json",
+    "sha256": "8b713e2b32402bf0028b1bd54440f162e4a493a3078f5998cd4654911bb6d083"
+  },
+  "fold_id": "lean4lean-held-out",
+  "frozen_at": "2026-08-24T02:28:14.699463+00:00",
+  "frozen_corpus": {
+    "candidate": {
+      "bytes": 476,
+      "path": "corpus/transfer/milestone-7/let-value-type-mismatch.ndjson",
+      "sha256": "a2f53d20e33e3a4f69e5061b3b4b2a328de3c4f9bff64dee3b250cc847427d43"
+    },
+    "composite_sha256": "e15e277b83ccfa58724566a22c101891c41ef0d906d99be20d090adcc4d6a177",
+    "positive_control": {
+      "bytes": 599,
+      "path": "corpus/transfer/milestone-7/let-value-type-control.ndjson",
+      "sha256": "d3786853802d7a80cea86a6345a37e71b21a8a1f095528d8aab9852cff74d5df"
+    }
+  },
+  "generator": {
+    "path": "scripts/freeze-rotating-fold",
+    "sha256": "4190685da96b27d4d0edf2f70f50cd610169bc715b2f932c0d145e1e670880c4",
+    "strategy": "construct-minimal-malformed-let-and-valid-control"
+  },
+  "held_out_boundary": {
+    "mutation_declared_but_not_applied": true,
+    "mutation_id": "lean4lean-m7-skip-let-value-validation",
+    "source_clean": true,
+    "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+    "source_sha256": "169023ed80a1b682643c2d7e83f6da18cd403065fede0c5c36c46dcd64bf3ab1",
+    "validator": "lean4lean"
+  },
+  "original_corpus": {
+    "early_stop": false,
+    "evaluation_order": "ascending-input-bytes-then-name",
+    "identity_manifest": {
+      "bytes": 49069,
+      "path": "results/manifests/coverage-nanoda.json",
+      "sha256": "398d9675ae62f4904c96d3a642fedf57c0eb25c47eccba459e15c0d635af3a6b"
+    },
+    "test_count": 197,
+    "total_bytes": 9506646641
+  },
+  "protocol": {
+    "excluded_generation_inputs": [
+      "Lean4Lean mutant outcomes",
+      "Lean4Lean mutant logs"
+    ],
+    "generation_inputs": [
+      "Kiota semantic mutation model",
+      "deterministic NDJSON template",
+      "official reference"
+    ],
+    "held_out_baseline_compatibility_permitted_before_freeze": true,
+    "held_out_mutant_execution_permitted_before_freeze": false,
+    "held_out_mutant_results_used_for_generation": false
+  },
+  "reference_evidence": {
+    "expected_outcome": "REJECT",
+    "path": "results/expected-outcomes/m7-let-value-type.json",
+    "reference_checker": "official",
+    "sha256": "86b47dceb6ad1359f10e7cdb23aff62d824867c90154804f7ca49276c24f37ef"
+  },
+  "schema_version": 1,
+  "source_validator_evidence": {
+    "candidate": {
+      "artifact_sha256": "a2f53d20e33e3a4f69e5061b3b4b2a328de3c4f9bff64dee3b250cc847427d43",
+      "baseline": {
+        "exit_code": 1,
+        "normalized_outcome": "REJECT",
+        "seconds": 0.13191304099746048,
+        "signal": null,
+        "stderr_sha256": "267d4926c2100d0eb6c764f30c8fc47f38a57a5a942cd793650ec6e5decdaeb5",
+        "stderr_tail": "REJECT: [m7LetMismatch] let value type mismatch\n",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "different": true,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.12350325006991625,
+        "signal": null,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      }
+    },
+    "checker_runs": 4,
+    "checker_seconds": 0.2615670000668615,
+    "mutation_id": "kiota-m7-skip-let-value-validation",
+    "positive_control": {
+      "artifact_sha256": "d3786853802d7a80cea86a6345a37e71b21a8a1f095528d8aab9852cff74d5df",
+      "baseline": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.003144624992273748,
+        "signal": null,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      },
+      "different": false,
+      "mutant": {
+        "exit_code": 0,
+        "normalized_outcome": "ACCEPT",
+        "seconds": 0.0030060840072110295,
+        "signal": null,
+        "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stderr_tail": "",
+        "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+        "stdout_tail": ""
+      }
+    },
+    "preparation": {
+      "apply_mutant": "changed",
+      "baseline_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 0.043123917072080076
+      },
+      "mutant_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 11.043564374907874
+      },
+      "mutated_source_sha256": "9e0095948b4c8c5a0c8b25015b227ca5a8b2518dbcc8efd5d1f1e4ecc46ec200",
+      "restore_after": "changed",
+      "restore_before": "already",
+      "restored_build": {
+        "output_tail": "",
+        "returncode": 0,
+        "seconds": 10.872394792037085
+      },
+      "restored_source_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393",
+      "source_restored": true
+    },
+    "validator": "kiota"
+  },
+  "status": "FROZEN_BEFORE_HELD_OUT_MUTANT_EVALUATION"
+}

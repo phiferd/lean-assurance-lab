@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "experiment_id": "m6-kiota-nonprop-theorem",
+  "held_out_validator": "kiota",
+  "source_validator": "nanoda",
+  "source_mutant": "nanoda-0001",
+  "fault_model": "theorem declarations must have a type inhabiting Prop",
+  "mutation": {
+    "id": "kiota-m6-skip-theorem-prop-validation",
+    "operator": "SKIP_VALIDATION",
+    "subsystem": "declaration-validation",
+    "source_file": "src/tc.rs",
+    "source_span": "1172-1174",
+    "original": "if kind == \"theorem\" && !level::is_def_eq(&lvl, &level::zero()) {",
+    "mutated": "if false && kind == \"theorem\" && !level::is_def_eq(&lvl, &level::zero()) {",
+    "semantic_rationale": "Models omission of the theorem-Prop validation independently in Kiota."
+  },
+  "held_out_source": {
+    "expected_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+    "baseline_source_sha256": "7ebd891004d61a8ad4e68e41ea0818fd582ef757871044426fa4e50807586393"
+  },
+  "generation": {
+    "seed": "external/lean-kernel-arena/_build/tests/tutorial/bad/012_nonPropThm.ndjson",
+    "strategy": "rename-declaration-while-preserving-nonprop-theorem-shape",
+    "candidate_name": "m6TransferNonPropTheorem",
+    "control_name": "m6TransferNonPropDefinition"
+  }
+}

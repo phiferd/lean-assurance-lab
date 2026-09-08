@@ -1,0 +1,160 @@
+{
+  "schema_version": 1,
+  "item_id": "ALT-TRANSFER",
+  "records": [
+    {
+      "id": "S1",
+      "title": "Are Mutants a Valid Substitute for Real Faults in Software Testing?",
+      "url": "https://homes.cs.washington.edu/~mernst/pubs/mutation-effectiveness-fse2014.pdf",
+      "version": "Just et al., FSE 2014; DOI 10.1145/2635868.2635929; author-hosted PDF hash recorded",
+      "decision": "REUSE_METHOD_CONTROLS",
+      "summary": "The study compares developer-fixed faults and mutants in five Java programs, controls code coverage, and reports an association. Its isolation of faulty/fixed versions is useful experimental practice.",
+      "limitations": [
+        "The sampled programs and reproducible mined faults bound applicability; these results do not establish Lean transfer or turn a mutant kill into a real defect."
+      ],
+      "locators": [
+        "Sections 2.2-2.6: isolation and comparisons",
+        "Section 3.4: validity threats"
+      ],
+      "reviewed_on": "2026-09-08",
+      "role": "METHOD_OR_TARGET_REVIEW_NOT_NORMATIVE_AUTHORITY",
+      "retrieval_bindings": [
+        {
+          "url": "https://homes.cs.washington.edu/~mernst/pubs/mutation-effectiveness-fse2014.pdf",
+          "sha256": "18c7f787b06ed6089ddec5771d931aef1c2f663285073d1cd8117120131e2951",
+          "bytes": 297046
+        }
+      ]
+    },
+    {
+      "id": "S2",
+      "title": "Are Mutation Scores Correlated with Real Fault Detection? A Large Scale Empirical Study on the Relationship Between Mutants and Real Faults",
+      "url": "https://orbilu.uni.lu/bitstream/10993/34950/1/ICSE-main18b%20%281%29.pdf",
+      "version": "Papadakis et al., ICSE 2018; DOI 10.1145/3180155.3180183; institutional final PDF read through web; hashed author-group preprint separately identified",
+      "decision": "REUSE_SIZE_CONTROL_AND_LIMIT_CLAIM",
+      "summary": "Using C and Java fault datasets, this study finds weaker associations after controlling test-suite size, while high-scoring suites can still improve detection. It explicitly compares its findings with Just et al.",
+      "limitations": [
+        "This is evidence to control suite size and report direct outcomes, not a Lean-specific effectiveness estimate.",
+        "Direct institutional download failed certificate verification; author-group preprint was hashed instead. Its placeholder conference typography is retained as a version difference, not treated as final typeset bytes."
+      ],
+      "locators": [
+        "Sections 3-5: size-controlled analysis",
+        "Sections 6-7: validity threats and conclusions",
+        "https://coinse.github.io/publications/pdfs/Papadakis2018hi.pdf"
+      ],
+      "reviewed_on": "2026-09-08",
+      "role": "METHOD_OR_TARGET_REVIEW_NOT_NORMATIVE_AUTHORITY",
+      "retrieval_bindings": [
+        {
+          "url": "https://coinse.github.io/publications/pdfs/Papadakis2018hi.pdf",
+          "sha256": "d1e292058054711e25eba801095c7d2d12e37baaf46c2c5f0527e7d228c4242c",
+          "bytes": 1831076
+        }
+      ]
+    },
+    {
+      "id": "S3",
+      "title": "Lean Language Reference: Validating a Lean Proof",
+      "url": "https://lean-lang.org/doc/reference/4.34.0-rc2/ValidatingProofs/",
+      "version": "4.34.0-rc2; initially discovered through latest alias; versioned HTML separately hashed",
+      "decision": "REUSE_TRUST_BOUNDARY_DISTINCTIONS",
+      "summary": "The manual distinguishes stored-proof replay from exported checking and trusted-statement matching. External checking retains assumptions about logic, plumbing, sandbox, shared bugs and interpretation.",
+      "limitations": [
+        "Current documentation is methods context only. It does not retroactively qualify any catalog entry or prove an executable profile refines the pinned declaration judgment."
+      ],
+      "locators": [
+        "Re-Checking Proofs with lean4checker",
+        "Gold Standard: comparator and external checkers",
+        "Remaining Issues"
+      ],
+      "reviewed_on": "2026-09-08",
+      "role": "METHOD_OR_TARGET_REVIEW_NOT_NORMATIVE_AUTHORITY",
+      "retrieval_bindings": [
+        {
+          "url": "https://lean-lang.org/doc/reference/4.34.0-rc2/ValidatingProofs/",
+          "sha256": "1212aab368f9f1518209c6a0e9bcef6a06d4a8102418bf58bf18a999ddbe6bc8",
+          "bytes": 133717
+        }
+      ]
+    },
+    {
+      "id": "S4",
+      "title": "Ferriprove source and readiness documentation",
+      "url": "https://github.com/ferriprove/ferriprove/tree/90d28c9183f69e8db58f517b5e3edce48b0edb3a",
+      "version": "90d28c9183f69e8db58f517b5e3edce48b0edb3a, commit 2026-04-27",
+      "decision": "EXCLUDE_CURRENT_TARGET",
+      "summary": "The pinned CLI main function only prints a placeholder. Parser and environment code exists, but that CLI supplies no checking path. README verification claims conflict with its unfinished milestone table and the soundness document reporting no verified components.",
+      "limitations": [
+        "No build or checker ran; this is a source-readiness boundary, not an observed rejection, exploit or soundness finding.",
+        "Nanoda is referenced as prior art and Lean4Lean as a proposed proof oracle; separate repository ownership cannot establish semantic independence."
+      ],
+      "locators": [
+        "ferriprove-cli/src/main.rs:6-8",
+        "ferriprove-export/src/lib.rs:parse_and_resolve",
+        "ferriprove-kernel/src/lib.rs:Environment",
+        "docs/SOUNDNESS.md:Formal Verification Status",
+        "README.md:Relationship to Existing Work and Status"
+      ],
+      "reviewed_on": "2026-09-08",
+      "role": "METHOD_OR_TARGET_REVIEW_NOT_NORMATIVE_AUTHORITY",
+      "retrieval_bindings": [
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/README.md",
+          "sha256": "abb3edbd66ca9cac2f7513b5a0ed240766dfc8090bb0e3a66888603a29f58279",
+          "bytes": 5110
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/ferriprove-cli/src/main.rs",
+          "sha256": "e640cce621ee634a9f3edda7dfeb1515d04fedf4d3f989f384aec5efa03aa6a0",
+          "bytes": 202
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/ferriprove-kernel/src/lib.rs",
+          "sha256": "e822bbdd9a8c5bd1434cdffbc3c6e808e9e7754c7a8cc3d4e897f53b254db718",
+          "bytes": 24743
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/ferriprove-export/src/lib.rs",
+          "sha256": "1e3683717ae508e5e667c72385737c834202553e0fd95bde038ef97b6ca8c938",
+          "bytes": 7576
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/Cargo.toml",
+          "sha256": "7459828e1ef112ad3317c67e66674ea1310cadc7761468ac821f1501cc811923",
+          "bytes": 1117
+        },
+        {
+          "url": "https://raw.githubusercontent.com/ferriprove/ferriprove/90d28c9183f69e8db58f517b5e3edce48b0edb3a/docs/SOUNDNESS.md",
+          "sha256": "d25c718a2540221965cddcfb335830bf27de335e742a8c9585f71fb36169279c",
+          "bytes": 5748
+        }
+      ]
+    },
+    {
+      "id": "S5",
+      "title": "Lean4Less translation framework",
+      "url": "https://github.com/Deducteam/Lean4Less/tree/5b66bbc4af5c2c11313fcfb5098630dadaf19281",
+      "version": "5b66bbc4af5c2c11313fcfb5098630dadaf19281, commit 2026-02-11",
+      "decision": "EXCLUDE_AS_INDEPENDENT_DROP_IN_CHECKER",
+      "summary": "The README identifies a modification of Lean4Lean that inserts explicit transports when translating to smaller theories. This can inform a later translation question, but it shares implementation ancestry and changes the checked object/theory.",
+      "limitations": [
+        "No isolated translation contract or independently validated target for this study is established. This exclusion is narrower than a claim that translation research lacks value."
+      ],
+      "locators": [
+        "README.md:opening description",
+        "README.md:Overview and Issues"
+      ],
+      "reviewed_on": "2026-09-08",
+      "role": "METHOD_OR_TARGET_REVIEW_NOT_NORMATIVE_AUTHORITY",
+      "retrieval_bindings": [
+        {
+          "url": "https://raw.githubusercontent.com/Deducteam/Lean4Less/5b66bbc4af5c2c11313fcfb5098630dadaf19281/README.md",
+          "sha256": "457d4af80f151de37ef1c73280b1e1d89ac56f1e9a0a1d68b68510b5024fe758",
+          "bytes": 10584
+        }
+      ]
+    }
+  ],
+  "search_scope": "Four queries; five source groups reviewed; one pinned implementation inspection. Bounded selection, not a systematic survey or global absence result.",
+  "excluded_discoveries": "Social posts, encyclopedias, course notes and Arena score pages were discovery results only; no claims rely on them."
+}

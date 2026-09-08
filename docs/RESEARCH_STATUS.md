@@ -50,6 +50,20 @@ research directions.
 
 ## Attempted
 
+- Completed `ALT-TRANSFER` on 2026-09-08 with `SUCCESS` for a bounded
+  feasibility assessment and **NO_GO** phase decision. Four fresh queries,
+  five primary-source groups, one pinned code inspection and the local exposure
+  audit exclude the three assessed routes: known observations, an unestablished
+  Ferriprove checker path, and Lean4Less ancestry/translation confounding.
+  No transfer design, checker/proof/build launch, scientific byte or external
+  research action occurred. No general impossibility claim is made. See the
+  [entry point](../results/research/alt-transfer-2026-09-08/README.md),
+  [result](../results/research/alt-transfer-2026-09-08/result.json), and
+  [queue review](../results/research/queue-reviews/2026-09-08-alt-transfer.json).
+  `TRANSFER-HOLDOUT-INTAKE-1` is selected WAITING for a supplied independent
+  input/custody package or concrete functioning target evidence and separate
+  authorization; no successor starts. Six pending survivors remain unchanged.
+
 - Completed `SURVIVOR-LET-ASSOCIATION-1` on 2026-09-08 with `SUCCESS`.
   The canonical registry now classifies `nanoda-gen-9face4e6a6f7` as
   `KILLED` / `MEANINGFUL_SEMANTIC` from the fresh fixed-pair result while
@@ -2336,7 +2350,7 @@ one pending identity, not a distinct upstream behavior. A new method or broader
 family requires its own scoped review. Existing Lean/Arena Waiting triggers and
 Kiota deferrals remain unchanged. Only `ALT-SURVIVORS` closes in this work.
 
-### Active
+### Completed predecessor — Survivor association, 2026-09-08
 
 1. `F-SURVIVOR-LET-ASSOCIATION` — the owner-authorized no-duplicate canonical
    association is complete under
@@ -2368,6 +2382,45 @@ unchanged. The planning proposal, prior CVC results,
 sixteen observer charges, failed/unknown costs and original CVC-4/CVC-5
 dependencies remain intact. Existing Lean/Arena Waiting triggers and Kiota
 deferrals are preserved.
+
+### Active
+
+1. `F-PROSPECTIVE-TRANSFER-ASSESSMENT` — the owner-authorized bounded
+   `ALT-TRANSFER` assessment is complete under
+   [docs/research/PROSPECTIVE_TRANSFER_ASSESSMENT_PLAN.md](research/PROSPECTIVE_TRANSFER_ASSESSMENT_PLAN.md).
+
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+
+Queue handoff: PAUSED.
+
+`ALT-TRANSFER` is COMPLETE with `SUCCESS` for an assessment and **NO_GO** for
+its three assessed routes. The existing four-checker known-case pool contains
+prior observed outcomes; Ferriprove's pinned CLI is a placeholder; Lean4Less
+shares Lean4Lean ancestry and changes the checked object/theory. None establishes
+both a usable target and a valid independent/unobserved comparison. This is a
+bounded eligibility decision, not a general negative transfer result. Prior
+M6/M7 scoped transfer evidence remains valid under its original feedback rules.
+
+The fresh methods review retains fault isolation, suite-size/coverage controls,
+direct outcome reporting and separate interpretation/checker trust boundaries.
+No design was frozen and no checker, proof, setup/build, new scientific byte or
+external research action ran. Read-only source requests and access failures are
+preserved in the [assessment package](../results/research/alt-transfer-2026-09-08/README.md).
+Required closure verification is recorded under
+`results/workflow-refresh/alt-transfer-2026-09-08/`.
+
+`TRANSFER-HOLDOUT-INTAKE-1` is selected WAITING and unstarted. Supply one
+owner-designated independently curated input/custody package or concrete new
+functioning target evidence, then separately authorize its one-hour metadata-only
+intake. No curator or package has been supplied. Do not repeat the completed
+search, unseal outcomes, build a checker or contact a provider to manufacture
+activity. A different named bounded direction may instead be authorized.
+
+All six pending survivors, current modeled population, historical study and
+conditional results, consumed/unknown costs, catalog authority and source locks
+remain unchanged. Existing Lean/Arena waiting triggers and Kiota deferrals are
+preserved. The exact accepted authority and entry state remain bound in
+[work-record.json](../results/research/alt-transfer-2026-09-08/work-record.json).
 
 ### Waiting
 
