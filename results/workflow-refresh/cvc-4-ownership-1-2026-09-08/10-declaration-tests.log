@@ -1,0 +1,43 @@
+...........................................................................................................................................................................F.F.................................F..................................................
+======================================================================
+FAIL: test_actual_gate_8_input_freeze_validates (test_declaration_validation_publication_study.DeclarationValidationPublicationStudyTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_declaration_validation_publication_study.py", line 316, in test_actual_gate_8_input_freeze_validates
+    self.assertEqual(validator.validate_gate8_input_freeze(check_generated=True), [])
+AssertionError: Lists differ: ['Gate-8 exact input freeze differs from the mechanical inventory'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'Gate-8 exact input freeze differs from the mechanical inventory'
+
+- ['Gate-8 exact input freeze differs from the mechanical inventory']
++ []
+
+======================================================================
+FAIL: test_actual_preregistration_validates (test_declaration_validation_publication_study.DeclarationValidationPublicationStudyTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_declaration_validation_publication_study.py", line 98, in test_actual_preregistration_validates
+    self.assertEqual(validator.validate_preregistration(), [])
+AssertionError: Lists differ: ['publication study is not the active durable research frontier'] != []
+
+First list contains 1 additional elements.
+First extra element 0:
+'publication study is not the active durable research frontier'
+
+- ['publication study is not the active durable research frontier']
++ []
+
+======================================================================
+FAIL: test_decision_and_report_cannot_be_relabelled_after_results (test_declaration_validation_publication_study_closure.PublicationStudyClosureTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_declaration_validation_publication_study_closure.py", line 46, in test_decision_and_report_cannot_be_relabelled_after_results
+    self.assertTrue(any('decision differs' in e for e in errors), errors)
+AssertionError: False is not true : ['publication study is not the active durable research frontier']
+
+----------------------------------------------------------------------
+Ran 258 tests in 347.196s
+
+FAILED (failures=3)

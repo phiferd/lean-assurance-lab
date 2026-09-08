@@ -363,3 +363,28 @@ successor. Retain a local regression plus finite report or bounded unresolved
 result, and perform the complete validation/handoff procedure above. Original
 CVC-4/CVC-5 dependencies remain unmet. No scientific variant, observer launch or
 external research action was performed by this review.
+
+## Ownership comparison closure and conditional phase decision — 2026-09-08
+
+`CVC-4-OWNERSHIP-1` completed SUCCESS: both fixed controls accepted, and both
+candidates reached the exact ownership refusal hypotheses after the sole
+parameter-record insertion. This supplies a local reproducible serialization
+regression; E-UNOWNED remains outside Supported, not semantically disproved.
+Four new plus twelve retained reservations exhaust the sixteen-launch combined
+ceiling. Original evidence and conditional assumptions remain unchanged.
+
+The [stopping review](../../results/research/queue-reviews/2026-09-08-cvc-4-ownership-1.json)
+selects `CVC-5-CONDITIONAL`, READY and unstarted, as a distinct existing-evidence
+successor to the shared-value/phase-decision question. Original CVC-4 and CVC-5
+remain PLANNED under unmet original dependencies. This is an explicit ranking
+decision after the fixed comparison, not an automatic further experiment.
+
+Use at most 3600 actual active seconds, including engineering, in intervals of
+at most 60 minutes. Produce one reusable entry point connecting the exact A7
+theorem/assumptions, three finite boundaries, raw observations and regression;
+state a concrete external-action recommendation or justified no-action result;
+compare continue/reuse/redirect/stop options and select a next item or explicit
+authority/state blocker. Use existing evidence only: zero new scientific bytes,
+observer/proof/setup/build/research-network launches or external actions. Do not
+activate a new semantic family or research theme. Apply the same required
+closure validation and handoff procedure; do not start it in this closure.

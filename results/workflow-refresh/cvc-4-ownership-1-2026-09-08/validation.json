@@ -1,0 +1,527 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-OWNERSHIP-1",
+  "status": "PASS",
+  "outcome": "SUCCESS",
+  "completed_at": "2026-09-08T12:41:40.503457+00:00",
+  "checks": [
+    {
+      "label": "01-queue",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/01-queue.json",
+        "bytes": 698,
+        "sha256": "43e06015c128366a0d0dc1c91f11318ddcd8c3444e8a1c704ad3c74261f3dbe8"
+      },
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "elapsed_seconds": 0.0551853752695024
+    },
+    {
+      "label": "02-queue-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/02-queue-tests.json",
+        "bytes": 787,
+        "sha256": "a481d3460a25684a841204ff2b79c174d7f763abce06ac60a54cd35e4b599771"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "elapsed_seconds": 0.1501241670921445
+    },
+    {
+      "label": "03-ownership-evidence",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/03-ownership-evidence.json",
+        "bytes": 713,
+        "sha256": "f8149970f57ff23a2479c57aaeeb0523be5f1f175bd3aed6dd1b0e49a0911557"
+      },
+      "command": [
+        "scripts/validate-cvc4-ownership"
+      ],
+      "elapsed_seconds": 10.584871166851372
+    },
+    {
+      "label": "04-predecessor-review",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/04-predecessor-review.json",
+        "bytes": 718,
+        "sha256": "5d6cb068b3bcd853ab9052df163ff51f7a1726c5e93920a458d426a7c45b806b"
+      },
+      "command": [
+        "scripts/validate-cvc4-adapter-review"
+      ],
+      "elapsed_seconds": 0.7653934583067894
+    },
+    {
+      "label": "05-historical",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/05-historical.json",
+        "bytes": 753,
+        "sha256": "02991afeb35e77f1a222260eb261e3ccd6c99f4f9c2165a78104856f85cafb44"
+      },
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "elapsed_seconds": 31.48692062497139
+    },
+    {
+      "label": "06-snapshot",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/06-snapshot.json",
+        "bytes": 743,
+        "sha256": "147978eb65f1b242d8589f29337ee9c14bea7824799d3fb6560989d93d91c904"
+      },
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 78.71605333313346
+    },
+    {
+      "label": "07-full-suite",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/07-full-suite.json",
+        "bytes": 863,
+        "sha256": "a0d0a45bee52d00518c06b4ed111e699bc8dc12ea4b24c7768517e5c6e04051d"
+      },
+      "command": [
+        "scripts/run-unit-tests-with-signal-retry",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 483.56844466598704
+    },
+    {
+      "label": "08-contribution",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/08-contribution.json",
+        "bytes": 729,
+        "sha256": "99c98d24e6de14493234768c43174cbbfbaf823e9433c713522b0a646903139d"
+      },
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "elapsed_seconds": 0.13688933290541172
+    },
+    {
+      "label": "09-catalog",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/09-catalog.json",
+        "bytes": 718,
+        "sha256": "7e461d9d870682e4f34e7c64f56bccbb744fbcaad67ec4a87f976815a6b15b0a"
+      },
+      "command": [
+        "scripts/validate-declaration-validation-catalog"
+      ],
+      "elapsed_seconds": 11.900556708220392
+    },
+    {
+      "label": "11-current-state",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/11-current-state.json",
+        "bytes": 803,
+        "sha256": "53acab5d9bd6d8bed9f7953e890f297cecb3387bd7343733f593198b57c386f1"
+      },
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/final-current-state"
+      ],
+      "elapsed_seconds": 84.39145241724327
+    },
+    {
+      "label": "12-project-review",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/12-project-review.json",
+        "bytes": 720,
+        "sha256": "cdc90366fd4cc6944e66ebb9fe1cdb40105f7b91bb76350e962a65cd43a11741"
+      },
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "elapsed_seconds": 27.693684292025864
+    },
+    {
+      "label": "13-artifact-status",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/13-artifact-status.json",
+        "bytes": 729,
+        "sha256": "f53e2da89b9d9b7419924182321c1867c04e1d9f7bba4f710f13492085bf5ed4"
+      },
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "elapsed_seconds": 11.242630125023425
+    },
+    {
+      "label": "14-diff-check",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/14-diff-check.json",
+        "bytes": 703,
+        "sha256": "752d65788315140cf3ee62b4b0cbc8794477e3da0d958f511de375338eea274a"
+      },
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "elapsed_seconds": 0.03952620830386877
+    },
+    {
+      "label": "15-portable-evidence",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/15-portable-evidence.json",
+        "bytes": 746,
+        "sha256": "24e7c569ed8cf1647ce1fa9b464ce9fb3281bb4e1c205c3474f0bc699b500f05"
+      },
+      "command": [
+        "scripts/validate-cvc4-ownership",
+        "--without-runtime-payloads"
+      ],
+      "elapsed_seconds": 10.167421542108059
+    }
+  ],
+  "source_manifest": {
+    "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/closure-code-bindings.json",
+    "bytes": 49444,
+    "sha256": "fb0d5e4fb95abde520c167bad20c12721c886e5a2f4afc4cecf30860e5385a0c"
+  },
+  "decision_manifest": {
+    "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/closure-decision-bindings.json",
+    "bytes": 2992,
+    "sha256": "ad9676f9eedfeb4b74204f8778c7a6366115334688e14137f767a42d458ad827"
+  },
+  "tests": {
+    "current": 707,
+    "historical": 73,
+    "total": 780,
+    "skips": 0,
+    "historical_transition_tests_unchanged": true
+  },
+  "research_accounting": {
+    "item_id": "CVC-4-OWNERSHIP-1",
+    "outcome": "SUCCESS",
+    "matrix_complete": true,
+    "research_counts": {
+      "byte_streams": 2,
+      "pairs": 1,
+      "observer_launches": 4,
+      "predecessor_observer_launches": 12,
+      "combined_observer_launches": 16,
+      "proof_builds": 0,
+      "setup_builds": 0,
+      "research_network_requests": 0
+    },
+    "accounting": {
+      "process_seconds": 0.13902070792391896,
+      "predecessor_process_seconds": 0.3862275807186961,
+      "combined_process_seconds": 0.5252482886426151,
+      "active_seconds_at_last_observation": 1324.73531,
+      "final_active_work_record": "results/research/conditional-validation-contracts/cvc-4-ownership-1/work-record.json",
+      "rule": "Final active time includes engineering and closure validation; administrative inert fixtures remain separate. Every predecessor charge remains unchanged."
+    }
+  },
+  "final_active_seconds": 2177.084173,
+  "work_record": {
+    "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/work-record.json",
+    "bytes": 3330,
+    "sha256": "e6f7a0cae8b520833f1151c5321823ebdc8c9caadba07486f91259d08543dcb1"
+  },
+  "administrative_fixtures": {
+    "allocation": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/administrative-fixture-allocation.json",
+    "reserved_launches": 23,
+    "reserved_seconds": 115,
+    "known_instrumented_charge_seconds": 7.239774124696851,
+    "reconciled": true
+  },
+  "evidence_bindings": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/cases.json",
+      "bytes": 3146,
+      "sha256": "2fa5a5cc830e5eef0435c330ae1ca47786fd74ae948de292e8f1a051d22a5a91"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/configurations/e-owned-control-param-record.json",
+      "bytes": 421,
+      "sha256": "d29e8f41f46a3bdc8dd00923aff0e49f5a36f50fd7cc91df7c072962aadf6037"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/configurations/e-unowned-param-record.json",
+      "bytes": 415,
+      "sha256": "9b22d6687b0bd8fbdd4de464fb1ad2a64f4ad58f848d1cf98d20e9d2cb5e680f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/entry-review.json",
+      "bytes": 3399,
+      "sha256": "bd3e1b73e0bcf40a554be3fd7a944613f1d9d344cba0228bb16751bee8960a90"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/independent-closure-review.json",
+      "bytes": 1784,
+      "sha256": "372951efcedf5b1ec8ac7c7211ba28ff6df96827c731cf3636e909cd1ef3fd1e"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/independent-input-review.json",
+      "bytes": 1690,
+      "sha256": "5b916b035df1963ff37c39a20ce2ba63698dfcbd43c0400ff6b9295e6b66eba5"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/inputs/e-owned-control-param-record.ndjson",
+      "bytes": 496,
+      "sha256": "34a064aa98b36774763a6cc178f88c084e963d026a5896cb887abed09d8cbb2f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/inputs/e-unowned-param-record.ndjson",
+      "bytes": 487,
+      "sha256": "208223d1c20b6886b2d0c69922a6a652d09cdf2ea630c7010f2becf1f7e8bd8e"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/predecessor.json",
+      "bytes": 1033,
+      "sha256": "1d86299611bf74826872161e5ee8f2e965b28a96b36155ecba95049104c2939d"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/prelaunch-tests.json",
+      "bytes": 3845,
+      "sha256": "c6a9440d4b8ec8c4280753ba7250814c6ea29884f2fe59991e14a5d45ca12352"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/prelaunch-tests.log",
+      "bytes": 188,
+      "sha256": "211f3f25b3a233e24cead4f97d84f51b6d1f0828bcdca6e4dfb970cc7ddf0651"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/prepare-manifest.py",
+      "bytes": 4881,
+      "sha256": "c82b0823d0e855d9f142dc87ebf88f4a1f034e9aafe2e076af80021b83f76b4f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/protocol.json",
+      "bytes": 4639,
+      "sha256": "9894edf67aa15e156ddae06e3cb8225b61a18194098b622cdb1709c61765b2a5"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/report.md",
+      "bytes": 3073,
+      "sha256": "a0ff41989d4a2272c0b2bb85ba95d46b4a0e0415be0cfecb90ac061053f6927f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/result.json",
+      "bytes": 10579,
+      "sha256": "71e43ef568f7faf8295663fe515ead41a21e495a8ffaea7dace54f6c6a218b3a"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/01/process.json",
+      "bytes": 186,
+      "sha256": "f087910268051a158f006d01f436c7a8465ec5b397eaa3f3484fd3725aed2555"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/01/request.json",
+      "bytes": 719,
+      "sha256": "d55012a07321e0765e537e27196e433a87793568f811fe657fe3e25b0b17c5c4"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/01/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/01/stdout",
+      "bytes": 25,
+      "sha256": "8905b995ad1f24eaa3febbfb9690c1665d2a5d3cfad78923f5673495e0dd43f2"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/01/supervisor.json",
+      "bytes": 593,
+      "sha256": "893d6338c6c16c3b08be69fe2aa0704e121a64518d9b843015e3c3641ce0d147"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/02/process.json",
+      "bytes": 186,
+      "sha256": "1da831198e0d4a64dd3c8db533a6b6460f1f4243beae71793277ae0a4c42612c"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/02/request.json",
+      "bytes": 728,
+      "sha256": "fa5ff6e6497c96194d115a6fa7d89fbbd9ff205664838167ea3ba784edf1725a"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/02/stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/02/stdout",
+      "bytes": 38,
+      "sha256": "a9afe4d37ecd98326f69a843a168ac994a12120107a93624db78671ab94b59c2"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/02/supervisor.json",
+      "bytes": 593,
+      "sha256": "bf031781b1dbeb40ce63d963336cee9d0b0d5fc6ef730da98871c2965974d2b5"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/03/process.json",
+      "bytes": 186,
+      "sha256": "cd2b9b1d16f164c4371c9fcc32972f8b9eed7b2e4ef5a0e12eed2dadb772d40c"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/03/request.json",
+      "bytes": 715,
+      "sha256": "f33b656c2a9cba586a7b1a8b16a1867997de685fd75c36ab931d3112ebe0008f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/03/stderr",
+      "bytes": 140,
+      "sha256": "fab49ad8fcb9d1e20dde7427a5d4ebfd4b903fd19d0845733c3994b5df2087e8"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/03/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/03/supervisor.json",
+      "bytes": 591,
+      "sha256": "01b9fe29396d2073eea175583485d02ffd8b742a86525c2f1c32e3f17342742b"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/04/process.json",
+      "bytes": 186,
+      "sha256": "285db23d34c5a10dc3e4d8069ebfbbf36e3af3d49a88952de7e9ae9aac7735b5"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/04/request.json",
+      "bytes": 722,
+      "sha256": "eb38494198366061c9d2cb776bae25e9fa22028228a51ee0e1afb9466a5f4c73"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/04/stderr",
+      "bytes": 337,
+      "sha256": "dcf627f3be5f3cba833c270452e5ccc38ce99de5bf8550b5842055da950f471c"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/04/stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/attempts/04/supervisor.json",
+      "bytes": 594,
+      "sha256": "d75661659fea27d4cb847e055f109243447ecedefd4e128918311914c07a220e"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/events.jsonl",
+      "bytes": 46354,
+      "sha256": "f1076cb3caf5aaf854ac25eabf2e250d6048d5464b921fe999853edf8957278d"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/start.json",
+      "bytes": 41781,
+      "sha256": "82a9cf43e1b164d91d8e9abe3efa48facdc2e045d320bce85aef01b9d8fc8fa4"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/run-0001/state.json",
+      "bytes": 18096,
+      "sha256": "e6fecccef390ba54b38011d59619a4526a4e2b88148a6edf4adc5697f5598a3f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/source-mapping.json",
+      "bytes": 17106,
+      "sha256": "ef698a6df0476078c63faae7c46f8defb1ee9818e977f41ce8e06ea11bf4d1da"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/work-baseline.json",
+      "bytes": 2640,
+      "sha256": "487c4446c75bc5741c17895b2e5bb041fbce9e4fdd44d9a89126b0f783ccd952"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/work-record.json",
+      "bytes": 3330,
+      "sha256": "e6f7a0cae8b520833f1151c5321823ebdc8c9caadba07486f91259d08543dcb1"
+    }
+  ],
+  "state_bindings": [
+    {
+      "path": "config/research-queue.json",
+      "bytes": 74826,
+      "sha256": "fff3968a3c663f8174015c499790523a95f9c4eaa4068e0cd670017bd6ac4f90"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 150336,
+      "sha256": "7efe1e5aaa081b9917c730c3d4da7cdbaa90c1883067a9351951d5e47a6ba06d"
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "bytes": 23874,
+      "sha256": "b21936353d423dc4593cc8db3a3825289711f0e1d5e1dc5df426372b7e1c16e4"
+    },
+    {
+      "path": "docs/PROJECT_REVIEW.md",
+      "bytes": 14345,
+      "sha256": "5a2941b23c8c035d8cb5f5484005a59ca2461db0eb11929d43cc7f3a62c05153"
+    },
+    {
+      "path": "docs/PUBLIC_STATUS.md",
+      "bytes": 2680,
+      "sha256": "a02a10eddc7d6eebc7bfe283082c2d9aac3ebd75cee8c590ec20ec505c485385"
+    },
+    {
+      "path": "results/artifacts/graph.json",
+      "bytes": 234899,
+      "sha256": "5654a63eeee013b1da425a34d3e69f3ff59e642659559a6e889bfac2fc597c12"
+    },
+    {
+      "path": "results/assurance/current.json",
+      "bytes": 39659,
+      "sha256": "9853c515c4dc0d9425aa0a4bf9df267da47e9ca7d11c4d78ea461f582fbfa9c3"
+    },
+    {
+      "path": "results/assurance/milestone-9.json",
+      "bytes": 2243,
+      "sha256": "a81cebfccd9462ff43dadd06ba5f012e2775f9fc6f7731cf9ee51eac8eba58f4"
+    },
+    {
+      "path": "results/research/project-review.json",
+      "bytes": 128821,
+      "sha256": "1961b1cfd8dbc07061f2633b873463a1cbe3f8c10d3fcdf04437e5f077c5fc92"
+    }
+  ],
+  "supplemental_validation_failure": {
+    "receipt": {
+      "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/10-declaration-tests.json",
+      "bytes": 803,
+      "sha256": "45fe2f74829d963a97735289ddcc9e6e011b9c1cf554b55eca486adfa1cc4ac4"
+    },
+    "diagnosis": {
+      "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/administrative-context-repair.json",
+      "bytes": 2660,
+      "sha256": "b6e4ff32b8310aac89eb378ece18806d1ec15f6d74bfcea5c3e23e0f30ad922b"
+    },
+    "resolution": "All three historical tests passed unchanged in the required attested full suite; no tests or gates weakened."
+  },
+  "finalizer_bindings": {
+    "path": "results/workflow-refresh/cvc-4-ownership-1-2026-09-08/closure-finalizer-bindings.json",
+    "bytes": 614,
+    "sha256": "cf2f66ffc7db217e4fc7dee6549f1c29e1bdb233716e9246fab5db1cac0b056f"
+  },
+  "completed_items": [
+    "CVC-4-OWNERSHIP-1"
+  ],
+  "next_selected_item": "CVC-5-CONDITIONAL",
+  "next_item_started": false,
+  "external_research_action": "NONE",
+  "delivery": "Final main commit and scripts/push-main verify delivery separately."
+}

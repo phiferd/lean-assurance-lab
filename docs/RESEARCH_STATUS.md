@@ -50,6 +50,19 @@ research directions.
 
 ## Attempted
 
+- Completed `CVC-4-OWNERSHIP-1` on 2026-09-08 with `SUCCESS`: both pinned
+  observers accepted the exact parameter-record control and then refused the
+  unowned candidate at their ownership checks. The serializer regression
+  preserves predecessor bytes and ASTs; no invalid accepted proof is shown.
+  Four new plus twelve old reservations reach the cumulative sixteen-launch
+  ceiling; new process time is 0.139021 seconds. See the
+  [result](../results/research/conditional-validation-contracts/cvc-4-ownership-1/result.json),
+  [report](../results/research/conditional-validation-contracts/cvc-4-ownership-1/report.md),
+  [review](../results/research/queue-reviews/2026-09-08-cvc-4-ownership-1.json), and
+  [validation](../results/workflow-refresh/cvc-4-ownership-1-2026-09-08/validation.json).
+  `CVC-5-CONDITIONAL` is selected READY and unstarted for a bounded
+  existing-evidence reuse package and phase decision; no new experiment starts.
+
 - Contributed declaration-level evidence on 2026-09-08 to the existing
   [Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955)
   normalization issue. The comment links the exact CVC-4 right-successor
@@ -2014,7 +2027,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-4-OWNERSHIP-1`.
+Selected next item: `CVC-5-CONDITIONAL`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -2119,17 +2132,31 @@ witness includes an axiom and `Expr.const`, so it cannot directly replace the
 fixed empty-environment Sort pair. The marginal value is a reproducible
 serialization regression and one finite ownership-boundary comparison.
 
-`CVC-4-OWNERSHIP-1` is selected ACTIVE under the exact
-[proposal](../results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json).
-Its preparation gate is this completed review and required validation; observer
-feedback additionally requires committed exact bytes, preserved ASTs and
-observer/runtime hashes, output hypotheses, tested controller and entry review.
-Both fresh controls must accept before either candidate. The bound is one pair,
-two new streams, two lineages, four launches of at most 30 seconds and 5400
-actual active seconds including engineering. Twelve old charges plus at most
-four new reservations stay within sixteen cumulative observer launches; old
-terminal IDs and unused slots are never resumed. Proof/setup/research-network
-launches remain zero, and administrative fixtures need a separate finite binding.
+`CVC-4-OWNERSHIP-1` is COMPLETE with `SUCCESS`. The exact sole unused-`v`
+level insertion preserves every old byte in order and the fixed name, ordered
+parameters, value and type syntax. Both pinned observers accepted fresh owned
+controls before either candidate. Official refused unowned `u`; Nanoda reached
+the ownership assertion at `tc.rs:520`, beyond its prior `parser.rs:506` failure.
+The candidate remains CHECKED_UNSUPPORTED, not a checked invalid proof.
+
+The four new reservations plus twelve preserved predecessor reservations use the
+cumulative sixteen-launch ceiling. New process time is 0.13902070792391896 seconds;
+combined process time is 0.5252482886426151 seconds. Final active work, including
+engineering and closure validation, is recorded in the
+[work record](../results/research/conditional-validation-contracts/cvc-4-ownership-1/work-record.json).
+No proof, setup or research-network launch ran. See the
+[result](../results/research/conditional-validation-contracts/cvc-4-ownership-1/result.json),
+[report](../results/research/conditional-validation-contracts/cvc-4-ownership-1/report.md),
+[review](../results/research/queue-reviews/2026-09-08-cvc-4-ownership-1.json), and
+[validation](../results/workflow-refresh/cvc-4-ownership-1-2026-09-08/validation.json).
+
+`CVC-5-CONDITIONAL` is selected READY and unstarted: one existing-evidence
+consolidation and phase decision, capped at 3600 actual active seconds with zero
+new byte variants, observer/proof/setup/research-network launches or external
+actions. It will tie the checked conditional result, assumptions and finite
+boundaries to the reusable local regression and decide the phase's next value.
+No further scientific comparison or new semantic family is selected. Original
+CVC-4/CVC-5 dependencies remain unchanged.
 
 The review created no new scientific bytes or observer outcome. A7, the checked
 proof, old parser/reporting failures and all prior costs remain unchanged.
