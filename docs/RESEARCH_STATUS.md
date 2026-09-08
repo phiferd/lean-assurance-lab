@@ -50,6 +50,20 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-LET-REUSE-1` on 2026-09-08 with `SUCCESS` for the
+  exact existing-regression comparison. Both the pinned baseline and freshly
+  built `nanoda-gen-9face4e6a6f7` accepted the 601-byte control. The baseline
+  candidate reached the source-bound let-value `assert_def_eq` refusal, while
+  the mutant accepted. One overly strict output normalizer classified the first
+  baseline receipt as `CRASH`; that receipt and cost remain, and a committed
+  tooling revision replayed only that cell. See the
+  [result](../results/research/survivor-let-reuse-1/result.json),
+  [report](../results/research/survivor-let-reuse-1/report.md), and
+  [association recommendation](../results/research/survivor-let-reuse-1/association-recommendation.json).
+  Canonical classifications remain unchanged because the frozen admission
+  producer accepts only its two historical witnesses. `SURVIVOR-LET-ASSOCIATION-1`
+  is selected WAITING for a separately authorized no-duplicate successor.
+
 - Completed `ALT-SURVIVORS` on 2026-09-08 with `SUCCESS` for a fixed
   existing-regression reuse proposal. It selects `nanoda-gen-9face4e6a6f7`,
   preserving all seven pending classifications. The exact let pair, pinned
@@ -2308,30 +2322,35 @@ Kiota deferrals remain unchanged. Only `ALT-SURVIVORS` closes in this work.
 
 ### Active
 
-1. `F-SURVIVOR-LET-REUSE` — owner-authorized execution under
+1. `F-SURVIVOR-LET-REUSE` — the owner-authorized fixed execution is complete
+   under
    [docs/research/SURVIVOR_LET_REUSE_PLAN.md](research/SURVIVOR_LET_REUSE_PLAN.md).
 
-Selected next item: `SURVIVOR-LET-REUSE-1`.
+Selected next item: `SURVIVOR-LET-ASSOCIATION-1`.
 
-Queue handoff: EXECUTABLE.
+Queue handoff: PAUSED.
 
-The owner explicitly authorized this exact fixed proposal on 2026-09-08; see
-[entry decision](../results/research/survivor-let-reuse-1/entry-decision.json).
-The item is ACTIVE with one live 5400-second work interval including engineering
-and closure. Only the exact 9face mutation and existing 601-byte pair are in scope.
-G1-G7 require committed source, runtime, dedicated tooling/tests and manifests,
-a counted isolated offline build, and two accepted controls before candidates.
-Caps remain two 120-second builds and eight 30-second checker reservations.
-No scientific export variant, proof, research network or external research action
-is authorized. Root alone owns launches. Ordinary engineering repairs stay in
-this item with all prior inputs, failures and costs retained.
+`SURVIVOR-LET-REUSE-1` is COMPLETE with `SUCCESS`. The exact fixed matrix
+distinguishes the selected 9face guard mutant: both controls accepted, the
+baseline candidate followed the bound let-value refusal path, and the mutant
+candidate accepted. One offline build and five checker reservations consumed
+15.865707375 process seconds, including a retained output-attribution replay.
+No new scientific export bytes, proof, research network request, official
+observer run, external action or upstream report occurred.
 
-Close this one bounded item with fresh raw comparison and local reuse association
-recommendation or bounded unresolved result. Historical admission remains intact;
-any canonical promotion must pass its append-only route and transition checks.
-Select the next item without starting it. The planning proposal and prior CVC
-results, sixteen observer charges, unknown costs and original dependencies remain
-unchanged. Existing Lean/Arena Waiting triggers and Kiota deferral are preserved.
+`SURVIVOR-LET-ASSOCIATION-1` is selected WAITING and unstarted. The historical
+admission producer is frozen around f19 and 21ef and accepts only its exact
+604-line predecessor or two-row successor. It cannot append 9face while reusing
+the existing pair without a new tested producer and historical-transition
+check. The next bounded item would implement that no-duplicate association
+route with zero research launches. It requires separate owner authorization;
+the successful comparison does not itself authorize canonical classification.
+
+The seven pending survivors, live registry, modeled population and historical
+admission bytes remain unchanged. The planning proposal, prior CVC results,
+sixteen observer charges, failed/unknown costs and original CVC-4/CVC-5
+dependencies remain intact. Existing Lean/Arena Waiting triggers and Kiota
+deferrals are preserved.
 
 ### Waiting
 

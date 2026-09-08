@@ -20,13 +20,19 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Focused contributions are awaiting upstream review | Respond to substantive Arena review and record final dispositions before proposing related external actions. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused and restore CLI-first GitHub operation before further external work. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete SURVIVOR-LET-REUSE-1: Attribute the existing let regression to the fixed pending guard mutant; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | PAUSED: no executable item | Authorize SURVIVOR-LET-ASSOCIATION-1, redirect to another named bounded item, or retain the pause. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **SURVIVOR-LET-REUSE-1**.
+**Queue execution is PAUSED; no executable item is selected.**
+
+**Blocker:** Separate owner authorization is required for canonical association work. The current item deliberately preserved the seven pending classifications and frozen admission producer.
+
+**Required decision:** Authorize SURVIVOR-LET-ASSOCIATION-1, redirect to another named bounded item, or retain the pause.
+
+Selected blocked decision: **SURVIVOR-LET-ASSOCIATION-1**. Resolve the recorded blocker and update the canonical queue before execution.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -34,8 +40,8 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 |---|---|---|
 | 18 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 19 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 21 | SURVIVOR-LET-REUSE-1: Attribute the existing let regression to the fixed pending guard mutant | ACTIVE |
-| 22 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
+| 22 | SURVIVOR-LET-ASSOCIATION-1: Admit the fixed survivor association without duplicating corpus bytes | WAITING |
+| 23 | ALT-TRANSFER: Assess a prospective transfer study | DEFERRED |
 
 ### 18. CVC-4: Connect the contract to real validation behavior
 
@@ -69,23 +75,23 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 21. SURVIVOR-LET-REUSE-1: Attribute the existing let regression to the fixed pending guard mutant
+### 22. SURVIVOR-LET-ASSOCIATION-1: Admit the fixed survivor association without duplicating corpus bytes
 
-**Target:** nanoda-gen-9face4e6a6f7 with the exact existing 601-byte 21ef mismatch/control pair
+**Target:** nanoda-gen-9face4e6a6f7 and the successful SURVIVOR-LET-REUSE-1 comparison against the already admitted 21ef pair
 
-Prepare committed dedicated controls, derive the exact selected mutant with a counted offline build, and execute only the fixed four-cell comparison under the owner-authorized proposal.
+After separate owner authorization, implement and test a successor association/admission validator that binds the fresh result, reuses the exact existing corpus artifacts, appends the mutation classification, and preserves historical admission bytes.
 
-**Why this rank:** Highest next decision: existing pair, pinned source and a source-supported predicate relationship make attribution bounded and concrete. Cache, universe, free-variable and thread alternatives need additional witness or reachability design; upstream work has no new recorded trigger.
+**Why this rank:** Highest next value after the successful fixed comparison. The present frozen admission producer is hardcoded to f19 and 21ef and cannot append 9face without invalidating historical producer bindings or generating duplicate corpus artifacts. A bounded successor can resolve that exact local gap; other survivors still need witness design and upstream work has no new trigger.
 
-**Completion:** Attributable fixed-pair raw comparison and local existing-regression association recommendation, or explicit bounded unresolved result with retained costs and cause; required durable closure checks.
+**Completion:** A tested no-duplicate successor association record, append-only canonical classification update, unchanged historical admission validation, refreshed modeled population and durable closure; or a bounded unresolved result naming the exact remaining canonical gap.
 
-**Stop:** Owner-authorized execution: at most 5400 cumulative active seconds including engineering, two offline builds <=120 seconds each, eight checker reservations <=30 seconds each, exactly one pair and one selected mutation; no new export variants, proof, network or external research action. Stop at fixed result or real cap/input/authority/payload boundary; repair ordinary engineering within the same item and retained budgets.
+**Stop:** No work starts while WAITING. After authorization: one 90-minute implementation session, zero checker/build/proof/network/external launches, zero new corpus byte variants, and no edit to frozen historical admission evidence. Stop after successful current-plus-historical transition or a concrete unrepairable admission boundary.
 
-**Execution:** At most 1 sessions of 90 active minutes; 8 validator launches. Additional plan limits apply.
+**Execution:** At most 1 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** ACTIVE: Owner explicitly authorized SURVIVOR-LET-REUSE-1 on 2026-09-08; entry-decision.json binds the exact proposal. G1-G7 remain mandatory before dependent launches.
+**Boundary:** WAITING: Separate owner authorization of this bounded successor. SURVIVOR-LET-REUSE-1 SUCCESS supplies evidence, not authority to modify canonical classification. Read the declaration-validation adjudication skill before changing declaration-validation catalog or evidence state; bind a new producer and historical-transition check rather than editing frozen admission tooling.
 
-### 22. ALT-TRANSFER: Assess a prospective transfer study
+### 23. ALT-TRANSFER: Assess a prospective transfer study
 
 **Target:** One independent or held-out transfer question
 
@@ -141,6 +147,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS. Selected next item: SURVIVOR-LET-REUSE-1 (ACTIVE).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1. Selected next item: SURVIVOR-LET-ASSOCIATION-1 (WAITING).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

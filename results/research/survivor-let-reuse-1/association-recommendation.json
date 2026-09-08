@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-LET-REUSE-1",
+  "decision": "RECOMMENDED_PENDING_SUCCESSOR",
+  "target": "nanoda-gen-9face4e6a6f7",
+  "evidence": {
+    "existing_candidate": {
+      "path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+      "bytes": 601,
+      "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+    },
+    "existing_control": {
+      "path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+      "bytes": 601,
+      "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"
+    },
+    "fresh_execution": {
+      "path": "results/research/survivor-let-reuse-1/run-0001/execution/events.jsonl",
+      "bytes": 13332,
+      "sha256": "96a34373e1e41d5eccd557ee907ae83bf72fbf4deef2b85b19c2ae8fe5732d9a"
+    }
+  },
+  "action": "Implement and test a bounded successor association/admission route that reuses these exact corpus bytes without a duplicate artifact.",
+  "admission_blocker": {
+    "path": "scripts/build-witness-admission",
+    "bytes": 15838,
+    "sha256": "64e1ef4f50d1f9bc39ab06cabafacf9df464b40f9aa55d6d5c3f79815a00be02",
+    "reason": "The frozen admission producer accepts only f19 and 21ef and only its 604-line predecessor or exact two-row successor. Editing it would invalidate historical producer bindings."
+  },
+  "preserved_state": {
+    "classification": "SURVIVED_WITHOUT_WITNESS",
+    "pending_survivors": 7,
+    "registry_appends": 0,
+    "duplicate_corpus_artifacts": 0,
+    "external_actions": 0
+  }
+}

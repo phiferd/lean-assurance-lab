@@ -1,0 +1,231 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-LET-REUSE-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-08T15:37:49.837094+00:00",
+  "result": "SUCCESS",
+  "scientific_process_seconds": 15.865707375109196,
+  "work": {
+    "path": "results/research/survivor-let-reuse-1/work-record.json",
+    "bytes": 893,
+    "sha256": "14c6611d121f8cdc238ab3273103f97a55bad3d543f83ce96007f0feb9a163a5"
+  },
+  "work_closure": {
+    "path": "results/research/survivor-let-reuse-1/work-closure.json",
+    "bytes": 754,
+    "sha256": "fa479f00d8c452f385e052b1bb1f18b8184272b6bcfe4ecc73d2e7d4695dfdc3"
+  },
+  "total_active_seconds": 5168.441580541898,
+  "active_limit_seconds": 5400,
+  "full_suite": {
+    "current_tests": 770,
+    "historical_tests": 73,
+    "total_tests": 843,
+    "skips": 0,
+    "passing_record": {
+      "path": "results/workflow-refresh/survivor-let-reuse-1-repair-1-2026-09-08/12-full-suite.json",
+      "bytes": 723,
+      "sha256": "88de91d8336043927948451317e31f626c0cd470e95d6066b000a313d8010f22"
+    },
+    "passing_log": {
+      "path": "results/workflow-refresh/survivor-let-reuse-1-repair-1-2026-09-08/12-full-suite.log",
+      "bytes": 117753,
+      "sha256": "fff963f771d807f9f93a39e5191c11dfa77f1ec156ab28ada1a2cd3cb4feb3fc"
+    },
+    "fixtures_reconciled": true,
+    "fixture_launches": 23,
+    "fixture_charge_seconds": 7.168988084420562
+  },
+  "retained_failure": {
+    "record": {
+      "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/10-full-suite.json",
+      "bytes": 641,
+      "sha256": "19a55e4af625c55c942964d815f880290e01eb981f3f5e0428de58e8279cc6cb"
+    },
+    "log": {
+      "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/10-full-suite.log",
+      "bytes": 118318,
+      "sha256": "8c9b2b95bcdb01d0a980c114ea8bb9975dac6b54e18de15b7a9d783d00a99247"
+    },
+    "failure": "Historical planning-frontier test fixture inherited successor frontier; repaired by explicitly restoring the planning frontier in the copied fixture.",
+    "fixtures_reconciled": true,
+    "fixture_launches": 23,
+    "fixture_charge_seconds": 7.253551126457751
+  },
+  "aggregate_administrative_reservations": {
+    "full_suite_runs": 2,
+    "fixture_launches": 46,
+    "fixture_seconds": 230,
+    "known_instrumented_charge_seconds": 14.422539210878313
+  },
+  "checks": {
+    "initial_batch": [
+      {
+        "command": [
+          "python3",
+          "tests/test_survivor_let_result.py"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/01-result-tests.json",
+          "bytes": 503,
+          "sha256": "6d329e8414602e40b399555e36514b4603d38fc47900fe7570d57dc0f0e014a9"
+        }
+      },
+      {
+        "command": [
+          "scripts/build-survivor-let-result",
+          "--check"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/02-result-check.json",
+          "bytes": 500,
+          "sha256": "45e61d9b534d02b302c12aa6c3fa640e54e65e1123b706a2aedc064311f2e727"
+        }
+      },
+      {
+        "command": [
+          "scripts/validate-research-queue"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/03-queue.json",
+          "bytes": 479,
+          "sha256": "5f3a0fcd5d0e506458e905347973d1e25bff39e92b161a6be5c855cc8379ab14"
+        }
+      },
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_research_queue*.py"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/04-queue-tests.json",
+          "bytes": 566,
+          "sha256": "7bad9feb026a6f9fb490ce0bcbbb33b3182a018387af5e055b4d1caecf99f3b4"
+        }
+      },
+      {
+        "command": [
+          "scripts/close-declaration-validation-publication-study",
+          "validate-historical"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/05-historical.json",
+          "bytes": 532,
+          "sha256": "65a9219bbd57e6d26d8e6a5f5c2547498764871a83ab3b3a95dd124d2481cfa0"
+        }
+      },
+      {
+        "command": [
+          "scripts/validate-publication-study-snapshot",
+          "--require-full-payload"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/06-publication-snapshot.json",
+          "bytes": 533,
+          "sha256": "c81a7a9bd0dfc4008fd667b773a468e9a6bd445566ce6c83eb3903d0b39df5e0"
+        }
+      },
+      {
+        "command": [
+          "scripts/validate-contribution",
+          "--check-catalog"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/07-contribution.json",
+          "bytes": 507,
+          "sha256": "5ffa731425f328819af6904ad3ad6035991efbfe19a7c9444bc8a249b90b6590"
+        }
+      },
+      {
+        "command": [
+          "scripts/validate-cvc5-package"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/08-cvc5.json",
+          "bytes": 476,
+          "sha256": "3aceb6955da0d4986a76396d57195af3fe595cbd9564e460f8f3d72f251aaefd"
+        }
+      },
+      {
+        "command": [
+          "scripts/validate-survivor-proposal"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-2026-09-08/09-survivor-proposal.json",
+          "bytes": 494,
+          "sha256": "641e9be5111868733ab0e28184e8b94f21baa26b280e3e8ae0bdf99e82a57b64"
+        }
+      }
+    ],
+    "repair_batch": [
+      {
+        "command": [
+          "python3",
+          "-m",
+          "unittest",
+          "discover",
+          "-s",
+          "tests",
+          "-p",
+          "test_survivor_proposal.py"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-repair-1-2026-09-08/11-proposal-repair.json",
+          "bytes": 580,
+          "sha256": "7554ee3b6bf65cad0f8c4403658ded6cb2438e6dcf2c1e8cc1ddecd6c774cd12"
+        }
+      },
+      {
+        "command": [
+          "scripts/run-unit-tests-with-signal-retry",
+          "--require-full-payload"
+        ],
+        "status": "PASS",
+        "record": {
+          "path": "results/workflow-refresh/survivor-let-reuse-1-repair-1-2026-09-08/12-full-suite.json",
+          "bytes": 723,
+          "sha256": "88de91d8336043927948451317e31f626c0cd470e95d6066b000a313d8010f22"
+        }
+      }
+    ],
+    "refresh_current_state": {
+      "path": "results/workflow-refresh/survivor-let-reuse-1-final-2026-09-08/result.json",
+      "bytes": 2919,
+      "sha256": "2b105ef2ca722fb0b4fb88d5ed661d1a0b54c8b910f8390b67d06906464a2a00"
+    },
+    "post_close": [
+      "scripts/validate-research-queue",
+      "scripts/build-survivor-let-result --check",
+      "scripts/build-project-review --check",
+      "scripts/artifact-status --require-current"
+    ]
+  },
+  "historical_transitions": "Required current and frozen historical transition tests passed in the 843-test full suite.",
+  "preserved_state": {
+    "pending_survivors": 7,
+    "registry_changed": false,
+    "duplicate_corpus_artifacts": 0,
+    "external_actions": 0
+  },
+  "next_item": {
+    "id": "SURVIVOR-LET-ASSOCIATION-1",
+    "status": "WAITING",
+    "started": false
+  }
+}

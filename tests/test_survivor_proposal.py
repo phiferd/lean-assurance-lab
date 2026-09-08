@@ -145,6 +145,10 @@ class SurvivorProposalTests(unittest.TestCase):
             validate(self.root)
 
     def test_planning_cannot_promote_classification(self):
+        queue_path = self.root / "config/research-queue.json"
+        queue = json.loads(queue_path.read_text())
+        queue["frontier_id"] = "F-SURVIVOR-TRIAGE-PROPOSAL"
+        queue_path.write_text(json.dumps(queue))
         path = self.root / "results/assurance/current.json"
         value = json.loads(path.read_text())
         value["mutation_testing"]["pending_survivor_triage"]["count"] = 6
