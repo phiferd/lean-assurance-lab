@@ -1,0 +1,153 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-ADAPTER-REVIEW",
+  "outcome": "SUCCESS",
+  "scientific_status": "EXISTING_EVIDENCE_INPUT_TRANSITION_REVIEW_ONLY",
+  "decision": "SUCCESSOR",
+  "contract_id": "CVC-U1-A7",
+  "proposal": "successor-proposal.json",
+  "evidence_manifest": "evidence-manifest.json",
+  "work_record": "work-record.json",
+  "finding": "The fixed ownership pair preserves its intended referenced syntax but omits an interned level for declared unused v. Nanoda fails at parser.rs:506 before declaration checking. Inserting one fresh unused v level per stream addresses that exact source precondition without changing the model AST; actual parser success and subsequent ownership behavior are unobserved.",
+  "source_claims": [
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-parser.rs",
+      "lines": [
+        500,
+        509
+      ],
+      "claim": "Every declared universe name must resolve to an already interned Level::Param."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-parser.rs",
+      "lines": [
+        637,
+        643
+      ],
+      "claim": "LevelParam inserts that exact constructor and asserts the assigned level index."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-parser.rs",
+      "lines": [
+        783,
+        791
+      ],
+      "claim": "Definition reconstruction resolves uparams before inserting the declaration."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-tc.rs",
+      "lines": [
+        161,
+        182
+      ],
+      "claim": "Header checking infers the declaration type before later value checking."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-tc.rs",
+      "lines": [
+        518,
+        524
+      ],
+      "claim": "infer_sort asserts that the level is defined by declaration uparams; candidate refusal here is a source hypothesis, not an observation."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-parser.rs",
+      "lines": [
+        103,
+        115
+      ],
+      "claim": "Level indices must be unique and continuous. The retained zero/u/succ-u table makes unused v the next index 3."
+    },
+    {
+      "source": "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/sources/nanoda-level.rs",
+      "lines": [
+        139,
+        146
+      ],
+      "claim": "Level ownership recursively requires each referenced parameter pointer in the declaration parameter list."
+    }
+  ],
+  "alternatives": [
+    {
+      "id": "MINIMAL_OWNERSHIP_SUCCESSOR",
+      "rank": 1,
+      "decision": "SELECT",
+      "value": "Produces a reusable exact serialization regression and separates the exporter/import precondition from the same model ownership boundary. Four launches suffice for fresh controls and the two unobserved candidates; existing binaries and supervision avoid builds.",
+      "cost_or_limit": "Marginal semantic information is modest: model ownership and source checks are already known; no general refinement follows."
+    },
+    {
+      "id": "STOP_AND_REUSE_EXISTING_EVIDENCE",
+      "rank": 2,
+      "decision": "RETAIN_AS_FALLBACK",
+      "value": "The model proof, two completed pairs, parser diagnosis and existing Arena imax contribution already explain substantial scope; stopping avoids more infrastructure.",
+      "cost_or_limit": "Leaves the exact ownership comparison and serializer regression without executed confirmation. The precisely bounded insertion and four-launch cost justify one last comparison; another failure does not automatically justify another successor. The existing nanoda-0003-undeclared-const-universe witness includes an axiom and Expr.const; it cannot replace the fixed empty-environment Sort-definition example without changing the fragment."
+    },
+    {
+      "id": "REBUILD_OR_WRAP_OBSERVER",
+      "rank": 3,
+      "decision": "REJECT",
+      "value": "Could bypass the importer prerequisite.",
+      "cost_or_limit": "Changes observer identity or hides changed actual input; greater cost and weaker attribution than explicit new stream bytes."
+    },
+    {
+      "id": "NEW_SEMANTIC_FAMILY_OR_NEW_PROOF",
+      "rank": 4,
+      "decision": "DEFER",
+      "value": "Could broaden contract reach.",
+      "cost_or_limit": "Outside this review and higher cost; A7 and runtime refinement gaps would remain."
+    }
+  ],
+  "literature_review": {
+    "decision": "REUSE_CURRENT_BOUND_ASSESSMENT",
+    "basis": "The September 6 CVC-1 reuse and A7 assumption reviews are less than 30 days old. No new theory, method or general representation is adopted: retain the exact existing NDJSON constructor and model; no claim of a fresh upstream survey or global novelty."
+  },
+  "recommendation": {
+    "action": "Implement and characterize the single exact ownership-input successor after committed prelaunch gates.",
+    "target": "CVC-4-OWNERSHIP-1, same CVC-U1-A7 Sort pair and same official/Nanoda observers",
+    "priority": 1,
+    "prerequisites": [
+      "Complete and deliver CVC-4-ADAPTER-REVIEW with required validation. Start a distinct work record only when the successor is requested or otherwise authorized.",
+      "Generate exactly the two proposed byte streams in new paths. Mechanically verify deletion of the sole inserted line recovers each predecessor byte-for-byte; verify fresh level index, declared v identity and absence of references to the inserted index in every original expression/level record.",
+      "Independently compare name, ordered parameter list, value and type syntax to the fixed ASTs. The unchanged strict decoder must accept the owned control and reject the candidate for unowned u. A raw dependency projection is supplementary syntax evidence only; never relax the original decoder or reclassify the candidate as supported.",
+      "Bind hashes of both new streams, all configurations, observer/runtime payloads, exact output hypotheses and source locators, controller/test sources and work baseline. Preserve all prior bindings and distinguish new Lab-authored streams from exporter provenance.",
+      "Reuse the existing process supervisor/accounting with a new manifest and minimal controller adaptation. Pure regressions must cover the exact insertion invariant, candidate/control order, missing or malformed output and cumulative caps. Bind a separate finite inert-fixture allocation before any needed process tests; scientific caps grant no extra fixtures.",
+      "Commit the tested controller, scientific inputs, source mapping, manifest and entry review before any observer feedback. Read-only hash and frozen-predecessor validation must pass; unavailable payloads or changed bytes cannot be repaired by builds, network or substitution under this item."
+    ],
+    "evidence_refs": [
+      "results/research/conditional-validation-contracts/cvc-4-conditional/result.json",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/report.md",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/adapter-boundary.json",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/adapter-boundary-review.md",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/cases.json",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/mapping/mapping.json",
+      "results/research/conditional-validation-contracts/cvc-4-conditional/revision-02/protocol.json",
+      "config/cvc4-u1-a7-0002.json",
+      "config/cvc-u1-a7-proof-0002.json",
+      "results/research/conditional-validation-contracts/cvc-a7-repair-1/result.json",
+      "results/research/conditional-validation-contracts/cvc-2/examples.json",
+      "results/research/conditional-validation-contracts/cvc-2/contract.json",
+      "results/research/conditional-validation-contracts/cvc-1/assessment.json",
+      "results/workflow-refresh/cvc-4-conditional-2026-09-07/validation.json",
+      "corpus/generated/nanoda-0003-undeclared-const-universe.ndjson"
+    ]
+  },
+  "external_action": {
+    "decision": "NO_EXTERNAL_ACTION_NOW",
+    "reason": "Existing evidence establishes a Lab-authored stream/importer mismatch and a partial comparison. It supplies no invalid accepted proof or new universal defect. Any later contribution requires its own exact target review and authorization."
+  },
+  "research_counts": {
+    "byte_variants": 0,
+    "observer_launches": 0,
+    "proof_builds": 0,
+    "setup_launches": 0,
+    "research_network_launches": 0
+  },
+  "next_item_started": false,
+  "limitations": [
+    "No generated successor bytes or new observer outcomes exist in this review.",
+    "E-UNOWNED is CHECKED_UNSUPPORTED, not a checked semantically invalid proof. Its referenced Sort levels satisfy the same equality; ownership is the missing support condition.",
+    "The owned control is MODEL_VALID_BY_DEFINITION, not an added checked finite required-acceptance theorem.",
+    "No parser/importer or executable refinement, source-to-binary correspondence, A7 discharge, consistency, universal ownership normativity or validator defect is established.",
+    "The catalog ownership entry remains PROVISIONAL. Existing Arena imax contribution and withdrawn defect recommendations remain unchanged."
+  ]
+}

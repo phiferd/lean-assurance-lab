@@ -1,0 +1,18 @@
+#!/usr/bin/env python3
+"""Check existing-evidence decision and its generated report; no research launches."""
+import argparse
+import json
+from pathlib import Path
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.cvc4_adapter_review import BASE, render, require, validate
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--write', action='store_true', help='write the derived review report')
+args = parser.parse_args()
+result = validate(ROOT)
+path, expected = ROOT / BASE / 'report.md', render(ROOT)
+if args.write:
+    path.write_text(expected)
+require(path.read_text() == expected, 'review report is stale')
+print(json.dumps(result, indent=2))

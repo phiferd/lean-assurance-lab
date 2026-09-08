@@ -1,0 +1,329 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-ADAPTER-REVIEW",
+  "status": "PASS",
+  "outcome": "SUCCESS",
+  "decision": "SUCCESSOR",
+  "completed_at": "2026-09-08T02:31:55.753628+00:00",
+  "checks": [
+    {
+      "label": "01-queue",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/01-queue.json",
+        "bytes": 705,
+        "sha256": "9dd23d89165f8b878c69fa20f1b5579c29527024531950d79c96610533413a78"
+      },
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "elapsed_seconds": 0.05729304114356637
+    },
+    {
+      "label": "02-review-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/02-review-tests.json",
+        "bytes": 799,
+        "sha256": "f46e8b3814b2a3a7c5f40a5348d82a58b36cbe44d5371038f5dfec9c75af2dbc"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_cvc4_adapter_review.py"
+      ],
+      "elapsed_seconds": 0.6239887923002243
+    },
+    {
+      "label": "03-review-evidence",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/03-review-evidence.json",
+        "bytes": 720,
+        "sha256": "62c34b1efdf9a8d40a3de4a8a59c9c89f97c4276ff7349bc9784b76df92a26e1"
+      },
+      "command": [
+        "scripts/validate-cvc4-adapter-review"
+      ],
+      "elapsed_seconds": 0.621689791791141
+    },
+    {
+      "label": "04-prior-evidence",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/04-prior-evidence.json",
+        "bytes": 743,
+        "sha256": "d1e3e8861c54fa415106929d03ae8bef4d027e34f521b592ffb3451d4ae48957"
+      },
+      "command": [
+        "scripts/validate-cvc4-evidence",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 5.996890541166067
+    },
+    {
+      "label": "05-queue-tests",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/05-queue-tests.json",
+        "bytes": 793,
+        "sha256": "cf7ac64c955a111fee71704565a81ab9c0d4d1c5615684374d81f5025a542876"
+      },
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_research_queue.py"
+      ],
+      "elapsed_seconds": 0.1151514588855207
+    },
+    {
+      "label": "06-historical",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/06-historical.json",
+        "bytes": 758,
+        "sha256": "27041d8f8eebf2b003b789ad28c5ae17c648a27bb3bb6293ddf2056054b3a611"
+      },
+      "command": [
+        "scripts/close-declaration-validation-publication-study",
+        "validate-historical"
+      ],
+      "elapsed_seconds": 31.3421204588376
+    },
+    {
+      "label": "07-snapshot",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/07-snapshot.json",
+        "bytes": 749,
+        "sha256": "c0a22bbe2c7ba83b3bfe9d67a5ea9cb1cdedfb1262f789fb88c1ce8c92849d9b"
+      },
+      "command": [
+        "scripts/validate-publication-study-snapshot",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 80.77234525000677
+    },
+    {
+      "label": "08-full-suite",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/08-full-suite.json",
+        "bytes": 869,
+        "sha256": "4efbfee8f6171bc9bce0517ad318f0f34ef5edf3735e316e3e29aa3a154e9b2e"
+      },
+      "command": [
+        "scripts/run-unit-tests-with-signal-retry",
+        "--require-full-payload"
+      ],
+      "elapsed_seconds": 510.6434602923691
+    },
+    {
+      "label": "09-contribution",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/09-contribution.json",
+        "bytes": 735,
+        "sha256": "3532c942dcf176f4ba3f5b8009b8a67e1e939005e662d8a11c7148bd70bb4f39"
+      },
+      "command": [
+        "scripts/validate-contribution",
+        "--check-catalog"
+      ],
+      "elapsed_seconds": 0.11876370757818222
+    },
+    {
+      "label": "10-catalog",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/10-catalog.json",
+        "bytes": 724,
+        "sha256": "7b2ce0fa5a37c85e1b5b63ef8962c880cbba470268f7b6929dd8130f9abed013"
+      },
+      "command": [
+        "scripts/validate-declaration-validation-catalog"
+      ],
+      "elapsed_seconds": 10.708007167093456
+    },
+    {
+      "label": "11-current-state",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/11-current-state.json",
+        "bytes": 806,
+        "sha256": "40253516a7df5fe9ce46afc2d299edb2e4f42a979b4371dfe631b6ae0e12d9c7"
+      },
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/current-state"
+      ],
+      "elapsed_seconds": 87.07711674971506
+    },
+    {
+      "label": "12-project-review",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/12-project-review.json",
+        "bytes": 726,
+        "sha256": "05c272e3cc1110c1f0cbb225af8e5b4a7de59b305ebd7ce52636246584449073"
+      },
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "elapsed_seconds": 28.447767707984895
+    },
+    {
+      "label": "13-artifact-status",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/13-artifact-status.json",
+        "bytes": 735,
+        "sha256": "0ba61944f066e5398422b1045e10252aea263f13c991604013967e10c0f1a398"
+      },
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "elapsed_seconds": 11.550163750071079
+    },
+    {
+      "label": "14-diff-check",
+      "receipt": {
+        "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/14-diff-check.json",
+        "bytes": 710,
+        "sha256": "b0e0e7e8ce9f1130eb05c486ec7e768090f2dd2a7802e3114b50d05562ccb897"
+      },
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "elapsed_seconds": 0.043838500045239925
+    }
+  ],
+  "source_manifest": {
+    "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/closure-code-bindings.json",
+    "bytes": 47843,
+    "sha256": "7df758334ffc8c57d13cb07ed41a127f41aa3753f0b4a5aedb13815ba69aaa31"
+  },
+  "decision_manifest": {
+    "path": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/closure-decision-bindings.json",
+    "bytes": 1966,
+    "sha256": "09f887463bbb72f0c3cdf9e2ff773b08534ccd8d429c4477e6e8771c21d16945"
+  },
+  "tests": {
+    "current": 690,
+    "historical": 73,
+    "total": 763,
+    "skips": 0,
+    "historical_transition_tests_unchanged": true
+  },
+  "research_accounting": {
+    "item_id": "CVC-4-ADAPTER-REVIEW",
+    "outcome": "SUCCESS",
+    "decision": "SUCCESSOR",
+    "bound_inputs": 38,
+    "active_seconds": 1356.4298297921196,
+    "research_counts": {
+      "byte_variants": 0,
+      "observer_launches": 0,
+      "proof_builds": 0,
+      "setup_launches": 0,
+      "research_network_launches": 0
+    },
+    "next_item": "CVC-4-OWNERSHIP-1",
+    "next_item_started": false
+  },
+  "administrative_fixtures": {
+    "allocation": "results/workflow-refresh/cvc-4-adapter-review-2026-09-08/administrative-fixture-allocation.json",
+    "reserved_launches": 23,
+    "reserved_seconds": 115,
+    "known_instrumented_charge_seconds": 7.2358543779700994,
+    "reconciled": true
+  },
+  "evidence_bindings": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/assessment.json",
+      "bytes": 9577,
+      "sha256": "ab0f7842193ad80fed373c4ac0873ee3fd9246845dc7809517cb72a03f5ce37f"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/evidence-manifest.json",
+      "bytes": 8553,
+      "sha256": "cd98b77b269a55f801133e572991cb11d505bc97d1da9524fc111da3fe57e0b9"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/independent-review.md",
+      "bytes": 2159,
+      "sha256": "181f286a04d8ff0d1aa0570b79b94c599adfa17494ea0530fa665e94558819b0"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/report.md",
+      "bytes": 6801,
+      "sha256": "83d82a4d16c231e4a899c89e2384741fc20bb40464a3ce564bfef2be5ee10bd3"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json",
+      "bytes": 8167,
+      "sha256": "ed380aca76b5d54598ca155982a59a5c656aae7e5b7f72337afd1f561cc1f1c7"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/work-record.json",
+      "bytes": 3441,
+      "sha256": "7492ed9d479b434d3887bb50905e0145e0f8e561236c638df91af706064fb539"
+    }
+  ],
+  "state_bindings": [
+    {
+      "path": "config/research-queue.json",
+      "bytes": 71208,
+      "sha256": "5ddbe9749e149e74ea1d79ddf3501106bede1c3756bba9fb7b35443f2e997e33"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 147246,
+      "sha256": "60f7b182a88c182db23adfd7faccb8e10bbe4d9ee773b93c87caff350a7eed7a"
+    },
+    {
+      "path": "docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md",
+      "bytes": 22223,
+      "sha256": "6c0b8d0802bf6763938385c7fd1b647aa9d12a6c96d469d6ae1802b871a081e3"
+    },
+    {
+      "path": "docs/PROJECT_REVIEW.md",
+      "bytes": 14956,
+      "sha256": "cd8ca4a0ceb1a92e33eae94fe7ae8ca9c62d46d3f57fdfcdba290fda7ee959cb"
+    },
+    {
+      "path": "docs/PUBLIC_STATUS.md",
+      "bytes": 2680,
+      "sha256": "bc9d566b9554248cb01a4ae9931e57e2f48bc07df1bfe2858b6b5d61baaa0f59"
+    },
+    {
+      "path": "results/artifacts/graph.json",
+      "bytes": 234862,
+      "sha256": "cdb794709fee930cbe5e3ea895218d25c911b24418b5a10185ff34c0ab8d7a68"
+    },
+    {
+      "path": "results/assurance/current.json",
+      "bytes": 39659,
+      "sha256": "6fc498cb8b509b286227a47d7ca51729432eb7618b6c38abe2bdec0bda9f0325"
+    },
+    {
+      "path": "results/assurance/milestone-9.json",
+      "bytes": 2243,
+      "sha256": "3c50a74a5de81464dd2cb4e5d10ed732e03aa25f083f474063981f345180051b"
+    },
+    {
+      "path": "results/research/project-review.json",
+      "bytes": 124464,
+      "sha256": "6d8d8bcc2141175adcb11cf1fcc28a9c5325c0439d038a88e402752b8186d00b"
+    }
+  ],
+  "completed_items": [
+    "CVC-4-ADAPTER-REVIEW"
+  ],
+  "next_selected_item": "CVC-4-OWNERSHIP-1",
+  "next_item_started": false,
+  "external_research_action": "NONE",
+  "delivery": "Git main commit and scripts/push-main record delivery separately."
+}

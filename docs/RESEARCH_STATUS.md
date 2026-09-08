@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-07
+Last updated: 2026-09-08
 
 ## How Status Is Tracked
 
@@ -49,6 +49,21 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- Completed `CVC-4-ADAPTER-REVIEW` on 2026-09-08 (UTC) with `SUCCESS`
+  for an existing-evidence scientific-input review and `SUCCESSOR` decision.
+  One exact unused `v` parameter-level insertion is proposed for each retained
+  ownership stream; all old bytes, observations and charges remain unchanged.
+  The candidate is `CHECKED_UNSUPPORTED`, not a checked invalid proof. See the
+  [assessment](../results/research/conditional-validation-contracts/cvc-4-adapter-review/assessment.json),
+  [proposal](../results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json),
+  [report](../results/research/conditional-validation-contracts/cvc-4-adapter-review/report.md),
+  [review](../results/research/queue-reviews/2026-09-08-cvc-4-adapter-review.json)
+  and [validation](../results/workflow-refresh/cvc-4-adapter-review-2026-09-08/validation.json).
+  `CVC-4-OWNERSHIP-1` is selected READY and unstarted: one pair, four new
+  launches of at most 30 seconds, and 5400 active seconds including engineering,
+  after exact committed prelaunch gates. This review generated no scientific
+  byte variant and ran no proof, observer, setup or research-network launch.
 
 - Completed `CVC-4-CONDITIONAL` on 2026-09-07 with `BOUNDED_UNRESOLVED`
   at a characterized frozen-byte/importer boundary. The right-successor and zero
@@ -1988,7 +2003,7 @@ prepared_external_action_drafts: 5
    assurance asset. Owner-selected successor on 2026-09-06, governed by
    [docs/research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md](research/CONDITIONAL_VALIDATION_CONTRACTS_PLAN.md).
 
-Selected next item: `CVC-4-ADAPTER-REVIEW`.
+Selected next item: `CVC-4-OWNERSHIP-1`.
 
 The [ranked queue](../config/research-queue.json) governs order, eligibility,
 finite budgets and closure records. CVC-1 retains its source-only `EXTEND`
@@ -2083,13 +2098,36 @@ disabling only axiom printing. Its two charges plus ten revised launches total
 research-network launch ran. See the [result](../results/research/conditional-validation-contracts/cvc-4-conditional/result.json),
 [adapter diagnosis](../results/research/conditional-validation-contracts/cvc-4-conditional/adapter-boundary.json) and [review](../results/research/queue-reviews/2026-09-07-cvc-4-conditional.json).
 
-`CVC-4-ADAPTER-REVIEW` is selected READY and unstarted. One existing-evidence
-review, capped at 3600 active seconds, must decide a justified stop or an exact
-scientific-input successor proposal with value, prerequisites and finite entry
-conditions. It authorizes no byte-variant generation, proof/observer/setup or
-research-network launch. Original CVC-4 and CVC-5 remain PLANNED under their unmet
-original dependencies. No success-only contribution stage is promoted, and
-withdrawn imax defect recommendations remain withdrawn.
+`CVC-4-ADAPTER-REVIEW` is COMPLETE with `SUCCESS` for the existing-evidence
+review and `SUCCESSOR` recommendation. It proposes one fresh unused `v` level
+record immediately before each ownership definition, preserving every old byte
+in order, the declared parameter lists and referenced syntax. This addresses
+Nanoda's known importer prerequisite; parser success and subsequent ownership
+behavior on those proposed bytes remain unobserved. The older constant-universe
+witness includes an axiom and `Expr.const`, so it cannot directly replace the
+fixed empty-environment Sort pair. The marginal value is a reproducible
+serialization regression and one finite ownership-boundary comparison.
+
+`CVC-4-OWNERSHIP-1` is selected READY and unstarted under the exact
+[proposal](../results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json).
+Its preparation gate is this completed review and required validation; observer
+feedback additionally requires committed exact bytes, preserved ASTs and
+observer/runtime hashes, output hypotheses, tested controller and entry review.
+Both fresh controls must accept before either candidate. The bound is one pair,
+two new streams, two lineages, four launches of at most 30 seconds and 5400
+actual active seconds including engineering. Twelve old charges plus at most
+four new reservations stay within sixteen cumulative observer launches; old
+terminal IDs and unused slots are never resumed. Proof/setup/research-network
+launches remain zero, and administrative fixtures need a separate finite binding.
+
+The review created no new scientific bytes or observer outcome. A7, the checked
+proof, old parser/reporting failures and all prior costs remain unchanged.
+`E-UNOWNED` remains outside the model's Supported domain, not a semantic-invalidity
+example. The catalog ownership obligation remains PROVISIONAL; no universal
+normativity, refinement or invalid accepted proof is established. Original CVC-4
+and CVC-5 remain PLANNED under their unmet original dependencies, and withdrawn
+imax defect recommendations remain withdrawn. No external action is recommended
+now; another successor is not automatic.
 
 `CVC-RUNNER-2` remains SUCCESS for its bound protocol implementation and inert
 control checks. `CVC-RUNNER-1` remains `BOUNDED_UNRESOLVED`; its cancellation,

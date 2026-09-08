@@ -328,3 +328,38 @@ Preserve every existing artifact, failure, charge, assumption and withdrawn
 recommendation. This narrowly ranked decision stays in the conditional phase;
 it activates no new comparison or semantic family. Original CVC-4/CVC-5
 requirements remain unchanged. Only CVC-4-CONDITIONAL closes in this work.
+
+## Exact ownership-input successor — 2026-09-08 UTC
+
+The [existing-evidence review](../../results/research/conditional-validation-contracts/cvc-4-adapter-review/assessment.json)
+completed SUCCESS and selects **CVC-4-OWNERSHIP-1**, READY and unstarted. Its
+[canonical proposal](../../results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json)
+fixes one new parameter-level record per old ownership stream, immediately before
+the final definition: level index 3, name index 3 in the control and 2 in the
+candidate. Every old byte, referenced AST, declaration parameter list, model
+assumption and pinned observer/runtime identity is retained. Generate the new
+streams only after this selected successor starts, never in the completed review.
+
+The successor includes preparation, a minimal reuse of existing supervision,
+a durable serialization regression, and one four-cell comparison. Require all
+six proposal prelaunch gates, including exact committed inputs, tested tooling,
+source/output hypotheses and an entry review. Both fresh controls must accept
+before either candidate runs. A parser error cannot count as ownership refusal.
+The unowned candidate remains CHECKED_UNSUPPORTED, not a proved invalid proof.
+
+Allow at most 5400 cumulative active seconds including engineering, intervals of
+at most 90 minutes, two new streams/one pair/two lineages, and four new observer
+reservations of at most 30 seconds. Preserve all twelve old charges and cap the
+combined observer reservations at sixteen; never resume a terminal run or reuse
+its unused slots. No proof, setup/build or research-network launches. Bind any
+required inert administrative fixtures separately. Missing payloads cannot
+justify rebuilding or substituting an observer within this item.
+
+Repair ordinary engineering faults within the same successor using exact tooling
+revisions and preserved counters. Stop after the finite comparison or a real cap,
+scientific-input boundary, authority/payload blocker, or demonstrated gap without
+a feasible authorized repair. Do not introduce another pair or automatic further
+successor. Retain a local regression plus finite report or bounded unresolved
+result, and perform the complete validation/handoff procedure above. Original
+CVC-4/CVC-5 dependencies remain unmet. No scientific variant, observer launch or
+external research action was performed by this review.

@@ -1,0 +1,149 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-OWNERSHIP-1",
+  "status": "PROPOSED_UNEXECUTED",
+  "contract_id": "CVC-U1-A7",
+  "question": "Does supplying the missing unused declared-parameter level record let the same pinned observers accept the owned control and reach a distinguishable ownership boundary for the unowned candidate?",
+  "representation_change": {
+    "operation": "INSERT_ONE_UNUSED_DECLARED_PARAMETER_LEVEL_BEFORE_FINAL_DEF",
+    "serialization": "One compact JSON object followed by LF; insert immediately before the existing final def line. Preserve every original byte in order. No renumbering, normalization, header change or other edits.",
+    "cases": [
+      {
+        "predecessor_case": "E-OWNED-CONTROL",
+        "successor_case": "E-OWNED-CONTROL-PARAM-RECORD",
+        "input": {
+          "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-owned-control.ndjson",
+          "sha256": "54d43141eb2c0a81c8045544cfe83426b128af39a6bbf42b6dbed3c0feca09b8"
+        },
+        "insert_record": {
+          "il": 3,
+          "param": 3
+        },
+        "unchanged_artifact": {
+          "name": "cvc2UnownedBoundaryControl",
+          "params": [
+            "u",
+            "v"
+          ],
+          "value_level": [
+            "param",
+            "u"
+          ],
+          "type_level": [
+            "succ",
+            [
+              "param",
+              "u"
+            ]
+          ]
+        },
+        "model_status": "MODEL_VALID_BY_DEFINITION"
+      },
+      {
+        "predecessor_case": "E-UNOWNED",
+        "successor_case": "E-UNOWNED-PARAM-RECORD",
+        "input": {
+          "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-unowned.ndjson",
+          "sha256": "5cd948669e72cfb7e0ef92df5e9d1e4118397358b3260dca1b629e042e6d2224"
+        },
+        "insert_record": {
+          "il": 3,
+          "param": 2
+        },
+        "unchanged_artifact": {
+          "name": "cvc2UnownedBoundary",
+          "params": [
+            "v"
+          ],
+          "value_level": [
+            "param",
+            "u"
+          ],
+          "type_level": [
+            "succ",
+            [
+              "param",
+              "u"
+            ]
+          ]
+        },
+        "model_status": "CHECKED_UNSUPPORTED"
+      }
+    ]
+  },
+  "retained_inputs": {
+    "observer_payloads": [
+      {
+        "path": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+        "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41"
+      },
+      {
+        "path": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+        "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"
+      }
+    ],
+    "configuration_basis": "results/research/conditional-validation-contracts/cvc-4-conditional/revision-02/protocol.json",
+    "configuration_rule": "Use revision-02 options including print_axioms=false; only input/output paths may change. Retain exact observer binaries, runtime products, source mapping, A7 assumptions and structured model. No observer rebuilding or substitution."
+  },
+  "budget": {
+    "active_seconds": 5400,
+    "interval_seconds": 5400,
+    "pairs": 1,
+    "new_byte_streams": 2,
+    "implementation_lineages": 2,
+    "validator_launches": 4,
+    "launch_seconds": 30,
+    "proof_builds": 0,
+    "setup_builds": 0,
+    "research_network_requests": 0
+  },
+  "accounting": {
+    "predecessor_launches": 12,
+    "predecessor_process_seconds": 0.3862275807186961,
+    "predecessor_active_seconds": 2830.644582082983,
+    "predecessor_unused_slots": 4,
+    "maximum_combined_launches": 16,
+    "terminal_runs_resumed": false,
+    "rule": "Four new reservations under a distinct input successor, never a restart or reuse of terminal run IDs. Preserve all twelve old charges; cumulative observer reservations cannot exceed sixteen. Research and administrative fixture costs stay separate."
+  },
+  "matrix": [
+    {
+      "case": "E-OWNED-CONTROL-PARAM-RECORD",
+      "observer": "official",
+      "expected": "ACCEPT"
+    },
+    {
+      "case": "E-OWNED-CONTROL-PARAM-RECORD",
+      "observer": "nanoda",
+      "expected": "ACCEPT"
+    },
+    {
+      "case": "E-UNOWNED-PARAM-RECORD",
+      "observer": "official",
+      "expected": "REFUSED_OWNERSHIP"
+    },
+    {
+      "case": "E-UNOWNED-PARAM-RECORD",
+      "observer": "nanoda",
+      "expected": "REFUSED_OWNERSHIP"
+    }
+  ],
+  "candidate_gate": "Both fresh controls must ACCEPT with exact bound success output and clean process receipts before either candidate launch. Preserve parser error, ownership refusal, other refusal, acceptance, timeout and unknown as separate outcomes; return code 101 alone is not ownership evidence.",
+  "prelaunch_gates": [
+    "Complete and deliver CVC-4-ADAPTER-REVIEW with required validation. Start a distinct work record only when the successor is requested or otherwise authorized.",
+    "Generate exactly the two proposed byte streams in new paths. Mechanically verify deletion of the sole inserted line recovers each predecessor byte-for-byte; verify fresh level index, declared v identity and absence of references to the inserted index in every original expression/level record.",
+    "Independently compare name, ordered parameter list, value and type syntax to the fixed ASTs. The unchanged strict decoder must accept the owned control and reject the candidate for unowned u. A raw dependency projection is supplementary syntax evidence only; never relax the original decoder or reclassify the candidate as supported.",
+    "Bind hashes of both new streams, all configurations, observer/runtime payloads, exact output hypotheses and source locators, controller/test sources and work baseline. Preserve all prior bindings and distinguish new Lab-authored streams from exporter provenance.",
+    "Reuse the existing process supervisor/accounting with a new manifest and minimal controller adaptation. Pure regressions must cover the exact insertion invariant, candidate/control order, missing or malformed output and cumulative caps. Bind a separate finite inert-fixture allocation before any needed process tests; scientific caps grant no extra fixtures.",
+    "Commit the tested controller, scientific inputs, source mapping, manifest and entry review before any observer feedback. Read-only hash and frozen-predecessor validation must pass; unavailable payloads or changed bytes cannot be repaired by builds, network or substitution under this item."
+  ],
+  "stop_condition": "Stop when the single four-cell matrix is characterized or a real cumulative cap, scientific-input change, authority/payload blocker or documented unrepairable gap is reached. Repair ordinary tooling failures within this item using exact revisions and preserved counters; no second pair or automatic successor. A failed control blocks both candidates until a feasible same-input repair passes within the four reservations.",
+  "completion": "A local reproducible serialization regression and finite outcome report, or bounded unresolved evidence with attempted repairs and exact residual gap; recommend reuse, a precise clarification draft, or no external action. Do not require matching hypotheses for a successfully characterized comparison.",
+  "nonclaims": [
+    "No generated successor bytes or new observer outcomes exist in this review.",
+    "E-UNOWNED is CHECKED_UNSUPPORTED, not a checked semantically invalid proof. Its referenced Sort levels satisfy the same equality; ownership is the missing support condition.",
+    "The owned control is MODEL_VALID_BY_DEFINITION, not an added checked finite required-acceptance theorem.",
+    "No parser/importer or executable refinement, source-to-binary correspondence, A7 discharge, consistency, universal ownership normativity or validator defect is established.",
+    "The catalog ownership entry remains PROVISIONAL. Existing Arena imax contribution and withdrawn defect recommendations remain unchanged."
+  ]
+}
