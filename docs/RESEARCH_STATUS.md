@@ -2442,7 +2442,10 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-CACHE-EXPORT-1`.
 
-The item is READY and unstarted.
+The item is ACTIVE under the owner's 2026-09-08 request to execute the
+highest-priority eligible canonical queue item. Source and parser analysis is
+in progress. No build, checker, proof, network, scientific export-byte or
+external-action launch has occurred.
 
 Queue handoff: EXECUTABLE.
 
@@ -2453,13 +2456,14 @@ internal same-checker cache-contract distinction. It does not establish an
 exported-input witness, production impact, semantic authority or a corpus kill;
 the canonical survivor classification remains unchanged.
 
-The project-wide closure review compared the cache export route, the next
-universe survivor, transfer intake, original conditional prerequisites,
-maintenance/upstream triggers and current methods/reuse evidence. The export
-route is the best feasible bounded question because the exact mechanism and a
-source-supported K-recursor-major call path are already present. This selection
-does not start it. A fresh work record and committed scientific gates are
-required before any launch.
+The project-wide entry review retains the cache export route above the next
+universe survivor, transfer intake, original conditional prerequisites and
+maintenance/upstream triggers. The exact internal mechanism and K-recursor
+major route are already bound. The active item is first testing whether a
+self-contained ordinary export can supply the required carrier without
+strongly checking the shared major earlier. Any launch still requires frozen
+bytes, expected cells, tooling/runtime identities and focused regressions in a
+committed successor entry state.
 
 ### Waiting
 
