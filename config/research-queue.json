@@ -1,9 +1,9 @@
 {
   "schema_version": 3,
-  "frontier_id": "F-SURVIVOR-CACHE",
-  "plan": "docs/research/SURVIVOR_CACHE_PLAN.md",
+  "frontier_id": "F-SURVIVOR-CACHE-EXPORT",
+  "plan": "docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md",
   "updated_at": "2026-09-08",
-  "selected_item": "SURVIVOR-CACHE-1",
+  "selected_item": "SURVIVOR-CACHE-EXPORT-1",
   "items": [
     {
       "id": "CVC-1",
@@ -1143,7 +1143,7 @@
       "completion": "One reproducible scoped comparison or supported reachability/indistinguishability analysis, precise unresolved limits, updated durable workflow and a project-wide next-item selection.",
       "stop_condition": "5400 cumulative active seconds; max2offline builds120s,8scientific test/checker calls30s,2comparisons frozen before observations; no external action. Repair engineering failures within the same item and cap.",
       "kind": "EXPERIMENT",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [],
       "budget": {
         "max_sessions": 1,
@@ -1157,6 +1157,50 @@
         "results/research/survivor-cache-1/work-record.json"
       ],
       "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/survivor-cache-1/result.json",
+          "results/research/survivor-cache-1/report.md",
+          "results/research/survivor-cache-1/evidence-manifest.json",
+          "results/research/survivor-cache-1/work-closure.json",
+          "results/research/survivor-cache-1/run-0001/execution/events.jsonl",
+          "results/research/survivor-cache-1/daybreak-source-review.json",
+          "results/research/queue-reviews/2026-09-08-survivor-cache-closure-strategic.json"
+        ],
+        "recommendation": "The exact internal comparison distinguishes the cache mutation: both controls and the baseline candidate pass, while the mutant candidate fails at the frozen no-rejection assertion. Preserve exported reachability and canonical survivor status as unresolved. Select SURVIVOR-CACHE-EXPORT-1 READY and unstarted after a project-wide comparison."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "SURVIVOR-CACHE-EXPORT-1",
+      "priority": 26,
+      "title": "Test exported-declaration reachability of the cache survivor",
+      "target": "One ordinary Nanoda export pair exercising the same-checker InferOnly-then-Check cache sequence for nanoda-gen-3365809b3c41",
+      "action": "Construct and freeze one source-supported exported control/candidate pair through the identified K-recursor-major route, then compare the pinned baseline and mutation under finite controls.",
+      "expected_value": "Resolves the main assurance boundary left by the internal regression: whether normal exported input can reach the harmful cache history, yielding either an admissible shared regression path or a precise reachability boundary.",
+      "rank_rationale": "Project-wide closure review ranks this above the next universe survivor because exact mechanism, pinned source, internal distinction and a concrete same-checker call route already exist. Transfer lacks independent input, original CVC prerequisites remain unmet, and no fresh upstream trigger displaces this local question.",
+      "entry_gate": "Standing local authorization permits this bounded READY successor, but it has not started. Before any launch, create a fresh exact work record and freeze and commit export bytes, expected outcomes, runtime/tooling bindings and focused runner tests under docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md.",
+      "completion": "A reproducible exported-declaration distinction or a bounded source- and parser-supported construction/reachability boundary, with exact evidence, unchanged historical state and a new project-wide next-item review.",
+      "stop_condition": "One 90-minute item; at most two offline builds of 120 seconds, eight test/checker reservations of 30 seconds and two pairs fixed before observations; no proof, network, external action, new mutation identity or successor execution.",
+      "kind": "EXPERIMENT",
+      "status": "READY",
+      "depends_on": [
+        "SURVIVOR-CACHE-1"
+      ],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 8
+      },
+      "evidence_refs": [
+        "docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md",
+        "results/research/survivor-cache-1/result.json",
+        "results/research/survivor-cache-1/daybreak-source-review.json",
+        "results/research/alt-survivors-2026-09-08/inventory.json",
+        "mutations/nanoda-gen-3365809b3c41.json"
+      ],
+      "issue_urls": [],
       "closure": null,
       "blocked_reason": ""
     }
@@ -1168,7 +1212,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-08-survivor-cache-entry-strategic.json",
-    "sha256": "69c83cc626f5fbd3ddb8c4fdb835498b557835ccb62afe6e4961d4064659b4cb"
+    "path": "results/research/queue-reviews/2026-09-08-survivor-cache-closure-strategic.json",
+    "sha256": "2c430235fdc52597b4b7e4b03d76e4102832eb58944d8ffd21f875973b776ac8"
   }
 }

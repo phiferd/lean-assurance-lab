@@ -1,0 +1,36 @@
+
+running 1 test
+test tc::cache_contract_tests::candidate ... FAILED
+
+failures:
+
+---- tc::cache_contract_tests::candidate stdout ----
+
+thread 'tc::cache_contract_tests::candidate' (2450556) panicked at src/tc.rs:1383:23:
+expected checked inference to reject warmed malformed let
+stack backtrace:
+   0:        0x1007c70cc - <<std[61a5f0013896dfb1]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[aedb9fd4ead64aec]::fmt::Display>::fmt
+   1:        0x10074bce0 - core[aedb9fd4ead64aec]::fmt::write
+   2:        0x1007c646c - <alloc[650f235c7e2e357a]::vec::Vec<u8> as std[61a5f0013896dfb1]::io::Write>::write_fmt
+   3:        0x1007c5f20 - std[61a5f0013896dfb1]::panicking::default_hook::{closure#0}
+   4:        0x1007c5b10 - std[61a5f0013896dfb1]::panicking::default_hook
+   5:        0x1007c5554 - std[61a5f0013896dfb1]::panicking::panic_with_hook
+   6:        0x1007e4f54 - std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}
+   7:        0x1007e4ee4 - std[61a5f0013896dfb1]::sys::backtrace::__rust_end_short_backtrace::<std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}, !>
+   8:        0x1007e53c4 - __rustc[667454f86b37ac2d]::rust_begin_unwind
+   9:        0x100822808 - core[aedb9fd4ead64aec]::panicking::panic_fmt
+  10:        0x100829474 - nanoda_lib[70a0406b3de038f0]::tc::cache_contract_tests::candidate
+  11:        0x10082b8a8 - <nanoda_lib[70a0406b3de038f0]::tc::cache_contract_tests::candidate::{closure#0} as core[aedb9fd4ead64aec]::ops::function::FnOnce<()>>::call_once
+  12:        0x1007f4b94 - test[751c0e0ecf18f1d4]::__rust_begin_short_backtrace::<core[aedb9fd4ead64aec]::result::Result<(), alloc[650f235c7e2e357a]::string::String>, fn() -> core[aedb9fd4ead64aec]::result::Result<(), alloc[650f235c7e2e357a]::string::String>>
+  13:        0x1007ef3d4 - test[751c0e0ecf18f1d4]::run_test::{closure#0}
+  14:        0x1007eefa4 - std[61a5f0013896dfb1]::sys::backtrace::__rust_begin_short_backtrace::<test[751c0e0ecf18f1d4]::run_test::{closure#1}, ()>
+  15:        0x100805f58 - <std[61a5f0013896dfb1]::thread::lifecycle::spawn_unchecked<test[751c0e0ecf18f1d4]::run_test::{closure#1}, ()>::{closure#1} as core[aedb9fd4ead64aec]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  16:        0x1007e5ed0 - <std[61a5f0013896dfb1]::sys::thread::unix::Thread>::new::thread_start
+  17:        0x18931bbc8 - __pthread_cond_wait
+
+
+failures:
+    tc::cache_contract_tests::candidate
+
+test result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 39 filtered out; finished in 0.00s
+

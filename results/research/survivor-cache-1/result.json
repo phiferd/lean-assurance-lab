@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-1",
+  "outcome": "SUCCESS",
+  "finding": "INTERNAL_CACHE_CONTRACT_DISTINCTION",
+  "mutation_id": "nanoda-gen-3365809b3c41",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "checkpoint_commit": "47f277daf96f0337b5a09e958eac5a959ba26f2b",
+  "manifest": {
+    "path": "config/survivor-cache-0001-r3.json",
+    "sha256": "c910c55e7f402a438c9ae624aeed207188e20c08ab4494893f2015aeb7158cb4"
+  },
+  "observations": [
+    {"input": "control", "observer": "baseline", "classification": "TEST_PASS", "attempt": 3},
+    {"input": "control", "observer": "mutant", "classification": "TEST_PASS", "attempt": 4},
+    {"input": "candidate", "observer": "baseline", "classification": "TEST_PASS", "attempt": 5},
+    {"input": "candidate", "observer": "mutant", "classification": "REGRESSION_FAILURE", "attempt": 6}
+  ],
+  "attribution": "After InferOnly warms infer_cache_no_check for the malformed let, the pinned baseline Check recomputes and rejects the annotation mismatch. The mutation allows Check to return the warmed no-check result and therefore reaches the harness's exact no-rejection assertion. Fresh controls isolate the staged cache history.",
+  "execution_accounting": {
+    "offline_builds": 2,
+    "scientific_test_launches": 4,
+    "scientific_pairs": 2,
+    "charged_process_seconds": 36.89197958300065,
+    "engineering_repairs_after_launch": 0,
+    "external_actions": 0
+  },
+  "claim_limits": [
+    "This establishes behavioral non-equivalence only for the exact pinned source, mutation, identical internal harness and same-checker call sequence.",
+    "It does not establish ordinary exported-declaration reachability, acceptance of malformed export bytes, production impact, semantic authority or a corpus-level kill.",
+    "The canonical SURVIVED_WITHOUT_WITNESS classification remains unchanged.",
+    "The source-supported K-recursor-major route remains a concrete follow-up question rather than an observed export witness."
+  ],
+  "next_item": "SURVIVOR-CACHE-EXPORT-1"
+}

@@ -1,0 +1,73 @@
+#!/usr/bin/env python3
+"""Validate the exact SURVIVOR-CACHE-1 result, accounting, and closure bindings."""
+from datetime import datetime
+import hashlib
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.research_queue_v3 import load_queue  # noqa: E402
+from lib.survivor_cache_runner import evidence  # noqa: E402
+
+BASE = ROOT / "results/research/survivor-cache-1"
+
+
+def load(path):
+    return json.loads(path.read_text())
+
+
+def bind(row):
+    if set(row) != {"path", "sha256"}:
+        raise ValueError("invalid closure binding")
+    path = (ROOT / row["path"]).resolve()
+    if not path.is_relative_to(ROOT) or not path.is_file():
+        raise ValueError("unsafe or missing closure binding")
+    if hashlib.sha256(path.read_bytes()).hexdigest() != row["sha256"]:
+        raise ValueError("closure binding drift: " + row["path"])
+
+
+def main():
+    state = evidence(ROOT)
+    if state["next_action"] != ("DONE", None) and state["next_action"] != ["DONE", None]:
+        raise ValueError("execution not complete")
+    observed = [a["terminal"].get("classification") for a in state["attempts"] if a["reservation"]["phase"] == "checker"]
+    if observed != ["TEST_PASS", "TEST_PASS", "TEST_PASS", "REGRESSION_FAILURE"]:
+        raise ValueError("scientific cell pattern differs")
+    result = load(BASE / "result.json")
+    if result["outcome"] != "SUCCESS" or result["finding"] != "INTERNAL_CACHE_CONTRACT_DISTINCTION":
+        raise ValueError("result overstates or omits scoped finding")
+    limits = " ".join(result["claim_limits"]).lower()
+    if "canonical survived_without_witness classification remains unchanged" not in limits:
+        raise ValueError("classification limit missing")
+    work, closure = load(BASE / "work-record.json"), load(BASE / "work-closure.json")
+    interval = work["intervals"][-1]
+    mono = closure["ended_monotonic"] - interval["started_monotonic"]
+    utc = (datetime.fromisoformat(closure["ended_at"]) - datetime.fromisoformat(interval["started_at"])).total_seconds()
+    charged = closure["entry_overhead_conservative_seconds"] + max(mono, utc)
+    if abs(charged - closure["final_active_seconds"]) > 1e-6 or charged > closure["budget_seconds"]:
+        raise ValueError("closure active-time accounting differs or exceeds cap")
+    manifest = load(BASE / "evidence-manifest.json")
+    if manifest["status"] != "PASS" or manifest["final_event_sha256"] != state["attempts"][-1]["terminal"]["event_sha256"]:
+        raise ValueError("evidence manifest state differs")
+    for name in ("execution_ledger", "manifest", "result", "report", "work_closure",
+                 "source_review", "strategic_review", "validation", "closure_validator"):
+        bind(manifest[name])
+    for row in manifest["durable_state"]:
+        bind(row)
+    queue = load_queue(ROOT, require_ready=True)
+    row = next(item for item in queue["items"] if item["id"] == "SURVIVOR-CACHE-1")
+    if row["status"] != "COMPLETE" or queue["selected_item"] != result["next_item"]:
+        raise ValueError("queue closure or successor differs")
+    print(json.dumps({"status": "PASS", "finding": result["finding"],
+                      "active_seconds": charged, "process_seconds": state["charged_seconds"],
+                      "next_item": queue["selected_item"]}, sort_keys=True))
+
+
+if __name__ == "__main__":
+    try:
+        main()
+    except (ValueError, OSError, json.JSONDecodeError) as error:
+        print("survivor-cache closure refused: " + str(error), file=sys.stderr)
+        raise SystemExit(2)

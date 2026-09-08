@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-08T22:04:31.591449+00:00",
+  "checks": [
+    {"name": "cache closure package", "command": "scripts/validate-survivor-cache-closure", "status": "PASS", "finding": "INTERNAL_CACHE_CONTRACT_DISTINCTION", "active_seconds": 4497.424668291},
+    {"name": "cache evidence and accounting", "command": "scripts/execute-survivor-cache --evidence", "status": "PASS", "attempts": 6, "next_action": "DONE"},
+    {"name": "research queue v3", "command": "scripts/validate-research-queue --require-ready", "status": "PASS"},
+    {"name": "transfer historical package", "command": "scripts/validate-transfer-assessment", "status": "PASS", "gate_decision": "NO_GO"},
+    {"name": "survivor proposal historical package", "command": "scripts/validate-survivor-proposal", "status": "PASS"},
+    {"name": "survivor reuse evidence", "command": "scripts/validate-survivor-let-reuse --evidence", "status": "PASS"},
+    {"name": "survivor association transition", "command": "scripts/build-survivor-let-association --check --require-full-payload", "status": "PASS"},
+    {"name": "declaration-validation catalog", "command": "scripts/validate-declaration-validation-catalog", "status": "PASS"},
+    {"name": "declaration-validation history", "command": "scripts/validate-declaration-validation-historical", "status": "PASS"},
+    {"name": "full current and frozen suite", "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 850, "frozen_publication_tests": 73},
+    {"name": "publication historical snapshot", "command": "scripts/validate-publication-study-snapshot --require-full-payload --tests", "status": "PASS", "tests": 73},
+    {"name": "current-state refresh", "command": "scripts/refresh-current-state", "status": "PASS", "log_directory": "results/workflow-refresh/20260908T220226279485Z"},
+    {"name": "project review freshness", "command": "scripts/build-project-review --check", "status": "PASS"},
+    {"name": "artifact graph freshness", "command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "current": 171, "historical": 10, "superseded": 4}
+  ],
+  "historical_validator_note": "The live publication-study validator correctly refuses outside its historical frontier; validation used the repository's bound historical snapshot path.",
+  "result_limits": "Validation confirms integrity and freshness. It does not establish semantic authority or exported-declaration reachability."
+}

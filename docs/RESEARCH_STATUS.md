@@ -50,6 +50,18 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-CACHE-1` on 2026-09-08 with `SUCCESS` for an exact
+  internal cache-contract comparison. Both controls and the baseline malformed
+  let candidate passed; the mutant candidate failed at the frozen no-rejection
+  assertion after reusing the warmed no-check cache. The result is scoped to the
+  same-checker internal harness and does not establish exported-input reachability,
+  production impact, semantic authority or a corpus kill. The canonical survivor
+  classification remains unchanged. See the [result](../results/research/survivor-cache-1/result.json),
+  [report](../results/research/survivor-cache-1/report.md), and
+  [closure review](../results/research/queue-reviews/2026-09-08-survivor-cache-closure-strategic.json).
+  `SURVIVOR-CACHE-EXPORT-1` is selected READY and unstarted after a project-wide
+  reassessment.
+
 - Completed `ALT-TRANSFER` on 2026-09-08 with `SUCCESS` for a bounded
   feasibility assessment and **NO_GO** phase decision. Four fresh queries,
   five primary-source groups, one pinned code inspection and the local exposure
@@ -2424,26 +2436,30 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-CACHE` — the owner-authorized cache-selection survivor investigation
-   is active under [docs/research/SURVIVOR_CACHE_PLAN.md](research/SURVIVOR_CACHE_PLAN.md).
+1. `F-SURVIVOR-CACHE-EXPORT` — test whether the established internal cache
+   distinction is reachable from an ordinary exported declaration, under
+   [docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md](research/SURVIVOR_CACHE_EXPORT_PLAN.md).
 
-Selected next item: `SURVIVOR-CACHE-1`.
+Selected next item: `SURVIVOR-CACHE-EXPORT-1`.
+
+The item is READY and unstarted.
 
 Queue handoff: EXECUTABLE.
 
-The owner authorized one90-minute investigation of `nanoda-gen-3365809b3c41`
-and explicitly requested durable project-wide prioritization after each completed
-item. This work traces the exact cache guard and compares a frozen original/
-modified-source pair. An internal-cache unit result must remain distinct from
-exported-declaration reachability and cannot by itself promote the survivor.
-Before counted execution, bind and commit exact scientific, tooling and test
-inputs. Preserve all prior evidence and failed/unknown charges.
+`SURVIVOR-CACHE-1` completed with `SUCCESS`: both source-bound controls passed,
+the pinned baseline candidate caught the exact let annotation mismatch, and the
+mutant candidate failed at the frozen warmed-cache assertion. This is an
+internal same-checker cache-contract distinction. It does not establish an
+exported-input witness, production impact, semantic authority or a corpus kill;
+the canonical survivor classification remains unchanged.
 
-At closure, reassess the best next contribution across constitutional goals,
-including work outside this plan. Record the reviewed alternatives and maintain
-a feasible bounded READY frontier. Existing transfer and upstream blockers do
-not block unrelated useful local work. This run completes at most this one
-research item and selects its successor without starting it.
+The project-wide closure review compared the cache export route, the next
+universe survivor, transfer intake, original conditional prerequisites,
+maintenance/upstream triggers and current methods/reuse evidence. The export
+route is the best feasible bounded question because the exact mechanism and a
+source-supported K-recursor-major call path are already present. This selection
+does not start it. A fresh work record and committed scientific gates are
+required before any launch.
 
 ### Waiting
 
