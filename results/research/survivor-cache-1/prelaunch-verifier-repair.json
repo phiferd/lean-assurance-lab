@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-1",
+  "phase": "PRELAUNCH_VERIFIER_REPAIR",
+  "original_manifest": {
+    "path": "config/survivor-cache-0001.json",
+    "sha256": "3e6f6cd4ede80c3e421fd75a057fc8432bfb1db5d3376f107da369c8b0ccbbf8"
+  },
+  "observed_failure": "Read-only payload validation rejected the inherited target-specific wasi lock entry because both source and archive were absent.",
+  "cause": "The new verifier required payloads for every Cargo.lock entry, while the exact inherited and previously validated offline runtime intentionally records an unused target-specific package with both payload bindings absent.",
+  "repair": "Require the full locked-package, registry-index, and tool inventory to equal the exact bound predecessor runtime; permit a package payload only when both source and archive are present, and permit symmetric absence only as inherited. Reject half-present bindings.",
+  "scientific_inputs_changed": false,
+  "launch_accounting": {
+    "builds": 0,
+    "tests_or_checkers": 0,
+    "scientific_pairs": 0
+  },
+  "regression_evidence": {
+    "path": "results/research/survivor-cache-1/focused-test-receipt-r2.json"
+  }
+}

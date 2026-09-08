@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-1",
+  "recorded_at": "2026-09-08T21:39:00+00:00",
+  "phase": "PRE_FREEZE_REVIEW_REPAIR",
+  "finding": "The reviewed harness referred to test_resources/Empty/export, which was absent from both isolated source materializations and would have failed before exercising the cache contract.",
+  "repair": "Embed the exact 176-byte empty-export metadata in the identical harness and parse it through nanoda's parser, then rematerialize only while the scientific manifest is absent and the prior materialization still matches its recorded binding.",
+  "prior_bindings": {
+    "harness": {
+      "path": "results/research/survivor-cache-1/cache-contract-tests.rs",
+      "sha256": "782cde04221c2e26a765294fe434dc9068e738ef75c3692cac66333f7ba50978"
+    },
+    "source_materialization": {
+      "path": "results/research/survivor-cache-1/source-materialization.json",
+      "sha256": "fa6b0a33792c4dc7cf034033d9a18c050e092a0c378ba0aac93fb3ba86f8c107"
+    },
+    "runtime_manifest": {
+      "path": "results/research/survivor-cache-1/runtime-manifest.json",
+      "sha256": "48c3a7a6df7edddec179d0cdc2358a94baceb69064c434a674c066d6ce2b2f77"
+    },
+    "source_review": {
+      "path": "results/research/survivor-cache-1/daybreak-source-review.json",
+      "sha256": "ad1cd2621a59243e279a268e2a987c965ba42daf5a0aa1177f71d637f8a4c7f5"
+    }
+  },
+  "launch_accounting": {
+    "builds": 0,
+    "tests_or_checkers": 0,
+    "scientific_pairs": 0
+  },
+  "scientific_manifest_existed": false
+}

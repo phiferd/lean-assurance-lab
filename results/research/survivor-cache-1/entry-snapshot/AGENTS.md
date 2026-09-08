@@ -32,34 +32,6 @@ When work changes the frontier, update the durable state and its canonical
 derived artifacts through their defined generation paths. Never advance into a
 subsequent milestone unless durable research state authorizes it.
 
-## Project-wide reassessment and standing local authorization
-
-At each logical item closure, use the LLM to reassess what best advances the
-constitution across the whole project. Compare methods and frontiers, unresolved
-evidence and shared regression opportunities, maintenance and upstream needs,
-and literature or reuse. A completed plan or a blocked next milestone is not,
-by itself, a reason to declare that no work remains or pause the project.
-
-The owner's standing instruction of 2026-09-08 authorizes agents to select and
-record bounded local successor work, including a changed research direction,
-and to update its explicit plan, Active status and canonical queue together.
-No new permission is needed merely because the best local direction differs
-from the completed plan. This includes local investigation, implementation and
-experiments after their exact entry, scientific-input and launch gates pass.
-It does not override the constitution, extend an item's budget, reopen frozen
-history, authorize an external action, or permit crossing an assurance milestone
-whose prerequisite gate is unsatisfied. Record the successor in durable state
-before executing it; a conversational recommendation is insufficient authority.
-
-At handoff select the highest-value feasible authorized READY item after that
-comparison. Reevaluate bounded local blocker-removal and alternative work before
-using PAUSED, and record the actual evidence-bound blockers and unblocking
-conditions if no useful local item exists. Do not manufacture activity or repeat
-planning without a concrete useful output. Selecting the next item does not
-start it: obey the current request's item count and stopping boundary, including
-an instruction to finish one item and stop. Use the current queue successor's
-strategic-review checks; older queues retain their original historical rules.
-
 ## Engineering persistence within an active item
 
 Treat an ordinary engineering failure as work to diagnose and repair within the

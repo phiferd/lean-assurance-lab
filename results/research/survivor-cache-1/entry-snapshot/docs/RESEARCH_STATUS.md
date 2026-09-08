@@ -2383,7 +2383,7 @@ sixteen observer charges, failed/unknown costs and original CVC-4/CVC-5
 dependencies remain intact. Existing Lean/Arena Waiting triggers and Kiota
 deferrals are preserved.
 
-### Completed predecessor — Prospective transfer assessment, 2026-09-08
+### Active
 
 1. `F-PROSPECTIVE-TRANSFER-ASSESSMENT` — the owner-authorized bounded
    `ALT-TRANSFER` assessment is complete under
@@ -2421,29 +2421,6 @@ conditional results, consumed/unknown costs, catalog authority and source locks
 remain unchanged. Existing Lean/Arena waiting triggers and Kiota deferrals are
 preserved. The exact accepted authority and entry state remain bound in
 [work-record.json](../results/research/alt-transfer-2026-09-08/work-record.json).
-
-### Active
-
-1. `F-SURVIVOR-CACHE` — the owner-authorized cache-selection survivor investigation
-   is active under [docs/research/SURVIVOR_CACHE_PLAN.md](research/SURVIVOR_CACHE_PLAN.md).
-
-Selected next item: `SURVIVOR-CACHE-1`.
-
-Queue handoff: EXECUTABLE.
-
-The owner authorized one90-minute investigation of `nanoda-gen-3365809b3c41`
-and explicitly requested durable project-wide prioritization after each completed
-item. This work traces the exact cache guard and compares a frozen original/
-modified-source pair. An internal-cache unit result must remain distinct from
-exported-declaration reachability and cannot by itself promote the survivor.
-Before counted execution, bind and commit exact scientific, tooling and test
-inputs. Preserve all prior evidence and failed/unknown charges.
-
-At closure, reassess the best next contribution across constitutional goals,
-including work outside this plan. Record the reviewed alternatives and maintain
-a feasible bounded READY frontier. Existing transfer and upstream blockers do
-not block unrelated useful local work. This run completes at most this one
-research item and selects its successor without starting it.
 
 ### Waiting
 

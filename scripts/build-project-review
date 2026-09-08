@@ -13,7 +13,7 @@ from pathlib import Path
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lib.research_queue_v2 import handoff_status, load_queue
+from lib.research_queue_v3 import handoff_status, load_queue
 OUTPUT = 'results/research/project-review.json'
 REPORT = 'docs/PROJECT_REVIEW.md'
 HISTORY = 'results/research/declaration-validation-publication-study-historical.json'
@@ -36,7 +36,8 @@ SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATIO
 SOURCES += ['config/research-queue.json', 'docs/RESEARCH_WORKFLOW.md',
             'lib/research_queue.py', 'scripts/validate-research-queue',
             'tests/test_research_queue.py', 'lib/research_queue_v2.py',
-            'tests/test_research_queue_v2.py']
+            'tests/test_research_queue_v2.py', 'lib/research_queue_v3.py',
+            'tests/test_research_queue_v3.py']
 
 
 def load(path):
@@ -106,6 +107,8 @@ def build():
     selected = next(row for row in queue['items'] if row['id'] == queue['selected_item'])
     paused = handoff_status(queue) == 'PAUSED'
     queue_sources = [queue['plan'], *[str(p.relative_to(ROOT)) for p in sorted((ROOT / 'results/research/queue-reviews').glob('*.json'))]]
+    if queue['schema_version'] == 3:
+        queue_sources.append(queue['strategic_review']['path'])
     for item in queue['items']:
         queue_sources.extend(item['evidence_refs'])
         if item['closure']:

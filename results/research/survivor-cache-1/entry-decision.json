@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-1",
+  "recorded_at": "2026-09-08T20:59:29.790933+00:00",
+  "owner_authorization": "Yes, let\u2019s do that",
+  "additional_owner_direction": "Always maintain a frontier with work that could be done; use the LLM to prioritize, execute and continuously reassess overall work advancing the project goals rather than only the next milestone in the current plan.",
+  "plan": "docs/research/SURVIVOR_CACHE_PLAN.md",
+  "scope": "One cache-survivor investigation plus the explicitly requested durable policy correction; no successor execution or external action.",
+  "entry_state": "entry-snapshot",
+  "selected_mutant": "nanoda-gen-3365809b3c41",
+  "scientific_freeze_status": "FROZEN",
+  "source_review": {
+    "path": "results/research/survivor-cache-1/daybreak-source-review.json",
+    "sha256": "7bd08b4fdb89a1084fac13d0bebbe84bc4f8e21e6cc720eb5aff5a7b2f2472ad",
+    "verdict": "PASS_FOR_INTERNAL_CACHE_CONTRACT_COMPARISON"
+  },
+  "fixed_comparison": {
+    "control": "On one fresh checker, infer a well-typed let with InferOnly and then Check; both baseline and mutant must pass.",
+    "candidate": "On a separate fresh checker, infer a malformed let with InferOnly and then Check; the baseline test must catch the exact annotation-mismatch panic, while the mutant must fail only at the explicit no-rejection assertion.",
+    "expected_cells": {
+      "baseline_control": "TEST_PASS",
+      "mutant_control": "TEST_PASS",
+      "baseline_candidate": "TEST_PASS",
+      "mutant_candidate": "REGRESSION_FAILURE at src/tc.rs:1383:23 with the exact fixed assertion message"
+    }
+  },
+  "interpretation": "The fixed comparison can establish an internal, same-checker cache-contract distinction for the exact pinned source and mutation. It cannot establish exported-declaration reachability, production impact, semantic authority, or a corpus-level kill; canonical survivor status remains unchanged.",
+  "execution_authorized": true,
+  "execution_prerequisites": [
+    "Exact scientific comparison and interpretation frozen",
+    "Pinned source/runtime and identical baseline/mutant harness bound",
+    "Focused negative runner tests PASS on exact tooling",
+    "Exact tooling and authority committed before launch"
+  ]
+}

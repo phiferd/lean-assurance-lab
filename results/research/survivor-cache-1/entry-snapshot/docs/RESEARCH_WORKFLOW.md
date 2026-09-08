@@ -1,17 +1,14 @@
 # Research selection and stopping-point review
 
 Effective 2026-09-06 under the owner's instruction to maintain a prioritized
-list and finish bounded work before reevaluating; extended 2026-09-08 by the
-owner's standing instruction for project-wide reassessment and bounded local
-successors. This operating procedure is subordinate to the constitution. Active
-execution follows the frontier recorded in RESEARCH_STATUS; a stopping-point
-review may replace that frontier through the explicit process below.
+list and finish bounded work before reevaluating. This operating procedure is
+subordinate to the constitution and the Active frontier in RESEARCH_STATUS.
 
 ## One authority chain and one queue
 
 `docs/RESEARCH_STATUS.md` selects the authorized frontier and links its plan.
 `config/research-queue.json` records ranked items within that frontier and
-explicitly deferred alternatives across the project. It governs mechanically decidable queue
+explicitly deferred alternatives. It governs mechanically decidable queue
 facts; it cannot activate a frontier by itself. `docs/PROJECT_REVIEW.md` is
 generated from the queue and existing assurance inputs. GitHub Issues mirror
 claimable work and ownership. Neither Issue order nor a generated report
@@ -21,20 +18,7 @@ Use `scripts/validate-research-queue` before selecting work. One writer owns
 queue changes. The validator checks unique contiguous ranks, dependencies,
 finite budgets, completion records, one active item, the highest-ranked eligible
 selection, and agreement with the Active status marker. It does not prove a
-priority judgment correct or substitute for exact experiment entry gates.
-
-The owner's standing authorization permits selecting, recording and executing
-bounded local successor work that best advances the constitutional goal, even
-when its method or research direction differs from the completed plan. At a
-logical stopping point, update the explicit successor plan, Active status and
-queue together before execution. This is the durable route for changing the
-frontier, not a silent prompt override. Local source investigations, regression
-construction, implementation and experiments can qualify. Scientific-input
-freezes, exact launch controls, finite cumulative budgets, milestone prerequisite
-gates and frozen history still apply. External publication, contact and changes
-still require authorization for that exact action and target. A task-specific
-limit such as one completed item controls when to stop, not whether useful next
-work may be selected READY.
+priority judgment correct or authorize an experiment.
 
 ## What makes an item executable
 
@@ -103,22 +87,13 @@ At every stop:
 2. Record the result and a recommendation with action, target, priority,
    prerequisites, and evidence. A completed literature task must recommend a
    reuse/extension/build/stop decision; a reading list is insufficient.
-3. Use the LLM to compare the best opportunities across the whole project,
-   judging them against the constitution rather than asking only whether the
-   current plan's next milestone is ready. Cover competing methods/frontiers,
-   unresolved evidence and shared regression value, maintenance and substantive
-   upstream needs, and literature/reuse currency. Reassess waiting follow-through
-   and deferred work, with concrete evidence and a reason when a category offers
-   no useful candidate. Promote a PLANNED item only if its entry gate is met and
-   it still merits the cost. Create a bounded local successor when a better
-   direction is available under the standing owner authorization.
+3. Reassess dependencies and all serious alternatives, including waiting
+   follow-through, deferred work, and literature needs. Promote a PLANNED item
+   only if its entry gate is met and it still merits the cost.
 4. Update the ranked queue and Active status together. Append a dated decision
    under `results/research/queue-reviews/` with the stopped item/outcome, before
-   and after ordering, evidence paths, selected next item, and reasons. The
-   current schema-v3 queue also binds a project-wide strategic review with the
-   compared candidates, exact supporting evidence, category coverage, concrete
-   blockers and selected-item agreement. Preserve earlier decisions; never
-   overwrite the result to justify a preferred rank.
+   and after ordering, evidence paths, selected next item, and reasons. Preserve
+   earlier decisions; never overwrite the result to justify a preferred rank.
 5. Validate the queue and regenerate its review through the existing refresh
    path. Mirror the bounded task to GitHub only within existing authorization.
 
@@ -129,21 +104,15 @@ checkpoint, consumed budget, and reason before switching. Do not silently reset
 budgets or extend scope. A bounded unresolved result cannot satisfy a downstream
 dependency that needs success; revise or replace that task explicitly.
 
-Maintain a useful executable frontier by selecting the highest-value feasible
-authorized READY item at handoff. A completed plan, a blocked planned milestone,
-or a change of local direction alone does not justify PAUSED or another request
-for authorization. Before concluding there is no work, assess whether a bounded
-local investigation, regression, implementation, maintenance action or
-blocker-removal task would advance the constitutional goal. Prefer work with a
-decisive shared output over successive planning-only items. If no valuable local
-task is feasible, preserve the evidence and identify the actual external input,
-target-specific authorization, technical capability, scientific gate, exhausted
-bound or lack of a useful bounded question. State what would unblock it. Do not
-invent a nominal task or run an endless planning loop. The validator refuses to
-present an empty/blocked queue as operationally ready. Selecting a successor
-does not execute it; stop after one item when the request specifies that bound.
+Maintain at least one eligible next item at handoff. If the queue would become
+empty, close the current item and add a small decision/reuse investigation
+inside the authorized scope, with its own bound and useful output. This is not
+permission for an endless planning loop: if no valuable authorized local task
+exists, record the authorization or external-state blocker and the exact next
+decision needed. Pause execution instead of inventing activity. The validator
+will refuse to present an empty/blocked queue as operationally ready.
 
-The explicit schema-v2/v3 handoff represents this case as `PAUSED`, with the
+The explicit schema-v2 handoff represents this case as `PAUSED`, with the
 highest-ranked WAITING/DEFERRED decision selected, no READY/ACTIVE items, a
 nonempty reason, exact required decision and existing evidence references.
 `Queue handoff: PAUSED.` must appear in Active status. Integrity validation
@@ -151,30 +120,7 @@ reports PAUSED with no executable item; `scripts/validate-research-queue
 --require-ready` fails. Schema v1 retains its original requirement for eligible
 work and remains the bound interface for historical scientific tooling. A
 paused handoff is a durable blocker, not authorization for an agent to execute
-the selected waiting entry. Version 2 retains its exact original validation
-rules through `lib/research_queue_v2.py`; new project-wide review requirements
-are implemented only in the explicit `lib/research_queue_v3.py` successor.
-
-For schema v3, `strategic_review` binds a dated JSON review by path and SHA-256.
-It records `PROJECT_WIDE` scope, `ENTRY` or `CLOSURE`, the completed item at
-closure, the selected successor, and the digest of the current queue excluding
-that review reference. It binds the constitution, this workflow, the current
-plan and each candidate's cited evidence. The review assesses all five
-categories: `METHODS_AND_FRONTIERS`, `UNRESOLVED_AND_SHARED_ASSETS`,
-`MAINTENANCE_AND_UPSTREAM`, `LITERATURE_AND_REUSE` and
-`LOCAL_BLOCKER_REMOVAL`. An empty candidate list for a category requires a
-concrete written explanation; it never requires inventing a candidate. Compare
-at least two actual unfinished queue alternatives and include every READY or
-ACTIVE item as FEASIBLE. Other retained entries may be represented as BLOCKED
-or DEFERRED, or excluded with a reason in the relevant category assessment.
-Candidate dispositions must agree with queue status. A PAUSED selection and any
-assessed local blocker-removal candidates need exact blocker evidence; no
-FEASIBLE candidate may remain. ENTRY applies only while the selected item is
-ACTIVE; a READY or PAUSED handoff requires CLOSURE and its completed-item
-reference. A CLOSURE review leaves the next item unstarted.
-The checks enforce scope recording, finite queue items, evidence freshness and
-selection consistency. They cannot prove the LLM's research judgment correct,
-prove a natural-language blocker genuine, or confer semantic authority.
+the selected waiting entry.
 
 Deliver the completed item on `main` using `scripts/push-main`, as required by
 `AGENTS.md`. A push to a task branch is not completed repository delivery.
