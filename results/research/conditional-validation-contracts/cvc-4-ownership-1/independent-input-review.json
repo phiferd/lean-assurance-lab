@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-OWNERSHIP-1",
+  "reviewer": "Delegated GPT-5.6 Luna medium, independent read-only input/source review",
+  "status": "PASS",
+  "inputs": [
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json",
+      "sha256": "ed380aca76b5d54598ca155982a59a5c656aae7e5b7f72337afd1f561cc1f1c7"
+    },
+    {
+      "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/cases.json",
+      "sha256": "2fa5a5cc830e5eef0435c330ae1ca47786fd74ae948de292e8f1a051d22a5a91"
+    },
+    {
+      "path": "lib/cvc4_ownership_inputs.py",
+      "sha256": "5b89d88c8e7e9f88ed400417d5a5e84619c898b7f28a8fc6b0452ea946a9f71e"
+    },
+    {
+      "path": "tests/test_cvc4_ownership_inputs.py",
+      "sha256": "ac7386c0381d9988f4fa418280b437c221804f0494485a90992ef211bf247bc6"
+    }
+  ],
+  "checks": [
+    "Exact predecessor and proposal hashes",
+    "Sole LF JSON insertion immediately before final def; deletion byte equality",
+    "Fresh level3 names declared v and no original level/expression references it",
+    "Unchanged ordered params/name/value/type AST",
+    "Unchanged strict decoder accepts control and refuses unowned candidate",
+    "Source locators parser500-509/637-643/783-791 tc518-524 official77-83"
+  ],
+  "pure_tests": {
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "discover",
+      "-s",
+      "tests",
+      "-p",
+      "test_cvc4_ownership_inputs.py"
+    ],
+    "passed": 6
+  },
+  "scope": "Scientific insertion and source mapping only; controller and final manifest need separate root review. No semantic authority or observer outcome inferred."
+}

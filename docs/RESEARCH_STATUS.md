@@ -2119,7 +2119,7 @@ witness includes an axiom and `Expr.const`, so it cannot directly replace the
 fixed empty-environment Sort pair. The marginal value is a reproducible
 serialization regression and one finite ownership-boundary comparison.
 
-`CVC-4-OWNERSHIP-1` is selected READY and unstarted under the exact
+`CVC-4-OWNERSHIP-1` is selected ACTIVE under the exact
 [proposal](../results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json).
 Its preparation gate is this completed review and required validation; observer
 feedback additionally requires committed exact bytes, preserved ASTs and

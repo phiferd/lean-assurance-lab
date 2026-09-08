@@ -30,7 +30,7 @@ Selected next item: **CVC-4-OWNERSHIP-1**. Status, rank and bounds come from `co
 
 | Rank | Item | Status |
 |---|---|---|
-| 16 | CVC-4-OWNERSHIP-1: Characterize the fixed ownership pair after explicit parameter serialization | READY |
+| 16 | CVC-4-OWNERSHIP-1: Characterize the fixed ownership pair after explicit parameter serialization | ACTIVE |
 | 17 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 18 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 19 | ALT-SURVIVORS: Design the next fixed survivor triage | DEFERRED |
@@ -50,7 +50,7 @@ Implement the exact two-stream scientific-input successor and minimal reused con
 
 **Execution:** At most 1 sessions of 90 active minutes; 4 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: CVC-4-ADAPTER-REVIEW SUCCESS with exact proposal, evidence bindings and required closure validation delivered. This READY entry permits preparation only when execution is requested; observer feedback additionally requires all six prelaunch gates in successor-proposal.json, including exact committed bytes, hypotheses, tested tooling and entry review.
+**Boundary:** ACTIVE: CVC-4-ADAPTER-REVIEW SUCCESS with exact proposal, evidence bindings and required closure validation delivered. This READY entry permits preparation only when execution is requested; observer feedback additionally requires all six prelaunch gates in successor-proposal.json, including exact committed bytes, hypotheses, tested tooling and entry review.
 
 ### 17. CVC-4: Connect the contract to real validation behavior
 
@@ -156,6 +156,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW. Selected next item: CVC-4-OWNERSHIP-1 (READY).
+- The conditional-contract plan and ranked queue are current. Completed queue items: CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW. Selected next item: CVC-4-OWNERSHIP-1 (ACTIVE).
 
 This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.

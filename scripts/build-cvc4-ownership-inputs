@@ -1,0 +1,11 @@
+#!/usr/bin/env python3
+import argparse
+import json
+import sys
+from pathlib import Path
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lib.cvc4_ownership_inputs import build
+p = argparse.ArgumentParser()
+p.add_argument('--write', action='store_true')
+a = p.parse_args()
+print(json.dumps(build(Path(__file__).resolve().parents[1], write=a.write), indent=2))

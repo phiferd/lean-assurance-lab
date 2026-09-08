@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "item_id": "CVC-4-OWNERSHIP-1",
+  "contract_id": "CVC-U1-A7",
+  "proposal": {
+    "path": "results/research/conditional-validation-contracts/cvc-4-adapter-review/successor-proposal.json",
+    "sha256": "ed380aca76b5d54598ca155982a59a5c656aae7e5b7f72337afd1f561cc1f1c7"
+  },
+  "cases": [
+    {
+      "id": "E-OWNED-CONTROL-PARAM-RECORD",
+      "pair_id": "ownership",
+      "role": "control",
+      "predecessor": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-owned-control.ndjson",
+        "sha256": "54d43141eb2c0a81c8045544cfe83426b128af39a6bbf42b6dbed3c0feca09b8"
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/inputs/e-owned-control-param-record.ndjson",
+        "sha256": "34a064aa98b36774763a6cc178f88c084e963d026a5896cb887abed09d8cbb2f"
+      },
+      "insert_record": {
+        "il": 3,
+        "param": 3
+      },
+      "artifact": {
+        "name": "cvc2UnownedBoundaryControl",
+        "params": [
+          "u",
+          "v"
+        ],
+        "value_level": [
+          "param",
+          "u"
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "model_status": "MODEL_VALID_BY_DEFINITION",
+      "strict_decoder": "ACCEPTED_STRUCTURAL_SUBSET",
+      "invariants": "Sole exact line before final def; deleting it recovers predecessor bytes; fresh index 3 names declared v and is unreferenced by original level/expression records."
+    },
+    {
+      "id": "E-UNOWNED-PARAM-RECORD",
+      "pair_id": "ownership",
+      "role": "candidate",
+      "predecessor": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-conditional/inputs/e-unowned.ndjson",
+        "sha256": "5cd948669e72cfb7e0ef92df5e9d1e4118397358b3260dca1b629e042e6d2224"
+      },
+      "input": {
+        "path": "results/research/conditional-validation-contracts/cvc-4-ownership-1/inputs/e-unowned-param-record.ndjson",
+        "sha256": "208223d1c20b6886b2d0c69922a6a652d09cdf2ea630c7010f2becf1f7e8bd8e"
+      },
+      "insert_record": {
+        "il": 3,
+        "param": 2
+      },
+      "artifact": {
+        "name": "cvc2UnownedBoundary",
+        "params": [
+          "v"
+        ],
+        "value_level": [
+          "param",
+          "u"
+        ],
+        "type_level": [
+          "succ",
+          [
+            "param",
+            "u"
+          ]
+        ]
+      },
+      "model_status": "CHECKED_UNSUPPORTED",
+      "strict_decoder": "REFUSED_UNOWNED_UNIVERSE_PARAMETER",
+      "invariants": "Sole exact line before final def; deleting it recovers predecessor bytes; fresh index 3 names declared v and is unreferenced by original level/expression records."
+    }
+  ],
+  "provenance": "Lab-authored input successors. Retained metadata is grammar compatibility, not a claim these streams were produced by the named exporter.",
+  "scope": "Raw projection is supplementary syntax evidence only. Strict decoder and model support remain unchanged; E-UNOWNED is unsupported, not proved semantically invalid."
+}
