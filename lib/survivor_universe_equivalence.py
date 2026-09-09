@@ -9,6 +9,8 @@ import subprocess
 ITEM = "SURVIVOR-UNIVERSE-EQUIVALENCE-1"
 MUTANT = "nanoda-gen-e9648d8c028d"
 SNAPSHOT = "a4580dcd2d74f8156b4151d7439ca1e048a9735c"
+TOOLING_SNAPSHOT = "4cea69c0b66487b82596c47c917b1d58af057a45"
+CLOSURE_SNAPSHOT = "70de72f54c520fad89ed023204163d1cc3e76c5b"
 BASE = "results/research/survivor-universe-equivalence-1"
 ANALYSIS = f"{BASE}/equivalence-analysis.json"
 RESULT = f"{BASE}/result.json"
@@ -18,6 +20,17 @@ EVIDENCE_MANIFEST = f"{BASE}/evidence-manifest.json"
 HISTORICAL_TRANSITION = f"{BASE}/historical-transition.json"
 REGISTRY = "results/mutants/registry.jsonl"
 INVENTORY = "results/survivors/inventory.jsonl"
+EVOLVED_TOOLING = {
+    "lib/survivor_universe_equivalence.py",
+    "lib/survivor_universe_equivalence_historical.py",
+    "tests/test_survivor_universe_equivalence_historical.py",
+    "lib/survivor_universe_diff_historical.py",
+    "tests/test_survivor_universe_diff_historical.py",
+    "lib/survivor_cache_historical.py",
+    "tests/test_survivor_cache_historical.py",
+    "tests/test_current_assurance.py",
+    "scripts/build-artifact-graph",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -35,6 +48,18 @@ def sha256(path: Path) -> str:
 
 def git_bytes(root: Path, path: str) -> bytes:
     return subprocess.check_output(["git", "show", f"{SNAPSHOT}:{path}"], cwd=root)
+
+
+def tooling_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{TOOLING_SNAPSHOT}:{path}"], cwd=root
+    )
+
+
+def closure_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{CLOSURE_SNAPSHOT}:{path}"], cwd=root
+    )
 
 
 def ordered(text: str, fragments: list[str], label: str) -> None:
@@ -207,12 +232,13 @@ def _validate_registry(root: Path, analysis: dict) -> dict:
     current = (root / REGISTRY).read_bytes()
     require(digest(predecessor) == "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572"
             and len(predecessor.splitlines()) == 607, "registry predecessor drift")
-    require(current.startswith(predecessor) and len(current.splitlines()) == 608,
-            "registry is not one exact append over its predecessor")
+    require(current.startswith(predecessor) and len(current.splitlines()) >= 608,
+            "registry no longer preserves the universe predecessor and append")
     suffix = current[len(predecessor):]
-    require(suffix.startswith(b"{") and suffix.count(b"\n") == 1,
-            "registry append is not one JSONL record")
-    appended = json.loads(suffix.decode("utf-8"))
+    first_line = suffix.splitlines(keepends=True)[0]
+    require(first_line.startswith(b"{") and first_line.count(b"\n") == 1,
+            "universe registry append is not one JSONL record")
+    appended = json.loads(first_line.decode("utf-8"))
     fields = {
         "checker", "classification", "classification_scope", "equivalence_analysis",
         "function", "id", "mutation_operator", "notes", "operator_family", "source_file",
@@ -246,13 +272,17 @@ def validate(root: Path) -> dict:
     _validate_registry(root, analysis)
 
     result = json.loads((root / RESULT).read_text(encoding="utf-8"))
+    predecessor_registry = git_bytes(root, REGISTRY)
+    first_append = (root / REGISTRY).read_bytes()[len(predecessor_registry):].splitlines(keepends=True)[0]
+    historical_successor_registry = predecessor_registry + first_append
     require(result["item_id"] == ITEM and result["outcome"] == "SUCCESS"
             and result["finding"] == analysis["classification"]
             and result["analysis"] == {"path": ANALYSIS, "sha256": sha256(root / ANALYSIS)}
             and result["registry_transition"]["predecessor_lines"] == 607
             and result["registry_transition"]["successor_lines"] == 608
             and result["registry_transition"]["predecessor_sha256"] == digest(git_bytes(root, REGISTRY))
-            and result["registry_transition"]["successor_sha256"] == sha256(root / REGISTRY)
+            and result["registry_transition"]["successor_sha256"]
+            == digest(historical_successor_registry)
             and result["scope"]["public_entrypoint_equivalence"] is True
             and result["scope"]["arbitrary_private_leq_core_equivalence"] is False
             and result["recommendation"]["external_action"] == "NO_ACTION_SUPPORTED"
@@ -285,7 +315,8 @@ def validate(root: Path) -> dict:
             and focused["scientific_launches"] == 0,
             "focused-validation identity or launch count drift")
     for row in focused["tooling"]:
-        require(sha256(root / row["path"]) == row["sha256"],
+        data = closure_bytes(root, row["path"])
+        require(digest(data) == row["sha256"],
                 "focused tooling drift: " + row["path"])
 
     manifest = json.loads((root / EVIDENCE_MANIFEST).read_text(encoding="utf-8"))
@@ -299,8 +330,8 @@ def validate(root: Path) -> dict:
         require(set(row) == {"path", "sha256", "bytes"} and row["path"] not in paths,
                 "malformed or duplicate manifest input")
         paths.add(row["path"])
-        path = root / row["path"]
-        require(path.stat().st_size == row["bytes"] and sha256(path) == row["sha256"],
+        data = closure_bytes(root, row["path"])
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
                 "manifest input drift: " + row["path"])
     require({
         "docs/research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md",

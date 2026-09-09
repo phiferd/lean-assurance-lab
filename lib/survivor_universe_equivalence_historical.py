@@ -13,6 +13,7 @@ MUTANT = "nanoda-gen-e9648d8c028d"
 TRANSITION = "results/research/survivor-universe-equivalence-1/historical-transition.json"
 REGISTRY = "results/mutants/registry.jsonl"
 INVENTORY = "results/survivors/inventory.jsonl"
+POST_CLOSURE_SNAPSHOT = "9d764b4d46b16aa898f229d60d4fe74714555597"
 
 
 def require(condition: bool, message: str) -> None:
@@ -112,16 +113,29 @@ def validate(root: Path) -> dict:
         "pending_survivors_after": 5,
         "survivor_inventory_changed": False,
     }, "live transition expectation drift")
-    current_registry = (root / REGISTRY).read_bytes()
-    require(current_registry.startswith(old_registry)
-            and len(current_registry.splitlines()) == 608,
-            "current registry is not the exact one-row successor")
-    appended = json.loads(current_registry[len(old_registry):].decode("utf-8"))
+    post_registry = git_bytes(root, POST_CLOSURE_SNAPSHOT, REGISTRY)
+    require(post_registry.startswith(old_registry) and len(post_registry.splitlines()) == 608,
+            "universe post-closure registry is not the exact one-row successor")
+    appended = json.loads(post_registry[len(old_registry):].decode("utf-8"))
     require(appended["id"] == MUTANT and appended["status"] == "SURVIVED"
             and appended["classification"] == expectation["registry_classification"],
             "current registry append classification drift")
-    require((root / INVENTORY).read_bytes() == old_inventory,
+    require(git_bytes(root, POST_CLOSURE_SNAPSHOT, INVENTORY) == old_inventory
+            and (root / INVENTORY).read_bytes() == old_inventory,
             "current survivor inventory changed")
+
+    post_queue = json.loads(git_bytes(root, POST_CLOSURE_SNAPSHOT, "config/research-queue.json"))
+    post_by_id = {item["id"]: item for item in post_queue["items"]}
+    require(post_queue["selected_item"] == expectation["selected_item"]
+            and post_by_id[expectation["selected_item"]]["status"] == "READY",
+            "universe post-closure successor state drift")
+    post_assurance = json.loads(
+        git_bytes(root, POST_CLOSURE_SNAPSHOT, "results/assurance/current.json")
+    )
+    post_pending = post_assurance["mutation_testing"]["pending_survivor_triage"]
+    require(post_pending["count"] == 5 and MUTANT not in post_pending["mutant_ids"]
+            and post_assurance["mutation_testing"]["equivalent_mutants"] == 13,
+            "universe post-closure assurance drift")
 
     current = load_queue(root, require_ready=True)
     current_by_id = {item["id"]: item for item in current["items"]}
@@ -129,26 +143,28 @@ def validate(root: Path) -> dict:
             == old_by_id["SURVIVOR-UNIVERSE-DIFF-1"]["closure"],
             "predecessor queue closure changed")
     require(current_by_id[ITEM]["status"] == "COMPLETE"
-            and current["selected_item"] == expectation["selected_item"]
-            and current_by_id[expectation["selected_item"]]["status"] == "READY",
-            "current queue does not close exactly one item and select its successor")
+            and current_by_id[expectation["selected_item"]]["status"] == "COMPLETE"
+            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
+            and current_by_id[current["selected_item"]]["status"] == "READY",
+            "current queue does not preserve the universe successor transition")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]
-    require(pending["count"] == 5 and MUTANT not in pending["mutant_ids"]
-            and current_assurance["mutation_testing"]["equivalent_mutants"] == 13,
-            "current assurance did not admit scoped equivalence")
+    require(pending["count"] == 4 and MUTANT not in pending["mutant_ids"]
+            and "nanoda-gen-399895fa0b72" not in pending["mutant_ids"]
+            and current_assurance["mutation_testing"]["equivalent_mutants"] == 14,
+            "current assurance did not preserve and advance scoped equivalence")
     report = json.loads((root / "results/assurance/current-mutation-report.json").read_text())
-    require(report["classified_equivalent"] == 13
-            and report["survived_without_witness"] == 5
-            and report["modeled_mutation_score_denominator"] == 143
-            and report["modeled_mutation_score"] == 135 / 143,
-            "current mutation report metrics disagree with the one-row admission")
+    require(report["classified_equivalent"] == 14
+            and report["survived_without_witness"] == 4
+            and report["modeled_mutation_score_denominator"] == 142
+            and report["modeled_mutation_score"] == 135 / 142,
+            "current mutation report metrics disagree with later scoped admissions")
     return {
         "status": "PASS",
         "historical_snapshot": snapshot,
         "historical_manifest_inputs": len(old_inputs),
         "registry_predecessor_lines": 607,
-        "registry_successor_lines": 608,
+        "registry_successor_lines": len((root / REGISTRY).read_bytes().splitlines()),
         "current_successor": current["selected_item"],
         "pending_survivors": pending["count"],
         "equivalent_mutants": current_assurance["mutation_testing"]["equivalent_mutants"],

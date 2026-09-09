@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-FVAR-REACHABILITY-1",
+  "outcome": "SUCCESS",
+  "finding": "EQUIVALENT_AT_PUBLIC_EXPORT_PATH",
+  "mutation_id": "nanoda-gen-399895fa0b72",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "assessment": {
+    "path": "results/research/survivor-fvar-reachability-1/reachability-assessment.json",
+    "sha256": "83250f0c5466f81a9afc691ed4b152e3a6ee914ab04201c201f1c4157c46990f"
+  },
+  "registry_transition": {
+    "path": "results/mutants/registry.jsonl",
+    "predecessor_lines": 608,
+    "successor_lines": 609,
+    "predecessor_sha256": "2ba8a9a640d994e4ee90fe78f58896c0735a2bbebce4db75eab8dfcee6a09961",
+    "successor_sha256": "9f38a528bec31f358009cf7f3c00f4f8d6779dc07dbd3371271ff3e4801eac10",
+    "appended_classification": "EQUIVALENT"
+  },
+  "scope": {
+    "public_export_path_equivalence": true,
+    "arbitrary_internal_declaration_equivalence": false,
+    "internal_counterexample": "A synthetic DeclarInfo.ty containing an Expr::Local with a Sort binder type.",
+    "semantic_authority": false,
+    "guard_retained_as_defense_in_depth": true
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_build_launches": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "recommendation": {
+    "action": "Retain EQUIVALENT only for the pinned public export ingestion/checking path, preserve the internal synthetic-declaration counterexample and keep the free-variable guard as defense in depth.",
+    "target": "nanoda-gen-399895fa0b72 at pinned Nanoda tc.rs:168",
+    "priority": "COMPLETE",
+    "prerequisites": [
+      "Reopen if the parser gains a Local/free-variable form, a new public ingestion API constructs declarations, or check_declar_info gains a new caller.",
+      "Do not report input non-representability as semantic enforcement by Nanoda."
+    ],
+    "external_action": "NO_ACTION_SUPPORTED",
+    "evidence": [
+      "results/research/survivor-fvar-reachability-1/reachability-assessment.json",
+      "results/research/survivor-fvar-reachability-1/historical-transition.json",
+      "results/mutants/registry.jsonl"
+    ]
+  },
+  "next_item": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "next_item_started": false
+}

@@ -1,0 +1,97 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-FVAR-REACHABILITY-1",
+  "transition": "PUBLIC_EXPORT_FVAR_EXCLUSION_TO_SCOPED_EQUIVALENT_ADMISSION",
+  "historical_snapshot": "4cea69c",
+  "historical_queue": {
+    "path": "config/research-queue.json",
+    "sha256": "9f5db995ca5e5e31a31c8e2c6485b2d06bab429bebd77c2aebb4e4c1445448ac"
+  },
+  "historical_status": {
+    "path": "docs/RESEARCH_STATUS.md",
+    "sha256": "91600ea74322b2ca25af6730231880468c2547efa857dc2a99a2680bb736826f"
+  },
+  "historical_universe_manifest": {
+    "path": "results/research/survivor-universe-equivalence-1/evidence-manifest.json",
+    "sha256": "870bd2bd359f4759247bf7fb5295c498e7eea242c1352f2cf8ffe66ee884d2b5"
+  },
+  "historical_work_record": {
+    "path": "results/research/survivor-fvar-reachability-1/work-record.json",
+    "sha256": "6c96b5998458e7d062abde559b366f2e2b1116e907bcdc9aa966ab8b0a4a8e72"
+  },
+  "predecessor_registry": {
+    "path": "results/mutants/registry.jsonl",
+    "lines": 608,
+    "sha256": "2ba8a9a640d994e4ee90fe78f58896c0735a2bbebce4db75eab8dfcee6a09961"
+  },
+  "entry_assurance": {
+    "path": "results/assurance/current.json",
+    "sha256": "225843db989c88a47bb0bb62ba80a8f80b2004690ee4186a08af21a17949af58",
+    "pending_survivors": 5,
+    "equivalent_mutants": 13
+  },
+  "survivor_inventory": {
+    "path": "results/survivors/inventory.jsonl",
+    "lines": 1,
+    "sha256": "c7e552e761f128e9911abeb6cc85cf1d4b7c48d6ed03798d574a0ace688f2458"
+  },
+  "evolved_live_tooling": [
+    {
+      "path": "lib/survivor_universe_equivalence.py",
+      "historical_sha256": "c45103e1ad7d4c6a51030701974321ce1862f1f8fee362fe30b3906d3bf29289",
+      "reason": "Validate the frozen universe-equivalence closure through its exact snapshot after a later registry append."
+    },
+    {
+      "path": "lib/survivor_universe_equivalence_historical.py",
+      "historical_sha256": "c18d36229d268ddebf42bdc7bbe54a5db182f7f8d170c7986201763e5274c649",
+      "reason": "Preserve the former selected successor at its snapshot while recognizing the separately completed fvar item."
+    },
+    {
+      "path": "tests/test_survivor_universe_equivalence_historical.py",
+      "historical_sha256": "b520ef4507cccea118d9766bc0999f0324a4471e067d80f5581f7fce8eb6799f",
+      "reason": "Advance live successor assertions without changing frozen universe evidence."
+    },
+    {
+      "path": "lib/survivor_universe_diff_historical.py",
+      "historical_sha256": "fcaa80ec3752efe9ee4607c670362dca4cbd425f507e0a1ee12eb6bd6578c444",
+      "reason": "Advance only the old reachability closure's live queue assertion."
+    },
+    {
+      "path": "tests/test_survivor_universe_diff_historical.py",
+      "historical_sha256": "e6d8b355fadfdb7494bb959b69d43061a22c3e0ccb714a443a8fb8b041efe685",
+      "reason": "Keep the historical reachability test synchronized with the authorized live successor."
+    },
+    {
+      "path": "lib/survivor_cache_historical.py",
+      "historical_sha256": "06454eafd7a361af438e4303f57c1c0e3eaa428a44edbff25beb1bb43e24ca64",
+      "reason": "Advance only the oldest cache closure's live queue assertion."
+    },
+    {
+      "path": "tests/test_survivor_cache_historical.py",
+      "historical_sha256": "b596d8590f4962dff767c1f6cd3ee52016ea9ec936b16fb91cbee43e29581ea9",
+      "reason": "Keep the oldest closure test synchronized with the new successor."
+    },
+    {
+      "path": "tests/test_current_assurance.py",
+      "historical_sha256": "b702c4937a2b0ad4a708c9931fbb737f145e5d6aaf70bb535ca827c7c04758ba",
+      "reason": "Advance the exact pending/equivalent totals after one scoped admission."
+    },
+    {
+      "path": "scripts/build-artifact-graph",
+      "historical_sha256": "a29fc1d8bf8b1a6f7a3460d7e19ba3df8121c53791c44833a92266ab91e29eb5",
+      "reason": "Register the new closure and historical-transition tooling in the live graph without changing frozen graphs."
+    }
+  ],
+  "live_expectation": {
+    "completed_item": "SURVIVOR-FVAR-REACHABILITY-1",
+    "selected_item": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+    "registry_append_count": 1,
+    "registry_classification": "EQUIVALENT",
+    "pending_survivors_before": 5,
+    "pending_survivors_after": 4,
+    "equivalent_mutants_before": 13,
+    "equivalent_mutants_after": 14,
+    "survivor_inventory_changed": false
+  },
+  "claim": "The 608-line registry, prior universe-equivalence manifest, active entry queue/status and work record validate unchanged at the exact entry snapshot. Current state adds one scoped EQUIVALENT row, preserves the one-line survivor inventory, completes only this item and selects the thread-configuration successor without starting it."
+}

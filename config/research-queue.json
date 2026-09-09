@@ -1,9 +1,9 @@
 {
   "schema_version": 3,
-  "frontier_id": "F-SURVIVOR-FVAR-REACHABILITY",
-  "plan": "docs/research/SURVIVOR_FVAR_REACHABILITY_PLAN.md",
+  "frontier_id": "F-SURVIVOR-THREAD-CONFIG-REACHABILITY",
+  "plan": "docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md",
   "updated_at": "2026-09-08",
-  "selected_item": "SURVIVOR-FVAR-REACHABILITY-1",
+  "selected_item": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
   "items": [
     {
       "id": "CVC-1",
@@ -1320,7 +1320,7 @@
       "completion": "One source-supported exact reachability or exclusion result for an exported declaration type with free-variable representation, or a precise parser/internal-local boundary, followed by current/historical validation and project-wide successor review.",
       "stop_condition": "One source-only session and at most 3600 active seconds; zero build, checker, proof, network, scientific-byte, mutation-identity or external-action launches; do not execute a successor in the selecting item.",
       "kind": "EXPERIMENT",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "SURVIVOR-UNIVERSE-EQUIVALENCE-1"
       ],
@@ -1337,6 +1337,53 @@
         "results/research/survivor-universe-equivalence-1/result.json"
       ],
       "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/survivor-fvar-reachability-1/reachability-assessment.json",
+          "results/research/survivor-fvar-reachability-1/result.json",
+          "results/research/survivor-fvar-reachability-1/report.md",
+          "results/research/survivor-fvar-reachability-1/work-closure.json",
+          "results/research/survivor-fvar-reachability-1/evidence-manifest.json",
+          "results/research/survivor-fvar-reachability-1/focused-validation.json",
+          "results/research/survivor-fvar-reachability-1/historical-transition.json",
+          "results/workflow-refresh/survivor-fvar-reachability-1-2026-09-08/validation.json",
+          "results/research/queue-reviews/2026-09-08-survivor-fvar-reachability-closure-strategic.json"
+        ],
+        "recommendation": "The mutation is EQUIVALENT only for declarations produced by pinned Nanoda's public export parser and checked through check_all_declars/check_declar. Preserve the source-level internal Local declaration counterexample and the guard as defense in depth. Select SURVIVOR-THREAD-CONFIG-REACHABILITY-1 READY and unstarted for the two remaining declaration-dispatch predicate survivors."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+      "priority": 30,
+      "title": "Assess declaration-checking thread configuration reachability",
+      "target": "The public zero/one/many-thread dispatch states changed by nanoda-gen-2bdfe18a9ec2 and nanoda-gen-93b21593b0d8 at pinned Nanoda check_all_declars",
+      "action": "Trace config validation, serial/parallel task coverage, checker isolation, failure propagation and stack-size behavior and record an exact configuration distinction, scoped equivalence or operational boundary before scientific execution.",
+      "expected_value": "Tests the last novel declaration-validation survivor mechanism after the fvar closure while avoiding unsupported checker runs and treating operational differences explicitly.",
+      "rank_rationale": "Highest-value feasible local successor: it covers both remaining declaration-dispatch predicates with exact source and historical evidence. The two cache predicates share one already demonstrated internal distinction and bounded exported-reachability boundary; transfer lacks independent input, original CVC gates remain unmet, and no fresh maintenance trigger displaces this source-only check.",
+      "entry_gate": "SURVIVOR-FVAR-REACHABILITY-1 completed SUCCESS with one scoped registry transition and historical validation. The project-wide closure review selects this source-only successor READY and unstarted; a future item must bind a fresh work record before analysis and may run no build, checker, proof, network, byte-generation or external-action launch.",
+      "completion": "One source-supported exact configuration reachability/distinction or scoped equivalence result for both predicate mutations, or a precise operational boundary, followed by current/historical validation and project-wide successor review.",
+      "stop_condition": "One source-only session and at most 3600 active seconds; zero build, checker, proof, network, scientific-byte, mutation-identity or external-action launches; do not execute a successor in the selecting item.",
+      "kind": "EXPERIMENT",
+      "status": "READY",
+      "depends_on": [
+        "SURVIVOR-FVAR-REACHABILITY-1"
+      ],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 60,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md",
+        "mutations/nanoda-gen-2bdfe18a9ec2.json",
+        "mutations/nanoda-gen-93b21593b0d8.json",
+        "results/mutants/nanoda-gen-2bdfe18a9ec2/scheduled-comparison.json",
+        "results/mutants/nanoda-gen-93b21593b0d8/scheduled-comparison.json",
+        "results/research/survivor-fvar-reachability-1/result.json"
+      ],
+      "issue_urls": [],
       "closure": null,
       "blocked_reason": ""
     }
@@ -1348,7 +1395,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-08-survivor-fvar-reachability-entry-strategic.json",
-    "sha256": "f051897273c955a18be225ec4074aab5a44b467f8ca115fc70c2d7b5a4302291"
+    "path": "results/research/queue-reviews/2026-09-08-survivor-fvar-reachability-closure-strategic.json",
+    "sha256": "35d33b11d473cb238cd0c2b43b52cb2b2fbd87089900c6edad6766d15bf563ff"
   }
 }

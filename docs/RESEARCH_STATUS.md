@@ -50,6 +50,26 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-FVAR-REACHABILITY-1` on 2026-09-08 with
+  `SUCCESS`. Pinned Nanoda's public export parser cannot construct
+  `Expr::Local`, the only expression form for which `has_fvars` is true.
+  Insertion-order induction over parser reconstruction shows that every
+  persistent expression has `has_fvars = false`; every exported declaration
+  type points directly into that DAG, and every current guard caller receives
+  an original parsed declaration. The mutation is therefore `EQUIVALENT` only
+  for the pinned public export/checking path. A synthetic internal Local-typed
+  declaration remains a source-level counterexample, so the guard is preserved
+  as defense in depth and input non-representability is not reported as
+  semantic enforcement. One append-only registry row moves pending survivors
+  from five to four and equivalent mutants from thirteen to fourteen. The
+  historical 184-test match is supporting observation only. No build, checker,
+  proof, network request, scientific export byte, mutation identity or external
+  action ran. See the
+  [assessment](../results/research/survivor-fvar-reachability-1/reachability-assessment.json),
+  [result](../results/research/survivor-fvar-reachability-1/result.json), and
+  [report](../results/research/survivor-fvar-reachability-1/report.md).
+  `SURVIVOR-THREAD-CONFIG-REACHABILITY-1` is selected READY and unstarted.
+
 - Completed `SURVIVOR-UNIVERSE-EQUIVALENCE-1` on 2026-09-08 with
   `SUCCESS`. The `diff < 0` to `diff <= 0` mutation is outcome-equivalent at
   pinned Nanoda's public level-comparison entrypoints. Mutual source induction
@@ -2484,29 +2504,32 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-FVAR-REACHABILITY` — assess whether an exported declaration
-   type can reach the pinned Nanoda free-variable guard under
-   [docs/research/SURVIVOR_FVAR_REACHABILITY_PLAN.md](research/SURVIVOR_FVAR_REACHABILITY_PLAN.md).
+1. `F-SURVIVOR-THREAD-CONFIG-REACHABILITY` — assess the public configuration
+   states changed by the two remaining declaration-checking thread predicates
+   under
+   [docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md](research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md).
 
-Selected next item: `SURVIVOR-FVAR-REACHABILITY-1`.
+Selected next item: `SURVIVOR-THREAD-CONFIG-REACHABILITY-1`.
 
-The item is ACTIVE under its bound work record. Its source-only execution is
-bounded to 3,600 active seconds with zero build, checker, proof, network,
-scientific-byte, mutation-identity or external-action launches.
+The item is READY and unstarted. Its future source-only execution is bounded to
+3,600 active seconds with zero build, checker, proof, network, scientific-byte,
+mutation-identity or external-action launches.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-UNIVERSE-EQUIVALENCE-1` closed `SUCCESS`: every public-reachable
-changed-domain state has the same result, while raw private non-normal states
-are explicitly not equivalent. The canonical registry admits one scoped
-`EQUIVALENT` classification; no optional scientific launch occurred.
+`SURVIVOR-FVAR-REACHABILITY-1` closed `SUCCESS`: the persistent parser DAG
+cannot contain Nanoda's internal Local/free-variable form, so public exported
+declaration types reach the removed guard only with a false predicate. The
+canonical registry admits one scoped `EQUIVALENT` classification; the internal
+synthetic-declaration counterexample and defense-in-depth role remain explicit.
 
-The project-wide closure review ranks the declaration free-variable guard next
-as the most novel feasible survivor route. Cache predicate alternatives overlap
-the already characterized cache behavior, thread predicates are primarily
-configuration paths, transfer still lacks independently curated input, original
-conditional-validation prerequisites remain unmet, and no fresh upstream or
-maintenance trigger displaces this local work.
+The project-wide closure review ranks the two thread-configuration predicates
+next as the last novel declaration-validation survivor mechanism. Cache
+predicate alternatives share one already characterized internal distinction and
+bounded exported-reachability boundary, transfer still lacks independently
+curated input, original conditional-validation prerequisites remain unmet, and
+no fresh upstream or maintenance trigger displaces this local work. Selection
+does not start the successor.
 
 ### Waiting
 

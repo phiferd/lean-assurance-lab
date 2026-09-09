@@ -1,0 +1,154 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-FVAR-REACHABILITY-1",
+  "mutation_id": "nanoda-gen-399895fa0b72",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "finding": "EXCLUDED_ON_PUBLIC_EXPORTED_DECLARATION_PATH",
+  "classification": "EQUIVALENT_AT_PUBLIC_EXPORT_PATH",
+  "question": "Can a declaration produced by pinned Nanoda's public export parser reach check_declar_info with info.ty containing the internal free-variable representation removed from validation by the mutation?",
+  "scope": {
+    "included": "Declarations produced by Config::to_export_file through parse_export_file and checked by check_all_declars/check_declar at the pinned revision.",
+    "excluded": [
+      "Arbitrary crate-internal or programmatically constructed Declar values.",
+      "Future parsers, ingestion APIs or expression variants that can construct Expr::Local in persistent declaration types.",
+      "Semantic necessity of a free-variable closure predicate in Lean generally.",
+      "Loose bound-variable validation, which uses Expr::Var and is a separate inference check."
+    ],
+    "semantic_authority": false,
+    "guard_role": "Defense in depth for internal callers and future ingestion changes; input non-representability is not checker enforcement."
+  },
+  "public_entry_path": [
+    {
+      "step": "CONFIG_INGESTION",
+      "source": "src/main.rs:22-28; src/util.rs:987-998",
+      "fact": "The binary obtains its ExportFile only through Config::to_export_file, which calls parse_export_file on a file or stdin, then calls check_all_declars."
+    },
+    {
+      "step": "PARSER_SCHEMA",
+      "source": "src/parser.rs:233-382",
+      "fact": "ExportJsonVal exhaustively lists expression tags including bvar but has no Local, free-variable or metavariable tag; mdata is rejected."
+    },
+    {
+      "step": "PARSER_RECONSTRUCTION",
+      "source": "src/parser.rs:576-763",
+      "fact": "Parser expression allocation constructs only NatLit, StringLit, Sort, Const, App, Var, Lambda, Pi, Let and Proj."
+    },
+    {
+      "step": "DECLARATION_TYPES",
+      "source": "src/parser.rs:765-883",
+      "fact": "Axiom, Definition, Theorem, Opaque, Quot, Inductive, Constructor and Recursor types are direct get_expr_ptr references into the persistent parser DAG."
+    },
+    {
+      "step": "CHECK_DISPATCH",
+      "source": "src/tc.rs:80-105; src/inductive.rs:34-77",
+      "fact": "All current check_declar_info call sites pass an original parsed declaration. Inductive checking invokes the guard before specialization and local creation; Quot uses a separate checker."
+    }
+  ],
+  "structural_exclusion_proof": {
+    "free_variable_representation": "Expr::Local with FVarId::DbjLevel or FVarId::Unique",
+    "source": "src/expr.rs:20-111,807-816",
+    "base_cases": [
+      "Parser-created Var, Sort, Const, NatLit and StringLit report has_fvars=false.",
+      "No parser arm constructs Expr::Local, the only expression variant reporting has_fvars=true."
+    ],
+    "inductive_cases": [
+      "App caches the disjunction of the two previously reconstructed children.",
+      "Lambda and Pi cache the disjunction of binder type and body.",
+      "Let caches the disjunction of binder type, value and body.",
+      "Proj copies the structure child's flag."
+    ],
+    "ordering_fact": "get_expr_ptr accepts only an already inserted persistent expression index, so the base and compound cases form an induction over parser insertion order.",
+    "conclusion": "Every expression in the persistent parser DAG has has_fvars=false; therefore every parsed declaration info.ty reaches the removed guard with a false predicate."
+  },
+  "internal_boundary": {
+    "reachable": true,
+    "source": "src/util.rs:256-287,604-647; src/tc.rs:165-170,479-496",
+    "construction": "Within a TcCtx, mk_unique or mk_dbj_level can create Expr::Local. A crate-internal caller can place a Local whose binder_type is a Sort into a synthetic Axiom DeclarInfo.ty and call check_declar_info directly.",
+    "baseline_behavior": "The original has_fvars assertion rejects the Local before inference.",
+    "mutant_behavior": "The skipped assertion allows infer(Local) to return its binder_type; with a Sort binder type, ensure_sort can complete.",
+    "status": "SOURCE_LEVEL_COUNTEREXAMPLE_NOT_EXECUTED",
+    "why_out_of_scope": "No current public parser or check_declar call site constructs or passes such a synthetic declaration."
+  },
+  "corroborating_existing_evidence": {
+    "path": "config/declaration-validation-discovery-closure.json",
+    "topic": "TOPIC.FVAR_CLOSURE",
+    "nanoda_state": "NOT_REPRESENTABLE_IN_INPUT",
+    "interpretation": "The existing discovery closure independently preserves the same representation/enforcement distinction; it is reused unchanged and is not normative authority."
+  },
+  "supporting_observation": {
+    "executed_tests": 184,
+    "difference_count": 0,
+    "all_covering_tests_exhausted": true,
+    "role": "Consistent finite observation only; not used as the exclusion proof."
+  },
+  "decision": {
+    "outcome": "SUCCESS",
+    "registry_classification": "EQUIVALENT",
+    "canonical_classification_change": true,
+    "public_export_path_equivalence": true,
+    "arbitrary_internal_equivalence": false,
+    "scientific_pair_or_launch_needed": false,
+    "external_action": "NO_ACTION_SUPPORTED",
+    "next_item": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_build_launches": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {
+      "path": "docs/research/SURVIVOR_FVAR_REACHABILITY_PLAN.md",
+      "sha256": "68cf9316a8d08cf0c55faac0b018fb550c9e9fd8f6c7705baf5f91babf3513b9"
+    },
+    {
+      "path": "mutations/nanoda-gen-399895fa0b72.json",
+      "sha256": "0ccdfb5dd8c4c79a43cfebf66b7f4fbd97c35d5c6e41126d8c85225fea2fdc2f"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-399895fa0b72/scheduled-comparison.json",
+      "sha256": "d3d469e07570c92c62057b83e262628b24e3a892b8772ba3016eda93cfe84291"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+      "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/main.rs",
+      "sha256": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs",
+      "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/expr.rs",
+      "sha256": "b66cc4483df55222fc69e11a260a9f23804d53aa43091d52b20e55d1870b0a66"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs",
+      "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/inductive.rs",
+      "sha256": "e4be60335f8c0eda18eae074acbf1ea6a6a2b709b31d4d50dbb92dd3443263fc"
+    },
+    {
+      "path": "config/declaration-validation-discovery-closure.json",
+      "sha256": "d45e19670561cbceee89c93cc9cbd3d5c98e04fc35e3b82f66ff681afdbf0731"
+    },
+    {
+      "path": "results/research/survivor-fvar-reachability-1/entry-decision.json",
+      "sha256": "e98018934619c2f2aeac71d6f320784679a0777c517e009b82aeb756c44ef674"
+    }
+  ]
+}

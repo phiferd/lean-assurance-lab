@@ -80,13 +80,15 @@ def validate(root: Path) -> dict:
             "completed cache-export queue record changed")
     require(current_by_id[expectation["completed_item"]]["status"] == "COMPLETE"
             and current_by_id[expectation["selected_item"]]["status"] == "COMPLETE"
-            and current["selected_item"] == "SURVIVOR-FVAR-REACHABILITY-1"
-            and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "READY",
+            and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "COMPLETE"
+            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
+            and current_by_id["SURVIVOR-THREAD-CONFIG-REACHABILITY-1"]["status"] == "READY",
             "live universe successor transition drift")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]["mutant_ids"]
     require("nanoda-gen-e9648d8c028d" not in pending
-            and current_assurance["mutation_testing"]["equivalent_mutants"] == 13,
+            and "nanoda-gen-399895fa0b72" not in pending
+            and current_assurance["mutation_testing"]["equivalent_mutants"] == 14,
             "scoped equivalence successor was not admitted")
     return {
         "status": "PASS",

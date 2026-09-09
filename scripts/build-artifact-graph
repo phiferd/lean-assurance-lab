@@ -1556,6 +1556,27 @@ def catalog() -> list[dict]:
             ),
         ),
         node(
+            "classification:nanoda-fvar-public-export-equivalence",
+            "classification",
+            locator=files(
+                ".",
+                "results/research/survivor-fvar-reachability-1/reachability-assessment.json",
+                "results/research/survivor-fvar-reachability-1/result.json",
+                "results/research/survivor-fvar-reachability-1/report.md",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-current",
+                "mutation-model:nanoda",
+            ],
+            required=True,
+            notes=(
+                "Parser insertion-order induction establishes public exported-declaration "
+                "equivalence for the fvar guard mutation while preserving the internal "
+                "synthetic-declaration counterexample and defense-in-depth boundary."
+            ),
+        ),
+        node(
             "classification:nanoda-imax-diff-boundary",
             "classification",
             locator=files(

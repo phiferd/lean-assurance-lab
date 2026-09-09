@@ -64,7 +64,8 @@ def validate(root: Path) -> dict:
     require(current_by_id["SURVIVOR-CACHE-EXPORT-1"]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-UNIVERSE-DIFF-1"]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-UNIVERSE-EQUIVALENCE-1"]["status"] == "COMPLETE"
-            and current["selected_item"] == "SURVIVOR-FVAR-REACHABILITY-1",
+            and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "COMPLETE"
+            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
             "current transition does not preserve and advance the cache successor")
     return {
         "status": "PASS",
