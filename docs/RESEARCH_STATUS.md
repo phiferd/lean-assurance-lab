@@ -66,6 +66,13 @@ research directions.
   research item remains `NANODA-CACHE-REGRESSION-1`, READY and unstarted. The
   [repair record](../results/research/arena-let-regression-1/post-closure-repair.json)
   binds the successor code, tests, erratum, inventory and validation results.
+  GitHub run `34415285434` then exposed a separate path-bound live
+  `SURVIVOR-CACHE-1` transition validator. The
+  [follow-up repair](../results/research/arena-let-regression-1/post-closure-repair-r2.json)
+  preserves that validator and its receipts and installs a scoped checkout-path
+  projection around the live unit suite. It also makes the first repair's test
+  validate its bound files at commit `7aef82e` rather than silently requiring
+  those current tooling paths never to evolve.
 
 - Completed `ARENA-LET-REGRESSION-1` on 2026-09-09 with
   `BOUNDED_UNRESOLVED`. The complete current static Arena inventory at

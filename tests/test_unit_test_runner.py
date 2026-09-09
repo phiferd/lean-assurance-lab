@@ -14,6 +14,26 @@ loader.exec_module(runner)
 
 
 class UnitRunnerBoundaryTests(unittest.TestCase):
+    def test_current_suite_runs_inside_portable_cache_history_context(self):
+        entered = []
+
+        @contextlib.contextmanager
+        def portable_context():
+            entered.append(True)
+            yield
+
+        with patch('sys.argv', ['run-unit-tests']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner, '_historical_modules', return_value=set()), \
+             patch.object(runner, 'portfolio_modules', return_value=set()), \
+             patch.object(runner, 'run_portfolio_history', return_value=True), \
+             patch.object(runner, 'portable_cache_history', portable_context), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover',
+                          return_value=unittest.TestSuite()), \
+             contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(runner.main(), 0)
+        self.assertEqual(entered, [True])
+
     def test_only_exact_payload_test_is_skipped(self):
         target = unittest.FunctionTestCase(lambda: self.fail('must be skipped'))
         target.id = lambda: runner.GATE8_TEST_ID

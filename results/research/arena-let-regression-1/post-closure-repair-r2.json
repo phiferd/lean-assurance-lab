@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "repair_id": "ARENA-LET-REGRESSION-1-POST-CLOSURE-REPAIR-2",
+  "recorded_at": "2026-09-09T23:12:21Z",
+  "status": "COMPLETE",
+  "classification": "LIVE_HISTORICAL_TEST_PORTABILITY_REPAIR",
+  "predecessor": {
+    "path": "results/research/arena-let-regression-1/post-closure-repair.json",
+    "sha256": "348d3e96292a330690ad41e9c4dbdc11d055e707f8bc47e0c17ab3dfe6bcfd7b",
+    "git_commit": "7aef82e104b04b0f4fbef19f71c11e294d18d092"
+  },
+  "github_actions_failure": {
+    "workflow": "Unit tests",
+    "run_id": 34415285434,
+    "url": "https://github.com/phiferd/lean-assurance-lab/actions/runs/34415285434",
+    "head_sha": "7aef82e104b04b0f4fbef19f71c11e294d18d092",
+    "failed_test": "test_survivor_cache_historical.SurvivorCacheHistoricalTests.test_completed_result_survives_current_queue_transition",
+    "failure": "The first repair made the frozen portfolio checkpoint portable. A separate live cache-transition validator still compared its current checkout root with checker commands recorded under the original macOS workspace and raised `cell command drift`."
+  },
+  "repair": {
+    "historical_policy": "The first repair commit, cache experiment receipts, cache runner, evolving cache-transition validator and its test remain unchanged. This is an explicit successor.",
+    "portable_validation": "A scoped unit-runner context projects current storage paths and the original checker workspace identity into the unchanged cache receipt validator, then restores the validator global after the live suite.",
+    "regression_boundary": "The new tests exercise distinct storage and recorded roots, context restoration and the actual completed cache history. The runner test requires the live suite to execute inside that context.",
+    "queue_effect": "NANODA-CACHE-REGRESSION-1 remains selected READY and unstarted."
+  },
+  "bindings": [
+    {
+      "path": "lib/survivor_cache_historical_v2.py",
+      "sha256": "6e02539f642c034b3e80b0e68fa2f9f2b8be45885c1cf6ff6657a650e522dbcc",
+      "role": "PORTABLE_CACHE_HISTORY_SUCCESSOR"
+    },
+    {
+      "path": "scripts/run-unit-tests",
+      "sha256": "499c89180814f0bbda8ec064a537778c934e5b2afb33a68a0471b71136ed09ac",
+      "role": "CURRENT_TEST_ENTRYPOINT"
+    },
+    {
+      "path": "tests/test_survivor_cache_historical_portability.py",
+      "sha256": "d9c616448eac76f59172ba60a5bd37817c3afa3e89484aaae5a64f332d2edc6f",
+      "role": "CACHE_PATH_PORTABILITY_REGRESSION"
+    },
+    {
+      "path": "tests/test_unit_test_runner.py",
+      "sha256": "c34028b1a0f88f0b64b97bb8ce6e05b62a20e4ec4abf31ee605c02d27c477c79",
+      "role": "RUNNER_CONTEXT_REGRESSION"
+    },
+    {
+      "path": "tests/test_arena_let_regression_erratum.py",
+      "sha256": "f505d7c0a714052c5df55966042c9d70dea17ed8efdd611ef3c2e6368b3261b1",
+      "role": "HISTORICAL_REPAIR_TRANSITION_REGRESSION"
+    }
+  ],
+  "validation": {
+    "focused_cache_portability_tests": 3,
+    "focused_unit_runner_tests": 8,
+    "complete_test_entrypoint": {
+      "command": ["python3", "scripts/run-unit-tests"],
+      "live_tests": 925,
+      "frozen_publication_tests": 73,
+      "portfolio_checkpoint_tests": 9,
+      "status": "PASS"
+    },
+    "derived_state_refresh": "PASS"
+  },
+  "scientific_effect": {
+    "arena_closure_outcome_changed": false,
+    "cache_closure_outcome_changed": false,
+    "catalog_or_authority_changed": false,
+    "scientific_inputs_changed": false,
+    "checker_or_proof_launches": 0,
+    "external_writes": 0
+  },
+  "selected_next_item": "NANODA-CACHE-REGRESSION-1"
+}

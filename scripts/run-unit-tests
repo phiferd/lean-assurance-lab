@@ -15,6 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
 from lib.portfolio_historical_snapshot_v2 import historical_modules as portfolio_modules
 from lib.portfolio_historical_snapshot_v2 import run_historical_tests as run_portfolio_history
+from lib.survivor_cache_historical_v2 import portable_validation as portable_cache_history
 GATE8_INPUT_PATH = (
     ROOT
     / "results"
@@ -140,7 +141,8 @@ def main() -> int:
     checkpoint_modules = portfolio_modules(ROOT)
     suite = _current_suite(suite, historical_modules | checkpoint_modules)
     suite = _rewrite_suite(suite, bool(missing))
-    result = unittest.TextTestRunner(verbosity=2).run(suite)
+    with portable_cache_history():
+        result = unittest.TextTestRunner(verbosity=2).run(suite)
     historical_ok = True
     if historical_modules:
         command = [str(ROOT / "scripts/validate-publication-study-snapshot"), "--tests"]

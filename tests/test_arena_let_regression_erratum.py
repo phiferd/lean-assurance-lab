@@ -9,8 +9,10 @@ import unittest
 ROOT = Path(__file__).resolve().parents[1]
 ERRATUM = ROOT / "results/research/arena-let-regression-1/arena-audit-erratum.json"
 REPAIR = ROOT / "results/research/arena-let-regression-1/post-closure-repair.json"
+REPAIR_SUCCESSOR = ROOT / "results/research/arena-let-regression-1/post-closure-repair-r2.json"
 QUEUE = ROOT / "config/research-queue.json"
 STATUS = ROOT / "docs/RESEARCH_STATUS.md"
+FIRST_REPAIR_COMMIT = "7aef82e104b04b0f4fbef19f71c11e294d18d092"
 
 
 def sha256(data):
@@ -61,15 +63,36 @@ class ArenaLetRegressionErratumTests(unittest.TestCase):
 
     def test_repair_record_binds_successors_without_scientific_change(self):
         repair = json.loads(REPAIR.read_text(encoding="utf-8"))
+        self.assertEqual(
+            REPAIR.read_bytes(),
+            committed_bytes(FIRST_REPAIR_COMMIT, str(REPAIR.relative_to(ROOT))),
+        )
         for binding in repair["bindings"]:
             self.assertEqual(
-                sha256((ROOT / binding["path"]).read_bytes()), binding["sha256"]
+                sha256(committed_bytes(FIRST_REPAIR_COMMIT, binding["path"])),
+                binding["sha256"],
             )
         queue = json.loads(QUEUE.read_text(encoding="utf-8"))
         self.assertEqual(queue["selected_item"], "NANODA-CACHE-REGRESSION-1")
         self.assertFalse(repair["scientific_effect"]["arena_closure_outcome_changed"])
         self.assertFalse(repair["scientific_effect"]["catalog_or_authority_changed"])
         self.assertFalse(repair["scientific_effect"]["scientific_inputs_changed"])
+
+    def test_followup_repair_binds_portable_cache_validation(self):
+        repair = json.loads(REPAIR_SUCCESSOR.read_text(encoding="utf-8"))
+        predecessor = repair["predecessor"]
+        self.assertEqual(predecessor["git_commit"], FIRST_REPAIR_COMMIT)
+        self.assertEqual(
+            sha256(committed_bytes(FIRST_REPAIR_COMMIT, predecessor["path"])),
+            predecessor["sha256"],
+        )
+        for binding in repair["bindings"]:
+            self.assertEqual(
+                sha256((ROOT / binding["path"]).read_bytes()), binding["sha256"]
+            )
+        self.assertEqual(repair["github_actions_failure"]["run_id"], 34415285434)
+        self.assertFalse(repair["scientific_effect"]["scientific_inputs_changed"])
+        self.assertEqual(repair["selected_next_item"], "NANODA-CACHE-REGRESSION-1")
 
 
 if __name__ == "__main__":
