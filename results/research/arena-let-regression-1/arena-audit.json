@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "ARENA-LET-REGRESSION-1",
+  "observed_at": "2026-09-09T18:02:41Z",
+  "arena": {
+    "repository": "https://github.com/leanprover/lean-kernel-arena.git",
+    "revision": "da7a53f8520fb072614956007d7091d0f9a1650f",
+    "inventory": {
+      "test_tree_entries": 123,
+      "test_definition_files": 66,
+      "static_ndjson_files": 15,
+      "sha256": "925504a50dc77ac38e5195f8f2d8d95da566de78b76330b503c550d7bc7063ce"
+    },
+    "bound_git_objects": {
+      "tests/tutorial.yaml": "8d4d5e930066a7434d3bb8dbb30d4ffcff6ec8e4",
+      "schemas/test.json": "39b1fefece248442b37ec219314a4057f502d4ce",
+      "lka.py": "7a568df4d386bd042a5628c58739061f9533809d",
+      "tests/constlevels.ndjson": "ca7ceaa9eced2598958975138e5bf4fc86e207cd",
+      "tests/rec-missing-ih.ndjson": "522a6beef1ea4ad8b2995fd140d62b2930f7a38a"
+    }
+  },
+  "duplicate_audit": {
+    "candidate_sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac",
+    "control_sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16",
+    "exact_static_file_match": false,
+    "serialized_letE_files": ["tests/constlevels.ndjson", "tests/rec-missing-ih.ndjson"],
+    "finding": "Neither fixed 601-byte file is present in the current static Arena inventory. The two files containing serialized let expressions are broad fixtures and do not isolate the fixed declaration value/annotation compatibility boundary. Tutorial wiring generates only three positive let examples: letType, letTypeDep, and letRed."
+  },
+  "outcome_policy": {
+    "arena_rule": "The current test schema and runner permit either only where acceptance and rejection are both positively supported as unsettled.",
+    "candidate_evidence": "The retained official-profile observation rejects the exact candidate and accepts the matching control; semantic_authority remains NOT_ESTABLISHED.",
+    "decision": "No strict reject or either outcome is supported for a new Arena test. The subject-reduction either cases establish their own documented beta-erasure boundary, not that either outcome is permitted for this malformed let pair."
+  },
+  "research_counts": {
+    "read_only_or_setup_requests": 2,
+    "static_build_test_reservations": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "new_mutation_identities": 0,
+    "new_scientific_export_bytes": 0,
+    "external_writes": 0
+  }
+}

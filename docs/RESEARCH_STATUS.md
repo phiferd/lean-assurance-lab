@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed `ARENA-LET-REGRESSION-1` on 2026-09-09 with
+  `BOUNDED_UNRESOLVED`. The complete current static Arena inventory at
+  `da7a53f8520fb072614956007d7091d0f9a1650f` contains no byte-identical copy
+  of either fixed 601-byte let artifact. Its only serialized-let fixtures are
+  broad `constlevels` and `rec-missing-ih` cases, while tutorial wiring provides
+  only three positive lets; none establishes equivalent negative coverage. The
+  retained official profile rejects the candidate and accepts its control, but
+  that remains implementation evidence rather than semantic authority. Neither
+  a strict `reject` nor Arena's `either` classification has the affirmative
+  support required for a new package, so no build-test, checker, proof, mutation,
+  new export byte or external action occurred. The
+  [audit](../results/research/arena-let-regression-1/arena-audit.json),
+  [unresolved-policy packet](../results/research/arena-let-regression-1/unresolved-policy-packet.md),
+  and [result](../results/research/arena-let-regression-1/result.json) preserve
+  the exact boundary. `NANODA-CACHE-REGRESSION-1` is selected READY and
+  unstarted; `SEMANTIC-LET-CONTRACT-1` retains the focused outcome question.
+
 - Completed `NANODA-TEST-NONVACUITY-1` on 2026-09-09 with `SUCCESS`.
   At current Nanoda `4c544ed4099c8227f07d5de77ad1e69fb0740a27`, the existing
   hash test generated 10,000 String and 10,000 Nat pairs while both extensions
@@ -2623,16 +2640,16 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `ARENA-LET-REGRESSION-1`.
+Selected next item: `NANODA-CACHE-REGRESSION-1`.
 
-The item is READY and unstarted. Reuse the exact existing 601-byte let mismatch
-and control, audit the complete current Arena executable inventory and wiring,
-and qualify the expected-outcome language before preparing at most one useful
-existing-byte regression. Its 90-minute bound permits at most twelve read-only
-or setup requests and two static build-test reservations, with no checker, proof,
-mutation, new NDJSON or external launch. Completion is one validated local Arena
-package/draft, exact existing coverage, or an evidence-bound unresolved-policy
-packet. Any external write requires exact target-specific human approval.
+The item is READY and unstarted. Reuse the existing internal staged-cache
+witness and malformed-let/control pair only after binding the current
+`InferFlag`, cache lookup/write policy, pointer lifetime, focused test patch,
+and process controls. Its 90-minute bound permits at most eight read-only/setup
+requests, three build reservations and four tests, with no proof, new mutant or
+external write. Completion is one current focused/full-suite-validated test
+draft, exact duplicate, or a source-bound contract/pointer boundary. Any
+external write requires exact target-specific human approval.
 
 Queue handoff: EXECUTABLE.
 
