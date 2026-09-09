@@ -1,0 +1,21 @@
+diff --git a/src/tests/util.rs b/src/tests/util.rs
+index 3ab529a..5342491 100644
+--- a/src/tests/util.rs
++++ b/src/tests/util.rs
+@@ -118,12 +118,16 @@ fn hash_test0() -> Result<(), Box<dyn Error>> {
+                 for _ in 0..100 {
+                     let s = rand_string(&mut rng, size);
+                     let (l, r) = (ctx.mk_string_lit_quick(s.clone()), ctx.mk_string_lit_quick(s));
++                    assert!(l.is_some(), "string literal construction is disabled");
++                    assert!(r.is_some(), "string literal construction is disabled");
+                     assert_eq!(hash64!(l), hash64!(r));
+                     assert_eq!(l, r)
+                 }
+                 for _ in 0..100 {
+                     let s = rng.gen_biguint(size as u64);
+                     let (l, r) = (ctx.mk_nat_lit_quick(s.clone()), ctx.mk_nat_lit_quick(s));
++                    assert!(l.is_some(), "natural literal construction is disabled");
++                    assert!(r.is_some(), "natural literal construction is disabled");
+                     assert_eq!(hash64!(l), hash64!(r));
+                     assert_eq!(l, r)
+                 }

@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "cell_id": "BASELINE-NONVACUITY-FAILURE",
+  "prepared_at": "2026-09-09T14:03:00Z",
+  "entry_commit": "9478f9beba6f861fe7941e25fd491a8196b92a0f",
+  "source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+    "detached_checkout": "/private/tmp/nanoda-test-nonvacuity.kVpZgx/checkout",
+    "source_lock": "results/research/nanoda-test-nonvacuity-1/source-lock.json"
+  },
+  "patch": {
+    "path": "results/research/nanoda-test-nonvacuity-1/patches/baseline-nonvacuity.patch",
+    "bytes": 1154,
+    "sha256": "a008d2d78c06794169622a67d933c571f33aecdfa0cd6e355c580b3ff8710bb2",
+    "resulting_src_tests_util_git_blob": "534249176c65459210ce680d2c195b9b65221d6f"
+  },
+  "fixtures": [
+    {"path": "Cargo.lock", "sha256": "0b59e677b7ffa4831e91434e7fe421bd8f023f74e2ae96fd8bee428024f5fa95", "git_blob": "08fdae41eb8519d052d276f421563d777f69133c"},
+    {"path": "test_resources/Empty/export", "git_blob": "846115f3b73fcc9b5ae9e2b6eff9ef1a1fb4552b"}
+  ],
+  "tooling": {
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "dependency_mode": "--offline --locked",
+    "reused_target_cache": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target"
+  },
+  "invocation": ["cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
+  "environment": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target",
+    "RUST_BACKTRACE": "0"
+  },
+  "timeout_seconds": 120,
+  "expected": {
+    "exit": "NONZERO",
+    "stderr_or_stdout_contains": "string literal construction is disabled",
+    "meaning": "The default helper prevents the test from constructing a real String literal; the original Option equality and hash assertions were vacuous."
+  },
+  "accounting_before": {
+    "active_seconds_charged_conservatively": 1200,
+    "read_only_or_setup_requests": 1,
+    "builds_including_compiling_tests": 0,
+    "test_processes": 0,
+    "remaining_builds": 3,
+    "remaining_test_processes": 4
+  },
+  "reservation": {
+    "build_number": 1,
+    "test_process_number": 1,
+    "counts_even_on_failure": true
+  }
+}
