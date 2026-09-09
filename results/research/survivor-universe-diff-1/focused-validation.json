@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-DIFF-1",
+  "recorded_at": "2026-09-08T23:59:45Z",
+  "status": "PASS",
+  "commands": [
+    {
+      "argv": ["scripts/validate-survivor-universe-diff-closure"],
+      "result": "PASS",
+      "assessment": "EXACT_CALL_STATE_REACHABLE_WITHOUT_LOCAL_OUTCOME_DIFFERENCE",
+      "scientific_launches": 0
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_survivor_universe_diff.py", "-v"],
+      "result": "PASS",
+      "test_count": 4
+    },
+    {
+      "argv": ["scripts/validate-survivor-universe-diff-historical"],
+      "result": "PASS",
+      "historical_snapshot": "1778f1de7028e33254d0ab7d5042fe749ed35392"
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_survivor_universe_diff_historical.py", "-v"],
+      "result": "PASS",
+      "test_count": 1
+    },
+    {
+      "argv": ["scripts/validate-survivor-cache-export-closure"],
+      "result": "PASS",
+      "historical_tooling_resolved_at_snapshot": true
+    },
+    {
+      "argv": ["git", "diff", "--check"],
+      "result": "PASS"
+    }
+  ],
+  "scientific_build_or_checker_launches": 0,
+  "tooling": [
+    {"path": "lib/survivor_universe_diff.py", "sha256": "f88baeec3fd557c7027957d02c2a0dcee00a283f2f4f3f97ac94e3ad028ce93d"},
+    {"path": "scripts/validate-survivor-universe-diff-closure", "sha256": "4a9d7b0c00fc140f14b9fc21f1398f627534809084f287a8c8e9a9778fab3906"},
+    {"path": "tests/test_survivor_universe_diff.py", "sha256": "539105018ec7ee674d70046eaa9fccdcef2b83b8b199010ca6f0c16b0a4bdde9"},
+    {"path": "lib/survivor_universe_diff_historical.py", "sha256": "1682a9ad7fae414818ff80628e0a819895233f70eec2082224d9c63102a1a88e"},
+    {"path": "scripts/validate-survivor-universe-diff-historical", "sha256": "f72a97857e87a17e972f6942277bca6aacba7bcdf4ff4ff4328431d7fd15cace"},
+    {"path": "tests/test_survivor_universe_diff_historical.py", "sha256": "59d9770833b0ec13a5a73a54f0fd9dfd651e46da97134aa7d31eb9daf6d1419c"},
+    {"path": "lib/survivor_cache_export_boundary.py", "sha256": "ba1fc0161df0e508c779f8dde8b9201c562328e9ebc2aba419dec9541d0d7c0f"},
+    {"path": "lib/survivor_cache_historical.py", "sha256": "b0328f32b43bb215a899344d7c654c228da26be6972362ce4871fbfa44f49e15"},
+    {"path": "tests/test_survivor_cache_historical.py", "sha256": "161b8c90c0c88e5213a12a4f4db59fd307e09b732bd5d1258f8313a5934287ee"}
+  ]
+}

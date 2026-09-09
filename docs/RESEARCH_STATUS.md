@@ -50,6 +50,22 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-UNIVERSE-DIFF-1` on 2026-09-08 with `SUCCESS`.
+  The existing non-Prop theorem reaches pinned Nanoda
+  `leq_core(Succ Zero, Zero, 0)`: the baseline skips the original guard,
+  recurses to `(Zero, Zero, -1)` and returns `false`, while the mutant's
+  broadened guard returns `false` immediately. This is exact reachability and a
+  control-flow difference, not a local Boolean difference or whole-checker
+  equivalence. The historical 163-test no-difference record is consistent but
+  not semantic authority. No build, checker, proof, network, scientific-byte
+  or external-action launch ran, and the canonical survivor classification is
+  unchanged. See the
+  [result](../results/research/survivor-universe-diff-1/result.json),
+  [assessment](../results/research/survivor-universe-diff-1/reachability-assessment.json),
+  and [report](../results/research/survivor-universe-diff-1/report.md).
+  `SURVIVOR-UNIVERSE-EQUIVALENCE-1` is selected READY and unstarted after the
+  project-wide closure review.
+
 - Completed `SURVIVOR-CACHE-EXPORT-1` on 2026-09-08 with
   `BOUNDED_UNRESOLVED`. Source and export-format analysis confirms the Eq
   K-recursor weak-major route, but each assessed ordinary carrier origin
@@ -2451,33 +2467,31 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-UNIVERSE-DIFF` — assess source-level reachability of the
-   `diff == 0` and right-`Zero` universe-comparison state under
-   [docs/research/SURVIVOR_UNIVERSE_DIFF_PLAN.md](research/SURVIVOR_UNIVERSE_DIFF_PLAN.md).
+1. `F-SURVIVOR-UNIVERSE-EQUIVALENCE` — prove or refute whole-public-entrypoint
+   outcome equivalence for the broadened right-`Zero` universe guard under
+   [docs/research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md](research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md).
 
-Selected next item: `SURVIVOR-UNIVERSE-DIFF-1`.
+Selected next item: `SURVIVOR-UNIVERSE-EQUIVALENCE-1`.
 
-The item is ACTIVE under the owner's 2026-09-08 request to execute the
-highest-priority eligible canonical queue item. Its source-only assessment is
-bounded to one 3,600-second session with zero build, checker, proof, network,
-scientific-byte or external-action launches. No such launch has occurred.
+The item is READY and unstarted. Its future execution is bounded to 5,400
+active seconds, optional exact-gated existing-byte focused tests, zero new
+export bytes, and no proof, checker-corpus campaign, network request or external
+action.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-CACHE-EXPORT-1` closed `BOUNDED_UNRESOLVED`: the exact source audit
-found an ordinary-carrier origin and expression-pointer boundary before a
-self-contained exported pair could be supported. It consumed no scientific
-launches and does not change the internal cache regression or canonical
-survivor classification.
+`SURVIVOR-UNIVERSE-DIFF-1` closed `SUCCESS`: the exact existing theorem reaches
+the changed call state, but the baseline recursion and mutant early return both
+produce `false`. It consumed no scientific launch and does not change the
+canonical survivor classification.
 
-The project-wide entry review retains the universe survivor above prospective
-transfer, the original conditional-validation continuation and maintenance
-follow-through. Its exact predicate, pinned source and historical 163-test
-no-difference record are already available, and the active item is tracing the
-normalized right-`Zero`, `diff == 0` state before proposing any scientific
-execution. Transfer still lacks independently curated input, original
-conditional-validation prerequisites remain unmet, and no fresh upstream or
-maintenance trigger displaces this local work.
+The project-wide closure review ranks a whole-entrypoint equivalence proof next
+because it can terminally resolve the just-characterized survivor while
+retaining a finite exact boundary if `Max`, nested `IMax` or a recursive caller
+cannot be closed. Free-variable reachability is the next novel survivor route;
+transfer still lacks independently curated input, original conditional-
+validation prerequisites remain unmet, and no fresh upstream or maintenance
+trigger displaces this local work. Selection does not start the successor.
 
 ### Waiting
 

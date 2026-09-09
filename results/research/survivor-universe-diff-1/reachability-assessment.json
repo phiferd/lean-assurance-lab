@@ -1,0 +1,136 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-DIFF-1",
+  "mutation_id": "nanoda-gen-e9648d8c028d",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "assessment": "EXACT_CALL_STATE_REACHABLE_WITHOUT_LOCAL_OUTCOME_DIFFERENCE",
+  "question": "Can an ordinary exported level comparison reach pinned Nanoda leq_core with a right Zero and diff == 0 at the changed line-179 guard?",
+  "existing_artifact": {
+    "candidate": {
+      "path": "corpus/transfer/milestone-6/nonprop-theorem.ndjson",
+      "sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f",
+      "shape": "The theorem type is ExprSort(Level::Zero)."
+    },
+    "control": {
+      "path": "corpus/transfer/milestone-6/nonprop-definition-control.ndjson",
+      "sha256": "5d2f93abb7b784c619471c465a14f5d534f3a01910098d4c94458326b36919ab",
+      "shape": "The same expression records are used by a definition, so the theorem-only proposition gate is bypassed."
+    },
+    "baseline_observation": {
+      "path": "results/investigations/nanoda-core-declaration-typing/nonprop-theorem-nanoda.json",
+      "sha256": "6bd3b33f22354addd2422475c09aa6def518acaed4660ba2057bb02398404e9e",
+      "candidate": "REJECT",
+      "control": "ACCEPT",
+      "use": "Historical baseline context only; no checker was launched for this item."
+    }
+  },
+  "exact_call_chain": [
+    {
+      "step": 1,
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs:681-711",
+      "fact": "LeanDag initializes the exporter's implicit level index zero as Level::Zero."
+    },
+    {
+      "step": 2,
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs:645-650,793-800",
+      "fact": "The parser preserves ExprSort(level 0) and installs the theorem using that expression as its type."
+    },
+    {
+      "step": 3,
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs:165-175,518-523",
+      "fact": "Declaration checking infers ExprSort(Zero) as ExprSort(Succ Zero), obtains Succ Zero from ensure_sort, and applies the theorem proposition gate."
+    },
+    {
+      "step": 4,
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/level.rs:55-81,263-266,229-232",
+      "fact": "is_zero calls leq(Succ Zero, Zero); simplify preserves Succ Zero and Zero; leq_core starts with (Succ Zero, Zero, 0)."
+    },
+    {
+      "step": 5,
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/level.rs:176-184",
+      "fact": "The changed right-Zero guard is evaluated at diff == 0 before the successor recursion."
+    }
+  ],
+  "state_trace": {
+    "entry": {
+      "lhs": "Succ Zero",
+      "rhs": "Zero",
+      "diff": 0
+    },
+    "baseline": {
+      "line_178_zero_fast_path": "NO_MATCH",
+      "line_179_original_guard": "diff < 0 is false",
+      "line_183_successor_recursion": {
+        "lhs": "Zero",
+        "rhs": "Zero",
+        "diff": -1
+      },
+      "recursive_result": "false from the original right-Zero guard",
+      "result": false
+    },
+    "mutant": {
+      "line_178_zero_fast_path": "NO_MATCH",
+      "line_179_mutated_guard": "diff <= 0 is true",
+      "result": false
+    },
+    "control_flow_difference": true,
+    "local_boolean_difference": false,
+    "source_predicted_candidate_outcome": "REJECT",
+    "source_predicted_control_outcome": "ACCEPT"
+  },
+  "historical_context": {
+    "path": "results/mutants/nanoda-gen-e9648d8c028d/scheduled-comparison.json",
+    "sha256": "a928f2a0e821f9c8f9d4d966b0a43536fabc9c3ddabc3a05409b69d4a6afc9df",
+    "executed_covering_tests": 163,
+    "difference_count": 0,
+    "status": "SURVIVED",
+    "interpretation": "Consistent with the exact same-result trace, but finite no-difference evidence is not a proof of equivalence."
+  },
+  "remaining_boundary": {
+    "statement": "This item does not prove that every public-entrypoint-reachable normalized non-Zero lhs at leq_core(lhs, Zero, 0) returns false through the original fallthrough.",
+    "closed_cases": [
+      "Zero is consumed by the preceding diff >= 0 fast path.",
+      "Param falls through to the explicit Param/Zero false arm.",
+      "The exact Succ Zero state recurses to the original negative-diff false arm."
+    ],
+    "unclosed_cases": [
+      "A structural invariant for every simplified residual Max lhs.",
+      "Termination and nonzero preservation across nested IMax case-splitting and rewrite paths.",
+      "A whole-public-caller argument that no other recursive state permits an original true result where the mutant returns early false."
+    ]
+  },
+  "decision": {
+    "outcome": "SUCCESS",
+    "call_state_reachable": true,
+    "exact_execution_pair_available": true,
+    "execute_same_output_pair_next": false,
+    "reason": "The source trace and historical 163-test no-difference record already predict the same cells; the higher-value successor is a bounded equivalence proof or exact counterexample search.",
+    "canonical_classification_change": false,
+    "next_item": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+    "external_action": "NO_ACTION_SUPPORTED"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_builds": 0,
+    "checker_or_scientific_test_launches": 0,
+    "scientific_byte_variants": 0,
+    "proof_launches": 0,
+    "research_network_requests": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {"path": "CONSTITUTION.md", "sha256": "f8bd97b3be61d1c09e9062eea11d41006ef266ce0c244b65827a9bd7aa03df16"},
+    {"path": "docs/RESEARCH_WORKFLOW.md", "sha256": "a6e30d52040b4d72d4d215511a6f49d99b95283e1ab903b198fcf200141c1620"},
+    {"path": "docs/research/SURVIVOR_UNIVERSE_DIFF_PLAN.md", "sha256": "ecef9c04c722f82a84e18c362cd003f02013f72885bf277a9bcbf3bd22273b89"},
+    {"path": "mutations/nanoda-gen-e9648d8c028d.json", "sha256": "43ad36fe45889753a7c9be731cc1c69bbdcc3cf6b4ff84439997001975ca43b4"},
+    {"path": "results/mutants/nanoda-gen-e9648d8c028d/scheduled-comparison.json", "sha256": "a928f2a0e821f9c8f9d4d966b0a43536fabc9c3ddabc3a05409b69d4a6afc9df"},
+    {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs", "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs", "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs", "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/level.rs", "sha256": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf"},
+    {"path": "corpus/transfer/milestone-6/nonprop-theorem.ndjson", "sha256": "ab15eeebf6466461a14fd9e22e0a8c1258ec37f1964bf6d4d0f698ddf3bccb7f"},
+    {"path": "corpus/transfer/milestone-6/nonprop-definition-control.ndjson", "sha256": "5d2f93abb7b784c619471c465a14f5d534f3a01910098d4c94458326b36919ab"},
+    {"path": "results/investigations/nanoda-core-declaration-typing/nonprop-theorem-nanoda.json", "sha256": "6bd3b33f22354addd2422475c09aa6def518acaed4660ba2057bb02398404e9e"}
+  ]
+}

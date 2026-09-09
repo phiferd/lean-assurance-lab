@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-DIFF-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-08T23:59:45Z",
+  "checks": [
+    {"name": "universe reachability closure", "command": "scripts/validate-survivor-universe-diff-closure", "status": "PASS", "assessment": "EXACT_CALL_STATE_REACHABLE_WITHOUT_LOCAL_OUTCOME_DIFFERENCE", "scientific_launches": 0},
+    {"name": "universe predecessor historical transition", "command": "scripts/validate-survivor-universe-diff-historical", "status": "PASS", "snapshot": "1778f1de7028e33254d0ab7d5042fe749ed35392", "canonical_classification_changed": false},
+    {"name": "cache export historical closure", "command": "scripts/validate-survivor-cache-export-closure", "status": "PASS"},
+    {"name": "cache predecessor historical transition", "command": "scripts/validate-survivor-cache-historical", "status": "PASS"},
+    {"name": "research queue v3", "command": "scripts/validate-research-queue --require-ready", "status": "PASS"},
+    {"name": "transfer historical package", "command": "scripts/validate-transfer-assessment", "status": "PASS", "gate_decision": "NO_GO"},
+    {"name": "survivor proposal historical package", "command": "scripts/validate-survivor-proposal", "status": "PASS"},
+    {"name": "survivor reuse evidence", "command": "scripts/validate-survivor-let-reuse --evidence", "status": "PASS"},
+    {"name": "survivor association transition", "command": "scripts/build-survivor-let-association --check --require-full-payload", "status": "PASS"},
+    {"name": "declaration-validation catalog", "command": "scripts/validate-declaration-validation-catalog", "status": "PASS"},
+    {"name": "declaration-validation history", "command": "scripts/validate-declaration-validation-historical", "status": "PASS"},
+    {"name": "full current and frozen suite", "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 861, "frozen_tests": 73},
+    {"name": "publication historical snapshot", "command": "scripts/validate-publication-study-snapshot --require-full-payload --tests", "status": "PASS", "tests": 73},
+    {"name": "current-state refresh", "command": "scripts/refresh-current-state", "status": "PASS", "log_path": "results/workflow-refresh/20260909T002415008303Z"},
+    {"name": "project review freshness", "command": "scripts/build-project-review --check", "status": "PASS"},
+    {"name": "artifact graph freshness", "command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "counts": {"CURRENT": 171, "HISTORICAL": 10, "SUPERSEDED": 4}},
+    {"name": "diff hygiene", "command": "git diff --check", "status": "PASS"}
+  ],
+  "result_limits": "Validation confirms exact source reachability, zero-launch accounting, historical preservation, queue consistency and generated-state freshness. It does not prove whole-entrypoint equivalence or semantic authority."
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-DIFF-1",
+  "outcome": "SUCCESS",
+  "finding": "EXACT_CALL_STATE_REACHABLE_WITHOUT_LOCAL_OUTCOME_DIFFERENCE",
+  "mutation_id": "nanoda-gen-e9648d8c028d",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "entry_commit": "64dc71be9b1c52c384a3dbea4141758672207bee",
+  "assessment": {
+    "path": "results/research/survivor-universe-diff-1/reachability-assessment.json",
+    "sha256": "dff7d03264c2db350cb1aa1b63ae4372f79201cf17800ba83e6ce51249320c1f"
+  },
+  "finding_summary": "An existing ordinary exported theorem reaches leq_core(Succ Zero, Zero, 0). The baseline skips the original right-Zero guard, recurses to (Zero, Zero, -1) and returns false; the mutant's broadened guard returns false immediately. This establishes reachability and changed control flow, not a local Boolean difference or whole-checker equivalence.",
+  "scope": "Exact pinned Nanoda revision and mutation, exported level-zero reconstruction, the existing non-Prop theorem and definition control, theorem proposition checking, simplify/leq/is_zero, and the explicit Succ-Zero state trace.",
+  "not_claimed": [
+    "No whole-public-entrypoint equivalence proof.",
+    "No proof that residual Max or nested IMax states cannot produce a difference.",
+    "No new checker, build, proof or corpus observation.",
+    "No semantic authority from source analysis, finite tests or checker agreement.",
+    "No corpus kill or canonical survivor-classification change."
+  ],
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_builds": 0,
+    "checker_or_scientific_test_launches": 0,
+    "scientific_byte_variants": 0,
+    "proof_launches": 0,
+    "research_network_requests": 0,
+    "external_actions": 0
+  },
+  "recommendation": {
+    "action": "Prove or refute the remaining whole-public-entrypoint equivalence invariant for the broadened right-Zero guard; do not spend the next item merely replaying the same-output theorem pair.",
+    "target": "nanoda-gen-e9648d8c028d at pinned Nanoda level.rs:179, including simplified Max, nested IMax and recursive caller states",
+    "priority": "HIGH_LOCAL_NEXT",
+    "prerequisites": [
+      "Reuse the exact pinned source, mutation, historical comparison and existing theorem/control bytes.",
+      "State the changed-domain proof obligation and every public level-comparison caller before any optional launch.",
+      "Require a complete source argument and current/historical transition before any EQUIVALENT admission."
+    ],
+    "external_action": "NO_ACTION_SUPPORTED"
+  },
+  "next_item": "SURVIVOR-UNIVERSE-EQUIVALENCE-1"
+}

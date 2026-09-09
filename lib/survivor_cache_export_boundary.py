@@ -4,12 +4,19 @@ from __future__ import annotations
 import hashlib
 import json
 from pathlib import Path
+import subprocess
 
 BOUNDARY = "results/research/survivor-cache-export-1/construction-boundary.json"
 RESULT = "results/research/survivor-cache-export-1/result.json"
 WORK_CLOSURE = "results/research/survivor-cache-export-1/work-closure.json"
 FOCUSED_VALIDATION = "results/research/survivor-cache-export-1/focused-validation.json"
 EVIDENCE_MANIFEST = "results/research/survivor-cache-export-1/evidence-manifest.json"
+HISTORICAL_SNAPSHOT = "1778f1de7028e33254d0ab7d5042fe749ed35392"
+EVOLVED_TOOLING = {
+    "lib/survivor_cache_export_boundary.py",
+    "lib/survivor_cache_historical.py",
+    "tests/test_survivor_cache_historical.py",
+}
 
 
 def require(condition: bool, message: str) -> None:
@@ -19,6 +26,12 @@ def require(condition: bool, message: str) -> None:
 
 def sha256(path: Path) -> str:
     return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def historical_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{HISTORICAL_SNAPSHOT}:{path}"], cwd=root
+    )
 
 
 def ordered_unique(text: str, fragments: list[str], label: str) -> None:
@@ -197,7 +210,11 @@ def validate(root: Path) -> dict:
             and focused["scientific_build_or_checker_launches"] == 0,
             "focused-validation disposition drift")
     for row in focused["tooling"]:
-        require(sha256(root / row["path"]) == row["sha256"],
+        digest = hashlib.sha256(
+            historical_bytes(root, row["path"])
+            if row["path"] in EVOLVED_TOOLING else (root / row["path"]).read_bytes()
+        ).hexdigest()
+        require(digest == row["sha256"],
                 "focused tooling drift: " + row["path"])
 
     manifest = json.loads((root / EVIDENCE_MANIFEST).read_text(encoding="utf-8"))
@@ -210,9 +227,10 @@ def validate(root: Path) -> dict:
     for row in manifest["inputs"]:
         require(set(row) == {"path", "sha256", "bytes"} and row["path"] not in manifest_paths,
                 "malformed or duplicate manifest input")
-        path = root / row["path"]
         manifest_paths.add(row["path"])
-        require(path.stat().st_size == row["bytes"] and sha256(path) == row["sha256"],
+        data = (historical_bytes(root, row["path"])
+                if row["path"] in EVOLVED_TOOLING else (root / row["path"]).read_bytes())
+        require(len(data) == row["bytes"] and hashlib.sha256(data).hexdigest() == row["sha256"],
                 "manifest input drift: " + row["path"])
     require({
         "docs/research/SURVIVOR_CACHE_EXPORT_PLAN.md", BOUNDARY, RESULT,
