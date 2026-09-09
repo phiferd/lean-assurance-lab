@@ -1,0 +1,180 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+  "mutation_id": "nanoda-gen-e9648d8c028d",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "classification": "EQUIVALENT_AT_PUBLIC_LEVEL_COMPARISON_ENTRYPOINTS",
+  "scope": {
+    "included": "Every call reachable from public TcCtx::leq after recursive simplify, including eq_antisymm, eq_antisymm_many, is_zero, is_nonzero and their type-checker and inductive-checker consumers.",
+    "excluded": "Arbitrary direct calls to private leq_core with non-normal Level arguments; resource exhaustion and hardware faults.",
+    "semantic_authority": false
+  },
+  "changed_domain": {
+    "predicate_partition": [
+      "diff < 0: both original and mutant return false at the right-Zero guard",
+      "diff > 0: neither right-Zero guard matches",
+      "diff == 0: only the mutant guard matches"
+    ],
+    "preceding_arm": "(Zero, _) if diff >= 0 => true",
+    "only_disputed_state": {
+      "lhs": "non-Zero",
+      "rhs": "Zero",
+      "diff": 0,
+      "mutant_result": false,
+      "baseline_obligation": "Every such state in the public recursive closure returns false in the baseline."
+    }
+  },
+  "private_counterexamples": [
+    {
+      "state": "leq_core(Max(Zero, Zero), Zero, 0)",
+      "baseline_result": true,
+      "mutant_result": false,
+      "exclusion": "Public leq simplifies Max(Zero,Zero) through combining to Zero before leq_core."
+    },
+    {
+      "state": "leq_core(IMax(a, Max(Zero, Zero)), Zero, 0)",
+      "baseline_result": true,
+      "mutant_result": false,
+      "exclusion": "Public simplify first reduces the nested Max to Zero and then the enclosing IMax to Zero."
+    }
+  ],
+  "mutual_induction": {
+    "measure": "Finite acyclic Level DAG structure, with the existing IMax decomposition ordering used by leq_core.",
+    "normalization_claim": "Both programs produce the same simplified normal form. simplify recurses on proper children before calling is_zero; the already-simplified child satisfies the smaller zero-reflection case, so the IMax decision is identical without assuming the final theorem.",
+    "zero_reflection_claim": "For every normal form N returned by simplify, baseline and mutant leq_core(N, Zero, 0) return true exactly when N is syntactic Zero.",
+    "recursive_equivalence_claim": "Every recursive leq_core call from normalized public inputs either stays outside the changed domain or reaches a disputed state covered by zero reflection or the generated nested-IMax case."
+  },
+  "normal_form": {
+    "grammar": [
+      "Zero",
+      "Param(name)",
+      "Succ(NF)",
+      "Max(NF_nonzero, NF_nonzero), with no retained pair of two Succ heads",
+      "IMax(NF_left_nonzero_nonone, NF_right), where the retained right head is Param, Max or IMax"
+    ],
+    "source_cases": [
+      {
+        "id": "ZERO_OR_PARAM",
+        "argument": "Zero and Param are returned unchanged."
+      },
+      {
+        "id": "SUCCESSOR",
+        "argument": "Succ recursively simplifies its predecessor and remains Succ."
+      },
+      {
+        "id": "MAX_COMBINING",
+        "argument": "combining removes either Zero child and combines two Succ heads; every retained Max therefore has two non-Zero normal children."
+      },
+      {
+        "id": "IMAX_ELIMINATION",
+        "argument": "IMax returns its right normal form when its left is zero or one, returns Zero when its right is Zero, combines a Succ right, and retains IMax only with a nonzero/nonone left and Param/Max/IMax right."
+      }
+    ]
+  },
+  "baseline_changed_state_cases": [
+    {
+      "id": "PARAM",
+      "result": false,
+      "argument": "The explicit (Param, Zero) arm returns false."
+    },
+    {
+      "id": "SUCC",
+      "result": false,
+      "argument": "Successor peeling changes diff from zero to minus one, so the original right-Zero guard immediately returns false regardless of the predecessor."
+    },
+    {
+      "id": "RETAINED_MAX",
+      "result": false,
+      "argument": "Both retained Max children are non-Zero normal forms. The Max arm is a conjunction, and the induction hypothesis makes both comparisons false."
+    },
+    {
+      "id": "IMAX_PARAM_TAIL",
+      "result": false,
+      "argument": "leq_imax_by_cases includes the positive substitution p := Succ p. subst_simp makes the IMax lhs a non-Zero normal form while rhs remains Zero, so that required conjunct is false."
+    },
+    {
+      "id": "IMAX_MAX_TAIL",
+      "result": false,
+      "argument": "The Max-tail rewrite explicitly simplifies its newly constructed Max. Each branch has a non-Zero tail, so the result returns to a non-Zero normal-form case and is false."
+    },
+    {
+      "id": "IMAX_IMAX_TAIL",
+      "result": false,
+      "argument": "The only unsimplified lhs Max synthesized by the comparator is Max(IMax(a,y),IMax(x,y)). The enclosing and nested retained IMax forms make a and x nonzero/nonone and y a Param/Max/IMax normal tail, so both constructed children are non-Zero retained IMax forms; their conjunction against Zero is false."
+    }
+  ],
+  "recursive_closure": [
+    {
+      "id": "SUCCESSOR_PEELING",
+      "argument": "Succ recursion exposes only normal subterms and adjusts diff symmetrically in unchanged code."
+    },
+    {
+      "id": "MAX_SPLITTING",
+      "argument": "Retained Max splitting visits non-Zero normal children; the nested-IMax synthesized Max is covered separately."
+    },
+    {
+      "id": "SUBSTITUTION_CASES",
+      "argument": "leq_imax_by_cases calls subst_simp for both zero and positive substitutions, restoring normal form before recursion."
+    },
+    {
+      "id": "LEFT_IMAX_REWRITES",
+      "argument": "A Max tail is re-simplified; an IMax tail constructs the single raw Max shape proved false above."
+    },
+    {
+      "id": "RIGHT_IMAX_REWRITES",
+      "argument": "Right-side case splits normalize both arguments. Nested right-IMax rewrites construct a Max rhs rather than literal Zero; any later Zero exposure returns through normalized substitution or successor peeling."
+    }
+  ],
+  "public_callers": [
+    "TcCtx::leq",
+    "TcCtx::eq_antisymm",
+    "TcCtx::eq_antisymm_many",
+    "TcCtx::is_zero",
+    "TcCtx::is_nonzero",
+    "TypeChecker theorem sort/Prop checks",
+    "TypeChecker sort and constant-level definitional equality",
+    "Inductive checker codomain, universe-ownership, constructor-level and large-elimination checks"
+  ],
+  "supporting_observation": {
+    "executed_tests": 163,
+    "difference_count": 0,
+    "role": "Consistent finite observation only; not used as the equivalence proof."
+  },
+  "decision": {
+    "outcome": "SUCCESS",
+    "registry_classification": "EQUIVALENT",
+    "canonical_classification_change": true,
+    "private_function_equivalence": false,
+    "public_entrypoint_equivalence": true,
+    "external_action": "NO_ACTION_SUPPORTED",
+    "next_item": "SURVIVOR-FVAR-REACHABILITY-1"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3600,
+    "offline_build_launches": 0,
+    "focused_unit_test_reservations": 0,
+    "checker_corpus_campaigns": 0,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {"path": "docs/research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md", "sha256": "f3962907e495772b9f0c28bcf7e7b8aa65250d8f8ea995559d0950860c5225b5"},
+    {"path": "results/research/survivor-universe-equivalence-1/entry-decision.json", "sha256": "6a2d3a8bf56ec7ef143f67971693f0109ceb15fb3c2ba533e1427f308f99233c"},
+    {"path": "results/research/survivor-universe-equivalence-1/work-record.json", "sha256": "a9b6d03261081132c50ac4447bfcc0aaabdea3946d1e36c8ccbd35f56ef2bc6b"},
+    {"path": "results/research/survivor-universe-diff-1/result.json", "sha256": "bea48a514407d1e517eb4dfddadd84ef936cba6575cad5d5f9344d828eaf0b4e"},
+    {"path": "results/research/survivor-universe-diff-1/reachability-assessment.json", "sha256": "dff7d03264c2db350cb1aa1b63ae4372f79201cf17800ba83e6ce51249320c1f"},
+    {"path": "mutations/nanoda-gen-e9648d8c028d.json", "sha256": "43ad36fe45889753a7c9be731cc1c69bbdcc3cf6b4ff84439997001975ca43b4"},
+    {"path": "results/mutants/nanoda-gen-e9648d8c028d/scheduled-comparison.json", "sha256": "a928f2a0e821f9c8f9d4d966b0a43536fabc9c3ddabc3a05409b69d4a6afc9df"},
+    {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/level.rs", "sha256": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs", "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs", "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs", "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/inductive.rs", "sha256": "e4be60335f8c0eda18eae074acbf1ea6a6a2b709b31d4d50dbb92dd3443263fc"},
+    {"path": "results/mutants/registry.jsonl", "sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572"},
+    {"path": "results/survivors/inventory.jsonl", "sha256": "c7e552e761f128e9911abeb6cc85cf1d4b7c48d6ed03798d574a0ace688f2458"}
+  ]
+}

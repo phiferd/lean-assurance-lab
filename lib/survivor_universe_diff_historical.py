@@ -79,18 +79,20 @@ def validate(root: Path) -> dict:
             == old_by_id["SURVIVOR-CACHE-EXPORT-1"]["closure"],
             "completed cache-export queue record changed")
     require(current_by_id[expectation["completed_item"]]["status"] == "COMPLETE"
-            and current["selected_item"] == expectation["selected_item"]
-            and current_by_id[expectation["selected_item"]]["status"] == "READY",
+            and current_by_id[expectation["selected_item"]]["status"] == "COMPLETE"
+            and current["selected_item"] == "SURVIVOR-FVAR-REACHABILITY-1"
+            and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "READY",
             "live universe successor transition drift")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]["mutant_ids"]
-    require("nanoda-gen-e9648d8c028d" in pending,
-            "source-only item changed the canonical survivor classification")
+    require("nanoda-gen-e9648d8c028d" not in pending
+            and current_assurance["mutation_testing"]["equivalent_mutants"] == 13,
+            "scoped equivalence successor was not admitted")
     return {
         "status": "PASS",
         "historical_snapshot": snapshot,
         "historical_manifest_inputs": len(old_inputs),
         "completed_item": expectation["completed_item"],
         "current_successor": current["selected_item"],
-        "canonical_classification_changed": False,
+        "canonical_classification_changed": True,
     }

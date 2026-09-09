@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-09T01:07:41Z",
+  "checks": [
+    {"name": "universe public-entrypoint equivalence closure", "command": "scripts/validate-survivor-universe-equivalence-closure", "status": "PASS", "classification": "EQUIVALENT_AT_PUBLIC_LEVEL_COMPARISON_ENTRYPOINTS", "private_counterexamples": 2, "scientific_launches": 0},
+    {"name": "universe equivalence historical transition", "command": "scripts/validate-survivor-universe-equivalence-historical", "status": "PASS", "snapshot": "a4580dcd2d74f8156b4151d7439ca1e048a9735c", "registry_lines": {"before": 607, "after": 608}, "pending_survivors": {"before": 6, "after": 5}},
+    {"name": "universe reachability predecessor closure", "command": "scripts/validate-survivor-universe-diff-closure", "status": "PASS"},
+    {"name": "universe reachability predecessor transition", "command": "scripts/validate-survivor-universe-diff-historical", "status": "PASS", "canonical_classification_changed": true},
+    {"name": "cache export predecessor closure", "command": "scripts/validate-survivor-cache-export-closure", "status": "PASS"},
+    {"name": "cache predecessor historical transition", "command": "scripts/validate-survivor-cache-historical", "status": "PASS"},
+    {"name": "research queue v3", "command": "scripts/validate-research-queue --require-ready", "status": "PASS", "selected_item": "SURVIVOR-FVAR-REACHABILITY-1", "selected_item_started": false},
+    {"name": "transfer historical package", "command": "scripts/validate-transfer-assessment", "status": "PASS", "gate_decision": "NO_GO"},
+    {"name": "survivor proposal historical package", "command": "scripts/validate-survivor-proposal", "status": "PASS"},
+    {"name": "survivor reuse evidence", "command": "scripts/validate-survivor-let-reuse --evidence", "status": "PASS"},
+    {"name": "survivor association transition", "command": "scripts/build-survivor-let-association --check --require-full-payload", "status": "PASS"},
+    {"name": "declaration-validation catalog", "command": "scripts/validate-declaration-validation-catalog", "status": "PASS"},
+    {"name": "declaration-validation history", "command": "scripts/validate-declaration-validation-historical", "status": "PASS"},
+    {"name": "full current and frozen suite", "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 866, "frozen_tests": 73},
+    {"name": "current-state refresh", "command": "scripts/refresh-current-state", "status": "PASS", "log_path": "results/workflow-refresh/20260909T011200000000Z"},
+    {"name": "project review freshness", "command": "scripts/build-project-review --check", "status": "PASS"},
+    {"name": "artifact graph freshness", "command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "counts": {"CURRENT": 172, "HISTORICAL": 10, "SUPERSEDED": 4}},
+    {"name": "diff hygiene", "command": "git diff --check", "status": "PASS"}
+  ],
+  "result_limits": "Validation confirms the scoped public-entrypoint source proof, explicit private counterexamples, exact registry append, zero-launch accounting, historical preservation, queue consistency and generated-state freshness. It does not establish arbitrary private leq_core equivalence or semantic authority beyond the pinned public comparison scope."
+}

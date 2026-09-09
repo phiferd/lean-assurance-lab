@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-UNIVERSE-EQUIVALENCE-1` on 2026-09-08 with
+  `SUCCESS`. The `diff < 0` to `diff <= 0` mutation is outcome-equivalent at
+  pinned Nanoda's public level-comparison entrypoints. Mutual source induction
+  over normalization and recursive comparison closes every reachable
+  right-`Zero`, diff-zero state. The unrestricted private function is not
+  equivalent: raw `leq_core(Max(Zero,Zero), Zero, 0)` returns `true` in the
+  baseline and `false` in the mutant, but public `leq` simplifies that lhs to
+  `Zero` first. One append-only registry row classifies the mutant
+  `EQUIVALENT` under this explicit scope; pending survivors move from six to
+  five. The historical 163-test match is supporting observation only. No build,
+  focused scientific test, checker campaign, Lean proof, network request, new
+  export byte, mutation identity or external action ran. See the
+  [analysis](../results/research/survivor-universe-equivalence-1/equivalence-analysis.json),
+  [result](../results/research/survivor-universe-equivalence-1/result.json), and
+  [report](../results/research/survivor-universe-equivalence-1/report.md).
+  `SURVIVOR-FVAR-REACHABILITY-1` is selected READY and unstarted.
+
 - Completed `SURVIVOR-UNIVERSE-DIFF-1` on 2026-09-08 with `SUCCESS`.
   The existing non-Prop theorem reaches pinned Nanoda
   `leq_core(Succ Zero, Zero, 0)`: the baseline skips the original guard,
@@ -2467,32 +2484,30 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-UNIVERSE-EQUIVALENCE` — prove or refute whole-public-entrypoint
-   outcome equivalence for the broadened right-`Zero` universe guard under
-   [docs/research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md](research/SURVIVOR_UNIVERSE_EQUIVALENCE_PLAN.md).
+1. `F-SURVIVOR-FVAR-REACHABILITY` — assess whether an exported declaration
+   type can reach the pinned Nanoda free-variable guard under
+   [docs/research/SURVIVOR_FVAR_REACHABILITY_PLAN.md](research/SURVIVOR_FVAR_REACHABILITY_PLAN.md).
 
-Selected next item: `SURVIVOR-UNIVERSE-EQUIVALENCE-1`.
+Selected next item: `SURVIVOR-FVAR-REACHABILITY-1`.
 
-The item is ACTIVE under the owner's request to complete the next selected
-queue item. It is bounded to 5,400 active seconds, optional exact-gated
-existing-byte focused tests, zero new export bytes, and no Lean proof,
-checker-corpus campaign, network request or external action. No optional launch
-has occurred.
+The item is READY and unstarted. Its future source-only execution is bounded to
+3,600 active seconds with zero build, checker, proof, network, scientific-byte,
+mutation-identity or external-action launches.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-UNIVERSE-DIFF-1` closed `SUCCESS`: the exact existing theorem reaches
-the changed call state, but the baseline recursion and mutant early return both
-produce `false`. It consumed no scientific launch and does not change the
-canonical survivor classification.
+`SURVIVOR-UNIVERSE-EQUIVALENCE-1` closed `SUCCESS`: every public-reachable
+changed-domain state has the same result, while raw private non-normal states
+are explicitly not equivalent. The canonical registry admits one scoped
+`EQUIVALENT` classification; no optional scientific launch occurred.
 
-The project-wide closure review ranks a whole-entrypoint equivalence proof next
-because it can terminally resolve the just-characterized survivor while
-retaining a finite exact boundary if `Max`, nested `IMax` or a recursive caller
-cannot be closed. Free-variable reachability is the next novel survivor route;
-transfer still lacks independently curated input, original conditional-
-validation prerequisites remain unmet, and no fresh upstream or maintenance
-trigger displaces this local work.
+The project-wide closure review ranks the declaration free-variable guard next
+as the most novel feasible survivor route. Cache predicate alternatives overlap
+the already characterized cache behavior, thread predicates are primarily
+configuration paths, transfer still lacks independently curated input, original
+conditional-validation prerequisites remain unmet, and no fresh upstream or
+maintenance trigger displaces this local work. Selection does not start the
+successor.
 
 ### Waiting
 

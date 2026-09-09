@@ -1,0 +1,68 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+  "recorded_at": "2026-09-09T00:46:49Z",
+  "status": "PASS",
+  "commands": [
+    {
+      "argv": ["scripts/validate-survivor-universe-equivalence-closure"],
+      "result": "PASS",
+      "classification": "EQUIVALENT_AT_PUBLIC_LEVEL_COMPARISON_ENTRYPOINTS",
+      "scientific_launches": 0
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_survivor_universe_equivalence.py", "-v"],
+      "result": "PASS",
+      "test_count": 4
+    },
+    {
+      "argv": ["scripts/validate-survivor-universe-equivalence-historical"],
+      "result": "PASS",
+      "historical_snapshot": "a4580dcd2d74f8156b4151d7439ca1e048a9735c"
+    },
+    {
+      "argv": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_survivor_universe_equivalence_historical.py", "-v"],
+      "result": "PASS",
+      "test_count": 1
+    },
+    {
+      "argv": ["scripts/validate-survivor-universe-diff-closure"],
+      "result": "PASS",
+      "historical_tooling_resolved_at_snapshot": true
+    },
+    {
+      "argv": ["scripts/validate-survivor-universe-diff-historical"],
+      "result": "PASS"
+    },
+    {
+      "argv": ["scripts/validate-survivor-cache-export-closure"],
+      "result": "PASS",
+      "historical_tooling_resolved_at_snapshot": true
+    },
+    {
+      "argv": ["scripts/validate-survivor-cache-historical"],
+      "result": "PASS"
+    },
+    {
+      "argv": ["git", "diff", "--check"],
+      "result": "PASS"
+    }
+  ],
+  "scientific_launches": 0,
+  "scientific_build_or_checker_launches": 0,
+  "tooling": [
+    {"path": "lib/survivor_universe_equivalence.py", "sha256": "c45103e1ad7d4c6a51030701974321ce1862f1f8fee362fe30b3906d3bf29289"},
+    {"path": "scripts/validate-survivor-universe-equivalence-closure", "sha256": "d208ad35559cbedfc1d065b906dfdc8df1c1d308d464e98614e9c8c246e1cbb6"},
+    {"path": "tests/test_survivor_universe_equivalence.py", "sha256": "b2ec6e367575f91f1b0fee9c3a50933b27598b2f7fc0053ea7cf9f34b254fcc6"},
+    {"path": "lib/survivor_universe_equivalence_historical.py", "sha256": "c18d36229d268ddebf42bdc7bbe54a5db182f7f8d170c7986201763e5274c649"},
+    {"path": "scripts/validate-survivor-universe-equivalence-historical", "sha256": "5ca1b816f571909eeb71195ee7721fd18e9ec725a835397106257fe4066515e4"},
+    {"path": "tests/test_survivor_universe_equivalence_historical.py", "sha256": "b520ef4507cccea118d9766bc0999f0324a4471e067d80f5581f7fce8eb6799f"},
+    {"path": "lib/survivor_universe_diff.py", "sha256": "bbf0fd534b2f1912f650e2dfd8bb78da98155cf65de2ccb503937ba99a3b2719"},
+    {"path": "lib/survivor_universe_diff_historical.py", "sha256": "fcaa80ec3752efe9ee4607c670362dca4cbd425f507e0a1ee12eb6bd6578c444"},
+    {"path": "tests/test_survivor_universe_diff_historical.py", "sha256": "e6d8b355fadfdb7494bb959b69d43061a22c3e0ccb714a443a8fb8b041efe685"},
+    {"path": "lib/survivor_cache_historical.py", "sha256": "06454eafd7a361af438e4303f57c1c0e3eaa428a44edbff25beb1bb43e24ca64"},
+    {"path": "tests/test_survivor_cache_historical.py", "sha256": "b596d8590f4962dff767c1f6cd3ee52016ea9ec936b16fb91cbee43e29581ea9"},
+    {"path": "tests/test_current_assurance.py", "sha256": "b702c4937a2b0ad4a708c9931fbb737f145e5d6aaf70bb535ca827c7c04758ba"},
+    {"path": "scripts/build-artifact-graph", "sha256": "a29fc1d8bf8b1a6f7a3460d7e19ba3df8121c53791c44833a92266ab91e29eb5"}
+  ]
+}

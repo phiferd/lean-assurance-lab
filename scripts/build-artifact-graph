@@ -1217,6 +1217,7 @@ def catalog() -> list[dict]:
                 "witness-search:nanoda-imax-equality",
                 "comparison:nanoda-imax-equality-references",
                 "classification:survivor-let-association",
+                "classification:nanoda-universe-public-equivalence",
             ],
             required=True,
         ),
@@ -1533,6 +1534,26 @@ def catalog() -> list[dict]:
             ],
             required=True,
             notes="Source match-arm proof establishes that the universe-boundary mutation is equivalent.",
+        ),
+        node(
+            "classification:nanoda-universe-public-equivalence",
+            "classification",
+            locator=files(
+                ".",
+                "results/research/survivor-universe-equivalence-1/equivalence-analysis.json",
+                "results/research/survivor-universe-equivalence-1/result.json",
+                "results/research/survivor-universe-equivalence-1/report.md",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-current",
+                "mutation-model:nanoda",
+            ],
+            required=True,
+            notes=(
+                "Mutual source induction establishes public level-comparison equivalence for "
+                "e964 while preserving the private raw-leq_core counterexample boundary."
+            ),
         ),
         node(
             "classification:nanoda-imax-diff-boundary",

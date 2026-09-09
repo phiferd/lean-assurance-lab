@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+  "transition": "UNIVERSE_DIFF_REACHABILITY_TO_SCOPED_EQUIVALENT_ADMISSION",
+  "historical_snapshot": "a4580dcd2d74f8156b4151d7439ca1e048a9735c",
+  "historical_queue": {
+    "path": "config/research-queue.json",
+    "sha256": "0968517dad4fbedf7c7e56223915dff672016b6a9eb4d32e8007094805d63f16"
+  },
+  "historical_status": {
+    "path": "docs/RESEARCH_STATUS.md",
+    "sha256": "514721a06275e748b83400403297f46122c0a95802e58129635d90c3e9847d8c"
+  },
+  "historical_diff_manifest": {
+    "path": "results/research/survivor-universe-diff-1/evidence-manifest.json",
+    "sha256": "825f9ecce2974f7d2f0fdc2a035e48417a35cbd54a3f0582480e5d46efecc84e"
+  },
+  "predecessor_registry": {
+    "path": "results/mutants/registry.jsonl",
+    "lines": 607,
+    "sha256": "99b5867b1437b25af3bb5ab440875a616756e7c0bd75047f0dcdd745f4f4a572"
+  },
+  "survivor_inventory": {
+    "path": "results/survivors/inventory.jsonl",
+    "lines": 1,
+    "sha256": "c7e552e761f128e9911abeb6cc85cf1d4b7c48d6ed03798d574a0ace688f2458"
+  },
+  "evolved_live_tooling": [
+    {
+      "path": "lib/survivor_universe_diff.py",
+      "historical_sha256": "f88baeec3fd557c7027957d02c2a0dcee00a283f2f4f3f97ac94e3ad028ce93d",
+      "reason": "Resolve the completed reachability closure tooling at its exact entry snapshot after terminal classification changes live state."
+    },
+    {
+      "path": "lib/survivor_universe_diff_historical.py",
+      "historical_sha256": "1682a9ad7fae414818ff80628e0a819895233f70eec2082224d9c63102a1a88e",
+      "reason": "Advance live successor and classification assertions without changing the predecessor transition artifact."
+    },
+    {
+      "path": "tests/test_survivor_universe_diff_historical.py",
+      "historical_sha256": "59d9770833b0ec13a5a73a54f0fd9dfd651e46da97134aa7d31eb9daf6d1419c",
+      "reason": "Assert the separately authorized terminal successor while retaining the old snapshot expectation."
+    },
+    {
+      "path": "lib/survivor_cache_historical.py",
+      "historical_sha256": "b0328f32b43bb215a899344d7c654c228da26be6972362ce4871fbfa44f49e15",
+      "reason": "Advance only the oldest cache closure's live queue assertion through the new successor."
+    },
+    {
+      "path": "tests/test_survivor_cache_historical.py",
+      "historical_sha256": "161b8c90c0c88e5213a12a4f4db59fd307e09b732bd5d1258f8313a5934287ee",
+      "reason": "Keep the oldest closure test synchronized with the authorized live successor."
+    }
+  ],
+  "live_expectation": {
+    "completed_item": "SURVIVOR-UNIVERSE-EQUIVALENCE-1",
+    "selected_item": "SURVIVOR-FVAR-REACHABILITY-1",
+    "registry_append_count": 1,
+    "registry_classification": "EQUIVALENT",
+    "pending_survivors_before": 6,
+    "pending_survivors_after": 5,
+    "survivor_inventory_changed": false
+  },
+  "claim": "The 607-line registry and completed universe-diff closure validate unchanged at the exact entry snapshot. Current state adds one scoped EQUIVALENT row, preserves the one-line survivor inventory, completes only this item and selects the free-variable reachability successor without starting it."
+}
