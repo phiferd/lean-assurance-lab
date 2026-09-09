@@ -50,6 +50,20 @@ research directions.
 
 ## Attempted
 
+- Completed `CONTRIBUTION-PORTFOLIO-REVIEW-1` on 2026-09-09 with
+  `SUCCESS`: reviewed the constitution, live queue, HSBM proposal, current
+  upstream source and contribution dispositions across corpus, checker and
+  independent semantics paths. The successor portfolio contains nine READY
+  candidates and one result-gated PLANNED reserve, selects `NANODA-TEST-NONVACUITY-1`
+  unstarted, and defers the one-thread operational survivor without changing
+  its budget or evidence. Arena PRs #181/#182 are merged; Nanoda PR #32 is open.
+  The zero-thread recommendation is corrected prospectively: no current defect
+  does not rule out a useful preventive regression. No scientific process,
+  semantic adjudication or external research write occurred. See the
+  [review](../results/research/contribution-portfolio-review-2026-09-09/result.json),
+  [recommendation successor](../results/research/contribution-portfolio-review-2026-09-09/zero-thread-recommendation-successor.json),
+  and [portfolio plan](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
+
 - Completed `SURVIVOR-CACHE-PREDICATE-TRANSFER-1` on 2026-09-09 with
   `SUCCESS`. Both exact mutation identities recompute and replace the same
   pinned `infer` cache-guard occurrence. On the complete two-value `InferFlag`
@@ -2578,30 +2592,37 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-THREAD-ONE-DETERMINISM` — assess whether the remaining pinned
-   Nanoda one-thread dispatch survivor has a deterministic locally controllable
-   operational witness boundary under
-   [docs/research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md).
+1. `F-EXTERNAL-CONTRIBUTION-PORTFOLIO` — prioritize useful shared Arena corpus
+   contributions, checker implementation/test hardening, and Lean semantic
+   clarification independent of implementations under
+   [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
+Selected next item: `NANODA-TEST-NONVACUITY-1`.
 
-The item is READY and unstarted. Before analysis it must commit a bounded work
-record, exact mutation/source/history bindings and a determinism rubric. Its
-one 60-minute source/evidence session permits at most eight local inspections
-and zero network, builds, checkers, proofs, new scientific bytes, mutation
-identities or external actions. A regression may not be frozen or executed
-unless this item first identifies a deterministic trigger and a later
-separately selected item binds exact controls and finite launch accounting.
+The item is READY and unstarted. Current source suggests the native-literal
+hash test compares `None` values because extensions are disabled. Reproduce or
+falsify that premise before claiming a defect. Its 90-minute bound permits up
+to eight read-only/setup requests, three builds and four test processes only
+after the plan's exact-input, work-record and process-accounting gates pass.
+Completion is a small validated local test repair and PR draft, an existing
+equivalent repair, a falsified premise or an exact bounded blocker. Submission
+requires human approval for that target and action.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-CACHE-PREDICATE-TRANSFER-1` closed with exact transfer support and one
-scoped classification append. The project-wide review selects the remaining
-one-thread operational boundary because it has a concrete serial/parallel split
-but no deterministic regression protocol. The direct cache survivor already
-has an internal distinction and a bounded unresolved ordinary-export boundary;
-prospective transfer still lacks independent input, historical CVC-4 gates
-remain unmet, and no substantive upstream maintenance trigger is recorded.
+The canonical queue retains nine READY items, including the selected item,
+and one PLANNED reserve across all three paths: Arena let reuse and inductive isolation;
+Nanoda literal-test repair, inference-cache regression and reserved-namespace
+coverage audit; independent let/import contract clarification; and a bounded
+history-mining pilot. Negative-cache history is an independent READY reserve;
+a theorem accept control requires a demonstrated coverage need. These are ranked opportunities, not a mandate to
+exhaust a lane before reconsidering others. The plan records result-dependent
+follow-ups and re-ranks at each closure by external usefulness and cost.
+
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
+rejected. Its original evidence and budget remain intact. Historical CVC gates,
+independent-transfer prerequisites, authority locks, pending survivor counts
+and modeled mutation metrics are unchanged. No new candidate has started.
 
 ### Waiting
 
@@ -2612,13 +2633,20 @@ remain unmet, and no substantive upstream maintenance trigger is recorded.
   it does not authorize a PR by itself. Until then, retain the source-only
   master comparison and do not claim a current-master execution result.
 
-- `W-ARENA-DISPOSITION-ACCESS`: the 2026-09-06 `OPS-UPSTREAM-1` CLI
-  preflight failed authentication before any disposition query. PR #181/#182
-  states below remain dated last-known records, not fresh observations. Restore
-  CLI access with `gh auth login -h github.com --web`; confirmed repair or
-  owner-supplied substantive feedback triggers review and ranking of a fresh
-  bounded check with successful preflight. Preserve the Kiota deferral. Do not
-  repeat the completed item or poll while access is unavailable.
+- `W-ARENA-DISPOSITION-ACCESS`: resolved for read-only review on 2026-09-09.
+  A working GitHub connector verified Arena #181 merged on 2026-09-06 and #182
+  merged on 2026-09-05. The historical CLI authentication failure is preserved
+  but is not a global access blocker. Exact metadata and maintainer feedback
+  are in the [Arena review](../results/research/contribution-portfolio-review-2026-09-09/arena-review.json).
+  Any external write still needs target-specific approval and a working
+  preflight for the selected channel; the Kiota submission deferral remains.
+
+- `W-NANODA-OMITTED-THREADS`: [PR #32](https://github.com/ammkrn/nanoda_lib/pull/32)
+  was verified open and unmerged on 2026-09-09 at head `85038f436b7c`.
+  It adds preventive malformed-declaration tests through omitted-field and
+  explicit-zero configuration paths. This is not a current checker defect or an unclaimed
+  new contribution opportunity. Do not create a duplicate. Preserve the old
+  NO_GO evidence and use its [recommendation successor](../results/research/contribution-portfolio-review-2026-09-09/zero-thread-recommendation-successor.json).
 
 - `W-ARENA-THEOREM-CONTROL`: review the exact identity-theorem accept control as
   a companion to Arena's existing `tutorial/012_nonPropThm` reject case. The
@@ -2644,21 +2672,23 @@ remain unmet, and no substantive upstream maintenance trigger is recorded.
   recursor type, and constructor index. Official Lean and Lean4Lean reject all
   three exact artifacts. Discuss them together before filing to avoid issue
   spam and to determine whether one shared validation boundary explains them.
-- `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on current
+- `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on pinned
   Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
   contract-clarification issue; no demonstrated unsoundness is claimed. The
   owner deferred that issue pending Arena feedback. The separate Arena
-  characterization was submitted as PR #182 with control `accept` / candidate
-  `either`; its maintainer-requested corner-case placement and shorter names are
-  complete. Any future Kiota issue still requires target-specific approval.
+  characterization merged as PR #182 on 2026-09-05 with control `accept` /
+  candidate `either`. This supplies the previously awaited Arena feedback,
+  not authorization to file the deferred Kiota issue. The portfolio allows
+  bounded local import-policy clarification; any issue still requires exact
+  target-specific approval.
 
 - `W-ARENA-REDUCIBLE-POSITIVITY`: retain the complete-recursor artifact,
   supported by prior pinned evidence, as submitted PR #181. Current
   tutorial-content comparison, recent-commit duplicate preflight, static
   integration, and owner approval are complete. Maintainer review removed the
   low-value control, moved the artifact to `corner-cases/positivity-whnf`, and
-  selected outcome `either` because acceptance after WHNF may be valid. Await
-  upstream disposition. The original reject/control observations remain
+  selected outcome `either` because acceptance after WHNF may be valid. PR #181
+  merged on 2026-09-06; no disposition polling is needed. The original observations remain
   preserved as profile evidence rather than normative semantic authority.
 
 - `W-IMAX-RIGHT-SUCCESSOR`: closed as contributed. Arena PR #176 merged on

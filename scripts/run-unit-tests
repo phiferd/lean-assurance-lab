@@ -12,6 +12,9 @@ from pathlib import Path
 
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.portfolio_historical_snapshot import historical_modules as portfolio_modules
+from lib.portfolio_historical_snapshot import run_historical_tests as run_portfolio_history
 GATE8_INPUT_PATH = (
     ROOT
     / "results"
@@ -134,7 +137,8 @@ def main() -> int:
 
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
     historical_modules = _historical_modules()
-    suite = _current_suite(suite, historical_modules)
+    checkpoint_modules = portfolio_modules(ROOT)
+    suite = _current_suite(suite, historical_modules | checkpoint_modules)
     suite = _rewrite_suite(suite, bool(missing))
     result = unittest.TextTestRunner(verbosity=2).run(suite)
     historical_ok = True
@@ -144,7 +148,8 @@ def main() -> int:
             command.append("--require-full-payload")
         print("Running frozen publication-study tests against their attested content and local payloads.", flush=True)
         historical_ok = subprocess.run(command, cwd=ROOT, check=False).returncode == 0
-    return 0 if result.wasSuccessful() and historical_ok else 1
+    checkpoint_ok = run_portfolio_history(ROOT)
+    return 0 if result.wasSuccessful() and historical_ok and checkpoint_ok else 1
 
 
 if __name__ == "__main__":

@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "review_date": "2026-09-09",
+  "scope": "Read-only checker contribution and historical-boundary strategy review; no checker execution, builds, mutations or external writes.",
+  "authority_read": [
+    "CONSTITUTION.md",
+    "docs/RESEARCH_STATUS.md",
+    "docs/research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md",
+    "docs/RESEARCH_WORKFLOW.md"
+  ],
+  "constitutional_assessment": {
+    "recommendation": "Prioritize concrete test repairs and preventive regressions with a current implementation contract, then bounded discovery of new candidates. A present implementation defect is not required for a useful test contribution.",
+    "reason": "The constitution prefers durable shared regression assets, requires concrete recommendations, permits replacement of methods, and explicitly rejects treating a vulnerability as the only successful outcome.",
+    "frontier_at_entry": "SURVIVOR-THREAD-ONE-DETERMINISM-1 was READY and unstarted; SURVIVOR-CACHE-PREDICATE-TRANSFER-1 had completed.",
+    "reranking": "The remaining one-thread survivor has no recorded deterministic operational witness or specific external contribution. The source-established literal test vacuity and existing internal infer-cache witness offer shorter, clearer contribution paths. Defer the one-thread item without claiming it completed or extending its budget."
+  },
+  "upstream_pr32": {
+    "url": "https://github.com/ammkrn/nanoda_lib/pull/32",
+    "observation_source": "Successful read-only GET https://api.github.com/repos/ammkrn/nanoda_lib/pulls/32 on 2026-09-09; parent review retains upstream-pr32.json.",
+    "state": "open",
+    "merged": false,
+    "comments": 0,
+    "review_comments": 0,
+    "head_revision": "85038f436b7c3ffb0b6e68d862a6eaf681eed62d",
+    "base_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "change": "Two tests, 21 added lines in src/tests/util.rs. The omitted-field case loads the existing ProjFromProp config through Config::try_from; the explicit-zero case sets public export.config.num_threads to 0. Both call check_all_declars and require the existing infer_proj prop rejection.",
+    "interpretation": "An actual preventive regression submission demonstrates that the prior safe-current-source NO_GO was too broad as a contribution policy. Submission does not establish maintainer acceptance or HSBM superiority.",
+    "historical_preservation": "Keep results/research/nanoda-zero-thread-upstream-readiness-1 unchanged. Its defect-report conclusion was supported within its rubric; a successor must correct the inference that safe current behavior eliminates an evidence-bound need for preventive tests.",
+    "future_action": "Track substantive maintainer feedback as a contribution follow-through trigger; do not create another zero-thread PR or issue."
+  },
+  "source_identity": {
+    "repository": "https://github.com/ammkrn/nanoda_lib",
+    "current_inspected_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "local_history_used": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib",
+    "reproduction": "The temporary clone is a convenience, not the evidence authority. Retrieve the exact repository revisions and git blobs below; current-branch names are not substitute bindings.",
+    "blobs": [
+      {"path": "src/tests/util.rs", "git_blob": "3ab529ae98a875f801619cd483d4243affe4bff9"},
+      {"path": "src/tests/name.rs", "git_blob": "2cbaac031e2c95320d8e4eca850426d73763dc9a"},
+      {"path": "src/tests/natlit.rs", "git_blob": "ac418a748185f98316671aff1e3a3f2be92283d8"},
+      {"path": "src/tc.rs", "git_blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf"},
+      {"path": "src/expr.rs", "git_blob": "ec7883b79ff672f9da200b65648285820b7f69d3"},
+      {"path": "src/util.rs", "git_blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35"},
+      {"path": "src/inductive.rs", "git_blob": "6c2e56b622c1649cbe68886b837ef6ef802ad27c"},
+      {"path": "README.md", "git_blob": "37748bcdb0ab7bb8b1af5e6733e7206d7bfd06c6"}
+    ],
+    "historical_transitions": [
+      {"child": "9c3a447bb3fd3056c906a05978ae8e13f524cd21", "parent": "2747659518c0d5debe1d05cb02ba9232cafa4897", "subject": "chore: switch to ndjson parser + QoL improvements"},
+      {"child": "4db8bcc0336db729610303c91db36895e898a11f", "parent": "6232bfcfc60d0ea8fb94d164f75a2531ecb93801", "subject": "strengthen safety of infer caching; simplify infer_lambda", "date_caveat": "This commit is from 2020, not 2026."},
+      {"child": "404660cc2fbf04d8040d25a15ddd55b6b15c8e5e", "parent": "ddfac2bf5a7b56cb46e141494427ff3dd55963c7", "subject": "chore: implement upstream safety checks"},
+      {"child": "6524aed358d79a1f20552a982623beab7bb7abdb", "parent": "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da", "subject": "fix: nat const handling, is_valid_ind_app univ's"},
+      {"child": "092838312149611649d27781e1d242be4cba4a12", "parent": "05055695879dfebb6628a67da88ceca6cd6b0421", "subject": "feat: perf improvements from flt project", "integration": "Merged by 4c544ed4099c8227f07d5de77ad1e69fb0740a27, whose subject identifies PR #31."}
+    ]
+  },
+  "source_excerpts": [
+    {
+      "id": "CURRENT-HELPER-DISABLES-LITERALS",
+      "path": "src/tests/util.rs",
+      "lines": [15, 34],
+      "text": "pub(crate) fn test_get_export_file<'p>(config_path: Option<&Path>) -> Result<(ExportFile<'p>, Vec<String>), Box<dyn Error>> {\n    let config_file = match config_path {\n        None => Config {\n            export_file_path: Some(PathBuf::from(\"test_resources/Empty/export\")),\n            use_stdin: false,\n            permitted_axioms: Some(Vec::new()),\n            unpermitted_axiom_hard_error: true,\n            nat_extension: false,\n            string_extension: false,"
+    },
+    {
+      "id": "CURRENT-HASH-TEST-COMPARES-OPTIONS",
+      "path": "src/tests/util.rs",
+      "lines": [110, 132],
+      "text": "    test_export_file(None, |export| {\n        let mut rng = thread_rng();\n        export.with_ctx(|ctx| {\n            for size in 0..100 {\n                for _ in 0..100 {\n                    let s = rand_string(&mut rng, size);\n                    let (l, r) = (ctx.mk_string_lit_quick(s.clone()), ctx.mk_string_lit_quick(s));\n                    assert_eq!(hash64!(l), hash64!(r));\n                    assert_eq!(l, r)\n                }\n                for _ in 0..100 {\n                    let s = rng.gen_biguint(size as u64);\n                    let (l, r) = (ctx.mk_nat_lit_quick(s.clone()), ctx.mk_nat_lit_quick(s));\n                    assert_eq!(hash64!(l), hash64!(r));\n                    assert_eq!(l, r)\n                }"
+    },
+    {
+      "id": "CURRENT-DISABLED-STRING-RETURNS-NONE",
+      "path": "src/util.rs",
+      "lines": [581, 586],
+      "text": "    pub fn mk_string_lit_quick(&mut self, s: CowStr<'t>) -> Option<ExprPtr<'t>> {\n        if !self.export_file.config.string_extension {\n            return None\n        }\n        let string_ptr = self.alloc_string(s);\n        self.mk_string_lit(string_ptr)"
+    },
+    {
+      "id": "CURRENT-NAT-CONSTRUCTION-IS-OPTIONAL",
+      "path": "src/util.rs",
+      "lines": [589, 601],
+      "text": "    pub fn mk_nat_lit(&mut self, num_ptr: BigUintPtr<'t>) -> Option<ExprPtr<'t>> {\n        if !self.export_file.config.nat_extension {\n            return None\n        }\n        let hash = hash64!(crate::expr::NAT_LIT_HASH, num_ptr);\n        Some(self.alloc_expr(Expr::NatLit { ptr: num_ptr, hash }))\n    }\n\n    /// Shortcut to make an `Expr::NatLit` directly from a `BigUint`, rather than\n    /// going `alloc_bignum` and `mk_nat_lit`\n    pub fn mk_nat_lit_quick(&mut self, n: BigUint) -> Option<ExprPtr<'t>> {\n        let num_ptr = self.alloc_bignum(n)?;\n        self.mk_nat_lit(num_ptr)"
+    },
+    {
+      "id": "CURRENT-INFER-MODE-GUARD",
+      "path": "src/tc.rs",
+      "lines": [513, 521],
+      "text": "    pub(crate) fn infer(&mut self, e: ExprPtr<'t>, flag: InferFlag) -> ExprPtr<'t> {\n        if let Some(cached) = self.tc_cache.infer_cache_check.get(&e).copied() {\n            return cached\n        }\n        if flag == InferFlag::InferOnly {\n            if let Some(cached) = self.tc_cache.infer_cache_no_check.get(&e).copied() {\n                return cached\n            }\n        }"
+    },
+    {
+      "id": "CURRENT-NEGATIVE-DEFEQ-CACHE",
+      "path": "src/tc.rs",
+      "lines": [957, 964],
+      "text": "    pub fn def_eq(&mut self, x: ExprPtr<'t>, y: ExprPtr<'t>) -> bool {\n        if let Some(easy) = self.def_eq_quick_check(x, y) {\n            return easy\n        }\n        let defeq_fail_cache_key = (x, y, self.ctx.eager_mode);\n        if self.tc_cache.defeq_fail_cache.contains(&defeq_fail_cache_key) {\n            return false\n        }"
+    },
+    {
+      "id": "CURRENT-NEGATIVE-DEFEQ-CACHE-LIFETIME",
+      "path": "src/util.rs",
+      "lines": [839, 840],
+      "text": "    /// per-declaration memo of `def_eq` calls that returned `false` (keyed by the ordered pair and the eager-mode flag).\n    pub(crate) defeq_fail_cache: FxHashSet<(ExprPtr<'t>, ExprPtr<'t>, bool)>,"
+    }
+  ],
+  "ranked_checker_candidates": [
+    {
+      "rank": 1,
+      "id": "NANODA-LITERAL-TEST-NONVACUITY-1",
+      "target": "Nanoda src/tests/util.rs::hash_test0 at current inspected revision",
+      "finding_level": "SOURCE_ESTABLISHED_TEST_DEFECT; no runtime reproduction in this review",
+      "finding": "The helper disables both literal extensions. Both literal constructors therefore return None, so 10,000 String and 10,000 Nat generated pairs only compare and hash None. The test does not exercise literal interning or literal hashes as its body suggests.",
+      "historical_link": "6524aed introduced Option-returning literal construction and disabled-extension guards; its test-file change only added unwraps in mk_succ_app, leaving hash_test0's comparisons valid on Option values.",
+      "exact_action": "Bind the current source and existing test; demonstrate failure of an explicit non-vacuity assertion, then construct a test-local Config with extensions enabled before ExportFile/DAG creation. Require Some and inspect literal variant/value before checking repeated-value pointer/hash equality. Add a small disabled-extension control if needed to keep intentional None behavior explicit. Prepare the smallest maintainable test-repair diff and validation receipt.",
+      "budget": {"max_sessions": 2, "session_minutes": 90, "max_build_reservations": 2, "max_test_processes": 4, "new_mutation_campaigns": 0},
+      "validation": "Exact baseline non-vacuity failure, repaired focused test, and full cargo test --locked; any process controls required by the selected execution plan bind before launches.",
+      "external_action_path": "A test-repair PR recommendation to ammkrn/nanoda_lib after current-source continuity, duplicate preflight and local validation. Submission requires exact target-specific human approval.",
+      "stop": "Current upstream already repaired or duplicates the change; source construction changes require more than a small test repair; finite budget expires with concrete evidence."
+    },
+    {
+      "rank": 2,
+      "id": "NANODA-INFER-CACHE-PREVENTIVE-1",
+      "target": "Nanoda current internal InferOnly/Check cache boundary",
+      "finding_level": "EXISTING_PINNED_INTERNAL_WITNESS_WITH_CURRENT_SOURCE_CONTINUITY; current execution still required",
+      "finding": "The Lab already has a four-cell malformed-let internal witness. Current code still separates checked and unchecked maps and guards unchecked lookup by InferOnly. This is an implementation-local validation-strength contract suitable for a focused internal regression even though ordinary exported-input reachability remains unresolved.",
+      "historical_link": "4db8bcc in 2020 changed cache keys from expression alone to (expression, InferFlag). The modern split-map architecture differs, so history explains the obligation but cannot directly transfer a 2020 binary or test claim.",
+      "evidence": ["results/research/survivor-cache-1/report.md", "results/research/survivor-cache-export-1/report.md", "results/research/survivor-cache-predicate-transfer-1/report.md"],
+      "exact_action": "Port the smallest existing malformed-let fixture to a current-source internal unit test. Bind fresh Check rejection, weak inference success, then weak-to-strong rejection on the same expression pointer and same checker. Include a valid control. Reuse an already bound narrow mutation only if necessary to demonstrate test sensitivity; do not reopen exported-input search.",
+      "budget": {"max_sessions": 2, "session_minutes": 90, "max_build_reservations": 2, "max_test_processes": 6, "new_mutation_campaigns": 0},
+      "external_action_path": "Preventive unit-test PR recommendation, explicitly limited to the internal inference contract. No malformed-export acceptance or current soundness defect claim.",
+      "stop": "Existing equivalent regression, architecture no longer supports the bound internal sequence, or no maintainable isolated test within budget."
+    },
+    {
+      "rank": 3,
+      "id": "NANODA-DEFEQ-CACHE-HISTORY-1",
+      "target": "New negative defeq cache introduced in 092838312149611649d27781e1d242be4cba4a12 and merged by current inspected revision",
+      "finding_level": "SOURCE_INFERRED_CANDIDATE; no gap or defect established",
+      "finding": "The recent performance commit adds failed-comparison memoization keyed by ordered expression pair and eager_mode and changes congruence argument traversal order. It adds no tests. Mode transitions and repeated histories now deserve an explicit regression audit.",
+      "exact_action": "Inspect the new cache's lifetime and eager-mode transitions; determine whether one expression pair can fail under ordinary reduction and succeed under eager reduction in the same supported context. Audit current tests and FLT donor tests for reuse. Nominate at most one maintained regression or record that a scoped history is unsupported/already covered.",
+      "budget": {"max_sessions": 1, "session_minutes": 90, "max_local_source_inspections": 8, "max_public_gets": 4, "checker_launches": 0, "builds": 0},
+      "external_action_path": "A separate successor may prepare a cache-mode preventive test, or a fix plus regression only if current behavior demonstrably violates an independently stated implementation contract.",
+      "stop": "No falsifiable mode/history distinction, existing coverage, or bounded source review exhausted."
+    },
+    {
+      "rank": 4,
+      "id": "NANODA-SAFETY-REGRESSION-1",
+      "target": "404660c _nested admission checks and projection-name fast path",
+      "finding_level": "SOURCE_INFERRED_CANDIDATES; no end-to-end missing test proved",
+      "finding": "The commit adds inductive/constructor _nested checks and a ty_name equality conjunct in def_eq_proj. Its added tests cover name-prefix helpers. Current checks remain; the executable test modules are name, level, natlit and util, and the only retained negative export fixture is ProjFromProp.",
+      "exact_action": "Audit at most two safety boundaries; nominate one isolating test. For _nested, bind an otherwise suitable inductive/constructor fixture whose admission fails specifically at the reserved-prefix check, with a neighboring allowed-name control. For projection identity, initially target the syntactic fast path, using a nonreducing supported structure expression and preventing other equality routes from masking the assertion.",
+      "claim_caveat": "Different projection type-name fields do not imply blanket semantic non-equality after reduction. The defensible local obligation is that this projection-congruence fast path cannot return true solely from matching index and structure while the type names differ. The commit itself says these checks do not implicate soundness; preserve that distinction.",
+      "budget": {"max_sessions": 1, "session_minutes": 90, "max_local_source_inspections": 8, "max_public_gets": 4, "checker_launches": 0, "builds": 0},
+      "external_action_path": "One small Nanoda test-only PR candidate if the asserted rejection/fast-path property is isolated. Shared Arena admission additionally requires a separately qualified semantic outcome and public export witness.",
+      "stop": "Candidate only exercises a helper, unrelated validation fails first, or expected semantic result cannot be scoped without imposing an invented Lean contract."
+    },
+    {
+      "rank": 5,
+      "id": "NANODA-NATIVE-CONFIG-BOUNDARY-1",
+      "target": "Nat/String extension interaction and absent required constants after 6524aed",
+      "finding_level": "SOURCE_INFERRED_CANDIDATES; no checker failure demonstrated",
+      "finding": "Current README exposes separate flags; parser rejects disabled literal forms, while string reconstruction returns None unless both extensions are enabled. Nat and String constants are optional in the source. Existing native arithmetic tests mainly test integer helper functions, not parser/config/reconstruction products.",
+      "exact_action": "After the concrete literal-test repair, inspect the four flag combinations and at most two declaration-presence states. Separate parser rejection, admitted literal typing and optional reconstruction. Select at most one previously uncovered supported interaction; avoid an unbounded Cartesian campaign.",
+      "budget": {"max_sessions": 1, "session_minutes": 90, "max_local_source_inspections": 8, "checker_launches": 0, "builds": 0},
+      "external_action_path": "A scoped configuration regression or documentation clarification; Arena candidate only if it transfers to an implementation-independent obligation.",
+      "stop": "No stable documented behavior beyond an internal optional return, existing coverage, or no small maintainable test."
+    }
+  ],
+  "hsbm_review": {
+    "decision": "Adopt as a bounded candidate-discovery method in the checker and shared-corpus portfolio; do not make it the exclusive frontier or require a broad scoring prototype before obvious useful test repairs.",
+    "corrected_reachability": "For num_threads, the supported novelty is the omitted-field path changing from 1 to 0. Explicit numeric zero was already a public usize/config input; do not assert zero was globally unreachable before Serde. Define interface, state abstraction and transition rather than using unqualified Post minus Pre.",
+    "taxonomy": "Reachability/default transition; validation-strength or cache-history distinction; safety enforcement addition; feature interaction; representation change; and test non-vacuity/wiring. Safety additions can shrink accepted states, so the useful umbrella is historical assurance boundaries, not only set expansion.",
+    "evidence_fields": ["parent and child revisions", "current continuity revision", "scoped interface", "source-inferred or execution-confirmed reachability", "implementation-local or qualified normative obligation authority", "state reached", "property asserted", "test executable", "test timing", "concrete next action"],
+    "avoid_overclaim": "Historical intent nominates an obligation; current source safety can justify preventive tests but does not establish Lean semantics. Resource existence is not executable coverage; helper tests are not automatically semantic regressions; coverage absence requires a scoped test audit.",
+    "bounded_pilot": {
+      "prerequisite": "Bounded primary literature and tool-reuse assessment for change-aware test generation, test amplification, regression test selection and history-guided mutation; retain a reuse/extend/stop decision before building new scoring tooling.",
+      "sample": "Freeze one exact history interval and a non-merge population, deterministic explainable score and tie break, six ranked commits across at least three strata, and two mechanically selected low-score controls. Record the already discussed zero-thread, infer-cache, safety, native-config and newly observed literal-test cases as discovery anchors excluded from prospective yield.",
+      "per_commit": "At most two candidate boundaries and one nominated regression; fixed follow-up window such as the next five non-merge commits plus a separate current-test continuity check.",
+      "budget": {"max_sessions": 3, "session_minutes": 90, "max_commits": 8, "max_primary_sources": 6, "checker_launches": 0, "builds": 0, "mutations": 0},
+      "success_criterion": "At least two non-anchor candidates from the frozen sample have current-source continuity, a scoped contract, evidence of missing isolation, a small implementable test design, and a concrete contribution path. Report all candidates and analyst minutes, including negatives and unresolved cases.",
+      "limits": "The first pilot establishes prospective actionability only. Superiority over broad mutation triage requires an equal-budget comparator and should not be claimed from this pilot or from PR #32.",
+      "successors": "Implement the highest-value admitted regression as one bounded local item; if all candidates are covered, stop scoring-tool investment and prioritize existing corpus/semantic items; if expected outcomes are ambiguous, route one candidate into semantic clarification; if ordinary export portability is established, route one into Arena integration."
+    }
+  },
+  "read_only_checks": {
+    "commands": [
+      "git show --stat and git show for 4db8bcc, 404660c, 6524aed and 0928383",
+      "git show -s --format='%H%n%P%n%s' for each recorded historical transition",
+      "git show 4c544ed4099c8227f07d5de77ad1e69fb0740a27:src/tests/util.rs and source counterpart inspections",
+      "git ls-tree 4c544ed4099c8227f07d5de77ad1e69fb0740a27 for recorded blobs",
+      "git log 9c3a447..4c544ed -- src/tests.rs src/tests test_resources",
+      "curl --fail --silent --show-error https://api.github.com/repos/ammkrn/nanoda_lib/pulls/32"
+    ],
+    "network_limit": "One successful unauthenticated PR #32 API GET; attempted public web opens failed with cache miss. PR #31 metadata was not separately fetched; its code and integration identity were inspected through local git objects.",
+    "execution_claims": "No claim that any new candidate was compiled, executed or reproduced. Source inference and previously frozen execution evidence remain distinct."
+  }
+}

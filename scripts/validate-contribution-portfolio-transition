@@ -1,0 +1,13 @@
+#!/usr/bin/env python3
+"""Validate the live preservation bridge and unchanged closure checkpoint tests."""
+from pathlib import Path
+import json
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.portfolio_historical_snapshot import validate_live_transition, run_historical_tests
+
+if __name__ == '__main__':
+    print(json.dumps(validate_live_transition(ROOT), sort_keys=True), flush=True)
+    raise SystemExit(0 if run_historical_tests(ROOT) else 1)

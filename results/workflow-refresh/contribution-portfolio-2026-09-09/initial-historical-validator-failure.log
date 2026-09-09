@@ -1,0 +1,15 @@
+Command: scripts/validate-survivor-cache-predicate-transfer-historical
+Exit code: 1
+Observed during portfolio frontier transition on 2026-09-09.
+
+Traceback (most recent call last):
+  File "scripts/validate-survivor-cache-predicate-transfer", line 347, in <module>
+    (validate_historical if args.historical_only else validate)(args.root.resolve())
+  File "scripts/validate-survivor-cache-predicate-transfer", line 308, in validate_historical
+    validate(root)
+  File "scripts/validate-survivor-cache-predicate-transfer", line 73, in validate
+    raise ValueError(f"entry binding mismatch: {row['path']}")
+ValueError: entry binding mismatch: docs/RESEARCH_WORKFLOW.md
+
+The following queued historical validator did not run because the shell used &&.
+The raw full-suite run is retained separately as full-unit-tests.log.

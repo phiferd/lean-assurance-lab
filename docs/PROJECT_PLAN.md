@@ -11,10 +11,81 @@ Continuously improve and explain the measured assurance state of the Lean
 validation ecosystem.
 ```
 
-The plan below describes the current strategy for advancing that goal. It is
-allowed to change. A strategy change is acceptable when it improves trust,
-quality, visibility, reproducibility, or community usefulness while preserving
-the constitutional tenets.
+The current strategy is the contribution portfolio adopted on 2026-09-09 below.
+`docs/RESEARCH_STATUS.md` selects its authorized frontier and
+`config/research-queue.json` ranks executable items. The completed foundation
+milestones later in this document are historical context, not a competing queue.
+
+## Current strategy: three contribution paths
+
+Advance measured ecosystem assurance through three complementary outputs:
+
+1. **Standard Arena corpus:** small executable cases that isolate an obligation
+   or precisely characterize a disputed boundary. Audit actual suite wiring and
+   duplicate coverage and use useful controls. Use `either` only with positive
+   support for permitting both outcomes; missing authority alone is insufficient.
+   A new file or another mutant kill alone is
+   insufficient reason to add a corpus case.
+2. **Individual checker hardening:** implementation fixes, preventive regressions,
+   and repairs to ineffective tests. Current correctness does not disqualify a
+   test contribution. A clear invariant, demonstrated testing gap, plausible
+   failure and small maintainable test can justify a test-only contribution.
+   Internal API contracts can justify unit tests without implying exported-input
+   reachability or a language-level soundness defect.
+3. **Independent Lean obligations:** precise statements of semantic requirements,
+   their input/environment assumptions, qualified sources and unresolved choices.
+   The useful external output is a focused reference/specification clarification
+   or a reviewable semantic example. Implementation behavior and majority votes
+   cannot supply authority.
+
+These paths share evidence but have different acceptance criteria. Corpus
+admission does not establish normativity, and an implementation-local regression
+does not automatically belong in Arena. Prefer results that transfer, while
+recognizing that a concrete checker test can have more immediate ecosystem value
+than another survivor classification.
+
+The [external contribution portfolio plan](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md)
+defines the bounded items and outcome-dependent follow-ups. Its first selection
+is a source-supported literal-test non-vacuity repair candidate in Nanoda.
+Ready alternatives include an Arena let-regression package, a checked/unchecked
+inference-cache regression, a focused let-contract clarification, and a bounded
+historical-boundary pilot. Independent reserves cover eager-mode negative
+caching, reserved namespaces and serialized metadata; a theorem control is
+conditional on demonstrating a distinct current coverage need.
+The one-thread operational survivor is deferred: it lacks the direct, stable
+contribution path of these candidates.
+
+At each item closure, compare the whole portfolio and retain a visible next
+move plus conditional follow-ups in all three paths. Use evidence strength,
+likely maintainer usefulness, severity, transfer, cost and urgency to rank;
+do not mechanically rotate categories or force work where no useful output
+exists. A maintainer merge is evidence of uptake, not semantic authority.
+
+Two recent Arena contributions (#181 positivity and #182 proof parameters) are
+now verified merged. Nanoda #32 submits preventive omitted/zero-thread tests.
+The earlier blanket zero-thread `NO_GO` confused absence of a current defect
+with absence of a useful regression; the
+[successor review](../results/research/contribution-portfolio-review-2026-09-09/zero-thread-recommendation-successor.json)
+corrects the live recommendation while preserving the original evidence.
+
+Historical Semantic Boundary Mining is admitted as a bounded experimental
+method within this portfolio. History may reveal default remapping, new routes,
+mode distinctions, changed enforcement, or tests that stopped exercising their
+intended objects. It generates candidates; exact source, executable tests and
+independent semantic sources determine what may be claimed. The pilot must
+separate known calibration examples from fresh candidates and record its costs
+and negative results before any claim of improved yield.
+
+## Constitutional alignment of the current strategy
+
+All three paths improve shared assets or clarify unresolved obligations. Every
+item has exact evidence, a finite budget and an external-output decision. Raw
+failures and unresolved interpretations remain visible. Existing tools handle
+provenance, admission and historical validation; the portfolio does not reopen
+completed assurance milestones. Local preparation proceeds under the standing
+authorization; a new upstream submission or message still needs approval for
+that exact action and target. Deliver Lab changes on `main` through
+`scripts/push-main`.
 
 ## Strategic Outcomes
 
@@ -42,9 +113,10 @@ Claims must remain scoped. The project should never say "Lean is correct" or
 "the corpus is sufficient." It may say that, for exact versions and documented
 models, a measured assurance condition currently holds or fails.
 
-The near-term strategy uses semantic mutation testing, coverage-guided
-execution, witness generation, minimization, and cross-validator confirmation.
-Those methods are implementation strategy, not constitutional identity.
+Select mutation testing, historical analysis, direct test repair, witness reuse,
+coverage, formalization or cross-validator comparison according to the concrete
+contribution they can enable. These methods are replaceable implementation
+choices. A completed finding must state its recommended action and target.
 
 Milestones succeed by producing scoped measurements, classifications, and
 reports. They must not depend on finding a flaw, proving a theorem, producing a
@@ -52,9 +124,12 @@ positive transfer result, or improving a metric. "None found," "no measurable
 change," "inconclusive," "incompatible," and "unresolved" are valid outputs
 when they are mechanically grounded and clearly reported.
 
-## Current Baseline
+## Foundation baseline (2026-08-24; historical context)
 
-Current measured state, distinguishing tracked artifacts from local evidence:
+This retained foundation snapshot is not the current measured state. Read
+`docs/RESEARCH_STATUS.md` and generated `results/assurance/current.json` for
+current evidence and counts. The milestone records below retain their original
+scope and completion meaning.
 
 - The project has a constitution and initial design documents.
 - The project has a private GitHub repository and an initial committed
@@ -556,9 +631,10 @@ Exit criteria:
 - Contributions can be accepted or rejected against the constitution rather
   than personal preference.
 
-## Near-Term Task Queue
+## Retained foundation handoff (2026-08-24)
 
-These are the next concrete tasks, in order:
+This section records the earlier foundation handoff. The current queue is
+`config/research-queue.json`, linked from the Active research frontier above.
 
 Completed prerequisites on 2026-08-24:
 
@@ -581,7 +657,7 @@ Completed next experiment on 2026-08-24:
   disclosed Collatz/Arena artifacts, but its post-disclosure knowledge limitation
   remains explicit in the report.
 
-Next:
+The then-proposed follow-ups were:
 
 1. Submit the prepared Kiota report upstream and track maintainer adjudication
    without changing the local disagreement status prematurely.
@@ -592,7 +668,7 @@ Next:
 4. Regenerate the assurance snapshot and public status whenever a bound input
    changes, preserving unfavorable or unresolved results as current evidence.
 
-## Decision Rules
+## Current Decision Rules
 
 Prefer tasks that improve:
 
@@ -601,16 +677,17 @@ Prefer tasks that improve:
 - current-state visibility;
 - shared corpus quality;
 - cross-validator confidence;
-- unresolved-state clarity.
+- unresolved-state clarity;
+- a concrete useful corpus, checker or semantic-reference contribution.
 
 Deprioritize tasks that:
 
 - chase a metric without improving assurance;
 - add architecture before the current loop works;
-- require human judgment in the normal path;
+- repeat planning or bookkeeping without changing a contribution decision;
 - produce results that cannot be reproduced;
 - obscure uncertainty;
-- only improve one implementation without explaining ecosystem relevance.
+- lack a clear invariant, beneficiary or maintainable external output.
 
 ## Open Planning Questions
 

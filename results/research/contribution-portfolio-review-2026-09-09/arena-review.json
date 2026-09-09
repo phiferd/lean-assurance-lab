@@ -1,0 +1,432 @@
+{
+  "schema_version": 1,
+  "reviewed_on": "2026-09-09",
+  "scope": "Read-only corpus portfolio review under the owner-requested project reassessment; no checker, proof, build, mutation campaign or external write.",
+  "constitutional_basis": [
+    "Improve shared assets",
+    "Generalization matters",
+    "Evidence must lead to a recommendation",
+    "Scoped claims",
+    "Community participation with standards"
+  ],
+  "current_frontier_observed": {
+    "id": "F-SURVIVOR-THREAD-ONE-DETERMINISM",
+    "item": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+    "status": "READY_UNSTARTED",
+    "plan": "docs/research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md"
+  },
+  "recommendation": "Prioritize a bounded current-Arena let-value isolation and duplicate audit over the remaining one-thread operational survivor. The 601-byte local pair already distinguishes multiple Nanoda mutants, the related M7 pair has transfer evidence, and current tutorial source has positive let cases. Require a complete duplicate/executable-binding review before claiming an Arena gap or preparing a single minimal contribution.",
+  "upstream_observations": {
+    "access": {
+      "github_connector": "SUCCEEDED",
+      "gh_cli": "Sandboxed gh API call failed connecting to api.github.com; no authentication conclusion follows.",
+      "web_fetch": "Public web opens of PR181/182 returned cache misses.",
+      "conclusion": "The historical CLI failure is not a current global read-access blocker."
+    },
+    "pull_requests": [
+      {
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "number": 181,
+        "state": "closed",
+        "merged": true,
+        "mergeable": false,
+        "draft": false,
+        "body": "This adds one static export for Lean's strict-positivity check. The declaration\nhas the following shape:\n\n```lean\ndef Ignore (A B : Type) : Type := A\n\ninductive T : Type where\n  | mk (f : Ignore Unit T -> T) : T\n```\n\n`Ignore` takes a second type argument but does not use it, so `Ignore Unit T`\nreduces to `Unit`. A checker that inspects the unreduced constructor field may\nreject the syntactic occurrence of `T` in the domain of the arrow. A checker\nthat first weak-head-normalizes the field type may instead see `(Unit -> T) ->\nT` and accept it. The test therefore has outcome `either`.\n\nThe file contains the full exported inductive declaration, with matching\nconstructor and recursor data. Arena's related tutorial example has placeholder\nrecursor data and can be rejected for that independent reason, so this test\nisolates the positivity behavior with an otherwise complete export.\n\nThe test is placed at `tests/corner-cases/positivity-whnf`.\n\nValidation:\n\n```text\npython lka.py build-test corner-cases/positivity-whnf\nResults: 1 succeeded, 0 failed\n```\n",
+        "title": "Add reducible-argument positivity corner case",
+        "base": "master",
+        "base_sha": "8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062",
+        "head": "codex/reducible-hidden-positivity",
+        "head_sha": "28935b44eacf89dfb6b5bb6e3200f86911f456a5",
+        "head_repo_id": 1348359676,
+        "head_repo_full_name": "phiferd/lean-kernel-arena",
+        "merge_commit_sha": "91f376e4baacf2df0c478e7173bccb2a6adac5c5",
+        "user": {
+          "login": "phiferd",
+          "name": "phiferd",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+          "id": 25631
+        },
+        "requested_reviewers": null,
+        "requested_team_reviewers": null,
+        "diff": null,
+        "comments": null,
+        "created_at": "2026-09-05T18:01:53Z",
+        "updated_at": "2026-09-06T04:56:34Z",
+        "closed_at": "2026-09-06T04:56:34Z",
+        "merged_at": "2026-09-06T04:56:34Z",
+        "commits": 4,
+        "changed_files": 2,
+        "additions": 99,
+        "deletions": 0,
+        "display_url": "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "display_title": "Add reducible-argument positivity corner case"
+      },
+      {
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/182",
+        "number": 182,
+        "state": "closed",
+        "merged": true,
+        "mergeable": false,
+        "draft": false,
+        "body": "This adds two static exports for an inductive type with parameters `(P : Prop)`\nand `(p q : P)`. They represent the following two constructor results:\n\n```lean\n-- accepted control\nmk : T P p q\n\n-- corner case\nmk : T P q p\n```\n\nThe official Lean checker accepts `T P p q` and rejects `T P q p`. Kiota\naccepts both because `p` and `q` are proofs of the same proposition and its\ncomparison uses proof irrelevance. The control therefore has outcome `accept`,\nwhile the swapped case has outcome `either`; Arena can record both checker\nbehaviors without scoring either one as a failure.\n\nBoth files contain the full exported inductive declaration, with recursor data\nmatching the corresponding constructor result. They are placed in\n`tests/corner-cases/` as `proof-param-ok` and `proof-param-swap`, following the\nlayout used by PR #176. Arena's existing `nested-nonuniform-param` test concerns\na value parameter in a nested occurrence; these tests isolate proof parameters\nin an ordinary constructor result.\n\nValidation:\n\n```text\npython lka.py build-test 'corner-cases/proof-param-*'\nResults: 2 succeeded, 0 failed\n```\n",
+        "title": "Add proof-parameter order characterization pair",
+        "base": "master",
+        "base_sha": "8ae1d84e335d2381b2bfcc0dbde7fc3da8e96062",
+        "head": "codex/proof-parameter-order",
+        "head_sha": "06e7350c2e5a92e5385f2602c683ae55c28a343c",
+        "head_repo_id": 1348359676,
+        "head_repo_full_name": "phiferd/lean-kernel-arena",
+        "merge_commit_sha": "6150cb600cc9eb90bffbcac13d1b8687c7a06f30",
+        "user": {
+          "login": "phiferd",
+          "name": "phiferd",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+          "id": 25631
+        },
+        "requested_reviewers": null,
+        "requested_team_reviewers": null,
+        "diff": null,
+        "comments": null,
+        "created_at": "2026-09-05T18:02:17Z",
+        "updated_at": "2026-09-05T21:37:44Z",
+        "closed_at": "2026-09-05T21:37:44Z",
+        "merged_at": "2026-09-05T21:37:44Z",
+        "commits": 2,
+        "changed_files": 4,
+        "additions": 116,
+        "deletions": 0,
+        "display_url": "https://github.com/leanprover/lean-kernel-arena/pull/182",
+        "display_title": "Add proof-parameter order characterization pair"
+      }
+    ],
+    "comment_timelines": [
+      {
+        "comments": [
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554708485",
+            "body": "That's an AI written PR description, right? Can you say again in human words what this is doing?",
+            "user": {
+              "login": "nomeata",
+              "name": "nomeata",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/148037?v=4",
+              "id": 148037
+            },
+            "id": 5554708485,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T20:52:50Z",
+            "updated_at": "2026-09-05T20:52:50Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">That's an AI written PR description, right? Can you say again in human words what this is doing?</p>"
+          },
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554877783",
+            "body": "I replaced the description with a source-level explanation of the two declarations and why the second one is rejected.\n",
+            "user": {
+              "login": "phiferd",
+              "name": "phiferd",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+              "id": 25631
+            },
+            "id": 5554877783,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T21:23:46Z",
+            "updated_at": "2026-09-05T21:23:46Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">I replaced the description with a source-level explanation of the two declarations and why the second one is rejected.</p>"
+          },
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5554965541",
+            "body": "Thanks, better! I would actually argue that this could be a corner case test: a checker accepting that may be ok, and the official checker is somewhat inconsistent in whether it whnfs constructor arguments or not. \r\n\r\nMaybe remove the control, it doesn't add much of value I think.",
+            "user": {
+              "login": "nomeata",
+              "name": "nomeata",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/148037?v=4",
+              "id": 148037
+            },
+            "id": 5554965541,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T21:40:05Z",
+            "updated_at": "2026-09-05T21:40:05Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">Thanks, better! I would actually argue that this could be a corner case test: a checker accepting that may be ok, and the official checker is somewhat inconsistent in whether it whnfs constructor arguments or not.</p>\n<p dir=\"auto\">Maybe remove the control, it doesn't add much of value I think.</p>"
+          },
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5555006221",
+            "body": "And full disclosure (human here, I swear), the description is AI generated, as are the test cases. I'm a software engineer and trying to apply testing methodology (such as mutation testing) to Lean. I am not a mathematician, so even for me, it's a bit hard to follow. However, the tests cases I'm adding so far are just cases where the existing tests leave some ambiguity (i.e. I can change a particular line of code in Lean, but the tests still pass) or there's disagreement between validators. I am ramping up the project and hoping to contribute more substantive tests (and maybe even a bug report), but please let me know if these contributions are not providing enough value; I don't mean to spam you with trivial tests.\r\n\r\n> Maybe remove the control, it doesn't add much of value I think\r\n\r\nWill do.",
+            "user": {
+              "login": "phiferd",
+              "name": "phiferd",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+              "id": 25631
+            },
+            "id": 5555006221,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T21:47:46Z",
+            "updated_at": "2026-09-05T21:47:46Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">And full disclosure (human here, I swear), the description is AI generated, as are the test cases. I'm a software engineer and trying to apply testing methodology (such as mutation testing) to Lean. I am not a mathematician, so even for me, it's a bit hard to follow. However, the tests cases I'm adding so far are just cases where the existing tests leave some ambiguity (i.e. I can change a particular line of code in Lean, but the tests still pass) or there's disagreement between validators. I am ramping up the project and hoping to contribute more substantive tests (and maybe even a bug report), but please let me know if these contributions are not providing enough value; I don't mean to spam you with trivial tests.</p>\n<blockquote>\n<p dir=\"auto\">Maybe remove the control, it doesn't add much of value I think</p>\n</blockquote>\n<p dir=\"auto\">Will do.</p>"
+          },
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/181#issuecomment-5557018817",
+            "body": "As long as I get to talk to a human from time to time these contributions are useful so far :-)",
+            "user": {
+              "login": "nomeata",
+              "name": "nomeata",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/148037?v=4",
+              "id": 148037
+            },
+            "id": 5557018817,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-06T04:52:20Z",
+            "updated_at": "2026-09-06T04:52:20Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">As long as I get to talk to a human from time to time these contributions are useful so far :-)</p>"
+          }
+        ],
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "title": "leanprover/lean-kernel-arena PR #181 comments",
+        "display_url": "https://github.com/leanprover/lean-kernel-arena/pull/181",
+        "display_title": "leanprover/lean-kernel-arena PR #181 comments"
+      },
+      {
+        "comments": [
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/182#issuecomment-5554718539",
+            "body": "This should go to corner-cases/. And please with a much shorter test names, else the table layout suffers",
+            "user": {
+              "login": "nomeata",
+              "name": "nomeata",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/148037?v=4",
+              "id": 148037
+            },
+            "id": 5554718539,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T20:54:43Z",
+            "updated_at": "2026-09-05T20:54:43Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">This should go to corner-cases/. And please with a much shorter test names, else the table layout suffers</p>"
+          },
+          {
+            "url": "https://github.com/leanprover/lean-kernel-arena/pull/182#issuecomment-5554878492",
+            "body": "Fixed: I moved the pair to `tests/corner-cases/` as `proof-param-ok` and `proof-param-swap`, following PR #176, and updated the descriptions and file references. Both tests build successfully.\n",
+            "user": {
+              "login": "phiferd",
+              "name": "phiferd",
+              "email": null,
+              "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+              "id": 25631
+            },
+            "id": 5554878492,
+            "pull_request_review_id": null,
+            "in_reply_to_id": null,
+            "created_at": "2026-09-05T21:23:53Z",
+            "updated_at": "2026-09-05T21:23:53Z",
+            "review": null,
+            "side": null,
+            "line": null,
+            "start_line": null,
+            "path": null,
+            "body_html": "<p dir=\"auto\">Fixed: I moved the pair to <code class=\"notranslate\">tests/corner-cases/</code> as <code class=\"notranslate\">proof-param-ok</code> and <code class=\"notranslate\">proof-param-swap</code>, following PR <a class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"5287628773\" data-permission-text=\"Title is private\" data-url=\"https://github.com/leanprover/lean-kernel-arena/issues/176\" data-hovercard-type=\"pull_request\" data-hovercard-url=\"/leanprover/lean-kernel-arena/pull/176/hovercard\" href=\"https://github.com/leanprover/lean-kernel-arena/pull/176\">#176</a>, and updated the descriptions and file references. Both tests build successfully.</p>"
+          }
+        ],
+        "url": "https://github.com/leanprover/lean-kernel-arena/pull/182",
+        "title": "leanprover/lean-kernel-arena PR #182 comments",
+        "display_url": "https://github.com/leanprover/lean-kernel-arena/pull/182",
+        "display_title": "leanprover/lean-kernel-arena PR #182 comments"
+      }
+    ],
+    "current_arena_revision": {
+      "revision": "da7a53f8520fb072614956007d7091d0f9a1650f",
+      "evidence": "GitHub search_commits empty-query recent-history response; latest returned commit is 2026-09-09T11:51:03Z, chore: bump nanoda (#186).",
+      "url": "https://github.com/leanprover/lean-kernel-arena/commit/da7a53f8520fb072614956007d7091d0f9a1650f"
+    },
+    "current_let_tutorial": {
+      "content": "    name := `levelMaxAbsorb\n    levelParams := [`u, `v]\n    type := .sort (.succ (.max (.param `u) (.param `v)))\n    value := .sort (.max (.param `u) (.max (.param `u) (.param `v)))\n    hints := .opaque\n    safety := .safe\n  })\n\n/-- Type inference of local variables -/\ngood_def inferVar : ∀ (f : Prop) (g : f), f := fun f g => g\n\n/-- Definitional equality between lambdas -/\ngood_def defEqLambda : ∀ (f : (Prop → Prop) → Prop) (g : (a : Prop → Prop) → f a), f (fun p => p → p) :=\n  fun f g => g (fun p => p → p)\n\n/-! Let's build Peano arithmetic -/\n\ndef PN := ∀ α, (α → α) → (α → α)\ndef PN.zero : PN := fun α s z => z\ndef PN.succ : PN → PN := fun n α s z => s (n α s z)\n\ndef PN.lit0 := PN.zero\ndef PN.lit1 := PN.succ PN.lit0\ndef PN.lit2 := PN.succ PN.lit1\ndef PN.lit3 := PN.succ PN.lit2\ndef PN.lit4 := PN.succ PN.lit3\n\ndef PN.add : PN → PN → PN := fun n m α s z => n α s (m α s z)\ndef PN.mul : PN → PN → PN := fun n m α s z => n α (m α s) z\n\n\n/-- Peano arithmetic: 2 = 2 -/\ngood_thm peano1.{u} : ∀ (t : PN → Prop) (v : (n : PN) → t n), t PN.lit2.{u} :=\n  fun t v => v PN.lit2.{u}\n\n/-- Peano arithmetic: 1 + 1 = 2 -/\ngood_thm peano2.{u} : ∀ (t : PN → Prop) (v : (n : PN) → t n), t PN.lit2.{u} :=\n  fun t v => v (PN.lit1.add PN.lit1)\n\n/-- Peano arithmetic: 2 * 2 = 4 -/\ngood_thm peano3.{u} : ∀ (t : PN → Prop) (v : (n : PN) → t n), t PN.lit4.{u} :=\n  fun t v => v (PN.lit2.mul PN.lit2)\n\n/-!\nLet declarations\n-/\n\n\n/--\nType checking a non-dependent let\n-/\n-- Use `good_decl` to avoid the elaborator turning lets into haves\ngood_decl (.defnDecl {\n    name := `letType\n    levelParams := []\n    type := .sort 1\n    value := .letE (nondep := false) `x (.sort 1) (.sort 0) ( .bvar 0)\n    hints := .opaque\n    safety := .safe\n  })\n\n/--\nType checking a dependent let\n-/\n-- Use `good_decl` to avoid the elaborator turning lets into haves\ngood_decl (.defnDecl {\n    name := `letTypeDep\n    levelParams := []\n    type := (Lean.mkConst `aDepProp).app (.sort 0)\n    value := .letE (nondep := false) `x (.sort 1) (.sort 0) <|\n             (Lean.mkConst ``mkADepProp).app (.bvar 0)\n    hints := .opaque\n    safety := .safe\n  })\n\n/--\nReducing a let\n-/\ngood_decl (.defnDecl {\n    name := `letRed\n    levelParams := []\n    type := .letE (nondep := false) `x (.sort 1) (.sort 0) <| .bvar 0\n    value := Lean.mkConst ``aProp\n    hints := .opaque\n    safety := .safe\n  })\n\n/-!",
+      "encoding": "utf-8",
+      "sha": "782a81685f76f4917b9189d49a7e8f5679a376dc",
+      "display_url": "https://github.com/leanprover/lean-kernel-arena/blob/da7a53f8520fb072614956007d7091d0f9a1650f/tutorial/Tutorial.lean",
+      "display_title": "Tutorial.lean"
+    }
+  },
+  "implications": [
+    "Arena PR181 merged 2026-09-06 and PR182 merged 2026-09-05. Replace dated awaiting-disposition planning with successor observations while preserving historical evidence bytes.",
+    "The final PR181 maintainer comment explicitly says contributions have been useful. Focused shared corpus improvements have demonstrated external demand.",
+    "Maintainer feedback requested short names, plain source-level descriptions, corner-case either outcomes when acceptance is defensible, and removal of a low-value control. A matched control's value must be shown case by case; laboratory isolation metrics alone do not require publishing every control.",
+    "PR182 feedback has arrived, so a fresh local Kiota clarification value review is feasible; the owner's previous deferral and target-specific external authorization remain controlling.",
+    "The current tutorial let section contains letType, letTypeDep and letRed, all good_decl. This supports a targeted negative-coverage audit, not a repository-wide absence claim."
+  ],
+  "candidates": [
+    {
+      "id": "ARENA-LET-ISOLATION-1",
+      "corpus_rank": 1,
+      "proposed_status": "READY_FOR_BOUNDED_LOCAL_REVIEW",
+      "question": "Does current Arena already isolate let value/annotation compatibility, or would the exact admitted mismatch yield a useful minimal regression?",
+      "evidence": [
+        "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+        "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+        "results/research/survivor-let-reuse-1/report.md",
+        "results/research/survivor-let-reuse-1/result.json",
+        "results/cross-validation/nanoda-gen-e551a17020ce-let-value-type/results.json",
+        "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_REPORT.md"
+      ],
+      "current_source": "tutorial/Tutorial.lean at da7a53f8520fb072614956007d7091d0f9a1650f lines 224-267 contains three positive let examples.",
+      "external_output": "One minimal Arena let-mismatch regression candidate with a short source-level explanation and evidence of value beyond existing cases, or exact duplicate/covered disposition.",
+      "budget": "One 90-minute review, at most one existing candidate/control family and 12 targeted read-only upstream requests. Zero checker/build/mutation launches in intake. If unique and integration-ready, select a separate finite execution item with exact test/package budget before any build.",
+      "dependencies": [
+        "Exact current Arena tree and open/recent PR duplicate search",
+        "Executable test binding and expectation review",
+        "Independent expected-outcome justification scoped to the relevant export contract",
+        "Target-specific approval only at external submission"
+      ],
+      "claim_limits": [
+        "Historical mutant kills are scoped source-fault evidence, not a current checker defect.",
+        "The catalog authority for EXPR.LET.VALUE_TYPE_MATCH remains PROVISIONAL; do not promote its frozen authority state.",
+        "Current source excerpt alone does not prove no equivalent negative occurs elsewhere."
+      ]
+    },
+    {
+      "id": "ARENA-TUTORIAL-REJECTION-ISOLATION-1",
+      "corpus_rank": 2,
+      "proposed_status": "PLANNED",
+      "question": "Do a fixed small set of tutorial inductive negatives have complete supporting recursor metadata, so rejection tests the stated condition?",
+      "evidence": [
+        "results/research/evidence/corpus-integration-arena-tutorial/Tutorial.lean",
+        "results/investigations/corpus-integration-2026-09-05/decision-packet.json",
+        "docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_REPORT.md",
+        "https://github.com/leanprover/lean-kernel-arena/pull/181"
+      ],
+      "external_output": "A fixed four-case isolation audit (constructor parameter domain, result parameters, result universe order and recursive-index occurrence), with at most one new complete-export regression nomination if a secondary refusal masks the stated obligation.",
+      "budget": "Two 60-minute source/evidence sessions; four predetermined cases, at most one nomination, no launches or new scientific bytes during audit.",
+      "dependencies": [
+        "Pin current Tutorial.lean and generated suite manifest",
+        "Check for existing standalone equivalents before nominating",
+        "Complete recursor synthesis and observer execution require a later bounded launch plan"
+      ],
+      "claim_limits": [
+        "The successful positivity contribution demonstrates this failure mode once, not in the proposed four cases.",
+        "Many existing Lab ordinary-inductive pairs derive from tutorial ideas; do not count them as novel without semantic comparison.",
+        "Outcome may be either if the reviewed property describes an allowed implementation profile."
+      ]
+    },
+    {
+      "id": "ARENA-RESTORED-METADATA-1",
+      "corpus_rank": 3,
+      "proposed_status": "PLANNED",
+      "question": "Do existing Arena orphan/extra/rec-k cases cover restoration of nested recursor k/type and constructor-index metadata, or is there one transferable gap?",
+      "evidence": [
+        "results/investigations/nanoda-restored-recursor/witness-analysis.json",
+        "results/investigations/nanoda-restored-recursor-type/witness-analysis.json",
+        "results/investigations/nanoda-restored-ctor/witness-analysis.json",
+        "corpus/regression-candidates/current.json",
+        "external/ecosystem-arena-current/tests/rec-k-lie.yaml",
+        "external/ecosystem-arena-current/tests/nat-rec-k-lie.yaml",
+        "external/ecosystem-arena-current/tests/orphan-rec.yaml",
+        "external/ecosystem-arena-current/tests/extra-rec.yaml"
+      ],
+      "external_output": "One grouped current coverage/contract packet for three exact existing mismatches; nominate at most one Arena case or one grouped checker clarification draft if distinct.",
+      "budget": "Two 60-minute source/duplicate-review sessions, three existing candidates sharing the same exact control, no build/checker launches.",
+      "dependencies": [
+        "Current Arena duplicate audit",
+        "Current checker source correspondence",
+        "Qualified reconstruction-versus-semantic-use review before strict expected rejection",
+        "Preserve owner preference to discuss related Kiota mismatches together"
+      ],
+      "claim_limits": [
+        "Pinned Kiota acceptance versus official/Lean4Lean rejection is not normative authority or an unsoundness claim.",
+        "Current Arena has related recursor metadata cases, so duplication risk is substantial.",
+        "Recent Arena nanoclo update for extra-rec/orphan-rec fixes increases urgency to compare exact coverage before creating traffic."
+      ]
+    },
+    {
+      "id": "ARENA-THEOREM-CONTROL-1",
+      "corpus_rank": 4,
+      "proposed_status": "PLANNED_LOW_COST_RESERVE",
+      "question": "Would the exact identity-theorem accept control add useful precision beyond current Arena tutorial/012_nonPropThm and existing positive theorems?",
+      "evidence": [
+        "results/research/publication-study-theorem-control-0001/result.json",
+        "results/research/publication-study-theorem-control-0001/action-recommendations.json",
+        "results/research/publication-study-theorem-control-0001/candidate-analysis.json"
+      ],
+      "external_output": "One optional accept-companion package, or explicit no-external-action decision if current positives already make it redundant.",
+      "budget": "One 45-minute source/duplicate/value review, one exact control, no launches; existing evidence includes eight historical observer cells.",
+      "dependencies": [
+        "Current Arena duplicate and relation review",
+        "Show external value in light of PR181 maintainer feedback that a control can add little",
+        "Separate integration budget and target-specific submission approval"
+      ],
+      "claim_limits": [
+        "Theorem proposition obligation is the sole established authority in the publication-study cohort, which reduces expectation ambiguity.",
+        "This completes a known negative's control and is not a newly discovered negative or checker defect.",
+        "The prior recommendation is LOW; do not inflate priority solely because the metric moves from 0/1 to 1/1."
+      ]
+    },
+    {
+      "id": "ARENA-OWNERSHIP-PAIR-1",
+      "corpus_rank": 5,
+      "proposed_status": "DEFERRED_UNTIL_DISTINCT_VALUE",
+      "question": "Does the exact owned/unowned pair add anything beyond Arena universe ownership tests and Kiota's existing issue?",
+      "evidence": [
+        "results/research/conditional-validation-contracts/cvc-4-ownership-1/report.md",
+        "results/research/conditional-validation-contracts/cvc-4-ownership-1/cases.json",
+        "results/research/conditional-validation-contracts/cvc-5-conditional/README.md",
+        "corpus/controls/nanoda-0003-declared-const-universe.ndjson"
+      ],
+      "external_output": "One reuse/duplicate disposition or one precise existing-corpus improvement if a missing declared-parameter record masks the semantic ownership check.",
+      "budget": "At most one 45-minute review only after a concrete upstream coverage mismatch or requested follow-up; no rerun of the exhausted historical matrix.",
+      "dependencies": [
+        "Show a current target need distinct from the existing Lab serialization repair",
+        "Ownership remains PROVISIONAL",
+        "Preserve all 16 consumed historical observer reservations"
+      ],
+      "claim_limits": [
+        "The completed CVC package recommends no new external action because no distinct target value was demonstrated.",
+        "The repaired input fixes a Lab serializer prerequisite; it is not a discovered Nanoda parser defect.",
+        "No new formal proof or normalization campaign is justified by packaging alone."
+      ]
+    }
+  ],
+  "rejected_prioritization_shortcuts": [
+    "Do not interpret blank Arena columns in a frozen catalog as proof of missing current corpus coverage.",
+    "Do not treat current-implementation correctness as sufficient reason to reject a preventive regression contribution.",
+    "Do not make fresh corpus work depend on completing the remaining local mutation survivor when the corpus candidate has greater expected shared value.",
+    "Do not launch generic history mining before its fixed sample and literature/reuse review; existing corpus cases provide faster near-term candidates."
+  ]
+}

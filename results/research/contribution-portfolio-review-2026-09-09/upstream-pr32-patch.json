@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "retrieved_at": "2026-09-09 12:59:16 UTC",
+  "source": "https://github.com/ammkrn/nanoda_lib/pull/32/changes",
+  "head_revision": "85038f436b7c3ffb0b6e68d862a6eaf681eed62d",
+  "observation": {
+    "patches": [
+      {
+        "filename": "src/tests/util.rs",
+        "patch": "@@ -101,6 +101,27 @@ fn check_proj_from_prop() {\n     )\n }\n \n+#[test]\n+#[should_panic(expected = \"infer_proj prop\")]\n+fn omitted_num_threads_still_checks_declarations() {\n+    let (export, _) = test_get_export_file(Some(Path::new(\n+        \"test_resources/ProjFromProp/config.json\",\n+    )))\n+    .expect(\"failed to load ProjFromProp test fixture\");\n+    export.check_all_declars();\n+}\n+\n+#[test]\n+#[should_panic(expected = \"infer_proj prop\")]\n+fn zero_num_threads_still_checks_declarations() {\n+    let (mut export, _) = test_get_export_file(Some(Path::new(\n+        \"test_resources/ProjFromProp/config.json\",\n+    )))\n+    .expect(\"failed to load ProjFromProp test fixture\");\n+    export.config.num_threads = 0;\n+    export.check_all_declars();\n+}\n+\n pub(crate) fn rand_string<'t>(rng: &mut ThreadRng, size: usize) -> CowStr<'t> {\n     let rand_string: String = rng.sample_iter(&Alphanumeric).take(size).map(char::from).collect();\n     CowStr::Owned(rand_string)"
+      }
+    ],
+    "url": "https://github.com/ammkrn/nanoda_lib/pull/32",
+    "title": "ammkrn/nanoda_lib#32 (patch)",
+    "display_url": "https://github.com/ammkrn/nanoda_lib/pull/32",
+    "display_title": "ammkrn/nanoda_lib#32 (patch)"
+  }
+}

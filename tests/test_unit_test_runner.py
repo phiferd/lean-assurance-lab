@@ -52,11 +52,24 @@ class UnitRunnerBoundaryTests(unittest.TestCase):
         with patch('sys.argv', ['run-unit-tests', '--require-full-payload']), \
              patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
              patch.object(runner, '_historical_modules', return_value={'old_module'}), \
+             patch.object(runner, 'portfolio_modules', return_value=set()), \
+             patch.object(runner, 'run_portfolio_history', return_value=True), \
              patch.object(runner.unittest.defaultTestLoader, 'discover', return_value=unittest.TestSuite()), \
              patch.object(runner.subprocess, 'run', return_value=SimpleNamespace(returncode=1)) as run, \
              contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
             self.assertEqual(runner.main(), 1)
         self.assertEqual(run.call_args.args[0][1:], ['--tests', '--require-full-payload'])
+
+    def test_checkpoint_failure_fails_complete_run(self):
+        with patch('sys.argv', ['run-unit-tests']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner, '_historical_modules', return_value=set()), \
+             patch.object(runner, 'portfolio_modules', return_value={'exact_old_module'}), \
+             patch.object(runner, 'run_portfolio_history', return_value=False) as historical, \
+             patch.object(runner.unittest.defaultTestLoader, 'discover', return_value=unittest.TestSuite()), \
+             contextlib.redirect_stderr(io.StringIO()), contextlib.redirect_stdout(io.StringIO()):
+            self.assertEqual(runner.main(), 1)
+        historical.assert_called_once_with(ROOT)
 
     def test_missing_tracked_input_is_not_an_integration_skip(self):
         with patch('sys.argv', ['run-unit-tests']), \

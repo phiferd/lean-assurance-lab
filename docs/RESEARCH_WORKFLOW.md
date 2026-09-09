@@ -82,6 +82,37 @@ that pretends these uncertain judgments are exact. Prefer the smaller decisive
 item when value is otherwise similar. Account for accumulated deferral so
 maintenance cannot be forgotten, but age alone is not proof of value.
 
+### Contribution paths and planning horizon
+
+Owner-directed reassessment, 2026-09-09: maintain a portfolio spanning standard
+Arena corpus improvements, individual checker implementation/test hardening,
+and implementation-independent Lean obligation clarification. Methods such as
+mutation, historical-boundary mining and formalization serve those outputs.
+Completion of the next survivor is not itself the preferred project objective.
+
+At closure compare concrete candidates across these three paths, retaining
+multiple READY alternatives where entry conditions permit and explicit
+PLANNED follow-ups with dependencies and result-dependent promotion gates.
+Describe what both a positive and negative finding would lead to. Do not force
+equal category quotas, fabricate work, or make all branches depend on one
+speculative investigation. The canonical queue checks ranks, dependencies,
+budgets and selection; the strategic review records why the comparison is useful.
+
+Before expensive investigation, name the potential external artifact and its
+beneficiary. Current implementation correctness excludes a current-defect claim;
+it does not exclude a preventive regression. An internal contract can justify
+a checker unit test without establishing external reachability. A defensible
+test contribution needs an independently stated invariant, concrete coverage or
+test-effectiveness gap, plausible failure, focused assertion and maintenance
+value. Reuse existing fixtures when appropriate. Distinguish source prediction,
+executed regression, submitted contribution and maintainer adoption.
+
+Use current upstream evidence to remove stale waiting conditions. A failed CLI
+credential preflight is not a global read-access blocker when a connected
+read-only API can supply the needed evidence. Preserve failed receipts and
+exact-action approval for external writes. Prefer concise contributions tied
+to maintainers' stated needs; combine related clarification questions.
+
 ## Finish, then reassess
 
 Choose the first eligible READY item and set it ACTIVE with the start date,

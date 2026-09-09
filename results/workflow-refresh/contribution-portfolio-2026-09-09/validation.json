@@ -1,0 +1,133 @@
+{
+  "schema_version": 1,
+  "item_id": "CONTRIBUTION-PORTFOLIO-REVIEW-1",
+  "status": "PASS",
+  "completed_at": "2026-09-09 13:47:24 UTC",
+  "entry_revision": "9b9c22a9e2c615fc0fe47ca66bea229ce0fa6718",
+  "scope": "Repository engineering validation of the owner-directed contribution portfolio; no new checker research or external research write.",
+  "full_suite": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "exit_code": 0,
+    "log": "results/workflow-refresh/contribution-portfolio-2026-09-09/verified-full-unit-tests.log",
+    "current": {
+      "tests": 916,
+      "seconds": 328.285,
+      "status": "PASS"
+    },
+    "publication_history": {
+      "tests": 73,
+      "seconds": 138.105,
+      "status": "PASS"
+    },
+    "checkpoint_history": {
+      "tests": 9,
+      "seconds": 3.215,
+      "status": "PASS"
+    },
+    "total_tests": 998,
+    "skipped": 0
+  },
+  "focused_checks": [
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_research_queue*.py'",
+      "tests": 43,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_portfolio_historical_snapshot.py'",
+      "tests": 8,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_unit_test_runner.py'",
+      "tests": 7,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_project_review_contribution_observations.py'",
+      "tests": 2,
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/validate-contribution-portfolio-transition",
+      "preserved_paths": 180,
+      "historical_tests": 9,
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/close-declaration-validation-publication-study validate-historical",
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/validate-publication-study-snapshot --require-full-payload",
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/validate-action-recommendations",
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/validate-declaration-validation-catalog",
+      "status": "PASS"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "canonical_refresh": {
+    "status": "COMPLETE",
+    "commands": 13,
+    "receipt": "results/workflow-refresh/contribution-portfolio-2026-09-09/verified-refresh/result.json",
+    "affected_current_nodes": [],
+    "note": "Artifact currentness PASS is not assurance success: the broader assurance gate retains its existing FAIL state and unresolved results."
+  },
+  "retained_failures": [
+    {
+      "log": "results/workflow-refresh/contribution-portfolio-2026-09-09/initial-historical-validator-failure.log",
+      "cause": "Old validator used the mutable workflow file instead of its closure binding."
+    },
+    {
+      "log": "results/workflow-refresh/contribution-portfolio-2026-09-09/full-unit-tests.log",
+      "current_tests": 916,
+      "current_errors": 6,
+      "publication_tests": 73,
+      "publication_status": "PASS",
+      "cause": "Four old-checkpoint failures and two transient strategic hash failures during same-item repair."
+    },
+    {
+      "log": "results/workflow-refresh/contribution-portfolio-2026-09-09/final-full-unit-tests.log",
+      "current_tests": 920,
+      "current_errors": 1,
+      "publication_tests": 73,
+      "publication_status": "PASS",
+      "cause": "Additional universe-diff workflow binding. After its live phase had failed, the successor helper was edited; the still-running superseded process subsequently hit a NameError in inspect-based bootstrap source extraction using its old loaded line positions. The verified full run uses fresh imports and unchanged files throughout, and all stages pass."
+    },
+    {
+      "command": "scripts/validate-contribution-catalog",
+      "exit_code": 127,
+      "cause": "No such script. Correct repository action/catalog validators were discovered and passed; no catalog result was inferred from this failed command."
+    }
+  ],
+  "historical_repair": "results/research/contribution-portfolio-review-2026-09-09/historical-transition-repair.json",
+  "existing_pr_drafts": {
+    "preserved": true,
+    "patch_matches": "Nanoda PR32 head 85038f436b7c3ffb0b6e68d862a6eaf681eed62d"
+  },
+  "next_item": "NANODA-TEST-NONVACUITY-1",
+  "next_item_started": false,
+  "delivery_protocol": "Commit in-scope changes on main and scripts/push-main; remote success must be separately verified.",
+  "patch_format_check": {
+    "path": "results/action-recommendations/drafts/nanoda-omitted-num-threads-declaration-checking.patch",
+    "finding": "The staged whitespace checker reports the required single-space empty context line at line 7 of this existing unified patch. Stripping it would alter the preserved patch format.",
+    "resolution": "Require exactly that one format finding, validate patch syntax with git apply --numstat, compare its hunk byte-for-byte with the captured PR32 patch, and run the ordinary staged whitespace check over every other path. No source-code whitespace exception or patch rewrite."
+  }
+}

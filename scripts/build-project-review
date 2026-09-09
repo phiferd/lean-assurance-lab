@@ -22,6 +22,7 @@ RUN = 'results/research/publication-study-theorem-control-0001'
 ACTION_PATHS = ['results/action-recommendations/current.json', RUN + '/action-recommendations.json']
 SUCCESSOR_PLAN = 'docs/research/CORPUS_INTEGRATION_AND_WITNESS_ADMISSION_PLAN.md'
 SUCCESSOR_PACKET = 'results/investigations/corpus-integration-2026-09-05/decision-packet.json'
+PORTFOLIO = 'results/research/contribution-portfolio-review-2026-09-09/'
 SOURCES = ['CONSTITUTION.md', 'README.md', 'CONTRIBUTING.md', 'docs/INVESTIGATION_SOP.md',
            'docs/RESEARCH_STATUS.md', 'results/assurance/current.json',
            HISTORY, 'results/research/declaration-validation-publication-study-content-manifest.json',
@@ -38,6 +39,14 @@ SOURCES += ['config/research-queue.json', 'docs/RESEARCH_WORKFLOW.md',
             'tests/test_research_queue.py', 'lib/research_queue_v2.py',
             'tests/test_research_queue_v2.py', 'lib/research_queue_v3.py',
             'tests/test_research_queue_v3.py']
+SOURCES += ['docs/PROJECT_PLAN.md', 'docs/UPSTREAM_ISSUES.md',
+            PORTFOLIO + 'arena-review.json', PORTFOLIO + 'upstream-pr32.json',
+            PORTFOLIO + 'zero-thread-recommendation-successor.json',
+            PORTFOLIO + 'historical-transition-repair.json',
+            'lib/portfolio_historical_snapshot.py',
+            'scripts/validate-contribution-portfolio-transition',
+            'tests/test_portfolio_historical_snapshot.py',
+            'tests/test_project_review_contribution_observations.py']
 
 
 def load(path):
@@ -47,6 +56,20 @@ def load(path):
 def bound(path):
     data = (ROOT / path).read_bytes()
     return {'path': path, 'sha256': hashlib.sha256(data).hexdigest(), 'bytes': len(data)}
+
+
+def contribution_observations(arena, nanoda):
+    """Dated metadata only; no inference of acceptance from a submitted PR."""
+    rows = []
+    for pr in arena['upstream_observations']['pull_requests']:
+        rows.append({'url': pr['url'], 'state': pr['state'],
+                     'merged': pr['merged'], 'merged_at': pr['merged_at'],
+                     'head_sha': pr['head_sha'], 'observed_at': arena['reviewed_on']})
+    pr = nanoda['observation']
+    rows.append({'url': pr['url'], 'state': pr['state'], 'merged': pr['merged'],
+                 'merged_at': pr['merged_at'], 'head_sha': pr['head_sha'],
+                 'observed_at': nanoda['retrieved_at']})
+    return rows
 
 
 def build():
@@ -115,8 +138,9 @@ def build():
             queue_sources.extend(item['closure']['evidence_refs'])
     if paused:
         queue_sources.extend(queue['handoff']['evidence_refs'])
-    return {'schema_version': 1, 'review_scope': 'Current local canonical records plus the bounded Arena submission and recent-commit preflight record; no completeness claim for all historical actions.',
+    return {'schema_version': 1, 'review_scope': 'Current local canonical records and the dated 2026-09-09 contribution-portfolio successor; historical submission records remain intact. No completeness claim for all historical actions or live upstream status.',
             'inputs': [bound(p) for p in dict.fromkeys([*SOURCES, *queue_sources, *([SUCCESSOR_PACKET] if packet is not None else [])])], 'metrics': metrics,
+            'dated_contribution_observations': contribution_observations(load(PORTFOLIO + 'arena-review.json'), load(PORTFOLIO + 'upstream-pr32.json')),
             'constitutional_assessment': 'Aligned in reproducibility, scoped claims and preserved uncertainty. The current authorized frontier is ' + queue['frontier_id'] + ', governed by ' + queue['plan'] + '. The ranked queue compares shared assurance value, information gain, feasibility and urgency at item stopping points. Planning records establish no new semantic result. Historical study claims and pending upstream follow-through remain separately recorded.',
             'work_queue': queue,
             'constitutional_alignment': [
@@ -125,21 +149,21 @@ def build():
                  'next_improvement': 'Prefer additional shared regression value and independent transfer over a larger coverage percentage.'},
                 {'goal': 'Durable reproducibility', 'assessment': 'Historical evidence remains bound; successor runner is manifest-governed',
                  'evidence': 'The authorized-run manifest binds inputs, platform, finite budgets and completion condition; materialization verifies exact local donor bytes.',
-                 'next_improvement': 'Record final upstream dispositions for Arena PRs #181 and #182 while preserving their input bindings.'},
+                 'next_improvement': 'Preserve dated disposition successors alongside original submission and scientific evidence bindings.'},
                 {'goal': 'Scoped claims and preserved uncertainty', 'assessment': 'Aligned',
                  'evidence': 'The pilot retains its one-obligation denominator, provisional candidates and known-negative limitation. The broader FAIL state and unresolved survivors remain visible.',
                  'next_improvement': 'Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence.'},
-                {'goal': 'Improve shared assets', 'assessment': 'Focused contributions are awaiting upstream review',
-                 'evidence': 'Arena PRs #181 and #182 submit separate, reproducible pairs; the Kiota clarification is deferred to avoid premature maintainer traffic.',
-                 'next_improvement': 'Respond to substantive Arena review and record final dispositions before proposing related external actions.'},
+                {'goal': 'Improve shared assets', 'assessment': 'Merged corpus contributions and an explicit three-path contribution portfolio',
+                 'evidence': 'The dated successor verifies Arena #181/#182 merged and Nanoda #32 open. The current queue compares shared corpus precision, checker hardening and independent semantic clarification; Kiota submission remains deferred.',
+                 'next_improvement': 'Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations.'},
                 {'goal': 'Community visibility and participation', 'assessment': 'Useful entry points; status maintenance needs discipline',
                  'evidence': 'README, contribution rules, the investigation SOP and generated public status provide inspection paths. The hand-maintained metrics section had diverged from machine records.',
-                 'next_improvement': 'Keep contribution packets focused and restore CLI-first GitHub operation before further external work.'},
+                 'next_improvement': 'Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write.'},
                 {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
                  'evidence': 'Schema-backed action records now preserve approval, deferral, separate PR URLs, exact branch commits, and the latest-upstream duplicate preflight.',
                  'next_improvement': 'Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control.'},
                 {'goal': 'Highest-value bounded work and replaceable strategy', 'assessment': ('PAUSED: no executable item' if paused else 'Explicit ranked operational successor'),
-                 'evidence': 'The queue retains finite items, dependencies, stop conditions and deferred alternatives; the first item assesses existing literature and reuse before committing to a fragment.',
+                 'evidence': 'The queue retains several finite executable alternatives across all three contribution paths plus outcome-gated follow-ups. History mining has a bounded literature/reuse review and a fresh-yield pilot, not a superiority claim.',
                  'next_improvement': (queue['handoff']['required_decision'] if paused else 'Complete ' + selected['id'] + ': ' + selected['title'] + '; record the result and rerank before the next item.')},
             ],
             'operational_findings': [
@@ -151,7 +175,7 @@ def build():
                 'run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.',
                 'The successor admitted two fixed witnesses without new checker execution, reducing the pending mechanical survivor queue from nine to seven while preserving unresolved semantic status.',
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
-                'Git pushes succeeded while GitHub CLI API authentication was invalid. `scripts/github-cli-preflight` now fails early with the repair command so duplicate checks, PR creation and status capture stay CLI-first.',
+                'The earlier CLI preflight failure remains historical. A dated successor verifies working read-only GitHub connector access; it does not prove CLI repair or authorize external writes.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
                 'Queue integrity validation checks bounded selection and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
             ],
@@ -161,7 +185,7 @@ def build():
                                        'Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.',
                                        'One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.',
                                        'The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.',
-                                       'The conditional-contract plan and ranked queue are current. Completed queue items: ' + ', '.join(row['id'] for row in queue['items'] if row['status'] == 'COMPLETE') + '. Selected next item: ' + selected['id'] + ' (' + selected['status'] + ').'],
+                                       'The active plan and ranked queue are current. Completed queue items: ' + ', '.join(row['id'] for row in queue['items'] if row['status'] == 'COMPLETE') + '. Selected next item: ' + selected['id'] + ' (' + selected['status'] + ').'],
             'successor_decision_packet': ({'binding': bound(SUCCESSOR_PACKET), 'status': packet['status'],
                                            'findings': [{'id': row.get('id'), 'disposition': row.get('disposition'), 'reason': row.get('reason')} for row in packet['findings']],
                                            'triage': [{'mutant_id': row.get('mutant_id'), 'status': row.get('status'), 'reason': row.get('reason')} for row in packet['triage']],
@@ -169,7 +193,7 @@ def build():
             'pending_external_actions': pending, 'proposed_next_steps': next_steps,
             'autonomy_policy': {'automatic': ['Hash and inventory checks', 'Already-authorized bounded execution and checkpointing', 'Deterministic normalization, report generation and validation', 'Read-only evidence assembly and preparation of concrete drafts'],
                                 'model_review': ['Frontier design and novelty assessment', 'Unexplained checker differences and semantic ambiguity', 'Source-to-claim interpretation under frozen authority rules'],
-                                'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Activation of proposed new research scope beyond the current authorized phase']},
+                                'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Scope beyond standing local authorization or an unsatisfied milestone gate']},
             'cost_policy': ['No model calls inside checker/build/minimization loops.', 'Batch independent mechanical work; stop on budget/input/semantic exceptions.', 'Use Luna for routine edits and Terra for bounded implementation; reserve Ultra for a named difficult question.', 'Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.', 'Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions per bounded investigation.'],
             'new_research_authorized_by_this_review': False}
 
@@ -207,7 +231,7 @@ def render(review):
     lines += ['- ' + value for value in review['operational_findings']]
     lines += ['', '## Efficiency rules', ''] + ['- ' + value for value in review['cost_policy']]
     lines += ['', '## Changes completed in this task', ''] + ['- ' + value for value in review['improvements_completed']]
-    lines += ['', 'This review does not activate a new campaign. Upstream observations are bounded to the dated, input-bound successor inventory, recent-commit preflight and recorded creation of Arena PRs #181 and #182; they are not a live status guarantee. The full evidence bindings, pending-action rows, exact targets and prerequisites are in the canonical JSON.', '']
+    lines += ['', 'This generated review does not launch a campaign. Upstream observations are bounded to dated, input-bound records, including the 2026-09-09 disposition successor; they are not a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.', '']
     return '\n'.join(lines)
 
 
