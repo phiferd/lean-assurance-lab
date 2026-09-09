@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-08
+Last updated: 2026-09-09
 
 ## How Status Is Tracked
 
@@ -2550,12 +2550,12 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1`.
 
-The item is READY and unstarted. Before any remote request it must create and
-commit a fresh work record, dated request log, current-source identity protocol
-and GO/NO_GO decision rubric. It permits at most six read-only requests and six
-local inspections in one hour, with zero builds, checker calls, proofs, new
-scientific bytes, mutation identities or external writes. Preparing an issue
-draft does not authorize submitting it.
+The item is ACTIVE under its bounded work record. Its request log,
+current-source identity protocol, GO/NO_GO rubric and exact local predecessor
+bindings must be committed before the first request. It permits at most six
+read-only requests and six local inspections in one hour, with zero builds,
+checker calls, proofs, new scientific bytes, mutation identities or external
+writes. Preparing an issue draft does not authorize submitting it.
 
 Queue handoff: EXECUTABLE.
 

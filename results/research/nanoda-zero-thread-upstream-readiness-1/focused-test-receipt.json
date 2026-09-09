@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+  "recorded_at": "2026-09-09T04:34:50Z",
+  "status": "PASS_AFTER_REPAIR",
+  "failed_attempt": {
+    "command": "scripts/validate-nanoda-zero-thread-upstream-protocol && python3 -m unittest discover -s tests -p 'test_nanoda_zero_thread_upstream.py' && git diff --check",
+    "failure": "ModuleNotFoundError: No module named 'lib'",
+    "classification": "ENGINEERING_SCRIPT_IMPORT_PATH",
+    "network_requests": 0
+  },
+  "repair": "Both repository scripts now prepend the repository root to sys.path before importing the bound library.",
+  "passing_checks": [
+    {
+      "command": "scripts/validate-nanoda-zero-thread-upstream-protocol",
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_nanoda_zero_thread_upstream.py'",
+      "tests_run": 3,
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "tooling": [
+    {"path": "lib/nanoda_zero_thread_upstream.py", "bytes": 9850, "sha256": "79e6cb0e569713ebc51cd795e24e2c53dcaed3a5798c6c952805c63b60d3f643"},
+    {"path": "scripts/collect-nanoda-zero-thread-upstream", "bytes": 272, "sha256": "4a5ee6a6b88275b674ae4e2488f1f504b50d6590cc8353b1b1c71e854a683a16"},
+    {"path": "scripts/validate-nanoda-zero-thread-upstream-protocol", "bytes": 292, "sha256": "bbc2304ab01c63b24aa54c8bd50f54d3fdbc1fef0386f37efe0516127577c5d2"},
+    {"path": "tests/test_nanoda_zero_thread_upstream.py", "bytes": 1290, "sha256": "be613faa807fb26290c73e577e18a01292b05ea9ffa8d49de094cba2bd1197e2"}
+  ],
+  "claim_limit": "This receipt validates inert protocol and accounting logic only. It records no current upstream fact and authorizes no external write."
+}

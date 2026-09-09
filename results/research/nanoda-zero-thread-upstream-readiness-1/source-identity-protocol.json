@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+  "repository": "https://github.com/ammkrn/nanoda_lib",
+  "transport": {
+    "method": "GET",
+    "authentication": "NONE",
+    "timeout_seconds": 30,
+    "max_response_bytes": 8000000,
+    "allowed_hosts": ["api.github.com", "codeload.github.com"],
+    "user_agent": "lean-assurance-lab-nanoda-readiness/1"
+  },
+  "requests": [
+    {
+      "id": "repository-metadata",
+      "kind": "JSON",
+      "url": "https://api.github.com/repos/ammkrn/nanoda_lib",
+      "purpose": "Resolve the public repository identity and default branch."
+    },
+    {
+      "id": "head-commit",
+      "kind": "JSON",
+      "url_template": "https://api.github.com/repos/ammkrn/nanoda_lib/commits/{default_branch}",
+      "derivation": "repository-metadata JSON pointer /default_branch",
+      "purpose": "Resolve the exact current default-branch commit."
+    },
+    {
+      "id": "source-archive",
+      "kind": "GZIP_TAR",
+      "url_template": "https://codeload.github.com/ammkrn/nanoda_lib/tar.gz/{head_sha}",
+      "derivation": "head-commit JSON pointer /sha",
+      "purpose": "Bind the exact current source tree for local read-only inspection."
+    },
+    {
+      "id": "issues-page-1",
+      "kind": "JSON",
+      "url": "https://api.github.com/repos/ammkrn/nanoda_lib/issues?state=all&per_page=100&sort=updated&direction=desc&page=1",
+      "purpose": "Search all issue and pull-request titles and bodies for an existing zero-thread report or regression."
+    },
+    {
+      "id": "issues-page-2",
+      "kind": "JSON",
+      "conditional": "Only the exact rel=next URL from issues-page-1 is permitted.",
+      "purpose": "Continue duplicate inventory only if GitHub paginates beyond 100 records."
+    },
+    {
+      "id": "issues-page-3",
+      "kind": "JSON",
+      "conditional": "Only the exact rel=next URL from issues-page-2 is permitted.",
+      "purpose": "Continue duplicate inventory only if GitHub paginates beyond 200 records."
+    }
+  ],
+  "identity_acceptance": [
+    "Repository metadata full_name is exactly ammkrn/nanoda_lib and is not archived or disabled.",
+    "The head response yields one 40-hex commit SHA for the metadata-declared default branch.",
+    "The archive request is derived from that exact SHA, retained byte-for-byte and content hashed.",
+    "The extracted archive has one top directory named nanoda_lib-<head_sha> and contains Cargo.toml plus src/tc.rs.",
+    "Current-source findings cite retained archive paths and line ranges; pinned-revision evidence remains separately identified."
+  ],
+  "duplicate_completeness": "Inspect every returned issue/PR title and body. Follow at most two rel=next pages. If a third next page remains, classify duplicate completeness as bounded unresolved rather than claiming absence.",
+  "prohibitions": [
+    "No POST, PUT, PATCH, DELETE, GraphQL mutation, issue creation, comment, pull request, branch, push or maintainer contact.",
+    "No credentials or authorization headers.",
+    "No build, checker, proof, generator or mutation launch.",
+    "No request outside the declared sequence or substitution of another repository."
+  ]
+}
