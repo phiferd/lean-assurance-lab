@@ -2473,10 +2473,11 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-UNIVERSE-EQUIVALENCE-1`.
 
-The item is READY and unstarted. Its future execution is bounded to 5,400
-active seconds, optional exact-gated existing-byte focused tests, zero new
-export bytes, and no proof, checker-corpus campaign, network request or external
-action.
+The item is ACTIVE under the owner's request to complete the next selected
+queue item. It is bounded to 5,400 active seconds, optional exact-gated
+existing-byte focused tests, zero new export bytes, and no Lean proof,
+checker-corpus campaign, network request or external action. No optional launch
+has occurred.
 
 Queue handoff: EXECUTABLE.
 
@@ -2491,7 +2492,7 @@ retaining a finite exact boundary if `Max`, nested `IMax` or a recursive caller
 cannot be closed. Free-variable reachability is the next novel survivor route;
 transfer still lacks independently curated input, original conditional-
 validation prerequisites remain unmet, and no fresh upstream or maintenance
-trigger displaces this local work. Selection does not start the successor.
+trigger displaces this local work.
 
 ### Waiting
 
