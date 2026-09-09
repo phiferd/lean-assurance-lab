@@ -27,13 +27,15 @@
     "dependency_mode": "--offline --locked",
     "reused_target_cache": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target"
   },
-  "invocation": ["cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
+  "invocation": ["perl", "-e", "alarm shift; exec @ARGV", "120", "cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
+  "payload_invocation": ["cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
   "environment": {
     "CARGO_NET_OFFLINE": "true",
     "CARGO_TARGET_DIR": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target",
     "RUST_BACKTRACE": "0"
   },
   "timeout_seconds": 120,
+  "timeout_controller": "Perl alarm persists across exec and terminates the cargo process after 120 wall-clock seconds.",
   "expected": {
     "exit": "NONZERO",
     "stderr_or_stdout_contains": "string literal construction is disabled",
