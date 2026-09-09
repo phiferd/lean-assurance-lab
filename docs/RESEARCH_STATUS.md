@@ -50,6 +50,24 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-THREAD-CONFIG-REGRESSION-1` on 2026-09-08 with
+  `SUCCESS`. Two exact offline builds and four strictly ordered checker calls
+  reproduced the zero-thread source prediction: baseline and mutant both
+  accepted the matching 601-byte control; the baseline rejected the existing
+  invalid 601-byte candidate at the bound type-equality assertion; and
+  `nanoda-gen-93b21593b0d8` returned the exact clean success message after its
+  zero-worker parallel path checked no declarations. All reservations retain
+  raw request, process, stdout, stderr, cleanup and hash-chain evidence. Total
+  scientific process time was 30.36 seconds; zero network, Lean proof, new
+  export byte, mutation identity or external action occurred. The predecessor's
+  scoped `MEANINGFUL_SEMANTIC` classification, historical one-thread
+  `SURVIVED` status and modeled mutation metrics remain unchanged; the derived
+  assurance snapshot refreshed only its producing revision. See the
+  [result](../results/research/survivor-thread-config-regression-1/result.json),
+  [report](../results/research/survivor-thread-config-regression-1/report.md),
+  and [raw ledger](../results/research/survivor-thread-config-regression-1/run-0001/execution/events.jsonl).
+  `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1` is selected READY and unstarted.
+
 - Completed `SURVIVOR-THREAD-CONFIG-REACHABILITY-1` on 2026-09-08 with
   `SUCCESS`. `num_threads` is a public `usize` configuration field with serde
   default zero, and config validation imposes no thread bound. The original
@@ -2525,34 +2543,30 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-THREAD-CONFIG-REGRESSION` — execute the fixed zero-thread
-   declaration-checking regression selected by the completed source assessment
-   under
-   [docs/research/SURVIVOR_THREAD_CONFIG_REGRESSION_PLAN.md](research/SURVIVOR_THREAD_CONFIG_REGRESSION_PLAN.md).
+1. `F-NANODA-ZERO-THREAD-UPSTREAM-READINESS` — assess current upstream
+   Nanoda and duplicate-report state for the confirmed zero-thread declaration
+   check elision under
+   [docs/research/NANODA_ZERO_THREAD_UPSTREAM_READINESS_PLAN.md](research/NANODA_ZERO_THREAD_UPSTREAM_READINESS_PLAN.md).
 
-Selected next item: `SURVIVOR-THREAD-CONFIG-REGRESSION-1`.
+Selected next item: `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1`.
 
-The item is ACTIVE under its bound work record. Before any launch it must bind
-and commit the existing candidate/control bytes, zero-thread configurations,
-expected outcomes, exact runtime identities and tested accounting controls. Its
-bound is at most two offline builds and four checker launches with zero network,
-Lean proof, new export byte, mutation identity or external action. All launches
-remain forbidden until that prelaunch checkpoint is committed.
+The item is READY and unstarted. Before any remote request it must create and
+commit a fresh work record, dated request log, current-source identity protocol
+and GO/NO_GO decision rubric. It permits at most six read-only requests and six
+local inspections in one hour, with zero builds, checker calls, proofs, new
+scientific bytes, mutation identities or external writes. Preparing an issue
+draft does not authorize submitting it.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-THREAD-CONFIG-REACHABILITY-1` closed `SUCCESS`: the negated predicate
-has an exact public zero-worker check-elision path, while the relational-boundary
-predicate retains a one-worker operational boundary rather than an unsupported
-equivalence claim.
-
-The project-wide closure review selected the fixed zero-thread regression
-because it converts the strongest source result into reproducible executable
-evidence using existing export bytes. The one-thread predicate needs a more
-specialized resource witness, cache alternatives overlap an already bounded
-route, transfer still lacks independently curated input, and no fresh upstream
-or maintenance trigger displaces this local work. The owner's request to
-execute the next plan starts only this item.
+`SURVIVOR-THREAD-CONFIG-REGRESSION-1` closed `SUCCESS` with the exact controlled
+baseline-refusal/mutant-accept difference and both controls valid. The
+project-wide review selects currentness and duplicate-report assessment because
+the confirmed public path can silently report unchecked declarations as
+error-free, and an upstream-ready package has greater immediate ecosystem value
+than another speculative survivor witness. The one-thread predicate still lacks
+a deterministic resource witness, the cache route remains bounded, transfer
+lacks independently curated input, and historical CVC-4 gates remain unmet.
 
 ### Waiting
 

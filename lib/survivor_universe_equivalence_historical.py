@@ -145,8 +145,8 @@ def validate(root: Path) -> dict:
     require(current_by_id[ITEM]["status"] == "COMPLETE"
             and current_by_id[expectation["selected_item"]]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-THREAD-CONFIG-REACHABILITY-1"]["status"] == "COMPLETE"
-            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REGRESSION-1"
-            and current_by_id[current["selected_item"]]["status"] == "READY",
+            and current_by_id["SURVIVOR-THREAD-CONFIG-REGRESSION-1"]["status"] == "COMPLETE"
+            and current_by_id[current["selected_item"]]["status"] in {"READY", "ACTIVE"},
             "current queue does not preserve the universe successor transition")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]
@@ -170,6 +170,7 @@ def validate(root: Path) -> dict:
         "registry_predecessor_lines": 607,
         "registry_successor_lines": len((root / REGISTRY).read_bytes().splitlines()),
         "current_successor": current["selected_item"],
+        "current_successor_status": current_by_id[current["selected_item"]]["status"],
         "pending_survivors": pending["count"],
         "equivalent_mutants": current_assurance["mutation_testing"]["equivalent_mutants"],
     }

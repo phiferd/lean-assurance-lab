@@ -12,7 +12,7 @@ class UniverseDiffHistoricalTests(unittest.TestCase):
         result = validate(ROOT)
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["completed_item"], "SURVIVOR-UNIVERSE-DIFF-1")
-        self.assertEqual(result["current_successor"], "SURVIVOR-THREAD-CONFIG-REGRESSION-1")
+        self.assertEqual(result["current_successor_status"], "READY")
         self.assertTrue(result["canonical_classification_changed"])
 
 

@@ -147,9 +147,9 @@ def validate(root: Path) -> dict:
             == old_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["closure"],
             "predecessor fvar queue closure changed")
     require(current_by_id[ITEM]["status"] == "COMPLETE"
-            and current["selected_item"] == NEXT_ITEM
-            and current_by_id[NEXT_ITEM]["status"] == "READY",
-            "current queue does not close this item and select its successor")
+            and current_by_id[NEXT_ITEM]["status"] == "COMPLETE"
+            and current_by_id[current["selected_item"]]["status"] in {"READY", "ACTIVE"},
+            "current queue does not preserve and advance the thread-config successor")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]
     require(pending["count"] == 3 and GE_MUTANT in pending["mutant_ids"]
@@ -171,6 +171,7 @@ def validate(root: Path) -> dict:
         "historical_manifest_inputs": len(old_inputs),
         "registry_predecessor_lines": 609, "registry_successor_lines": 610,
         "current_successor": current["selected_item"],
+        "current_successor_status": current_by_id[current["selected_item"]]["status"],
         "pending_survivors": pending["count"],
         "meaningful_survivors": current_assurance["mutation_testing"]["meaningful_survivors"],
         "equivalent_mutants": current_assurance["mutation_testing"]["equivalent_mutants"],

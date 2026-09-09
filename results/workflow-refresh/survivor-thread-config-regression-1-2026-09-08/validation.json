@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-09T04:19:08Z",
+  "checks": [
+    {
+      "name": "scientific_execution",
+      "command": "scripts/validate-survivor-thread-config-regression",
+      "status": "PASS",
+      "result": "Six exact attempts close DONE with two offline builds, controls before candidates, no repairs and 30.361877125003957 charged process seconds."
+    },
+    {
+      "name": "item_closure",
+      "command": "scripts/validate-survivor-thread-config-regression-closure",
+      "status": "PASS",
+      "result": "The ACCEPT, ACCEPT, TYPECHECK_REFUSAL, ACCEPT fixed pair, evidence bindings, accounting and READY successor validate."
+    },
+    {
+      "name": "historical_transition_repair",
+      "command": "scripts/validate-survivor-thread-config-reachability-closure && scripts/validate-survivor-thread-config-reachability-historical",
+      "status": "PASS",
+      "result": "Frozen predecessor inputs validate against closure snapshot d7fb1008a9431c569f2f02d314aefef3c33953b3 while the current valid queue advances to the readiness successor."
+    },
+    {
+      "name": "focused_survivor_regression",
+      "command": "python3 -m unittest discover -s tests -p 'test_survivor_*.py'",
+      "status": "PASS",
+      "tests_run": 140
+    },
+    {
+      "name": "research_queue",
+      "command": "scripts/validate-research-queue",
+      "status": "PASS"
+    },
+    {
+      "name": "declaration_validation_current_and_history",
+      "command": "scripts/validate-declaration-validation-catalog && scripts/validate-declaration-validation-historical",
+      "status": "PASS",
+      "result": "The current catalog and frozen M7 through M10 attestation chain remain valid and unchanged."
+    },
+    {
+      "name": "derived_state_refresh",
+      "command": "scripts/refresh-current-state",
+      "status": "PASS",
+      "receipt": "results/workflow-refresh/20260909T041946055954Z/result.json"
+    },
+    {
+      "name": "full_current_suite",
+      "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+      "status": "PASS",
+      "tests_run": 906,
+      "seconds": 302.049
+    },
+    {
+      "name": "frozen_publication_suite",
+      "status": "PASS",
+      "tests_run": 73,
+      "seconds": 131.488
+    }
+  ],
+  "retained_engineering_failure": "results/research/survivor-thread-config-regression-1/validator-repair.json",
+  "result_limits": "Validates the bounded zero-thread regression and durable handoff only. The fixed pair does not establish a broader Nanoda soundness result, close the distinct one-thread operational survivor or authorize any external action."
+}

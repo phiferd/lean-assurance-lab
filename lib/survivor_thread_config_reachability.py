@@ -11,6 +11,7 @@ ITEM = "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
 GE_MUTANT = "nanoda-gen-2bdfe18a9ec2"
 NEG_MUTANT = "nanoda-gen-93b21593b0d8"
 ENTRY_SNAPSHOT = "336172a83fc6c2c8896aa107637f3a7924bea34a"
+CLOSURE_SNAPSHOT = "d7fb1008a9431c569f2f02d314aefef3c33953b3"
 BASE = "results/research/survivor-thread-config-reachability-1"
 ASSESSMENT = f"{BASE}/dispatch-assessment.json"
 RESULT = f"{BASE}/result.json"
@@ -39,6 +40,12 @@ def sha256(path: Path) -> str:
 def git_bytes(root: Path, path: str) -> bytes:
     return subprocess.check_output(
         ["git", "show", f"{ENTRY_SNAPSHOT}:{path}"], cwd=root
+    )
+
+
+def closure_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{CLOSURE_SNAPSHOT}:{path}"], cwd=root
     )
 
 
@@ -338,8 +345,8 @@ def validate(root: Path) -> dict:
             and focused["scientific_launches"] == 0,
             "focused validation identity or launch count drift")
     for row in focused["tooling"]:
-        require(sha256(root / row["path"]) == row["sha256"],
-                "focused tooling drift: " + row["path"])
+        require(digest(closure_bytes(root, row["path"])) == row["sha256"],
+                "frozen focused tooling drift: " + row["path"])
 
     manifest = json.loads((root / EVIDENCE_MANIFEST).read_text(encoding="utf-8"))
     require(set(manifest) == {"schema_version", "kind", "item_id", "status",
@@ -355,9 +362,9 @@ def validate(root: Path) -> dict:
                 and row["path"] not in paths,
                 "malformed or duplicate manifest input")
         paths.add(row["path"])
-        path = root / row["path"]
-        require(path.stat().st_size == row["bytes"] and sha256(path) == row["sha256"],
-                "manifest input drift: " + row["path"])
+        data = closure_bytes(root, row["path"])
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
+                "frozen manifest input drift: " + row["path"])
     require({
         "docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md",
         "docs/research/SURVIVOR_THREAD_CONFIG_REGRESSION_PLAN.md",

@@ -1,0 +1,76 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+  "outcome": "SUCCESS",
+  "finding": "EXECUTED_PUBLIC_ZERO_THREAD_DECLARATION_CHECK_ELISION",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "mutation_id": "nanoda-gen-93b21593b0d8",
+  "execution_manifest": {
+    "path": "config/survivor-thread-config-regression-0001.json",
+    "sha256": "1d606fc141b06db2d3e3b0535e554d89ec39e59eba1156b53f392a129a5e4a24"
+  },
+  "ledger": {
+    "path": "results/research/survivor-thread-config-regression-1/run-0001/execution/events.jsonl",
+    "sha256": "060545675671e50137f8e257397b6c1578930b917c60485a3a56eadd8ab2e5cd",
+    "event_count": 13,
+    "tail_sha256": "4a93c2e67d721d8606b12f5d100be7dbfa95c2e5349614bae0a654c324a32c5b"
+  },
+  "binaries": {
+    "baseline": {
+      "path": "external/survivor-thread-config-regression-0001-products/baseline/nanoda_bin",
+      "sha256": "49392904e78a9757eec46d5c2bbe852e48abcb4d204cc76e41ab418ac1b41d77"
+    },
+    "mutant": {
+      "path": "external/survivor-thread-config-regression-0001-products/mutant/nanoda_bin",
+      "sha256": "c7ad92b92d24e0dd194c539dbec68a45a81ec36013fcec8ddf3fdb31ea41a588"
+    }
+  },
+  "fixed_pair": [
+    {"cell": "control-baseline", "expected": "ACCEPT", "observed": "ACCEPT", "returncode": 0, "attempt": 3},
+    {"cell": "control-mutant", "expected": "ACCEPT", "observed": "ACCEPT", "returncode": 0, "attempt": 4},
+    {"cell": "candidate-baseline", "expected": "TYPECHECK_REFUSAL", "observed": "TYPECHECK_REFUSAL", "returncode": 101, "attempt": 5},
+    {"cell": "candidate-mutant", "expected": "ACCEPT", "observed": "ACCEPT", "returncode": 0, "attempt": 6}
+  ],
+  "interpretation": {
+    "baseline": "With public num_threads=0, pinned baseline Nanoda serially checks the existing invalid 601-byte export and reaches the exact type-equality refusal.",
+    "mutant": "With the same public zero-thread configuration, the predicate-negation mutant dispatches to check_all_declars_par(0), checks no declarations, returns normally and prints the exact success message.",
+    "controls": "Both independently built observers accept the exact matching 601-byte control with clean stdout and empty stderr.",
+    "claim_limit": "This establishes a controlled executable difference for the pinned revision, exact mutation, zero-thread configuration and fixed pair. It does not establish current upstream state, semantic authority, a historical default-profile corpus kill, or permission to contact upstream."
+  },
+  "execution_accounting": {
+    "offline_build_launches": 2,
+    "checker_launches": 4,
+    "scientific_process_seconds": 30.361877125003957,
+    "pre_record_seconds": 180,
+    "prelaunch_active_seconds": 3600,
+    "closure_administration_seconds": 1200,
+    "total_active_seconds_charged_conservatively": 5010.361877125004,
+    "active_seconds_limit": 7200,
+    "remaining_active_seconds": 2189.638122874996,
+    "sessions_used": 1,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "canonical_state": {
+    "mutation_registry_changed": false,
+    "survivor_inventory_changed": false,
+    "assurance_snapshot_changed": true,
+    "mutation_metrics_changed": false,
+    "reason": "The predecessor already recorded the scoped MEANINGFUL_SEMANTIC classification while preserving historical SURVIVED status. This execution confirms that scoped result without redefining the historical mutation profile. The generated assurance snapshot changed only to refresh its producing repository revision; modeled mutation facts and metrics are unchanged."
+  },
+  "recommendation": {
+    "action": "Assess current upstream Nanoda and duplicate-report state, then prepare but do not submit a minimal zero-thread regression and issue draft if the path remains present.",
+    "next_item": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+    "external_action": "NO_EXTERNAL_WRITE_AUTHORIZED",
+    "regression_assets": [
+      "results/research/survivor-thread-config-regression-1/configs/control.json",
+      "results/research/survivor-thread-config-regression-1/configs/candidate.json",
+      "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+      "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson"
+    ]
+  },
+  "next_item_started": false
+}

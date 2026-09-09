@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+  "status": "REPAIRED",
+  "recorded_at": "2026-09-09T04:09:58Z",
+  "classification": "ENGINEERING_HISTORICAL_SUCCESSOR_VALIDATOR_STALENESS",
+  "failed_full_suite": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "current_suite_tests_run": 906,
+    "current_suite_errors": 6,
+    "frozen_publication_tests_run": 73,
+    "frozen_publication_status": "PASS",
+    "failing_tests": [
+      "test_survivor_cache_historical",
+      "test_survivor_fvar_reachability_historical",
+      "test_survivor_thread_config_reachability",
+      "test_survivor_thread_config_reachability_historical",
+      "test_survivor_universe_diff_historical",
+      "test_survivor_universe_equivalence_historical"
+    ]
+  },
+  "cause": [
+    "Five historical-transition validators treated SURVIVOR-THREAD-CONFIG-REGRESSION-1 as a permanently selected READY item instead of a completed link in an advancing valid queue.",
+    "The predecessor thread-configuration closure validator compared its frozen evidence-manifest inputs to mutable current paths after the authorized queue and status transition."
+  ],
+  "repair": [
+    "Historical validators now require the exact completed successor chain and an eligible READY or ACTIVE current selection without pinning a permanent selected item.",
+    "The predecessor closure validator checks its focused-tooling and manifest bindings against closure snapshot d7fb1008a9431c569f2f02d314aefef3c33953b3."
+  ],
+  "focused_repair_validation": {
+    "historical_tests_run": 5,
+    "historical_status": "PASS",
+    "predecessor_closure_tests_run": 1,
+    "predecessor_closure_status": "PASS",
+    "survivor_tests_run": 140,
+    "survivor_status": "PASS"
+  },
+  "full_suite_revalidation": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "current_suite_tests_run": 906,
+    "current_suite_seconds": 302.049,
+    "current_suite_status": "PASS",
+    "frozen_publication_tests_run": 73,
+    "frozen_publication_seconds": 131.488,
+    "frozen_publication_status": "PASS"
+  },
+  "preserved_failed_invocations": [
+    {
+      "command": "python3 -m unittest tests/test_survivor_cache_historical.py tests/test_survivor_fvar_reachability_historical.py tests/test_survivor_thread_config_reachability.py tests/test_survivor_thread_config_reachability_historical.py tests/test_survivor_universe_diff_historical.py tests/test_survivor_universe_equivalence_historical.py",
+      "result": "FAILED_WITH_6_IMPORT_ERRORS_BECAUSE_TESTS_IS_NOT_A_PACKAGE"
+    },
+    {
+      "command": "python3 tests/test_survivor_thread_config_reachability.py",
+      "result": "FAILED_WITH_LIB_IMPORT_ERROR_BECAUSE_THE_SCRIPT_DIRECTORY_REPLACED_THE_REPOSITORY_IMPORT_ROOT"
+    },
+    {
+      "command": "scripts/validate-declaration-validation-history",
+      "result": "FAILED_BEFORE_VALIDATION_BECAUSE_THE_SCRIPT_NAME_WAS_INCORRECT; scripts/validate-declaration-validation-historical THEN_PASSED"
+    }
+  ],
+  "scientific_evidence_changed": false,
+  "scientific_launches_added": 0,
+  "claim_limit": "This is a prospective validator repair. It does not alter the frozen execution ledger, raw attempts, fixed-pair result, canonical mutation classification or scientific accounting."
+}

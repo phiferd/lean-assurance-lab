@@ -82,8 +82,8 @@ def validate(root: Path) -> dict:
             and current_by_id[expectation["selected_item"]]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-THREAD-CONFIG-REACHABILITY-1"]["status"] == "COMPLETE"
-            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REGRESSION-1"
-            and current_by_id["SURVIVOR-THREAD-CONFIG-REGRESSION-1"]["status"] == "READY",
+            and current_by_id["SURVIVOR-THREAD-CONFIG-REGRESSION-1"]["status"] == "COMPLETE"
+            and current_by_id[current["selected_item"]]["status"] in {"READY", "ACTIVE"},
             "live universe successor transition drift")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]["mutant_ids"]
@@ -98,5 +98,6 @@ def validate(root: Path) -> dict:
         "historical_manifest_inputs": len(old_inputs),
         "completed_item": expectation["completed_item"],
         "current_successor": current["selected_item"],
+        "current_successor_status": current_by_id[current["selected_item"]]["status"],
         "canonical_classification_changed": True,
     }

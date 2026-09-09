@@ -66,7 +66,8 @@ def validate(root: Path) -> dict:
             and current_by_id["SURVIVOR-UNIVERSE-EQUIVALENCE-1"]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-FVAR-REACHABILITY-1"]["status"] == "COMPLETE"
             and current_by_id["SURVIVOR-THREAD-CONFIG-REACHABILITY-1"]["status"] == "COMPLETE"
-            and current["selected_item"] == "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+            and current_by_id["SURVIVOR-THREAD-CONFIG-REGRESSION-1"]["status"] == "COMPLETE"
+            and current_by_id[current["selected_item"]]["status"] in {"READY", "ACTIVE"},
             "current transition does not preserve and advance the cache successor")
     return {
         "status": "PASS",
@@ -75,4 +76,5 @@ def validate(root: Path) -> dict:
         "scientific_cells": len(observed),
         "historical_successor": result["next_item"],
         "current_successor": current["selected_item"],
+        "current_successor_status": current_by_id[current["selected_item"]]["status"],
     }
