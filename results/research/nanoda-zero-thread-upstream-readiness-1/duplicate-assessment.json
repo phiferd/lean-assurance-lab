@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+  "inventory_scope": {
+    "repository": "ammkrn/nanoda_lib",
+    "endpoint": "https://api.github.com/repos/ammkrn/nanoda_lib/issues?state=all&per_page=100&sort=updated&direction=desc&page=1",
+    "returned_items": 29,
+    "returned_numbers": [30, 29, 28, 25, 27, 26, 24, 23, 22, 21, 20, 18, 19, 17, 15, 16, 14, 11, 13, 6, 10, 9, 8, 7, 5, 3, 4, 2, 1],
+    "next_page_present": false,
+    "inventory_complete_within_protocol": true
+  },
+  "method": "Inspected every returned issue and pull-request title and body for zero-thread, zero-worker, num_threads, unchecked-declaration, declaration-dispatch and success-reporting correspondence.",
+  "potential_keyword_hits": [
+    {
+      "number": 18,
+      "kind": "PULL_REQUEST",
+      "title": "feat: add opt-in progress reporting for large exports",
+      "disposition": "NOT_DUPLICATE",
+      "reason": "Mentions num_threads=1 for serial progress debugging and changes progress reporting; it does not report zero-worker declaration-check elision."
+    },
+    {
+      "number": 25,
+      "kind": "ISSUE",
+      "title": "Inductive checker panics on mutual blocks with a non-recursive member",
+      "disposition": "NOT_DUPLICATE",
+      "reason": "A thread_2 panic concerns inductive isRec reconstruction, not zero threads or skipped declaration checks."
+    },
+    {
+      "number": 10,
+      "kind": "ISSUE",
+      "title": "Stack overflow while type checking small real analysis example",
+      "disposition": "NOT_DUPLICATE",
+      "reason": "Reports a main-thread stack overflow during checking, not a zero-worker clean success."
+    },
+    {
+      "number": 7,
+      "kind": "PULL_REQUEST",
+      "title": "Switch to ndjson parser, QoL improvements",
+      "disposition": "NOT_DUPLICATE",
+      "reason": "General parallel-checking changes contain no zero-thread check-elision report or regression."
+    },
+    {
+      "number": 29,
+      "kind": "ISSUE",
+      "title": "Nanoda rejects reference-accepted nested inductive when numIndices metadata differs",
+      "disposition": "NOT_DUPLICATE",
+      "reason": "The Lab's prior current-revision issue concerns numIndices over-rejection and is unrelated to thread dispatch."
+    }
+  ],
+  "matching_report_or_regression_found": false,
+  "result": "NO_DUPLICATE_FOUND_IN_COMPLETE_RETAINED_INVENTORY",
+  "decision_effect": "Supporting context only. Current source safety independently requires NO_GO, so duplicate absence does not support a new issue.",
+  "claim_limit": "Absence is scoped to the retained 29-item issue/PR inventory and is not a claim about private discussions, deleted records or other repositories."
+}

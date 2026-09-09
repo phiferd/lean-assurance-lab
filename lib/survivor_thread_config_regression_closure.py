@@ -3,9 +3,9 @@ from __future__ import annotations
 
 import json
 from pathlib import Path
+import subprocess
 
-from lib.cvc_prep import bind, require
-from lib.cvc_process import sha
+from lib.cvc_prep import require
 from lib.survivor_thread_config_regression import evidence
 
 BASE = "results/research/survivor-thread-config-regression-1"
@@ -18,10 +18,21 @@ REPAIR = BASE + "/validator-repair.json"
 LEDGER = BASE + "/run-0001/execution/events.jsonl"
 TAIL = "4a93c2e67d721d8606b12f5d100be7dbfa95c2e5349614bae0a654c324a32c5b"
 PROCESS_SECONDS = 30.361877125003957
+CLOSURE_SNAPSHOT = "4b13a40e2ac694d339f419472d3b5c6c1c7672ca"
 
 
 def load(path):
     return json.loads(Path(path).read_text(encoding="utf-8"))
+
+
+def snapshot_bytes(root, path):
+    return subprocess.check_output(
+        ["git", "show", f"{CLOSURE_SNAPSHOT}:{path}"], cwd=root
+    )
+
+
+def snapshot_load(root, path):
+    return json.loads(snapshot_bytes(root, path))
 
 
 def validate_state(state):
@@ -50,7 +61,7 @@ def validate_state(state):
 def validate(root):
     root = Path(root).resolve()
     state = validate_state(evidence(root))
-    result = load(root / RESULT)
+    result = snapshot_load(root, RESULT)
     require(result["item_id"] == "SURVIVOR-THREAD-CONFIG-REGRESSION-1"
             and result["outcome"] == "SUCCESS"
             and result["finding"] == "EXECUTED_PUBLIC_ZERO_THREAD_DECLARATION_CHECK_ELISION"
@@ -76,7 +87,7 @@ def validate(root):
             and accounting["external_actions"] == 0
             and accounting["total_active_seconds_charged_conservatively"] <= 7200,
             "result accounting differs or exceeds cap")
-    work, closure = load(root / WORK), load(root / CLOSURE)
+    work, closure = snapshot_load(root, WORK), snapshot_load(root, CLOSURE)
     require(work["status"] == closure["status"] == "COMPLETE"
             and work["outcome"] == closure["outcome"] == "SUCCESS"
             and work["research_counts"]["offline_build_launches"] == 2
@@ -86,18 +97,18 @@ def validate(root):
             == "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1"
             and not work["next_item_started"] and not closure["next_item_started"]
             and not result["next_item_started"], "work closure differs")
-    preservation = load(root / PRESERVATION)
+    preservation = snapshot_load(root, PRESERVATION)
     require(preservation["status"] == "MUTATION_STATE_UNCHANGED_DERIVED_SNAPSHOT_REFRESHED",
             "canonical mutation state is not preserved")
     for row in preservation["artifacts"]:
-        path = root / row["path"]
-        require(row["after_sha256"] == sha(path)
-                and len(path.read_text(encoding="utf-8").splitlines()) == row["lines"],
+        data = snapshot_bytes(root, row["path"])
+        require(row["after_sha256"] == __import__("hashlib").sha256(data).hexdigest()
+                and len(data.splitlines()) == row["lines"],
                 "canonical state drift: " + row["path"])
         if row["path"] != "results/assurance/current.json":
             require(row["before_sha256"] == row["after_sha256"],
                     "canonical mutation input changed: " + row["path"])
-    repair = load(root / REPAIR)
+    repair = snapshot_load(root, REPAIR)
     require(repair["item_id"] == result["item_id"]
             and repair["status"] == "REPAIRED"
             and repair["classification"]
@@ -108,7 +119,7 @@ def validate(root):
             and repair["full_suite_revalidation"]["current_suite_status"] == "PASS"
             and repair["full_suite_revalidation"]["frozen_publication_status"] == "PASS",
             "validator repair record differs or changes scientific evidence")
-    manifest = load(root / EVIDENCE)
+    manifest = snapshot_load(root, EVIDENCE)
     require(manifest["item_id"] == result["item_id"] and manifest["status"] == "PASS"
             and manifest["ledger_tail_sha256"] == TAIL, "evidence manifest differs")
     required = {RESULT, WORK, CLOSURE, PRESERVATION, REPAIR, LEDGER,
@@ -119,8 +130,9 @@ def validate(root):
     require(required <= paths and len(paths) == len(manifest["artifacts"]),
             "evidence manifest missing required or duplicate paths")
     for row in manifest["artifacts"]:
-        path = bind(root, {"path": row["path"], "sha256": row["sha256"]})
-        require(path.stat().st_size == row["bytes"], "evidence byte count differs")
+        data = snapshot_bytes(root, row["path"])
+        require(__import__("hashlib").sha256(data).hexdigest() == row["sha256"]
+                and len(data) == row["bytes"], "historical evidence binding differs")
     attempts_root = root / BASE / "run-0001/attempts"
     for number in range(1, 7):
         directory = attempts_root / f"{number:02d}"
@@ -132,8 +144,7 @@ def validate(root):
         require(process["request_sha256"] == request["request_sha256"]
                 and type(process["pid"]) is int and type(process["supervisor_pid"]) is int,
                 "process identity receipt differs")
-    from lib.research_queue_v3 import load_queue
-    queue = load_queue(root, require_ready=True)
+    queue = snapshot_load(root, "config/research-queue.json")
     current = next(row for row in queue["items"] if row["id"] == result["item_id"])
     successor = next(row for row in queue["items"]
                      if row["id"] == "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1")
@@ -141,8 +152,16 @@ def validate(root):
             and queue["selected_item"] == successor["id"]
             and current["status"] == "COMPLETE" and successor["status"] == "READY"
             and not any(row["status"] == "ACTIVE" for row in queue["items"]),
-            "queue handoff differs")
+            "historical queue handoff differs")
+    from lib.research_queue_v3 import load_queue
+    live = load_queue(root, require_ready=True)
+    live_by_id = {row["id"]: row for row in live["items"]}
+    require(live_by_id[result["item_id"]]["closure"] == current["closure"]
+            and live_by_id[successor["id"]]["status"] == "COMPLETE"
+            and live_by_id[live["selected_item"]]["status"] in {"READY", "ACTIVE"},
+            "live queue does not preserve and advance the regression handoff")
     return {"status": "PASS", "outcome": result["outcome"],
             "fixed_pair": [row["observed"] for row in result["fixed_pair"]],
             "scientific_process_seconds": state["charged_seconds"],
-            "selected_item": queue["selected_item"]}
+            "selected_item": live["selected_item"],
+            "historical_closure_snapshot": CLOSURE_SNAPSHOT}

@@ -1,0 +1,10 @@
+#!/usr/bin/env python3
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.survivor_thread_config_regression_historical import validate
+
+print(json.dumps(validate(ROOT), indent=2, sort_keys=True))

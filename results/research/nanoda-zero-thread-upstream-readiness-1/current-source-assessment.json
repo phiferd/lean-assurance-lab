@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+  "decision": "NO_GO",
+  "reason": "CURRENT_ZERO_THREAD_PATH_CHECKS_EVERY_DECLARATION_SERIALLY",
+  "repository": {
+    "full_name": "ammkrn/nanoda_lib",
+    "default_branch": "master",
+    "head_sha": "05055695879dfebb6628a67da88ceca6cd6b0421",
+    "tree_sha": "407fa5f738fb09a27c54060dae8f3ae5f9289b1c",
+    "head_date": "2026-08-25T00:00:47Z",
+    "version": "0.4.16",
+    "archived": false,
+    "disabled": false
+  },
+  "archive": {
+    "path": "results/research/nanoda-zero-thread-upstream-readiness-1/evidence/requests/source-archive/body",
+    "bytes": 88510,
+    "sha256": "ed66082b95e7a3148894887815a1e1905cf1864383bc15edc64722d83543b1ec",
+    "top_directory": "nanoda_lib-05055695879dfebb6628a67da88ceca6cd6b0421",
+    "member_count": 38
+  },
+  "source_bindings": [
+    {
+      "path": "Cargo.toml",
+      "sha256": "7d0e2d09ddac124d83d9d634bb7140fe7803047870f52fe4ea10d3ddb155d823",
+      "finding": "package version is 0.4.16"
+    },
+    {
+      "path": "src/util.rs",
+      "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383",
+      "lines": [887, 889],
+      "finding": "Config.num_threads remains a public usize with serde default, so omitted or explicit zero is admitted"
+    },
+    {
+      "path": "src/tc.rs",
+      "sha256": "9aa8a3aa3bb8824075331f5cd1a21797f91fd585412ff690a05163488e578a5f",
+      "lines": [141, 186],
+      "finding": "check_all_declars selects the parallel helper only when num_threads > 1; zero and one call check_all_declars_serial, whose loop calls check_declar for every declaration"
+    },
+    {
+      "path": "src/main.rs",
+      "sha256": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a",
+      "lines": [28, 41],
+      "finding": "main calls check_all_declars before formatting success text"
+    }
+  ],
+  "test_inventory": {
+    "explicit_num_threads_values": [1],
+    "explicit_zero_thread_regression_found": false,
+    "interpretation": "The absence of an explicit zero-thread unit test does not create the predicate-negation defect in the current source."
+  },
+  "pinned_comparison": {
+    "pinned_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "current_dispatch_segment_matches_pinned_baseline": true,
+    "distinction": "The predecessor executable defect belongs to hypothetical mutant nanoda-gen-93b21593b0d8 at the pinned revision, not to pinned or current upstream baseline source."
+  },
+  "rubric_clause": "Current zero-thread dispatch still checks every declaration.",
+  "claim_limits": [
+    "This is a source-bound current-upstream assessment, not a current binary reproduction.",
+    "It does not claim that every possible future change or alternate branch preserves serial zero-thread behavior.",
+    "The pinned mutant fixed pair remains valid historical mutation evidence and is not rewritten by this maintenance result."
+  ]
+}

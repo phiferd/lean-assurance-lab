@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1",
+  "outcome": "SUCCESS",
+  "gate_decision": "NO_GO",
+  "finding": "CURRENT_UPSTREAM_ZERO_THREAD_SERIAL_FALLBACK",
+  "entry_checkpoint": "b7428e4295b4192d3159cb5fdde13b2e85ca7541",
+  "current_revision": "05055695879dfebb6628a67da88ceca6cd6b0421",
+  "finding_summary": "Current Nanoda 0.4.16 retains public serde-default num_threads=0, but check_all_declars uses the parallel helper only above one thread. Zero therefore executes check_all_declars_serial and calls check_declar for every declaration before success reporting. The 29-item issue/PR inventory is complete within the request protocol and has no same-case report, but current source safety independently makes a new defect report inaccurate.",
+  "evidence": {
+    "source_assessment": "results/research/nanoda-zero-thread-upstream-readiness-1/current-source-assessment.json",
+    "duplicate_assessment": "results/research/nanoda-zero-thread-upstream-readiness-1/duplicate-assessment.json",
+    "request_log": "results/research/nanoda-zero-thread-upstream-readiness-1/request-log.json",
+    "recommendation": "results/research/nanoda-zero-thread-upstream-readiness-1/no-action-recommendation.json"
+  },
+  "execution_accounting": {
+    "sessions": 1,
+    "active_seconds_charged_conservatively": 2400,
+    "read_only_upstream_requests": 4,
+    "unused_conditional_pagination_requests": 2,
+    "local_code_or_evidence_inspections": 6,
+    "builds": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "new_scientific_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_writes": 0
+  },
+  "canonical_effect": "No mutation registry, survivor inventory, mutation classification, modeled metric or scientific evidence changed. Derived current-state artifacts may refresh only their producing revision and queue/status projection.",
+  "recommendation": {
+    "action": "Do not create a Nanoda issue or regression proposal for the pinned mutant behavior; preserve the local evidence and reopen only on a source-bound trigger.",
+    "next_item": "SURVIVOR-CACHE-PREDICATE-TRANSFER-1",
+    "next_item_status": "READY_UNSTARTED"
+  },
+  "next_item_started": false
+}

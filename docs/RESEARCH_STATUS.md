@@ -50,6 +50,24 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1` on 2026-09-09 with
+  `SUCCESS` and a source-bound `NO_GO` for external action. Four bounded public
+  GETs bound current `ammkrn/nanoda_lib` master to
+  `05055695879dfebb6628a67da88ceca6cd6b0421` (0.4.16), retained the exact
+  archive, and retrieved the complete 29-item issue/PR inventory. Current
+  `num_threads` remains a public serde-default `usize`, but the dispatcher uses
+  parallel checking only above one thread; zero and one call the serial loop,
+  which checks every declaration before success reporting. No same-case report
+  or regression was found, but current source safety independently makes a new
+  defect issue inaccurate. Two conditional request slots were unused. No
+  build, checker, proof, new scientific byte, mutation identity or external
+  write occurred; canonical mutation classifications and historical evidence
+  are unchanged. See the [source assessment](../results/research/nanoda-zero-thread-upstream-readiness-1/current-source-assessment.json),
+  [duplicate assessment](../results/research/nanoda-zero-thread-upstream-readiness-1/duplicate-assessment.json),
+  [result](../results/research/nanoda-zero-thread-upstream-readiness-1/result.json),
+  and [report](../results/research/nanoda-zero-thread-upstream-readiness-1/report.md).
+  `SURVIVOR-CACHE-PREDICATE-TRANSFER-1` is selected READY and unstarted.
+
 - Completed `SURVIVOR-THREAD-CONFIG-REGRESSION-1` on 2026-09-08 with
   `SUCCESS`. Two exact offline builds and four strictly ordered checker calls
   reproduced the zero-thread source prediction: baseline and mutant both
@@ -2543,30 +2561,32 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-NANODA-ZERO-THREAD-UPSTREAM-READINESS` — assess current upstream
-   Nanoda and duplicate-report state for the confirmed zero-thread declaration
-   check elision under
-   [docs/research/NANODA_ZERO_THREAD_UPSTREAM_READINESS_PLAN.md](research/NANODA_ZERO_THREAD_UPSTREAM_READINESS_PLAN.md).
+1. `F-SURVIVOR-CACHE-PREDICATE-TRANSFER` — assess exact evidence transfer
+   between the two remaining pinned Nanoda `infer` cache-guard mutants under
+   [docs/research/SURVIVOR_CACHE_PREDICATE_TRANSFER_PLAN.md](research/SURVIVOR_CACHE_PREDICATE_TRANSFER_PLAN.md).
 
-Selected next item: `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1`.
+Selected next item: `SURVIVOR-CACHE-PREDICATE-TRANSFER-1`.
 
-The item is ACTIVE under its bounded work record. Its request log,
-current-source identity protocol, GO/NO_GO rubric and exact local predecessor
-bindings must be committed before the first request. It permits at most six
-read-only requests and six local inspections in one hour, with zero builds,
-checker calls, proofs, new scientific bytes, mutation identities or external
-writes. Preparing an issue draft does not authorize submitting it.
+The item is READY and unstarted. Before analysis it must commit a bounded work
+record, both mutation specifications, exact pinned source and `InferFlag`
+semantics, prior cache-contract evidence and a transfer rubric. It may transfer
+the earlier scoped result only if predicate equivalence, replacement occurrence
+and observer/input scope all match mechanically. One 60-minute source/evidence
+session and eight local inspections are available; network, builds, checkers,
+proofs, new scientific bytes, mutation identities and external actions are all
+zero.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-THREAD-CONFIG-REGRESSION-1` closed `SUCCESS` with the exact controlled
-baseline-refusal/mutant-accept difference and both controls valid. The
-project-wide review selects currentness and duplicate-report assessment because
-the confirmed public path can silently report unchecked declarations as
-error-free, and an upstream-ready package has greater immediate ecosystem value
-than another speculative survivor witness. The one-thread predicate still lacks
-a deterministic resource witness, the cache route remains bounded, transfer
-lacks independently curated input, and historical CVC-4 gates remain unmet.
+`NANODA-ZERO-THREAD-UPSTREAM-READINESS-1` closed with current-source `NO_GO`, so
+no Nanoda issue or regression proposal is supported. The project-wide review
+selects the cache-predicate transfer because `nanoda-gen-3365809b3c41` and
+`nanoda-gen-af1dac9744e9` replace the same pinned expression occurrence with
+apparently extensionally identical conditions, while the former already has a
+controlled internal witness. Exact reuse can resolve a pending survivor without
+new scientific execution if the premise holds. The remaining one-thread
+boundary is operational and nondeterministic, prospective transfer still lacks
+independent input, and historical CVC-4 gates remain unmet.
 
 ### Waiting
 
