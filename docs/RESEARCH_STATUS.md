@@ -2599,18 +2599,19 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-TEST-NONVACUITY-1`.
 
-The item is READY and unstarted. Current source suggests the native-literal
+The item is ACTIVE under its committed exact-source, work-record, action-rubric
+and process-accounting entry gate. Current source predicts that the native-literal
 hash test compares `None` values because extensions are disabled. Reproduce or
-falsify that premise before claiming a defect. Its 90-minute bound permits up
-to eight read-only/setup requests, three builds and four test processes only
-after the plan's exact-input, work-record and process-accounting gates pass.
-Completion is a small validated local test repair and PR draft, an existing
+falsify that premise before claiming a test defect, then attempt only the small
+test-local repair defined by the rubric. Its 90-minute bound permits at most
+eight read-only/setup requests, three builds and four test processes. Completion
+is a focused/full-suite-validated local test repair and PR draft, an existing
 equivalent repair, a falsified premise or an exact bounded blocker. Submission
 requires human approval for that target and action.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains nine READY items, including the selected item,
+The canonical queue retains this one ACTIVE item and eight other READY items,
 and one PLANNED reserve across all three paths: Arena let reuse and inductive isolation;
 Nanoda literal-test repair, inference-cache regression and reserved-namespace
 coverage audit; independent let/import contract clarification; and a bounded

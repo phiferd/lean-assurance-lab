@@ -1,0 +1,44 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "question": "Does current Nanoda's hash_test0 compare only absent optional literals, and can a small test-only patch make its literal hash and interning assertions non-vacuous while preserving the intentional disabled-extension behavior?",
+  "fixed_source": "results/research/nanoda-test-nonvacuity-1/source-lock.json",
+  "premise": {
+    "helper_configuration": "test_get_export_file(None) constructs Config with nat_extension=false and string_extension=false before ExportFile creation",
+    "constructors": "mk_string_lit_quick and mk_nat_lit_quick return Option and return None when their corresponding extension is disabled",
+    "test_behavior": "hash_test0 hashes and compares the Option results without requiring Some, so repeated None values satisfy the assertions"
+  },
+  "required_reproduction": {
+    "change": "Add a temporary assertion that each constructed literal is Some without enabling extensions or otherwise changing construction.",
+    "expected": "The exact focused hash_test0 process fails at the first explicit non-vacuity assertion.",
+    "interpretation": "Failure reproduces the source-predicted test-effectiveness defect; it is not a checker-correctness or Lean-semantic defect."
+  },
+  "repair_acceptance": [
+    "Both extensions are enabled in Config before ExportFile/DAG construction.",
+    "Each constructor result is required to be Some before hash, equality or pointer assertions.",
+    "Constructed expressions are matched as StringLit and NatLit and their stored contents equal the generated values.",
+    "Repeated construction of the same value retains equality and same-value interning coverage.",
+    "A disabled-extension control explicitly requires both quick constructors to return None.",
+    "Only test code changes; no Nanoda implementation, export fixture or dependency changes.",
+    "The focused test and complete locked upstream test suite pass at the exact source revision with the same final patch."
+  ],
+  "terminal_outcomes": {
+    "SUCCESS": "The premise is reproduced and one small test-only repair satisfies every acceptance condition with focused and full-suite evidence; prepare but do not submit a PR draft.",
+    "NEGATIVE": "Exact current source or executed evidence falsifies the predicted None-only behavior, or equivalent executable coverage already exists.",
+    "BOUNDED_UNRESOLVED": "A concrete setup, source-construction or technical boundary prevents a validated small repair within the fixed budget."
+  },
+  "limits": {
+    "active_seconds": 5400,
+    "sessions": 1,
+    "read_only_or_setup_requests": 8,
+    "builds_including_compiling_tests": 3,
+    "build_timeout_seconds": 600,
+    "test_processes": 4,
+    "test_timeout_seconds": 120,
+    "lean_proof_launches": 0,
+    "new_mutation_identities": 0,
+    "new_scientific_export_bytes": 0,
+    "external_writes": 0
+  },
+  "launch_gate": "Before each process, commit an execution manifest binding the exact detached source tree, patch bytes, expected cell, invocation, timeout, environment/tool versions and cumulative accounting. Preserve every receipt, including failures."
+}
