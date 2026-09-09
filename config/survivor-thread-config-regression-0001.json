@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+  "run_id": "survivor-thread-config-regression-0001",
+  "limits": {
+    "active_seconds": 7200,
+    "sessions": 2,
+    "offline_build_launches": 2,
+    "offline_build_timeout_seconds": 180,
+    "checker_launches": 4,
+    "checker_timeout_seconds": 30,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "prelaunch_active_seconds": 3600,
+  "entry_decision": {
+    "path": "results/research/survivor-thread-config-regression-1/entry-decision.json",
+    "sha256": "ab7377c738d7ac4096e07b889d34c820414379a2a458beac490341a338cb0684"
+  },
+  "prelaunch_work_record": {
+    "path": "results/research/survivor-thread-config-regression-1/prelaunch-work-record.json",
+    "sha256": "6fdb4406839cf39c78e306feb10da98c1b4ee60330652fe6f015c6afc44b6c2b"
+  },
+  "source_materialization": {
+    "path": "results/research/survivor-thread-config-regression-1/source-materialization.json",
+    "sha256": "fc2e0188f9837d853b7cd152584e510216dd58c35813ccfdf35252bc2b21961c"
+  },
+  "runtime_binding": {
+    "path": "results/research/survivor-thread-config-regression-1/runtime-binding.json",
+    "sha256": "b885d36054cbc220579f6309e3040477c522f2409d213e3098b0b7bcf65e3cfc"
+  },
+  "fixed_inputs": [
+    {"path": "mutations/nanoda-gen-93b21593b0d8.json", "sha256": "b4c04dcf5b1b7335a282d228d4279ee792995f1132db5553f426b05971816d71"},
+    {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    {"path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson", "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"},
+    {"path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson", "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"},
+    {"path": "results/mutants/nanoda-gen-21ef4d1d32a1/augmented-comparison-v2.json", "sha256": "1a1221c86690b5a4e183d9c7953d648c41a648eac0df94d06fadc5b3c4dde493"},
+    {"path": "results/research/survivor-thread-config-reachability-1/dispatch-assessment.json", "sha256": "416eab29fbbb439ae801b0f1899eba25511549d7c015b7448015496a6864c29e"},
+    {"path": "results/research/survivor-thread-config-reachability-1/result.json", "sha256": "8071aa9cea7d111b28efa7247aabb4a2642557f44b23e0c44f3fced5845a07f2"}
+  ],
+  "configs": {
+    "control": {
+      "path": "results/research/survivor-thread-config-regression-1/configs/control.json",
+      "sha256": "4c339795cdde7bfedb3cd9f3a3696dfd0c70adec86c7f5725d8c32b339c6fd59"
+    },
+    "candidate": {
+      "path": "results/research/survivor-thread-config-regression-1/configs/candidate.json",
+      "sha256": "720483e40d040399b97cd270a631f705ee643fdf9d6bcd7be8e2be0115e983e1"
+    }
+  },
+  "matrix": [
+    {"id": "control-baseline", "observer": "baseline", "input": "control", "expected": "ACCEPT"},
+    {"id": "control-mutant", "observer": "mutant", "input": "control", "expected": "ACCEPT"},
+    {"id": "candidate-baseline", "observer": "baseline", "input": "candidate", "expected": "TYPECHECK_REFUSAL"},
+    {"id": "candidate-mutant", "observer": "mutant", "input": "candidate", "expected": "ACCEPT"}
+  ],
+  "checker_environment": {
+    "PATH": "/usr/bin:/bin",
+    "LANG": "C",
+    "RUST_BACKTRACE": "full"
+  },
+  "tooling_inputs": [
+    {"path": "lib/survivor_thread_config_regression.py", "sha256": "ff12b0834a60dd05bda18b6c946dfeea9d0d7e61abf5e84ed95b761291abc90b"},
+    {"path": "scripts/execute-survivor-thread-config-regression", "sha256": "6a4bc687ab0253c0c9c2f26fdaa7ea10a38dfa487fc76e92ae16ab85e48b8c2a"},
+    {"path": "scripts/validate-survivor-thread-config-regression", "sha256": "02a5db7add102937eefc5befc1a339a27fefc1569c7d767a368138efecde28a4"},
+    {"path": "tests/test_survivor_thread_config_regression.py", "sha256": "d48e30aa5cf47534eaa9e5071bbd1c4edccb3c07a6cc6bae8c810dfe4301c456"},
+    {"path": "lib/cvc_process.py", "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c"},
+    {"path": "lib/cvc_signal_retry.py", "sha256": "5324c4214c57248198c28b9140864b4e0cd4c84b124396e6d0e5cf9e4aeb138f"},
+    {"path": "lib/cvc_prep.py", "sha256": "2f16c3eb8ece976c51aa1eb143a571894b5004f20c7d7fb609a7d4b48075cb61"},
+    {"path": "lib/survivor_let_payload.py", "sha256": "8c5578b462c0f2a55ec0b5c360b3571bdee8f2cf05e0461b742253c552d3cab4"},
+    {"path": "lib/research_queue_v3.py", "sha256": "2c923e3acdfc32ebb4905450468908da5ef0f854dda7c3a4e6cfe43a600fcfe7"}
+  ],
+  "focused_test_receipt": {
+    "path": "results/research/survivor-thread-config-regression-1/focused-test-receipt.json",
+    "sha256": "d87d2e3b09e73e1bc339f6b233bab9230d6e6cbfb0eca7f1d3404e1b045cb7b0"
+  }
+}

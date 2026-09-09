@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "kind": "SURVIVOR_THREAD_CONFIG_SOURCE_MATERIALIZATION",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "source_lock": {
+    "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+    "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+  },
+  "source_file_count": 22,
+  "readme": {
+    "path": "results/research/survivor-let-reuse-1/evidence/nanoda-README.md",
+    "bytes": 6517,
+    "sha256": "4442003879ac4ac7d455df1db16e0c5646652e6c9b44451f5d877345b8ff65d2"
+  },
+  "baseline": {
+    "workspace": "external/survivor-thread-config-regression-0001-baseline",
+    "target": "external/survivor-thread-config-regression-0001-target-baseline",
+    "product": "external/survivor-thread-config-regression-0001-products/baseline/nanoda_bin",
+    "tc": {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+      "bytes": 56602,
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    }
+  },
+  "mutant": {
+    "workspace": "external/survivor-thread-config-regression-0001-mutant",
+    "target": "external/survivor-thread-config-regression-0001-target-mutant",
+    "product": "external/survivor-thread-config-regression-0001-products/mutant/nanoda_bin",
+    "mutation_spec": {
+      "path": "mutations/nanoda-gen-93b21593b0d8.json",
+      "sha256": "b4c04dcf5b1b7335a282d228d4279ee792995f1132db5553f426b05971816d71"
+    },
+    "patch": {
+      "path": "src/tc.rs",
+      "line": 147,
+      "occurrence": 0,
+      "original": "self.config.num_threads > 1",
+      "mutated": "!(self.config.num_threads > 1)"
+    },
+    "tc_after_patch": {
+      "bytes": 56605,
+      "sha256": "3bd5c0da63537eb640f77f26ffd3cb64f62905fb1e80a9d3c0d7934f83d83e0e"
+    }
+  }
+}
