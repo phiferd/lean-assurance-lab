@@ -67,7 +67,10 @@ research directions.
   [assessment](../results/research/nanoda-test-nonvacuity-1/test-effectiveness-assessment.json),
   [patch](../results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch)
   and [unsubmitted draft](../results/action-recommendations/drafts/nanoda-literal-hash-test-nonvacuity.md)
-  preserve the exact recommendation. `ARENA-LET-REGRESSION-1` is selected READY
+  preserve the exact recommendation. The [evidence-linked draft successor](../results/action-recommendations/drafts/nanoda-literal-hash-test-nonvacuity-evidence-v2.md)
+  references immutable repository evidence while retaining the content-bound
+  original unchanged; its [successor record](../results/research/nanoda-test-nonvacuity-1/recommendation-successor.json)
+  binds the paths and hashes. `ARENA-LET-REGRESSION-1` is selected READY
   and unstarted.
 
 - Completed `CONTRIBUTION-PORTFOLIO-REVIEW-1` on 2026-09-09 with
