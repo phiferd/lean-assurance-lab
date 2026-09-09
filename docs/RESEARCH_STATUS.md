@@ -50,6 +50,26 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-TEST-NONVACUITY-1` on 2026-09-09 with `SUCCESS`.
+  At current Nanoda `4c544ed4099c8227f07d5de77ad1e69fb0740a27`, the existing
+  hash test generated 10,000 String and 10,000 Nat pairs while both extensions
+  were disabled, so all constructor results were `None` and no literal expression
+  was exercised. An assertion-only focused cell failed immediately as predicted.
+  The final test-only patch makes disabled behavior explicit, enables extensions
+  before fresh DAG construction, requires actual `StringLit`/`NatLit` values and
+  payloads, and preserves equal-value hash/interning assertions. The focused test
+  passed and the complete locked suite passed 38 library tests with zero failures;
+  eight doc tests were ignored. A stable-rustfmt probe rewrote unrelated files,
+  so those bytes were rejected and preserved while the patch was rebuilt in a
+  clean detached checkout. No checker campaign, proof, mutation identity, export
+  byte, canonical classification, authority decision or external write occurred.
+  The [result](../results/research/nanoda-test-nonvacuity-1/result.json),
+  [assessment](../results/research/nanoda-test-nonvacuity-1/test-effectiveness-assessment.json),
+  [patch](../results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch)
+  and [unsubmitted draft](../results/action-recommendations/drafts/nanoda-literal-hash-test-nonvacuity.md)
+  preserve the exact recommendation. `ARENA-LET-REGRESSION-1` is selected READY
+  and unstarted.
+
 - Completed `CONTRIBUTION-PORTFOLIO-REVIEW-1` on 2026-09-09 with
   `SUCCESS`: reviewed the constitution, live queue, HSBM proposal, current
   upstream source and contribution dispositions across corpus, checker and
@@ -2597,21 +2617,20 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-TEST-NONVACUITY-1`.
+Selected next item: `ARENA-LET-REGRESSION-1`.
 
-The item is ACTIVE under its committed exact-source, work-record, action-rubric
-and process-accounting entry gate. Current source predicts that the native-literal
-hash test compares `None` values because extensions are disabled. Reproduce or
-falsify that premise before claiming a test defect, then attempt only the small
-test-local repair defined by the rubric. Its 90-minute bound permits at most
-eight read-only/setup requests, three builds and four test processes. Completion
-is a focused/full-suite-validated local test repair and PR draft, an existing
-equivalent repair, a falsified premise or an exact bounded blocker. Submission
-requires human approval for that target and action.
+The item is READY and unstarted. Reuse the exact existing 601-byte let mismatch
+and control, audit the complete current Arena executable inventory and wiring,
+and qualify the expected-outcome language before preparing at most one useful
+existing-byte regression. Its 90-minute bound permits at most twelve read-only
+or setup requests and two static build-test reservations, with no checker, proof,
+mutation, new NDJSON or external launch. Completion is one validated local Arena
+package/draft, exact existing coverage, or an evidence-bound unresolved-policy
+packet. Any external write requires exact target-specific human approval.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains this one ACTIVE item and eight other READY items,
+The canonical queue retains eight READY items, including the selected item,
 and one PLANNED reserve across all three paths: Arena let reuse and inductive isolation;
 Nanoda literal-test repair, inference-cache regression and reserved-namespace
 coverage audit; independent let/import contract clarification; and a bounded

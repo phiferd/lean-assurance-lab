@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "outcome": "SUCCESS",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "finding": "Nanoda's hash_test0 performed 10,000 String and 10,000 Nat pair checks with both extensions disabled, so both Option-returning constructors produced None and the test exercised no literal expression. The assertion-only reproduction failed immediately as predicted.",
+  "repair": "A test-only patch makes disabled None behavior explicit, creates a fresh export after enabling both extensions, requires real StringLit/NatLit expressions, verifies their stored payloads and retains repeated-value hash and pointer equality.",
+  "validation": {
+    "baseline_nonvacuity": "EXPECTED_FAILURE_OBSERVED",
+    "repaired_focused": "PASS",
+    "repaired_full_locked_suite": "PASS_38_LIBRARY_TESTS_0_FAILURES_8_DOC_TESTS_IGNORED"
+  },
+  "claim_scope": "One current Nanoda test-effectiveness defect and tested repair. No checker-correctness, Lean-semantic, mutation, production-impact or maintainer-adoption claim.",
+  "recommendation": {
+    "action": "After a current duplicate/rebase preflight and exact human approval, submit the prepared test-only pull request to ammkrn/nanoda_lib and rerun the focused and full locked suites on the submission revision.",
+    "target": "ammkrn/nanoda_lib src/tests/util.rs::hash_test0",
+    "priority": "MEDIUM",
+    "beneficiary": "Nanoda maintainers and users relying on native-literal regression coverage",
+    "prerequisites": ["current upstream and open-PR duplicate preflight", "rebase if master advanced", "focused and full locked-suite rerun", "explicit human approval for this exact pull request and target"],
+    "draft": "results/action-recommendations/drafts/nanoda-literal-hash-test-nonvacuity.md",
+    "external_action_status": "NOT_AUTHORIZED_NOT_SUBMITTED"
+  },
+  "successor": {
+    "selected_item": "ARENA-LET-REGRESSION-1",
+    "reason": "The literal repair closes the cheapest concrete checker gap. The existing exact let pair is now the highest-ranked remaining direct shared-corpus opportunity; its duplicate and outcome-policy checks remain bounded and feasible.",
+    "started": false
+  }
+}

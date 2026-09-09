@@ -1,0 +1,123 @@
+#!/usr/bin/env python3
+"""Validate the NANODA-TEST-NONVACUITY-1 closure package."""
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+ITEM = "NANODA-TEST-NONVACUITY-1"
+BASE = ROOT / "results/research/nanoda-test-nonvacuity-1"
+ENTRY = "9478f9beba6f861fe7941e25fd491a8196b92a0f"
+
+
+def fail(message: str) -> None:
+    raise ValueError(message)
+
+
+def load(path: Path) -> object:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        fail(message)
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def safe(relative: str) -> Path:
+    path = (ROOT / relative).resolve()
+    require(path.is_relative_to(ROOT) and path.is_file(), f"unsafe or missing evidence path: {relative}")
+    return path
+
+
+def git_json(revision: str, relative: str) -> object:
+    raw = subprocess.check_output(["git", "show", f"{revision}:{relative}"], cwd=ROOT)
+    return json.loads(raw)
+
+
+def validate() -> None:
+    manifest = load(BASE / "evidence-manifest.json")
+    require(manifest["schema_version"] == 1 and manifest["item_id"] == ITEM, "manifest identity")
+    rows = manifest["files"]
+    require(isinstance(rows, list) and len(rows) == 20, "manifest file population")
+    paths: set[str] = set()
+    for row in rows:
+        require(set(row) == {"path", "bytes", "sha256"}, "manifest row fields")
+        require(row["path"] not in paths, "duplicate manifest path")
+        paths.add(row["path"])
+        path = safe(row["path"])
+        require(path.stat().st_size == row["bytes"], f"byte count: {row['path']}")
+        require(digest(path) == row["sha256"], f"digest: {row['path']}")
+
+    work = load(BASE / "work-record.json")
+    require(work["item_id"] == ITEM and work["status"] == "COMPLETE", "work record closure")
+    require(work["entry_commit"] == ENTRY and work["outcome"] == "SUCCESS", "work record outcome")
+    used = work["consumed_at_closure"]
+    require(used["active_seconds_charged_conservatively"] <= work["budget"]["active_seconds"], "active budget")
+    require(used["read_only_or_setup_requests"] <= work["budget"]["read_only_or_setup_requests"], "request budget")
+    require(used["builds_including_compiling_tests"] == 3, "build accounting")
+    require(used["test_processes"] == 3, "test accounting")
+    for zero in ("lean_proof_launches", "new_mutation_identities", "new_scientific_export_bytes", "external_writes"):
+        require(used[zero] == 0, f"zero budget: {zero}")
+
+    entry_work = git_json(ENTRY, "results/research/nanoda-test-nonvacuity-1/work-record.json")
+    entry_queue = git_json(ENTRY, "config/research-queue.json")
+    require(entry_work["status"] == "ACTIVE" and entry_work["launch_state"].startswith("COMMITTED_ENTRY"), "entry work binding")
+    entry_item = next(item for item in entry_queue["items"] if item["id"] == ITEM)
+    require(entry_queue["selected_item"] == ITEM and entry_item["status"] == "ACTIVE", "entry queue binding")
+
+    baseline = load(BASE / "execution/baseline-nonvacuity-receipt.json")
+    focused = load(BASE / "execution/repaired-focused-receipt.json")
+    full = load(BASE / "execution/repaired-full-suite-receipt.json")
+    require(baseline["exit_code"] == 101 and not baseline["timed_out"], "baseline expected failure")
+    require("string literal construction is disabled" in baseline["stdout_stderr"], "baseline attribution")
+    require(focused["exit_code"] == 0 and focused["observed"]["focused_lib_tests_passed"] == 1, "focused pass")
+    require(full["exit_code"] == 0 and full["observed"]["lib_tests_passed"] == 38, "full pass")
+    require(full["observed"]["lib_tests_failed"] == 0 and full["observed"]["doc_tests_failed"] == 0, "suite failures")
+
+    patch = (BASE / "patches/final-test-repair.patch").read_text(encoding="utf-8")
+    require(patch.count("diff --git ") == 1 and "diff --git a/src/tests/util.rs b/src/tests/util.rs" in patch, "test-only patch")
+    for required in ("Expr::StringLit", "Expr::NatLit", "enabled_config.nat_extension = true",
+                     "enabled_config.string_extension = true", ".is_none()", ".expect("):
+        require(required in patch, f"patch assertion: {required}")
+
+    result = load(BASE / "result.json")
+    assessment = load(BASE / "test-effectiveness-assessment.json")
+    closure = load(BASE / "work-closure.json")
+    require(result["outcome"] == closure["outcome"] == "SUCCESS", "result agreement")
+    require(assessment["validation"]["focused"] == "PASS" and
+            assessment["validation"]["full_locked_suite"] == "PASS", "assessment validation")
+    require(assessment["original_test"]["effective_literal_expressions_checked"] == 0, "non-vacuity finding")
+    require(result["recommendation"]["external_action_status"] == "NOT_AUTHORIZED_NOT_SUBMITTED", "external gate")
+    draft = (ROOT / result["recommendation"]["draft"]).read_text(encoding="utf-8")
+    require("not authorized and not submitted" in draft, "draft gate text")
+
+    preservation = load(BASE / "canonical-state-preservation.json")
+    for row in preservation["unchanged_at_scientific_closure"]:
+        require(digest(safe(row["path"])) == row["sha256"], f"preserved canonical state: {row['path']}")
+
+    queue = load(ROOT / "config/research-queue.json")
+    item = next(row for row in queue["items"] if row["id"] == ITEM)
+    successor = next(row for row in queue["items"] if row["id"] == "ARENA-LET-REGRESSION-1")
+    require(item["status"] == "COMPLETE" and item["closure"]["outcome"] == "SUCCESS", "queue closure")
+    require(queue["selected_item"] == successor["id"] and successor["status"] == "READY", "successor handoff")
+    require(not any(row["status"] == "ACTIVE" for row in queue["items"]), "no active successor")
+    status = (ROOT / "docs/RESEARCH_STATUS.md").read_text(encoding="utf-8")
+    require("Selected next item: `ARENA-LET-REGRESSION-1`." in status, "status successor marker")
+
+
+if __name__ == "__main__":
+    try:
+        validate()
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError,
+            subprocess.CalledProcessError) as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        raise SystemExit(1)
+    print("PASS")

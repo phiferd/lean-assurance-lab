@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "original_test": {
+    "path": "src/tests/util.rs",
+    "name": "hash_test0",
+    "string_generated_pairs": 10000,
+    "nat_generated_pairs": 10000,
+    "configuration": {"string_extension": false, "nat_extension": false},
+    "constructor_results": {"string": "None", "nat": "None"},
+    "effective_literal_expressions_checked": 0,
+    "source_conclusion": "The original test repeatedly hashes and compares equal Option::None values rather than native literal expressions."
+  },
+  "executed_reproduction": {
+    "patch": "results/research/nanoda-test-nonvacuity-1/patches/baseline-nonvacuity.patch",
+    "receipt": "results/research/nanoda-test-nonvacuity-1/execution/baseline-nonvacuity-receipt.json",
+    "observation": "Adding only a Some assertion caused the focused test to fail immediately with 'string literal construction is disabled'.",
+    "premise_reproduced": true
+  },
+  "repair": {
+    "patch": "results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch",
+    "test_only": true,
+    "config_enabled_before_export_creation": true,
+    "disabled_control": true,
+    "requires_some": true,
+    "variant_checks": ["Expr::StringLit", "Expr::NatLit"],
+    "payload_checks": ["stored CowStr equals generated string", "stored BigUint equals generated natural"],
+    "retained_checks": ["equal repeated-value hashes", "same interned ExprPtr for repeated equal values"]
+  },
+  "validation": {
+    "focused": "PASS",
+    "full_locked_suite": "PASS",
+    "focused_receipt": "results/research/nanoda-test-nonvacuity-1/execution/repaired-focused-receipt.json",
+    "full_receipt": "results/research/nanoda-test-nonvacuity-1/execution/repaired-full-suite-receipt.json"
+  },
+  "claim_scope": "This establishes and repairs one current Nanoda test-effectiveness defect. It does not establish a Nanoda checker correctness defect, Lean semantic defect, native-literal soundness issue or maintainer adoption."
+}
