@@ -2490,9 +2490,9 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-FVAR-REACHABILITY-1`.
 
-The item is READY and unstarted. Its future source-only execution is bounded to
-3,600 active seconds with zero build, checker, proof, network, scientific-byte,
-mutation-identity or external-action launches.
+The item is ACTIVE under its bound work record. Its source-only execution is
+bounded to 3,600 active seconds with zero build, checker, proof, network,
+scientific-byte, mutation-identity or external-action launches.
 
 Queue handoff: EXECUTABLE.
 
@@ -2506,8 +2506,7 @@ as the most novel feasible survivor route. Cache predicate alternatives overlap
 the already characterized cache behavior, thread predicates are primarily
 configuration paths, transfer still lacks independently curated input, original
 conditional-validation prerequisites remain unmet, and no fresh upstream or
-maintenance trigger displaces this local work. Selection does not start the
-successor.
+maintenance trigger displaces this local work.
 
 ### Waiting
 
