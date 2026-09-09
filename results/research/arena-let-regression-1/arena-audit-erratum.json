@@ -1,0 +1,63 @@
+{
+  "schema_version": 1,
+  "item_id": "ARENA-LET-REGRESSION-1",
+  "kind": "POST_CLOSURE_PROVENANCE_ERRATUM",
+  "recorded_at": "2026-09-09T22:29:34Z",
+  "applies_to": {
+    "path": "results/research/arena-let-regression-1/arena-audit.json",
+    "sha256": "671cdac8bda3aa577f49f40b26a96332b990f3a4928aea990fdd5908a35a0fbe",
+    "git_commit": "e9f680f73d8790a25e44d5898dbc35f96baac53c"
+  },
+  "corrections": [
+    {
+      "field": "/outcome_policy/arena_rule",
+      "incorrect_attribution": "The positive-support requirement for an `either` outcome was attributed to Arena's schema and runner.",
+      "corrected_attribution": "Arena provides the `either` outcome for unsettled cases. The stronger requirement that both outcomes have affirmative support is the Lean Assurance Lab portfolio rule for this item.",
+      "authority": {
+        "path": "docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md",
+        "sha256": "4bc41276ed6d5eb4cbceeea6907fdcf420c871ce18269fc2971cf47444b90b3b",
+        "locator": "ARENA-LET-REGRESSION-1"
+      }
+    },
+    {
+      "field": "/outcome_policy/candidate_evidence",
+      "incomplete_description": "The audit named only the retained official-profile observation.",
+      "corrected_description": "For the exact 601-byte pair, the pinned Nanoda baseline and pinned official observer both reject the candidate and accept the control; the selected Nanoda mutant accepts the candidate. These remain implementation observations rather than normative authority.",
+      "evidence": {
+        "path": "results/witnesses/nanoda-gen-21ef4d1d32a1-witness/confirmation.json",
+        "sha256": "1d57fbf5da7681f41ad98008091f5d32edd9cda9dbc9d5af2b0010b46be739a4",
+        "locator": "/observations"
+      }
+    },
+    {
+      "field": "/arena/inventory",
+      "clarification": "The audit establishes absence of a byte-identical candidate or control in the pinned static test tree. It does not establish absence of every semantically equivalent test.",
+      "reproducible_inventory": {
+        "repository": "https://github.com/leanprover/lean-kernel-arena.git",
+        "revision": "da7a53f8520fb072614956007d7091d0f9a1650f",
+        "tests_tree_git_oid": "0a49b7f02f9be1ead4521fd943dc33035351b794",
+        "command": [
+          "git",
+          "ls-tree",
+          "-r",
+          "--name-only",
+          "da7a53f8520fb072614956007d7091d0f9a1650f",
+          "tests"
+        ],
+        "listing": {
+          "path": "results/research/arena-let-regression-1/arena-test-inventory-da7a53f.txt",
+          "sha256": "8d2441947b967feb038d4a898e895fb3c72e0cef190aaf5f57888c6edd74eae8",
+          "line_count": 123
+        }
+      }
+    }
+  ],
+  "effect": {
+    "scientific_outcome_changed": false,
+    "closure_outcome": "BOUNDED_UNRESOLVED",
+    "test_package_authorized": false,
+    "catalog_or_authority_changed": false,
+    "historical_artifact_rewritten": false,
+    "selected_next_item": "NANODA-CACHE-REGRESSION-1"
+  }
+}

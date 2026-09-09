@@ -57,6 +57,8 @@ Follow `AGENTS.md`, then read:
    `scripts/render-declaration-validation-milestone-7-completion` when their
    inputs require them. Do not hand-edit generated outputs.
 8. Run `scripts/validate-declaration-validation-catalog` and
-   `python3 -m unittest discover -s tests -p 'test_declaration_validation_*.py'`
-   before claiming completion. Stop when evidence cannot meet a gate; do not
-   weaken the gate to obtain a desired classification.
+   `python3 scripts/run-unit-tests`. The repository runner executes attested
+   publication-study modules against their frozen Git blobs and current tests
+   against the live frontier; direct discovery against mutable current paths
+   is not a valid historical-transition check. Stop when evidence cannot meet
+   a gate; do not weaken the gate to obtain a desired classification.

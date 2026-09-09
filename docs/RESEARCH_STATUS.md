@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed a bounded post-closure provenance and CI repair on 2026-09-09
+  without changing the `ARENA-LET-REGRESSION-1` scientific outcome or rewriting
+  its committed audit. The
+  [audit erratum](../results/research/arena-let-regression-1/arena-audit-erratum.json)
+  attributes the affirmative-support rule for `either` to the active Lab
+  portfolio plan, records both exact candidate/control observer profiles, and
+  binds the complete 123-path Arena test inventory plus its derivation command.
+  A versioned portfolio-history test adapter now reads current checkout bytes
+  while comparing command identity against the original recorded workspace,
+  so frozen zero-thread receipts validate from GitHub's Linux checkout without
+  rewriting them. Frozen publication-study tests continue to run against their
+  attested Git blobs through `scripts/run-unit-tests`; direct discovery against
+  the live frontier is not a valid historical-transition check. The selected
+  research item remains `NANODA-CACHE-REGRESSION-1`, READY and unstarted. The
+  [repair record](../results/research/arena-let-regression-1/post-closure-repair.json)
+  binds the successor code, tests, erratum, inventory and validation results.
+
 - Completed `ARENA-LET-REGRESSION-1` on 2026-09-09 with
   `BOUNDED_UNRESOLVED`. The complete current static Arena inventory at
   `da7a53f8520fb072614956007d7091d0f9a1650f` contains no byte-identical copy
@@ -2653,14 +2670,14 @@ external write requires exact target-specific human approval.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains eight READY items, including the selected item,
-and one PLANNED reserve across all three paths: Arena let reuse and inductive isolation;
-Nanoda literal-test repair, inference-cache regression and reserved-namespace
-coverage audit; independent let/import contract clarification; and a bounded
-history-mining pilot. Negative-cache history is an independent READY reserve;
-a theorem accept control requires a demonstrated coverage need. These are ranked opportunities, not a mandate to
-exhaust a lane before reconsidering others. The plan records result-dependent
-follow-ups and re-ranks at each closure by external usefulness and cost.
+The canonical queue retains seven READY items, including the selected item,
+and one PLANNED portfolio reserve across all three paths: Arena inductive
+isolation; Nanoda inference-cache, negative-cache and reserved-namespace
+regressions; independent let/import contract clarification; and a bounded
+history-mining pilot. A theorem accept control requires a demonstrated coverage
+need. These are ranked opportunities, not a mandate to exhaust a lane before
+reconsidering others. The plan records result-dependent follow-ups and re-ranks
+at each closure by external usefulness and cost.
 
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,

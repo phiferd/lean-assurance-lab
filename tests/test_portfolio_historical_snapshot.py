@@ -1,10 +1,11 @@
 import copy
 from pathlib import Path
 import tempfile
+import types
 import unittest
 from unittest import mock
 
-from lib import portfolio_historical_snapshot as history
+from lib import portfolio_historical_snapshot_v2 as history
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -56,17 +57,54 @@ class PortfolioHistoricalSnapshotTests(unittest.TestCase):
             with self.assertRaisesRegex(ValueError, "tracked historical path"):
                 history._attach_payloads(root, snapshot, {"external/frozen"})
 
-    def test_original_receipt_failure_propagates_without_path_rewrite(self):
+    def test_recorded_workspace_identity_is_preserved_across_checkout_paths(self):
         snapshot = Path("/private/tmp/frozen-content")
-        original = Path("/original/execution/root")
-        evidence = mock.Mock(side_effect=ValueError("checker command drift"))
+        original = Path("/current/checkout")
+        recorded = "/Users/researcher/original/checkout"
+        events = [{"kind": "RESERVED", "phase": "checker", "cwd": recorded}]
+        seen = {}
+
+        class Ledger:
+            def __init__(self, root):
+                self.root = root
+
+            def read(self):
+                self.assert_root()
+                return events, {"ignored": True}
+
+            def assert_root(self):
+                self_test.assertEqual(self.root, original)
+
+        def verify(root, actual_events):
+            seen["storage_root"] = Path(root)
+            seen["recorded_root"] = str(root)
+            seen["storage_child"] = Path(root / "evidence.json")
+            seen["recorded_child"] = str(root / "evidence.json")
+            seen["events"] = actual_events
+            return {"status": "PASS"}
+
+        self_test = self
+        namespace = {"Ledger": Ledger, "verify_attempts": verify}
+        evidence = types.FunctionType((lambda: None).__code__, namespace)
         adapter = history._operational_evidence(evidence, snapshot, original)
-        with self.assertRaisesRegex(ValueError, "checker command drift"):
-            adapter(snapshot)
-        evidence.assert_called_once_with(original)
+        self.assertEqual(adapter(snapshot), {"status": "PASS"})
+        self.assertEqual(seen, {
+            "storage_root": original,
+            "recorded_root": recorded,
+            "storage_child": original / "evidence.json",
+            "recorded_child": recorded + "/evidence.json",
+            "events": events,
+        })
         with self.assertRaisesRegex(ValueError, "unexpected snapshot evidence caller"):
             adapter(Path("/unrelated/root"))
-        self.assertEqual(evidence.call_count, 1)
+
+    def test_inconsistent_recorded_workspace_identity_is_rejected(self):
+        events = [
+            {"kind": "RESERVED", "phase": "checker", "cwd": "/recorded/one"},
+            {"kind": "RESERVED", "phase": "checker", "cwd": "/recorded/two"},
+        ]
+        with self.assertRaisesRegex(ValueError, "workspace identity differs"):
+            history._recorded_workspace(events)
 
     def test_historical_process_failure_propagates(self):
         from contextlib import contextmanager
