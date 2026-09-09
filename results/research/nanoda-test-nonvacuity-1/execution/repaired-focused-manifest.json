@@ -1,0 +1,67 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "cell_id": "REPAIRED-FOCUSED-PASS",
+  "prepared_at": "2026-09-09T14:06:43Z",
+  "prepared_after_commit": "0a8820824b8f3c4a303530a54445e964920242b5",
+  "source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+    "detached_checkout": "/private/tmp/nanoda-test-nonvacuity-final.LUnDM6/checkout",
+    "checkout_state": "Only src/tests/util.rs differs from the exact source revision.",
+    "source_lock": "results/research/nanoda-test-nonvacuity-1/source-lock.json"
+  },
+  "patch": {
+    "path": "results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch",
+    "bytes": 3191,
+    "sha256": "9bdc3700d1d35ba464323e049855b1e0b87cf8a4fb5a026b85ff5d1ae492a0df",
+    "resulting_src_tests_util_git_blob": "87e4967d4b029ebabf40d3b1e8dc8069b2a64da8"
+  },
+  "prior_evidence": {
+    "baseline_receipt": "results/research/nanoda-test-nonvacuity-1/execution/baseline-nonvacuity-receipt.json",
+    "baseline_receipt_sha256": "301b3100ec0ef51dddfeedafe755562d12b2ee711654f18b51b4e057690e487d",
+    "independent_review": "results/research/nanoda-test-nonvacuity-1/implementation-review.json",
+    "independent_review_sha256": "526e0b80943b8d114e04baf27d9aa794aefaec161f80605a2ab9ae5ec6e31e39"
+  },
+  "acceptance": [
+    "The disabled-extension control requires both quick constructors to return None.",
+    "A cloned Config enables both extensions before a fresh ExportFile is created.",
+    "Both results are unwrapped and matched as the expected literal variant with the generated payload.",
+    "Repeated equal values retain equal hashes and identical interned expression pointers."
+  ],
+  "tooling": {
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "dependency_mode": "--offline --locked",
+    "reused_target_cache": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target"
+  },
+  "invocation": ["perl", "-e", "alarm shift; exec @ARGV", "120", "cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
+  "payload_invocation": ["cargo", "test", "--offline", "--locked", "tests::util::hash_test0", "--", "--exact", "--nocapture"],
+  "environment": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target",
+    "RUST_BACKTRACE": "0"
+  },
+  "timeout_seconds": 120,
+  "timeout_controller": "Perl alarm persists across exec and terminates the cargo process after 120 wall-clock seconds.",
+  "expected": {
+    "exit": 0,
+    "tests_passed": 1,
+    "tests_failed": 0,
+    "meaning": "The exact repair constructs and inspects real native literals while preserving explicit disabled behavior and same-value interning/hash assertions."
+  },
+  "accounting_before": {
+    "active_seconds_charged_conservatively": 2100,
+    "read_only_or_setup_requests": 2,
+    "builds_including_compiling_tests": 1,
+    "test_processes": 1,
+    "remaining_builds": 2,
+    "remaining_test_processes": 3
+  },
+  "reservation": {
+    "build_number": 2,
+    "test_process_number": 2,
+    "counts_even_on_failure": true
+  }
+}

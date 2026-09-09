@@ -1,0 +1,24 @@
+{
+  "schema_version": 1,
+  "operation": "cargo fmt --all",
+  "checkout": "/private/tmp/nanoda-test-nonvacuity.kVpZgx/checkout",
+  "exit_code": 0,
+  "scientific_or_test_launch": false,
+  "finding": "The installed stable rustfmt could not honor five unstable project settings and rewrote seventeen source files, including files outside the test-only scope.",
+  "disposition": "REJECTED_TOOLING_OUTPUT_PRESERVED_IN_DIRTY_ISOLATED_CHECKOUT",
+  "repair": "Leave the dirty checkout intact as raw repair evidence. Create a second detached checkout at the same exact source revision and apply only the formatted hash_test0 replacement. Do not admit unrelated formatter churn to the patch.",
+  "warnings": [
+    "can't set fn_single_line = true; unstable features are only available in nightly channel",
+    "can't set where_single_line = false; unstable features are only available in nightly channel",
+    "can't set match_arm_blocks = false; unstable features are only available in nightly channel",
+    "can't set brace_style = PreferSameLine; unstable features are only available in nightly channel",
+    "can't set trailing_semicolon = false; unstable features are only available in nightly channel"
+  ],
+  "changed_file_count": 17,
+  "admitted_patch_file_count": 1,
+  "budget_effect": {
+    "read_only_or_setup_requests_consumed_by_clean_recheckout": 1,
+    "builds": 0,
+    "test_processes": 0
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "cell_id": "BASELINE-NONVACUITY-FAILURE",
+  "manifest": "results/research/nanoda-test-nonvacuity-1/execution/baseline-nonvacuity-manifest.json",
+  "started_after_commit": "0a8820824b8f3c4a303530a54445e964920242b5",
+  "exit_code": 101,
+  "wall_seconds": 7.184499083,
+  "timed_out": false,
+  "stdout_stderr": "   Compiling nanoda_lib v0.4.17 (/private/tmp/nanoda-test-nonvacuity.kVpZgx/checkout)\n    Finished `test` profile [optimized + debuginfo] target(s) in 7.12s\n     Running unittests src/lib.rs (/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target/debug/deps/nanoda_lib-6ba86b580e603906)\n\nrunning 1 test\n\nthread 'tests::util::hash_test0' (12362022) panicked at src/tests/util.rs:121:21:\nstring literal construction is disabled\nnote: run with `RUST_BACKTRACE=1` environment variable to display a backtrace\ntest tests::util::hash_test0 ... FAILED\n\nfailures:\n\nfailures:\n    tests::util::hash_test0\n\ntest result: FAILED. 0 passed; 1 failed; 0 ignored; 0 measured; 37 filtered out; finished in 0.00s\n\nerror: test failed, to rerun pass `--lib`\n",
+  "observed": {
+    "expected_nonzero_exit": true,
+    "expected_failure_text": true,
+    "tests_run": 1,
+    "tests_failed": 1,
+    "filtered_out": 37
+  },
+  "interpretation": "PASS for the preregistered failure cell: requiring a real String literal immediately fails under the unchanged disabled-extension helper, mechanically reproducing that the original Option hash/equality assertions compared None values.",
+  "accounting_after": {
+    "read_only_or_setup_requests": 1,
+    "builds_including_compiling_tests": 1,
+    "test_processes": 1,
+    "remaining_builds": 2,
+    "remaining_test_processes": 3
+  }
+}

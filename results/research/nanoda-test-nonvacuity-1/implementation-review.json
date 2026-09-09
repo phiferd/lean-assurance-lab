@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "review_kind": "INDEPENDENT_READ_ONLY_SOURCE_DESIGN_REVIEW",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "reviewer": "delegated Codex subagent nanoda_patch_review",
+  "authority": "Advisory implementation review only; source, compiler and test evidence remain controlling.",
+  "checks": [
+    "Config implements Clone and ExportFile.config is public at the bound revision.",
+    "TcCtx exposes read_expr, read_string and read_bignum for direct literal payload assertions.",
+    "Expr has StringLit and NatLit variants carrying the corresponding storage pointers.",
+    "Enabling nat_extension after an ExportFile is built is insufficient because LeanDag allocates optional bignum storage during construction.",
+    "A fresh enabled ExportFile must therefore be created from a cloned config before literal construction."
+  ],
+  "recommendation": "Keep the repair inside hash_test0: first make disabled None behavior explicit, then clone the config, enable both extensions, build a fresh ExportFile, require Some, inspect literal variants and payloads, and retain repeated-value hash and pointer equality.",
+  "external_actions": 0,
+  "builds_or_tests": 0
+}
