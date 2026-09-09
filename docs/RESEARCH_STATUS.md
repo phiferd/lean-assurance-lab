@@ -2457,9 +2457,10 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-UNIVERSE-DIFF-1`.
 
-The item is READY and unstarted. Its future source-only entry is bounded to one
-3,600-second session with zero build, checker, proof, network, scientific-byte
-or external-action launches.
+The item is ACTIVE under the owner's 2026-09-08 request to execute the
+highest-priority eligible canonical queue item. Its source-only assessment is
+bounded to one 3,600-second session with zero build, checker, proof, network,
+scientific-byte or external-action launches. No such launch has occurred.
 
 Queue handoff: EXECUTABLE.
 
@@ -2469,13 +2470,14 @@ self-contained exported pair could be supported. It consumed no scientific
 launches and does not change the internal cache regression or canonical
 survivor classification.
 
-The project-wide closure review ranks the universe survivor next because its
-exact predicate, pinned source and historical 163-test no-difference record are
-already available and a source-only reachability gate is cheap and
-falsifiable. Prospective transfer still lacks independently curated input,
-original conditional-validation prerequisites remain unmet, and no fresh
-upstream or maintenance trigger displaces this local work. Selection does not
-start the successor.
+The project-wide entry review retains the universe survivor above prospective
+transfer, the original conditional-validation continuation and maintenance
+follow-through. Its exact predicate, pinned source and historical 163-test
+no-difference record are already available, and the active item is tracing the
+normalized right-`Zero`, `diff == 0` state before proposing any scientific
+execution. Transfer still lacks independently curated input, original
+conditional-validation prerequisites remain unmet, and no fresh upstream or
+maintenance trigger displaces this local work.
 
 ### Waiting
 
