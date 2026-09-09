@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "status": "PASS",
+  "scientific_launches": 0,
+  "checks": [
+    {
+      "name": "public_zero_one_many_dispatch_trace",
+      "status": "PASS",
+      "result": "The public configuration path admits zero, one and many threads; baseline and both predicates have the recorded exact dispatch truth table."
+    },
+    {
+      "name": "zero_thread_declaration_coverage",
+      "status": "PASS",
+      "result": "For the negated predicate at num_threads=0, check_all_declars_par spawns no workers and invokes check_declar zero times."
+    },
+    {
+      "name": "one_thread_operational_boundary",
+      "status": "PASS",
+      "result": "One-worker no-panic declaration coverage matches serial coverage, but stack, spawn and panic behavior remain unresolved and no equivalence is claimed."
+    },
+    {
+      "name": "registry_transition",
+      "status": "PASS",
+      "result": "The 609-line entry registry has exactly one appended scoped MEANINGFUL_SEMANTIC row; the survivor inventory is unchanged."
+    },
+    {
+      "name": "historical_transition",
+      "status": "PASS",
+      "result": "The entry snapshot and predecessor fvar evidence remain bound while live validation advances only the authorized successor assertions."
+    }
+  ],
+  "tooling": [
+    {
+      "path": "lib/survivor_thread_config_reachability.py",
+      "sha256": "d38ca0d7116a85cdbfa02924e37eaa8ec76bf48f212ce4b8d5e86512a0abd699"
+    },
+    {
+      "path": "lib/survivor_thread_config_reachability_historical.py",
+      "sha256": "97d4d1074d0a5f0ef9b4ff8bbbad7d188c3ab5a57e90886b8ab2c03fadadab37"
+    },
+    {
+      "path": "scripts/validate-survivor-thread-config-reachability-closure",
+      "sha256": "648ec876cb833a7dc88b06bf7ff46caa5cb8916ba089174d9e4e55ea74d26825"
+    },
+    {
+      "path": "scripts/validate-survivor-thread-config-reachability-historical",
+      "sha256": "9ad28045a6f511d3014287881c8a6c5bb68e94b30a963e095e20716fd6141124"
+    },
+    {
+      "path": "tests/test_survivor_thread_config_reachability.py",
+      "sha256": "928e108ff9602333e3d52751321c0e541d6201e7c906fcf1a4a2572356c9e3a4"
+    },
+    {
+      "path": "tests/test_survivor_thread_config_reachability_historical.py",
+      "sha256": "f4ebde0a7a855b794d393ac901fa24004fece6c189a09027aea4175e76ce43b6"
+    }
+  ]
+}

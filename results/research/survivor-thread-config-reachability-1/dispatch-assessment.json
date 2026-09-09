@@ -1,0 +1,223 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "mutation_ids": [
+    "nanoda-gen-2bdfe18a9ec2",
+    "nanoda-gen-93b21593b0d8"
+  ],
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "finding": "PUBLIC_ZERO_THREAD_CHECK_ELISION_AND_ONE_THREAD_OPERATIONAL_BOUNDARY",
+  "question": "Which public zero, one and many-thread configurations reach each check_all_declars branch, and what declaration coverage or operational behavior changes under the two predicate mutations?",
+  "scope": {
+    "included": "Config values accepted by pinned Nanoda's public JSON or programmatic configuration path and dispatched through ExportFile::check_all_declars.",
+    "excluded": [
+      "Claims about Rust scheduler behavior beyond the source-enforced task-index and join structure.",
+      "A whole-process outcome equivalence claim for the one-thread mutation under arbitrary caller stacks, spawn failures or panics.",
+      "Semantic authority from Nanoda behavior or from the historical finite test comparisons.",
+      "Any newly generated configuration or export bytes and any unexecuted successor regression."
+    ],
+    "semantic_authority": false
+  },
+  "public_configuration_path": [
+    {
+      "step": "CONFIG_DESERIALIZATION",
+      "source": "src/util.rs:867-889",
+      "fact": "Config is publicly deserializable and num_threads is a usize with serde(default), so omission reaches the value zero."
+    },
+    {
+      "step": "CONFIG_VALIDATION",
+      "source": "src/util.rs:931-955",
+      "fact": "Config::try_from validates input-source and axiom-option compatibility but imposes no lower or upper bound on num_threads; zero, one and larger values remain public."
+    },
+    {
+      "step": "CONFIG_RETENTION",
+      "source": "src/util.rs:987-998; src/parser.rs:386-456",
+      "fact": "Config::to_export_file passes the same Config into parse_export_file, which stores it unchanged on ExportFile."
+    },
+    {
+      "step": "PUBLIC_DISPATCH",
+      "source": "src/main.rs:22-30; src/tc.rs:107-152",
+      "fact": "The binary calls check_all_declars before pretty printing or success reporting; the baseline selects parallel checking only when num_threads > 1."
+    }
+  ],
+  "dispatch_truth_table": [
+    {
+      "config_class": "ZERO",
+      "representative": 0,
+      "baseline": "SERIAL",
+      "rel_gt_to_ge_mutant": "SERIAL",
+      "predicate_negation_mutant": "PARALLEL_ZERO_WORKERS",
+      "declaration_coverage": "Baseline and REL_GT_TO_GE visit every declaration serially. BOOL_NEGATE creates no handles and invokes check_declar zero times.",
+      "distinction": "EXACT_SEMANTIC_CHECK_ELISION"
+    },
+    {
+      "config_class": "ONE",
+      "representative": 1,
+      "baseline": "SERIAL",
+      "rel_gt_to_ge_mutant": "PARALLEL_ONE_WORKER",
+      "predicate_negation_mutant": "PARALLEL_ONE_WORKER",
+      "declaration_coverage": "If spawn succeeds and no declaration panics, one worker claims indices in order and visits every declaration exactly once, matching serial coverage.",
+      "distinction": "OPERATIONAL_STACK_SPAWN_AND_PANIC_BOUNDARY"
+    },
+    {
+      "config_class": "MANY",
+      "representative": 2,
+      "baseline": "PARALLEL_N_WORKERS",
+      "rel_gt_to_ge_mutant": "PARALLEL_N_WORKERS",
+      "predicate_negation_mutant": "SERIAL",
+      "declaration_coverage": "If all spawns succeed and checks do not panic, both modes visit every declaration exactly once; parallel completion order is not fixed by source.",
+      "distinction": "OPERATIONAL_SCHEDULING_STACK_AND_PANIC_BOUNDARY"
+    }
+  ],
+  "task_coverage_proof": {
+    "serial": "FxIndexMap::values visits every declaration once in insertion order and calls check_declar directly.",
+    "parallel_zero": "The worker-construction range 0..num_threads is empty, the handle join loop is empty, and the function returns without reading the nonempty declaration map.",
+    "parallel_positive_no_panic": "AtomicUsize::fetch_add assigns distinct monotonically increasing indices. Every index below declars.len() is claimed once before workers terminate on an out-of-range get_index result.",
+    "failure_limit": "A panic can terminate a worker before it claims another index; successful all-declaration coverage is therefore explicitly conditional on no declaration panic and successful worker creation."
+  },
+  "checker_isolation": {
+    "source": "src/util.rs:218-247; src/tc.rs:80-105,155-158",
+    "fact": "Each check_declar arm constructs a fresh LeanDag/TcCtx and, where applicable, a fresh TypeChecker with a fresh TcCache. Workers share the immutable ExportFile/declaration map, not a mutable checker cache.",
+    "consequence": "For positive worker counts and successful non-panicking checks, scheduling alone does not create cross-declaration checker-state reuse."
+  },
+  "failure_and_stack_boundary": {
+    "parallel_stack_bytes": 16777216,
+    "serial_stack": "The caller's stack; Nanoda does not set it in check_all_declars_serial.",
+    "spawn_failure": "Parallel dispatch unwraps spawn_scoped, so thread-creation failure adds a panic surface absent from serial dispatch.",
+    "worker_panic": "A worker panic is observed through join().expect with the pinned check_all_declars join message; serial dispatch unwinds directly from check_declar.",
+    "many_worker_progress": "Other workers may claim declarations before failure is joined; the exact runtime schedule and which later declarations run are not fixed by source.",
+    "conclusion": "The one-thread REL_GT_TO_GE mutation has equal successful task coverage but is not proved outcome-equivalent under resource exhaustion, stack-sensitive checking or panic diagnostics."
+  },
+  "public_counterexample": {
+    "mutation_id": "nanoda-gen-93b21593b0d8",
+    "config": "A valid public Config with num_threads omitted or explicitly zero, one export_file_path, no pretty-print selection and optional print_success_message=true.",
+    "existing_export": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+    "existing_observation": "results/mutants/nanoda-gen-21ef4d1d32a1/augmented-comparison-v2.json records that pinned baseline parsing succeeds and declaration checking rejects this 601-byte export.",
+    "baseline_path": "num_threads=0 makes the original predicate false, so serial checking reaches the known rejecting declaration.",
+    "mutant_path": "!(0 > 1) is true, check_all_declars_par(0) creates no workers, and check_all_declars returns without checking the declaration; main proceeds to post-check reporting.",
+    "status": "SOURCE_LEVEL_PUBLIC_COUNTEREXAMPLE_NOT_EXECUTED_WITH_THIS_MUTANT",
+    "claim_limit": "The prior rejection observation is reused unchanged. No new config, export, baseline, mutant or reference-checker execution occurred."
+  },
+  "mutation_decisions": [
+    {
+      "mutation_id": "nanoda-gen-93b21593b0d8",
+      "finding": "PUBLIC_ZERO_THREAD_DECLARATION_CHECK_ELISION",
+      "registry_classification": "MEANINGFUL_SEMANTIC",
+      "canonical_classification_change": true,
+      "status": "SURVIVED",
+      "reason": "The public default zero configuration changes from checking every declaration to checking none; an existing parsed-and-rejected export makes the source-level outcome distinction concrete.",
+      "execution_needed_for_non_equivalence": false,
+      "corpus_kill_claimed": false
+    },
+    {
+      "mutation_id": "nanoda-gen-2bdfe18a9ec2",
+      "finding": "PUBLIC_ONE_THREAD_OPERATIONAL_DISTINCTION",
+      "registry_classification": "SURVIVED_WITHOUT_WITNESS",
+      "canonical_classification_change": false,
+      "status": "SURVIVED",
+      "reason": "Only num_threads=1 changes branch. Successful declaration coverage is equal, but explicit worker stack, spawn failure and panic propagation differ; no bounded source proof closes all process outcomes.",
+      "execution_needed_for_non_equivalence": true,
+      "corpus_kill_claimed": false
+    }
+  ],
+  "supporting_observations": [
+    {
+      "mutation_id": "nanoda-gen-2bdfe18a9ec2",
+      "executed_tests": 187,
+      "difference_count": 0,
+      "role": "Finite support only; test utilities explicitly construct num_threads=1, so matching normalized outcomes do not erase the operational branch change."
+    },
+    {
+      "mutation_id": "nanoda-gen-93b21593b0d8",
+      "executed_tests": 187,
+      "difference_count": 0,
+      "role": "Finite support only; the pinned test utility's explicit num_threads=1 reaches one worker rather than the public serde default zero-worker counterexample."
+    }
+  ],
+  "decision": {
+    "outcome": "SUCCESS",
+    "registry_append_count": 1,
+    "appended_mutation_id": "nanoda-gen-93b21593b0d8",
+    "appended_classification": "MEANINGFUL_SEMANTIC",
+    "rel_gt_to_ge_classification_unchanged": true,
+    "scientific_pair_or_launch_used": false,
+    "external_action": "NO_EXTERNAL_ACTION",
+    "next_item": "SURVIVOR-THREAD-CONFIG-REGRESSION-1"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_build_launches": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {
+      "path": "docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md",
+      "sha256": "da0c182098a51b037d00c5f31b8db86ad5fc69e886c4ac03eda006293571443b"
+    },
+    {
+      "path": "mutations/nanoda-gen-2bdfe18a9ec2.json",
+      "sha256": "565dade1407732bed722b3db2758f77e6a3a8a3cd079ce526974d91b8347aca6"
+    },
+    {
+      "path": "mutations/nanoda-gen-93b21593b0d8.json",
+      "sha256": "b4c04dcf5b1b7335a282d228d4279ee792995f1132db5553f426b05971816d71"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-2bdfe18a9ec2/scheduled-comparison.json",
+      "sha256": "b0fca685bb6fdb5a1d49a2fcdcd6e3a3f9c01cb51713e9a1f0c6072332504abc"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-93b21593b0d8/scheduled-comparison.json",
+      "sha256": "58e2ddb34949c0fdd9ec2b0c3d814b97183db9f110af347f83be6a85e9ea621d"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+      "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/main.rs",
+      "sha256": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/parser.rs",
+      "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/util.rs",
+      "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/lib.rs",
+      "sha256": "23074a173a2ce6c3ca6ef39c9a8da488c7556f9aa95360a50fec7c154dcbee77"
+    },
+    {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/env.rs",
+      "sha256": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01"
+    },
+    {
+      "path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+      "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+    },
+    {
+      "path": "results/mutants/nanoda-gen-21ef4d1d32a1/augmented-comparison-v2.json",
+      "sha256": "1a1221c86690b5a4e183d9c7953d648c41a648eac0df94d06fadc5b3c4dde493"
+    },
+    {
+      "path": "results/research/survivor-thread-config-reachability-1/work-record.json",
+      "sha256": "53bfc9f611ea23ed78d686473ba895db67a6e8689de5f876e12b0f76df93abf2"
+    },
+    {
+      "path": "results/research/survivor-thread-config-reachability-1/entry-decision.json",
+      "sha256": "8a4dacb53cfd3dcd480882f476238a3d0d2e84cf7a60985c1e25e0dd749807d4"
+    }
+  ]
+}

@@ -10,6 +10,7 @@ import subprocess
 ITEM = "SURVIVOR-FVAR-REACHABILITY-1"
 MUTANT = "nanoda-gen-399895fa0b72"
 ENTRY_SNAPSHOT = "4cea69c0b66487b82596c47c917b1d58af057a45"
+CLOSURE_SNAPSHOT = "87eadcc83e89439388b17997af50a207936ebe5a"
 BASE = "results/research/survivor-fvar-reachability-1"
 ASSESSMENT = f"{BASE}/reachability-assessment.json"
 RESULT = f"{BASE}/result.json"
@@ -37,6 +38,12 @@ def sha256(path: Path) -> str:
 def git_bytes(root: Path, path: str) -> bytes:
     return subprocess.check_output(
         ["git", "show", f"{ENTRY_SNAPSHOT}:{path}"], cwd=root
+    )
+
+
+def closure_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{CLOSURE_SNAPSHOT}:{path}"], cwd=root
     )
 
 
@@ -216,12 +223,13 @@ def _validate_registry(root: Path, assessment: dict) -> dict:
             == "2ba8a9a640d994e4ee90fe78f58896c0735a2bbebce4db75eab8dfcee6a09961"
             and len(predecessor.splitlines()) == 608,
             "registry predecessor drift")
-    require(current.startswith(predecessor) and len(current.splitlines()) == 609,
-            "registry is not one exact append over the entry snapshot")
+    require(current.startswith(predecessor) and len(current.splitlines()) >= 609,
+            "registry no longer preserves the exact fvar append")
     suffix = current[len(predecessor):]
-    require(suffix.startswith(b"{") and suffix.count(b"\n") == 1,
+    first_line = suffix.splitlines(keepends=True)[0]
+    require(first_line.startswith(b"{") and first_line.count(b"\n") == 1,
             "registry append is not one JSONL record")
-    appended = json.loads(suffix.decode("utf-8"))
+    appended = json.loads(first_line.decode("utf-8"))
     fields = {
         "checker", "classification", "classification_scope",
         "equivalence_analysis", "function", "id", "mutation_operator", "notes",
@@ -256,6 +264,9 @@ def validate(root: Path) -> dict:
     assessment = _validate_assessment(root)
     _validate_registry(root, assessment)
     result = json.loads((root / RESULT).read_text(encoding="utf-8"))
+    predecessor_registry = git_bytes(root, REGISTRY)
+    first_append = (root / REGISTRY).read_bytes()[len(predecessor_registry):].splitlines(keepends=True)[0]
+    historical_successor_registry = predecessor_registry + first_append
     require(result["item_id"] == ITEM and result["outcome"] == "SUCCESS"
             and result["finding"] == assessment["classification"]
             and result["assessment"] == {"path": ASSESSMENT,
@@ -264,7 +275,7 @@ def validate(root: Path) -> dict:
                 "path": REGISTRY, "predecessor_lines": 608,
                 "successor_lines": 609,
                 "predecessor_sha256": digest(git_bytes(root, REGISTRY)),
-                "successor_sha256": sha256(root / REGISTRY),
+                "successor_sha256": digest(historical_successor_registry),
                 "appended_classification": "EQUIVALENT",
             }
             and result["scope"]["public_export_path_equivalence"] is True
@@ -300,7 +311,7 @@ def validate(root: Path) -> dict:
             and focused["scientific_launches"] == 0,
             "focused validation identity or launch count drift")
     for row in focused["tooling"]:
-        require(sha256(root / row["path"]) == row["sha256"],
+        require(digest(closure_bytes(root, row["path"])) == row["sha256"],
                 "focused tooling drift: " + row["path"])
 
     manifest = json.loads((root / EVIDENCE_MANIFEST).read_text(encoding="utf-8"))
@@ -314,8 +325,8 @@ def validate(root: Path) -> dict:
         require(set(row) == {"path", "sha256", "bytes"} and row["path"] not in paths,
                 "malformed or duplicate manifest input")
         paths.add(row["path"])
-        path = root / row["path"]
-        require(path.stat().st_size == row["bytes"] and sha256(path) == row["sha256"],
+        data = closure_bytes(root, row["path"])
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
                 "manifest input drift: " + row["path"])
     require({
         "docs/research/SURVIVOR_FVAR_REACHABILITY_PLAN.md",

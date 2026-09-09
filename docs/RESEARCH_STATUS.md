@@ -50,6 +50,27 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-THREAD-CONFIG-REACHABILITY-1` on 2026-09-08 with
+  `SUCCESS`. `num_threads` is a public `usize` configuration field with serde
+  default zero, and config validation imposes no thread bound. The original
+  zero-thread path checks every declaration serially; `nanoda-gen-93b21593b0d8`
+  instead calls the parallel helper with zero workers, checks no declarations,
+  returns normally and permits post-check success reporting. An existing
+  601-byte parsed-and-rejected export makes the source counterexample concrete,
+  so one append-only registry row records `MEANINGFUL_SEMANTIC` while retaining
+  historical `SURVIVED` status and making no corpus-kill or authority claim.
+  `nanoda-gen-2bdfe18a9ec2` changes only the one-thread path: successful task
+  coverage matches serial checking, but the 16 MiB worker stack, spawn failure
+  and joined-panic behavior differ, so its unresolved classification is
+  preserved. Pending survivors move from four to three and meaningful survivors
+  from three to four; the modeled 135/142 score and fourteen equivalents are
+  unchanged. No build, checker, proof, network, new export byte, mutation
+  identity or external action ran. See the
+  [assessment](../results/research/survivor-thread-config-reachability-1/dispatch-assessment.json),
+  [result](../results/research/survivor-thread-config-reachability-1/result.json),
+  and [report](../results/research/survivor-thread-config-reachability-1/report.md).
+  `SURVIVOR-THREAD-CONFIG-REGRESSION-1` is selected READY and unstarted.
+
 - Completed `SURVIVOR-FVAR-REACHABILITY-1` on 2026-09-08 with
   `SUCCESS`. Pinned Nanoda's public export parser cannot construct
   `Expr::Local`, the only expression form for which `has_fvars` is true.
@@ -2504,32 +2525,33 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-THREAD-CONFIG-REACHABILITY` — assess the public configuration
-   states changed by the two remaining declaration-checking thread predicates
+1. `F-SURVIVOR-THREAD-CONFIG-REGRESSION` — execute the fixed zero-thread
+   declaration-checking regression selected by the completed source assessment
    under
-   [docs/research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md](research/SURVIVOR_THREAD_CONFIG_REACHABILITY_PLAN.md).
+   [docs/research/SURVIVOR_THREAD_CONFIG_REGRESSION_PLAN.md](research/SURVIVOR_THREAD_CONFIG_REGRESSION_PLAN.md).
 
-Selected next item: `SURVIVOR-THREAD-CONFIG-REACHABILITY-1`.
+Selected next item: `SURVIVOR-THREAD-CONFIG-REGRESSION-1`.
 
-The item is ACTIVE under its bound work record. Its source-only execution is
-bounded to 3,600 active seconds with zero build, checker, proof, network,
-scientific-byte, mutation-identity or external-action launches.
+The item is READY and unstarted. Before any launch it must bind and commit the
+existing candidate/control bytes, zero-thread configurations, expected outcomes,
+exact runtime identities and tested accounting controls. Its future bound is at
+most two offline builds and four checker launches with zero network, Lean proof,
+new export byte, mutation identity or external action.
 
 Queue handoff: EXECUTABLE.
 
-`SURVIVOR-FVAR-REACHABILITY-1` closed `SUCCESS`: the persistent parser DAG
-cannot contain Nanoda's internal Local/free-variable form, so public exported
-declaration types reach the removed guard only with a false predicate. The
-canonical registry admits one scoped `EQUIVALENT` classification; the internal
-synthetic-declaration counterexample and defense-in-depth role remain explicit.
+`SURVIVOR-THREAD-CONFIG-REACHABILITY-1` closed `SUCCESS`: the negated predicate
+has an exact public zero-worker check-elision path, while the relational-boundary
+predicate retains a one-worker operational boundary rather than an unsupported
+equivalence claim.
 
-The project-wide closure review ranks the two thread-configuration predicates
-next as the last novel declaration-validation survivor mechanism. Cache
-predicate alternatives share one already characterized internal distinction and
-bounded exported-reachability boundary, transfer still lacks independently
-curated input, original conditional-validation prerequisites remain unmet, and
-no fresh upstream or maintenance trigger displaces this local work. The owner's
-request to execute the next plan starts this item only.
+The project-wide closure review ranks the fixed zero-thread regression next
+because it converts the strongest source result into reproducible executable
+evidence using existing export bytes. The one-thread predicate needs a more
+specialized resource witness, cache alternatives overlap an already bounded
+route, transfer still lacks independently curated input, and no fresh upstream
+or maintenance trigger displaces this local work. Selection does not start the
+successor.
 
 ### Waiting
 

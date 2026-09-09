@@ -1218,6 +1218,8 @@ def catalog() -> list[dict]:
                 "comparison:nanoda-imax-equality-references",
                 "classification:survivor-let-association",
                 "classification:nanoda-universe-public-equivalence",
+                "classification:nanoda-fvar-public-export-equivalence",
+                "classification:nanoda-thread-config-reachability",
             ],
             required=True,
         ),
@@ -1574,6 +1576,27 @@ def catalog() -> list[dict]:
                 "Parser insertion-order induction establishes public exported-declaration "
                 "equivalence for the fvar guard mutation while preserving the internal "
                 "synthetic-declaration counterexample and defense-in-depth boundary."
+            ),
+        ),
+        node(
+            "classification:nanoda-thread-config-reachability",
+            "classification",
+            locator=files(
+                ".",
+                "results/research/survivor-thread-config-reachability-1/dispatch-assessment.json",
+                "results/research/survivor-thread-config-reachability-1/result.json",
+                "results/research/survivor-thread-config-reachability-1/report.md",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-current",
+                "mutation-model:nanoda",
+            ],
+            required=True,
+            notes=(
+                "Public config-source analysis establishes zero-worker declaration-check "
+                "elision for the negated predicate and preserves the separate one-worker "
+                "stack, spawn, and panic-propagation boundary."
             ),
         ),
         node(

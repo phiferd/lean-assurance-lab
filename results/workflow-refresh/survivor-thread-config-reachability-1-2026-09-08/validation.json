@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "status": "PASS",
+  "recorded_at": "2026-09-09T03:25:39+00:00",
+  "checks": [
+    {"name": "thread configuration source closure", "command": "scripts/validate-survivor-thread-config-reachability-closure", "status": "PASS", "finding": "PUBLIC_ZERO_THREAD_CHECK_ELISION_AND_ONE_THREAD_OPERATIONAL_BOUNDARY", "registry_append_count": 1, "scientific_launches": 0},
+    {"name": "thread configuration historical transition", "command": "scripts/validate-survivor-thread-config-reachability-historical", "status": "PASS", "snapshot": "336172a83fc6c2c8896aa107637f3a7924bea34a", "registry_predecessor_lines": 609, "registry_successor_lines": 610},
+    {"name": "fvar predecessor closure", "command": "scripts/validate-survivor-fvar-reachability-closure", "status": "PASS", "classification": "EQUIVALENT_AT_PUBLIC_EXPORT_PATH", "scientific_launches": 0},
+    {"name": "fvar predecessor historical transition", "command": "scripts/validate-survivor-fvar-reachability-historical", "status": "PASS", "registry_successor_lines": 610},
+    {"name": "universe and cache predecessor historical transitions", "command": "scripts/validate-survivor-universe-equivalence-historical && scripts/validate-survivor-universe-diff-historical && scripts/validate-survivor-cache-historical", "status": "PASS"},
+    {"name": "research queue v3", "command": "scripts/validate-research-queue --require-ready", "status": "PASS", "selected_item": "SURVIVOR-THREAD-CONFIG-REGRESSION-1"},
+    {"name": "declaration-validation catalog", "command": "scripts/validate-declaration-validation-catalog", "status": "PASS"},
+    {"name": "declaration-validation history", "command": "scripts/validate-declaration-validation-historical", "status": "PASS"},
+    {"name": "full current and frozen suite", "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 870, "frozen_publication_tests": 73},
+    {"name": "publication historical snapshot", "command": "scripts/validate-publication-study-snapshot --require-full-payload --tests", "status": "PASS", "tests": 73},
+    {"name": "current-state refresh", "command": "scripts/refresh-current-state", "status": "PASS", "log_directory": "results/workflow-refresh/20260909T031236245663Z"},
+    {"name": "project review freshness", "command": "scripts/build-project-review --check", "status": "PASS"},
+    {"name": "artifact graph freshness", "command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "current": 174, "historical": 10, "superseded": 4},
+    {"name": "whitespace and conflict markers", "command": "git diff --check", "status": "PASS"}
+  ],
+  "result_limits": "Validation confirms the bounded source result, exact one-row scoped registry transition, historical preservation and generated-state freshness. It does not claim a corpus kill, checker execution, general one-thread equivalence, semantic authority or production impact."
+}

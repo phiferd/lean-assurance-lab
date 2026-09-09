@@ -1,0 +1,9 @@
+#!/usr/bin/env python3
+from pathlib import Path
+import json
+import sys
+
+sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
+from lib.survivor_thread_config_reachability import validate
+
+print(json.dumps(validate(Path(__file__).resolve().parents[1]), sort_keys=True))

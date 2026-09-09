@@ -1,0 +1,114 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "transition": "PUBLIC_THREAD_CONFIG_TRACE_TO_SCOPED_MEANINGFUL_ADMISSION",
+  "historical_snapshot": "336172a",
+  "historical_queue": {
+    "path": "config/research-queue.json",
+    "sha256": "a93ceeb9ed11887b3e4f1787a831bfb59cc1356c79c05e737e3aebc35762bec5"
+  },
+  "historical_status": {
+    "path": "docs/RESEARCH_STATUS.md",
+    "sha256": "622f2ba71912d1e00e84cdba10f132417ca02e352ebe4a0aeac65048c6b080d7"
+  },
+  "historical_fvar_manifest": {
+    "path": "results/research/survivor-fvar-reachability-1/evidence-manifest.json",
+    "sha256": "99f022531e3a4ec9670cf06d116d76366662873844bf2b2fa581ca886295ec8e"
+  },
+  "historical_work_record": {
+    "path": "results/research/survivor-thread-config-reachability-1/work-record.json",
+    "sha256": "53bfc9f611ea23ed78d686473ba895db67a6e8689de5f876e12b0f76df93abf2"
+  },
+  "historical_entry_decision": {
+    "path": "results/research/survivor-thread-config-reachability-1/entry-decision.json",
+    "sha256": "8a4dacb53cfd3dcd480882f476238a3d0d2e84cf7a60985c1e25e0dd749807d4"
+  },
+  "predecessor_registry": {
+    "path": "results/mutants/registry.jsonl",
+    "lines": 609,
+    "sha256": "9f38a528bec31f358009cf7f3c00f4f8d6779dc07dbd3371271ff3e4801eac10"
+  },
+  "entry_assurance": {
+    "path": "results/assurance/current.json",
+    "sha256": "1bce4225a581982fc6ddf9dc91c3457580cde6ddb410003bd1005f13477c9064",
+    "pending_survivors": 4,
+    "meaningful_survivors": 3,
+    "equivalent_mutants": 14
+  },
+  "survivor_inventory": {
+    "path": "results/survivors/inventory.jsonl",
+    "lines": 1,
+    "sha256": "c7e552e761f128e9911abeb6cc85cf1d4b7c48d6ed03798d574a0ace688f2458"
+  },
+  "evolved_live_tooling": [
+    {
+      "path": "lib/survivor_fvar_reachability.py",
+      "historical_sha256": "905aa651026f41dead29506b01f348b9ec7b2294465a69a4fb304c634f0a15d6",
+      "reason": "Validate the frozen fvar closure through its exact closure snapshot while allowing later registry rows."
+    },
+    {
+      "path": "lib/survivor_fvar_reachability_historical.py",
+      "historical_sha256": "a13503090632bb88dd293e7566c055911f9bc35e81fee89cf3d0b08abf755171",
+      "reason": "Preserve the fvar admission and advance only live successor and assurance assertions."
+    },
+    {
+      "path": "tests/test_survivor_fvar_reachability_historical.py",
+      "historical_sha256": "3488b40e9880739841b29c644bbef36e142ad6df79d1512bc9d2254b25545d63",
+      "reason": "Advance live registry and successor counts without changing frozen fvar evidence."
+    },
+    {
+      "path": "lib/survivor_universe_equivalence_historical.py",
+      "historical_sha256": "c1af05e1ceecb52ef57b914160ef0b3027170a4288a632c8bd731de70f326eb6",
+      "reason": "Advance only the universe closure's live successor and assurance assertions."
+    },
+    {
+      "path": "tests/test_survivor_universe_equivalence_historical.py",
+      "historical_sha256": "dc638f99f4dfa3551c5112c59f870ff6d3b0f977099e4eb66b76044df18649ed",
+      "reason": "Keep the universe historical test synchronized with the authorized live successor."
+    },
+    {
+      "path": "lib/survivor_universe_diff_historical.py",
+      "historical_sha256": "e27587722e9650790f02fa57f11f8d4aebd058dbe3f6060a38d2bb294c53ce41",
+      "reason": "Advance only the old reachability closure's live queue assertion."
+    },
+    {
+      "path": "tests/test_survivor_universe_diff_historical.py",
+      "historical_sha256": "76f99c2c2bfbf42001b034e05e363c0e8a5405c9fd7f63b406bb6e8665ecd41f",
+      "reason": "Keep the old reachability test synchronized with the new successor."
+    },
+    {
+      "path": "lib/survivor_cache_historical.py",
+      "historical_sha256": "c0a62bbba54e5d0592a41dd4542c1be04f3fc871798c212478c8aed27db74631",
+      "reason": "Advance only the oldest cache closure's live queue assertion."
+    },
+    {
+      "path": "tests/test_survivor_cache_historical.py",
+      "historical_sha256": "3613ed1c902c32c29a581aed16953c7f10a2447da3628681b76bf0d6eb06d77b",
+      "reason": "Keep the oldest closure test synchronized with the regression successor."
+    },
+    {
+      "path": "tests/test_current_assurance.py",
+      "historical_sha256": "ae36f7ccf4d74fb1c909f3b4254071f5b8d7b593d80ed894567b95a4eb5dfc6e",
+      "reason": "Advance exact pending and meaningful-survivor totals after one scoped admission."
+    },
+    {
+      "path": "scripts/build-artifact-graph",
+      "historical_sha256": "7c39d4ac3e06ab80df99dfa54198d8b3265bd0a7574ad2515efa1808cc52090c",
+      "reason": "Register the new classification and preserve explicit registry dependencies in the live graph."
+    }
+  ],
+  "live_expectation": {
+    "completed_item": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+    "selected_item": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+    "registry_append_count": 1,
+    "registry_mutation_id": "nanoda-gen-93b21593b0d8",
+    "registry_classification": "MEANINGFUL_SEMANTIC",
+    "pending_survivors_before": 4,
+    "pending_survivors_after": 3,
+    "meaningful_survivors_before": 3,
+    "meaningful_survivors_after": 4,
+    "equivalent_mutants": 14,
+    "survivor_inventory_changed": false
+  },
+  "claim": "The 609-line registry, fvar closure manifest, active entry queue/status, work record and entry decision validate unchanged at the exact entry snapshot. Current state adds one scoped MEANINGFUL_SEMANTIC row for the zero-thread negated predicate, preserves the separate one-thread unresolved classification and one-line survivor inventory, completes only this item and selects the fixed regression without starting it."
+}

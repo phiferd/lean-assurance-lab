@@ -12,9 +12,9 @@ class UniverseEquivalenceHistoricalTests(unittest.TestCase):
         result = validate(ROOT)
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["registry_predecessor_lines"], 607)
-        self.assertEqual(result["registry_successor_lines"], 609)
-        self.assertEqual(result["current_successor"], "SURVIVOR-THREAD-CONFIG-REACHABILITY-1")
-        self.assertEqual(result["pending_survivors"], 4)
+        self.assertEqual(result["registry_successor_lines"], 610)
+        self.assertEqual(result["current_successor"], "SURVIVOR-THREAD-CONFIG-REGRESSION-1")
+        self.assertEqual(result["pending_survivors"], 3)
         self.assertEqual(result["equivalent_mutants"], 14)
 
 

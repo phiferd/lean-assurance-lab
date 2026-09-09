@@ -12,7 +12,7 @@ class SurvivorCacheHistoricalTests(unittest.TestCase):
         result = validate(ROOT)
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["historical_successor"], "SURVIVOR-CACHE-EXPORT-1")
-        self.assertEqual(result["current_successor"], "SURVIVOR-THREAD-CONFIG-REACHABILITY-1")
+        self.assertEqual(result["current_successor"], "SURVIVOR-THREAD-CONFIG-REGRESSION-1")
 
 
 if __name__ == "__main__":

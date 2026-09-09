@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-CONFIG-REACHABILITY-1",
+  "outcome": "SUCCESS",
+  "finding": "PUBLIC_ZERO_THREAD_CHECK_ELISION_AND_ONE_THREAD_OPERATIONAL_BOUNDARY",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "assessment": {
+    "path": "results/research/survivor-thread-config-reachability-1/dispatch-assessment.json",
+    "sha256": "416eab29fbbb439ae801b0f1899eba25511549d7c015b7448015496a6864c29e"
+  },
+  "registry_transition": {
+    "path": "results/mutants/registry.jsonl",
+    "predecessor_lines": 609,
+    "successor_lines": 610,
+    "predecessor_sha256": "9f38a528bec31f358009cf7f3c00f4f8d6779dc07dbd3371271ff3e4801eac10",
+    "successor_sha256": "7d89a43c8e695617e648037e32a2332f5f81c444a9c6ef1ff05752bdc8ed9b7e",
+    "appended_mutation_id": "nanoda-gen-93b21593b0d8",
+    "appended_classification": "MEANINGFUL_SEMANTIC"
+  },
+  "mutation_results": [
+    {
+      "mutation_id": "nanoda-gen-93b21593b0d8",
+      "finding": "PUBLIC_ZERO_THREAD_DECLARATION_CHECK_ELISION",
+      "classification": "MEANINGFUL_SEMANTIC",
+      "classification_changed": true,
+      "corpus_kill": false
+    },
+    {
+      "mutation_id": "nanoda-gen-2bdfe18a9ec2",
+      "finding": "PUBLIC_ONE_THREAD_OPERATIONAL_DISTINCTION",
+      "classification": "SURVIVED_WITHOUT_WITNESS",
+      "classification_changed": false,
+      "corpus_kill": false
+    }
+  ],
+  "assurance_transition": {
+    "pending_survivors_before": 4,
+    "pending_survivors_after": 3,
+    "meaningful_survivors_before": 3,
+    "meaningful_survivors_after": 4,
+    "equivalent_mutants": 14,
+    "modeled_mutation_score_numerator": 135,
+    "modeled_mutation_score_denominator": 142
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3000,
+    "offline_build_launches": 0,
+    "checker_launches": 0,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "recommendation": {
+    "action": "Execute one fixed zero-thread baseline/mutant regression using the existing 21ef candidate and control bytes; preserve the one-thread mutation as unresolved unless a separately bound stack, spawn or panic-sensitive witness closes it.",
+    "target": "nanoda-gen-93b21593b0d8 at pinned Nanoda tc.rs:147",
+    "priority": "HIGH_LOCAL_NEXT",
+    "prerequisites": [
+      "Freeze zero-thread configuration bytes, the existing candidate/control hashes, expected outcomes, baseline and mutant identities, runtime and strict process accounting before launch.",
+      "Run controls before candidates and do not create a new export-byte variant.",
+      "Do not infer semantic authority or an upstream defect from the mutant distinction."
+    ],
+    "external_action": "NO_ACTION_BEFORE_REGRESSION",
+    "evidence": [
+      "results/research/survivor-thread-config-reachability-1/dispatch-assessment.json",
+      "results/research/survivor-thread-config-reachability-1/historical-transition.json",
+      "results/mutants/registry.jsonl"
+    ]
+  },
+  "next_item": "SURVIVOR-THREAD-CONFIG-REGRESSION-1",
+  "next_item_started": false
+}
