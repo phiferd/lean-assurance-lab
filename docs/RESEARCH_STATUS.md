@@ -2511,9 +2511,9 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-THREAD-CONFIG-REACHABILITY-1`.
 
-The item is READY and unstarted. Its future source-only execution is bounded to
-3,600 active seconds with zero build, checker, proof, network, scientific-byte,
-mutation-identity or external-action launches.
+The item is ACTIVE under its bound work record. Its source-only execution is
+bounded to 3,600 active seconds with zero build, checker, proof, network,
+scientific-byte, mutation-identity or external-action launches.
 
 Queue handoff: EXECUTABLE.
 
@@ -2528,8 +2528,8 @@ next as the last novel declaration-validation survivor mechanism. Cache
 predicate alternatives share one already characterized internal distinction and
 bounded exported-reachability boundary, transfer still lacks independently
 curated input, original conditional-validation prerequisites remain unmet, and
-no fresh upstream or maintenance trigger displaces this local work. Selection
-does not start the successor.
+no fresh upstream or maintenance trigger displaces this local work. The owner's
+request to execute the next plan starts this item only.
 
 ### Waiting
 
