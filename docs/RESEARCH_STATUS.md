@@ -70,7 +70,10 @@ research directions.
   preserve the exact recommendation. The [evidence-linked draft successor](../results/action-recommendations/drafts/nanoda-literal-hash-test-nonvacuity-evidence-v2.md)
   references immutable repository evidence while retaining the content-bound
   original unchanged; its [successor record](../results/research/nanoda-test-nonvacuity-1/recommendation-successor.json)
-  binds the paths and hashes. `ARENA-LET-REGRESSION-1` is selected READY
+  binds the paths and hashes. With owner authorization, the evidence-linked
+  repair was submitted as [Nanoda PR #33](https://github.com/ammkrn/nanoda_lib/pull/33);
+  the [submission record](../results/research/nanoda-test-nonvacuity-1/external-submission-record.json)
+  preserves the exact source revision, preflight and fresh validation. `ARENA-LET-REGRESSION-1` is selected READY
   and unstarted.
 
 - Completed `CONTRIBUTION-PORTFOLIO-REVIEW-1` on 2026-09-09 with
