@@ -2532,11 +2532,12 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-THREAD-CONFIG-REGRESSION-1`.
 
-The item is READY and unstarted. Before any launch it must bind and commit the
-existing candidate/control bytes, zero-thread configurations, expected outcomes,
-exact runtime identities and tested accounting controls. Its future bound is at
-most two offline builds and four checker launches with zero network, Lean proof,
-new export byte, mutation identity or external action.
+The item is ACTIVE under its bound work record. Before any launch it must bind
+and commit the existing candidate/control bytes, zero-thread configurations,
+expected outcomes, exact runtime identities and tested accounting controls. Its
+bound is at most two offline builds and four checker launches with zero network,
+Lean proof, new export byte, mutation identity or external action. All launches
+remain forbidden until that prelaunch checkpoint is committed.
 
 Queue handoff: EXECUTABLE.
 
@@ -2545,13 +2546,13 @@ has an exact public zero-worker check-elision path, while the relational-boundar
 predicate retains a one-worker operational boundary rather than an unsupported
 equivalence claim.
 
-The project-wide closure review ranks the fixed zero-thread regression next
+The project-wide closure review selected the fixed zero-thread regression
 because it converts the strongest source result into reproducible executable
 evidence using existing export bytes. The one-thread predicate needs a more
 specialized resource witness, cache alternatives overlap an already bounded
 route, transfer still lacks independently curated input, and no fresh upstream
-or maintenance trigger displaces this local work. Selection does not start the
-successor.
+or maintenance trigger displaces this local work. The owner's request to
+execute the next plan starts only this item.
 
 ### Waiting
 
