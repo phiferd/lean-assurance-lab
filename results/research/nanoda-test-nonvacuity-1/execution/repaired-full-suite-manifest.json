@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-TEST-NONVACUITY-1",
+  "cell_id": "REPAIRED-FULL-SUITE-PASS",
+  "prepared_at": "2026-09-09T14:07:24Z",
+  "prepared_after_commit": "7f76023a500de27a23cf0542e167d52fd28846b6",
+  "source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+    "detached_checkout": "/private/tmp/nanoda-test-nonvacuity-final.LUnDM6/checkout",
+    "checkout_state": "Only src/tests/util.rs differs from the exact source revision. The diff is byte-identical to the bound final patch.",
+    "source_lock": "results/research/nanoda-test-nonvacuity-1/source-lock.json"
+  },
+  "patch": {
+    "path": "results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch",
+    "bytes": 3191,
+    "sha256": "9bdc3700d1d35ba464323e049855b1e0b87cf8a4fb5a026b85ff5d1ae492a0df",
+    "resulting_src_tests_util_git_blob": "87e4967d4b029ebabf40d3b1e8dc8069b2a64da8"
+  },
+  "focused_evidence": {
+    "manifest": "results/research/nanoda-test-nonvacuity-1/execution/repaired-focused-manifest.json",
+    "manifest_sha256": "2bd50334d5f23484f7d2f1ade780427f5064a6f73b825a0143aecc037587b962",
+    "receipt": "results/research/nanoda-test-nonvacuity-1/execution/repaired-focused-receipt.json",
+    "receipt_sha256": "5627c924f3d4f36fd360d095fb29312a1e4a7e8e7c59c5e7b6b8c9b5d948d3d8"
+  },
+  "tooling": {
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "dependency_mode": "--offline --locked",
+    "reused_target_cache": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target"
+  },
+  "invocation": ["perl", "-e", "alarm shift; exec @ARGV", "120", "cargo", "test", "--offline", "--locked"],
+  "payload_invocation": ["cargo", "test", "--offline", "--locked"],
+  "environment": {
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib/target",
+    "RUST_BACKTRACE": "0"
+  },
+  "timeout_seconds": 120,
+  "timeout_controller": "Perl alarm persists across exec and terminates the cargo process after 120 wall-clock seconds.",
+  "expected": {
+    "exit": 0,
+    "lib_tests_passed": 38,
+    "lib_tests_failed": 0,
+    "meaning": "The exact final test-only patch preserves the complete current upstream test suite."
+  },
+  "accounting_before": {
+    "active_seconds_charged_conservatively": 2700,
+    "read_only_or_setup_requests": 2,
+    "builds_including_compiling_tests": 2,
+    "test_processes": 2,
+    "remaining_builds": 1,
+    "remaining_test_processes": 2
+  },
+  "reservation": {
+    "build_number": 3,
+    "test_process_number": 3,
+    "counts_even_on_failure": true
+  }
+}
