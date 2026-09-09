@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-PREDICATE-TRANSFER-1",
+  "question": "Does the scoped internal cache-contract distinction recorded for nanoda-gen-3365809b3c41 transfer to nanoda-gen-af1dac9744e9 without a new scientific launch?",
+  "pinned_source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib",
+    "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "path": "src/tc.rs",
+    "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+    "function": "infer",
+    "line": 483,
+    "column": 11,
+    "replace_occurrence": 0,
+    "original": "flag == InferFlag::InferOnly"
+  },
+  "closed_domain": ["InferOnly", "Check"],
+  "candidate_predicates": [
+    {"mutation_id": "nanoda-gen-3365809b3c41", "expression": "(flag != InferFlag::InferOnly)", "verdict": "PENDING"},
+    {"mutation_id": "nanoda-gen-af1dac9744e9", "expression": "!(flag == InferFlag::InferOnly)", "verdict": "PENDING"}
+  ],
+  "admission_gates": [
+    {"id": "IDENTITY", "requirement": "Both mutation identities verify from their recorded identity algorithm and exact fields.", "verdict": "PENDING"},
+    {"id": "OCCURRENCE", "requirement": "Both specifications replace occurrence zero of the same original expression at the same pinned source function, file, line and column.", "verdict": "PENDING"},
+    {"id": "PREDICATE_EQUIVALENCE", "requirement": "The two mutated predicates return the same Boolean for every source-defined InferFlag value.", "verdict": "PENDING"},
+    {"id": "OBSERVER_INPUT_SCOPE", "requirement": "The prior internal witness, controls, source revision, cache state transition and outcome predicate apply unchanged; exported-input reachability is not imported.", "verdict": "PENDING"},
+    {"id": "HISTORICAL_PRESERVATION", "requirement": "Every prior observation and its original tooling/evidence binding remains unchanged; any canonical state change is append-only.", "verdict": "PENDING"}
+  ],
+  "decisions": [
+    {"outcome": "TRANSFER_SUPPORTED", "condition": "All five admission gates are PASS.", "effect": "Recommend only the same scoped internal cache-contract behavioral classification for the second identity; make no exported-input or semantic-authority claim."},
+    {"outcome": "TRANSFER_PREMISE_FALSIFIED", "condition": "IDENTITY, OCCURRENCE, PREDICATE_EQUIVALENCE or OBSERVER_INPUT_SCOPE is FAIL.", "effect": "Preserve both histories and report the exact mismatch without transferring the result."},
+    {"outcome": "BOUNDED_UNRESOLVED", "condition": "Any required gate cannot be mechanically decided within the fixed local-inspection budget.", "effect": "Preserve both histories and name the missing binding or semantic fact."}
+  ],
+  "authority_limits": [
+    "LLM reasoning, test consensus and checker consensus are not semantic authority.",
+    "The prior internal harness does not establish exported-input reachability or production impact.",
+    "No new scientific byte, build, checker, proof, mutation identity, network request or external action is permitted."
+  ]
+}

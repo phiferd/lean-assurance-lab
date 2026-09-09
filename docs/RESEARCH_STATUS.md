@@ -2567,14 +2567,14 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SURVIVOR-CACHE-PREDICATE-TRANSFER-1`.
 
-The item is READY and unstarted. Before analysis it must commit a bounded work
-record, both mutation specifications, exact pinned source and `InferFlag`
-semantics, prior cache-contract evidence and a transfer rubric. It may transfer
-the earlier scoped result only if predicate equivalence, replacement occurrence
-and observer/input scope all match mechanically. One 60-minute source/evidence
-session and eight local inspections are available; network, builds, checkers,
-proofs, new scientific bytes, mutation identities and external actions are all
-zero.
+The item is ACTIVE at its committed entry checkpoint. Its bounded work record
+binds both mutation specifications, the exact pinned source and two-value
+`InferFlag` domain, prior cache-contract evidence, current canonical registry
+and a finite transfer rubric. Four of eight local inspections are consumed and
+600 active seconds are charged conservatively before analysis. Network, builds,
+checkers, proofs, new scientific bytes, mutation identities and external
+actions are all zero. Scientific transfer analysis starts only after this
+checkpoint is committed.
 
 Queue handoff: EXECUTABLE.
 

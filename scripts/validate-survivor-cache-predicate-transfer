@@ -1,0 +1,74 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import subprocess
+from pathlib import Path
+
+
+def load(path: Path):
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def validate(root: Path) -> None:
+    base = root / "results/research/survivor-cache-predicate-transfer-1"
+    work = load(base / "work-record.json")
+    rubric = load(base / "transfer-rubric.json")
+    if work["item_id"] != "SURVIVOR-CACHE-PREDICATE-TRANSFER-1" or work["frontier_id"] != "F-SURVIVOR-CACHE-PREDICATE-TRANSFER":
+        raise ValueError("work-record identity mismatch")
+    if work["status"] not in {"ACTIVE", "COMPLETE"}:
+        raise ValueError("work-record status must be ACTIVE or COMPLETE")
+    budget = work["budget"]
+    if budget["active_seconds"] != 3600 or budget["sessions"] != 1 or budget["local_source_or_evidence_inspections"] != 8:
+        raise ValueError("fixed work budget changed")
+    for key in ("network_requests", "builds", "checker_launches", "lean_proof_launches", "new_scientific_byte_variants", "new_mutation_identities", "external_actions"):
+        if budget[key] != 0 or work["consumed_at_entry"][key] != 0:
+            raise ValueError(f"zero-execution bound violated: {key}")
+    if work["consumed_at_entry"]["local_source_or_evidence_inspections"] != len(work["entry_inspections"]):
+        raise ValueError("entry inspection accounting mismatch")
+    if len(work["entry_inspections"]) > budget["local_source_or_evidence_inspections"]:
+        raise ValueError("entry inspection budget exceeded")
+    seen = set()
+    for row in work["entry_bindings"]:
+        if set(row) != {"path", "bytes", "sha256"} or row["path"] in seen:
+            raise ValueError("invalid or duplicate entry binding")
+        seen.add(row["path"])
+        if row["path"] in {"config/research-queue.json", "docs/RESEARCH_STATUS.md"}:
+            data = subprocess.check_output(
+                ["git", "-C", str(root), "show", f"{work['base_commit']}:{row['path']}"]
+            )
+        else:
+            data = (root / row["path"]).read_bytes()
+        if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
+            raise ValueError(f"entry binding mismatch: {row['path']}")
+    required = {
+        "mutations/nanoda-gen-3365809b3c41.json",
+        "mutations/nanoda-gen-af1dac9744e9.json",
+        "results/research/survivor-cache-1/result.json",
+        "results/research/survivor-cache-export-1/result.json",
+        "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+        "results/mutants/registry.jsonl",
+    }
+    if not required.issubset(seen):
+        raise ValueError("required scientific binding omitted")
+    if rubric["item_id"] != work["item_id"] or rubric["closed_domain"] != ["InferOnly", "Check"]:
+        raise ValueError("transfer rubric identity or domain mismatch")
+    if [row["mutation_id"] for row in rubric["candidate_predicates"]] != ["nanoda-gen-3365809b3c41", "nanoda-gen-af1dac9744e9"]:
+        raise ValueError("transfer rubric mutation order changed")
+    gate_ids = [row["id"] for row in rubric["admission_gates"]]
+    if gate_ids != ["IDENTITY", "OCCURRENCE", "PREDICATE_EQUIVALENCE", "OBSERVER_INPUT_SCOPE", "HISTORICAL_PRESERVATION"]:
+        raise ValueError("transfer rubric gates changed")
+    queue = load(root / "config/research-queue.json")
+    item = next(row for row in queue["items"] if row["id"] == work["item_id"])
+    if work["status"] == "ACTIVE" and item["status"] != "ACTIVE":
+        raise ValueError("active work-record disagrees with queue")
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    args = parser.parse_args()
+    validate(args.root.resolve())
+    print("survivor cache predicate transfer evidence: valid")
