@@ -16,7 +16,7 @@ class NanodaZeroThreadUpstreamClosureTests(unittest.TestCase):
     def test_complete_closure_passes(self):
         result = validate(ROOT)
         self.assertEqual(result["gate_decision"], "NO_GO")
-        self.assertEqual(result["selected_item"], "SURVIVOR-CACHE-PREDICATE-TRANSFER-1")
+        self.assertEqual(result["selected_item"], "SURVIVOR-THREAD-ONE-DETERMINISM-1")
 
 
 if __name__ == "__main__":

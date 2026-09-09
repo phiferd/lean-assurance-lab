@@ -11,7 +11,7 @@ class SurvivorThreadConfigRegressionHistoricalTests(unittest.TestCase):
         result = validate(ROOT)
         self.assertEqual(result["frozen_regression_outcome"], "SUCCESS")
         self.assertEqual(result["readiness_gate_decision"], "NO_GO")
-        self.assertEqual(result["selected_item"], "SURVIVOR-CACHE-PREDICATE-TRANSFER-1")
+        self.assertEqual(result["selected_item"], "SURVIVOR-THREAD-ONE-DETERMINISM-1")
 
 
 if __name__ == "__main__":

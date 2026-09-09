@@ -12,6 +12,7 @@ from lib.research_queue_v3 import load_queue
 ITEM = "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
 GE_MUTANT = "nanoda-gen-2bdfe18a9ec2"
 NEG_MUTANT = "nanoda-gen-93b21593b0d8"
+TRANSFERRED_CACHE_MUTANT = "nanoda-gen-af1dac9744e9"
 SNAPSHOT = "336172a83fc6c2c8896aa107637f3a7924bea34a"
 FVAR_CLOSURE_SNAPSHOT = "87eadcc83e89439388b17997af50a207936ebe5a"
 TRANSITION = f"results/research/survivor-thread-config-reachability-1/historical-transition.json"
@@ -125,9 +126,11 @@ def validate(root: Path) -> dict:
     }, "live transition expectation drift")
     current_registry = (root / REGISTRY).read_bytes()
     require(current_registry.startswith(old_registry)
-            and len(current_registry.splitlines()) == 610,
-            "current registry is not the exact one-row successor")
-    appended = json.loads(current_registry[len(old_registry):].decode("utf-8"))
+            and len(current_registry.splitlines()) >= 610,
+            "current registry no longer preserves the exact thread append")
+    appended = json.loads(
+        current_registry[len(old_registry):].splitlines(keepends=True)[0].decode("utf-8")
+    )
     require(appended["id"] == NEG_MUTANT and appended["status"] == "SURVIVED"
             and appended["classification"] == expectation["registry_classification"],
             "current registry append classification drift")
@@ -136,7 +139,9 @@ def validate(root: Path) -> dict:
         row = json.loads(line)
         latest[row["id"]] = {**latest.get(row["id"], {}), **row}
     require(latest[GE_MUTANT]["classification"] == "SURVIVED_WITHOUT_WITNESS"
-            and latest[NEG_MUTANT]["classification"] == "MEANINGFUL_SEMANTIC",
+            and latest[NEG_MUTANT]["classification"] == "MEANINGFUL_SEMANTIC"
+            and latest[TRANSFERRED_CACHE_MUTANT]["classification"]
+            == "MEANINGFUL_SEMANTIC",
             "live registry lost the split thread classification")
     require((root / INVENTORY).read_bytes() == old_inventory,
             "current survivor inventory changed")
@@ -152,24 +157,26 @@ def validate(root: Path) -> dict:
             "current queue does not preserve and advance the thread-config successor")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]
-    require(pending["count"] == 3 and GE_MUTANT in pending["mutant_ids"]
+    require(pending["count"] == 2 and GE_MUTANT in pending["mutant_ids"]
             and NEG_MUTANT not in pending["mutant_ids"]
-            and current_assurance["mutation_testing"]["meaningful_survivors"] == 4
+            and TRANSFERRED_CACHE_MUTANT not in pending["mutant_ids"]
+            and current_assurance["mutation_testing"]["meaningful_survivors"] == 5
             and current_assurance["mutation_testing"]["equivalent_mutants"] == 14,
             "current assurance did not apply the split thread classification")
     report = json.loads(
         (root / "results/assurance/current-mutation-report.json").read_text()
     )
     require(report["classified_equivalent"] == 14
-            and report["survived_without_witness"] == 3
-            and report["meaningful_survivors"] == 4
+            and report["survived_without_witness"] == 2
+            and report["meaningful_survivors"] == 5
             and report["modeled_mutation_score_denominator"] == 142
             and report["modeled_mutation_score"] == 135 / 142,
             "current mutation metrics disagree with the scoped admission")
     return {
         "status": "PASS", "historical_snapshot": SNAPSHOT,
         "historical_manifest_inputs": len(old_inputs),
-        "registry_predecessor_lines": 609, "registry_successor_lines": 610,
+        "registry_predecessor_lines": 609,
+        "registry_successor_lines": len(current_registry.splitlines()),
         "current_successor": current["selected_item"],
         "current_successor_status": current_by_id[current["selected_item"]]["status"],
         "pending_survivors": pending["count"],

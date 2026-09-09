@@ -148,17 +148,18 @@ def validate(root: Path) -> dict:
             "current queue does not preserve and advance the fvar successor")
     current_assurance = json.loads((root / "results/assurance/current.json").read_text())
     pending = current_assurance["mutation_testing"]["pending_survivor_triage"]
-    require(pending["count"] == 3 and MUTANT not in pending["mutant_ids"]
+    require(pending["count"] == 2 and MUTANT not in pending["mutant_ids"]
             and "nanoda-gen-93b21593b0d8" not in pending["mutant_ids"]
+            and "nanoda-gen-af1dac9744e9" not in pending["mutant_ids"]
             and current_assurance["mutation_testing"]["equivalent_mutants"] == 14
-            and current_assurance["mutation_testing"]["meaningful_survivors"] == 4,
+            and current_assurance["mutation_testing"]["meaningful_survivors"] == 5,
             "current assurance did not admit scoped fvar equivalence")
     report = json.loads(
         (root / "results/assurance/current-mutation-report.json").read_text()
     )
     require(report["classified_equivalent"] == 14
-            and report["survived_without_witness"] == 3
-            and report["meaningful_survivors"] == 4
+            and report["survived_without_witness"] == 2
+            and report["meaningful_survivors"] == 5
             and report["modeled_mutation_score_denominator"] == 142
             and report["modeled_mutation_score"] == 135 / 142,
             "current mutation report metrics disagree with the one-row admission")

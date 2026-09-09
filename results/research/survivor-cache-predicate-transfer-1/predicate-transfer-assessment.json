@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-PREDICATE-TRANSFER-1",
+  "finding": "EXACT_PREDICATE_AND_OBSERVER_SCOPE_TRANSFER",
+  "pinned_source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib",
+    "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "source_tree_sha256": "591e0cc3b98273c42b8125d8719af5c0caaed800e333dc7f8499ac8cb1ad46c8",
+    "path": "src/tc.rs",
+    "bytes": 56602,
+    "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc",
+    "function": "infer",
+    "line": 483,
+    "column": 11,
+    "replace_occurrence": 0,
+    "original": "flag == InferFlag::InferOnly"
+  },
+  "identity_proofs": [
+    {
+      "mutation_id": "nanoda-gen-3365809b3c41",
+      "algorithm": "sha256(source-file,NUL,line,NUL,column,NUL,operator,NUL,original,NUL,mutated)",
+      "inputs": ["src/tc.rs", "483", "11", "REL_EQ_TO_NE", "flag == InferFlag::InferOnly", "(flag != InferFlag::InferOnly)"],
+      "recorded_sha256": "3365809b3c41e7ecfe6b45c7ad584ea51840ea44ba80957943fb0da8baddb34f",
+      "recomputed_sha256": "3365809b3c41e7ecfe6b45c7ad584ea51840ea44ba80957943fb0da8baddb34f",
+      "verdict": "PASS"
+    },
+    {
+      "mutation_id": "nanoda-gen-af1dac9744e9",
+      "algorithm": "sha256(source-file,NUL,line,NUL,column,NUL,operator,NUL,original,NUL,mutated)",
+      "inputs": ["src/tc.rs", "483", "11", "BOOL_NEGATE", "flag == InferFlag::InferOnly", "!(flag == InferFlag::InferOnly)"],
+      "recorded_sha256": "af1dac9744e9777f57b4ea7376aa1097078aaa2910bcbfd31a09d9e389fc547d",
+      "recomputed_sha256": "af1dac9744e9777f57b4ea7376aa1097078aaa2910bcbfd31a09d9e389fc547d",
+      "verdict": "PASS"
+    }
+  ],
+  "occurrence_comparison": {
+    "fields": ["function", "source_file", "source_span", "source_column", "replace_occurrence", "original"],
+    "left": ["infer", "src/tc.rs", "483", 11, 0, "flag == InferFlag::InferOnly"],
+    "right": ["infer", "src/tc.rs", "483", 11, 0, "flag == InferFlag::InferOnly"],
+    "verdict": "PASS"
+  },
+  "infer_flag_domain": {
+    "source_definition": "#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)] enum InferFlag { InferOnly, Check }",
+    "closed_values": ["InferOnly", "Check"],
+    "other_values_possible_in_pinned_source": false
+  },
+  "predicate_truth_table": [
+    {"flag": "InferOnly", "original": true, "nanoda-gen-3365809b3c41": false, "nanoda-gen-af1dac9744e9": false, "mutants_equal": true},
+    {"flag": "Check", "original": false, "nanoda-gen-3365809b3c41": true, "nanoda-gen-af1dac9744e9": true, "mutants_equal": true}
+  ],
+  "predicate_equivalence": {
+    "scope": "Every value of the pinned source's closed InferFlag enum at the exact replacement occurrence.",
+    "verdict": "PASS",
+    "reason": "For equality-comparable enum values, flag != InferOnly and !(flag == InferOnly) are Boolean complements of the same equality predicate; the exhaustive table agrees."
+  },
+  "observer_input_scope": {
+    "prior_item": "SURVIVOR-CACHE-1",
+    "prior_finding": "INTERNAL_CACHE_CONTRACT_DISTINCTION",
+    "source_revision_equal": true,
+    "source_occurrence_equal": true,
+    "cache_sequence": "The exact same TypeChecker first calls InferOnly on one expression pointer, then calls Check on that pointer with the warmed infer_cache_no_check entry.",
+    "controls": "Fresh baseline and mutant controls isolate the staged cache history.",
+    "transferred_observations": [
+      {"input": "control", "observer": "baseline", "classification": "TEST_PASS"},
+      {"input": "control", "observer": "mutant", "classification": "TEST_PASS"},
+      {"input": "candidate", "observer": "baseline", "classification": "TEST_PASS"},
+      {"input": "candidate", "observer": "mutant", "classification": "REGRESSION_FAILURE"}
+    ],
+    "verdict": "PASS",
+    "scope_limit": "The transfer is logical reuse of an existing exact internal harness result. It is not a new execution and does not establish ordinary exported-input reachability, acceptance of malformed export bytes, production impact, semantic authority or a corpus-level kill."
+  },
+  "covering_test_context": {
+    "nanoda-gen-3365809b3c41": {"executed": 184, "differences": 0, "status": "SURVIVED"},
+    "nanoda-gen-af1dac9744e9": {"executed": 184, "differences": 0, "status": "SURVIVED"},
+    "role": "Finite historical observation only; matching tests neither prove equivalence nor supply semantic authority."
+  },
+  "export_boundary": {
+    "prior_item": "SURVIVOR-CACHE-EXPORT-1",
+    "outcome": "BOUNDED_UNRESOLVED",
+    "finding": "ORDINARY_K_CARRIER_ORIGIN_AND_POINTER_IDENTITY_BOUNDARY",
+    "preserved": true,
+    "effect_on_transfer": "The internal distinction transfers, but its export-reachability limitation transfers unchanged as well."
+  },
+  "admission_gates": [
+    {"id": "IDENTITY", "verdict": "PASS"},
+    {"id": "OCCURRENCE", "verdict": "PASS"},
+    {"id": "PREDICATE_EQUIVALENCE", "verdict": "PASS"},
+    {"id": "OBSERVER_INPUT_SCOPE", "verdict": "PASS"},
+    {"id": "HISTORICAL_PRESERVATION", "verdict": "PASS"}
+  ],
+  "decision": {
+    "outcome": "TRANSFER_SUPPORTED",
+    "registry_append_count": 1,
+    "appended_mutation_id": "nanoda-gen-af1dac9744e9",
+    "appended_classification": "MEANINGFUL_SEMANTIC",
+    "status_retained": "SURVIVED",
+    "direct_mutation_id_unchanged": "nanoda-gen-3365809b3c41",
+    "direct_mutation_classification_unchanged": "SURVIVED_WITHOUT_WITNESS",
+    "scientific_pair_or_launch_used": false,
+    "corpus_kill_claimed": false,
+    "external_action": "NO_ACTION_SUPPORTED",
+    "next_item": "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 1800,
+    "local_source_or_evidence_inspections": 8,
+    "network_requests": 0,
+    "offline_builds": 0,
+    "checker_or_scientific_test_launches": 0,
+    "proof_launches": 0,
+    "new_scientific_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence_bindings": [
+    {"path": "mutations/nanoda-gen-3365809b3c41.json", "sha256": "c1af3a5fe559e4cf604b046c9b3dc37b9cebf599f05373789804f661c429e52c"},
+    {"path": "mutations/nanoda-gen-af1dac9744e9.json", "sha256": "dd22959ea500d85d0aa5ce9f4d2890a602725ffd483c1d8f1cc7f236d905704f"},
+    {"path": "results/mutants/nanoda-gen-3365809b3c41/scheduled-comparison.json", "sha256": "f5376b76f07facee8313d45035d6c67ef189db6bd66b396bfb87c87b02f31069"},
+    {"path": "results/mutants/nanoda-gen-af1dac9744e9/scheduled-comparison.json", "sha256": "03ce4f02094863f601a0cf8d2a734e15400cbd9cf68832e92d99f03f862ea953"},
+    {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs", "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"},
+    {"path": "results/research/survivor-cache-1/result.json", "sha256": "3f523c43cea1255c6e5cd642293bdf20d9cfae9288d6bcf4f8b49a8a0c38a2b2"},
+    {"path": "results/research/survivor-cache-1/evidence-manifest.json", "sha256": "52f42c8e26f0a138058378aa554c357446e28ce331b784f0a94acc2d5cbe9267"},
+    {"path": "results/research/survivor-cache-export-1/result.json", "sha256": "20d41078e549e9237afd62a082cfb5a55dc339ca86fee37b6ea764d5541d6ade"},
+    {"path": "results/research/survivor-cache-export-1/evidence-manifest.json", "sha256": "c7406b62ca9c8755542ade30f3bdc6f2b35a8735f240d616110ea06eb6d31a2a"}
+  ]
+}

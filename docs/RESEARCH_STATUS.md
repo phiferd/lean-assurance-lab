@@ -50,6 +50,23 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-CACHE-PREDICATE-TRANSFER-1` on 2026-09-09 with
+  `SUCCESS`. Both exact mutation identities recompute and replace the same
+  pinned `infer` cache-guard occurrence. On the complete two-value `InferFlag`
+  domain, `(flag != InferOnly)` and `!(flag == InferOnly)` are false for
+  `InferOnly` and true for `Check`, so the existing same-checker staged-cache
+  distinction transfers to `nanoda-gen-af1dac9744e9`. One append-only registry
+  row records `SURVIVED` / `MEANINGFUL_SEMANTIC` under that internal-only scope.
+  Ordinary exported-input reachability remains bounded unresolved; no corpus
+  kill, production impact or semantic authority is claimed. Pending survivors
+  move from three to two while the modeled 135/142 score and fourteen
+  equivalents remain unchanged. No network, build, checker, proof, scientific
+  byte, mutation identity or external action occurred. See the
+  [assessment](../results/research/survivor-cache-predicate-transfer-1/predicate-transfer-assessment.json),
+  [result](../results/research/survivor-cache-predicate-transfer-1/result.json),
+  and [report](../results/research/survivor-cache-predicate-transfer-1/report.md).
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted.
+
 - Completed `NANODA-ZERO-THREAD-UPSTREAM-READINESS-1` on 2026-09-09 with
   `SUCCESS` and a source-bound `NO_GO` for external action. Four bounded public
   GETs bound current `ammkrn/nanoda_lib` master to
@@ -2561,32 +2578,30 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-SURVIVOR-CACHE-PREDICATE-TRANSFER` — assess exact evidence transfer
-   between the two remaining pinned Nanoda `infer` cache-guard mutants under
-   [docs/research/SURVIVOR_CACHE_PREDICATE_TRANSFER_PLAN.md](research/SURVIVOR_CACHE_PREDICATE_TRANSFER_PLAN.md).
+1. `F-SURVIVOR-THREAD-ONE-DETERMINISM` — assess whether the remaining pinned
+   Nanoda one-thread dispatch survivor has a deterministic locally controllable
+   operational witness boundary under
+   [docs/research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md).
 
-Selected next item: `SURVIVOR-CACHE-PREDICATE-TRANSFER-1`.
+Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
 
-The item is ACTIVE at its committed entry checkpoint. Its bounded work record
-binds both mutation specifications, the exact pinned source and two-value
-`InferFlag` domain, prior cache-contract evidence, current canonical registry
-and a finite transfer rubric. Four of eight local inspections are consumed and
-600 active seconds are charged conservatively before analysis. Network, builds,
-checkers, proofs, new scientific bytes, mutation identities and external
-actions are all zero. Scientific transfer analysis starts only after this
-checkpoint is committed.
+The item is READY and unstarted. Before analysis it must commit a bounded work
+record, exact mutation/source/history bindings and a determinism rubric. Its
+one 60-minute source/evidence session permits at most eight local inspections
+and zero network, builds, checkers, proofs, new scientific bytes, mutation
+identities or external actions. A regression may not be frozen or executed
+unless this item first identifies a deterministic trigger and a later
+separately selected item binds exact controls and finite launch accounting.
 
 Queue handoff: EXECUTABLE.
 
-`NANODA-ZERO-THREAD-UPSTREAM-READINESS-1` closed with current-source `NO_GO`, so
-no Nanoda issue or regression proposal is supported. The project-wide review
-selects the cache-predicate transfer because `nanoda-gen-3365809b3c41` and
-`nanoda-gen-af1dac9744e9` replace the same pinned expression occurrence with
-apparently extensionally identical conditions, while the former already has a
-controlled internal witness. Exact reuse can resolve a pending survivor without
-new scientific execution if the premise holds. The remaining one-thread
-boundary is operational and nondeterministic, prospective transfer still lacks
-independent input, and historical CVC-4 gates remain unmet.
+`SURVIVOR-CACHE-PREDICATE-TRANSFER-1` closed with exact transfer support and one
+scoped classification append. The project-wide review selects the remaining
+one-thread operational boundary because it has a concrete serial/parallel split
+but no deterministic regression protocol. The direct cache survivor already
+has an internal distinction and a bounded unresolved ordinary-export boundary;
+prospective transfer still lacks independent input, historical CVC-4 gates
+remain unmet, and no substantive upstream maintenance trigger is recorded.
 
 ### Waiting
 

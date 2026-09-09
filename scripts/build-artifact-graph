@@ -1600,6 +1600,29 @@ def catalog() -> list[dict]:
             ),
         ),
         node(
+            "classification:nanoda-infer-cache-predicate-transfer",
+            "classification",
+            locator=files(
+                ".",
+                "results/research/survivor-cache-predicate-transfer-1/predicate-transfer-assessment.json",
+                "results/research/survivor-cache-predicate-transfer-1/result.json",
+                "results/research/survivor-cache-predicate-transfer-1/report.md",
+                "results/research/survivor-cache-predicate-transfer-1/historical-transition.json",
+            ),
+            dependencies=[
+                "validator:nanoda",
+                "comparison:semantic-mutants-current",
+                "mutation-model:nanoda",
+            ],
+            required=True,
+            notes=(
+                "Exact identity, occurrence and exhaustive two-value InferFlag analysis "
+                "transfer the prior same-checker internal cache distinction to the "
+                "extensionally identical predicate-negation mutant while preserving the "
+                "bounded unresolved exported-input boundary."
+            ),
+        ),
+        node(
             "classification:nanoda-imax-diff-boundary",
             "classification",
             locator=files(

@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-PREDICATE-TRANSFER-1",
+  "classification": "CLOSURE_VALIDATION_TOOLING_REPAIR",
+  "scientific_result_changed": false,
+  "initial_full_suite": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "exit_code": 1,
+    "current_suite_tests": 914,
+    "frozen_publication_tests": 73,
+    "frozen_publication_status": "PASS",
+    "errors": [
+      {
+        "test": "test_nanoda_zero_thread_upstream_closure.NanodaZeroThreadUpstreamClosureTests.test_complete_closure_passes",
+        "exception": "ValueError: canonical artifact differs: results/mutants/registry.jsonl"
+      },
+      {
+        "test": "test_survivor_thread_config_reachability.SurvivorThreadConfigReachabilityTests.test_public_dispatch_counterexample_and_boundary_are_split",
+        "exception": "ValueError: registry is not one exact append over the entry snapshot"
+      },
+      {
+        "test": "test_survivor_thread_config_regression_historical.SurvivorThreadConfigRegressionHistoricalTests.test_frozen_regression_survives_readiness_closure",
+        "exception": "ValueError: live maintenance transition differs"
+      }
+    ]
+  },
+  "cause": "Three predecessor validators compared later append-only registry or queue state directly with older closure expectations instead of validating the old state at its bound commit and the authorized live suffix separately.",
+  "repair": "Bind the predecessor closure artifacts to their existing immutable commits, require the exact 611-line live registry extension and current READY successor separately, and retain the earlier selected successor as COMPLETE rather than requiring it to remain selected.",
+  "targeted_validation": [
+    {"command": "scripts/validate-nanoda-zero-thread-upstream-closure", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-reachability-closure", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-reachability-historical", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-regression-historical", "status": "PASS"}
+  ],
+  "final_full_suite": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "completed_at": "2026-09-09T12:13:27Z",
+    "exit_code": 0,
+    "current_suite_tests": 914,
+    "current_suite_status": "PASS",
+    "frozen_publication_tests": 73,
+    "frozen_publication_status": "PASS"
+  },
+  "post_suite_generated_state_repair": {
+    "initial_command": "scripts/build-project-review --check",
+    "initial_exit_code": 1,
+    "initial_error": "project review is stale; run scripts/build-project-review --write",
+    "repair": "Regenerated the project review through its canonical builder, then ran a fresh full current-state refresh so the artifact graph bound the regenerated report.",
+    "refresh_receipt": "results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-post-review-final/result.json",
+    "final_project_review_status": "PASS",
+    "final_artifact_gate_status": "PASS",
+    "current_artifact_count": 175,
+    "affected_current_nodes": []
+  },
+  "retry_note": "An initial targeted unittest invocation used package-style names although tests is not a package; discovery-pattern invocations were then used and passed. No scientific process was launched."
+}

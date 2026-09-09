@@ -52,10 +52,12 @@ def validate(root: Path) -> dict:
     by_id = {row["id"]: row for row in live["items"]}
     expectation = transition["live_expectation"]
     result = json.loads((root / "results/research/nanoda-zero-thread-upstream-readiness-1/result.json").read_text())
+    current_selected = live["selected_item"]
     require(by_id[expectation["regression_item"]]["status"] == "COMPLETE"
             and by_id[expectation["completed_readiness_item"]]["status"] == "COMPLETE"
-            and live["selected_item"] == expectation["selected_item"]
-            and by_id[expectation["selected_item"]]["status"] == "READY"
+            and by_id[expectation["selected_item"]]["status"] == "COMPLETE"
+            and current_selected == "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+            and by_id[current_selected]["status"] == "READY"
             and result["outcome"] == expectation["readiness_outcome"]
             and result["gate_decision"] == expectation["readiness_gate_decision"],
             "live maintenance transition differs")
@@ -63,4 +65,4 @@ def validate(root: Path) -> dict:
             "frozen_regression_outcome": closure["outcome"],
             "readiness_outcome": result["outcome"],
             "readiness_gate_decision": result["gate_decision"],
-            "selected_item": live["selected_item"]}
+            "selected_item": current_selected}

@@ -10,6 +10,7 @@ import subprocess
 ITEM = "SURVIVOR-THREAD-CONFIG-REACHABILITY-1"
 GE_MUTANT = "nanoda-gen-2bdfe18a9ec2"
 NEG_MUTANT = "nanoda-gen-93b21593b0d8"
+TRANSFERRED_CACHE_MUTANT = "nanoda-gen-af1dac9744e9"
 ENTRY_SNAPSHOT = "336172a83fc6c2c8896aa107637f3a7924bea34a"
 CLOSURE_SNAPSHOT = "d7fb1008a9431c569f2f02d314aefef3c33953b3"
 BASE = "results/research/survivor-thread-config-reachability-1"
@@ -238,14 +239,14 @@ def _validate_assessment(root: Path) -> dict:
 
 def _validate_registry(root: Path, assessment: dict) -> dict:
     predecessor = git_bytes(root, REGISTRY)
-    current = (root / REGISTRY).read_bytes()
+    successor = closure_bytes(root, REGISTRY)
     require(digest(predecessor)
             == "9f38a528bec31f358009cf7f3c00f4f8d6779dc07dbd3371271ff3e4801eac10"
             and len(predecessor.splitlines()) == 609,
             "registry entry predecessor drift")
-    require(current.startswith(predecessor) and len(current.splitlines()) == 610,
+    require(successor.startswith(predecessor) and len(successor.splitlines()) == 610,
             "registry is not one exact append over the entry snapshot")
-    suffix = current[len(predecessor):]
+    suffix = successor[len(predecessor):]
     require(suffix.startswith(b"{") and suffix.count(b"\n") == 1,
             "registry append is not one JSONL record")
     appended = json.loads(suffix.decode("utf-8"))
@@ -269,13 +270,24 @@ def _validate_registry(root: Path, assessment: dict) -> dict:
             and "creates no workers" in appended["notes"],
             "registry append overstates or misidentifies the source distinction")
     latest = {}
-    for row in json_lines(current):
+    for row in json_lines(successor):
         latest[row["id"]] = {**latest.get(row["id"], {}), **row}
     require(latest[NEG_MUTANT]["classification"] == "MEANINGFUL_SEMANTIC"
             and latest[GE_MUTANT]["status"] == "SURVIVED"
             and latest[GE_MUTANT]["classification"] == "SURVIVED_WITHOUT_WITNESS",
             "latest mutation states do not preserve the split decision")
-    require((root / INVENTORY).read_bytes() == git_bytes(root, INVENTORY),
+    live = (root / REGISTRY).read_bytes()
+    require(live.startswith(successor) and len(live.splitlines()) == 611,
+            "live registry does not preserve the exact thread closure")
+    live_latest = {}
+    for row in json_lines(live):
+        live_latest[row["id"]] = {**live_latest.get(row["id"], {}), **row}
+    require(live_latest[NEG_MUTANT]["classification"] == "MEANINGFUL_SEMANTIC"
+            and live_latest[GE_MUTANT]["classification"] == "SURVIVED_WITHOUT_WITNESS"
+            and live_latest[TRANSFERRED_CACHE_MUTANT]["classification"]
+            == "MEANINGFUL_SEMANTIC",
+            "live registry does not preserve the thread split and cache transfer")
+    require((root / INVENTORY).read_bytes() == closure_bytes(root, INVENTORY),
             "survivor inventory changed during source classification")
     require(assessment["decision"]["appended_classification"]
             == appended["classification"],
@@ -296,7 +308,7 @@ def validate(root: Path) -> dict:
                 "path": REGISTRY, "predecessor_lines": 609,
                 "successor_lines": 610,
                 "predecessor_sha256": digest(git_bytes(root, REGISTRY)),
-                "successor_sha256": sha256(root / REGISTRY),
+                "successor_sha256": digest(closure_bytes(root, REGISTRY)),
                 "appended_mutation_id": NEG_MUTANT,
                 "appended_classification": "MEANINGFUL_SEMANTIC",
             }

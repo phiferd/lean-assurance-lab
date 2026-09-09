@@ -58,12 +58,13 @@ class CurrentAssuranceTests(unittest.TestCase):
         pending = snapshot["mutation_testing"]["pending_survivor_triage"]
         self.assertEqual(pending["classification"], "SURVIVED_WITHOUT_WITNESS")
         self.assertEqual(pending["count"], len(pending["mutant_ids"]))
-        self.assertEqual(pending["count"], 3)
+        self.assertEqual(pending["count"], 2)
         self.assertNotIn("nanoda-gen-e9648d8c028d", pending["mutant_ids"])
         self.assertNotIn("nanoda-gen-399895fa0b72", pending["mutant_ids"])
         self.assertNotIn("nanoda-gen-93b21593b0d8", pending["mutant_ids"])
+        self.assertNotIn("nanoda-gen-af1dac9744e9", pending["mutant_ids"])
         self.assertEqual(snapshot["mutation_testing"]["equivalent_mutants"], 14)
-        self.assertEqual(snapshot["mutation_testing"]["meaningful_survivors"], 4)
+        self.assertEqual(snapshot["mutation_testing"]["meaningful_survivors"], 5)
         self.assertIn("modeled denominator", pending["scope"])
 
 

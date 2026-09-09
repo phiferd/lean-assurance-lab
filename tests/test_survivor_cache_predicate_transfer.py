@@ -14,6 +14,11 @@ class SurvivorCachePredicateTransferTest(unittest.TestCase):
         SourceFileLoader(module.__name__, str(SCRIPT)).exec_module(module)
         module.validate(ROOT)
 
+    def test_historical_transition(self):
+        module = ModuleType("cache_predicate_transfer_historical")
+        SourceFileLoader(module.__name__, str(SCRIPT)).exec_module(module)
+        module.validate_historical(ROOT)
+
 
 if __name__ == "__main__":
     unittest.main()

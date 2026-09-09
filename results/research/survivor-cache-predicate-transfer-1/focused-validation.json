@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-CACHE-PREDICATE-TRANSFER-1",
+  "status": "PASS",
+  "checked_at": "2026-09-09T12:18:36Z",
+  "checks": [
+    {"command": "scripts/validate-survivor-cache-predicate-transfer", "status": "PASS"},
+    {"command": "scripts/validate-survivor-cache-predicate-transfer-historical", "status": "PASS"},
+    {"command": "scripts/validate-survivor-cache-historical", "status": "PASS"},
+    {"command": "scripts/validate-survivor-cache-export-closure", "status": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_survivor_thread_config_reachability_historical.py", "status": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_survivor_universe_equivalence_historical.py", "status": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_survivor_fvar_reachability_historical.py", "status": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_current_assurance.py", "status": "PASS"},
+    {"command": "scripts/validate-nanoda-zero-thread-upstream-closure", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-reachability-closure", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-reachability-historical", "status": "PASS"},
+    {"command": "scripts/validate-survivor-thread-config-regression-historical", "status": "PASS"},
+    {"command": "scripts/validate-research-queue --require-ready", "status": "PASS"},
+    {"command": "scripts/refresh-current-state --log-dir results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09", "status": "PASS"},
+    {"command": "scripts/refresh-current-state --log-dir results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-final", "status": "PASS"},
+    {"command": "scripts/refresh-current-state --log-dir results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-repair-final", "status": "PASS"},
+    {"command": "scripts/run-unit-tests-with-signal-retry --require-full-payload", "status": "PASS", "current_tests": 914, "frozen_publication_tests": 73},
+    {"command": "scripts/refresh-current-state --log-dir results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-post-review-final", "status": "PASS"},
+    {"command": "scripts/build-project-review --check", "status": "PASS"},
+    {"command": "scripts/artifact-status --require-current", "status": "PASS", "current_claims_valid": true, "affected_current_nodes": []}
+  ],
+  "refresh_retry": {
+    "failed_command": "scripts/refresh-current-state --log-dir results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09",
+    "failure": "The refresh controller refused to reuse the existing evidence directory with FileExistsError before running any refresh command.",
+    "repair": "Preserved the first complete receipt and used a distinct append-only final directory; the full final refresh passed."
+  },
+  "historical_validator_note": "The frozen SURVIVOR-CACHE-1 direct closure validator retains its original live-queue binding. Its unchanged scientific evidence is validated through scripts/validate-survivor-cache-historical; the frozen validator and historical evidence were not rewritten.",
+  "engineering_repair": {
+    "path": "results/research/survivor-cache-predicate-transfer-1/engineering-repair.json",
+    "initial_full_suite_status": "FAILED_WITH_THREE_TOOLING_ERRORS",
+    "scientific_result_changed": false,
+    "final_full_suite_status": "PASS",
+    "post_suite_generated_state_status": "PASS"
+  },
+  "scientific_processes_launched": 0
+}

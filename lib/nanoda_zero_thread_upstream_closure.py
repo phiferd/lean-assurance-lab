@@ -14,6 +14,7 @@ BASE = Path("results/research/nanoda-zero-thread-upstream-readiness-1")
 ITEM = "NANODA-ZERO-THREAD-UPSTREAM-READINESS-1"
 NEXT = "SURVIVOR-CACHE-PREDICATE-TRANSFER-1"
 ENTRY = "b7428e4295b4192d3159cb5fdde13b2e85ca7541"
+LOCAL_CLOSURE = "869000141a9316c8a6a129af0891239e551cec75"
 HEAD = "05055695879dfebb6628a67da88ceca6cd6b0421"
 TOP = "nanoda_lib-" + HEAD
 
@@ -33,6 +34,12 @@ def digest(data: bytes) -> str:
 
 def git_bytes(root: Path, path: str) -> bytes:
     return subprocess.check_output(["git", "show", f"{ENTRY}:{path}"], cwd=root)
+
+
+def closure_bytes(root: Path, path: str) -> bytes:
+    return subprocess.check_output(
+        ["git", "show", f"{LOCAL_CLOSURE}:{path}"], cwd=root
+    )
 
 
 def member_bytes(archive: bytes, path: str) -> bytes:
@@ -156,13 +163,22 @@ def validate(root: Path) -> dict:
     require(preservation["status"] == "MUTATION_STATE_UNCHANGED_DERIVED_SNAPSHOT_REFRESHED",
             "canonical preservation record differs")
     for row in preservation["artifacts"]:
-        data = (root / row["path"]).read_bytes()
+        data = closure_bytes(root, row["path"])
         require(digest(data) == row["after_sha256"]
                 and len(data.splitlines()) == row["lines"],
-                "canonical artifact differs: " + row["path"])
+                "closure-bound canonical artifact differs: " + row["path"])
         if row["path"] != "results/assurance/current.json":
             require(row["before_sha256"] == row["after_sha256"],
                     "canonical mutation input changed: " + row["path"])
+    closure_registry = closure_bytes(root, "results/mutants/registry.jsonl")
+    live_registry = (root / "results/mutants/registry.jsonl").read_bytes()
+    require(live_registry.startswith(closure_registry)
+            and len(live_registry.splitlines()) == 611,
+            "live registry does not preserve the readiness closure prefix")
+    live_inventory = (root / "results/survivors/inventory.jsonl").read_bytes()
+    require(live_inventory
+            == closure_bytes(root, "results/survivors/inventory.jsonl"),
+            "live survivor inventory differs from the readiness closure")
 
     manifest = load(root / BASE / "evidence-manifest.json")
     require(manifest["item_id"] == ITEM and manifest["status"] == "PASS",
@@ -175,19 +191,21 @@ def validate(root: Path) -> dict:
     require(required <= set(paths) and len(paths) == len(set(paths)),
             "evidence manifest is incomplete or duplicate")
     for row in manifest["artifacts"]:
-        data = (root / row["path"]).read_bytes()
+        data = closure_bytes(root, row["path"])
         require(digest(data) == row["sha256"] and len(data) == row["bytes"],
-                "manifest binding differs: " + row["path"])
+                "closure-bound manifest binding differs: " + row["path"])
 
     queue = load_queue(root, require_ready=True)
     by_item = {row["id"]: row for row in queue["items"]}
-    require(queue["frontier_id"] == "F-SURVIVOR-CACHE-PREDICATE-TRANSFER"
-            and queue["selected_item"] == NEXT
+    current_next = "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+    require(queue["frontier_id"] == "F-SURVIVOR-THREAD-ONE-DETERMINISM"
+            and queue["selected_item"] == current_next
             and by_item[ITEM]["status"] == "COMPLETE"
-            and by_item[NEXT]["status"] == "READY"
+            and by_item[NEXT]["status"] == "COMPLETE"
+            and by_item[current_next]["status"] == "READY"
             and not any(row["status"] == "ACTIVE" for row in queue["items"]),
             "queue handoff differs")
     return {"status": "PASS", "outcome": "SUCCESS", "gate_decision": "NO_GO",
             "head": HEAD, "requests": 4, "issues_and_prs": 29,
             "zero_thread_dispatch": source["zero_thread_dispatch"],
-            "selected_item": NEXT}
+            "selected_item": current_next}

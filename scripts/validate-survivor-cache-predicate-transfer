@@ -7,16 +7,46 @@ import json
 import subprocess
 from pathlib import Path
 
+ITEM = "SURVIVOR-CACHE-PREDICATE-TRANSFER-1"
+DIRECT = "nanoda-gen-3365809b3c41"
+TRANSFERRED = "nanoda-gen-af1dac9744e9"
+BASE = Path("results/research/survivor-cache-predicate-transfer-1")
+REGISTRY = Path("results/mutants/registry.jsonl")
+INVENTORY = Path("results/survivors/inventory.jsonl")
+
 
 def load(path: Path):
     return json.loads(path.read_text(encoding="utf-8"))
 
 
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(data: bytes) -> str:
+    return hashlib.sha256(data).hexdigest()
+
+
+def sha256(path: Path) -> str:
+    return digest(path.read_bytes())
+
+
+def git_bytes(root: Path, commit: str, path: str | Path) -> bytes:
+    return subprocess.check_output(
+        ["git", "-C", str(root), "show", f"{commit}:{path}"]
+    )
+
+
+def json_lines(data: bytes) -> list[dict]:
+    return [json.loads(line) for line in data.decode("utf-8").splitlines()]
+
+
 def validate(root: Path) -> None:
-    base = root / "results/research/survivor-cache-predicate-transfer-1"
+    base = root / BASE
     work = load(base / "work-record.json")
     rubric = load(base / "transfer-rubric.json")
-    if work["item_id"] != "SURVIVOR-CACHE-PREDICATE-TRANSFER-1" or work["frontier_id"] != "F-SURVIVOR-CACHE-PREDICATE-TRANSFER":
+    if work["item_id"] != ITEM or work["frontier_id"] != "F-SURVIVOR-CACHE-PREDICATE-TRANSFER":
         raise ValueError("work-record identity mismatch")
     if work["status"] not in {"ACTIVE", "COMPLETE"}:
         raise ValueError("work-record status must be ACTIVE or COMPLETE")
@@ -35,10 +65,8 @@ def validate(root: Path) -> None:
         if set(row) != {"path", "bytes", "sha256"} or row["path"] in seen:
             raise ValueError("invalid or duplicate entry binding")
         seen.add(row["path"])
-        if row["path"] in {"config/research-queue.json", "docs/RESEARCH_STATUS.md"}:
-            data = subprocess.check_output(
-                ["git", "-C", str(root), "show", f"{work['base_commit']}:{row['path']}"]
-            )
+        if row["path"] in {"config/research-queue.json", "docs/RESEARCH_STATUS.md", str(REGISTRY)}:
+            data = git_bytes(root, work["base_commit"], row["path"])
         else:
             data = (root / row["path"]).read_bytes()
         if len(data) != row["bytes"] or hashlib.sha256(data).hexdigest() != row["sha256"]:
@@ -55,7 +83,7 @@ def validate(root: Path) -> None:
         raise ValueError("required scientific binding omitted")
     if rubric["item_id"] != work["item_id"] or rubric["closed_domain"] != ["InferOnly", "Check"]:
         raise ValueError("transfer rubric identity or domain mismatch")
-    if [row["mutation_id"] for row in rubric["candidate_predicates"]] != ["nanoda-gen-3365809b3c41", "nanoda-gen-af1dac9744e9"]:
+    if [row["mutation_id"] for row in rubric["candidate_predicates"]] != [DIRECT, TRANSFERRED]:
         raise ValueError("transfer rubric mutation order changed")
     gate_ids = [row["id"] for row in rubric["admission_gates"]]
     if gate_ids != ["IDENTITY", "OCCURRENCE", "PREDICATE_EQUIVALENCE", "OBSERVER_INPUT_SCOPE", "HISTORICAL_PRESERVATION"]:
@@ -64,11 +92,257 @@ def validate(root: Path) -> None:
     item = next(row for row in queue["items"] if row["id"] == work["item_id"])
     if work["status"] == "ACTIVE" and item["status"] != "ACTIVE":
         raise ValueError("active work-record disagrees with queue")
+    if work["status"] == "COMPLETE":
+        validate_closure(root, work, rubric, queue)
+
+
+def validate_closure(root: Path, work: dict, rubric: dict, queue: dict) -> None:
+    base = root / BASE
+    require(work["entry_commit"] == "a58cde09633e114b7027770165262512c6fe960d",
+            "entry commit changed")
+    require(len(work["entry_inspections"]) == 4
+            and len(work["post_checkpoint_inspections"]) == 4
+            and work["consumed_at_closure"]["local_source_or_evidence_inspections"] == 8,
+            "closure inspection accounting mismatch")
+    require(work["consumed_at_closure"]["active_seconds_charged_conservatively"] <= 3600
+            and work["remaining_active_seconds_at_closure"] >= 0,
+            "active-time budget exceeded")
+    for key in ("network_requests", "builds", "checker_launches",
+                "lean_proof_launches", "new_scientific_byte_variants",
+                "new_mutation_identities", "external_actions"):
+        require(work["consumed_at_closure"][key] == 0,
+                f"closure records forbidden execution: {key}")
+
+    specs = {mid: load(root / f"mutations/{mid}.json")
+             for mid in (DIRECT, TRANSFERRED)}
+    expected = {
+        DIRECT: ("REL_EQ_TO_NE", "(flag != InferFlag::InferOnly)"),
+        TRANSFERRED: ("BOOL_NEGATE", "!(flag == InferFlag::InferOnly)"),
+    }
+    common = ("infer", "src/tc.rs", "483", 11, 0,
+              "flag == InferFlag::InferOnly")
+    for mid, spec in specs.items():
+        require((spec["function"], spec["source_file"], spec["source_span"],
+                 spec["source_column"], spec["replace_occurrence"], spec["original"])
+                == common, f"mutation occurrence drift: {mid}")
+        operator, mutated = expected[mid]
+        values = [spec["source_file"], spec["source_span"],
+                  str(spec["source_column"]), operator, spec["original"], mutated]
+        identity = digest("\0".join(values).encode("utf-8"))
+        require(spec["mutation_operator"] == operator and spec["mutated"] == mutated
+                and spec["identity"]["sha256"] == identity
+                and spec["id"] == f"nanoda-gen-{identity[:12]}",
+                f"mutation identity mismatch: {mid}")
+
+    tc = (root / "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs").read_text(encoding="utf-8")
+    require("pub(crate) enum InferFlag {\n    InferOnly,\n    Check,\n}" in tc
+            and "if flag == InferFlag::InferOnly {\n            if let Some(cached) = self.tc_cache.infer_cache_no_check.get(&e).copied()" in tc,
+            "pinned InferFlag domain or cache occurrence drift")
+
+    assessment = load(base / "predicate-transfer-assessment.json")
+    require(assessment["item_id"] == ITEM
+            and assessment["finding"] == "EXACT_PREDICATE_AND_OBSERVER_SCOPE_TRANSFER",
+            "assessment identity changed")
+    require(assessment["predicate_truth_table"] == [
+        {"flag": "InferOnly", "original": True, DIRECT: False,
+         TRANSFERRED: False, "mutants_equal": True},
+        {"flag": "Check", "original": False, DIRECT: True,
+         TRANSFERRED: True, "mutants_equal": True},
+    ] and assessment["predicate_equivalence"]["verdict"] == "PASS",
+            "predicate equivalence table changed")
+    require([row["id"] for row in assessment["admission_gates"]]
+            == [row["id"] for row in rubric["admission_gates"]]
+            and all(row["verdict"] == "PASS" for row in assessment["admission_gates"]),
+            "admission gates do not all pass")
+    for row in assessment["identity_proofs"]:
+        require(row["recorded_sha256"] == row["recomputed_sha256"]
+                == specs[row["mutation_id"]]["identity"]["sha256"]
+                and row["verdict"] == "PASS", "identity proof changed")
+    for row in assessment["evidence_bindings"]:
+        require(sha256(root / row["path"]) == row["sha256"],
+                "assessment evidence drift: " + row["path"])
+    prior = load(root / "results/research/survivor-cache-1/result.json")
+    export = load(root / "results/research/survivor-cache-export-1/result.json")
+    require(prior["outcome"] == "SUCCESS"
+            and prior["finding"] == "INTERNAL_CACHE_CONTRACT_DISTINCTION"
+            and prior["mutation_id"] == DIRECT
+            and [row["classification"] for row in prior["observations"]]
+            == ["TEST_PASS", "TEST_PASS", "TEST_PASS", "REGRESSION_FAILURE"],
+            "prior internal result changed")
+    require(export["outcome"] == "BOUNDED_UNRESOLVED"
+            and export["finding"] == "ORDINARY_K_CARRIER_ORIGIN_AND_POINTER_IDENTITY_BOUNDARY"
+            and export["mutation_id"] == DIRECT,
+            "export boundary changed")
+
+    predecessor = git_bytes(root, work["entry_commit"], REGISTRY)
+    current = (root / REGISTRY).read_bytes()
+    require(digest(predecessor) == "7d89a43c8e695617e648037e32a2332f5f81c444a9c6ef1ff05752bdc8ed9b7e"
+            and len(predecessor.splitlines()) == 610,
+            "registry entry predecessor drift")
+    require(current.startswith(predecessor) and len(current.splitlines()) == 611,
+            "registry is not one append over the entry checkpoint")
+    appended = json.loads(current[len(predecessor):].decode("utf-8"))
+    expected_fields = {
+        "checker", "classification", "classification_scope", "function", "id",
+        "mutation_operator", "notes", "operator_family",
+        "predicate_transfer_assessment", "source_file", "source_span", "status",
+        "subsystem", "updated_at",
+    }
+    require(set(appended) == expected_fields and appended["id"] == TRANSFERRED
+            and appended["checker"] == "nanoda" and appended["status"] == "SURVIVED"
+            and appended["classification"] == "MEANINGFUL_SEMANTIC"
+            and appended["predicate_transfer_assessment"]
+            == str(BASE / "predicate-transfer-assessment.json")
+            and "internal same-checker" in appended["classification_scope"]
+            and "no exported-input reachability" in appended["classification_scope"],
+            "registry append changed or overstates scope")
+    latest = {}
+    for row in json_lines(current):
+        latest[row["id"]] = {**latest.get(row["id"], {}), **row}
+    require(latest[TRANSFERRED]["classification"] == "MEANINGFUL_SEMANTIC"
+            and latest[DIRECT]["classification"] == "SURVIVED_WITHOUT_WITNESS",
+            "latest mutation classifications do not preserve the scoped split")
+    require((root / INVENTORY).read_bytes()
+            == git_bytes(root, work["entry_commit"], INVENTORY),
+            "survivor inventory changed")
+
+    result = load(base / "result.json")
+    require(result["item_id"] == ITEM and result["outcome"] == "SUCCESS"
+            and result["finding"] == assessment["finding"]
+            and result["assessment"]["sha256"] == sha256(base / "predicate-transfer-assessment.json")
+            and result["registry_transition"]["predecessor_sha256"] == digest(predecessor)
+            and result["registry_transition"]["successor_sha256"] == digest(current)
+            and result["assurance_transition"] == {
+                "pending_survivors_before": 3, "pending_survivors_after": 2,
+                "meaningful_survivors_before": 4, "meaningful_survivors_after": 5,
+                "equivalent_mutants": 14,
+                "modeled_mutation_score_numerator": 135,
+                "modeled_mutation_score_denominator": 142,
+                "modeled_population_changed": False,
+            } and result["next_item"] == "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+            and result["next_item_started"] is False,
+            "result transition or successor changed")
+    require(all(value == 0 for key, value in result["execution_accounting"].items()
+                if key not in {"active_seconds_charged_conservatively",
+                               "local_source_or_evidence_inspections"}),
+            "result records forbidden execution")
+    closure = load(base / "work-closure.json")
+    require(closure["status"] == "CLOSED" and closure["outcome"] == "SUCCESS"
+            and closure["canonical_classification_changed"] is True
+            and closure["appended_mutation_id"] == TRANSFERRED
+            and closure["unchanged_mutation_id"] == DIRECT
+            and closure["next_item"] == result["next_item"]
+            and closure["next_item_started"] is False,
+            "work closure changed")
+    by_id = {row["id"]: row for row in queue["items"]}
+    require(by_id[ITEM]["status"] == "COMPLETE"
+            and by_id["SURVIVOR-THREAD-ONE-DETERMINISM-1"]["status"] == "READY"
+            and queue["selected_item"] == "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+            and queue["frontier_id"] == "F-SURVIVOR-THREAD-ONE-DETERMINISM"
+            and queue["plan"] == "docs/research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md",
+            "queue closure or successor state changed")
+    focused = load(base / "focused-validation.json")
+    engineering = load(base / "engineering-repair.json")
+    require(focused["item_id"] == ITEM and focused["status"] == "PASS"
+            and all(row["status"] == "PASS" for row in focused["checks"])
+            and focused["refresh_retry"]["failure"].startswith(
+                "The refresh controller refused to reuse")
+            and "distinct append-only final directory"
+            in focused["refresh_retry"]["repair"],
+            "focused closure validation is incomplete")
+    require(focused["engineering_repair"]["final_full_suite_status"] == "PASS"
+            and engineering["classification"]
+            == "CLOSURE_VALIDATION_TOOLING_REPAIR"
+            and engineering["scientific_result_changed"] is False
+            and engineering["initial_full_suite"]["exit_code"] == 1
+            and len(engineering["initial_full_suite"]["errors"]) == 3
+            and all(row["status"] == "PASS"
+                    for row in engineering["targeted_validation"])
+            and engineering["final_full_suite"]["exit_code"] == 0
+            and engineering["final_full_suite"]["current_suite_tests"] == 914
+            and engineering["final_full_suite"]["frozen_publication_tests"] == 73
+            and focused["engineering_repair"]["post_suite_generated_state_status"]
+            == "PASS"
+            and engineering["post_suite_generated_state_repair"]
+            ["final_project_review_status"] == "PASS"
+            and engineering["post_suite_generated_state_repair"]
+            ["final_artifact_gate_status"] == "PASS"
+            and engineering["post_suite_generated_state_repair"]
+            ["affected_current_nodes"] == [],
+            "engineering repair or final full-suite evidence is incomplete")
+    manifest = load(base / "evidence-manifest.json")
+    require(manifest["item_id"] == ITEM and manifest["status"] == "PASS",
+            "closure evidence manifest is incomplete")
+    manifest_paths = set()
+    for row in manifest["inputs"]:
+        require(set(row) == {"path", "bytes", "sha256"}
+                and row["path"] not in manifest_paths,
+                "invalid or duplicate closure manifest row")
+        manifest_paths.add(row["path"])
+        data = (root / row["path"]).read_bytes()
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
+                "closure manifest drift: " + row["path"])
+    require({
+        str(BASE / "predicate-transfer-assessment.json"),
+        str(BASE / "result.json"), str(BASE / "report.md"),
+        str(BASE / "work-record.json"), str(BASE / "work-closure.json"),
+        str(BASE / "historical-transition.json"),
+        str(BASE / "focused-validation.json"),
+        str(BASE / "engineering-repair.json"),
+        "scripts/validate-survivor-cache-predicate-transfer",
+        "scripts/validate-survivor-cache-predicate-transfer-historical",
+        "tests/test_survivor_cache_predicate_transfer.py",
+        "lib/nanoda_zero_thread_upstream_closure.py",
+        "lib/survivor_thread_config_reachability.py",
+        "lib/survivor_thread_config_regression_historical.py",
+        "tests/test_nanoda_zero_thread_upstream_closure.py",
+        "tests/test_survivor_thread_config_regression_historical.py",
+        "results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09/result.json",
+        "results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-final/result.json",
+        "results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-repair-final/result.json",
+        "results/workflow-refresh/survivor-cache-predicate-transfer-1-2026-09-09-post-review-final/result.json",
+    }.issubset(manifest_paths), "closure manifest omits required evidence")
+
+
+def validate_historical(root: Path) -> None:
+    validate(root)
+    transition = load(root / BASE / "historical-transition.json")
+    entry_commit = transition["entry_commit"]
+    require(entry_commit == "a58cde09633e114b7027770165262512c6fe960d",
+            "historical transition entry commit changed")
+    for row in transition["entry_state"]:
+        data = git_bytes(root, entry_commit, row["path"])
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
+                "entry-state binding drift: " + row["path"])
+    entry_work = json.loads(git_bytes(
+        root, entry_commit, BASE / "work-record.json").decode("utf-8"))
+    entry_rubric = json.loads(git_bytes(
+        root, entry_commit, BASE / "transfer-rubric.json").decode("utf-8"))
+    require(entry_work["status"] == "ACTIVE"
+            and entry_work["analysis_state"] == "NOT_STARTED"
+            and entry_work["launch_state"] == "COMMITTED_ENTRY_CHECKPOINT_REQUIRED_BEFORE_ANALYSIS"
+            and all(row["verdict"] == "PENDING"
+                    for row in entry_rubric["admission_gates"]),
+            "entry checkpoint no longer proves pre-analysis freeze")
+    for row in transition["predecessor_evidence"]:
+        data = (root / row["path"]).read_bytes()
+        require(len(data) == row["bytes"] and digest(data) == row["sha256"],
+                "predecessor evidence drift: " + row["path"])
+    successor = transition["successor_state"]
+    registry = (root / successor["registry"]["path"]).read_bytes()
+    inventory = (root / successor["survivor_inventory"]["path"]).read_bytes()
+    require(len(registry) == successor["registry"]["bytes"]
+            and len(registry.splitlines()) == successor["registry"]["lines"]
+            and digest(registry) == successor["registry"]["sha256"]
+            and len(inventory) == successor["survivor_inventory"]["bytes"]
+            and digest(inventory) == successor["survivor_inventory"]["sha256"],
+            "historical successor state drift")
 
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
     parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    parser.add_argument("--historical-only", action="store_true")
     args = parser.parse_args()
-    validate(args.root.resolve())
+    (validate_historical if args.historical_only else validate)(args.root.resolve())
     print("survivor cache predicate transfer evidence: valid")
