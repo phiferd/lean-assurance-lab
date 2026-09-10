@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "phase": "PRELAUNCH_ENGINEERING_REPAIR",
+  "observed_at": "2026-09-10T00:02:00Z",
+  "failed_operation": "/opt/homebrew/Cellar/rust/1.98.0/bin/rustfmt --edition 2021 --check /private/tmp/nanoda-cache-regression-1/source/src/tests/tc.rs",
+  "exit_code": 1,
+  "failure": "The generated new-file patch declared and contained only 85 lines; its final catch_unwind closure and test-body delimiters were absent, so rustfmt reported an unclosed delimiter at line 85.",
+  "cause": "The manually frozen patch hunk length truncated six intended closing lines during patch construction.",
+  "repair": "Before any build or test, extend the patch hunk to 91 lines, restore the six intended closing lines in both the patch artifact and detached checkout, then rerun the formatting-only check.",
+  "formatting_followup": {
+    "operation": "/opt/homebrew/Cellar/rust/1.98.0/bin/rustfmt --edition 2021 --check /private/tmp/nanoda-cache-regression-1/source/src/tests/tc.rs",
+    "exit_code": 1,
+    "finding": "The syntax repair succeeded; rustfmt then identified six style-only line-wrapping differences. The patch and checkout were normalized identically before freeze."
+  },
+  "accounting": {
+    "read_only_or_setup_requests_after_failure": 4,
+    "builds_including_compiling_tests": 0,
+    "test_processes": 0,
+    "lean_proof_launches": 0,
+    "new_mutation_identities": 0,
+    "new_scientific_export_bytes": 0,
+    "external_writes": 0
+  },
+  "scientific_interpretation": "None. This was an unfrozen test-patch packaging failure and consumed no scientific process reservation."
+}

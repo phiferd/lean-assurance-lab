@@ -1,0 +1,99 @@
+diff --git a/src/tests.rs b/src/tests.rs
+index 304a306..76373c6 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -1,4 +1,5 @@
+ mod name;
+ mod level;
+ mod natlit;
++mod tc;
+ mod util;
+diff --git a/src/tests/tc.rs b/src/tests/tc.rs
+new file mode 100644
+index 0000000..523cbe4
+--- /dev/null
++++ b/src/tests/tc.rs
+@@ -0,0 +1,77 @@
++use super::util::test_get_export_file;
++use crate::env::EnvLimit;
++use crate::tc::InferFlag::{Check, InferOnly};
++use std::error::Error;
++
++fn assert_def_eq_failure<T>(result: std::thread::Result<T>) {
++    let payload = match result {
++        Ok(_) => panic!("expected checked inference to reject malformed let"),
++        Err(payload) => payload,
++    };
++    let message = payload
++        .downcast_ref::<String>()
++        .map(String::as_str)
++        .or_else(|| payload.downcast_ref::<&str>().copied())
++        .expect("inference panic payload must be a string");
++    assert_eq!(message, "assertion failed: self.def_eq(u, v)");
++}
++
++#[test]
++fn infer_cache_keeps_checked_and_unchecked_control_results_separate() -> Result<(), Box<dyn Error>> {
++    let (export, skipped) = test_get_export_file(None)?;
++    assert!(skipped.is_empty());
++    export.with_tc(EnvLimit::Empty, |tc| {
++        let zero = tc.ctx.zero();
++        let one = tc.ctx.succ(zero);
++        let sort0 = tc.ctx.mk_sort(zero);
++        let sort1 = tc.ctx.mk_sort(one);
++        let body = tc.ctx.mk_var(0);
++        let name = tc.ctx.anonymous();
++        let expression = tc.ctx.mk_let(name, sort1, sort0, body, false);
++
++        let inferred = tc.infer(expression, InferOnly);
++        assert_eq!(inferred, sort1);
++        assert_eq!(tc.tc_cache.infer_cache_no_check.get(&expression).copied(), Some(inferred));
++        assert!(tc.tc_cache.infer_cache_check.get(&expression).is_none());
++
++        let checked = tc.infer(expression, Check);
++        assert_eq!(checked, inferred);
++        assert_eq!(tc.tc_cache.infer_cache_check.get(&expression).copied(), Some(checked));
++    });
++    Ok(())
++}
++
++#[test]
++fn infer_cache_does_not_let_unchecked_result_bypass_check() -> Result<(), Box<dyn Error>> {
++    let (export, skipped) = test_get_export_file(None)?;
++    assert!(skipped.is_empty());
++    export.with_tc(EnvLimit::Empty, |tc| {
++        let zero = tc.ctx.zero();
++        let one = tc.ctx.succ(zero);
++        let two = tc.ctx.succ(one);
++        let sort1 = tc.ctx.mk_sort(one);
++        let sort2 = tc.ctx.mk_sort(two);
++        let fresh_body = tc.ctx.mk_var(0);
++        let fresh_name = tc.ctx.str1("fresh");
++        let fresh = tc.ctx.mk_let(fresh_name, sort1, sort1, fresh_body, false);
++
++        let fresh_rejection = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| tc.infer(fresh, Check)));
++        assert_def_eq_failure(fresh_rejection);
++        assert!(tc.tc_cache.infer_cache_check.get(&fresh).is_none());
++
++        let staged_body = tc.ctx.mk_var(0);
++        let staged_name = tc.ctx.str1("staged");
++        let staged = tc.ctx.mk_let(staged_name, sort1, sort1, staged_body, false);
++        assert_ne!(fresh, staged);
++
++        let inferred = tc.infer(staged, InferOnly);
++        assert_eq!(inferred, sort2);
++        assert_eq!(tc.tc_cache.infer_cache_no_check.get(&staged).copied(), Some(inferred));
++        assert!(tc.tc_cache.infer_cache_check.get(&staged).is_none());
++
++        let warmed_rejection = std::panic::catch_unwind(std::panic::AssertUnwindSafe(|| tc.infer(staged, Check)));
++        assert_def_eq_failure(warmed_rejection);
++        assert!(tc.tc_cache.infer_cache_check.get(&staged).is_none());
++    });
++    Ok(())
++}
++        }));
++        assert_def_eq_failure(warmed_rejection);
++        assert!(tc.tc_cache.infer_cache_check.get(&staged).is_none());
++    });
++    Ok(())
++}
