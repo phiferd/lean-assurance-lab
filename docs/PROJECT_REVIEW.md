@@ -32,7 +32,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 | Rank | Item | Status |
 |---|---|---|
-| 3 | NANODA-CACHE-REGRESSION-1: Contribute a staged inference-cache preventive unit test | READY |
+| 3 | NANODA-CACHE-REGRESSION-1: Contribute a staged inference-cache preventive unit test | ACTIVE |
 | 4 | SEMANTIC-LET-CONTRACT-1: Clarify raw let typing versus normalization obligations | READY |
 | 5 | HSBM-PILOT-1: Pilot historical boundary mining on six fresh commits | READY |
 | 6 | NANODA-DEFEQ-CACHE-1: Assess eager-mode negative-cache regression feasibility | READY |
@@ -59,7 +59,7 @@ Verify current source continuity and port the existing malformed-let/control seq
 
 **Execution:** At most 1 sessions of 90 active minutes; 4 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
+**Boundary:** ACTIVE: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
 
 ### 4. SEMANTIC-LET-CONTRACT-1: Clarify raw let typing versus normalization obligations
 
@@ -277,6 +277,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - Owner decisions are recorded: Arena PRs #181 and #182 were submitted separately after latest-upstream duplicate checks; the Kiota clarification is deferred.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: NANODA-CACHE-REGRESSION-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: NANODA-CACHE-REGRESSION-1 (ACTIVE).
 
 This generated review does not launch a campaign. Upstream observations are bounded to dated, input-bound records, including the 2026-09-09 disposition successor; they are not a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

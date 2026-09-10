@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "repository": "https://github.com/ammkrn/nanoda_lib.git",
+  "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+  "parents": [
+    "05055695879dfebb6628a67da88ceca6cd6b0421",
+    "092838312149611649d27781e1d242be4cba4a12"
+  ],
+  "subject": "Merge pull request #31 from ammkrn/flt_perf",
+  "tracked_inputs": [
+    {"path": "Cargo.lock", "git_blob": "08fdae41eb8519d052d276f421563d777f69133c"},
+    {"path": "Cargo.toml", "git_blob": "faec73d980e02394440962455570381cc15a81a5"},
+    {"path": "src/env.rs", "git_blob": "dcded64b0bb94fc077bcbfa63e1aa736bf820cab"},
+    {"path": "src/parser.rs", "git_blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b"},
+    {"path": "src/tc.rs", "git_blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf"},
+    {"path": "src/tests.rs", "git_blob": "304a306bbf0c47bbdf21d8b859ffec9c5b978ceb"},
+    {"path": "src/util.rs", "git_blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35"},
+    {"path": "test_resources/Empty/export", "git_blob": "846115f3b73fcc9b5ae9e2b6eff9ef1a1fb4552b"}
+  ],
+  "retained_local_object_store": "/private/tmp/nanoda-pr-submit.P1KY3H/nanoda_lib",
+  "detached_checkout": "/private/tmp/nanoda-cache-regression-1/source",
+  "checkout_rule": "Create one detached worktree at the exact revision and apply only the committed test patch. Do not use the existing PR #32 checkout, a moving branch, or implementation changes as test input.",
+  "current_contract": {
+    "infer_flag": "src/tc.rs defines exactly InferOnly and Check.",
+    "lookup_policy": "infer first returns infer_cache_check[e] for either flag; only InferOnly may then read infer_cache_no_check[e].",
+    "write_policy": "successful InferOnly writes infer_cache_no_check[e], while successful Check writes infer_cache_check[e].",
+    "pointer_lifetime": "ExportFile::with_tc constructs one TcCtx and one TypeChecker for the closure, so the staged calls can reuse the identical ExprPtr and TcCache.",
+    "failure_assertion": "Check on the malformed let reaches assert_def_eq(val_ty, binder_type), whose failed assertion reports assertion failed: self.def_eq(u, v)."
+  },
+  "currentness_scope": "This is the exact current inspected Nanoda master revision bound by the completed contribution portfolio review. The item makes no claim about a later moving branch without a new bounded preflight.",
+  "external_write_authority": false
+}

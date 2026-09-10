@@ -2666,19 +2666,20 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-CACHE-REGRESSION-1`.
 
-The item is READY and unstarted. Reuse the existing internal staged-cache
-witness and malformed-let/control pair only after binding the current
-`InferFlag`, cache lookup/write policy, pointer lifetime, focused test patch,
-and process controls. Its 90-minute bound permits at most eight read-only/setup
-requests, three build reservations and four tests, with no proof, new mutant or
-external write. Completion is one current focused/full-suite-validated test
-draft, exact duplicate, or a source-bound contract/pointer boundary. Any
-external write requires exact target-specific human approval.
+The item is ACTIVE under its committed exact-source, work-record and action-rubric
+entry gate. Current `InferFlag`, split cache lookup/write policy, same-checker
+pointer lifetime and the exact definitional-equality failure are bound. Port at
+most the existing valid/malformed pair, then freeze the exact test-only patch,
+expected focused/full-suite cells and process controls before any launch. Its
+90-minute bound permits at most eight read-only/setup requests, three build
+reservations and four tests, with no proof, new mutant, scientific export byte
+or external write. Completion is one current focused/full-suite-validated test
+draft, exact duplicate, or a source-bound contract/pointer boundary.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains seven READY items, including the selected item,
-and one PLANNED portfolio reserve across all three paths: Arena inductive
+The canonical queue retains this one ACTIVE item, six other READY items and one
+PLANNED portfolio reserve across all three paths: Arena inductive
 isolation; Nanoda inference-cache, negative-cache and reserved-namespace
 regressions; independent let/import contract clarification; and a bounded
 history-mining pilot. A theorem accept control requires a demonstrated coverage
@@ -2689,7 +2690,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No new candidate has started.
+and modeled mutation metrics are unchanged. No successor has started.
 
 ### Waiting
 

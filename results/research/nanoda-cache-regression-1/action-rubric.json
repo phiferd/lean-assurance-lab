@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "question": "Can the existing staged malformed-let witness be expressed as a maintainable two-test regression for current Nanoda's split checked/unchecked inference caches, while preserving the valid control and making no exported-impact claim?",
+  "fixed_source": "results/research/nanoda-cache-regression-1/source-lock.json",
+  "prior_evidence": [
+    "results/research/survivor-cache-1/result.json",
+    "results/research/survivor-cache-export-1/result.json"
+  ],
+  "fixed_pair": {
+    "control": "A let annotated with Sort 1 and valued by Sort 0 is inferred first with InferOnly and then with Check on the same ExprPtr and TypeChecker; both calls succeed and populate their distinct cache maps.",
+    "candidate": "A let annotated with Sort 1 and valued by Sort 1 is rejected by a fresh Check; an equivalent distinct expression then succeeds with InferOnly but is rejected by Check on the same ExprPtr and TypeChecker.",
+    "isolation": "The distinct fresh and staged expressions differ only by binder name, which is irrelevant to infer_let validation but yields separate interned pointers in the same checker context."
+  },
+  "required_assertions": [
+    "The valid control's InferOnly result is present only in infer_cache_no_check before Check.",
+    "The valid control's Check result is then present in infer_cache_check and equals the InferOnly result.",
+    "Fresh Check on the malformed let fails with the bound definitional-equality assertion.",
+    "InferOnly on the staged malformed let succeeds and writes only infer_cache_no_check for that exact pointer.",
+    "Check on that same warmed pointer still fails with the same bound assertion and does not write infer_cache_check.",
+    "The patch changes only current Nanoda test files and adds no fixture, dependency, implementation, exported-input or mutation change.",
+    "The exact focused test filter and complete cargo test --locked suite pass with the identical committed patch."
+  ],
+  "expected_cells": [
+    {
+      "cell_id": "CURRENT-FOCUSED-CACHE-REGRESSION",
+      "invocation": "cargo test --locked infer_cache -- --nocapture",
+      "expected": "Both new tests pass; the caught malformed-let panics contain the exact bound assertion text."
+    },
+    {
+      "cell_id": "CURRENT-FULL-SUITE",
+      "invocation": "cargo test --locked",
+      "expected": "The complete current locked Nanoda suite passes with the same test-only patch."
+    }
+  ],
+  "terminal_outcomes": {
+    "SUCCESS": "The two-test current-source patch satisfies every required assertion and both committed validation cells; prepare but do not submit a PR draft.",
+    "NEGATIVE": "An equivalent current regression already exists or exact current source falsifies the split-cache contract or fixed fixture premise.",
+    "BOUNDED_UNRESOLVED": "A concrete current API, pointer-lifetime, process-control or build/test boundary prevents a maintainable validated pair within the fixed budget."
+  },
+  "claim_limits": [
+    "Historical mutant execution is supporting sensitivity evidence only; no current mutant result is claimed.",
+    "No ordinary exported-input reachability, malformed-export acceptance, production impact, semantic authority or corpus kill is claimed.",
+    "A useful preventive internal regression does not require a present implementation defect or public export witness."
+  ],
+  "limits": {
+    "active_seconds": 5400,
+    "sessions": 1,
+    "read_only_or_setup_requests": 8,
+    "builds_including_compiling_tests": 3,
+    "build_timeout_seconds": 600,
+    "test_processes": 4,
+    "test_timeout_seconds": 120,
+    "lean_proof_launches": 0,
+    "new_mutation_identities": 0,
+    "new_scientific_export_bytes": 0,
+    "external_writes": 0
+  },
+  "launch_gate": "Before either process, commit the exact test patch and an execution manifest binding source/tree status, patch bytes, expected cell, invocation, timeout, environment/tool versions and cumulative accounting. Preserve every receipt, including failures."
+}
