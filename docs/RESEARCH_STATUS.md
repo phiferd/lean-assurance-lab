@@ -50,6 +50,32 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-CACHE-REGRESSION-1` on 2026-09-09 with `SUCCESS` at
+  current inspected Nanoda `4c544ed4099c8227f07d5de77ad1e69fb0740a27`.
+  A two-test module now protects the split inference-cache contract: the valid
+  same-pointer `InferOnly`-to-`Check` control succeeds and records results in
+  both mode-specific maps; a fresh malformed let is rejected, weak inference
+  warms only its unchecked entry, and `Check` on that identical pointer still
+  rejects with the exact definitional-equality assertion. The focused pair
+  passed and the complete locked suite passed 40 library tests with zero
+  failures; eight documentation tests were ignored. A truncated patch hunk was
+  caught and repaired before any build. No proof, current mutant, new scientific
+  export byte, mutation identity, canonical classification, authority decision
+  or external write occurred. The prior exported-input boundary remains bounded
+  unresolved. The [result](../results/research/nanoda-cache-regression-1/result.json),
+  [assessment](../results/research/nanoda-cache-regression-1/cache-contract-assessment.json),
+  [patch](../results/research/nanoda-cache-regression-1/patches/infer-cache-regression.patch)
+  and [unsubmitted draft](../results/action-recommendations/drafts/nanoda-infer-cache-regression.md)
+  preserve the exact recommendation. Repository closure testing also found that
+  the older Arena-let repair regression compared a historical successor claim
+  with the mutable current queue and historical bindings with live files. The
+  [third repair](../results/research/arena-let-regression-1/post-closure-repair-r3.json)
+  now resolves those claims and bindings at their exact commits, binds the
+  evolved test by immutable Git blob identity and validates current queue state
+  separately. The rerun passed 926 live, 73 frozen-publication and 9
+  portfolio-checkpoint tests. `SEMANTIC-LET-CONTRACT-1` is selected READY and
+  unstarted.
+
 - Completed a bounded post-closure provenance and CI repair on 2026-09-09
   without changing the `ARENA-LET-REGRESSION-1` scientific outcome or rewriting
   its committed audit. The
@@ -2664,22 +2690,20 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-CACHE-REGRESSION-1`.
+Selected next item: `SEMANTIC-LET-CONTRACT-1`.
 
-The item is ACTIVE under its committed exact-source, work-record and action-rubric
-entry gate. Current `InferFlag`, split cache lookup/write policy, same-checker
-pointer lifetime and the exact definitional-equality failure are bound. Port at
-most the existing valid/malformed pair, then freeze the exact test-only patch,
-expected focused/full-suite cells and process controls before any launch. Its
-90-minute bound permits at most eight read-only/setup requests, three build
-reservations and four tests, with no proof, new mutant, scientific export byte
-or external write. Completion is one current focused/full-suite-validated test
-draft, exact duplicate, or a source-bound contract/pointer boundary.
+The item is READY and unstarted. Use at most eight primary-source GETs and 120
+active minutes to distinguish the raw let typing judgment from the admissible
+input and environment assumptions of zeta reduction. Reuse the exact let/control
+evidence and prior authority deferral, and produce one source-qualified
+documentation patch or maintainer-question draft, qualified-source reuse, or
+duplicate/no-added-value result. No build, checker, proof, mutation, new export,
+catalog promotion, authority change or external write is authorized.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains this one ACTIVE item, six other READY items and one
-PLANNED portfolio reserve across all three paths: Arena inductive
+The canonical queue retains six READY items and one PLANNED portfolio reserve
+across all three paths: Arena inductive
 isolation; Nanoda inference-cache, negative-cache and reserved-namespace
 regressions; independent let/import contract clarification; and a bounded
 history-mining pilot. A theorem accept control requires a demonstrated coverage

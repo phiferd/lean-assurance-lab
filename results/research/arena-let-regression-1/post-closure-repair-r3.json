@@ -1,0 +1,78 @@
+{
+  "schema_version": 1,
+  "repair_id": "ARENA-LET-REGRESSION-1-POST-CLOSURE-REPAIR-3",
+  "recorded_at": "2026-09-10T00:28:00Z",
+  "status": "COMPLETE",
+  "classification": "HISTORICAL_QUEUE_ASSERTION_PORTABILITY_REPAIR",
+  "predecessor": {
+    "git_commit": "0121fc80c9a0aa5d3fcc731c69fa091b64dd1d21",
+    "path": "results/research/arena-let-regression-1/post-closure-repair-r2.json",
+    "bytes": 3543,
+    "sha256": "91aa43fd1dc4041b060324c50f87b6058ad1ab9da427aaf1013c261f23d8389e"
+  },
+  "trigger": {
+    "command": ["scripts/run-unit-tests"],
+    "live_suite": {"tests": 925, "failures": 1},
+    "frozen_publication_suite": {"tests": 73, "failures": 0},
+    "portfolio_checkpoint_suite": {"tests": 9, "failures": 0},
+    "failure": "test_arena_let_regression_erratum.ArenaLetRegressionErratumTests.test_repair_record_binds_successors_without_scientific_change compared the mutable current selected_item with NANODA-CACHE-REGRESSION-1 after that item had legitimately completed and the queue selected SEMANTIC-LET-CONTRACT-1.",
+    "attribution": "The assertion conflated the first repair's historical queue claim with mutable successor state. The second repair also checked its bound tooling paths against live bytes, making ordinary future test evolution fail its historical regression."
+  },
+  "repair": {
+    "historical_selection": "Load each repair's queue claim from its own exact Git checkpoint and continue to require NANODA-CACHE-REGRESSION-1 there.",
+    "historical_bindings": "Validate first- and second-repair binding bytes from their respective exact commits, not from mutable live paths.",
+    "current_state": "Run scripts/validate-research-queue --require-ready against current state without hard-coding a future successor identity.",
+    "future_test_evolution": "Bind this repaired regression by immutable Git blob identity so later test maintenance does not redefine or invalidate the historical repair."
+  },
+  "test_binding": {
+    "path": "tests/test_arena_let_regression_erratum.py",
+    "git_blob": "0435ec9771346ce5ca1b883eac45223c18afb8fd",
+    "bytes": 6205,
+    "sha256": "c89431e8c3c523a976308074bd44f3d0aff9487d27c80f78b4850c4008c003f3"
+  },
+  "validation": {
+    "focused_attempt_1": {
+      "command": ["python3", "-m", "unittest", "-v", "tests.test_arena_let_regression_erratum"],
+      "status": "FAILED_SETUP",
+      "failure": "tests is not a Python package, so module-name discovery raised ModuleNotFoundError before loading any test."
+    },
+    "focused_attempt_2": {
+      "command": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_arena_let_regression_erratum.py", "-v"],
+      "status": "FAILED_PREFLIGHT",
+      "failure": "The intended repaired-test Git blob had not yet been written to the local object store, so the new historical binding check failed before the repair checkpoint was staged."
+    },
+    "focused_command": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_arena_let_regression_erratum.py", "-v"],
+    "focused_status": "PASS_5_TESTS",
+    "complete_command": ["scripts/run-unit-tests"],
+    "complete_status": "PASS_926_LIVE_73_FROZEN_9_CHECKPOINT",
+    "complete_counts": {
+      "live_tests": 926,
+      "frozen_publication_tests": 73,
+      "portfolio_checkpoint_tests": 9,
+      "failures": 0
+    },
+    "final_plain_rerun": {
+      "command": [
+        "scripts/run-unit-tests"
+      ],
+      "status": "FAILED_1_OF_926_LIVE",
+      "failure": "On Darwin, test_cvc_prep.ProcessTests.test_real_timeout_kills_process_group encountered the already characterized transient EPERM on its final process-group SIGKILL. Frozen-publication 73/73 and portfolio-checkpoint 9/9 still passed. This is a validation-runtime failure, not a scientific result."
+    },
+    "final_prescribed_darwin_rerun": {
+      "command": [
+        "scripts/run-unit-tests-with-signal-retry",
+        "--require-full-payload"
+      ],
+      "status": "PASS_926_LIVE_73_FROZEN_9_CHECKPOINT",
+      "boundary": "Uses the previously committed bounded Darwin-only retry adapter; it repeats only an identical denied signal while the group leader is provably absent and does not weaken cleanup assertions or alter Linux CI execution."
+    }
+  },
+  "scientific_effect": {
+    "arena_closure_outcome_changed": false,
+    "catalog_or_authority_changed": false,
+    "scientific_inputs_changed": false,
+    "nanoda_cache_result_changed": false,
+    "checker_or_proof_launches": 0,
+    "external_research_actions": 0
+  }
+}

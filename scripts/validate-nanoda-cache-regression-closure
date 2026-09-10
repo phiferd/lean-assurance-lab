@@ -1,0 +1,157 @@
+#!/usr/bin/env python3
+"""Validate the NANODA-CACHE-REGRESSION-1 closure package."""
+from __future__ import annotations
+
+import hashlib
+import json
+import subprocess
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+ITEM = "NANODA-CACHE-REGRESSION-1"
+BASE = ROOT / "results/research/nanoda-cache-regression-1"
+ENTRY = "454c3510e9e8cf08d234d63fa440702d4f0407f5"
+REVISION = "4c544ed4099c8227f07d5de77ad1e69fb0740a27"
+
+
+def require(condition: bool, message: str) -> None:
+    if not condition:
+        raise ValueError(message)
+
+
+def load(path: Path) -> object:
+    return json.loads(path.read_text(encoding="utf-8"))
+
+
+def digest(path: Path) -> str:
+    return hashlib.sha256(path.read_bytes()).hexdigest()
+
+
+def safe(relative: str) -> Path:
+    path = (ROOT / relative).resolve()
+    require(path.is_relative_to(ROOT) and path.is_file(), f"unsafe or missing evidence path: {relative}")
+    return path
+
+
+def git_json(revision: str, relative: str) -> object:
+    raw = subprocess.check_output(["git", "show", f"{revision}:{relative}"], cwd=ROOT)
+    return json.loads(raw)
+
+
+def validate() -> None:
+    manifest = load(BASE / "evidence-manifest.json")
+    require(manifest["schema_version"] == 1 and manifest["item_id"] == ITEM, "manifest identity")
+    rows = manifest["files"]
+    require(isinstance(rows, list) and len(rows) == 30, "manifest file population")
+    paths: set[str] = set()
+    for row in rows:
+        require(set(row) == {"path", "bytes", "sha256"}, "manifest row fields")
+        require(row["path"] not in paths, "duplicate manifest path")
+        paths.add(row["path"])
+        path = safe(row["path"])
+        require(path.stat().st_size == row["bytes"], f"byte count: {row['path']}")
+        require(digest(path) == row["sha256"], f"digest: {row['path']}")
+
+    work = load(BASE / "work-record.json")
+    require(work["item_id"] == ITEM and work["status"] == "COMPLETE", "work record closure")
+    require(work["entry_commit"] == ENTRY and work["outcome"] == "SUCCESS", "work record outcome")
+    used = work["consumed_at_closure"]
+    require(used["active_seconds_charged_conservatively"] <= work["budget"]["active_seconds"], "active budget")
+    require(used["read_only_or_setup_requests"] == 8, "setup accounting")
+    require(used["builds_including_compiling_tests"] == 2, "build accounting")
+    require(used["test_processes"] == 2, "test accounting")
+    for zero in ("lean_proof_launches", "new_mutation_identities", "new_scientific_export_bytes", "external_writes"):
+        require(used[zero] == 0, f"zero budget: {zero}")
+
+    entry_work = git_json(ENTRY, "results/research/nanoda-cache-regression-1/work-record.json")
+    entry_queue = git_json(ENTRY, "config/research-queue.json")
+    entry_source = git_json(ENTRY, "results/research/nanoda-cache-regression-1/source-lock.json")
+    entry_rubric = git_json(ENTRY, "results/research/nanoda-cache-regression-1/action-rubric.json")
+    require(entry_work["status"] == "ACTIVE" and entry_work["launch_state"].startswith("COMMITTED_ENTRY"), "entry work binding")
+    require(entry_work["consumed_at_entry"]["test_processes"] == 0, "entry launch count")
+    entry_item = next(item for item in entry_queue["items"] if item["id"] == ITEM)
+    require(entry_queue["selected_item"] == ITEM and entry_item["status"] == "ACTIVE", "entry queue binding")
+    require(entry_source["item_id"] == entry_rubric["item_id"] == ITEM, "entry artifact identity")
+    require(entry_source["revision"] == REVISION, "entry source revision")
+
+    focused = load(BASE / "execution/focused-receipt.json")
+    full = load(BASE / "execution/full-suite-receipt.json")
+    require(focused["status"] == "PASS" and focused["exit_code"] == 0, "focused status")
+    require(focused["observed"]["lib_tests_passed"] == 2 and focused["observed"]["lib_tests_failed"] == 0, "focused counts")
+    require(focused["observed"]["caught_bound_panics"] == 2, "focused bound panics")
+    require(full["status"] == "PASS" and full["exit_code"] == 0, "full status")
+    require(full["observed"]["lib_tests_passed"] == 40 and full["observed"]["lib_tests_failed"] == 0, "full counts")
+    require(full["observed"]["doc_tests_failed"] == 0 and full["observed"]["doc_tests_ignored"] == 8, "doc counts")
+    for cell in ("focused", "full"):
+        raw = load(BASE / f"execution/{cell}/supervisor.json")
+        require(raw["status"] == "COMPLETE" and raw["returncode"] == 0, f"{cell} raw status")
+        require(raw["cleanup_completed"] and not raw["deadline_exceeded"], f"{cell} process control")
+
+    patch = (BASE / "patches/infer-cache-regression.patch").read_text(encoding="utf-8")
+    require(patch.count("diff --git ") == 2, "two-file test patch")
+    require("diff --git a/src/tests.rs b/src/tests.rs" in patch, "test module declaration")
+    require("diff --git a/src/tests/tc.rs b/src/tests/tc.rs" in patch, "test module body")
+    for forbidden in ("diff --git a/src/tc.rs", "diff --git a/src/util.rs", "diff --git a/Cargo"):
+        require(forbidden not in patch, f"production or dependency patch: {forbidden}")
+    for required in ("infer_cache_no_check", "infer_cache_check", "InferOnly", "Check", "catch_unwind", "assert_def_eq_failure"):
+        require(required in patch, f"patch assertion: {required}")
+
+    assessment = load(BASE / "cache-contract-assessment.json")
+    result = load(BASE / "result.json")
+    closure = load(BASE / "work-closure.json")
+    require(result["outcome"] == closure["outcome"] == "SUCCESS", "result agreement")
+    require(assessment["validation"]["focused"] == "PASS", "focused assessment")
+    require(assessment["validation"]["full_locked_suite"] == "PASS", "full assessment")
+    require(assessment["export_boundary"]["status"] == "BOUNDED_UNRESOLVED_UNCHANGED", "export boundary")
+    require(result["recommendation"]["external_action_status"] == "NOT_AUTHORIZED_NOT_SUBMITTED", "external gate")
+    draft = safe(result["recommendation"]["draft"]).read_text(encoding="utf-8")
+    require("not authorized and not submitted" in draft, "draft gate text")
+
+    repair = load(ROOT / "results/research/arena-let-regression-1/post-closure-repair-r3.json")
+    require(repair["status"] == "COMPLETE", "repository test repair status")
+    require(repair["validation"]["focused_status"] == "PASS_5_TESTS", "repair focused validation")
+    require(
+        repair["validation"]["complete_status"] == "PASS_926_LIVE_73_FROZEN_9_CHECKPOINT",
+        "repair complete validation",
+    )
+    require(
+        repair["validation"]["final_prescribed_darwin_rerun"]["status"]
+        == "PASS_926_LIVE_73_FROZEN_9_CHECKPOINT",
+        "repair final prescribed validation",
+    )
+    test_binding = repair["test_binding"]
+    test_path = safe(test_binding["path"])
+    require(test_path.stat().st_size == test_binding["bytes"], "repair test bytes")
+    require(digest(test_path) == test_binding["sha256"], "repair test digest")
+    blob = subprocess.check_output(["git", "cat-file", "blob", test_binding["git_blob"]], cwd=ROOT)
+    require(len(blob) == test_binding["bytes"], "repair test blob bytes")
+    require(hashlib.sha256(blob).hexdigest() == test_binding["sha256"], "repair test blob digest")
+
+    preservation = load(BASE / "canonical-state-preservation.json")
+    for row in preservation["unchanged_at_scientific_closure"]:
+        require(digest(safe(row["path"])) == row["sha256"], f"preserved canonical state: {row['path']}")
+
+    transition = load(BASE / "historical-transition.json")
+    require(transition["entry_commit"] == ENTRY, "historical entry commit")
+    for relative in transition["entry_paths"]:
+        subprocess.check_output(["git", "show", f"{ENTRY}:{relative}"], cwd=ROOT)
+
+    queue = load(ROOT / "config/research-queue.json")
+    item = next(row for row in queue["items"] if row["id"] == ITEM)
+    successor = next(row for row in queue["items"] if row["id"] == "SEMANTIC-LET-CONTRACT-1")
+    require(item["status"] == "COMPLETE" and item["closure"]["outcome"] == "SUCCESS", "queue closure")
+    require(queue["selected_item"] == successor["id"] and successor["status"] == "READY", "successor handoff")
+    require(not any(row["status"] == "ACTIVE" for row in queue["items"]), "no active successor")
+    status = (ROOT / "docs/RESEARCH_STATUS.md").read_text(encoding="utf-8")
+    require("Selected next item: `SEMANTIC-LET-CONTRACT-1`." in status, "status successor marker")
+
+
+if __name__ == "__main__":
+    try:
+        validate()
+    except (OSError, KeyError, TypeError, ValueError, json.JSONDecodeError,
+            subprocess.CalledProcessError) as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        raise SystemExit(1)
+    print("PASS")

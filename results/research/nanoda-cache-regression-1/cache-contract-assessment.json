@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "finding": "CURRENT_SPLIT_CACHE_CONTRACT_HAS_MAINTAINABLE_PREVENTIVE_REGRESSION",
+  "source_continuity": {
+    "infer_flag": ["InferOnly", "Check"],
+    "checked_lookup": "infer_cache_check is consulted first for both modes.",
+    "unchecked_lookup": "infer_cache_no_check is consulted only when flag == InferOnly.",
+    "writes": "Successful results are written to infer_cache_no_check for InferOnly and infer_cache_check for Check.",
+    "lifetime": "Both staged calls occur on one exact ExprPtr inside one ExportFile::with_tc TypeChecker closure.",
+    "failure": "The malformed let's value type fails assert_def_eq against its Sort 1 annotation with assertion failed: self.def_eq(u, v)."
+  },
+  "fixed_pair": {
+    "control": {
+      "fixture": "let annotated Sort 1 := Sort 0; body #0",
+      "infer_only": "PASS; returns Sort 1 and writes only infer_cache_no_check for the exact expression pointer.",
+      "check_after_warm": "PASS; returns the same Sort 1 and writes infer_cache_check for the exact expression pointer."
+    },
+    "candidate": {
+      "fixture": "let annotated Sort 1 := Sort 1; body #0",
+      "fresh_check": "REJECTS with the exact bound definitional-equality assertion and writes no checked result for the candidate pointer.",
+      "infer_only": "PASS; returns Sort 2 and writes only infer_cache_no_check for the staged pointer.",
+      "check_after_warm": "REJECTS with the same exact assertion and writes no checked result, demonstrating that the weaker cached result is not reused by Check."
+    }
+  },
+  "implementation": {
+    "patch": "results/research/nanoda-cache-regression-1/patches/infer-cache-regression.patch",
+    "changed_paths": ["src/tests.rs", "src/tests/tc.rs"],
+    "production_paths_changed": 0,
+    "new_test_count": 2,
+    "new_fixture_bytes": 0
+  },
+  "validation": {
+    "focused": "PASS",
+    "focused_tests_passed": 2,
+    "full_locked_suite": "PASS",
+    "full_library_tests_passed": 40,
+    "full_library_tests_failed": 0,
+    "doc_tests_ignored": 8,
+    "repository_suite_after_historical_test_repair": "PASS_926_LIVE_73_FROZEN_9_CHECKPOINT"
+  },
+  "sensitivity_basis": {
+    "kind": "HISTORICAL_SUPPORT_ONLY",
+    "evidence": "results/research/survivor-cache-1/result.json",
+    "statement": "The older pinned mutation made Check consult the warmed unchecked result and failed the same internal candidate assertion. It motivates this preventive test but is not re-executed or transferred as a current mutant result."
+  },
+  "export_boundary": {
+    "evidence": "results/research/survivor-cache-export-1/result.json",
+    "status": "BOUNDED_UNRESOLVED_UNCHANGED",
+    "statement": "No ordinary exported-input witness, malformed-export acceptance or production-impact conclusion follows from the internal unit regression."
+  },
+  "conclusion": "SUCCESS: current source supports a concise two-test regression that directly protects the split-cache validation-strength policy and same-pointer staged behavior."
+}

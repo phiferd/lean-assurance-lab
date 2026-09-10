@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "outcome": "SUCCESS",
+  "finding": "PREVENTIVE_INTERNAL_INFERENCE_CACHE_REGRESSION",
+  "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "entry_commit": "454c3510e9e8cf08d234d63fa440702d4f0407f5",
+  "patch_commit": "c43a8263df588db47ae5aca77a8ac6d91eef2ab3",
+  "observations": [
+    "The valid same-pointer InferOnly-to-Check control succeeds and records results in both distinct maps.",
+    "Fresh Check rejects the malformed let with the bound definitional-equality assertion.",
+    "InferOnly accepts the staged malformed let and warms only its unchecked cache entry.",
+    "Check on that identical warmed pointer still rejects and does not record a checked entry.",
+    "The focused filter passed both new tests and the complete locked suite passed all 40 library tests.",
+    "Repository closure validation exposed a historical test that compared an old queue claim with mutable current state; the repaired test binds each old claim at its exact commit, and the complete repository suite then passed 926 live, 73 frozen-publication and 9 portfolio-checkpoint tests."
+  ],
+  "artifacts": {
+    "assessment": "results/research/nanoda-cache-regression-1/cache-contract-assessment.json",
+    "patch": "results/research/nanoda-cache-regression-1/patches/infer-cache-regression.patch",
+    "focused_receipt": "results/research/nanoda-cache-regression-1/execution/focused-receipt.json",
+    "full_suite_receipt": "results/research/nanoda-cache-regression-1/execution/full-suite-receipt.json",
+    "repository_test_repair": "results/research/arena-let-regression-1/post-closure-repair-r3.json"
+  },
+  "execution_accounting": {
+    "active_seconds_charged_conservatively": 3600,
+    "read_only_or_setup_requests": 8,
+    "builds_including_compiling_tests": 2,
+    "test_processes": 2,
+    "process_wall_seconds": 11.236989958008053,
+    "lean_proof_launches": 0,
+    "new_mutation_identities": 0,
+    "new_scientific_export_bytes": 0,
+    "external_writes": 0
+  },
+  "claim_limits": [
+    "The result establishes a current internal implementation-contract regression only.",
+    "Historical mutant execution remains supporting evidence; no current mutant was built or run.",
+    "No ordinary exported-input reachability, malformed-export acceptance, production impact, semantic authority or corpus kill is claimed.",
+    "The canonical mutation registry, survivor classifications and exported-reachability result remain unchanged."
+  ],
+  "recommendation": {
+    "action": "Retain the test-only patch as a Nanoda pull-request candidate. After a fresh exact current-source and duplicate/rebase preflight, rerun focused and full validation and request explicit human approval before submission.",
+    "draft": "results/action-recommendations/drafts/nanoda-infer-cache-regression.md",
+    "external_action_status": "NOT_AUTHORIZED_NOT_SUBMITTED"
+  },
+  "next_item": "SEMANTIC-LET-CONTRACT-1",
+  "next_item_started": false
+}
