@@ -1,0 +1,73 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-CACHE-REGRESSION-1",
+  "cell_id": "CURRENT-FULL-SUITE",
+  "prepared_at": "2026-09-10T00:14:00Z",
+  "prepared_after_commit": "c43a8263df588db47ae5aca77a8ac6d91eef2ab3",
+  "source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+    "detached_checkout": "/private/tmp/nanoda-cache-regression-1/source",
+    "checkout_state": "Exactly src/tests.rs and new src/tests/tc.rs differ from the source revision; reverse application of the focused-cell patch still succeeds after execution.",
+    "source_lock": "results/research/nanoda-cache-regression-1/source-lock.json"
+  },
+  "patch": {
+    "path": "results/research/nanoda-cache-regression-1/patches/infer-cache-regression.patch",
+    "bytes": 3751,
+    "sha256": "83714aabc7867e9521a075dd73cbe54a71f9cf7d872658d82acb3ad9a21ae441",
+    "resulting_files": [
+      {"path": "src/tests.rs", "bytes": 51, "sha256": "3ef08daddd7fae585c3894595bf0cba3cbfb0a89d00d52d0b1b6d71831886923", "git_blob": "c1ac1c729eac345a9386642d1a132817237ec694"},
+      {"path": "src/tests/tc.rs", "bytes": 3189, "sha256": "ab27dc24595dcf3f6308f715662143158c1af3e69f2eae3d6c769ff0e84c4d0f", "git_blob": "e2e606d010971c195691c3109612b57ef63f9f48"}
+    ]
+  },
+  "focused_evidence": {
+    "manifest": "results/research/nanoda-cache-regression-1/execution/focused-manifest.json",
+    "manifest_sha256": "7e6403f1d3a745b2ee56e13bd608f2965ebd2252be616ab7c775cf95d75fd99d",
+    "receipt": "results/research/nanoda-cache-regression-1/execution/focused-receipt.json",
+    "raw_supervisor_sha256": "f5cce793c96346e7946ff728f45bb14e6821d2e3a8dc9cbe456e2757ed19a41e"
+  },
+  "expected": {
+    "exit": 0,
+    "lib_tests_passed": 40,
+    "lib_tests_failed": 0,
+    "main_tests_passed": 0,
+    "doc_tests_ignored": 8,
+    "meaning": "The complete current locked Nanoda suite passes with the identical test-only patch."
+  },
+  "tooling": {
+    "rustc": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)",
+    "cargo": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)",
+    "dependency_mode": "--offline --locked",
+    "runner": {"path": "results/research/nanoda-cache-regression-1/run-cell.py", "bytes": 1314, "sha256": "1a769deb9ade3fed98322e5b5497ddbc49cb2e463fe71c31713f1dea9464b9c6"},
+    "supervisor": {"path": "lib/cvc_process.py", "bytes": 8271, "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c", "git_blob": "94d885b55e72f4d556daa1e34fdcd75071c33a14"}
+  },
+  "invocation": ["python3", "results/research/nanoda-cache-regression-1/run-cell.py", "full"],
+  "payload_invocation": ["/opt/homebrew/Cellar/rust/1.98.0/bin/cargo", "test", "--offline", "--locked"],
+  "environment": {
+    "PATH": "/opt/homebrew/Cellar/rust/1.98.0/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    "CARGO_HOME": "/Users/danphifer/.cargo",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/private/tmp/nanoda-cache-regression-1/target",
+    "RUSTC": "/opt/homebrew/Cellar/rust/1.98.0/bin/rustc",
+    "RUST_BACKTRACE": "0",
+    "LANG": "C"
+  },
+  "execution_directory": "results/research/nanoda-cache-regression-1/execution/full",
+  "timeout_seconds": 120,
+  "timeout_controller": "lib/cvc_process.py creates a dedicated payload process group, enforces the monotonic deadline, detects controller loss and always sends TERM then KILL to the group before writing hashes and cleanup status.",
+  "accounting_before": {
+    "active_seconds_charged_conservatively": 3000,
+    "read_only_or_setup_requests": 8,
+    "builds_including_compiling_tests": 1,
+    "test_processes": 1,
+    "remaining_active_seconds": 2400,
+    "remaining_builds": 2,
+    "remaining_test_processes": 3
+  },
+  "reservation": {
+    "build_number": 2,
+    "test_process_number": 2,
+    "counts_even_on_failure": true
+  }
+}
