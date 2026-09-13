@@ -2784,7 +2784,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SEMANTIC-IMPORT-CONTRACT-1`.
 
-The item is READY and unstarted under the existing portfolio reserve: 120
+The item is ACTIVE under the existing portfolio reserve: 120
 cumulative active minutes, at most eight primary/source/duplicate read-only
 requests, zero builds/checkers/proofs/new exports/mutants/external writes, and
 no catalog or authority changes. Bind a fresh work record before comparing the
@@ -2837,7 +2837,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
+and modeled mutation metrics are unchanged. SEMANTIC-IMPORT-CONTRACT-1 is the only ACTIVE item; no successor has started.
 
 ### Waiting
 
