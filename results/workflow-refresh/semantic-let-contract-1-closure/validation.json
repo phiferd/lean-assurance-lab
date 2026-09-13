@@ -1,0 +1,134 @@
+{
+  "schema_version": 1,
+  "item_id": "SEMANTIC-LET-CONTRACT-1",
+  "status": "PASS",
+  "completed_at": "2026-09-13T13:36:02.486290+00:00",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/full-suite.log",
+        "bytes": 136483,
+        "sha256": "174c6c190bc582fff8ad53bc5cef027a635ed8ab57abb8c7d533411a3d9955a1"
+      }
+    },
+    {
+      "command": [
+        "scripts/validate-semantic-let-contract-closure"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/closure.log",
+        "bytes": 106,
+        "sha256": "52cb462ce1be8eadb60f1a3cf13cc42cfdfcddfbbe8aebe23327301c1ba1f17d"
+      }
+    },
+    {
+      "command": [
+        "scripts/validate-declaration-validation-catalog"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/catalog.log",
+        "bytes": 441,
+        "sha256": "879f1f2cf4d902c0b593176a8d33b25b80ab8896e4228dc58903d3927870bb55"
+      }
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue",
+        "--require-ready"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/queue.log",
+        "bytes": 5,
+        "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+      }
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/project-review.log",
+        "bytes": 54,
+        "sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+      }
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "exit_code": 0,
+      "log": {
+        "path": "results/workflow-refresh/semantic-let-contract-1-closure/external-ledger.log",
+        "bytes": 68,
+        "sha256": "560184e42e5a737377ebbccd5d95321e66748a007a28a8109f2ec1b867a582d3"
+      }
+    }
+  ],
+  "full_suite": {
+    "live_tests": 936,
+    "frozen_publication_tests": 73,
+    "portfolio_checkpoint_tests": 9,
+    "failures": 0,
+    "full_payload_required": true
+  },
+  "refresh": {
+    "path": "results/workflow-refresh/semantic-let-contract-1-closure-refresh/result.json",
+    "status": "COMPLETE"
+  },
+  "accounting_update": {
+    "reason": "Extend the unchanged continuous interval through required full-payload validation and final local closure; same scientific inputs and tooling. Final accounting fields are rechecked after this update. Repository commit/push is delivery.",
+    "pre_validation_inputs": "results/workflow-refresh/semantic-let-contract-1-closure/validation-inputs.json",
+    "final_work_record": {
+      "path": "results/research/semantic-let-contract-1/work-record.json",
+      "bytes": 1809,
+      "sha256": "ae9e24f0524a84eb082f512bc2699e8df2fe0882ff8c1f6ceb40e4caa4da4193"
+    },
+    "final_work_closure": {
+      "path": "results/research/semantic-let-contract-1/work-closure.json",
+      "bytes": 1159,
+      "sha256": "48d06036d3d82a831b3b4bba86f7945e63dbc4e735e7204a2b998dfa8c6b2b62"
+    }
+  },
+  "whitespace_check": {
+    "command": [
+      "git",
+      "diff",
+      "--cached",
+      "--check",
+      "--",
+      ".",
+      ":(exclude)results/research/semantic-let-contract-1/sources/06-export-readme.txt",
+      ":(exclude)results/research/semantic-let-contract-1/sources/07-export-format.txt"
+    ],
+    "exit_code": 0,
+    "exception": "Two exact upstream documentation snapshots retain original trailing whitespace. Their complete content/receipt hashes are checked; all authored text and tooling pass the standard diff check."
+  },
+  "final_accounting_check": {
+    "command": [
+      "scripts/validate-semantic-let-contract-closure"
+    ],
+    "exit_code": 0,
+    "log": {
+      "path": "results/workflow-refresh/semantic-let-contract-1-closure/final-accounting-check.log",
+      "bytes": 106,
+      "sha256": "762e4ef83afa1ad853ee82fa067949269d13a1b77bb39d861c2daf5c6ebc19dc"
+    }
+  },
+  "evidence_manifest_check": {
+    "status": "PASS",
+    "files": 34,
+    "tooling_blobs": 3
+  }
+}

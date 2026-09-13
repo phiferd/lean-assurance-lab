@@ -57,6 +57,19 @@ research directions.
 
 ## Attempted
 
+- Completed `SEMANTIC-LET-CONTRACT-1` on 2026-09-13 with `SUCCESS` for one
+  source-qualified clarification packet and an unsubmitted `leanprover/lean4export`
+  documentation question. Pinned official checking/inference/reduction interfaces
+  and Lean4Lean's value-typing translation premise clarify why erasure alone does
+  not settle arbitrary raw-input acceptance. The existing 601-byte pair uses its
+  bound variable and changes both the value and enclosing declaration type.
+  Seven source requests (including one failed open), retained formal sources and
+  independent reviews support the [packet](../results/research/semantic-let-contract-1/clarification-packet.md)
+  and [result](../results/research/semantic-let-contract-1/result.json).
+  The policy remains bounded unresolved; no catalog/authority change, experimental
+  launch, new export byte or external research write occurred. `HSBM-PILOT-1` is
+  selected READY and unstarted after project-wide reassessment.
+
 - Completed a bounded external-contribution tracking checkpoint on 2026-09-13.
   A schema-backed canonical ledger now consolidates Arena PRs #176/#181/#182,
   Nanoda PRs #32/#33, and the unsubmitted `NANODA-CACHE-REGRESSION-1` pull-request
@@ -2710,22 +2723,30 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `SEMANTIC-LET-CONTRACT-1`.
+Selected next item: `HSBM-PILOT-1`.
 
-The item is ACTIVE under its committed [work record](../results/research/semantic-let-contract-1/work-record.json). Use at most eight primary-source GETs and 120
-active minutes to distinguish the raw let typing judgment from the admissible
-input and environment assumptions of zeta reduction. Reuse the exact let/control
-evidence and prior authority deferral, and produce one source-qualified
-documentation patch or maintainer-question draft, qualified-source reuse, or
-duplicate/no-added-value result. No build, checker, proof, mutation, new export,
-catalog promotion, authority change or external write is authorized.
+The item is READY and unstarted. Use 120 active minutes, at most eight
+primary-source/setup GETs and zero build, checker, proof, mutation or new export
+launches. Freeze the complete reachable non-merge population and exclusions,
+then select four signal-ranked commits and two seeded controls before semantic
+inspection, following the portfolio plan. Produce a compact selection/analysis
+tool and six-commit ledger with at most two actionable fresh regression
+candidates, or a precise negative/bounded unresolved pilot result.
+
+`SEMANTIC-LET-CONTRACT-1` completed with SUCCESS for a
+[source-qualified clarification packet](../results/research/semantic-let-contract-1/clarification-packet.md)
+and one unsubmitted documentation question. The exact raw-let acceptance policy
+remains BOUNDED_UNRESOLVED; no catalog or authority decision changed. Its seven
+source requests include one failed web open. No scientific launch or new export
+occurred. The pair uses its bound variable and adjusts the enclosing declaration
+type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains six READY items and one PLANNED portfolio reserve
+The canonical queue retains five READY items and one PLANNED portfolio reserve
 across all three paths: Arena inductive
-isolation; Nanoda inference-cache, negative-cache and reserved-namespace
-regressions; independent let/import contract clarification; and a bounded
+isolation; Nanoda negative-cache and reserved-namespace
+regressions; independent import-contract clarification; and a bounded
 history-mining pilot. A theorem accept control requires a demonstrated coverage
 need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks

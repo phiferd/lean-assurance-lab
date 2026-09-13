@@ -1,0 +1,16 @@
+#!/usr/bin/env python3
+"""Validate retained SEMANTIC-LET-CONTRACT-1 closure; performs no network access."""
+import json
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.semantic_let_contract import validate
+
+if __name__ == "__main__":
+    try:
+        print(json.dumps(validate(ROOT), sort_keys=True))
+    except (ValueError, KeyError, StopIteration, OSError) as exc:
+        print(f"SEMANTIC-LET-CONTRACT-1 validation failed: {exc}", file=sys.stderr)
+        raise SystemExit(1)
