@@ -1,0 +1,129 @@
+diff --git a/src/tests.rs b/src/tests.rs
+index 304a306..b4d2a96 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -1,4 +1,5 @@
+ mod name;
+ mod level;
+ mod natlit;
++mod nat_dispatch;
+ mod util;
+diff --git a/src/tests/nat_dispatch.rs b/src/tests/nat_dispatch.rs
+new file mode 100644
+index 0000000..b368208
+--- /dev/null
++++ b/src/tests/nat_dispatch.rs
+@@ -0,0 +1,113 @@
++use super::util::test_get_export_file;
++use crate::env::EnvLimit;
++use crate::expr::Expr;
++use crate::name::Name;
++use crate::util::{CowStr, DagMarker, ExportFile, ExprPtr, LeanDag, NamePtr, Ptr};
++use num_bigint::BigUint;
++use std::error::Error;
++
++const CASES: [(&str, u8, u8, u16); 6] = [
++    ("gcd", 12, 18, 6),
++    ("land", 10, 12, 8),
++    ("lor", 10, 12, 14),
++    ("xor", 10, 12, 6),
++    ("shiftLeft", 3, 2, 12),
++    ("shiftRight", 12, 2, 3),
++];
++
++fn name<'p>(dag: &mut LeanDag<'p>, prefix: NamePtr<'p>, suffix: &'static str) -> NamePtr<'p> {
++    let (idx, _) = dag.strings.insert_full(CowStr::Borrowed(suffix));
++    let suffix = Ptr::from(DagMarker::ExportFile, idx);
++    let hash = crate::hash64!(crate::name::STR_HASH, prefix, suffix);
++    let (idx, _) = dag.names.insert_full(Name::Str(prefix, suffix, hash));
++    Ptr::from(DagMarker::ExportFile, idx)
++}
++
++fn fixture<'p>() -> Result<(ExportFile<'p>, [NamePtr<'p>; 6]), Box<dyn Error>> {
++    // Reuse the empty fixture's configuration, enabling literals before either
++    // the export DAG or a temporary checker DAG is constructed.
++    let (template, skipped) = test_get_export_file(None)?;
++    assert!(skipped.is_empty());
++    let mut config = template.config;
++    config.nat_extension = true;
++    let (mut export, skipped) = config.to_export_file()?;
++    assert!(skipped.is_empty());
++    assert!(export.declars.is_empty());
++    let anon = export.dag.anonymous();
++    let nat = name(&mut export.dag, anon, "Nat");
++    let names = CASES.map(|(suffix, ..)| name(&mut export.dag, nat, suffix));
++    export.name_cache = export.dag.mk_name_cache();
++    assert_eq!(
++        [export.name_cache.nat_gcd, export.name_cache.nat_land,
++         export.name_cache.nat_lor, export.name_cache.nat_xor,
++         export.name_cache.nat_shl, export.name_cache.nat_shr],
++        names.map(Some),
++    );
++    Ok((export, names))
++}
++
++#[test]
++fn nat_dispatch_matches_each_operation() -> Result<(), Box<dyn Error>> {
++    let (export, names) = fixture()?;
++    export.with_tc(EnvLimit::Empty, |tc| {
++        for ((label, lhs, rhs, expected), name) in CASES.into_iter().zip(names) {
++            let lhs = tc.ctx.mk_nat_lit_quick(BigUint::from(lhs)).expect("left literal");
++            let rhs = tc.ctx.mk_nat_lit_quick(BigUint::from(rhs)).expect("right literal");
++            assert!(matches!(tc.ctx.read_expr(lhs), Expr::NatLit { .. }));
++            assert!(matches!(tc.ctx.read_expr(rhs), Expr::NatLit { .. }));
++            let levels = tc.ctx.alloc_levels_slice(&[]);
++            let op = tc.ctx.mk_const(name, levels);
++            let applied = tc.ctx.mk_app(op, lhs);
++            let applied = tc.ctx.mk_app(applied, rhs);
++            let result = tc.try_reduce_nat(applied).expect(label);
++            let Expr::NatLit { ptr, .. } = tc.ctx.read_expr(result) else {
++                panic!("{label} did not produce a natural literal");
++            };
++            assert_eq!(tc.ctx.read_bignum(ptr), Some(&BigUint::from(expected)), "{label}");
++        }
++    });
++    Ok(())
++}
++
++// Keep the control's real operands in the owned export DAG, so disabling the
++// extension cannot turn input construction into None or invalidate their storage.
++fn stored_literal<'p>(export: &mut ExportFile<'p>, value: u8) -> ExprPtr<'p> {
++    let (idx, _) = export.dag.bignums.as_mut().unwrap().insert_full(BigUint::from(value));
++    let ptr = Ptr::from(DagMarker::ExportFile, idx);
++    let hash = crate::hash64!(crate::expr::NAT_LIT_HASH, ptr);
++    let (idx, _) = export.dag.exprs.insert_full(Expr::NatLit { ptr, hash });
++    Ptr::from(DagMarker::ExportFile, idx)
++}
++
++#[test]
++fn nat_dispatch_respects_disabled_extension() -> Result<(), Box<dyn Error>> {
++    let (mut export, names) = fixture()?;
++    let lhs = stored_literal(&mut export, 10);
++    let rhs = stored_literal(&mut export, 12);
++    for enabled in [true, false] {
++        export.config.nat_extension = enabled;
++        export.with_tc(EnvLimit::Empty, |tc| {
++            // These same export-backed arguments remain actual literals in both modes.
++            for (operand, value) in [(lhs, 10u8), (rhs, 12u8)] {
++                let Expr::NatLit { ptr, .. } = tc.ctx.read_expr(operand) else {
++                    panic!("control operand is not a literal");
++                };
++                assert_eq!(tc.ctx.read_bignum(ptr), Some(&BigUint::from(value)));
++            }
++            let levels = tc.ctx.alloc_levels_slice(&[]);
++            let op = tc.ctx.mk_const(names[1], levels);
++            let applied = tc.ctx.mk_app(op, lhs);
++            let applied = tc.ctx.mk_app(applied, rhs);
++            let result = tc.try_reduce_nat(applied);
++            if enabled {
++                let Expr::NatLit { ptr, .. } = tc.ctx.read_expr(result.expect("enabled land control")) else {
++                    panic!("enabled control did not produce a natural literal");
++                };
++                assert_eq!(tc.ctx.read_bignum(ptr), Some(&BigUint::from(8u8)));
++            } else {
++                assert!(result.is_none(), "disabled extension reduced the application");
++            }
++        });
++    }
++    Ok(())
++}

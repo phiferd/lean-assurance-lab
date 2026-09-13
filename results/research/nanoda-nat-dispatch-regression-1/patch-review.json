@@ -1,0 +1,77 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NAT-DISPATCH-REGRESSION-1",
+  "reviewer": "history_review_a",
+  "status": "PASS_SOURCE_REVIEW",
+  "decision": "PASS",
+  "source_tip": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "scope": "Independent static review of exact files before launch; no compiler, test process, checker, network or new serialized export invoked. Root still must satisfy committed launch gate.",
+  "files": [
+    {
+      "path": "src/tests/nat_dispatch.rs",
+      "sha256": "45a46bb46cc5641457218a54521c889102d3aea15513b394c4fff8aa1e11b673",
+      "bytes": 5073
+    },
+    {
+      "path": "src/tests.rs",
+      "sha256": "709129dfa9bf4c842864b7dd9df01feb09c17024ed2806837f1263e2c33e8770",
+      "bytes": 61
+    }
+  ],
+  "checks": {
+    "typing_lifetimes": "Source-plausible. Config::to_export_file is generic in output lifetime; owned ExportFile contains all persistent names and stored operands. Context-local expression/name lifetimes do not escape closures. Ptr types are constrained by Name::Str and Expr::NatLit; CowStr::Borrowed suffixes are static. Compilation remains unverified.",
+    "name_hashing": "name() interns suffix strings in owned export DAG and hashes Name::Str with STR_HASH, prefix and exact string pointer, matching TcCtx::str. Nat prefix and six canonical suffixes are interned. Refreshed mk_name_cache entries are asserted equal to the six name pointers in CASES order.",
+    "nonvacuous_setup": "fixture loads Empty template only to reuse config, then enables nat_extension before parsing a fresh export and before with_tc builds temporary DAG. Both export and temporary bignum stores therefore exist for positive literal construction. Both inputs use expect and match NatLit; results require Some and NatLit with exact payload.",
+    "dispatcher_reach": "Closed mk_const/mk_app expressions call crate-internal try_reduce_nat directly; its six name comparisons map to do_nat_bin. NatLit arguments make whnf return immediately, so EnvLimit::Empty is adequate without declaring Nat constants. This does not demonstrate a checked declaration/public import route.",
+    "positive_values": "All six CASES results are correct. For each individual input pair, expected result differs from the other five newly added native operations, even though gcd and xor rows both equal 6 for different inputs.",
+    "disabled_control": "stored_literal creates properly hashed Expr::NatLit and bignums in owned export DAG with ExportFile marker. Enabled phase first checks land(10,12)=8. Config then disabled between context borrows; original persistent operand pointers and their payloads are rechecked. try_reduce_nat returns None at config guard before reading temp bignum storage. Application expressions are rebuilt in each context; operand identity is retained, application pointer identity is not claimed.",
+    "wiring": "src/tests.rs adds mod nat_dispatch under lib.rs cfg(test) mod tests. Two unignored #[test] functions are wired; production source untouched.",
+    "scope_and_duplication": "Known Nat.land is preventive reuse/control. Five other operations extend focused Cargo coverage. No current defect, universal absence, new scientific mismatch, public export reachability, or six-novel-discoveries claim."
+  },
+  "fixed_cells": [
+    {
+      "operation": "Nat.gcd",
+      "lhs": 12,
+      "rhs": 18,
+      "expected": 6
+    },
+    {
+      "operation": "Nat.land",
+      "lhs": 10,
+      "rhs": 12,
+      "expected": 8
+    },
+    {
+      "operation": "Nat.lor",
+      "lhs": 10,
+      "rhs": 12,
+      "expected": 14
+    },
+    {
+      "operation": "Nat.xor",
+      "lhs": 10,
+      "rhs": 12,
+      "expected": 6
+    },
+    {
+      "operation": "Nat.shiftLeft",
+      "lhs": 3,
+      "rhs": 2,
+      "expected": 12
+    },
+    {
+      "operation": "Nat.shiftRight",
+      "lhs": 12,
+      "rhs": 2,
+      "expected": 3
+    }
+  ],
+  "blocking_concerns": [],
+  "limitations": [
+    "Static review is not proof of compilation or executed reach; focused/full suite still required.",
+    "Hash/intern construction intentionally uses crate-internal DAG APIs and does not add serialized data.",
+    "Disabled retained-DAG state is a unit fixture for internal configuration guard, not a normal disabled importer outcome."
+  ],
+  "reviewed_at": "2026-09-13T17:16:38.565450+00:00",
+  "reviewed_monotonic": 98553.099759708
+}

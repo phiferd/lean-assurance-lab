@@ -1,0 +1,65 @@
+{
+  "item_id": "NANODA-NAT-DISPATCH-REGRESSION-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "cases": [
+    [
+      "gcd",
+      12,
+      18,
+      6
+    ],
+    [
+      "land",
+      10,
+      12,
+      8
+    ],
+    [
+      "lor",
+      10,
+      12,
+      14
+    ],
+    [
+      "xor",
+      10,
+      12,
+      6
+    ],
+    [
+      "shiftLeft",
+      3,
+      2,
+      12
+    ],
+    [
+      "shiftRight",
+      12,
+      2,
+      3
+    ]
+  ],
+  "control": {
+    "operation": "land",
+    "lhs": 10,
+    "rhs": 12,
+    "enabled_result": 8,
+    "disabled_result": null,
+    "same_operands": "Export-backed NatLit pointers persist across contexts; applications are rebuilt. Both modes assert literal tags and numeric payloads.",
+    "scope": "Internal implementation contract; no claim of arbitrary public input reachability or isolated early-guard causality."
+  },
+  "configuration": "Copy Empty fixture config; enable nat before constructing fresh export DAG; intern operation names and recompute name cache; with_tc creates correctly configured temporary DAG. Disabled control stores actual operands in owned export DAG before toggling config.",
+  "expected_tests": [
+    "tests::nat_dispatch::nat_dispatch_matches_each_operation",
+    "tests::nat_dispatch::nat_dispatch_respects_disabled_extension"
+  ],
+  "build_test_caps": {
+    "builds": 3,
+    "tests": 4,
+    "per_process_seconds": 120
+  },
+  "new_exports": 0,
+  "mutants": 0,
+  "proofs": 0,
+  "external_writes": 0
+}
