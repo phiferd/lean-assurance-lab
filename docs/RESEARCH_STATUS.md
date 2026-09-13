@@ -57,6 +57,18 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-NAT-DISPATCH-REGRESSION-1` on 2026-09-13 with SUCCESS:
+  a test-only patch adds two tests covering six Nat dispatcher operations and
+  disabled mode. Both focused tests and all 40 Nanoda library tests passed;
+  eight existing doc examples remain ignored. Three source/setup requests and
+  two build/test reservations were charged, with no scientific failures,
+  new exports, proofs, mutations or external research writes. The
+  [result](../results/research/nanoda-nat-dispatch-regression-1/result.json) and
+  [indexed local PR draft](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md)
+  preserve preventive internal-API scope and known Nat.land reuse. The draft is
+  held for maintainer-capacity review, refreshed source/duplicates, retesting and
+  exact submission approval. `NANODA-DEFEQ-CACHE-1` is selected READY/unstarted.
+
 - Completed `HSBM-PILOT-1` on 2026-09-13 with `NEGATIVE` for its fixed
   two-fresh-commit feasibility threshold. The frozen 36-commit reachable
   non-merge population contains 32 eligible commits; four signal selections
@@ -2748,18 +2760,21 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-NAT-DISPATCH-REGRESSION-1`.
+Selected next item: `NANODA-DEFEQ-CACHE-1`.
 
-The item is ACTIVE under its committed
-[work record](../results/research/nanoda-nat-dispatch-regression-1/work-record.json)
-and the portfolio plan's explicit HSBM closure successor. Use 90 cumulative active minutes, at most eight source/setup
-requests, three builds up to 600 seconds and four test processes up to 120
-seconds. Prepare a test-only six-operation Nat dispatcher matrix and a disabled
-control using in-memory inputs; freeze exact source, fixtures, name-cache
-bindings, expected cells, test patch, tooling and process accounting before
-any launch. Produce a focused/full-suite-validated patch and indexed unsubmitted
-PR draft, or an exact bounded boundary. No new serialized export, implementation
-fix, proof, mutant or external research write is authorized.
+The item is READY and unstarted under the portfolio plan's existing reserve
+scope: 90 cumulative active minutes, at most eight read-only requests, and
+initially zero build/test/export launches. Bind current source/test inventory
+and derive an exact same-context sequence distinguishing eager-mode negative
+cache behavior, or a scoped exclusion. Reuse prior cache infrastructure where
+applicable; execution requires a separately recorded budget and frozen cells.
+
+`NANODA-NAT-DISPATCH-REGRESSION-1` completed SUCCESS with a test-only patch:
+both new tests and all 40 Nanoda library tests passed. The
+[local PR draft](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md)
+is indexed and held for capacity review, refreshed source/duplicates and exact
+submission approval. Its six operations and disabled control provide preventive
+internal-API coverage; no current bug or public importer claim is made.
 
 `HSBM-PILOT-1` completed NEGATIVE for its fresh-yield criterion. Its one useful
 Nat dispatcher recommendation partly reuses known `Nat.land` evidence; no two
@@ -2780,8 +2795,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains five READY items and one PLANNED portfolio reserve
-across all three paths: Nat dispatcher tests; Arena inductive isolation;
+The canonical queue retains four READY items and one PLANNED portfolio reserve
+across all three paths: Arena inductive isolation;
 Nanoda negative-cache and reserved-namespace regressions; and independent
 import-contract clarification. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before

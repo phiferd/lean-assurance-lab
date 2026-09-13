@@ -25,7 +25,14 @@ class ExternalContributionTests(unittest.TestCase):
             (ROOT / "docs" / "EXTERNAL_CONTRIBUTIONS.md").read_text(encoding="utf-8"),
             rendered,
         )
-        self.assertEqual(len(ledger["contributions"]), 6)
+        # Retain every delivered/prepared contribution while allowing the
+        # canonical ledger to grow; a fixed total rejects legitimate additions.
+        self.assertLessEqual(
+            {"ARENA-PR-176", "ARENA-PR-181", "ARENA-PR-182", "NANODA-PR-32",
+             "NANODA-PR-33", "NANODA-CACHE-REGRESSION-PR-DRAFT",
+             "NANODA-NAT-DISPATCH-REGRESSION-PR-DRAFT"},
+            {row["id"] for row in ledger["contributions"]},
+        )
 
     def test_current_index_includes_open_merged_and_local_draft_states(self):
         ledger = external_contributions.load_and_validate()

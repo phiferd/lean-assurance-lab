@@ -1,0 +1,33 @@
+{
+  "item_id": "NANODA-NAT-DISPATCH-REGRESSION-1",
+  "classification": "ADMINISTRATIVE_TEST_REPAIR_SAME_ITEM",
+  "failure": "The current external-contribution test required exactly six entries; registering the authorized seventh draft correctly grew the ledger and exposed the stale test.",
+  "initial_full_suite": {
+    "log": "results/research/nanoda-nat-dispatch-regression-1/lab-full-suite-initial-failure.log",
+    "sha256": "d0b3eb7e85b912ee6664a02a9af26d1aaeed9eece1df36cf96b76ca03adaf946",
+    "current_tests": 992,
+    "current_failures": 1,
+    "frozen_publication_tests": 73,
+    "frozen_portfolio_tests": 9,
+    "historical_failures": 0
+  },
+  "repair": "Replace the stale cardinality with required identity coverage for all seven known contributions. Existing schema/duplicate/reference validation remains intact; future valid additions are allowed. No frozen evidence or research gate changed.",
+  "original_test": {
+    "commit": "7cd43f0e4624c8ba572148d7f34f61ad7e4fbd99",
+    "path": "tests/test_external_contributions.py",
+    "sha256": "15f2ca2bf7be7ae4f681161a89e7dc5a713d92bc2bafc786386704f2bec69df5"
+  },
+  "repaired_test": {
+    "path": "tests/test_external_contributions.py",
+    "sha256": "e220abe27ae1256fddc6d3377d478b82dfdb1af45fccb08d4673e3db1bb5af38"
+  },
+  "focused_validation": {
+    "command": "python3 -m unittest discover -s tests -p test_external_contributions.py -q",
+    "tests": 5,
+    "status": "PASS"
+  },
+  "extra_Nanoda_builds": 0,
+  "extra_Nanoda_test_processes": 0,
+  "extra_network_requests": 0,
+  "full_suite_repair_validation": "lab-full-suite.log"
+}

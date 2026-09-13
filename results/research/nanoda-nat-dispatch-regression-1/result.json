@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NAT-DISPATCH-REGRESSION-1",
+  "outcome": "SUCCESS",
+  "completion_kind": "TEST_ONLY_PREVENTIVE_REGRESSION_AND_LOCAL_DRAFT",
+  "entry_commit": "1f08c299dbe27f6e7d767de21da61c3a8570565b",
+  "freeze_commit": "7cd43f0e4624c8ba572148d7f34f61ad7e4fbd99",
+  "execution_commits": {
+    "001-focused": "7cd43f0e4624c8ba572148d7f34f61ad7e4fbd99",
+    "002-full": "7cd43f0e4624c8ba572148d7f34f61ad7e4fbd99"
+  },
+  "finding": "Added two crate-internal tests protecting six Nat operation dispatcher arms and disabled-extension behavior. Both focused tests and all 40 library tests passed; eight existing doc examples remain ignored. No current defect is claimed.",
+  "scope": "Supported internal TypeChecker::try_reduce_nat with configured in-memory DAGs, explicit name-cache identity and real literal inputs/results. This does not establish public import reachability, universal arithmetic correctness or isolated early-guard causality.",
+  "known_reuse": "Nat.land sensitivity was already known in Lab evidence; its inclusion is preventive reuse, not a new discovery.",
+  "recommendation": {
+    "target": "ammkrn/nanoda_lib src/tests.rs and src/tests/nat_dispatch.rs",
+    "action": "Add two preventive native-operation dispatch regression tests.",
+    "priority": "LOCAL_READY_HOLD_FOR_MAINTAINER_CAPACITY",
+    "draft": "results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md",
+    "patch": "results/research/nanoda-nat-dispatch-regression-1/patches/nat-dispatch.patch",
+    "external_action_status": "LOCAL_PREPARATION_ONLY_NOT_SUBMITTED",
+    "prerequisites": [
+      "Reassess current maintainer capacity after acknowledgment of open #32/#33",
+      "Fresh source and complete duplicate preflight",
+      "Rebase and focused/full validation on selected current base",
+      "Explicit owner approval for exact pull request to ammkrn/nanoda_lib"
+    ]
+  },
+  "research_counts": {
+    "source_setup_requests": 3,
+    "builds": 2,
+    "test_processes": 2,
+    "proofs": 0,
+    "mutants": 0,
+    "new_exports": 0,
+    "external_research_writes": 0
+  },
+  "next_item": {
+    "id": "NANODA-DEFEQ-CACHE-1",
+    "status": "READY",
+    "started": false
+  },
+  "catalog_changed": false,
+  "authority_changed": false,
+  "output_bindings": [
+    {
+      "path": "results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md",
+      "sha256": "4e41c3a79428da93a2a72331a5c027b004c45bba1320dcee47f3c807302a9606",
+      "bytes": 1453
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/administrative-repair.json",
+      "sha256": "ddd606c69eb3831d0298c699f25e9cdf3db8dfa4e21a98a3e44a3663bb06acbe",
+      "bytes": 1599
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/closure-external-contributions.json",
+      "sha256": "39acbeec80ce51188761a2bdc182378e45214574ec3185e09369328c608009b3",
+      "bytes": 12168
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/closure-queue.json",
+      "sha256": "e084b01989d5c17a1427e95cabf3f86fe0d8ad4338fa991f3346ba655e17b714",
+      "bytes": 45864
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/001-focused/process.json",
+      "sha256": "fb221786d4cce3d5bcc70736ed1d42d02fcadff20490d2e3b8fce5de12aa91bf",
+      "bytes": 184
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/001-focused/request.json",
+      "sha256": "57145670c0b26fa743539ecc3f5f63c94f3744dbe0572926e1255738c7b758ef",
+      "bytes": 825
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/001-focused/stderr",
+      "sha256": "5e6e4dac20ad1e395bfec3387768c3ed9de1761eaa2c774f86f8c543036d0c26",
+      "bytes": 1224
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/001-focused/stdout",
+      "sha256": "454bae88a7c38a3c94cda938f3dfa3386aa112a6ee2d54c70521263f09d681f3",
+      "bytes": 370
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/001-focused/supervisor.json",
+      "sha256": "9d476e9e70ed13894544eb6dd49fa2e9c7c1a9055a4be159e3b495683f0f446c",
+      "bytes": 588
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/002-full/process.json",
+      "sha256": "9458f9e67b2765623f7e39382c62e10425aa784a01dfeb453853d4f1bdcde164",
+      "bytes": 184
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/002-full/request.json",
+      "sha256": "7306be4700964a8922cc10b8f68bd315309b23fa9fd620f560936a844df65d01",
+      "bytes": 805
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/002-full/stderr",
+      "sha256": "0f15c10617d9241b26336ad3036cf23a23bb6feb0fb6a5c4238fd3d471750a91",
+      "bytes": 2325
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/002-full/stdout",
+      "sha256": "bf75df2cdbede4a24fdce4bcaa1fe5df6e81fd30de97337273cc1d2cfe3f3740",
+      "bytes": 2763
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/002-full/supervisor.json",
+      "sha256": "ed13e2e73b8b2e01e02c43258e5e516245f53c17a4d96cf22d272710f85c92b3",
+      "bytes": 587
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/execution/accounting.json",
+      "sha256": "a60f41841cbceee8018f5087b1e5a53dde7423d3bbff7aaf2f0c6456138ceb6a",
+      "bytes": 944
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/lab-full-suite-initial-failure.log",
+      "sha256": "d0b3eb7e85b912ee6664a02a9af26d1aaeed9eece1df36cf96b76ca03adaf946",
+      "bytes": 142651
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/lab-full-suite.log",
+      "sha256": "fd35ac70f8e950b2a82448e167ef95ac7125ca513dad7e8bb6db18907fa4c47b",
+      "bytes": 142106
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/report.md",
+      "sha256": "9489e884fdb2eef8c2b57316e6381e6f637c5eb4ce776ec3c10d0901c6ceaad1",
+      "bytes": 2077
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/requests.json",
+      "sha256": "00ba30210492c43b33ed31366fc81f96257312f7b3d375cf817d87b0e8580f2a",
+      "bytes": 687
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/setup-notes.json",
+      "sha256": "d89a2ec6fb4e7e296af48094ca7a0d7e95c9eda7af952185b28ff9b4d004075e",
+      "bytes": 1353
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/successor-review.json",
+      "sha256": "1bf12586e4e53498f0df7bfdfb9a04b64d3471e52e77a640c137feba32c39699",
+      "bytes": 14993
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/validation.json",
+      "sha256": "b301aadacb8c1ee0b25650d4d17fa71c45649ee4b7242b047137f909f1944b5d",
+      "bytes": 2079
+    },
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/work-closure.json",
+      "sha256": "2d7e598723ceb57e1e03ed24a01ac0ce16e317429283e81544f5ec93cccdee27",
+      "bytes": 911
+    }
+  ],
+  "lab_validation": {
+    "status": "PASS",
+    "current_tests": 992,
+    "frozen_publication_tests": 73,
+    "frozen_portfolio_tests": 9,
+    "record": "validation.json",
+    "retained_administrative_repair": "administrative-repair.json"
+  },
+  "final_delivery_accounting": "delivery-accounting.json"
+}
