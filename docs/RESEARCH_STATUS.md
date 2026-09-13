@@ -2762,7 +2762,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-DEFEQ-CACHE-1`.
 
-The item is READY and unstarted under the portfolio plan's existing reserve
+The item is ACTIVE under the portfolio plan's existing reserve
 scope: 90 cumulative active minutes, at most eight read-only requests, and
 initially zero build/test/export launches. Bind current source/test inventory
 and derive an exact same-context sequence distinguishing eager-mode negative
@@ -2806,7 +2806,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No successor has started.
+and modeled mutation metrics are unchanged. Only NANODA-DEFEQ-CACHE-1 has started; no successor is executing.
 
 ### Waiting
 
