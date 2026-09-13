@@ -2750,8 +2750,9 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-NAT-DISPATCH-REGRESSION-1`.
 
-The item is READY and unstarted under the portfolio plan's explicit HSBM
-closure successor. Use 90 cumulative active minutes, at most eight source/setup
+The item is ACTIVE under its committed
+[work record](../results/research/nanoda-nat-dispatch-regression-1/work-record.json)
+and the portfolio plan's explicit HSBM closure successor. Use 90 cumulative active minutes, at most eight source/setup
 requests, three builds up to 600 seconds and four test processes up to 120
 seconds. Prepare a test-only six-operation Nat dispatcher matrix and a disabled
 control using in-memory inputs; freeze exact source, fixtures, name-cache
