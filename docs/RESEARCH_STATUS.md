@@ -57,6 +57,16 @@ research directions.
 
 ## Attempted
 
+- On 2026-09-13, after exact owner authorization, submitted the revised
+  `SEMANTIC-LET-CONTRACT-1` documentation question as
+  [lean4export #48](https://github.com/leanprover/lean4export/issues/48).
+  Read-only duplicate and current-format checks preceded submission; a fresh
+  readback verified the approved title and body. The
+  [submission record](../results/research/semantic-let-contract-1/external-submission-record.json)
+  preserves the request and receipts separately from the unchanged research
+  closure. The policy remains BOUNDED_UNRESOLVED. `HSBM-PILOT-1` remains READY
+  and unstarted; no scientific launch or frontier change occurred.
+
 - Completed `SEMANTIC-LET-CONTRACT-1` on 2026-09-13 with `SUCCESS` for one
   source-qualified clarification packet and an unsubmitted `leanprover/lean4export`
   documentation question. Pinned official checking/inference/reduction interfaces
@@ -2735,7 +2745,10 @@ candidates, or a precise negative/bounded unresolved pilot result.
 
 `SEMANTIC-LET-CONTRACT-1` completed with SUCCESS for a
 [source-qualified clarification packet](../results/research/semantic-let-contract-1/clarification-packet.md)
-and one unsubmitted documentation question. The exact raw-let acceptance policy
+and one documentation question, subsequently submitted with owner authorization
+as [lean4export #48](https://github.com/leanprover/lean4export/issues/48) on
+2026-09-13. The [submission record](../results/research/semantic-let-contract-1/external-submission-record.json)
+preserves that later action separately from the research closure. The exact raw-let acceptance policy
 remains BOUNDED_UNRESOLVED; no catalog or authority decision changed. Its seven
 source requests include one failed web open. No scientific launch or new export
 occurred. The pair uses its bound variable and adjusts the enclosing declaration
@@ -2758,6 +2771,14 @@ independent-transfer prerequisites, authority locks, pending survivor counts
 and modeled mutation metrics are unchanged. No successor has started.
 
 ### Waiting
+
+- `W-LET-VALIDATION-CONTRACT`: await guidance on
+  [lean4export #48](https://github.com/leanprover/lean4export/issues/48), observed
+  open at submission on 2026-09-13. A maintainer response or cited policy that
+  clarifies raw-let validation versus permitted substitution triggers a bounded
+  local qualification proposal and assessment of shared regression value.
+  Submission or agreement alone is not semantic authority. No automatic polling
+  or further external write is authorized; the local queue remains executable.
 
 - `W-LEAN-IMAX-NORMALIZATION`: await maintainer guidance on the
   [declaration-level evidence contributed to Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955).
