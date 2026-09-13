@@ -2773,7 +2773,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `ARENA-INDUCTIVE-ISOLATION-1`.
 
-The item is READY and unstarted under the existing portfolio reserve: 90
+The item is ACTIVE under the existing portfolio reserve: 90
 cumulative active minutes, at most eight read-only requests, at most four existing
 tutorial cases and zero scientific/build launches or new export bytes. Establish
 current Arena inventory and inspect independent rejection causes before selecting
@@ -2821,7 +2821,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No successor has started.
+and modeled mutation metrics are unchanged. ARENA-INDUCTIVE-ISOLATION-1 is the only active item; no successor has started.
 
 ### Waiting
 
