@@ -1,0 +1,34 @@
+{
+  "item_id": "SEMANTIC-IMPORT-CONTRACT-1",
+  "kind": "SAME_ITEM_ADMINISTRATIVE_TOOLING_REPAIR",
+  "failure_log": "lab-full-suite-initial.log",
+  "initial_validation": "validation-progress-initial.json",
+  "raw_failure": "FAIL: test_status_ready_count_matches_the_canonical_queue (test_arena_let_regression_erratum.ArenaLetRegressionErratumTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_arena_let_regression_erratum.py\", line 62, in test_status_ready_count_matches_the_canonical_queue\n    self.assertIsNotNone(match)\nAssertionError: unexpectedly None\n\n----------------------------------------------------------------------\nRan 1017 tests in 337.552s\n\nFAILED (failures=1)\n",
+  "cause": "Live status correctly has one READY item, while the legacy count parser required the literal plural items. The count comparison itself was not wrong.",
+  "repair": "Accept item or items with a word boundary, retain recognized number-word parsing and equality against the canonical READY count. Add singular/plural and invalid-suffix/unknown-count regression.",
+  "historical_mechanism": {
+    "record": "results/research/arena-let-regression-1/post-closure-repair-r3.json",
+    "instruction": "Bind this repaired regression by immutable Git blob identity so later test maintenance does not redefine or invalidate the historical repair.",
+    "original_test_blob": "0435ec9771346ce5ca1b883eac45223c18afb8fd",
+    "original_test_sha256": "c89431e8c3c523a976308074bd44f3d0aff9487d27c80f78b4850c4008c003f3",
+    "original_bytes_unchanged": true
+  },
+  "successor_test_snapshot": {
+    "path": "results/research/semantic-import-contract-1/ready-count-test-r1.py.txt",
+    "sha256": "c07dafb0888762c72fd30916f01ffca0e2f97fc08f0bd941805e29f6140ec0b8",
+    "bytes": 7047
+  },
+  "scientific_effect": {
+    "inputs_changed": false,
+    "outcomes_changed": false,
+    "counter_reset": false,
+    "new_item": false,
+    "launches": 0
+  },
+  "validation": "Focused regression and required full current/historical suite follow the tooling checkpoint; retain all prior raw evidence.",
+  "patch": "results/research/semantic-import-contract-1/ready-count-repair.patch.json",
+  "delivery_preflight_repair": {
+    "failure": "git diff --cached --check refused standard blank unified-diff context lines at lines5,6,48 as trailing whitespace; commit did not run.",
+    "resolution": "Preserve the exact patch text and digest in JSON; no test source or scientific artifact changed."
+  }
+}

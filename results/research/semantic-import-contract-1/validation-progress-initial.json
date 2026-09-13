@@ -1,0 +1,38 @@
+{
+  "commands": [
+    {
+      "command": [
+        "scripts/validate-semantic-import-contract-closure"
+      ],
+      "returncode": 0,
+      "log": "results/research/semantic-import-contract-1/pre-suite-0.log"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/semantic-import-contract-1/replay-historical-evidence.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/research/semantic-import-contract-1/pre-suite-1.log"
+    },
+    {
+      "command": [
+        "scripts/refresh-current-state",
+        "--log-dir",
+        "results/workflow-refresh/semantic-import-contract-1-pre-suite"
+      ],
+      "returncode": 0,
+      "log": "results/research/semantic-import-contract-1/pre-suite-2.log"
+    },
+    {
+      "command": [
+        "scripts/run-unit-tests",
+        "--require-full-payload"
+      ],
+      "returncode": 1,
+      "log": "results/research/semantic-import-contract-1/lab-full-suite.log"
+    }
+  ],
+  "status": "FAIL"
+}
