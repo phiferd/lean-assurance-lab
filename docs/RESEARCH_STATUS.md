@@ -2735,7 +2735,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `HSBM-PILOT-1`.
 
-The item is READY and unstarted. Use 120 active minutes, at most eight
+The item is ACTIVE under its committed [work record](../results/research/hsbm-pilot-1/work-record.json). Use 120 active minutes, at most eight
 primary-source/setup GETs and zero build, checker, proof, mutation or new export
 launches. Freeze the complete reachable non-merge population and exclusions,
 then select four signal-ranked commits and two seeded controls before semantic
