@@ -19,6 +19,7 @@ characterize validation boundaries.
 - Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)
 - Agent workflow: [`docs/AGENT_WORKFLOW.md`](docs/AGENT_WORKFLOW.md)
 - Project review and proposed next steps: [`docs/PROJECT_REVIEW.md`](docs/PROJECT_REVIEW.md)
+- External contributions and prepared PRs: [`docs/EXTERNAL_CONTRIBUTIONS.md`](docs/EXTERNAL_CONTRIBUTIONS.md)
 - Current measured assurance state: [`docs/PUBLIC_STATUS.md`](docs/PUBLIC_STATUS.md)
 
 The project is governed by `CONSTITUTION.md`.
@@ -149,6 +150,13 @@ distinction on attempt 1. The scoped report is
 [results/collatz-retrospective/REPORT.md](results/collatz-retrospective/REPORT.md).
 
 ## Shared Ecosystem Contributions
+
+The generated [external contribution view](docs/EXTERNAL_CONTRIBUTIONS.md) is
+the single current index of project-originated pull requests and prepared PR
+candidates. It is built from the canonical machine-readable
+[`results/research/external-contributions.json`](results/research/external-contributions.json).
+Upstream states are explicitly dated snapshots; the offline generator does not
+poll GitHub.
 
 The project has submitted three Lean Kernel Arena test contributions, all now
 merged: [PR #176](https://github.com/leanprover/lean-kernel-arena/pull/176)

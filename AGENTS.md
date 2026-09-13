@@ -121,6 +121,19 @@ disclosure, or pushed commit requires explicit human approval for that exact
 action and target. Prior approval for one action is not blanket authorization
 for later actions.
 
+Track project-originated external pull requests and prepared pull-request
+candidates in `results/research/external-contributions.json`; its generated
+human view is `docs/EXTERNAL_CONTRIBUTIONS.md`. When a tracked external action
+is prepared, submitted, modified, or observed, update the ledger and its dated
+fields, then run `scripts/build-external-contributions --write` and `--check`.
+`scripts/refresh-current-state` regenerates the view but intentionally performs
+no network lookup: never present an older dated observation as live state.
+Name new pull-request submission drafts with the `*-pr.md` suffix; ledger
+validation rejects any convention-named PR draft that is not indexed.
+Item-specific evidence and submission records remain authoritative for detailed
+or historical claims, and a ledger entry never supplies external-write
+authorization.
+
 ## Durable epistemic invariants
 
 - LLM output is not semantic authority, and checker consensus or majority is

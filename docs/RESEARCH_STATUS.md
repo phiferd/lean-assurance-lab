@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-09
+Last updated: 2026-09-13
 
 ## How Status Is Tracked
 
@@ -23,6 +23,13 @@ planning document. GitHub Issues coordinate bounded, claimable work beneath the
 Active frontier and track upstream conversations; an Issue does not activate a
 research direction or establish project truth. This file retains the project's
 own priorities and completion conditions.
+
+Project-originated pull requests and prepared pull-request candidates are
+indexed in the canonical
+[external contribution ledger](../results/research/external-contributions.json)
+and its generated [human view](EXTERNAL_CONTRIBUTIONS.md). Upstream states there
+are dated observations rather than live guarantees. Item-specific evidence and
+submission records remain authoritative for their detailed historical claims.
 
 Use [Research workflow](RESEARCH_WORKFLOW.md) to rank by expected ecosystem
 value, information gained, transfer, feasibility/cost, and urgency. Complete a
@@ -49,6 +56,19 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- Completed a bounded external-contribution tracking checkpoint on 2026-09-13.
+  A schema-backed canonical ledger now consolidates Arena PRs #176/#181/#182,
+  Nanoda PRs #32/#33, and the unsubmitted `NANODA-CACHE-REGRESSION-1` pull-request
+  candidate with evidence paths, dated upstream observations, review/check
+  summaries, and explicit next actions. Its generated human view is wired into
+  `scripts/refresh-current-state`; generation is deliberately offline and does
+  not authorize an external write. Nanoda #32/#33 remain open, mergeable, and
+  without review activity or reported checks as observed on 2026-09-13. The
+  cache candidate remains local pending upstream capacity, fresh preflight, and
+  exact human approval. This maintenance checkpoint changes no scientific
+  evidence, queue rank, frontier, or external state. `SEMANTIC-LET-CONTRACT-1`
+  remains selected READY and unstarted.
 
 - Completed `NANODA-CACHE-REGRESSION-1` on 2026-09-09 with `SUCCESS` at
   current inspected Nanoda `4c544ed4099c8227f07d5de77ad1e69fb0740a27`.

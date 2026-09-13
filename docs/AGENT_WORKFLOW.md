@@ -19,6 +19,7 @@ by the task. Do not replace those sources with this page or a conversation.
 | Project review and proposed next frontier | `docs/PROJECT_REVIEW.md`, `results/research/project-review.json`, `scripts/build-project-review --check`; proposals do not activate work |
 | Ranked work and stopping-point review | `docs/RESEARCH_WORKFLOW.md`, `config/research-queue.json`, `scripts/validate-research-queue`; the Active frontier selects the governing phase plan |
 | External-action preparation | `docs/INVESTIGATION_SOP.md`, exact investigation and action draft, `scripts/github-cli-preflight <owner/repo>`; publication still requires target-specific human authorization |
+| External contribution status | `results/research/external-contributions.json`, generated `docs/EXTERNAL_CONTRIBUTIONS.md`, `scripts/build-external-contributions --check`; upstream states are dated observations, not live guarantees |
 
 Use `rg` to find a section or artifact ID before opening large files. For JSON,
 inspect keys and the relevant records first. Follow bindings when the task
@@ -161,6 +162,15 @@ Explain the source-level case and expected behavior before internal provenance
 or research terminology. Verify paths and names against the target's current
 tree and an accepted precedent. Keep the exact proposed external text separate
 from local evidence notes so the owner can approve what maintainers will see.
+Record each project-originated pull request and prepared pull-request candidate
+in `results/research/external-contributions.json`. A read-only upstream check
+updates the affected observation date and status fields; preparing, submitting,
+modifying or observing a tracked item updates its disposition and next action.
+Regenerate the human view with `scripts/build-external-contributions --write`.
+Name new pull-request submission drafts with the `*-pr.md` suffix so validation
+can reject a convention-named draft that was not indexed.
+The ordinary current-state refresh performs that offline generation, but never
+polls GitHub or authorizes an external write.
 
 The completed publication study's validators require its original Active
 frontier. After Gate 12, use the snapshot successor for full-payload checks;

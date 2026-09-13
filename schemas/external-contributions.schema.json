@@ -1,0 +1,276 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://lean-assurance-lab.local/schemas/external-contributions.schema.json",
+  "title": "Lean Assurance Lab external contribution ledger",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "schema_version",
+    "record_type",
+    "updated_on",
+    "scope",
+    "status_policy",
+    "contributions"
+  ],
+  "properties": {
+    "schema_version": {
+      "const": 1
+    },
+    "record_type": {
+      "const": "EXTERNAL_CONTRIBUTION_LEDGER"
+    },
+    "updated_on": {
+      "type": "string",
+      "format": "date"
+    },
+    "scope": {
+      "type": "string",
+      "minLength": 1
+    },
+    "status_policy": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "upstream_states_are_dated_observations",
+        "network_refresh_is_automatic",
+        "view_generator",
+        "view_check",
+        "external_writes_require_target_specific_authorization"
+      ],
+      "properties": {
+        "upstream_states_are_dated_observations": {
+          "const": true
+        },
+        "network_refresh_is_automatic": {
+          "const": false
+        },
+        "view_generator": {
+          "const": "scripts/build-external-contributions --write"
+        },
+        "view_check": {
+          "const": "scripts/build-external-contributions --check"
+        },
+        "external_writes_require_target_specific_authorization": {
+          "const": true
+        }
+      }
+    },
+    "contributions": {
+      "type": "array",
+      "minItems": 1,
+      "items": {
+        "$ref": "#/$defs/contribution"
+      }
+    }
+  },
+  "$defs": {
+    "revision": {
+      "type": "string",
+      "pattern": "^[0-9a-f]{40}$"
+    },
+    "upstream": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "number",
+        "url",
+        "state",
+        "is_draft",
+        "observed_on",
+        "created_at",
+        "updated_at",
+        "merged_at",
+        "head_revision",
+        "base_revision",
+        "mergeability",
+        "review_state",
+        "checks_state"
+      ],
+      "properties": {
+        "number": {
+          "type": "integer",
+          "minimum": 1
+        },
+        "url": {
+          "type": "string",
+          "format": "uri",
+          "pattern": "^https://github\\.com/"
+        },
+        "state": {
+          "enum": ["OPEN", "MERGED", "CLOSED"]
+        },
+        "is_draft": {
+          "type": "boolean"
+        },
+        "observed_on": {
+          "type": "string",
+          "format": "date"
+        },
+        "created_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "updated_at": {
+          "type": "string",
+          "format": "date-time"
+        },
+        "merged_at": {
+          "oneOf": [
+            {"type": "string", "format": "date-time"},
+            {"type": "null"}
+          ]
+        },
+        "head_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "base_revision": {
+          "$ref": "#/$defs/revision"
+        },
+        "mergeability": {
+          "oneOf": [
+            {"enum": ["MERGEABLE", "CONFLICTING", "UNKNOWN"]},
+            {"type": "null"}
+          ]
+        },
+        "review_state": {
+          "enum": ["NO_ACTIVITY", "ACTIVE", "COMPLETED", "UNKNOWN"]
+        },
+        "checks_state": {
+          "enum": ["PASS", "FAIL", "PENDING", "NOT_REPORTED", "UNKNOWN"]
+        }
+      }
+    },
+    "next_step": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "disposition",
+        "summary",
+        "reassess_not_before",
+        "requires_fresh_preflight",
+        "requires_human_authorization"
+      ],
+      "properties": {
+        "disposition": {
+          "enum": ["NONE", "AWAIT_REVIEW", "HOLD_FOR_CAPACITY", "REASSESS"]
+        },
+        "summary": {
+          "type": "string",
+          "minLength": 1
+        },
+        "reassess_not_before": {
+          "oneOf": [
+            {"type": "string", "format": "date"},
+            {"type": "null"}
+          ]
+        },
+        "requires_fresh_preflight": {
+          "type": "boolean"
+        },
+        "requires_human_authorization": {
+          "type": "boolean"
+        }
+      }
+    },
+    "contribution": {
+      "type": "object",
+      "additionalProperties": false,
+      "required": [
+        "id",
+        "target_repository",
+        "channel",
+        "title",
+        "research_items",
+        "lifecycle",
+        "upstream",
+        "submission_material",
+        "evidence_refs",
+        "next_step",
+        "notes"
+      ],
+      "properties": {
+        "id": {
+          "type": "string",
+          "pattern": "^[A-Z0-9][A-Z0-9._-]*$"
+        },
+        "target_repository": {
+          "type": "string",
+          "pattern": "^[^/]+/[^/]+$"
+        },
+        "channel": {
+          "enum": ["PULL_REQUEST", "ISSUE", "COMMENT"]
+        },
+        "title": {
+          "type": "string",
+          "minLength": 1
+        },
+        "research_items": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "lifecycle": {
+          "enum": ["EXTERNAL", "LOCAL_DRAFT"]
+        },
+        "upstream": {
+          "oneOf": [
+            {"$ref": "#/$defs/upstream"},
+            {"type": "null"}
+          ]
+        },
+        "submission_material": {
+          "oneOf": [
+            {"type": "string", "minLength": 1},
+            {"type": "null"}
+          ]
+        },
+        "evidence_refs": {
+          "type": "array",
+          "minItems": 1,
+          "uniqueItems": true,
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "next_step": {
+          "$ref": "#/$defs/next_step"
+        },
+        "notes": {
+          "type": "array",
+          "items": {
+            "type": "string",
+            "minLength": 1
+          }
+        }
+      },
+      "allOf": [
+        {
+          "if": {
+            "properties": {"lifecycle": {"const": "LOCAL_DRAFT"}}
+          },
+          "then": {
+            "properties": {
+              "upstream": {"type": "null"},
+              "submission_material": {"type": "string"}
+            }
+          }
+        },
+        {
+          "if": {
+            "properties": {"lifecycle": {"const": "EXTERNAL"}}
+          },
+          "then": {
+            "properties": {
+              "upstream": {"$ref": "#/$defs/upstream"}
+            }
+          }
+        }
+      ]
+    }
+  }
+}
