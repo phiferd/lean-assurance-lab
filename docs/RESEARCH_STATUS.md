@@ -57,6 +57,14 @@ research directions.
 
 ## Attempted
 
+- Incorporated the lean4export #48 reply on 2026-09-13 through a
+  [recommendation successor](../results/research/arena-let-feedback-2026-09-13/decision.md).
+  The exact-question response supplies affirmative practical support to reconsider
+  an Arena `either` characterization. Historical closures and unresolved universal
+  authority remain unchanged. `ARENA-LET-POLICY-FOLLOWUP-1` is selected READY
+  and unstarted; the original no-positive-support premise is no longer a blanket
+  blocker. No research execution or external write occurred.
+
 - Completed `SEMANTIC-IMPORT-CONTRACT-1` on 2026-09-13 with SUCCESS for one
   source-qualified four-field clarification packet; universal authority remains
   UNRESOLVED. Current Kiota documents k recomputation and checks constructor
@@ -2793,21 +2801,31 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-NESTED-REGRESSION-1`.
+Selected next item: `ARENA-LET-POLICY-FOLLOWUP-1`.
 
-The item is READY and unstarted under the existing portfolio reserve: 90
-cumulative active minutes and at most eight read-only source/setup requests.
-Audit the current suite and reserved-prefix traversal to produce one supported
-candidate/control design or scoped exclusion. Zero builds, checker/proof/test,
-new export, mutation or external research launches are authorized by this
-source-only scope. Bind a fresh work record before analysis; any later execution
-needs exact frozen inputs and a separately recorded finite budget.
+The item is READY and unstarted: 60 cumulative active minutes, eight read-only
+source/setup requests, and two static build-test reservations of 300 seconds.
+Use the unchanged 601-byte let candidate/control for a current Arena inventory,
+semantic-overlap, policy and practical-value review; produce at most one useful
+`either` characterization package or a specific no-value result. Commit a fresh
+entry before substantive work and bind any static launch first. Zero checker,
+proof, mutation, new export or external research launches are authorized.
+`NANODA-NESTED-REGRESSION-1` remains READY under its original scope.
+
+The [feedback successor](../results/research/arena-let-feedback-2026-09-13/decision.md)
+incorporates nomeata's direct reply to #48. It supplies affirmative scoped
+practical support for allowing implementation choice on this exact question;
+it is neither universal semantic authority nor automatic Arena adoption.
+The original Arena-let closure remains historical BOUNDED_UNRESOLVED, but its
+absence-of-any-positive-support premise no longer blocks a practical proposal.
 
 `SEMANTIC-IMPORT-CONTRACT-1` completed SUCCESS for a source-qualified four-field
 clarification packet. Universal metadata obligations remain UNRESOLVED; current
 source explains k recomputation and a newer cidx guard without projecting old
 checker outcomes. One grouped documentation appendix remains local alongside
-lean4export #48, pending fresh discussion review and exact external approval.
+lean4export #48. Its next review must incorporate the maintainer reply and identify
+a distinct practical documentation need before any further question or exact
+external approval request.
 No scientific launch, catalog change or authority promotion occurred.
 
 `ARENA-INDUCTIVE-ISOLATION-1` completed NEGATIVE for an eligible existing-byte
@@ -2839,16 +2857,18 @@ covered, obsolete, unresolved and unchanged boundaries without replacing cases.
 and one documentation question, subsequently submitted with owner authorization
 as [lean4export #48](https://github.com/leanprover/lean4export/issues/48) on
 2026-09-13. The [submission record](../results/research/semantic-let-contract-1/external-submission-record.json)
-preserves that later action separately from the research closure. The exact raw-let acceptance policy
-remains BOUNDED_UNRESOLVED; no catalog or authority decision changed. Its seven
+preserves that later action separately from the research closure. The later
+[reply assessment](../results/research/arena-let-feedback-2026-09-13/recommendation-successor.json)
+supplies practical latitude for the exact question; universal authority remains
+UNRESOLVED. No catalog or authority decision changed. Its seven
 source requests include one failed web open. No scientific launch or new export
 occurred. The pair uses its bound variable and adjusts the enclosing declaration
 type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, Nanoda reserved-namespace regression,
-and one PLANNED portfolio reserve. A theorem accept control requires a demonstrated
+The canonical queue retains two READY items, the Arena let-policy follow-up and
+Nanoda reserved-namespace regression, and one PLANNED portfolio reserve. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
 at each closure by external usefulness and cost.
@@ -2860,13 +2880,16 @@ and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selecte
 
 ### Waiting
 
-- `W-LET-VALIDATION-CONTRACT`: await guidance on
-  [lean4export #48](https://github.com/leanprover/lean4export/issues/48), observed
-  open at submission on 2026-09-13. A maintainer response or cited policy that
-  clarifies raw-let validation versus permitted substitution triggers a bounded
-  local qualification proposal and assessment of shared regression value.
-  Submission or agreement alone is not semantic authority. No automatic polling
-  or further external write is authorized; the local queue remains executable.
+- `W-LET-VALIDATION-CONTRACT`: response observed and incorporated on 2026-09-13.
+  [Nomeata's reply](https://github.com/leanprover/lean4export/issues/48#issuecomment-5654286873)
+  gives practical latitude on the exact let question while disclaiming a
+  completely authoritative answer. The issue was observed open; the connector
+  omitted comment timestamps. The
+  [recommendation successor](../results/research/arena-let-feedback-2026-09-13/recommendation-successor.json)
+  selects the bounded Arena follow-up READY and unstarted. Do not continue to
+  wait for the first reply or treat the old lack-of-positive-support premise as
+  current. Further normative qualification and any external write retain their
+  separate gates; no automatic polling is enabled.
 
 - `W-LEAN-IMAX-NORMALIZATION`: await maintainer guidance on the
   [declaration-level evidence contributed to Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955).
