@@ -57,6 +57,21 @@ research directions.
 
 ## Attempted
 
+- Completed `HSBM-PILOT-1` on 2026-09-13 with `NEGATIVE` for its fixed
+  two-fresh-commit feasibility threshold. The frozen 36-commit reachable
+  non-merge population contains 32 eligible commits; four signal selections
+  and two seeded controls were fixed with their descendant sets before review.
+  Existing version/projection/imax tests, a current Arena recursor-rule duplicate,
+  stale pretty-print inputs and unchanged conversion behavior remove apparent
+  opportunities. One Nat dispatcher preventive-test recommendation has explicit
+  prior `Nat.land` overlap and is excluded conservatively from fresh yield.
+  The [ledger](../results/research/hsbm-pilot-1/ledger.json),
+  [result](../results/research/hsbm-pilot-1/result.json) and retained Git bundle
+  preserve source-only findings and reproducible selection. Seven charged setup
+  requests include the failed DNS attempt; no build, checker, proof, mutation,
+  new export or external research write occurred. `NANODA-NAT-DISPATCH-REGRESSION-1`
+  is selected READY and unstarted after project-wide comparison.
+
 - On 2026-09-13, after exact owner authorization, submitted the revised
   `SEMANTIC-LET-CONTRACT-1` documentation question as
   [lean4export #48](https://github.com/leanprover/lean4export/issues/48).
@@ -2733,15 +2748,23 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `HSBM-PILOT-1`.
+Selected next item: `NANODA-NAT-DISPATCH-REGRESSION-1`.
 
-The item is ACTIVE under its committed [work record](../results/research/hsbm-pilot-1/work-record.json). Use 120 active minutes, at most eight
-primary-source/setup GETs and zero build, checker, proof, mutation or new export
-launches. Freeze the complete reachable non-merge population and exclusions,
-then select four signal-ranked commits and two seeded controls before semantic
-inspection, following the portfolio plan. Produce a compact selection/analysis
-tool and six-commit ledger with at most two actionable fresh regression
-candidates, or a precise negative/bounded unresolved pilot result.
+The item is READY and unstarted under the portfolio plan's explicit HSBM
+closure successor. Use 90 cumulative active minutes, at most eight source/setup
+requests, three builds up to 600 seconds and four test processes up to 120
+seconds. Prepare a test-only six-operation Nat dispatcher matrix and a disabled
+control using in-memory inputs; freeze exact source, fixtures, name-cache
+bindings, expected cells, test patch, tooling and process accounting before
+any launch. Produce a focused/full-suite-validated patch and indexed unsubmitted
+PR draft, or an exact bounded boundary. No new serialized export, implementation
+fix, proof, mutant or external research write is authorized.
+
+`HSBM-PILOT-1` completed NEGATIVE for its fresh-yield criterion. Its one useful
+Nat dispatcher recommendation partly reuses known `Nat.land` evidence; no two
+fresh actionable commits were found and no broader yield claim follows.
+The [six-commit ledger](../results/research/hsbm-pilot-1/ledger.json) preserves
+covered, obsolete, unresolved and unchanged boundaries without replacing cases.
 
 `SEMANTIC-LET-CONTRACT-1` completed with SUCCESS for a
 [source-qualified clarification packet](../results/research/semantic-let-contract-1/clarification-packet.md)
@@ -2757,11 +2780,10 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains five READY items and one PLANNED portfolio reserve
-across all three paths: Arena inductive
-isolation; Nanoda negative-cache and reserved-namespace
-regressions; independent import-contract clarification; and a bounded
-history-mining pilot. A theorem accept control requires a demonstrated coverage
-need. These are ranked opportunities, not a mandate to exhaust a lane before
+across all three paths: Nat dispatcher tests; Arena inductive isolation;
+Nanoda negative-cache and reserved-namespace regressions; and independent
+import-contract clarification. A theorem accept control requires a demonstrated
+coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
 at each closure by external usefulness and cost.
 

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "item_id": "HSBM-PILOT-1",
+  "tooling_revision": 2,
+  "recorded_at": "2026-09-13T14:50:51.424237+00:00",
+  "classification": "SAME_ITEM_ADMINISTRATIVE_REPLAY_REPAIR",
+  "failure": {
+    "evidence": {
+      "path": "results/workflow-refresh/hsbm-pilot-1/offline-replay-failure.log",
+      "sha256": "5ec5166a8ba0d94bad3e4355826868fd46d067f8deb4aed471f18a421798d8e6"
+    },
+    "reason": "The exact retained bundle advertises only FETCH_HEAD. git clone applied branch ref discovery, warned that the repository was empty, and did not retain usable source objects; the frozen selection tool then failed its lower-endpoint ancestry precheck. This is a bundle-import defect in the closure validator, not a scientific mismatch."
+  },
+  "previous_tooling": [
+    {
+      "path": "results/research/hsbm-pilot-1/tooling/validator-r1.py",
+      "sha256": "30b89e2b988cf3af51f1414bda9d56693a0e4e7e768b202da9e9d37d0d23669d"
+    },
+    {
+      "path": "results/research/hsbm-pilot-1/tooling/tests-r1.py",
+      "sha256": "cfb41174c6b7472b286f0fe1a41b10251664f444eacc5625f93b5d15d2ec3bb8"
+    }
+  ],
+  "repaired_tooling": [
+    {
+      "path": "scripts/validate-hsbm-pilot-closure",
+      "sha256": "6cf7bb75b02043549da9d8235b0f9c4e6848d6fc15b4edbfbf43bb2ef74c0ae0"
+    },
+    {
+      "path": "tests/test_hsbm_closure.py",
+      "sha256": "dd93be484fb461e994ac5f7d380a4cab3af9ad79dfd5b29fc3be5604aa5c14b6"
+    }
+  ],
+  "repair": "Replace clone with git init and git bundle unbundle, importing the existing verified pack independently of branch refs. Run the same frozen selector from fe61bdf against the same tip and selection bytes. The helper verifies the bundle against the frozen source lock before importing.",
+  "regression": {
+    "command": "python3 -m unittest discover -s tests -p test_hsbm_closure.py -v",
+    "tests": 7,
+    "failures": 0,
+    "elapsed_seconds": 7.516,
+    "exact_bundle_test": "test_retained_fetch_head_bundle_replays_offline confirms the bound bundle advertises exactly TIP FETCH_HEAD and then performs real offline object import and exact whole-selection reproduction.",
+    "observed_replay_output": "PASS: exact population/selection reproduction"
+  },
+  "preserved_scientific_inputs": [
+    {
+      "path": "results/research/hsbm-pilot-1/source-lock.json",
+      "sha256": "3be93060a32fae2481d142ee5c68b68a83bde4b6a1f3d819d8fd0ca255fd567a"
+    },
+    {
+      "path": "results/research/hsbm-pilot-1/selection.json",
+      "sha256": "4056fcfd0e45af383b61b4654792899a691d8ba1b45d86f9220b79722462e7aa"
+    },
+    {
+      "path": "results/research/hsbm-pilot-1/nanoda-history.bundle",
+      "sha256": "11bcf77b775953c7890d728f2f34b1dc30ded20ac8fc8ca88d7d54f914c39e1e"
+    },
+    {
+      "path": "scripts/hsbm-pilot",
+      "sha256": "73e6047306d87a4e5e2ecbeb5d8f0ddc008540c283c5f8bec882ccb9e8a898c4"
+    }
+  ],
+  "network_requests": 0,
+  "scientific_launches": 0,
+  "budget_reset": false,
+  "remaining_closure_step": "Root rebinds current tooling and repair artifacts in artifact-bindings.json, then runs the complete required closure validation. This focused success does not itself close the item."
+}

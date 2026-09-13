@@ -1,0 +1,17 @@
+warning: You appear to have cloned an empty repository.
+fatal: Not a valid commit name 713c245191f7afbc4e996f853ca3131b9b11ec27
+Traceback (most recent call last):
+  File "/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/hsbm-pilot", line 78, in <module>
+    if __name__=='__main__':main()
+  File "/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/hsbm-pilot", line 71, in main
+    value=generate(a.repo,a.tip);payload=json.dumps(value,indent=2)+'\n'
+  File "/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/hsbm-pilot", line 25, in generate
+    git(repo, 'merge-base', '--is-ancestor', LOWER, tip)
+  File "/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/hsbm-pilot", line 19, in git
+    return subprocess.check_output(['git', '-C', str(repo), *args])
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 421, in check_output
+    return run(*popenargs, stdout=PIPE, timeout=timeout, check=True,
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 526, in run
+    raise CalledProcessError(retcode, process.args,
+subprocess.CalledProcessError: Command '['git', '-C', '/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/source', 'merge-base', '--is-ancestor', '713c245191f7afbc4e996f853ca3131b9b11ec27', '4c544ed4099c8227f07d5de77ad1e69fb0740a27']' returned non-zero exit status 128.
+FAIL: Command '['/Library/Frameworks/Python.framework/Versions/3.10/bin/python3', '/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/hsbm-pilot', '--repo', '/var/folders/49/s235nv8d6xvgxhy1yfq4g5rh0000gn/T/hsbm-offline-replay-tidb6ktn/source', '--tip', '4c544ed4099c8227f07d5de77ad1e69fb0740a27', '--output', '/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/results/research/hsbm-pilot-1/selection.json', '--check']' returned non-zero exit status 1.

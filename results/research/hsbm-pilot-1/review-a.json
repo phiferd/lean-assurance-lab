@@ -1,0 +1,905 @@
+{
+  "schema_version": 1,
+  "item_id": "HSBM-PILOT-1",
+  "reviewer": "history_review_a",
+  "source_only": true,
+  "source_tip": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "selection_binding": {
+    "lab_commit": "fe61bdf",
+    "path": "results/research/hsbm-pilot-1/selection.json",
+    "sha256": "4056fcfd0e45af383b61b4654792899a691d8ba1b45d86f9220b79722462e7aa"
+  },
+  "reviewed_commits": [
+    "2747659518c0d5debe1d05cb02ba9232cafa4897",
+    "54f24a82f5175edcb95b74118cc7b98b624fe0d7"
+  ],
+  "boundary_counts": {
+    "2747659518c0d5debe1d05cb02ba9232cafa4897": 2,
+    "54f24a82f5175edcb95b74118cc7b98b624fe0d7": 3
+  },
+  "rows": [
+    {
+      "id": "A1-version",
+      "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "interface": "parse_export_file metadata version gate",
+      "input_class": "Version-tagged stream",
+      "state_abstraction": "Before/after receipt of metadata",
+      "before_mapping": "First line Semver; refuse below 2.0.0 before body",
+      "after_mapping": "NDJSON Metadata exporter.version; refuse below 3.0.0; old executable bad_semver test commented",
+      "boundary_kind": "remapping; test-effectiveness",
+      "non_normative_obligation": "Preserve implementation-declared version support through format migration, not a normative Lean validity rule",
+      "source_inferred_reachability": true,
+      "demonstrated_reachability": false,
+      "test_reach": "At selected old parser test commented; descendant adds inline semver_tests; valid current Empty fixture exercises metadata",
+      "assertion_strength": "test_ng asserts Err below minimum and at/above maximum; test_ok asserts Ok at 3.1.0 and 3.1.9. Predicate tests do not establish metadata absence/placement policy",
+      "executable_binding": "lib.rs pub mod parser; inline #[test] functions included by ordinary Cargo test",
+      "test_timing": "Old test commented selected; replacements added first bound descendant 9c3a447",
+      "current_continuity": "Tip check_semver uses meta.format.version and [3.1.0,3.2.0), tests retained",
+      "ex_ante_useful_action": "If version tests remain absent add a focused pair; follow-up instead establishes existing predicate coverage",
+      "decision": "NEGATIVE_EXISTING_COVERAGE",
+      "sources": [
+        {
+          "commit": "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+          "path": "src/parser.rs",
+          "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+          "lines": [
+            39,
+            58
+          ]
+        },
+        {
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "path": "src/parser.rs",
+          "blob": "8c5f8098cdcca4f03524849c6e15d085a3089995",
+          "lines": [
+            425,
+            437
+          ]
+        },
+        {
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "path": "src/tests/parser.rs",
+          "blob": "fabfb5e37d827a989028a7bc83689ec2ca863ac6",
+          "lines": [
+            1,
+            26
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/parser.rs",
+          "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+          "lines": [
+            21,
+            38
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/parser.rs",
+          "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+          "lines": [
+            916,
+            958
+          ]
+        }
+      ],
+      "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+      "time_group": "shared-review-a"
+    },
+    {
+      "id": "A2-eager",
+      "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "interface": "infer_app / eager_mode",
+      "input_class": "Checked eagerReduce argument",
+      "state_abstraction": "Outer mode -> argument-local true -> restored mode",
+      "before_mapping": "No eager_mode field or toggle",
+      "after_mapping": "Initialize false; save, enable for recognized eagerReduce, compare argument type, restore on normal return",
+      "boundary_kind": "expansion; remapping",
+      "non_normative_obligation": "Mode should follow documented normal-return scope; no specific mode-sensitive outcome pair established",
+      "source_inferred_reachability": true,
+      "demonstrated_reachability": false,
+      "test_reach": "No targeted eagerReduce/mode restoration assertion in complete current source inventory; projection fixture is not eagerReduce",
+      "assertion_strength": "No targeted mode assertion; search absence is scoped to bound inventory",
+      "executable_binding": "No eager test established; current restore statement executes after assert_def_eq",
+      "test_timing": "Introduced selected; first descendant 9c3a447 swaps comparison order back to binder_type,arg_type",
+      "current_continuity": "Tip retains toggle and restore plus swapped-back order; current mode-aware cache is calibration, not new yield",
+      "ex_ante_useful_action": "Derive exact same-context mode-sensitive pair before regression; reuse queued negative-cache assessment",
+      "decision": "BOUNDED_UNRESOLVED_NOT_PROMOTED",
+      "sources": [
+        {
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "path": "src/tc.rs",
+          "blob": "3bc92185dcb3035a35cb94a7a6bd4d853c1fff04",
+          "lines": [
+            520,
+            537
+          ]
+        },
+        {
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "path": "src/expr.rs",
+          "blob": "bdf71dbd95680e409106a0305c42a664737d5edb",
+          "lines": [
+            532,
+            541
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tc.rs",
+          "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+          "lines": [
+            560,
+            580
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tc.rs",
+          "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+          "lines": [
+            957,
+            973
+          ]
+        }
+      ],
+      "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+      "time_group": "shared-review-a"
+    },
+    {
+      "id": "A3-nat-dispatch",
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "interface": "try_reduce_nat -> do_nat_bin",
+      "input_class": "Closed two-literal gcd/land/lor/xor/shiftLeft/shiftRight applications",
+      "state_abstraction": "Nat extension enabled, corresponding names present, result Some(NatLit)",
+      "before_mapping": "Six native branches absent",
+      "after_mapping": "Six native branches and direct helper tests added; nat_binop constructor has six new arms but e_nat_tests invokes older operations only",
+      "boundary_kind": "expansion; test-effectiveness",
+      "non_normative_obligation": "Advertised operator names should select intended helpers and exact literal payloads under supported settings; implementation regression only",
+      "source_inferred_reachability": true,
+      "demonstrated_reachability": false,
+      "test_reach": "Six active tests call numerical helpers. At selected e_nat_tests invokes only older operations; at tip entire e_nat expression harness commented. Other tests cover names/levels/version/hash and Empty/ProjFromProp fixtures",
+      "assertion_strength": "Strong helper numerical assertions cannot detect wrong name dispatch. Proposed direct dispatcher matrix must require constructor Some, result Some and payload equality",
+      "executable_binding": "lib.rs #[cfg(test)] mod tests -> tests.rs mod natlit -> 16 active numeric tests. e_nat_tests #[test] line is commented at tip",
+      "test_timing": "Helper tests coadded selected; expression harness commented at calibration descendant 9c3a447",
+      "current_continuity": "All six name-cache entries, dispatch cases and helpers remain at tip. Literal construction now returns Option and requires enabled extension",
+      "ex_ante_useful_action": "Small deterministic in-memory six-case dispatcher matrix with extension-disabled control; no serialized exports needed. Subject to root ranking and exact successor launch gate",
+      "decision": "ACTIONABLE_PREVENTIVE_REUSE_NOT_FRESH_YIELD",
+      "sources": [
+        {
+          "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+          "path": "src/tc.rs",
+          "blob": "94c3060c8df3991299023d9b79f884328e4c0401",
+          "lines": [
+            310,
+            377
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/tc.rs",
+          "blob": "25cd0e7e995071872bfe0bdb8a1b8aaace1cb1f0",
+          "lines": [
+            320,
+            398
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/tests/natlit.rs",
+          "blob": "30799b2721a8a095157bfbeb0dba4e8f3ba62ca2",
+          "lines": [
+            60,
+            231
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/tests/natlit.rs",
+          "blob": "30799b2721a8a095157bfbeb0dba4e8f3ba62ca2",
+          "lines": [
+            710,
+            757
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tc.rs",
+          "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+          "lines": [
+            370,
+            444
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/util.rs",
+          "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+          "lines": [
+            741,
+            768
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tests/natlit.rs",
+          "blob": "ac418a748185f98316671aff1e3a3f2be92283d8",
+          "lines": [
+            55,
+            225
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tests/natlit.rs",
+          "blob": "ac418a748185f98316671aff1e3a3f2be92283d8",
+          "lines": [
+            701,
+            751
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tests/util.rs",
+          "blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+          "lines": [
+            15,
+            39
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/util.rs",
+          "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+          "lines": [
+            203,
+            237
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/util.rs",
+          "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+          "lines": [
+            671,
+            699
+          ]
+        }
+      ],
+      "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+      "time_group": "shared-review-a",
+      "provisional_protocol": {
+        "target": "ammkrn/nanoda_lib src/tests/natlit.rs or private tc test module",
+        "priority": "Medium",
+        "cells": [
+          [
+            "gcd",
+            10,
+            15,
+            5
+          ],
+          [
+            "land",
+            10,
+            12,
+            8
+          ],
+          [
+            "lor",
+            10,
+            12,
+            14
+          ],
+          [
+            "xor",
+            10,
+            12,
+            6
+          ],
+          [
+            "shiftLeft",
+            3,
+            2,
+            12
+          ],
+          [
+            "shiftRight",
+            12,
+            2,
+            3
+          ]
+        ],
+        "construction": "Source-feasible route: load the existing Empty/export through test_get_export_file; before any TcCtx borrow, enable export.config.nat_extension, create export.dag.bignums if absent, intern Nat and six suffixes directly into public LeanDag.strings/names with hash64!(STR_HASH,prefix,string_ptr) and Ptr::from(DagMarker::ExportFile,index); then refresh export.name_cache = export.dag.mk_name_cache(). Enter export.with_tc(EnvLimit::Unlimited,...) after all mutation; construct closed literals with mk_nat_lit_quick(...).expect, mk_const/mk_app, call try_reduce_nat, and assert result payload. Exact Rust lifetimes, enum variant and disabled-control construction remain entry fixture gates before any launch. Do not mutate export config during a borrowed context. No serialized export generation required.",
+        "gates": [
+          "Record exact inputs and build/test budget before execution",
+          "Fresh duplicate/current-source check",
+          "Target-specific human approval before upstream write",
+          "Exact fixture construction, expected values, patch and toolchain must be frozen; source feasibility is not a compiled test result"
+        ],
+        "freshness": "Nat.land is a known control from the Lab matrix; five remaining operators extend preventive implementation coverage, not a claim of six novel semantic discoveries. fresh_commit_candidate=false; whole pilot remains negative."
+      },
+      "fresh_commit_candidate": false
+    },
+    {
+      "id": "A4-count-bool",
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "interface": "Legacy parse_bool -> parse_nat_as_bool",
+      "input_class": "Inductive whitespace flag/count tokens",
+      "state_abstraction": "Exact 0 versus other digit strings",
+      "before_mapping": "Accept only exact 0 and 1",
+      "after_mapping": "Exact 0 false; other all-ASCII-digit strings true (including 00); consume new reflexive token",
+      "boundary_kind": "expansion; remapping",
+      "non_normative_obligation": "Count-to-bool lexical mapping needs explicit implementation intent; not demonstrated invalidity",
+      "source_inferred_reachability": true,
+      "demonstrated_reachability": false,
+      "test_reach": "No targeted legacy helper assertion identified; helper now removed",
+      "assertion_strength": "No current legacy target; typed JSON numNested uses >0",
+      "executable_binding": "Legacy helper absent at tip",
+      "test_timing": "Selected change; removed in sixth bound descendant 274765",
+      "current_continuity": "Current JSON booleans and numNested:u16 -> >0 replace old lexical path",
+      "ex_ante_useful_action": "Check continuity before investing; do not revive obsolete parser just to create pilot yield",
+      "decision": "NEGATIVE_OBSOLETE_REPRESENTATION",
+      "sources": [
+        {
+          "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+          "path": "src/parser.rs",
+          "blob": "8305b0c59d4130ae8dee09a0205bc2b2e204d178",
+          "lines": [
+            648,
+            654
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/parser.rs",
+          "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+          "lines": [
+            543,
+            555
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/parser.rs",
+          "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+          "lines": [
+            649,
+            655
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/parser.rs",
+          "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+          "lines": [
+            823,
+            839
+          ]
+        }
+      ],
+      "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+      "time_group": "shared-review-a"
+    },
+    {
+      "id": "A5-major-name",
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "interface": "reduce_rec nonliteral major -> iota_try_eta_struct",
+      "input_class": "Recursor prefix versus major-premise type identity",
+      "state_abstraction": "Namespace prefix versus constant head at major_idx binder",
+      "before_mapping": "Use get_name_prefix(info.name)",
+      "after_mapping": "Walk recursor type to major binder, use constant/application head",
+      "boundary_kind": "remapping; refinement",
+      "non_normative_obligation": "Implementation should obtain inductive identity from declared major-premise type; no namespace semantic theorem inferred",
+      "source_inferred_reachability": true,
+      "demonstrated_reachability": false,
+      "test_reach": "No focused prefix/type mismatch assertion in current inventory. ProjFromProp has ordinary PUnit.rec/Wrap.rec and targets projection rejection",
+      "assertion_strength": "Expected infer_proj prop panic does not establish recursor identity-source assertion",
+      "executable_binding": "Helper refactored to TcCtx::get_major_induct; current reduce_rec calls it; no focused regression established",
+      "test_timing": "Selected remapping; first format-switch descendant refactors helper",
+      "current_continuity": "Tip expr.rs 794 extracts major binder constant head; tc.rs1090 uses it",
+      "ex_ante_useful_action": "Would need a small well-scoped mismatch fixture with demonstrated reduction reach; no such fixture established here",
+      "decision": "BOUNDED_UNRESOLVED_NOT_PROMOTED",
+      "sources": [
+        {
+          "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+          "path": "src/tc.rs",
+          "blob": "94c3060c8df3991299023d9b79f884328e4c0401",
+          "lines": [
+            897,
+            908
+          ]
+        },
+        {
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "path": "src/tc.rs",
+          "blob": "25cd0e7e995071872bfe0bdb8a1b8aaace1cb1f0",
+          "lines": [
+            914,
+            951
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/expr.rs",
+          "blob": "ec7883b79ff672f9da200b65648285820b7f69d3",
+          "lines": [
+            792,
+            799
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tc.rs",
+          "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+          "lines": [
+            1085,
+            1095
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "src/tests/util.rs",
+          "blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+          "lines": [
+            91,
+            103
+          ]
+        },
+        {
+          "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+          "path": "test_resources/ProjFromProp/export",
+          "blob": "5ebd25bd37da05bf3c30545f018443d18bb85550",
+          "lines": [
+            1,
+            71
+          ]
+        }
+      ],
+      "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+      "time_group": "shared-review-a"
+    }
+  ],
+  "current_test_inventory": {
+    "method": "Complete git ls-tree; all tracked Rust files scanned for test attributes including inline parser tests; active test bodies and two tracked fixtures inspected for selected-boundary reach. Static source inventory, not executed coverage.",
+    "files": [
+      {
+        "path": ".github/workflows/release.yml",
+        "blob": "2c081bd9e79815736d80113f2689f9afc442b7cc",
+        "lines": 27
+      },
+      {
+        "path": "Cargo.toml",
+        "blob": "faec73d980e02394440962455570381cc15a81a5",
+        "lines": 37
+      },
+      {
+        "path": "src/debug_printer.rs",
+        "blob": "f1f51a57ad4093c7944de618175fe07a43dd0769",
+        "lines": 228
+      },
+      {
+        "path": "src/env.rs",
+        "blob": "dcded64b0bb94fc077bcbfa63e1aa736bf820cab",
+        "lines": 328
+      },
+      {
+        "path": "src/expr.rs",
+        "blob": "ec7883b79ff672f9da200b65648285820b7f69d3",
+        "lines": 835
+      },
+      {
+        "path": "src/inductive.rs",
+        "blob": "6c2e56b622c1649cbe68886b837ef6ef802ad27c",
+        "lines": 1774
+      },
+      {
+        "path": "src/level.rs",
+        "blob": "870f9df215870a239ead1ff0c2a8b62a5235a2bf",
+        "lines": 288
+      },
+      {
+        "path": "src/lib.rs",
+        "blob": "f7ca1d96d591bbffb908ae736f07f8105a59b280",
+        "lines": 23
+      },
+      {
+        "path": "src/main.rs",
+        "blob": "e4e0e7808a9d8372bb39d764c13f6aaa5f5eed48",
+        "lines": 72
+      },
+      {
+        "path": "src/name.rs",
+        "blob": "3fa8e98acb4e094acc473307527a1485b1774dec",
+        "lines": 91
+      },
+      {
+        "path": "src/parser.rs",
+        "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+        "lines": 958
+      },
+      {
+        "path": "src/pretty_printer.rs",
+        "blob": "5a45d3c5643fbdd4c11e0eef86b864b61a32841b",
+        "lines": 952
+      },
+      {
+        "path": "src/quot.rs",
+        "blob": "991b48086c1e9a487d8670e3999ab41da659a4fb",
+        "lines": 274
+      },
+      {
+        "path": "src/tc.rs",
+        "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+        "lines": 1363
+      },
+      {
+        "path": "src/tests.rs",
+        "blob": "304a306bbf0c47bbdf21d8b859ffec9c5b978ceb",
+        "lines": 4
+      },
+      {
+        "path": "src/tests/level.rs",
+        "blob": "4603c00cf4f330793e7ffbb82af6c1f4064b2620",
+        "lines": 213
+      },
+      {
+        "path": "src/tests/name.rs",
+        "blob": "2cbaac031e2c95320d8e4eca850426d73763dc9a",
+        "lines": 45
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "blob": "ac418a748185f98316671aff1e3a3f2be92283d8",
+        "lines": 784
+      },
+      {
+        "path": "src/tests/util.rs",
+        "blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+        "lines": 133
+      },
+      {
+        "path": "src/union_find.rs",
+        "blob": "3e17916c71e24d56590376fc5342f9810d9eefca",
+        "lines": 130
+      },
+      {
+        "path": "src/unique_hasher.rs",
+        "blob": "30e61f919fd8112eacc63c9380dba6011b64404f",
+        "lines": 41
+      },
+      {
+        "path": "src/util.rs",
+        "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+        "lines": 1017
+      },
+      {
+        "path": "test_resources/Empty/export",
+        "blob": "846115f3b73fcc9b5ae9e2b6eff9ef1a1fb4552b",
+        "lines": 1
+      },
+      {
+        "path": "test_resources/ProjFromProp/config.json",
+        "blob": "a1525cebe65b66be09c6a5823cdf4c62af20bd2d",
+        "lines": 7
+      },
+      {
+        "path": "test_resources/ProjFromProp/export",
+        "blob": "5ebd25bd37da05bf3c30545f018443d18bb85550",
+        "lines": 72
+      }
+    ],
+    "active_tests": [
+      {
+        "path": "src/parser.rs",
+        "line": 927,
+        "function": "fn test_ng() {"
+      },
+      {
+        "path": "src/parser.rs",
+        "line": 948,
+        "function": "fn test_ok() {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 5,
+        "function": "fn leq_test0() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 17,
+        "function": "fn leq_test1() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 29,
+        "function": "fn leq_test2() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 39,
+        "function": "fn leq_test_imax_imax() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 56,
+        "function": "fn leq_test3() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 66,
+        "function": "fn leq_test4() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 83,
+        "function": "fn leq_test5() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 109,
+        "function": "fn leq_test6() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 135,
+        "function": "fn leq_test7() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 161,
+        "function": "fn eq_test1() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 173,
+        "function": "fn eq_many_test1() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 188,
+        "function": "fn debug_test0() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/level.rs",
+        "line": 201,
+        "function": "fn debug_test1() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/name.rs",
+        "line": 5,
+        "function": "fn pfx_test_anon() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/name.rs",
+        "line": 12,
+        "function": "fn pfx_test_str0() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/name.rs",
+        "line": 20,
+        "function": "fn pfx_test_num0() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/name.rs",
+        "line": 29,
+        "function": "fn pfx_test_str1() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 20,
+        "function": "fn nat_div_le_self() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 37,
+        "function": "fn nat_div_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 55,
+        "function": "fn nat_shr_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 82,
+        "function": "fn nat_shl_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 110,
+        "function": "fn nat_gcd_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 167,
+        "function": "fn nat_xor_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 188,
+        "function": "fn nat_lor_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 207,
+        "function": "fn nat_land_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 226,
+        "function": "fn nat_add_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 244,
+        "function": "fn nat_sub_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 262,
+        "function": "fn nat_pow_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 281,
+        "function": "fn nat_mul_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 299,
+        "function": "fn nat_ble_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 328,
+        "function": "fn nat_mod_eq() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 348,
+        "function": "fn nat_div_add_mod() {"
+      },
+      {
+        "path": "src/tests/natlit.rs",
+        "line": 365,
+        "function": "fn nat_mod_eq_sub_mod() {"
+      },
+      {
+        "path": "src/tests/util.rs",
+        "line": 82,
+        "function": "fn check_empty() -> Result<(), Box<dyn Error>> {"
+      },
+      {
+        "path": "src/tests/util.rs",
+        "line": 91,
+        "function": "fn check_proj_from_prop() {"
+      },
+      {
+        "path": "src/tests/util.rs",
+        "line": 109,
+        "function": "fn hash_test0() -> Result<(), Box<dyn Error>> {"
+      }
+    ],
+    "count": 38,
+    "wiring": [
+      {
+        "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+        "path": "src/lib.rs",
+        "blob": "f7ca1d96d591bbffb908ae736f07f8105a59b280",
+        "lines": [
+          8,
+          21
+        ]
+      },
+      {
+        "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+        "path": "src/tests.rs",
+        "blob": "304a306bbf0c47bbdf21d8b859ffec9c5b978ceb",
+        "lines": [
+          1,
+          4
+        ]
+      },
+      {
+        "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+        "path": "Cargo.toml",
+        "blob": "faec73d980e02394440962455570381cc15a81a5",
+        "lines": [
+          1,
+          37
+        ]
+      },
+      {
+        "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+        "path": ".github/workflows/release.yml",
+        "blob": "2c081bd9e79815736d80113f2689f9afc442b7cc",
+        "lines": [
+          1,
+          27
+        ]
+      }
+    ],
+    "ci": "Only tracked workflow is release packaging; no live remote CI observation"
+  },
+  "descendant_review": {
+    "bound_sets": [
+      {
+        "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+        "arm": "SIGNAL",
+        "family": "defaults_options",
+        "descendants": [
+          "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+          "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+          "d9ed4198136c4505b2004e972568bfa8bf265179",
+          "0bc36318ad52ac7d32163b0214edc63136558dc4",
+          "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+          "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+          "6524aed358d79a1f20552a982623beab7bb7abdb",
+          "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+          "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+          "12838995ca232ced05cd5218e4975d03c5c44316"
+        ]
+      },
+      {
+        "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+        "arm": "SIGNAL",
+        "family": "parser_representation",
+        "descendants": [
+          "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+          "6f159434b52cd7e973c1009be30a85049dbc5fee",
+          "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+          "66cca78149555a92b7d7a919acd88d3878b83302",
+          "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+          "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+          "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+          "d9ed4198136c4505b2004e972568bfa8bf265179",
+          "0bc36318ad52ac7d32163b0214edc63136558dc4"
+        ]
+      }
+    ],
+    "method": "Targeted boundary diffs screened only in frozen sets. Detailed follow-up: 9c3a447 for both selections, 274765 for 54f24. Zero lexical hits are not semantic absence. Current tip inspected separately.",
+    "calibration": "9c3a447 and 6524aed never counted as fresh yield"
+  },
+  "duplicate_audit": {
+    "arena_tip": "512ee87e6209bda5004cb38789ba424a1b04ee93",
+    "arena_repo": "external/ecosystem-arena-current",
+    "command": "git grep -n -E 'gcd|shiftLeft|shiftRight|Nat.land|Nat.lor|Nat.xor|54f24' 512ee87e6209bda5004cb38789ba424a1b04ee93",
+    "result": "exit 1, no literal matches over tracked current content; not proof of equivalent-semantic absence or generated tutorial coverage",
+    "inventory": "Root retained full current inventory/static YAMLs at results/research/hsbm-pilot-1/arena-evidence",
+    "prior_lab": [
+      {
+        "path": "results/investigations/nanoda-reduction-semantics/nat-land-nanoda.json",
+        "sha256": "6557c2269c0d91fdd4ec7c7b9aba3f08d1ed63f5c1c1f24097a367e9239f2c2d"
+      },
+      {
+        "path": "results/investigations/nanoda-reduction-semantics-matrix.json",
+        "sha256": "1742646d0f8cfefd65aaa6b293064485ba44475857047501ed7f1e4c18aaa020"
+      }
+    ],
+    "prior_result": "Existing 2026-08-28 Nat.land candidate/control accepted by pinned Nanoda6ae1f0c and dispatch mutation sensitivity already recorded. No rerun performed."
+  },
+  "time": {
+    "start_utc": "2026-09-13T14:37:55.021171+00:00",
+    "start_monotonic": 89029.535431208,
+    "end_utc": "2026-09-13T14:45:38.657976+00:00",
+    "end_monotonic": 89493.022775875,
+    "measured_seconds": 463.48734466699534,
+    "scope": "Shared nonadditive elapsed review interval; authority reads before first timestamp are included in parent active-item accounting"
+  },
+  "engineering_notes": [
+    "Read-only descendant summarizer IndexError on empty path-limited diff, receipt9cd388; repaired safe empty handling and reran successfully receipt04802f.",
+    "Initial JSON writer failed an exact line-range assertion before writing, receipt48a8bd; rebuilt references from exact blob lengths. No evidence modified, no scientific launch or counter reset.",
+    "Two functions.exec calls failed JS parsing before any shell launch; subsequent corrected calls completed."
+  ],
+  "limits": {
+    "network_requests": 0,
+    "builds": 0,
+    "checker_launches": 0,
+    "test_launches": 0,
+    "exports_generated": 0,
+    "external_writes": 0
+  },
+  "summary": "One actionable preventive Nat dispatcher reuse recommendation with known Nat.land control and five-operator extension; fresh_commit_candidate=false. Version gate covered, legacy parser obsolete, eager and major identity bounded unresolved. No efficiency/prevalence claim."
+}

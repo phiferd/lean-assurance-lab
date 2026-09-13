@@ -1,0 +1,116 @@
+{
+  "schema_version": 1,
+  "item_id": "HSBM-PILOT-1",
+  "reviewer": "selection_audit",
+  "reviewed_at": "2026-09-13T14:39:22.255102+00:00",
+  "scope": "Independent administrative review of frozen population, lexical selection, calibration exclusions and descendant follow-up bounds; no semantic Nanoda source inspection.",
+  "source": {
+    "repository": "external/ecosystem-triage-nanoda",
+    "tip": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "lower_exclusive": "713c245191f7afbc4e996f853ca3131b9b11ec27"
+  },
+  "bindings": [
+    {
+      "path": "scripts/hsbm-pilot",
+      "sha256": "73e6047306d87a4e5e2ecbeb5d8f0ddc008540c283c5f8bec882ccb9e8a898c4"
+    },
+    {
+      "path": "results/research/hsbm-pilot-1/selection.json",
+      "sha256": "4056fcfd0e45af383b61b4654792899a691d8ba1b45d86f9220b79722462e7aa"
+    },
+    {
+      "path": "tests/test_hsbm_pilot.py",
+      "sha256": "2621b08f1de0a9601fe05e6e3340b9caf98f50b01a6ad4bcb42d233bfbad34ca"
+    }
+  ],
+  "result": "PASS_FOR_FIXED_POPULATION",
+  "checks": [
+    {
+      "name": "whole_reachable_nonmerge_population",
+      "result": "PASS",
+      "population_count": 36,
+      "eligible_count": 32,
+      "method": "Exact independent git rev-list --no-merges LOWER..TIP equality; no first-parent restriction."
+    },
+    {
+      "name": "calibration_exclusions",
+      "result": "PASS",
+      "commits": [
+        {
+          "prefix": "9c3a447",
+          "commit": "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+          "in_population": true,
+          "scope": "EXCLUDED_KNOWN_CALIBRATION"
+        },
+        {
+          "prefix": "4db8bcc",
+          "commit": "4db8bcc0336db729610303c91db36895e898a11f",
+          "in_population": false,
+          "scope": "OUTSIDE_INTERVAL_ANCESTOR_OF_LOWER"
+        },
+        {
+          "prefix": "404660c",
+          "commit": "404660cc2fbf04d8040d25a15ddd55b6b15c8e5e",
+          "in_population": true,
+          "scope": "EXCLUDED_KNOWN_CALIBRATION"
+        },
+        {
+          "prefix": "6524aed",
+          "commit": "6524aed358d79a1f20552a982623beab7bb7abdb",
+          "in_population": true,
+          "scope": "EXCLUDED_KNOWN_CALIBRATION"
+        },
+        {
+          "prefix": "0928383",
+          "commit": "092838312149611649d27781e1d242be4cba4a12",
+          "in_population": true,
+          "scope": "EXCLUDED_KNOWN_CALIBRATION"
+        }
+      ]
+    },
+    {
+      "name": "ranking_and_diverse_signal_selection",
+      "result": "PASS",
+      "method": "Scores count binary lexical families; descending score/full-SHA rank; fixed order greedy assignment gives four distinct families for the fixed sample. All four selected IDs are the first four eligible ranked commits."
+    },
+    {
+      "name": "controls",
+      "result": "PASS",
+      "method": "Python Random(20260909).sample selects two distinct IDs from remaining eligible full-SHA-sorted IDs; population is not filtered by score for controls."
+    },
+    {
+      "name": "descendant_gate",
+      "result": "PASS",
+      "method": "All six frozen lists independently equal first ten IDs from git rev-list --ancestry-path --topo-order --reverse CHILD..bound-tip."
+    },
+    {
+      "name": "frozen_reproduction",
+      "result": "PASS",
+      "command": "python3 scripts/hsbm-pilot --repo external/ecosystem-triage-nanoda --tip 4c544ed4099c8227f07d5de77ad1e69fb0740a27 --output results/research/hsbm-pilot-1/selection.json --check"
+    },
+    {
+      "name": "administrative_regressions",
+      "result": "PASS",
+      "command": "python3 -m unittest discover -s tests -p test_hsbm_pilot.py -v",
+      "tests": 4,
+      "failures": 0,
+      "coverage": [
+        "all-reachable command and descendant cap",
+        "rank tie/full SHA ordering and repeated-family skip",
+        "exclusion even when highest scored",
+        "fixed seeded controls without replacement",
+        "shortfall without duplicate cases",
+        "context/header exclusion and deleted-test signal",
+        "refusal to overwrite and check drift rejection"
+      ]
+    }
+  ],
+  "limitations": [
+    "Lexical signals indicate diff features, not semantic risk, reachability or test coverage; size/churn confounds remain explicit.",
+    "Greedy family assignment is deterministic but is not a maximum matching algorithm for arbitrary future populations. This fixed sample obtains all four required distinct families, so no selection change is needed.",
+    "This review checks the frozen selection and bound follow-up sets; the root must preserve commitment ordering and enforce semantic inspection limits, current-tip continuity and final ledger obligations."
+  ],
+  "scientific_launches": 0,
+  "network_requests": 0,
+  "recommended_action": "Retain the frozen six-commit sample and execute only its authorized source assessment, with no replacement of negative cases."
+}

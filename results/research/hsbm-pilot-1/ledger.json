@@ -1,0 +1,1071 @@
+{
+  "schema_version": 1,
+  "item_id": "HSBM-PILOT-1",
+  "tip": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "selection_commit": "fe61bdf4de7beef3dc1a86b3e247ea1f4b591489",
+  "rows": [
+    {
+      "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "arm": "SIGNAL",
+      "signal_family": "defaults_options",
+      "descendants_bound": [
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4",
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+        "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+        "6524aed358d79a1f20552a982623beab7bb7abdb",
+        "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+        "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+        "12838995ca232ced05cd5218e4975d03c5c44316"
+      ],
+      "boundaries": [
+        {
+          "id": "A1-version",
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "interface": "parse_export_file metadata version gate",
+          "input_class": "Version-tagged stream",
+          "state_abstraction": "Before/after receipt of metadata",
+          "before_mapping": "First line Semver; refuse below 2.0.0 before body",
+          "after_mapping": "NDJSON Metadata exporter.version; refuse below 3.0.0; old executable bad_semver test commented",
+          "boundary_kind": "remapping; test-effectiveness",
+          "non_normative_obligation": "Preserve implementation-declared version support through format migration, not a normative Lean validity rule",
+          "source_inferred_reachability": true,
+          "demonstrated_reachability": false,
+          "test_reach": "At selected old parser test commented; descendant adds inline semver_tests; valid current Empty fixture exercises metadata",
+          "assertion_strength": "test_ng asserts Err below minimum and at/above maximum; test_ok asserts Ok at 3.1.0 and 3.1.9. Predicate tests do not establish metadata absence/placement policy",
+          "executable_binding": "lib.rs pub mod parser; inline #[test] functions included by ordinary Cargo test",
+          "test_timing": "Old test commented selected; replacements added first bound descendant 9c3a447",
+          "current_continuity": "Tip check_semver uses meta.format.version and [3.1.0,3.2.0), tests retained",
+          "ex_ante_useful_action": "If version tests remain absent add a focused pair; follow-up instead establishes existing predicate coverage",
+          "decision": "NEGATIVE_EXISTING_COVERAGE",
+          "sources": [
+            {
+              "commit": "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+              "path": "src/parser.rs",
+              "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+              "lines": [
+                39,
+                58
+              ]
+            },
+            {
+              "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+              "path": "src/parser.rs",
+              "blob": "8c5f8098cdcca4f03524849c6e15d085a3089995",
+              "lines": [
+                425,
+                437
+              ]
+            },
+            {
+              "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+              "path": "src/tests/parser.rs",
+              "blob": "fabfb5e37d827a989028a7bc83689ec2ca863ac6",
+              "lines": [
+                1,
+                26
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/parser.rs",
+              "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+              "lines": [
+                21,
+                38
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/parser.rs",
+              "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+              "lines": [
+                916,
+                958
+              ]
+            }
+          ],
+          "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+          "time_group": "shared-review-a"
+        },
+        {
+          "id": "A2-eager",
+          "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+          "interface": "infer_app / eager_mode",
+          "input_class": "Checked eagerReduce argument",
+          "state_abstraction": "Outer mode -> argument-local true -> restored mode",
+          "before_mapping": "No eager_mode field or toggle",
+          "after_mapping": "Initialize false; save, enable for recognized eagerReduce, compare argument type, restore on normal return",
+          "boundary_kind": "expansion; remapping",
+          "non_normative_obligation": "Mode should follow documented normal-return scope; no specific mode-sensitive outcome pair established",
+          "source_inferred_reachability": true,
+          "demonstrated_reachability": false,
+          "test_reach": "No targeted eagerReduce/mode restoration assertion in complete current source inventory; projection fixture is not eagerReduce",
+          "assertion_strength": "No targeted mode assertion; search absence is scoped to bound inventory",
+          "executable_binding": "No eager test established; current restore statement executes after assert_def_eq",
+          "test_timing": "Introduced selected; first descendant 9c3a447 swaps comparison order back to binder_type,arg_type",
+          "current_continuity": "Tip retains toggle and restore plus swapped-back order; current mode-aware cache is calibration, not new yield",
+          "ex_ante_useful_action": "Derive exact same-context mode-sensitive pair before regression; reuse queued negative-cache assessment",
+          "decision": "BOUNDED_UNRESOLVED_NOT_PROMOTED",
+          "sources": [
+            {
+              "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+              "path": "src/tc.rs",
+              "blob": "3bc92185dcb3035a35cb94a7a6bd4d853c1fff04",
+              "lines": [
+                520,
+                537
+              ]
+            },
+            {
+              "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+              "path": "src/expr.rs",
+              "blob": "bdf71dbd95680e409106a0305c42a664737d5edb",
+              "lines": [
+                532,
+                541
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tc.rs",
+              "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+              "lines": [
+                560,
+                580
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tc.rs",
+              "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+              "lines": [
+                957,
+                973
+              ]
+            }
+          ],
+          "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+          "time_group": "shared-review-a"
+        }
+      ],
+      "decision": "Existing version predicate coverage; eager sequence remains unresolved and belongs to existing reserve."
+    },
+    {
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "arm": "SIGNAL",
+      "signal_family": "parser_representation",
+      "descendants_bound": [
+        "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+        "6f159434b52cd7e973c1009be30a85049dbc5fee",
+        "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+        "66cca78149555a92b7d7a919acd88d3878b83302",
+        "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+        "2747659518c0d5debe1d05cb02ba9232cafa4897",
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4"
+      ],
+      "boundaries": [
+        {
+          "id": "A3-nat-dispatch",
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "interface": "try_reduce_nat -> do_nat_bin",
+          "input_class": "Closed two-literal gcd/land/lor/xor/shiftLeft/shiftRight applications",
+          "state_abstraction": "Nat extension enabled, corresponding names present, result Some(NatLit)",
+          "before_mapping": "Six native branches absent",
+          "after_mapping": "Six native branches and direct helper tests added; nat_binop constructor has six new arms but e_nat_tests invokes older operations only",
+          "boundary_kind": "expansion; test-effectiveness",
+          "non_normative_obligation": "Advertised operator names should select intended helpers and exact literal payloads under supported settings; implementation regression only",
+          "source_inferred_reachability": true,
+          "demonstrated_reachability": false,
+          "test_reach": "Six active tests call numerical helpers. At selected e_nat_tests invokes only older operations; at tip entire e_nat expression harness commented. Other tests cover names/levels/version/hash and Empty/ProjFromProp fixtures",
+          "assertion_strength": "Strong helper numerical assertions cannot detect wrong name dispatch. Proposed direct dispatcher matrix must require constructor Some, result Some and payload equality",
+          "executable_binding": "lib.rs #[cfg(test)] mod tests -> tests.rs mod natlit -> 16 active numeric tests. e_nat_tests #[test] line is commented at tip",
+          "test_timing": "Helper tests coadded selected; expression harness commented at calibration descendant 9c3a447",
+          "current_continuity": "All six name-cache entries, dispatch cases and helpers remain at tip. Literal construction now returns Option and requires enabled extension",
+          "ex_ante_useful_action": "Small deterministic in-memory six-case dispatcher matrix with extension-disabled control; no serialized exports needed. Subject to root ranking and exact successor launch gate",
+          "decision": "ACTIONABLE_PREVENTIVE_REUSE_NOT_FRESH_YIELD",
+          "sources": [
+            {
+              "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+              "path": "src/tc.rs",
+              "blob": "94c3060c8df3991299023d9b79f884328e4c0401",
+              "lines": [
+                310,
+                377
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tc.rs",
+              "blob": "25cd0e7e995071872bfe0bdb8a1b8aaace1cb1f0",
+              "lines": [
+                320,
+                398
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tests/natlit.rs",
+              "blob": "30799b2721a8a095157bfbeb0dba4e8f3ba62ca2",
+              "lines": [
+                60,
+                231
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tests/natlit.rs",
+              "blob": "30799b2721a8a095157bfbeb0dba4e8f3ba62ca2",
+              "lines": [
+                710,
+                757
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tc.rs",
+              "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+              "lines": [
+                370,
+                444
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/util.rs",
+              "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+              "lines": [
+                741,
+                768
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/natlit.rs",
+              "blob": "ac418a748185f98316671aff1e3a3f2be92283d8",
+              "lines": [
+                55,
+                225
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/natlit.rs",
+              "blob": "ac418a748185f98316671aff1e3a3f2be92283d8",
+              "lines": [
+                701,
+                751
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/util.rs",
+              "blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+              "lines": [
+                15,
+                39
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/util.rs",
+              "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+              "lines": [
+                203,
+                237
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/util.rs",
+              "blob": "a251636418d2f7d973d3de9f44b39bb5c4cc9b35",
+              "lines": [
+                671,
+                699
+              ]
+            }
+          ],
+          "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+          "time_group": "shared-review-a",
+          "provisional_protocol": {
+            "target": "ammkrn/nanoda_lib src/tests/natlit.rs or private tc test module",
+            "priority": "Medium",
+            "cells": [
+              [
+                "gcd",
+                10,
+                15,
+                5
+              ],
+              [
+                "land",
+                10,
+                12,
+                8
+              ],
+              [
+                "lor",
+                10,
+                12,
+                14
+              ],
+              [
+                "xor",
+                10,
+                12,
+                6
+              ],
+              [
+                "shiftLeft",
+                3,
+                2,
+                12
+              ],
+              [
+                "shiftRight",
+                12,
+                2,
+                3
+              ]
+            ],
+            "construction": "Source-feasible route: load the existing Empty/export through test_get_export_file; before any TcCtx borrow, enable export.config.nat_extension, create export.dag.bignums if absent, intern Nat and six suffixes directly into public LeanDag.strings/names with hash64!(STR_HASH,prefix,string_ptr) and Ptr::from(DagMarker::ExportFile,index); then refresh export.name_cache = export.dag.mk_name_cache(). Enter export.with_tc(EnvLimit::Unlimited,...) after all mutation; construct closed literals with mk_nat_lit_quick(...).expect, mk_const/mk_app, call try_reduce_nat, and assert result payload. Exact Rust lifetimes, enum variant and disabled-control construction remain entry fixture gates before any launch. Do not mutate export config during a borrowed context. No serialized export generation required.",
+            "gates": [
+              "Record exact inputs and build/test budget before execution",
+              "Fresh duplicate/current-source check",
+              "Target-specific human approval before upstream write",
+              "Exact fixture construction, expected values, patch and toolchain must be frozen; source feasibility is not a compiled test result"
+            ],
+            "freshness": "Nat.land is a known control from the Lab matrix; five remaining operators extend preventive implementation coverage, not a claim of six novel semantic discoveries. fresh_commit_candidate=false; whole pilot remains negative."
+          },
+          "fresh_commit_candidate": false
+        },
+        {
+          "id": "A4-count-bool",
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "interface": "Legacy parse_bool -> parse_nat_as_bool",
+          "input_class": "Inductive whitespace flag/count tokens",
+          "state_abstraction": "Exact 0 versus other digit strings",
+          "before_mapping": "Accept only exact 0 and 1",
+          "after_mapping": "Exact 0 false; other all-ASCII-digit strings true (including 00); consume new reflexive token",
+          "boundary_kind": "expansion; remapping",
+          "non_normative_obligation": "Count-to-bool lexical mapping needs explicit implementation intent; not demonstrated invalidity",
+          "source_inferred_reachability": true,
+          "demonstrated_reachability": false,
+          "test_reach": "No targeted legacy helper assertion identified; helper now removed",
+          "assertion_strength": "No current legacy target; typed JSON numNested uses >0",
+          "executable_binding": "Legacy helper absent at tip",
+          "test_timing": "Selected change; removed in sixth bound descendant 274765",
+          "current_continuity": "Current JSON booleans and numNested:u16 -> >0 replace old lexical path",
+          "ex_ante_useful_action": "Check continuity before investing; do not revive obsolete parser just to create pilot yield",
+          "decision": "NEGATIVE_OBSOLETE_REPRESENTATION",
+          "sources": [
+            {
+              "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+              "path": "src/parser.rs",
+              "blob": "8305b0c59d4130ae8dee09a0205bc2b2e204d178",
+              "lines": [
+                648,
+                654
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/parser.rs",
+              "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+              "lines": [
+                543,
+                555
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/parser.rs",
+              "blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+              "lines": [
+                649,
+                655
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/parser.rs",
+              "blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+              "lines": [
+                823,
+                839
+              ]
+            }
+          ],
+          "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+          "time_group": "shared-review-a"
+        },
+        {
+          "id": "A5-major-name",
+          "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+          "interface": "reduce_rec nonliteral major -> iota_try_eta_struct",
+          "input_class": "Recursor prefix versus major-premise type identity",
+          "state_abstraction": "Namespace prefix versus constant head at major_idx binder",
+          "before_mapping": "Use get_name_prefix(info.name)",
+          "after_mapping": "Walk recursor type to major binder, use constant/application head",
+          "boundary_kind": "remapping; refinement",
+          "non_normative_obligation": "Implementation should obtain inductive identity from declared major-premise type; no namespace semantic theorem inferred",
+          "source_inferred_reachability": true,
+          "demonstrated_reachability": false,
+          "test_reach": "No focused prefix/type mismatch assertion in current inventory. ProjFromProp has ordinary PUnit.rec/Wrap.rec and targets projection rejection",
+          "assertion_strength": "Expected infer_proj prop panic does not establish recursor identity-source assertion",
+          "executable_binding": "Helper refactored to TcCtx::get_major_induct; current reduce_rec calls it; no focused regression established",
+          "test_timing": "Selected remapping; first format-switch descendant refactors helper",
+          "current_continuity": "Tip expr.rs 794 extracts major binder constant head; tc.rs1090 uses it",
+          "ex_ante_useful_action": "Would need a small well-scoped mismatch fixture with demonstrated reduction reach; no such fixture established here",
+          "decision": "BOUNDED_UNRESOLVED_NOT_PROMOTED",
+          "sources": [
+            {
+              "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+              "path": "src/tc.rs",
+              "blob": "94c3060c8df3991299023d9b79f884328e4c0401",
+              "lines": [
+                897,
+                908
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tc.rs",
+              "blob": "25cd0e7e995071872bfe0bdb8a1b8aaace1cb1f0",
+              "lines": [
+                914,
+                951
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/expr.rs",
+              "blob": "ec7883b79ff672f9da200b65648285820b7f69d3",
+              "lines": [
+                792,
+                799
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tc.rs",
+              "blob": "27eaaac0e6069aa4ac92596dc5f6972865fe3eaf",
+              "lines": [
+                1085,
+                1095
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/util.rs",
+              "blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+              "lines": [
+                91,
+                103
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "test_resources/ProjFromProp/export",
+              "blob": "5ebd25bd37da05bf3c30545f018443d18bb85550",
+              "lines": [
+                1,
+                71
+              ]
+            }
+          ],
+          "confidence": "High for exact source mapping; no executed outcome, coverage measurement or semantic authority claimed",
+          "time_group": "shared-review-a"
+        }
+      ],
+      "decision": "One preventive dispatcher reuse recommendation with partial known Nat.land overlap; obsolete parser and unfixed major-name fixture questions add no fresh candidate."
+    },
+    {
+      "commit": "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+      "arm": "SIGNAL",
+      "signal_family": "caches_modes",
+      "descendants_bound": [
+        "6f159434b52cd7e973c1009be30a85049dbc5fee",
+        "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+        "66cca78149555a92b7d7a919acd88d3878b83302",
+        "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+        "2747659518c0d5debe1d05cb02ba9232cafa4897",
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4",
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191"
+      ],
+      "boundaries": [
+        {
+          "reachability_demonstrated": false,
+          "scientific_runs": 0,
+          "time": "review_timing",
+          "semantic_authority": "Implementation obligations and source reasoning only; neither source changes nor test metadata establishes universal Lean semantics.",
+          "row_id": "HSBM-73cc-PP",
+          "commit": "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+          "interface": "Cargo pp_let0 -> test_export_file -> pp_selected_declars; current PrettyPrinter::pp_expr/pp_let",
+          "input_class": "Nested serialized let terms in deleted PpLet0 fixture; selected declaration letPrintTestDef",
+          "state_abstraction": "Fixture format version, module wiring, PP selected-declaration list/destination, output error list",
+          "before_after": {
+            "before": "Named pp_let0 test and 76-line fixture exist; fixture is 0.1.2 but parent parser already requires >=2.0.0, so source route returns parse error before PP closure. The test was registered but not a demonstrated passing let-coverage test at this parent.",
+            "after": "Named test and PpLet0 config/export removed. No implementation acceptance claim follows."
+          },
+          "boundary_kind": "test-effectiveness change / stale fixture deletion",
+          "reachability_source_inferred": "Parent parse-semver gate prevents this exact old fixture reaching its PP closure. Current public pp_expr routes Let to pp_let; no current test calls PP APIs in audited tracked Rust sources.",
+          "candidate_obligation": "A future PP regression should construct a tiny well-formed let DAG, enable proof printing if relevant, exercise binder substitution and assert exact stable output. It must avoid stale exporter-fixture dependence.",
+          "test_reach": "Historical test targeted lets by configuration and fixture, but exact parent version mismatch prevents source-inferred closure reach. Current inventory has no PP module or PP API test caller; no dynamic coverage was measured.",
+          "test_assertion_strength": "Deleted test asserted errors.is_empty only, not output text or binding preservation. This is weaker than a rendering oracle.",
+          "test_executable_wiring": "Parent src/tests.rs loads pretty_printer; deleted test had #[test]. Current src/tests.rs loads only name/level/natlit/util; inline parser tests separately exist. Cargo test was not run.",
+          "test_timing": "Test existed in selected parent but used stale 0.1.2 fixture. Deleted in selected commit. In frozen descendant set, 9c3a447 removes remaining PP module; this calibration commit is continuity only. No reinstatement is visible at bound tip.",
+          "current_continuity": "pp_let remains current at src/pretty_printer.rs:706-734 and pp_expr at893. Test/resource removal remains at tip.",
+          "confidence": "HIGH on source/version/wiring facts; no historical runtime measurement.",
+          "ex_ante_action": "If a fresh reachable coverage gap is substantiated, prefer a small DAG-based PP output regression; otherwise record test deletion and limits.",
+          "decision": "NEGATIVE_FOR_FRESH_PILOT_CANDIDATE",
+          "decision_reason": "Stale fixture cleanup is not evidence of lost passing coverage; PP-output maintenance has lower direct assurance value than current portfolio work. No new upstream action recommended.",
+          "source_refs": [
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tests/pretty_printer.rs",
+              "git_blob": "ef86770bd2a91ffbff18bcb6c6a2ecbc133e82ea",
+              "lines": [
+                23,
+                30
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "test_resources/PpLet0/config.json",
+              "git_blob": "90333c2209df077c47dc23fa89fa67ce79152399",
+              "lines": [
+                1,
+                15
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "test_resources/PpLet0/export",
+              "git_blob": "0e3df007357b02f81ec4097890281e4cb8f7c706",
+              "lines": [
+                1,
+                76
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/parser.rs",
+              "git_blob": "556cca5d81da30b2bc8eeb0ce012864cfc317b7a",
+              "lines": [
+                19,
+                55
+              ]
+            },
+            {
+              "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+              "path": "src/tests/util.rs",
+              "git_blob": "f07217c28b30c6e4e8632750fef40a0671cb4919",
+              "lines": [
+                7,
+                13
+              ]
+            },
+            {
+              "commit": "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+              "path": "src/tests.rs",
+              "git_blob": "6e817db97b188fe8127589ea90c2e917a5914bac",
+              "lines": [
+                1,
+                7
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/pretty_printer.rs",
+              "git_blob": "5a45d3c5643fbdd4c11e0eef86b864b61a32841b",
+              "lines": [
+                706,
+                769
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/pretty_printer.rs",
+              "git_blob": "5a45d3c5643fbdd4c11e0eef86b864b61a32841b",
+              "lines": [
+                893,
+                896
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests.rs",
+              "git_blob": "304a306bbf0c47bbdf21d8b859ffec9c5b978ceb",
+              "lines": [
+                1,
+                4
+              ]
+            }
+          ]
+        }
+      ],
+      "decision": "Stale pretty-print fixture removal gives no fresh actionable assurance candidate."
+    },
+    {
+      "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+      "arm": "SIGNAL",
+      "signal_family": "new_checks",
+      "descendants_bound": [
+        "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+        "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+        "7981ff640d2f29c68750f06600e6fc7408afefc2",
+        "224b7c186e695e2e24f29e272a3b2aa7a97f8219",
+        "3e705b33504fe6f270006ec117996665bd0422ef",
+        "42194374f96cdd8afc0c83d8d5ecbbe3212eb69b",
+        "514a1a5f677d22e001ecca96c05810864d988117",
+        "9557f24286e414a7b75beb522529c3e677aa0955",
+        "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+        "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0"
+      ],
+      "boundaries": [
+        {
+          "reachability_demonstrated": false,
+          "scientific_runs": 0,
+          "time": "review_timing",
+          "semantic_authority": "Implementation obligations and source reasoning only; neither source changes nor test metadata establishes universal Lean semantics.",
+          "row_id": "HSBM-1283-IMAX",
+          "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+          "interface": "TcCtx::leq -> leq_core",
+          "input_class": "Equal imax(a,b) operands with different outer successor offsets",
+          "state_abstraction": "Shared underlying imax pointers and signed diff tracking rhs successors minus lhs successors",
+          "before_after": {
+            "before": "Equal imax components return true regardless of diff in leq_core.",
+            "after": "Fast path requires diff >= 0; negative diff proceeds to case analysis rather than unconditional true."
+          },
+          "boundary_kind": "tightening",
+          "reachability_source_inferred": "succ recursion subtracts/adds diff before same-imax match. Co-added tests construct imax(a,b), successor and double successor to exercise positive/negative cases.",
+          "candidate_obligation": "Equal imax bases must not suppress signed-offset information. Preserve focused tests for both order directions.",
+          "test_reach": "Direct co-added API tests construct the selected shape, not an unrelated exported fixture; reach is source-inferred, not measured here.",
+          "test_assertion_strength": "Four positive and two negative leq assertions distinguish reflexivity/monotonicity from predecessor failure. Negative assertions target the changed signed-offset boundary.",
+          "test_executable_wiring": "#[test] leq_test_imax_imax in module level, loaded through src/tests.rs and cfg(test) src/lib.rs. Source binding survives at tip; no run result claimed.",
+          "test_timing": "Focused regression added in the same selected commit. None of ten bound descendant patches changes this test/boundary. Current continuity checked separately.",
+          "current_continuity": "Same diff >= 0 guard at current src/level.rs:188; six focused assertions at current src/tests/level.rs:39-54.",
+          "confidence": "HIGH for mapping and static regression alignment; runtime unmeasured.",
+          "ex_ante_action": "If no effective regression exists, add focused positive/negative offset regression; otherwise do not duplicate it.",
+          "decision": "NEGATIVE_ALREADY_FOCUSED_TESTED_IN_SOURCE",
+          "decision_reason": "Existing co-added test precisely covers the changed boundary. No new regression or external action warranted from this row.",
+          "source_refs": [
+            {
+              "commit": "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+              "path": "src/level.rs",
+              "git_blob": "24939e31b834d4f82c42b7b26fbe203f205081f9",
+              "lines": [
+                175,
+                190
+              ]
+            },
+            {
+              "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+              "path": "src/level.rs",
+              "git_blob": "c2eb6e18141ba247cce0d0087567acbc800aa918",
+              "lines": [
+                175,
+                190
+              ]
+            },
+            {
+              "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+              "path": "src/tests/level.rs",
+              "git_blob": "4603c00cf4f330793e7ffbb82af6c1f4064b2620",
+              "lines": [
+                39,
+                54
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/level.rs",
+              "git_blob": "870f9df215870a239ead1ff0c2a8b62a5235a2bf",
+              "lines": [
+                175,
+                191
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/level.rs",
+              "git_blob": "4603c00cf4f330793e7ffbb82af6c1f4064b2620",
+              "lines": [
+                39,
+                54
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/lib.rs",
+              "git_blob": "f7ca1d96d591bbffb908ae736f07f8105a59b280",
+              "lines": [
+                18,
+                19
+              ]
+            }
+          ]
+        },
+        {
+          "reachability_demonstrated": false,
+          "scientific_runs": 0,
+          "time": "review_timing",
+          "semantic_authority": "Implementation obligations and source reasoning only; neither source changes nor test metadata establishes universal Lean semantics.",
+          "row_id": "HSBM-1283-RECRULE",
+          "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+          "interface": "Parser recursor rules -> ExportFile::check_declar -> check_inductive_declar -> nonnested old/new comparison",
+          "input_class": "Ordinary nonnested inductive group with imported recursor rule list and separately reconstructed recursor/rules",
+          "state_abstraction": "Imported permanent environment vs temporary constructed environment; per-rec uparams, rule count, ctor names, field counts and RHS",
+          "before_after": {
+            "before": "The comparator obtains imported rec_rules then compares its length with itself and zips rec_rules with itself; its type comparison also derives from imported info. Missing old recursor falls through return.",
+            "after": "Comparator pairs old and new declarations, rejects accidental identity/structural equality, compares their types and list lengths, and zips old_rec_rules with new_rec_rules; a missing/wrong declaration panics. Descendant 053b4f5 normalizes imported recursor universe parameters before type comparison."
+          },
+          "boundary_kind": "tightening / validation-reference repair",
+          "reachability_source_inferred": "Current parser.rs:859-883 stores each serialized rhs/ctor/nfields in RecRule and imported declaration. check_inductive_declar builds fresh recursors at98-106, chooses nonnested branch at131-136, then compares old/new lists at1321-1343. A malformed body may fail earlier gates; no minimal isolating input was launched or demonstrated.",
+          "candidate_obligation": "An imported rule must be compared against independently constructed content after appropriate level substitution; a regression must retain a valid control and isolate rule mismatch beyond earlier gates.",
+          "test_reach": "Current full upstream inventory has no nonnested negative rule-comparison unit test. Empty fixture is vacuous and ProjFromProp targets infer_proj; it may transitively check valid inductives but its expected panic is not a rule-mismatch oracle. External Arena nat-rec-rules is a directly matching serialized regression, already indexed in Lab coverage manifest.",
+          "test_assertion_strength": "No co-added recursor assertion test. Production pointer/structural assertions are guards, not tests. Arena YAML states reject and names this exact commit; that metadata is a prior regression claim, not newly reproduced authority.",
+          "test_executable_wiring": "Current Cargo tests load no Arena corpus and only Empty/ProjFromProp fixtures. Existing Arena case is separately wired by tests/nat-rec-rules.yaml. No integration/checker run here.",
+          "test_timing": "Selected commit adds production checks but only imax unit test. First bound descendant 053b4f5 adjusts universe normalization; no matching unit test added in ten-descendant window. Current-tip source retains comparator with additional aux metadata check. Existing Arena case predates this pilot; do not count it as new.",
+          "current_continuity": "Current src/inductive.rs:1303-1343 preserves separate old/new list pairing and applies uparam substitution plus aux_data_ck. No current checker defect inferred.",
+          "confidence": "HIGH for historical self-comparison and direct existing Arena duplicate; MEDIUM for particular end-to-end reach without a run.",
+          "ex_ante_action": "Prefer one small preventive nonnested rule comparison regression if fresh; reject fresh-yield promotion if a matching case already exists.",
+          "decision": "NEGATIVE_DUPLICATE_EXISTING_ARENA_REGRESSION",
+          "decision_reason": "Arena nat-rec-rules.yaml explicitly describes imported self-comparison and links selected 12838995. Porting this existing case to Cargo could be separately ranked maintenance, but is not a fresh nonduplicate HSBM candidate. Nested restored k/type/index matrix is a distinct boundary and does not eliminate this direct duplicate.",
+          "dedup_artifacts": [
+            {
+              "path": "external/ecosystem-arena-current/tests/nat-rec-rules.yaml",
+              "sha256": "268d8b554e3685677d7e0c57002b8a4b9a6084df16e5fe8d9b3499982dc034d0",
+              "bytes": 970
+            },
+            {
+              "path": "external/ecosystem-arena-current/tests/nat-rec-rules.ndjson",
+              "sha256": "934e59fdc4f2a978605c4a44e90b94b57e9940f3828620c0db337b7125cdd169",
+              "bytes": 8345
+            },
+            {
+              "path": "results/manifests/coverage-nanoda.json",
+              "sha256": "4d4d3e4975153bcce23aa5f7671135c56823ac5825f82fb42be65a8ff5515f80",
+              "bytes": 50264
+            },
+            {
+              "path": "results/investigations/nanoda-restored-declaration-contract-matrix.json",
+              "sha256": "658e0efb069a18811040e32822ef7e798e7b53f3a80c0401f016fd1b061e7da1",
+              "bytes": 4959
+            }
+          ],
+          "source_refs": [
+            {
+              "commit": "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+              "path": "src/inductive.rs",
+              "git_blob": "dbac2e8c4fde7c1a2e6488bf7c7ffffb5668c18b",
+              "lines": [
+                1209,
+                1241
+              ]
+            },
+            {
+              "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+              "path": "src/inductive.rs",
+              "git_blob": "7292dd82c5c2163ba425ff54bc72a6278b1dc3d7",
+              "lines": [
+                1209,
+                1248
+              ]
+            },
+            {
+              "commit": "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+              "path": "src/inductive.rs",
+              "git_blob": "853e94dd5c2afe859189eec68a8e911c522e2f89",
+              "lines": [
+                1235,
+                1244
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/parser.rs",
+              "git_blob": "92007626c6abc499864f4c3de6c7628fa6b79e4b",
+              "lines": [
+                859,
+                883
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/inductive.rs",
+              "git_blob": "6c2e56b622c1649cbe68886b837ef6ef802ad27c",
+              "lines": [
+                98,
+                136
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/inductive.rs",
+              "git_blob": "6c2e56b622c1649cbe68886b837ef6ef802ad27c",
+              "lines": [
+                1303,
+                1343
+              ]
+            },
+            {
+              "commit": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+              "path": "src/tests/util.rs",
+              "git_blob": "3ab529ae98a875f801619cd483d4243affe4bff9",
+              "lines": [
+                82,
+                103
+              ]
+            }
+          ],
+          "current_arena_dedup_refs": [
+            {
+              "repository": "external/ecosystem-arena-current",
+              "commit": "512ee87e6209bda5004cb38789ba424a1b04ee93",
+              "path": "tests/nat-rec-rules.yaml",
+              "git_blob": "7d01693a4b076071e80be7e540e7880d630c40cd",
+              "sha256": "268d8b554e3685677d7e0c57002b8a4b9a6084df16e5fe8d9b3499982dc034d0",
+              "bytes": 970,
+              "lines": [
+                1,
+                16
+              ]
+            },
+            {
+              "repository": "external/ecosystem-arena-current",
+              "commit": "512ee87e6209bda5004cb38789ba424a1b04ee93",
+              "path": "tests/nat-rec-rules.ndjson",
+              "git_blob": "c66537f6d2b1d79e5794c38b766b63d097bad30a",
+              "sha256": "934e59fdc4f2a978605c4a44e90b94b57e9940f3828620c0db337b7125cdd169",
+              "bytes": 8345,
+              "lines": [
+                1,
+                128
+              ]
+            }
+          ],
+          "dedup_scope": "Root refreshed Arena read-only; reviewer then inspected exact fetched tip 512ee87e6209bda5004cb38789ba424a1b04ee93 without history discovery. Original local hashes retained separately and not presented as fresh network observations."
+        }
+      ],
+      "decision": "Focused imax test and exact Arena recursor-rule regression already exist."
+    },
+    {
+      "commit": "0bc36318ad52ac7d32163b0214edc63136558dc4",
+      "arm": "CONTROL",
+      "signal_family": null,
+      "descendants_bound": [
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+        "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+        "6524aed358d79a1f20552a982623beab7bb7abdb",
+        "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+        "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+        "12838995ca232ced05cd5218e4975d03c5c44316",
+        "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+        "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+        "7981ff640d2f29c68750f06600e6fc7408afefc2",
+        "224b7c186e695e2e24f29e272a3b2aa7a97f8219"
+      ],
+      "boundaries": [
+        {
+          "interface": "TypeChecker::infer_proj on structure expression and selected field",
+          "input_class": "Projection from a structure whose type is a proposition, with non-Prop field",
+          "state_abstraction": "structure : S; S : Sort 0; distinguish proposition from proof of proposition",
+          "before_after_mapping": "Before asks whether structure itself is a proposition; after asks whether structure is a proof, then retains whnf of its type.",
+          "boundary_kind": "ENFORCEMENT_TIGHTENING",
+          "reachability": "Source-inferred from infer Proj dispatch; no execution here.",
+          "non_normative_obligation": "Nanoda implementation must apply its Prop projection refusal policy to the type of the structure. This is not independent authority for arbitrary Lean import outcomes.",
+          "test_reach": "Next descendant eb3b2cc wires existing ProjFromProp fixture through parsing and check_declar for every declaration.",
+          "assertion_strength": "#[should_panic(expected = \"infer_proj prop\")] requires named failure; helper returns on load error so IO failure does not pass. Exact panic origin remains source-inferred, not reexecuted.",
+          "executable_binding": "src/lib.rs #[cfg(test)] mod tests -> src/tests.rs mod util -> src/tests/util.rs check_proj_from_prop #[test], fixture/config paths retained.",
+          "test_timing": "Absent in selected diff; added in first bound descendant eb3b2cc; survives at tip lines 91-103 of src/tests/util.rs.",
+          "current_continuity": "Tip src/tc.rs:465-510 infers structure type with flag and uses may_be_prop, a later broader profile; original is_proof spelling is not current. Named projection refusal and focused test remain.",
+          "confidence": "HIGH for executable coverage/changed current implementation; no new behavior claim.",
+          "ex_ante_useful_action": "Check whether Prop projection repair lacks an executable focused regression; reuse it if present.",
+          "decision": "COVERED_NO_NEW_CANDIDATE",
+          "evidence_paths": [
+            "src/tc.rs",
+            "src/tests/util.rs",
+            "src/lib.rs",
+            "src/tests.rs",
+            "test_resources/ProjFromProp/config.json",
+            "test_resources/ProjFromProp/export"
+          ]
+        }
+      ],
+      "decision": "Existing focused projection regression added in first descendant."
+    },
+    {
+      "commit": "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+      "arm": "CONTROL",
+      "signal_family": null,
+      "descendants_bound": [
+        "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0",
+        "d5f6c8d3ee3cbdeb12a4bf16db73bd7b6004115e",
+        "bd79f6a27d2ac4c0d0a4cdc7640d07b2cf0da2ed",
+        "6d2f03717af89dde5b8906bb957a6a50eeecbb94",
+        "e4a15af0a2b1d494f30f6d6096a8e17cdc813b43",
+        "8d68231443e6b5f859697822f4e5915f0a19258f",
+        "b109108112009a8e53593c2986bbdfb6889912d3",
+        "698c869f3dabd827d25b6b839f1c24fd010a937e",
+        "f58f2f6d535e189a40fcb02ede8eb95f97a92d37",
+        "8e02a15296e9ebfee247c160e58a73f2946829f1"
+      ],
+      "boundaries": [
+        {
+          "interface": "TcCtx::abstr_aux, TypeChecker::mk_motive_dep and def_eq telescope local counter restoration",
+          "input_class": "Existing local indices, inductive type indices and telescope lengths within or outside checked conversion ranges",
+          "state_abstraction": "Fixed local index/offset, local_indices and dbj_level_counter; conversion success versus panic",
+          "before_after_mapping": "Checked conversions and addition/subtraction remain identical; temporary bindings are inlined into the same consumers.",
+          "boundary_kind": "BEHAVIOR_PRESERVING_REFACTOR",
+          "reachability": "Same input domains inferred from identical try_from(...).unwrap() expressions; no new reachability demonstrated.",
+          "non_normative_obligation": "Preserve checked-conversion success/panic and local-counter restoration behavior across this refactor; no changed obligation found.",
+          "test_reach": "No test added by the selected commit; no newly changed boundary to justify a new targeted test. Broader range coverage is not established by this assessment.",
+          "assertion_strength": "No new assertion; unchanged conversion expression provides the source-equivalence basis, not an executed equivalence result.",
+          "executable_binding": "Existing crate wiring retained; no focused test or CI result claimed.",
+          "test_timing": "Selected commit and bound descendants introduce no focused regression for these inlined expressions; no test-removal claim.",
+          "current_continuity": "Tip src/expr.rs:298, src/inductive.rs:1061 and src/tc.rs:891/899 retain inlined checked conversions.",
+          "confidence": "HIGH for source-level refactor classification; no runtime equivalence theorem.",
+          "ex_ante_useful_action": "Check whether inlining changes conversion/panic boundaries; prepare regression only for an actual changed obligation.",
+          "decision": "NO_CHANGED_BOUNDARY_NO_CANDIDATE",
+          "evidence_paths": [
+            "src/expr.rs",
+            "src/inductive.rs",
+            "src/tc.rs"
+          ]
+        }
+      ],
+      "decision": "Behavior-preserving conversion inlining adds no changed boundary."
+    }
+  ],
+  "actionable_candidates": [
+    {
+      "id": "HSBM-NAT-DISPATCH-REUSE",
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "fresh_commit_candidate": false,
+      "freshness_reason": "Prior Lab Nat.land sensitivity reaches this dispatcher. Six-case preventive Cargo integration is useful reuse/extension, not a wholly fresh commit-level discovery. No two fresh source commits have actionable outcomes.",
+      "target": "ammkrn/nanoda_lib src/tests/natlit.rs or private tc test module",
+      "protocol": {
+        "target": "ammkrn/nanoda_lib src/tests/natlit.rs or private tc test module",
+        "priority": "Medium",
+        "cells": [
+          [
+            "gcd",
+            10,
+            15,
+            5
+          ],
+          [
+            "land",
+            10,
+            12,
+            8
+          ],
+          [
+            "lor",
+            10,
+            12,
+            14
+          ],
+          [
+            "xor",
+            10,
+            12,
+            6
+          ],
+          [
+            "shiftLeft",
+            3,
+            2,
+            12
+          ],
+          [
+            "shiftRight",
+            12,
+            2,
+            3
+          ]
+        ],
+        "construction": "Source-feasible route: load the existing Empty/export through test_get_export_file; before any TcCtx borrow, enable export.config.nat_extension, create export.dag.bignums if absent, intern Nat and six suffixes directly into public LeanDag.strings/names with hash64!(STR_HASH,prefix,string_ptr) and Ptr::from(DagMarker::ExportFile,index); then refresh export.name_cache = export.dag.mk_name_cache(). Enter export.with_tc(EnvLimit::Unlimited,...) after all mutation; construct closed literals with mk_nat_lit_quick(...).expect, mk_const/mk_app, call try_reduce_nat, and assert result payload. Exact Rust lifetimes, enum variant and disabled-control construction remain entry fixture gates before any launch. Do not mutate export config during a borrowed context. No serialized export generation required.",
+        "gates": [
+          "Record exact inputs and build/test budget before execution",
+          "Fresh duplicate/current-source check",
+          "Target-specific human approval before upstream write",
+          "Exact fixture construction, expected values, patch and toolchain must be frozen; source feasibility is not a compiled test result"
+        ],
+        "freshness": "Nat.land is a known control from the Lab matrix; five remaining operators extend preventive implementation coverage, not a claim of six novel semantic discoveries. fresh_commit_candidate=false; whole pilot remains negative."
+      },
+      "beneficiary": "Nanoda maintainers and users of its routine Cargo regression suite",
+      "action": "Add fixed six-operation dispatcher and disabled-extension assertions; preserve existing BigUint helper tests.",
+      "priority": "NEXT_LOCAL_BOUNDED_TEST_CONTRIBUTION",
+      "prerequisites": [
+        "Separate committed successor work record and current source/duplicate preflight",
+        "Freeze exact in-memory fixtures/name-cache identities/expected cells/test patch/tooling/dependencies/process controls before any launch",
+        "Focused and full Nanoda tests within successor caps",
+        "Index unsubmitted PR draft and obtain exact approval before external write"
+      ],
+      "root_protocol_clarification": {
+        "status": "PROPOSAL_ONLY_NOT_FROZEN_FOR_EXECUTION",
+        "recommended_cells": [
+          [
+            "gcd",
+            12,
+            18,
+            6
+          ],
+          [
+            "land",
+            10,
+            12,
+            8
+          ],
+          [
+            "lor",
+            10,
+            12,
+            14
+          ],
+          [
+            "xor",
+            10,
+            12,
+            6
+          ],
+          [
+            "shiftLeft",
+            3,
+            2,
+            12
+          ],
+          [
+            "shiftRight",
+            12,
+            2,
+            3
+          ]
+        ],
+        "reason": "Use gcd(12,18)=6 to distinguish accidental XOR dispatch; the retained original gcd(10,15)=5 aliases XOR. Before successor launch check all intended arm-discrimination values and bind the exact fixture/cells.",
+        "prior_proposal_preserved": "review-a.json and protocol field remain unchanged",
+        "scientific_launches": 0
+      }
+    }
+  ],
+  "fresh_commit_candidate_count": 0,
+  "interpretation": "NEGATIVE for at least two fresh nonduplicate actionable commits. One partially overlapping preventive reuse recommendation does not meet the threshold. No comparative efficiency or prevalence inference.",
+  "independent_reviews": [
+    "review-a.json",
+    "review-b.json",
+    "selection-review.json",
+    "review-controls.json"
+  ],
+  "time_scope": "Owner work-closure interval includes all parallel review and administrative work; review intervals overlap and are not added."
+}

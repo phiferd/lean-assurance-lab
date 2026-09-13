@@ -20,46 +20,46 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Merged corpus contributions and an explicit three-path contribution portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete HSBM-PILOT-1: Pilot historical boundary mining on six fresh commits; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete NANODA-NAT-DISPATCH-REGRESSION-1: Add focused Nat operation dispatcher regressions; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **HSBM-PILOT-1**.
+Selected next item: **NANODA-NAT-DISPATCH-REGRESSION-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 5 | HSBM-PILOT-1: Pilot historical boundary mining on six fresh commits | ACTIVE |
-| 6 | NANODA-DEFEQ-CACHE-1: Assess eager-mode negative-cache regression feasibility | READY |
-| 7 | ARENA-INDUCTIVE-ISOLATION-1: Audit independent rejection causes in Arena inductive cases | READY |
-| 8 | SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata | READY |
-| 9 | NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression | READY |
-| 10 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
-| 29 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 30 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 35 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 45 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | DEFERRED |
+| 6 | NANODA-NAT-DISPATCH-REGRESSION-1: Add focused Nat operation dispatcher regressions | READY |
+| 7 | NANODA-DEFEQ-CACHE-1: Assess eager-mode negative-cache regression feasibility | READY |
+| 8 | ARENA-INDUCTIVE-ISOLATION-1: Audit independent rejection causes in Arena inductive cases | READY |
+| 9 | SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata | READY |
+| 10 | NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression | READY |
+| 11 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
+| 30 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 31 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 36 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 46 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | DEFERRED |
 
-### 5. HSBM-PILOT-1: Pilot historical boundary mining on six fresh commits
+### 6. NANODA-NAT-DISPATCH-REGRESSION-1: Add focused Nat operation dispatcher regressions
 
-**Target:** Bound Nanoda reachable non-merge history in 713c245..TIP excluding known anchors
+**Target:** Current Nanoda TypeChecker::try_reduce_nat and routine Cargo tests
 
-Freeze explainable scores, population, exclusions and six IDs before semantic analysis; inspect bounded state/test changes and record action paths and costs.
+Add fixed six-operation dispatcher and disabled-extension assertions; preserve existing BigUint helper tests.
 
-**Why this rank:** Fifth: bounded discovery is justified after cheaper concrete opportunities; no general tool framework or superiority claim.
+**Why this rank:** The source-bound implementation path and fixed small matrix offer a more immediate maintainable contribution than the negative-cache reserve whose distinguishing pair is unresolved. Prior Nat.land overlap is useful reuse, not new discovery.
 
-**Completion:** Bound selection/assessment ledger with costs and negatives; at most two nonduplicate actionable candidates from distinct commits, or negative/unresolved feasibility result. No comparative efficiency/prevalence claim.
+**Completion:** One test-only patch, focused/full-suite evidence and indexed unsubmitted PR draft; or precise duplicate, negative or bounded unresolved boundary.
 
-**Stop:** 120 active minutes, 8 source/setup GETs, six fresh commits (four stratified high ranks and two seeded controls), <=3 boundaries each and ten descendant follow-ups capped at tip; zero builds/checkers/proofs/mutants/new exports/external writes.
+**Stop:** 90 active minutes, 8 source/setup requests, 3 builds <=600s including compiling tests, 4 test processes <=120s; zero implementation fixes, proofs, mutants, new serialized exports or external research writes.
 
-**Execution:** At most 1 sessions of 120 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** At most 1 sessions of 90 active minutes; 4 validator launches. Additional plan limits apply.
 
-**Boundary:** ACTIVE: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
+**Boundary:** READY: Standing owner local successor authorization, recorded HSBM negative closure and portfolio successor scope. READY is unstarted. Commit work record, bind current source and complete duplicates/test inventory; freeze exact in-memory fixtures/config/name-cache bindings/cells/patch/tooling/dependencies/runner/accounting before first permitted test launch.
 
-### 6. NANODA-DEFEQ-CACHE-1: Assess eager-mode negative-cache regression feasibility
+### 7. NANODA-DEFEQ-CACHE-1: Assess eager-mode negative-cache regression feasibility
 
 **Target:** Nanoda PR31 / 092838312149611649d27781e1d242be4cba4a12 and current failure cache
 
@@ -75,7 +75,7 @@ Bind a same-context mode-sensitive call history and exact candidate/control prot
 
 **Boundary:** READY: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. Establish current source and test inventory through this item's own bounded preflight.
 
-### 7. ARENA-INDUCTIVE-ISOLATION-1: Audit independent rejection causes in Arena inductive cases
+### 8. ARENA-INDUCTIVE-ISOLATION-1: Audit independent rejection causes in Arena inductive cases
 
 **Target:** At most four current Arena tutorial inductive cases and retained complete exports
 
@@ -91,7 +91,7 @@ Audit current inventory and independent rejection reasons; select at most one us
 
 **Boundary:** READY: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
 
-### 8. SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata
+### 9. SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata
 
 **Target:** Independent import contract for restored recursor k/type, constructor index and numIndices
 
@@ -107,7 +107,7 @@ Compare per-field evidence and primary sources, distinguish validation/reconstru
 
 **Boundary:** READY: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
 
-### 9. NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression
+### 10. NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression
 
 **Target:** Nanoda 404660c and current _nested occurrences in inductive/constructor types
 
@@ -123,7 +123,7 @@ Perform an independent current-suite coverage audit, then bind a supported API/i
 
 **Boundary:** READY: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
 
-### 10. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
+### 11. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
 **Target:** Arena tutorial/012_nonPropThm and retained publication-study theorem control
 
@@ -139,7 +139,7 @@ Compare existing accepts and asymmetric over-rejection risk; package existing by
 
 **Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent bounded audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
 
-### 29. CVC-4: Connect the contract to real validation behavior
+### 30. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -155,7 +155,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 30. CVC-5: Prepare shared evidence and decide the next phase
+### 31. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -171,7 +171,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 35. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
+### 36. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
 
 **Target:** One owner-designated curator/dataset package or provider-supplied functioning checker profile
 
@@ -187,7 +187,7 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
-### 45. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
+### 46. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
 
 **Target:** nanoda-gen-2bdfe18a9ec2 at pinned Nanoda src/tc.rs:147, the serial/one-worker dispatch split and its operational failure boundaries
 
@@ -244,6 +244,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: HSBM-PILOT-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: NANODA-NAT-DISPATCH-REGRESSION-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

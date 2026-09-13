@@ -1,0 +1,97 @@
+{
+  "item_id": "HSBM-PILOT-1",
+  "reviewer": "root",
+  "review_started_at": "2026-09-13T14:34:14.262365+00:00",
+  "review_finished_at": "2026-09-13T14:40:36.616716+00:00",
+  "start_monotonic": 88808.776679708,
+  "end_monotonic": 89191.1310025,
+  "time_scope": "Conservative overlapping root interval includes entry, selection, coordination and both control reviews. Do not sum per-row with item time.",
+  "source_kind": "SOURCE_ONLY_NO_EXECUTION",
+  "rows": [
+    {
+      "commit": "0bc36318ad52ac7d32163b0214edc63136558dc4",
+      "arm": "CONTROL",
+      "descendants_bound": [
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+        "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+        "6524aed358d79a1f20552a982623beab7bb7abdb",
+        "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+        "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+        "12838995ca232ced05cd5218e4975d03c5c44316",
+        "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+        "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+        "7981ff640d2f29c68750f06600e6fc7408afefc2",
+        "224b7c186e695e2e24f29e272a3b2aa7a97f8219"
+      ],
+      "descendant_review_scope": "Selected/parent diff and relevant hunks within bound descendant diff stream; separately inspect current tip. No other discovery commits.",
+      "boundary_candidates": [
+        {
+          "interface": "TypeChecker::infer_proj on structure expression and selected field",
+          "input_class": "Projection from a structure whose type is a proposition, with non-Prop field",
+          "state_abstraction": "structure : S; S : Sort 0; distinguish proposition from proof of proposition",
+          "before_after_mapping": "Before asks whether structure itself is a proposition; after asks whether structure is a proof, then retains whnf of its type.",
+          "boundary_kind": "ENFORCEMENT_TIGHTENING",
+          "reachability": "Source-inferred from infer Proj dispatch; no execution here.",
+          "non_normative_obligation": "Nanoda implementation must apply its Prop projection refusal policy to the type of the structure. This is not independent authority for arbitrary Lean import outcomes.",
+          "test_reach": "Next descendant eb3b2cc wires existing ProjFromProp fixture through parsing and check_declar for every declaration.",
+          "assertion_strength": "#[should_panic(expected = \"infer_proj prop\")] requires named failure; helper returns on load error so IO failure does not pass. Exact panic origin remains source-inferred, not reexecuted.",
+          "executable_binding": "src/lib.rs #[cfg(test)] mod tests -> src/tests.rs mod util -> src/tests/util.rs check_proj_from_prop #[test], fixture/config paths retained.",
+          "test_timing": "Absent in selected diff; added in first bound descendant eb3b2cc; survives at tip lines 91-103 of src/tests/util.rs.",
+          "current_continuity": "Tip src/tc.rs:465-510 infers structure type with flag and uses may_be_prop, a later broader profile; original is_proof spelling is not current. Named projection refusal and focused test remain.",
+          "confidence": "HIGH for executable coverage/changed current implementation; no new behavior claim.",
+          "ex_ante_useful_action": "Check whether Prop projection repair lacks an executable focused regression; reuse it if present.",
+          "decision": "COVERED_NO_NEW_CANDIDATE",
+          "evidence_paths": [
+            "src/tc.rs",
+            "src/tests/util.rs",
+            "src/lib.rs",
+            "src/tests.rs",
+            "test_resources/ProjFromProp/config.json",
+            "test_resources/ProjFromProp/export"
+          ]
+        }
+      ]
+    },
+    {
+      "commit": "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+      "arm": "CONTROL",
+      "descendants_bound": [
+        "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0",
+        "d5f6c8d3ee3cbdeb12a4bf16db73bd7b6004115e",
+        "bd79f6a27d2ac4c0d0a4cdc7640d07b2cf0da2ed",
+        "6d2f03717af89dde5b8906bb957a6a50eeecbb94",
+        "e4a15af0a2b1d494f30f6d6096a8e17cdc813b43",
+        "8d68231443e6b5f859697822f4e5915f0a19258f",
+        "b109108112009a8e53593c2986bbdfb6889912d3",
+        "698c869f3dabd827d25b6b839f1c24fd010a937e",
+        "f58f2f6d535e189a40fcb02ede8eb95f97a92d37",
+        "8e02a15296e9ebfee247c160e58a73f2946829f1"
+      ],
+      "descendant_review_scope": "Selected/parent diff and relevant hunks within bound descendant diff stream; separately inspect current tip. No other discovery commits.",
+      "boundary_candidates": [
+        {
+          "interface": "TcCtx::abstr_aux, TypeChecker::mk_motive_dep and def_eq telescope local counter restoration",
+          "input_class": "Existing local indices, inductive type indices and telescope lengths within or outside checked conversion ranges",
+          "state_abstraction": "Fixed local index/offset, local_indices and dbj_level_counter; conversion success versus panic",
+          "before_after_mapping": "Checked conversions and addition/subtraction remain identical; temporary bindings are inlined into the same consumers.",
+          "boundary_kind": "BEHAVIOR_PRESERVING_REFACTOR",
+          "reachability": "Same input domains inferred from identical try_from(...).unwrap() expressions; no new reachability demonstrated.",
+          "non_normative_obligation": "Preserve checked-conversion success/panic and local-counter restoration behavior across this refactor; no changed obligation found.",
+          "test_reach": "No test added by the selected commit; no newly changed boundary to justify a new targeted test. Broader range coverage is not established by this assessment.",
+          "assertion_strength": "No new assertion; unchanged conversion expression provides the source-equivalence basis, not an executed equivalence result.",
+          "executable_binding": "Existing crate wiring retained; no focused test or CI result claimed.",
+          "test_timing": "Selected commit and bound descendants introduce no focused regression for these inlined expressions; no test-removal claim.",
+          "current_continuity": "Tip src/expr.rs:298, src/inductive.rs:1061 and src/tc.rs:891/899 retain inlined checked conversions.",
+          "confidence": "HIGH for source-level refactor classification; no runtime equivalence theorem.",
+          "ex_ante_useful_action": "Check whether inlining changes conversion/panic boundaries; prepare regression only for an actual changed obligation.",
+          "decision": "NO_CHANGED_BOUNDARY_NO_CANDIDATE",
+          "evidence_paths": [
+            "src/expr.rs",
+            "src/inductive.rs",
+            "src/tc.rs"
+          ]
+        }
+      ]
+    }
+  ]
+}
