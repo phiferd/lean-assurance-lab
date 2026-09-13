@@ -2712,7 +2712,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SEMANTIC-LET-CONTRACT-1`.
 
-The item is READY and unstarted. Use at most eight primary-source GETs and 120
+The item is ACTIVE under its committed [work record](../results/research/semantic-let-contract-1/work-record.json). Use at most eight primary-source GETs and 120
 active minutes to distinguish the raw let typing judgment from the admissible
 input and environment assumptions of zeta reduction. Reuse the exact let/control
 evidence and prior authority deferral, and produce one source-qualified
