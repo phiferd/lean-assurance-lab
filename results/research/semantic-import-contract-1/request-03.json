@@ -1,0 +1,49 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "commit": {
+      "sha": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "message": "Test indexed Prop elimination across intern-table resets",
+      "url": "https://api.github.com/repos/sankalpsthakur/kiota/commits/9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "html_url": "https://github.com/sankalpsthakur/kiota/commit/9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "diff": "@@ -739,6 +739,21 @@ fn eq_shaped_index_field_accepts() {\n     assert_accept(\"eq-shaped-index-field.accept.ndjson\");\n }\n \n+/// Reproduce the large-corpus state transition: constructor expressions\n+/// survive a hash-cons table reset before their inductive is checked.\n+#[test]\n+fn eq_shaped_index_field_accepts_after_intern_reset() {\n+    let input = fs::read_to_string(fixture(\"eq-shaped-index-field.accept.ndjson\"))\n+        .expect(\"read fixture\");\n+    let split = input.find(\"{\\\"inductive\\\":\").expect(\"inductive block\");\n+    let mut parser = Parser::new();\n+    parser.run(Cursor::new(&input[..split])).expect(\"parse expressions\");\n+    assert!(kiota::expr::intern_clear_if_large(0));\n+    parser.run(Cursor::new(&input[split..])).expect(\n+        \"an indexed Prop recursor must remain valid across an intern-table reset\",\n+    );\n+}\n+\n /// Minimal dependency-closure slice, cut directly from a real\n /// `cedar-spec` export (not hand-assembled), of\n /// `Cedar.Spec.Value._sizeOf_3_eq` — the equation lemma bridging",
+      "files": [
+        {
+          "filename": "tests/exports.rs",
+          "patch": "@@ -739,6 +739,21 @@ fn eq_shaped_index_field_accepts() {\n     assert_accept(\"eq-shaped-index-field.accept.ndjson\");\n }\n \n+/// Reproduce the large-corpus state transition: constructor expressions\n+/// survive a hash-cons table reset before their inductive is checked.\n+#[test]\n+fn eq_shaped_index_field_accepts_after_intern_reset() {\n+    let input = fs::read_to_string(fixture(\"eq-shaped-index-field.accept.ndjson\"))\n+        .expect(\"read fixture\");\n+    let split = input.find(\"{\\\"inductive\\\":\").expect(\"inductive block\");\n+    let mut parser = Parser::new();\n+    parser.run(Cursor::new(&input[..split])).expect(\"parse expressions\");\n+    assert!(kiota::expr::intern_clear_if_large(0));\n+    parser.run(Cursor::new(&input[split..])).expect(\n+        \"an indexed Prop recursor must remain valid across an intern-table reset\",\n+    );\n+}\n+\n /// Minimal dependency-closure slice, cut directly from a real\n /// `cedar-spec` export (not hand-assembled), of\n /// `Cedar.Spec.Value._sizeOf_3_eq` — the equation lemma bridging"
+        }
+      ],
+      "repository_full_name": "sankalpsthakur/kiota",
+      "comments": null,
+      "author": {
+        "login": "sankalpsthakur",
+        "name": null,
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/31366524?v=4",
+        "id": 31366524
+      },
+      "committer": {
+        "login": "sankalpsthakur",
+        "name": null,
+        "email": null,
+        "avatar_url": "https://avatars.githubusercontent.com/u/31366524?v=4",
+        "id": 31366524
+      },
+      "created_at": "2026-09-07T20:10:52Z",
+      "git_author_email": null,
+      "display_url": "https://github.com/sankalpsthakur/kiota/commit/9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "display_title": "Test indexed Prop elimination across intern-table resets"
+    },
+    "url": "https://github.com/sankalpsthakur/kiota/commit/9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+    "title": "Test indexed Prop elimination across intern-table resets",
+    "diff": "@@ -739,6 +739,21 @@ fn eq_shaped_index_field_accepts() {\n     assert_accept(\"eq-shaped-index-field.accept.ndjson\");\n }\n \n+/// Reproduce the large-corpus state transition: constructor expressions\n+/// survive a hash-cons table reset before their inductive is checked.\n+#[test]\n+fn eq_shaped_index_field_accepts_after_intern_reset() {\n+    let input = fs::read_to_string(fixture(\"eq-shaped-index-field.accept.ndjson\"))\n+        .expect(\"read fixture\");\n+    let split = input.find(\"{\\\"inductive\\\":\").expect(\"inductive block\");\n+    let mut parser = Parser::new();\n+    parser.run(Cursor::new(&input[..split])).expect(\"parse expressions\");\n+    assert!(kiota::expr::intern_clear_if_large(0));\n+    parser.run(Cursor::new(&input[split..])).expect(\n+        \"an indexed Prop recursor must remain valid across an intern-table reset\",\n+    );\n+}\n+\n /// Minimal dependency-closure slice, cut directly from a real\n /// `cedar-spec` export (not hand-assembled), of\n /// `Cedar.Spec.Value._sizeOf_3_eq` — the equation lemma bridging",
+    "display_url": "https://github.com/sankalpsthakur/kiota/commit/9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+    "display_title": "Test indexed Prop elimination across intern-table resets"
+  },
+  "isError": false
+}

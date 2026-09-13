@@ -1,0 +1,52 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "commit": {
+        "sha": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+        "message": "Merge pull request #47 from leanprover/partial-is-unsafe\n\nfix: omit partial declarations unless exportUnsafe is true",
+        "url": "https://api.github.com/repos/leanprover/lean4export/commits/411dce7db58a3afc60ecab2d211acd1042b593dc",
+        "html_url": "https://github.com/leanprover/lean4export/commit/411dce7db58a3afc60ecab2d211acd1042b593dc",
+        "diff": "@@ -235,7 +235,7 @@ partial def dumpExpr (e : Expr) : M Nat := do\n partial def dumpConstant (c : Name) : M Unit := do\n   let some declar := (← read).env.find? c\n     | if (← get).ignoreMissing then return else panic! s!\"Constant {c} not found in environment.\"\n-  if (declar.isUnsafe && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n+  if ((declar.isUnsafe || declar.isPartial) && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n     return\n   modify fun st => { st with visitedConstants := st.visitedConstants.insert c }\n   match declar with",
+        "files": [
+          {
+            "filename": "Export.lean",
+            "patch": "@@ -235,7 +235,7 @@ partial def dumpExpr (e : Expr) : M Nat := do\n partial def dumpConstant (c : Name) : M Unit := do\n   let some declar := (← read).env.find? c\n     | if (← get).ignoreMissing then return else panic! s!\"Constant {c} not found in environment.\"\n-  if (declar.isUnsafe && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n+  if ((declar.isUnsafe || declar.isPartial) && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n     return\n   modify fun st => { st with visitedConstants := st.visitedConstants.insert c }\n   match declar with"
+          }
+        ],
+        "repository_full_name": "leanprover/lean4export",
+        "comments": null,
+        "author": {
+          "login": "robsimmons",
+          "name": null,
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/442315?v=4",
+          "id": 442315
+        },
+        "committer": {
+          "login": "web-flow",
+          "name": null,
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/19864447?v=4",
+          "id": 19864447
+        },
+        "created_at": "2026-08-25T22:09:10Z",
+        "git_author_email": null,
+        "display_url": "https://github.com/leanprover/lean4export/commit/411dce7db58a3afc60ecab2d211acd1042b593dc",
+        "display_title": "Merge pull request #47 from leanprover/partial-is-unsafe"
+      },
+      "url": "https://github.com/leanprover/lean4export/commit/411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "title": "Merge pull request #47 from leanprover/partial-is-unsafe\n\nfix: omit partial declarations unless exportUnsafe is true",
+      "diff": "@@ -235,7 +235,7 @@ partial def dumpExpr (e : Expr) : M Nat := do\n partial def dumpConstant (c : Name) : M Unit := do\n   let some declar := (← read).env.find? c\n     | if (← get).ignoreMissing then return else panic! s!\"Constant {c} not found in environment.\"\n-  if (declar.isUnsafe && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n+  if ((declar.isUnsafe || declar.isPartial) && !(← get).exportUnsafe) || (← get).visitedConstants.contains c then\n     return\n   modify fun st => { st with visitedConstants := st.visitedConstants.insert c }\n   match declar with",
+      "display_url": "https://github.com/leanprover/lean4export/commit/411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "display_title": "Merge pull request #47 from leanprover/partial-is-unsafe\n\nfix: omit partial declarations unless exportUnsafe is true"
+    },
+    "isError": false
+  }
+}

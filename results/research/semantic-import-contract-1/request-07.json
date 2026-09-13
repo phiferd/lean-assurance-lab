@@ -1,0 +1,124 @@
+{
+  "status": "fulfilled",
+  "value": {
+    "content": [
+      {
+        "type": "text",
+        "text": "Action completed."
+      }
+    ],
+    "structuredContent": {
+      "issues": [
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/48",
+          "title": "Should a checker reject a let type mismatch that disappears after substitution?",
+          "issue_number": 48,
+          "body": "We are preparing shared regression tests for external Lean checkers and want\nto clarify what a checker is expected to validate when it reads an exported\ndeclaration.\n\nConsider this existing serialized declaration, shown here in readable notation:\n\n```text\ndef EcosystemCase : Sort 2 := let u : Sort 1 := Sort 1; u\n```\n\nThe let contains a type mismatch: its value, `Sort 1`, has type `Sort 2`, but\nits annotation says `Sort 1`.\n\nIf we first substitute the value for `u` (zeta reduction), the expression becomes:\n\n```text\ndef EcosystemCase : Sort 2 := Sort 1\n```\n\nThat resulting declaration has matching types. The simplification has removed\nthe incorrect annotation.\n\n**Should a full external checker reject the original declaration because of\nthat mismatch, or is it permitted to simplify the let first and accept the\nresult?** If the interface assumes that incoming expressions have already been\ntype-checked, could that assumption be stated explicitly instead?\n\nThis matters for shared tests: we need to know whether acceptance promises that\nthe supplied expression was checked, or that a permitted transformation of it\nwas checked. We are asking about that guarantee, not reporting a false theorem\nor asking every reducer to repeat checks on already-validated expressions.\n\nWe found separate checking and reduction paths in Lean v4.33.0:\n[`infer_let`](https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L200-L222)\nchecks the annotation/value relationship in checking mode, while the\n[let reduction branch](https://github.com/leanprover/lean4/blob/d8b18978322de05a8f3dba51ef03cf5461676c17/src/kernel/type_checker.cpp#L504-L506)\nsubstitutes directly. The\n[3.1.0 format description](https://github.com/leanprover/lean4export/blob/f297dfe2a8557e8674fe892bb49dffe4bfadc0e9/format_ndjson.md)\nlists the let fields but does not state which acceptance guarantee applies.\nIs there an existing policy we should cite, or would a short clarification in\nthat document or the Lean reference manual be appropriate?\n\nFor reproducibility, the unchanged [candidate NDJSON](https://github.com/phiferd/lean-assurance-lab/blob/4a760173ea7e3e155ce46fa5631d4b447ee7682b/corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson)\nand [matching control](https://github.com/phiferd/lean-assurance-lab/blob/4a760173ea7e3e155ce46fa5631d4b447ee7682b/corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson)\nare each 601 bytes. The notation above explains those bytes; it is not an\nelaboration result or a new test run. The body uses `u`, and the control changes\nboth the let value and the enclosing declaration type. The\n[source review](https://github.com/phiferd/lean-assurance-lab/blob/4a760173ea7e3e155ce46fa5631d4b447ee7682b/results/research/semantic-let-contract-1/clarification-packet.md)\nrecords the exact versions and remaining qualifications.\n",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/48",
+          "display_title": "Should a checker reject a let type mismatch that disappears after substitution?"
+        },
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/40",
+          "title": "Static facets and Export.Parse not built",
+          "issue_number": 40,
+          "body": "Currently, when building [comparator](https://github.com/leanprover/comparator) with an already built/distributed lean4export, it tries to build `Export.Parse` leading to a permission denied issue when the artifacts of `lean4export` are distributed in a read-only state (as is the case with nix e.g.).\n\nTo fix this, `lean4export` should also build `Export.Parse` which can be fixed by adding `globs = [\"Export.*\"]` to lakefile.toml under the `Export` library configuration (otherwise, when building comparator for example, lake tries to build these in the immutable location `/path/to/lean4export/.lake`).\n\nThis would be sufficient to build comparator's oleans, but as it also contains an exe which import `Export.Parse`, it needs the static library facets (including the `.c.o.export` files that are found under `.lake/build/ir/Export/`) which again, when missing, lake tries to build in the immutable location. To build static facets as part of `lean4export` we should add `defaultFacets = [\"static\"]` to the `Export` library configuration.\n\nI can submit a PR for this if it's okay?",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/40",
+          "display_title": "Static facets and Export.Parse not built"
+        },
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/3",
+          "title": "[RFC] Switch to JSON",
+          "issue_number": 3,
+          "body": "The concrete syntax of the export format is troublesome to parse, being a homegrown textual format with a heavy reliance on newline separators and with lots of \"clever\" sequence encodings. Moreover, the encoding of names is unquoted, which is just plain wrong in the presence of names with escaped characters, because these names can include arbitrary characters, including newlines, keywords and everything else - a classic SQL injection attack.\r\n\r\nI propose we drop this ad hoc encoding entirely and switch to a JSON-based format. This is much easier to get right, and libraries for doing the parsing are numerous (but it's also feasible to write the parser directly).",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/3",
+          "display_title": "[RFC] Switch to JSON"
+        },
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/1",
+          "title": "export format discussion",
+          "issue_number": 1,
+          "body": "I wrote/drew up a description of the main thing we talked about in a very bootleg PDF: [lifetimes.pdf](https://github.com/Kha/lean4export/files/12761573/lifetimes.pdf)\r\n\r\nA few additional thoughts:\r\n\r\n1. The declaration items currently give their universe parameters as name indices, which the type checker needs to promote to levels. It seems like it would be easier to do what's already done with `#EC` and give a list of level indices instead of name indices, and the type checkers could get rid of a (very) little bit of code in the parser.\r\n\r\n2. Something to think about down the line if there are multiple type checkers, it may be nice to have an extension to the export format that conveys the pretty printer options the user wants to use and a list of the declarations they actually want to see printed back to them. Users would just convey that once to the exporter and be able to expect the same behavior from each checker, and it might prevent different checkers from having slightly different ways of taking pretty printer options.\r\n\r\n3. It may be worth it to have some kind of lean version identifier somewhere. While the underlying theory isn't really expected to change, there might be small implementation details in checkers or the format that warrants versioning (we're on v2 of the export format after all).",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/1",
+          "display_title": "export format discussion"
+        },
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/8",
+          "title": "PANIC at Option.get! Init.Data.Option.BasicAux:22:14: value is none",
+          "issue_number": 8,
+          "body": "This panic keeps coming up when processing various files. You can see it in the results here (Comparator column, yellow results):\nhttps://github.com/oOo0oOo/LeanParanoia/blob/main/VERIFIER_COMPARISON.md\n\n## Full Error Message\n```\nPANIC Building LeanTestProject.AuxiliaryShadowing.MatcherShadowing\nBuild completed successfully (2 jobs).\nExporting #[test1] from LeanTestProject.AuxiliaryShadowing.MatcherShadowing\nuncaught exception: process 'landrun' exited with code 134\nstderr:\nPANIC at Option.get! Init.Data.Option.BasicAux:22:14: value is none\nbacktrace:\nlean4export(+0x9f5698e) [0x6552441ca98e]\nlean4export(lean_panic_fn+0x1c) [0x6552441cae2c]\nlean4export(l_dumpConstant+0x9c) [0x65523c5d725c]\nlean4export(l_List_forIn_x27_loop___at___main_spec__3___redArg+0xec) [0x65523c5c923c]\nlean4export(l_main___lam__1+0x50e) [0x65523c5ca0ee]\nlean4export(lean_apply_3+0x970) [0x6552441da3e0]\nlean4export(l_M_run___redArg+0x1d) [0x65523c5cb84d]\nlean4export(+0x2357609) [0x65523c5cb609]\n/lib/x86_64-linux-gnu/libc.so.6(+0x29d90) [0x77ec09c29d90]\n/lib/x86_64-linux-gnu/libc.so.6(__libc_start_main+0x80) [0x77ec09c29e40]\nlean4export(_start+0x2a) [0x65523c5c86aa]\n```\n\n## System\nUbuntu 22.04.5, Lean v4.25.0, lean4export built from source (HEAD)\n\nlean4export installed using:\nhttps://github.com/oOo0oOo/LeanParanoia/blob/main/tests/benchmark/install_comparator.sh\n\nComparator is run here:\nhttps://github.com/oOo0oOo/LeanParanoia/blob/968e428181a7ef8fec3af34216e426db21d56d70/tests/benchmark/test_tool_comparison.py#L250\n",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/8",
+          "display_title": "PANIC at Option.get! Init.Data.Option.BasicAux:22:14: value is none"
+        },
+        {
+          "url": "https://github.com/leanprover/lean4export/issues/5",
+          "title": "Panic exporting",
+          "issue_number": 5,
+          "body": "Greetings. I've tried to use the export with no avail.\r\n\r\nProcess to reproduce.\r\n- Clone github repo.\r\n- In different folder with given path create following minimal file that I want to export.\r\n```lean\r\ntheorem iffo (a b : Prop) (h1: a->b) (h2: b->a): a↔b := by\r\n  have hy := Iff.intro h1 h2\r\n  exact hy\r\n```\r\n- run in cloned gh repo \"lake exe lean4export -- ../test/Test/das.lean\" where \"../test/Test/das.lean\" is the file above I want to export.\r\n\r\nStacktrace:\r\n```\r\nPANIC at Option.get! Init.Data.Option.BasicAux:16:14: value is none\r\nbacktrace:\r\n./.lake/build/bin/lean4export(lean_panic_fn+0x9e) [0x5f2dcb216e0e]\r\n./.lake/build/bin/lean4export(l_List_mapTR_loop___at_main___spec__14+0x21a) [0x5f2dc872f5aa]\r\n./.lake/build/bin/lean4export(_lean_main+0x36b) [0x5f2dc872fa9b]\r\n./.lake/build/bin/lean4export(+0xae6113) [0x5f2dc8730113]\r\n/usr/lib/libc.so.6(+0x25e08) [0x717efdb8ce08]\r\n/usr/lib/libc.so.6(__libc_start_main+0x8c) [0x717efdb8cecc]\r\n./.lake/build/bin/lean4export(_start+0x25) [0x5f2dc872db65]\r\nPANIC at Option.get! Init.Data.Option.BasicAux:16:14: value is none\r\nbacktrace:\r\n./.lake/build/bin/lean4export(lean_panic_fn+0x9e) [0x5f2dcb216e0e]\r\n./.lake/build/bin/lean4export(l_dumpConstant___lambda__4+0x2cb) [0x5f2dc874095b]\r\n./.lake/build/bin/lean4export(l_List_forIn_loop___at_main___spec__12+0xd3) [0x5f2dc872ed63]\r\n./.lake/build/bin/lean4export(lean_apply_3+0x375) [0x5f2dcb222de5]\r\n./.lake/build/bin/lean4export(l_ReaderT_bind___at_main___spec__13___rarg+0x44) [0x5f2dc872f0c4]\r\n./.lake/build/bin/lean4export(lean_apply_3+0x375) [0x5f2dcb222de5]\r\n./.lake/build/bin/lean4export(l_M_run___rarg+0x23) [0x5f2dc87311c3]\r\n./.lake/build/bin/lean4export(+0xae6113) [0x5f2dc8730113]\r\n/usr/lib/libc.so.6(+0x25e08) [0x717efdb8ce08]\r\n/usr/lib/libc.so.6(__libc_start_main+0x8c) [0x717efdb8cecc]\r\n./.lake/build/bin/lean4export(_start+0x25) [0x5f2dc872db65]\r\n0 #EV 0\r\n#AX 0 0 \r\n```\r\n\r\nI think I am doing something horribly wrong, but I just can't grasp the how to run. I don't know what the input for the cli is. My goal is quite simple, given an input file that contains one or more theorems, export it.\r\n\r\nAlso it would be awesome if the exported examples in the example folder had some reproducible steps.\r\n\r\nHelp is much appreciated.",
+          "state": null,
+          "user": null,
+          "assignees": null,
+          "labels": null,
+          "milestone": null,
+          "state_reason": null,
+          "comments": null,
+          "created_at": null,
+          "updated_at": null,
+          "closed_at": null,
+          "display_url": "https://github.com/leanprover/lean4export/issues/5",
+          "display_title": "Panic exporting"
+        }
+      ]
+    },
+    "isError": false
+  }
+}
