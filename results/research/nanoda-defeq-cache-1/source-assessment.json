@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-DEFEQ-CACHE-1",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "mode_outcome_witness_established": false,
+  "global_mode_equivalence_established": false,
+  "public_import_reachability_established": false,
+  "current_defect_established": false,
+  "scientific_execution": false,
+  "question": "Identical ordered pair and unchanged checker context: can a naturally inserted negative result in one eager mode improperly mask success in the other if mode is omitted?",
+  "exclusions": [
+    {
+      "id": "OPEN-NAT",
+      "source": "src/tc.rs:398",
+      "scope": "Same expression retaining free variables",
+      "finding": "try_reduce_nat refuses independently of eager_mode; not an open-term native-reduction witness."
+    },
+    {
+      "id": "CLOSED-PAIR",
+      "source": "src/tc.rs:1259",
+      "scope": "One delta_try_nat invocation with both sides closed",
+      "finding": "Pair-level native gate already enabled in both modes; no local gate distinction. Recursive binder-created locals are outside this exclusion."
+    },
+    {
+      "id": "OPEN-PAIR",
+      "source": "src/tc.rs:1259 and 398",
+      "scope": "One invocation with both sides retaining free variables",
+      "finding": "Eager helper calls each refuse; no direct native-reduction difference."
+    },
+    {
+      "id": "QUICK-RETURN",
+      "source": "src/tc.rs:957-977",
+      "scope": "False exits through quick checks",
+      "finding": "Does not establish failure-key insertion; assert key membership."
+    },
+    {
+      "id": "POSITIVE-WARM",
+      "source": "src/tc.rs:1003-1006 and 1177-1183",
+      "scope": "Successful call reaching positive insertion",
+      "finding": "Mode-independent sorted positive entry masks subsequent negative lookup. Boolean shortcut returns before positive insertion and is explicitly excepted."
+    },
+    {
+      "id": "INFER-CACHE-REUSE",
+      "source": "results/research/nanoda-cache-regression-1/result.json",
+      "scope": "Prior malformed-let inference witness",
+      "finding": "InferOnly/Check modes are not eager_mode; cannot transfer outcome distinction."
+    }
+  ],
+  "remaining_boundaries": [
+    {
+      "id": "CLOSED-OPEN-ASYMMETRY",
+      "source": "src/tc.rs:1255-1267",
+      "missing": "Exact well-typed pair where newly reducing closed side changes final Boolean outcome, including later unfolding/congruence/eta paths."
+    },
+    {
+      "id": "BOOLEAN-SHORTCUT",
+      "source": "src/tc.rs:968-973 and 1274-1318",
+      "missing": "Exact open lhs and Bool.true rhs with eager success, lazy false, and a naturally populated ordered negative key; earlier normalization and later unfolding must be accounted for."
+    },
+    {
+      "id": "CALLER-HISTORY",
+      "source": "src/tc.rs:556-582",
+      "missing": "Normal same-context reachability through eagerReduce or justified supported internal control; no continuation after assertion panic assumed."
+    }
+  ],
+  "recommendation": {
+    "action": "Retain exclusions; do not launch or submit a mode-sensitive test without the missing exact sequence. Prioritize Arena independent-rejection audit.",
+    "target": "Nanoda def_eq regression design; Arena shared tutorial corpus",
+    "priority": "DEFER_CACHE_EXECUTION_SELECT_READY_CORPUS_ITEM",
+    "prerequisites": [
+      "Concrete source-supported differing outcome pair and stable environment",
+      "Natural failure-cache insertion with exact pointer history and fresh controls",
+      "Separately recorded finite execution scope and frozen cells/tooling",
+      "Exact human approval for any future external write"
+    ],
+    "evidence": [
+      "report.md",
+      "source-lock.json",
+      "pr31-change.patch",
+      "independent-review.json"
+    ]
+  }
+}

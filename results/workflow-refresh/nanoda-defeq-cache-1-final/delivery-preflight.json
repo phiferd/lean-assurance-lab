@@ -1,0 +1,35 @@
+{
+  "initial_command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check"
+  ],
+  "initial_returncode": 2,
+  "initial_log": "results/workflow-refresh/nanoda-defeq-cache-1-final/20-staged-source-whitespace.log",
+  "authored_files_command": [
+    "git",
+    "diff",
+    "--cached",
+    "--check",
+    "--",
+    ".",
+    ":!results/research/nanoda-defeq-cache-1/current-tc.rs.txt",
+    ":!results/research/nanoda-defeq-cache-1/current-util.rs.txt",
+    ":!results/research/nanoda-defeq-cache-1/pr31-change.patch"
+  ],
+  "returncode": 0,
+  "excluded_exact_raw_evidence": [
+    "results/research/nanoda-defeq-cache-1/current-tc.rs.txt",
+    "results/research/nanoda-defeq-cache-1/current-util.rs.txt",
+    "results/research/nanoda-defeq-cache-1/pr31-change.patch"
+  ],
+  "reason": "These files preserve upstream bytes, including upstream whitespace. No evidence is normalized or rewritten. Independently replayed exact source identity replaces style checking for these three immutable source copies only.",
+  "source_replay": "results/research/nanoda-defeq-cache-1/source-replay.json",
+  "scope": "Whitespace hygiene; no research/assurance acceptance gate or frozen artifact changes.",
+  "initial_log_encoding": "JSON string preserves exact original diagnostic output, including upstream trailing whitespace.",
+  "administrative_events": [
+    "Sandbox denied initial Git index write; authorized escalation allowed staging.",
+    "A subsequent whitespace check also saw upstream whitespace echoed in its raw diagnostic log; preserve that diagnostic losslessly as a JSON string so only the three byte-exact source copies need style exclusions."
+  ]
+}

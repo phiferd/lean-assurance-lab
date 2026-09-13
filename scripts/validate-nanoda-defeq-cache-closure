@@ -1,0 +1,139 @@
+#!/usr/bin/env python3
+"""Validate the source-only negative-cache closure against immutable entry evidence."""
+from datetime import datetime
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+PREFIX = "results/research/nanoda-defeq-cache-1/"
+ITEM = "NANODA-DEFEQ-CACHE-1"
+BUNDLE = "results/research/hsbm-pilot-1/nanoda-history.bundle"
+BUNDLE_SHA = "11bcf77b775953c7890d728f2f34b1dc30ded20ac8fc8ca88d7d54f914c39e1e"
+TIP = "4c544ed4099c8227f07d5de77ad1e69fb0740a27"
+ZERO_COUNTS = ("builds", "test_processes", "checkers", "proofs", "mutants", "new_exports", "external_research_writes")
+FROZEN = ("entry-lock.json", "entry-queue.json", "work-record.json", "action-rubric.json")
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def number(value, name):
+    require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+            "invalid " + name)
+    return value
+
+
+def count(value, name):
+    require(type(value) is int and value >= 0, "invalid " + name)
+    return value
+
+
+def safe_path(root, name):
+    require(isinstance(name, str) and bool(name) and not Path(name).is_absolute(), "invalid binding path")
+    path = (root / name).resolve()
+    require(path.is_relative_to(root.resolve()), "binding escapes repository")
+    return path
+
+
+def git_bytes(root, revision, path):
+    require(isinstance(revision, str) and re.fullmatch(r"[0-9a-f]{40}", revision), "full commit identity required")
+    safe_path(root, path)
+    return subprocess.check_output(["git", "-C", str(root), "show", f"{revision}:{path}"])
+
+
+def validate_data(result, entry, closure, requests, assessment, queue):
+    for value in (result, entry, closure, requests, assessment):
+        require(value["item_id"] == ITEM, "wrong item identity")
+    for value in (result, closure):
+        require(value["status"] == "COMPLETE" and value["outcome"] == "BOUNDED_UNRESOLVED", "closure outcome mismatch")
+    require(entry["status"] == "ACTIVE", "entry status changed")
+    budget = entry["budget"]
+    require(budget["active_seconds"] == 5400 and budget["read_only_requests"] == 8,
+            "entry budget changed")
+    for key in ZERO_COUNTS:
+        require(count(budget[key], key) == 0, "nonzero source-only budget: " + key)
+    for key in ("mode_outcome_witness_established", "global_mode_equivalence_established"):
+        require(assessment[key] is False and result[key] is False, "unsupported claim: " + key)
+    require(closure["started_at"] == entry["started_at"] and closure["start_monotonic"] == entry["start_monotonic"], "work clock reset")
+    start = number(closure["start_monotonic"], "start clock")
+    end = number(closure["end_monotonic"], "end clock")
+    active = number(closure["active_seconds"], "active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and active <= 5400, "active interval or cap mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(closure[key]) for key in ("started_at", "completed_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None, "timezone-aware interval required")
+    elapsed = (utc_end - utc_start).total_seconds()
+    require(elapsed >= 0 and abs(elapsed - active) <= 2, "UTC/monotonic interval disagreement")
+    rows = requests["requests"]
+    ids = [row["id"] for row in rows]
+    require(len(ids) == len(set(ids)) and all(ids), "duplicate or empty request ID")
+    charges = [count(row["charged_requests"], "request charge") for row in rows]
+    require(all(charge > 0 for charge in charges), "uncharged request event")
+    total = sum(charges)
+    require(requests["cap"] == 8 and total == count(requests["charged_read_only_requests"], "request total") <= 8,
+            "request accounting or cap mismatch")
+    counts = result["research_counts"]
+    require(closure["research_counts"] == counts, "closure/result counts disagree")
+    require(count(counts["read_only_requests"], "result requests") == total, "result/request counts disagree")
+    for key in ZERO_COUNTS:
+        require(count(counts[key], key) == 0, "prohibited launch: " + key)
+    successor = result["next_item"]
+    require(bool(successor["id"]) and successor["id"] != ITEM and successor["status"] == "READY"
+            and successor["started"] is False, "successor must be READY and unstarted")
+    require(closure["next_item"] == successor["id"] and closure["next_item_started"] is False, "closure successor mismatch")
+    require(queue["selected_item"] == successor["id"], "snapshot successor mismatch")
+    queue_ids = [row["id"] for row in queue["items"]]
+    require(len(queue_ids) == len(set(queue_ids)), "duplicate snapshot queue item")
+    indexed = {row["id"]: row for row in queue["items"]}
+    require(indexed[ITEM]["status"] == "COMPLETE" and indexed[ITEM]["closure"]["outcome"] == result["outcome"], "snapshot closure mismatch")
+    require(indexed[successor["id"]]["status"] == "READY"
+            and not any(row["status"] == "ACTIVE" for row in queue["items"]), "snapshot successor started")
+
+
+def validate(root=ROOT):
+    root = Path(root)
+    def read(name):
+        return json.loads(safe_path(root, PREFIX + name).read_text())
+    result, entry = read("result.json"), read("work-record.json")
+    for name in FROZEN:
+        path = PREFIX + name
+        require(safe_path(root, path).read_bytes() == git_bytes(root, result["entry_commit"], path), "frozen input changed: " + name)
+    entry_lock = read("entry-lock.json")
+    names = [row["path"] for row in entry_lock["bindings"]]
+    require(names and len(names) == len(set(names)), "duplicate or empty entry bindings")
+    for row in entry_lock["bindings"]:
+        require(digest(git_bytes(root, entry["base_commit"], row["path"])) == row["sha256"], "historical entry binding mismatch")
+    require(safe_path(root, PREFIX + "entry-queue.json").read_bytes() == git_bytes(root, entry["base_commit"], "config/research-queue.json"), "entry queue historical mismatch")
+    source = read("source-lock.json")
+    require(source["item_id"] == ITEM and source["tip"] == TIP, "source identity mismatch")
+    require(source["history_bundle"] == BUNDLE and source["history_bundle_sha256"] == BUNDLE_SHA
+            and digest(safe_path(root, BUNDLE).read_bytes()) == BUNDLE_SHA, "retained source bundle mismatch")
+    bound = set()
+    for row in result["output_bindings"]:
+        require(row["path"] not in bound, "duplicate output binding")
+        bound.add(row["path"])
+        data = safe_path(root, row["path"]).read_bytes()
+        require(digest(data) == row["sha256"] and count(row["bytes"], "binding bytes") == len(data), "output binding mismatch: " + row["path"])
+    required = {PREFIX + name for name in ("source-lock.json", "requests.json", "work-closure.json", "source-assessment.json", "closure-queue.json")}
+    require(required <= bound, "missing required output binding")
+    # Historical closure is intentionally independent of the mutable live queue.
+    validate_data(result, entry, read("work-closure.json"), read("requests.json"), read("source-assessment.json"), read("closure-queue.json"))
+    return {"status": "PASS", "item_id": ITEM, "output_bindings": len(bound)}
+
+
+if __name__ == "__main__":
+    try:
+        print(json.dumps(validate(), sort_keys=True))
+    except (ValueError, KeyError, TypeError, OSError, subprocess.CalledProcessError) as error:
+        print("FAIL: " + str(error), file=sys.stderr)
+        raise SystemExit(1)

@@ -57,6 +57,17 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-DEFEQ-CACHE-1` on 2026-09-13 with
+  `BOUNDED_UNRESOLVED`. Current Nanoda `4c544ed` and all 38 statically active
+  unit tests are bound. Native reduction still rejects open expressions in eager
+  mode; the review excludes several invalid cache-witness designs but establishes
+  neither a differing-outcome sequence nor global mode equivalence. The
+  [assessment](../results/research/nanoda-defeq-cache-1/report.md) records Boolean
+  shortcut/closed-open boundaries and positive-cache confounds. Two conservatively
+  charged source requests include one invalid-argument call; no scientific launch,
+  new export or external research write occurred. No speculative PR is prepared.
+  `ARENA-INDUCTIVE-ISOLATION-1` is selected READY and unstarted.
+
 - Completed `NANODA-NAT-DISPATCH-REGRESSION-1` on 2026-09-13 with SUCCESS:
   a test-only patch adds two tests covering six Nat dispatcher operations and
   disabled mode. Both focused tests and all 40 Nanoda library tests passed;
@@ -2760,14 +2771,18 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-DEFEQ-CACHE-1`.
+Selected next item: `ARENA-INDUCTIVE-ISOLATION-1`.
 
-The item is ACTIVE under the portfolio plan's existing reserve
-scope: 90 cumulative active minutes, at most eight read-only requests, and
-initially zero build/test/export launches. Bind current source/test inventory
-and derive an exact same-context sequence distinguishing eager-mode negative
-cache behavior, or a scoped exclusion. Reuse prior cache infrastructure where
-applicable; execution requires a separately recorded budget and frozen cells.
+The item is READY and unstarted under the existing portfolio reserve: 90
+cumulative active minutes, at most eight read-only requests, at most four existing
+tutorial cases and zero scientific/build launches or new export bytes. Establish
+current Arena inventory and inspect independent rejection causes before selecting
+one useful existing-artifact package or an evidence-backed no-contribution result.
+
+`NANODA-DEFEQ-CACHE-1` completed BOUNDED_UNRESOLVED. Its source-bound assessment
+excludes direct eager native reduction of open terms and records the exact remaining
+Boolean-shortcut and closed/open routes; no mode-outcome witness or global mode
+equivalence is established. No Nanoda scientific launch or speculative PR occurred.
 
 `NANODA-NAT-DISPATCH-REGRESSION-1` completed SUCCESS with a test-only patch:
 both new tests and all 40 Nanoda library tests passed. The
@@ -2795,9 +2810,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains four READY items and one PLANNED portfolio reserve
+The canonical queue retains three READY items and one PLANNED portfolio reserve
 across all three paths: Arena inductive isolation;
-Nanoda negative-cache and reserved-namespace regressions; and independent
+Nanoda reserved-namespace regression; and independent
 import-contract clarification. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2806,7 +2821,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. Only NANODA-DEFEQ-CACHE-1 has started; no successor is executing.
+and modeled mutation metrics are unchanged. No successor has started.
 
 ### Waiting
 

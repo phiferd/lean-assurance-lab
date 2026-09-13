@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-DEFEQ-CACHE-1",
+  "review_date": "2026-09-13",
+  "reviewer_role": "independent final source-claim review",
+  "reviewed_artifacts": [
+    {
+      "path": "results/research/nanoda-defeq-cache-1/report.md",
+      "sha256": "8754418b56e2f9daab91db7b1627b304d7e3d2e71c418967b4556b7a44327384"
+    },
+    {
+      "path": "results/research/nanoda-defeq-cache-1/source-assessment.json",
+      "sha256": "251a400424856cad3ff080122e667be455ca21fd2d3d0cd8ad6b59d301da78cc"
+    }
+  ],
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "disposition": "APPROVE_SCOPED_BOUNDED_UNRESOLVED",
+  "required_corrections": [],
+  "checks": [
+    {
+      "topic": "panic restoration",
+      "assessment": "Accurate: tc.rs:577 assert_def_eq occurs before restoration at 579. A panic bypasses this assignment. The report correctly refuses to treat caught-panic continuation as a normal supported same-context route; it does not claim every panic necessarily changes the prior flag value."
+    },
+    {
+      "topic": "local closed/open exclusion",
+      "assessment": "Accurate and appropriately scoped: tc.rs:1259 admits both-closed pairs regardless of flag; helper tc.rs:398 rejects any side still marked open. The report explicitly excludes global recursive equivalence and notes binder-created locals."
+    },
+    {
+      "topic": "early return and key insertion",
+      "assessment": "Accurate: target pair insertion at tc.rs:1006 occurs only after reaching final result block. Earlier quick-check failure can still populate caches for recursive subpairs; the report requires membership of the targeted key rather than claiming no cache writes anywhere."
+    },
+    {
+      "topic": "positive cache",
+      "assessment": "Accurate: sorted positive cache checked at 1181 precedes target negative lookup; success at 1004 warms it, while Bool shortcut at 971 does not itself insert. The report preserves this distinction."
+    },
+    {
+      "topic": "eager strategy versus final result",
+      "assessment": "Accurate: one earlier reduction opportunity does not establish differing Booleans. WHNF has no direct eager branch, although its recursive helper calls can reach def_eq; the no-direct wording avoids claiming a mode-independent call graph."
+    },
+    {
+      "topic": "coverage",
+      "assessment": "Matches independently inventoried 38 active test attributes, eight ignored examples, disabled Nat checker comments and exact fixture wiring. No unmeasured dynamic-coverage claim."
+    },
+    {
+      "topic": "missed easy route",
+      "assessment": "No exact type-correct naturally populated false-to-true sequence identified. A fabricated cache key, malformed custom environment, or recovered assertion-panic state would not establish the requested normal boundary. Closed/open Nat and Bool early-WHNF routes remain explicit unresolved cases, not excluded globally."
+    },
+    {
+      "topic": "recommendation",
+      "assessment": "Retaining this local source assessment without a new PR/issue and selecting the READY Arena reserve follows from the unresolved discriminator and existing independent corpus opportunity. Selection alone does not execute the next item."
+    }
+  ],
+  "scope_limits": "This is source review, not proof of global eager-mode equivalence or absence of all witnesses. No network request, build, test, checker, proof, mutation, or export launch occurred."
+}

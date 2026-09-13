@@ -1,0 +1,175 @@
+commit 092838312149611649d27781e1d242be4cba4a12
+Author:     ammkrn <chris@christopherabailey.com>
+AuthorDate: Tue Sep 8 23:50:34 2026 -0700
+Commit:     ammkrn <chris@christopherabailey.com>
+CommitDate: Tue Sep 8 23:50:34 2026 -0700
+
+    feat: perf improvements from flt project
+    
+    Merge some performance improvements made by the FLT formalization repo.
+
+diff --git a/Cargo.lock b/Cargo.lock
+index bef2976..08fdae4 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -67,7 +67,7 @@ checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
+ 
+ [[package]]
+ name = "nanoda_lib"
+-version = "0.4.16"
++version = "0.4.17"
+ dependencies = [
+  "indexmap",
+  "num-bigint",
+diff --git a/Cargo.toml b/Cargo.toml
+index 1bdd76f..faec73d 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,7 +1,7 @@
+ 
+ [package]
+ name = "nanoda_lib"
+-version = "0.4.16"
++version = "0.4.17"
+ edition = "2021"
+ license = "Apache-2.0"
+ repository = "https://github.com/ammkrn/nanoda_lib"
+diff --git a/src/expr.rs b/src/expr.rs
+index e17d17d..ec7883b 100644
+--- a/src/expr.rs
++++ b/src/expr.rs
+@@ -163,7 +163,11 @@ impl<'t, 'p: 't> TcCtx<'t, 'p> {
+ 
+     /// Instantiate `e` with the substitutions in `substs`
+     pub fn inst(&mut self, e: ExprPtr<'t>, substs: &[ExprPtr<'t>]) -> ExprPtr<'t> {
+-        self.expr_cache.inst_cache.clear();
++        if self.expr_cache.inst_cache.capacity() > 1024 { 
++            self.expr_cache.inst_cache = crate::util::new_fx_hash_map(); 
++        } else { 
++            self.expr_cache.inst_cache.clear(); 
++        }
+         self.inst_aux(e, substs, 0)
+     }
+ 
+@@ -271,7 +275,11 @@ impl<'t, 'p: 't> TcCtx<'t, 'p> {
+     }
+ 
+     pub fn abstr_levels(&mut self, e: ExprPtr<'t>, start_pos: u16) -> ExprPtr<'t> {
+-        self.expr_cache.abstr_cache_levels.clear();
++        if self.expr_cache.abstr_cache_levels.capacity() > 1024 { 
++            self.expr_cache.abstr_cache_levels = crate::util::new_fx_hash_map(); 
++        } else { 
++            self.expr_cache.abstr_cache_levels.clear(); 
++        } 
+         self.abstr_aux_levels(e, start_pos, self.dbj_level_counter)
+     }
+ 
+@@ -326,7 +334,11 @@ impl<'t, 'p: 't> TcCtx<'t, 'p> {
+     /// Abstraction of unique identifiers; replaces free variables with the appropriate
+     /// bound variable, if the free variable is in `locals`.
+     pub fn abstr(&mut self, e: ExprPtr<'t>, locals: &[ExprPtr<'t>]) -> ExprPtr<'t> {
+-        self.expr_cache.abstr_cache.clear();
++        if self.expr_cache.abstr_cache.capacity() > 1024 { 
++            self.expr_cache.abstr_cache = crate::util::new_fx_hash_map(); 
++        } else { 
++            self.expr_cache.abstr_cache.clear(); 
++        } 
+         self.abstr_aux(e, locals, 0u16)
+     }
+ 
+@@ -383,7 +395,11 @@ impl<'t, 'p: 't> TcCtx<'t, 'p> {
+         if let Some(cached) = self.expr_cache.dsubst_cache.get(&(e, ks, vs)).copied() {
+             return cached
+         }
+-        self.expr_cache.subst_cache.clear();
++        if self.expr_cache.subst_cache.capacity() > 1024 { 
++            self.expr_cache.subst_cache = crate::util::new_fx_hash_map(); 
++        } else { 
++            self.expr_cache.subst_cache.clear(); 
++        } 
+         assert_eq!(self.read_levels(ks).len(), self.read_levels(vs).len());
+         let out = self.subst_aux(e, ks, vs);
+         self.expr_cache.dsubst_cache.insert((e, ks, vs), out);
+diff --git a/src/tc.rs b/src/tc.rs
+index 3fb6042..27eaaac 100644
+--- a/src/tc.rs
++++ b/src/tc.rs
+@@ -958,7 +958,10 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+         if let Some(easy) = self.def_eq_quick_check(x, y) {
+             return easy
+         }
+-
++        let defeq_fail_cache_key = (x, y, self.ctx.eager_mode);
++        if self.tc_cache.defeq_fail_cache.contains(&defeq_fail_cache_key) {
++            return false
++        }
+         let x_n = self.whnf_no_unfolding_cheap_proj(x);
+         let y_n = self.whnf_no_unfolding_cheap_proj(y);
+ 
+@@ -999,6 +1002,8 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+         };
+         if result {
+             self.tc_cache.eq_cache.insert(SortedPair::new(x, y));
++        } else {
++            self.tc_cache.defeq_fail_cache.insert(defeq_fail_cache_key);        
+         }
+         result
+     }
+@@ -1186,11 +1191,11 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+     }
+ 
+     fn failure_cache_contains(&self, x: ExprPtr<'t>, y: ExprPtr<'t>) -> bool {
+-        self.tc_cache.failure_cache.contains(&SortedPair::new(x, y))
++        self.tc_cache.congr_fail_cache.contains(&SortedPair::new(x, y))
+     }
+ 
+     fn failure_cache_insert(&mut self, x: ExprPtr<'t>, y: ExprPtr<'t>) {
+-        self.tc_cache.failure_cache.insert(SortedPair::new(x, y));
++        self.tc_cache.congr_fail_cache.insert(SortedPair::new(x, y));
+     }
+ 
+     fn try_eq_const_app(
+@@ -1223,7 +1228,7 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+                     (Const { levels: l_levels, .. }, Const { levels: r_levels, .. })
+                         if l_args.len() == r_args.len()
+                             && !self.failure_cache_contains(x, y)
+-                            && l_args.iter().copied().zip(r_args.iter().copied()).all(|(x, y)| self.def_eq(x, y))
++                            && l_args.iter().copied().zip(r_args.iter().copied()).rev().all(|(x, y)| self.def_eq(x, y))
+                             && self.ctx.eq_antisymm_many(l_levels, r_levels) =>
+                         Some(FoundEqResult(true)),
+                     (Const { .. }, Const { .. }) => {
+diff --git a/src/util.rs b/src/util.rs
+index 45dfcb9..a251636 100644
+--- a/src/util.rs
++++ b/src/util.rs
+@@ -835,7 +835,9 @@ pub(crate) struct TcCache<'t> {
+     pub(crate) whnf_no_unfolding_cache: UniqueHashMap<ExprPtr<'t>, ExprPtr<'t>>,
+     pub(crate) eq_cache: FxHashSet<SortedPair<'t>>,
+     /// A cache of congruence failures during the lazy delta step procedure.
+-    pub(crate) failure_cache: FxHashSet<SortedPair<'t>>,
++    pub(crate) congr_fail_cache: FxHashSet<SortedPair<'t>>,
++    /// per-declaration memo of `def_eq` calls that returned `false` (keyed by the ordered pair and the eager-mode flag).
++    pub(crate) defeq_fail_cache: FxHashSet<(ExprPtr<'t>, ExprPtr<'t>, bool)>,
+     /// Strong reduction is not used during type-checking, this is more of a library/inspection feature.
+     pub(crate) strong_cache: UniqueHashMap<(ExprPtr<'t>, bool, bool), ExprPtr<'t>>,
+ }
+@@ -848,7 +850,8 @@ impl<'t> TcCache<'t> {
+             whnf_cache: new_unique_hash_map(),
+             whnf_no_unfolding_cache: new_unique_hash_map(),
+             eq_cache: new_fx_hash_set(),
+-            failure_cache: new_fx_hash_set(),
++            congr_fail_cache: new_fx_hash_set(),
++            defeq_fail_cache: new_fx_hash_set(),
+             strong_cache: new_unique_hash_map(),
+         }
+     }
+@@ -859,7 +862,8 @@ impl<'t> TcCache<'t> {
+         self.whnf_cache.clear();
+         self.whnf_no_unfolding_cache.clear();
+         self.eq_cache.clear();
+-        self.failure_cache.clear();
++        self.congr_fail_cache.clear();
++        self.defeq_fail_cache.clear();
+         self.strong_cache.clear();
+     }
+ }
