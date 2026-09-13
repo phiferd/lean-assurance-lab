@@ -1,0 +1,1220 @@
+{
+  "schema_version": 1,
+  "item_id": "HSBM-PILOT-1",
+  "lower_exclusive": "713c245191f7afbc4e996f853ca3131b9b11ec27",
+  "tip": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "tip_tree": "e8816d9dc69c669d99181a8fece5aaeed9a6c13d",
+  "seed": 20260909,
+  "population_rule": "All reachable non-merge commits, not first-parent only; full SHA sort.",
+  "selection_rule": "Descending count of binary lexical families, full-SHA ties; greedily assign first unused family in declared order; fill only on family shortfall; Python Random(seed).sample from remaining full-SHA sorted IDs.",
+  "signal_patterns": {
+    "defaults_options": "\\b(default|Option|Some|None|unwrap_or|Config|config)\\b",
+    "parser_representation": "\\b(parse\\w*|serde|deserialize\\w*|Expr|Level|Name|struct|enum)\\b",
+    "caches_modes": "\\b(\\w*cache\\w*|InferOnly|Check|eager\\w*|mode)\\b",
+    "dispatch": "\\b(spawn|thread\\w*|num_threads|scope|dispatch\\w*)\\b",
+    "new_checks": "\\b(assert\\w*|panic|Err|is_def_eq|def_eq)\\b",
+    "test_wiring": "(\\btest\\b|#\\[test\\]|\\bmod tests\\b)"
+  },
+  "population": [
+    {
+      "commit": "05024bd3bb25b5d5417282f482fbb00381780720",
+      "parent": "276ac3810bf3242a70dc236eaa109e7c09c5b646",
+      "subject": "fix: is_sort guards, disable union find eq",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "struct"
+        ],
+        "caches_modes": [
+          "TcCache",
+          "eq_cache",
+          "failure_cache",
+          "tc_cache"
+        ],
+        "dispatch": [],
+        "new_checks": [
+          "Assert",
+          "assert_eq",
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 3,
+      "changed_files": 6,
+      "changed_lines": 64,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "71c76400a0a32df7c299b6018c79f194024e84035040b3f9b06d0753b0d4b635"
+    },
+    {
+      "commit": "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+      "parent": "12838995ca232ced05cd5218e4975d03c5c44316",
+      "subject": "feat: make inductive more robust to uparam names",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert_def_eq"
+        ],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 3,
+      "changed_lines": 7,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "3bd4f5a23574850154013b3abf007fad2f76cbd06df9b5ea3e421d5bcb199283"
+    },
+    {
+      "commit": "092838312149611649d27781e1d242be4cba4a12",
+      "parent": "05055695879dfebb6628a67da88ceca6cd6b0421",
+      "subject": "feat: perf improvements from flt project",
+      "excluded": true,
+      "exclusion_reason": "KNOWN_CALIBRATION",
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [
+          "abstr_cache",
+          "abstr_cache_levels",
+          "congr_fail_cache",
+          "defeq_fail_cache",
+          "defeq_fail_cache_key",
+          "eager",
+          "eager_mode",
+          "expr_cache",
+          "failure_cache",
+          "inst_cache",
+          "mode",
+          "subst_cache",
+          "tc_cache"
+        ],
+        "dispatch": [],
+        "new_checks": [
+          "def_eq"
+        ],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 5,
+      "changed_lines": 51,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "6fa9ea55bfd10e1852e7b73d568f5003fb5b505b5f65a1baf874b175d4c89cbd"
+    },
+    {
+      "commit": "0bc36318ad52ac7d32163b0214edc63136558dc4",
+      "parent": "d9ed4198136c4505b2004e972568bfa8bf265179",
+      "subject": "fix: check is_proof instead of is_proposition in infer_proj",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 1,
+      "changed_lines": 4,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "cc76f726df31eb4b370f6c15247707f2258805ede83a901e5c378fb2bedc8519"
+    },
+    {
+      "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+      "parent": "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+      "subject": "fix: leq_core(imax, imax) case, rec_rule cmp ck",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "None",
+          "Some"
+        ],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "assert_def_eq",
+          "assert_eq",
+          "assert_ne",
+          "assert_nonnested_rec_rule_def_eq",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]"
+        ]
+      },
+      "score": 4,
+      "changed_files": 6,
+      "changed_lines": 52,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "2c577e0b01bedb17ab33e51c415e15f1d7aef53bd9f7bee281559303a3943631"
+    },
+    {
+      "commit": "12cde077c79e71c8ea476f8559f7605566bcad4d",
+      "parent": "7e93de0c9b1576882c513a3a1eda91d66acdac14",
+      "subject": "link to live version of the book",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 1,
+      "changed_lines": 2,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "0e4be42dcd98f5d210072efa3a1435ab0f8466f1d16d8f5fb3b987f156329160"
+    },
+    {
+      "commit": "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0",
+      "parent": "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+      "subject": "chore: bump semver",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 2,
+      "changed_lines": 4,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "97494043bd2f215a49e317065cfdab612b4c5bdbf17761bbcabc43aa474dcaae"
+    },
+    {
+      "commit": "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+      "parent": "9557f24286e414a7b75beb522529c3e677aa0955",
+      "subject": "chore: inline try_from conversions",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 3,
+      "changed_lines": 17,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "c6928b35d3c88b092192578dd10a590001d4c2de1fe554920a65d069a72aaa9a"
+    },
+    {
+      "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "parent": "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+      "subject": "NDJSON parser, eager gadget, String changes",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Config",
+          "Default",
+          "None",
+          "Option",
+          "Some",
+          "config",
+          "default",
+          "some"
+        ],
+        "parser_representation": [
+          "Deserialize",
+          "Deserializer",
+          "Expr",
+          "Level",
+          "Name",
+          "Parse",
+          "Parser",
+          "deserialize_biguint_from_string",
+          "deserialize_str",
+          "deserialize_with",
+          "deserializer",
+          "enum",
+          "expr",
+          "level",
+          "name",
+          "parse",
+          "parse_axiom",
+          "parse_binder_info",
+          "parse_constructor",
+          "parse_def",
+          "parse_expr_app_row",
+          "parse_expr_const_row",
+          "parse_expr_lambda_row",
+          "parse_expr_let_row",
+          "parse_expr_natlit_row",
+          "parse_expr_pi_row",
+          "parse_expr_proj_row",
+          "parse_expr_ptr",
+          "parse_expr_sort_row",
+          "parse_expr_stringlit_row",
+          "parse_expr_var_row",
+          "parse_hex_string",
+          "parse_hint",
+          "parse_inductive",
+          "parse_insert_string",
+          "parse_level_imax_row",
+          "parse_level_max_row",
+          "parse_level_param_row",
+          "parse_level_ptr",
+          "parse_level_ptrs",
+          "parse_level_succ_row",
+          "parse_name_num_row",
+          "parse_name_ptr",
+          "parse_name_str_row",
+          "parse_names",
+          "parse_nat_as_bool",
+          "parse_notation",
+          "parse_opaque",
+          "parse_primitive",
+          "parse_quot",
+          "parse_rec_rule",
+          "parse_recursor",
+          "parse_rest_cowstr",
+          "parse_semver",
+          "parse_theorem",
+          "parse_u16",
+          "parse_u32",
+          "parse_u64",
+          "parse_uparams",
+          "parse_usize",
+          "parsed",
+          "parser",
+          "serde",
+          "struct"
+        ],
+        "caches_modes": [
+          "ExprCache",
+          "TcCache",
+          "eager",
+          "eagerReduce",
+          "eager_mode",
+          "eager_reduce",
+          "expr_cache",
+          "name_cache",
+          "tc_cache"
+        ],
+        "dispatch": [
+          "scope"
+        ],
+        "new_checks": [
+          "Err",
+          "assert",
+          "assert_def_eq",
+          "assert_eq",
+          "def_eq",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]",
+          "test"
+        ]
+      },
+      "score": 6,
+      "changed_files": 11,
+      "changed_lines": 1488,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "91fc75f2a8ea75df182c97ebbcd083b2429de072dd9d53c652bec3a6def5223b"
+    },
+    {
+      "commit": "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+      "parent": "6f159434b52cd7e973c1009be30a85049dbc5fee",
+      "subject": "Bump release workflow version",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 1,
+      "changed_lines": 2,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "577d03153dc94e44bb5cd55b84764ef313bd6e0b5e608ef7e5b2f33b56d39fc8"
+    },
+    {
+      "commit": "3e705b33504fe6f270006ec117996665bd0422ef",
+      "parent": "224b7c186e695e2e24f29e272a3b2aa7a97f8219",
+      "subject": "add nix flake for development tooling",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "default"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 2,
+      "changed_lines": 72,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "b316d1cc0820e6fad72c3734d294b45c7b993538b268d72c7db747b5d029ad05"
+    },
+    {
+      "commit": "404660cc2fbf04d8040d25a15ddd55b6b15c8e5e",
+      "parent": "ddfac2bf5a7b56cb46e141494427ff3dd55963c7",
+      "subject": "chore: implement upstream safety checks",
+      "excluded": true,
+      "exclusion_reason": "KNOWN_CALIBRATION",
+      "signals": {
+        "defaults_options": [
+          "None",
+          "Some"
+        ],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [
+          "cache",
+          "cached"
+        ],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "assert_eq",
+          "def_eq",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]"
+        ]
+      },
+      "score": 5,
+      "changed_files": 8,
+      "changed_lines": 137,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "e4643b0af9301d7892b13d1f1420fed6472db36f7f903ae791c1c06fd07d6b8a"
+    },
+    {
+      "commit": "42194374f96cdd8afc0c83d8d5ecbbe3212eb69b",
+      "parent": "3e705b33504fe6f270006ec117996665bd0422ef",
+      "subject": "feat: encode DagMarker in bit 31 of Ptr's u32 index",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert"
+        ],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 2,
+      "changed_lines": 51,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "762fc4399f7999ab5c70f034f518a502f9050c31c9c32d4b308376abfb60a739"
+    },
+    {
+      "commit": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+      "parent": "8a40ec02af6f77263752f6f4b6e214823399e603",
+      "subject": "More effective caching for uparam substitution",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Some"
+        ],
+        "parser_representation": [],
+        "caches_modes": [
+          "cached",
+          "dsubst_cache",
+          "expr_cache"
+        ],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 4,
+      "changed_lines": 34,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "8c78ed4f8425fe96bdedaa1c7d50ecd381090b1d9ea799c972779e87c92a519f"
+    },
+    {
+      "commit": "514a1a5f677d22e001ecca96c05810864d988117",
+      "parent": "42194374f96cdd8afc0c83d8d5ecbbe3212eb69b",
+      "subject": "chore: bump semver, remove flake files",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "default"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 4,
+      "changed_lines": 76,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "82c5b92c282f4bf0545a2e478e4c65c7c290919774ad462582ddb411e41eb1a5"
+    },
+    {
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "parent": "4acb533a53f53ef7ebc99b2e43d9a5b99b0cc04f",
+      "subject": "Impl. upstream changes, fix leq_imax_by_cases",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Option",
+          "Some"
+        ],
+        "parser_representation": [
+          "Level",
+          "name",
+          "parse_bool",
+          "parse_nat_as_bool",
+          "parsed"
+        ],
+        "caches_modes": [
+          "TcCache",
+          "name_cache"
+        ],
+        "dispatch": [
+          "thread_rng"
+        ],
+        "new_checks": [
+          "assert_eq",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]"
+        ]
+      },
+      "score": 6,
+      "changed_files": 11,
+      "changed_lines": 344,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "80017d2b64256f0e96f89aba461bfd5c7a3c5c0fb41d557486b709e8651d2945"
+    },
+    {
+      "commit": "6524aed358d79a1f20552a982623beab7bb7abdb",
+      "parent": "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+      "subject": "fix: nat const handling, is_valid_ind_app univ's",
+      "excluded": true,
+      "exclusion_reason": "KNOWN_CALIBRATION",
+      "signals": {
+        "defaults_options": [
+          "Config",
+          "None",
+          "Option",
+          "Some",
+          "config",
+          "unwrap_or"
+        ],
+        "parser_representation": [
+          "Expr",
+          "Level",
+          "Name",
+          "name"
+        ],
+        "caches_modes": [
+          "name_cache"
+        ],
+        "dispatch": [],
+        "new_checks": [
+          "Err",
+          "assert"
+        ],
+        "test_wiring": []
+      },
+      "score": 4,
+      "changed_files": 11,
+      "changed_lines": 214,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "938af736f13f313bd869b2ea2128b502ce54fd23183ba675de175837977f24a8"
+    },
+    {
+      "commit": "66cca78149555a92b7d7a919acd88d3878b83302",
+      "parent": "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+      "subject": "Add lifetime annotation to quiet new lint",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "None"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 3,
+      "changed_lines": 6,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "4ca742c40a2f1ccee388f4216fc933f8f0aaea7eb930fae0ff64e8b6b96203f9"
+    },
+    {
+      "commit": "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+      "parent": "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+      "subject": "chore: even more misc. bounds checks",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "None"
+        ],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [
+          "name_cache"
+        ],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "assert_eq"
+        ],
+        "test_wiring": []
+      },
+      "score": 4,
+      "changed_files": 5,
+      "changed_lines": 17,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "671244860f1480b1cbd6854b1eaaa31ed7aa625b00a223cb7b8669081e1188eb"
+    },
+    {
+      "commit": "698c869f3dabd827d25b6b839f1c24fd010a937e",
+      "parent": "b109108112009a8e53593c2986bbdfb6889912d3",
+      "subject": "feat: Change exit code for incorrect backrefs",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "Expr",
+          "Level",
+          "Name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "assert_eq",
+          "assert_ie",
+          "assert_il",
+          "assert_in",
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 3,
+      "changed_lines": 55,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "22ed97bc17af29d4dbea6392366fa9859e8cce1628cb7e512bab11c0ce66ffd7"
+    },
+    {
+      "commit": "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+      "parent": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "subject": "Update test files for new export format.",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Config",
+          "Option",
+          "Some",
+          "config",
+          "default",
+          "none",
+          "some"
+        ],
+        "parser_representation": [
+          "Expr",
+          "Level",
+          "Name",
+          "Parser",
+          "ParserDescr",
+          "enum",
+          "level",
+          "name",
+          "parse",
+          "parser"
+        ],
+        "caches_modes": [
+          "Mode",
+          "mode"
+        ],
+        "dispatch": [
+          "spawn"
+        ],
+        "new_checks": [
+          "assert",
+          "err",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]"
+        ]
+      },
+      "score": 6,
+      "changed_files": 31,
+      "changed_lines": 954433,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "0c5c3e3ee1ca96d319c6bf149509ef98c4c28df6e86e5c7a159ed17e7adf04f8"
+    },
+    {
+      "commit": "78ded449217ee2ffa95487d4600ffd3637921666",
+      "parent": "50cbb3e86ee9a9e45e2477c1f4e3d8985427cb79",
+      "subject": "chore: more conservative always/never zero checks",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "Level",
+          "level"
+        ],
+        "caches_modes": [
+          "InferOnly"
+        ],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 5,
+      "changed_lines": 57,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "f7cafbeca666fafbab5f1f033373e0c0f3dc2c28b50926bb35f74e40c8cb9953"
+    },
+    {
+      "commit": "7981ff640d2f29c68750f06600e6fc7408afefc2",
+      "parent": "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+      "subject": "README accounts for standardized lean4export JSON output",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "parser"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 1,
+      "changed_lines": 4,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "169565f96547760293703f521c9d74bf65cae3e83fd142a0457dd465298d845f"
+    },
+    {
+      "commit": "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+      "parent": "66cca78149555a92b7d7a919acd88d3878b83302",
+      "subject": "chore: add temp. note about Q4 upstream issues",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "parser"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": [
+          "test"
+        ]
+      },
+      "score": 2,
+      "changed_files": 1,
+      "changed_lines": 6,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "cb4466e2e99214fa85f5943f3e62e56ae7ba2f7e9692e3fb42f7143e55c20fcb"
+    },
+    {
+      "commit": "7e93de0c9b1576882c513a3a1eda91d66acdac14",
+      "parent": "713c245191f7afbc4e996f853ca3131b9b11ec27",
+      "subject": "mention exporter fork in README",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 1,
+      "changed_lines": 4,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "0a46fc65090f57699a5f48b6ea9179f7fa6161c906b035ca8a112ed27904ebf5"
+    },
+    {
+      "commit": "8a327a18c3a1401d6ccc1d64053b1397861136e8",
+      "parent": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+      "subject": "fix: prohibit \"orphan\" recursors",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "None",
+          "Some",
+          "none"
+        ],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 3,
+      "changed_files": 3,
+      "changed_lines": 40,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "23640cea576d2dfa8779b8704f81ee580aef569b5ed0a501d3c70b7d0bf10a99"
+    },
+    {
+      "commit": "8a40ec02af6f77263752f6f4b6e214823399e603",
+      "parent": "12cde077c79e71c8ea476f8559f7605566bcad4d",
+      "subject": "add release action",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 1,
+      "changed_lines": 27,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "dd9013a2a3a81787d0cb8cdf75ada73022cb36e122f4a8e5393b5c641815d14a"
+    },
+    {
+      "commit": "8e02a15296e9ebfee247c160e58a73f2946829f1",
+      "parent": "f58f2f6d535e189a40fcb02ede8eb95f97a92d37",
+      "subject": "fix: more struct and inductive checks",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "None",
+          "Option",
+          "Some"
+        ],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "Assert",
+          "assert",
+          "assert_eq",
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 3,
+      "changed_files": 3,
+      "changed_lines": 82,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "c326aec41b5a91f6884b378c40fe679acac1ba15d67616d36dc02e0141478c6a"
+    },
+    {
+      "commit": "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+      "parent": "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+      "subject": "fix: remedy remaining arena test suite cases",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [
+          "name"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 4,
+      "changed_lines": 24,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "24f9f185bf2d9aefbfd4fabfa1226e6cfed3644782e3b37c3f191ac4db7b81fe"
+    },
+    {
+      "commit": "9557f24286e414a7b75beb522529c3e677aa0955",
+      "parent": "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+      "subject": "fix: remove and disallow truncating casts",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "unwrap_or"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 4,
+      "changed_lines": 21,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "31fd802374dc231f7f80c647e4f5f476274e9bfeb10fde74f5d0348a482bcf22"
+    },
+    {
+      "commit": "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+      "parent": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "subject": "chore: switch to ndjson parser + QoL improvements",
+      "excluded": true,
+      "exclusion_reason": "KNOWN_CALIBRATION",
+      "signals": {
+        "defaults_options": [
+          "Config",
+          "Default",
+          "None",
+          "Option",
+          "Some",
+          "config",
+          "default",
+          "none",
+          "option",
+          "unwrap_or"
+        ],
+        "parser_representation": [
+          "Deserialize",
+          "Expr",
+          "Name",
+          "Parser",
+          "enum",
+          "expr",
+          "level",
+          "name",
+          "parse",
+          "parse_hex_string",
+          "parse_semver",
+          "parsed",
+          "parser",
+          "serde",
+          "struct"
+        ],
+        "caches_modes": [
+          "Check",
+          "InferOnly",
+          "NameCache",
+          "TcCache",
+          "cached",
+          "check",
+          "eager_mode",
+          "name_cache",
+          "strong_cache",
+          "tc_cache"
+        ],
+        "dispatch": [
+          "ThreadRng",
+          "num_threads",
+          "thread",
+          "thread_rng",
+          "threads"
+        ],
+        "new_checks": [
+          "Err",
+          "assert",
+          "assert_beq",
+          "assert_ble",
+          "assert_def_eq",
+          "assert_eq",
+          "assert_eq_beq",
+          "assert_ie",
+          "assert_il",
+          "assert_in",
+          "assert_not_beq",
+          "def_eq",
+          "panic"
+        ],
+        "test_wiring": [
+          "#[test]",
+          "test"
+        ]
+      },
+      "score": 6,
+      "changed_files": 66,
+      "changed_lines": 9653,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "a37f9bbf01624290879c50e3fe64c0519c70935291a225cea1c7af2adc67c65b"
+    },
+    {
+      "commit": "b109108112009a8e53593c2986bbdfb6889912d3",
+      "parent": "8d68231443e6b5f859697822f4e5915f0a19258f",
+      "subject": "chore: document `unsafe_permit_all_axioms` option",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "option"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 1,
+      "changed_files": 1,
+      "changed_lines": 2,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "47cfebf4c40597efc945811056e691a74f7ec25140f0cb9033525c130c5b6dd3"
+    },
+    {
+      "commit": "d9ed4198136c4505b2004e972568bfa8bf265179",
+      "parent": "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+      "subject": "test: add ProjFromProp soundness test case",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "default"
+        ],
+        "parser_representation": [
+          "name",
+          "struct"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 2,
+      "changed_files": 2,
+      "changed_lines": 79,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "600e6e63deaacf7a29a0168b06a438fd19348d843e4901107ff0d01590edff48"
+    },
+    {
+      "commit": "e4a15af0a2b1d494f30f6d6096a8e17cdc813b43",
+      "parent": "6d2f03717af89dde5b8906bb957a6a50eeecbb94",
+      "subject": "fix: forward `flag` parameter in infer_proj",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": []
+      },
+      "score": 0,
+      "changed_files": 3,
+      "changed_lines": 15,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "bafdb71fd6da9b98b0814871cbcf27d6ca2667f9b88396254c9648fcc984c3bc"
+    },
+    {
+      "commit": "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+      "parent": "0bc36318ad52ac7d32163b0214edc63136558dc4",
+      "subject": "test: add check_proj_from_prop to cargo test suite",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Some",
+          "config"
+        ],
+        "parser_representation": [],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [],
+        "test_wiring": [
+          "#[test]"
+        ]
+      },
+      "score": 2,
+      "changed_files": 1,
+      "changed_lines": 13,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "cc852d34e13190c1584902c3ee8aef85d4bf8b8d9edee10815c79e88a0a2fff8"
+    },
+    {
+      "commit": "f04456a32f50c9dfd92ac2d4bb8ad668b6baf934",
+      "parent": "418320295890faed83a96fd97907b12a3b6728c2",
+      "subject": "fix: add additional checks for underived recursors",
+      "excluded": false,
+      "exclusion_reason": null,
+      "signals": {
+        "defaults_options": [
+          "Config"
+        ],
+        "parser_representation": [
+          "name",
+          "parser"
+        ],
+        "caches_modes": [],
+        "dispatch": [],
+        "new_checks": [
+          "assert",
+          "panic"
+        ],
+        "test_wiring": []
+      },
+      "score": 3,
+      "changed_files": 5,
+      "changed_lines": 92,
+      "size_confound": "Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.",
+      "patch_sha256": "8c05f693a73b9319b045192044c4f6132d50cfbde940873581ab3c18c0db1675"
+    }
+  ],
+  "selected": [
+    {
+      "commit": "2747659518c0d5debe1d05cb02ba9232cafa4897",
+      "arm": "SIGNAL",
+      "family": "defaults_options",
+      "descendants": [
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4",
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+        "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+        "6524aed358d79a1f20552a982623beab7bb7abdb",
+        "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+        "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+        "12838995ca232ced05cd5218e4975d03c5c44316"
+      ]
+    },
+    {
+      "commit": "54f24a82f5175edcb95b74118cc7b98b624fe0d7",
+      "arm": "SIGNAL",
+      "family": "parser_representation",
+      "descendants": [
+        "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+        "6f159434b52cd7e973c1009be30a85049dbc5fee",
+        "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+        "66cca78149555a92b7d7a919acd88d3878b83302",
+        "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+        "2747659518c0d5debe1d05cb02ba9232cafa4897",
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4"
+      ]
+    },
+    {
+      "commit": "73cc1b2a9ef909afb1a2f62285fc5d35f3e2d5cd",
+      "arm": "SIGNAL",
+      "family": "caches_modes",
+      "descendants": [
+        "6f159434b52cd7e973c1009be30a85049dbc5fee",
+        "36bb426e59374ad8251cda2bfdc97d4ab9281ad3",
+        "66cca78149555a92b7d7a919acd88d3878b83302",
+        "7e0c27321e6dbdd2728268e74c05c29ee5036f9f",
+        "2747659518c0d5debe1d05cb02ba9232cafa4897",
+        "9c3a447bb3fd3056c906a05978ae8e13f524cd21",
+        "90c2b705a7a0d8d9a8ffdb2d953e6aaa8283c379",
+        "d9ed4198136c4505b2004e972568bfa8bf265179",
+        "0bc36318ad52ac7d32163b0214edc63136558dc4",
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191"
+      ]
+    },
+    {
+      "commit": "12838995ca232ced05cd5218e4975d03c5c44316",
+      "arm": "SIGNAL",
+      "family": "new_checks",
+      "descendants": [
+        "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+        "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+        "7981ff640d2f29c68750f06600e6fc7408afefc2",
+        "224b7c186e695e2e24f29e272a3b2aa7a97f8219",
+        "3e705b33504fe6f270006ec117996665bd0422ef",
+        "42194374f96cdd8afc0c83d8d5ecbbe3212eb69b",
+        "514a1a5f677d22e001ecca96c05810864d988117",
+        "9557f24286e414a7b75beb522529c3e677aa0955",
+        "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+        "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0"
+      ]
+    },
+    {
+      "commit": "0bc36318ad52ac7d32163b0214edc63136558dc4",
+      "arm": "CONTROL",
+      "family": null,
+      "descendants": [
+        "eb3b2cc459fb627c88c407f0ca42d44fab7d9191",
+        "b6e3c8aa5f5a91c985f15b5fb850b69c9db956da",
+        "6524aed358d79a1f20552a982623beab7bb7abdb",
+        "e753956526411aa6ebebbb73d1a3b535a45f61aa",
+        "93bf604bacf5fd5aa45d153b4264c2b8265db01f",
+        "12838995ca232ced05cd5218e4975d03c5c44316",
+        "053b4f5523dd2e17ecc1db26ab2d487809a8f7ed",
+        "68d5ca9db226849b41a6fff59d796ff19d0a8840",
+        "7981ff640d2f29c68750f06600e6fc7408afefc2",
+        "224b7c186e695e2e24f29e272a3b2aa7a97f8219"
+      ]
+    },
+    {
+      "commit": "2097cc6915c92cc33d6112ce0720ac7d3f599568",
+      "arm": "CONTROL",
+      "family": null,
+      "descendants": [
+        "14bbb5c7d26a7c70e21708e76535f4556e8bf6b0",
+        "d5f6c8d3ee3cbdeb12a4bf16db73bd7b6004115e",
+        "bd79f6a27d2ac4c0d0a4cdc7640d07b2cf0da2ed",
+        "6d2f03717af89dde5b8906bb957a6a50eeecbb94",
+        "e4a15af0a2b1d494f30f6d6096a8e17cdc813b43",
+        "8d68231443e6b5f859697822f4e5915f0a19258f",
+        "b109108112009a8e53593c2986bbdfb6889912d3",
+        "698c869f3dabd827d25b6b839f1c24fd010a937e",
+        "f58f2f6d535e189a40fcb02ede8eb95f97a92d37",
+        "8e02a15296e9ebfee247c160e58a73f2946829f1"
+      ]
+    }
+  ],
+  "shortfall": 0,
+  "semantic_inspection_started": false
+}

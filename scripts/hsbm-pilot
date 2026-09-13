@@ -1,0 +1,78 @@
+#!/usr/bin/env python3
+"""Deterministic, source-only HSBM population/selection freeze. Never runs a checker."""
+import argparse, hashlib, json, random, re, subprocess
+from pathlib import Path
+
+LOWER = '713c245191f7afbc4e996f853ca3131b9b11ec27'
+EXCLUDED = ('9c3a447', '4db8bcc', '404660c', '6524aed', '0928383')
+# Binary lexical signals, not semantic conclusions. Equal weights avoid inferred risk precision.
+SIGNALS = {
+    'defaults_options': r'\b(default|Option|Some|None|unwrap_or|Config|config)\b',
+    'parser_representation': r'\b(parse\w*|serde|deserialize\w*|Expr|Level|Name|struct|enum)\b',
+    'caches_modes': r'\b(\w*cache\w*|InferOnly|Check|eager\w*|mode)\b',
+    'dispatch': r'\b(spawn|thread\w*|num_threads|scope|dispatch\w*)\b',
+    'new_checks': r'\b(assert\w*|panic|Err|is_def_eq|def_eq)\b',
+    'test_wiring': r'(\btest\b|#\[test\]|\bmod tests\b)',
+}
+
+def git(repo, *args):
+    return subprocess.check_output(['git', '-C', str(repo), *args])
+
+def sha(data): return hashlib.sha256(data).hexdigest()
+
+def generate(repo, tip):
+    tip = git(repo, 'rev-parse', tip).decode().strip()
+    git(repo, 'merge-base', '--is-ancestor', LOWER, tip)
+    ids = sorted(git(repo, 'rev-list', '--no-merges', f'{LOWER}..{tip}').decode().split())
+    excluded = {git(repo, 'rev-parse', x).decode().strip() for x in EXCLUDED}
+    rows = []
+    for commit in ids:
+        patch = git(repo, 'diff', '--no-ext-diff', '--no-renames', f'{commit}^', commit)
+        changed = '\n'.join(line for line in patch.decode(errors='replace').splitlines()
+                            if line[:1] in '+-' and not line.startswith(('+++', '---')))
+        signals = {name: sorted(set(re.findall(pattern, changed, re.I)))
+                   for name, pattern in SIGNALS.items()}
+        stats = git(repo, 'diff', '--numstat', '--no-renames', f'{commit}^', commit).decode().splitlines()
+        churn = sum(int(v) for line in stats for v in line.split('\t')[:2] if v.isdigit())
+        rows.append(dict(commit=commit, parent=git(repo,'rev-parse',f'{commit}^').decode().strip(),
+                         subject=git(repo,'show','-s','--format=%s',commit).decode().strip(),
+                         excluded=commit in excluded, exclusion_reason='KNOWN_CALIBRATION' if commit in excluded else None,
+                         signals=signals, score=sum(bool(v) for v in signals.values()),
+                         changed_files=len(stats), changed_lines=churn,
+                         size_confound='Binary signal opportunity grows with diff size; size recorded, not normalized. Test churn is not coverage.',
+                         patch_sha256=sha(patch)))
+    eligible = sorted((r for r in rows if not r['excluded']), key=lambda r:(-r['score'],r['commit']))
+    selected=[]; used=set()
+    # Greedy descending rank: prefer any as-yet-unrepresented family in fixed order.
+    for r in eligible:
+        available=[f for f in SIGNALS if r['signals'][f] and f not in used]
+        if available:
+            selected.append(dict(commit=r['commit'],arm='SIGNAL',family=available[0]))
+            used.add(available[0])
+        if len(selected)==4: break
+    for r in eligible:
+        if len(selected)==4: break
+        if r['commit'] not in {s['commit'] for s in selected}:
+            selected.append(dict(commit=r['commit'],arm='SIGNAL',family=None))
+    remaining=sorted(r['commit'] for r in eligible if r['commit'] not in {s['commit'] for s in selected})
+    for commit in random.Random(20260909).sample(remaining,min(2,len(remaining))):
+        selected.append(dict(commit=commit,arm='CONTROL',family=None))
+    for s in selected:
+        s['descendants']=git(repo,'rev-list','--ancestry-path','--topo-order','--reverse',f"{s['commit']}..{tip}").decode().split()[:10]
+    return dict(schema_version=1,item_id='HSBM-PILOT-1',lower_exclusive=LOWER,tip=tip,
+                tip_tree=git(repo,'rev-parse',f'{tip}^{{tree}}').decode().strip(),seed=20260909,
+                population_rule='All reachable non-merge commits, not first-parent only; full SHA sort.',
+                selection_rule='Descending count of binary lexical families, full-SHA ties; greedily assign first unused family in declared order; fill only on family shortfall; Python Random(seed).sample from remaining full-SHA sorted IDs.',
+                signal_patterns=SIGNALS,population=rows,selected=selected,
+                shortfall=6-len(selected),semantic_inspection_started=False)
+
+def main():
+    p=argparse.ArgumentParser(description=__doc__);p.add_argument('--repo',type=Path,required=True);p.add_argument('--tip',required=True);p.add_argument('--output',type=Path,required=True);p.add_argument('--check',action='store_true');a=p.parse_args()
+    value=generate(a.repo,a.tip);payload=json.dumps(value,indent=2)+'\n'
+    if a.check:
+        if a.output.read_text()!=payload: raise SystemExit('FAIL: population/selection mismatch')
+        print('PASS: exact population/selection reproduction')
+    else:
+        if a.output.exists(): raise SystemExit('Refusing to overwrite frozen selection')
+        a.output.write_text(payload);print(json.dumps({'population':len(value['population']),'excluded':sum(r['excluded'] for r in value['population']),'selected':value['selected']}))
+if __name__=='__main__':main()
