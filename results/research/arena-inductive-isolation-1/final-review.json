@@ -1,0 +1,92 @@
+{
+  "schema_version": 1,
+  "item_id": "ARENA-INDUCTIVE-ISOLATION-1",
+  "reviewed_at": "2026-09-13T20:41:54.087683+00:00",
+  "review_kind": "Independent final read-only claim and stopping-boundary review",
+  "status": "PASS",
+  "scientific_claim_review": "PASS",
+  "reviewed_bindings": [
+    {
+      "path": "results/research/arena-inductive-isolation-1/report.md",
+      "sha256": "09d462342021ce7b68060c5ff8efd61c42f88bfb2e92eb49a26e3865b4b0f38d"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/case-assessment.json",
+      "sha256": "bd9eb5e2d26894bb20790f861fe8d1a7bda65bf1982a0b58b826864be22268a8"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/static-audit.json",
+      "sha256": "cfe0a081e1c532089526ee7443fe3d5fa06633c7797f63476efac25fa8451db6"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/replay-static-audit.py",
+      "sha256": "cae60cab4d700f010d51db53e2364c1cc72f60c74d0a43021d8eb5e76f8851e2"
+    },
+    {
+      "path": "config/research-queue.json",
+      "sha256": "e865cb367817d8f867b2a9af56129a7da7255f3fe3fad602f2127309a71cd1df"
+    },
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "sha256": "dcf7fe3e61d4f8913dcb4d16a49a63b4226f961d00b84667379dce8578ec4a46"
+    },
+    {
+      "path": "docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md",
+      "sha256": "07a73115f1ee7596fea48ea7e12782878e48948910eb91150ed901cfdc58317a"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/reviewed-result-snapshot.json",
+      "sha256": "c0d4350fa99d540da6d57fc53b942d10da1dbee455f7516b5704831f4b27f430"
+    }
+  ],
+  "checks": [
+    {
+      "id": "BOUNDED_NEGATIVE",
+      "status": "PASS",
+      "finding": "Report limits NEGATIVE to an eligible existing-byte contribution from the assessed reuse set; it explicitly disclaims exhaustive corpus coverage and current checker defect."
+    },
+    {
+      "id": "FOUR_CASE_SCOPE",
+      "status": "PASS",
+      "finding": "Case assessment contains exactly the four frozen case IDs. Complete static fixture hashes support reuse/duplicate comparisons without another tutorial semantic audit."
+    },
+    {
+      "id": "CURRENT_AND_HISTORICAL",
+      "status": "PASS",
+      "finding": "Current Arena revision and two distinct current dependency locks remain separate from historical exported candidates and pinned outcomes; installed v4.33 replay is explicitly not evidence for current v4.34.0-rc2 behavior."
+    },
+    {
+      "id": "REJECTION_ISOLATION",
+      "status": "PASS",
+      "finding": "Historical diagnostics and dummy metadata support competing causes. Generic controls are correctly limited to compatibility. Domain case fixed-result-parameter defect is preserved; no simulated mutant/repaired control result is asserted."
+    },
+    {
+      "id": "REUSE",
+      "status": "PASS",
+      "finding": "Proof-parameter and positivity byte matches establish existing upstream presence and are distinguished from the selected four properties; no duplicate package or unsupported outcome is nominated."
+    },
+    {
+      "id": "STOPPING_BOUNDARY",
+      "status": "PASS",
+      "finding": "ARENA-INDUCTIVE-ISOLATION-1 is COMPLETE; SEMANTIC-IMPORT-CONTRACT-1 is READY/unstarted; no queue item ACTIVE. Plan/status agree; no second item execution recorded."
+    }
+  ],
+  "nonclaims": [
+    "This review does not replace required repository full-suite, historical and generation validations.",
+    "No network, build, checker, proof, export or mutation launch occurred in this review.",
+    "No state file or parent-owned artifact was modified; only this review record was written."
+  ],
+  "addressed_corrections": [
+    {
+      "id": "STATIC_SCOPE_WORDING",
+      "path": "results/research/arena-inductive-isolation-1/replay-static-audit.py",
+      "location": "replay return value /scope; generated static-audit.json /scope",
+      "problem": "The scope says hashes enumerate the complete static tests directory, while test_manifests filters .yaml and .ndjson and omits .lean files. The separately checked full archive inventory does include all source files.",
+      "correction": "State explicitly that the full archive inventory covers all 232 files and test_manifests enumerates tests/ .yaml and .ndjson files; regenerate static-audit.json via --write then --check.",
+      "severity": "Minor precision correction; no scientific finding change",
+      "resolution": "Parent corrected the generated scope to distinguish all 232 archive files from the .yaml/.ndjson test manifest subset. Reviewer read back both generator and generated output and confirmed agreement."
+    }
+  ],
+  "required_corrections": [],
+  "reviewed_result_scope": "Result binding points to preserved pre-validation review snapshot; final result subsequently binds this review and final validation without a hash cycle."
+}

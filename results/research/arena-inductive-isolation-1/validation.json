@@ -1,0 +1,80 @@
+{
+  "item_id": "ARENA-INDUCTIVE-ISOLATION-1",
+  "status": "PASS",
+  "command": "scripts/run-unit-tests --require-full-payload",
+  "returncode": 0,
+  "current_tests": 1007,
+  "frozen_publication_tests": 73,
+  "frozen_portfolio_tests": 9,
+  "total_tests": 1089,
+  "full_suite_log": {
+    "path": "results/research/arena-inductive-isolation-1/lab-full-suite.log",
+    "sha256": "4388028e750deb34e230720d901a0a90706c874cd9e2432911d87f4cdffb3013",
+    "bytes": 143948
+  },
+  "focused_command": "python3 -m unittest discover -s tests -p test_arena_inductive_isolation_closure.py",
+  "focused_tests": 9,
+  "focused_result": "PASS",
+  "tooling": [
+    {
+      "path": "scripts/validate-arena-inductive-isolation-closure",
+      "sha256": "33a13bb0ae0696ff72fc05bfb30ab6df608fac9262ebe9eaf46fc0fe7b22582d",
+      "bytes": 12762
+    },
+    {
+      "path": "tests/test_arena_inductive_isolation_closure.py",
+      "sha256": "2efc5a52d407c88fbe5b06e373bddd07dd62bc98c9e2690020a67e56571d51fc",
+      "bytes": 15757
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/replay-static-audit.py",
+      "sha256": "cae60cab4d700f010d51db53e2364c1cc72f60c74d0a43021d8eb5e76f8851e2",
+      "bytes": 7959
+    }
+  ],
+  "catalog_validation": "scripts/validate-declaration-validation-catalog PASS; catalog sha256 33992703c088bde0994fafe1050931b93c4273f36cee26d9fafab33005ff1a35; no changes",
+  "pre_suite_generation": "results/workflow-refresh/arena-inductive-isolation-1-pre-suite/result.json",
+  "pre_suite_checks": [
+    {
+      "command": [
+        "scripts/validate-arena-inductive-isolation-closure"
+      ],
+      "returncode": 0,
+      "log": "results/research/arena-inductive-isolation-1/pre-suite-0.log"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/arena-inductive-isolation-1/replay-static-audit.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/research/arena-inductive-isolation-1/pre-suite-1.log"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--write"
+      ],
+      "returncode": 0,
+      "log": "results/research/arena-inductive-isolation-1/pre-suite-2.log"
+    },
+    {
+      "command": [
+        "scripts/build-artifact-graph"
+      ],
+      "returncode": 0,
+      "log": "results/research/arena-inductive-isolation-1/pre-suite-3.log"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "returncode": 0,
+      "log": "results/research/arena-inductive-isolation-1/pre-suite-4.log"
+    }
+  ],
+  "final_delivery_checks_record": "delivery-accounting.json",
+  "no_scientific_processes": true
+}

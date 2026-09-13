@@ -1,0 +1,83 @@
+{
+  "item_id": "ARENA-INDUCTIVE-ISOLATION-1",
+  "started_at": "2026-09-13T20:29:02.109936+00:00",
+  "start_monotonic": 110096.660651583,
+  "recorded_at": "2026-09-13T20:58:41.223078+00:00",
+  "end_monotonic": 111875.777891833,
+  "cumulative_active_seconds": 1779.1172402499942,
+  "administrative_seconds_after_work_closure": 142.1801912499941,
+  "remaining_seconds": 3620.882759750006,
+  "cap_seconds": 5400,
+  "scope": "Inclusive work through final refresh/checks and commit preparation; ordinary main delivery transport follows this cutoff. No clock or counters reset.",
+  "research_counts": {
+    "read_only_requests": 3,
+    "builds": 0,
+    "test_processes": 0,
+    "checkers": 0,
+    "proofs": 0,
+    "mutants": 0,
+    "new_exports": 0,
+    "external_research_writes": 0
+  },
+  "next_item": "SEMANTIC-IMPORT-CONTRACT-1",
+  "next_item_started": false,
+  "final_generated_state_refresh": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/result.json",
+  "final_checks": [
+    {
+      "command": [
+        "scripts/validate-arena-inductive-isolation-closure"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/15-delivery-check.log"
+    },
+    {
+      "command": [
+        "python3",
+        "results/research/arena-inductive-isolation-1/replay-static-audit.py",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/16-delivery-check.log"
+    },
+    {
+      "command": [
+        "scripts/validate-nanoda-defeq-cache-closure"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/17-delivery-check.log"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/18-delivery-check.log"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/19-delivery-check.log"
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/20-delivery-check.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/arena-inductive-isolation-1-final-reconciled/21-delivery-check.log"
+    }
+  ],
+  "final_check_status": "PASS"
+}

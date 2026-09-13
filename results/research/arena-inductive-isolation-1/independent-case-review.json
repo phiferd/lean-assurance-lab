@@ -1,0 +1,664 @@
+{
+  "schema_version": 1,
+  "item_id": "ARENA-INDUCTIVE-ISOLATION-1",
+  "review_role": "Independent source/case reviewer",
+  "recorded_at": "2026-09-13T20:37:06.745567+00:00",
+  "entry_commit": "d5b64a4",
+  "selection_freeze_commit": "2f0941e",
+  "arena_revision": "83d5e34a2de6f8cd7d0096f93a893179d724d3c9",
+  "case_cap": 4,
+  "inspected_cases": [
+    "inductWrongCtorParams",
+    "inductWrongCtorResParams",
+    "inductWrongCtorResLevel",
+    "inductInIndex"
+  ],
+  "inspection_kind": "SOURCE_ONLY_WITH_RETAINED_HISTORICAL_OUTCOMES",
+  "sources": [
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-777c921e-Export.lean",
+      "sha256": "c1c154a1b5d308acb6db78f9bfe8663c7f06c2e7ea288b31ff4e70f0225af704",
+      "original_path": "external/lean-kernel-arena/tutorial/.lake/packages/Lean4Export/Export.lean",
+      "revision": "777c921eba89aac5f14cc388717935b5fa2cb739",
+      "scope": "Matches current Arena tutorial/lake-manifest.json; retained clean local dependency checkout."
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-f297dfe2-Parse.lean",
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+      "original_path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/packages/lean4export/Export/Parse.lean",
+      "revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+      "scope": "Matches current Arena official/lake-manifest.json; retained local dependency checkout."
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/installed-lean4-v4.33.0-Replay.lean",
+      "sha256": "5ea88ea9b6c374ad74b8c6f5d36117cec00ec64202aff37f7cff0c6765fb746d",
+      "original_path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0/src/lean/Lean/Replay.lean",
+      "revision": null,
+      "scope": "Installed release-path source snapshot only. Supports historical v4.33.0 importer explanation; this file alone does not authenticate the release Git revision. Current Arena uses v4.34.0-rc2 and is not assessed by this snapshot."
+    }
+  ],
+  "wiring": [
+    {
+      "path": "tutorial/Tutorial/Meta.lean",
+      "lines": [
+        91,
+        117
+      ],
+      "finding": "bad_raw_consts invokes raw ConstantInfo elaboration with Outcome.bad; addTestCaseCIsCore calls addConstInfos then registers all supplied names."
+    },
+    {
+      "path": "tutorial/Tutorial/AddConstInfo.lean",
+      "lines": [
+        6,
+        19
+      ],
+      "finding": "Raw constants are inserted directly into environment maps, bypassing kernel validation."
+    },
+    {
+      "path": "tutorial/Tutorial/Meta.lean",
+      "lines": [
+        188,
+        203
+      ],
+      "finding": "dummyRecInfo constructs a placeholder recursor, not a recursor derived from the inductive."
+    },
+    {
+      "path": "tutorial/Tutorial/Export.lean",
+      "lines": [
+        8,
+        34
+      ],
+      "finding": "initStateCached collects .recInfo declarations into recursorMap by their all list; the dummy is included."
+    },
+    {
+      "path": "tutorial/Tutorial/Export.lean",
+      "lines": [
+        49,
+        63
+      ],
+      "finding": "exportDeclsFromEnv initializes the map and dumps supplied constant names."
+    },
+    {
+      "path": "tutorial/Tutorial/TestCaseEnv.lean",
+      "lines": [
+        26,
+        51
+      ],
+      "finding": "Outcome.bad determines bad/ output directory; all case names are passed to exportDeclsFromEnv."
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-777c921e-Export.lean",
+      "lines": [
+        304,
+        322
+      ],
+      "finding": "Exporter permits a constructor group only with a recursor-map entry; the presence check does not validate recursor completeness.",
+      "sha256": "c1c154a1b5d308acb6db78f9bfe8663c7f06c2e7ea288b31ff4e70f0225af704"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-777c921e-Export.lean",
+      "lines": [
+        331,
+        391
+      ],
+      "finding": "Exports existing recursor type, counts, rules and metadata rather than reconstructing a valid recursor.",
+      "sha256": "c1c154a1b5d308acb6db78f9bfe8663c7f06c2e7ea288b31ff4e70f0225af704"
+    },
+    {
+      "path": "checkers/official/Main.lean",
+      "lines": [
+        4,
+        10
+      ],
+      "finding": "Current official adapter invokes Lean replay on parsed constMap; adapter source alone does not reveal the current Lean replay implementation."
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-f297dfe2-Parse.lean",
+      "lines": [
+        392,
+        440
+      ],
+      "finding": "Current locked official parser retains serialized recursor data as ConstantInfo; parse success is not metadata validity.",
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/installed-lean4-v4.33.0-Replay.lean",
+      "lines": [
+        102,
+        128
+      ],
+      "finding": "Historical-version local replay source reconstructs inductive Declaration from level/term parameter counts and type/constructor names/types, postponing original constructor and recursor records.",
+      "sha256": "5ea88ea9b6c374ad74b8c6f5d36117cec00ec64202aff37f7cff0c6765fb746d"
+    },
+    {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/installed-lean4-v4.33.0-Replay.lean",
+      "lines": [
+        148,
+        188
+      ],
+      "finding": "After kernel replay, postponed constructor and recursor records are checked for exact equality with generated records. The historical official route does not simply ignore serialized recursors.",
+      "sha256": "5ea88ea9b6c374ad74b8c6f5d36117cec00ec64202aff37f7cff0c6765fb746d"
+    },
+    {
+      "path": "results/research/evidence/declaration-validation-publication-study/kiota-58e8636c-parser.rs",
+      "lines": [
+        365,
+        405
+      ],
+      "finding": "Pinned historical Kiota parser retains recursor fields in its environment.",
+      "sha256": "c6c53ac6a364b9d318585ad7c51ad8dd9883c027cb9dc356c119373782c77392"
+    },
+    {
+      "path": "results/research/evidence/declaration-validation-publication-study/kiota-58e8636c-parser.rs",
+      "lines": [
+        452,
+        464
+      ],
+      "finding": "Pinned historical Kiota parser rejects numMotives inconsistent with the single-type group before downstream inductive validation; retained diagnostics match this site.",
+      "sha256": "c6c53ac6a364b9d318585ad7c51ad8dd9883c027cb9dc356c119373782c77392"
+    }
+  ],
+  "cases": [
+    {
+      "id": "inductWrongCtorParams",
+      "source": {
+        "path": "tutorial/Tutorial.lean",
+        "lines": [
+          385,
+          413
+        ]
+      },
+      "intended_boundary_analysis": "Constructor binder domain is Sort 1 (Type), whereas the inductive parameter domain is Sort 0 (Prop). The result also uses fixed aProp rather than the bound parameter. This is a second intended-family mismatch: repairing only the binder domain leaves result-parameter nonuniformity.",
+      "additional_dummy_mismatch": "Domain mismatch and fixed result parameter; recursor numParams 0 disagrees with inductive/constructor numParams 1.",
+      "common_competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "existing_candidate": {
+        "path": "corpus/generated/ordinary-inductive-constructor-param-domain-candidate.ndjson",
+        "sha256": "20214ec1a31221884548d3e91b689b9569fd7588af2fb0e219754b683041ac10",
+        "bytes": 1182,
+        "retains_dummy_recursor": true,
+        "recursor_records": [
+          [
+            {
+              "all": [
+                2
+              ],
+              "isUnsafe": false,
+              "k": false,
+              "levelParams": [],
+              "name": 5,
+              "numIndices": 0,
+              "numMinors": 0,
+              "numMotives": 0,
+              "numParams": 0,
+              "rules": [],
+              "type": 0
+            }
+          ]
+        ]
+      },
+      "existing_control": {
+        "path": "corpus/generated/ordinary-inductive-constructor-param-domain-control.ndjson",
+        "sha256": "9f2f275784ba923bc3a050c5f1856ad0d18c83d31ff107a5cd663d4cceaec98a",
+        "scope": "Prior compatibility control; not a targeted repair of this candidate. Its acceptance cannot establish candidate rejection isolation."
+      },
+      "historical_observations": {
+        "path": "results/cross-validation/ordinary-inductive-constructor-param-domain/results.json",
+        "sha256": "1bdd7bd15ec3e366bd93c19bb27e8e5f275d8ac4041f19f52ece0c93fbe2d416",
+        "created_at": "2026-08-29T00:42:08.712362+00:00",
+        "validators": [
+          {
+            "checker": "official",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: while replaying declaration 'inductWrongCtorParams':\n(kernel) arg #1 of 'inductWrongCtorParams.mk' does not match inductive datatypes parameters'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/0/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/official.yaml",
+              "arena_definition_sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+              "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+              "built_source_matches_template": true,
+              "built_source_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "built_toolchain": "leanprover/lean4:v4.33.0",
+              "display_name": "Official Lean kernel 4.33.0",
+              "expected_built_toolchain": "leanprover/lean4:v4.33.0",
+              "id": "official",
+              "implementation_family": "lean4-official",
+              "independent_from_nanoda": true,
+              "role": "REFERENCE",
+              "source_template_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "version": "4.33.0"
+            }
+          },
+          {
+            "checker": "kiota",
+            "outcome": "REJECT",
+            "diagnostic": "REJECT: recursor `inductWrongCtorParams.rec` has numMotives=0 but group size is 1\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/1/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/kiota.yaml",
+              "arena_definition_sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+              "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+              "display_name": "Kiota 0.1.0",
+              "expected_source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "id": "kiota",
+              "implementation_family": "kiota-rust",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "version": "0.1.0"
+            }
+          },
+          {
+            "checker": "lean4lean",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: at inductWrongCtorParams: (kernel) arg #1 of 'inductWrongCtorParams.mk' does not match inductive datatype parameters\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/2/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/lean4lean.yaml",
+              "arena_definition_sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+              "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+              "display_name": "Lean4Lean arena ecb3b66",
+              "expected_source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "id": "lean4lean",
+              "implementation_family": "lean4lean-lean",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "version": "arena-ecb3b66"
+            }
+          }
+        ]
+      },
+      "reuse_decision": "Do not repackage this retained candidate as a complete-artifact isolation improvement: the existing bytes contain the same dummy recursor."
+    },
+    {
+      "id": "inductWrongCtorResParams",
+      "source": {
+        "path": "tutorial/Tutorial.lean",
+        "lines": [
+          415,
+          443
+        ]
+      },
+      "intended_boundary_analysis": "The constructor binds x y : Prop, then returns I y x; the inductive expects parameters in x,y order. Here x,y are propositions (terms of Sort 0), not two proofs of the same proposition. Existing proof-parameter irrelevance characterization is related, not semantic equivalence.",
+      "additional_dummy_mismatch": "Recursor numParams 0 disagrees with inductive/constructor numParams 2.",
+      "common_competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "existing_candidate": {
+        "path": "corpus/generated/ordinary-inductive-constructor-result-params-candidate.ndjson",
+        "sha256": "5506566449cc2f3c83f417007bf15a7a0101c458c450d77a23cfd4c2423910c4",
+        "bytes": 1293,
+        "retains_dummy_recursor": true,
+        "recursor_records": [
+          [
+            {
+              "all": [
+                1
+              ],
+              "isUnsafe": false,
+              "k": false,
+              "levelParams": [],
+              "name": 5,
+              "numIndices": 0,
+              "numMinors": 0,
+              "numMotives": 0,
+              "numParams": 0,
+              "rules": [],
+              "type": 0
+            }
+          ]
+        ]
+      },
+      "existing_control": {
+        "path": "corpus/generated/ordinary-inductive-constructor-result-params-control.ndjson",
+        "sha256": "9f2f275784ba923bc3a050c5f1856ad0d18c83d31ff107a5cd663d4cceaec98a",
+        "scope": "Prior compatibility control; not a targeted repair of this candidate. Its acceptance cannot establish candidate rejection isolation."
+      },
+      "historical_observations": {
+        "path": "results/cross-validation/ordinary-inductive-constructor-result-params/results.json",
+        "sha256": "485f1eb9fc6fd5f69a3fc7917785a017de90121a4ea6602b1f40552cf3ab2f3c",
+        "created_at": "2026-08-29T00:42:09.758890+00:00",
+        "validators": [
+          {
+            "checker": "official",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: while replaying declaration 'inductWrongCtorResParams':\n(kernel) invalid return type for 'inductWrongCtorResParams.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/0/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/official.yaml",
+              "arena_definition_sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+              "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+              "built_source_matches_template": true,
+              "built_source_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "built_toolchain": "leanprover/lean4:v4.33.0",
+              "display_name": "Official Lean kernel 4.33.0",
+              "expected_built_toolchain": "leanprover/lean4:v4.33.0",
+              "id": "official",
+              "implementation_family": "lean4-official",
+              "independent_from_nanoda": true,
+              "role": "REFERENCE",
+              "source_template_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "version": "4.33.0"
+            }
+          },
+          {
+            "checker": "kiota",
+            "outcome": "REJECT",
+            "diagnostic": "REJECT: recursor `inductWrongCtorResParams.rec` has numMotives=0 but group size is 1\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/1/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/kiota.yaml",
+              "arena_definition_sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+              "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+              "display_name": "Kiota 0.1.0",
+              "expected_source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "id": "kiota",
+              "implementation_family": "kiota-rust",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "version": "0.1.0"
+            }
+          },
+          {
+            "checker": "lean4lean",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: at inductWrongCtorResParams: (kernel) invalid return type for 'inductWrongCtorResParams.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/2/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/lean4lean.yaml",
+              "arena_definition_sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+              "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+              "display_name": "Lean4Lean arena ecb3b66",
+              "expected_source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "id": "lean4lean",
+              "implementation_family": "lean4lean-lean",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "version": "arena-ecb3b66"
+            }
+          }
+        ]
+      },
+      "reuse_decision": "Do not repackage this retained candidate as a complete-artifact isolation improvement: the existing bytes contain the same dummy recursor."
+    },
+    {
+      "id": "inductWrongCtorResLevel",
+      "source": {
+        "path": "tutorial/Tutorial.lean",
+        "lines": [
+          445,
+          474
+        ]
+      },
+      "intended_boundary_analysis": "Constructor result uses universe arguments [u2,u1] against declarations parameterized [u1,u2]; term arguments remain x,y. The inductive result sort is fixed Sort 1, so unused universes still expose a syntactic universe-order restriction rather than a demonstrated type-level discrepancy.",
+      "additional_dummy_mismatch": "Recursor levelParams [] and numParams 0 differ from the two-universe/two-parameter inductive group.",
+      "common_competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "existing_candidate": {
+        "path": "corpus/generated/ordinary-inductive-constructor-result-levels-candidate.ndjson",
+        "sha256": "3f29bd3a753caa056cc45c20cd8aeb734bc44cfc6b3828a6c6ec855737f596f3",
+        "bytes": 1411,
+        "retains_dummy_recursor": true,
+        "recursor_records": [
+          [
+            {
+              "all": [
+                1
+              ],
+              "isUnsafe": false,
+              "k": false,
+              "levelParams": [],
+              "name": 7,
+              "numIndices": 0,
+              "numMinors": 0,
+              "numMotives": 0,
+              "numParams": 0,
+              "rules": [],
+              "type": 0
+            }
+          ]
+        ]
+      },
+      "existing_control": {
+        "path": "corpus/generated/ordinary-inductive-constructor-result-levels-control.ndjson",
+        "sha256": "9f2f275784ba923bc3a050c5f1856ad0d18c83d31ff107a5cd663d4cceaec98a",
+        "scope": "Prior compatibility control; not a targeted repair of this candidate. Its acceptance cannot establish candidate rejection isolation."
+      },
+      "historical_observations": {
+        "path": "results/cross-validation/ordinary-inductive-constructor-result-levels/results.json",
+        "sha256": "f43dedbad1708612f677c15f3cd6f55e088c8b83d2a1a185d2d59b5cc5557abb",
+        "created_at": "2026-08-29T00:42:10.799799+00:00",
+        "validators": [
+          {
+            "checker": "official",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: while replaying declaration 'inductWrongCtorResLevel':\n(kernel) invalid return type for 'inductWrongCtorResLevel.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/0/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/official.yaml",
+              "arena_definition_sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+              "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+              "built_source_matches_template": true,
+              "built_source_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "built_toolchain": "leanprover/lean4:v4.33.0",
+              "display_name": "Official Lean kernel 4.33.0",
+              "expected_built_toolchain": "leanprover/lean4:v4.33.0",
+              "id": "official",
+              "implementation_family": "lean4-official",
+              "independent_from_nanoda": true,
+              "role": "REFERENCE",
+              "source_template_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "version": "4.33.0"
+            }
+          },
+          {
+            "checker": "kiota",
+            "outcome": "REJECT",
+            "diagnostic": "REJECT: recursor `inductWrongCtorResLevel.rec` has numMotives=0 but group size is 1\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/1/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/kiota.yaml",
+              "arena_definition_sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+              "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+              "display_name": "Kiota 0.1.0",
+              "expected_source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "id": "kiota",
+              "implementation_family": "kiota-rust",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "version": "0.1.0"
+            }
+          },
+          {
+            "checker": "lean4lean",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: at inductWrongCtorResLevel: (kernel) invalid return type for 'inductWrongCtorResLevel.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/2/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/lean4lean.yaml",
+              "arena_definition_sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+              "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+              "display_name": "Lean4Lean arena ecb3b66",
+              "expected_source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "id": "lean4lean",
+              "implementation_family": "lean4lean-lean",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "version": "arena-ecb3b66"
+            }
+          }
+        ]
+      },
+      "reuse_decision": "Do not repackage this retained candidate as a complete-artifact isolation improvement: the existing bytes contain the same dummy recursor."
+    },
+    {
+      "id": "inductInIndex",
+      "source": {
+        "path": "tutorial/Tutorial.lean",
+        "lines": [
+          476,
+          504
+        ]
+      },
+      "intended_boundary_analysis": "I : Prop -> Prop and the nullary constructor returns I (I aProp). Its inner I aProp is a well-typed proposition; the intended issue is the recursive inductive occurrence inside a result index.",
+      "additional_dummy_mismatch": "Recursor numIndices 0 differs from the one-index inductive; no motive/minor/rule and Prop type remain common defects.",
+      "common_competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "existing_candidate": {
+        "path": "corpus/generated/ordinary-inductive-recursive-index-occurrence-candidate.ndjson",
+        "sha256": "8dc9a9997862a5f25b76520f5d69a146664ad9f0364dd350732a7f76e4190763",
+        "bytes": 1099,
+        "retains_dummy_recursor": true,
+        "recursor_records": [
+          [
+            {
+              "all": [
+                2
+              ],
+              "isUnsafe": false,
+              "k": false,
+              "levelParams": [],
+              "name": 5,
+              "numIndices": 0,
+              "numMinors": 0,
+              "numMotives": 0,
+              "numParams": 0,
+              "rules": [],
+              "type": 0
+            }
+          ]
+        ]
+      },
+      "existing_control": {
+        "path": "corpus/generated/ordinary-inductive-recursive-index-occurrence-control.ndjson",
+        "sha256": "d9781f44fcb7e46ff06da1c8a273a4fec4ae989e4114d6668720bd5b87c20b79",
+        "scope": "Prior compatibility control; not a targeted repair of this candidate. Its acceptance cannot establish candidate rejection isolation."
+      },
+      "historical_observations": {
+        "path": "results/cross-validation/ordinary-inductive-recursive-index-occurrence/results.json",
+        "sha256": "e0492f625e07002f8f4b183d74f278ab03be78ac93912d16118f34a04c9b9cb7",
+        "created_at": "2026-08-29T00:42:11.847085+00:00",
+        "validators": [
+          {
+            "checker": "official",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: while replaying declaration 'inductInIndex':\n(kernel) invalid return type for 'inductInIndex.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/0/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/official.yaml",
+              "arena_definition_sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+              "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+              "built_source_matches_template": true,
+              "built_source_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "built_toolchain": "leanprover/lean4:v4.33.0",
+              "display_name": "Official Lean kernel 4.33.0",
+              "expected_built_toolchain": "leanprover/lean4:v4.33.0",
+              "id": "official",
+              "implementation_family": "lean4-official",
+              "independent_from_nanoda": true,
+              "role": "REFERENCE",
+              "source_template_sha256": "13963b19c5a36dec955cc744e25de15bb931f43d1997229368cb0ff7b2b9064a",
+              "version": "4.33.0"
+            }
+          },
+          {
+            "checker": "kiota",
+            "outcome": "REJECT",
+            "diagnostic": "REJECT: recursor `inductInIndex.rec` has numMotives=0 but group size is 1\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/1/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/kiota.yaml",
+              "arena_definition_sha256": "e04252e7cffaf57a557d9850f02b2bf881d2612c9127a19342eee559574c3d4f",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/kiota/src/target/release/kiota",
+              "binary_sha256": "d4a1d35a47d1d1246a1e9418e51a49347887845f713673721357b19e3b49c99f",
+              "display_name": "Kiota 0.1.0",
+              "expected_source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "id": "kiota",
+              "implementation_family": "kiota-rust",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "58e8636cfb51cf9c3bf3de7455a0e3c6ab68e87a",
+              "version": "0.1.0"
+            }
+          },
+          {
+            "checker": "lean4lean",
+            "outcome": "REJECT",
+            "diagnostic": "uncaught exception: at inductInIndex: (kernel) invalid return type for 'inductInIndex.mk'\n",
+            "control_outcome": "ACCEPT",
+            "json_pointer": "/validators/2/result",
+            "identity": {
+              "arena_definition": "external/lean-kernel-arena/checkers/lean4lean.yaml",
+              "arena_definition_sha256": "7b7923e8f672251a28c6683e0dce2000403cfac96aa0cdf12f4a868ef42be927",
+              "arena_revision": "37f7525b732808a49b746dc6999d53c3717db124",
+              "binary": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+              "binary_sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc",
+              "display_name": "Lean4Lean arena ecb3b66",
+              "expected_source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "id": "lean4lean",
+              "implementation_family": "lean4lean-lean",
+              "independent_from_nanoda": true,
+              "role": "INDEPENDENT",
+              "source_clean": true,
+              "source_revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+              "version": "arena-ecb3b66"
+            }
+          }
+        ]
+      },
+      "reuse_decision": "Do not repackage this retained candidate as a complete-artifact isolation improvement: the existing bytes contain the same dummy recursor."
+    }
+  ],
+  "overall_finding": "All four selected tests have a retained dummy-recursor rejection cause. Historical official/Lean4Lean diagnostics reach intended inductive checks; historical Kiota diagnostics do not. A generic REJECT result therefore does not establish intended-check coverage for these bytes. This qualifies test isolation; it does not invalidate their published reject expectation.",
+  "best_existing_byte_candidate": "The complete proof-parameter family is the nearest known complete result-parameter reuse, but current Arena already contains tests/corner-cases/proof-param-swap.ndjson and proof-param-ok.ndjson with either/accept metadata. Parent full-inventory/hash review must decide duplicate identity. The four direct Lab candidates are not complete-recursion replacements.",
+  "suggested_disposition": "NO_CONTRIBUTION_WITHIN_EXISTING_BYTE_SCOPE, subject to parent complete inventory/reuse audit. No duplicate PR or unsupported outcome change. A future exact gated complete-artifact design would be needed for ordinary proposition-parameter order, domain, result-universe or recursive-index isolation; this review does not authorize generation.",
+  "scope_limits": [
+    "Only the four frozen tutorial semantic bodies were audited. Broad retained evidence discovery yielded filenames and existing outcome metadata; no additional tutorial semantic body was audited.",
+    "No network, build, checker, proof, export generation, mutation or external write occurred in this review.",
+    "Current Arena tutorial producer and official parser dependency revisions differ; both are recorded rather than silently conflated.",
+    "The current Arena official Lean toolchain is v4.34.0-rc2; only historical v4.33.0 replay source was locally inspected. No current official/Lean4Lean/Kiota execution is claimed.",
+    "Pinned Kiota parser checks and retained observations do not establish present-day Kiota behavior.",
+    "This is an implementation/test-isolation assessment, not a normative semantic adjudication. No catalog, identity, authority-source or historical evidence is modified.",
+    "A surviving mutant after repairing one check was not constructed or executed. Independent causes are source-supported and historically diagnostic-supported, not a new mutation outcome."
+  ],
+  "suggested_outcome": "NEGATIVE for an eligible nonduplicate existing-byte contribution; characterized rejection-isolation boundary remains useful."
+}

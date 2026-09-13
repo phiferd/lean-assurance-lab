@@ -57,6 +57,17 @@ research directions.
 
 ## Attempted
 
+- Completed `ARENA-INDUCTIVE-ISOLATION-1` on 2026-09-13 with NEGATIVE for an
+  eligible existing-byte contribution. Four frozen current tutorial cases retain
+  competing dummy-recursor rejection causes; their historical exported candidates
+  share those defects. Generic accepting controls do not isolate the intended
+  checks, and related complete proof-parameter/positivity fixtures already exist
+  upstream. The [assessment](../results/research/arena-inductive-isolation-1/report.md)
+  distinguishes current source from historical diagnostics and preserves all
+  prior outcomes. Three charged requests; zero scientific launches, new exports
+  or external writes. No current checker defect or universal policy is inferred.
+  `SEMANTIC-IMPORT-CONTRACT-1` is selected READY and unstarted.
+
 - Completed `NANODA-DEFEQ-CACHE-1` on 2026-09-13 with
   `BOUNDED_UNRESOLVED`. Current Nanoda `4c544ed` and all 38 statically active
   unit tests are bound. Native reduction still rejects open expressions in eager
@@ -2771,13 +2782,20 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `ARENA-INDUCTIVE-ISOLATION-1`.
+Selected next item: `SEMANTIC-IMPORT-CONTRACT-1`.
 
-The item is ACTIVE under the existing portfolio reserve: 90
-cumulative active minutes, at most eight read-only requests, at most four existing
-tutorial cases and zero scientific/build launches or new export bytes. Establish
-current Arena inventory and inspect independent rejection causes before selecting
-one useful existing-artifact package or an evidence-backed no-contribution result.
+The item is READY and unstarted under the existing portfolio reserve: 120
+cumulative active minutes, at most eight primary/source/duplicate read-only
+requests, zero builds/checkers/proofs/new exports/mutants/external writes, and
+no catalog or authority changes. Bind a fresh work record before comparing the
+restored recursor k/type, constructor-index and numIndices evidence and primary
+sources. Produce one coherent supplied/reconstructed/retained metadata packet.
+
+`ARENA-INDUCTIVE-ISOLATION-1` completed NEGATIVE for an eligible existing-byte
+package. The four fixed tutorial cases and retained exports contain competing
+recursor causes; existing complete alternatives are already present and concern
+other properties. The source/diagnostic distinction strengthens the value of
+independent import-contract clarification. No new scientific launch occurred.
 
 `NANODA-DEFEQ-CACHE-1` completed BOUNDED_UNRESOLVED. Its source-bound assessment
 excludes direct eager native reduction of open terms and records the exact remaining
@@ -2810,10 +2828,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains three READY items and one PLANNED portfolio reserve
-across all three paths: Arena inductive isolation;
-Nanoda reserved-namespace regression; and independent
-import-contract clarification. A theorem accept control requires a demonstrated
+The canonical queue retains two READY items and one PLANNED portfolio reserve:
+independent import-contract clarification and Nanoda reserved-namespace regression. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
 at each closure by external usefulness and cost.
@@ -2821,7 +2837,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. ARENA-INDUCTIVE-ISOLATION-1 is the only active item; no successor has started.
+and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
 
 ### Waiting
 

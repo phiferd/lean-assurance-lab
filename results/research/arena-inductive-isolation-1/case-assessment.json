@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "item_id": "ARENA-INDUCTIVE-ISOLATION-1",
+  "scope": "Four frozen current tutorial source cases and retained existing-byte reuse candidates; no new export or checker launch.",
+  "source_revision": "83d5e34a2de6f8cd7d0096f93a893179d724d3c9",
+  "outcome": "NEGATIVE",
+  "nominated_packages": 0,
+  "cases": [
+    {
+      "id": "inductWrongCtorParams",
+      "intended_boundary": "Constructor binder domain is Sort 1 (Type), whereas the inductive parameter domain is Sort 0 (Prop). The result also uses fixed aProp rather than the bound parameter. This is a second intended-family mismatch: repairing only the binder domain leaves result-parameter nonuniformity.",
+      "competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "additional_mismatch": "Domain mismatch and fixed result parameter; recursor numParams 0 disagrees with inductive/constructor numParams 1.",
+      "retained_candidate": "corpus/generated/ordinary-inductive-constructor-param-domain-candidate.ndjson",
+      "historical_diagnostics": "results/cross-validation/ordinary-inductive-constructor-param-domain/results.json",
+      "decision": "NO_ELIGIBLE_EXISTING_BYTE_PACKAGE",
+      "reason": "The retained candidate has the same dummy recursor. Existing positive controls establish compatibility, not independent rejection isolation. Related complete fixtures cover different properties and are already present upstream."
+    },
+    {
+      "id": "inductWrongCtorResParams",
+      "intended_boundary": "The constructor binds x y : Prop, then returns I y x; the inductive expects parameters in x,y order. Here x,y are propositions (terms of Sort 0), not two proofs of the same proposition. Existing proof-parameter irrelevance characterization is related, not semantic equivalence.",
+      "competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "additional_mismatch": "Recursor numParams 0 disagrees with inductive/constructor numParams 2.",
+      "retained_candidate": "corpus/generated/ordinary-inductive-constructor-result-params-candidate.ndjson",
+      "historical_diagnostics": "results/cross-validation/ordinary-inductive-constructor-result-params/results.json",
+      "decision": "NO_ELIGIBLE_EXISTING_BYTE_PACKAGE",
+      "reason": "The retained candidate has the same dummy recursor. Existing positive controls establish compatibility, not independent rejection isolation. Related complete fixtures cover different properties and are already present upstream."
+    },
+    {
+      "id": "inductWrongCtorResLevel",
+      "intended_boundary": "Constructor result uses universe arguments [u2,u1] against declarations parameterized [u1,u2]; term arguments remain x,y. The inductive result sort is fixed Sort 1, so unused universes still expose a syntactic universe-order restriction rather than a demonstrated type-level discrepancy.",
+      "competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "additional_mismatch": "Recursor levelParams [] and numParams 0 differ from the two-universe/two-parameter inductive group.",
+      "retained_candidate": "corpus/generated/ordinary-inductive-constructor-result-levels-candidate.ndjson",
+      "historical_diagnostics": "results/cross-validation/ordinary-inductive-constructor-result-levels/results.json",
+      "decision": "NO_ELIGIBLE_EXISTING_BYTE_PACKAGE",
+      "reason": "The retained candidate has the same dummy recursor. Existing positive controls establish compatibility, not independent rejection isolation. Related complete fixtures cover different properties and are already present upstream."
+    },
+    {
+      "id": "inductInIndex",
+      "intended_boundary": "I : Prop -> Prop and the nullary constructor returns I (I aProp). Its inner I aProp is a well-typed proposition; the intended issue is the recursive inductive occurrence inside a result index.",
+      "competing_cause": "Every selected array supplies dummyRecInfo: recursor type Prop; numMotives=0; numMinors=0; rules=[] despite a one-type/one-constructor group.",
+      "additional_mismatch": "Recursor numIndices 0 differs from the one-index inductive; no motive/minor/rule and Prop type remain common defects.",
+      "retained_candidate": "corpus/generated/ordinary-inductive-recursive-index-occurrence-candidate.ndjson",
+      "historical_diagnostics": "results/cross-validation/ordinary-inductive-recursive-index-occurrence/results.json",
+      "decision": "NO_ELIGIBLE_EXISTING_BYTE_PACKAGE",
+      "reason": "The retained candidate has the same dummy recursor. Existing positive controls establish compatibility, not independent rejection isolation. Related complete fixtures cover different properties and are already present upstream."
+    }
+  ],
+  "authority_scope": "Test-isolation assessment. Historical diagnostics and source implementations do not create universal semantic authority. Catalog and authority locks unchanged.",
+  "current_execution_claim": false,
+  "global_corpus_exhaustiveness_claim": false,
+  "reconsideration_conditions": [
+    "A later bounded item must freeze exact complete candidate/control declarations, supported importer/API, per-checker expected outcomes and finite construction/execution budget before generating or launching anything.",
+    "Repair all unrelated recursor fields and, for the domain case, the independent fixed result-parameter mismatch; demonstrate target-specific failure attribution.",
+    "Recheck current inventory and policy to avoid duplicating complete proof-parameter/positivity fixtures; obtain exact approval before any external write."
+  ]
+}
