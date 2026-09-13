@@ -1,0 +1,239 @@
+#!/usr/bin/env python3
+"""Validate the source-only semantic import contract closure against immutable entry evidence."""
+from datetime import datetime
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tarfile
+
+ROOT = Path(__file__).resolve().parents[1]
+PREFIX = "results/research/semantic-import-contract-1/"
+ITEM = "SEMANTIC-IMPORT-CONTRACT-1"
+ENTRY_COMMIT = "08fa41c1081431dbeeb54fc9b18195c053fe5dcf"
+FREEZE_COMMIT = "c85d634ebca986911fe665393814aceaa07637a1"
+SOURCE_SPECS = {
+    "exporter": ("leanprover/lean4export", "411dce7db58a3afc60ecab2d211acd1042b593dc", "271cb5cc7f77824273bd0a5a5671b225a7d9529e4aa95eb115d6d82b1bb39d3c", 13),
+    "kiota": ("sankalpsthakur/kiota", "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42", "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8", 90),
+}
+FIELD_IDS = {"recursor.k", "recursor.type", "constructor.cidx", "inductive.numIndices"}
+SOURCE_FROZEN = ("source-lock.json", "requests.json", "exporter-source.tar.gz", "kiota-source.tar.gz",
+                 "lean-v4.34.0-rc2-Replay.lean", "request-01.json", "request-02.json", "request-03.json",
+                 "request-07.json", "request-08.json")
+ZERO_COUNTS = ("builds", "test_processes", "checkers", "proofs", "mutants", "new_exports", "external_research_writes")
+FROZEN = ("entry-lock.json", "entry-queue.json", "work-record.json", "action-rubric.json")
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def number(value, name):
+    require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+            "invalid " + name)
+    return value
+
+
+def count(value, name):
+    require(type(value) is int and value >= 0, "invalid " + name)
+    return value
+
+
+def safe_path(root, name):
+    require(isinstance(name, str) and bool(name) and not Path(name).is_absolute(), "invalid binding path")
+    path = (root / name).resolve()
+    require(path.is_relative_to(root.resolve()), "binding escapes repository")
+    return path
+
+
+def git_bytes(root, revision, path):
+    require(isinstance(revision, str) and re.fullmatch(r"[0-9a-f]{40}", revision), "full commit identity required")
+    safe_path(root, path)
+    return subprocess.check_output(["git", "-C", str(root), "show", f"{revision}:{path}"])
+
+
+def validate_data(result, entry, closure, requests, assessment, queue):
+    for value in (result, entry, closure, requests, assessment):
+        require(value["item_id"] == ITEM, "wrong item identity")
+    for value in (result, closure):
+        require(value["status"] == "COMPLETE" and value["outcome"] == "SUCCESS", "closure outcome mismatch")
+    require(entry["status"] == "ACTIVE", "entry status changed")
+    budget = entry["budget"]
+    require(budget["active_seconds"] == 7200 and budget["read_only_requests"] == 8,
+            "entry budget changed")
+    for key in ZERO_COUNTS:
+        require(count(budget[key], key) == 0, "nonzero source-only budget: " + key)
+    require(count(budget["fields"], "field budget") == 4, "field cap changed")
+    for value in (result, assessment):
+        require(value["universal_authority"] == "UNRESOLVED", "unsupported universal authority")
+        require(value["current_execution"] is False, "source review promoted to current execution")
+        require(count(value["local_drafts"], "local drafts") <= 1, "too many local drafts")
+    require(result["local_drafts"] == assessment["local_drafts"], "draft counts disagree")
+    for key in ("catalog_changed", "authority_changed"):
+        require(result[key] is False, "unsupported authority/catalog change")
+    ids = [row["id"] for row in assessment["fields"]]
+    require(len(ids) == 4 and set(ids) == FIELD_IDS, "selected field substitution or duplication")
+    require(closure["started_at"] == entry["started_at"] and closure["start_monotonic"] == entry["start_monotonic"], "work clock reset")
+    start = number(closure["start_monotonic"], "start clock")
+    end = number(closure["end_monotonic"], "end clock")
+    active = number(closure["active_seconds"], "active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and active <= 7200, "active interval or cap mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(closure[key]) for key in ("started_at", "completed_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None, "timezone-aware interval required")
+    elapsed = (utc_end - utc_start).total_seconds()
+    require(elapsed >= 0 and abs(elapsed - active) <= 2, "UTC/monotonic interval disagreement")
+    rows = requests["requests"]
+    require(len(rows) == 8, "request event lost or added")
+    ids = [row["id"] for row in rows]
+    require(len(ids) == len(set(ids)) and all(ids), "duplicate or empty request ID")
+    charges = [count(row["charged_requests"], "request charge") for row in rows]
+    require(all(charge == 1 for charge in charges), "request charge changed")
+    require(ids == [f"request-{index:02d}" for index in range(1, 9)]
+            and rows[1]["result"] == "FAILED_404_WRONG_REPOSITORY", "failed request history lost")
+    total = sum(charges)
+    require(requests["cap"] == 8 and total == count(requests["charged_requests"], "request total") <= 8,
+            "request accounting or cap mismatch")
+    counts = result["research_counts"]
+    require(closure["research_counts"] == counts, "closure/result counts disagree")
+    require(count(counts["read_only_requests"], "result requests") == total, "result/request counts disagree")
+    for key in ZERO_COUNTS:
+        require(count(counts[key], key) == 0, "prohibited launch: " + key)
+    successor = result["next_item"]
+    require(bool(successor["id"]) and successor["id"] != ITEM and successor["status"] == "READY"
+            and successor["started"] is False, "successor must be READY and unstarted")
+    require(closure["next_item"] == successor["id"] and closure["next_item_started"] is False, "closure successor mismatch")
+    require(queue["selected_item"] == successor["id"], "snapshot successor mismatch")
+    queue_ids = [row["id"] for row in queue["items"]]
+    require(len(queue_ids) == len(set(queue_ids)), "duplicate snapshot queue item")
+    indexed = {row["id"]: row for row in queue["items"]}
+    require(indexed[ITEM]["status"] == "COMPLETE" and indexed[ITEM]["closure"]["outcome"] == result["outcome"], "snapshot closure mismatch")
+    require(indexed[successor["id"]]["status"] == "READY"
+            and not any(row["status"] == "ACTIVE" for row in queue["items"]), "snapshot successor started")
+
+
+def validate_delivery(data, entry, closure, result):
+    require(data["item_id"] == ITEM, "wrong delivery item")
+    require(data["started_at"] == entry["started_at"] == closure["started_at"]
+            and data["start_monotonic"] == entry["start_monotonic"] == closure["start_monotonic"],
+            "delivery work clock reset")
+    start = number(data["start_monotonic"], "delivery start")
+    end = number(data["end_monotonic"], "delivery end")
+    active = number(data["cumulative_active_seconds"], "delivery active seconds")
+    work_active = number(closure["active_seconds"], "work closure active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and work_active <= active <= 7200,
+            "delivery active interval or cap mismatch")
+    require(number(data["cap_seconds"], "delivery cap") == entry["budget"]["active_seconds"] == 7200,
+            "delivery cap changed")
+    remaining = number(data["remaining_seconds"], "delivery remaining seconds")
+    admin = number(data["administrative_seconds_after_work_closure"], "delivery administrative seconds")
+    require(abs(remaining - (7200 - active)) <= .01 and abs(admin - (active - work_active)) <= .01,
+            "delivery remaining or administrative accounting mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(data[key]) for key in ("started_at", "recorded_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None,
+            "timezone-aware delivery interval required")
+    elapsed = (utc_end - utc_start).total_seconds()
+    require(elapsed >= 0 and abs(elapsed - active) <= 2, "delivery UTC/monotonic interval disagreement")
+    require(data["research_counts"] == closure["research_counts"] == result["research_counts"],
+            "delivery research counts changed")
+    require(data["next_item"] == result["next_item"]["id"] == closure["next_item"]
+            and data["next_item_started"] is False and result["next_item"]["started"] is False
+            and closure["next_item_started"] is False and result["next_item"]["status"] == "READY",
+            "delivery successor changed or started")
+
+
+def validate_archive(root, source):
+    require(source["id"] in SOURCE_SPECS, "source identity mismatch")
+    repo, revision, archive_sha, file_count = SOURCE_SPECS[source["id"]]
+    require(source["repo"] == repo and source["revision"] == revision, "source identity mismatch")
+    require(source["archive"] == PREFIX + source["id"] + "-source.tar.gz"
+            and source["archive_sha256"] == archive_sha, "archive identity mismatch")
+    archive = safe_path(root, source["archive"])
+    require(digest(archive.read_bytes()) == archive_sha, "archive digest mismatch")
+    expected = {}
+    for row in source["inventory"]:
+        safe_path(root, row["path"])
+        require(row["path"] not in expected, "duplicate inventory path")
+        expected[row["path"]] = (row["sha256"], count(row["bytes"], "inventory bytes"))
+    require(len(expected) == file_count, "incomplete source inventory")
+    actual = {}
+    prefix = repo.split("/")[1] + "-" + revision + "/"
+    with tarfile.open(archive, "r:gz") as retained:
+        for member in retained.getmembers():
+            if member.isdir():
+                continue
+            require(member.isfile() and member.name.startswith(prefix), "unexpected archive member")
+            path = member.name[len(prefix):]
+            safe_path(root, path)
+            require(path not in actual, "duplicate archive member")
+            with retained.extractfile(member) as stream:
+                data = stream.read()
+            actual[path] = (digest(data), len(data))
+    require(actual == expected, "archive inventory replay mismatch")
+
+
+def validate_sources(root, source):
+    require(source["item_id"] == ITEM, "wrong source item")
+    ids = [row["id"] for row in source["sources"]]
+    require(len(ids) == 3 and set(ids) == {"exporter", "kiota", "lean-replay"}, "source set changed")
+    for row in source["sources"]:
+        if row["id"] != "lean-replay":
+            validate_archive(root, row)
+            continue
+        require(row["repo"] == "leanprover/lean4" and row["revision_ref"] == "v4.34.0-rc2"
+                and row["path"] == PREFIX + "lean-v4.34.0-rc2-Replay.lean", "release source identity changed")
+        raw = safe_path(root, row["path"]).read_bytes()
+        require(digest(raw) == row["sha256"] == "c434b5b2bc5047ca58d4a095fcf1d9935d413c788ae98a4f21948e6a95ca3fb0"
+                and len(raw) == count(row["bytes"], "release bytes") == 7987, "release source binding mismatch")
+
+
+def validate(root=ROOT):
+    root = Path(root)
+    def read(name):
+        return json.loads(safe_path(root, PREFIX + name).read_text())
+    result, entry = read("result.json"), read("work-record.json")
+    require(result["entry_commit"] == ENTRY_COMMIT and result["freeze_commit"] == FREEZE_COMMIT,
+            "historical checkpoint identity changed")
+    for name in FROZEN:
+        path = PREFIX + name
+        require(safe_path(root, path).read_bytes() == git_bytes(root, result["entry_commit"], path), "frozen input changed: " + name)
+    entry_lock = read("entry-lock.json")
+    names = [row["path"] for row in entry_lock["bindings"]]
+    require(names and len(names) == len(set(names)), "duplicate or empty entry bindings")
+    for row in entry_lock["bindings"]:
+        require(digest(git_bytes(root, entry["base_commit"], row["path"])) == row["sha256"], "historical entry binding mismatch")
+    require(safe_path(root, PREFIX + "entry-queue.json").read_bytes() == git_bytes(root, entry["base_commit"], "config/research-queue.json"), "entry queue historical mismatch")
+    for name in SOURCE_FROZEN:
+        path = PREFIX + name
+        require(safe_path(root, path).read_bytes() == git_bytes(root, result["freeze_commit"], path), "frozen source changed: " + name)
+    source = read("source-lock.json")
+    validate_sources(root, source)
+    bound = set()
+    for row in result["output_bindings"]:
+        require(row["path"] not in bound, "duplicate output binding")
+        bound.add(row["path"])
+        data = safe_path(root, row["path"]).read_bytes()
+        require(digest(data) == row["sha256"] and count(row["bytes"], "binding bytes") == len(data), "output binding mismatch: " + row["path"])
+    required = {PREFIX + name for name in ("source-lock.json", "requests.json", "work-closure.json", "field-assessment.json", "closure-queue.json")}
+    require(required <= bound, "missing required output binding")
+    # Historical closure is intentionally independent of the mutable live queue.
+    validate_data(result, entry, read("work-closure.json"), read("requests.json"), read("field-assessment.json"), read("closure-queue.json"))
+    if result.get("validation_status") == "PASS":
+        require(result["final_delivery_accounting"] == "delivery-accounting.json", "final delivery accounting missing")
+        validate_delivery(read("delivery-accounting.json"), entry, read("work-closure.json"), result)
+    return {"status": "PASS", "item_id": ITEM, "output_bindings": len(bound), "source_files": sum(len(row.get("inventory", [])) for row in source["sources"])}
+
+
+if __name__ == "__main__":
+    try:
+        print(json.dumps(validate(), sort_keys=True))
+    except (ValueError, KeyError, TypeError, OSError, tarfile.TarError, subprocess.CalledProcessError) as error:
+        print("FAIL: " + str(error), file=sys.stderr)
+        raise SystemExit(1)

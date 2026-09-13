@@ -1,0 +1,129 @@
+{
+  "item_id": "SEMANTIC-IMPORT-CONTRACT-1",
+  "scope": "Exact source snapshots only; no current execution; no authority promotion.",
+  "sources": [
+    {
+      "archive": "exporter-source.tar.gz",
+      "revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "path": "format_ndjson.md",
+      "sha256": "f82a21e17e4258a1043895d0653ea4333bef8cb07aad2e3d6c1fc4be52b138e3",
+      "lines": [
+        23,
+        27
+      ],
+      "claim": "The format describes redundant information, including recursor types, for other tools and leaves ignored-versus-validated behavior open; this is a format description, not a universal all-fields equality requirement.",
+      "excerpt_sha256": "44fbfdb0c66cc5c9e0c8bb08cffcaff524cbff27fd77578981c8aeda6b834bdb"
+    },
+    {
+      "archive": "exporter-source.tar.gz",
+      "revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "path": "format_ndjson.md",
+      "sha256": "f82a21e17e4258a1043895d0653ea4333bef8cb07aad2e3d6c1fc4be52b138e3",
+      "lines": [
+        282,
+        284
+      ],
+      "claim": "The inductive note distinguishes kernel inductDecl inputs from generated recursors and informational fields such as cidx.",
+      "excerpt_sha256": "bcd5ab99dd962dbf59dc3b87362ff6c83c223babecbf2c260b973cba1438d699"
+    },
+    {
+      "archive": "exporter-source.tar.gz",
+      "revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "path": "Export.lean",
+      "sha256": "6e9f24262253678960b05b8392a1774a3cbf36b21ed2fc1b834906659b8ca95a",
+      "lines": [
+        350,
+        394
+      ],
+      "claim": "Exports supplied environment field values, including inductive.numIndices, constructor.cidx, and recursor.type/k.",
+      "excerpt_sha256": "4e614f4ed4228344e32b09bb5fa19efb4ee226ba1f9f4c0978cbd66c1f8717d5"
+    },
+    {
+      "archive": "exporter-source.tar.gz",
+      "revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "path": "Export/Parse.lean",
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+      "lines": [
+        331,
+        363
+      ],
+      "claim": "Parser requires and retains inductive.numIndices in ConstantInfo.",
+      "excerpt_sha256": "2ad3785e6ec9bbb7acd31d335f13a8679a10cd540546feaa97cbc01e97dc59a2"
+    },
+    {
+      "archive": "exporter-source.tar.gz",
+      "revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+      "path": "Export/Parse.lean",
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+      "lines": [
+        365,
+        432
+      ],
+      "claim": "Parser requires and retains constructor.cidx and recursor.type/k; parsing is not the replay verification step.",
+      "excerpt_sha256": "c14d9725b07f7c6b5f24bc23f7043c72a1d46d31b998e3883cb5081c33afcf36"
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/lean-v4.34.0-rc2-Replay.lean",
+      "sha256": "c434b5b2bc5047ca58d4a095fcf1d9935d413c788ae98a4f21948e6a95ca3fb0",
+      "revision_ref": "v4.34.0-rc2",
+      "lines": [
+        14,
+        25
+      ],
+      "claim": "Replay documentation states that constructors and recursors are compared with generated records.",
+      "excerpt_sha256": "de0dd60484404ae5a2314e5f0d9358f77940eb97e67f4d8587e23d2c3eb2f12b"
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/lean-v4.34.0-rc2-Replay.lean",
+      "sha256": "c434b5b2bc5047ca58d4a095fcf1d9935d413c788ae98a4f21948e6a95ca3fb0",
+      "revision_ref": "v4.34.0-rc2",
+      "lines": [
+        102,
+        120
+      ],
+      "claim": "Safe inductive replay constructs inductDecl from levelParams, numParams, type names/types and constructor names/types. Supplied inductive.numIndices is not an inductDecl argument and no later postponed-inductive comparison appears.",
+      "excerpt_sha256": "47602cec9b033ae2da33f19304765d3cdfc6134a9196b576c55fc23051fa56f3"
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/lean-v4.34.0-rc2-Replay.lean",
+      "sha256": "c434b5b2bc5047ca58d4a095fcf1d9935d413c788ae98a4f21948e6a95ca3fb0",
+      "revision_ref": "v4.34.0-rc2",
+      "lines": [
+        144,
+        164
+      ],
+      "claim": "Postponed constructors and recursors are compared using their complete record == operation against the reconstructed environment. This is a specific importer policy, not a universal independent-validator obligation.",
+      "excerpt_sha256": "c96e9aae2d7394b1e49705cf243b229b71aab2213f8f24c6865e04cfd20a27c6"
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/lean-v4.34.0-rc2-Replay.lean",
+      "sha256": "c434b5b2bc5047ca58d4a095fcf1d9935d413c788ae98a4f21948e6a95ca3fb0",
+      "revision_ref": "v4.34.0-rc2",
+      "lines": [
+        176,
+        190
+      ],
+      "claim": "Only safe/nonpartial records enter remaining; final validation invokes postponed constructor and recursor checks, returning reconstructed s.env.",
+      "excerpt_sha256": "e7cfa9de4a7abe0a0b41216bed19bfe82643a72fa5dd816dd892a10f08facd12"
+    }
+  ],
+  "parser_continuity": {
+    "current_exporter_revision": "411dce7db58a3afc60ecab2d211acd1042b593dc",
+    "arena_locked_parser_revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+    "retained_parser_path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-f297dfe2-Parse.lean",
+    "retained_parser_sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+    "byte_identical": true
+  },
+  "reference_profile": {
+    "recursor.k": "retain during parsing; regenerate with inductive; compare postponed recursor record",
+    "recursor.type": "retain during parsing; regenerate with inductive; compare postponed recursor record under its == operation",
+    "constructor.cidx": "retain during parsing; regenerate with inductive; compare postponed constructor record",
+    "inductive.numIndices": "retain in parsed input; derive via inductDecl; no supplied InductiveVal identity comparison in inspected replay path"
+  },
+  "limits": [
+    "Release-tag raw source is content-bound but not independently attested to a full Git commit.",
+    "Do not conflate current exporter HEAD, current Arena parser lock, and historical run identities.",
+    "No exact present-day acceptance or rejection is claimed for historical bytes.",
+    "Documentation that metadata is redundant does not prove retained unchecked values harmless, nor mandate literal equality for every checker."
+  ]
+}

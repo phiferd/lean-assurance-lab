@@ -1,0 +1,495 @@
+{
+  "item_id": "SEMANTIC-IMPORT-CONTRACT-1",
+  "reviewer": "independent Kiota source reviewer",
+  "entry_commit": "08fa41c",
+  "source_freeze_commit": "c85d634",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "source_archive": "results/research/semantic-import-contract-1/kiota-source.tar.gz",
+  "source_archive_sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8",
+  "scope": [
+    "recursor.k",
+    "recursor.type",
+    "constructor.cidx",
+    "inductive.numIndices"
+  ],
+  "research_launches": 0,
+  "network_requests": 0,
+  "new_scientific_bytes": 0,
+  "external_writes": 0,
+  "source_pointers": {
+    "parser_field_helpers": {
+      "source_path": "src/parser.rs",
+      "line_start": 47,
+      "line_end": 81,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "971b5ef0ed984455828a64ef0a2c3debc31247154071b0c1693094d668c6cf52",
+      "excerpt": "    fn get_u32(v: &Value, k: &str) -> u32 {\n        v.get(k).and_then(|x| x.as_u64()).unwrap_or(0) as u32\n    }\n\n    fn require_u32(v: &Value, k: &str) -> Result<u32, TcError> {\n        match v.get(k) {\n            None => Err(TcError::Reject(format!(\"missing required field `{k}`\"))),\n            Some(x) => match x.as_u64() {\n                Some(n) if n <= u32::MAX as u64 => Ok(n as u32),\n                _ => Err(TcError::Reject(format!(\"field `{k}` must be a u32\"))),\n            },\n        }\n    }\n\n    fn require_expr(&self, v: &Value, k: &str) -> Result<Expr, TcError> {\n        let i = Self::require_u32(v, k)?;\n        self.exprs\n            .get(i as usize)\n            .cloned()\n            .ok_or_else(|| TcError::Reject(format!(\"expr index {i} for `{k}` is out of range\")))\n    }\n\n    fn get_str<'a>(v: &'a Value, k: &str) -> &'a str {\n        v.get(k).and_then(|x| x.as_str()).unwrap_or(\"\")\n    }\n    fn get_bool(v: &Value, k: &str) -> bool {\n        v.get(k).and_then(|x| x.as_bool()).unwrap_or(false)\n    }\n    fn require_bool(v: &Value, k: &str) -> Result<bool, TcError> {\n        match v.get(k) {\n            None => Err(TcError::Reject(format!(\"missing required field `{k}`\"))),\n            Some(x) => x\n                .as_bool()\n                .ok_or_else(|| TcError::Reject(format!(\"field `{k}` must be a bool\"))),\n        }\n"
+    },
+    "inductive_parse_retain": {
+      "source_path": "src/parser.rs",
+      "line_start": 390,
+      "line_end": 425,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "fa3b1ce12eb96dea6b16d056055eaf47c5bfaed4ffc5303cc17399ee44c6c439",
+      "excerpt": "            std::collections::HashMap::new();\n        for t in &types {\n            let name = Self::require_u32(t, \"name\")?;\n            self.reject_if_dup(name)?;\n            let level_params = Self::get_vec_u32(t, \"levelParams\");\n            let typ = self.require_expr(t, \"type\")?;\n            let num_params = Self::require_u32(t, \"numParams\")?;\n            let num_indices = Self::require_u32(t, \"numIndices\")?;\n            let all = Self::get_vec_u32(t, \"all\");\n            let ctor_names = Self::get_vec_u32(t, \"ctors\");\n            let is_rec = Self::require_bool(t, \"isRec\")?;\n            let is_unsafe = Self::get_bool(t, \"isUnsafe\");\n            if is_unsafe {\n                return Err(TcError::Reject(format!(\n                    \"unsafe inductive `{}`\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n            }\n            declared_ctors.insert(name, ctor_names.clone());\n            self.env.insert(\n                name,\n                ConstantInfo::InductiveType {\n                    level_params,\n                    typ,\n                    num_params,\n                    num_indices,\n                    all,\n                    ctors: ctor_names,\n                    is_rec,\n                    is_unsafe,\n                },\n            );\n        }\n"
+    },
+    "ctor_index_gate": {
+      "source_path": "src/parser.rs",
+      "line_start": 432,
+      "line_end": 482,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "6f534b4d16c356cfb86087dc51ee8f704006f7cbfaba343e812950e31243e8b1",
+      "excerpt": "            let cidx = Self::require_u32(c, \"cidx\")?;\n            let num_params = Self::require_u32(c, \"numParams\")?;\n            let num_fields = Self::require_u32(c, \"numFields\")?;\n            let is_unsafe = Self::get_bool(c, \"isUnsafe\");\n            if is_unsafe {\n                return Err(TcError::Reject(format!(\n                    \"unsafe constructor `{}`\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n            }\n            let Some(owner_ctors) = declared_ctors.get(&induct) else {\n                return Err(TcError::Reject(format!(\n                    \"constructor `{}` claims inductive `{}`, which this block does not declare\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\"),\n                    self.names\n                        .get(induct as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n            };\n            if owner_ctors.get(cidx as usize) != Some(&name) {\n                return Err(TcError::Reject(format!(\n                    \"constructor `{}` is not `{}`'s own constructor at index {cidx}\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\"),\n                    self.names\n                        .get(induct as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n            }\n            self.env.insert(\n                name,\n                ConstantInfo::Constructor {\n                    level_params,\n                    typ,\n                    induct,\n                    cidx,\n                    num_params,\n                    num_fields,\n                    is_unsafe,\n                },\n            );\n"
+    },
+    "recursor_parse_arity": {
+      "source_path": "src/parser.rs",
+      "line_start": 485,
+      "line_end": 515,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "f138ddd57af4533e1dd84fef2e8a5ced0c80d96f4d16baa1b28d83d88b3e4da0",
+      "excerpt": "            let name = Self::require_u32(r, \"name\")?;\n            self.reject_if_dup(name)?;\n            let level_params = Self::get_vec_u32(r, \"levelParams\");\n            let typ = self.require_expr(r, \"type\")?;\n            let all = Self::get_vec_u32(r, \"all\");\n            let num_params = Self::require_u32(r, \"numParams\")?;\n            let num_indices = Self::require_u32(r, \"numIndices\")?;\n            let num_motives = Self::require_u32(r, \"numMotives\")?;\n            let num_minors = Self::require_u32(r, \"numMinors\")?;\n            let k = Self::get_bool(r, \"k\");\n            let is_unsafe = Self::get_bool(r, \"isUnsafe\");\n            if is_unsafe {\n                return Err(TcError::Reject(format!(\n                    \"unsafe recursor `{}`\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n            }\n            let expected =\n                num_params as u64 + num_indices as u64 + num_motives as u64 + num_minors as u64 + 1;\n            let arity = pi_telescope_len(&typ);\n            if arity as u64 != expected {\n                return Err(TcError::Reject(format!(\n                    \"recursor `{}` type telescope length {arity} != {expected}\",\n                    self.names\n                        .get(name as usize)\n                        .map(|s| s.as_str())\n                        .unwrap_or(\"?\")\n                )));\n"
+    },
+    "recursor_retain": {
+      "source_path": "src/parser.rs",
+      "line_start": 565,
+      "line_end": 580,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "bede4786dc6865b87952b8e492d2eba721ade17e888c048de8656dc3b3d54abf",
+      "excerpt": "            self.env.insert(\n                name,\n                ConstantInfo::Recursor {\n                    level_params,\n                    typ,\n                    all,\n                    num_params,\n                    num_indices,\n                    num_motives,\n                    num_minors,\n                    rules,\n                    k,\n                    is_unsafe,\n                },\n            );\n        }\n"
+    },
+    "nested_maps": {
+      "source_path": "src/parser.rs",
+      "line_start": 582,
+      "line_end": 599,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "90d98ab8282f05646c05bca4be42649c9ab0098575e579f66185b5d6f6d19097",
+      "excerpt": "        // Recursor identity is the inductive of this recursor's *rule\n        // constructors*, not the pretty name `I.rec` and not `all[0]`.\n        // Nested `Syntax.rec`/`rec_1`/`rec_2` all export `all = [Syntax]`;\n        // `rec_2`'s rules are `List.nil`/`List.cons`. Mapping every rec to\n        // `all[0]` is a duplicate-recursor reject on type 8527; mapping by\n        // `I.rec` rejects a well-typed recursor named `elim`. Empty-rules\n        // recursors (`False.rec`) claim `all \u2229 group`. Nested rec_k have\n        // rules for foreign constructors and must not steal `rec_of[I]`.\n        // Extra recursor: more recs than `types + nested specializations\n        // reconstructed from ctor fields`, or two recs claiming the same\n        // group type. Exported `numNested` / `k` / rule RHS are not trusted.\n        let type_names: Vec<u32> = types.iter().map(|t| Self::get_u32(t, \"name\")).collect();\n        let nested_n = self.counted_nested(&type_names);\n        let nested = nested_n > 0;\n        let expected_recs = type_names.len() + nested_n;\n        if recs.len() > expected_recs {\n            return Err(TcError::Reject(format!(\n                \"extra recursor in inductive group ({} recs, expected {expected_recs})\",\n"
+    },
+    "recursor_counts": {
+      "source_path": "src/parser.rs",
+      "line_start": 675,
+      "line_end": 704,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "0678b432c7982c3fde5cd9d011188a4fce27209ce14edb67eb6f90433a6fc437",
+      "excerpt": "            if !motives_ok {\n                return Err(TcError::Reject(format!(\n                    \"recursor `{rstr}` has numMotives={num_motives} but group size is {}\",\n                    type_names.len()\n                )));\n            }\n            let mut nctors = 0u32;\n            for tname in &type_names {\n                if let Some(ConstantInfo::InductiveType { ctors, .. }) = self.env.get(*tname) {\n                    nctors += ctors.len() as u32;\n                }\n            }\n            let num_minors = Self::get_u32(r, \"numMinors\");\n            let minors_ok = if nested {\n                num_minors >= nctors\n            } else {\n                num_minors == nctors\n            };\n            if !minors_ok {\n                return Err(TcError::Reject(format!(\n                    \"recursor `{rstr}` has numMinors={num_minors} but constructor count is {nctors}\"\n                )));\n            }\n        }\n        {\n            // Minor concatenation is Lean's rec_k order (main, then nested\n            // types in specialization order). Main = recs in `rec_of` (rule\n            // constructors), not the pretty suffix `.rec`. Nested recs with\n            // the same container (`Value.rec_3` / `rec_4`, both `List`) share\n            // `ctor.induct`; `I.rec_N` is the specialization index \u2014 order\n"
+    },
+    "group_check_call": {
+      "source_path": "src/parser.rs",
+      "line_start": 922,
+      "line_end": 939,
+      "file_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "excerpt_sha256": "13a4da0642ca5789ba258949f7130c0d00a2d8875c45ede6fe3d4a0003786373",
+      "excerpt": "        if let Some(d) = v.get(\"inductive\") {\n            self.handle_inductive_block(d)?;\n            let names: Vec<u32> = d\n                .get(\"types\")\n                .and_then(|x| x.as_array())\n                .map(|a| a.iter().map(|t| Self::get_u32(t, \"name\")).collect())\n                .unwrap_or_default();\n            let nat_ref = self.name_by_str.get(\"Nat\").copied();\n            let string_ref = self.name_by_str.get(\"String\").copied();\n            for n in names {\n                Checker::new(&self.env, &self.names, nat_ref, string_ref)\n                    .check_inductive_group(n)\n                    .map_err(|e| self.annotate(n, e))?;\n            }\n            return Ok(());\n        }\n        Ok(())\n    }\n"
+    },
+    "infer_constant_type": {
+      "source_path": "src/tc.rs",
+      "line_start": 1930,
+      "line_end": 1946,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "ddfbba41fff36e9e4e3fa7f00c357a3c92ea592a1315d42bfc8fe002a5bbc443",
+      "excerpt": "    fn infer_const(&self, n: u32, us: &[Level]) -> R<Expr> {\n        if self.declaring.get() == Some(n) {\n            return reject(format!(\n                \"`{}` refers to itself; it is not in the environment until it is checked\",\n                self.name_str(n)\n            ));\n        }\n        let ci = self\n            .env\n            .get(n)\n            .ok_or_else(|| TcError::Other(format!(\"unknown const {n}\")))?;\n        let lp = ci.level_params();\n        if lp.len() != us.len() {\n            return reject(\"universe param count mismatch\");\n        }\n        let subst = level::subst_map(lp, us);\n        Ok(expr::instantiate_level_params(ci.typ(), &subst))\n"
+    },
+    "k_compute_call": {
+      "source_path": "src/tc.rs",
+      "line_start": 4307,
+      "line_end": 4320,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "64b6f89d93531e2d598e7aed652049c73b1fe0cd88815095ffdef358c358751a",
+      "excerpt": "        let major_pos = (num_params + num_motives + num_minors + num_indices) as usize;\n        if args.len() <= major_pos {\n            return Ok(None);\n        }\n        let params = &args[..num_params as usize];\n        let motives = &args[num_params as usize..(num_params + num_motives) as usize];\n        let minors = &args\n            [(num_params + num_motives) as usize..(num_params + num_motives + num_minors) as usize];\n        let major = &args[major_pos];\n        let rest = &args[major_pos + 1..];\n\n        let k_like = self.is_k_like(&all)?;\n\n        let major_w = self.whnf_major(ctx, major, rname)?;\n"
+    },
+    "k_compute": {
+      "source_path": "src/tc.rs",
+      "line_start": 4511,
+      "line_end": 4579,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "8366e9a5e781c2e9a0f328588b67148e1e8eef1ac5d90b6b78a7e89ab90675c1",
+      "excerpt": "    /// K-like iff: not mutual, result sort is Prop, one constructor, zero fields.\n    /// Independently computed; the exported `k` flag is never trusted.\n    fn is_k_like(&self, all: &[u32]) -> R<bool> {\n        if all.len() != 1 {\n            return Ok(false);\n        }\n        let tname = all[0];\n        let (ctors, num_params, typ) = match self.env.get(tname) {\n            Some(ConstantInfo::InductiveType {\n                ctors,\n                num_params,\n                typ,\n                ..\n            }) => (ctors.clone(), *num_params, typ.clone()),\n            _ => return Ok(false),\n        };\n        if ctors.len() != 1 {\n            return Ok(false);\n        }\n        let mut ctx: Ctx = Ctx::new();\n        let mut cur = typ;\n        for _ in 0..num_params {\n            match self.ensure_pi(&ctx, &cur) {\n                Ok((_, dom, body)) => {\n                    ctx.push(dom);\n                    cur = body;\n                }\n                Err(_) => return Ok(false),\n            }\n        }\n        loop {\n            match self.whnf(&ctx, &cur) {\n                Ok(w) => match &**w {\n                    ExprData::Pi(_, dom, body) => {\n                        ctx.push(dom.clone());\n                        cur = body.clone();\n                    }\n                    _ => {\n                        cur = w;\n                        break;\n                    }\n                },\n                Err(_) => return Ok(false),\n            }\n        }\n        let lvl = match self.ensure_sort(&ctx, &cur) {\n            Ok(l) => l,\n            Err(_) => return Ok(false),\n        };\n        if !level::is_def_eq(&lvl, &level::zero()) {\n            return Ok(false);\n        }\n        let ctor_typ = match self.env.get(ctors[0]) {\n            Some(ConstantInfo::Constructor { typ, .. }) => typ.clone(),\n            _ => return Ok(false),\n        };\n        let mut nfields = 0u32;\n        let mut ct = ctor_typ;\n        loop {\n            match &**ct {\n                ExprData::Pi(_, _, body) => {\n                    nfields += 1;\n                    ct = body.clone();\n                }\n                _ => break,\n            }\n        }\n        Ok(nfields == num_params)\n    }\n"
+    },
+    "type_index_check": {
+      "source_path": "src/tc.rs",
+      "line_start": 8504,
+      "line_end": 8546,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "70e886ab87bd5829f7f3166ac0ce28154dd3345b10cd867314b8b33dcb6beee1",
+      "excerpt": "        for tname in &all {\n            let (t_np, t_ni, t_typ, t_lp) = match self.env.get(*tname) {\n                Some(ConstantInfo::InductiveType {\n                    num_params,\n                    num_indices,\n                    typ,\n                    level_params,\n                    ..\n                }) => (*num_params, *num_indices, typ.clone(), level_params.clone()),\n                _ => continue,\n            };\n            if t_np != num_params {\n                return reject(\"inconsistent numParams across mutual inductive group\");\n            }\n            if t_lp != shared_lp {\n                return reject(\"inconsistent universe parameters across mutual inductive group\");\n            }\n            let mut c2: Ctx = Ctx::new();\n            let mut cur2 = t_typ.clone();\n            for i in 0..t_np {\n                let (_, dom, body) = self.ensure_pi(&c2, &cur2)?;\n                if !self.is_def_eq(&c2, &dom, &param_ctx[i as usize])? {\n                    return reject(\"inductive type's parameter telescope is inconsistent\");\n                }\n                c2.push(dom);\n                cur2 = body;\n            }\n            for _ in 0..t_ni {\n                let (_, dom, body) = self.ensure_pi(&c2, &cur2)?;\n                c2.push(dom);\n                cur2 = body;\n            }\n            let sort_lvl = self.ensure_sort(&c2, &cur2)?;\n            infos.insert(\n                *tname,\n                TInfo {\n                    num_params: t_np,\n                    num_indices: t_ni,\n                    sort: sort_lvl,\n                },\n            );\n        }\n\n"
+    },
+    "ctor_result_arity": {
+      "source_path": "src/tc.rs",
+      "line_start": 8632,
+      "line_end": 8647,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "95d922f6ef344560bc8307e4d12ed553a50dadb6e8c58cb8fcfd041d8cc04a2f",
+      "excerpt": "                let t_ni = infos.get(tname).map(|i| i.num_indices).unwrap_or(0);\n                if args.len() != (num_params + t_ni) as usize {\n                    return reject(\"constructor conclusion has wrong number of arguments\");\n                }\n                for i in 0..num_params as usize {\n                    let expected = expr::bvar((c2.len() as u32) - 1 - i as u32);\n                    if !self.is_def_eq(&c2, &args[i], &expected)? {\n                        return reject(\"constructor does not apply the inductive type to its own shared parameters\");\n                    }\n                }\n                for idx_arg in &args[num_params as usize..] {\n                    if self.occurs_any(idx_arg, &all) {\n                        return reject(\"constructor index expression refers to the inductive type being defined\");\n                    }\n                }\n            }\n"
+    },
+    "prop_elimination_check": {
+      "source_path": "src/tc.rs",
+      "line_start": 8650,
+      "line_end": 8703,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "5b77fa5ff51cca243ca833244be47bd1615820e3c1cf4fdf116f9ed0e5010c33",
+      "excerpt": "        // `check_inductive_group` runs once per type name in the block,\n        // all sharing the same `all`). See `elim_only_at_universe_zero`'s\n        // own comment for the exact rule being enforced.\n        if all.first() == Some(&first_name) && self.elim_only_at_universe_zero(&all)? {\n            let mut recs: Vec<u32> = all\n                .iter()\n                .filter_map(|t| self.env.rec_of.get(t).copied())\n                .collect();\n            recs.sort_unstable();\n            recs.dedup();\n            for rname in recs {\n                let (r_typ, r_np, r_nm) = match self.env.get(rname) {\n                    Some(ConstantInfo::Recursor {\n                        typ,\n                        num_params,\n                        num_motives,\n                        ..\n                    }) => (typ.clone(), *num_params, *num_motives),\n                    _ => continue,\n                };\n                let mut mctx = Ctx::new();\n                let mut cur = r_typ;\n                for _ in 0..r_np {\n                    let (_, dom, body) = self.ensure_pi(&mctx, &cur)?;\n                    mctx.push(dom);\n                    cur = body;\n                }\n                for _ in 0..r_nm {\n                    let (_, dom, body) = self.ensure_pi(&mctx, &cur)?;\n                    let motive_ok = {\n                        let mut mtctx = mctx.clone();\n                        let mut mt = dom.clone();\n                        loop {\n                            match self.ensure_pi(&mtctx, &mt) {\n                                Ok((_, d, b)) => {\n                                    mtctx.push(d);\n                                    mt = b;\n                                }\n                                Err(_) => break,\n                            }\n                        }\n                        self.ensure_sort(&mtctx, &mt)\n                            .is_ok_and(|l| level::is_def_eq(&l, &level::zero()))\n                    };\n                    if !motive_ok {\n                        return reject(format!(\n                            \"recursor `{}` allows large elimination out of a Prop-valued inductive that is not a subsingleton\",\n                            self.name_str(rname)\n                        ));\n                    }\n                    mctx.push(dom);\n                    cur = body;\n                }\n            }\n"
+    },
+    "env_types_and_insert": {
+      "source_path": "src/env.rs",
+      "line_start": 135,
+      "line_end": 160,
+      "file_sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b",
+      "excerpt_sha256": "663839561ff2b861181f0c987ecca08fac771dafad0ace11e495a6ae825256b1",
+      "excerpt": "#[derive(Default)]\npub struct Environment {\n    pub consts: FxHashMap<u32, ConstantInfo>,\n    /// Inductive type name \u2192 recursor name, filled in by the parser.\n    pub rec_of: FxHashMap<u32, u32>,\n    /// Recursor \u2192 every recursor in its inductive block (`.rec`, `.rec_1`, \u2026),\n    /// sorted so main comes first. Used for nested \u03b9, not for trusting RHS.\n    pub rec_group: FxHashMap<u32, Vec<u32>>,\n}\n\nimpl Environment {\n    pub fn get(&self, n: u32) -> Option<&ConstantInfo> {\n        self.consts.get(&n)\n    }\n    pub fn insert(&mut self, n: u32, ci: ConstantInfo) {\n        self.consts.insert(n, ci);\n    }\n}\n"
+    },
+    "documented_k_policy": {
+      "source_path": "README.md",
+      "line_start": 1,
+      "line_end": 24,
+      "file_sha256": "602b4d8efdf6ef6c5f9389251691c625158c03e0811e0a259c37188a4ec4ba1e",
+      "excerpt_sha256": "dafebd75926f3222cac98ff06837512e282b2f4f6634a4ffb4a236c6ea509404",
+      "excerpt": "# kiota\n\nA **from-scratch Lean 4 kernel checker in Rust**, built as an independent implementation for the [Lean Kernel Arena](https://arena.lean-lang.org/).\n\nIt deliberately does not trust two pieces of recursor metadata from exported terms: the K-like flag and iota right-hand sides. Kiota recomputes both.\n\n> **Arena-validated snapshot (`84b2fc4`)**  \n> **116/116 valid exports accepted \u00b7 62/62 invalid exports rejected \u00b7 zero false accepts on the published tarball**\n>\n> That revision was merged into the Lean Kernel Arena in [leanprover/lean-kernel-arena#131](https://github.com/leanprover/lean-kernel-arena/pull/131). Current `main` is ahead of that snapshot.\n\nKiota is experimental. It is not a nanoda fork, and it is not currently competitive with sokonanoda / nanoclo / the official kernel on full-mathlib throughput. The point is a second implementation with different trust boundaries.\n\n## Why another kernel checker?\n\nA kernel checker is the last line between a proof-producing tool and \u201cthis theorem is actually accepted by the logic.\u201d Independent implementations are useful because they can fail differently.\n\nKiota's design choices are intentionally explicit:\n\n- **From-scratch term language, universes, WHNF and definitional equality.**\n- **Recursor K-like-ness is recomputed.** Exported `k` is ignored.\n- **Iota reduction is rebuilt** from constructor fields and recursive calls in Lean's field-then-rec order. Exported recursor RHS terms are ignored.\n- **Nested inductives are checked rather than blanket-declined.** A nested occurrence must apply the datatype's own parameters correctly.\n- **Failure is allowed to be explicit.** Unsupported large corpora can be declined rather than guessed through.\n"
+    },
+    "rec_type_regression": {
+      "source_path": "tests/exports.rs",
+      "line_start": 263,
+      "line_end": 267,
+      "file_sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+      "excerpt_sha256": "e2a85ba411f2e4d932a3ef38f69b4fa02c28fda0e5575df3aa3db6cd90498e1b",
+      "excerpt": "/// Recursor type `False \u2192 False` is a Pi but not a recursor telescope.\n#[test]\nfn extra_rec_wrong_pi_type_rejects() {\n    assert_reject(\"extra-rec-wrong-pi-type.reject.ndjson\");\n}\n"
+    },
+    "test_harness": {
+      "source_path": "tests/exports.rs",
+      "line_start": 19,
+      "line_end": 29,
+      "file_sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+      "excerpt_sha256": "1547821b0081b55e94a02ce26c6e8f078b9c73e4ae6bd873a7421ccd11b73089",
+      "excerpt": "fn check_file(path: &std::path::Path) -> Result<(), TcError> {\n    let bytes = fs::read(path).unwrap_or_else(|e| panic!(\"read {}: {e}\", path.display()));\n    let mut p = Parser::new();\n    p.run(Cursor::new(bytes))\n}\n\nfn assert_accept(name: &str) {\n    let path = fixture(name);\n    check_file(&path).unwrap_or_else(|e| panic!(\"{name} should accept, got {e:?}\"));\n}\n\n"
+    },
+    "reject_assertion": {
+      "source_path": "tests/exports.rs",
+      "line_start": 52,
+      "line_end": 58,
+      "file_sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+      "excerpt_sha256": "2367a343a0a8db688421c05851382cc6332bb2e73643150428c3104ca8877213",
+      "excerpt": "        Err(TcError::Reject(_)) => {}\n        other => panic!(\"{name} should reject, got {other:?}\"),\n    }\n}\n\n#[test]\nfn eq_rec_accepts() {\n"
+    },
+    "ctor_minor_index": {
+      "source_path": "src/tc.rs",
+      "line_start": 4971,
+      "line_end": 5036,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "d78987b1d45cb9cac6eff09a282f591dd4fb92efec159ca124d84ec49d7b8da5",
+      "excerpt": "    fn ctor_minor_index(&self, cname: u32, rname: u32, all: &[u32]) -> usize {\n        // `rname`'s own position for `cname` first: a nested group's own\n        // constructor can be *polymorphic* (`List.cons` is the same\n        // constant regardless of its element type), so two different\n        // specializations in the same group (`List Value`'s recursor and\n        // `List (Prod Attr Value)`'s, say) can each list a rule for the\n        // exact same `cname`. Matching the first occurrence across the\n        // *whole* group, regardless of which recursor is actually being\n        // reduced, silently picked whichever specialization's rule (and\n        // RHS) happened to come first in the group's order \u2014 the wrong\n        // one whenever `rname` itself isn't that first specialization.\n        // This fixes that misattribution (never uses a *different*\n        // recursor's rule for the constructor being reduced), but the\n        // offset added below still assumes `self.rec_group`'s own sort\n        // order lines up with the actual, shared minor-slot layout the\n        // group's individual definitions (e.g. a mutual `sizeOf` helper)\n        // were built against; a group with more than one same-shaped\n        // nested specialization (two `List.nil`/`List.cons` pairs, for\n        // distinct element types, both in one group) can still combine\n        // with the wrong minor if that assumption doesn't hold for a\n        // given export. Confirmed independently correct \u2014 and needed \u2014\n        // for every existing fixture (the `Acc`/`PersistentHashMap.Node`\n        // nested-recursor cases): only known to be incomplete on a case\n        // pulled from the live `cedar` export with two same-shaped `List`\n        // specializations in one six-way mutual group.\n        let mut idx = 0usize;\n        for rec in self.rec_group(rname) {\n            let rules = match self.env.get(rec) {\n                Some(ConstantInfo::Recursor { rules, .. }) => rules,\n                _ => continue,\n            };\n            if rec == rname {\n                if let Some(local) = rules.iter().position(|r| r.ctor == cname) {\n                    return idx + local;\n                }\n            }\n            idx += rules.len();\n        }\n        // Fallback for a `cname` `rname` doesn't own directly (shouldn't\n        // normally happen: `try_iota`'s own ctor detection already\n        // requires `rec_owns_ctor(cname)` or `all.contains(induct)` before\n        // calling here) \u2014 first match by ctor name anywhere in the group.\n        idx = 0;\n        for rec in self.rec_group(rname) {\n            if let Some(ConstantInfo::Recursor { rules, .. }) = self.env.get(rec) {\n                for rule in rules {\n                    if rule.ctor == cname {\n                        return idx;\n                    }\n                    idx += 1;\n                }\n            }\n        }\n        // Fallback: main-type ctor order (non-nested groups).\n        idx = 0;\n        for t in all {\n            let ctors = match self.env.get(*t) {\n                Some(ConstantInfo::InductiveType { ctors, .. }) => ctors,\n                _ => continue,\n            };\n            for c in ctors {\n                if *c == cname {\n                    return idx;\n                }\n                idx += 1;\n            }\n"
+    },
+    "num_indices_semantic_use": {
+      "source_path": "src/tc.rs",
+      "line_start": 2968,
+      "line_end": 2980,
+      "file_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "excerpt_sha256": "c0bbe61d190e00301cbf38a831af10433055ee58251022270e357a56c65f121d",
+      "excerpt": "            if let Some(ConstantInfo::InductiveType {\n                typ,\n                ctors,\n                num_indices,\n                is_rec,\n                ..\n            }) = self.env.get(*induct)\n            {\n                if ctors.len() == 1 && *num_indices == 0 && !*is_rec && !self.sort_codomain_is_prop(typ)\n                {\n                    return Ok(false);\n                }\n            }\n"
+    }
+  },
+  "fields": [
+    {
+      "field": "recursor.k",
+      "parse": "get_bool reads supplied k, missing/nonbool maps false; value is stored in ConstantInfo::Recursor.",
+      "reconstruct": "try_iota computes is_k_like(all) from group/type/constructor structure; does not use stored k.",
+      "compare": "No comparison between supplied k and computed K-like predicate in inspected current source. README explicitly says exported k ignored.",
+      "retain_and_use": "Stored k stays in parser environment, while reduction uses recomputed predicate.",
+      "pointers": [
+        "parser_field_helpers",
+        "recursor_parse_arity",
+        "recursor_retain",
+        "k_compute_call",
+        "k_compute",
+        "documented_k_policy"
+      ],
+      "historical_relation": "Old ACCEPT is consistent with documented recomputation policy; not unexplained evidence of a current missing check. This source review does not rerun historical bytes or qualify universal permission to ignore k."
+    },
+    {
+      "field": "recursor.type",
+      "parse": "require_expr resolves supplied expression id; stored as typ in recursor.",
+      "reconstruct": "The importer does not regenerate a recursor type and compare it to supplied typ. It derives grouping/count facts and iota behavior separately.",
+      "compare": "Manifest Pi arity equals metadata sum; recursor identities, motive/minor counts and restricted Prop elimination are checked. These partial constraints are not a full reconstructed-type equality check.",
+      "retain_and_use": "No post-check overwrite in handle_line; infer_const returns universe-instantiated retained ci.typ(), including recursor typ.",
+      "pointers": [
+        "recursor_parse_arity",
+        "recursor_retain",
+        "recursor_counts",
+        "prop_elimination_check",
+        "group_check_call",
+        "infer_constant_type"
+      ],
+      "historical_relation": "Old recursor-type candidate replaces expression49 with68; both have5 manifest Pis, matching its metadata. Arity guard alone does not distinguish the pair. No current acceptance or unsoundness is claimed."
+    },
+    {
+      "field": "constructor.cidx",
+      "parse": "require_u32 then owner-list cross-check; supplied value stored only after check.",
+      "reconstruct": "Index expectation is derived from supplied owning inductive ctors list, not full kernel declaration reconstruction.",
+      "compare": "owner_ctors.get(cidx) must equal constructor name. Applies to every supplied ctor, with no restored/nested exception.",
+      "retain_and_use": "Retains checked supplied cidx; reduction chooses minor by rule identities and owner order through ctor_minor_index rather than a stored cidx read.",
+      "pointers": [
+        "ctor_index_gate",
+        "group_check_call",
+        "ctor_minor_index"
+      ],
+      "historical_relation": "Old changed cidx1 points beyond one-element owner ctors[11]. Current parser guard statically fails on that object; old Kiota ACCEPT must not be stated as current. No current process result is claimed."
+    },
+    {
+      "field": "inductive.numIndices",
+      "parse": "require_u32 reads and stores supplied numIndices.",
+      "reconstruct": "No replacement/recomputed integer installed in environment.",
+      "compare": "check_inductive_group peels exactly numParams then numIndices binders and requires remaining sort; constructor result argument count must match numParams+numIndices.",
+      "retain_and_use": "Original value retained and consulted in checker structural/eta/recursor-related paths.",
+      "pointers": [
+        "inductive_parse_retain",
+        "type_index_check",
+        "ctor_result_arity",
+        "group_check_call",
+        "num_indices_semantic_use"
+      ],
+      "historical_relation": "Source describes current Kiota boundary only; historical numIndices Nanoda/Lean policy must be attributed to their own exact evidence, not inferred from this current source."
+    }
+  ],
+  "restoration_assessment": "No shared restored-info exemption was found in current Kiota. handle_inductive_block installs supplied constant records and auxiliary maps; Checker borrows the environment for validation. The historical label restored describes the originating evidence family, not an identified Kiota restoration implementation.",
+  "historical_artifact_static_projections": [
+    {
+      "path": "corpus/generated/nanoda-gen-8237cd6d3cb2-valid-aux-k.ndjson",
+      "sha256": "3c1793757719145eeff9bc0fea6b5003aa5fb36dad25063ac3c8e2efbbb6099d",
+      "blocks": [
+        {
+          "type_names": [
+            1
+          ],
+          "recursors": [
+            {
+              "name": 5,
+              "type": 22,
+              "k": false,
+              "manifest_pi_arity": 4,
+              "metadata_arity": 4
+            }
+          ],
+          "constructors": [
+            {
+              "name": 3,
+              "cidx": 0,
+              "owner_ctors": [
+                3
+              ],
+              "current_index_guard_satisfied": true
+            }
+          ]
+        },
+        {
+          "type_names": [
+            10
+          ],
+          "recursors": [
+            {
+              "name": 13,
+              "type": 49,
+              "k": true,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            },
+            {
+              "name": 19,
+              "type": 68,
+              "k": false,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            }
+          ],
+          "constructors": [
+            {
+              "name": 11,
+              "cidx": 0,
+              "owner_ctors": [
+                11
+              ],
+              "current_index_guard_satisfied": true
+            }
+          ]
+        }
+      ],
+      "classification": "read-only JSON projection; no checker execution"
+    },
+    {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd",
+      "blocks": [
+        {
+          "type_names": [
+            1
+          ],
+          "recursors": [
+            {
+              "name": 5,
+              "type": 22,
+              "k": false,
+              "manifest_pi_arity": 4,
+              "metadata_arity": 4
+            }
+          ],
+          "constructors": [
+            {
+              "name": 3,
+              "cidx": 0,
+              "owner_ctors": [
+                3
+              ],
+              "current_index_guard_satisfied": true
+            }
+          ]
+        },
+        {
+          "type_names": [
+            10
+          ],
+          "recursors": [
+            {
+              "name": 13,
+              "type": 68,
+              "k": false,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            },
+            {
+              "name": 19,
+              "type": 68,
+              "k": false,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            }
+          ],
+          "constructors": [
+            {
+              "name": 11,
+              "cidx": 0,
+              "owner_ctors": [
+                11
+              ],
+              "current_index_guard_satisfied": true
+            }
+          ]
+        }
+      ],
+      "classification": "read-only JSON projection; no checker execution"
+    },
+    {
+      "path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson",
+      "sha256": "4e93ea97c3a167cef51fa43f2600f34ec81774ac8bd74acd316a7897b2caeee6",
+      "blocks": [
+        {
+          "type_names": [
+            1
+          ],
+          "recursors": [
+            {
+              "name": 5,
+              "type": 22,
+              "k": false,
+              "manifest_pi_arity": 4,
+              "metadata_arity": 4
+            }
+          ],
+          "constructors": [
+            {
+              "name": 3,
+              "cidx": 0,
+              "owner_ctors": [
+                3
+              ],
+              "current_index_guard_satisfied": true
+            }
+          ]
+        },
+        {
+          "type_names": [
+            10
+          ],
+          "recursors": [
+            {
+              "name": 13,
+              "type": 49,
+              "k": false,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            },
+            {
+              "name": 19,
+              "type": 68,
+              "k": false,
+              "manifest_pi_arity": 5,
+              "metadata_arity": 5
+            }
+          ],
+          "constructors": [
+            {
+              "name": 11,
+              "cidx": 1,
+              "owner_ctors": [
+                11
+              ],
+              "current_index_guard_satisfied": false
+            }
+          ]
+        }
+      ],
+      "classification": "read-only JSON projection; no checker execution"
+    }
+  ],
+  "test_inventory": {
+    "ndjson_fixture_count": 70,
+    "exact_historical_candidate_hash_matches": [],
+    "relevant_existing_tests": [
+      {
+        "path": "tests/exports.rs",
+        "lines": [
+          263,
+          267
+        ],
+        "test": "extra_rec_wrong_pi_type_rejects",
+        "scope": "wrong Pi telescope; does not establish full equal-arity restored-type coverage"
+      },
+      {
+        "path": "tests/exports.rs",
+        "lines": [
+          342,
+          345
+        ],
+        "test": "nested_list_tree_accepts",
+        "scope": "nested positive fixture"
+      },
+      {
+        "path": "tests/exports.rs",
+        "lines": [
+          383,
+          386
+        ],
+        "test": "orphan_ctor_rejects",
+        "scope": "owner membership, not evidence of exact changed-index case"
+      },
+      {
+        "path": "src/tc.rs",
+        "lines": [
+          11562,
+          11631
+        ],
+        "scope": "same interned K-like reduction app under different contexts, not raw-k conformance"
+      }
+    ],
+    "limitation": "Static binding inspection only; tests not run. No exact hash match does not establish absence of equivalent coverage."
+  },
+  "recommendation": {
+    "useful_grouped_question": true,
+    "target": "lean4export documentation / independent importer contract; one grouped local packet",
+    "question": "For each supplied metadata field, distinguish required correspondence with a Lean-generated declaration from values an independent checker may derive for use. State whether inconsistent unused stored metadata may be accepted, and whether retained recursor types must be validated against the inductive declaration even when reduction is reconstructed.",
+    "kiota_specific_disposition": "Do not file three current bug reports from historical matrix. cidx has a current guard; k is explicitly documented ignored/recomputed. Retained recursor-type validation remains a separate source-supported contract question, without fresh execution or normative adjudication.",
+    "authority": "Implementation code and README explain this checker snapshot, not universal semantic authority."
+  },
+  "limitations": [
+    "No current checker/build/test/proof run.",
+    "No external issue search or submission by this reviewer.",
+    "No universal conformance obligation inferred from checker disagreement.",
+    "No full recursor/inductive specification claimed beyond four selected fields."
+  ]
+}

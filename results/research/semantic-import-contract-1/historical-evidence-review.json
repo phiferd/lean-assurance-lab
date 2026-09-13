@@ -1,0 +1,77 @@
+{
+  "item_id": "SEMANTIC-IMPORT-CONTRACT-1",
+  "reviewer": "independent historical-evidence agent",
+  "review_type": "read-only historical bytes and structured receipts",
+  "scope": [
+    "restored_aux_recursor_k",
+    "restored_aux_recursor_type",
+    "restored_constructor_index",
+    "inductive.numIndices"
+  ],
+  "replay": {
+    "command": "python3 results/research/semantic-import-contract-1/replay-historical-evidence.py --check",
+    "status": "PASS",
+    "script": {
+      "path": "results/research/semantic-import-contract-1/replay-historical-evidence.py",
+      "sha256": "310fe3eb6576a26ddd487e77707fb0aa8f93374544687cfaa85f8c6c96cd7791",
+      "bytes": 9970
+    },
+    "observations": {
+      "path": "results/research/semantic-import-contract-1/historical-observations.json",
+      "sha256": "35786538b5adb4d4e2d04bb7399685294ea8d0f80326939b22c8c29cb91760db",
+      "bytes": 54614
+    }
+  },
+  "findings": [
+    {
+      "boundary": "restored_aux_recursor_k",
+      "exact_change": "LALNest.rec_1.k false to true at record105 /inductive/recs/0/k; exactly one scalar difference and unchanged expression/name tables.",
+      "historical_observation": "Pinned official Lean4.33.0 and Lean4Lean ecb3b666 reject with Invalid recursor LALNest.rec_1; pinned Kiota58e8636 accepts. All three accept byte-identical control. Separate Nanoda mutation reproduction records baseline rejection at original.aux_data_ck(&restored).",
+      "limit": "The Nanoda reproduction binds artifact/mutation receipts but does not independently identify baseline revision/binary; retain that attribution limit. No current execution or obligation is inferred."
+    },
+    {
+      "boundary": "restored_aux_recursor_type",
+      "exact_change": "LALNest.rec_1.type pointer49 to existing68. Type49 ends with major premise LALWrap LALNest and motive_2 applied to it; type68 ends with major premise LALNest and motive_1. Prefix motive/minor arguments remain unchanged.",
+      "shared_node_reach": "No expression node changes. Expression68 remains the existing LALNest.rec type and becomes directly shared by LALNest.rec_1. LALNest.rec keeps its original pointer. Only the rec_1 declaration type pointer differs. This syntactic isolation does not prove absence of downstream semantic interactions; recursive-rule expressions mention recursor constants.",
+      "historical_observation": "Same pinned official/Lean4Lean rejection and Kiota acceptance as k case; controls accept. Nanoda baseline reproduction rejects at src/tc.rs:921 self.def_eq(u,v), not the k metadata assertion.",
+      "limit": "Do not combine different diagnostics into a demonstrated single current Kiota root cause; current source assessment is separate."
+    },
+    {
+      "boundary": "restored_constructor_index",
+      "exact_change": "LALNest.node.cidx0 to1, one scalar difference; sole constructor stays in position0 and constructor/recursor types and rules are unchanged.",
+      "historical_observation": "Pinned official/Lean4Lean report Invalid constructor LALNest.node; pinned Kiota accepts; all controls accept. Nanoda reproduction rejects old_ctor.aux_data_ck(&new_ctor).",
+      "limit": "Constructor ordinal metadata enforcement belongs to a supplied-versus-reconstructed contract question; disagreement alone proves no universal obligation or unsoundness."
+    },
+    {
+      "boundary": "inductive.numIndices",
+      "exact_change": "Inductive E.numIndices0 to1 in record142. E type remains W -> Type (one parameter numParams1), all constructor/recursor fields and DAG nodes unchanged.",
+      "historical_observation": "On the bound 2026-08-26 receipts, official4.33.0 and Lean4Lean ecb3b666 accept candidate/control. Nanoda05055695879dfebb6628a67da88ceca6cd6b0421 binaryba64173d... accepts control and rejects candidate at old.aux_data_ck(new). Kiota58e8636 rejects the positive control as non-uniform nested inductive parameter; compatibility INCOMPATIBLE and candidate result null/not run.",
+      "policy": "Dated 2026-09-01 Nanoda owner comment5489276523 explains that supplied declarations remain in permanent environment and derived num_indices cannot replace them; future change may depend on Lean14977. This explains implementation policy without settling universal format semantics.",
+      "control_retention": {
+        "path": "results/research/semantic-import-contract-1/retained-numindices-control.ndjson",
+        "sha256": "aaab3a45abbef89db7b24cef96e7ca6a6901e87a38baeec56118846c64a75c56",
+        "bytes": 9415
+      },
+      "limit": "Historical upstream-main naming is not a current-master execution claim; do not reopen closed Nanoda29 or assign strict Arena outcome from this difference."
+    }
+  ],
+  "conclusion": "The four exact pairs provide a coherent, non-normative motivation to specify whether serialized metadata is a checked consistency assertion, reconstruction hint, or retained semantic input. The recursor examples also require stating which type equality is intended. Preserve separate importer checks, core inductive reconstruction, retained environment and downstream semantic use; checker acceptance alone does not establish which fields were used.",
+  "recommendation": {
+    "action": "Use these four existing pairs in one export/import contract clarification packet, grouped by supplied/reconstructed/retained role; identify unresolved field-specific requirements and request documented policy before proposing mandatory outcomes.",
+    "priority": "Current bounded semantic clarification",
+    "target": "Lean export/import documentation and maintainers selected by parent source review",
+    "prerequisites": [
+      "Fresh exact source review distinct from historical outcomes",
+      "No promotion of reference-derived historical expected labels to normative authority",
+      "Exact approval before any external issue/comment write"
+    ],
+    "no_new_checker_issue_supported_by_this_audit": true
+  },
+  "nonclaims": [
+    "No new scientific bytes: the retained control is byte-identical reuse only.",
+    "No builds, checkers, proofs, mutants, source network requests or external writes.",
+    "No catalog, stable identity, authority source, evidence lock or historical artifact changes.",
+    "No demonstrated soundness defect, universal all-metadata equality rule, or current checker execution.",
+    "Official/Lean4Lean common lineage remains visible."
+  ]
+}

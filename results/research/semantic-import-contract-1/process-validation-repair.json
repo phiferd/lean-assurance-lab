@@ -1,0 +1,117 @@
+{
+  "item_id": "SEMANTIC-IMPORT-CONTRACT-1",
+  "recorded_at": "2026-09-13T21:54:21.722866+00:00",
+  "type": "SAME_ITEM_ADMINISTRATIVE_VALIDATION_REPAIR",
+  "original_cause": "UNRESOLVED: full-suite temporary supervisor receipt was deleted by existing fixture cleanup; assertion retained INTERRUPTED versus TIMED_OUT. Known Darwin cleanup EPERM is plausible, not proven.",
+  "failed_attempt": {
+    "path": "results/research/semantic-import-contract-1/lab-full-suite-process-failure.log",
+    "sha256": "fbe2b3f20dfa7a0a292dffd04fc8cb62dc1e7b42795c4fb0096e68b164c36c61",
+    "bytes": 145944
+  },
+  "historical_suites": "73 and 9 PASS; current 1018 with one failure, no combined passing claim",
+  "source_revision": "c51285b4acf266ff67abee34cd2088b2179e46f6",
+  "sources": [
+    {
+      "path": "scripts/run-unit-tests",
+      "sha256": "499c89180814f0bbda8ec064a537778c934e5b2afb33a68a0471b71136ed09ac",
+      "bytes": 5882
+    },
+    {
+      "path": "scripts/run-unit-tests-with-signal-retry",
+      "sha256": "28b380c7f1d199355fe1a80c56fa11d23bf2118291a47a18f802904a007ae6e6",
+      "bytes": 435
+    },
+    {
+      "path": "lib/cvc_signal_retry.py",
+      "sha256": "5324c4214c57248198c28b9140864b4e0cd4c84b124396e6d0e5cf9e4aeb138f",
+      "bytes": 2480
+    },
+    {
+      "path": "lib/cvc_process.py",
+      "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c",
+      "bytes": 8271
+    },
+    {
+      "path": "lib/cvc_fixture_budget.py",
+      "sha256": "06a922da444bb13b43821c6a1f794f4b942a13873800f2b869564ca44c6d21d1",
+      "bytes": 6114
+    },
+    {
+      "path": "tests/test_cvc_process.py",
+      "sha256": "13429aa0e167649ed90e15101e23883caa882f6522438e5f1476e03474280538",
+      "bytes": 4237
+    },
+    {
+      "path": "tests/cvc_runner2_fixture.py",
+      "sha256": "f4c04300b18d0be2849fbfbb6c41749dc588c78fcf16eab6e4b9f0384b6f11a6",
+      "bytes": 1323
+    },
+    {
+      "path": "tests/test_cvc_signal_retry.py",
+      "sha256": "bc2ea9cc5127f018d632710994ffb4d0835828311fff2ab21172d25ec75616ff",
+      "bytes": 8738
+    }
+  ],
+  "policy": {
+    "path": "docs/AGENT_WORKFLOW.md",
+    "lines": [
+      127,
+      143
+    ],
+    "instruction": "Use existing bounded Darwin signal retry wrapper for complete macOS suite; preserve failures and verify no current fixture processes before launches."
+  },
+  "reconciliation": {
+    "original_fixture_lifetimes": "UNKNOWN; deleted temporary raw receipt cannot reconstruct individual PIDs or elapsed lifetimes",
+    "current_process_observation": "Escalated ps inventory after full current suite showed no cvc_runner2_fixture or cvc_process processes. Historical test driver remained running, later finished.",
+    "no_scientific_launches": true
+  },
+  "prospective_administrative_allocation": {
+    "ledger": "results/research/semantic-import-contract-1/process-validation/fixture-ledger.jsonl",
+    "max_processes": 80,
+    "max_process_seconds": 400,
+    "per_process_deadline_seconds": 5,
+    "planned_invocations": [
+      "one unchanged focused six-process-test diagnostic",
+      "one complete suite through existing bounded Darwin wrapper",
+      "one corrected focused diagnostic with absolute same-ledger path and existing Darwin adapter"
+    ],
+    "one_owner": "root",
+    "cost_scope": "Administrative inert validation only; same inclusive 7200-second item clock; prior two suite costs retained, no clock reset."
+  },
+  "status": "COMPLETE",
+  "diagnostic_attempt_1": {
+    "command": "python3 -m unittest discover -s tests -p test_cvc_process.py",
+    "returncode": 1,
+    "result": "Original timeout test passed. Controller fixture failed because root supplied relative durable ledger path; nested child interpreted inner path relative to its changed cwd. Exact stderr and receipts retained.",
+    "receipt": "process-validation/fixtures/02/stderr",
+    "repair": "Supply absolute path for same ledger; preserve reservations and use next numbers. No source change.",
+    "timeout_receipt": "process-validation/fixtures/06/supervisor.json",
+    "original_full_suite_cause": "Still UNRESOLVED",
+    "reconciliation": "All six supervisor receipts confirm cleanup completed; failed nested controller stopped at mkdir before inner launch. No new scientific processes."
+  },
+  "diagnostic_attempt_2": {
+    "returncode": 0,
+    "tests": 6,
+    "log": "process-diagnostic-adapted.log",
+    "same_ledger_preserved": true,
+    "adapter": "Existing unmodified lib/cvc_signal_retry.py",
+    "all_assertions_unchanged": true
+  },
+  "final_suite": {
+    "returncode": 0,
+    "tests": 1100,
+    "command": [
+      "scripts/run-unit-tests-with-signal-retry",
+      "--require-full-payload"
+    ],
+    "log": "lab-full-suite.log",
+    "original_failure_cause": "UNRESOLVED; no raw original receipt; existing adapter used per repository macOS policy"
+  },
+  "administrative_totals": {
+    "reserved_processes": 45,
+    "charged_process_seconds": 19.27264478307916,
+    "ledger": "results/research/semantic-import-contract-1/process-validation/fixture-ledger.jsonl",
+    "prior_two_full_suites": "Separate preserved attempts; temporary per-fixture receipts were not retained by their default fixture runner. All elapsed suite work charged by unchanged inclusive item clock; no merged PASS claim.",
+    "prior_two_full_suite_reserved_processes": 30
+  }
+}

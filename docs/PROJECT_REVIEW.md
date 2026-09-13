@@ -20,19 +20,18 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Merged corpus contributions and an explicit three-path contribution portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **SEMANTIC-IMPORT-CONTRACT-1**.
+Selected next item: **NANODA-NESTED-REGRESSION-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 9 | SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata | ACTIVE |
 | 10 | NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression | READY |
 | 11 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 30 | CVC-4: Connect the contract to real validation behavior | PLANNED |
@@ -40,29 +39,13 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 36 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 | 46 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | DEFERRED |
 
-### 9. SEMANTIC-IMPORT-CONTRACT-1: Clarify supplied and reconstructed declaration metadata
-
-**Target:** Independent import contract for restored recursor k/type, constructor index and numIndices
-
-Compare per-field evidence and primary sources, distinguish validation/reconstruction/retention and prepare one coherent documentation or grouped clarification packet.
-
-**Why this rank:** Highest-value feasible successor: current four-case isolation evidence demonstrates shared metadata interpretation risks; a coherent independent import contract can qualify several retained disagreements before proposing strict obligations. The nested namespace design remains useful but targets one checker and still lacks a traversal-isolated candidate.
-
-**Completion:** One import-contract documentation or grouped clarification draft, existing-policy explanation or duplicate/no-value result.
-
-**Stop:** 120 active minutes, 8 primary/source/duplicate GETs; zero builds/checkers/proofs/new exports/mutants/external writes; no authority/catalog changes.
-
-**Execution:** At most 1 sessions of 120 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** ACTIVE: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md.
-
 ### 10. NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression
 
 **Target:** Nanoda 404660c and current _nested occurrences in inductive/constructor types
 
 Perform an independent current-suite coverage audit, then bind a supported API/input candidate and control isolating reserved-prefix enforcement/traversal, or a scoped exclusion.
 
-**Why this rank:** Independent checker reserve; does not depend on a fresh pilot rediscovering its excluded calibration anchor.
+**Why this rank:** Highest-value feasible next bounded output after metadata clarification: an independent current-suite and reserved-prefix traversal audit can produce an exact implementation-contract regression design. The theorem companion lacks a distinct refusal risk, further cache work lacks an outcome witness, and external clarification remains held without displacing useful local work.
 
 **Completion:** One source-supported candidate/control design with exact attribution, or documented duplicate/input-scope exclusion.
 
@@ -193,6 +176,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: SEMANTIC-IMPORT-CONTRACT-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: NANODA-NESTED-REGRESSION-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.
