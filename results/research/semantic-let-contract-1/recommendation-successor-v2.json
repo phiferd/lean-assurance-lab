@@ -63,7 +63,8 @@
       },
       {
         "command": "scripts/build-project-review --check",
-        "status": "PASS"
+        "status": "PASS_AFTER_REGENERATION",
+        "initial_error": "project review is stale; run scripts/build-project-review --write"
       },
       {
         "command": "scripts/build-external-contributions --check",
@@ -72,7 +73,20 @@
       {
         "check": "SHA-256 and byte count for every completed evidence-manifest file/tooling record and every editorial successor binding",
         "status": "PASS"
+      },
+      {
+        "command": "scripts/build-artifact-graph",
+        "status": "PASS"
+      },
+      {
+        "command": "scripts/artifact-status --require-current",
+        "status": "PASS"
+      },
+      {
+        "command": "git diff --check",
+        "status": "PASS"
       }
-    ]
+    ],
+    "repair_note": "The first editorial checkpoint recorded PASS before the asynchronous generated-review check returned. Its failure is preserved above. The prior research closure had finalized its accounting after project-review generation, leaving one work-closure hash stale. Regenerated the review through scripts/build-project-review --write, rebuilt the artifact graph, and verified both before delivery. No scientific evidence or frontier changed."
   }
 }
