@@ -1,0 +1,82 @@
+{
+  "item_id": "NANODA-NESTED-TEST-1",
+  "status": "PASS",
+  "final_refresh": "results/workflow-refresh/nanoda-nested-test-1-final/result.json",
+  "completed_commands": [
+    {
+      "command": [
+        "scripts/validate-nanoda-nested-test-closure"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-test-1-delivery/01-validate-nanoda-nested-test-closure.log",
+      "sha256": "a5b64e9c72f9bbbb46d04826489c3e97b2bb3d56167270f39aa00c3f077d79d0"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-test-1-delivery/02-validate-research-queue.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-test-1-delivery/03-build-external-contributions.log",
+      "sha256": "560184e42e5a737377ebbccd5d95321e66748a007a28a8109f2ec1b867a582d3"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-test-1-delivery/04-build-project-review.log",
+      "sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-test-1-delivery/05-git.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "started_at": "2026-09-14T14:06:13.016890+00:00",
+  "start_monotonic": 173527.618081541,
+  "accounted_through": "2026-09-14T14:35:52.959682+00:00",
+  "end_monotonic": 175307.570188833,
+  "cumulative_active_seconds": 1779.9521072919888,
+  "final_generation_check_seconds": 141.0398081250023,
+  "budget_active_seconds": 5400,
+  "remaining_active_seconds": 3620.047892708011,
+  "research_counts": {
+    "source_setup_requests": 2,
+    "builds": 2,
+    "test_processes": 2,
+    "proofs": 0,
+    "mutants": 0,
+    "new_exports": 0,
+    "external_research_writes": 0
+  },
+  "next_item": "NANODA-NATIVE-CONFIG-BOUNDARY-1",
+  "next_item_started": false,
+  "scope": "Inclusive elapsed accounting through final verification and delivery preparation; git commit/push transport follows. No budget reset, further research launch or successor execution.",
+  "whitespace_review": {
+    "raw_check_returncode": 2,
+    "raw_diagnostic": "results/workflow-refresh/nanoda-nested-test-1-delivery/06-staged-raw-output-whitespace.log",
+    "authored_check_returncode": 0,
+    "authored_diagnostic": "results/workflow-refresh/nanoda-nested-test-1-delivery/07-authored-staged-whitespace.log",
+    "excluded_exact_raw_stdout_files": [
+      "results/research/nanoda-nested-test-1/execution/001-focused/stdout",
+      "results/research/nanoda-nested-test-1/execution/002-full/stdout"
+    ],
+    "reason": "Cargo emits an extra trailing blank line in each retained stdout. Both files match the frozen execution receipts. Preserve raw evidence byte-for-byte; all authored staged content passes. No validator or assurance gate is altered."
+  }
+}

@@ -57,6 +57,15 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-NESTED-TEST-1` on 2026-09-14 with SUCCESS for one
+  [test-only preventive patch](../results/research/nanoda-nested-test-1/report.md).
+  Six focused and all 44 Nanoda library tests passed; eight existing doc examples
+  remain ignored. Exact PUnit guards and the unchanged control are independently
+  reviewed. Two source requests, two build/test reservations and no production
+  change, proof, mutation, new export or external research write. The indexed PR
+  draft is held locally for capacity and fresh preflight before exact submission
+  approval. `NANODA-NATIVE-CONFIG-BOUNDARY-1` is selected READY and unstarted.
+
 - Completed `NANODA-NESTED-REGRESSION-1` on 2026-09-14 with SUCCESS for one
   [source-supported regression design](../results/research/nanoda-nested-regression-1/report.md).
   Current Nanoda `4c544ed` has 38 statically active tests; no direct reserved-name
@@ -2829,16 +2838,24 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-NESTED-TEST-1`.
+Selected next item: `NANODA-NATIVE-CONFIG-BOUNDARY-1`.
 
-The item is ACTIVE: 90 cumulative active minutes, eight source/setup
-requests, at most three builds (600 seconds each) and four test processes
-(120 seconds each); compiling tests consume both counters. Implement the exact
-[source-supported design](../results/research/nanoda-nested-regression-1/regression-design.json)
-as one small test-only Nanoda patch, run focused/full tests and prepare a held-local
-PR draft. Commit a fresh entry before implementation and freeze exact source,
-fixture/patch/cells, dependencies/tooling and process accounting before launches.
-No production fix, proof, mutation, new serialized export or external research write.
+The item is READY and unstarted: 90 cumulative active minutes, eight read-only
+source/setup requests, zero build/test/checker/proof/mutation/new export/external
+research-write launches. Audit four Nat/String flag combinations and at most two
+declaration-presence states at source level. Reuse the complete relevant current
+suite and local held patches before selecting at most one uncovered interaction
+regression design, documentation question or precise duplicate/no-value exclusion.
+Commit a fresh source/input/rubric entry before substantive review. No successor
+execution occurred at this handoff.
+
+`NANODA-NESTED-TEST-1` completed SUCCESS. Six focused and all 44 library tests
+passed at current Nanoda `4c544ed`, with eight existing doc examples ignored.
+The [report](../results/research/nanoda-nested-test-1/report.md) retains exact
+prefix/traversal controls, two exact guards, unchanged PUnit positive control and
+scope exclusions. The indexed test-only PR draft remains local for fresh preflight,
+capacity review and exact submission approval. No current defect or universal
+obligation is established.
 
 `NANODA-NESTED-REGRESSION-1` completed SUCCESS for its source-only design.
 The complete static 38-test audit distinguishes name helper and incidental
@@ -2915,7 +2932,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item, Nanoda reserved-namespace test implementation,
+The canonical queue retains one READY item, Nanoda native-configuration source review,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2924,7 +2941,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. Only `NANODA-NESTED-TEST-1` is ACTIVE; no successor has started.
+and modeled mutation metrics are unchanged. `NANODA-NATIVE-CONFIG-BOUNDARY-1` is READY; no item is ACTIVE and no successor has started.
 
 ### Waiting
 

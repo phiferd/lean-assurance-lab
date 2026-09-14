@@ -9,7 +9,7 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 ## At a glance
 
 - Awaiting upstream: **3**
-- Local drafts: **2**
+- Local drafts: **3**
 - Merged: **3**
 
 ## Awaiting upstream
@@ -26,6 +26,7 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [test(tc): protect checked inference from unchecked cache entries](../results/action-recommendations/drafts/nanoda-infer-cache-regression.md) | `ammkrn/nanoda_lib` | `NANODA-CACHE-REGRESSION-1` | 2026-09-16 | Keep the candidate local while Nanoda PRs #32 and #33 await acknowledgment; then refresh source, duplicate, rebase, and test evidence before any submission decision. |
 | [test(tc): cover native Nat operation dispatch](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NAT-DISPATCH-REGRESSION-1` | 2026-09-16 | Keep this preventive test patch local while #32 and #33 await acknowledgment. Then refresh source/duplicates, rebase and rerun focused/full tests before requesting approval for a pull request to ammkrn/nanoda_lib. |
+| [test: cover reserved nested namespace traversal and declaration guards](../results/action-recommendations/drafts/nanoda-nested-namespace-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NESTED-TEST-1` | 2026-09-16 | Keep this preventive test patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Review source, duplicates, rebase/retest and maintainer capacity before seeking exact approval for a PR to ammkrn/nanoda_lib. |
 
 ## Merged
 
