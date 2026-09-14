@@ -2820,11 +2820,11 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-NESTED-REGRESSION-1`.
 
-The item is READY and unstarted under its original source-only scope: 90
+The item is ACTIVE under its original source-only scope: 90
 cumulative active minutes, at most eight read-only source/setup requests, zero
 build/checker/proof/new export/mutation or external research launches. Audit
 current coverage and reserved-prefix traversal to produce one exact supported
-regression design or a scoped exclusion. Commit a fresh entry before analysis;
+regression design or a scoped exclusion. The committed entry binds the work record and audit rubric before analysis;
 later execution requires exact frozen cells and a separately recorded budget.
 
 `ARENA-LET-POLICY-FOLLOWUP-1` completed SUCCESS. One
@@ -2891,7 +2891,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, Nanoda reserved-namespace regression,
+The canonical queue retains one ACTIVE item, Nanoda reserved-namespace regression,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2900,7 +2900,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
+and modeled mutation metrics are unchanged. Only `NANODA-NESTED-REGRESSION-1` is ACTIVE; no successor has started.
 
 ### Waiting
 
