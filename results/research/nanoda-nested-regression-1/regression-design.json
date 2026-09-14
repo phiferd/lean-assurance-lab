@@ -1,0 +1,188 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NESTED-REGRESSION-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "status": "SOURCE_SUPPORTED_NOT_EXECUTED",
+  "scope": "Preventive implementation safety-contract regression; no universal Lean obligation or current defect claim.",
+  "beneficiary": "ammkrn/nanoda_lib maintainers; one small test-only contribution after bounded execution and separate submission review.",
+  "definitions": {
+    "R": "Rooted hierarchical name _nested.Probe",
+    "Rc": "Const(R, empty universe arguments)",
+    "S": "Sort(0)",
+    "b": "ordinary binder name; BinderStyle::Default",
+    "Local": "mk_unique with default binder style; no inference"
+  },
+  "traversal_cells": [
+    {
+      "id": "const_root",
+      "expression": "Const(R,[])",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "projection_name",
+      "expression": "Proj(R,0,S)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "app_fun",
+      "expression": "App(Rc,S)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "app_arg",
+      "expression": "App(S,Rc)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "pi_domain",
+      "expression": "Pi(b,Rc,S)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "pi_body",
+      "expression": "Pi(b,S,Rc)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "lambda_domain",
+      "expression": "Lambda(b,Rc,S)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "lambda_body",
+      "expression": "Lambda(b,S,Rc)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "let_annotation",
+      "expression": "Let(b,Rc,S,S,false)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "let_value",
+      "expression": "Let(b,S,Rc,S,false)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "let_body",
+      "expression": "Let(b,S,S,Rc,false)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "local_type",
+      "expression": "Local(b,Rc)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    },
+    {
+      "id": "projection_structure",
+      "expression": "Proj(ordinary,0,Rc)",
+      "expected_reserved": true,
+      "control": "Identical construction replacing every R name root with _nestedX; expected false."
+    }
+  ],
+  "name_cells": [
+    {
+      "name": "_nested",
+      "expected": true
+    },
+    {
+      "name": "_nested.Probe",
+      "expected": true
+    },
+    {
+      "name": "_nested.Probe.7",
+      "expected": true
+    },
+    {
+      "name": "_nestedX.Probe",
+      "expected": false
+    },
+    {
+      "name": "user._nested.Probe",
+      "expected": false
+    },
+    {
+      "name": "anonymous",
+      "expected": false
+    },
+    {
+      "name": "numeric-root 7._nested",
+      "expected": false
+    }
+  ],
+  "negative_metadata_cells": [
+    "Pi with binder name _nested but ordinary domain/body -> false",
+    "Lambda with binder name _nested but ordinary domain/body -> false",
+    "Let with binder name _nested but ordinary annotation/value/body -> false",
+    "Local with binder name _nested but ordinary type -> false",
+    "Var(0), Sort(0) -> false"
+  ],
+  "cache_cells": [
+    "App(S,S) -> false; then App(S,Rc) -> true in same context; then App(S,S) -> false",
+    "App(Rc,Rc) -> true; duplicate node identity checked; fresh find_e cache per invocation"
+  ],
+  "enforcement_cells": [
+    {
+      "id": "punit_control",
+      "fixture": "test_resources/ProjFromProp/export",
+      "target": "PUnit only via ExportFile::check_declar",
+      "change": "None",
+      "expected": "Returns normally; do not check entire fixture, whose explosion_helper is deliberately rejected."
+    },
+    {
+      "id": "punit_type_reserved",
+      "fixture": "Fresh independent parse of unchanged ProjFromProp config/export",
+      "target": "PUnit only via ExportFile::check_declar",
+      "change": "Append a correctly interned permanent Const(_nested.Probe,[]) and replace only PUnit.info.ty in declars. Clone selected declaration AFTER the mutation. Preserve every metadata map and all other fields.",
+      "expected": "Panic payload exactly assertion failed: !ctx.has_nested_pfx(ind.info.ty, nested_pfx)"
+    },
+    {
+      "id": "punit_ctor_reserved",
+      "fixture": "Fresh independent parse of unchanged ProjFromProp config/export",
+      "target": "PUnit only via ExportFile::check_declar",
+      "change": "Append a correctly interned permanent Const(_nested.Probe,[]) and replace only PUnit.unit.info.ty in declars. Preserve every metadata map and all other fields.",
+      "expected": "Panic payload exactly assertion failed: !ctx.has_nested_pfx(ctor_data.info.ty, nested_pfx)"
+    }
+  ],
+  "failure_attribution": {
+    "preconditions": [
+      "PUnit is nonrecursive with one nullary constructor; replacing its type with a Const leaves is_recursive false",
+      "All names, declaration entries and mutual metadata resolved from the unchanged parsed fixture; no fabricated missing map entry",
+      "Parse/setup and candidate construction occur outside catch_unwind; validate actual Const/name/root before calling check_declar",
+      "catch_unwind only the target call, downcast string panic and require the exact selected assertion; later missing-declaration/type/recursor/pointer panic fails the test"
+    ],
+    "qualification": "Reserved candidate constants are intentionally undeclared. These cells test early guard enforcement, not a semantic accept/reject pair with only a prefix change. Removing the guard may still reject later, which MUST NOT satisfy the expected assertion. Unchanged PUnit is a complete baseline control, not proof of full validity of the changed type."
+  },
+  "permanent_dag_recipe": [
+    "Use a fresh owned ExportFile from test_get_export_file(ProjFromProp/config.json).",
+    "Intern CowStr::Borrowed _nested and Probe into export.dag.strings; build Name::Str nodes from anonymous with hash64!(STR_HASH, pre, suffix); intern and wrap each index in Ptr::from(DagMarker::ExportFile, idx).",
+    "Intern an empty Arc<[LevelPtr]> into dag.uparams; construct Expr::Const with hash64!(CONST_HASH,name,levels); intern and use ExportFile-marked ExprPtr. Mirror current parser insertion; never overwrite an interned node or fake a hash.",
+    "Change DeclarInfo.ty in the declaration map only. Scope mutable borrows before immutable validation/check_declar. Never carry a TcCtx-marked pointer across with_ctx calls."
+  ],
+  "limits": [
+    "Mutual-peer guard at inductive.rs:47 is audited in source but is not isolated by these single-inductive enforcement cells. A future complete mutual fixture needs a separate useful-design gate.",
+    "Traversal cells exercise supported crate-internal raw expression APIs; ill-typed App/Local constructions are not presented as public importer inputs.",
+    "No literals are required; NatLit and StringLit have no name-bearing children and are source-only leaf exclusions, avoiding duplicate native-extension setup.",
+    "No compilation, test or mutation sensitivity result has been observed. No serialized export modification or new export bytes are generated."
+  ],
+  "later_execution_gate": [
+    "Select and commit a distinct bounded execution item; do not launch in this source assessment",
+    "Freeze exact current source, test patch, fixture hashes, expected cells, dependency/tooling identities and runner/time accounting before each launch",
+    "Use 90 active minutes, 8 source/setup requests, at most 3 compiling builds <=600 seconds each and 4 test processes <=120 seconds each; compiling tests consume both counters",
+    "Test-only change; no production fix or mutation/new serialized export/proof/external write; failures repair within same item and cumulative budget",
+    "Run focused tests and current full Nanoda suite, then required Lab current/historical full-payload closure suite",
+    "Fresh source/duplicate/capacity review and exact target-specific owner approval before any upstream submission"
+  ]
+}

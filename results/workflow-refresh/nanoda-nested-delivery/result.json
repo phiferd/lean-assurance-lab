@@ -1,0 +1,66 @@
+{
+  "status": "PASS",
+  "commands": [
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--write"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/01-build-project-review.log"
+    },
+    {
+      "command": [
+        "scripts/build-artifact-graph"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/02-build-artifact-graph.log"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/03-artifact-status.log"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/04-build-project-review.log"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/05-validate-research-queue.log"
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/06-build-external-contributions.log"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-nested-delivery/07-git.log"
+    }
+  ],
+  "accounted_through": "2026-09-14T14:01:40.217385+00:00",
+  "end_monotonic": 173254.815594791,
+  "generation_tail_seconds": 72.56788304098882,
+  "total_item_active_seconds_through_final_checks": 1576.3268122079899,
+  "remaining_item_active_seconds": 3823.67318779201,
+  "qualification": "Final generation and integrity checks after result freeze. Last git commit/push transport is excluded from this research accounting; no scientific launch or successor start."
+}

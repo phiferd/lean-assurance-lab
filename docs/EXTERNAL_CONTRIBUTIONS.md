@@ -16,8 +16,8 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 
 | Contribution | Repository | Observed | Review/checks | Next step |
 |---|---|---|---|---|
-| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-13 | no activity; not reported | Await maintainer review; do not file a duplicate issue or pull request. |
-| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-13 | no activity; not reported | Await maintainer review before proposing another independent Nanoda contribution. |
+| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-14 | unknown; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
+| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-14 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
 | [Add a let annotation/substitution corner case](https://github.com/leanprover/lean-kernel-arena/pull/206) | `leanprover/lean-kernel-arena` | 2026-09-14 | unknown; unknown | Submitted as Arena #206 with exact owner approval and fresh source/duplicate preflight. Reassess substantive maintainer feedback when observed; any further external write needs its own exact authorization. No automatic polling. |
 
 ## Local drafts

@@ -57,6 +57,17 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-NESTED-REGRESSION-1` on 2026-09-14 with SUCCESS for one
+  [source-supported regression design](../results/research/nanoda-nested-regression-1/report.md).
+  Current Nanoda `4c544ed` has 38 statically active tests; no direct reserved-name
+  rejection/traversal assertions were found. Thirteen paired traversal positions,
+  exact name controls and two declaration-guard cells reuse the complete PUnit
+  fixture portion with a positive control. Exact panic attribution excludes later
+  type errors; the mutual-peer guard remains a named isolation gap. Two read-only
+  requests, zero Nanoda scientific launches/new exports/external writes. No current
+  bug or universal obligation is established. `NANODA-NESTED-TEST-1` is selected
+  READY and unstarted for one bounded test-only implementation.
+
 - On 2026-09-14, after exact owner authorization and fresh source/duplicate
   preflight, submitted the two-file let characterization as
   [Arena #206](https://github.com/leanprover/lean-kernel-arena/pull/206).
@@ -2818,14 +2829,27 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-NESTED-REGRESSION-1`.
+Selected next item: `NANODA-NESTED-TEST-1`.
 
-The item is ACTIVE under its original source-only scope: 90
-cumulative active minutes, at most eight read-only source/setup requests, zero
-build/checker/proof/new export/mutation or external research launches. Audit
-current coverage and reserved-prefix traversal to produce one exact supported
-regression design or a scoped exclusion. The committed entry binds the work record and audit rubric before analysis;
-later execution requires exact frozen cells and a separately recorded budget.
+The item is READY and unstarted: 90 cumulative active minutes, eight source/setup
+requests, at most three builds (600 seconds each) and four test processes
+(120 seconds each); compiling tests consume both counters. Implement the exact
+[source-supported design](../results/research/nanoda-nested-regression-1/regression-design.json)
+as one small test-only Nanoda patch, run focused/full tests and prepare a held-local
+PR draft. Commit a fresh entry before implementation and freeze exact source,
+fixture/patch/cells, dependencies/tooling and process accounting before launches.
+No production fix, proof, mutation, new serialized export or external research write.
+
+`NANODA-NESTED-REGRESSION-1` completed SUCCESS for its source-only design.
+The complete static 38-test audit distinguishes name helper and incidental
+fixture coverage from targeted reserved-prefix assertions. Thirteen paired
+traversal positions and two exact declaration-level guard checks are proposed,
+with unchanged PUnit as a complete positive control. Candidates test early
+namespace enforcement; generic downstream type panics cannot satisfy them.
+The mutual-peer guard is source-audited but not isolated. No Nanoda test was run
+and no universal Lean obligation or current defect is inferred. The
+[assessment](../results/research/nanoda-nested-regression-1/report.md) preserves
+these limits and independently reviewed construction/pointer controls.
 
 `ARENA-LET-POLICY-FOLLOWUP-1` completed SUCCESS. One
 [submitted PR #206](https://github.com/leanprover/lean-kernel-arena/pull/206)
@@ -2891,7 +2915,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item, Nanoda reserved-namespace regression,
+The canonical queue retains one READY item, Nanoda reserved-namespace test implementation,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2900,7 +2924,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. Only `NANODA-NESTED-REGRESSION-1` is ACTIVE; no successor has started.
+and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
 
 ### Waiting
 

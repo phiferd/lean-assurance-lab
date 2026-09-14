@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NESTED-REGRESSION-1",
+  "kind": "ADMINISTRATIVE_VALIDATOR_REPAIR",
+  "status": "REPAIRED_WITHIN_SAME_ITEM",
+  "failure": {
+    "invocation": "python3 -m unittest discover -s tests -p test_nanoda_nested_closure.py",
+    "affected_test": "test_artifact_binding_tampering_and_mutable_queue_independence",
+    "initial_result": "Ran 6 tests; FAILED (errors=1)",
+    "cause": "The retained Git bundle has a detached source identity. A local git clone --bare produced an empty repository, so subsequent rev-parse could not resolve the bound source tip.",
+    "raw_error_excerpt": "warning: You appear to have cloned an empty repository.\nfatal: ambiguous argument '4c544ed4099c8227f07d5de77ad1e69fb0740a27^{tree}': unknown revision or path not in the working tree.\nUse '--' to separate paths from revisions, like this:\n'git <command> [<revision>...] -- [<file>...]'",
+    "excerpt_provenance": "Verbatim excerpt from this item's retained tool response; this record preserves the diagnostic excerpt and summary, not the full original traceback."
+  },
+  "repair": {
+    "change": "Initialize a temporary bare Git repository and use git bundle unbundle to load the retained local objects before reading the exact tree and blobs.",
+    "regression": "The artifact-binding test runs the real local bundle materialization and verifies successful exact-source validation; missing inventory, rebinding, retained-file and bundle tampering remain rejected.",
+    "tooling_paths": [
+      "scripts/validate-nanoda-nested-closure",
+      "tests/test_nanoda_nested_closure.py"
+    ]
+  },
+  "focused_validation": {
+    "invocation": "python3 -m unittest discover -s tests -p test_nanoda_nested_closure.py",
+    "status": "PASS",
+    "tests": 9,
+    "raw_summary": ".........\n----------------------------------------------------------------------\nRan 9 tests in 5.007s\n\nOK"
+  },
+  "accounting": {
+    "classification": "Local metadata-only Git operations and Lab administrative Python validation; no Nanoda scientific launch or source request.",
+    "scientific_launches": 0,
+    "network_requests": 0,
+    "budget_reset": false,
+    "scientific_inputs_changed": false,
+    "historical_evidence_edited": false,
+    "scope": "Engineering diagnosis and repair remain charged inside the same item's cumulative active interval."
+  }
+}

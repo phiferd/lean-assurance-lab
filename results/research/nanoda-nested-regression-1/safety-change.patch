@@ -1,0 +1,234 @@
+commit 404660cc2fbf04d8040d25a15ddd55b6b15c8e5e
+Author: ammkrn <chris@christopherabailey.com>
+Date:   Sat Aug 1 18:24:09 2026 -0700
+
+    chore: implement upstream safety checks
+    
+    Prohibits use of the private `_nested` prefix in inductive and constructor
+    types, and requires projection structure names to be identical in def_eq.
+    
+    These are evidently do not implicate soundness issues, but can otherwise
+    be used to trigger unwanted or unexpected behavior.
+
+diff --git a/Cargo.lock b/Cargo.lock
+index 84967e6..a294f6d 100644
+--- a/Cargo.lock
++++ b/Cargo.lock
+@@ -67,7 +67,7 @@ checksum = "f52b00d39961fc5b2736ea853c9cc86238e165017a493d1d5c8eac6bdc4cc273"
+ 
+ [[package]]
+ name = "nanoda_lib"
+-version = "0.4.10-beta"
++version = "0.4.12"
+ dependencies = [
+  "indexmap",
+  "num-bigint",
+diff --git a/Cargo.toml b/Cargo.toml
+index 34dd8a7..c47922f 100644
+--- a/Cargo.toml
++++ b/Cargo.toml
+@@ -1,7 +1,7 @@
+ 
+ [package]
+ name = "nanoda_lib"
+-version = "0.4.10-beta"
++version = "0.4.12"
+ edition = "2021"
+ license = "Apache-2.0"
+ repository = "https://github.com/ammkrn/nanoda_lib"
+diff --git a/src/expr.rs b/src/expr.rs
+index fc78b2d..e17d17d 100644
+--- a/src/expr.rs
++++ b/src/expr.rs
+@@ -675,6 +675,47 @@ impl<'t, 'p: 't> TcCtx<'t, 'p> {
+         e
+     }
+ 
++    pub(crate) fn has_nested_pfx(&self, e: ExprPtr<'t>, nested_pfx: NamePtr<'t>) -> bool {
++        debug_assert_eq!("_nested", format!("{:?}", self.debug_print(nested_pfx)));
++        self.find_e(e, |eprime| {
++            match self.read_expr(eprime) {
++                Const {name, ..} | Proj {ty_name: name, ..} => self.get_pfx(name) == nested_pfx,
++                _ => false
++            }
++        })
++    }
++
++    pub(crate) fn find_e<F>(&self, e: ExprPtr<'t>, pred: F) -> bool
++    where
++        F: FnOnce(ExprPtr<'t>) -> bool + Copy, {
++        let mut cache = crate::util::new_fx_hash_map();
++        self.find_aux(e, pred, &mut cache)
++    }
++
++    fn find_aux<F>(&self, e: ExprPtr<'t>, pred: F, cache: &mut FxHashMap<ExprPtr<'t>, bool>) -> bool
++    where
++        F: FnOnce(ExprPtr<'t>) -> bool + Copy, {
++        if let Some(cached) = cache.get(&e) {
++            *cached
++        } else {
++            let r = match self.read_expr(e) {
++                Var { .. } | Sort { .. } | NatLit { .. } | StringLit { .. } | Const { .. } => pred(e),
++                App { fun, arg, .. } => pred(e) || self.find_aux(fun, pred, cache) || self.find_aux(arg, pred, cache),
++                Pi { binder_type, body, .. } | Lambda { binder_type, body, .. } =>
++                    pred(e) || self.find_aux(binder_type, pred, cache) || self.find_aux(body, pred, cache),
++                Let { binder_type, val, body, .. } =>
++                    pred(e) 
++                        || self.find_aux(binder_type, pred, cache)
++                        || self.find_aux(val, pred, cache)
++                        || self.find_aux(body, pred, cache),
++                Local { binder_type, .. } => pred(e) || self.find_aux(binder_type, pred, cache),
++                Proj { structure, .. } => pred(e) || self.find_aux(structure, pred, cache),
++            };
++            cache.insert(e, r);
++            r
++        }
++    }
++
+     pub(crate) fn find_const<F>(&self, e: ExprPtr<'t>, pred: F) -> bool
+     where
+         F: FnOnce(NamePtr<'t>) -> bool + Copy, {
+diff --git a/src/inductive.rs b/src/inductive.rs
+index fa56b25..6edddef 100644
+--- a/src/inductive.rs
++++ b/src/inductive.rs
+@@ -21,12 +21,34 @@ impl<'t, 'p: 't> ExportFile<'p> {
+                                     ctor_ty = body;
+                                 }
+                             },
+-                            _ => panic!()
++                            _ => panic!("expected constructor")
+                         }
+                     }
+                     false
+                 });
+                 assert_eq!(ind.is_recursive, is_recursive);
++                self.with_ctx(|ctx| {
++                    let nested_pfx = ctx.str1("_nested");
++                    assert!(!ctx.has_nested_pfx(ind.info.ty, nested_pfx));
++                    for ind_name in ind.all_ind_names.iter() {
++                        match self.declars.get(ind_name).unwrap() {
++                            Declar::Inductive(ind_data @ InductiveData {..}) => {
++                                assert!(!ctx.has_nested_pfx(ind_data.info.ty, nested_pfx))
++                            },
++                            _ => panic!("expected inductive declar")
++                        }
++                        
++                    }
++                    for ctor_name in ind.all_ctor_names.iter() {
++                        match self.declars.get(ctor_name).unwrap() {
++                            Declar::Constructor(ctor_data @ ConstructorData {..}) => {
++                                assert!(!ctx.has_nested_pfx(ctor_data.info.ty, nested_pfx))
++                            },
++                            _ => panic!("expected constructor")
++                        }
++                    }
++                });
++
+                 let (start, size) = self.mutual_block_sizes.get(&ind.info.name).unwrap();
+                 (ind, crate::env::EnvLimit::ByIndex(start + size))
+             }
+diff --git a/src/name.rs b/src/name.rs
+index 32a4286..3fa8e98 100644
+--- a/src/name.rs
++++ b/src/name.rs
+@@ -27,6 +27,22 @@ impl<'a> Name<'a> {
+ }
+ 
+ impl<'x, 't: 'x, 'p: 't> TcCtx<'t, 'p> {
++    pub(crate) fn get_pfx(&self, mut n: NamePtr<'t>) -> NamePtr<'t> {
++        let anonymous = self.anonymous();
++        loop {
++            match self.read_name(n) {
++                Anon => return n,
++                Str(pfx, ..) | Num(pfx, ..) => { 
++                    if pfx == anonymous {
++                        return n
++                    } else {
++                        n = pfx 
++                    }
++                },
++            }
++        }
++    }
++
+     pub(crate) fn concat_name(&mut self, n1: NamePtr<'t>, n2: NamePtr<'t>) -> NamePtr<'t> {
+         match self.read_name(n2) {
+             Anon => n1,
+diff --git a/src/tc.rs b/src/tc.rs
+index 595c6fe..57168e7 100644
+--- a/src/tc.rs
++++ b/src/tc.rs
+@@ -871,8 +871,10 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+ 
+     fn def_eq_proj(&mut self, x: ExprPtr<'t>, y: ExprPtr<'t>) -> bool {
+         match self.ctx.read_expr_pair(x, y) {
+-            (Proj { idx: idx_l, structure: structure_l, .. }, Proj { idx: idx_r, structure: structure_r, .. }) =>
+-                idx_l == idx_r && self.def_eq(structure_l, structure_r),
++            (
++                Proj { ty_name: ty_name_l, idx: idx_l, structure: structure_l, .. },
++                Proj { ty_name: ty_name_r, idx: idx_r, structure: structure_r, .. }
++            ) => ty_name_l == ty_name_r && idx_l == idx_r && self.def_eq(structure_l, structure_r),
+             _ => false,
+         }
+     }
+diff --git a/src/tests.rs b/src/tests.rs
+index 2ddc112..304a306 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -1,3 +1,4 @@
++mod name;
+ mod level;
+ mod natlit;
+ mod util;
+diff --git a/src/tests/name.rs b/src/tests/name.rs
+new file mode 100644
+index 0000000..2cbaac0
+--- /dev/null
++++ b/src/tests/name.rs
+@@ -0,0 +1,45 @@
++use crate::tests::util::test_ctx;
++use std::error::Error;
++use std::borrow::Cow;
++
++#[test]
++fn pfx_test_anon() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        assert_eq!(ctx.get_pfx(ctx.anonymous()), ctx.anonymous());
++    })
++}
++
++#[test]
++fn pfx_test_str0() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let aaa = ctx.str1("aaa");
++        assert_eq!(ctx.get_pfx(aaa), aaa);
++    })
++}
++
++#[test]
++fn pfx_test_num0() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let anon = ctx.anonymous();
++        let n0 = ctx.num(anon, 123);
++        assert_eq!(ctx.get_pfx(n0), n0);
++    })
++}
++
++#[test]
++fn pfx_test_str1() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let bbb = ctx.alloc_string(Cow::from("bbb"));
++        let ccc = ctx.alloc_string(Cow::from("ccc"));
++        let a = ctx.str1("aaa");
++        let b = ctx.str(a, bbb);
++        let c = ctx.str(b, ccc);
++        let d = ctx.num(c, 1234);
++        let pfx1 = ctx.get_pfx(d);
++        let pfx2 = ctx.get_pfx(pfx1);
++        assert_eq!(pfx1, a);
++        assert_eq!(pfx2, pfx1);
++    })
++}
++
++
