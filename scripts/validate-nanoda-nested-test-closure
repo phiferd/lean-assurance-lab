@@ -1,0 +1,319 @@
+#!/usr/bin/env python3
+"""Replay Nested-prefix provenance/accounting without launching scientific code."""
+from datetime import datetime
+import hashlib
+import json
+import math
+from pathlib import Path, PurePosixPath
+import re
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+REL = 'results/research/nanoda-nested-test-1'
+ITEM = 'NANODA-NESTED-TEST-1'
+SOURCE = '4c544ed4099c8227f07d5de77ad1e69fb0740a27'
+ENTRY = '9e805861a12e863882ca576ba39f7e90493600aa'
+SCIENTIFIC = {'item_id': 'NANODA-NESTED-TEST-1',
+ 'source_revision': '4c544ed4099c8227f07d5de77ad1e69fb0740a27',
+ 'design_binding': {'path': 'results/research/nanoda-nested-regression-1/regression-design.json',
+                    'sha256': '71bec4bc2079d69443774c6bfe2e07572e9dafa078c2c798a24c6853a780e46f'},
+ 'traversal_cell_ids': ['const_root',
+                        'projection_name',
+                        'app_fun',
+                        'app_arg',
+                        'pi_domain',
+                        'pi_body',
+                        'lambda_domain',
+                        'lambda_body',
+                        'let_annotation',
+                        'let_value',
+                        'let_body',
+                        'local_type',
+                        'projection_structure'],
+ 'name_cells': [{'name': '_nested', 'expected': True},
+                {'name': '_nested.Probe', 'expected': True},
+                {'name': '_nested.Probe.7', 'expected': True},
+                {'name': '_nestedX.Probe', 'expected': False},
+                {'name': 'user._nested.Probe', 'expected': False},
+                {'name': 'anonymous', 'expected': False},
+                {'name': 'numeric-root 7._nested', 'expected': False}],
+ 'enforcement_cell_ids': ['punit_control', 'punit_type_reserved', 'punit_ctor_reserved'],
+ 'expected_tests': ['tests::nested::nested_prefix_names',
+                    'tests::nested::nested_prefix_traversal',
+                    'tests::nested::nested_prefix_binder_names_and_shared_dag',
+                    'tests::nested::nested_punit_control_returns',
+                    'tests::nested::nested_punit_type_rejected',
+                    'tests::nested::nested_punit_ctor_rejected'],
+ 'expected_full_library_tests': 44,
+ 'build_test_caps': {'builds': 3, 'tests': 4, 'per_process_seconds': 120},
+ 'exclusions': ['mutual-peer guard isolation', 'native-literal leaf construction'],
+ 'claims': {'current_bug': False,
+            'universal_obligation': False,
+            'public_semantic_acceptance_pair': False},
+ 'new_exports': 0,
+ 'mutants': 0,
+ 'proofs': 0,
+ 'external_writes': 0}
+NAMES = SCIENTIFIC["expected_tests"]
+FIXTURES = {
+    'test_resources/ProjFromProp/config.json': {
+        'sha256': 'c898525fcb5347fc9f60961201d93d7663afb1867197a46a5753e21b24fc3cc8', 'bytes': 186},
+    'test_resources/ProjFromProp/export': {
+        'sha256': '5fc8f25b717c2dd56880064e43d87489b1bea202f5b5ef96d0d06a6ba7ce2022', 'bytes': 4509},
+}
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def sha(raw):
+    return hashlib.sha256(raw).hexdigest()
+
+
+def relative(path):
+    require(isinstance(path, str) and path and not PurePosixPath(path).is_absolute()
+            and '..' not in PurePosixPath(path).parts, 'unsafe relative path')
+    return path
+
+
+def safe(path):
+    p = (ROOT / relative(path)).resolve()
+    require(p.is_relative_to(ROOT.resolve()) and p.is_file(), 'unsafe or missing evidence: ' + path)
+    return p
+
+
+def read(path):
+    return json.loads(safe(path).read_bytes())
+
+
+def git_bytes(commit, path):
+    relative(path)
+    require(re.fullmatch('[0-9a-f]{7,40}', commit), 'invalid Git revision')
+    return subprocess.check_output(['git', 'show', commit + ':' + path], cwd=ROOT)
+
+
+def commit_time(commit):
+    return float(subprocess.check_output(['git', 'show', '-s', '--format=%ct', commit], cwd=ROOT))
+
+
+def utc(value):
+    d = datetime.fromisoformat(value)
+    require(d.tzinfo is not None, 'UTC timestamp needs timezone')
+    return d.timestamp()
+
+
+def number(value, label):
+    require(type(value) in (int, float) and math.isfinite(value), label + ' must be finite')
+    return value
+
+
+def binding(row, raw):
+    require(type(row['bytes']) is int and row['bytes'] == len(raw), 'evidence byte count: ' + row['path'])
+    require(row['sha256'] == sha(raw), 'evidence digest: ' + row['path'])
+
+
+def validate_scientific(s):
+    require(s['item_id'] == ITEM and s['source_revision'] == SOURCE, 'scientific identity')
+    require(s == SCIENTIFIC, 'fixed nested-prefix scientific matrix, claims and exclusions')
+
+
+def validate_patch(raw):
+    text = raw.decode()
+    changes = re.findall(r'^diff --git a/(\S+) b/(\S+)$', text, re.M)
+    require(changes and all(a == b for a, b in changes), 'patch rename or malformed path')
+    require(len(changes) == 2 and {a for a, _ in changes} ==
+            {'src/tests.rs', 'src/tests/nested.rs'}, 'test-only patch scope')
+    require(not re.search(r'^(?:old mode|new mode|deleted file mode|rename from|rename to|GIT binary patch)', text, re.M),
+            'unsupported patch mutation')
+
+
+def validate_clock(work, closure):
+    require(closure['started_at'] == work['started_at'] and
+            closure['start_monotonic'] == work['start_monotonic'], 'entry clock reset')
+    elapsed = number(closure['end_monotonic'], 'end clock') - number(work['start_monotonic'], 'start clock')
+    active = number(closure['active_seconds'], 'active seconds')
+    wall = utc(closure['completed_at']) - utc(work['started_at'])
+    require(0 <= elapsed <= 5400 and abs(active - elapsed) <= .01, 'active budget or deducted time')
+    require(abs(wall - elapsed) <= 2, 'paired closure clocks')
+
+
+def validate_receipt(manifest, request, receipt, stdout, stderr, work, closure):
+    data = dict(request)
+    recorded_hash = data.pop('request_sha256')
+    require(recorded_hash == sha(json.dumps(data, sort_keys=True).encode()), 'raw request digest')
+    require(receipt['request_sha256'] == recorded_hash, 'receipt request identity')
+    require(request['argv'] == manifest['argv'] and request['env'] == manifest['environment']
+            and request['cwd'] == manifest['cwd'], 'receipt invocation differs from frozen manifest')
+    require(request['seconds'] == manifest['timeout_seconds'] == 120, 'process cap')
+    begin, end = number(receipt['monotonic_started'], 'receipt start'), number(receipt['monotonic_ended'], 'receipt end')
+    charged = number(receipt['charged_seconds'], 'charged time')
+    deadline = number(request['deadline_monotonic'], 'deadline')
+    require(request['monotonic_started'] == begin and request['started_at'] == receipt['started_at'], 'receipt start identity')
+    require(work['start_monotonic'] <= begin <= end <= closure['end_monotonic'], 'receipt outside item interval')
+    require(0 <= charged <= 120 and abs(end - begin - charged) <= .1, 'receipt duration accounting')
+    require(abs(utc(receipt['ended_at']) - utc(receipt['started_at']) - charged) <= 2, 'paired receipt clocks')
+    require(abs((utc(receipt['started_at']) - utc(work['started_at'])) - (begin - work['start_monotonic'])) <= 2,
+            'receipt/item clock disagreement')
+    require(begin < deadline <= min(begin + 120, work['start_monotonic'] + 5400) + .001 and end <= deadline,
+            'process deadline exceeds allowance')
+    require(receipt['cleanup_completed'] is True and receipt['deadline_exceeded'] is False, 'unreconciled process control')
+    require(receipt['status'] in ('COMPLETE', 'FAILED'), 'unreconciled terminal status')
+    require(receipt['stdout_sha256'] == sha(stdout) and receipt['stderr_sha256'] == sha(stderr), 'raw output digest')
+    if receipt['status'] == 'COMPLETE':
+        require(receipt['returncode'] == 0, 'successful receipt exit code')
+        summaries = re.findall(rb'^test result: (\w+)\. (\d+) passed; (\d+) failed; (\d+) ignored;', stdout, re.M)
+        wanted = manifest['expected']['library_tests_passed']
+        require(summaries and summaries[0][:3] == (b'ok', str(wanted).encode(), b'0'), 'library test summary')
+        require(all(status == b'ok' and failed == b'0' for status, _, failed, _ in summaries), 'failed supplementary test suite')
+        if manifest['cell_id'].endswith('full'):
+            require(summaries == [(b'ok', b'44', b'0', b'0'), (b'ok', b'0', b'0', b'0'),
+                                  (b'ok', b'0', b'0', b'8')], 'full library/binary/documentation suite summaries')
+        require(all(('test ' + name + ' ... ok').encode() in stdout for name in NAMES), 'missing named regression result')
+    else:
+        require(receipt['returncode'] is None or receipt['returncode'] != 0, 'failed receipt with zero exit')
+
+
+def validate():
+    result, closure = read(REL + '/result.json'), read(REL + '/work-closure.json')
+    require(result['item_id'] == closure['item_id'] == ITEM and result['outcome'] == closure['outcome'] == 'SUCCESS'
+            and closure['status'] == 'COMPLETE', 'closure identity/outcome/status')
+    freeze, entry = result['freeze_commit'], result['entry_commit']
+    require(re.fullmatch('[0-9a-f]{40}', freeze) and entry == ENTRY, 'freeze/entry commit')
+    work_raw = git_bytes(entry, REL + '/work-record.json')
+    require(work_raw == safe(REL + '/work-record.json').read_bytes(), 'immutable entry work record')
+    work = json.loads(work_raw)
+    require(work['item_id'] == ITEM and work['status'] == 'ACTIVE' and work['budget']['active_seconds'] == 5400, 'entry authority')
+    entry_lock = json.loads(git_bytes(entry, REL + '/entry-lock.json'))
+    for row in entry_lock['bindings']:
+        require(sha(git_bytes(work['base_commit'], row['path'])) == row['sha256'], 'historical entry binding')
+    validate_clock(work, closure)
+    scientific_raw = git_bytes(freeze, REL + '/scientific-inputs.json')
+    require(scientific_raw == safe(REL + '/scientific-inputs.json').read_bytes(), 'scientific inputs changed after freeze')
+    validate_scientific(json.loads(scientific_raw))
+    design = SCIENTIFIC['design_binding']
+    require(sha(git_bytes(freeze, design['path'])) == design['sha256'], 'fixed predecessor design binding')
+    lock = json.loads(git_bytes(freeze, REL + '/source-lock.json'))
+    require(lock['tip'] == SOURCE and lock['tree'] == 'e8816d9dc69c669d99181a8fece5aaeed9a6c13d', 'source lock identity')
+    bundle = lock['history_bundle']
+    require(bundle == 'results/research/hsbm-pilot-1/nanoda-history.bundle', 'retained source bundle identity')
+    require(git_bytes(freeze, bundle) == safe(bundle).read_bytes(), 'retained historical source bundle changed')
+    require(sha(git_bytes(freeze, bundle)) == lock['history_bundle_sha256'], 'source bundle digest')
+    patch_raw = git_bytes(freeze, REL + '/patches/nested.patch')
+    require(patch_raw == safe(REL + '/patches/nested.patch').read_bytes(), 'patch changed after freeze')
+    validate_patch(patch_raw)
+    output_paths = set()
+    for row in result['output_bindings']:
+        require(row['path'] not in output_paths, 'duplicate output binding')
+        output_paths.add(row['path'])
+        binding(row, safe(row['path']).read_bytes())
+    required_outputs = {REL + '/' + p for p in ('work-closure.json', 'requests.json', 'execution/accounting.json')}
+    requests = read(REL + '/requests.json')
+    require(requests['item_id'] == ITEM and requests['cap'] == 8, 'source request identity/cap')
+    ids = [r['id'] for r in requests['requests']]
+    require(len(ids) == len(set(ids)), 'duplicate request reservation')
+    charges = [r['charged_requests'] for r in requests['requests']]
+    require(all(type(n) is int and n > 0 for n in charges), 'invalid request charge')
+    charged_requests = sum(charges)
+    require(charged_requests == requests['charged_read_only_requests'] <= 8, 'source request accounting')
+    account = read(REL + '/execution/accounting.json')
+    reservations = account['reservations']
+    require(account['pending'] is None, 'pending reservation at closure')
+    require(2 <= len(reservations) == account['builds'] == account['test_processes'] <= 3, 'reservation count/budget')
+    cell_ids = [r['cell_id'] for r in reservations]
+    require(len(cell_ids) == len(set(cell_ids)), 'reused cell ID')
+    require(set(result['execution_commits']) == set(cell_ids), 'execution commit population')
+    directories = {p.name for p in (ROOT / REL / 'execution').iterdir() if p.is_dir()}
+    require(directories == set(cell_ids), 'orphan or deleted reservation evidence')
+    successes, prior_end = set(), work['start_monotonic']
+    for index, reservation in enumerate(reservations, 1):
+        cell = reservation['cell_id']
+        require(re.fullmatch(r'00[1-3]-(focused|full)', cell), 'invalid reserved cell ID')
+        require(reservation['build_number'] == reservation['test_number'] == index, 'reservation counters reset')
+        manifest_path = REL + '/execution/' + cell + '-manifest.json'
+        prelaunch = result['execution_commits'][cell]
+        require(re.fullmatch('[0-9a-f]{40}', prelaunch), 'execution commit needs full identity')
+        raw = git_bytes(prelaunch, manifest_path)
+        require(raw == safe(manifest_path).read_bytes() and sha(raw) == reservation['manifest_sha256'], 'frozen execution manifest')
+        manifest = json.loads(raw)
+        require(manifest['cell_id'] == cell and manifest['item_id'] == ITEM and manifest['source_revision'] == SOURCE, 'execution identity')
+        require(manifest['patch_sha256'] == sha(patch_raw), 'execution patch identity')
+        require(manifest['expected']['library_tests_passed'] == (6 if cell.endswith('focused') else 44)
+                and manifest['expected']['library_tests_failed'] == 0 and manifest['expected']['named_tests'] == NAMES,
+                'execution expected tests')
+        argv = manifest['argv']
+        require(argv[1:] == ['test', '--offline', '--locked'] + (['nested'] if cell.endswith('focused') else [])
+                + ['--', '--nocapture'], 'fixed Cargo invocation')
+        require(manifest['environment']['CARGO_NET_OFFLINE'] == 'true', 'offline execution')
+        bound = set()
+        for row in manifest['bindings']:
+            require(row['path'] not in bound, 'duplicate frozen binding')
+            bound.add(row['path'])
+            if Path(row['path']).is_absolute():
+                require(type(row['bytes']) is int and row['bytes'] > 0 and re.fullmatch('[0-9a-f]{64}', row['sha256']), 'runtime binding format')
+            else:
+                binding(row, git_bytes(prelaunch, row['path']))
+        require({REL + '/' + p for p in ('run-cell.py', 'scientific-inputs.json', 'source-lock.json', 'dependency-lock.json',
+                    'patches/nested.patch')} | {'lib/cvc_process.py', design['path']} <= bound,
+                'missing required tooling/scientific binding')
+        require(Path(manifest['cwd']).is_absolute(), 'source checkout must be absolute')
+        bound_rows = {row['path']: row for row in manifest['bindings']}
+        for fixture, expected in FIXTURES.items():
+            path = str(Path(manifest['cwd']) / fixture)
+            require(path in bound_rows, 'missing required fixture binding: ' + fixture)
+            require(all(bound_rows[path][key] == value for key, value in expected.items()),
+                    'fixture bytes differ from pinned source: ' + fixture)
+        require(git_bytes(prelaunch, REL + '/scientific-inputs.json') == scientific_raw, 'attempt changed scientific inputs')
+        prefix = REL + '/execution/' + cell + '/'
+        require(reservation['receipt'] == prefix + 'supervisor.json', 'receipt path attribution')
+        request, receipt = read(prefix + 'request.json'), read(prefix + 'supervisor.json')
+        require(commit_time(prelaunch) <= utc(request['started_at']), 'manifest committed after launch')
+        require(reservation['status'] == receipt['status'], 'reservation/receipt status')
+        used = number(reservation['active_seconds_at_reservation'], 'reservation active time')
+        require(0 <= used <= 5280 and abs(used + reservation['remaining_active_seconds'] - 5400) <= .01, 'reservation remaining budget')
+        require(prior_end <= request['monotonic_started'] and abs(request['monotonic_started'] - work['start_monotonic'] - used) <= 2,
+                'parallel or misaccounted reservations')
+        validate_receipt(manifest, request, receipt, safe(prefix + 'stdout').read_bytes(), safe(prefix + 'stderr').read_bytes(), work, closure)
+        prior_end = receipt['monotonic_ended']
+        if receipt['status'] == 'COMPLETE':
+            successes.add(cell.rsplit('-', 1)[1])
+        required_outputs.update(prefix + p for p in ('request.json', 'supervisor.json', 'stdout', 'stderr'))
+    require(successes == {'focused', 'full'}, 'missing focused/full success')
+    counts = result['research_counts']
+    require(closure['research_counts'] == counts, 'closure/result counts')
+    require(counts['source_setup_requests'] == charged_requests and counts['builds'] == account['builds']
+            and counts['test_processes'] == account['test_processes'], 'result accounting disagreement')
+    for zero in ('proofs', 'mutants', 'new_exports', 'external_research_writes'):
+        require(type(counts[zero]) is int and counts[zero] == 0, 'prohibited launch: ' + zero)
+    successor = result['next_item']
+    require(successor['id'] != ITEM and successor['status'] == 'READY' and successor['started'] is False, 'unstarted successor')
+    require(closure['next_item'] == successor['id'] and closure['next_item_started'] is False, 'closure successor agreement')
+    queue = read(REL + '/closure-queue.json')
+    require(queue['selected_item'] == successor['id'], 'closure queue successor')
+    done = [row for row in queue['items'] if row['id'] == ITEM]
+    next_rows = [row for row in queue['items'] if row['id'] == successor['id']]
+    require(len(done) == len(next_rows) == 1 and done[0]['status'] == 'COMPLETE'
+            and done[0]['closure']['outcome'] == 'SUCCESS' and next_rows[0]['status'] == 'READY'
+            and not any(row['status'] == 'ACTIVE' for row in queue['items']), 'closure queue state')
+    draft = result['recommendation']['draft']
+    require(draft.endswith('-pr.md'), 'draft naming convention')
+    ledger = read(REL + '/closure-external-contributions.json')
+    contributions = [row for row in ledger['contributions'] if row['submission_material'] == draft]
+    require(len(contributions) == 1 and ITEM in contributions[0]['research_items']
+            and contributions[0]['lifecycle'] == 'LOCAL_DRAFT' and contributions[0]['upstream'] is None,
+            'draft absent or incorrectly attributed in external contribution ledger')
+    required_outputs.update(REL + '/' + name for name in ('closure-queue.json', 'closure-external-contributions.json'))
+    required_outputs.add(draft)
+    require(required_outputs <= output_paths, 'incomplete closure output bindings')
+    return {'status': 'PASS', 'item_id': ITEM, 'reservations': len(reservations),
+            'source_requests': charged_requests, 'named_tests': len(NAMES), 'output_bindings': len(output_paths)}
+
+
+if __name__ == '__main__':
+    try:
+        print(json.dumps(validate(), sort_keys=True))
+    except (OSError, KeyError, TypeError, ValueError, subprocess.CalledProcessError) as error:
+        print('FAIL: ' + str(error), file=sys.stderr)
+        raise SystemExit(1)

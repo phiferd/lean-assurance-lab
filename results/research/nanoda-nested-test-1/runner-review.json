@@ -1,0 +1,38 @@
+{
+  "reviewer": "nested_test_runner",
+  "status": "PASS",
+  "command": "python3 -m unittest discover -s tests -p test_nanoda_nested_test_runner.py -q",
+  "tests": 22,
+  "scientific_launches": 0,
+  "processes": "All subprocess.check_output and run_process APIs mocked. CLI flock and supervisor cleanup/parent-loss controls source-reviewed; no new concurrency execution claim.",
+  "bindings": [
+    {
+      "path": "results/research/nanoda-nat-dispatch-regression-1/run-cell.py",
+      "sha256": "aec38db7c4164b91108ad7add4c21c8682b2175b353b48a95e6d8a937119a340"
+    },
+    {
+      "path": "results/research/nanoda-nested-test-1/run-cell.py",
+      "sha256": "7b1ab757bdb769ca5e06869f35a2f813c0b3777b8c97f1bcac5b9c729fdd5d9c"
+    },
+    {
+      "path": "lib/cvc_process.py",
+      "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c"
+    },
+    {
+      "path": "tests/test_nanoda_nested_test_runner.py",
+      "sha256": "612963e3a99b8ad2ccee4133f9dd79d7cfb870c8802033fcb0ba5c8018f4a88e"
+    }
+  ],
+  "runner_change": "Identity-only copy of frozen predecessor; lib/cvc_process.py unchanged.",
+  "checks": [
+    "Committed manifest and cell identity before reservation",
+    "Exact source HEAD, binary patch and absence of untracked source files",
+    "Manifest bindings; Cargo configuration absence list; full dependency inventory and content",
+    "Paired item clocks; full 120-second reservation must fit remaining 5400-second active budget",
+    "Exclusive CLI lock, no lost accounting, counters equal reservation count, no reused cell",
+    "Durable reservation before process call; builds <=3 and tests <=4; failures stay charged",
+    "Supervisor process-group cleanup, parent-loss pipe, deadline and durable request/output/receipt hashes",
+    "Pending remains after timeout or incomplete cleanup; ordinary failed build clears pending only after successful cleanup"
+  ],
+  "repairs_before_freeze": []
+}

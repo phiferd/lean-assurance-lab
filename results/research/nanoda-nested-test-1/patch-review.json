@@ -1,0 +1,88 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NESTED-TEST-1",
+  "review_kind": "independent_source_only_prelaunch_patch_review",
+  "reviewer": "nested_test_patch_review",
+  "date": "2026-09-14",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "entry_revision": "9e805861a12e863882ca576ba39f7e90493600aa",
+  "design_binding": {
+    "path": "results/research/nanoda-nested-regression-1/regression-design.json",
+    "sha256": "71bec4bc2079d69443774c6bfe2e07572e9dafa078c2c798a24c6853a780e46f"
+  },
+  "patch_binding": {
+    "path": "results/research/nanoda-nested-test-1/patches/nested.patch",
+    "sha256": "557ebdbc4f7726d5703a355b0889fd95154f29d9d6b9a1fbe89663baf558f001",
+    "bytes": 9764,
+    "matches_git_diff_binary_HEAD": true
+  },
+  "reviewed_files": [
+    {
+      "path": "src/tests.rs",
+      "sha256": "374d127b04631bc5c5ffabb236340172a13b84f6d1f15306d9d156c4d38a8176"
+    },
+    {
+      "path": "src/tests/nested.rs",
+      "sha256": "7c68a2d94e620044bc58b306dea07019138ce8e6f00e679e09f3a7633e406011"
+    }
+  ],
+  "verdict": "SOURCE_SUPPORTED_NO_REQUIRED_CHANGES",
+  "checks": [
+    {
+      "id": "test_only_scope",
+      "status": "PASS",
+      "evidence": "Only src/tests.rs module registration and new src/tests/nested.rs differ; six tests match scientific-inputs.json."
+    },
+    {
+      "id": "paired_traversal",
+      "status": "PASS",
+      "evidence": "All thirteen frozen positions are built independently with _nested.Probe / _nestedX.Probe roots; assertions compare the expected result per position. Constructor signatures agree with util.rs."
+    },
+    {
+      "id": "names_metadata_cache",
+      "status": "PASS",
+      "evidence": "Seven exact hierarchical-name controls, four binder-name exclusions, Var/Sort leaves, negative-positive-negative invocation sequence and duplicate Const identity plus App(c,c) are present. Shared negative traversal exercises memoization; positive short-circuit is correctly qualified."
+    },
+    {
+      "id": "permanent_dag_hashes",
+      "status": "PASS",
+      "evidence": "String/name/empty-level/Const insertion follows parser.rs insert_full rules and STR_HASH/CONST_HASH inputs. Every inserted pointer has ExportFile tag. Existing interned nodes are reused without overwrite or forged hash."
+    },
+    {
+      "id": "lifetimes_borrows",
+      "status": "SOURCE_SUPPORTED",
+      "evidence": "Returned candidate pointers are permanent ExprPtr<p>; only an existing permanent declaration-map name escapes with_ctx. Temporary prefix stays inside with_ctx, and mutable declaration borrows end before cloning or checking. Compilation remains a launch-stage verification."
+    },
+    {
+      "id": "fresh_control_and_metadata",
+      "status": "PASS",
+      "evidence": "Each integration cell independently parses unchanged ProjFromProp config/export. Control invokes only PUnit check_declar. Candidate edits touch only the chosen info.ty; original maps and other fields are retained. Nonrecursive PUnit and nullary constructor checks accord with inductive.rs early recursion preflight."
+    },
+    {
+      "id": "detached_declaration_staleness",
+      "status": "PASS",
+      "evidence": "Type cell clones selected PUnit after changing its info.ty. Constructor cell edits the live constructor map and only then clones PUnit, so both direct and map-driven guard views see intended changes."
+    },
+    {
+      "id": "exact_panic_attribution",
+      "status": "PASS",
+      "evidence": "Only export.check_declar is inside catch_unwind. Parse, name resolution, interning assertions and field mutation happen outside. Required exact String/&str assertion payload separates direct-inductive and constructor guard failures; setup failure, normal return, peer guard or later type/declaration/pointer panic cannot satisfy it."
+    }
+  ],
+  "required_changes": [],
+  "qualified_exclusions": [
+    "Mutual-peer guard remains source-audited, not isolated by this patch.",
+    "Raw ill-typed expressions test crate-internal predicate traversal, not public importer semantics.",
+    "Reserved candidate constants are undeclared; exact early-guard panic is the claim, not a semantic paired-validity proof.",
+    "Source review supplies no compilation, test-execution or mutation-sensitivity result."
+  ],
+  "review_launches": {
+    "cargo": 0,
+    "builds": 0,
+    "tests": 0,
+    "checker": 0,
+    "proof": 0,
+    "network": 0,
+    "exports": 0
+  }
+}

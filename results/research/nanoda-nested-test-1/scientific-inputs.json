@@ -1,0 +1,85 @@
+{
+  "item_id": "NANODA-NESTED-TEST-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "design_binding": {
+    "path": "results/research/nanoda-nested-regression-1/regression-design.json",
+    "sha256": "71bec4bc2079d69443774c6bfe2e07572e9dafa078c2c798a24c6853a780e46f"
+  },
+  "traversal_cell_ids": [
+    "const_root",
+    "projection_name",
+    "app_fun",
+    "app_arg",
+    "pi_domain",
+    "pi_body",
+    "lambda_domain",
+    "lambda_body",
+    "let_annotation",
+    "let_value",
+    "let_body",
+    "local_type",
+    "projection_structure"
+  ],
+  "name_cells": [
+    {
+      "name": "_nested",
+      "expected": true
+    },
+    {
+      "name": "_nested.Probe",
+      "expected": true
+    },
+    {
+      "name": "_nested.Probe.7",
+      "expected": true
+    },
+    {
+      "name": "_nestedX.Probe",
+      "expected": false
+    },
+    {
+      "name": "user._nested.Probe",
+      "expected": false
+    },
+    {
+      "name": "anonymous",
+      "expected": false
+    },
+    {
+      "name": "numeric-root 7._nested",
+      "expected": false
+    }
+  ],
+  "enforcement_cell_ids": [
+    "punit_control",
+    "punit_type_reserved",
+    "punit_ctor_reserved"
+  ],
+  "expected_tests": [
+    "tests::nested::nested_prefix_names",
+    "tests::nested::nested_prefix_traversal",
+    "tests::nested::nested_prefix_binder_names_and_shared_dag",
+    "tests::nested::nested_punit_control_returns",
+    "tests::nested::nested_punit_type_rejected",
+    "tests::nested::nested_punit_ctor_rejected"
+  ],
+  "expected_full_library_tests": 44,
+  "build_test_caps": {
+    "builds": 3,
+    "tests": 4,
+    "per_process_seconds": 120
+  },
+  "exclusions": [
+    "mutual-peer guard isolation",
+    "native-literal leaf construction"
+  ],
+  "claims": {
+    "current_bug": false,
+    "universal_obligation": false,
+    "public_semantic_acceptance_pair": false
+  },
+  "new_exports": 0,
+  "mutants": 0,
+  "proofs": 0,
+  "external_writes": 0
+}

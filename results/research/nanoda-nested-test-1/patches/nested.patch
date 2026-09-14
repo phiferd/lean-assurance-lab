@@ -1,0 +1,229 @@
+diff --git a/src/tests.rs b/src/tests.rs
+index 304a306..1a89a6e 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -2,3 +2,4 @@ mod name;
+ mod level;
+ mod natlit;
+ mod util;
++mod nested;
+diff --git a/src/tests/nested.rs b/src/tests/nested.rs
+new file mode 100644
+index 0000000..47717da
+--- /dev/null
++++ b/src/tests/nested.rs
+@@ -0,0 +1,214 @@
++use crate::env::Declar;
++use crate::expr::{BinderStyle, Expr};
++use crate::name::Name;
++use crate::tests::util::{test_ctx, test_get_export_file};
++use crate::util::{DagMarker, ExportFile, ExprPtr, LevelPtr, LevelsPtr, NamePtr, StringPtr};
++use std::borrow::Cow;
++use std::error::Error;
++use std::panic::{catch_unwind, AssertUnwindSafe};
++use std::path::Path;
++use std::sync::Arc;
++
++#[test]
++fn nested_prefix_names() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let reserved = ctx.str1("_nested");
++        let descendant = ctx.str2("_nested", "Probe");
++        let numbered = ctx.num(descendant, 7);
++        let similar = ctx.str2("_nestedX", "Probe");
++        let user_nested = ctx.str2("user", "_nested");
++        let probe = ctx.alloc_string(Cow::Borrowed("Probe"));
++        let user_probe = ctx.str(user_nested, probe);
++        let anon = ctx.anonymous();
++        let numeric = ctx.num(anon, 7);
++        let nested = ctx.alloc_string(Cow::Borrowed("_nested"));
++        let numeric_nested = ctx.str(numeric, nested);
++        let levels = ctx.alloc_levels_slice(&[]);
++        for (name, expected) in [
++            (reserved, true),
++            (descendant, true),
++            (numbered, true),
++            (similar, false),
++            (user_probe, false),
++            (anon, false),
++            (numeric_nested, false),
++        ] {
++            let expr = ctx.mk_const(name, levels);
++            assert_eq!(ctx.has_nested_pfx(expr, reserved), expected, "{:?}", ctx.debug_print(name));
++        }
++    })
++}
++
++#[test]
++fn nested_prefix_traversal() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let reserved = ctx.str1("_nested");
++        let binder = ctx.str1("x");
++        let ordinary = ctx.str1("Ordinary");
++        let zero = ctx.zero();
++        let sort = ctx.mk_sort(zero);
++        let levels = ctx.alloc_levels_slice(&[]);
++        // Each positive has exactly one name-bearing position to detect. The
++        // same shapes under a similar, unreserved root guard against overreach.
++        for (root, expected) in [("_nested", true), ("_nestedX", false)] {
++            let name = ctx.str2(root, "Probe");
++            let c = ctx.mk_const(name, levels);
++            let cells = [
++                ("const_root", c),
++                ("projection_name", ctx.mk_proj(name, 0, sort)),
++                ("app_fun", ctx.mk_app(c, sort)),
++                ("app_arg", ctx.mk_app(sort, c)),
++                ("pi_domain", ctx.mk_pi(binder, BinderStyle::Default, c, sort)),
++                ("pi_body", ctx.mk_pi(binder, BinderStyle::Default, sort, c)),
++                ("lambda_domain", ctx.mk_lambda(binder, BinderStyle::Default, c, sort)),
++                ("lambda_body", ctx.mk_lambda(binder, BinderStyle::Default, sort, c)),
++                ("let_annotation", ctx.mk_let(binder, c, sort, sort, false)),
++                ("let_value", ctx.mk_let(binder, sort, c, sort, false)),
++                ("let_body", ctx.mk_let(binder, sort, sort, c, false)),
++                ("local_type", ctx.mk_unique(binder, BinderStyle::Default, c)),
++                ("projection_structure", ctx.mk_proj(ordinary, 0, c)),
++            ];
++            for (position, expr) in cells {
++                assert_eq!(ctx.has_nested_pfx(expr, reserved), expected, "{root}: {position}");
++            }
++        }
++    })
++}
++
++#[test]
++fn nested_prefix_binder_names_and_shared_dag() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        let reserved = ctx.str1("_nested");
++        let zero = ctx.zero();
++        let sort = ctx.mk_sort(zero);
++        let ignored_names = [
++            ctx.mk_pi(reserved, BinderStyle::Default, sort, sort),
++            ctx.mk_lambda(reserved, BinderStyle::Default, sort, sort),
++            ctx.mk_let(reserved, sort, sort, sort, false),
++            ctx.mk_unique(reserved, BinderStyle::Default, sort),
++            ctx.mk_var(0),
++            sort,
++        ];
++        for expr in ignored_names {
++            assert!(!ctx.has_nested_pfx(expr, reserved));
++        }
++        let name = ctx.str2("_nested", "Probe");
++        let levels = ctx.alloc_levels_slice(&[]);
++        let c = ctx.mk_const(name, levels);
++        assert_eq!(c, ctx.mk_const(name, levels));
++        let negative = ctx.mk_app(sort, sort);
++        let positive = ctx.mk_app(sort, c);
++        assert!(!ctx.has_nested_pfx(negative, reserved));
++        assert!(ctx.has_nested_pfx(positive, reserved));
++        assert!(!ctx.has_nested_pfx(negative, reserved));
++        // The positive occurrence short-circuits; it does not claim a positive
++        // memo hit. The repeated negative child above exercises shared traversal.
++        let repeated = ctx.mk_app(c, c);
++        assert!(ctx.has_nested_pfx(repeated, reserved));
++    })
++}
++
++fn punit_name<'p>(export: &ExportFile<'p>) -> NamePtr<'p> {
++    export
++        .declars
++        .iter()
++        .find_map(|(name, declar)| {
++            if matches!(declar, Declar::Inductive(_))
++                && export.with_ctx(|ctx| format!("{:?}", ctx.debug_print(*name)) == "PUnit")
++            {
++                Some(*name)
++            } else {
++                None
++            }
++        })
++        .expect("existing fixture must contain PUnit")
++}
++
++// Follow the parser's interning rules in the permanent DAG: a pointer allocated
++// in with_ctx's temporary DAG cannot be carried into check_declar's new context.
++fn reserved_const<'p>(export: &mut ExportFile<'p>) -> ExprPtr<'p> {
++    let mut name = export.dag.anonymous();
++    for component in ["_nested", "Probe"] {
++        let s = StringPtr::from(DagMarker::ExportFile, export.dag.strings.insert_full(Cow::Borrowed(component)).0);
++        let hash = crate::hash64!(crate::name::STR_HASH, name, s);
++        name = NamePtr::from(DagMarker::ExportFile, export.dag.names.insert_full(Name::Str(name, s, hash)).0);
++    }
++    let empty: Arc<[LevelPtr<'p>]> = Arc::from([]);
++    let levels = LevelsPtr::from(DagMarker::ExportFile, export.dag.uparams.insert_full(empty).0);
++    let hash = crate::hash64!(crate::expr::CONST_HASH, name, levels);
++    let expr = ExprPtr::from(DagMarker::ExportFile, export.dag.exprs.insert_full(Expr::Const { name, levels, hash }).0);
++    assert_eq!(expr.dag_marker(), DagMarker::ExportFile);
++    export.with_ctx(|ctx| {
++        assert!(matches!(ctx.read_expr(expr), Expr::Const { name: n, .. } if n == name));
++        assert!(ctx.read_levels(levels).is_empty());
++        assert_eq!(format!("{:?}", ctx.debug_print(name)), "_nested.Probe");
++        let prefix = ctx.str1("_nested");
++        assert!(ctx.has_nested_pfx(expr, prefix));
++    });
++    expr
++}
++
++fn assert_reserved_guard<'p>(export: &ExportFile<'p>, declar: &Declar<'p>, expected: &str) {
++    // Parsing and fixture construction have already succeeded outside this catch.
++    // A missing-declaration/type error after a deleted guard must fail this test.
++    let panic = catch_unwind(AssertUnwindSafe(|| export.check_declar(declar)))
++        .expect_err("reserved type must reach the namespace guard");
++    let message = panic
++        .downcast_ref::<String>()
++        .map(String::as_str)
++        .or_else(|| panic.downcast_ref::<&str>().copied())
++        .expect("string panic payload");
++    assert_eq!(message, expected);
++}
++
++#[test]
++fn nested_punit_control_returns() -> Result<(), Box<dyn Error>> {
++    let (export, _) = test_get_export_file(Some(Path::new("test_resources/ProjFromProp/config.json")))?;
++    let name = punit_name(&export);
++    // The complete fixture intentionally fails later at explosion_helper.
++    export.check_declar(export.declars.get(&name).unwrap());
++    Ok(())
++}
++
++#[test]
++fn nested_punit_type_rejected() -> Result<(), Box<dyn Error>> {
++    let (mut export, _) = test_get_export_file(Some(Path::new("test_resources/ProjFromProp/config.json")))?;
++    let name = punit_name(&export);
++    let reserved = reserved_const(&mut export);
++    match export.declars.get_mut(&name).unwrap() {
++        Declar::Inductive(ind) => {
++            assert!(!ind.is_recursive);
++            ind.info.ty = reserved;
++        }
++        _ => unreachable!(),
++    }
++    let declar = export.declars.get(&name).unwrap().clone();
++    assert_reserved_guard(&export, &declar, "assertion failed: !ctx.has_nested_pfx(ind.info.ty, nested_pfx)");
++    Ok(())
++}
++
++#[test]
++fn nested_punit_ctor_rejected() -> Result<(), Box<dyn Error>> {
++    let (mut export, _) = test_get_export_file(Some(Path::new("test_resources/ProjFromProp/config.json")))?;
++    let name = punit_name(&export);
++    let ctor_name = match export.declars.get(&name).unwrap() {
++        Declar::Inductive(ind) => {
++            assert!(!ind.is_recursive);
++            assert_eq!(ind.all_ctor_names.len(), 1);
++            ind.all_ctor_names[0]
++        }
++        _ => unreachable!(),
++    };
++    let reserved = reserved_const(&mut export);
++    match export.declars.get_mut(&ctor_name).unwrap() {
++        Declar::Constructor(ctor) => {
++            assert_eq!(ctor.inductive_name, name);
++            assert_eq!(ctor.num_fields, 0);
++            ctor.info.ty = reserved;
++        }
++        _ => unreachable!(),
++    }
++    let declar = export.declars.get(&name).unwrap().clone();
++    assert_reserved_guard(&export, &declar, "assertion failed: !ctx.has_nested_pfx(ctor_data.info.ty, nested_pfx)");
++    Ok(())
++}
