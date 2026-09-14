@@ -1,0 +1,8 @@
+{
+  "title": "Add a let annotation/substitution corner case",
+  "body": "This adds one small static `either` test at\n`tests/corner-cases/let-value-type-mismatch`:\n\n```text\ndef EcosystemCase : Sort 2 := let u : Sort 1 := Sort 1; u\n```\n\nThe let value has type `Sort 2`, which disagrees with its `Sort 1` annotation.\nChecking that relationship can reject the declaration. Substituting the value\nfor `u` first produces `def EcosystemCase : Sort 2 := Sort 1`, whose types match.\n\nThe [reply to this exact example](https://github.com/leanprover/lean4export/issues/48#issuecomment-5654286873)\nsupports allowing either outcome as practical checker policy, while leaving a\ncompletely authoritative answer open. The test records that choice without\nscoring it as a soundness or completeness failure. It is not a false-theorem\nexample.\n\nThe existing subject-reduction cases concern beta erasure and conversion\ntransitivity; this case isolates a let annotation removed by substitution.\n`constlevels` also contains malformed lets, but combines them with other\nunfolding/type defects. The tutorial already supplies a matching positive let,\nso no extra accept control is added.\n\nValidation at Arena `fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb`:\n\n```text\npython lka.py build-test corner-cases/let-value-type-mismatch\nResults: 1 succeeded, 0 failed\n```\n\nThe static build preserves the existing 601-byte export and records outcome\n`either`. No checker was run for this change.\n",
+  "base": "master",
+  "head": "phiferd:arena-let-value-type-mismatch",
+  "draft": false,
+  "maintainer_can_modify": true
+}

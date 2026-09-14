@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-13
+Last updated: 2026-09-14
 
 ## How Status Is Tracked
 
@@ -56,6 +56,15 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- On 2026-09-14, after exact owner authorization and fresh source/duplicate
+  preflight, submitted the two-file let characterization as
+  [Arena #206](https://github.com/leanprover/lean-kernel-arena/pull/206).
+  Readback verifies the approved title/body and exact package bytes on unchanged
+  Arena `fd74e8b`. The [submission record](../results/research/arena-let-policy-followup-1/external-submission-record.json)
+  preserves receipts and the connector permission failure resolved through existing
+  GitHub CLI credentials, with no browser use. Research closure remains unchanged;
+  `NANODA-NESTED-REGRESSION-1` stays READY and unstarted.
 
 - Completed `ARENA-LET-POLICY-FOLLOWUP-1` on 2026-09-14 with SUCCESS for one
   [candidate-only either package](../results/research/arena-let-policy-followup-1/report.md).
@@ -2819,11 +2828,13 @@ regression design or a scoped exclusion. Commit a fresh entry before analysis;
 later execution requires exact frozen cells and a separately recorded budget.
 
 `ARENA-LET-POLICY-FOLLOWUP-1` completed SUCCESS. One
-[local PR draft](../results/action-recommendations/drafts/arena-let-value-type-mismatch-pr.md)
+[submitted PR #206](https://github.com/leanprover/lean-kernel-arena/pull/206)
 adds a candidate-only `either` static case; current Arena build-test passed with
 the unchanged 601-byte export. No extra accept control is useful given current
-tutorial coverage. Recommend this concrete contribution after fresh preflight
-and exact owner approval. No external submission or checker execution occurred.
+tutorial coverage. Exact owner approval and fresh preflight preceded submission
+on 2026-09-14; readback verified OPEN with the exact two files. Await maintainer
+review. No checker execution occurred; the [submission record](../results/research/arena-let-policy-followup-1/external-submission-record.json)
+is separate from the unchanged research closure.
 
 The [feedback successor](../results/research/arena-let-feedback-2026-09-13/decision.md)
 incorporates nomeata's direct reply to #48. It supplies affirmative scoped

@@ -1,0 +1,47 @@
+{
+  "observed_on": "2026-09-14",
+  "scope": "Original arguments retained from the performed submission preflight. Search results are bounded and not a complete live PR inventory.",
+  "requests": [
+    {
+      "receipt": "tip.json",
+      "tool": "github_fetch",
+      "arguments": {
+        "url": "https://api.github.com/repos/leanprover/lean-kernel-arena/commits/master"
+      }
+    },
+    {
+      "receipt": "duplicates.json",
+      "tool": "github_search_prs",
+      "arguments": {
+        "repository_full_name": "leanprover/lean-kernel-arena",
+        "query": "let in:title,body",
+        "state": "all",
+        "topn": 50
+      }
+    },
+    {
+      "receipt": "exact-duplicates.json",
+      "tool": "github_search_prs",
+      "arguments": {
+        "repository_full_name": "leanprover/lean-kernel-arena",
+        "query": "\"let-value-type-mismatch\" OR \"let annotation\" OR \"EcosystemCase\" in:title,body",
+        "state": "all",
+        "topn": 30
+      }
+    },
+    {
+      "receipt": "fork.json",
+      "tool": "github_get_repo",
+      "arguments": {
+        "repository_full_name": "phiferd/lean-kernel-arena"
+      }
+    },
+    {
+      "receipt": "branches.json",
+      "tool": "github_fetch",
+      "arguments": {
+        "url": "https://api.github.com/repos/phiferd/lean-kernel-arena/git/matching-refs/heads/arena-let-value-type-mismatch"
+      }
+    }
+  ]
+}

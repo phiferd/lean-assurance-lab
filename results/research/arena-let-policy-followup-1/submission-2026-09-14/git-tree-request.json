@@ -1,0 +1,17 @@
+{
+  "base_tree": "7a152ed5a0323cc10fd86b5b3466a5095ca7d3ae",
+  "tree": [
+    {
+      "path": "tests/corner-cases/let-value-type-mismatch.ndjson",
+      "mode": "100644",
+      "type": "blob",
+      "content": "{\"meta\":{\"exporter\":{\"name\":\"lean4export\",\"version\":\"3.1.0\"},\"format\":{\"version\":\"3.1.0\"},\"lean\":{\"githash\":\"f72c35b3f637c8c6571d353742168ab66cc22c00\",\"version\":\"4.29.1\"}}}\n{\"in\":1,\"str\":{\"pre\":0,\"str\":\"EcosystemCase\"}}\n{\"in\":2,\"str\":{\"pre\":0,\"str\":\"u\"}}\n{\"in\":3,\"str\":{\"pre\":0,\"str\":\"v\"}}\n{\"in\":4,\"str\":{\"pre\":0,\"str\":\"w\"}}\n{\"il\":1,\"succ\":0}\n{\"il\":2,\"succ\":1}\n{\"ie\":0,\"sort\":0}\n{\"ie\":1,\"sort\":1}\n{\"ie\":2,\"sort\":2}\n{\"bvar\":0,\"ie\":3}\n{\"ie\":4,\"letE\":{\"body\":3,\"name\":2,\"nondep\":false,\"type\":1,\"value\":1}}\n{\"def\":{\"all\":[1],\"hints\":\"opaque\",\"levelParams\":[],\"name\":1,\"safety\":\"safe\",\"type\":2,\"value\":4}}\n"
+    },
+    {
+      "path": "tests/corner-cases/let-value-type-mismatch.yaml",
+      "mode": "100644",
+      "type": "blob",
+      "content": "description: |\n  A let has a mismatched annotation, but substitution removes the mismatch.\n\n  In readable notation, the exported declaration is:\n\n  ```text\n  def EcosystemCase : Sort 2 := let u : Sort 1 := Sort 1; u\n  ```\n\n  The value `Sort 1` has type `Sort 2`, rather than the annotated `Sort 1`.\n  Checking the supplied let can therefore reject it. Substituting its value\n  for `u` gives `def EcosystemCase : Sort 2 := Sort 1`, whose types match.\n\n  This records the choice to check the supplied annotation or first simplify\n  the let. The [discussion of this exact example](https://github.com/leanprover/lean4export/issues/48#issuecomment-5654286873)\n  supports allowing either outcome as practical checker policy, while leaving\n  a completely authoritative answer open. This is not a false-theorem example.\nfile: tests/corner-cases/let-value-type-mismatch.ndjson\noutcome: either\n"
+    }
+  ]
+}

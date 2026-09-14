@@ -463,3 +463,23 @@ Commit its fresh work record before analysis; later execution still needs exact
 cells and a separate finite launch budget. Existing Nanoda capacity holds,
 theorem distinct-risk gate and historical assurance/transfer gates remain
 unchanged. Stop after this item validation and main delivery.
+
+## Arena let PR submission checkpoint — 2026-09-14
+
+Exact owner authorization and fresh source/duplicate preflight were followed by
+[PR #206](https://github.com/leanprover/lean-kernel-arena/pull/206), verified OPEN
+with the approved description and exact two-file package. Arena remains at the
+validated `fd74e8b`; existing static-build evidence applies unchanged. The
+[submission record](../../results/research/arena-let-policy-followup-1/external-submission-record.json)
+preserves receipts, including a connector permission denial resolved using
+existing GitHub CLI credentials without a browser. Await substantive maintainer
+feedback; submission is not adoption or semantic authority.
+
+This external-action checkpoint reopens no research item and launches no new
+experiment. After comparing shared corpus, checker hardening, unresolved policy,
+upstream capacity and reuse, retain `NANODA-NESTED-REGRESSION-1` READY and unstarted
+as the highest-value feasible local successor under its existing source-only
+scope. The theorem distinct-risk gate and historical assurance/transfer gates
+remain unsatisfied; no new method or repeated planning task is warranted.
+Further external changes require their own exact approval. Stop after durable
+state validation and main delivery.

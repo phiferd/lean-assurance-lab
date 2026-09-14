@@ -8,8 +8,8 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 
 ## At a glance
 
-- Awaiting upstream: **2**
-- Local drafts: **3**
+- Awaiting upstream: **3**
+- Local drafts: **2**
 - Merged: **3**
 
 ## Awaiting upstream
@@ -18,6 +18,7 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-13 | no activity; not reported | Await maintainer review; do not file a duplicate issue or pull request. |
 | [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-13 | no activity; not reported | Await maintainer review before proposing another independent Nanoda contribution. |
+| [Add a let annotation/substitution corner case](https://github.com/leanprover/lean-kernel-arena/pull/206) | `leanprover/lean-kernel-arena` | 2026-09-14 | unknown; unknown | Submitted as Arena #206 with exact owner approval and fresh source/duplicate preflight. Reassess substantive maintainer feedback when observed; any further external write needs its own exact authorization. No automatic polling. |
 
 ## Local drafts
 
@@ -25,7 +26,6 @@ Ledger updated: **2026-09-14**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [test(tc): protect checked inference from unchecked cache entries](../results/action-recommendations/drafts/nanoda-infer-cache-regression.md) | `ammkrn/nanoda_lib` | `NANODA-CACHE-REGRESSION-1` | 2026-09-16 | Keep the candidate local while Nanoda PRs #32 and #33 await acknowledgment; then refresh source, duplicate, rebase, and test evidence before any submission decision. |
 | [test(tc): cover native Nat operation dispatch](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NAT-DISPATCH-REGRESSION-1` | 2026-09-16 | Keep this preventive test patch local while #32 and #33 await acknowledgment. Then refresh source/duplicates, rebase and rerun focused/full tests before requesting approval for a pull request to ammkrn/nanoda_lib. |
-| [Add a let annotation/substitution corner case](../results/action-recommendations/drafts/arena-let-value-type-mismatch-pr.md) | `leanprover/lean-kernel-arena` | `ARENA-LET-POLICY-FOLLOWUP-1` | — | Ready for owner review of one candidate-only either package. Before submission, refresh Arena source and target-specific duplicates and obtain exact owner approval; rerun static build if inputs change. |
 
 ## Merged
 

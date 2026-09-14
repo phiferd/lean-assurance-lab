@@ -1,0 +1,27 @@
+{
+  "observed_on": "2026-09-14",
+  "authorization": "Create the PR. Do not attempt to use the browser if you have any permission issues.",
+  "scope": "Authorized external submission checkpoint after closed research; no new research execution.",
+  "request": {
+    "repository_full_name": "leanprover/lean-kernel-arena",
+    "title": "Add a let annotation/substitution corner case",
+    "body": "This adds one small static `either` test at\n`tests/corner-cases/let-value-type-mismatch`:\n\n```text\ndef EcosystemCase : Sort 2 := let u : Sort 1 := Sort 1; u\n```\n\nThe let value has type `Sort 2`, which disagrees with its `Sort 1` annotation.\nChecking that relationship can reject the declaration. Substituting the value\nfor `u` first produces `def EcosystemCase : Sort 2 := Sort 1`, whose types match.\n\nThe [reply to this exact example](https://github.com/leanprover/lean4export/issues/48#issuecomment-5654286873)\nsupports allowing either outcome as practical checker policy, while leaving a\ncompletely authoritative answer open. The test records that choice without\nscoring it as a soundness or completeness failure. It is not a false-theorem\nexample.\n\nThe existing subject-reduction cases concern beta erasure and conversion\ntransitivity; this case isolates a let annotation removed by substitution.\n`constlevels` also contains malformed lets, but combines them with other\nunfolding/type defects. The tutorial already supplies a matching positive let,\nso no extra accept control is added.\n\nValidation at Arena `fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb`:\n\n```text\npython lka.py build-test corner-cases/let-value-type-mismatch\nResults: 1 succeeded, 0 failed\n```\n\nThe static build preserves the existing 601-byte export and records outcome\n`either`. No checker was run for this change.\n",
+    "base": "master",
+    "head": "phiferd:arena-let-value-type-mismatch",
+    "draft": false,
+    "maintainer_can_modify": true
+  },
+  "source_revision": "fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb",
+  "base_tree": "7a152ed5a0323cc10fd86b5b3466a5095ca7d3ae",
+  "package": [
+    {
+      "path": "tests/corner-cases/let-value-type-mismatch.ndjson",
+      "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+    },
+    {
+      "path": "tests/corner-cases/let-value-type-mismatch.yaml",
+      "sha256": "a6dc2b4acc2f363f72812f16a5f6be5b424f2ce212b5617bdadb7958f5bb9e2b"
+    }
+  ],
+  "draft_sha256": "a1e23781afe949faddfe638c4cb397540af3a62c5e2957bfd241308b4d7dd45b"
+}
