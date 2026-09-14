@@ -2803,7 +2803,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `ARENA-LET-POLICY-FOLLOWUP-1`.
 
-The item is READY and unstarted: 60 cumulative active minutes, eight read-only
+The item is ACTIVE: 60 cumulative active minutes, eight read-only
 source/setup requests, and two static build-test reservations of 300 seconds.
 Use the unchanged 601-byte let candidate/control for a current Arena inventory,
 semantic-overlap, policy and practical-value review; produce at most one useful
@@ -2867,8 +2867,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items, the Arena let-policy follow-up and
-Nanoda reserved-namespace regression, and one PLANNED portfolio reserve. A theorem accept control requires a demonstrated
+The canonical queue retains one READY item, Nanoda reserved-namespace regression,
+and one PLANNED portfolio reserve. The Arena let-policy follow-up is ACTIVE. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
 at each closure by external usefulness and cost.
@@ -2876,7 +2876,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
+and modeled mutation metrics are unchanged. ARENA-LET-POLICY-FOLLOWUP-1 is the only ACTIVE item; no successor has started.
 
 ### Waiting
 

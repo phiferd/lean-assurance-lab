@@ -32,7 +32,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 | Rank | Item | Status |
 |---|---|---|
-| 1 | ARENA-LET-POLICY-FOLLOWUP-1: Reassess the Arena let characterization after maintainer guidance | READY |
+| 1 | ARENA-LET-POLICY-FOLLOWUP-1: Reassess the Arena let characterization after maintainer guidance | ACTIVE |
 | 11 | NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression | READY |
 | 12 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 31 | CVC-4: Connect the contract to real validation behavior | PLANNED |
@@ -54,7 +54,7 @@ Audit current complete inventory, semantic overlap, policy and runner usefulness
 
 **Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: READY and unstarted. Commit a fresh bounded work record and bind current source, exact existing bytes, policy/action rubric and inventory before substantive work; freeze static build inputs/tooling/reservations before any launch. Reply supports proposal review, not automatic Arena adoption.
+**Boundary:** ACTIVE: READY and unstarted. Commit a fresh bounded work record and bind current source, exact existing bytes, policy/action rubric and inventory before substantive work; freeze static build inputs/tooling/reservations before any launch. Reply supports proposal review, not automatic Arena adoption.
 
 ### 11. NANODA-NESTED-REGRESSION-1: Design a reserved-namespace enforcement regression
 
@@ -193,6 +193,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: ARENA-LET-POLICY-FOLLOWUP-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: ARENA-LET-POLICY-FOLLOWUP-1 (ACTIVE).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.
