@@ -2831,7 +2831,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-NESTED-TEST-1`.
 
-The item is READY and unstarted: 90 cumulative active minutes, eight source/setup
+The item is ACTIVE: 90 cumulative active minutes, eight source/setup
 requests, at most three builds (600 seconds each) and four test processes
 (120 seconds each); compiling tests consume both counters. Implement the exact
 [source-supported design](../results/research/nanoda-nested-regression-1/regression-design.json)
@@ -2915,7 +2915,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, Nanoda reserved-namespace test implementation,
+The canonical queue retains one ACTIVE item, Nanoda reserved-namespace test implementation,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2924,7 +2924,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
+and modeled mutation metrics are unchanged. Only `NANODA-NESTED-TEST-1` is ACTIVE; no successor has started.
 
 ### Waiting
 
