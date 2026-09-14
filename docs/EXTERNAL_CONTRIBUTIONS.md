@@ -4,12 +4,12 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-09-13**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-09-14**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
 - Awaiting upstream: **2**
-- Local drafts: **2**
+- Local drafts: **3**
 - Merged: **3**
 
 ## Awaiting upstream
@@ -25,6 +25,7 @@ Ledger updated: **2026-09-13**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [test(tc): protect checked inference from unchecked cache entries](../results/action-recommendations/drafts/nanoda-infer-cache-regression.md) | `ammkrn/nanoda_lib` | `NANODA-CACHE-REGRESSION-1` | 2026-09-16 | Keep the candidate local while Nanoda PRs #32 and #33 await acknowledgment; then refresh source, duplicate, rebase, and test evidence before any submission decision. |
 | [test(tc): cover native Nat operation dispatch](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NAT-DISPATCH-REGRESSION-1` | 2026-09-16 | Keep this preventive test patch local while #32 and #33 await acknowledgment. Then refresh source/duplicates, rebase and rerun focused/full tests before requesting approval for a pull request to ammkrn/nanoda_lib. |
+| [Add a let annotation/substitution corner case](../results/action-recommendations/drafts/arena-let-value-type-mismatch-pr.md) | `leanprover/lean-kernel-arena` | `ARENA-LET-POLICY-FOLLOWUP-1` | — | Ready for owner review of one candidate-only either package. Before submission, refresh Arena source and target-specific duplicates and obtain exact owner approval; rerun static build if inputs change. |
 
 ## Merged
 

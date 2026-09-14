@@ -1,0 +1,277 @@
+#!/usr/bin/env python3
+"""Replay the bounded Arena let-policy package closure; never launch a checker."""
+from datetime import datetime
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tarfile
+import yaml
+
+ROOT = Path(__file__).resolve().parents[1]
+PREFIX = "results/research/arena-let-policy-followup-1/"
+ITEM = "ARENA-LET-POLICY-FOLLOWUP-1"
+ENTRY_COMMIT = "67eeaa51b2b1ed7cd7e3b9065f508a8adb40cc3a"
+SOURCE_REVISION = "fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb"
+ARCHIVE_SHA = "55190fcac4d07f9342bdd32b95f9e8c219821d853ceb100cc132a7747e4b133a"
+CANDIDATE_SHA = "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"
+CASE = "corner-cases/let-value-type-mismatch"
+CANDIDATE = "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson"
+ZERO_COUNTS = ("checker_launches", "proof_launches", "mutations", "new_exports", "external_research_writes")
+FROZEN = ("entry-lock.json", "entry-queue.json", "work-record.json", "action-rubric.json")
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def number(value, name):
+    require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+            "invalid " + name)
+    return value
+
+
+def count(value, name):
+    require(type(value) is int and value >= 0, "invalid " + name)
+    return value
+
+
+def safe_path(root, name):
+    require(isinstance(name, str) and bool(name) and not Path(name).is_absolute(), "invalid binding path")
+    path = (root / name).resolve()
+    require(path.is_relative_to(root.resolve()), "binding escapes repository")
+    return path
+
+
+def git_bytes(root, revision, path):
+    require(isinstance(revision, str) and re.fullmatch(r"[0-9a-f]{40}", revision), "full commit identity required")
+    safe_path(root, path)
+    return subprocess.check_output(["git", "-C", str(root), "show", f"{revision}:{path}"])
+
+
+def validate_data(result, entry, closure, requests, queue):
+    for value in (result, entry, closure, requests):
+        require(value["item_id"] == ITEM, "wrong item identity")
+    require(entry["status"] == "ACTIVE", "entry status changed")
+    for value in (result, closure):
+        require(value["status"] == "COMPLETE" and value["outcome"] == "SUCCESS", "closure outcome mismatch")
+    budget = entry["budget"]
+    require(budget["active_seconds"] == 3600 and budget["read_only_requests"] == 8
+            and budget["static_build_test_reservations"] == 2 and budget["seconds_per_static_build"] == 300,
+            "entry budget changed")
+    require(result["candidate_label"] == "either", "unsupported strict label promotion")
+    for key in ("current_checker_execution", "catalog_changed", "authority_changed", "control_included"):
+        require(result[key] is False, "unsupported claim or control addition: " + key)
+    require(count(result["package_count"], "package count") == 1, "one package required")
+    require(result["source_revision"] == SOURCE_REVISION, "source revision changed")
+    require(closure["started_at"] == entry["started_at"] and closure["start_monotonic"] == entry["start_monotonic"], "work clock reset")
+    start = number(closure["start_monotonic"], "start clock")
+    end = number(closure["end_monotonic"], "end clock")
+    active = number(closure["active_seconds"], "active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and active <= 3600, "active interval or cap mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(closure[key]) for key in ("started_at", "completed_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None, "timezone-aware interval required")
+    require(abs((utc_end - utc_start).total_seconds() - active) <= 2, "UTC/monotonic interval disagreement")
+    rows = requests["requests"]
+    require(requests["cap"] == 8 and 1 <= len(rows) <= 8, "request cap mismatch")
+    require([row["id"] for row in rows] == list(range(1, len(rows) + 1)), "request identity lost or duplicated")
+    total = sum(count(row["charged_requests"], "request charge") for row in rows)
+    require(total == len(rows) and all(row["status"] == "COMPLETE" for row in rows), "uncharged or unfinished request")
+    counts = result["research_counts"]
+    require(closure["research_counts"] == counts, "closure/result counts disagree")
+    require(count(counts["read_only_requests"], "result requests") == total, "result/request counts disagree")
+    require(1 <= count(counts["static_build_test_reservations"], "static reservations") <= 2, "static reservation cap mismatch")
+    for key in ZERO_COUNTS:
+        require(count(budget[key], key) == 0 and count(counts[key], key) == 0, "prohibited launch: " + key)
+    successor = result["next_item"]
+    require(successor == {"id": "NANODA-NESTED-REGRESSION-1", "status": "READY", "started": False}, "successor must be READY and unstarted")
+    require(closure["next_item"] == successor["id"] and closure["next_item_started"] is False, "closure successor mismatch")
+    require(queue["selected_item"] == successor["id"], "snapshot successor mismatch")
+    ids = [row["id"] for row in queue["items"]]
+    require(len(ids) == len(set(ids)), "duplicate queue item")
+    indexed = {row["id"]: row for row in queue["items"]}
+    require(indexed[ITEM]["status"] == "COMPLETE" and indexed[ITEM]["closure"]["outcome"] == "SUCCESS", "snapshot closure mismatch")
+    require(indexed[successor["id"]]["status"] == "READY"
+            and not any(row["status"] == "ACTIVE" for row in queue["items"]), "snapshot successor started")
+
+
+def validate_delivery(data, entry, closure, result):
+    require(data["item_id"] == ITEM, "wrong delivery item")
+    require(data["started_at"] == entry["started_at"] == closure["started_at"]
+            and data["start_monotonic"] == entry["start_monotonic"] == closure["start_monotonic"],
+            "delivery work clock reset")
+    start = number(data["start_monotonic"], "delivery start")
+    end = number(data["end_monotonic"], "delivery end")
+    active = number(data["cumulative_active_seconds"], "delivery active seconds")
+    work_active = number(closure["active_seconds"], "work closure active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and work_active <= active <= 3600,
+            "delivery active interval or cap mismatch")
+    require(number(data["cap_seconds"], "delivery cap") == entry["budget"]["active_seconds"] == 3600,
+            "delivery cap changed")
+    remaining = number(data["remaining_seconds"], "delivery remaining seconds")
+    admin = number(data["administrative_seconds_after_work_closure"], "delivery administrative seconds")
+    require(abs(remaining - (3600 - active)) <= .01 and abs(admin - (active - work_active)) <= .01,
+            "delivery remaining or administrative accounting mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(data[key]) for key in ("started_at", "recorded_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None,
+            "timezone-aware delivery interval required")
+    elapsed = (utc_end - utc_start).total_seconds()
+    require(elapsed >= 0 and abs(elapsed - active) <= 2, "delivery UTC/monotonic interval disagreement")
+    require(data["research_counts"] == closure["research_counts"] == result["research_counts"],
+            "delivery research counts changed")
+    require(data["next_item"] == result["next_item"]["id"] == closure["next_item"]
+            and data["next_item_started"] is False and result["next_item"]["started"] is False
+            and closure["next_item_started"] is False and result["next_item"]["status"] == "READY",
+            "delivery successor changed or started")
+
+
+def validate_binding(root, row):
+    raw = safe_path(root, row["path"]).read_bytes()
+    require(digest(raw) == row["sha256"] and len(raw) == count(row["bytes"], "binding bytes"), "binding mismatch: " + row["path"])
+    return raw
+
+
+def validate_source(root, source):
+    require(source["item_id"] == ITEM and source["revision"] == SOURCE_REVISION, "source identity mismatch")
+    require(source["archive"] == PREFIX + "arena-source.tar.gz" and source["archive_sha256"] == ARCHIVE_SHA, "archive identity mismatch")
+    archive = safe_path(root, source["archive"])
+    require(digest(archive.read_bytes()) == ARCHIVE_SHA, "archive digest mismatch")
+    expected = {}
+    for row in source["files"]:
+        safe_path(root, row["path"])
+        require(row["path"] not in expected, "duplicate source inventory path")
+        expected[row["path"]] = (row["sha256"], count(row["bytes"], "source bytes"))
+    require(len(expected) == 234, "incomplete source inventory")
+    actual = {}
+    prefix = "lean-kernel-arena-" + SOURCE_REVISION + "/"
+    with tarfile.open(archive, "r:gz") as retained:
+        for member in retained.getmembers():
+            if member.isdir():
+                continue
+            require(member.isfile() and member.name.startswith(prefix), "unexpected archive member")
+            name = member.name[len(prefix):]
+            safe_path(root, name)
+            require(name not in actual, "duplicate archive member")
+            with retained.extractfile(member) as stream:
+                raw = stream.read()
+            actual[name] = (digest(raw), len(raw))
+    require(actual == expected, "archive inventory replay mismatch")
+
+
+def validate_package(root, manifest):
+    require(manifest["item_id"] == ITEM and manifest["source_revision"] == SOURCE_REVISION, "manifest identity mismatch")
+    require(manifest["case_name"] == CASE and manifest["case_count"] == 1
+            and manifest["outcome"] == "either" and manifest["control_included"] is False, "package scope changed")
+    require(manifest["max_static_reservations"] == 2 and manifest["seconds_per_reservation"] == 300, "manifest cap changed")
+    names = {row["path"] for row in manifest["package"]}
+    expected = {PREFIX + "package/tests/" + CASE + suffix for suffix in (".yaml", ".ndjson")}
+    require(len(manifest["package"]) == 2 and names == expected, "two-file package changed")
+    actual = {str(path.relative_to(root)) for path in (root / PREFIX / "package").rglob("*") if path.is_file()}
+    require(actual == expected, "unexpected package file")
+    for row in manifest["package"]:
+        raw = validate_binding(root, row)
+        if row["path"].endswith(".ndjson"):
+            original = safe_path(root, CANDIDATE).read_bytes()
+            require(raw == original and digest(raw) == CANDIDATE_SHA and len(raw) == 601, "candidate differs from existing bytes")
+        else:
+            metadata = yaml.safe_load(raw)
+            require(metadata["outcome"] == "either" and metadata["file"] == "tests/" + CASE + ".ndjson", "YAML outcome or file changed")
+    validate_binding(root, manifest["patch"])
+    validate_binding(root, manifest["source_lock"])
+
+
+def validate_static(root, manifest, counts):
+    attempts = sorted((root / PREFIX).glob("static-build-*/reservation.json"))
+    require(len(attempts) == counts["static_build_test_reservations"] <= 2, "reservation receipt accounting mismatch")
+    manifest_sha = digest((root / PREFIX / "execution-manifest.json").read_bytes())
+    for index, path in enumerate(attempts, 1):
+        def read(name):
+            return json.loads((path.parent / name).read_text())
+        reservation, result, supervisor, request = (read(name) for name in ("reservation.json", "result.json", "supervisor.json", "request.json"))
+        require(reservation["item_id"] == result["item_id"] == ITEM and reservation["number"] == result["number"] == index,
+                "static attempt identity mismatch")
+        require(reservation["seconds"] == 300 and reservation["cumulative_reservations"] == index
+                and reservation["remaining_reservations"] == 2 - index, "static reservation cap mismatch")
+        require(reservation["manifest_sha256"] == result["manifest_sha256"] == manifest_sha
+                and reservation["source_revision"] == SOURCE_REVISION, "static input binding mismatch")
+        require(reservation["runner_sha256"] == digest((root / PREFIX / "run-static-build.py").read_bytes()), "static runner mismatch")
+        require(reservation["argv"] == request["argv"] == manifest["invocation"]
+                and request["cwd"] == manifest["cwd"] and request["seconds"] == 300, "static invocation changed")
+        require(request["argv"][1:] == ["lka.py", "build-test", CASE], "non-static invocation")
+        require(request["request_sha256"] == supervisor["request_sha256"], "supervisor request mismatch")
+        require(supervisor["cleanup_completed"] is True and result["cleanup_completed"] is True
+                and supervisor["deadline_exceeded"] is False, "static cleanup or timeout failure")
+        charge = number(result["charged_seconds"], "static charge")
+        require(charge == supervisor["charged_seconds"] and charge <= 300
+                and abs(supervisor["monotonic_ended"] - supervisor["monotonic_started"] - charge) <= .01,
+                "static time accounting mismatch")
+        require(result["returncode"] == supervisor["returncode"] == 0 and result["status"] == supervisor["status"] == "COMPLETE"
+                and result["validation_status"] == "PASS", "static build failed")
+        for name in ("stdout", "stderr"):
+            require(digest((path.parent / name).read_bytes()) == supervisor[name + "_sha256"], "raw static log changed")
+        require(manifest["expected"]["summary"] in (path.parent / "stdout").read_text(), "successful static summary missing")
+        expected_files = {str(path.parent.relative_to(root) / ("let-value-type-mismatch" + suffix))
+                          for suffix in (".ndjson", ".stats.json")}
+        require(len(result["files"]) == 2 and {row["path"] for row in result["files"]} == expected_files, "static outputs changed")
+        for row in result["files"]:
+            raw = validate_binding(root, row)
+            if row["path"].endswith(".ndjson"):
+                require(digest(raw) == CANDIDATE_SHA and len(raw) == 601, "built candidate changed")
+            else:
+                stats = json.loads(raw)
+                require(stats["size"] == 601 and stats["lines"] == 13 and stats["outcome"] == "either"
+                        and stats["name"] == CASE, "static statistics or outcome mismatch")
+
+
+def validate(root=ROOT):
+    root = Path(root)
+    def read(name):
+        return json.loads(safe_path(root, PREFIX + name).read_text())
+    result, entry, closure = read("result.json"), read("work-record.json"), read("work-closure.json")
+    freeze = "0c497bd3f7a314d4d8b60a1cc75bb0d1cc33d241"
+    require(result["entry_commit"] == ENTRY_COMMIT and result["freeze_commit"] == freeze, "historical checkpoint identity changed")
+    for name in FROZEN:
+        path = PREFIX + name
+        require(safe_path(root, path).read_bytes() == git_bytes(root, ENTRY_COMMIT, path), "frozen entry changed: " + name)
+    lock = read("entry-lock.json")
+    require(lock["base_commit"] == entry["base_commit"], "entry base mismatch")
+    for row in lock["bindings"]:
+        raw = git_bytes(root, entry["base_commit"], row["path"])
+        require(digest(raw) == row["sha256"] and len(raw) == row["bytes"], "entry binding mismatch")
+    require((root / PREFIX / "entry-queue.json").read_bytes() == git_bytes(root, entry["base_commit"], "config/research-queue.json"), "entry queue mismatch")
+    manifest = read("execution-manifest.json")
+    frozen = ["source-lock.json", "arena-source.tar.gz", "requests.json", "request-01.json", "request-02.json", "request-03.json", "execution-manifest.json", "run-static-build.py"]
+    frozen_paths = [PREFIX + name for name in frozen] + [row["path"] for row in manifest["package"]] + [manifest["patch"]["path"]]
+    for path in frozen_paths:
+        require(safe_path(root, path).read_bytes() == git_bytes(root, freeze, path), "frozen scientific/tooling input changed: " + path)
+    validate_source(root, read("source-lock.json"))
+    validate_package(root, manifest)
+    bound = set()
+    for row in result["output_bindings"]:
+        require(row["path"] not in bound, "duplicate output binding")
+        bound.add(row["path"])
+        validate_binding(root, row)
+    required = {PREFIX + name for name in ("source-lock.json", "requests.json", "execution-manifest.json", "work-closure.json", "closure-queue.json", "static-build-01/result.json")}
+    require(required <= bound, "missing required output binding")
+    validate_data(result, entry, closure, read("requests.json"), read("closure-queue.json"))
+    validate_static(root, manifest, result["research_counts"])
+    if result.get("validation_status") == "PASS":
+        require(result["final_delivery_accounting"] == "delivery-accounting.json", "final delivery accounting missing")
+        validate_delivery(read("delivery-accounting.json"), entry, closure, result)
+    return {"status": "PASS", "item_id": ITEM, "source_files": 234, "output_bindings": len(bound), "static_builds": result["research_counts"]["static_build_test_reservations"]}
+
+
+if __name__ == "__main__":
+    try:
+        print(json.dumps(validate(), sort_keys=True))
+    except (ValueError, KeyError, TypeError, OSError, tarfile.TarError, yaml.YAMLError, subprocess.CalledProcessError) as error:
+        print("FAIL: " + str(error), file=sys.stderr)
+        raise SystemExit(1)

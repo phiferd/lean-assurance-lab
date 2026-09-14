@@ -57,6 +57,14 @@ research directions.
 
 ## Attempted
 
+- Completed `ARENA-LET-POLICY-FOLLOWUP-1` on 2026-09-14 with SUCCESS for one
+  [candidate-only either package](../results/research/arena-let-policy-followup-1/report.md).
+  Current Arena `fd74e8b` static build-test passed, preserving the exact 601-byte
+  export. The indexed local PR draft is ready for review after fresh preflight;
+  no external submission occurred. Four read-only requests, one static build,
+  zero checker/proof/new export/mutation launches or authority changes.
+  `NANODA-NESTED-REGRESSION-1` is READY and unstarted.
+
 - Incorporated the lean4export #48 reply on 2026-09-13 through a
   [recommendation successor](../results/research/arena-let-feedback-2026-09-13/decision.md).
   The exact-question response supplies affirmative practical support to reconsider
@@ -2801,16 +2809,21 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `ARENA-LET-POLICY-FOLLOWUP-1`.
+Selected next item: `NANODA-NESTED-REGRESSION-1`.
 
-The item is ACTIVE: 60 cumulative active minutes, eight read-only
-source/setup requests, and two static build-test reservations of 300 seconds.
-Use the unchanged 601-byte let candidate/control for a current Arena inventory,
-semantic-overlap, policy and practical-value review; produce at most one useful
-`either` characterization package or a specific no-value result. Commit a fresh
-entry before substantive work and bind any static launch first. Zero checker,
-proof, mutation, new export or external research launches are authorized.
-`NANODA-NESTED-REGRESSION-1` remains READY under its original scope.
+The item is READY and unstarted under its original source-only scope: 90
+cumulative active minutes, at most eight read-only source/setup requests, zero
+build/checker/proof/new export/mutation or external research launches. Audit
+current coverage and reserved-prefix traversal to produce one exact supported
+regression design or a scoped exclusion. Commit a fresh entry before analysis;
+later execution requires exact frozen cells and a separately recorded budget.
+
+`ARENA-LET-POLICY-FOLLOWUP-1` completed SUCCESS. One
+[local PR draft](../results/action-recommendations/drafts/arena-let-value-type-mismatch-pr.md)
+adds a candidate-only `either` static case; current Arena build-test passed with
+the unchanged 601-byte export. No extra accept control is useful given current
+tutorial coverage. Recommend this concrete contribution after fresh preflight
+and exact owner approval. No external submission or checker execution occurred.
 
 The [feedback successor](../results/research/arena-let-feedback-2026-09-13/decision.md)
 incorporates nomeata's direct reply to #48. It supplies affirmative scoped
@@ -2868,7 +2881,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item, Nanoda reserved-namespace regression,
-and one PLANNED portfolio reserve. The Arena let-policy follow-up is ACTIVE. A theorem accept control requires a demonstrated
+and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
 at each closure by external usefulness and cost.
@@ -2876,7 +2889,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. ARENA-LET-POLICY-FOLLOWUP-1 is the only ACTIVE item; no successor has started.
+and modeled mutation metrics are unchanged. No queue item is ACTIVE; the selected successor has not started.
 
 ### Waiting
 
@@ -2886,7 +2899,8 @@ and modeled mutation metrics are unchanged. ARENA-LET-POLICY-FOLLOWUP-1 is the o
   completely authoritative answer. The issue was observed open; the connector
   omitted comment timestamps. The
   [recommendation successor](../results/research/arena-let-feedback-2026-09-13/recommendation-successor.json)
-  selects the bounded Arena follow-up READY and unstarted. Do not continue to
+  triggered the now-completed Arena follow-up and its indexed local PR draft.
+  Do not continue to
   wait for the first reply or treat the old lack-of-positive-support premise as
   current. Further normative qualification and any external write retain their
   separate gates; no automatic polling is enabled.
