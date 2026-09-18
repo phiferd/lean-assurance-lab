@@ -57,6 +57,19 @@ research directions.
 
 ## Attempted
 
+- Completed `NANODA-STRING-RECONSTRUCTION-TEST-1` on 2026-09-18 with SUCCESS:
+  two focused and all 40 library tests passed at exact Nanoda `4c544ed`; eight
+  existing doc examples remain ignored. The test-only patch checks eight flag/name
+  states and empty/Unicode constructor shapes with an empty declaration map.
+  Two requests and two build/test reservations used 12.084409499017056 process
+  seconds with successful cleanup. The
+  [report](../results/research/nanoda-string-reconstruction-test-1/report.md) and
+  [indexed local PR draft](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md)
+  retain internal syntax scope and capacity/submission holds. No current defect,
+  public semantic result or new export is claimed. The existing
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted under its
+  original source-only scope and budget after project-wide comparison.
+
 - Completed `NANODA-NATIVE-CONFIG-BOUNDARY-1` on 2026-09-17 with SUCCESS for
   one [source-supported String reconstruction design](../results/research/nanoda-native-config-boundary-1/report.md).
   Eight source-predicted flag/name rows distinguish raw literals, syntactic typing
@@ -2847,17 +2860,28 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `NANODA-STRING-RECONSTRUCTION-TEST-1`.
+Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
 
-The item is ACTIVE: 90 cumulative active minutes, eight read-only
-source/setup requests, at most three builds (600 seconds each) and four test
-processes (120 seconds each); compiling tests count both. Implement the exact
-[source-supported design](../results/research/nanoda-native-config-boundary-1/regression-design.json)
-as one small test-only patch, run focused/full tests and prepare a held-local PR
-candidate, or record a precise construction/duplicate exclusion. Bind fresh entry
-source/design/fixture inputs before implementation and exact patch/cells/tooling
-and accounting before launches. No production fix, proof, mutation, new serialized
-export or external research write. The fresh entry binds the design, fixture, reuse evidence and finite action rubric before implementation; no scientific process has launched at entry.
+The existing item is READY and unstarted under its unchanged
+[one-thread determinism plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md),
+reactivated as a bounded portfolio reserve. Use at most 60 cumulative active
+minutes and eight local source/evidence inspections; zero network, builds,
+checkers, proofs, new scientific bytes, mutation identities or external actions.
+Before analysis commit a fresh work record, exact mutation/source/historical
+bindings and determinism rubric. Determine whether exactly `nanoda-gen-2bdfe18a9ec2`
+has a deterministic locally controllable operational witness boundary or record
+the exact missing control. A known trigger gates later separately selected
+execution, not this source-only assessment. Preserve historical outcomes and all
+charges. No successor work begins at this handoff.
+
+`NANODA-STRING-RECONSTRUCTION-TEST-1` completed SUCCESS. Two focused and all
+40 library tests pass; eight existing doc examples remain ignored. The
+[report](../results/research/nanoda-string-reconstruction-test-1/report.md) and
+[indexed local PR draft](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md)
+record exact empty/Unicode constructor shapes, eight flag/name states and an empty
+declaration map. Both counted build/test reservations completed cleanup. The
+candidate remains local for source/duplicate/capacity review and exact submission
+approval. No current defect or public typing/defeq/checker result is established.
 
 `NANODA-NATIVE-CONFIG-BOUNDARY-1` completed SUCCESS. The
 [assessment](../results/research/nanoda-native-config-boundary-1/report.md) distinguishes
@@ -2951,16 +2975,20 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item, Nanoda String reconstruction test implementation,
-and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
-coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
-reconsidering others. The plan records result-dependent follow-ups and re-ranks
-at each closure by external usefulness and cost.
+The canonical queue retains one READY item, the bounded one-thread operational
+witnessability assessment, and one PLANNED portfolio reserve. Four held Nanoda
+test candidates and two open PRs favor resolving this existing source question
+over unspecified new small-test designs. Contribution portability/overlap needs
+a concrete gap; documentation work must add practical value beyond existing
+packets. The theorem distinct-risk, independent-transfer and original CVC gates
+remain unmet. These comparisons preserve current methods/reuse evidence and all
+historical assurance bindings.
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
-rejected. Its original evidence and budget remain intact. Historical CVC gates,
-independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. Only `NANODA-STRING-RECONSTRUCTION-TEST-1` is ACTIVE; no successor has started.
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` is reactivated without resetting its original
+scope or budget. Earlier deferral was a priority judgment, not a scientific
+negative or requirement to find a trigger before source investigation. Historical
+CVC gates, authority locks, pending survivor counts and modeled mutation metrics
+remain unchanged. No item is ACTIVE; the selected successor has not started.
 
 ### Waiting
 
