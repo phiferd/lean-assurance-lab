@@ -1,0 +1,159 @@
+diff --git a/src/tests.rs b/src/tests.rs
+index 304a306..8d3414d 100644
+--- a/src/tests.rs
++++ b/src/tests.rs
+@@ -2,3 +2,4 @@ mod name;
+ mod level;
+ mod natlit;
+ mod util;
++mod string_reconstruction;
+diff --git a/src/tests/string_reconstruction.rs b/src/tests/string_reconstruction.rs
+new file mode 100644
+index 0000000..0b6bbac
+--- /dev/null
++++ b/src/tests/string_reconstruction.rs
+@@ -0,0 +1,144 @@
++use super::util::test_get_export_file;
++use crate::expr::Expr;
++use crate::name::Name;
++use crate::util::{CowStr, DagMarker, ExportFile, ExprPtr, LeanDag, LevelPtr, NamePtr, Ptr, TcCtx};
++use num_bigint::BigUint;
++use std::error::Error;
++
++const PAYLOADS: [(&str, &[u32]); 2] = [("", &[]), ("Aé𝄞", &[65, 233, 119070])];
++
++fn name<'p>(dag: &mut LeanDag<'p>, prefix: NamePtr<'p>, suffix: &'static str) -> NamePtr<'p> {
++    let (idx, _) = dag.strings.insert_full(CowStr::Borrowed(suffix));
++    let suffix = Ptr::from(DagMarker::ExportFile, idx);
++    let hash = crate::hash64!(crate::name::STR_HASH, prefix, suffix);
++    let (idx, _) = dag.names.insert_full(Name::Str(prefix, suffix, hash));
++    Ptr::from(DagMarker::ExportFile, idx)
++}
++
++fn fixture<'p>(nat: bool, string: bool, cached_names: bool) -> Result<ExportFile<'p>, Box<dyn Error>> {
++    let (template, skipped) = test_get_export_file(None)?;
++    assert!(skipped.is_empty());
++    // Set flags before creating either DAG, since Nat storage is optional.
++    let mut config = template.config;
++    config.nat_extension = nat;
++    config.string_extension = string;
++    let (mut export, skipped) = config.to_export_file()?;
++    assert!(skipped.is_empty());
++    assert!(export.declars.is_empty());
++
++    let expected = if cached_names {
++        // These are names only, not declarations or a complete native prelude.
++        let dag = &mut export.dag;
++        let anon = dag.anonymous();
++        let nat = name(dag, anon, "Nat");
++        let nat_zero = name(dag, nat, "zero");
++        let nat_succ = name(dag, nat, "succ");
++        let string = name(dag, anon, "String");
++        let string_of_list = name(dag, string, "ofList");
++        let char = name(dag, anon, "Char");
++        let char_of_nat = name(dag, char, "ofNat");
++        let list = name(dag, anon, "List");
++        let list_nil = name(dag, list, "nil");
++        let list_cons = name(dag, list, "cons");
++        [nat, nat_zero, nat_succ, string, string_of_list, char, char_of_nat, list, list_nil, list_cons].map(Some)
++    } else {
++        [None; 10]
++    };
++    export.name_cache = export.dag.mk_name_cache();
++    let c = export.name_cache;
++    assert_eq!(
++        [
++            c.nat,
++            c.nat_zero,
++            c.nat_succ,
++            c.string,
++            c.string_of_list,
++            c.char,
++            c.char_of_nat,
++            c.list,
++            c.list_nil,
++            c.list_cons
++        ],
++        expected,
++    );
++    assert!(export.declars.is_empty());
++    Ok(export)
++}
++
++fn const_app<'t, 'p: 't>(
++    ctx: &TcCtx<'t, 'p>,
++    expr: ExprPtr<'t>,
++    expected_name: NamePtr<'t>,
++    expected_levels: &[LevelPtr<'t>],
++    arity: usize,
++) -> Vec<ExprPtr<'t>> {
++    let (head, args) = ctx.unfold_apps(expr);
++    let Expr::Const { name, levels, .. } = ctx.read_expr(head) else {
++        panic!("expected a constant application");
++    };
++    assert_eq!(name, expected_name);
++    assert_eq!(ctx.read_levels(levels).as_ref(), expected_levels);
++    assert_eq!(args.len(), arity);
++    args
++}
++
++fn assert_string_shape<'t, 'p: 't>(ctx: &TcCtx<'t, 'p>, expr: ExprPtr<'t>, scalars: &[u32]) {
++    let c = ctx.export_file.name_cache;
++    let zero = [ctx.zero()];
++    let mut tail = const_app(ctx, expr, c.string_of_list.unwrap(), &[], 1)[0];
++    // Inspect the output in forward order against fixed scalar values; do not
++    // reconstruct the expected expression with the production conversion loop.
++    for scalar in scalars {
++        let args = const_app(ctx, tail, c.list_cons.unwrap(), &zero, 3);
++        const_app(ctx, args[0], c.char.unwrap(), &[], 0);
++        let char_args = const_app(ctx, args[1], c.char_of_nat.unwrap(), &[], 1);
++        let Expr::NatLit { ptr, .. } = ctx.read_expr(char_args[0]) else {
++            panic!("expected a character's scalar as NatLit");
++        };
++        assert_eq!(ctx.read_bignum(ptr).expect("enabled Nat storage"), &BigUint::from(*scalar));
++        tail = args[2];
++    }
++    // Requiring nil here also rules out an extra element after the fixed input.
++    let args = const_app(ctx, tail, c.list_nil.unwrap(), &zero, 1);
++    const_app(ctx, args[0], c.char.unwrap(), &[], 0);
++}
++
++fn check_configurations(cached_names: bool) -> Result<(), Box<dyn Error>> {
++    for (nat, string) in [(false, false), (false, true), (true, false), (true, true)] {
++        let export = fixture(nat, string, cached_names)?;
++        export.with_ctx(|ctx| {
++            for (text, scalars) in PAYLOADS {
++                let literal = ctx.mk_string_lit_quick(CowStr::Borrowed(text));
++                let ptr = if string {
++                    let Expr::StringLit { ptr, .. } = ctx.read_expr(literal.expect("enabled String literal")) else {
++                        panic!("expected StringLit");
++                    };
++                    assert_eq!(ctx.read_string(ptr).as_ref(), text);
++                    ptr
++                } else {
++                    assert!(literal.is_none());
++                    // A StringPtr is valid without an enabled String extension;
++                    // this tests conversion refusal, not an admitted expression.
++                    ctx.alloc_string(CowStr::Borrowed(text))
++                };
++                let converted = ctx.str_lit_to_constructor(ptr);
++                if nat && string && cached_names {
++                    assert_string_shape(ctx, converted.expect("enabled reconstruction with cached names"), scalars);
++                } else {
++                    assert!(converted.is_none(), "nat={nat}, string={string}, names={cached_names}, text={text:?}");
++                }
++            }
++        });
++    }
++    Ok(())
++}
++
++#[test]
++fn string_reconstruction_configurations() -> Result<(), Box<dyn Error>> {
++    check_configurations(true)
++}
++
++#[test]
++fn string_reconstruction_without_cached_names() -> Result<(), Box<dyn Error>> {
++    check_configurations(false)
++}

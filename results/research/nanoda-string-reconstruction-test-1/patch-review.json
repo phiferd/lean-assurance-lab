@@ -1,0 +1,76 @@
+{
+  "item_id": "NANODA-STRING-RECONSTRUCTION-TEST-1",
+  "reviewer": "nested_test_runner",
+  "status": "PASS_SOURCE_REVIEW",
+  "entry_commit": "1fde6e309ae1ef3f365ce5e1ba801ee585789504",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "bindings": [
+    {
+      "path": "results/research/nanoda-string-reconstruction-test-1/patches/string-reconstruction.patch",
+      "sha256": "8f9222747bce5c73eadd3c8e651db725bf3ca46487c456062eae87056db9b744",
+      "bytes": 6372
+    },
+    {
+      "path": "results/research/nanoda-string-reconstruction-test-1/scientific-inputs.json",
+      "sha256": "1bad002a8141470d8e328c9fd0b6447e5c47f124bad23eb3792a85fc938af646",
+      "bytes": 4902
+    },
+    {
+      "path": "results/research/nanoda-native-config-boundary-1/regression-design.json",
+      "sha256": "5057ed6245560d43f5c9c817016903e96e12f6bca629e2d4edf1d8f0f18d09ee",
+      "bytes": 6219
+    },
+    {
+      "path": "results/research/nanoda-native-config-boundary-1/matrix.json",
+      "sha256": "443630e3589f3740606f73a5d338034fd3e8313b3c4145350594155c3dfcdfe9",
+      "bytes": 5574
+    }
+  ],
+  "patch_matches_source_worktree": true,
+  "findings": [],
+  "matrix_review": {
+    "flag_pairs": [
+      [
+        false,
+        false
+      ],
+      [
+        false,
+        true
+      ],
+      [
+        true,
+        false
+      ],
+      [
+        true,
+        true
+      ]
+    ],
+    "cached_name_states": [
+      true,
+      false
+    ],
+    "payload_count": 2,
+    "state_payload_combinations": 16,
+    "positive_shape_combinations": 2,
+    "negative_reconstruction_combinations": 14,
+    "explicit_declaration_map_empty": true
+  },
+  "checks": [
+    "Only src/tests.rs and new src/tests/string_reconstruction.rs change; no production source or serialized export change.",
+    "Fresh permanent DAG and with_ctx temporary DAG receive per-cell flags before construction; immutable fixture configuration is not toggled.",
+    "Name helper interns correct STR_HASH nodes and ExportFile-marked string/name pointers; name cache refreshed, ten exact cache entries asserted, declaration map empty.",
+    "Each of eight states tries empty and fixed A\u00e9\ud834\udd1e payload. String-enabled quick construction requires Some(StringLit) and exact stored text; disabled branch requires None and uses supported raw owned StringPtr for conversion refusal.",
+    "Reconstruction requires Some only for both flags and cached names; other fourteen combinations require None.",
+    "Positive helper checks exact String.ofList/Char/Char.ofNat names, empty levels and arities; List.cons has exactly three arguments at levels[0]; List.nil has exactly one Char argument at levels[0].",
+    "Fixed scalar integers65/233/119070 checked in forward output order; exact nil termination rejects extra or omitted elements; empty payload checks immediate nil.",
+    "All temporary expressions remain inside owning with_ctx. Shared read-only helpers return only pointers owned by that same context; no borrow/type mismatch identified from current APIs.",
+    "No infer/defeq/WHNF/check_declar call or panic-catching shortcut; expected results are structural internal API assertions, not semantic equivalence/acceptance or measured mutation sensitivity."
+  ],
+  "limitations": [
+    "This is source review, not compilation or execution evidence. Focused/full Cargo checks remain root launch-owner responsibility under frozen manifest.",
+    "All required cached names absent together does not isolate individual missing-name arms."
+  ],
+  "scientific_launches": 0
+}
