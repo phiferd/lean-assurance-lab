@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-14
+Last updated: 2026-09-17
 
 ## How Status Is Tracked
 
@@ -2840,14 +2840,13 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-NATIVE-CONFIG-BOUNDARY-1`.
 
-The item is READY and unstarted: 90 cumulative active minutes, eight read-only
+The item is ACTIVE: 90 cumulative active minutes, eight read-only
 source/setup requests, zero build/test/checker/proof/mutation/new export/external
 research-write launches. Audit four Nat/String flag combinations and at most two
 declaration-presence states at source level. Reuse the complete relevant current
 suite and local held patches before selecting at most one uncovered interaction
 regression design, documentation question or precise duplicate/no-value exclusion.
-Commit a fresh source/input/rubric entry before substantive review. No successor
-execution occurred at this handoff.
+Commit a fresh source/input/rubric entry before substantive review. The committed entry binds current source, the static test inventory and action rubric.
 
 `NANODA-NESTED-TEST-1` completed SUCCESS. Six focused and all 44 library tests
 passed at current Nanoda `4c544ed`, with eight existing doc examples ignored.
@@ -2932,7 +2931,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, Nanoda native-configuration source review,
+The canonical queue retains one ACTIVE item, Nanoda native-configuration source review,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2941,7 +2940,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. `NANODA-NATIVE-CONFIG-BOUNDARY-1` is READY; no item is ACTIVE and no successor has started.
+and modeled mutation metrics are unchanged. Only `NANODA-NATIVE-CONFIG-BOUNDARY-1` is ACTIVE; no successor has started.
 
 ### Waiting
 
