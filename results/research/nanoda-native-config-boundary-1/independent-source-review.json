@@ -1,0 +1,300 @@
+{
+  "schema_version": 1,
+  "item_id": "NANODA-NATIVE-CONFIG-BOUNDARY-1",
+  "reviewer": "nested_test_patch_review",
+  "review_kind": "independent_source_only",
+  "reviewed_at": "2026-09-18T03:38:10.288257+00:00",
+  "entry_commit": "ab3da78",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "source_bindings": [
+    {
+      "path": "README.md",
+      "sha256": "4442003879ac4ac7d455df1db16e0c5646652e6c9b44451f5d877345b8ff65d2"
+    },
+    {
+      "path": "src/parser.rs",
+      "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"
+    },
+    {
+      "path": "src/util.rs",
+      "sha256": "57b2022b743ad5f31cc08d18dfa5092f2246b6a57b2b49770deb0f53cd3e7561"
+    },
+    {
+      "path": "src/expr.rs",
+      "sha256": "7ea1a70e11c7adf1fa2f4be8e8a2f10f7fcd6441d73117fdc206a55ac2d76e3c"
+    },
+    {
+      "path": "src/tc.rs",
+      "sha256": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda"
+    },
+    {
+      "path": "src/tests.rs",
+      "sha256": "a77fb2e96c3440ca170f9bcb39279ad609582e0961f6605cf36d473e6e1cd52e"
+    },
+    {
+      "path": "src/tests/util.rs",
+      "sha256": "f2de3d3bc76336ef82e34374ba6f50a8b185e30f17f68bb1e517e2b48f6666c2"
+    },
+    {
+      "path": "src/tests/natlit.rs",
+      "sha256": "49e012cf9af881c4d3205795d2ced385e39128baa53770806489b69aaa1674fe"
+    },
+    {
+      "path": "test_resources/Empty/export",
+      "sha256": "6ecdb8d4389e5c525cd9dfd05bb610c8a9c74739d9a62dbecc6a049ceb0b9837"
+    },
+    {
+      "path": "test_resources/ProjFromProp/export",
+      "sha256": "5fc8f25b717c2dd56880064e43d87489b1bea202f5b5ef96d0d06a6ba7ce2022"
+    }
+  ],
+  "verdict": "SOURCE_SUPPORTED_INTERNAL_RECONSTRUCTION_REGRESSION_DESIGN; NO_PUBLIC_CHECKER_OUTCOME_CLAIM",
+  "finite_matrix": {
+    "flag_order": [
+      "nat_extension",
+      "string_extension"
+    ],
+    "presence_definitions": {
+      "required_prerequisites_absent": "The helper-required cached native names are absent; declaration map remains empty.",
+      "all_required_prerequisites_present": "The helper-required cached names are present; declaration map remains empty. This means all effective prerequisites of str_lit_to_constructor, not valid native declarations."
+    },
+    "cells": [
+      {
+        "nat_extension": false,
+        "string_extension": false,
+        "presence": "required_prerequisites_absent",
+        "parser_nat_literal": "Err_disabled_nat",
+        "parser_string_literal": "Err_disabled_string",
+        "quick_nat": "None",
+        "quick_string": "None",
+        "infer_nat": "not_called_no_literal",
+        "infer_string": "not_called_no_literal",
+        "nat_constructor": "not_called_flag_assertion_precondition",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": false,
+        "string_extension": false,
+        "presence": "all_required_prerequisites_present",
+        "parser_nat_literal": "Err_disabled_nat",
+        "parser_string_literal": "Err_disabled_string",
+        "quick_nat": "None",
+        "quick_string": "None",
+        "infer_nat": "not_called_no_literal",
+        "infer_string": "not_called_no_literal",
+        "nat_constructor": "not_called_flag_assertion_precondition",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": false,
+        "string_extension": true,
+        "presence": "required_prerequisites_absent",
+        "parser_nat_literal": "Err_disabled_nat",
+        "parser_string_literal": "admitted_at_literal_insertion",
+        "quick_nat": "None",
+        "quick_string": "Some(StringLit)",
+        "infer_nat": "not_called_no_literal",
+        "infer_string": "unwrap_panic_missing_cached_String",
+        "nat_constructor": "not_called_flag_assertion_precondition",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": false,
+        "string_extension": true,
+        "presence": "all_required_prerequisites_present",
+        "parser_nat_literal": "Err_disabled_nat",
+        "parser_string_literal": "admitted_at_literal_insertion",
+        "quick_nat": "None",
+        "quick_string": "Some(StringLit)",
+        "infer_nat": "not_called_no_literal",
+        "infer_string": "Const(String,[])_from_cached_name",
+        "nat_constructor": "not_called_flag_assertion_precondition",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": true,
+        "string_extension": false,
+        "presence": "required_prerequisites_absent",
+        "parser_nat_literal": "admitted_at_literal_insertion",
+        "parser_string_literal": "Err_disabled_string",
+        "quick_nat": "Some(NatLit)",
+        "quick_string": "None",
+        "infer_nat": "unwrap_panic_missing_cached_Nat",
+        "infer_string": "not_called_no_literal",
+        "nat_constructor": "None_missing_cached_zero_or_succ",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": true,
+        "string_extension": false,
+        "presence": "all_required_prerequisites_present",
+        "parser_nat_literal": "admitted_at_literal_insertion",
+        "parser_string_literal": "Err_disabled_string",
+        "quick_nat": "Some(NatLit)",
+        "quick_string": "None",
+        "infer_nat": "Const(Nat,[])_from_cached_name",
+        "infer_string": "not_called_no_literal",
+        "nat_constructor": "Some(Nat.zero)_or_Some(Nat.succ_(n-1))",
+        "string_constructor": "None_flag_gate"
+      },
+      {
+        "nat_extension": true,
+        "string_extension": true,
+        "presence": "required_prerequisites_absent",
+        "parser_nat_literal": "admitted_at_literal_insertion",
+        "parser_string_literal": "admitted_at_literal_insertion",
+        "quick_nat": "Some(NatLit)",
+        "quick_string": "Some(StringLit)",
+        "infer_nat": "unwrap_panic_missing_cached_Nat",
+        "infer_string": "unwrap_panic_missing_cached_String",
+        "nat_constructor": "None_missing_cached_zero_or_succ",
+        "string_constructor": "None_missing_cached_names"
+      },
+      {
+        "nat_extension": true,
+        "string_extension": true,
+        "presence": "all_required_prerequisites_present",
+        "parser_nat_literal": "admitted_at_literal_insertion",
+        "parser_string_literal": "admitted_at_literal_insertion",
+        "quick_nat": "Some(NatLit)",
+        "quick_string": "Some(StringLit)",
+        "infer_nat": "Const(Nat,[])_from_cached_name",
+        "infer_string": "Const(String,[])_from_cached_name",
+        "nat_constructor": "Some(Nat.zero)_or_Some(Nat.succ_(n-1))",
+        "string_constructor": "Some(String.ofList_list_of_Char.ofNat_scalar_literals)"
+      }
+    ],
+    "limits": "Parser rows cover literal insertion only. Inference rows describe cached-type construction, not declaration validity. Present-state returned Const names may lack declarations; direct helper matrix never invokes infer/defeq/check_declar. Empty and complete native declaration environments were not added as further cells.",
+    "axis_refinement": {
+      "reason": "Source establishes cache-name presence, not declaration presence, as the reconstruction helper prerequisite. Refine the frozen symbol/declaration-prerequisite wording explicitly; do not silently equate names with declarations.",
+      "states": "Two cache-name states, one declaration-map state (empty). This replaces the initially considered absent-names/declarations versus present-names/declarations reading; it does not add a third mixed state.",
+      "execution_condition": "Record this exact axis clarification in canonical source assessment/design before a later separately gated implementation. No implementation or experiment occurred during this review."
+    }
+  },
+  "source_findings": [
+    {
+      "id": "independent_flags",
+      "references": [
+        "README.md:35",
+        "src/util.rs:895-898",
+        "src/util.rs:936-960"
+      ],
+      "finding": "Separate flags default false; configuration validation does not require Nat when String is true. README does not describe a cross-extension dependency or guarantee full support for each mixed configuration."
+    },
+    {
+      "id": "parser_and_quick_constructor",
+      "references": [
+        "src/parser.rs:576-610",
+        "src/util.rs:573-601",
+        "src/util.rs:694"
+      ],
+      "finding": "Parser NatLit insertion gates only Nat; StrLit insertion gates only String. Quick constructors likewise follow their own flag/storage. Configure before constructing both permanent and temporary DAGs; post-construction flag toggles are not equivalent."
+    },
+    {
+      "id": "cache_not_declaration",
+      "references": [
+        "src/util.rs:720-779",
+        "src/parser.rs:419",
+        "src/expr.rs:644-668",
+        "src/tc.rs:532-538",
+        "src/tc.rs:221-231"
+      ],
+      "finding": "NameCache resolves interned hierarchical names, not declarations. Literal inference manufactures Const(Nat,[]) or Const(String,[]) from cache; ordinary constant inference separately looks up a declaration. Some reconstruction or a returned literal type does not establish valid declarations or whole-export acceptance."
+    },
+    {
+      "id": "string_reconstruction_dependency",
+      "references": [
+        "src/expr.rs:565-599"
+      ],
+      "finding": "str_lit_to_constructor returns None unless both flags are true. With both flags it needs cached Char, Char.ofNat, List.nil, List.cons, String.ofList, then builds a list in source character order with u32 Unicode scalar Nat literals. Even the empty string follows all five cache prerequisites. Return Some means syntactic construction only."
+    },
+    {
+      "id": "public_path_consumers",
+      "references": [
+        "src/tc.rs:331-353",
+        "src/tc.rs:447-458",
+        "src/tc.rs:1075-1095",
+        "src/tc.rs:996"
+      ],
+      "finding": "Private/crate-internal reconstruction feeds conversion, projection and recursor reduction reached from public declaration checking. None locally declines expansion or retains the major; it is not itself a public declaration rejection, and another route may determine the final result."
+    }
+  ],
+  "reuse_assessment": {
+    "source_tests": "Static inventory has 38 tests. Current active literal hash test uses both flags false; active natlit tests mainly compare integer helper operations. Commented checker tests are not executed coverage. No active mixed-flag string-reconstruction assertion was identified.",
+    "retained_nonvacuity_patch": "PR33 tests both-disabled and both-enabled quick-construction payload/interner behavior; it does not cover string-only constructor expansion.",
+    "retained_dispatch_patch": "Tests Nat operation dispatch with synthetic cached operation names, not String constructor reconstruction; reuse demonstrates in-memory cache setup but not native declaration validity.",
+    "other_retained_patches": "Inference-cache and reserved-namespace tests target unrelated boundaries; no mixed Nat/String policy contribution is supplied by them.",
+    "small_fixture_limit": "Neither upstream fixture supplies complete String/List/Char declarations. This blocks a claimed end-to-end regression here but does not block internal helper construction, whose actual prerequisites are five cached names. Keep declarations absent in both source-designed fixture states."
+  },
+  "selected_deliverable": {
+    "kind": "ONE_SOURCE_SUPPORTED_INTERNAL_REGRESSION_DESIGN",
+    "target": "ammkrn/nanoda_lib crate-internal TcCtx::str_lit_to_constructor",
+    "priority": "A small held-local preventive regression after separately bounded implementation and fresh source/duplicate/capacity review.",
+    "basis": "expr.rs:565 explicitly describes conversion to String.ofList over List.cons/Char.ofNat. Positive Some structure and exact Unicode scalar order are an independent regression property beyond existing literal creation/interning coverage and beyond an undocumented None observation.",
+    "fixture": "Fresh empty ExportFile configured before DAG creation for each flag combination. Declaration map stays empty. Absent-name state retains empty name cache. Present-name state interns permanent Nat.zero, Nat.succ, String.ofList, Char.ofNat, List.nil and List.cons with parser-compatible Name hashes and ExportFile tags; ancestors supply Nat/String/Char/List. Rebuild mk_name_cache and assert relevant identities. Payloads are allocated only inside their owning context.",
+    "finite_controls": {
+      "names_present_both_flags_enabled": "For empty payload require Some(App(Const String.ofList [], App(Const List.nil [0], Const Char []))). For A\u00e9\ud834\udd1e require Some with three cons cells, one Char.ofNat applied to each NatLit Unicode scalar in order [65,233,119070], then List.nil Char. Verify every constructor head, universe argument and application arity by destructuring; do not build expected output by reusing conversion helper.",
+      "names_present_mixed_or_disabled_flags": "Every flag combination except both enabled returns None. In string-only mode quick StringLit construction may independently be inspected as Some; absence from reconstruction is kept distinct.",
+      "names_absent": "Both-enabled helper returns None for missing effective prerequisites; other flag combinations return None at the earlier flag gate. No missing-name subset matrix.",
+      "positive_requirement": "At least one exact Some structural/payload result is required. Comparing two None values cannot establish success."
+    },
+    "scope": "Supported crate-internal raw-expression conversion contract only. No type inference, definitional equality, native declaration validation, public exported-input acceptance/refusal, or universal semantics claim.",
+    "maintainer_benefit": "Protects Unicode scalar encoding, sequence order, list terminator, constructor names/universes, and extension interaction with one small reusable internal test.",
+    "implementation_gate": "Fresh bounded test-only successor and committed source/patch/fixture/expected-cell/tooling/accounting freeze before any build/test. Existing permanent-name test utilities are reusable; generated serialized exports, production change, third prerequisite state and extra literal families remain excluded."
+  },
+  "caveats": [
+    "No current defect, public input acceptance/rejection difference, universal Lean obligation, or test execution is established.",
+    "The mixed-flag None result is implementation behavior protected alongside a positive shape control; it is not promoted to a universal public refusal contract.",
+    "Do not label cached names as valid declarations. The final source-designed fixture has two name-cache states with an empty declaration map in both, following the helper actual prerequisites.",
+    "Adding complete or partial declaration environments, missing-name subsets or per-character campaigns would expand this matrix and is excluded.",
+    "No new serialized input bytes or native declaration fixtures were produced.",
+    "Compilation and maintainability of the proposed test remain to be established in its separately bounded implementation item."
+  ],
+  "review_launches": {
+    "network": 0,
+    "builds": 0,
+    "tests": 0,
+    "checkers": 0,
+    "proofs": 0,
+    "mutants": 0,
+    "new_exports": 0,
+    "external_writes": 0
+  },
+  "documentation_alternative": {
+    "disposition": "Secondary alternative, not an additional selected deliverable.",
+    "question": "Should README explain that constructor expansion of String literals requires both extensions although parsing and quick construction gate only String?",
+    "reason_not_selected": "The exact positive reconstruction shape supplies a concrete preventive regression with source-comment support. Documentation alone leaves intended public completeness unresolved and should not be escalated into a policy claim."
+  },
+  "review_resolution": "Initial independent preference for a documentation question assumed a complete-declaration positive control was required. Source review of the proposed internal shape assertion established that declarations are irrelevant to this helper contract; explicit axis clarification and positive structural checks support the internal regression without that public-validity assumption.",
+  "final_design_review": {
+    "verdict": "SOURCE_SUPPORTED_NO_REQUIRED_CHANGES",
+    "bindings": [
+      {
+        "path": "results/research/nanoda-native-config-boundary-1/matrix.json",
+        "sha256": "443630e3589f3740606f73a5d338034fd3e8313b3c4145350594155c3dfcdfe9",
+        "bytes": 5574
+      },
+      {
+        "path": "results/research/nanoda-native-config-boundary-1/source-assessment.json",
+        "sha256": "fd79f91872740f3b0d0679a245a3daacfe5ed5f26d59d6c3b8d7608fd4b9d8d0",
+        "bytes": 22080
+      },
+      {
+        "path": "results/research/nanoda-native-config-boundary-1/regression-design.json",
+        "sha256": "5057ed6245560d43f5c9c817016903e96e12f6bca629e2d4edf1d8f0f18d09ee",
+        "bytes": 6219
+      }
+    ],
+    "checks": [
+      "Eight unique flag/cache-name cells preserve one empty-declaration state; axis clarification explicitly replaces ambiguous prerequisite language.",
+      "Parser predictions are literal-line gates qualified against unsupported whole-stream or checker outcomes.",
+      "Literal inference predictions correctly distinguish missing cached-name unwrap from syntactic Const return and do not claim declaration existence.",
+      "A\u00e9\ud834\udd1e fixed scalar list [65,233,119070] is correct; List.cons and List.nil universe [0], Char/Char.ofNat/String.ofList empty universes and arities match pinned source.",
+      "Permanent name insertion and context-local payload ownership support internal helper use without a complete native prelude.",
+      "Enabled StringLit construction is verified before extracting its payload; String-disabled cells use a supported StringPtr and are explicitly not admitted-expression claims.",
+      "Positive complete shape assertions and no-extra-elements check avoid comparing two None results or reusing production conversion for expected values.",
+      "No inference/defeq/WHNF/checker/parser execution, new serialized stream, partial missing-name matrix or mutation-sensitivity claim is included."
+    ],
+    "followup": "NANODA-STRING-RECONSTRUCTION-TEST-1 is a supported bounded test-only implementation successor, provided it is selected READY and remains unstarted until its own fresh entry and launch gates."
+  }
+}

@@ -1,0 +1,157 @@
+{
+  "item_id": "NANODA-NATIVE-CONFIG-BOUNDARY-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "evidence_kind": "SOURCE_INFERENCE",
+  "source_lock": {
+    "path": "results/research/nanoda-native-config-boundary-1/source-lock.json",
+    "sha256": "1afe0b69ed0280cbe8aa64c9f8ef01e08df31a843770785b7eb693016c6564c1",
+    "bytes": 5287
+  },
+  "matrix": {
+    "path": "results/research/nanoda-native-config-boundary-1/matrix.json",
+    "sha256": "443630e3589f3740606f73a5d338034fd3e8313b3c4145350594155c3dfcdfe9",
+    "bytes": 5574
+  },
+  "excerpts": [
+    {
+      "path": "README.md",
+      "start_line": 33,
+      "end_line": 35,
+      "source_sha256": "4442003879ac4ac7d455df1db16e0c5646652e6c9b44451f5d877345b8ff65d2",
+      "meaning": "User-facing independent flag descriptions",
+      "text": "If `\"unsafe_permit_all_axioms\"` is set to `true`, all axioms will be admitted to the environment (when using this option, you must also explicitly set `\"unpermitted_axiom_hard_error\": false` to avoid a hard error on startup). This is checked so as to be mutually exclusive with any of the axiom allow list/whitelist features: it cannot be combined with `\"unpermitted_axiom_hard_error\": true` or with a non-empty `\"permitted_axioms\"` list, and either combination will result in a hard error. Defaults to `false`.\n\n`\"nat_extension\"` and `\"string_extension\"` enable or disable the Nat and String kernel extensions. While we expect most users to opt into the Nat and String kernel extensions, they are disabled by default.\n"
+    },
+    {
+      "path": "src/parser.rs",
+      "start_line": 576,
+      "end_line": 610,
+      "source_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+      "meaning": "Independent literal-line admission gates",
+      "text": "            NatLit(big_uint) => {\n                if !self.config.nat_extension {\n                    return Err(Box::<dyn Error>::from(\n                        format!(\"Nat lit extension disallowed by checker execution config, but export file contains a nat literal {:?}\", line)\n                    ))\n                }\n                let num_ptr = BigUintPtr::from(DagMarker::ExportFile, self.dag.bignums.as_mut().unwrap().insert_full(big_uint).0);\n                let insert_result = {\n                    let hash = hash64!(crate::expr::NAT_LIT_HASH, num_ptr);\n                    self.dag.exprs.insert_full(Expr::NatLit { ptr: num_ptr, hash })\n                };\n                if !self.config.nat_extension {\n                    return Err(Box::<dyn Error>::from(\n                        format!(\"Nat lit extension disallowed by checker execution config, found {:?}\", line)\n                    ))\n                }\n                assigned_idx.unwrap().assert_ie(insert_result);\n            }\n            StrLit(cow_str) => {\n                if !self.config.string_extension {\n                    return Err(Box::<dyn Error>::from(\n                        format!(\"String lit extension disallowed by checker execution config, but export file contains a string literal {:?}\", line)\n                    ))\n                }\n                let s = cow_str.to_string();\n                let string_ptr = StringPtr::from(\n                    DagMarker::ExportFile,\n                    self.dag.strings.insert_full(crate::util::CowStr::Owned(s)).0\n                );\n                let insert_result = {\n                    let hash = hash64!(crate::expr::STRING_LIT_HASH, string_ptr);\n                    self.dag.exprs.insert_full(Expr::StringLit { ptr: string_ptr, hash })\n                };\n                assigned_idx.unwrap().assert_ie(insert_result);\n            }\n"
+    },
+    {
+      "path": "src/parser.rs",
+      "start_line": 419,
+      "end_line": 447,
+      "source_sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+      "meaning": "Name cache constructed from DAG separately from declarations",
+      "text": "    let name_cache = parser.dag.mk_name_cache();\n    // Maps inductive names to exported recursor names. This is later reused in the inductive\n    // module to require that the set of derived recursors matches the set of exported recursors,\n    // so that additional \"unassociated\" recursors cannot be added to the environment.\n    let mut ind_name_to_recursor_names = new_fx_hash_map();\n    for declar in parser.declars.values() {\n        match declar {\n            Declar::Constructor(ConstructorData {inductive_name, info, ..}) => {\n                match parser.declars.get(inductive_name).unwrap() {\n                    Declar::Inductive(InductiveData {all_ctor_names, ..}) => {\n                        assert!(all_ctor_names.contains(&info.name))\n                    },\n                    _ => panic!(\"failed to find inductive {:?}\", parser.name_to_string(*inductive_name))\n                }\n            }\n            Declar::Recursor(RecursorData {all_inductives, info, ..}) => {\n                for ind_name in all_inductives.iter().copied() {\n                    ind_name_to_recursor_names.entry(ind_name).or_insert(new_fx_hash_set()).insert(info.name);\n                }\n            },\n            _ => continue\n        }\n    }\n    \n    let export_file = crate::util::ExportFile {\n        dag: parser.dag,\n        declars: parser.declars,\n        notations: parser.notations,\n        name_cache,\n"
+    },
+    {
+      "path": "src/util.rs",
+      "start_line": 573,
+      "end_line": 602,
+      "source_sha256": "57b2022b743ad5f31cc08d18dfa5092f2246b6a57b2b49770deb0f53cd3e7561",
+      "meaning": "Flag-dependent raw literal construction",
+      "text": "    pub fn mk_string_lit(&mut self, string_ptr: StringPtr<'t>) -> Option<ExprPtr<'t>> {\n        if !self.export_file.config.string_extension {\n            return None\n        }\n        let hash = hash64!(crate::expr::STRING_LIT_HASH, string_ptr);\n        Some(self.alloc_expr(Expr::StringLit { ptr: string_ptr, hash }))\n    }\n\n    pub fn mk_string_lit_quick(&mut self, s: CowStr<'t>) -> Option<ExprPtr<'t>> {\n        if !self.export_file.config.string_extension {\n            return None\n        }\n        let string_ptr = self.alloc_string(s);\n        self.mk_string_lit(string_ptr)\n    }\n\n    pub fn mk_nat_lit(&mut self, num_ptr: BigUintPtr<'t>) -> Option<ExprPtr<'t>> {\n        if !self.export_file.config.nat_extension {\n            return None\n        }\n        let hash = hash64!(crate::expr::NAT_LIT_HASH, num_ptr);\n        Some(self.alloc_expr(Expr::NatLit { ptr: num_ptr, hash }))\n    }\n\n    /// Shortcut to make an `Expr::NatLit` directly from a `BigUint`, rather than\n    /// going `alloc_bignum` and `mk_nat_lit`\n    pub fn mk_nat_lit_quick(&mut self, n: BigUint) -> Option<ExprPtr<'t>> {\n        let num_ptr = self.alloc_bignum(n)?;\n        self.mk_nat_lit(num_ptr)\n    }\n"
+    },
+    {
+      "path": "src/util.rs",
+      "start_line": 684,
+      "end_line": 699,
+      "source_sha256": "57b2022b743ad5f31cc08d18dfa5092f2246b6a57b2b49770deb0f53cd3e7561",
+      "meaning": "Nat storage allocated when new DAG is created",
+      "text": "    ///\n    /// So when creating a new parser, we need to begin by placing `Anon` and `Zero` in the 0th position\n    /// of their backing storage, satisfying the exporter's assumption.\n    pub fn new(config: &Config) -> Self {\n        let mut out = Self {\n            names: new_unique_index_set(),\n            levels: new_unique_index_set(),\n            exprs: new_unique_index_set(),\n            uparams: new_fx_index_set(),\n            strings: new_fx_index_set(),\n            bignums: if config.nat_extension { Some(new_fx_index_set()) } else { None },\n        };\n\n        let _ = out.names.insert(Name::Anon);\n        let _ = out.levels.insert(Level::Zero);\n        out\n"
+    },
+    {
+      "path": "src/util.rs",
+      "start_line": 743,
+      "end_line": 777,
+      "source_sha256": "57b2022b743ad5f31cc08d18dfa5092f2246b6a57b2b49770deb0f53cd3e7561",
+      "meaning": "Syntactic cached-name lookup",
+      "text": "    pub(crate) fn mk_name_cache(&self) -> NameCache<'a> {\n        NameCache {\n            eager_reduce: self.find_name(\"eagerReduce\"),\n            quot: self.find_name(\"Quot\"),\n            quot_mk: self.find_name(\"Quot.mk\"),\n            quot_lift: self.find_name(\"Quot.lift\"),\n            quot_ind: self.find_name(\"Quot.ind\"),\n            string: self.find_name(\"String\"),\n            string_of_list: self.find_name(\"String.ofList\"),\n            nat: self.find_name(\"Nat\"),\n            nat_zero: self.find_name(\"Nat.zero\"),\n            nat_succ: self.find_name(\"Nat.succ\"),\n            nat_add: self.find_name(\"Nat.add\"),\n            nat_sub: self.find_name(\"Nat.sub\"),\n            nat_mul: self.find_name(\"Nat.mul\"),\n            nat_pow: self.find_name(\"Nat.pow\"),\n            nat_mod: self.find_name(\"Nat.mod\"),\n            nat_div: self.find_name(\"Nat.div\"),\n            nat_beq: self.find_name(\"Nat.beq\"),\n            nat_ble: self.find_name(\"Nat.ble\"),\n            nat_gcd: self.find_name(\"Nat.gcd\"),\n            nat_xor: self.find_name(\"Nat.xor\"),\n            nat_land: self.find_name(\"Nat.land\"),\n            nat_lor: self.find_name(\"Nat.lor\"),\n            nat_shl: self.find_name(\"Nat.shiftLeft\"),\n            nat_shr: self.find_name(\"Nat.shiftRight\"),\n            bool_true: self.find_name(\"Bool.true\"),\n            bool_false: self.find_name(\"Bool.false\"),\n            char: self.find_name(\"Char\"),\n            char_of_nat: self.find_name(\"Char.ofNat\"),\n            list: self.find_name(\"List\"),\n            list_nil: self.find_name(\"List.nil\"),\n            list_cons: self.find_name(\"List.cons\"),\n        }\n    }\n"
+    },
+    {
+      "path": "src/expr.rs",
+      "start_line": 537,
+      "end_line": 551,
+      "source_sha256": "7ea1a70e11c7adf1fa2f4be8e8a2f10f7fcd6441d73117fdc206a55ac2d76e3c",
+      "meaning": "Optional Nat constructor conversion",
+      "text": "    /// Used in iota reduction (`reduce_rec`) to turn a bignum\n    /// either `Nat.zero`, or `App (Nat.succ) (bignum - 1)`; in order to do iota reduction,\n    /// we need to know what constructor the major premise comes from.\n    pub(crate) fn nat_lit_to_constructor(&mut self, n: BigUintPtr<'t>) -> Option<ExprPtr<'t>> {\n        assert!(self.export_file.config.nat_extension);\n        let n = self.read_bignum(n).unwrap();\n        if n.is_zero() {\n            self.c_nat_zero()\n        } else {\n            let pred = self.alloc_bignum(core::ops::Sub::sub(n, 1u8)).unwrap();\n            let pred = self.mk_nat_lit(pred).unwrap();\n            let succ_c = self.c_nat_succ()?;\n            Some(self.mk_app(succ_c, pred))\n        }\n    }\n"
+    },
+    {
+      "path": "src/expr.rs",
+      "start_line": 565,
+      "end_line": 600,
+      "source_sha256": "7ea1a70e11c7adf1fa2f4be8e8a2f10f7fcd6441d73117fdc206a55ac2d76e3c",
+      "meaning": "Documented String encoding and effective prerequisites",
+      "text": "    /// Convert a string literal to `String.ofList <| List.cons (Char.ofNat _) .. List.nil`\n    pub(crate) fn str_lit_to_constructor(&mut self, s: StringPtr<'t>) -> Option<ExprPtr<'t>> {\n        if (!self.export_file.config.string_extension) || (!self.export_file.config.nat_extension) {\n            return None\n        }\n        let zero = self.zero();\n        let empty_levels = self.alloc_levels_slice(&[]);\n        let tyzero_levels = self.alloc_levels_slice(&[zero]);\n        // Const(Char, [])\n        let c_char = self.mk_const(self.export_file.name_cache.char?, empty_levels);\n        // Const(Char.ofNat, [])\n        let c_char_of_nat = self.mk_const(self.export_file.name_cache.char_of_nat?, empty_levels);\n        // @List.nil.{0} Char\n        let c_list_nil_char = {\n            let f = self.mk_const(self.export_file.name_cache.list_nil?, tyzero_levels);\n            self.mk_app(f, c_char)\n        };\n        // @List.cons.{0} Char\n        let c_list_cons_char = {\n            let f = self.mk_const(self.export_file.name_cache.list_cons?, tyzero_levels);\n            self.mk_app(f, c_char)\n        };\n        let mut out = c_list_nil_char;\n        for c in self.read_string(s).clone().chars().rev() {\n            let bignum = self.alloc_bignum(BigUint::from(c as u32)).unwrap();\n            let bignum = self.mk_nat_lit(bignum).unwrap();\n            // Char.ofNat (c as u32)\n            let x = self.mk_app(c_char_of_nat, bignum);\n            // List.cons (Char.ofNat u32)\n            let y = self.mk_app(c_list_cons_char, x);\n            // (List.cons (Char.ofNat u32)) xs\n            out = self.mk_app(y, out);\n        }\n        let string_of_list_const = self.mk_const(self.export_file.name_cache.string_of_list?, empty_levels);\n        Some(self.mk_app(string_of_list_const, out))\n    }\n"
+    },
+    {
+      "path": "src/expr.rs",
+      "start_line": 657,
+      "end_line": 668,
+      "source_sha256": "7ea1a70e11c7adf1fa2f4be8e8a2f10f7fcd6441d73117fdc206a55ac2d76e3c",
+      "meaning": "Syntactic native type constants",
+      "text": "    pub(crate) fn nat_type(&mut self) -> Option<ExprPtr<'t>> {\n        let n = self.export_file.name_cache.nat?;\n        let levels = self.alloc_levels_slice(&[]);\n        Some(self.mk_const(n, levels))\n    }\n\n    /// Make `Const(\"String\", [])`\n    pub(crate) fn string_type(&mut self) -> Option<ExprPtr<'t>> {\n        let n = self.export_file.name_cache.string?;\n        let levels = self.alloc_levels_slice(&[]);\n        Some(self.mk_const(n, levels))\n    }\n"
+    },
+    {
+      "path": "src/tc.rs",
+      "start_line": 513,
+      "end_line": 548,
+      "source_sha256": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+      "meaning": "Literal inference asserts flag and unwraps name-derived type",
+      "text": "    pub(crate) fn infer(&mut self, e: ExprPtr<'t>, flag: InferFlag) -> ExprPtr<'t> {\n        if let Some(cached) = self.tc_cache.infer_cache_check.get(&e).copied() {\n            return cached\n        }\n        if flag == InferFlag::InferOnly {\n            if let Some(cached) = self.tc_cache.infer_cache_no_check.get(&e).copied() {\n                return cached\n            }\n        }\n        let r = match self.ctx.read_expr(e) {\n            Local { binder_type, .. } => binder_type,\n            Var { .. } => panic!(\"no loose bvars allowed in infer\"),\n            Sort { level, .. } => self.infer_sort(level, flag),\n            App { .. } => self.infer_app(e, flag),\n            Pi { .. } => self.infer_pi(e, flag),\n            Lambda { .. } => self.infer_lambda(e, flag),\n            Let { binder_type, val, body, .. } => self.infer_let(binder_type, val, body, flag),\n            Const { name, levels, .. } => self.infer_const(name, levels, flag),\n            Proj { ty_name, idx, structure, .. } => self.infer_proj(ty_name, idx, structure, flag),\n            NatLit { .. } => {\n                assert!(self.ctx.export_file.config.nat_extension);\n                self.ctx.nat_type().unwrap()\n            }\n            StringLit { .. } => {\n                assert!(self.ctx.export_file.config.string_extension);\n                self.ctx.string_type().unwrap()\n            }\n        };\n        match flag {\n            InferFlag::InferOnly => {\n                self.tc_cache.infer_cache_no_check.insert(e, r);\n            }\n            InferFlag::Check => {\n                self.tc_cache.infer_cache_check.insert(e, r);\n            }\n        }\n"
+    },
+    {
+      "path": "src/tc.rs",
+      "start_line": 331,
+      "end_line": 355,
+      "source_sha256": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+      "meaning": "String expansion used by definitional equality",
+      "text": "    fn str_lit_to_ctor_reducing(&mut self, x: StringPtr<'t>) -> Option<ExprPtr<'t>> {\n        self.ctx.str_lit_to_constructor(x).map(|x| self.whnf(x))\n    }\n\n    fn try_string_lit_expansion_aux(&mut self, x: ExprPtr<'t>, y: ExprPtr<'t>) -> Option<bool> {\n        if let (StringLit { ptr, .. }, App { fun, .. }) = self.ctx.read_expr_pair(x, y) {\n            if let Some((name, _levels)) = self.ctx.try_const_info(fun) {\n                if name == self.ctx.export_file.name_cache.string_of_list? {\n                    // levels should be empty\n                    let lhs = self.str_lit_to_ctor_reducing(ptr)?;\n                    return Some(self.def_eq(lhs, y))\n                }\n            }\n        }\n        None\n    }\n\n    fn try_string_lit_expansion(&mut self, x: ExprPtr<'t>, y: ExprPtr<'t>) -> bool {\n        if !self.ctx.export_file.config.string_extension {\n            return false\n        }\n        matches!(self.try_string_lit_expansion_aux(x, y), Some(true))\n            || matches!(self.try_string_lit_expansion_aux(y, x), Some(true))\n    }\n\n"
+    },
+    {
+      "path": "src/tc.rs",
+      "start_line": 447,
+      "end_line": 461,
+      "source_sha256": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+      "meaning": "Optional String expansion in projection reduction",
+      "text": "    fn reduce_proj(&mut self, idx: usize, structure: ExprPtr<'t>, cheap: bool) -> Option<ExprPtr<'t>> {\n        let mut structure = if cheap { self.whnf_no_unfolding_cheap_proj(structure) } else { self.whnf(structure) };\n        if let StringLit { ptr, .. } = self.ctx.read_expr(structure) {\n            if let Some(s) = self.str_lit_to_ctor_reducing(ptr) {\n                structure = s;\n            }\n        }\n        let (_, name, _, args) = self.ctx.unfold_const_apps(structure)?;\n        let ConstructorData { num_params, .. } = self.env.get_constructor(&name)?;\n        let i = (*num_params as usize) + idx;\n        Some(args.get(i).copied().unwrap())\n    }\n\n    pub(crate) fn infer_then_whnf(&mut self, e: ExprPtr<'t>, flag: InferFlag) -> ExprPtr<'t> {\n        let ty = self.infer(e, flag);\n"
+    },
+    {
+      "path": "src/tc.rs",
+      "start_line": 1074,
+      "end_line": 1100,
+      "source_sha256": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+      "meaning": "Optional native reconstruction in recursor reduction",
+      "text": "    \n    fn reduce_rec(\n        &mut self,\n        const_name: NamePtr<'t>,\n        const_levels: LevelsPtr<'t>,\n        args: &[ExprPtr<'t>],\n    ) -> Option<ExprPtr<'t>> {\n        let rec @ RecursorData { info, rec_rules, num_params, num_motives, num_minors, .. } =\n            self.env.get_recursor(&const_name)?;\n        let major = args.get(rec.major_idx()).copied()?;\n        let major = self.to_ctor_when_k(major, rec).unwrap_or(major);\n        let major = self.whnf(major);\n        let major = match self.ctx.read_expr(major) {\n            NatLit { ptr, .. } => self.ctx.nat_lit_to_constructor(ptr).unwrap_or(major),\n            StringLit { ptr, .. } => self.str_lit_to_ctor_reducing(ptr).unwrap_or(major),\n            _ => {\n                let ind_rec_name_prefix = self.ctx.get_major_induct(rec).unwrap();\n                self.iota_try_eta_struct(ind_rec_name_prefix, major)\n            }\n        };\n        let (major_ctor, major_ctor_args) = self.ctx.unfold_apps(major);\n        let rec_rule = self.get_rec_rule(rec_rules, major_ctor)?;\n\n        // The number of parameters in the constructor is not necessarily\n        // equal to the number of parameters in the recursor when we have\n        // nested inductive types.\n        let num_extra_params_to_major =\n"
+    }
+  ],
+  "findings": [
+    "String-only configuration admits/constructs StringLit but disables constructor reconstruction even when all cached names are supplied.",
+    "Both-enabled raw literals do not imply inference or reconstruction prerequisites exist.",
+    "Cached type names let literal inference return a syntactic type constant without declaration lookup; this is not a declaration-validity or soundness result.",
+    "Successful String conversion is a concrete syntax contract documented beside the function: String.ofList of List.cons/Char.ofNat scalar values, ending in List.nil, with fixed constructor arities/levels.",
+    "Source consumers link reconstruction to defeq/projection/recursor paths, but no outcome in those callers is established by this source-only design."
+  ],
+  "fixture_audit": {
+    "tracked_fixtures": [
+      "test_resources/Empty/export",
+      "test_resources/ProjFromProp/export"
+    ],
+    "complete_string_prelude_fixture_available": false,
+    "consequence": "Use crate-internal syntactic reconstruction test with a real StringLit and owned names. No public parser/checker/defeq/typing result or well-typed prelude claim.",
+    "no_new_serialized_exports": true
+  },
+  "candidate_comparison": [
+    {
+      "candidate": "Exact String reconstruction and configuration regression",
+      "decision": "SELECT_ONE",
+      "reason": "Positive Unicode and empty shapes establish an independently stated representation contract beyond optional-return observation, plus distinct mixed-flag and missing-name controls. No current or retained patch asserts it; small reusable fixture construction is source-supported."
+    },
+    {
+      "candidate": "Standalone README dependency question",
+      "decision": "DO_NOT_PREPARE_SECOND_DELIVERABLE",
+      "reason": "Real documentation ambiguity, but current source alone does not establish intended full String semantics. A focused internal representation test yields more concrete executable follow-up without contacting maintainers or asserting a global config policy."
+    },
+    {
+      "candidate": "Public string-only semantic acceptance/defeq pair",
+      "decision": "EXCLUDE",
+      "reason": "No bound complete String prelude fixture, no permitted new serialized bytes and no current execution. Cannot promote helper returns to checker outcomes."
+    }
+  ],
+  "current_bug": false,
+  "universal_obligation": false,
+  "execution": false
+}

@@ -1,0 +1,257 @@
+#!/usr/bin/env python3
+"""Validate the source-only native-configuration boundary closure against immutable entry evidence."""
+from datetime import datetime
+import hashlib
+import json
+import math
+from pathlib import Path
+import re
+import subprocess
+import sys
+import tempfile
+
+ROOT = Path(__file__).resolve().parents[1]
+PREFIX = "results/research/nanoda-native-config-boundary-1/"
+ITEM = "NANODA-NATIVE-CONFIG-BOUNDARY-1"
+BUNDLE = "results/research/hsbm-pilot-1/nanoda-history.bundle"
+BUNDLE_SHA = "11bcf77b775953c7890d728f2f34b1dc30ded20ac8fc8ca88d7d54f914c39e1e"
+TIP = "4c544ed4099c8227f07d5de77ad1e69fb0740a27"
+ZERO_COUNTS = ("builds", "test_processes", "checkers", "proofs", "mutants", "new_exports", "external_research_writes")
+ENTRY_COMMIT = "ab3da784231930e99cea4e850971be17fb0c1b42"
+FROZEN = ("entry-lock.json", "entry-queue.json", "work-record.json", "action-rubric.json",
+          "source-lock.json", "test-inventory.json")
+LEAF_NAMES = {"Nat.zero", "Nat.succ", "String.ofList", "Char.ofNat", "List.nil", "List.cons"}
+
+
+def validate_design(design, matrix):
+    require(design["item_id"] == ITEM and design["source_revision"] == TIP, "design source identity")
+    require(design["status"] == "SOURCE_SUPPORTED_UNEXECUTED", "design execution claim")
+    require(type(design["deliverable_count"]) is int and design["deliverable_count"] == 1, "design scope expanded")
+    for key in ("current_bug", "universal_obligation", "execution", "public_semantic_acceptance", "mutation_sensitivity"):
+        require(design["claims"][key] is False, "unsupported design claim: " + key)
+    require(len(design["cells"]) == 8 and set(design["cells"]) == {row["id"] for row in matrix["rows"]}, "design/matrix cells mismatch")
+    fixture = design["fixture"]
+    require(fixture["declarations_present"] is False and fixture["cached_name_states"] == ["ABSENT", "PRESENT"], "design declaration/name state mismatch")
+    require(len(fixture["present_leaf_paths"]) == 6 and set(fixture["present_leaf_paths"]) == LEAF_NAMES, "design cached names mismatch")
+    require(design["payloads"] == [{"text": "", "unicode_scalars": []}, {"text": "Aé𝄞", "unicode_scalars": [65, 233, 119070]}], "design payload/control changed")
+
+
+def validate_excerpts(assessment, blobs):
+    require(assessment["item_id"] == ITEM and assessment["source_revision"] == TIP
+            and assessment["evidence_kind"] == "SOURCE_INFERENCE", "assessment source/evidence identity")
+    for key in ("current_bug", "universal_obligation", "execution"):
+        require(assessment[key] is False, "unsupported assessment claim: " + key)
+    require(bool(assessment["excerpts"]), "source excerpts missing")
+    for row in assessment["excerpts"]:
+        raw = blobs[row["path"]]
+        lines = raw.decode().splitlines(keepends=True)
+        start, end = count(row["start_line"], "excerpt start"), count(row["end_line"], "excerpt end")
+        require(1 <= start <= end <= len(lines), "invalid source excerpt range")
+        require(row["source_sha256"] == digest(raw) and row["text"] == "".join(lines[start - 1:end]), "source excerpt binding mismatch")
+
+
+def validate_matrix(matrix):
+    require(matrix["item_id"] == ITEM and matrix["source_revision"] == TIP, "matrix source identity")
+    require(matrix["evidence_kind"] == "SOURCE_INFERENCE", "matrix execution claim")
+    refinement = matrix["state_refinement"]
+    require(refinement["axis"] == "CACHED_NAME_PRESENCE"
+            and type(refinement["declaration_presence_states"]) is int
+            and refinement["declaration_presence_states"] == 1
+            and refinement["declarations_present"] is False and bool(refinement["reason"]),
+            "invalid cached-name/declaration state refinement")
+    rows = matrix["rows"]
+    require(len(rows) == 8, "matrix requires exactly eight cells")
+    identifiers, cells = set(), set()
+    for row in rows:
+        require(isinstance(row["id"], str) and row["id"] and row["id"] not in identifiers, "duplicate or empty matrix ID")
+        identifiers.add(row["id"])
+        nat, string = row["nat_extension"], row["string_extension"]
+        require(type(nat) is bool and type(string) is bool, "matrix flags must be Boolean")
+        require(row["prerequisites"] in ("ABSENT", "PRESENT"), "invalid prerequisite state")
+        cell = (nat, string, row["prerequisites"])
+        require(cell not in cells, "duplicate matrix configuration")
+        cells.add(cell)
+        require(row["declarations_present"] is False, "cached names are not declarations")
+        for key, expected in (("parser_nat", "ADMIT" if nat else "REJECT"),
+                              ("parser_string", "ADMIT" if string else "REJECT"),
+                              ("quick_nat", "SOME" if nat else "NONE"),
+                              ("quick_string", "SOME" if string else "NONE"),
+                              ("nat_reconstruction", "UNREACHED" if not nat else "NONE" if row["prerequisites"] == "ABSENT" else "SOME_ZERO_OR_SUCC"),
+                              ("string_reconstruction", "SOME_SHAPE" if nat and string and row["prerequisites"] == "PRESENT" else "NONE")):
+            require(row[key] == expected, "matrix source condition mismatch: " + key)
+        for key, flag in (("nat", nat), ("string", string)):
+            expected = "UNREACHED" if not flag else "PANIC_MISSING_NAME" if row["prerequisites"] == "ABSENT" else "SYNTACTIC_TYPE_CONST"
+            require(row["native_typing"][key] == expected, "native typing source condition mismatch")
+
+
+def validate_source(root, source, tests):
+    inventory = source["inventory"]
+    names = [row["path"] for row in inventory]
+    require(names and len(names) == len(set(names)), "empty or duplicate source inventory")
+    # Only local Git object reads: no checkout, build, checker, or network request.
+    with tempfile.TemporaryDirectory(prefix="native-config-source-binding-") as temporary:
+        bare = Path(temporary) / "source.git"
+        subprocess.run(["git", "init", "--bare", "--quiet", str(bare)], check=True)
+        subprocess.run(["git", "-C", str(bare), "bundle", "unbundle", str(safe_path(root, BUNDLE))],
+                       check=True, stdout=subprocess.DEVNULL)
+        tree = subprocess.check_output(["git", "-C", str(bare), "rev-parse", TIP + "^{tree}"], text=True).strip()
+        require(source["tree"] == tree, "source tree identity mismatch")
+        tracked = subprocess.check_output(["git", "-C", str(bare), "ls-tree", "-r", "--name-only", TIP], text=True).splitlines()
+        require(set(tracked) == set(names), "incomplete or extra tracked source inventory")
+        discovered, blobs = [], {}
+        for row in inventory:
+            safe_path(root, row["path"])
+            raw = git_bytes(bare, TIP, row["path"])
+            blobs[row["path"]] = raw
+            require(row["sha256"] == digest(raw) and count(row["bytes"], "source bytes") == len(raw),
+                    "source inventory binding mismatch: " + row["path"])
+            if row["path"].startswith("src/") and row["path"].endswith(".rs"):
+                text = raw.decode()
+                for match in re.finditer(r"(?m)^[ \t]*#\[test\][^\S\n]*\n(?:[ \t]*#\[[^\n]+\]\n)*[ \t]*(?:pub )?fn ([A-Za-z0-9_]+)", text):
+                    discovered.append({"path": row["path"], "name": match.group(1), "line": text.count("\n", 0, match.start()) + 1})
+        require(tests["item_id"] == ITEM and tests["source_revision"] == TIP, "test inventory source identity")
+        require(tests["kind"] == "STATIC_DECLARED_TEST_INVENTORY_NOT_EXECUTION", "test inventory execution claim")
+        key = lambda row: (row["path"], row["line"], row["name"])
+        require(count(tests["count"], "test inventory count") == 38 and len(discovered) == 38
+                and sorted(tests["tests"], key=key) == sorted(discovered, key=key), "static test inventory mismatch")
+        return blobs
+
+
+def require(condition, message):
+    if not condition:
+        raise ValueError(message)
+
+
+def digest(data):
+    return hashlib.sha256(data).hexdigest()
+
+
+def number(value, name):
+    require(type(value) in (int, float) and math.isfinite(value) and value >= 0,
+            "invalid " + name)
+    return value
+
+
+def count(value, name):
+    require(type(value) is int and value >= 0, "invalid " + name)
+    return value
+
+
+def safe_path(root, name):
+    require(isinstance(name, str) and bool(name) and not Path(name).is_absolute(), "invalid binding path")
+    path = (root / name).resolve()
+    require(path.is_relative_to(root.resolve()), "binding escapes repository")
+    return path
+
+
+def git_bytes(root, revision, path):
+    require(isinstance(revision, str) and re.fullmatch(r"[0-9a-f]{40}", revision), "full commit identity required")
+    safe_path(root, path)
+    return subprocess.check_output(["git", "-C", str(root), "show", f"{revision}:{path}"])
+
+
+def validate_binding(root, row, expected_path=None):
+    if expected_path is not None:
+        require(row["path"] == expected_path, "binding target mismatch")
+    raw = safe_path(root, row["path"]).read_bytes()
+    require(row["sha256"] == digest(raw) and count(row["bytes"], "binding bytes") == len(raw), "output binding mismatch: " + row["path"])
+
+
+def validate_data(result, entry, closure, requests, assessment, queue):
+    for value in (result, entry, closure, requests, assessment):
+        require(value["item_id"] == ITEM, "wrong item identity")
+    for value in (result, closure):
+        require(value["status"] == "COMPLETE" and value["outcome"] == "SUCCESS", "closure outcome mismatch")
+    require(entry["status"] == "ACTIVE", "entry status changed")
+    budget = entry["budget"]
+    require(budget["active_seconds"] == 5400 and budget["read_only_requests"] == 8,
+            "entry budget changed")
+    for key in ZERO_COUNTS:
+        require(count(budget[key], key) == 0, "nonzero source-only budget: " + key)
+    for key in ("execution", "universal_obligation", "current_bug"):
+        require(result[key] is False, "unsupported claim: " + key)
+    validate_matrix(assessment)
+    require(closure["started_at"] == entry["started_at"] and closure["start_monotonic"] == entry["start_monotonic"], "work clock reset")
+    start = number(closure["start_monotonic"], "start clock")
+    end = number(closure["end_monotonic"], "end clock")
+    active = number(closure["active_seconds"], "active seconds")
+    require(end >= start and abs(end - start - active) <= .01 and active <= 5400, "active interval or cap mismatch")
+    utc_start, utc_end = (datetime.fromisoformat(closure[key]) for key in ("started_at", "completed_at"))
+    require(utc_start.utcoffset() is not None and utc_end.utcoffset() is not None, "timezone-aware interval required")
+    elapsed = (utc_end - utc_start).total_seconds()
+    require(elapsed >= 0 and abs(elapsed - active) <= 2, "UTC/monotonic interval disagreement")
+    rows = requests["requests"]
+    ids = [row["id"] for row in rows]
+    require(len(ids) == len(set(ids)) and all(ids), "duplicate or empty request ID")
+    charges = [count(row["charged_requests"], "request charge") for row in rows]
+    require(all(charge > 0 for charge in charges), "uncharged request event")
+    total = sum(charges)
+    require(requests["cap"] == 8 and total == count(requests["charged_read_only_requests"], "request total") <= 8,
+            "request accounting or cap mismatch")
+    counts = result["research_counts"]
+    require(closure["research_counts"] == counts, "closure/result counts disagree")
+    require(count(counts["read_only_requests"], "result requests") == total, "result/request counts disagree")
+    for key in ZERO_COUNTS:
+        require(count(counts[key], key) == 0, "prohibited launch: " + key)
+    successor = result["next_item"]
+    require(bool(successor["id"]) and successor["id"] != ITEM and successor["status"] == "READY"
+            and successor["started"] is False, "successor must be READY and unstarted")
+    require(closure["next_item"] == successor["id"] and closure["next_item_started"] is False, "closure successor mismatch")
+    require(queue["selected_item"] == successor["id"], "snapshot successor mismatch")
+    queue_ids = [row["id"] for row in queue["items"]]
+    require(len(queue_ids) == len(set(queue_ids)), "duplicate snapshot queue item")
+    indexed = {row["id"]: row for row in queue["items"]}
+    require(indexed[ITEM]["status"] == "COMPLETE" and indexed[ITEM]["closure"]["outcome"] == result["outcome"], "snapshot closure mismatch")
+    require(indexed[successor["id"]]["status"] == "READY"
+            and not any(row["status"] == "ACTIVE" for row in queue["items"]), "snapshot successor started")
+
+
+def validate(root=ROOT):
+    root = Path(root)
+    def read(name):
+        return json.loads(safe_path(root, PREFIX + name).read_text())
+    result, entry = read("result.json"), read("work-record.json")
+    require(result["entry_commit"] == ENTRY_COMMIT, "entry commit rebound")
+    for name in FROZEN:
+        path = PREFIX + name
+        require(safe_path(root, path).read_bytes() == git_bytes(root, result["entry_commit"], path), "frozen input changed: " + name)
+    entry_lock = read("entry-lock.json")
+    require(entry_lock["base_commit"] == entry["base_commit"], "entry base commit mismatch")
+    names = [row["path"] for row in entry_lock["bindings"]]
+    require(names and len(names) == len(set(names)), "duplicate or empty entry bindings")
+    for row in entry_lock["bindings"]:
+        require(digest(git_bytes(root, entry["base_commit"], row["path"])) == row["sha256"], "historical entry binding mismatch")
+    require(safe_path(root, PREFIX + "entry-queue.json").read_bytes() == git_bytes(root, entry["base_commit"], "config/research-queue.json"), "entry queue historical mismatch")
+    source = read("source-lock.json")
+    require(source["item_id"] == ITEM and source["tip"] == TIP, "source identity mismatch")
+    require(source["history_bundle"] == BUNDLE and source["history_bundle_sha256"] == BUNDLE_SHA
+            and digest(safe_path(root, BUNDLE).read_bytes()) == BUNDLE_SHA, "retained source bundle mismatch")
+    blobs = validate_source(root, source, read("test-inventory.json"))
+    matrix, design, assessment = read("matrix.json"), read("regression-design.json"), read("source-assessment.json")
+    validate_design(design, matrix)
+    validate_excerpts(assessment, blobs)
+    validate_binding(root, design["matrix"], PREFIX + "matrix.json")
+    validate_binding(root, assessment["matrix"], PREFIX + "matrix.json")
+    validate_binding(root, assessment["source_lock"], PREFIX + "source-lock.json")
+    fixture_binding = design["fixture"]["retained_export_binding"]
+    require(fixture_binding in source["inventory"] and fixture_binding["path"] == "test_resources/Empty/export"
+            and design["fixture"]["retained_export"] == fixture_binding["path"], "design fixture binding mismatch")
+    bound = set()
+    for row in result["output_bindings"]:
+        require(row["path"] not in bound, "duplicate output binding")
+        bound.add(row["path"])
+        validate_binding(root, row)
+    required = {PREFIX + name for name in ("source-lock.json", "test-inventory.json", "requests.json", "work-closure.json", "matrix.json", "closure-queue.json", "report.md", "regression-design.json", "source-assessment.json", "validation-design.json")}
+    required.update(("scripts/validate-nanoda-native-config-closure", "tests/test_nanoda_native_config_closure.py"))
+    require(required <= bound, "missing required output binding")
+    # Historical closure is intentionally independent of the mutable live queue.
+    validate_data(result, entry, read("work-closure.json"), read("requests.json"), read("matrix.json"), read("closure-queue.json"))
+    return {"status": "PASS", "item_id": ITEM, "output_bindings": len(bound)}
+
+
+if __name__ == "__main__":
+    try:
+        print(json.dumps(validate(), sort_keys=True))
+    except (ValueError, KeyError, TypeError, OSError, subprocess.CalledProcessError) as error:
+        print("FAIL: " + str(error), file=sys.stderr)
+        raise SystemExit(1)

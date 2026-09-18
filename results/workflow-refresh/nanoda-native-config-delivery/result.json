@@ -1,0 +1,72 @@
+{
+  "item_id": "NANODA-NATIVE-CONFIG-BOUNDARY-1",
+  "status": "PASS",
+  "final_refresh": "results/workflow-refresh/nanoda-native-config-final/result.json",
+  "completed_commands": [
+    {
+      "command": [
+        "scripts/validate-nanoda-native-config-closure"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-native-config-delivery/01-validate-nanoda-native-config-closure.log",
+      "sha256": "a2a387b30f6580e547d8665b29c7d3ad0a18b0688653ce6affe8f978bfd7df71"
+    },
+    {
+      "command": [
+        "scripts/validate-research-queue"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-native-config-delivery/02-validate-research-queue.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-native-config-delivery/03-build-external-contributions.log",
+      "sha256": "560184e42e5a737377ebbccd5d95321e66748a007a28a8109f2ec1b867a582d3"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-native-config-delivery/04-build-project-review.log",
+      "sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "log": "results/workflow-refresh/nanoda-native-config-delivery/05-git.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "started_at": "2026-09-18T03:32:25.208925+00:00",
+  "start_monotonic": 481100.101642958,
+  "accounted_through": "2026-09-18T03:58:39.779440+00:00",
+  "end_monotonic": 482674.690970208,
+  "cumulative_active_seconds": 1574.589327249967,
+  "final_generation_check_seconds": 121.01231120794546,
+  "budget_active_seconds": 5400,
+  "remaining_active_seconds": 3825.410672750033,
+  "research_counts": {
+    "read_only_requests": 2,
+    "builds": 0,
+    "test_processes": 0,
+    "checkers": 0,
+    "proofs": 0,
+    "mutants": 0,
+    "new_exports": 0,
+    "external_research_writes": 0
+  },
+  "next_item": "NANODA-STRING-RECONSTRUCTION-TEST-1",
+  "next_item_started": false,
+  "scope": "Inclusive accounting through final verification and delivery preparation. Git commit/push transport follows. No reset, scientific process or successor execution."
+}
