@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-17
+Last updated: 2026-09-18
 
 ## How Status Is Tracked
 
@@ -2849,7 +2849,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `NANODA-STRING-RECONSTRUCTION-TEST-1`.
 
-The item is READY and unstarted: 90 cumulative active minutes, eight read-only
+The item is ACTIVE: 90 cumulative active minutes, eight read-only
 source/setup requests, at most three builds (600 seconds each) and four test
 processes (120 seconds each); compiling tests count both. Implement the exact
 [source-supported design](../results/research/nanoda-native-config-boundary-1/regression-design.json)
@@ -2857,7 +2857,7 @@ as one small test-only patch, run focused/full tests and prepare a held-local PR
 candidate, or record a precise construction/duplicate exclusion. Bind fresh entry
 source/design/fixture inputs before implementation and exact patch/cells/tooling
 and accounting before launches. No production fix, proof, mutation, new serialized
-export or external research write. No successor execution occurred at handoff.
+export or external research write. The fresh entry binds the design, fixture, reuse evidence and finite action rubric before implementation; no scientific process has launched at entry.
 
 `NANODA-NATIVE-CONFIG-BOUNDARY-1` completed SUCCESS. The
 [assessment](../results/research/nanoda-native-config-boundary-1/report.md) distinguishes
@@ -2951,7 +2951,7 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, Nanoda String reconstruction test implementation,
+The canonical queue retains one ACTIVE item, Nanoda String reconstruction test implementation,
 and one PLANNED portfolio reserve. The Arena let-policy follow-up is complete. A theorem accept control requires a demonstrated
 coverage need. These are ranked opportunities, not a mandate to exhaust a lane before
 reconsidering others. The plan records result-dependent follow-ups and re-ranks
@@ -2960,7 +2960,7 @@ at each closure by external usefulness and cost.
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` is DEFERRED, not completed or scientifically
 rejected. Its original evidence and budget remain intact. Historical CVC gates,
 independent-transfer prerequisites, authority locks, pending survivor counts
-and modeled mutation metrics are unchanged. `NANODA-STRING-RECONSTRUCTION-TEST-1` is READY; no item is ACTIVE and no successor has started.
+and modeled mutation metrics are unchanged. Only `NANODA-STRING-RECONSTRUCTION-TEST-1` is ACTIVE; no successor has started.
 
 ### Waiting
 

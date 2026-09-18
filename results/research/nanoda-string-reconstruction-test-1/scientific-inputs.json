@@ -1,0 +1,107 @@
+{
+  "item_id": "NANODA-STRING-RECONSTRUCTION-TEST-1",
+  "source_revision": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+  "design_binding": {
+    "path": "results/research/nanoda-native-config-boundary-1/regression-design.json",
+    "sha256": "5057ed6245560d43f5c9c817016903e96e12f6bca629e2d4edf1d8f0f18d09ee"
+  },
+  "matrix_binding": {
+    "path": "results/research/nanoda-native-config-boundary-1/matrix.json",
+    "sha256": "443630e3589f3740606f73a5d338034fd3e8313b3c4145350594155c3dfcdfe9",
+    "bytes": 5574
+  },
+  "cells": [
+    "N0S0-ABSENT",
+    "N0S0-PRESENT",
+    "N0S1-ABSENT",
+    "N0S1-PRESENT",
+    "N1S0-ABSENT",
+    "N1S0-PRESENT",
+    "N1S1-ABSENT",
+    "N1S1-PRESENT"
+  ],
+  "payloads": [
+    {
+      "text": "",
+      "unicode_scalars": []
+    },
+    {
+      "text": "Aé𝄞",
+      "unicode_scalars": [
+        65,
+        233,
+        119070
+      ]
+    }
+  ],
+  "positive_assertions": [
+    "Outer Const String.ofList has empty levels and exactly one argument.",
+    "For each expected scalar, inspect exactly List.cons with levels [Level.zero], three arguments Char, Char.ofNat(NatLit scalar), and tail; Char and Char.ofNat have empty levels and expected arity.",
+    "Read the NatLit BigUint and compare to fixed integers [65,233,119070] in order, not to values recomputed through the production conversion loop.",
+    "After all expected values, inspect exactly List.nil with levels [Level.zero] and one Char argument. The empty input immediately has this terminal shape.",
+    "Assert the list contains no extra elements and use separate expected literal sequences to avoid copying the production algorithm."
+  ],
+  "fixture": {
+    "retained_export": "test_resources/Empty/export",
+    "retained_export_binding": {
+      "path": "test_resources/Empty/export",
+      "sha256": "6ecdb8d4389e5c525cd9dfd05bb610c8a9c74739d9a62dbecc6a049ceb0b9837",
+      "bytes": 176
+    },
+    "declarations_present": false,
+    "cached_name_states": [
+      "ABSENT",
+      "PRESENT"
+    ],
+    "present_leaf_paths": [
+      "Nat.zero",
+      "Nat.succ",
+      "String.ofList",
+      "Char.ofNat",
+      "List.nil",
+      "List.cons"
+    ],
+    "string_helper_required_names": [
+      "Char",
+      "Char.ofNat",
+      "List.nil",
+      "List.cons",
+      "String.ofList"
+    ],
+    "recipe": [
+      "Read the existing empty fixture template configuration; set both flags for each cell before config.to_export_file creates the permanent DAG. Check skipped list and declaration map are empty.",
+      "For PRESENT only, insert the six leaf paths and their ancestors into permanent strings/names using insert_full, STR_HASH and ExportFile pointer tags, reusing the reviewed Nat-dispatch name helper. Refresh export.name_cache = export.dag.mk_name_cache() before opening TcCtx. ABSENT retains the unchanged empty fixture names.",
+      "Assert cache presence/absence as the fixture precondition, and export.declars.is_empty() in both states. Never seed a temporary pointer into permanent storage or fabricate declaration validity.",
+      "Inside a fresh with_ctx per cell, allocate each fixed payload. Check quick String construction is None when string_extension is false; when true require Some, Expr::StringLit and exact stored text.",
+      "Invoke str_lit_to_constructor on the valid StringPtr. StringPtr allocation itself is supported independently of the String extension; when enabled use/verify the real StringLit payload pointer. Disabled cases test the conversion API refusal, not an admitted String expression.",
+      "Require None for every cell except N1S1-PRESENT. For that cell require Some and inspect the complete shape and scalar payloads described below. No None==None equality or panic-catching shortcut.",
+      "Keep every temporary expression/pointer inside the owning TcCtx. Do not toggle flags after DAG construction, call infer/defeq/WHNF/check_declar, or synthesize a serialized export."
+    ]
+  },
+  "expected_tests": [
+    "tests::string_reconstruction::string_reconstruction_configurations",
+    "tests::string_reconstruction::string_reconstruction_without_cached_names"
+  ],
+  "expected_full_library_tests": 40,
+  "build_test_caps": {
+    "builds": 3,
+    "tests": 4,
+    "per_process_seconds": 120
+  },
+  "exclusions": [
+    "Parser literal-line admission remains source-audited; no new serialized literal stream.",
+    "No public checker acceptance, declaration validation, semantic defeq, projection/recursor execution or typing test.",
+    "All five cached names absent together does not isolate each individual missing-name arm.",
+    "No Nat arithmetic/dispatcher or hash/interner re-test beyond fixture preconditions."
+  ],
+  "claims": {
+    "current_bug": false,
+    "universal_obligation": false,
+    "public_semantic_acceptance": false,
+    "mutation_sensitivity": false
+  },
+  "new_exports": 0,
+  "mutants": 0,
+  "proofs": 0,
+  "external_writes": 0
+}
