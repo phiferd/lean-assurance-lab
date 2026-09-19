@@ -2894,7 +2894,7 @@ rejection. No Kiota process or external write ran, so current execution and
 current-tip behavior remain unclaimed. See the [coverage map](../results/research/kiota-ctor-index-coverage-1/coverage-map.json)
 and [report](../results/research/kiota-ctor-index-coverage-1/report.md).
 
-Select `KIOTA-CTOR-INDEX-TEST-1` READY and unstarted under its
+`KIOTA-CTOR-INDEX-TEST-1` is ACTIVE under its
 [implementation plan](research/KIOTA_CTOR_INDEX_TEST_PLAN.md). Use 90 cumulative
 active minutes, six source/setup/duplicate requests, two builds and three tests
 under their fixed timeouts, with zero production fixes, checkers, proofs,
@@ -2902,7 +2902,12 @@ mutations, new export bytes or external writes. Before implementation bind fresh
 source and complete duplicates; before launch commit the exact existing bytes,
 patch, expected cells, tooling, dependencies, process controls and accounting.
 Require paired acceptance and the exact guard error. A tested local PR draft is
-permitted; submission remains separately human-gated.
+permitted; submission remains separately human-gated. The entry gate binds a
+fresh response reporting unchanged `9fa2c297`, a fresh exact-revision archive,
+the complete 153-test/70-fixture inventory and a zero-entry open-PR response.
+Five of six read-only requests are charged, including two failed browser-access
+attempts. No implementation edit, Kiota build or test has run; a separate exact
+patch/tooling/process freeze is still required before the first launch.
 
 `SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY as the reserve under its
 unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):

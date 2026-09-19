@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "kind": "ENTRY_BINDINGS_NOT_EXECUTION_MANIFEST",
+  "design": {"path": "results/research/kiota-ctor-index-coverage-1/regression-design.json", "sha256": "d14b48bcfb4b769c9ba15506a1604a1c5b436eeecd1b428c4206fe86a40c0b00"},
+  "fresh_source": {"path": "results/research/kiota-ctor-index-test-1/source-lock.json"},
+  "complete_duplicate_inventory": {"path": "results/research/kiota-ctor-index-test-1/duplicate-inventory.json"},
+  "fixtures": [
+    {
+      "cell": "CONTROL_ACCEPT",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-control.ndjson",
+      "target_path": "tests/fixtures/ctor-owner-index.accept.ndjson",
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+      "bytes": 6332,
+      "records": 105,
+      "expected": "ACCEPT"
+    },
+    {
+      "cell": "CANDIDATE_EXACT_REJECT",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson",
+      "target_path": "tests/fixtures/ctor-owner-index.reject.ndjson",
+      "sha256": "4e93ea97c3a167cef51fa43f2600f34ec81774ac8bd74acd316a7897b2caeee6",
+      "bytes": 6332,
+      "records": 105,
+      "expected": {"kind": "TcError::Reject", "exact_message": "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1"}
+    }
+  ],
+  "fixed_relation": "The files differ at exactly one byte and one parsed scalar: record 105, /104/inductive/ctors/0/cidx, control 0 and candidate 1. No export bytes may be generated or altered.",
+  "prelaunch_gate": "Before any Kiota process, separately commit exact target fixture hashes, test patch, expected test identities/counts, Cargo/dependency/toolchain bindings, invocations, timeouts, cleanup controls and remaining cumulative accounting."
+}

@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "decision": "NO_CURRENT_SOURCE_OR_OPEN_PR_DUPLICATE",
+  "executable_inventory": {
+    "total_test_functions": 153,
+    "unit_tests": {
+      "total": 83,
+      "by_file": {"src/expr.rs": 9, "src/level.rs": 5, "src/nat.rs": 11, "src/nbe.rs": 3, "src/stats.rs": 1, "src/tc.rs": 54}
+    },
+    "integration_tests": 70,
+    "fixture_files": 70,
+    "fixture_manifest_sha256": "2c28a410c22975e67aeb2edc182dbb8423df83df6bcff78372f1c0886caf5e97",
+    "sorted_fixture_path_list_sha256": "7dcde94ab7fb987e1de722559fa9c58bec89991411b80fb72fefd3f998c4c111",
+    "wired_fixture_references": 70,
+    "unique_wired_fixtures": 69,
+    "unique_accept_fixtures": 33,
+    "unique_reject_fixtures": 36,
+    "unwired": ["tests/fixtures/cedar-prefix-60.ndjson"],
+    "multiply_wired": [{"path": "tests/fixtures/eq-shaped-index-field.accept.ndjson", "references": 2}],
+    "missing_references": []
+  },
+  "exact_byte_search": {
+    "control_sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+    "candidate_sha256": "4e93ea97c3a167cef51fa43f2600f34ec81774ac8bd74acd316a7897b2caeee6",
+    "matching_current_fixtures": [],
+    "matching_identifiers": [],
+    "searched_identifiers": ["LALNest", "a59d7fa2cfb3", "ctor-owner-index"]
+  },
+  "semantic_projection": {
+    "method": "Project every constructor in every inductive record across all 70 fixtures against the declared owner's ordered constructor list.",
+    "violations": [{"fixture": "tests/fixtures/orphan-ctor.reject.ndjson", "record": 19, "constructor": "rogue", "constructor_id": 2, "owner": "Orphan", "owner_id": 7, "cidx": 0, "declared_owner": false, "target_equivalent": false}],
+    "declared_owner_wrong_or_out_of_range_count": 0,
+    "exact_owner_index_message_assertions": 0,
+    "generic_reject_helper": "tests/exports.rs:49-55 accepts every TcError::Reject",
+    "production_message": "src/parser.rs:459-466",
+    "conclusion": "orphan-ctor covers the distinct missing-owner branch; no current executable test covers the owner-present wrong/out-of-range index predicate."
+  },
+  "open_pull_requests": {
+    "requested_endpoint": "https://api.github.com/repos/sankalpsthakur/kiota/pulls?state=open&per_page=100",
+    "observed_at": "2026-09-19T21:40:34+00:00",
+    "count": 0,
+    "receipt_path": "results/research/kiota-ctor-index-test-1/open-pr-response.json",
+    "receipt_sha256": "2ba33ca0557f1bb5b7ba88d67f9d0093c7185a36ec51fe2b7bd9372d3e001d6d",
+    "qualification": "The bound complete response contained zero open PR entries. This is not a maintainer-capacity inference and says nothing about later upstream state."
+  }
+}

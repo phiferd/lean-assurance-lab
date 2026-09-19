@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "reviews": [
+    {
+      "reviewer": "duplicate_audit",
+      "status": "PASS",
+      "scope": "Complete fresh executable inventory, exact-byte and semantic duplicate search, and bound open-PR response",
+      "findings": [
+        "153 executable tests before the patch: 83 unit and 70 integration",
+        "70 fixture files, 69 unique wired files, no missing reference and only cedar-prefix-60.ndjson unwired",
+        "No fixture hash or source identifier duplicates either retained file",
+        "The only malformed projected owner/index relationship is orphan-ctor's missing owner; no owner-present wrong/out-of-range index is covered",
+        "The bound complete open-PR response contains zero entries"
+      ],
+      "launches": 0,
+      "edits": 0
+    },
+    {
+      "reviewer": "attribution_audit",
+      "status": "PASS_WITH_SCOPE_CAVEATS",
+      "scope": "Fresh receipt/archive/pair identity and attribution replay",
+      "findings": [
+        "The response reports revision 9fa2c297dd700fe8fd1712a86bdbb258e1c01c42 and tree dce00230604c0f098b760a50ccfea85a48e78c72",
+        "The fresh archive has one revision-named root and is byte-identical to the prior retained archive",
+        "The 105-record pair differs at exactly byte 5702 and parsed pointer /104/inductive/ctors/0/cidx",
+        "Request endpoint/query/time must be supplied by request-log.json; raw bodies alone do not prove live state",
+        "The Git tree SHA is response-reported rather than independently reconstructed from tar members"
+      ],
+      "launches": 0,
+      "edits": 0
+    },
+    {
+      "reviewer": "wiring_audit",
+      "status": "PASS",
+      "scope": "Minimal exact-message test design and toolchain/invocation review",
+      "findings": [
+        "Use unchanged fixture names ctor-owner-index.accept.ndjson and ctor-owner-index.reject.ndjson",
+        "Add assert_reject_exact by destructuring TcError::Reject(String), plus two separately named tests",
+        "Focused cargo test --locked --test exports ctor_owner_index should select exactly two tests",
+        "Full cargo test --locked is upstream-compatible and should execute 83 unit plus 72 integration tests",
+        "The source has no Rust toolchain pin; exact local compiler, Cargo, host and environment require a separate prelaunch freeze"
+      ],
+      "launches": 0,
+      "edits": 0
+    }
+  ],
+  "conclusion": "The fresh entry gate remains eligible. No duplicate invalidates the design, and the exact test-only implementation can proceed only after a separately committed execution freeze."
+}

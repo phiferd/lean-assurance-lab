@@ -748,3 +748,16 @@ a distinct small public-import regression gap with a direct beneficiary. No
 current checker defect, universal metadata authority, current-tip result,
 submission or maintainer-capacity claim follows. The one-thread item remains
 READY with its original evidence and budget.
+
+### Kiota constructor-index test entry — 2026-09-19 UTC
+
+`KIOTA-CTOR-INDEX-TEST-1` is ACTIVE after a fresh bounded entry review. A bound
+API response reports `main` at unchanged `9fa2c297`; the fresh exact-revision
+archive is byte-identical to the retained audit archive. The complete current
+executable inventory has 153 tests before the patch, including 70 integration
+tests over 69 unique wired fixtures. No existing fixture, semantic projection or
+entry in the bound zero-result open-PR response duplicates the owner-present
+wrong/out-of-range index case. Five of six read-only requests are charged,
+including two failed browser access attempts. No implementation edit, Kiota
+process or external write has occurred. The exact patch, toolchain, expected
+cells and finite process controls remain separately gated before execution.
