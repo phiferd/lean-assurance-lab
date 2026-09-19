@@ -2873,13 +2873,16 @@ preserved. The exact accepted authority and entry state remain bound in
 Selected next item: `KIOTA-CTOR-INDEX-COVERAGE-1`.
 
 The [project-wide review](../results/research/project-strategy-review-2026-09-19/report.md)
-selects this source-only audit READY and unstarted under its
+selected this source-only audit; its entry gate is now committed and the item is
+ACTIVE under its
 [bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). Use at most 60 cumulative
 active minutes and eight read-only source/inventory/duplicate requests; zero
 builds, tests, checkers, proofs, new scientific bytes, mutations or external
 writes. Before analysis commit the work record and exact retained input bindings;
 bind the analyzed source and complete executable inventory before coverage claims.
-Qualify retained-source freshness and bind any refreshed revision.
+The entry binds retained Kiota `9fa2c297`, its September 13 freshness limit,
+the exact archive and pair hashes, a one-request charge and the fixed decision
+rubric. Qualify retained-source freshness and bind any refreshed revision.
 Determine whether Kiota's constructor-index owner-list guard has equivalent
 regression coverage and whether the existing pair can isolate it. Missing coverage
 and current candidate/control outcomes are unknown. This promises one existing-byte
@@ -2889,7 +2892,7 @@ design, precise covered/no-value result, or bounded compatibility/attribution ga
 unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later
-execution retains a separate gate. Neither item is ACTIVE or started.
+execution retains a separate gate. The reserve is not ACTIVE or started.
 
 `NANODA-STRING-RECONSTRUCTION-TEST-1` completed SUCCESS. Two focused and all
 40 library tests pass; eight existing doc examples remain ignored. The

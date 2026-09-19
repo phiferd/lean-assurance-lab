@@ -709,7 +709,7 @@ remain open with no discussion entries returned; capacity is unknown. Four held
 Nanoda candidates are useful intermediate assets, not adoption or a reason to
 continue unspecified test discovery.
 
-Select `KIOTA-CTOR-INDEX-COVERAGE-1` READY and unstarted under its
+`KIOTA-CTOR-INDEX-COVERAGE-1` is now ACTIVE after its committed entry gate under its
 [explicit plan](KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). The completed import-contract
 review binds a newer owner-list/index guard and an exact historical pair but
 leaves equivalent executable regression coverage unresolved. This concrete
@@ -717,7 +717,9 @@ public-input question offers a clearer shared-test beneficiary than the old
 operational survivor. Its 60-minute/eight-request source-only assessment produces
 one precise regression design, covered/no-value result or exact blocker. It runs
 no scientific launch, creates no new export, changes no authority and submits
-nothing. No absent coverage, current acceptance or bug is assumed.
+nothing. Its entry binds retained Kiota `9fa2c297`, the exact archive/pair hashes,
+freshness limit, request log and decision rubric. No absent coverage, current
+acceptance or bug is assumed.
 
 Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY as the next reserve, with original
 scope and budget unchanged. No prior item is reopened, no successor starts, and
