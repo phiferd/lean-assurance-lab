@@ -3,7 +3,7 @@
   "frontier_id": "F-EXTERNAL-CONTRIBUTION-PORTFOLIO",
   "plan": "docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md",
   "updated_at": "2026-09-19",
-  "selected_item": "KIOTA-CTOR-INDEX-COVERAGE-1",
+  "selected_item": "KIOTA-CTOR-INDEX-TEST-1",
   "items": [
     {
       "id": "ARENA-LET-POLICY-FOLLOWUP-1",
@@ -575,7 +575,7 @@
       "completion": "One source-bound coverage map and precise existing-byte regression design, equivalent-coverage/no-value decision, or bounded unresolved compatibility/attribution/access result with a concrete next action.",
       "stop_condition": "60 cumulative active minutes and at most eight read-only source/inventory/duplicate requests; zero builds, tests, checkers, proofs, new scientific bytes, mutations or external writes. No broader metadata survey; select but do not start a successor.",
       "kind": "CONTRIBUTION",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "SEMANTIC-IMPORT-CONTRACT-1"
       ],
@@ -595,10 +595,34 @@
         "results/research/kiota-ctor-index-coverage-1/work-record.json",
         "results/research/kiota-ctor-index-coverage-1/entry-inputs.json",
         "results/research/kiota-ctor-index-coverage-1/action-rubric.json",
-        "results/research/kiota-ctor-index-coverage-1/requests.json"
+        "results/research/kiota-ctor-index-coverage-1/requests.json",
+        "results/research/kiota-ctor-index-coverage-1/source-lock.json",
+        "results/research/kiota-ctor-index-coverage-1/request-log.json",
+        "results/research/kiota-ctor-index-coverage-1/coverage-map.json",
+        "results/research/kiota-ctor-index-coverage-1/independent-reviews.json",
+        "results/research/kiota-ctor-index-coverage-1/regression-design.json",
+        "results/research/kiota-ctor-index-coverage-1/report.md",
+        "results/research/kiota-ctor-index-coverage-1/result.json",
+        "results/research/kiota-ctor-index-coverage-1/work-closure.json",
+        "results/research/kiota-ctor-index-coverage-1/validation.json",
+        "results/research/kiota-ctor-index-coverage-1/delivery-accounting.json"
       ],
       "issue_urls": [],
-      "closure": null,
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/kiota-ctor-index-coverage-1/source-lock.json",
+          "results/research/kiota-ctor-index-coverage-1/coverage-map.json",
+          "results/research/kiota-ctor-index-coverage-1/regression-design.json",
+          "results/research/kiota-ctor-index-coverage-1/independent-reviews.json",
+          "results/research/kiota-ctor-index-coverage-1/report.md",
+          "results/research/kiota-ctor-index-coverage-1/result.json",
+          "results/research/kiota-ctor-index-coverage-1/work-closure.json",
+          "results/research/kiota-ctor-index-coverage-1/validation.json",
+          "results/research/kiota-ctor-index-coverage-1/delivery-accounting.json"
+        ],
+        "recommendation": "Retained Kiota 9fa2c297 has the owner-list/index guard but no wired declared-owner wrong/out-of-range cidx regression; orphan-ctor covers only missing owner and any generic rejection. Select KIOTA-CTOR-INDEX-TEST-1 READY and unstarted to refresh/bind source and duplicates, then implement and test the exact existing-byte accept/exact-reject pair under a separate launch gate. External submission remains held for fresh preflight and exact approval."
+      },
       "blocked_reason": ""
     },
     {
@@ -2205,8 +2229,40 @@
       "blocked_reason": ""
     },
     {
-      "id": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+      "id": "KIOTA-CTOR-INDEX-TEST-1",
       "priority": 51,
+      "title": "Implement Kiota constructor-index owner-list regression",
+      "target": "Freshly bound Kiota public NDJSON parser and the exact a59d7fa2cfb3 candidate/control bytes",
+      "action": "Refresh and bind source/duplicates, add the two unchanged fixtures, require paired acceptance and the exact owner-list/index rejection, then run focused and complete current tests.",
+      "expected_value": "Protects the owner-present wrong/out-of-range constructor-index branch that the existing orphan-owner regression does not execute, using an already isolated public-input pair.",
+      "rank_rationale": "The completed source audit establishes a distinct small regression gap and exact reusable pair. A tested contribution for another checker's public import boundary now has greater immediate shared value than the historical one-thread operational assessment; no defect or external capacity is presumed.",
+      "entry_gate": "KIOTA-CTOR-INDEX-COVERAGE-1 completed SUCCESS. Before implementation commit a fresh work record, exact current source archive/revision, complete duplicate inventory, fixed fixture hashes and action rubric; before launch separately commit exact patch, dependencies/tooling, expected cells and process controls under docs/research/KIOTA_CTOR_INDEX_TEST_PLAN.md.",
+      "completion": "One focused/full-suite-validated test-only patch and local PR draft, exact duplicate/no-value result, or bounded technical incompatibility. No current-defect, universal-authority or submission claim.",
+      "stop_condition": "90 cumulative active minutes, 6 source/setup/duplicate requests, 2 builds <=600s and 3 test processes <=120s; compiling tests count both. Zero production fixes, checkers, proofs, mutations, new export bytes or external writes; select but do not start a successor.",
+      "kind": "IMPLEMENTATION",
+      "status": "READY",
+      "depends_on": [
+        "KIOTA-CTOR-INDEX-COVERAGE-1"
+      ],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 90,
+        "checker_launches": 3
+      },
+      "evidence_refs": [
+        "docs/research/KIOTA_CTOR_INDEX_TEST_PLAN.md",
+        "results/research/kiota-ctor-index-coverage-1/source-lock.json",
+        "results/research/kiota-ctor-index-coverage-1/coverage-map.json",
+        "results/research/kiota-ctor-index-coverage-1/regression-design.json",
+        "results/research/kiota-ctor-index-coverage-1/result.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+      "priority": 52,
       "title": "Assess deterministic witnessability of the one-thread dispatch survivor",
       "target": "nanoda-gen-2bdfe18a9ec2 at pinned Nanoda src/tc.rs:147, the serial/one-worker dispatch split and its operational failure boundaries",
       "action": "Bind the exact mutation, source and historical evidence; determine whether spawn failure, child panic, stack behavior or scheduling exposes a deterministic locally controllable baseline/mutant distinction without ambient resource exhaustion.",
@@ -2247,7 +2303,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-19-kiota-ctor-index-coverage-entry-strategic.json",
-    "sha256": "805e5ebcd4a20913d05029538d68a07bbcaf5d2b48269771e1f15539a5c00480"
+    "path": "results/research/queue-reviews/2026-09-19-kiota-ctor-index-coverage-closure-strategic.json",
+    "sha256": "017f77824a28b04811d7eb4fc559bcd014ef27f3c2ae93ded95a9644fb765377"
   }
 }

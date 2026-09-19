@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-COVERAGE-1",
+  "design_status": "SOURCE_SUPPORTED_UNEXECUTED",
+  "target": "sankalpsthakur/kiota public NDJSON parser at retained revision 9fa2c297",
+  "beneficiary": "Kiota maintainers and users relying on imported constructor metadata being checked against the owning inductive's ordered constructor list",
+  "fixtures": [
+    {
+      "role": "CONTROL",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-control.ndjson",
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+      "bytes": 6332,
+      "proposed_target_name": "tests/fixtures/ctor-owner-index.accept.ndjson",
+      "expected": "Parser::run returns Ok(())"
+    },
+    {
+      "role": "CANDIDATE",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson",
+      "sha256": "4e93ea97c3a167cef51fa43f2600f34ec81774ac8bd74acd316a7897b2caeee6",
+      "bytes": 6332,
+      "proposed_target_name": "tests/fixtures/ctor-owner-index.reject.ndjson",
+      "expected": {
+        "error_kind": "TcError::Reject",
+        "exact_message": "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1"
+      }
+    }
+  ],
+  "fixed_relation": "Both files contain 105 records and differ only at /104/inductive/ctors/0/cidx: control 0, candidate 1. Owner LALNest declares ctors [LALNest.node].",
+  "test_patch": {
+    "files": [
+      "tests/exports.rs",
+      "tests/fixtures/ctor-owner-index.accept.ndjson",
+      "tests/fixtures/ctor-owner-index.reject.ndjson"
+    ],
+    "steps": [
+      "Reuse the two exact existing fixture bytes without regeneration.",
+      "Add one accept test using the existing assert_accept helper.",
+      "Add one negative test that matches TcError::Reject and the exact guard message, not merely any rejection.",
+      "Keep the existing orphan-ctor test: it protects the separate absent-owner branch."
+    ],
+    "why_control_is_needed": "The candidate differs by one scalar, but current 9fa2c297 control acceptance is only source-predicted. The paired accept cell prevents unrelated later validation from making the negative assertion vacuous.",
+    "why_exact_message_is_needed": "The current generic assert_reject accepts competing refusal paths. Exact text attributes the regression to the intended owner-list/index guard."
+  },
+  "expected_cells": [
+    {
+      "cell": "control",
+      "expected": "ACCEPT",
+      "executed": false
+    },
+    {
+      "cell": "candidate",
+      "expected": "REJECT with exact owner-list/index message",
+      "executed": false
+    }
+  ],
+  "excluded_claims": [
+    "No current Kiota defect or unsoundness is claimed; the guard already exists.",
+    "No current-tip behavior or passing test is claimed.",
+    "No universal constructor-metadata obligation is adjudicated.",
+    "No in-range wrong-name coverage is claimed.",
+    "No submission or upstream capacity claim is made."
+  ],
+  "next_gate": "A separately selected implementation item must refresh and bind source/duplicates, commit exact fixtures/patch/tooling/dependencies/process controls before launch, run focused and complete Kiota tests within its finite budget, and keep any PR draft local pending fresh preflight and exact human approval."
+}

@@ -1,0 +1,221 @@
+#!/usr/bin/env python3
+"""Validate the source-only Kiota constructor-index coverage closure."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import re
+import tarfile
+from pathlib import Path
+
+
+REQUIRED_ERROR = (
+    "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1"
+)
+
+
+def fail(message: str) -> None:
+    raise ValueError(message)
+
+
+def require(value: bool, message: str) -> None:
+    if not value:
+        fail(message)
+
+
+def load(path: Path) -> dict:
+    try:
+        value = json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        fail(f"could not load {path}: {error}")
+    require(isinstance(value, dict), f"{path} must contain an object")
+    return value
+
+
+def digest_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def digest(path: Path) -> str:
+    return digest_bytes(path.read_bytes())
+
+
+def flatten_differences(left, right, pointer="") -> list[tuple[str, object, object]]:
+    if type(left) is not type(right):
+        return [(pointer, left, right)]
+    if isinstance(left, dict):
+        if set(left) != set(right):
+            return [(pointer, left, right)]
+        rows: list[tuple[str, object, object]] = []
+        for key in sorted(left):
+            rows.extend(flatten_differences(left[key], right[key], f"{pointer}/{key}"))
+        return rows
+    if isinstance(left, list):
+        if len(left) != len(right):
+            return [(pointer, left, right)]
+        rows = []
+        for index, (lval, rval) in enumerate(zip(left, right)):
+            rows.extend(flatten_differences(lval, rval, f"{pointer}/{index}"))
+        return rows
+    return [] if left == right else [(pointer, left, right)]
+
+
+def validate(root: Path) -> None:
+    item = root / "results/research/kiota-ctor-index-coverage-1"
+    source = load(item / "source-lock.json")
+    coverage = load(item / "coverage-map.json")
+    design = load(item / "regression-design.json")
+    requests = load(item / "request-log.json")
+    result = load(item / "result.json")
+    closure = load(item / "work-closure.json")
+
+    require(source["item_id"] == "KIOTA-CTOR-INDEX-COVERAGE-1", "wrong source item")
+    require(source["revision"] == "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+            "wrong source revision")
+    archive = root / source["archive"]["path"]
+    require(digest(archive) == source["archive"]["sha256"], "archive hash mismatch")
+    prior = root / source["prior_complete_inventory"]["path"]
+    require(digest(prior) == source["prior_complete_inventory"]["sha256"],
+            "prior inventory hash mismatch")
+
+    with tarfile.open(archive, "r:gz") as bundle:
+        file_members = [member for member in bundle.getmembers() if member.isfile()]
+        roots = {member.name.split("/", 1)[0] for member in file_members}
+        require(len(roots) == 1, "archive must have one root")
+        prefix = next(iter(roots)) + "/"
+        by_rel = {member.name[len(prefix):]: member for member in file_members
+                  if member.name.startswith(prefix)}
+
+        def archived(path: str) -> bytes:
+            require(path in by_rel, f"archive missing {path}")
+            stream = bundle.extractfile(by_rel[path])
+            require(stream is not None, f"could not read {path}")
+            return stream.read()
+
+        for row in source["selected_files"]:
+            value = archived(row["path"])
+            require(len(value) == row["bytes"], f"size mismatch: {row['path']}")
+            require(digest_bytes(value) == row["sha256"], f"hash mismatch: {row['path']}")
+
+        fixtures = sorted(path for path in by_rel
+                          if path.startswith("tests/fixtures/") and path.endswith(".ndjson"))
+        inventory = source["fixture_inventory"]
+        require(len(fixtures) == inventory["physical_ndjson_files"] == 70,
+                "fixture count mismatch")
+        path_digest = digest_bytes("".join(path + "\n" for path in fixtures).encode())
+        require(path_digest == inventory["sorted_relative_path_list_sha256"],
+                "fixture path binding mismatch")
+
+        tests = archived("tests/exports.rs").decode()
+        refs = re.findall(
+            r'(?:assert_accept|assert_accept_deep|assert_reject|fixture)\("([^\"]+\.ndjson)"\)',
+            tests,
+        )
+        unique_refs = set(refs)
+        require(len(re.findall(r"#\[test\]\s*\nfn ", tests)) == 70, "test count mismatch")
+        require(len(unique_refs) == 69, "wired fixture count mismatch")
+        require(sorted(set(path.removeprefix("tests/fixtures/") for path in fixtures) - unique_refs)
+                == ["cedar-prefix-60.ndjson"], "unwired fixture mismatch")
+        require(not (unique_refs - set(path.removeprefix("tests/fixtures/") for path in fixtures)),
+                "referenced fixture missing")
+        require(tests.count('#[ignore') == 0 and tests.count('#[should_panic') == 0,
+                "unexpected ignored/panic test")
+        require(tests.count('fixture("eq-shaped-index-field.accept.ndjson")')
+                + tests.count('assert_accept("eq-shaped-index-field.accept.ndjson")') == 2,
+                "double-wired fixture mismatch")
+
+        violations = []
+        for path in fixtures:
+            rows = [json.loads(line) for line in archived(path).decode().splitlines() if line]
+            for line_number, row in enumerate(rows, 1):
+                if "inductive" not in row:
+                    continue
+                block = row["inductive"]
+                owners = {entry["name"]: entry.get("ctors", [])
+                          for entry in block.get("types", [])}
+                for ctor in block.get("ctors", []):
+                    owner = owners.get(ctor.get("induct"))
+                    index = ctor.get("cidx")
+                    ok = (owner is not None and isinstance(index, int)
+                          and index < len(owner) and owner[index] == ctor.get("name"))
+                    if not ok:
+                        violations.append((path, line_number, ctor.get("name"),
+                                           ctor.get("induct"), index, owner))
+        require(violations == [(
+            "tests/fixtures/orphan-ctor.reject.ndjson", 19, 2, 7, 0, None
+        )], f"unexpected owner/index projection: {violations}")
+
+        parser = archived("src/parser.rs").decode()
+        require("let Some(owner_ctors) = declared_ctors.get(&induct) else" in parser,
+                "missing owner guard changed")
+        require("if owner_ctors.get(cidx as usize) != Some(&name)" in parser,
+                "owner-list/index guard changed")
+        require(parser.index("declared_ctors.get(&induct)")
+                < parser.index("owner_ctors.get(cidx as usize)")
+                < parser.index("ConstantInfo::Constructor"), "guard order changed")
+
+    candidate_path = root / "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson"
+    control_path = root / "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-control.ndjson"
+    fixture_rows = {row["role"]: row for row in design["fixtures"]}
+    require(digest(candidate_path) == fixture_rows["CANDIDATE"]["sha256"],
+            "candidate hash mismatch")
+    require(digest(control_path) == fixture_rows["CONTROL"]["sha256"],
+            "control hash mismatch")
+    candidate = [json.loads(line) for line in candidate_path.read_text().splitlines() if line]
+    control = [json.loads(line) for line in control_path.read_text().splitlines() if line]
+    require(len(candidate) == len(control) == 105, "pair record count mismatch")
+    require(flatten_differences(candidate, control) == [
+        ("/104/inductive/ctors/0/cidx", 1, 0)
+    ], "pair no longer has one fixed scalar difference")
+    require(fixture_rows["CANDIDATE"]["expected"]["exact_message"] == REQUIRED_ERROR,
+            "exact error expectation changed")
+
+    require(coverage["decision"] == "MISSING_DISTINCT_OWNER_PRESENT_INDEX_COVERAGE",
+            "coverage decision changed")
+    require(coverage["property_projection"]["declared_owner_wrong_or_out_of_range_index_count"] == 0,
+            "coverage count changed")
+    require(not coverage["current_checker_defect"] and not result["current_checker_defect"],
+            "closure must not claim a current defect")
+    require(not result["execution"] and design["design_status"] == "SOURCE_SUPPORTED_UNEXECUTED",
+            "closure must remain unexecuted")
+    require(requests["charged_read_only_requests"] == 7 <= requests["cap"],
+            "request accounting mismatch")
+    require(closure["active_seconds"] <= 3600, "active-time cap exceeded")
+    counts = closure["research_counts"]
+    for key in ("network_requests", "builds", "test_processes", "checkers", "proofs",
+                "mutants", "new_scientific_bytes", "external_research_writes"):
+        require(counts[key] == 0, f"forbidden launch count: {key}")
+
+    for binding in result["output_bindings"]:
+        path = root / binding["path"]
+        require(path.stat().st_size == binding["bytes"], f"output size mismatch: {path}")
+        require(digest(path) == binding["sha256"], f"output hash mismatch: {path}")
+
+    queue = load(root / "config/research-queue.json")
+    by_id = {row["id"]: row for row in queue["items"]}
+    require(queue["selected_item"] == "KIOTA-CTOR-INDEX-TEST-1", "wrong selected successor")
+    require(by_id["KIOTA-CTOR-INDEX-COVERAGE-1"]["status"] == "COMPLETE", "item not complete")
+    require(by_id["KIOTA-CTOR-INDEX-COVERAGE-1"]["closure"]["outcome"] == "SUCCESS",
+            "wrong closure outcome")
+    require(by_id["KIOTA-CTOR-INDEX-TEST-1"]["status"] == "READY", "successor not READY")
+    require(by_id["SURVIVOR-THREAD-ONE-DETERMINISM-1"]["status"] == "READY",
+            "reserve not preserved")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    args = parser.parse_args()
+    try:
+        validate(args.root.resolve())
+    except (ValueError, OSError, KeyError, TypeError) as error:
+        print(f"FAIL: {error}")
+        return 1
+    print("PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-COVERAGE-1",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "scope": "constructor owner-list/index guard only",
+  "guard": {
+    "owner_map_build": "src/parser.rs:377-425",
+    "constructor_parse": "src/parser.rs:426-444",
+    "missing_owner_branch": "src/parser.rs:445-457",
+    "owner_present_index_branch": "src/parser.rs:458-470",
+    "predicate": "owner_ctors.get(cidx as usize) == Some(&name)",
+    "post_guard_insertion": "src/parser.rs:471-482",
+    "later_group_check": "src/parser.rs:922-935"
+  },
+  "executable_inventory": {
+    "fixture_files": 70,
+    "unique_wired_fixtures": 69,
+    "test_functions": 70,
+    "accept_fixtures": 33,
+    "reject_fixtures": 36,
+    "unwired_fixture": "tests/fixtures/cedar-prefix-60.ndjson",
+    "duplicate_wiring": "eq-shaped-index-field.accept.ndjson has ordinary and intern-reset tests",
+    "dynamic_fixture_discovery": false,
+    "ignored_or_should_panic_tests": 0,
+    "reject_assertion_strength": "tests/exports.rs:49-55 accepts any TcError::Reject and does not bind an error reason"
+  },
+  "property_projection": {
+    "method": "For every inductive record in all 70 fixtures, map each declared type name to its ordered ctors list and compare each constructor's induct and cidx against that list.",
+    "violations": [
+      {
+        "fixture": "tests/fixtures/orphan-ctor.reject.ndjson",
+        "record": 19,
+        "constructor_name_id": 2,
+        "constructor_name": "rogue",
+        "claimed_owner_id": 7,
+        "claimed_owner": "Orphan",
+        "cidx": 0,
+        "declared_owner": false,
+        "source_branch": "src/parser.rs:445-457",
+        "equivalent_to_target": false
+      }
+    ],
+    "declared_owner_wrong_or_out_of_range_index_count": 0,
+    "in_range_wrong_constructor_count": 0,
+    "correct_multi_constructor_reject_example": "large-elim-prop-bool.reject.ndjson has correct cidx 0/1 for both two-constructor declarations and is rejected for a separate large-elimination property",
+    "correct_multi_constructor_accept_examples": [
+      "080_RBTree.id_spec.accept.ndjson: RBTree cidx 0/1/2",
+      "lean-compiler-lcnf-code-ctorelim.accept.ndjson: Expr cidx 0 through 11"
+    ]
+  },
+  "retained_pair": {
+    "candidate": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson",
+    "control": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-control.ndjson",
+    "record_count": 105,
+    "single_difference": {
+      "pointer": "/104/inductive/ctors/0/cidx",
+      "candidate": 1,
+      "control": 0,
+      "one_based_byte_offset": 5702
+    },
+    "owner": {
+      "name_id": 10,
+      "name": "LALNest",
+      "ctors": [
+        11
+      ]
+    },
+    "constructor": {
+      "name_id": 11,
+      "name": "LALNest.node",
+      "induct": 10
+    },
+    "candidate_guard_evaluation": "[11].get(1) is None; source-predicted exact rejection at src/parser.rs:458-470",
+    "control_guard_evaluation": "[11].get(0) is Some(&11); source-predicted to pass the guard",
+    "candidate_first_divergent_error": "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1",
+    "control_prediction": "ACCEPT through EOF after static downstream review; unexecuted at retained revision",
+    "attribution": "The pair isolates the unified owner-list/index predicate and specifically its out-of-range manifestation. It does not separately cover an in-range wrong-name occupant."
+  },
+  "decision": "MISSING_DISTINCT_OWNER_PRESENT_INDEX_COVERAGE",
+  "current_checker_defect": false,
+  "semantic_authority": "NOT_ADJUDICATED",
+  "limitations": [
+    "No Kiota build, test or checker process ran.",
+    "No current upstream tip was fetched; claims are limited to 9fa2c297.",
+    "Historical Kiota 58e8636 acceptance is not projected to this source.",
+    "Static control compatibility is a prediction to be tested by a separately gated successor.",
+    "No recursor-type or broader metadata coverage conclusion is made."
+  ]
+}

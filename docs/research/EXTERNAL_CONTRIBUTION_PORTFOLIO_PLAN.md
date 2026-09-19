@@ -727,3 +727,24 @@ no CVC, transfer or theorem prerequisite is waived. The current ledger records
 new dated upstream observations; all earlier closure/submission observations
 remain historical. Local status corrections do not remove historical disagreement
 artifacts or change the failing assurance gate.
+
+## Kiota constructor-index coverage closure — 2026-09-19 UTC
+
+`KIOTA-CTOR-INDEX-COVERAGE-1` completes SUCCESS for one source-supported,
+unexecuted existing-byte design at retained Kiota `9fa2c297`. The complete
+fixture/wiring audit found 70 physical fixtures and 69 unique wired fixtures
+across 70 tests. `orphan-ctor` exercises the missing-owner branch with a generic
+reject assertion; no fixture exercises the declared-owner wrong/out-of-range
+index branch. The exact retained pair changes only `LALNest.node.cidx` from 0 to
+1 and attributes the candidate's first source-predicted refusal to that branch.
+The control is source-predicted compatible but unexecuted.
+
+Select `KIOTA-CTOR-INDEX-TEST-1` READY and unstarted under
+[KIOTA_CTOR_INDEX_TEST_PLAN.md](KIOTA_CTOR_INDEX_TEST_PLAN.md). Its fresh-source
+and duplicate entry gate, exact fixture/patch/tooling/process freeze, finite
+build/test budget and exact-message assertion are separate from the completed
+audit. It outranks the retained one-thread reserve because the audit established
+a distinct small public-import regression gap with a direct beneficiary. No
+current checker defect, universal metadata authority, current-tip result,
+submission or maintainer-capacity claim follows. The one-thread item remains
+READY with its original evidence and budget.

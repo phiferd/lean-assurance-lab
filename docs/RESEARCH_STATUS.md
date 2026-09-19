@@ -57,6 +57,17 @@ research directions.
 
 ## Attempted
 
+- Completed `KIOTA-CTOR-INDEX-COVERAGE-1` on 2026-09-19 with SUCCESS for one
+  [source-bound existing-byte regression design](../results/research/kiota-ctor-index-coverage-1/report.md)
+  at retained Kiota `9fa2c297`. The complete 70-fixture inventory has 69 unique
+  wired fixtures across 70 tests. `orphan-ctor` reaches the missing-owner branch;
+  no wired fixture reaches the distinct declared-owner wrong/out-of-range cidx
+  branch. The exact one-scalar pair predicts control ACCEPT and candidate exact
+  owner-list/index REJECT, but no Kiota process ran. Seven local requests, zero
+  network/build/test/checker/proof/mutation/new-export/external-write launches.
+  No current defect or universal metadata rule is claimed. The separately gated
+  `KIOTA-CTOR-INDEX-TEST-1` is selected READY and unstarted.
+
 - Project-wide strategy review on 2026-09-19 UTC confirmed four merged Arena
   contributions after freshly observing #206 merged. Nanoda #32/#33 remain open;
   their combined discussion endpoints returned no entries, without a capacity
@@ -2870,25 +2881,30 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `KIOTA-CTOR-INDEX-COVERAGE-1`.
+Selected next item: `KIOTA-CTOR-INDEX-TEST-1`.
 
-The [project-wide review](../results/research/project-strategy-review-2026-09-19/report.md)
-selected this source-only audit; its entry gate is now committed and the item is
-ACTIVE under its
-[bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). Use at most 60 cumulative
-active minutes and eight read-only source/inventory/duplicate requests; zero
-builds, tests, checkers, proofs, new scientific bytes, mutations or external
-writes. Before analysis commit the work record and exact retained input bindings;
-bind the analyzed source and complete executable inventory before coverage claims.
-The entry binds retained Kiota `9fa2c297`, its September 13 freshness limit,
-the exact archive and pair hashes, a one-request charge and the fixed decision
-rubric. Qualify retained-source freshness and bind any refreshed revision.
-Determine whether Kiota's constructor-index owner-list guard has equivalent
-regression coverage and whether the existing pair can isolate it. Missing coverage
-and current candidate/control outcomes are unknown. This promises one existing-byte
-design, precise covered/no-value result, or bounded compatibility/attribution gap.
+`KIOTA-CTOR-INDEX-COVERAGE-1` completed SUCCESS under its
+[bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). At retained Kiota
+`9fa2c297`, 69 unique fixtures are wired across 70 tests. `orphan-ctor` reaches
+the missing-owner branch and uses a generic rejection assertion; the complete
+fixture projection found no declared-owner wrong, swapped or out-of-range cidx
+case. The exact retained pair changes only `LALNest.node.cidx` from 0 to 1 and
+source-predicts a compatible accept control plus the exact owner-list/index
+rejection. No Kiota process or external write ran, so current execution and
+current-tip behavior remain unclaimed. See the [coverage map](../results/research/kiota-ctor-index-coverage-1/coverage-map.json)
+and [report](../results/research/kiota-ctor-index-coverage-1/report.md).
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY as the next reserve under its
+Select `KIOTA-CTOR-INDEX-TEST-1` READY and unstarted under its
+[implementation plan](research/KIOTA_CTOR_INDEX_TEST_PLAN.md). Use 90 cumulative
+active minutes, six source/setup/duplicate requests, two builds and three tests
+under their fixed timeouts, with zero production fixes, checkers, proofs,
+mutations, new export bytes or external writes. Before implementation bind fresh
+source and complete duplicates; before launch commit the exact existing bytes,
+patch, expected cells, tooling, dependencies, process controls and accounting.
+Require paired acceptance and the exact guard error. A tested local PR draft is
+permitted; submission remains separately human-gated.
+
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY as the reserve under its
 unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later

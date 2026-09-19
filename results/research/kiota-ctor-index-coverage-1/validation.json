@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-COVERAGE-1",
+  "status": "PASS",
+  "focused": [
+    {
+      "command": "scripts/validate-kiota-ctor-index-coverage-closure",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "python3 tests/test_kiota_ctor_index_coverage_closure.py",
+      "returncode": 0,
+      "tests": 2,
+      "result": "OK"
+    },
+    {
+      "command": "scripts/validate-research-queue",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-external-contributions --check",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/artifact-status",
+      "returncode": 0,
+      "result": "PASS"
+    }
+  ],
+  "administrative_repair": {
+    "failed_command": "python3 -m unittest tests.test_kiota_ctor_index_coverage_closure",
+    "failure": "ModuleNotFoundError because tests is not a Python package",
+    "scientific_effect": "NONE",
+    "repair": "Run the test file directly; both tests passed. The complete repository runner later discovered and passed the same module."
+  },
+  "full_suite": {
+    "command": "python3 scripts/run-unit-tests",
+    "returncode": 0,
+    "current_live_tests": 1160,
+    "frozen_publication_tests": 73,
+    "portfolio_checkpoint_tests": 9,
+    "result": "OK"
+  },
+  "refresh": {
+    "command": "scripts/refresh-current-state",
+    "status": "COMPLETE",
+    "receipt": "results/workflow-refresh/20260919T205737667315Z/result.json",
+    "receipt_sha256": "dbad6f669f47a9b753f1dcbc722f530cd89d1de06d54dd4720977ecb867a9f2e"
+  },
+  "validator_bindings": [
+    {
+      "path": "scripts/validate-kiota-ctor-index-coverage-closure",
+      "sha256": "5ceb516b2fc1e549a69a834e01f83d7b6c7c1f234cd4214ceb1eb8c696e33dc5",
+      "bytes": 10252
+    },
+    {
+      "path": "tests/test_kiota_ctor_index_coverage_closure.py",
+      "sha256": "3f349cbe029552f0dfd516c32a9ba51f3dd4492e9f31d0270bb5d650b3dd677c",
+      "bytes": 2323
+    }
+  ],
+  "scientific_launches": 0,
+  "qualification": "All commands are Lab administrative validation. No Kiota build, test or checker process and no successor execution occurred."
+}
