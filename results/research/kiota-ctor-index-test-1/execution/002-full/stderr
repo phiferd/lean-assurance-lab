@@ -1,0 +1,356 @@
+warning: unused import: `std::io::Write`
+ --> src/expr.rs:6:5
+  |
+6 | use std::io::Write;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/tc.rs:5078:13
+     |
+5078 |         let mut cctx = ctx.clone();
+     |             ----^^^^
+     |             |
+     |             help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type`
+    --> src/tc.rs:1785:5
+     |
+1785 |     pub fn infer_type(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::infer_type` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+     = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::whnf`
+    --> src/tc.rs:2808:5
+     |
+2808 |     pub fn whnf(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::whnf` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq`
+    --> src/tc.rs:3747:5
+     |
+3747 |     pub fn is_def_eq(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq_via_nbe`
+    --> src/tc.rs:9054:5
+     |
+9054 |     pub(crate) fn is_def_eq_via_nbe(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq_via_nbe` is reachable at visibility `pub(crate)`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type_value`
+    --> src/tc.rs:9971:5
+     |
+9971 | /     pub(crate) fn infer_type_value(
+9972 | |         &self,
+9973 | |         ctx: &Ctx,
+9974 | |         tys: &[Rc<nbe::Thunk>],
+9975 | |         env: &nbe::VEnv,
+9976 | |         e: &Expr,
+9977 | |     ) -> R<Rc<nbe::Value>> {
+     | |__________________________^ method `Checker::<'e>::infer_type_value` is reachable at visibility `pub(crate)`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: function `kind_or_direct` is never used
+    --> src/parser.rs:1020:4
+     |
+1020 | fn kind_or_direct(_v: &Value) {}
+     |    ^^^^^^^^^^^^^^
+     |
+     = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: method `concat` is never used
+   --> src/tc.rs:486:8
+    |
+435 | impl CrMon {
+    | ---------- method in this implementation
+...
+486 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: methods `insert`, `insert_go`, and `concat` are never used
+   --> src/tc.rs:559:8
+    |
+527 | impl CrPoly {
+    | ----------- methods in this implementation
+...
+559 |     fn insert(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^
+...
+569 |     fn insert_go(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^^^^
+...
+591 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: method `is_empty` is never used
+    --> src/tc.rs:1148:8
+     |
+1075 | impl Ctx {
+     | -------- method in this implementation
+...
+1148 |     fn is_empty(&self) -> bool {
+     |        ^^^^^^^^
+
+warning: multiple associated items are never used
+    --> src/tc.rs:1683:8
+     |
+1244 | impl<'e> Checker<'e> {
+     | -------------------- associated items in this implementation
+...
+1683 |     fn whnf_abbrev(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |        ^^^^^^^^^^^
+...
+2083 |     fn occurs_bvar(e: &Expr, i: u32) -> bool {
+     |        ^^^^^^^^^^^
+...
+3523 |     fn type_is_packed_structure(&self, typ: &Expr) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+3537 |     fn def_is_packed_structure(&self, n: u32) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+4484 |     pub(crate) fn iota_lit_memo_miss_count(&self) -> u32 {
+     |                   ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+6223 |     fn int_zero(&self) -> Option<Expr> {
+     |        ^^^^^^^^
+...
+6837 |     fn mk_int_bin(&self, op: &str, a: Expr, b: Expr) -> Option<Expr> {
+     |        ^^^^^^^^^^
+...
+6842 |     fn mk_int_un(&self, op: &str, a: Expr) -> Option<Expr> {
+     |        ^^^^^^^^^
+...
+8037 |     fn is_int_of_nat_zero(&self, e: &Expr) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^
+...
+8710 |     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+     |        ^^^^^^^^^^^^^^^^
+...
+9629 |     fn vctx_new() -> (Vec<Rc<nbe::Thunk>>, nbe::VEnv) {
+     |        ^^^^^^^^
+
+warning: field `num_params` is never read
+    --> src/tc.rs:8499:13
+     |
+8498 |         struct TInfo {
+     |                ----- field in this struct
+8499 |             num_params: u32,
+     |             ^^^^^^^^^^
+
+   Compiling kiota v0.1.0 (/private/tmp/kiota-ctor-index-test-1.qsehwn/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42)
+warning: `kiota` (lib) generated 13 warnings (run `cargo fix --lib -p kiota` to apply 2 suggestions)
+warning: output of `xcrun` while finding MacOSX.sdk
+  |
+  = note: xcrun: warning: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+
+warning: linker stderr: cc: confstr() failed with code 5: couldn't get path of DARWIN_USER_TEMP_DIR; using /tmp instead
+  |
+  = note: `#[warn(linker_messages)]` on by default
+
+warning: `kiota` (test "exports") generated 2 warnings
+warning: `kiota` (bin "kiota") generated 2 warnings (2 duplicates)
+warning: `kiota` (bin "kiota" test) generated 2 warnings (2 duplicates)
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::infer_type`
+    --> src/tc.rs:1785:5
+     |
+1785 |     pub fn infer_type(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::infer_type` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+     = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::whnf`
+    --> src/tc.rs:2808:5
+     |
+2808 |     pub fn whnf(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::whnf` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::is_def_eq`
+    --> src/tc.rs:3747:5
+     |
+3747 |     pub fn is_def_eq(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::is_def_eq` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::is_def_eq_via_nbe`
+    --> src/tc.rs:9054:5
+     |
+9054 |     pub(crate) fn is_def_eq_via_nbe(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::is_def_eq_via_nbe` is reachable at visibility `pub(crate)`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::infer_type_value`
+    --> src/tc.rs:9971:5
+     |
+9971 | /     pub(crate) fn infer_type_value(
+9972 | |         &self,
+9973 | |         ctx: &Ctx,
+9974 | |         tys: &[Rc<nbe::Thunk>],
+9975 | |         env: &nbe::VEnv,
+9976 | |         e: &Expr,
+9977 | |     ) -> R<Rc<nbe::Value>> {
+     | |__________________________^ method `tc::Checker::<'e>::infer_type_value` is reachable at visibility `pub(crate)`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1055:1
+     |
+1055 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: multiple associated items are never used
+    --> src/tc.rs:1683:8
+     |
+1244 | impl<'e> Checker<'e> {
+     | -------------------- associated items in this implementation
+...
+1683 |     fn whnf_abbrev(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |        ^^^^^^^^^^^
+...
+2083 |     fn occurs_bvar(e: &Expr, i: u32) -> bool {
+     |        ^^^^^^^^^^^
+...
+3523 |     fn type_is_packed_structure(&self, typ: &Expr) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+3537 |     fn def_is_packed_structure(&self, n: u32) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+6223 |     fn int_zero(&self) -> Option<Expr> {
+     |        ^^^^^^^^
+...
+6837 |     fn mk_int_bin(&self, op: &str, a: Expr, b: Expr) -> Option<Expr> {
+     |        ^^^^^^^^^^
+...
+6842 |     fn mk_int_un(&self, op: &str, a: Expr) -> Option<Expr> {
+     |        ^^^^^^^^^
+...
+8037 |     fn is_int_of_nat_zero(&self, e: &Expr) -> bool {
+     |        ^^^^^^^^^^^^^^^^^^
+...
+8710 |     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+     |        ^^^^^^^^^^^^^^^^
+
+warning: function `nest_apps` is never used
+     --> src/tc.rs:10437:8
+      |
+10437 |     fn nest_apps(base: Expr, n: u32) -> Expr {
+      |        ^^^^^^^^^
+
+warning: `kiota` (lib test) generated 16 warnings (9 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 1.91s
+     Running unittests src/lib.rs (/tmp/kiota-ctor-index-test-1.qsehwn/target/debug/deps/kiota-54b97b51a5482a38)
+     Running unittests src/main.rs (/tmp/kiota-ctor-index-test-1.qsehwn/target/debug/deps/kiota-f95268e1d7ad06cf)
+     Running tests/exports.rs (/tmp/kiota-ctor-index-test-1.qsehwn/target/debug/deps/exports-d0d6d4eb481ddc7d)
+[decl #100] def Nat.beq.match_1
+[decl #100] def absurd
+[decl #100] def absurd
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+[decl #100] def Nat.le.below.casesOn
+[decl #100] def absurd
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+[decl #100] def _private.Init.Prelude.0.Nat.le_of_ble_eq_true.match_1_1
+[decl #100] def _private.Init.Prelude.0.of_decide_eq_true.match_1_1
+[decl #100] def Applicative.toPure
+[decl #200] def _private.Init.Prelude.0.Nat.lt_or_ge.match_1_3
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] theorem Int.subNatNat_of_le
+[decl #200] def _private.Init.Prelude.0.Nat.pow_pos.match_1_1
+[decl #200] theorem Nat.mod_lt
+[decl #200] def List.utf8Encode
+[decl #300] theorem eq_self
+[decl #300] theorem of_eq_true
+[decl #300] theorem AddMonoid.add_assoc
+[decl #100] def _private.Init.Prelude.0.Nat.le_of_ble_eq_true.match_1_1
+[decl #400] def _private.Init.Core.0.ite_eq_left.match_1_1
+[decl #400] def Nat.zero_add._f
+[decl #200] theorem Nat.lt_of_not_le
+[decl #400] theorem Function.RightInverse.comp_eq_id
+[decl #500] theorem Nat.mul_le_mul_right
+[decl #300] def FunLike
+[decl #500] def Multiplicative.commSemigroup
+[decl #500] theorem mul_one
+[decl #600] theorem Nat.div_eq_ite
+[decl #400] def False.casesOn
+[decl #700] def Int.noConfusionType
+[decl #500] def SMul.smul
+[decl #600] def Zero.ofOfNat0
+[decl #600] def ZeroHom.casesOn
+[decl #800] theorem Int.negSucc_ne_zero._simp_1
+[decl #700] theorem Int.subNatNat_elim
+[decl #900] def Lean.Omega.normalize
+[decl #800] theorem Int.ofNat_inj
+[decl #700] def MulHom.toFun
+[decl #1000] def _private.Init.Data.Nat.Div.Basic.0.Nat.modCore_eq_mod.match_1_8
+[decl #1100] theorem Int.lt_iff_add_one_le
+[decl #1200] def _private.Init.Data.Nat.Dvd.0.Nat.le_of_dvd.match_1_3
+[decl #1300] def Lean.Omega.IntList.set._f
+[decl #1400] theorem and_assoc
+[decl #1500] theorem Nat.mul_two
+[decl #1600] def Nat.Internal.Linear.Poly.norm.go
+[decl #1700] theorem Nat.Internal.Linear.Poly.of_denote_le_cancelAux
+[decl #1800] theorem Prod.lexAccessible
+[decl #1900] def Lean.Grind.Semiring.npow
+[decl #2000] theorem Lean.Grind.Ring.sub_eq_add_neg
+[decl #2100] theorem Lean.Grind.CommRing.Expr.toPoly.match_1.congr_eq_5
+[decl #2200] theorem Lean.Grind.Ring.neg_eq_mul_neg_one
+[decl #2300] theorem dite_false
+[decl #2400] theorem Prod.mk.inj
+[decl #2500] def Encodable.decodeSubtype
+   Doc-tests kiota

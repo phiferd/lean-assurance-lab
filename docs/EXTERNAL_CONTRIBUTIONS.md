@@ -9,7 +9,7 @@ Ledger updated: **2026-09-19**. Upstream states are dated observations, not a li
 ## At a glance
 
 - Awaiting upstream: **2**
-- Local drafts: **4**
+- Local drafts: **5**
 - Merged: **4**
 
 ## Awaiting upstream
@@ -27,6 +27,7 @@ Ledger updated: **2026-09-19**. Upstream states are dated observations, not a li
 | [test(tc): cover native Nat operation dispatch](../results/action-recommendations/drafts/nanoda-nat-dispatch-regression-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NAT-DISPATCH-REGRESSION-1` | 2026-09-16 | Keep this preventive test patch local while #32 and #33 await acknowledgment. Then refresh source/duplicates, rebase and rerun focused/full tests before requesting approval for a pull request to ammkrn/nanoda_lib. |
 | [test: cover reserved nested namespace traversal and declaration guards](../results/action-recommendations/drafts/nanoda-nested-namespace-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NESTED-TEST-1` | 2026-09-16 | Keep this preventive test patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Review source, duplicates, rebase/retest and maintainer capacity before seeking exact approval for a PR to ammkrn/nanoda_lib. |
 | [test: cover String reconstruction shape and configuration boundaries](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-STRING-RECONSTRUCTION-TEST-1` | — | Keep this preventive internal String reconstruction patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Refresh source, duplicates, rebasing/tests and maintainer capacity before seeking exact owner approval for a PR to ammkrn/nanoda_lib. |
+| [test: cover constructor owner-index validation](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md) | `sankalpsthakur/kiota` | `KIOTA-CTOR-INDEX-TEST-1` | — | Before seeking exact approval for a PR to sankalpsthakur/kiota, refresh source, duplicate/open-PR state and maintainer context, rebase and retest if needed, and present the exact tested package for human authorization. |
 
 ## Merged
 

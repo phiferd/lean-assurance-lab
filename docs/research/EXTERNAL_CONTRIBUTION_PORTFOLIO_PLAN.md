@@ -761,3 +761,27 @@ wrong/out-of-range index case. Five of six read-only requests are charged,
 including two failed browser access attempts. No implementation edit, Kiota
 process or external write has occurred. The exact patch, toolchain, expected
 cells and finite process controls remain separately gated before execution.
+
+## Kiota constructor-index test closure — 2026-09-19 UTC
+
+`KIOTA-CTOR-INDEX-TEST-1` completes SUCCESS for one exact test-only package at
+freshly bound Kiota `9fa2c297`. The focused owner-index pair passed 2/2 with 70
+tests filtered out; the complete suite passed 83 unit and 72 integration tests,
+155 total, with zero failures or ignores. The unchanged control accepts and the
+one-scalar candidate requires the exact owner-list/index rejection. Existing
+`orphan-ctor` remains the separate missing-owner regression. Both counted
+build/test reservations completed cleanup.
+
+The indexed local PR draft is a preventive contribution, not a current-defect,
+soundness or universal-metadata claim. Five of six source/setup/duplicate
+requests were charged, including two failed browser attempts. No production
+change, checker, proof, mutation, new export or external write occurred. A bound
+zero-entry open-PR response does not establish maintainer capacity. Submission
+requires a fresh source/duplicate/capacity preflight, any needed rebase/retest
+and exact human authorization for `sankalpsthakur/kiota`.
+
+Select `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY and unstarted under its original
+source/evidence-only plan. The theorem companion still lacks distinct-risk
+evidence, original CVC-4/CVC-5 gates remain unmet, and transfer intake still
+lacks an independently supplied package. No deterministic experiment starts at
+this handoff.

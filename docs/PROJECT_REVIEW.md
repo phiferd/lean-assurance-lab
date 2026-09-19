@@ -20,13 +20,13 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Merged corpus contributions and an explicit three-path contribution portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete KIOTA-CTOR-INDEX-TEST-1: Implement Kiota constructor-index owner-list regression; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **KIOTA-CTOR-INDEX-TEST-1**.
+Selected next item: **SURVIVOR-THREAD-ONE-DETERMINISM-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -36,7 +36,6 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 35 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 36 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 41 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 51 | KIOTA-CTOR-INDEX-TEST-1: Implement Kiota constructor-index owner-list regression | READY |
 | 52 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | READY |
 
 ### 16. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
@@ -103,29 +102,13 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
-### 51. KIOTA-CTOR-INDEX-TEST-1: Implement Kiota constructor-index owner-list regression
-
-**Target:** Freshly bound Kiota public NDJSON parser and the exact a59d7fa2cfb3 candidate/control bytes
-
-Refresh and bind source/duplicates, add the two unchanged fixtures, require paired acceptance and the exact owner-list/index rejection, then run focused and complete current tests.
-
-**Why this rank:** The completed source audit establishes a distinct small regression gap and exact reusable pair. A tested contribution for another checker's public import boundary now has greater immediate shared value than the historical one-thread operational assessment; no defect or external capacity is presumed.
-
-**Completion:** One focused/full-suite-validated test-only patch and local PR draft, exact duplicate/no-value result, or bounded technical incompatibility. No current-defect, universal-authority or submission claim.
-
-**Stop:** 90 cumulative active minutes, 6 source/setup/duplicate requests, 2 builds <=600s and 3 test processes <=120s; compiling tests count both. Zero production fixes, checkers, proofs, mutations, new export bytes or external writes; select but do not start a successor.
-
-**Execution:** At most 1 sessions of 90 active minutes; 3 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: KIOTA-CTOR-INDEX-COVERAGE-1 completed SUCCESS. Before implementation commit a fresh work record, exact current source archive/revision, complete duplicate inventory, fixed fixture hashes and action rubric; before launch separately commit exact patch, dependencies/tooling, expected cells and process controls under docs/research/KIOTA_CTOR_INDEX_TEST_PLAN.md.
-
 ### 52. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
 
 **Target:** nanoda-gen-2bdfe18a9ec2 at pinned Nanoda src/tc.rs:147, the serial/one-worker dispatch split and its operational failure boundaries
 
 Bind the exact mutation, source and historical evidence; determine whether spawn failure, child panic, stack behavior or scheduling exposes a deterministic locally controllable baseline/mutant distinction without ambient resource exhaustion.
 
-**Why this rank:** Retained READY reserve under its original budget. The Kiota constructor-index audit now outranks it because it addresses a named public-input regression opportunity in another checker; the one-thread item remains a useful bounded operational visibility question.
+**Why this rank:** Selected after the Kiota constructor-index test package completed SUCCESS. It is the sole executable local successor and addresses the final operational survivor with a bounded source/evidence question; planned theorem and original CVC items lack their gates, and transfer intake lacks external input.
 
 **Completion:** One fixed deterministic regression protocol for later separate authorization, a source-supported scoped classification recommendation, or a bounded negative/unresolved result naming the exact nondeterministic or missing control.
 
@@ -133,7 +116,7 @@ Bind the exact mutation, source and historical evidence; determine whether spawn
 
 **Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: SURVIVOR-CACHE-PREDICATE-TRANSFER-1 completed SUCCESS; the project-wide String closure review reselects this existing reserve READY. Before analysis commit a fresh work record, exact input bindings and determinism rubric under the unchanged original plan. A deterministic trigger is required for later separately selected regression execution, not this source/evidence assessment.
+**Boundary:** READY: SURVIVOR-CACHE-PREDICATE-TRANSFER-1 completed SUCCESS; the project-wide Kiota test closure reselects this existing reserve READY. Before analysis commit a fresh work record, exact input bindings and determinism rubric under the unchanged original plan. A deterministic trigger is required for later separately selected regression execution, not this source/evidence assessment.
 
 ## Autonomous workflow
 
@@ -176,6 +159,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: KIOTA-CTOR-INDEX-TEST-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SURVIVOR-THREAD-ONE-DETERMINISM-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

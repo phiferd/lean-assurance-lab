@@ -57,6 +57,18 @@ research directions.
 
 ## Attempted
 
+- Completed `KIOTA-CTOR-INDEX-TEST-1` on 2026-09-19 with SUCCESS for one
+  [test-only preventive regression](../results/research/kiota-ctor-index-test-1/report.md)
+  at freshly bound Kiota `9fa2c297`. The focused pair passed 2/2 and the full
+  current suite passed 83 unit plus 72 integration tests, 155 total, with zero
+  failures or ignores. The exact unchanged control accepts; the one-scalar
+  candidate rejects with the exact owner-list/index message. Five of six
+  source/setup/duplicate requests and two build/test reservations were charged;
+  no production change, checker, proof, mutation, new export or external write.
+  The [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
+  remains local and human-gated. No current defect or universal metadata rule is
+  claimed. `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted.
+
 - Completed `KIOTA-CTOR-INDEX-COVERAGE-1` on 2026-09-19 with SUCCESS for one
   [source-bound existing-byte regression design](../results/research/kiota-ctor-index-coverage-1/report.md)
   at retained Kiota `9fa2c297`. The complete 70-fixture inventory has 69 unique
@@ -2881,7 +2893,7 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `KIOTA-CTOR-INDEX-TEST-1`.
+Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
 
 `KIOTA-CTOR-INDEX-COVERAGE-1` completed SUCCESS under its
 [bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). At retained Kiota
@@ -2894,26 +2906,22 @@ rejection. No Kiota process or external write ran, so current execution and
 current-tip behavior remain unclaimed. See the [coverage map](../results/research/kiota-ctor-index-coverage-1/coverage-map.json)
 and [report](../results/research/kiota-ctor-index-coverage-1/report.md).
 
-`KIOTA-CTOR-INDEX-TEST-1` is ACTIVE under its
-[implementation plan](research/KIOTA_CTOR_INDEX_TEST_PLAN.md). Use 90 cumulative
-active minutes, six source/setup/duplicate requests, two builds and three tests
-under their fixed timeouts, with zero production fixes, checkers, proofs,
-mutations, new export bytes or external writes. Before implementation bind fresh
-source and complete duplicates; before launch commit the exact existing bytes,
-patch, expected cells, tooling, dependencies, process controls and accounting.
-Require paired acceptance and the exact guard error. A tested local PR draft is
-permitted; submission remains separately human-gated. The entry gate binds a
-fresh response reporting unchanged `9fa2c297`, a fresh exact-revision archive,
-the complete 153-test/70-fixture inventory and a zero-entry open-PR response.
-Five of six read-only requests are charged, including two failed browser-access
-attempts. No implementation edit, Kiota build or test has run; a separate exact
-patch/tooling/process freeze is still required before the first launch.
+`KIOTA-CTOR-INDEX-TEST-1` completed SUCCESS under its
+[implementation plan](research/KIOTA_CTOR_INDEX_TEST_PLAN.md). The exact test-only
+package adds two unchanged fixtures, a paired acceptance test and an exact-message
+rejection test. Focused 2/2 and all 155 current tests passed at bound
+`9fa2c297`; both reservations completed cleanup. The [report](../results/research/kiota-ctor-index-test-1/report.md)
+and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
+preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY as the reserve under its
-unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
+Select `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY and unstarted under its unchanged
+[original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later
-execution retains a separate gate. The reserve is not ACTIVE or started.
+execution retains a separate gate. Bind a fresh work record, exact historical
+inputs and determinism rubric before analysis. The theorem companion remains
+PLANNED without distinct-risk evidence, original CVC-4/CVC-5 gates remain unmet,
+and transfer intake still lacks its required independent external package.
 
 `NANODA-STRING-RECONSTRUCTION-TEST-1` completed SUCCESS. Two focused and all
 40 library tests pass; eight existing doc examples remain ignored. The
@@ -3018,13 +3026,13 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items, both source-only: the selected Kiota
-constructor-index coverage audit and the one-thread operational reserve. Four
-held Nanoda candidates and two open PRs favor a concrete question at another
-checker's public import boundary over further unspecified small tests. The
-existing Kiota source review supplies a guard and exact historical pair but no
-complete equivalent-coverage finding. This priority judgment does not claim a
-current defect, independent transfer result, or missing test.
+The canonical queue retains one READY item: the selected one-thread operational
+source/evidence assessment. The Kiota constructor-index audit and test-only
+implementation are complete; the exact local patch passed focused 2/2 and all
+155 current tests, while submission remains separately human-gated. Four held
+Nanoda candidates and two open PRs do not displace the final internal survivor
+question. This priority judgment does not claim a current defect, independent
+transfer result, or deterministic trigger for later execution.
 
 Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
 The fresh Arena merge observation supports shared-corpus work but does not supply

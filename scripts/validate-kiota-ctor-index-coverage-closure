@@ -195,13 +195,12 @@ def validate(root: Path) -> None:
 
     queue = load(root / "config/research-queue.json")
     by_id = {row["id"]: row for row in queue["items"]}
-    require(queue["selected_item"] == "KIOTA-CTOR-INDEX-TEST-1", "wrong selected successor")
     require(by_id["KIOTA-CTOR-INDEX-COVERAGE-1"]["status"] == "COMPLETE", "item not complete")
     require(by_id["KIOTA-CTOR-INDEX-COVERAGE-1"]["closure"]["outcome"] == "SUCCESS",
             "wrong closure outcome")
-    require(by_id["KIOTA-CTOR-INDEX-TEST-1"]["status"] == "READY", "successor not READY")
-    require(by_id["SURVIVOR-THREAD-ONE-DETERMINISM-1"]["status"] == "READY",
-            "reserve not preserved")
+    require(by_id["KIOTA-CTOR-INDEX-TEST-1"]["depends_on"]
+            == ["KIOTA-CTOR-INDEX-COVERAGE-1"], "successor dependency changed")
+    require("SURVIVOR-THREAD-ONE-DETERMINISM-1" in by_id, "reserve item missing")
 
 
 def main() -> int:

@@ -1,0 +1,235 @@
+#!/usr/bin/env python3
+"""Validate the exact Kiota constructor-index test implementation closure."""
+from __future__ import annotations
+
+import argparse
+import hashlib
+import json
+import tarfile
+from pathlib import Path
+
+
+REVISION = "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42"
+ERROR = "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1"
+ITEM = "KIOTA-CTOR-INDEX-TEST-1"
+
+
+def fail(message: str) -> None:
+    raise ValueError(message)
+
+
+def require(value: bool, message: str) -> None:
+    if not value:
+        fail(message)
+
+
+def load(path: Path):
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        fail(f"could not load {path}: {error}")
+
+
+def digest_bytes(value: bytes) -> str:
+    return hashlib.sha256(value).hexdigest()
+
+
+def digest(path: Path) -> str:
+    return digest_bytes(path.read_bytes())
+
+
+def binding(root: Path, row: dict) -> None:
+    path = root / row["path"]
+    require(path.is_file(), f"missing binding: {row['path']}")
+    require(path.stat().st_size == row["bytes"], f"binding size mismatch: {row['path']}")
+    require(digest(path) == row["sha256"], f"binding hash mismatch: {row['path']}")
+
+
+def differences(left, right, pointer=""):
+    if type(left) is not type(right):
+        return [(pointer, left, right)]
+    if isinstance(left, dict):
+        if set(left) != set(right):
+            return [(pointer, left, right)]
+        result = []
+        for key in sorted(left):
+            result.extend(differences(left[key], right[key], f"{pointer}/{key}"))
+        return result
+    if isinstance(left, list):
+        if len(left) != len(right):
+            return [(pointer, left, right)]
+        result = []
+        for index, (lvalue, rvalue) in enumerate(zip(left, right)):
+            result.extend(differences(lvalue, rvalue, f"{pointer}/{index}"))
+        return result
+    return [] if left == right else [(pointer, left, right)]
+
+
+def validate(root: Path) -> None:
+    base = root / "results/research/kiota-ctor-index-test-1"
+    source = load(base / "source-lock.json")
+    requests = load(base / "request-log.json")
+    inventory = load(base / "duplicate-inventory.json")
+    inputs = load(base / "scientific-inputs.json")
+    package = load(base / "patch-package.json")
+    execution = load(base / "execution-review.json")
+    account = load(base / "execution/accounting.json")
+    result = load(base / "result.json")
+    closure = load(base / "work-closure.json")
+
+    require(source["item_id"] == ITEM and source["revision"] == REVISION,
+            "wrong source binding")
+    require(requests["charged_requests"] == 5 <= requests["cap"] == 6
+            and requests["remaining"] == 1, "request accounting mismatch")
+    require([row["outcome"] for row in requests["requests"][:2]]
+            == ["FAILED_TOOL_ACCESS", "FAILED_TOOL_ACCESS"],
+            "failed requests were not preserved")
+    for name in ("tip_receipt", "archive"):
+        binding(root, source[name])
+    require(load(root / "results/research/kiota-ctor-index-test-1/open-pr-response.json") == [],
+            "bound open-PR response must be empty")
+
+    archive = root / source["archive"]["path"]
+    with tarfile.open(archive, "r:gz") as bundle:
+        members = [member for member in bundle.getmembers() if member.isfile()]
+        prefix = source["archive"]["top_level"]
+        by_relative = {member.name[len(prefix):]: member for member in members
+                       if member.name.startswith(prefix)}
+        require(len(members) == source["archive"]["regular_files"] == 90,
+                "archive inventory mismatch")
+        for row in source["selected_files"]:
+            require(row["path"] in by_relative, "archive selected file missing")
+            raw = bundle.extractfile(by_relative[row["path"]]).read()
+            require(len(raw) == row["bytes"] and digest_bytes(raw) == row["sha256"],
+                    "archive selected file mismatch: " + row["path"])
+        parser = bundle.extractfile(by_relative["src/parser.rs"]).read().decode()
+        require("owner_ctors.get(cidx as usize) != Some(&name)" in parser
+                and "constructor `{}` is not `{}`'s own constructor at index {cidx}" in parser,
+                "owner-index production guard changed")
+
+    executable = inventory["executable_inventory"]
+    require(executable["total_test_functions"] == 153
+            and executable["unit_tests"]["total"] == 83
+            and executable["integration_tests"] == 70,
+            "entry executable inventory mismatch")
+    require(inventory["semantic_projection"]["declared_owner_wrong_or_out_of_range_count"] == 0,
+            "entry duplicate decision changed")
+    require(inventory["open_pull_requests"]["count"] == 0,
+            "entry open-PR count changed")
+
+    require(package["item_id"] == ITEM and package["source_revision"] == REVISION
+            and package["kind"] == "TEST_ONLY", "wrong patch package")
+    require(package["changed_paths"] == [
+        "tests/exports.rs",
+        "tests/fixtures/ctor-owner-index.accept.ndjson",
+        "tests/fixtures/ctor-owner-index.reject.ndjson",
+    ], "patch path scope changed")
+    binding(root, package["code_patch"])
+    patch = (root / package["code_patch"]["path"]).read_text()
+    require("fn assert_reject_exact" in patch and "fn ctor_owner_index_accepts" in patch
+            and "fn ctor_owner_index_rejects" in patch and ERROR in patch,
+            "exact patch content changed")
+    for row in package["fixture_copies"]:
+        fixture = root / row["source_path"]
+        require(fixture.stat().st_size == row["bytes"] and digest(fixture) == row["sha256"],
+                "fixture source mismatch")
+    control_row, candidate_row = package["fixture_copies"]
+    control = [json.loads(line) for line in (root / control_row["source_path"]).read_text().splitlines()]
+    candidate = [json.loads(line) for line in (root / candidate_row["source_path"]).read_text().splitlines()]
+    require(len(control) == len(candidate) == 105, "fixture record count mismatch")
+    require(differences(candidate, control) == [("/104/inductive/ctors/0/cidx", 1, 0)],
+            "fixture pair no longer has one fixed scalar difference")
+
+    require(inputs["source_revision"] == REVISION and len(inputs["cells"]) == 2,
+            "scientific input cells changed")
+    require(inputs["cells"][0]["expected"]["named_tests"]
+            == ["ctor_owner_index_accepts", "ctor_owner_index_rejects"],
+            "focused test identity changed")
+    require(inputs["cells"][1]["expected"]["total_passed"] == 155,
+            "full expected count changed")
+
+    expected_manifests = {
+        "001-focused": "f695859bc2db833da90a66a67944e3dcb8fa9e4dce176a9f628deb1e85a2b457",
+        "002-full": "405a0aaa14a30341729eede221cb47c6093afa1f2b069a1cca796a6e1fcf499b",
+    }
+    require(execution["entry_commit"] == "8c92b9b87d9b349a67493fbf5305b133eda20e4e"
+            and execution["freeze_commit"] == "15252e96c00f3ebdd51f088c329a1e889fd790be",
+            "entry/freeze commits changed")
+    require(account["builds"] == account["test_processes"] == 2
+            and account["pending"] is None and len(account["reservations"]) == 2,
+            "execution accounting mismatch")
+    require(abs(execution["accounting"]["total_charged_process_seconds"]
+                - 14.729227207950316) < 1e-12, "charged process time changed")
+    for row in execution["processes"]:
+        cell = row["cell_id"]
+        manifest = base / "execution" / f"{cell}-manifest.json"
+        require(digest(manifest) == expected_manifests[cell] == row["manifest_sha256"],
+                "execution manifest mismatch: " + cell)
+        for name in ("request", "stdout", "stderr", "supervisor"):
+            path = base / "execution" / cell / (name + (".json" if name in ("request", "supervisor") else ""))
+            require(digest(path) == row[name + "_sha256"], f"{cell} {name} mismatch")
+        supervisor = load(base / "execution" / cell / "supervisor.json")
+        require(supervisor["status"] == "COMPLETE" and supervisor["returncode"] == 0
+                and supervisor["cleanup_completed"] and not supervisor["deadline_exceeded"],
+                "scientific process did not complete cleanly")
+    focused = (base / "execution/001-focused/stdout").read_text()
+    full = (base / "execution/002-full/stdout").read_text()
+    require("2 passed; 0 failed; 0 ignored; 0 measured; 70 filtered out" in focused,
+            "focused result changed")
+    for summary in (
+        "83 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out",
+        "72 passed; 0 failed; 0 ignored; 0 measured; 0 filtered out",
+    ):
+        require(summary in full, "full-suite result changed")
+
+    require(result["status"] == "COMPLETE" and result["outcome"] == "SUCCESS",
+            "result is not SUCCESS")
+    require(result["observations"]["candidate"]["exact_message"] == ERROR,
+            "result exact message changed")
+    require(not result["claims"]["current_defect"]
+            and result["claims"]["semantic_authority"] == "NOT_ADJUDICATED",
+            "result overclaims authority or defect")
+    for row in result["output_bindings"]:
+        binding(root, row)
+    require(closure["active_seconds"] <= 5400
+            and closure["research_counts"]["builds"] == 2
+            and closure["research_counts"]["test_processes"] == 2,
+            "work closure accounting mismatch")
+    for key in ("checkers", "proofs", "mutants", "new_exports", "external_research_writes"):
+        require(closure["research_counts"][key] == 0, "forbidden closure count: " + key)
+
+    ledger = load(root / "results/research/external-contributions.json")
+    entry = next((row for row in ledger["contributions"]
+                  if row["id"] == "KIOTA-CTOR-INDEX-TEST-PR-DRAFT"), None)
+    require(entry is not None and entry["lifecycle"] == "LOCAL_DRAFT"
+            and entry["upstream"] is None
+            and entry["next_step"]["requires_human_authorization"],
+            "external contribution ledger entry mismatch")
+    require((root / entry["submission_material"]).is_file(), "local PR draft missing")
+
+    queue = load(root / "config/research-queue.json")
+    by_id = {row["id"]: row for row in queue["items"]}
+    require(queue["selected_item"] == "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+            "wrong selected successor")
+    require(by_id[ITEM]["status"] == "COMPLETE"
+            and by_id[ITEM]["closure"]["outcome"] == "SUCCESS",
+            "queue item not closed SUCCESS")
+    require(by_id["SURVIVOR-THREAD-ONE-DETERMINISM-1"]["status"] == "READY",
+            "successor not READY")
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--root", type=Path, default=Path(__file__).resolve().parents[1])
+    args = parser.parse_args()
+    try:
+        validate(args.root.resolve())
+    except (ValueError, OSError, KeyError, TypeError, StopIteration) as error:
+        print(f"FAIL: {error}")
+        return 1
+    print("PASS")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

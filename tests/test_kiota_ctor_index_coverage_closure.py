@@ -55,6 +55,20 @@ class KiotaCtorIndexCoverageClosureTest(unittest.TestCase):
             self.assertNotEqual(completed.returncode, 0)
             self.assertIn("coverage decision changed", completed.stdout)
 
+    def test_completed_item_cannot_be_reopened_after_successor_transition(self) -> None:
+        with tempfile.TemporaryDirectory() as tmp:
+            root = Path(tmp)
+            self.copy_fixture(root)
+            path = root / "config/research-queue.json"
+            value = json.loads(path.read_text())
+            item = next(row for row in value["items"]
+                        if row["id"] == "KIOTA-CTOR-INDEX-COVERAGE-1")
+            item["status"] = "READY"
+            path.write_text(json.dumps(value, indent=2) + "\n")
+            completed = self.run_validator(root)
+            self.assertNotEqual(completed.returncode, 0)
+            self.assertIn("item not complete", completed.stdout)
+
 
 if __name__ == "__main__":
     unittest.main()

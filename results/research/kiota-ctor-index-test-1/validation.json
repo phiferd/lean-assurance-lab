@@ -1,0 +1,95 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "status": "PASS",
+  "focused": [
+    {
+      "command": "scripts/validate-kiota-ctor-index-test-closure",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "python3 tests/test_kiota_ctor_index_test_closure.py",
+      "returncode": 0,
+      "tests": 2,
+      "result": "OK"
+    },
+    {
+      "command": "python3 tests/test_kiota_ctor_index_runner.py",
+      "returncode": 0,
+      "tests": 14,
+      "result": "OK"
+    },
+    {
+      "command": "python3 tests/test_kiota_ctor_index_coverage_closure.py",
+      "returncode": 0,
+      "tests": 3,
+      "result": "OK"
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "returncode": 0,
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-external-contributions --check",
+      "returncode": 0,
+      "result": "PASS"
+    }
+  ],
+  "administrative_repairs": [
+    {
+      "failure": "The first direct unittest module command used package-style names although tests is not a Python package.",
+      "repair": "Ran both test files directly; 2 closure tests and 14 runner tests passed.",
+      "scientific_effect": "NONE"
+    },
+    {
+      "failure": "The first repository-suite preflight saw not-yet-created validation and delivery evidence referenced by the evolving queue.",
+      "repair": "Created the in-progress administrative records before retrying; no repository test ran in that attempt.",
+      "scientific_effect": "NONE"
+    },
+    {
+      "failure": "The first complete repository run executed 1176 current tests and found two queue-transition assumptions: stale READY-count prose and the predecessor Kiota coverage validator pinning its immediate successor forever.",
+      "repair": "Updated current status to the one-item READY state and made the predecessor validator preserve its completed result and dependency without freezing mutable future selection; added a reopening regression. The next diagnostic run was interrupted after confirming the remaining stale status prose, then the final complete run passed.",
+      "scientific_effect": "NONE; no Kiota source, fixture, patch, manifest, raw receipt or scientific result changed."
+    }
+  ],
+  "full_suite": {
+    "command": "python3 scripts/run-unit-tests",
+    "returncode": 0,
+    "current_live_tests": 1177,
+    "frozen_publication_tests": 73,
+    "portfolio_checkpoint_tests": 9,
+    "result": "OK"
+  },
+  "refresh": {
+    "command": "scripts/refresh-current-state",
+    "status": "COMPLETE",
+    "receipt": "results/workflow-refresh/20260919T224005703063Z/result.json",
+    "receipt_sha256": "24d196d02d32e16a50eb1174a1e8d125a8fa1678f818ad31aa449389fd4b5de3"
+  },
+  "validator_bindings": [
+    {
+      "path": "scripts/validate-kiota-ctor-index-test-closure",
+      "sha256": "52cc795e2f4ba77a37ca08d1b2432887bd8f40a3f4411f467ac524c42f59053c",
+      "bytes": 11138
+    },
+    {
+      "path": "tests/test_kiota_ctor_index_test_closure.py",
+      "sha256": "e62df3e79b16e286ea8eee40b5f1b0c6c9c1cfa5fd028b4727984f2beaa01f14",
+      "bytes": 2252
+    },
+    {
+      "path": "scripts/validate-kiota-ctor-index-coverage-closure",
+      "sha256": "cd5411c81707950a26199dfe8c8b20d9b57b22d9999d94096cc3abced9f35d5d",
+      "bytes": 10176
+    },
+    {
+      "path": "tests/test_kiota_ctor_index_coverage_closure.py",
+      "sha256": "0cfc28209ef8355c25e0339e1c6cb34aa30d9e70f41bda0a0c0980c8094a3f33",
+      "bytes": 3030
+    }
+  ],
+  "scientific_launches": 2,
+  "qualification": "The two bound Kiota test processes are the only scientific launches. Repository validation, state regeneration and historical-transition repair were administrative and did not alter the frozen scientific inputs or outcomes."
+}
