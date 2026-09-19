@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/leanprover/lean-kernel-arena/pull/206",
+    "number": 206,
+    "state": "closed",
+    "merged": true,
+    "mergeable": false,
+    "draft": false,
+    "body": "This adds one small static `either` test at\n`tests/corner-cases/let-value-type-mismatch`:\n\n```text\ndef EcosystemCase : Sort 2 := let u : Sort 1 := Sort 1; u\n```\n\nThe let value has type `Sort 2`, which disagrees with its `Sort 1` annotation.\nChecking that relationship can reject the declaration. Substituting the value\nfor `u` first produces `def EcosystemCase : Sort 2 := Sort 1`, whose types match.\n\nThe [reply to this exact example](https://github.com/leanprover/lean4export/issues/48#issuecomment-5654286873)\nsupports allowing either outcome as practical checker policy, while leaving a\ncompletely authoritative answer open. The test records that choice without\nscoring it as a soundness or completeness failure. It is not a false-theorem\nexample.\n\nThe existing subject-reduction cases concern beta erasure and conversion\ntransitivity; this case isolates a let annotation removed by substitution.\n`constlevels` also contains malformed lets, but combines them with other\nunfolding/type defects. The tutorial already supplies a matching positive let,\nso no extra accept control is added.\n\nValidation at Arena `fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb`:\n\n```text\npython lka.py build-test corner-cases/let-value-type-mismatch\nResults: 1 succeeded, 0 failed\n```\n\nThe static build preserves the existing 601-byte export and records outcome\n`either`. No checker was run for this change.\n",
+    "title": "Add a let annotation/substitution corner case",
+    "base": "master",
+    "base_sha": "fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb",
+    "head": "arena-let-value-type-mismatch",
+    "head_sha": "cd31bb7e3cebd1a3b4deabcdcf1dad341ef20755",
+    "head_repo_id": 1348359676,
+    "head_repo_full_name": "phiferd/lean-kernel-arena",
+    "merge_commit_sha": "4543f486677a6cb56c7656767712cd017f8058ea",
+    "user": {
+      "login": "phiferd",
+      "name": "phiferd",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+      "id": 25631
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-09-14T11:51:27Z",
+    "updated_at": "2026-09-14T12:27:45Z",
+    "closed_at": "2026-09-14T12:27:45Z",
+    "merged_at": "2026-09-14T12:27:45Z",
+    "commits": 1,
+    "changed_files": 2,
+    "additions": 32,
+    "deletions": 0,
+    "display_url": "https://github.com/leanprover/lean-kernel-arena/pull/206",
+    "display_title": "Add a let annotation/substitution corner case"
+  },
+  "isError": false
+}

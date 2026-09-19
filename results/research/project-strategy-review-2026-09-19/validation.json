@@ -1,0 +1,97 @@
+{
+  "status": "PASS",
+  "recorded_at": "2026-09-19T01:35:54.244878+00:00",
+  "scope": "Project-wide review and selected-but-unstarted successor; no scientific execution or milestone advance.",
+  "checks": [
+    {
+      "command": "python3 scripts/run-unit-tests --require-full-payload",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/full-lab-suite.log",
+      "tests": 1240,
+      "current_tests": 1158,
+      "historical_tests": 82
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_arena_let_regression_erratum.py -v",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/focused-repair.log",
+      "tests": 6
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/queue-validation.log"
+    },
+    {
+      "command": "scripts/build-external-contributions --check",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/ledger-validation.log"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/generated-review-validation.log"
+    },
+    {
+      "command": "git diff --check",
+      "returncode": 0,
+      "log": "results/research/project-strategy-review-2026-09-19/diff-check.log"
+    },
+    {
+      "command": "scripts/refresh-current-state --log-dir results/workflow-refresh/project-strategy-review-2026-09-19-final",
+      "returncode": 0,
+      "result": "results/workflow-refresh/project-strategy-review-2026-09-19-final/result.json"
+    }
+  ],
+  "prior_failed_attempt": {
+    "log": "results/research/project-strategy-review-2026-09-19/full-lab-suite-attempt-1.log",
+    "returncode": 1,
+    "cause": "READY-count sentence grammar; repaired without changing the checker or test.",
+    "record": "results/research/project-strategy-review-2026-09-19/repair-record.json"
+  },
+  "scientific_state_preserved": true,
+  "selected_item": "KIOTA-CTOR-INDEX-COVERAGE-1",
+  "selected_item_started": false,
+  "evidence_bindings": [
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/full-lab-suite.log",
+      "sha256": "e3c929634a8c48e5507f89962819e94f2b01ded3f853c38833eccfd5007de60d"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/full-lab-suite-attempt-1.log",
+      "sha256": "f4b1ca3ab0bafeec0c5936eaa81d9a6981b40f940e8b93baf05bd9cd6750d015"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/focused-repair.log",
+      "sha256": "d206f3523bb798dec27fb9217035a198aff532a31450696a3a21916ddb213d74"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/repair-record.json",
+      "sha256": "56a6ddc51bac95b0c08294859f3d8477b8a67512a68d6e8203920af5cbbe013f"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/scientific-state-preservation.json",
+      "sha256": "cdfb4a9436af7a550fa925881cd5d9f3e35ec591b877eb93434c0140a52d8394"
+    },
+    {
+      "path": "results/workflow-refresh/project-strategy-review-2026-09-19-final/result.json",
+      "sha256": "0074524f9727cb03c657cecc3511741a9f143fe998d0aa1c992c903cb9949aef"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/queue-validation.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/ledger-validation.log",
+      "sha256": "560184e42e5a737377ebbccd5d95321e66748a007a28a8109f2ec1b867a582d3"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/generated-review-validation.log",
+      "sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "path": "results/research/project-strategy-review-2026-09-19/diff-check.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

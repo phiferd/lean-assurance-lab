@@ -4,21 +4,20 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-09-18**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-09-19**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
-- Awaiting upstream: **3**
+- Awaiting upstream: **2**
 - Local drafts: **4**
-- Merged: **3**
+- Merged: **4**
 
 ## Awaiting upstream
 
 | Contribution | Repository | Observed | Review/checks | Next step |
 |---|---|---|---|---|
-| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-18 | unknown; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
-| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-18 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
-| [Add a let annotation/substitution corner case](https://github.com/leanprover/lean-kernel-arena/pull/206) | `leanprover/lean-kernel-arena` | 2026-09-14 | unknown; unknown | Submitted as Arena #206 with exact owner approval and fresh source/duplicate preflight. Reassess substantive maintainer feedback when observed; any further external write needs its own exact authorization. No automatic polling. |
+| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
+| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
 
 ## Local drafts
 
@@ -36,6 +35,7 @@ Ledger updated: **2026-09-18**. Upstream states are dated observations, not a li
 | [Add imax right-successor corner cases](https://github.com/leanprover/lean-kernel-arena/pull/176) | `leanprover/lean-kernel-arena` | 2026-08-30T09:10:53Z | [record](../results/investigations/ecosystem-closure-2026-09-05/upstream/details/arena-pr-176.json) |
 | [Add reducible-argument positivity corner case](https://github.com/leanprover/lean-kernel-arena/pull/181) | `leanprover/lean-kernel-arena` | 2026-09-06T04:56:34Z | [record](../results/investigations/corpus-integration-2026-09-05/external-actions.json) |
 | [Add proof-parameter order characterization pair](https://github.com/leanprover/lean-kernel-arena/pull/182) | `leanprover/lean-kernel-arena` | 2026-09-05T21:37:44Z | [record](../results/investigations/corpus-integration-2026-09-05/external-actions.json) |
+| [Add a let annotation/substitution corner case](https://github.com/leanprover/lean-kernel-arena/pull/206) | `leanprover/lean-kernel-arena` | 2026-09-14T12:27:45Z | [record](../results/research/arena-let-policy-followup-1/report.md) |
 
 ## Maintenance contract
 

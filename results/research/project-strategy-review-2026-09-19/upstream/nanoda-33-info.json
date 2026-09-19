@@ -1,0 +1,47 @@
+{
+  "content": [
+    {
+      "type": "text",
+      "text": "Action completed."
+    }
+  ],
+  "structuredContent": {
+    "url": "https://github.com/ammkrn/nanoda_lib/pull/33",
+    "number": 33,
+    "state": "open",
+    "merged": false,
+    "mergeable": true,
+    "draft": false,
+    "body": "## Summary\n\nhash_test0 used the default test configuration, which disables both native-literal extensions. Consequently, the quick Nat and String constructors returned None, and the existing equality/hash loop compared absent values instead of literal expressions.\n\nThis test-only change:\n\n- makes the disabled behavior explicit;\n- enables both extensions before creating a fresh export/DAG;\n- requires successful Nat/String literal construction and checks their variants and stored payloads;\n- retains the repeated-value equality, hash, and interning checks.\n\n## Validation\n\n- cargo test --offline --locked hash_test0\n- cargo test --offline --locked — 38 library tests passed; 0 failed; 8 doc tests ignored\n\n## Evidence\n\nThe evidence below is pinned to the immutable Lean Assurance Lab commit that recorded this finding and repair:\n\n- [test-effectiveness assessment](https://github.com/phiferd/lean-assurance-lab/blob/773f2cac989e54fcb846bc87e3789985a1fd0e7e/results/research/nanoda-test-nonvacuity-1/test-effectiveness-assessment.json)\n- [assertion-only reproduction receipt](https://github.com/phiferd/lean-assurance-lab/blob/773f2cac989e54fcb846bc87e3789985a1fd0e7e/results/research/nanoda-test-nonvacuity-1/execution/baseline-nonvacuity-receipt.json)\n- [focused repaired-test receipt](https://github.com/phiferd/lean-assurance-lab/blob/773f2cac989e54fcb846bc87e3789985a1fd0e7e/results/research/nanoda-test-nonvacuity-1/execution/repaired-focused-receipt.json)\n- [full locked-suite receipt](https://github.com/phiferd/lean-assurance-lab/blob/773f2cac989e54fcb846bc87e3789985a1fd0e7e/results/research/nanoda-test-nonvacuity-1/execution/repaired-full-suite-receipt.json)\n- [final patch](https://github.com/phiferd/lean-assurance-lab/blob/773f2cac989e54fcb846bc87e3789985a1fd0e7e/results/research/nanoda-test-nonvacuity-1/patches/final-test-repair.patch)\n",
+    "title": "test: make native literal hash assertions non-vacuous",
+    "base": "master",
+    "base_sha": "4c544ed4099c8227f07d5de77ad1e69fb0740a27",
+    "head": "test/nonvacuous-native-literal-hash",
+    "head_sha": "36dda5a86749a6b66cd0090c20b453a272f46412",
+    "head_repo_id": 1362582792,
+    "head_repo_full_name": "phiferd/nanoda_lib",
+    "merge_commit_sha": "092ebc95b2f85ab0c441ae56096b2552a9d3e148",
+    "user": {
+      "login": "phiferd",
+      "name": "phiferd",
+      "email": null,
+      "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+      "id": 25631
+    },
+    "requested_reviewers": null,
+    "requested_team_reviewers": null,
+    "diff": null,
+    "comments": null,
+    "created_at": "2026-09-09T16:26:21Z",
+    "updated_at": "2026-09-09T16:40:08Z",
+    "closed_at": null,
+    "merged_at": null,
+    "commits": 1,
+    "changed_files": 1,
+    "additions": 42,
+    "deletions": 17,
+    "display_url": "https://github.com/ammkrn/nanoda_lib/pull/33",
+    "display_title": "test: make native literal hash assertions non-vacuous"
+  },
+  "isError": false
+}

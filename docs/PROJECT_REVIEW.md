@@ -20,25 +20,42 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Merged corpus contributions and an explicit three-path contribution portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked operational successor | Complete KIOTA-CTOR-INDEX-COVERAGE-1: Audit Kiota constructor-index regression coverage; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **SURVIVOR-THREAD-ONE-DETERMINISM-1**.
+Selected next item: **KIOTA-CTOR-INDEX-COVERAGE-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 15 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
-| 34 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 35 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 40 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 50 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | READY |
+| 15 | KIOTA-CTOR-INDEX-COVERAGE-1: Audit Kiota constructor-index regression coverage | READY |
+| 16 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
+| 35 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 36 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 41 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 51 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | READY |
 
-### 15. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
+### 15. KIOTA-CTOR-INDEX-COVERAGE-1: Audit Kiota constructor-index regression coverage
+
+**Target:** Kiota constructor-index owner-list guard and the retained a59d7fa2cfb3 candidate/control pair
+
+Bind exact source and complete executable tests, audit equivalent guard coverage, positive-control compatibility and refusal attribution; produce one existing-byte regression design or exact covered/blocker result.
+
+**Why this rank:** Project-wide review identifies a concrete unassessed coverage question with a shared-test beneficiary. It outranks the old one-thread operational boundary; no missing coverage, current defect, capacity limit or independent-transfer result is presumed.
+
+**Completion:** One source-bound coverage map and precise existing-byte regression design, equivalent-coverage/no-value decision, or bounded unresolved compatibility/attribution/access result with a concrete next action.
+
+**Stop:** 60 cumulative active minutes and at most eight read-only source/inventory/duplicate requests; zero builds, tests, checkers, proofs, new scientific bytes, mutations or external writes. No broader metadata survey; select but do not start a successor.
+
+**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
+
+**Boundary:** READY: SEMANTIC-IMPORT-CONTRACT-1 completed SUCCESS and the project-wide review selects this bounded local successor. Before analysis commit a fresh work record, exact retained source/pair bindings and decision rubric. Bind any refreshed source and complete executable inventory before coverage conclusions; no scientific launch is permitted.
+
+### 16. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
 **Target:** Arena tutorial/012_nonPropThm and retained publication-study theorem control
 
@@ -54,7 +71,7 @@ Compare existing accepts and asymmetric over-rejection risk; package existing by
 
 **Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent bounded audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
 
-### 34. CVC-4: Connect the contract to real validation behavior
+### 35. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -70,7 +87,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 35. CVC-5: Prepare shared evidence and decide the next phase
+### 36. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -86,7 +103,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 40. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
+### 41. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
 
 **Target:** One owner-designated curator/dataset package or provider-supplied functioning checker profile
 
@@ -102,13 +119,13 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
-### 50. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
+### 51. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
 
 **Target:** nanoda-gen-2bdfe18a9ec2 at pinned Nanoda src/tc.rs:147, the serial/one-worker dispatch split and its operational failure boundaries
 
 Bind the exact mutation, source and historical evidence; determine whether spawn failure, child panic, stack behavior or scheduling exposes a deterministic locally controllable baseline/mutant distinction without ambient resource exhaustion.
 
-**Why this rank:** The concrete String package completes the current stronger test opportunities; four held candidates and two open PRs reduce value of unspecified additional test work. The original bounded source-only operational witnessability question now offers a useful decision without a pre-existing deterministic trigger or new execution.
+**Why this rank:** Retained READY reserve under its original budget. The Kiota constructor-index audit now outranks it because it addresses a named public-input regression opportunity in another checker; the one-thread item remains a useful bounded operational visibility question.
 
 **Completion:** One fixed deterministic regression protocol for later separate authorization, a source-supported scoped classification recommendation, or a bounded negative/unresolved result naming the exact nondeterministic or missing control.
 
@@ -159,6 +176,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: SURVIVOR-THREAD-ONE-DETERMINISM-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1. Selected next item: KIOTA-CTOR-INDEX-COVERAGE-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

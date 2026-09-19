@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-18
+Last updated: 2026-09-19
 
 ## How Status Is Tracked
 
@@ -56,6 +56,16 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- Project-wide strategy review on 2026-09-19 UTC confirmed four merged Arena
+  contributions after freshly observing #206 merged. Nanoda #32/#33 remain open;
+  their combined discussion endpoints returned no entries, without a capacity
+  inference. The [review](../results/research/project-strategy-review-2026-09-19/report.md)
+  selects `KIOTA-CTOR-INDEX-COVERAGE-1` READY and unstarted for one bounded
+  existing-byte coverage audit. The one-thread assessment remains READY under
+  its unchanged scope and budget. Corrected live survivor-denominator and Kiota
+  waiting descriptions against existing evidence; no historical result, gate,
+  authority, scientific execution or external research write changed.
 
 - Completed `NANODA-STRING-RECONSTRUCTION-TEST-1` on 2026-09-18 with SUCCESS:
   two focused and all 40 library tests passed at exact Nanoda `4c544ed`; eight
@@ -1503,7 +1513,7 @@ prepared_external_action_drafts: 5
 
 ## Unresolved Problems
 
-- Mechanically executed survivors await triage outside the current canonical
+- Two mechanically executed survivors await triage within the current canonical
   modeled population; `results/assurance/current.json` records the current count
   and exact IDs.
   Earlier campaign counts in the legacy snapshot above use a different state
@@ -2860,19 +2870,26 @@ preserved. The exact accepted authority and entry state remain bound in
    clarification independent of implementations under
    [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
 
-Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
+Selected next item: `KIOTA-CTOR-INDEX-COVERAGE-1`.
 
-The existing item is READY and unstarted under its unchanged
-[one-thread determinism plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md),
-reactivated as a bounded portfolio reserve. Use at most 60 cumulative active
-minutes and eight local source/evidence inspections; zero network, builds,
-checkers, proofs, new scientific bytes, mutation identities or external actions.
-Before analysis commit a fresh work record, exact mutation/source/historical
-bindings and determinism rubric. Determine whether exactly `nanoda-gen-2bdfe18a9ec2`
-has a deterministic locally controllable operational witness boundary or record
-the exact missing control. A known trigger gates later separately selected
-execution, not this source-only assessment. Preserve historical outcomes and all
-charges. No successor work begins at this handoff.
+The [project-wide review](../results/research/project-strategy-review-2026-09-19/report.md)
+selects this source-only audit READY and unstarted under its
+[bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). Use at most 60 cumulative
+active minutes and eight read-only source/inventory/duplicate requests; zero
+builds, tests, checkers, proofs, new scientific bytes, mutations or external
+writes. Before analysis commit the work record and exact retained input bindings;
+bind the analyzed source and complete executable inventory before coverage claims.
+Qualify retained-source freshness and bind any refreshed revision.
+Determine whether Kiota's constructor-index owner-list guard has equivalent
+regression coverage and whether the existing pair can isolate it. Missing coverage
+and current candidate/control outcomes are unknown. This promises one existing-byte
+design, precise covered/no-value result, or bounded compatibility/attribution gap.
+
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY as the next reserve under its
+unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
+60 cumulative active minutes, eight local inspections and no network or launches.
+No deterministic trigger is required before that source assessment; later
+execution retains a separate gate. Neither item is ACTIVE or started.
 
 `NANODA-STRING-RECONSTRUCTION-TEST-1` completed SUCCESS. Two focused and all
 40 library tests pass; eight existing doc examples remain ignored. The
@@ -2916,8 +2933,10 @@ these limits and independently reviewed construction/pointer controls.
 adds a candidate-only `either` static case; current Arena build-test passed with
 the unchanged 601-byte export. No extra accept control is useful given current
 tutorial coverage. Exact owner approval and fresh preflight preceded submission
-on 2026-09-14; readback verified OPEN with the exact two files. Await maintainer
-review. No checker execution occurred; the [submission record](../results/research/arena-let-policy-followup-1/external-submission-record.json)
+on 2026-09-14; readback verified OPEN with the exact two files. A separate
+2026-09-19 observation verifies it merged on 2026-09-14 at `4543f486`; see the
+[dated contribution ledger](EXTERNAL_CONTRIBUTIONS.md). No further action is
+recommended for this package. No checker execution occurred; the [submission record](../results/research/arena-let-policy-followup-1/external-submission-record.json)
 is separate from the unchanged research closure.
 
 The [feedback successor](../results/research/arena-let-feedback-2026-09-13/decision.md)
@@ -2975,20 +2994,19 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item, the bounded one-thread operational
-witnessability assessment, and one PLANNED portfolio reserve. Four held Nanoda
-test candidates and two open PRs favor resolving this existing source question
-over unspecified new small-test designs. Contribution portability/overlap needs
-a concrete gap; documentation work must add practical value beyond existing
-packets. The theorem distinct-risk, independent-transfer and original CVC gates
-remain unmet. These comparisons preserve current methods/reuse evidence and all
-historical assurance bindings.
+The canonical queue retains two READY items, both source-only: the selected Kiota
+constructor-index coverage audit and the one-thread operational reserve. Four
+held Nanoda candidates and two open PRs favor a concrete question at another
+checker's public import boundary over further unspecified small tests. The
+existing Kiota source review supplies a guard and exact historical pair but no
+complete equivalent-coverage finding. This priority judgment does not claim a
+current defect, independent transfer result, or missing test.
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` is reactivated without resetting its original
-scope or budget. Earlier deferral was a priority judgment, not a scientific
-negative or requirement to find a trigger before source investigation. Historical
-CVC gates, authority locks, pending survivor counts and modeled mutation metrics
-remain unchanged. No item is ACTIVE; the selected successor has not started.
+Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
+The fresh Arena merge observation supports shared-corpus work but does not supply
+an additional unexplored case. All historical assurance bindings, pending counts,
+consumed budgets and external-write gates remain unchanged. No research item starts
+in this review.
 
 ### Waiting
 
@@ -3004,7 +3022,9 @@ remain unchanged. No item is ACTIVE; the selected successor has not started.
   current. Further normative qualification and any external write retain their
   separate gates; no automatic polling is enabled.
 
-- `W-LEAN-IMAX-NORMALIZATION`: await maintainer guidance on the
+- `W-LEAN-IMAX-NORMALIZATION`: a 2026-09-19 read of the issue comments found
+  no later response to the Lab's question (connector timestamps are unavailable).
+  Continue to await maintainer guidance on the
   [declaration-level evidence contributed to Lean #12747](https://github.com/leanprover/lean4/issues/12747#issuecomment-5584574955).
   A reply indicating that a focused regression or kernel fix would be useful
   triggers a new bounded proposal and target-specific contribution decision;
@@ -3045,11 +3065,15 @@ remain unchanged. No item is ACTIVE; the selected successor has not started.
 - `W-KIOTA-SELF-REFERENCE`: await adjudication of
   [Kiota #5](https://github.com/sankalpsthakur/kiota/issues/5) for declaration
   self-reference.
-- `W-KIOTA-RESTORED-DECLARATIONS`: decide whether to report Kiota's acceptance
-  of three isolated restored nested declaration mismatches: recursor `k`,
-  recursor type, and constructor index. Official Lean and Lean4Lean reject all
-  three exact artifacts. Discuss them together before filing to avoid issue
-  spam and to determine whether one shared validation boundary explains them.
+- `W-KIOTA-RESTORED-DECLARATIONS`: retain the three historical mismatches
+  against their exact observers. The completed
+  [import-contract review](../results/research/semantic-import-contract-1/report.md)
+  documents Kiota `9fa2c297` recomputing `k` and enforcing the constructor-index
+  owner-list guard; the old cidx ACCEPT is not a current-behavior claim.
+  Retained recursor-type validation remains a separate contract question without
+  current execution or a defect claim. Do not file a new defect report from the
+  old matrix. The grouped documentation packet and Kiota submission deferral
+  remain; the selected cidx coverage audit is local and grants no external action.
 - `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on pinned
   Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
   contract-clarification issue; no demonstrated unsoundness is claimed. The
