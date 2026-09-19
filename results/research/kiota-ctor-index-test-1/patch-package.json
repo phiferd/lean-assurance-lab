@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "kind": "TEST_ONLY",
+  "changed_paths": [
+    "tests/exports.rs",
+    "tests/fixtures/ctor-owner-index.accept.ndjson",
+    "tests/fixtures/ctor-owner-index.reject.ndjson"
+  ],
+  "code_patch": {
+    "path": "results/research/kiota-ctor-index-test-1/patches/exports.patch",
+    "sha256": "03ef127b32eeaf27bda5b6128cb0db5a1de404c859fd5d4c0741b06aeb8dacc8",
+    "bytes": 683,
+    "target_path": "tests/exports.rs",
+    "base_sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+    "base_bytes": 49582,
+    "patched_sha256": "ac05695107ba4f00399294404e790832c72f1317216cb302a296f3a8fa1b9713",
+    "patched_bytes": 50159
+  },
+  "fixture_copies": [
+    {
+      "role": "CONTROL_ACCEPT",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-control.ndjson",
+      "target_path": "tests/fixtures/ctor-owner-index.accept.ndjson",
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+      "bytes": 6332
+    },
+    {
+      "role": "CANDIDATE_EXACT_REJECT",
+      "source_path": "corpus/generated/nanoda-gen-a59d7fa2cfb3-valid-ctor-index.ndjson",
+      "target_path": "tests/fixtures/ctor-owner-index.reject.ndjson",
+      "sha256": "4e93ea97c3a167cef51fa43f2600f34ec81774ac8bd74acd316a7897b2caeee6",
+      "bytes": 6332
+    }
+  ],
+  "test_functions": ["ctor_owner_index_accepts", "ctor_owner_index_rejects"],
+  "exact_rejection": "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1",
+  "static_post_patch_counts": {"unit": 83, "integration": 72, "total": 155, "ignored": 0},
+  "unchanged_production_bindings": [
+    {"path": "src/parser.rs", "sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e", "bytes": 46528},
+    {"path": "src/tc.rs", "sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b", "bytes": 545983}
+  ],
+  "application": "Apply exports.patch to the exact source revision, then copy the two source_path files byte-for-byte to their target_path files. The runner verifies every other archive file remains byte-identical."
+}

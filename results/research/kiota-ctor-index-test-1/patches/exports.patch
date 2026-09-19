@@ -1,0 +1,25 @@
+--- a/tests/exports.rs
++++ b/tests/exports.rs
+@@ -56,0 +57,8 @@
++fn assert_reject_exact(name: &str, expected: &str) {
++    let path = fixture(name);
++    match check_file(&path) {
++        Err(TcError::Reject(message)) if message.as_str() == expected => {}
++        other => panic!("{name} should reject with {expected:?}, got {other:?}"),
++    }
++}
++
+@@ -385,0 +394,13 @@
++}
++
++#[test]
++fn ctor_owner_index_accepts() {
++    assert_accept("ctor-owner-index.accept.ndjson");
++}
++
++#[test]
++fn ctor_owner_index_rejects() {
++    assert_reject_exact(
++        "ctor-owner-index.reject.ndjson",
++        "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1",
++    );

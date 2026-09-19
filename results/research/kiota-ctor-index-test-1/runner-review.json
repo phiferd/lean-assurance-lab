@@ -1,0 +1,18 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "status": "PASS_AFTER_LOCAL_REPAIR",
+  "review": "The controller binds committed manifests and all declared files, rejects Cargo configuration drift, verifies every archive file plus the two additions, verifies aggregate hashes for every locked registry source, enforces paired clocks and the finite build/test caps, reserves durably before spawn, and uses the existing process-group supervisor with parent-loss cleanup.",
+  "administrative_tests": {
+    "path": "tests/test_kiota_ctor_index_runner.py",
+    "tests": 14,
+    "result": "PASS",
+    "scientific_launch_api": "mocked in every test"
+  },
+  "repair": {
+    "initial_result": "Three mock success/failure-path tests raised NameError because the verified source path was not assigned before the supervisor call.",
+    "change": "Assign source = Path(manifest['cwd']) immediately after exact source verification.",
+    "final_result": "All 14 mock-only tests pass; no reservation, Cargo process or scientific launch was consumed."
+  },
+  "trusted_boundary": "The local filesystem, OS, Python runtime, bound Cargo/rustc binaries, existing lib/cvc_process.py and reviewed runner are trusted. This is process accounting, not a sandbox for hostile code."
+}

@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-CTOR-INDEX-TEST-1",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "source_archive": {"path": "results/research/kiota-ctor-index-test-1/kiota-source.tar.gz", "sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8", "bytes": 4587521},
+  "source_directory": "/tmp/kiota-ctor-index-test-1.qsehwn/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "target_directory": "/tmp/kiota-ctor-index-test-1.qsehwn/target",
+  "patch_package": {"path": "results/research/kiota-ctor-index-test-1/patch-package.json", "sha256": "223c3efc5f61205ae87a5ec5ddbd46c88b2b4a8aa0cb9799fa61c34b0d6bf53a", "bytes": 2196},
+  "dependency_lock": {"path": "results/research/kiota-ctor-index-test-1/dependency-lock.json", "sha256": "08f97b0825dba055f01ae2e172fbcb5424959523aa4bb70ad70fb4076bd777c7", "bytes": 7287},
+  "toolchain": {
+    "rustc": {"path": "/opt/homebrew/Cellar/rust/1.98.0/bin/rustc", "sha256": "1f9bb25ccda465e30e4eec0d7338725963297793f341de3394d870fbae0c6cc3", "bytes": 341440, "version": "rustc 1.98.0 (88d9e12ae 2026-08-18) (Homebrew)", "host": "aarch64-apple-darwin"},
+    "cargo": {"path": "/opt/homebrew/Cellar/rust/1.98.0/bin/cargo", "sha256": "7dd84b082024c09872d9686922d1537b730a8a06bdd990dd75a6d5186c08dbcd", "bytes": 31148800, "version": "cargo 1.98.0 (797e8a9bc 2026-08-05) (Homebrew)", "host": "aarch64-apple-darwin"},
+    "python": {"path": "/opt/homebrew/Cellar/python@3.13/3.13.0_1/Frameworks/Python.framework/Versions/3.13/bin/python3.13", "sha256": "48774227bf4f97efed9fab43d8033e466ed24a6d4d6cbd7f4a8cf3a544d81904", "bytes": 52640},
+    "platform": "Darwin 24.6.0 arm64"
+  },
+  "environment": {
+    "PATH": "/opt/homebrew/Cellar/rust/1.98.0/bin:/usr/bin:/bin:/usr/sbin:/sbin",
+    "CARGO_HOME": "/Users/danphifer/.cargo",
+    "CARGO_NET_OFFLINE": "true",
+    "CARGO_TARGET_DIR": "/tmp/kiota-ctor-index-test-1.qsehwn/target",
+    "RUSTC": "/opt/homebrew/Cellar/rust/1.98.0/bin/rustc",
+    "RUST_BACKTRACE": "0",
+    "LANG": "C"
+  },
+  "cells": [
+    {
+      "cell_id": "001-focused",
+      "argv": ["/opt/homebrew/Cellar/rust/1.98.0/bin/cargo", "test", "--offline", "--locked", "--test", "exports", "ctor_owner_index", "--", "--nocapture"],
+      "expected": {"exit": 0, "integration_passed": 2, "failed": 0, "ignored": 0, "filtered_out": 70, "named_tests": ["ctor_owner_index_accepts", "ctor_owner_index_rejects"]},
+      "timeout_seconds": 120,
+      "reservations": {"build": 1, "test_process": 1}
+    },
+    {
+      "cell_id": "002-full",
+      "argv": ["/opt/homebrew/Cellar/rust/1.98.0/bin/cargo", "test", "--offline", "--locked", "--", "--nocapture"],
+      "expected": {"exit": 0, "unit_passed": 83, "integration_passed": 72, "binary_passed": 0, "doctest_passed": 0, "total_passed": 155, "failed": 0, "ignored": 0},
+      "timeout_seconds": 120,
+      "reservations": {"build": 1, "test_process": 1}
+    }
+  ],
+  "accounting": "Run cells sequentially. Before each spawn, durably charge one build and one test process. Preserve every failure. A pending cleanup or deadline exceedance blocks further launch. Maximum totals: two builds, three test processes, 5400 active seconds."
+}
