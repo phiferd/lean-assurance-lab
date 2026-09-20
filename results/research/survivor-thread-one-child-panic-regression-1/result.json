@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "outcome": "BOUNDED_UNRESOLVED",
+  "conclusion": "The fixed four-cell one-thread child-panic protocol was not executable because the pinned source inventory omitted README.md required by the pinned build. No control, baseline-candidate, mutant-candidate, checker or semantic observation was produced.",
+  "matrix": [
+    {"id": "control-baseline", "status": "NOT_RUN", "reason": "baseline observer did not compile"},
+    {"id": "control-mutant", "status": "NOT_RUN", "reason": "mutant observer was not built after the baseline source-materialization stop"},
+    {"id": "candidate-baseline", "status": "NOT_RUN", "reason": "matching control prerequisite was unavailable"},
+    {"id": "candidate-mutant", "status": "NOT_RUN", "reason": "matching control prerequisite was unavailable"}
+  ],
+  "attempt_accounting": {
+    "R1_controller_reservations": 1,
+    "R1_cargo_or_checker_processes": 0,
+    "R2_offline_build_launches": 1,
+    "R2_checker_launches": 0,
+    "R2_build_elapsed_seconds": 7.8932141669793054,
+    "R2_build_timeout_seconds": 600,
+    "R2_memory_limit_bytes": 2147483648,
+    "R2_memory_exceeded": false,
+    "R2_cleanup_complete": true,
+    "remaining_offline_build_launches_not_used": 1,
+    "remaining_checker_launches_not_used": 4,
+    "network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence": {
+    "R1_controller_repair": {"path": "results/research/survivor-thread-one-child-panic-regression-1/tooling-repair-0001.json", "sha256": "e6c331969b11f9005901882819c7c6a53fb6e8bfc3f2f769c4ded597416c7804"},
+    "R2_execution_events": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/execution/events.jsonl", "sha256": "d4f3713e069da97ec6c3d5710bfddd64f08c111b5b242b05683e0258cac79857"},
+    "R2_execution_state": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/execution/state.json", "sha256": "8d808d48f44b71089c77aeb1bb3f29a51ee99cc2e66dde41f15f75f237d703a2"},
+    "source_materialization_audit": {"path": "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json", "sha256": "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35"},
+    "closure_test": {"path": "tests/test_survivor_thread_one_child_panic_regression_closure.py", "sha256": "51eed431fa3e82c56edfec805120be5a924be01384ba50d94a4e3fbae7d87048"}
+  },
+  "claim_limits": [
+    "A compiler failure due to an omitted source dependency is not a control/candidate result.",
+    "No claim about Nanoda acceptance, semantics, soundness, current upstream behavior or thread safety follows.",
+    "The exact missing README byte was neither invented nor fetched; no frozen source, mutation, configuration or input byte was changed."
+  ],
+  "recommendation": "Do not retry this protocol under the frozen materialization. A successor may first obtain and independently bind a provenance-acceptable complete source inventory under separate authority; it must not treat this result as a semantic negative or a current upstream defect."
+}

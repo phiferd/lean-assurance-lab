@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "status": "INCOMPLETE_PINNED_BUILD_INPUT",
+  "frozen_inventory": {
+    "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+    "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472",
+    "file_count": 22,
+    "missing_required_path": "README.md"
+  },
+  "pinned_build_reference": {
+    "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/main.rs",
+    "sha256": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a",
+    "literal": "include_str!(\"../README.md\")"
+  },
+  "real_build_observation": {
+    "request": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/attempts/01/request.json", "sha256": "72caa93392c1a3134c495b5999ae96ca8caf5c96133cd9b9adf5d9b7eb97ce38"},
+    "supervisor": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/attempts/01/supervisor.json", "sha256": "8989cabde41653d2e96d56428eb4c717632a8d897894b3f284aa3fd1c3358748"},
+    "stderr": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/attempts/01/process.stderr", "sha256": "31be5e7fdc95b7df75da81b71c3d4bf7733c041537ea00f83dc47c1e7ab984da"},
+    "exit_code": 101,
+    "elapsed_seconds": 7.8932141669793054,
+    "memory_exceeded": false,
+    "cleanup_complete": true,
+    "diagnostic": "couldn't read `src/../README.md`: No such file or directory"
+  },
+  "repair_assessment": {
+    "possible_with_frozen_existing_bytes": false,
+    "reason": "The exact required README byte is absent from the pinned evidence and the frozen source inventory. Supplying a substitute changes the bound source tree; fetching the original byte requires a forbidden network request.",
+    "consequence": "The missing source dependency prevents building both observers, establishing control observations, or interpreting either candidate diagnostic under this item's fixed protocol."
+  },
+  "claim_limit": "This audit establishes an incomplete build-input boundary only. It establishes no checker, acceptance, semantic, current-upstream or thread-safety result."
+}

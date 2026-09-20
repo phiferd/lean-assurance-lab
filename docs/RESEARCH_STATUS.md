@@ -57,6 +57,17 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` on 2026-09-20 with
+  `BOUNDED_UNRESOLVED`. Its R1 controller import error occurred before any
+  supervised process and is preserved separately. The R2 baseline Cargo build
+  did run offline with complete RSS/cleanup receipts, but pinned `src/main.rs`
+  requires a `README.md` omitted from the frozen 22-file source inventory.
+  Neither exact source byte is locally pinned nor may it be fetched or
+  substituted within this item, so no observer, control or candidate cell ran.
+  This is a source-materialization boundary, not an acceptance, semantic or
+  current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected READY
+  and unstarted for a bounded source-only audit.
+
 - Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
   for a source-supported, unexecuted one-thread child-panic diagnostic protocol.
   At public `num_threads=1`, the pinned original checks the existing invalid
@@ -67,9 +78,9 @@ research directions.
   acceptance difference, current upstream defect or external action. The
   [assessment](../results/research/survivor-thread-one-determinism-1/determinism-assessment.json)
   ran no process. `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is selected
-  ACTIVE under its separately bound plan and committed R2 prelaunch package.
-  Its preserved R1 controller import error preceded every process invocation;
-  no offline build or checker process has yet launched.
+  as a historical bounded follow-through: its R1 controller import error
+  preceded every process invocation, and its R2 baseline build later established
+  only the omitted-README source-materialization boundary.
 
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-2` on 2026-09-20 with SUCCESS.
   The separate continuation preserved pilot 1 unchanged, diagnosed its hidden
@@ -2949,7 +2960,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`.
+Selected next item: `SOURCE-LOCK-COMPLETENESS-AUDIT-1`.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -3117,10 +3128,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item: the selected and unstarted
-one-thread child-panic operational regression. The wider horizon still includes
-nine independently gated PLANNED discovery candidates. Pilot 1 remains frozen
-at its tooling cap; pilot 2 is its successful separate continuation and retains
-the completed reusable package.
+source-lock completeness audit. The child-panic regression is complete
+BOUNDED_UNRESOLVED on the pinned missing-README build boundary. The wider horizon
+still includes nine independently gated PLANNED discovery candidates. Pilot 1
+remains frozen at its tooling cap; pilot 2 is its successful separate continuation
+and retains the completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

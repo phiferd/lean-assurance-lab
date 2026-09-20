@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "scope": "PROJECT_WIDE",
+  "phase": "CLOSURE",
+  "reviewed_at": "2026-09-20",
+  "stopped_item": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "selected_item": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+  "queue_sha256": "8f866dca449bdba76b8e1969e20c7244257bc2c7079474de06d8ce07f59683e1",
+  "decision": "Close the one-thread child-panic regression BOUNDED_UNRESOLVED. Its R1 controller failure preceded every process; its R2 baseline build was fully supervised but the frozen source inventory omitted the README required by pinned src/main.rs. No control or candidate observation exists. Select SOURCE-LOCK-COMPLETENESS-AUDIT-1 READY and unstarted as the highest-value feasible local successor: it can statically characterize the source-lock boundary without inventing/fetching a byte. Pipeline completeness remains broader but is still blocked by its independent receipt-semantics protocol gate.",
+  "categories": [
+    {"category": "METHODS_AND_FRONTIERS", "assessment": "The selected source-lock audit is a low-cost static provenance method directly motivated by the stopped item's exact build boundary. Pipeline completeness remains the broader discovery method but lacks its prerequisite protocol.", "candidate_ids": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1", "PIPELINE-COMPLETENESS-PILOT-1"]},
+    {"category": "UNRESOLVED_AND_SHARED_ASSETS", "assessment": "The stopped child-panic matrix remains unobserved. A static complete/missing dependency ledger can become a reusable source-materialization asset; pipeline completeness could later provide a checked-object sentinel after its own gate.", "candidate_ids": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1", "PIPELINE-COMPLETENESS-PILOT-1"]},
+    {"category": "MAINTENANCE_AND_UPSTREAM", "assessment": "No current external defect or maintainer request follows from an incomplete local pin. The selected audit is local-only; pipeline completeness also needs no external action at this stage.", "candidate_ids": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1", "PIPELINE-COMPLETENESS-PILOT-1"]},
+    {"category": "LITERATURE_AND_REUSE", "assessment": "The selected audit reuses only local source, Cargo and closure evidence. Pipeline completeness requires an independent producer/adapter/receipt review before it can justify reuse.", "candidate_ids": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1", "PIPELINE-COMPLETENESS-PILOT-1"]},
+    {"category": "LOCAL_BLOCKER_REMOVAL", "assessment": "The selected audit directly characterizes the frozen source-lock blocker without bypassing it. Pipeline completeness remains blocked by a scientific protocol gate rather than an external dependency.", "candidate_ids": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1", "PIPELINE-COMPLETENESS-PILOT-1"]}
+  ],
+  "candidates": [
+    {
+      "item_id": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+      "disposition": "FEASIBLE",
+      "rationale": "Selected READY and unstarted. It has a fixed local source-only scope, eight-inspection cap and zero-process/network boundary. It can preserve the exact README omission and audit other locally visible compile-time path dependencies without changing the frozen failed run.",
+      "evidence_refs": ["docs/research/SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md", "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json", "results/research/survivor-thread-one-child-panic-regression-1/result.json"],
+      "blockers": []
+    },
+    {
+      "item_id": "PIPELINE-COMPLETENESS-PILOT-1",
+      "disposition": "BLOCKED",
+      "rationale": "This keeps stronger broad transfer value but lacks a pinned producer/adapters, checked-object receipt semantics, independent expected contents and fixed fault rubric.",
+      "evidence_refs": ["docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md"],
+      "blockers": [
+        {"kind": "SCIENTIFIC_GATE", "reason": "Bind the supported producer and adapters, a twelve-declaration expectation, receipt semantics, fixed faults and finite source/setup/build/tooling/process controls before promotion.", "evidence_refs": ["docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md"]}
+      ]
+    }
+  ],
+  "evidence_bindings": [
+    {"path": "CONSTITUTION.md", "sha256": "f8bd97b3be61d1c09e9062eea11d41006ef266ce0c244b65827a9bd7aa03df16"},
+    {"path": "docs/RESEARCH_WORKFLOW.md", "sha256": "e9fde6cce44d3fd3ff462e6c50f651d8a121d537ff8f4546dd75afccbafa808e"},
+    {"path": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md", "sha256": "b672f5db0d47e37f090e2788b90eb9fcf386ca74378f9b793a2124100caddbde"},
+    {"path": "docs/research/SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md", "sha256": "1db25fd6f5de609f24b5dcac93eebbf6095a8ef1e505da220089757bc3fd0a34"},
+    {"path": "docs/research/SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md", "sha256": "05ce2a7fe1f75bfe540a7db9967aedd8e05b89b5c1f0e6e5891a538a9af64aa3"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json", "sha256": "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/result.json", "sha256": "c6baccddd0f9cf592f156e7f61e166ba4396d660bdd4c0225dfdc21cde660c92"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/work-closure.json", "sha256": "05eb30dbf6d1c08835150007c5b71bdcb96ad9e636951309710ff40ff3791aca"}
+  ]
+}

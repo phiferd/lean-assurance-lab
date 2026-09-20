@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "status": "PASS",
+  "checks": [
+    {
+      "command": "scripts/validate-survivor-thread-one-child-panic-regression --evidence",
+      "status": "PASS",
+      "meaning": "The R2 ledger and all recorded process receipts validate; it reports one failed supervised build and PAUSED next action."
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_survivor_thread_one_child_panic_regression_closure.py' -v",
+      "status": "PASS",
+      "tests_run": 3,
+      "meaning": "The closure regression proves the frozen inventory omits the required README and preserves both R1/R2 receipt distinctions."
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "status": "PASS",
+      "meaning": "The closure queue marks this item COMPLETE and SOURCE-LOCK-COMPLETENESS-AUDIT-1 READY and unstarted."
+    },
+    {
+      "command": "scripts/run-unit-tests",
+      "status": "PASS",
+      "meaning": "The required repository-wide unit suite passed after the closure queue/status repair."
+    }
+  ],
+  "bindings": [
+    {"path": "config/survivor-thread-one-child-panic-regression-0001-r2.json", "sha256": "d590b56c06fb7b660fd4e27b3230d972982dd61a625c0ce0c0899cb2b16d13a4"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001-r2/execution/events.jsonl", "sha256": "d4f3713e069da97ec6c3d5710bfddd64f08c111b5b242b05683e0258cac79857"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json", "sha256": "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/result.json", "sha256": "c6baccddd0f9cf592f156e7f61e166ba4396d660bdd4c0225dfdc21cde660c92"},
+    {"path": "results/research/survivor-thread-one-child-panic-regression-1/report.md", "sha256": "6e94f1df45c6ca0e8095edc00aca555aea64b1a478b7af47e88c23128ee1daa5"},
+    {"path": "tests/test_survivor_thread_one_child_panic_regression_closure.py", "sha256": "51eed431fa3e82c56edfec805120be5a924be01384ba50d94a4e3fbae7d87048"}
+  ],
+  "claim_limit": "Validation confirms evidence integrity and the closure guard only; no scientific matrix result exists."
+}
