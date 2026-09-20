@@ -57,6 +57,22 @@ research directions.
 
 ## Attempted
 
+- Completed `METAMORPHIC-REPRESENTATION-PILOT-2` on 2026-09-20 with SUCCESS.
+  The separate continuation preserved pilot 1 unchanged, diagnosed its hidden
+  sandbox-denied `/bin/ps` monitor path, added observable start-gated macOS RSS
+  supervision, generated four exact variants and independently preserved all
+  four. Two reverse-ready variants met the frozen nonidentity delta; two
+  round-robin variants remained ineligible as predicted. The final twelve-cell
+  matrix has eight executed ACCEPT observations and four ineligible dispositions:
+  all four exact within-checker original/variant relations held on official Lean
+  4.33.0 and Nanoda `6ae1f0c`. One eight-attempt run remains preserved as an
+  infrastructure failure; the exact eight-cell confirmation had positive RSS
+  observations, exact raw paths and complete cleanup. This is scoped evidence
+  of no observed representation sensitivity, not global invariance. Retain the
+  package as a local conformance asset; no external action now. See the
+  [report](../results/research/metamorphic-representation-pilot-2/report.md).
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted.
+
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-1` on 2026-09-20 with
   BOUNDED_UNRESOLVED at its exact 8/8 tooling-attempt cap. The source/reuse and
   scientific-design gates froze two originals, two transformations, two exact
@@ -2918,21 +2934,22 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `METAMORPHIC-REPRESENTATION-PILOT-2`.
+Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
-remains COMPLETE with BOUNDED_UNRESOLVED at its immutable eight-attempt tooling
-cap. At the owner's explicit direction to complete the scientific pilot rather
-than treat that controller limit as the endpoint, the separately identified
-[continuation](research/METAMORPHIC_REPRESENTATION_PILOT_2_PLAN.md) is ACTIVE.
-It inherits the exact two-original, two-transformation, two-profile scientific
-manifest by hash, adds no per-invocation tooling-test counter, and first requires
-an observable host-native supervisor before generation. Pilot 1's failure record
-and zero scientific launches remain unchanged in its [report](../results/research/metamorphic-representation-pilot-1/report.md).
+remains immutable BOUNDED_UNRESOLVED. Its separately identified
+[continuation](research/METAMORPHIC_REPRESENTATION_PILOT_2_PLAN.md) completed
+SUCCESS without resetting that history. The exact final matrix has eight
+executed ACCEPT cells and four preregistered ineligible cells: both nonidentity
+reverse-ready variants preserved acceptance on both bound profiles. The
+[result](../results/research/metamorphic-representation-pilot-2/result.json)
+supports a scoped no-sensitivity observation, not global invariance. Its tooling,
+generated pairs and closure regression remain live as a local conformance asset;
+no external action is recommended now.
 
 | Rank | Candidate | State |
 | --- | --- | --- |
-| 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | ACTIVE |
+| 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-1` | PLANNED |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
@@ -2942,15 +2959,15 @@ and zero scientific launches remain unchanged in its [report](../results/researc
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
-| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY, unstarted reserve |
+| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY, selected and unstarted |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan. Reassess actual value and
-feasibility at closure. The active continuation uses exactly the inherited two
-originals, two transformations and two profiles, with a twelve-cell maximum
-matrix and at most 120 checker attempts including fixed-pair diagnosis. Legal
-representation, independent preservation and observable supervision gate
-generation/execution; source predictions are not observed outcomes.
+feasibility at closure. The completed continuation used exactly the inherited
+two originals, two transformations and two profiles. Sixteen checker attempts
+were consumed across one infrastructure-invalid run and one exact confirmation;
+no scientific input changed. Legal representation, independent preservation and
+observable supervision remain enforced by the retained regressions.
 
 `KIOTA-CTOR-INDEX-COVERAGE-1` completed SUCCESS under its
 [bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). At retained Kiota
@@ -2971,7 +2988,7 @@ rejection test. Focused 2/2 and all 155 current tests passed at bound
 and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
 preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY and unstarted as reserve under
+Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY, selected and unstarted under
 its unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later
@@ -3083,11 +3100,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE continuation and one READY reserve. The wider
-horizon still includes nine independently gated PLANNED discovery candidates.
-The completed representation pilot remains frozen at its tooling cap and is not
-reopened or reset; the new item preserves that history while pursuing the missing
-scientific result with a host-native supervisor and aggregate resource limits.
+The canonical queue retains one READY item: the selected and unstarted
+one-thread source assessment. The wider horizon still includes nine independently
+gated PLANNED discovery candidates. Pilot 1 remains frozen at its tooling cap;
+pilot 2 is its successful separate continuation and retains the completed
+reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

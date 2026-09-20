@@ -1,0 +1,59 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "status": "PASS",
+  "validated_at": "2026-09-20T17:13:40.899894000Z",
+  "scientific_result": "results/research/metamorphic-representation-pilot-2/result.json",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p test_metamorphic_pilot_closure.py -v",
+      "status": "PASS",
+      "tests": 5,
+      "purpose": "Replay the fixed matrix, exact receipts, pair relations and scoped conclusion."
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "status": "PASS",
+      "purpose": "Require one mechanically valid READY handoff after pilot closure."
+    },
+    {
+      "command": "scripts/refresh-current-state --log-dir results/workflow-refresh/metamorphic-representation-pilot-2-final-r3",
+      "status": "PASS",
+      "completed_commands": 14,
+      "receipt": {
+        "path": "results/workflow-refresh/metamorphic-representation-pilot-2-final-r3/result.json",
+        "sha256": "59a68971414451eeeea4e0a22df5641d38be885a6386ebcca1b79f42de53ceea"
+      }
+    },
+    {
+      "command": "scripts/run-unit-tests --require-full-payload",
+      "status": "REPAIR_REQUIRED",
+      "current_tests": 1205,
+      "current_errors": 1,
+      "frozen_publication_tests": 73,
+      "historical_checkpoint_tests": 9,
+      "cause": "The closure status used 'canonical queue has one READY' instead of the parser's mechanically required 'canonical queue retains one READY item' form.",
+      "scientific_effect": "NONE"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_arena_let_regression_erratum.py -v",
+      "status": "PASS",
+      "tests": 6,
+      "purpose": "Verify the repaired canonical READY count and its historical erratum bindings."
+    },
+    {
+      "command": "scripts/run-unit-tests --require-full-payload",
+      "status": "PASS",
+      "current_tests": 1205,
+      "frozen_publication_tests": 73,
+      "historical_checkpoint_tests": 9,
+      "total_tests": 1287
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    }
+  ],
+  "scientific_processes_during_closure_validation": 0,
+  "note": "The first complete-suite run exposed one administrative status-prose mismatch after all scientific and tooling tests had passed. The same-item repair changed no scientific input, output, classification or conclusion; the clean rerun passed every required partition."
+}
