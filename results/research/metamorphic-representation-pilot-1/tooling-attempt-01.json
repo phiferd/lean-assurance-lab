@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 1,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-01.json",
+    "sha256": "ea904fba42827f62dd273167078e32fb803075b84aef758c621ebbc3d8f603c7"
+  },
+  "command": [
+    "python3",
+    "-m",
+    "unittest",
+    "tests.test_metamorphic_representation"
+  ],
+  "exit_code": 1,
+  "wall_time_seconds": 0.001,
+  "wall_time_accounting": "Conservative minimum charge because the command transport reported 0.000003708 seconds while unittest reported 0.000 seconds.",
+  "tests_run": 1,
+  "test_bodies_run": 0,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "TEST_DISCOVERY_IMPORT",
+  "raw_output": "E\n======================================================================\nERROR: test_metamorphic_representation (unittest.loader._FailedTest)\n----------------------------------------------------------------------\nImportError: Failed to import test module: test_metamorphic_representation\nTraceback (most recent call last):\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/unittest/loader.py\", line 154, in loadTestsFromName\n    module = __import__(module_name)\nModuleNotFoundError: No module named 'tests.test_metamorphic_representation'\n\n\n----------------------------------------------------------------------\nRan 1 test in 0.000s\n\nFAILED (errors=1)\n",
+  "diagnosis": "The repository tests directory is not a Python package, so dotted module loading fails before importing the file or running a test body.",
+  "repair": "Add a dedicated discovery-based validator and bind it in tooling revision 2. Preserve this attempt and carry all counters."
+}
