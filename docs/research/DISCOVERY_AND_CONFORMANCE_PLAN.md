@@ -27,7 +27,8 @@ completed SUCCESS as a source-only assessment and selected
 `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`, which closed
 BOUNDED_UNRESOLVED after its first actual offline build exposed an omitted
 `README.md` dependency in the frozen source inventory. Its source-only successor
-`SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected READY and unstarted.
+`SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE under its committed
+source-only static-audit bindings.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was

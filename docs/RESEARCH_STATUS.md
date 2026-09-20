@@ -65,8 +65,9 @@ research directions.
   Neither exact source byte is locally pinned nor may it be fetched or
   substituted within this item, so no observer, control or candidate cell ran.
   This is a source-materialization boundary, not an acceptance, semantic or
-  current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected READY
-  and unstarted for a bounded source-only audit.
+  current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE
+  under committed source-only static-audit bindings; no audit process has yet
+  run.
 
 - Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
   for a source-supported, unexecuted one-thread child-panic diagnostic protocol.
@@ -2961,6 +2962,11 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `SOURCE-LOCK-COMPLETENESS-AUDIT-1`.
+
+Its entry package is committed before static inspection. The current work is
+limited to a source-only ledger of compile-time Rust inclusion dependencies;
+it performs no build, checker launch, network request, byte substitution or
+source retrieval.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified

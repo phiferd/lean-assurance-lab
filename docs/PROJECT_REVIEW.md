@@ -45,7 +45,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 52 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 65 | SOURCE-LOCK-COMPLETENESS-AUDIT-1: Audit pinned source-lock completeness before offline compilation | READY |
+| 65 | SOURCE-LOCK-COMPLETENESS-AUDIT-1: Audit pinned source-lock completeness before offline compilation | ACTIVE |
 
 ### 2. PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness
 
@@ -269,7 +269,7 @@ Statically trace path-valued Rust inclusion directives from the pinned crate roo
 
 **Execution:** At most 1 sessions of 30 active minutes; 0 validator launches. Additional plan limits apply.
 
-**Boundary:** READY: READY and unstarted. Before any source inspection, bind the completed child-panic closure, the frozen source lock, exact pinned Cargo metadata and a static directive parser/audit plan. No build, checker, network request, byte substitution or source retrieval is authorized.
+**Boundary:** ACTIVE: READY and unstarted. Before any source inspection, bind the completed child-panic closure, the frozen source lock, exact pinned Cargo metadata and a static directive parser/audit plan. No build, checker, network request, byte substitution or source retrieval is authorized.
 
 ## Autonomous workflow
 
@@ -312,6 +312,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SOURCE-LOCK-COMPLETENESS-AUDIT-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SOURCE-LOCK-COMPLETENESS-AUDIT-1 (ACTIVE).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

@@ -1,7 +1,8 @@
 # Source-lock completeness audit
 
-Item `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is the selected, unstarted successor to
-`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`. It is a source-only audit. It
+Item `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is the selected, ACTIVE successor to
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`, under its committed
+source-only static-audit bindings. It
 does not retrieve a missing source byte, rebuild Nanoda, or reopen the bounded
 child-panic result.
 
