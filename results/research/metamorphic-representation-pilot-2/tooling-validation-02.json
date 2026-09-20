@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "tooling_revision": 2,
+  "command": [
+    "METAMORPHIC_SUPERVISOR_RECEIPT_DIR=results/research/metamorphic-representation-pilot-2/supervisor-validation-02",
+    "scripts/validate-metamorphic-pilot-tooling"
+  ],
+  "execution_context": "host context with macOS /bin/ps process inspection permitted",
+  "status": "PASS",
+  "generation_requested": false,
+  "variants_generated": 0,
+  "checker_attempts": 0,
+  "suites": [
+    {
+      "name": "host-native supervisor",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.258
+    },
+    {
+      "name": "transformation, preservation and successor-ownership controls",
+      "tests": 13,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.011
+    }
+  ],
+  "supervisor_receipts": [
+    {"case": "child-memory-breach", "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-02/memory.receipt.json", "sha256": "c749b7c1c24bee3c3f5270c6010c8d4df7364e27cda9fc0d13ca4336d76b08ef"},
+    {"case": "nonzero-exit", "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-02/nonzero.receipt.json", "sha256": "e4d3bda389e1af6d3c1788de42d4d1cf588af46ccf831b5f9f60b1840cd7a67a"},
+    {"case": "normal-exit", "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-02/normal.receipt.json", "sha256": "bc156b71743283bf618eadb577e2256e330c05e21759dd47beecc87de5647da8"},
+    {"case": "child-timeout", "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-02/timeout.receipt.json", "sha256": "8cb0f861e3f3446df610c02b19db035e45e3016e23f3e56932567c4937e69363"}
+  ],
+  "receipt_summary": {
+    "backend": "macos-ps-process-group-rss-v2",
+    "all_preflight_sample_counts_positive": true,
+    "all_runtime_sample_counts_positive": true,
+    "all_monitor_errors_null": true,
+    "all_cleanup_complete": true,
+    "child_memory_maximum_observed_rss_bytes": 143998976,
+    "child_memory_limit_bytes": 67108864
+  },
+  "ownership_regression": "The generation summary must identify METAMORPHIC-REPRESENTATION-PILOT-2 while retaining the exact pilot-1 scientific freeze identity.",
+  "gate": "PASS",
+  "next_gate": "Commit this exact revision and validation binding before generation."
+}

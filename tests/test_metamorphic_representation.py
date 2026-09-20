@@ -25,6 +25,10 @@ def encoded(values: list[dict]) -> bytes:
 
 
 class TransformationTests(unittest.TestCase):
+    def test_generation_summary_is_owned_by_successor(self):
+        source = (ROOT / "scripts" / "generate-metamorphic-pilot-variants").read_text()
+        self.assertIn('"item_id": "METAMORPHIC-REPRESENTATION-PILOT-2"', source)
+
     def test_reverse_ready_pairs_are_nonidentity_and_preserved(self):
         for path in ORIGINALS:
             source = path.read_bytes()
