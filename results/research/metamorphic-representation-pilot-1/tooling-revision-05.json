@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "revision": 5,
+  "status": "BOUND_UNTESTED",
+  "base_commit": "ae96da1c85bc090ce4d08de6dca2b166cc63079a",
+  "predecessor": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-04.json",
+    "sha256": "26b6361ac4f23343b1d5384bd1bfeb78fd51c39b50046c4fdfb205825384b1ab"
+  },
+  "preserved_failures": [
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-01.json", "sha256": "c33394d5b4a5c117a84e9e2124b0cafecf5ff077b4a35bd7ea2d40fa12d2d1f8"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-02.json", "sha256": "ca263cf7a58de2d00f7ef9ed08971ce1ce911697b0b877a63c6866eff9e2dc18"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-03.json", "sha256": "471b349c5c8001424af3f3a27797a95d0c66cb76cf65b429b632cb516c314822"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-04.json", "sha256": "ba356e6d7adfde7c0282acf163c885ed05b116a1ad4c9221ddcf422e82370ae4"}
+  ],
+  "scientific_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-1/scientific-manifest.json",
+    "sha256": "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab"
+  },
+  "source_files": [
+    {"path": "lib/metamorphic_ndjson_transform.py", "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0"},
+    {"path": "lib/metamorphic_ndjson_audit.py", "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21"},
+    {"path": "lib/metamorphic_pilot_runner.py", "sha256": "b16bbe09b12705414033f7fb296c89753bee079a060c2477014cbb971432fd8b"},
+    {"path": "scripts/metamorphic-ndjson-transform", "sha256": "0449ffe6b5fd955bf8da01cc9f7e400483c29363eefcfbc9b24d264f31bfb000"},
+    {"path": "scripts/audit-metamorphic-ndjson", "sha256": "51022702bfe5459846001edb91242b43839bbc21056a5ec432778f3fdf7fe2b2"},
+    {"path": "scripts/run-metamorphic-representation-pilot", "sha256": "62cba51c2fd8511d7131ceb03e0204de9a4b976e88718d98e2216546e04d62a8"},
+    {"path": "scripts/validate-metamorphic-pilot-tooling", "sha256": "b92fcce75bd1288723b2f6b04f2cd20d8f7e6e52fd4bf8af4a488daa4417165c"}
+  ],
+  "test_file": {"path": "tests/test_metamorphic_representation.py", "sha256": "d601fcf5d3d672896c91b57f4e9a6e97fb654f4bbaff28d1d33b28ea9797dccb"},
+  "independent_review": {"path": "results/research/metamorphic-representation-pilot-1/tooling-review-01.json", "sha256": "41526cd04f7afde472134048657e850986430f0826bf9a99839f72ec7117da61"},
+  "repair": {
+    "class": "SUPERVISOR_PREEXEC_SESSION_SETUP",
+    "change": "Delegate session creation to subprocess start_new_session and restrict the preexec function to the unchanged hard RLIMIT_AS cap.",
+    "scientific_inputs_changed": false,
+    "memory_limit_changed": false,
+    "transformer_auditor_changed": false,
+    "budgets_reset": false
+  },
+  "permitted_test_attempt": {
+    "ordinal": 5,
+    "command": ["scripts/validate-metamorphic-pilot-tooling"],
+    "timeout_seconds": 120,
+    "case_count": 14,
+    "checker_attempts": 0,
+    "maximum_nested_nonchecker_processes": 4
+  },
+  "carried_consumption": {
+    "tooling_test_attempts": 4,
+    "tooling_process_seconds": 0.05564975,
+    "checker_attempts": 0
+  },
+  "generation_permission": "No retained scientific generation until test attempt 5 passes and this revision receives a validation successor."
+}

@@ -36,7 +36,6 @@ def _binding(value: Any, label: str) -> Path:
 
 def _limit(memory_bytes: int):
     def apply() -> None:
-        os.setsid()
         resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
     return apply
 
@@ -66,7 +65,7 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
     start = time.monotonic()
     process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
-                               preexec_fn=_limit(memory_bytes))
+                               preexec_fn=_limit(memory_bytes), start_new_session=True)
     timed_out = False
     try:
         stdout, stderr = process.communicate(stdin, timeout=timeout_seconds)
