@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 2,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-02.json",
+    "sha256": "62ba70964411e6042fc1d161e4a947f85b0542a76c1998dd6dab2231efa1fa4d"
+  },
+  "command": ["scripts/validate-metamorphic-pilot-tooling"],
+  "exit_code": 1,
+  "wall_time_seconds": 0.03864975,
+  "tests_run": 0,
+  "test_bodies_run": 0,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "TEST_DISCOVERY_IMPORT",
+  "raw_output": "Traceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/scripts/validate-metamorphic-pilot-tooling\", line 25, in <module>\n    raise SystemExit(main())\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/scripts/validate-metamorphic-pilot-tooling\", line 13, in main\n    suite = unittest.defaultTestLoader.discover(\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/unittest/loader.py\", line 346, in discover\n    raise ImportError('Start directory is not importable: %r' % start_dir)\nImportError: Start directory is not importable: '/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests'\n",
+  "diagnosis": "unittest discovery with an explicit repository top-level still requires the tests directory to be an importable package.",
+  "repair": "Load the exact test file through importlib, register the module, then build the suite directly while retaining the fourteen-case lock."
+}
