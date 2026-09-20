@@ -1,0 +1,47 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "scope": "ADMINISTRATIVE_CLOSURE_ONLY",
+  "scientific_cases_launched": 0,
+  "checks": [
+    {
+      "command": ["scripts/validate-research-queue", "--require-ready"],
+      "status": "PASS",
+      "summary": "Queue v3 closure review, completed stopped item, executable unstarted successor and status markers agree."
+    },
+    {
+      "command": ["scripts/refresh-current-state", "--log-dir", "results/workflow-refresh/metamorphic-representation-pilot-1-final"],
+      "status": "PASS",
+      "receipt": {
+        "path": "results/workflow-refresh/metamorphic-representation-pilot-1-final/result.json",
+        "sha256": "77341b0f8d7663c806b74d31e1e6482c750c4b9b444332f18a8aa6354734641b"
+      }
+    },
+    {
+      "command": ["scripts/run-unit-tests", "--require-full-payload"],
+      "status": "INITIAL_FAIL_REPAIRED",
+      "summary": "The first closure run passed all other tests but found one stale canonical READY-count sentence after the queue moved from two READY items to one. The generated status sentence was corrected; no scientific or historical input changed."
+    },
+    {
+      "command": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_arena_let_regression_erratum.py"],
+      "status": "PASS",
+      "tests": 6,
+      "seconds": 0.448
+    },
+    {
+      "command": ["scripts/run-unit-tests", "--require-full-payload"],
+      "status": "PASS",
+      "current_tests": 1182,
+      "current_seconds": 369.829,
+      "frozen_publication_study_tests": 73,
+      "frozen_publication_study_seconds": 146.072,
+      "checkpoint_historical_tests": 9,
+      "checkpoint_historical_seconds": 3.181
+    },
+    {
+      "command": ["git", "diff", "--check"],
+      "status": "PASS"
+    }
+  ],
+  "note": "A preliminary dotted unittest command failed to import the non-package tests directory before any test body; the repository-supported discovery command immediately replaced it and passed. This administrative command is unrelated to the exhausted pilot tooling budget."
+}

@@ -57,6 +57,20 @@ research directions.
 
 ## Attempted
 
+- Completed `METAMORPHIC-REPRESENTATION-PILOT-1` on 2026-09-20 with
+  BOUNDED_UNRESOLVED at its exact 8/8 tooling-attempt cap. The source/reuse and
+  scientific-design gates froze two originals, two transformations, two exact
+  profiles and a twelve-cell maximum matrix, but process supervision never
+  passed its complete fourteen-case gate. The final combined attempt stopped
+  before generation: zero variants, zero checker launches and zero external
+  writes. No representation-sensitivity or invariance conclusion follows, and
+  no external action is recommended. The pilot-only unvalidated executable
+  tooling was retired from the live tree while its final bytes remain bound at
+  commit `4e4128c034cfe930c032b40881d0ec6fd6e97247`; see the
+  [report](../results/research/metamorphic-representation-pilot-1/report.md).
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted under its
+  unchanged source-only plan.
+
 - On 2026-09-20, the owner-requested [frontier selection](../results/research/frontier-selection-2026-09-20/report.md)
   adopted `F-DISCOVERY-AND-CONFORMANCE` after both Kiota items completed.
   Ten concrete discovery candidates now occupy the ranked horizon.
@@ -2904,20 +2918,19 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `METAMORPHIC-REPRESENTATION-PILOT-1`.
+Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
 
 The [2026-09-20 selection review](../results/research/frontier-selection-2026-09-20/report.md)
-incorporates the completed Kiota work and the ten-candidate proposal. The selected
-[representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md) is ACTIVE
-under its fresh [work record](../results/research/metamorphic-representation-pilot-1/work-record.json):
-one 360-cumulative-active-minute item spanning source/reuse, implementation,
-independent preservation audit and gated checker execution. Its source/reuse phase
-is open; exact scientific-input, generated-byte and launch gates remain unsatisfied
-and must pass within that same item before scientific execution.
+incorporates the completed Kiota work and the ten-candidate proposal. The
+[representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md) is now
+COMPLETE with BOUNDED_UNRESOLVED. It passed source/reuse and scientific-design
+gates but exhausted all eight tooling attempts before generation; no checker
+cell ran and no representation claim follows. The exact failure record and
+no-action recommendation are in its [report](../results/research/metamorphic-representation-pilot-1/report.md).
 
 | Rank | Candidate | State |
 | --- | --- | --- |
-| 1 | `METAMORPHIC-REPRESENTATION-PILOT-1` | ACTIVE, selected |
+| 1 | `METAMORPHIC-REPRESENTATION-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-1` | PLANNED |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
@@ -2927,7 +2940,7 @@ and must pass within that same item before scientific execution.
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
-| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY reserve |
+| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY, selected and unstarted |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan; none depends automatically on
@@ -2956,7 +2969,7 @@ rejection test. Focused 2/2 and all 155 current tests passed at bound
 and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
 preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY, unstarted and unselected under
+Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY, selected and unstarted under
 its unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later
@@ -3068,12 +3081,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items: the selected representation pilot
-and the unchanged one-thread source/evidence reserve. The wider horizon includes
-nine independently gated PLANNED discovery candidates, rather than treating the
-last surviving source audit as the entire opportunity set. A source-only pilot
-checkpoint does not complete the selected item while feasible implementation and
-execution remain inside its scope/budget.
+The canonical queue retains one READY item: the unchanged one-thread
+source/evidence successor, now selected but unstarted. The wider horizon still includes nine independently
+gated PLANNED discovery candidates. The completed representation pilot stopped
+at a real tooling cap; it is not a source-only checkpoint and cannot be reopened
+or have its counters reset.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

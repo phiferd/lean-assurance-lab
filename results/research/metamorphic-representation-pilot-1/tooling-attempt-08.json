@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 8,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-08.json",
+    "sha256": "eae53df1a7897293dd1b9f991622bee42bd1cf77eadef1f66e427ca227afac12"
+  },
+  "command": ["scripts/validate-metamorphic-pilot-tooling", "--generate-frozen"],
+  "exit_code": 1,
+  "wall_time_seconds": 0.014,
+  "wall_time_accounting": "Charged the larger unittest-reported duration; command transport reported 0.000001625 seconds.",
+  "tests_run": 14,
+  "test_bodies_run": 14,
+  "generation_reached": false,
+  "variants_generated": 0,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "SUPERVISOR_EARLY_TERMINATION_UNDIAGNOSED_AT_CAP",
+  "raw_output": ".......FF.....\n======================================================================\nFAIL: test_memory_limit_is_enforced (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 132, in test_memory_limit_is_enforced\n    self.assertTrue(receipt[\"memory_exceeded\"])\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_timeout_kills_process_group (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 147, in test_timeout_kills_process_group\n    self.assertTrue(receipt[\"timed_out\"])\nAssertionError: False is not true\n\n----------------------------------------------------------------------\nRan 14 tests in 0.014s\n\nFAILED (failures=2)\n",
+  "diagnosis": "Removing the BSD time wrapper did not change the two immediate supervisor failures, refuting attempt 7's wrapper-only diagnosis. The harness did not surface its receipts on assertion failure, so the exact early-termination cause remains unresolved at the tooling-attempt cap.",
+  "terminal_effect": "The combined attempt stopped before generation. The cap is 8/8 and cannot be reset; no generated scientific byte, execution manifest or checker launch is authorized."
+}
