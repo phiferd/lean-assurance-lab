@@ -1,0 +1,105 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "reviewed_at": "2026-09-20",
+  "request_budget": {
+    "cap": 16,
+    "consumed": 13,
+    "remaining": 3
+  },
+  "question": "Can a narrowly legal NDJSON representation change be generated, independently audited and observed on two exact checker profiles without treating checker agreement as semantic authority?",
+  "primary_sources": [
+    {
+      "kind": "FORMAT",
+      "title": "Lean 4 export format 3.1.0",
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/packages/lean4export/format_ndjson.md",
+      "revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9",
+      "sha256": "f82a21e17e4258a1043895d0653ea4333bef8cb07aad2e3d6c1fc4be52b138e3",
+      "relevance": "Defines separate Name, Level and Expr back references and groups declarations; it does not itself authorize arbitrary reorderings."
+    },
+    {
+      "kind": "IMPLEMENTATION",
+      "title": "Nanoda parser",
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/parser.rs",
+      "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+      "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4",
+      "relevance": "Requires continuous indices and rejects duplicate interned Name, Level and Expr nodes, while resolving typed references during parsing."
+    },
+    {
+      "kind": "LITERATURE",
+      "title": "Metamorphic Testing: A New Approach for Generating Next Test Cases",
+      "url": "https://www.cse.ust.hk/faculty/scc/publ/CS98-01-metamorphictesting.pdf",
+      "identity": "HKUST-CS98-01 (1998)",
+      "relevance": "Supplies the source/follow-up-test and domain-specific-relation method; it does not prove this representation relation."
+    },
+    {
+      "kind": "LITERATURE",
+      "title": "Compiler Validation via Equivalence Modulo Inputs",
+      "url": "https://www.microsoft.com/en-us/research/publication/compiler-validation-via-equivalence-modulo-inputs/",
+      "identity": "PLDI 2014, DOI 10.1145/2594291.2594334",
+      "relevance": "Supports scoped same-implementation comparison of justified variants, while its input-relative program equivalence is not reused as an NDJSON oracle."
+    },
+    {
+      "kind": "LITERATURE",
+      "title": "An Automatic Testing Approach for Compiler Based on Metamorphic Testing Technique",
+      "url": "https://ieeexplore.ieee.org/document/5693203/",
+      "identity": "APSEC 2010, DOI 10.1109/APSEC.2010.39",
+      "relevance": "Demonstrates compiler testing with equivalence-preserving source transformations; no transformation from that work is imported here."
+    }
+  ],
+  "reuse_assessment": {
+    "decision": "REUSE_AND_BUILD_ONLY_MISSING_PARTS",
+    "reuse": [
+      "Exact retained official and Nanoda binaries and their profile definitions",
+      "Two small controls with raw prior ACCEPT receipts on both exact binaries",
+      "Existing process-accounting, fail-closed evidence and raw-diagnostic conventions"
+    ],
+    "build": [
+      "A bounded typed topological-renumbering transformer",
+      "A separately implemented canonical graph auditor",
+      "A fail-closed resource-limited observation runner"
+    ],
+    "excluded": [
+      "A general validation framework",
+      "Sparse-ID permutation",
+      "Duplicate-versus-shared encoding",
+      "Declaration reordering",
+      "Whitespace or JSON key-order changes as substantive variants",
+      "Checker consensus as semantic authority"
+    ],
+    "duplicate_search": "No local NDJSON topological-renumbering transformer or independent canonical graph auditor was found."
+  },
+  "legal_relation": {
+    "name": "typed dependency-respecting primitive reorder with contiguous renumbering",
+    "domain": "Format-3.1.0 files with exactly one metadata record, one declaration-free primitive prefix, then a fixed declaration sequence; the two selected files each contain one final definition.",
+    "justification": "A schedule changes only the order and contiguous identifiers of primitive Name, Level and Expr nodes. Every typed reference is rewritten through the corresponding complete bijection. Metadata, declaration order, declaration fields, graph constructors, sharing, dependencies and all non-reference values remain fixed. An independent decoder compares the resulting typed graph and canonical declarations while failing closed.",
+    "limits": "This is a mechanically checked structural relation for two exact inputs and tooling revisions, not a theorem about arbitrary exports or semantic equivalence."
+  },
+  "profiles": [
+    {
+      "id": "official-lean-4.33.0",
+      "implementation_lineage": "lean4-official",
+      "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "supported_fragment": "Format 3.1.0 controls accepted under Lean v4.33.0 replay"
+    },
+    {
+      "id": "nanoda-6ae1f0c",
+      "implementation_lineage": "nanoda-rust",
+      "binary_sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+      "supported_fragment": "Format >=3.1.0 and <3.2.0 under the bound four-thread permissive-axiom configuration"
+    }
+  ],
+  "original_selection_rule": "Select every exact retained augmented-comparison control, ordered by control path, for which the current bound official and Nanoda binary hashes both have raw ACCEPT receipts, record count is at most 32, bytes are at most 4096, the file has metadata then one primitive prefix then one ordinary declaration, and the pair adds a distinct expression or universe feature; cap at two. This yields the let control then the imax control, with no replacements after freeze.",
+  "independent_preservation_design": "The auditor is a separate module that does not import the transformer. It decodes strict known schemas, resolves typed references, rejects unknown/missing/extra/duplicate/unresolved nodes, constructs collision-resistant canonical typed-node identities while retaining sharing, and compares metadata plus the ordered canonical declaration vector. Changed-object and malformed controls must fail.",
+  "named_useful_output": "A reusable bounded transformer/auditor/runner package and four exact original/variant pairs with a complete twelve-cell observation matrix; any contribution recommendation remains conditional on demonstrated maintenance value and duplicate review.",
+  "gate": {
+    "status": "PASS",
+    "reasons": [
+      "At least one narrow legal relation is justified and independently checkable.",
+      "Two exact independent checker profiles are locally available and previously accepted both selected controls.",
+      "The finite selection rule yields exactly two originals without adaptive replacement.",
+      "The preservation design fails closed and is separate from transformation code.",
+      "The intended executable package and matrix are concrete shared outputs."
+    ]
+  }
+}

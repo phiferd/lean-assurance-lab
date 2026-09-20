@@ -2,6 +2,111 @@
   "schema_version": 1,
   "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
   "cap": 16,
-  "consumed": 0,
-  "requests": []
+  "consumed": 13,
+  "requests": [
+    {
+      "ordinal": 1,
+      "kind": "LOCAL_INVENTORY",
+      "started_at": "2026-09-20T13:46:00+00:00",
+      "scope": "Repository-wide retained NDJSON format, adapter, fixture and local-toolchain inventory.",
+      "outcome": "SUCCESS",
+      "evidence": "Found retained Arena official, Nanoda and Lean4Lean builds; numerous accepted NDJSON fixtures and prior exact source locks. Broad output was truncated, so exact files are resolved in later focused requests."
+    },
+    {
+      "ordinal": 2,
+      "kind": "FORMAT_AND_PARSER_SOURCE",
+      "started_at": "2026-09-20T13:47:00+00:00",
+      "scope": "Retained format 3.1.0 documentation plus focused Nanoda and official-checker parser inventory.",
+      "outcome": "SUCCESS",
+      "evidence": "Format documentation specifies separate Name, Level and Expr back-reference spaces and grouped declarations. Nanoda parser source rejects duplicate interned nodes and non-contiguous back references."
+    },
+    {
+      "ordinal": 3,
+      "kind": "PROFILE_SOURCE_AND_BINARY",
+      "started_at": "2026-09-20T13:48:00+00:00",
+      "scope": "Retained Arena, Nanoda and official profile source, configuration, repository and binary identity inspection.",
+      "outcome": "PARTIAL",
+      "evidence": "Arena is 37f7525b; Nanoda is 6ae1f0c with only untracked config/profiling/build artifacts, source clean. Release Nanoda SHA-256 is 55a36861...bc41 and checks all declarations. Official Main source replays the parsed constMap, but the attempted assumed binary path was absent and requires focused resolution."
+    },
+    {
+      "ordinal": 4,
+      "kind": "PROFILE_ADAPTER_RESOLUTION",
+      "started_at": "2026-09-20T13:49:00+00:00",
+      "scope": "Resolve exact official and Nanoda Arena commands, binaries and result semantics.",
+      "outcome": "SUCCESS",
+      "evidence": "Official retained executable is _build/checkers/official/src/.lake/build/bin/kernel and consumes a file path; Nanoda consumes stdin under retained config.json. Arena documents exit 0 accept, 1 reject, 2 decline, other checker fault, while Nanoda's integration explicitly collapses reject and other nonzero forms and therefore requires raw diagnostic preservation."
+    },
+    {
+      "ordinal": 5,
+      "kind": "EXACT_PROFILE_BINDING",
+      "started_at": "2026-09-20T13:50:00+00:00",
+      "scope": "Resolve official executable, Lean toolchain, lean4export revision and current checker configuration identities.",
+      "outcome": "SUCCESS",
+      "evidence": "Official executable SHA-256 87efe83a...2585 is arm64, built for Lean v4.33.0 with lean4export f297dfe2; Nanoda configuration is pinned at 6ae1f0c and its raw command is target/release/nanoda_bin config.json with stdin."
+    },
+    {
+      "ordinal": 6,
+      "kind": "RETAINED_OUTCOME_INVENTORY",
+      "started_at": "2026-09-20T13:50:30+00:00",
+      "scope": "Locate prior cross-validation evidence and accepted controls without launching a checker.",
+      "outcome": "SUCCESS",
+      "evidence": "Cross-validation records bind exact official and independent profiles plus accepted positive controls. The existing result schema preserves raw exit, diagnostics, binary identity and compatibility evidence suitable for reuse, but exact cohort candidates require a focused projection."
+    },
+    {
+      "ordinal": 7,
+      "kind": "COHORT_EVIDENCE_PROJECTION",
+      "started_at": "2026-09-20T13:51:00+00:00",
+      "scope": "Project cross-validation outcome and small-payload projection for candidate baselines.",
+      "outcome": "PARTIAL",
+      "evidence": "Many small accepted official controls exist, including 4- to 16-record artifacts. Current cross-validation records primarily use official plus Kiota and do not supply the required retained Nanoda row, so Nanoda acceptance provenance must be resolved from mutation evidence or separately rechecked in the frozen matrix."
+    },
+    {
+      "ordinal": 8,
+      "kind": "NANODA_BASELINE_PROVENANCE",
+      "started_at": "2026-09-20T13:51:30+00:00",
+      "scope": "Resolve exact small controls with prior ACCEPT outcomes on both retained official and Nanoda binaries.",
+      "outcome": "SUCCESS",
+      "evidence": "Two independently retained controls have exact current-binary ACCEPT evidence on both profiles: corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson and corpus/controls/nanoda-gen-f19ffc8a2e9b-matching-imax-control.ndjson. They exercise distinct let and imax structures and remain small."
+    },
+    {
+      "ordinal": 9,
+      "kind": "LITERATURE_SEARCH",
+      "started_at": "2026-09-20T13:52:00+00:00",
+      "scope": "Three-query search for primary metamorphic-testing, compiler, and representation-transformation literature.",
+      "outcome": "PARTIAL",
+      "evidence": "Surfaced recent equivalence-transformation, compiler and model-transformation work but not the foundational source; no result was treated as an NDJSON legality oracle."
+    },
+    {
+      "ordinal": 10,
+      "kind": "LITERATURE_SEARCH",
+      "started_at": "2026-09-20T13:52:10+00:00",
+      "scope": "Three-query focused search resolving foundational metamorphic testing, PLDI 2014 EMI and peer-reviewed compiler transformation work.",
+      "outcome": "SUCCESS",
+      "evidence": "Resolved the 1998 HKUST report, the PLDI 2014 EMI primary publication and APSEC 2010 DOI 10.1109/APSEC.2010.39. They support derived follow-up cases with domain-specific relations and same-implementation comparison, but do not establish the NDJSON relation."
+    },
+    {
+      "ordinal": 11,
+      "kind": "COHORT_PAYLOAD_REVIEW",
+      "started_at": "2026-09-20T13:52:20+00:00",
+      "scope": "Inspect exact two retained controls and their original raw ACCEPT observations.",
+      "outcome": "SUCCESS",
+      "evidence": "The 13-record let and 16-record imax controls bind exact hashes and contain only one declaration after a declaration-free primitive block. Both have exact raw official/Nanoda ACCEPT receipts on the currently retained binary hashes."
+    },
+    {
+      "ordinal": 12,
+      "kind": "REUSE_AND_DUPLICATE_SEARCH",
+      "started_at": "2026-09-20T13:52:40+00:00",
+      "scope": "Search local transformation/audit code and refresh the relevant methods-map entry.",
+      "outcome": "SUCCESS",
+      "evidence": "No existing NDJSON topological-renumbering transformer or independent canonical preservation auditor exists. Reuse retained profile bindings, controller patterns and evidence conventions; build only the bounded missing transformer/auditor/runner. The methods map remains literature-only and explicitly requires independent mechanical justification."
+    },
+    {
+      "ordinal": 13,
+      "kind": "SCIENTIFIC_INPUT_BINDING",
+      "started_at": "2026-09-20T13:53:00+00:00",
+      "scope": "Hash exact profile definitions, sources, binaries, configuration, two originals and their retained prior-outcome records.",
+      "outcome": "SUCCESS",
+      "evidence": "Resolved all exact SHA-256 values and Git revisions required for the scientific manifest; both built binaries match their retained prior observations."
+    }
+  ]
 }
