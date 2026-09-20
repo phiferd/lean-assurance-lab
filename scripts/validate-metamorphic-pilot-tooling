@@ -1,7 +1,9 @@
 #!/usr/bin/env python3
 from __future__ import annotations
 
+import argparse
 import importlib.util
+import subprocess
 import sys
 import unittest
 from pathlib import Path
@@ -12,6 +14,9 @@ sys.path.insert(0, str(ROOT))
 
 
 def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--generate-frozen", action="store_true")
+    args = parser.parse_args()
     test_path = ROOT / "tests" / "test_metamorphic_representation.py"
     name = "test_metamorphic_representation"
     spec = importlib.util.spec_from_file_location(name, test_path)
@@ -27,7 +32,18 @@ def main() -> int:
         print(f"FAIL: expected exactly 14 frozen tooling cases, found {count}", file=sys.stderr)
         return 1
     result = unittest.TextTestRunner(verbosity=1).run(suite)
-    return 0 if result.wasSuccessful() else 1
+    if not result.wasSuccessful():
+        return 1
+    if args.generate_frozen:
+        command = [
+            str(ROOT / "scripts" / "generate-metamorphic-pilot-variants"),
+            "--scientific-manifest", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-1" / "scientific-manifest.json"),
+            "--scientific-sha256", "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab",
+            "--output-dir", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-1" / "generated"),
+            "--summary", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-1" / "generation-summary.json"),
+        ]
+        return subprocess.run(command, cwd=ROOT, check=False).returncode
+    return 0
 
 
 if __name__ == "__main__":

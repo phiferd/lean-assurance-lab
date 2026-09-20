@@ -14,7 +14,6 @@ from typing import Any
 
 
 ROOT = Path(__file__).resolve().parents[1]
-TIME = Path("/usr/bin/time")
 PS = Path("/bin/ps")
 
 
@@ -75,31 +74,12 @@ def _memory_monitor(process: subprocess.Popen[bytes], memory_bytes: int,
             pass
 
 
-def _parse_time(path: Path) -> dict[str, Any]:
-    text = path.read_text(errors="replace") if path.exists() else ""
-    patterns = {
-        "real_seconds": r"^\s*([0-9.]+) real\s*$",
-        "user_seconds": r"^\s*([0-9.]+) user\s*$",
-        "sys_seconds": r"^\s*([0-9.]+) sys\s*$",
-        "peak_rss_bytes": r"^\s*([0-9]+)\s+maximum resident set size\s*$",
-    }
-    out: dict[str, Any] = {"raw": text}
-    for name, pattern in patterns.items():
-        match = re.search(pattern, text, re.MULTILINE)
-        if match:
-            out[name] = int(match.group(1)) if name == "peak_rss_bytes" else float(match.group(1))
-    return out
-
-
 def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict[str, str],
                    timeout_seconds: int, memory_bytes: int, raw_prefix: Path) -> dict[str, Any]:
-    if not TIME.is_file(): raise RunnerError("/usr/bin/time is unavailable")
     if not PS.is_file(): raise RunnerError("/bin/ps is unavailable")
     raw_prefix.parent.mkdir(parents=True, exist_ok=True)
-    time_path = raw_prefix.with_suffix(".time")
-    command = [str(TIME), "-l", "-o", str(time_path), *argv]
     start = time.monotonic()
-    process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+    process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
                                start_new_session=True)
     stopped = threading.Event()
@@ -133,8 +113,6 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
     elapsed = time.monotonic() - start
     raw_prefix.with_suffix(".stdout").write_bytes(stdout)
     raw_prefix.with_suffix(".stderr").write_bytes(stderr)
-    metrics = _parse_time(time_path)
-    metrics.pop("raw", None)
     cleanup = process.poll() is not None
     try:
         os.killpg(process.pid, 0)
@@ -154,7 +132,7 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         "stderr_sha256": hashlib.sha256(stderr).hexdigest(),
         "stdout_bytes": len(stdout),
         "stderr_bytes": len(stderr),
-        "metrics": metrics,
+        "metrics": {"real_seconds": elapsed},
         "memory_limit_bytes": memory_bytes,
         "memory_enforcement": "per-process-rss-process-group-monitor-v1",
         "memory_exceeded": monitor_state["memory_exceeded"],

@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "revision": 8,
+  "status": "BOUND_UNTESTED_FINAL_ATTEMPT",
+  "base_commit": "e8e937afb57c4a8c9f4acf2ca51724a2694d2bc9",
+  "predecessor": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-07.json",
+    "sha256": "5396da7cb653114b10ec2b4c5f2c30b891ccb74e2b0c2854d3be76104c345510"
+  },
+  "preserved_failures": [
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-01.json", "sha256": "c33394d5b4a5c117a84e9e2124b0cafecf5ff077b4a35bd7ea2d40fa12d2d1f8"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-02.json", "sha256": "ca263cf7a58de2d00f7ef9ed08971ce1ce911697b0b877a63c6866eff9e2dc18"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-03.json", "sha256": "471b349c5c8001424af3f3a27797a95d0c66cb76cf65b429b632cb516c314822"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-04.json", "sha256": "ba356e6d7adfde7c0282acf163c885ed05b116a1ad4c9221ddcf422e82370ae4"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-05.json", "sha256": "1f431b91574ff29c11d3b694ce2b5837877abe0da4de50de6864f65a8d43ce6e"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-06.json", "sha256": "86d540373a3143b280c91a8d4728e05f12934e0c365f48edd5f83cc437f5a5a7"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-attempt-07.json", "sha256": "2fa563c22009c8e400a321c3b2d22ab3dafd8fb9ca54b6fc619fb1051d503fef"}
+  ],
+  "scientific_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-1/scientific-manifest.json",
+    "sha256": "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab"
+  },
+  "source_files": [
+    {"path": "lib/metamorphic_ndjson_transform.py", "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0"},
+    {"path": "lib/metamorphic_ndjson_audit.py", "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21"},
+    {"path": "lib/metamorphic_pilot_runner.py", "sha256": "c725aa05776a5039f2e968d172f7364dfe3950d31e3e411e4a7024247f68eb7b"},
+    {"path": "scripts/metamorphic-ndjson-transform", "sha256": "0449ffe6b5fd955bf8da01cc9f7e400483c29363eefcfbc9b24d264f31bfb000"},
+    {"path": "scripts/audit-metamorphic-ndjson", "sha256": "51022702bfe5459846001edb91242b43839bbc21056a5ec432778f3fdf7fe2b2"},
+    {"path": "scripts/generate-metamorphic-pilot-variants", "sha256": "636a458577046bf4832c406b5f126e997b90c1620470ac9a8643db14c910e4cf"},
+    {"path": "scripts/run-metamorphic-representation-pilot", "sha256": "62cba51c2fd8511d7131ceb03e0204de9a4b976e88718d98e2216546e04d62a8"},
+    {"path": "scripts/validate-metamorphic-pilot-tooling", "sha256": "35f13438c304958506ba303f9667574b651620f7361e2335e2bda168d25aa10c"}
+  ],
+  "test_file": {"path": "tests/test_metamorphic_representation.py", "sha256": "c212e763022132f9e971b625abf62727b35347fbc18bef9ac93288e39f82f41f"},
+  "independent_reviews": [
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-review-01.json", "sha256": "41526cd04f7afde472134048657e850986430f0826bf9a99839f72ec7117da61"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-review-02.json", "sha256": "fbe7868c97551ed05bdc71ebe9257a895c78704111849f993da1617b8c899ba5"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-review-03.json", "sha256": "fee83127163bdb0bffe184e083ea0be0180ff7a8714ca623c5b4c9ab030936f9"},
+    {"path": "results/research/metamorphic-representation-pilot-1/tooling-review-04.json", "sha256": "35c84db0bce6e939abeff670051c24b89bcf2b8aae4c3e69818756c55cfa4fcc"}
+  ],
+  "repair": {
+    "class": "SUPERVISOR_TIME_WRAPPER_UNSUPPORTED",
+    "change": "Launch exact commands directly, retain exact raw outputs, and combine the last fourteen-case validation with frozen generation that is conditionally reachable only after every test passes.",
+    "scientific_inputs_changed": false,
+    "memory_ceiling_changed": false,
+    "transformer_auditor_changed": false,
+    "budgets_reset": false
+  },
+  "permitted_combined_attempt": {
+    "ordinal": 8,
+    "command": ["scripts/validate-metamorphic-pilot-tooling", "--generate-frozen"],
+    "timeout_seconds": 120,
+    "case_count": 14,
+    "variants": 4,
+    "checker_attempts": 0,
+    "maximum_nested_nonchecker_processes": 4,
+    "sequencing": "Generation is unreachable unless all fourteen tooling cases pass in the same invocation."
+  },
+  "carried_consumption": {
+    "tooling_test_attempts": 7,
+    "tooling_process_seconds": 0.09864975,
+    "checker_attempts": 0
+  },
+  "generation_permission": "The final attempt may generate only the exact four frozen variants after its fourteen bound tests pass; no other tooling attempt is permitted."
+}

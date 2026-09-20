@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 7,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-07.json",
+    "sha256": "5396da7cb653114b10ec2b4c5f2c30b891ccb74e2b0c2854d3be76104c345510"
+  },
+  "command": ["scripts/validate-metamorphic-pilot-tooling"],
+  "exit_code": 1,
+  "wall_time_seconds": 0.017,
+  "wall_time_accounting": "Charged the larger unittest-reported duration; command transport reported 0.000001792 seconds.",
+  "tests_run": 14,
+  "test_bodies_run": 14,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "SUPERVISOR_TIME_WRAPPER_UNSUPPORTED",
+  "raw_output": ".......FF.....\n======================================================================\nFAIL: test_memory_limit_is_enforced (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 132, in test_memory_limit_is_enforced\n    self.assertTrue(receipt[\"memory_exceeded\"])\nAssertionError: False is not true\n\n======================================================================\nFAIL: test_timeout_kills_process_group (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 147, in test_timeout_kills_process_group\n    self.assertTrue(receipt[\"timed_out\"])\nAssertionError: False is not true\n\n----------------------------------------------------------------------\nRan 14 tests in 0.017s\n\nFAILED (failures=2)\n",
+  "diagnosis": "Both supervised receipts returned immediately without either expected condition. Static inspection identified that the command was wrapped with BSD /usr/bin/time using the unsupported -o output-file option, so the wrapper exited before launching the requested child.",
+  "repair": "Launch the exact requested argv directly, retain child stdout/stderr without wrapper contamination, retain monotonic elapsed time and RSS-monitor evidence, and remove the unsupported timing-output path."
+}

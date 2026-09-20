@@ -134,7 +134,7 @@ class SupervisorTests(unittest.TestCase):
             self.assertGreater(receipt["memory_monitor_samples"], 0)
             self.assertGreater(receipt["maximum_observed_rss_bytes"], receipt["memory_limit_bytes"])
             self.assertTrue(receipt["cleanup_complete"])
-            self.assertIn("peak_rss_bytes", receipt["metrics"])
+            self.assertIn("real_seconds", receipt["metrics"])
 
     def test_timeout_kills_process_group(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
