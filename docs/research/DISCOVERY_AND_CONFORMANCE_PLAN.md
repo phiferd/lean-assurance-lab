@@ -24,13 +24,14 @@ eight eligible cells and retained four preregistered ineligible dispositions;
 all four within-checker original/variant relations preserved ACCEPT. The package
 is retained as a local conformance asset. `SURVIVOR-THREAD-ONE-DETERMINISM-1`
 completed SUCCESS as a source-only assessment and selected
-`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` READY and unstarted.
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`, now ACTIVE under its committed
+prelaunch package; neither permitted build has yet started.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
 confined to replaceable supervision. At closure the one-thread source assessment
-identified a bounded diagnostic follow-through, now selected READY and
-unstarted. Pipeline completeness remains the next practical discovery alternative
+identified a bounded diagnostic follow-through, now selected ACTIVE after its
+committed prelaunch package. Pipeline completeness remains the next practical discovery alternative
 after its receipt-semantics protocol gate;
 valid-term generation follows because its typing oracle and generator demand
 more construction. These are ordinal judgments, not estimated defect rates.
@@ -72,8 +73,9 @@ bounded investigation. Ordinary implementation repairs remain inside that item.
 unchanged [original plan](SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): it identified
 a source-supported child-panic diagnostic protocol using existing bytes, with no
 network or launches. Its separate successor
-`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is READY and unstarted under the
-new [bounded execution plan](SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md).
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is ACTIVE under the new
+[bounded execution plan](SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md),
+with no offline build or checker yet launched.
 No historical budget or counter is reset.
 
 The theorem companion, original CVC-4/CVC-5 and independent transfer intake retain

@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "kind": "SURVIVOR_THREAD_ONE_CHILD_PANIC_SOURCE_MATERIALIZATION",
+  "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+  "source_lock": {
+    "path": "results/research/alt-survivors-2026-09-08/source-lock.json",
+    "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"
+  },
+  "source_file_count": 22,
+  "baseline": {
+    "workspace": "external/survivor-thread-one-child-panic-regression-0001-baseline",
+    "target": "external/survivor-thread-one-child-panic-regression-0001-target-baseline",
+    "product": "external/survivor-thread-one-child-panic-regression-0001-products/baseline/nanoda_bin",
+    "tc": {
+      "path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs",
+      "bytes": 56602,
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    }
+  },
+  "mutant": {
+    "workspace": "external/survivor-thread-one-child-panic-regression-0001-mutant",
+    "target": "external/survivor-thread-one-child-panic-regression-0001-target-mutant",
+    "product": "external/survivor-thread-one-child-panic-regression-0001-products/mutant/nanoda_bin",
+    "mutation_spec": {
+      "path": "mutations/nanoda-gen-2bdfe18a9ec2.json",
+      "sha256": "565dade1407732bed722b3db2758f77e6a3a8a3cd079ce526974d91b8347aca6"
+    },
+    "patch": {
+      "path": "src/tc.rs",
+      "line": 147,
+      "occurrence": 0,
+      "original": "self.config.num_threads > 1",
+      "mutated": "self.config.num_threads >= 1"
+    },
+    "tc_after_patch": {
+      "bytes": 56603,
+      "sha256": "a2a41ceb83361d892cd260f60605338788267635baf33f19cedf43e9aa579fdb"
+    }
+  }
+}
