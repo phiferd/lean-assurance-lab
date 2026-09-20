@@ -125,13 +125,15 @@ class SupervisorTests(unittest.TestCase):
     def test_memory_limit_is_enforced(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             prefix = Path(directory) / "memory"
-            script = "try:\n x=bytearray(3*1024*1024*1024)\nexcept MemoryError:\n print('LIMITED')\n"
+            script = "import time; x=bytearray(128*1024*1024); time.sleep(30)"
             receipt = run_supervised(argv=[sys.executable, "-c", script], cwd=ROOT, stdin=None,
                                      env=os.environ.copy(), timeout_seconds=10,
-                                     memory_bytes=2 * 1024 * 1024 * 1024, raw_prefix=prefix)
-            self.assertEqual(receipt["exit_code"], 0)
+                                     memory_bytes=64 * 1024 * 1024, raw_prefix=prefix)
+            self.assertTrue(receipt["memory_exceeded"])
+            self.assertIsNone(receipt["memory_monitor_error"])
+            self.assertGreater(receipt["memory_monitor_samples"], 0)
+            self.assertGreater(receipt["maximum_observed_rss_bytes"], receipt["memory_limit_bytes"])
             self.assertTrue(receipt["cleanup_complete"])
-            self.assertEqual(prefix.with_suffix(".stdout").read_text(), "LIMITED\n")
             self.assertIn("peak_rss_bytes", receipt["metrics"])
 
     def test_timeout_kills_process_group(self):

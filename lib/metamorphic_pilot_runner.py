@@ -5,9 +5,9 @@ import hashlib
 import json
 import os
 import re
-import resource
 import signal
 import subprocess
+import threading
 import time
 from pathlib import Path
 from typing import Any
@@ -15,6 +15,7 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 TIME = Path("/usr/bin/time")
+PS = Path("/bin/ps")
 
 
 class RunnerError(ValueError):
@@ -34,10 +35,44 @@ def _binding(value: Any, label: str) -> Path:
     return path
 
 
-def _limit(memory_bytes: int):
-    def apply() -> None:
-        resource.setrlimit(resource.RLIMIT_AS, (memory_bytes, memory_bytes))
-    return apply
+def _group_rss_bytes(process_group: int) -> list[int]:
+    completed = subprocess.run(
+        [str(PS), "-axo", "pgid=,rss="], capture_output=True, text=True,
+        check=True, timeout=2,
+    )
+    values = []
+    for line in completed.stdout.splitlines():
+        fields = line.split()
+        if len(fields) == 2 and int(fields[0]) == process_group:
+            values.append(int(fields[1]) * 1024)
+    return values
+
+
+def _memory_monitor(process: subprocess.Popen[bytes], memory_bytes: int,
+                    stopped: threading.Event, state: dict[str, Any]) -> None:
+    try:
+        while process.poll() is None:
+            values = _group_rss_bytes(process.pid)
+            if values:
+                state["samples"] += 1
+                state["maximum_observed_rss_bytes"] = max(
+                    state["maximum_observed_rss_bytes"], max(values)
+                )
+                if any(value > memory_bytes for value in values):
+                    state["memory_exceeded"] = True
+                    try:
+                        os.killpg(process.pid, signal.SIGKILL)
+                    except ProcessLookupError:
+                        pass
+                    return
+            if stopped.wait(0.01):
+                return
+    except (OSError, subprocess.SubprocessError, ValueError) as error:
+        state["monitor_error"] = f"{type(error).__name__}: {error}"
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
 
 
 def _parse_time(path: Path) -> dict[str, Any]:
@@ -59,13 +94,25 @@ def _parse_time(path: Path) -> dict[str, Any]:
 def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict[str, str],
                    timeout_seconds: int, memory_bytes: int, raw_prefix: Path) -> dict[str, Any]:
     if not TIME.is_file(): raise RunnerError("/usr/bin/time is unavailable")
+    if not PS.is_file(): raise RunnerError("/bin/ps is unavailable")
     raw_prefix.parent.mkdir(parents=True, exist_ok=True)
     time_path = raw_prefix.with_suffix(".time")
     command = [str(TIME), "-l", "-o", str(time_path), *argv]
     start = time.monotonic()
     process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
                                stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
-                               preexec_fn=_limit(memory_bytes), start_new_session=True)
+                               start_new_session=True)
+    stopped = threading.Event()
+    monitor_state: dict[str, Any] = {
+        "samples": 0,
+        "maximum_observed_rss_bytes": 0,
+        "memory_exceeded": False,
+        "monitor_error": None,
+    }
+    monitor = threading.Thread(
+        target=_memory_monitor, args=(process, memory_bytes, stopped, monitor_state), daemon=True
+    )
+    monitor.start()
     timed_out = False
     try:
         stdout, stderr = process.communicate(stdin, timeout=timeout_seconds)
@@ -74,6 +121,15 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         try: os.killpg(process.pid, signal.SIGKILL)
         except ProcessLookupError: pass
         stdout, stderr = process.communicate()
+    finally:
+        stopped.set()
+        monitor.join(timeout=3)
+    if monitor.is_alive():
+        monitor_state["monitor_error"] = "memory monitor did not terminate"
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
     elapsed = time.monotonic() - start
     raw_prefix.with_suffix(".stdout").write_bytes(stdout)
     raw_prefix.with_suffix(".stderr").write_bytes(stderr)
@@ -100,12 +156,21 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         "stderr_bytes": len(stderr),
         "metrics": metrics,
         "memory_limit_bytes": memory_bytes,
+        "memory_enforcement": "per-process-rss-process-group-monitor-v1",
+        "memory_exceeded": monitor_state["memory_exceeded"],
+        "memory_monitor_samples": monitor_state["samples"],
+        "maximum_observed_rss_bytes": monitor_state["maximum_observed_rss_bytes"],
+        "memory_monitor_error": monitor_state["monitor_error"],
         "cleanup_complete": cleanup and process_group_absent,
         "raw_prefix": str(raw_prefix.relative_to(ROOT)),
     }
 
 
 def classify(profile: str, receipt: dict[str, Any], stdout: bytes, stderr: bytes) -> tuple[str, str]:
+    if receipt["memory_monitor_error"]:
+        return "INFRASTRUCTURE_AUDIT_FAILURE", "resident-memory observation failed"
+    if receipt["memory_exceeded"]:
+        return "CRASH", "resident-memory ceiling exceeded and process group was killed"
     if receipt["timed_out"]: return "TIMEOUT", "process exceeded frozen timeout"
     if not receipt["cleanup_complete"]: return "INFRASTRUCTURE_AUDIT_FAILURE", "process group cleanup not proven"
     code = receipt["exit_code"]

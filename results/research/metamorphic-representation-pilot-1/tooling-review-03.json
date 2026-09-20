@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "tooling_revision": 7,
+  "reviewed_at": "2026-09-20",
+  "reviewer": "root separate static host-enforcement review",
+  "scope": "Replacement of unsupported RLIMIT_AS with host-observed per-process resident-memory enforcement; no scientific checker was invoked.",
+  "runner": {
+    "path": "lib/metamorphic_pilot_runner.py",
+    "sha256": "a77a94ff36c987eea7436b0ab0b31036c6f302a9497325ba3b214457ed08893b",
+    "findings": [
+      "Every supervised command starts a new session, making its PID the process-group identifier used for observation and termination.",
+      "The monitor reads every process group's resident set through the host /bin/ps interface every 10 milliseconds and compares each process independently to the supplied ceiling.",
+      "The first observed per-process breach kills the complete process group; observation failure also kills the group and is classified as an infrastructure/audit failure.",
+      "Receipts retain enforcement method, sample count, maximum observed per-process RSS, breach status, observation error, /usr/bin/time metrics, and process-group cleanup evidence.",
+      "The regression holds a 128 MiB allocation against a 64 MiB test ceiling, requires observed breach and cleanup, and separately retains the frozen 2 GiB value in execution-manifest validation."
+    ],
+    "claim_limit": "This is sampled resident-memory enforcement, not a hard virtual-address-space limit; it stops a process group at the first host-observed breach and does not claim zero transient overshoot between 10 ms samples."
+  },
+  "scientific_inputs_changed": false,
+  "frozen_memory_ceiling_changed": false,
+  "budget_reset": false,
+  "hidden_checker_calls": false,
+  "disposition": "APPROVE_FOR_BOUND_TOOLING_TEST_ATTEMPT_7"
+}
