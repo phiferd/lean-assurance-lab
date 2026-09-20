@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-19
+Last updated: 2026-09-20
 
 ## How Status Is Tracked
 
@@ -56,6 +56,16 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- On 2026-09-20, the owner-requested [frontier selection](../results/research/frontier-selection-2026-09-20/report.md)
+  adopted `F-DISCOVERY-AND-CONFORMANCE` after both Kiota items completed.
+  Ten concrete discovery candidates now occupy the ranked horizon.
+  `METAMORPHIC-REPRESENTATION-PILOT-1` is selected READY and unstarted for one
+  staged 360-active-minute source/reuse, implementation and gated execution pilot.
+  The other nine remain PLANNED with independent promotion gates; the original
+  one-thread assessment remains READY reserve. No pilot, new scientific byte,
+  external research write, historical result or assurance milestone starts or
+  changes in this queue update.
 
 - Completed `KIOTA-CTOR-INDEX-TEST-1` on 2026-09-19 with SUCCESS for one
   [test-only preventive regression](../results/research/kiota-ctor-index-test-1/report.md)
@@ -2888,12 +2898,44 @@ preserved. The exact accepted authority and entry state remain bound in
 
 ### Active
 
-1. `F-EXTERNAL-CONTRIBUTION-PORTFOLIO` — prioritize useful shared Arena corpus
-   contributions, checker implementation/test hardening, and Lean semantic
-   clarification independent of implementations under
-   [docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md](research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md).
+1. `F-DISCOVERY-AND-CONFORMANCE` — explore fresh public-input behavior and build
+   reusable shared conformance assets under
+   [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
+   This explicitly succeeds the contribution portfolio; it crosses no assurance
+   milestone and preserves its completed work and external-action gates.
 
-Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
+Selected next item: `METAMORPHIC-REPRESENTATION-PILOT-1`.
+
+The [2026-09-20 selection review](../results/research/frontier-selection-2026-09-20/report.md)
+incorporates the completed Kiota work and the ten-candidate proposal. The selected
+[representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md) is READY
+and unstarted: one 360-cumulative-active-minute item spanning source/reuse,
+implementation, independent preservation audit and gated checker execution.
+READY permits its committed entry/source phase; exact scientific-input and
+launch gates remain to be satisfied within that same item. No pilot starts in
+this queue-update task.
+
+| Rank | Candidate | State |
+| --- | --- | --- |
+| 1 | `METAMORPHIC-REPRESENTATION-PILOT-1` | READY, selected |
+| 2 | `PIPELINE-COMPLETENESS-PILOT-1` | PLANNED |
+| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
+| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
+| 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
+| 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
+| 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
+| 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
+| 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
+| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY reserve |
+
+Each PLANNED candidate has its own concrete promotion gate and finite candidate
+cap in the canonical queue and successor plan; none depends automatically on
+pilot 1 succeeding. Reassess actual value and feasibility at closure. The initial
+pilot uses at most twelve originals, four reviewed transformation kinds and two
+exact implementations, with an initial matrix of at most 96 and an overall cap
+of 120 checker attempts. Legal representation and independent preservation
+checks gate generation/execution; source predictions are not observed outcomes.
 
 `KIOTA-CTOR-INDEX-COVERAGE-1` completed SUCCESS under its
 [bounded plan](research/KIOTA_CTOR_INDEX_COVERAGE_PLAN.md). At retained Kiota
@@ -2914,8 +2956,8 @@ rejection test. Focused 2/2 and all 155 current tests passed at bound
 and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
 preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-Select `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY and unstarted under its unchanged
-[original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
+Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY, unstarted and unselected under
+its unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
 60 cumulative active minutes, eight local inspections and no network or launches.
 No deterministic trigger is required before that source assessment; later
 execution retains a separate gate. Bind a fresh work record, exact historical
@@ -3026,19 +3068,23 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item: the selected one-thread operational
-source/evidence assessment. The Kiota constructor-index audit and test-only
-implementation are complete; the exact local patch passed focused 2/2 and all
-155 current tests, while submission remains separately human-gated. Four held
-Nanoda candidates and two open PRs do not displace the final internal survivor
-question. This priority judgment does not claim a current defect, independent
-transfer result, or deterministic trigger for later execution.
+The canonical queue retains two READY items: the selected representation pilot
+and the unchanged one-thread source/evidence reserve. The wider horizon includes
+nine independently gated PLANNED discovery candidates, rather than treating the
+last surviving source audit as the entire opportunity set. A source-only pilot
+checkpoint does not complete the selected item while feasible implementation and
+execution remain inside its scope/budget.
+
+Both Kiota constructor-index items are complete; its focused 2/2 and all 155
+current tests passed and its draft remains locally held. Four Nanoda drafts and
+two PRs recorded open remain subject to their dated evidence and follow-through
+gates. This review did not refresh external discussions or infer capacity.
 
 Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
-The fresh Arena merge observation supports shared-corpus work but does not supply
-an additional unexplored case. All historical assurance bindings, pending counts,
-consumed budgets and external-write gates remain unchanged. No research item starts
-in this review.
+Historical results, completed-record content, consumed budgets, pending counts,
+external-write gates and the failing assurance state remain unchanged. The exact
+scientific design, tooling and launch manifests for the selected pilot must be
+committed and mechanically validated before their respective phases run.
 
 ### Waiting
 
@@ -3105,7 +3151,8 @@ in this review.
   Retained recursor-type validation remains a separate contract question without
   current execution or a defect claim. Do not file a new defect report from the
   old matrix. The grouped documentation packet and Kiota submission deferral
-  remain; the selected cidx coverage audit is local and grants no external action.
+  remain; the cidx coverage audit and test package are complete and grant no
+  external action.
 - `W-KIOTA-PROOF-PARAMETER-UNIFORMITY`: the exact pair reproduces on pinned
   Kiota `2d2a9fa` after PR #8. Review the new successor draft for one Kiota
   contract-clarification issue; no demonstrated unsoundness is claimed. The

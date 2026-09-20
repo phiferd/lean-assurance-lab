@@ -5,13 +5,21 @@ from __future__ import annotations
 import argparse
 import hashlib
 import json
+import subprocess
+import sys
 import tarfile
 from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.research_queue_v3 import load_queue, queue_digest
 
 
 REVISION = "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42"
 ERROR = "constructor `LALNest.node` is not `LALNest`'s own constructor at index 1"
 ITEM = "KIOTA-CTOR-INDEX-TEST-1"
+CLOSURE_COMMIT = "38713bf568d82cb5411544e3a9284bb49cf1d3dc"
+PREFIX = "results/research/kiota-ctor-index-test-1/"
 
 
 def fail(message: str) -> None:
@@ -43,6 +51,66 @@ def binding(root: Path, row: dict) -> None:
     require(path.is_file(), f"missing binding: {row['path']}")
     require(path.stat().st_size == row["bytes"], f"binding size mismatch: {row['path']}")
     require(digest(path) == row["sha256"], f"binding hash mismatch: {row['path']}")
+
+
+def historical_bytes(root: Path, path: str) -> bytes:
+    """Read the unchanged closure, including the original validator revision."""
+    completed = subprocess.run(
+        ["git", "show", f"{CLOSURE_COMMIT}:{path}"], cwd=root,
+        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False,
+    )
+    require(completed.returncode == 0, "historical closure input unavailable: " + path)
+    return completed.stdout
+
+
+def validate_historical_handoff(read_history):
+    """Check the original handoff against its immutable queue/review bindings."""
+    validation = json.loads(read_history(PREFIX + "validation.json"))
+    for row in validation["validator_bindings"]:
+        original = read_history(row["path"])
+        require(len(original) == row["bytes"]
+                and digest_bytes(original) == row["sha256"],
+                "historical tooling binding mismatch: " + row["path"])
+    queue = json.loads(read_history("config/research-queue.json"))
+    review_binding = queue["strategic_review"]
+    encoded_review = read_history(review_binding["path"])
+    require(digest_bytes(encoded_review) == review_binding["sha256"],
+            "historical strategic review binding mismatch")
+    review = json.loads(encoded_review)
+    require(review["queue_sha256"] == queue_digest(queue)
+            and review["phase"] == "CLOSURE" and review["stopped_item"] == ITEM,
+            "historical closure review mismatch")
+    for row in review["evidence_bindings"]:
+        require(digest_bytes(read_history(row["path"])) == row["sha256"],
+                "historical review evidence mismatch: " + row["path"])
+    result = json.loads(read_history(PREFIX + "result.json"))
+    closure = json.loads(read_history(PREFIX + "work-closure.json"))
+    successor = "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+    by_id = {row["id"]: row for row in queue["items"]}
+    require(queue["selected_item"] == review["selected_item"] == successor
+            and result["next_item"] == closure["next_item"] == successor
+            and result["next_item_started"] is False
+            and closure["next_item_started"] is False
+            and by_id[ITEM]["status"] == "COMPLETE"
+            and by_id[ITEM]["closure"]["outcome"] == "SUCCESS"
+            and by_id[successor]["status"] == "READY",
+            "historical successor handoff changed")
+    return queue
+
+
+def validate_current_handoff(root: Path, historical_queue: dict) -> None:
+    """Later selections may advance; this completed item may not be rewritten."""
+    queue = load_queue(root)
+    by_id = {row["id"]: row for row in queue["items"]}
+    historical = next(row for row in historical_queue["items"] if row["id"] == ITEM)
+    current = by_id.get(ITEM)
+    require(current is not None and current["status"] == "COMPLETE"
+            and current["closure"]["outcome"] == "SUCCESS",
+            "queue item not closed SUCCESS")
+    without_priority = lambda row: {key: value for key, value in row.items()
+                                    if key != "priority"}
+    require(without_priority(current) == without_priority(historical),
+            "completed Kiota queue record changed")
 
 
 def differences(left, right, pointer=""):
@@ -207,15 +275,12 @@ def validate(root: Path) -> None:
             "external contribution ledger entry mismatch")
     require((root / entry["submission_material"]).is_file(), "local PR draft missing")
 
-    queue = load(root / "config/research-queue.json")
-    by_id = {row["id"]: row for row in queue["items"]}
-    require(queue["selected_item"] == "SURVIVOR-THREAD-ONE-DETERMINISM-1",
-            "wrong selected successor")
-    require(by_id[ITEM]["status"] == "COMPLETE"
-            and by_id[ITEM]["closure"]["outcome"] == "SUCCESS",
-            "queue item not closed SUCCESS")
-    require(by_id["SURVIVOR-THREAD-ONE-DETERMINISM-1"]["status"] == "READY",
-            "successor not READY")
+    read_history = lambda path: historical_bytes(root, path)
+    historical_queue = validate_historical_handoff(read_history)
+    for path in (PREFIX + "result.json", PREFIX + "work-closure.json"):
+        require((root / path).read_bytes() == read_history(path),
+                "frozen Kiota closure changed: " + path)
+    validate_current_handoff(root, historical_queue)
 
 
 def main() -> int:

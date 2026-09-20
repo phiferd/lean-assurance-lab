@@ -1,0 +1,271 @@
+{
+  "schema_version": 1,
+  "status": "PASS",
+  "scope": "Owner-requested frontier/queue successor and prospective historical-handoff validator repair; selected pilot READY and unstarted.",
+  "input_manifest": "results/research/frontier-selection-2026-09-20/validation-inputs.json",
+  "focused": [
+    {
+      "command": [
+        "scripts/validate-research-queue",
+        "--require-ready"
+      ],
+      "returncode": 0,
+      "seconds": 0.063,
+      "log": "results/research/frontier-selection-2026-09-20/focused-01.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "scripts/validate-contribution-portfolio-transition"
+      ],
+      "returncode": 0,
+      "seconds": 11.812,
+      "log": "results/research/frontier-selection-2026-09-20/focused-02.log",
+      "sha256": "c239956c6e2ee9b3220feff62524f8eb41e4c0a1f2c51b6f5a89e54b735eab59"
+    },
+    {
+      "command": [
+        "scripts/validate-kiota-ctor-index-test-closure"
+      ],
+      "returncode": 0,
+      "seconds": 0.372,
+      "log": "results/research/frontier-selection-2026-09-20/focused-03.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/test_kiota_ctor_index_test_closure.py"
+      ],
+      "returncode": 0,
+      "seconds": 1.367,
+      "log": "results/research/frontier-selection-2026-09-20/focused-04.log",
+      "sha256": "2b774a707a182caf56daeded056c640c69659b3f9f5943cc48eef758508f72f1"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/test_arena_let_regression_erratum.py"
+      ],
+      "returncode": 0,
+      "seconds": 0.473,
+      "log": "results/research/frontier-selection-2026-09-20/focused-05.log",
+      "sha256": "fcf6981350a269a60404e20c4a154f377a2f6edda7ae86289515a2c38f33290c"
+    },
+    {
+      "command": [
+        "python3",
+        "tests/test_project_review_contribution_observations.py"
+      ],
+      "returncode": 0,
+      "seconds": 0.043,
+      "log": "results/research/frontier-selection-2026-09-20/focused-06.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "additional_focused_checks": [
+    {
+      "command": [
+        "python3",
+        "-m",
+        "unittest",
+        "discover",
+        "-s",
+        "tests",
+        "-p",
+        "test_project_review_contribution_observations.py",
+        "-v"
+      ],
+      "returncode": 0,
+      "tests": 2,
+      "note": "The direct module invocation recorded in focused-06 ran no tests; discovery and the complete suite exercised these assertions."
+    }
+  ],
+  "full_suite": {
+    "command": [
+      "scripts/run-unit-tests-with-signal-retry",
+      "--require-full-payload"
+    ],
+    "returncode": 0,
+    "seconds": 513.486,
+    "log": "results/research/frontier-selection-2026-09-20/full-suite-macos.log",
+    "sha256": "d3a2c6df504f59ee5a7077d7f9d70690f2362ed8ba561f99a7ea58f4bf86b75a",
+    "current_tests": 1182,
+    "frozen_publication_tests": 73,
+    "portfolio_checkpoint_tests": 9,
+    "total_tests": 1264
+  },
+  "failed_attempt_preserved": {
+    "command": [
+      "python3",
+      "scripts/run-unit-tests",
+      "--require-full-payload"
+    ],
+    "returncode": 1,
+    "seconds": 530.422,
+    "log": "results/research/frontier-selection-2026-09-20/full-suite.log",
+    "sha256": "b081a8aa7b3e8a90513453e33e277a15464470255a4d266583259f1612006253"
+  },
+  "failed_attempt_qualification": "Underlying runner was used before the prescribed macOS signal adapter. One timeout-status assertion failed; raw original supervisor receipt was deleted by the existing temporary fixture context, so original cause remains unresolved. No source/assertion change; the independently complete final wrapper run passed. No combined passing claim.",
+  "administrative_repair_record": "results/research/frontier-selection-2026-09-20/process-validation-repair.json",
+  "retained_supervisor_receipts": [
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/01/supervisor.json",
+      "sha256": "4167f81dfa0c6bd043501a3d2a4c88e0fab854334d472640bf61e84dbd3d0e3e",
+      "status": "INTERRUPTED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/02/inner/supervisor.json",
+      "sha256": "a26e4b7c01e18ee8ab39f33ce18bce344563ddcb176e3ce6bbf80fa45b992c6f",
+      "status": "INTERRUPTED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/02/supervisor.json",
+      "sha256": "ae16cba04440a5222a4a315e1dbddc870c30e57e05984c44078bd0f1a00eff91",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/03/supervisor.json",
+      "sha256": "009e5ce5457821f02b8d22855f3e6d2875da42fdcd513cf4dc0c02320a474a4c",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/04/supervisor.json",
+      "sha256": "e80d47debe6f6c77912c9626720a84c74d6acfa412b070255bb530483cb8e3ef",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/05/supervisor.json",
+      "sha256": "e4357098b66da162cd67856174f0eae889233fbe2b3bc98060e5e9be03dbaaee",
+      "status": "COMPLETE",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/06/supervisor.json",
+      "sha256": "d17bb77d9bb9d95f2e878d189686d6ae51b681b90eecc686b50a2c3db8ca8e3c",
+      "status": "TIMED_OUT",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/07/supervisor.json",
+      "sha256": "32b9d3343b0c7928f0bb9a77d97f775f17fcb4f6965f4a07bad559cca466676e",
+      "status": "INTERRUPTED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/08/inner/supervisor.json",
+      "sha256": "b8d53c7e1c878c1804251ca572e385237558dd1c03e3c2265c28b2fe585f9cd9",
+      "status": "INTERRUPTED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/08/supervisor.json",
+      "sha256": "d8e548657d816d4e421dffd5a67a8663213a91d718ee209df3e8c3f2c955293a",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/09/supervisor.json",
+      "sha256": "bf0cb9aa60d495a2f3c798d3c9b4e65eca12e757b06bedc1ceb7f1804a0b882c",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/10/supervisor.json",
+      "sha256": "fe793a1f30db46c1df7c1116ffdde792968bc90a044314db9abc58b62cfd8fbc",
+      "status": "FAILED",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/11/supervisor.json",
+      "sha256": "a11e6ef9c88b98c5d3fda51ac10697cfe0db6c601a804672235f0ef97d2997a5",
+      "status": "COMPLETE",
+      "cleanup_completed": true
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/12/supervisor.json",
+      "sha256": "28c32b1c9e464f5defba9fc355eba0bb3a7cf5eb223c6d4951e8fae005f8fc58",
+      "status": "TIMED_OUT",
+      "cleanup_completed": true
+    }
+  ],
+  "refresh": {
+    "command": [
+      "scripts/refresh-current-state",
+      "--log-dir",
+      "results/workflow-refresh/frontier-selection-2026-09-20-final"
+    ],
+    "status": "COMPLETE",
+    "receipt": "results/workflow-refresh/frontier-selection-2026-09-20-final/result.json",
+    "sha256": "c82791c80c3669a3672219eeedd227bc49be5eb000c640986ac45ff830f71afc"
+  },
+  "final_checks": [
+    {
+      "command": [
+        "scripts/validate-research-queue",
+        "--require-ready"
+      ],
+      "returncode": 0,
+      "seconds": 0.069,
+      "log": "results/research/frontier-selection-2026-09-20/final-check-01.log",
+      "sha256": "c26de83abdc9496cd1301470918ec39ecca1cf389ef0ae1c6504da1800d1c431"
+    },
+    {
+      "command": [
+        "scripts/build-project-review",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 27.34,
+      "log": "results/research/frontier-selection-2026-09-20/final-check-02.log",
+      "sha256": "e44131237c601731ba4124e9f337b505cdb897168045cc163871d86e5063062c"
+    },
+    {
+      "command": [
+        "scripts/build-external-contributions",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 0.095,
+      "log": "results/research/frontier-selection-2026-09-20/final-check-03.log",
+      "sha256": "560184e42e5a737377ebbccd5d95321e66748a007a28a8109f2ec1b867a582d3"
+    },
+    {
+      "command": [
+        "scripts/artifact-status",
+        "--require-current"
+      ],
+      "returncode": 0,
+      "seconds": 12.244,
+      "log": "results/research/frontier-selection-2026-09-20/final-check-04.log",
+      "sha256": "00d224ba5d4e2a20d669642bc2b39a05f4ad5a3c8452452c87ed5296295fcd3c"
+    },
+    {
+      "command": [
+        "git",
+        "diff",
+        "--check"
+      ],
+      "returncode": 0,
+      "seconds": 0.04,
+      "log": "results/research/frontier-selection-2026-09-20/final-check-05.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ],
+  "preservation": {
+    "original_item_budgets_unchanged": true,
+    "completed_queue_records_unchanged_except_priority": true,
+    "scientific_snapshot_unchanged_except_producing_revision": true,
+    "historical_kiota_closure_commit": "38713bf568d82cb5411544e3a9284bb49cf1d3dc",
+    "original_kiota_validator_and_tests_preserved_in_commit": true,
+    "old_kiota_scientific_result_and_work_closure_bytes_unchanged": true
+  },
+  "pilot_launches": 0,
+  "new_scientific_artifacts": 0,
+  "external_research_writes": 0
+}

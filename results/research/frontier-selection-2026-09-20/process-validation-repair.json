@@ -1,0 +1,158 @@
+{
+  "schema_version": 1,
+  "scope": "Administrative validation only, not the unstarted research pilot.",
+  "status": "COMPLETE",
+  "failure_log": "results/research/frontier-selection-2026-09-20/full-suite.log",
+  "cause": "UNRESOLVED: original default fixture context deleted raw supervisor receipts; retained assertion is INTERRUPTED != TIMED_OUT. The existing macOS adapter is prescribed by repository policy, not proof of original cause.",
+  "policy": "docs/AGENT_WORKFLOW.md requires scripts/run-unit-tests-with-signal-retry --require-full-payload on macOS. Original process source and assertions remain unchanged.",
+  "sources": [
+    {
+      "path": "docs/AGENT_WORKFLOW.md",
+      "sha256": "a4b99761e5ef45fa42b3e6544eb17017a801c3dab32e20b3c3347fa815b97e7c",
+      "bytes": 13517
+    },
+    {
+      "path": "scripts/run-unit-tests",
+      "sha256": "499c89180814f0bbda8ec064a537778c934e5b2afb33a68a0471b71136ed09ac",
+      "bytes": 5882
+    },
+    {
+      "path": "scripts/run-unit-tests-with-signal-retry",
+      "sha256": "28b380c7f1d199355fe1a80c56fa11d23bf2118291a47a18f802904a007ae6e6",
+      "bytes": 435
+    },
+    {
+      "path": "lib/cvc_signal_retry.py",
+      "sha256": "5324c4214c57248198c28b9140864b4e0cd4c84b124396e6d0e5cf9e4aeb138f",
+      "bytes": 2480
+    },
+    {
+      "path": "lib/cvc_process.py",
+      "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c",
+      "bytes": 8271
+    },
+    {
+      "path": "lib/cvc_fixture_budget.py",
+      "sha256": "06a922da444bb13b43821c6a1f794f4b942a13873800f2b869564ca44c6d21d1",
+      "bytes": 6114
+    },
+    {
+      "path": "tests/test_cvc_process.py",
+      "sha256": "13429aa0e167649ed90e15101e23883caa882f6522438e5f1476e03474280538",
+      "bytes": 4237
+    },
+    {
+      "path": "tests/cvc_runner2_fixture.py",
+      "sha256": "f4c04300b18d0be2849fbfbb6c41749dc588c78fcf16eab6e4b9f0384b6f11a6",
+      "bytes": 1323
+    }
+  ],
+  "prior_attempt": {
+    "cvc_fixture_reserved_processes": 15,
+    "cvc_fixture_process_seconds": "UNKNOWN; conservatively charge all 75 reserved process-seconds for aggregate accounting. Full suite wall time retained separately.",
+    "temporary_raw_receipts": "Not retained by original default fixture context; do not manufacture per-process lifetimes."
+  },
+  "prospective_allocation": {
+    "cvc_fixture_ledger": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/results/research/frontier-selection-2026-09-20/process-validation/fixture-ledger.jsonl",
+    "max_additional_cvc_fixture_processes": 80,
+    "max_additional_cvc_fixture_process_seconds": 400,
+    "per_process_deadline_seconds": 5,
+    "planned_runs": [
+      "one unchanged focused six-test diagnostic inside existing signal_retry context",
+      "one complete suite via required macOS wrapper"
+    ],
+    "aggregate_with_failed_attempt": {
+      "max_reserved_processes": 95,
+      "max_charged_process_seconds": 475
+    },
+    "one_owner": "root",
+    "entry_gate": "Original suite terminal; retain failure and verify current absence of fixture processes before diagnostics."
+  },
+  "scientific_inputs_changed": false,
+  "pilot_launches": 0,
+  "failed_attempt": {
+    "command": [
+      "python3",
+      "scripts/run-unit-tests",
+      "--require-full-payload"
+    ],
+    "returncode": 1,
+    "seconds": 530.422,
+    "log": "results/research/frontier-selection-2026-09-20/full-suite.log",
+    "sha256": "b081a8aa7b3e8a90513453e33e277a15464470255a4d266583259f1612006253"
+  },
+  "reconciliation": "Current CVC fixture/supervisor processes absent; original individual lifetimes remain unknown.",
+  "focused_diagnostic": {
+    "command": [
+      "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+      "-c",
+      "from lib.cvc_signal_retry import signal_retry\nimport unittest\nwith signal_retry():\n    suite=unittest.defaultTestLoader.discover(\"tests\",pattern=\"test_cvc_process.py\")\n    result=unittest.TextTestRunner(verbosity=2).run(suite)\nraise SystemExit(0 if result.wasSuccessful() else 1)\n"
+    ],
+    "returncode": 0,
+    "seconds": 2.926,
+    "log": "results/research/frontier-selection-2026-09-20/process-diagnostic-adapted.log",
+    "sha256": "9353286389008d35e7afb814bdc3cdd9cf28f1d9fac87da5127f11b898bbcd5d"
+  },
+  "focused_receipts": [
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/01/supervisor.json",
+      "status": "INTERRUPTED",
+      "cleanup_completed": true,
+      "error": "supervisor cancelled",
+      "charged_seconds": 0.040526292053982615
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/02/supervisor.json",
+      "status": "FAILED",
+      "cleanup_completed": true,
+      "error": null,
+      "charged_seconds": 0.06164829107001424
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/03/supervisor.json",
+      "status": "FAILED",
+      "cleanup_completed": true,
+      "error": "FileNotFoundError: [Errno 2] No such file or directory: '/absent/cvc-fixture'",
+      "charged_seconds": 0.002524999901652336
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/04/supervisor.json",
+      "status": "FAILED",
+      "cleanup_completed": true,
+      "error": null,
+      "charged_seconds": 2.033658916945569
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/05/supervisor.json",
+      "status": "COMPLETE",
+      "cleanup_completed": true,
+      "error": null,
+      "charged_seconds": 0.03982079110573977
+    },
+    {
+      "path": "results/research/frontier-selection-2026-09-20/process-validation/fixtures/06/supervisor.json",
+      "status": "TIMED_OUT",
+      "cleanup_completed": true,
+      "error": "process deadline",
+      "charged_seconds": 0.6050413749180734
+    }
+  ],
+  "full_suite": {
+    "command": [
+      "scripts/run-unit-tests-with-signal-retry",
+      "--require-full-payload"
+    ],
+    "returncode": 0,
+    "seconds": 513.486,
+    "log": "results/research/frontier-selection-2026-09-20/full-suite-macos.log",
+    "sha256": "d3a2c6df504f59ee5a7077d7f9d70690f2362ed8ba561f99a7ea58f4bf86b75a"
+  },
+  "administrative_totals": {
+    "new_reserved_cvc_fixture_processes": 30,
+    "new_charged_cvc_fixture_process_seconds": 13.016432292875834,
+    "prior_reserved_processes": 15,
+    "prior_conservative_charged_process_seconds": 75,
+    "aggregate_reserved_processes": 45,
+    "aggregate_conservative_charged_process_seconds": 88.01643229287583
+  }
+}
