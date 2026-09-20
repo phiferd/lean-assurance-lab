@@ -23,12 +23,12 @@ SUCCESS while preserving pilot 1 unchanged. Its exact final matrix executed
 eight eligible cells and retained four preregistered ineligible dispositions;
 all four within-checker original/variant relations preserved ACCEPT. The package
 is retained as a local conformance asset. `SURVIVOR-THREAD-ONE-DETERMINISM-1`
-is selected READY and unstarted as the feasible reserve successor.
+is now ACTIVE as the feasible bounded successor.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
 confined to replaceable supervision. At closure the existing one-thread source
-assessment remains the only fully gated READY item. Pipeline completeness is the
+assessment is the only fully gated item and is now ACTIVE. Pipeline completeness is the
 next practical discovery alternative after its receipt-semantics protocol gate;
 valid-term generation follows because its typing oracle and generator demand
 more construction. These are ordinal judgments, not estimated defect rates.
@@ -66,11 +66,10 @@ bounded investigation. Ordinary implementation repairs remain inside that item.
 
 ## Reserves and preserved work
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` remains READY at rank 11 under its unchanged
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` is ACTIVE at rank 11 under its unchanged
 [original plan](SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): 60 cumulative active
-minutes, eight local inspections, no network or launches. It is a feasible
-reserve, but explaining that historical operational boundary currently offers
-less transferable discovery value. No original budget or counter is reset.
+minutes, eight local inspections, no network or launches. It is a bounded source
+assessment; no original budget or counter is reset.
 
 The theorem companion, original CVC-4/CVC-5 and independent transfer intake retain
 their exact unmet gates and scopes. The nine new candidates neither inherit nor

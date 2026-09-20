@@ -71,7 +71,8 @@ research directions.
   of no observed representation sensitivity, not global invariance. Retain the
   package as a local conformance asset; no external action now. See the
   [report](../results/research/metamorphic-representation-pilot-2/report.md).
-  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is selected READY and unstarted.
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is now ACTIVE under its separate
+  source-only assessment plan.
 
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-1` on 2026-09-20 with
   BOUNDED_UNRESOLVED at its exact 8/8 tooling-attempt cap. The source/reuse and
@@ -2959,7 +2960,7 @@ no external action is recommended now.
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
-| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | READY, selected and unstarted |
+| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | ACTIVE, source-only assessment |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan. Reassess actual value and
@@ -2988,12 +2989,11 @@ rejection test. Focused 2/2 and all 155 current tests passed at bound
 and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
 preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-Retain `SURVIVOR-THREAD-ONE-DETERMINISM-1` READY, selected and unstarted under
-its unchanged [original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md):
-60 cumulative active minutes, eight local inspections and no network or launches.
-No deterministic trigger is required before that source assessment; later
-execution retains a separate gate. Bind a fresh work record, exact historical
-inputs and determinism rubric before analysis. The theorem companion remains
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` is ACTIVE under its unchanged
+[original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): 60 cumulative
+active minutes, eight local inspections and no network or launches. Its fresh
+work record, exact historical inputs and determinism rubric are bound before
+analysis; later execution retains a separate gate. The theorem companion remains
 PLANNED without distinct-risk evidence, original CVC-4/CVC-5 gates remain unmet,
 and transfer intake still lacks its required independent external package.
 
@@ -3100,11 +3100,10 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item: the selected and unstarted
-one-thread source assessment. The wider horizon still includes nine independently
-gated PLANNED discovery candidates. Pilot 1 remains frozen at its tooling cap;
-pilot 2 is its successful separate continuation and retains the completed
-reusable package.
+The canonical queue has one ACTIVE item: the bounded one-thread source
+assessment. The wider horizon still includes nine independently gated PLANNED
+discovery candidates. Pilot 1 remains frozen at its tooling cap; pilot 2 is its
+successful separate continuation and retains the completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

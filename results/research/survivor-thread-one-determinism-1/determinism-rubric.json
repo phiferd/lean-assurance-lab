@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+  "question": "Can the public num_threads=1 branch change induced by nanoda-gen-2bdfe18a9ec2 be observed through a fixed, locally controllable baseline/mutant protocol without ambient resource exhaustion?",
+  "frozen_scope": {
+    "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "mutation_id": "nanoda-gen-2bdfe18a9ec2",
+    "original_predicate": "self.config.num_threads > 1",
+    "mutated_predicate": "self.config.num_threads >= 1",
+    "public_configuration_class": "ONE",
+    "baseline_dispatch": "SERIAL",
+    "mutant_dispatch": "PARALLEL_ONE_WORKER"
+  },
+  "deterministic_protocol_requirements": [
+    "Use the same fixed public configuration and same immutable input bytes for baseline and mutant.",
+    "State an exact observable outcome difference attributable to the serial versus scoped-worker dispatch boundary.",
+    "Specify a locally controllable trigger independent of ambient thread limits, host memory pressure, scheduler timing or arbitrary caller-stack accidents.",
+    "Bind baseline/mutant binaries, process timeout, cleanup and exact diagnostic or outcome predicate before any future launch.",
+    "Show that a matching control prevents ordinary declaration rejection or unrelated parsing from satisfying the distinction."
+  ],
+  "source_facts_to_test_against": [
+    "Successful non-panicking one-worker dispatch has the same one-per-declaration coverage as serial dispatch.",
+    "Parallel dispatch changes the worker stack to 16 MiB and adds spawn_scoped unwrap and joined-panic surfaces absent from serial dispatch.",
+    "Source does not fix scheduler order, host thread-creation success, caller stack depth or panic payload beyond the join path."
+  ],
+  "allowed_terminal_recommendations": [
+    "PROTOCOL_CANDIDATE_FOR_SEPARATE_AUTHORIZATION only if every deterministic protocol requirement is source-supported.",
+    "SOURCE_SUPPORTED_PERFORMANCE_OR_OPERATIONAL_CLASSIFICATION if source bounds the difference without claiming semantic authority.",
+    "BOUNDED_UNRESOLVED if the exact trigger remains ambient, nondeterministic or lacks a matching control."
+  ],
+  "prohibitions": [
+    "No network, build, checker, Lean proof, scientific-byte generation, mutation generation or external action during this item.",
+    "Do not relabel the historical SURVIVED status or use matching finite test outcomes as outcome equivalence.",
+    "Do not treat process failure, thread exhaustion, host stack variation or timing as a deterministic witness."
+  ],
+  "semantic_authority": false
+}
