@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "tooling_revision": 6,
+  "reviewed_at": "2026-09-20",
+  "reviewer": "root separate static repair and generation-boundary review",
+  "scope": "Process-supervision repair, exact-ceiling regression, and bounded four-variant generation controller; no scientific checker was invoked for this review.",
+  "runner": {
+    "path": "lib/metamorphic_pilot_runner.py",
+    "sha256": "b16bbe09b12705414033f7fb296c89753bee079a060c2477014cbb971432fd8b",
+    "findings": [
+      "Session creation is delegated to subprocess start_new_session and the preexec function performs only hard RLIMIT_AS enforcement.",
+      "The experiment ceiling remains exactly 2147483648 bytes; no limit or cleanup gate was weakened.",
+      "The regression now tests the exact frozen ceiling and requires an attempted 3 GiB allocation to fail with MemoryError.",
+      "Timeout cleanup is tested under that same exact ceiling and still requires the process group to be absent."
+    ]
+  },
+  "generator": {
+    "path": "scripts/generate-metamorphic-pilot-variants",
+    "sha256": "636a458577046bf4832c406b5f126e997b90c1620470ac9a8643db14c910e4cf",
+    "findings": [
+      "The controller refuses a stale scientific-manifest hash, unexpected freeze identifier, changed generation bounds, changed original bindings, extra originals, extra transformations, external output paths, or existing outputs.",
+      "It generates exactly the two ordered transformations for each of two frozen originals in one bounded invocation.",
+      "Each variant is immediately decoded by the independent auditor; structural inequivalence aborts generation and no ineligible pair is promoted.",
+      "The summary binds every variant, transform report, and audit by repository path, SHA-256 and byte count."
+    ]
+  },
+  "scientific_inputs_changed": false,
+  "budget_reset": false,
+  "hidden_checker_calls": false,
+  "disposition": "APPROVE_FOR_BOUND_TOOLING_TEST_ATTEMPT_6"
+}

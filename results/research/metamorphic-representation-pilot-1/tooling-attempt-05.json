@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 5,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-05.json",
+    "sha256": "32c1a9a4bd298ad92289bb297e6f46be0e8cafd2acae5381386c0aa579a85ea4"
+  },
+  "command": ["scripts/validate-metamorphic-pilot-tooling"],
+  "exit_code": 1,
+  "wall_time_seconds": 0.013,
+  "wall_time_accounting": "Charged the larger unittest-reported duration; command transport reported 0.000001584 seconds.",
+  "tests_run": 14,
+  "test_bodies_run": 14,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "HOST_REJECTED_SUBFROZEN_MEMORY_CAP",
+  "raw_output": ".......EE.....\n======================================================================\nERROR: test_memory_limit_is_enforced (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 129, in test_memory_limit_is_enforced\n    receipt = run_supervised(argv=[sys.executable, \"-c\", script], cwd=ROOT, stdin=None,\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner.py\", line 66, in run_supervised\n    process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py\", line 971, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py\", line 1848, in _execute_child\n    raise child_exception_type(err_msg)\nsubprocess.SubprocessError: Exception occurred in preexec_fn.\n\n======================================================================\nERROR: test_timeout_kills_process_group (test_metamorphic_representation.SupervisorTests)\n----------------------------------------------------------------------\nTraceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 142, in test_timeout_kills_process_group\n    receipt = run_supervised(argv=[sys.executable, \"-c\", script], cwd=ROOT, stdin=None,\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner.py\", line 66, in run_supervised\n    process = subprocess.Popen(command, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py\", line 971, in __init__\n    self._execute_child(args, executable, preexec_fn, close_fds,\n  File \"/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py\", line 1848, in _execute_child\n    raise child_exception_type(err_msg)\nsubprocess.SubprocessError: Exception occurred in preexec_fn.\n\n----------------------------------------------------------------------\nRan 14 tests in 0.013s\n\nFAILED (errors=2)\n",
+  "diagnosis": "Separating session creation left the same failure, isolating hard RLIMIT_AS application as the failing preexec operation. Both cases used an artificial 256 MiB ceiling below the frozen 2 GiB experiment ceiling, so they did not verify whether the exact required ceiling is host-supported.",
+  "repair": "Exercise both memory enforcement and timeout cleanup at the exact frozen 2 GiB ceiling; the memory case attempts a 3 GiB allocation and must observe MemoryError."
+}

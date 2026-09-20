@@ -125,10 +125,10 @@ class SupervisorTests(unittest.TestCase):
     def test_memory_limit_is_enforced(self):
         with tempfile.TemporaryDirectory(dir=ROOT) as directory:
             prefix = Path(directory) / "memory"
-            script = "try:\n x=bytearray(512*1024*1024)\nexcept MemoryError:\n print('LIMITED')\n"
+            script = "try:\n x=bytearray(3*1024*1024*1024)\nexcept MemoryError:\n print('LIMITED')\n"
             receipt = run_supervised(argv=[sys.executable, "-c", script], cwd=ROOT, stdin=None,
                                      env=os.environ.copy(), timeout_seconds=10,
-                                     memory_bytes=256 * 1024 * 1024, raw_prefix=prefix)
+                                     memory_bytes=2 * 1024 * 1024 * 1024, raw_prefix=prefix)
             self.assertEqual(receipt["exit_code"], 0)
             self.assertTrue(receipt["cleanup_complete"])
             self.assertEqual(prefix.with_suffix(".stdout").read_text(), "LIMITED\n")
@@ -141,7 +141,7 @@ class SupervisorTests(unittest.TestCase):
                       "subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); time.sleep(30)")
             receipt = run_supervised(argv=[sys.executable, "-c", script], cwd=ROOT, stdin=None,
                                      env=os.environ.copy(), timeout_seconds=1,
-                                     memory_bytes=256 * 1024 * 1024, raw_prefix=prefix)
+                                     memory_bytes=2 * 1024 * 1024 * 1024, raw_prefix=prefix)
             self.assertTrue(receipt["timed_out"])
             self.assertTrue(receipt["cleanup_complete"])
 
