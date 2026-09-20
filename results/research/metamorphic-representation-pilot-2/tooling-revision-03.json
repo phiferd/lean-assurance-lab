@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "revision": 3,
+  "supersedes": {
+    "path": "results/research/metamorphic-representation-pilot-2/tooling-revision-02.json",
+    "sha256": "c3b0324ad361872d64a022ece9eb95090b7eae67e4e23ba850f376a9c61e9312"
+  },
+  "reason": "Run 01 exposed a fast-process observation race and dotted-prefix provenance defect. Preserve all eight attempts, pause launches, guarantee a positive process-group RSS sample through a separate inherited start-gate descriptor before exec, fail closed on missing/zero observations, and record exact raw paths.",
+  "scientific_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-1/scientific-manifest.json",
+    "sha256": "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab"
+  },
+  "run_01_audit": {
+    "path": "results/research/metamorphic-representation-pilot-2/run-01-audit.json",
+    "sha256": "bf5c0a9092549f54220ec07c7cabfa46e75b6681d9c628c77405ac1804e3b6b4"
+  },
+  "files": [
+    {"path": "lib/metamorphic_ndjson_audit.py", "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21"},
+    {"path": "lib/metamorphic_ndjson_transform.py", "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0"},
+    {"path": "lib/metamorphic_pilot_runner.py", "sha256": "fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50"},
+    {"path": "scripts/audit-metamorphic-ndjson", "sha256": "51022702bfe5459846001edb91242b43839bbc21056a5ec432778f3fdf7fe2b2"},
+    {"path": "scripts/generate-metamorphic-pilot-variants", "sha256": "25a6a582377eb0a92943a1ec9e4c867ec72db8eeeb690fba35dc2e3ac4e6a6ef"},
+    {"path": "scripts/metamorphic-ndjson-transform", "sha256": "0449ffe6b5fd955bf8da01cc9f7e400483c29363eefcfbc9b24d264f31bfb000"},
+    {"path": "scripts/run-metamorphic-representation-pilot", "sha256": "62cba51c2fd8511d7131ceb03e0204de9a4b976e88718d98e2216546e04d62a8"},
+    {"path": "scripts/validate-metamorphic-pilot-tooling", "sha256": "ded91ed6982232eba31d35b40d09fa6635e2c31e2e70b2ac3422384c287154cb"},
+    {"path": "tests/test_metamorphic_representation.py", "sha256": "71446cacb21c1d4fa6027581493b4128a14760448b489c42f7c0817f3acec8fc"},
+    {"path": "tests/test_metamorphic_supervisor.py", "sha256": "8305958aabd8a7688931c8b0ce172e5161aa0110b5985ad8ebcda085990f330e"}
+  ],
+  "validation": {
+    "command": [
+      "METAMORPHIC_SUPERVISOR_RECEIPT_DIR=results/research/metamorphic-representation-pilot-2/supervisor-validation-03",
+      "scripts/validate-metamorphic-pilot-tooling"
+    ],
+    "expected_supervisor_cases": 5,
+    "expected_representation_cases": 13,
+    "supervisor_receipt_dir": "results/research/metamorphic-representation-pilot-2/supervisor-validation-03",
+    "status": "PASS",
+    "evidence": {
+      "path": "results/research/metamorphic-representation-pilot-2/tooling-validation-03.json",
+      "sha256": "620ef5afca2683f443f433e87f13a292506fbb99a0a434c7d3cd8870ef0e1d65"
+    }
+  },
+  "launch_authority": "No confirmation launch until this exact revision passes all eighteen cases, retained receipts prove positive runtime RSS and exact raw paths, and a successor execution manifest is committed."
+}

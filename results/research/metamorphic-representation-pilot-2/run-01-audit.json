@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "run": "run-01",
+  "execution_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-2/execution-manifest.json",
+    "sha256": "e67075c973ee8a4f303b02b1370d5d8e7cdeff13973d0ef8802b3217a603f46a"
+  },
+  "raw_result": {
+    "path": "results/research/metamorphic-representation-pilot-2/run-01/result.json",
+    "sha256": "cbabcfdba0532d3c5fb5676e1c4e263b2fadc41bac8ed9d8e0ef3a787a54b165"
+  },
+  "events": {
+    "path": "results/research/metamorphic-representation-pilot-2/run-01/events.jsonl",
+    "sha256": "229f14d384b77b8371da2eba2923a0d85ef79375cc7e9ad01b8fd6f7d2fcf7da"
+  },
+  "checker_attempts_consumed": 8,
+  "raw_reported_status": "COMPLETE",
+  "audit_status": "INFRASTRUCTURE_AUDIT_FAILURE",
+  "failure": {
+    "cell": "nanoda-6ae1f0c/matching-imax-control/reverse-ready-v1",
+    "receipt_fields": {
+      "memory_monitor_samples": 0,
+      "maximum_observed_rss_bytes": 0,
+      "memory_monitor_error": null,
+      "cleanup_complete": true,
+      "exit_code": 0
+    },
+    "reason": "The plan requires runtime process-group RSS observation for every scientific child. The final fast Nanoda cell exited before the monitor sampled it, but tooling revision 02 did not fail closed on an absent sample and therefore mislabeled the run COMPLETE."
+  },
+  "secondary_provenance_defect": "Path.with_suffix replaced the dotted tail of official-profile raw prefixes. The files remained unique by ordinal and their bytes/hashes were read correctly, but the receipt raw_prefix did not identify the actual stdout/stderr path exactly.",
+  "observations_retained": "All eight raw processes exited zero and were reported ACCEPT, with no original/variant difference. These observations remain evidence from their exact tooling revision, but run 01 cannot establish the final complete matrix because one resource receipt violated the frozen audit rule.",
+  "repair_scope": "Keep every scientific byte, cell and expected relation fixed. Add a child start gate that obtains a positive process-group RSS sample before exec, fail closed on missing or zero-valued runtime RSS, record exact raw stdout/stderr paths, validate the repair, bind tooling revision 03 and use only reserved exact-cell confirmation attempts.",
+  "scientific_conclusion": "None from run 01 alone. New scientific launches remained paused after audit."
+}

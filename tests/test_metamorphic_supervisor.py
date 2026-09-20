@@ -7,7 +7,7 @@ import sys
 import tempfile
 import unittest
 
-from lib.metamorphic_pilot_runner import run_supervised
+from lib.metamorphic_pilot_runner import classify, run_supervised
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -20,7 +20,7 @@ class SupervisorTests(unittest.TestCase):
                  memory: int = PRODUCTION_MEMORY_LIMIT) -> tuple[dict, bytes, bytes]:
         def execute(directory: Path) -> tuple[dict, bytes, bytes]:
             prefix = directory / name
-            if any(prefix.with_suffix(suffix).exists()
+            if any(Path(str(prefix) + suffix).exists()
                    for suffix in (".stdout", ".stderr", ".receipt.json")):
                 self.fail(f"refusing to overwrite supervisor receipt prefix {prefix}")
             receipt = run_supervised(
@@ -28,11 +28,15 @@ class SupervisorTests(unittest.TestCase):
                 env=os.environ.copy(), timeout_seconds=timeout,
                 memory_bytes=memory, raw_prefix=prefix,
             )
-            stdout = prefix.with_suffix(".stdout").read_bytes()
-            stderr = prefix.with_suffix(".stderr").read_bytes()
-            prefix.with_suffix(".receipt.json").write_text(
+            stdout_path = Path(str(prefix) + ".stdout")
+            stderr_path = Path(str(prefix) + ".stderr")
+            stdout = stdout_path.read_bytes()
+            stderr = stderr_path.read_bytes()
+            Path(str(prefix) + ".receipt.json").write_text(
                 json.dumps(receipt, indent=2, sort_keys=True) + "\n"
             )
+            self.assertEqual(ROOT / receipt["raw_stdout_path"], stdout_path)
+            self.assertEqual(ROOT / receipt["raw_stderr_path"], stderr_path)
             return receipt, stdout, stderr
 
         retained = os.environ.get("METAMORPHIC_SUPERVISOR_RECEIPT_DIR")
@@ -49,13 +53,34 @@ class SupervisorTests(unittest.TestCase):
         detail = json.dumps(receipt, sort_keys=True)
         self.assertIsNone(receipt["memory_monitor_error"], detail)
         self.assertGreater(receipt["memory_monitor_samples"], 0, detail)
+        self.assertGreater(receipt["maximum_observed_rss_bytes"], 0, detail)
         self.assertGreater(receipt["memory_backend"]["preflight_samples"], 0, detail)
         self.assertTrue(receipt["cleanup_complete"], detail)
         self.assertIn("real_seconds", receipt["metrics"])
 
+    def test_classification_rejects_missing_runtime_sample(self):
+        receipt = {
+            "memory_monitor_error": None,
+            "memory_monitor_samples": 0,
+            "maximum_observed_rss_bytes": 0,
+            "memory_exceeded": False,
+            "timed_out": False,
+            "cleanup_complete": True,
+            "exit_code": 0,
+        }
+        self.assertEqual(
+            classify("nanoda-6ae1f0c", receipt, b"", b""),
+            ("INFRASTRUCTURE_AUDIT_FAILURE", "no child process-group RSS sample recorded"),
+        )
+        receipt["memory_monitor_samples"] = 1
+        self.assertEqual(
+            classify("nanoda-6ae1f0c", receipt, b"", b""),
+            ("INFRASTRUCTURE_AUDIT_FAILURE", "child process-group RSS samples contained no positive value"),
+        )
+
     def test_normal_exit_is_observed(self):
         receipt, stdout, stderr = self.run_case(
-            "normal", "print('supervised-ok')", timeout=5,
+            "normal.with.dots", "print('supervised-ok')", timeout=5,
         )
         self.assertEqual(receipt["exit_code"], 0, json.dumps(receipt, sort_keys=True))
         self.assertFalse(receipt["timed_out"])

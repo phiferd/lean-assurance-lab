@@ -7,6 +7,7 @@ import os
 import re
 import signal
 import subprocess
+import sys
 import threading
 import time
 from pathlib import Path
@@ -15,6 +16,12 @@ from typing import Any
 
 ROOT = Path(__file__).resolve().parents[1]
 PS = Path("/bin/ps")
+START_GATE_PROGRAM = (
+    "import os,sys; "
+    "fd=int(sys.argv[1]); target=sys.argv[2:]; "
+    "token=os.read(fd,1); os.close(fd); "
+    "sys.exit(125) if token != b'1' else os.execvpe(target[0],target,os.environ)"
+)
 
 
 class RunnerError(ValueError):
@@ -93,15 +100,29 @@ def _memory_monitor(process: subprocess.Popen[bytes], memory_bytes: int,
             pass
 
 
+def _raw_path(raw_prefix: Path, extension: str) -> Path:
+    return Path(str(raw_prefix) + extension)
+
+
 def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict[str, str],
                    timeout_seconds: int, memory_bytes: int, raw_prefix: Path) -> dict[str, Any]:
     if not PS.is_file(): raise RunnerError("/bin/ps is unavailable")
     backend = _verify_memory_monitor_backend()
     raw_prefix.parent.mkdir(parents=True, exist_ok=True)
     start = time.monotonic()
-    process = subprocess.Popen(argv, cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
-                               stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
-                               start_new_session=True)
+    gate_read, gate_write = os.pipe()
+    try:
+        process = subprocess.Popen(
+            [sys.executable, "-c", START_GATE_PROGRAM, str(gate_read), *argv],
+            cwd=cwd, stdin=subprocess.PIPE if stdin is not None else subprocess.DEVNULL,
+            stdout=subprocess.PIPE, stderr=subprocess.PIPE, env=env,
+            start_new_session=True, pass_fds=(gate_read,),
+        )
+    except BaseException:
+        os.close(gate_read)
+        os.close(gate_write)
+        raise
+    os.close(gate_read)
     stopped = threading.Event()
     monitor_state: dict[str, Any] = {
         "samples": 0,
@@ -113,9 +134,28 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         target=_memory_monitor, args=(process, memory_bytes, stopped, monitor_state), daemon=True
     )
     monitor.start()
+    sample_deadline = min(start + timeout_seconds, time.monotonic() + 2)
+    while (monitor_state["samples"] == 0 and monitor_state["monitor_error"] is None
+           and process.poll() is None and time.monotonic() < sample_deadline):
+        time.sleep(0.001)
+    if monitor_state["samples"] == 0 and monitor_state["monitor_error"] is None:
+        monitor_state["monitor_error"] = "no child process-group RSS sample before start-gate deadline"
+        try:
+            os.killpg(process.pid, signal.SIGKILL)
+        except ProcessLookupError:
+            pass
+    try:
+        if monitor_state["samples"] > 0 and monitor_state["monitor_error"] is None:
+            os.write(gate_write, b"1")
+    except BrokenPipeError:
+        if monitor_state["monitor_error"] is None:
+            monitor_state["monitor_error"] = "child start gate closed before release"
+    finally:
+        os.close(gate_write)
     timed_out = False
     try:
-        stdout, stderr = process.communicate(stdin, timeout=timeout_seconds)
+        remaining = max(0.001, timeout_seconds - (time.monotonic() - start))
+        stdout, stderr = process.communicate(stdin, timeout=remaining)
     except subprocess.TimeoutExpired:
         timed_out = True
         try: os.killpg(process.pid, signal.SIGKILL)
@@ -131,8 +171,10 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         except ProcessLookupError:
             pass
     elapsed = time.monotonic() - start
-    raw_prefix.with_suffix(".stdout").write_bytes(stdout)
-    raw_prefix.with_suffix(".stderr").write_bytes(stderr)
+    stdout_path = _raw_path(raw_prefix, ".stdout")
+    stderr_path = _raw_path(raw_prefix, ".stderr")
+    stdout_path.write_bytes(stdout)
+    stderr_path.write_bytes(stderr)
     cleanup = process.poll() is not None
     try:
         os.killpg(process.pid, 0)
@@ -162,12 +204,18 @@ def run_supervised(*, argv: list[str], cwd: Path, stdin: bytes | None, env: dict
         "memory_monitor_error": monitor_state["monitor_error"],
         "cleanup_complete": cleanup and process_group_absent,
         "raw_prefix": str(raw_prefix.relative_to(ROOT)),
+        "raw_stdout_path": str(stdout_path.relative_to(ROOT)),
+        "raw_stderr_path": str(stderr_path.relative_to(ROOT)),
     }
 
 
 def classify(profile: str, receipt: dict[str, Any], stdout: bytes, stderr: bytes) -> tuple[str, str]:
     if receipt["memory_monitor_error"]:
         return "INFRASTRUCTURE_AUDIT_FAILURE", "resident-memory observation failed"
+    if receipt["memory_monitor_samples"] <= 0:
+        return "INFRASTRUCTURE_AUDIT_FAILURE", "no child process-group RSS sample recorded"
+    if receipt["maximum_observed_rss_bytes"] <= 0:
+        return "INFRASTRUCTURE_AUDIT_FAILURE", "child process-group RSS samples contained no positive value"
     if receipt["memory_exceeded"]:
         return "CRASH", "resident-memory ceiling exceeded and process group was killed"
     if receipt["timed_out"]: return "TIMEOUT", "process exceeded frozen timeout"
@@ -265,8 +313,8 @@ def execute_manifest(path: Path) -> dict[str, Any]:
             receipt = run_supervised(argv=argv, cwd=cwd, stdin=stdin, env=env,
                                      timeout_seconds=manifest["timeout_seconds"], memory_bytes=manifest["memory_bytes"],
                                      raw_prefix=raw_prefix)
-            stdout = raw_prefix.with_suffix(".stdout").read_bytes()
-            stderr = raw_prefix.with_suffix(".stderr").read_bytes()
+            stdout = _raw_path(raw_prefix, ".stdout").read_bytes()
+            stderr = _raw_path(raw_prefix, ".stderr").read_bytes()
             outcome, reason = classify(profile["id"], receipt, stdout, stderr)
             row = {"ordinal": number, "cell": cell, "input_path": str(input_path.relative_to(ROOT)),
                    "input_sha256": sha256(input_path), "outcome": outcome, "reason": reason, "receipt": receipt}
