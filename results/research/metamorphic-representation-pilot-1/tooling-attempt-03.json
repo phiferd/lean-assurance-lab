@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "attempt": 3,
+  "tooling_revision": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-revision-03.json",
+    "sha256": "1db240ebe0a0048f6d9d380f27b152da21a0ea5c814a4097716b732803a1f710"
+  },
+  "command": ["scripts/validate-metamorphic-pilot-tooling"],
+  "exit_code": 1,
+  "wall_time_seconds": 0.001,
+  "wall_time_accounting": "Conservative minimum charge because the command transport reported 0.000005459 seconds.",
+  "tests_run": 0,
+  "test_bodies_run": 0,
+  "checker_attempts": 0,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "TEST_MODULE_IMPORT_PATH",
+  "raw_output": "Traceback (most recent call last):\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/scripts/validate-metamorphic-pilot-tooling\", line 32, in <module>\n    raise SystemExit(main())\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/scripts/validate-metamorphic-pilot-tooling\", line 21, in main\n    spec.loader.exec_module(module)\n  File \"<frozen importlib._bootstrap_external>\", line 883, in exec_module\n  File \"<frozen importlib._bootstrap>\", line 241, in _call_with_frames_removed\n  File \"/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/tests/test_metamorphic_representation.py\", line 11, in <module>\n    from lib.metamorphic_ndjson_audit import AuditError, audit_pair\nModuleNotFoundError: No module named 'lib'\n",
+  "diagnosis": "The exact-file loader reached the bound test module, but execution did not place the repository root on sys.path, so the test's repository-local lib imports failed before suite construction or any test body ran.",
+  "repair": "Prepend the resolved repository root to sys.path before executing the exact bound test module; retain the exact-file and fourteen-case locks."
+}
