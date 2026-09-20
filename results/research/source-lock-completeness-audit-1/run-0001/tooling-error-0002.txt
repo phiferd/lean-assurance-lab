@@ -1,0 +1,19 @@
+Command: scripts/execute-source-lock-completeness-audit
+Exit status: 1
+Classification: controller/tooling failure after static source scanning, before audit ledger write.
+
+Traceback (most recent call last):
+  File "scripts/execute-source-lock-completeness-audit", line 8, in <module>
+    raise SystemExit(main())
+  File "lib/source_lock_completeness_audit.py", line 170, in main
+    value = validate(root) if validate_only else execute(root)
+  File "lib/source_lock_completeness_audit.py", line 161, in execute
+    output.parent.mkdir(parents=True, exist_ok=False)
+  File "pathlib.py", line 1175, in mkdir
+    self._accessor.mkdir(self, mode)
+FileExistsError: [Errno 17] File exists: "results/research/source-lock-completeness-audit-1/run-0001"
+
+The R2 static parser reached its output step after binding and scanning the
+locked source files. It did not write an audit ledger because R1's preserved
+tooling-error file had already created the run directory. No Cargo build,
+checker, network request, source retrieval or byte substitution occurred.

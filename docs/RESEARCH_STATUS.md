@@ -66,9 +66,10 @@ research directions.
   substituted within this item, so no observer, control or candidate cell ran.
   This is a source-materialization boundary, not an acceptance, semantic or
   current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE
-  under committed source-only static-audit bindings. Its first controller
-  attempt found a binding-shape engineering error before reading pinned source
-  content; an R2 tooling-only repair is committed and no build, checker or
+  under committed source-only static-audit bindings. Its R1 controller attempt
+  found a binding-shape error before reading pinned source content; R2 scanned
+  the locked source but could not write its ledger beside the preserved R1
+  error. An R3 output-path-only repair is committed; no build, checker or
   network operation occurred.
 
 - Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
@@ -2965,10 +2966,10 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `SOURCE-LOCK-COMPLETENESS-AUDIT-1`.
 
-Its R2 entry package preserves the first controller incident and is committed
-before static inspection. The current work is limited to a source-only ledger
-of compile-time Rust inclusion dependencies; it performs no build, checker
-launch, network request, byte substitution or source retrieval.
+Its R3 entry package preserves both controller incidents and is committed before
+the static ledger. The current work is limited to a source-only ledger of
+compile-time Rust inclusion dependencies; it performs no build, checker launch,
+network request, byte substitution or source retrieval.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified

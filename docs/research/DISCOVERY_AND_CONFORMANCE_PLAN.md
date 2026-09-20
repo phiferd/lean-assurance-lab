@@ -29,8 +29,9 @@ BOUNDED_UNRESOLVED after its first actual offline build exposed an omitted
 `README.md` dependency in the frozen source inventory. Its source-only successor
 `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE under its committed
 source-only static-audit bindings. Its first audit-controller attempt exposed a
-binding-shape error before source content was read; the preserving R2
-audit-tooling repair is now committed for its single allowed static ledger.
+binding-shape error before source content was read; R2 then scanned the locked
+sources but could not write its ledger beside the preserved R1 error. The
+preserving R3 audit-output repair is committed for the single allowed ledger.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was

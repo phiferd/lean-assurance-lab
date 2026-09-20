@@ -7,9 +7,11 @@ does not retrieve a missing source byte, rebuild Nanoda, or reopen the bounded
 child-panic result.
 
 The initial R1 static-audit controller rejected the source-lock row shape before
-reading pinned source content. Its preserved tooling repair validates the row's
-path/hash and attested byte count separately. R2 changes no frozen source,
-scope or claimed disposition and remains the same bounded audit.
+reading pinned source content. R2 validated the row shape and scanned the
+locked source files, but could not write beside R1's preserved error evidence.
+R3 permits that existing evidence directory while still refusing to overwrite
+the ledger. These repairs change no frozen source, scope or claimed disposition
+and remain the same bounded audit.
 
 ## Question
 

@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "item_id": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+  "kind": "ENGINEERING_STATIC_AUDIT_REPAIR",
+  "recorded_at": "2026-09-20T22:12:00Z",
+  "classification": "PREEXISTING_AUDIT_OUTPUT_DIRECTORY",
+  "prior_tooling_repair": {
+    "path": "results/research/source-lock-completeness-audit-1/tooling-repair-0001.json",
+    "sha256": "1203f9ad2cce831eebd2edfa480c3ea0ab468e8f3e60710ea1d579d9fb22c08b"
+  },
+  "failed_attempt": {
+    "command": "scripts/execute-source-lock-completeness-audit",
+    "exit_status": 1,
+    "raw_error": {
+      "path": "results/research/source-lock-completeness-audit-1/run-0001/tooling-error-0002.txt",
+      "sha256": "a9935e3a50761ce9dc2abe6bc873d23a90541a0e08a97c64d73352474fd3846f"
+    },
+    "source_setup_inspections": 1,
+    "static_source_scan_reached_output_step": true
+  },
+  "no_build_checker_or_network_process": true,
+  "repair": {
+    "new_tooling_revision": "R3",
+    "change": "Allow an existing run directory that contains preserved prior error evidence, while refusing to overwrite audit.json.",
+    "scope": "Audit-output-path-only repair; no frozen source, Cargo metadata, export byte, mutation, expected disposition or scientific claim changes."
+  },
+  "continuation": "Commit an R3 manifest and work record, rerun only the static source-lock ledger, and preserve both prior failed attempts as engineering evidence."
+}

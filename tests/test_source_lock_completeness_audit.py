@@ -30,6 +30,13 @@ class SourceLockAuditTests(unittest.TestCase):
                 "path": "src/main.rs", "sha256": audit.sha(source), "bytes": source.stat().st_size}}
             self.assertEqual(audit.source_file(root, row), source)
 
+    def test_allows_existing_error_directory_for_new_ledger(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            existing = root / audit.OUT
+            existing.mkdir(parents=True)
+            self.assertEqual(audit.prepare_output(root), existing / "audit.json")
+
 
 if __name__ == "__main__":
     unittest.main()

@@ -15,16 +15,16 @@ ITEM = "SOURCE-LOCK-COMPLETENESS-AUDIT-1"
 RUN = "source-lock-completeness-audit-0001"
 BASE = "results/research/source-lock-completeness-audit-1"
 OUT = BASE + "/run-0001"
-WORK = BASE + "/work-record-r2.json"
+WORK = BASE + "/work-record-r3.json"
 ENTRY = BASE + "/entry-decision.json"
-MANIFEST = "config/source-lock-completeness-audit-0001-r2.json"
+MANIFEST = "config/source-lock-completeness-audit-0001-r3.json"
 PLAN = "docs/research/SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md"
 LOCK = "results/research/alt-survivors-2026-09-08/source-lock.json"
 SOURCE_ROOT = "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda"
 CHILD_CLOSURE = "results/research/survivor-thread-one-child-panic-regression-1/work-closure.json"
 CHILD_AUDIT = "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json"
-RECEIPT = BASE + "/focused-test-receipt-r2.json"
-REPAIR = BASE + "/tooling-repair-0001.json"
+RECEIPT = BASE + "/focused-test-receipt-r3.json"
+REPAIR = BASE + "/tooling-repair-0002.json"
 INCLUDE = re.compile(r"(?P<macro>include_(?:str|bytes))!\s*\(\s*\"(?P<literal>[^\"]+)\"\s*\)")
 CODE = [
     "lib/source_lock_completeness_audit.py",
@@ -77,6 +77,13 @@ def source_file(root: Path, row: dict) -> Path:
     return path
 
 
+def prepare_output(root: Path) -> Path:
+    output = safe(root, OUT + "/audit.json", exists=False)
+    require(not output.exists(), "refuse audit overwrite")
+    output.parent.mkdir(parents=True, exist_ok=True)
+    return output
+
+
 def validate(root: Path, *, launch: bool = False) -> dict:
     root = Path(root).resolve()
     manifest = load(safe(root, MANIFEST))
@@ -88,7 +95,7 @@ def validate(root: Path, *, launch: bool = False) -> dict:
             "manifest identity differs")
     work = load(exact(root, manifest["work_record"], WORK, manifest["work_record"]["sha256"]))
     require(work["item_id"] == ITEM and work["status"] == "ACTIVE"
-            and work["authorization"] == AUTHORIZATION and work["source_setup_inspections"] == 1,
+            and work["authorization"] == AUTHORIZATION and work["source_setup_inspections"] == 2,
             "work record differs")
     entry = load(exact(root, manifest["entry_decision"], ENTRY, manifest["entry_decision"]["sha256"]))
     require(entry["item_id"] == ITEM and entry["authorization"] == "Do the work!!"
@@ -105,7 +112,7 @@ def validate(root: Path, *, launch: bool = False) -> dict:
           "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35")
     repair = load(exact(root, manifest["tooling_repair"], REPAIR,
                         manifest["tooling_repair"]["sha256"]))
-    require(repair["item_id"] == ITEM and repair["classification"] == "LOCK_ROW_BINDING_SHAPE_MISMATCH"
+    require(repair["item_id"] == ITEM and repair["classification"] == "PREEXISTING_AUDIT_OUTPUT_DIRECTORY"
             and repair["no_build_checker_or_network_process"] is True,
             "tooling repair differs")
     require([row["path"] for row in manifest["tooling_inputs"]] == CODE, "tooling inventory differs")
@@ -134,8 +141,7 @@ def validate(root: Path, *, launch: bool = False) -> dict:
 def execute(root: Path) -> dict:
     root = Path(root).resolve()
     bundle = validate(root, launch=True)
-    output = safe(root, OUT + "/audit.json", exists=False)
-    require(not output.exists(), "refuse audit overwrite")
+    output = prepare_output(root)
     locked = {row["source_path"] for row in bundle["lock"]["files"]}
     rows: list[dict] = []
     for row in bundle["lock"]["files"]:
@@ -152,13 +158,12 @@ def execute(root: Path) -> dict:
                                         else "MISSING_FROM_LOCK")
             rows.append(directive)
     result = {
-        "schema_version": 1, "item_id": ITEM, "run_id": RUN, "audit_revision": "R2", "generated_at": now(),
+        "schema_version": 1, "item_id": ITEM, "run_id": RUN, "audit_revision": "R3", "generated_at": now(),
         "source_lock": bundle["manifest"]["source_lock"], "source_file_count": len(locked),
         "directives": rows,
         "missing": [row for row in rows if row["disposition"] != "LOCKED"],
         "claim_limit": "Static source-dependency inventory only; no build, checker, network or source-byte retrieval occurred.",
     }
-    output.parent.mkdir(parents=True, exist_ok=False)
     atomic(output, result)
     return result
 
