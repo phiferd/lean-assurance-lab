@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "diagnosed_at": "2026-09-20",
+  "predecessor_snapshot_commit": "4e4128c034cfe930c032b40881d0ec6fd6e97247",
+  "question": "Why did both pilot-1 supervisor controls terminate in about two milliseconds without setting memory_exceeded or timed_out?",
+  "reproduction": {
+    "command": [
+      "PYTHONPATH=.",
+      "python3",
+      "tests/test_metamorphic_representation.py",
+      "SupervisorTests",
+      "-v"
+    ],
+    "execution_context": "restricted repository command sandbox",
+    "tests_run": 2,
+    "tests_failed": 2,
+    "memory_receipt_excerpt": {
+      "exit_code": -9,
+      "elapsed_seconds": 0.0025819999864324927,
+      "memory_exceeded": false,
+      "memory_monitor_samples": 0,
+      "maximum_observed_rss_bytes": 0,
+      "memory_monitor_error": "PermissionError: [Errno 1] Operation not permitted: '/bin/ps'",
+      "timed_out": false,
+      "cleanup_complete": true
+    },
+    "timeout_receipt_excerpt": {
+      "exit_code": -9,
+      "elapsed_seconds": 0.002031582989729941,
+      "memory_exceeded": false,
+      "memory_monitor_samples": 0,
+      "maximum_observed_rss_bytes": 0,
+      "memory_monitor_error": "PermissionError: [Errno 1] Operation not permitted: '/bin/ps'",
+      "timed_out": false,
+      "cleanup_complete": true
+    }
+  },
+  "root_cause": "The monitor thread invoked /bin/ps after launching the child. The restricted command sandbox denied that process-list operation. The monitor error handler correctly killed the new process group, but the tests did not include the receipt in their assertion messages, so pilot 1 could not distinguish this fail-closed infrastructure path from a child that exited on its own.",
+  "confirmation": {
+    "command": [
+      "PYTHONPATH=.",
+      "python3",
+      "tests/test_metamorphic_representation.py",
+      "SupervisorTests",
+      "-v"
+    ],
+    "execution_context": "host context with macOS /bin/ps permission",
+    "tests_run": 2,
+    "tests_passed": 2,
+    "seconds": 1.087
+  },
+  "repair": "Probe the sampled-RSS backend before launching any child, identify the backend and preflight sample in every receipt, keep fail-closed monitoring after launch, split supervisor controls from transformation controls, include receipts in all assertion failures, retain raw receipts for the bound validation run, and add normal/nonzero plus child-memory and child-timeout process-group cases.",
+  "scientific_effect": "None. No variant was generated and no checker was invoked while diagnosing or validating the supervisor."
+}

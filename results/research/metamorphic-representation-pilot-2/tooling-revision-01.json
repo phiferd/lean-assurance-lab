@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "revision": 1,
+  "purpose": "Recover pilot-1 transformation/audit tooling and repair the host-native supervisor with prelaunch capability detection, observable receipts and split validation surfaces.",
+  "scientific_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-1/scientific-manifest.json",
+    "sha256": "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab"
+  },
+  "predecessor_snapshot_commit": "4e4128c034cfe930c032b40881d0ec6fd6e97247",
+  "diagnosis": {
+    "path": "results/research/metamorphic-representation-pilot-2/supervisor-diagnosis-01.json",
+    "sha256": "5786264b2547a9e05868149cd4670e01265ec186cbe58a36f4a1e645b8e14a13"
+  },
+  "files": [
+    {"path": "lib/metamorphic_ndjson_audit.py", "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21"},
+    {"path": "lib/metamorphic_ndjson_transform.py", "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0"},
+    {"path": "lib/metamorphic_pilot_runner.py", "sha256": "5a03135d96c856d10ebe0fe0975af3e8e0204a5072f599553e371d8781642942"},
+    {"path": "scripts/audit-metamorphic-ndjson", "sha256": "51022702bfe5459846001edb91242b43839bbc21056a5ec432778f3fdf7fe2b2"},
+    {"path": "scripts/generate-metamorphic-pilot-variants", "sha256": "636a458577046bf4832c406b5f126e997b90c1620470ac9a8643db14c910e4cf"},
+    {"path": "scripts/metamorphic-ndjson-transform", "sha256": "0449ffe6b5fd955bf8da01cc9f7e400483c29363eefcfbc9b24d264f31bfb000"},
+    {"path": "scripts/run-metamorphic-representation-pilot", "sha256": "62cba51c2fd8511d7131ceb03e0204de9a4b976e88718d98e2216546e04d62a8"},
+    {"path": "scripts/validate-metamorphic-pilot-tooling", "sha256": "5593310c4687e98f1f35ceb6c4307a3d7b6d03c73d334c092d735c9ebbccb840"},
+    {"path": "tests/test_metamorphic_representation.py", "sha256": "cc17b9a504751cc536b8e487ec1a0659fb1dd3dc0a2f6af5220b4f2fa1737b7e"},
+    {"path": "tests/test_metamorphic_supervisor.py", "sha256": "278ec931ef8e544dfecf18421a5a71506e6e2409fc7e653b658c8794a4d42d69"}
+  ],
+  "validation": {
+    "command": [
+      "METAMORPHIC_SUPERVISOR_RECEIPT_DIR=results/research/metamorphic-representation-pilot-2/supervisor-validation-01",
+      "scripts/validate-metamorphic-pilot-tooling"
+    ],
+    "expected_supervisor_cases": 4,
+    "expected_representation_cases": 12,
+    "supervisor_receipt_dir": "results/research/metamorphic-representation-pilot-2/supervisor-validation-01",
+    "status": "PASS",
+    "evidence": {
+      "path": "results/research/metamorphic-representation-pilot-2/tooling-validation-01.json",
+      "sha256": "4db7c1906bcae8f23c803829ecd45e32a346b3019441b3416f128c8ee7c1d4e7"
+    }
+  },
+  "generation_authority": "No generation until the exact bound revision passes all sixteen cases in a host context that permits the declared macOS process-inspection backend."
+}

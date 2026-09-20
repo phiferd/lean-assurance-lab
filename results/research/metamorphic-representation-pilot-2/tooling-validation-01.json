@@ -1,0 +1,87 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "tooling_revision": 1,
+  "command": [
+    "METAMORPHIC_SUPERVISOR_RECEIPT_DIR=results/research/metamorphic-representation-pilot-2/supervisor-validation-01",
+    "scripts/validate-metamorphic-pilot-tooling"
+  ],
+  "execution_context": "host context with macOS /bin/ps process inspection permitted",
+  "status": "PASS",
+  "generation_requested": false,
+  "variants_generated": 0,
+  "checker_attempts": 0,
+  "suites": [
+    {
+      "name": "host-native supervisor",
+      "tests": 4,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 1.239,
+      "coverage": [
+        "normal zero exit and stdout retention",
+        "nonzero exit and stderr retention",
+        "child-process RSS breach detection plus whole-group kill and cleanup",
+        "child-process timeout plus whole-group kill and cleanup"
+      ]
+    },
+    {
+      "name": "transformation and independent preservation audit",
+      "tests": 12,
+      "failures": 0,
+      "errors": 0,
+      "seconds": 0.009,
+      "coverage": [
+        "reverse-ready nonidentity pairs",
+        "round-robin preserved but delta-ineligible pairs",
+        "byte determinism",
+        "identity decode/encode structural round-trip",
+        "unknown transformation rejection",
+        "changed let value rejection",
+        "changed imax constructor rejection",
+        "missing record rejection",
+        "duplicate/non-contiguous identifier rejection",
+        "invalid reference rejection",
+        "unknown tag rejection",
+        "extra field rejection"
+      ]
+    }
+  ],
+  "supervisor_receipts": [
+    {
+      "case": "child-memory-breach",
+      "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-01/memory.receipt.json",
+      "sha256": "9feb9172a4079445a4f4b243f9dbc1da75e6ba7a0057e6db14c80b9e545df1cb",
+      "expected": {"memory_exceeded": true, "timed_out": false, "cleanup_complete": true}
+    },
+    {
+      "case": "nonzero-exit",
+      "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-01/nonzero.receipt.json",
+      "sha256": "6756af44b56a3b8d0855ccfb60f6d4787520476c72838b1ed334728254fca24c",
+      "expected": {"exit_code": 7, "timed_out": false, "cleanup_complete": true}
+    },
+    {
+      "case": "normal-exit",
+      "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-01/normal.receipt.json",
+      "sha256": "e131cc87d13acae063410465da48633cee831c443727b660067150cf4e424c34",
+      "expected": {"exit_code": 0, "timed_out": false, "cleanup_complete": true}
+    },
+    {
+      "case": "child-timeout",
+      "path": "results/research/metamorphic-representation-pilot-2/supervisor-validation-01/timeout.receipt.json",
+      "sha256": "b7113a647cc6a941fdc5dabe1a3749598c4397b36fe6cee3fa09a14d6a188d69",
+      "expected": {"memory_exceeded": false, "timed_out": true, "cleanup_complete": true}
+    }
+  ],
+  "receipt_summary": {
+    "backend": "macos-ps-process-group-rss-v2",
+    "all_preflight_sample_counts_positive": true,
+    "all_runtime_sample_counts_positive": true,
+    "all_monitor_errors_null": true,
+    "all_cleanup_complete": true,
+    "child_memory_maximum_observed_rss_bytes": 143785984,
+    "child_memory_limit_bytes": 67108864
+  },
+  "gate": "PASS",
+  "next_gate": "Commit this exact tooling revision and validation binding before generation."
+}

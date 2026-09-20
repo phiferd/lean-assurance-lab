@@ -1,0 +1,61 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-2",
+  "policy": "No per-invocation cap. Every top-level tooling command is retained and its observed command-transport wall time is charged conservatively to the aggregate process ceiling.",
+  "invocations": [
+    {
+      "ordinal": 1,
+      "command": ["python3", "tests/test_metamorphic_representation.py", "SupervisorTests", "-v"],
+      "context": "restricted sandbox without PYTHONPATH",
+      "status": "IMPORT_ERROR",
+      "wall_time_seconds": 0.3,
+      "scientific_effect": "none"
+    },
+    {
+      "ordinal": 2,
+      "command": ["PYTHONPATH=.", "python3", "tests/test_metamorphic_representation.py", "SupervisorTests", "-v"],
+      "context": "restricted sandbox",
+      "status": "EXPECTED_REPRODUCTION_FAILURE",
+      "wall_time_seconds": 0.3,
+      "evidence": "results/research/metamorphic-representation-pilot-2/supervisor-diagnosis-01.json",
+      "scientific_effect": "none"
+    },
+    {
+      "ordinal": 3,
+      "command": ["PYTHONPATH=.", "python3", "tests/test_metamorphic_representation.py", "SupervisorTests", "-v"],
+      "context": "host process-inspection context",
+      "status": "PASS_2_OF_2_PREDECESSOR_CASES",
+      "wall_time_seconds": 5.5,
+      "scientific_effect": "none"
+    },
+    {
+      "ordinal": 4,
+      "command": ["PYTHONPATH=.", "python3", "tests/test_metamorphic_supervisor.py", "-v"],
+      "context": "host process-inspection context",
+      "status": "PASS_4_OF_4_DEVELOPMENT",
+      "wall_time_seconds": 4.3,
+      "scientific_effect": "none"
+    },
+    {
+      "ordinal": 5,
+      "command": ["PYTHONPATH=.", "python3", "tests/test_metamorphic_representation.py", "-v"],
+      "context": "restricted sandbox; no process inspection required",
+      "status": "PASS_12_OF_12_DEVELOPMENT",
+      "wall_time_seconds": 0.1,
+      "scientific_effect": "none"
+    },
+    {
+      "ordinal": 6,
+      "command": ["METAMORPHIC_SUPERVISOR_RECEIPT_DIR=results/research/metamorphic-representation-pilot-2/supervisor-validation-01", "scripts/validate-metamorphic-pilot-tooling"],
+      "context": "host process-inspection context",
+      "status": "PASS_16_OF_16_BOUND_GATE",
+      "wall_time_seconds": 6.1,
+      "evidence": "results/research/metamorphic-representation-pilot-2/tooling-validation-01.json",
+      "scientific_effect": "none"
+    }
+  ],
+  "top_level_invocations": 6,
+  "charged_process_seconds": 16.6,
+  "variants_generated": 0,
+  "checker_attempts": 0
+}

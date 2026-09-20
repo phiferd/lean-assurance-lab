@@ -1,0 +1,65 @@
+#!/usr/bin/env python3
+from __future__ import annotations
+
+import argparse
+import importlib.util
+import subprocess
+import sys
+import unittest
+from pathlib import Path
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+
+def load_suite(name: str, test_path: Path, expected: int) -> unittest.TestSuite:
+    spec = importlib.util.spec_from_file_location(name, test_path)
+    if spec is None or spec.loader is None:
+        raise RuntimeError(f"cannot load {test_path}")
+    module = importlib.util.module_from_spec(spec)
+    sys.modules[name] = module
+    spec.loader.exec_module(module)
+    suite = unittest.defaultTestLoader.loadTestsFromModule(module)
+    count = suite.countTestCases()
+    if count != expected:
+        raise RuntimeError(f"expected exactly {expected} cases in {test_path}, found {count}")
+    return suite
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--generate-frozen", action="store_true")
+    args = parser.parse_args()
+    try:
+        supervisor = load_suite(
+            "test_metamorphic_supervisor",
+            ROOT / "tests" / "test_metamorphic_supervisor.py",
+            4,
+        )
+        representation = load_suite(
+            "test_metamorphic_representation",
+            ROOT / "tests" / "test_metamorphic_representation.py",
+            12,
+        )
+    except RuntimeError as error:
+        print(f"FAIL: {error}", file=sys.stderr)
+        return 1
+    if not unittest.TextTestRunner(verbosity=1).run(supervisor).wasSuccessful():
+        return 1
+    if not unittest.TextTestRunner(verbosity=1).run(representation).wasSuccessful():
+        return 1
+    if args.generate_frozen:
+        command = [
+            str(ROOT / "scripts" / "generate-metamorphic-pilot-variants"),
+            "--scientific-manifest", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-1" / "scientific-manifest.json"),
+            "--scientific-sha256", "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab",
+            "--output-dir", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-2" / "generated"),
+            "--summary", str(ROOT / "results" / "research" / "metamorphic-representation-pilot-2" / "generation-summary.json"),
+        ]
+        return subprocess.run(command, cwd=ROOT, check=False).returncode
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
