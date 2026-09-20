@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+  "scope": "SOURCE_AND_EVIDENCE_CLOSURE_ONLY",
+  "scientific_cases_launched": 0,
+  "checks": [
+    {
+      "command": ["scripts/validate-research-queue", "--require-ready"],
+      "status": "PASS",
+      "summary": "The completed source assessment, its closure review, the selected READY successor, and status markers agree."
+    },
+    {
+      "command": ["scripts/refresh-current-state", "--log-dir", "results/workflow-refresh/survivor-thread-one-determinism-1-final"],
+      "status": "PASS",
+      "receipt": {
+        "path": "results/workflow-refresh/survivor-thread-one-determinism-1-final/result.json",
+        "sha256": "dcdb69f07037af0749bbd624c12008070e19650cdd97c1bd68c19661f20756da"
+      }
+    },
+    {
+      "command": ["scripts/run-unit-tests", "--require-full-payload"],
+      "status": "SANDBOX_PERMISSION_LIMIT_REPAIRED",
+      "summary": "The first regenerated-state run reached all 1,208 current tests but could not exercise five process-control tests because the sandbox denied /bin/ps and process-group signals. The unchanged command was rerun with host process-control permission; no source or scientific input changed."
+    },
+    {
+      "command": ["scripts/run-unit-tests", "--require-full-payload"],
+      "status": "PASS",
+      "execution_environment": "host process-control permission enabled",
+      "current_tests": 1208,
+      "current_seconds": 444.774,
+      "frozen_publication_study_tests": 73,
+      "frozen_publication_study_seconds": 166.876,
+      "checkpoint_historical_tests": 9,
+      "checkpoint_historical_seconds": 3.636
+    },
+    {
+      "command": ["python3", "-m", "unittest", "discover", "-s", "tests", "-p", "test_survivor_thread_one_determinism_closure.py"],
+      "status": "PASS",
+      "tests": 3,
+      "seconds": 0.001
+    },
+    {
+      "command": ["git", "diff", "--check"],
+      "status": "PASS"
+    }
+  ],
+  "note": "Validation covers repository-state closure only. The completed item performed exactly eight local source/evidence inspections and no builds, checker launches, Lean proof launches, new scientific bytes, mutations, network requests, or external actions."
+}

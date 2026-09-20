@@ -20,13 +20,13 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked research successor | Complete SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked research successor | Complete SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1: Execute the bounded one-thread child-panic diagnostic regression; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **SURVIVOR-THREAD-ONE-DETERMINISM-1**.
+Selected next item: **SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -41,11 +41,11 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 8 | BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model | PLANNED |
 | 9 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
 | 10 | RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs | PLANNED |
-| 11 | SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor | READY |
 | 27 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 52 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 64 | SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1: Execute the bounded one-thread child-panic diagnostic regression | READY |
 
 ### 2. PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness
 
@@ -191,22 +191,6 @@ Measure fixed time/memory envelopes with stop-at-first-limit per family/implemen
 
 **Boundary:** PLANNED: PLANNED: bind valid families, comparable supported fragments, reliable resource measurement, memory limits and cleanup in a staged protocol; finite samples establish no asymptotic theorem.
 
-### 11. SURVIVOR-THREAD-ONE-DETERMINISM-1: Assess deterministic witnessability of the one-thread dispatch survivor
-
-**Target:** nanoda-gen-2bdfe18a9ec2 at pinned Nanoda src/tc.rs:147, the serial/one-worker dispatch split and its operational failure boundaries
-
-Bind the exact mutation, source and historical evidence; determine whether spawn failure, child panic, stack behavior or scheduling exposes a deterministic locally controllable baseline/mutant distinction without ambient resource exhaustion.
-
-**Why this rank:** READY reserve after owner-directed expansion: the one-hour historical operational question remains feasible, but the selected representation pilot offers broader fresh-input and shared-method value. Original scope, budgets and prerequisites are unchanged.
-
-**Completion:** One fixed deterministic regression protocol for later separate authorization, a source-supported scoped classification recommendation, or a bounded negative/unresolved result naming the exact nondeterministic or missing control.
-
-**Stop:** One source/evidence-only session and at most 3600 active seconds; at most eight local inspections; zero network, build, checker, proof, scientific-byte, mutation-identity or external-action launches; select but do not start a successor at closure.
-
-**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** READY: Existing prerequisite SURVIVOR-CACHE-PREDICATE-TRANSFER-1 completed SUCCESS. Retained READY, unstarted and unselected by the 2026-09-20 project-wide review. Before analysis commit a fresh work record, original exact historical inputs and determinism rubric under its unchanged original plan. Later execution still needs a separately selected deterministic protocol.
-
 ### 27. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
 **Target:** Arena tutorial/012_nonPropThm and retained publication-study theorem control
@@ -271,6 +255,22 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
+### 64. SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1: Execute the bounded one-thread child-panic diagnostic regression
+
+**Target:** Pinned Nanoda 6ae1f0cd962f081f6c423454c5da729d841236a7, nanoda-gen-2bdfe18a9ec2, public num_threads=1 and the existing 601-byte matching-let pair
+
+Bind exact configuration/source/binary bytes, independently audit the one-field mutation and configuration relation, then execute a four-cell control/candidate matrix that distinguishes direct assertion failure from the fixed joined-worker diagnostic.
+
+**Why this rank:** The completed source assessment identified a deterministic existing-byte child-panic protocol with a fixed diagnostic predicate. It is narrower than the planned discovery horizon but is the only newly concrete, fully specified local follow-through and can retire an old operational uncertainty.
+
+**Completion:** Four complete cells with both controls ACCEPT, baseline candidate direct assertion refusal and mutant candidate fixed joined-worker diagnostic; or a bounded unresolved result preserving the exact infrastructure/control blocker.
+
+**Stop:** One 60-minute session; four source/setup inspections; two offline builds x600s; four checker processes x30s; 2GiB sampled RSS per process; zero network, proof, production checker edit, new export byte, new mutation identity, external action or assurance-milestone advance.
+
+**Execution:** At most 1 sessions of 60 active minutes; 4 validator launches. Additional plan limits apply.
+
+**Boundary:** READY: READY after predecessor SUCCESS. Before any build or process, commit a fresh work record, exact source/toolchain/input/configuration bindings, a four-cell manifest and an independently checked prelaunch gate. The matching controls must establish ordinary one-worker creation before a candidate diagnostic is interpreted.
+
 ## Autonomous workflow
 
 | Work | Default mechanism |
@@ -312,6 +312,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SURVIVOR-THREAD-ONE-DETERMINISM-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

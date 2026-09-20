@@ -23,13 +23,15 @@ SUCCESS while preserving pilot 1 unchanged. Its exact final matrix executed
 eight eligible cells and retained four preregistered ineligible dispositions;
 all four within-checker original/variant relations preserved ACCEPT. The package
 is retained as a local conformance asset. `SURVIVOR-THREAD-ONE-DETERMINISM-1`
-is now ACTIVE as the feasible bounded successor.
+completed SUCCESS as a source-only assessment and selected
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` READY and unstarted.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
-confined to replaceable supervision. At closure the existing one-thread source
-assessment is the only fully gated item and is now ACTIVE. Pipeline completeness is the
-next practical discovery alternative after its receipt-semantics protocol gate;
+confined to replaceable supervision. At closure the one-thread source assessment
+identified a bounded diagnostic follow-through, now selected READY and
+unstarted. Pipeline completeness remains the next practical discovery alternative
+after its receipt-semantics protocol gate;
 valid-term generation follows because its typing oracle and generator demand
 more construction. These are ordinal judgments, not estimated defect rates.
 
@@ -66,10 +68,13 @@ bounded investigation. Ordinary implementation repairs remain inside that item.
 
 ## Reserves and preserved work
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` is ACTIVE at rank 11 under its unchanged
-[original plan](SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): 60 cumulative active
-minutes, eight local inspections, no network or launches. It is a bounded source
-assessment; no original budget or counter is reset.
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` completed SUCCESS at rank 11 under its
+unchanged [original plan](SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): it identified
+a source-supported child-panic diagnostic protocol using existing bytes, with no
+network or launches. Its separate successor
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is READY and unstarted under the
+new [bounded execution plan](SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md).
+No historical budget or counter is reset.
 
 The theorem companion, original CVC-4/CVC-5 and independent transfer intake retain
 their exact unmet gates and scopes. The nine new candidates neither inherit nor

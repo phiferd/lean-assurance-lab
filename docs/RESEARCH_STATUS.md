@@ -57,6 +57,18 @@ research directions.
 
 ## Attempted
 
+- Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
+  for a source-supported, unexecuted one-thread child-panic diagnostic protocol.
+  At public `num_threads=1`, the pinned original checks the existing invalid
+  601-byte export serially while the relational-boundary mutant runs it in one
+  scoped worker; the source fixes the parent join diagnostic for that worker
+  panic. This supports a separate four-cell operational regression candidate
+  using existing control/candidate bytes. It does not establish a semantic
+  acceptance difference, current upstream defect or external action. The
+  [assessment](../results/research/survivor-thread-one-determinism-1/determinism-assessment.json)
+  ran no process. `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is selected
+  READY and unstarted under its separately bound plan.
+
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-2` on 2026-09-20 with SUCCESS.
   The separate continuation preserved pilot 1 unchanged, diagnosed its hidden
   sandbox-denied `/bin/ps` monitor path, added observable start-gated macOS RSS
@@ -71,8 +83,8 @@ research directions.
   of no observed representation sensitivity, not global invariance. Retain the
   package as a local conformance asset; no external action now. See the
   [report](../results/research/metamorphic-representation-pilot-2/report.md).
-  `SURVIVOR-THREAD-ONE-DETERMINISM-1` is now ACTIVE under its separate
-  source-only assessment plan.
+  `SURVIVOR-THREAD-ONE-DETERMINISM-1` later completed SUCCESS as a separate
+  source-only assessment.
 
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-1` on 2026-09-20 with
   BOUNDED_UNRESOLVED at its exact 8/8 tooling-attempt cap. The source/reuse and
@@ -2935,7 +2947,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `SURVIVOR-THREAD-ONE-DETERMINISM-1`.
+Selected next item: `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -2960,7 +2972,8 @@ no external action is recommended now.
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
-| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | ACTIVE, source-only assessment |
+| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
+| 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | READY, selected and unstarted |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan. Reassess actual value and
@@ -2989,13 +3002,14 @@ rejection test. Focused 2/2 and all 155 current tests passed at bound
 and [indexed PR draft](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md)
 preserve the no-defect, no-universal-authority and human-gated submission limits.
 
-`SURVIVOR-THREAD-ONE-DETERMINISM-1` is ACTIVE under its unchanged
-[original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md): 60 cumulative
-active minutes, eight local inspections and no network or launches. Its fresh
-work record, exact historical inputs and determinism rubric are bound before
-analysis; later execution retains a separate gate. The theorem companion remains
-PLANNED without distinct-risk evidence, original CVC-4/CVC-5 gates remain unmet,
-and transfer intake still lacks its required independent external package.
+`SURVIVOR-THREAD-ONE-DETERMINISM-1` completed its unchanged
+[original plan](research/SURVIVOR_THREAD_ONE_DETERMINISM_PLAN.md) with eight
+local inspections and no launches. It selected the separately planned
+`SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` READY and unstarted: one bounded
+four-cell existing-byte protocol that must bind configuration/build/cleanup
+controls before execution. The theorem companion remains PLANNED without
+distinct-risk evidence, original CVC-4/CVC-5 gates remain unmet, and transfer
+intake still lacks its required independent external package.
 
 `NANODA-STRING-RECONSTRUCTION-TEST-1` completed SUCCESS. Two focused and all
 40 library tests pass; eight existing doc examples remain ignored. The
@@ -3100,10 +3114,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item: the bounded one-thread source
-assessment. The wider horizon still includes nine independently gated PLANNED
-discovery candidates. Pilot 1 remains frozen at its tooling cap; pilot 2 is its
-successful separate continuation and retains the completed reusable package.
+The canonical queue retains one READY item: the selected and unstarted
+one-thread child-panic operational regression. The wider horizon still includes
+nine independently gated PLANNED discovery candidates. Pilot 1 remains frozen
+at its tooling cap; pilot 2 is its successful separate continuation and retains
+the completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

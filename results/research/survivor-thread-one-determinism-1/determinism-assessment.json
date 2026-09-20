@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-DETERMINISM-1",
+  "status": "SOURCE_SUPPORTED_PROTOCOL_CANDIDATE",
+  "question": "Can the public one-thread dispatch difference from nanoda-gen-2bdfe18a9ec2 be tested with a fixed, non-ambient observable boundary?",
+  "scope": {
+    "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7",
+    "mutation_id": "nanoda-gen-2bdfe18a9ec2",
+    "public_configuration": "num_threads=1",
+    "baseline": "check_all_declars_serial",
+    "mutant": "check_all_declars_par(1)",
+    "semantic_authority": false,
+    "execution_used": false
+  },
+  "source_reasoning": [
+    {
+      "fact": "The baseline calls check_declar directly for each declaration; the mutant creates exactly one scoped worker with a fixed 16 MiB stack and joins it explicitly.",
+      "source": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs:107-152; src/lib.rs:23",
+      "consequence": "Successful one-worker coverage alone cannot distinguish the programs, but the panic-observation boundary is structurally different."
+    },
+    {
+      "fact": "The fixed invalid existing export reaches check_declar's direct assert_def_eq call; assert_def_eq is an assert over def_eq.",
+      "source": "src/tc.rs:89-93, 921-923; results/research/survivor-thread-config-regression-1/run-0001/execution/events.jsonl",
+      "consequence": "The historical serial run at zero threads establishes a type-equality refusal for these unchanged bytes; it is support for the input-triggered panic, not an execution of the one-thread protocol."
+    },
+    {
+      "fact": "A panic inside the one worker reaches the literal join expectation 'A thread in `check_all_declars` panicked while being joined'.",
+      "source": "src/tc.rs:134-139",
+      "consequence": "With one successful worker and the fixed invalid input, this literal is a source-defined mutant-only diagnostic predicate, independent of scheduler order, ambient memory pressure or an attempted spawn failure."
+    },
+    {
+      "fact": "The matching control and invalid candidate each contain thirteen existing NDJSON records; historical zero-thread controls accepted on both observers while the candidate's serial baseline refused.",
+      "source": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson; corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson; survivor-thread-config-regression-1/result.json",
+      "consequence": "A future four-cell pair can guard against ordinary parsing or declaration failure being mistaken for the panic-propagation distinction."
+    }
+  ],
+  "protocol_candidate": {
+    "name": "ONE_THREAD_CHILD_PANIC_DIAGNOSTIC",
+    "fixed_payloads": {
+      "control": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+      "candidate": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson"
+    },
+    "future_configuration_requirement": "Use otherwise-identical, separately bound public configuration bytes with num_threads=1 for every cell.",
+    "future_matrix": [
+      {"cell": "control-baseline", "expected": "ACCEPT"},
+      {"cell": "control-mutant", "expected": "ACCEPT"},
+      {"cell": "candidate-baseline", "expected": "TYPECHECK_REFUSAL_WITH_DIRECT_ASSERTION"},
+      {"cell": "candidate-mutant", "expected": "WORKER_PANIC_JOIN_REFUSAL_WITH_FIXED_JOIN_DIAGNOSTIC"}
+    ],
+    "required_prelaunch_controls": [
+      "Bind the exact baseline and only the REL_GT_TO_GE mutant source/binary identities.",
+      "Demonstrate ordinary one-worker creation on the matching control before interpreting the candidate cell.",
+      "Bind timeout, process cleanup, raw stdout/stderr and a literal predicate for the join diagnostic.",
+      "Treat an inability to create the worker as infrastructure failure, never as the candidate distinction."
+    ]
+  },
+  "excluded_triggers": [
+    "Thread-creation failure depends on ambient host resource availability.",
+    "Stack exhaustion depends on an unbound caller-stack and platform threshold.",
+    "Multi-worker scheduling is outside the num_threads=1 protocol.",
+    "Matching historical test outcomes do not prove whole-process outcome equivalence."
+  ],
+  "conclusion": "The existing invalid byte supplies a source-supported, locally controllable child-panic trigger. It supports a separately authorized fixed operational regression candidate; it does not establish a semantic validation difference, a current upstream defect or an executed result.",
+  "evidence_bindings": [
+    {"path": "mutations/nanoda-gen-2bdfe18a9ec2.json", "sha256": "565dade1407732bed722b3db2758f77e6a3a8a3cd079ce526974d91b8347aca6"},
+    {"path": "results/research/survivor-thread-config-reachability-1/dispatch-assessment.json", "sha256": "416eab29fbbb439ae801b0f1899eba25511549d7c015b7448015496a6864c29e"},
+    {"path": "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs", "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"},
+    {"path": "results/research/survivor-thread-config-regression-1/result.json", "sha256": "fe179f646427809ee7db7abc8a54605355ace907ce7e737089c74fa629e9b45c"},
+    {"path": "results/research/survivor-thread-config-regression-1/run-0001/execution/events.jsonl", "sha256": "060545675671e50137f8e257397b6c1578930b917c60485a3a56eadd8ab2e5cd"},
+    {"path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson", "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"}
+  ]
+}
