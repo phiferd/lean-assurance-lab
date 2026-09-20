@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "tooling_revision": 1,
+  "reviewed_at": "2026-09-20",
+  "reviewer": "root separate static preservation review",
+  "scope": "Transformation algorithm, independent canonical preservation argument, adversarial controls and supervised process boundary; no code was executed for this review.",
+  "transformer": {
+    "path": "lib/metamorphic_ndjson_transform.py",
+    "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0",
+    "findings": [
+      "Typed reference paths are explicit; ordinary integers are not generically remapped.",
+      "Metadata and declaration sequence remain fixed; declarations and primitives are strict-schema checked.",
+      "Original input is required to have continuous indices and backward-resolved references.",
+      "The reverse-ready schedule should change both order and per-space identifiers on both frozen controls.",
+      "The kind-round-robin schedule uses lowest old ID within each requested space, so it should interleave records while retaining per-space identifiers; it is predicted INAPPLICABLE under the frozen stronger delta rule and must not be launched."
+    ]
+  },
+  "auditor": {
+    "path": "lib/metamorphic_ndjson_audit.py",
+    "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21",
+    "independence": "Imports no transformer code and consumes no transformer mapping. It independently duplicates the narrow format schema and resolves references to canonical typed-node digests.",
+    "shared_critical_assumption": "Transformer and auditor both encode the documented 3.1.0 typed field map. The duplication avoids shared code but not a shared interpretation; deliberately changed tag, field, reference, missing, duplicate and unknown-tag controls test that interpretation at its supported boundary.",
+    "preservation_argument": "Canonical node descriptors contain the primitive space, constructor, ordered child identities and every non-reference field. Duplicate descriptors are rejected. Ordered declarations replace references with those identities, so equality retains constructor distinctions, ordered universe parameters, binder information, dependencies and sharing while ignoring only record order and numeric identifiers.",
+    "claim_limit": "This is a collision-resistant bounded structural audit, not a proof theorem."
+  },
+  "runner": {
+    "path": "lib/metamorphic_pilot_runner.py",
+    "sha256": "d2b1b1fffc4f65546a382434002d341e1ec985f18bf99e9a0402a28e8e68603f",
+    "findings": [
+      "Execution refuses stale scientific, tooling, original, generated-audit, profile-source, configuration or binary bindings.",
+      "Only cells marked ELIGIBLE in a complete disposition of the frozen maximum matrix may launch.",
+      "Each attempt runs in a new process group with RLIMIT_AS, timeout kill, cleanup check, raw outputs and /usr/bin/time memory/timing capture.",
+      "Nanoda panic exit 101 remains CRASH unless an identified parse/import diagnostic applies; raw nonzero output is not collapsed into semantic REJECT."
+    ]
+  },
+  "planned_controls": [
+    "two reverse-ready positive preservation pairs",
+    "two round-robin preserved-but-ineligible delta pairs",
+    "byte determinism for all four generated pairs",
+    "strict identity decode/encode round trip for both originals",
+    "unknown transform rejection",
+    "changed let value rejection",
+    "imax-to-max rejection",
+    "missing record rejection",
+    "duplicate index rejection",
+    "invalid reference rejection",
+    "unknown tag rejection",
+    "extra field rejection",
+    "memory limit enforcement",
+    "process-group timeout cleanup"
+  ],
+  "hidden_checker_calls": false,
+  "disposition": "APPROVE_FOR_BOUND_TOOLING_TEST_ATTEMPT_1"
+}

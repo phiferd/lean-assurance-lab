@@ -1,0 +1,60 @@
+{
+  "schema_version": 1,
+  "item_id": "METAMORPHIC-REPRESENTATION-PILOT-1",
+  "revision": 1,
+  "status": "BOUND_UNTESTED",
+  "base_commit": "f6920cd1f256ce60e2c0fa71255df5a51bda4d97",
+  "scientific_manifest": {
+    "path": "results/research/metamorphic-representation-pilot-1/scientific-manifest.json",
+    "sha256": "0b862c93495bc0ca3bf16c836d0123ee9ebe4c13ac0aa93bbe9350e709d6e5ab"
+  },
+  "source_files": [
+    {
+      "path": "lib/metamorphic_ndjson_transform.py",
+      "sha256": "c3d3c892ffddbd2992d2db93507091a385c54fb95bb7148a7da0a0e45366bfb0"
+    },
+    {
+      "path": "lib/metamorphic_ndjson_audit.py",
+      "sha256": "7a84b8ccd510c563cc820bc8d4f658bdd7c82086ac95c7afd8c40a94a544fd21"
+    },
+    {
+      "path": "lib/metamorphic_pilot_runner.py",
+      "sha256": "d2b1b1fffc4f65546a382434002d341e1ec985f18bf99e9a0402a28e8e68603f"
+    },
+    {
+      "path": "scripts/metamorphic-ndjson-transform",
+      "sha256": "0449ffe6b5fd955bf8da01cc9f7e400483c29363eefcfbc9b24d264f31bfb000"
+    },
+    {
+      "path": "scripts/audit-metamorphic-ndjson",
+      "sha256": "51022702bfe5459846001edb91242b43839bbc21056a5ec432778f3fdf7fe2b2"
+    },
+    {
+      "path": "scripts/run-metamorphic-representation-pilot",
+      "sha256": "62cba51c2fd8511d7131ceb03e0204de9a4b976e88718d98e2216546e04d62a8"
+    }
+  ],
+  "test_file": {
+    "path": "tests/test_metamorphic_representation.py",
+    "sha256": "d601fcf5d3d672896c91b57f4e9a6e97fb654f4bbaff28d1d33b28ea9797dccb"
+  },
+  "independent_review": {
+    "path": "results/research/metamorphic-representation-pilot-1/tooling-review-01.json",
+    "sha256": "41526cd04f7afde472134048657e850986430f0826bf9a99839f72ec7117da61"
+  },
+  "permitted_test_attempt": {
+    "ordinal": 1,
+    "command": [
+      "python3",
+      "-m",
+      "unittest",
+      "tests.test_metamorphic_representation"
+    ],
+    "timeout_seconds": 120,
+    "case_count": 14,
+    "checker_attempts": 0,
+    "maximum_nested_nonchecker_processes": 4
+  },
+  "generation_permission": "No retained scientific generation until test attempt 1 passes and this revision receives a validation successor.",
+  "repair_policy": "Preserve raw failure, add the smallest regression, bind revision 2 and carry all counters before retry."
+}
