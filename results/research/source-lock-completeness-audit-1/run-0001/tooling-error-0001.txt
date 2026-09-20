@@ -1,0 +1,21 @@
+Command: scripts/execute-source-lock-completeness-audit
+Exit status: 1
+Classification: controller/tooling failure before reading a pinned source file.
+
+Traceback (most recent call last):
+  File "scripts/execute-source-lock-completeness-audit", line 8, in <module>
+    raise SystemExit(main())
+  File "lib/source_lock_completeness_audit.py", line 152, in main
+    value = validate(root) if validate_only else execute(root)
+  File "lib/source_lock_completeness_audit.py", line 124, in execute
+    source = bind(root, row["binding"])
+  File "lib/cvc_prep.py", line 66, in bind
+    require(set(row) == {'path', 'sha256'} and isinstance(row['sha256'], str)
+  File "lib/cvc_prep.py", line 35, in require
+    raise ValueError(message)
+ValueError: invalid binding
+
+The static audit had loaded and hash-checked its manifest and source lock, but
+the first source-lock row was rejected because its binding also has an attested
+`bytes` field. No pinned Rust source content, Cargo build, checker, network or
+source retrieval was invoked.

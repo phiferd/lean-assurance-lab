@@ -2,7 +2,6 @@
 from __future__ import annotations
 
 import argparse
-import hashlib
 import json
 import posixpath
 from pathlib import Path, PurePosixPath
@@ -16,15 +15,16 @@ ITEM = "SOURCE-LOCK-COMPLETENESS-AUDIT-1"
 RUN = "source-lock-completeness-audit-0001"
 BASE = "results/research/source-lock-completeness-audit-1"
 OUT = BASE + "/run-0001"
-WORK = BASE + "/work-record.json"
+WORK = BASE + "/work-record-r2.json"
 ENTRY = BASE + "/entry-decision.json"
-MANIFEST = "config/source-lock-completeness-audit-0001.json"
+MANIFEST = "config/source-lock-completeness-audit-0001-r2.json"
 PLAN = "docs/research/SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md"
 LOCK = "results/research/alt-survivors-2026-09-08/source-lock.json"
 SOURCE_ROOT = "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda"
 CHILD_CLOSURE = "results/research/survivor-thread-one-child-panic-regression-1/work-closure.json"
 CHILD_AUDIT = "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json"
-RECEIPT = BASE + "/focused-test-receipt.json"
+RECEIPT = BASE + "/focused-test-receipt-r2.json"
+REPAIR = BASE + "/tooling-repair-0001.json"
 INCLUDE = re.compile(r"(?P<macro>include_(?:str|bytes))!\s*\(\s*\"(?P<literal>[^\"]+)\"\s*\)")
 CODE = [
     "lib/source_lock_completeness_audit.py",
@@ -65,18 +65,30 @@ def directives(source_path: str, data: str) -> list[dict]:
             for match in INCLUDE.finditer(data)]
 
 
+def source_file(root: Path, row: dict) -> Path:
+    """Bind a source-lock row, including its separately attested byte count."""
+    require(isinstance(row, dict) and isinstance(row.get("binding"), dict), "missing source binding")
+    binding = row["binding"]
+    require(set(binding) == {"path", "sha256", "bytes"}
+            and isinstance(binding["bytes"], int) and binding["bytes"] >= 0,
+            "invalid source binding")
+    path = bind(root, {"path": binding["path"], "sha256": binding["sha256"]})
+    require(path.stat().st_size == binding["bytes"], "source byte count changed: " + row["source_path"])
+    return path
+
+
 def validate(root: Path, *, launch: bool = False) -> dict:
     root = Path(root).resolve()
     manifest = load(safe(root, MANIFEST))
     require(set(manifest) == {"schema_version", "item_id", "run_id", "work_record", "entry_decision",
-                              "source_lock", "source_root", "child_closure", "child_audit",
+                              "source_lock", "source_root", "child_closure", "child_audit", "tooling_repair",
                               "tooling_inputs", "focused_test_receipt"}
             and manifest["schema_version"] == 1 and manifest["item_id"] == ITEM
             and manifest["run_id"] == RUN and manifest["source_root"] == SOURCE_ROOT,
             "manifest identity differs")
     work = load(exact(root, manifest["work_record"], WORK, manifest["work_record"]["sha256"]))
     require(work["item_id"] == ITEM and work["status"] == "ACTIVE"
-            and work["authorization"] == AUTHORIZATION and work["source_setup_inspections"] == 0,
+            and work["authorization"] == AUTHORIZATION and work["source_setup_inspections"] == 1,
             "work record differs")
     entry = load(exact(root, manifest["entry_decision"], ENTRY, manifest["entry_decision"]["sha256"]))
     require(entry["item_id"] == ITEM and entry["authorization"] == "Do the work!!"
@@ -91,6 +103,11 @@ def validate(root: Path, *, launch: bool = False) -> dict:
           "05eb30dbf6d1c08835150007c5b71bdcb96ad9e636951309710ff40ff3791aca")
     exact(root, manifest["child_audit"], CHILD_AUDIT,
           "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35")
+    repair = load(exact(root, manifest["tooling_repair"], REPAIR,
+                        manifest["tooling_repair"]["sha256"]))
+    require(repair["item_id"] == ITEM and repair["classification"] == "LOCK_ROW_BINDING_SHAPE_MISMATCH"
+            and repair["no_build_checker_or_network_process"] is True,
+            "tooling repair differs")
     require([row["path"] for row in manifest["tooling_inputs"]] == CODE, "tooling inventory differs")
     for row in manifest["tooling_inputs"]:
         bind(root, row)
@@ -105,7 +122,8 @@ def validate(root: Path, *, launch: bool = False) -> dict:
         require(queue["selected_item"] == ITEM and row is not None and row["status"] == "ACTIVE",
                 "item is not selected ACTIVE")
         for row in ([manifest["work_record"], manifest["entry_decision"], manifest["source_lock"],
-                     manifest["child_closure"], manifest["child_audit"], manifest["focused_test_receipt"]]
+                     manifest["child_closure"], manifest["child_audit"], manifest["tooling_repair"],
+                     manifest["focused_test_receipt"]]
                     + manifest["tooling_inputs"]):
             committed(root, row["path"])
         for path in (MANIFEST, "config/research-queue.json", "docs/RESEARCH_STATUS.md", PLAN):
@@ -121,7 +139,7 @@ def execute(root: Path) -> dict:
     locked = {row["source_path"] for row in bundle["lock"]["files"]}
     rows: list[dict] = []
     for row in bundle["lock"]["files"]:
-        source = bind(root, row["binding"])
+        source = source_file(root, row)
         if not row["source_path"].endswith(".rs"):
             continue
         for directive in directives(row["source_path"], source.read_text(encoding="utf-8")):
@@ -134,7 +152,7 @@ def execute(root: Path) -> dict:
                                         else "MISSING_FROM_LOCK")
             rows.append(directive)
     result = {
-        "schema_version": 1, "item_id": ITEM, "run_id": RUN, "generated_at": now(),
+        "schema_version": 1, "item_id": ITEM, "run_id": RUN, "audit_revision": "R2", "generated_at": now(),
         "source_lock": bundle["manifest"]["source_lock"], "source_file_count": len(locked),
         "directives": rows,
         "missing": [row for row in rows if row["disposition"] != "LOCKED"],

@@ -1,6 +1,8 @@
 from __future__ import annotations
 
 import unittest
+from pathlib import Path
+from tempfile import TemporaryDirectory
 
 from lib import source_lock_completeness_audit as audit
 
@@ -17,6 +19,16 @@ class SourceLockAuditTests(unittest.TestCase):
     def test_refuses_source_root_escape(self):
         with self.assertRaises(ValueError):
             audit.resolved_path("src/main.rs", "../../secret")
+
+    def test_binds_source_lock_byte_count(self):
+        with TemporaryDirectory() as directory:
+            root = Path(directory)
+            source = root / "src" / "main.rs"
+            source.parent.mkdir()
+            source.write_text("fn main() {}\n", encoding="utf-8")
+            row = {"source_path": "src/main.rs", "binding": {
+                "path": "src/main.rs", "sha256": audit.sha(source), "bytes": source.stat().st_size}}
+            self.assertEqual(audit.source_file(root, row), source)
 
 
 if __name__ == "__main__":

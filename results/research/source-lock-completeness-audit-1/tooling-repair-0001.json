@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "item_id": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+  "kind": "ENGINEERING_STATIC_AUDIT_REPAIR",
+  "recorded_at": "2026-09-20T22:05:00Z",
+  "classification": "LOCK_ROW_BINDING_SHAPE_MISMATCH",
+  "original_execution_manifest": {
+    "path": "config/source-lock-completeness-audit-0001.json",
+    "sha256": "b9d57e5fbeebafe57e9fbefe0736f017667bb77e0a1786bbb39d195c9013f64c"
+  },
+  "failed_attempt": {
+    "command": "scripts/execute-source-lock-completeness-audit",
+    "exit_status": 1,
+    "raw_error": {
+      "path": "results/research/source-lock-completeness-audit-1/run-0001/tooling-error-0001.txt",
+      "sha256": "4a1124cb3c000c4f8f0e5127c222ad9f613e7699ee7a7ae886cffd1a9f7ecccd"
+    },
+    "source_setup_inspections": 1
+  },
+  "no_build_checker_or_network_process": true,
+  "repair": {
+    "new_tooling_revision": "R2",
+    "change": "Validate the source-lock row's path/hash through the generic binder and then separately verify its attested byte count.",
+    "scope": "Audit-tooling-only repair; no frozen source, Cargo metadata, export byte, mutation, expected disposition or scientific claim changes."
+  },
+  "continuation": "Commit an R2 manifest and work record, rerun only the static source-lock ledger, and preserve the failed R1 attempt as engineering evidence."
+}

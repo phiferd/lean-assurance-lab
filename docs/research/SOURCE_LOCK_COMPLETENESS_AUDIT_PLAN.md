@@ -6,6 +6,11 @@ source-only static-audit bindings. It
 does not retrieve a missing source byte, rebuild Nanoda, or reopen the bounded
 child-panic result.
 
+The initial R1 static-audit controller rejected the source-lock row shape before
+reading pinned source content. Its preserved tooling repair validates the row's
+path/hash and attested byte count separately. R2 changes no frozen source,
+scope or claimed disposition and remains the same bounded audit.
+
 ## Question
 
 Can existing, locally pinned build metadata and source bytes identify every
