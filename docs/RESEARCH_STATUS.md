@@ -2908,16 +2908,16 @@ Selected next item: `METAMORPHIC-REPRESENTATION-PILOT-1`.
 
 The [2026-09-20 selection review](../results/research/frontier-selection-2026-09-20/report.md)
 incorporates the completed Kiota work and the ten-candidate proposal. The selected
-[representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md) is READY
-and unstarted: one 360-cumulative-active-minute item spanning source/reuse,
-implementation, independent preservation audit and gated checker execution.
-READY permits its committed entry/source phase; exact scientific-input and
-launch gates remain to be satisfied within that same item. No pilot starts in
-this queue-update task.
+[representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md) is ACTIVE
+under its fresh [work record](../results/research/metamorphic-representation-pilot-1/work-record.json):
+one 360-cumulative-active-minute item spanning source/reuse, implementation,
+independent preservation audit and gated checker execution. Its source/reuse phase
+is open; exact scientific-input, generated-byte and launch gates remain unsatisfied
+and must pass within that same item before scientific execution.
 
 | Rank | Candidate | State |
 | --- | --- | --- |
-| 1 | `METAMORPHIC-REPRESENTATION-PILOT-1` | READY, selected |
+| 1 | `METAMORPHIC-REPRESENTATION-PILOT-1` | ACTIVE, selected |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-1` | PLANNED |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
