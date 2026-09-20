@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "kind": "ENGINEERING_CONTROLLER_REPAIR",
+  "recorded_at": "2026-09-20T21:11:21.001675+00:00",
+  "classification": "MISSING_SIGNAL_RETRY_IMPORT_BEFORE_PROCESS",
+  "original_execution_manifest": {"path": "config/survivor-thread-one-child-panic-regression-0001.json", "sha256": "13858e5f15fa0a17a41113c090fe3b6ed92bb1d7b6161eb8079b235f658030ed"},
+  "reservation": {
+    "number": 1,
+    "phase": "build",
+    "cell": "baseline",
+    "reserved_seconds": 600,
+    "events": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001/execution/events.jsonl", "sha256": "eda82debf9b42242abb68fcc19937a4bf5a399ab67d8a053eefa0a555e8a8427"},
+    "state": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001/execution/state.json", "sha256": "57c69f1fd832275ffbda1f33ec3974d6230b24b5e26f8382a07d2d6dbc9952c1"},
+    "request": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001/attempts/01/request.json", "sha256": "ff7c92532416df96a3195e7ae35581236b5b2103e000a0bb64f2cd8226f69396"}
+  },
+  "raw_error": {"path": "results/research/survivor-thread-one-child-panic-regression-1/run-0001/controller-error.txt", "sha256": "9ec7a36ad4435bfba071329f3ca93d18d5e9ca0de501939c255f0a4f1921240e"},
+  "no_process_evidence": {
+    "cargo_or_checker_process_invoked": false,
+    "supervisor_receipt_exists": false,
+    "stdout_receipt_exists": false,
+    "stderr_receipt_exists": false
+  },
+  "repair": {
+    "new_controller_revision": "R2",
+    "change": "Import signal_retry before entering the supervised process context.",
+    "scope": "Controller-only repair; no scientific input, source mutation, configuration or expected predicate changes."
+  },
+  "continuation": "A separate R2 manifest and ledger may run the original four-cell matrix because the preserved R1 reservation did not invoke Cargo or a checker."
+}

@@ -20,17 +20,18 @@ import time
 
 from lib.cvc_prep import append, bind, committed, lock, read_events, require, safe
 from lib.cvc_process import atomic, now, sha
+from lib.cvc_signal_retry import signal_retry
 from lib.metamorphic_pilot_runner import run_supervised
 
 
 ITEM = "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1"
 FRONTIER = "F-DISCOVERY-AND-CONFORMANCE"
-RUN = "survivor-thread-one-child-panic-regression-0001"
+RUN = "survivor-thread-one-child-panic-regression-0001-r2"
 BASE = "results/research/survivor-thread-one-child-panic-regression-1"
-OUT = BASE + "/run-0001"
-WORK = BASE + "/work-record.json"
+OUT = BASE + "/run-0001-r2"
+WORK = BASE + "/work-record-r2.json"
 PLAN = "docs/research/SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md"
-MANIFEST = "config/survivor-thread-one-child-panic-regression-0001.json"
+MANIFEST = "config/survivor-thread-one-child-panic-regression-0001-r2.json"
 SOURCE_LOCK = "results/research/alt-survivors-2026-09-08/source-lock.json"
 MUTATION = "mutations/nanoda-gen-2bdfe18a9ec2.json"
 CONTROL = "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson"
@@ -40,7 +41,8 @@ ASSESSMENT_RESULT = "results/research/survivor-thread-one-determinism-1/result.j
 SOURCE = BASE + "/source-materialization.json"
 RUNTIME = BASE + "/runtime-binding.json"
 ENTRY = BASE + "/entry-decision.json"
-RECEIPT = BASE + "/focused-test-receipt.json"
+RECEIPT = BASE + "/focused-test-receipt-r2.json"
+REPAIR = BASE + "/tooling-repair-0001.json"
 
 LIMITS = {
     "active_seconds": 3600,
@@ -180,8 +182,8 @@ def validate_manifest(root: Path, *, launch: bool = False) -> dict:
     expected_fields = {
         "schema_version", "item_id", "run_id", "limits", "prelaunch_active_seconds",
         "memory_bytes", "work_record", "entry_decision", "source_materialization",
-        "runtime_binding", "fixed_inputs", "configs", "matrix", "checker_environment",
-        "tooling_inputs", "focused_test_receipt",
+        "runtime_binding", "tooling_repair", "fixed_inputs", "configs", "matrix",
+        "checker_environment", "tooling_inputs", "focused_test_receipt",
     }
     require(set(manifest) == expected_fields and manifest["schema_version"] == 1
             and manifest["item_id"] == ITEM and manifest["run_id"] == RUN
@@ -196,6 +198,51 @@ def validate_manifest(root: Path, *, launch: bool = False) -> dict:
                 "research_network_requests": 0, "new_export_byte_variants": 0,
                 "new_mutation_identities": 0, "external_actions": 0,
             }, "work record does not preserve prelaunch state")
+    repair = load(exact(root, manifest["tooling_repair"], REPAIR,
+                        manifest["tooling_repair"]["sha256"]))
+    require(set(repair) == {"schema_version", "item_id", "kind", "recorded_at",
+                            "classification", "original_execution_manifest", "reservation",
+                            "raw_error", "no_process_evidence", "repair", "continuation"}
+            and repair["item_id"] == ITEM
+            and repair["kind"] == "ENGINEERING_CONTROLLER_REPAIR"
+            and repair["classification"] == "MISSING_SIGNAL_RETRY_IMPORT_BEFORE_PROCESS"
+            and repair["original_execution_manifest"] == {
+                "path": "config/survivor-thread-one-child-panic-regression-0001.json",
+                "sha256": "13858e5f15fa0a17a41113c090fe3b6ed92bb1d7b6161eb8079b235f658030ed",
+            }
+            and repair["repair"] == {
+                "new_controller_revision": "R2",
+                "change": "Import signal_retry before entering the supervised process context.",
+                "scope": "Controller-only repair; no scientific input, source mutation, configuration or expected predicate changes.",
+            }
+            and repair["continuation"] == "A separate R2 manifest and ledger may run the original four-cell matrix because the preserved R1 reservation did not invoke Cargo or a checker.",
+            "tooling repair binding differs")
+    require(work["prior_controller_incident"] == manifest["tooling_repair"],
+            "work record does not bind the tooling repair")
+    expected_reservation = {
+        "number": 1,
+        "phase": "build",
+        "cell": "baseline",
+        "reserved_seconds": 600,
+        "events": {"path": BASE + "/run-0001/execution/events.jsonl",
+                   "sha256": "eda82debf9b42242abb68fcc19937a4bf5a399ab67d8a053eefa0a555e8a8427"},
+        "state": {"path": BASE + "/run-0001/execution/state.json",
+                  "sha256": "57c69f1fd832275ffbda1f33ec3974d6230b24b5e26f8382a07d2d6dbc9952c1"},
+        "request": {"path": BASE + "/run-0001/attempts/01/request.json",
+                    "sha256": "ff7c92532416df96a3195e7ae35581236b5b2103e000a0bb64f2cd8226f69396"},
+    }
+    require(repair["reservation"] == expected_reservation and repair["raw_error"] == {
+        "path": BASE + "/run-0001/controller-error.txt",
+        "sha256": "9ec7a36ad4435bfba071329f3ca93d18d5e9ca0de501939c255f0a4f1921240e",
+    } and repair["no_process_evidence"] == {
+        "cargo_or_checker_process_invoked": False,
+        "supervisor_receipt_exists": False,
+        "stdout_receipt_exists": False,
+        "stderr_receipt_exists": False,
+    }, "R1 reservation evidence differs")
+    for row in (expected_reservation["events"], expected_reservation["state"],
+                expected_reservation["request"], repair["raw_error"]):
+        bind(root, row)
     decision = load(exact(root, manifest["entry_decision"], ENTRY, manifest["entry_decision"]["sha256"]))
     require(decision["item_id"] == ITEM and decision["owner_authorization"] == "Go ahead."
             and decision["one_worker_protocol"] is True, "entry decision differs")
@@ -241,7 +288,7 @@ def validate_manifest(root: Path, *, launch: bool = False) -> dict:
     if launch:
         gate(root, manifest)
         for row in ([manifest["work_record"], manifest["entry_decision"], manifest["source_materialization"],
-                     manifest["runtime_binding"], manifest["focused_test_receipt"]]
+                     manifest["runtime_binding"], manifest["tooling_repair"], manifest["focused_test_receipt"]]
                     + manifest["fixed_inputs"] + list(manifest["configs"].values())
                     + manifest["tooling_inputs"]):
             committed(root, row["path"])

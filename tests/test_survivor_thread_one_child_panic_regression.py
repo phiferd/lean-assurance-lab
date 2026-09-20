@@ -102,6 +102,9 @@ class ProtocolTests(unittest.TestCase):
 
 
 class SourceBindingTests(unittest.TestCase):
+    def test_signal_retry_is_available_before_process_execution(self):
+        self.assertTrue(callable(p.signal_retry))
+
     def test_only_relational_boundary_changes(self):
         source = (ROOT / "results/research/alt-survivors-2026-09-08/evidence/pinned-nanoda/src/tc.rs").read_bytes()
         self.assertEqual(source.count(b"self.config.num_threads > 1"), 1)

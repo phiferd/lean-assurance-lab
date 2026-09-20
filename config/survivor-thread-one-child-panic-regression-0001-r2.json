@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "item_id": "SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1",
+  "run_id": "survivor-thread-one-child-panic-regression-0001-r2",
+  "limits": {
+    "active_seconds": 3600,
+    "sessions": 1,
+    "offline_build_launches": 2,
+    "offline_build_timeout_seconds": 600,
+    "checker_launches": 4,
+    "checker_timeout_seconds": 30,
+    "memory_bytes": 2147483648,
+    "lean_proof_launches": 0,
+    "research_network_requests": 0,
+    "new_export_byte_variants": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "prelaunch_active_seconds": 300,
+  "memory_bytes": 2147483648,
+  "work_record": {"path": "results/research/survivor-thread-one-child-panic-regression-1/work-record-r2.json", "sha256": "68ceaacd63001ad658be60163c418cc74fc43a9d5e8657499fd3ba3ca366414a"},
+  "entry_decision": {"path": "results/research/survivor-thread-one-child-panic-regression-1/entry-decision.json", "sha256": "9f5b74c4a456dc131d3b757dadfefe4cd041f1dbb02e8de02d35f4d6c4763d4d"},
+  "source_materialization": {"path": "results/research/survivor-thread-one-child-panic-regression-1/source-materialization.json", "sha256": "6f2550823dce568c88426c9398bced82e256ff494058bf8e6b845b29b12c99c9"},
+  "runtime_binding": {"path": "results/research/survivor-thread-one-child-panic-regression-1/runtime-binding.json", "sha256": "185e0fe0a420ada25d7c8833aa694b4202b238044905621bc10c9e7f601291b3"},
+  "tooling_repair": {"path": "results/research/survivor-thread-one-child-panic-regression-1/tooling-repair-0001.json", "sha256": "e6c331969b11f9005901882819c7c6a53fb6e8bfc3f2f769c4ded597416c7804"},
+  "fixed_inputs": [
+    {"path": "mutations/nanoda-gen-2bdfe18a9ec2.json", "sha256": "565dade1407732bed722b3db2758f77e6a3a8a3cd079ce526974d91b8347aca6"},
+    {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    {"path": "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson", "sha256": "63ef460ca2aac739482c983457cd14309f4d7149ecd2c0d79d53fe2a410c9f16"},
+    {"path": "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson", "sha256": "52e75d78c948d466e90fb203e7a04192dde4273c7319d44fc261fd2b3b6beeac"},
+    {"path": "results/research/survivor-thread-one-determinism-1/determinism-assessment.json", "sha256": "3d00b95dd3211da3aa4a15f0cdfbe0f1feb28b771e690bf45f2c29ed7609e4e4"},
+    {"path": "results/research/survivor-thread-one-determinism-1/result.json", "sha256": "23f9d6846fe25b5fde7f48fef7faa5999cde962e911a1067a67408aac19561a9"}
+  ],
+  "configs": {
+    "control": {"path": "results/research/survivor-thread-one-child-panic-regression-1/configs/control.json", "sha256": "cb2f6e6a34082bb607f26ba8e612c27d4d6cb3e2c1f923a8a40e45dc325934a6"},
+    "candidate": {"path": "results/research/survivor-thread-one-child-panic-regression-1/configs/candidate.json", "sha256": "73a9e4414b5a001ba6ff24ae5f20957bf901a31c6e977f09c1a5e62e648bf909"}
+  },
+  "matrix": [
+    {"id": "control-baseline", "observer": "baseline", "input": "control", "expected": "ACCEPT"},
+    {"id": "control-mutant", "observer": "mutant", "input": "control", "expected": "ACCEPT"},
+    {"id": "candidate-baseline", "observer": "baseline", "input": "candidate", "expected": "DIRECT_ASSERTION_REFUSAL"},
+    {"id": "candidate-mutant", "observer": "mutant", "input": "candidate", "expected": "WORKER_PANIC_JOIN_REFUSAL"}
+  ],
+  "checker_environment": {"LANG": "C", "PATH": "/usr/bin:/bin", "RUST_BACKTRACE": "full"},
+  "tooling_inputs": [
+    {"path": "lib/survivor_thread_one_child_panic_regression.py", "sha256": "6dbeb88c4389382b2f62930774bd0015282e46f24e8e4f8c8c52c4c1f175c069"},
+    {"path": "scripts/execute-survivor-thread-one-child-panic-regression", "sha256": "078f184d99e9856cd1326e84266a896398044410c9d07e287534d9b12bc40c07"},
+    {"path": "scripts/validate-survivor-thread-one-child-panic-regression", "sha256": "dae6d221626141e2702f899123b5c17bc74423546d3990a965a7e7959cb66848"},
+    {"path": "tests/test_survivor_thread_one_child_panic_regression.py", "sha256": "1f4b6b87277b3755d85975129b9f0f144a655a7acd2249bc9322bef585ea67e9"},
+    {"path": "lib/cvc_prep.py", "sha256": "2f16c3eb8ece976c51aa1eb143a571894b5004f20c7d7fb609a7d4b48075cb61"},
+    {"path": "lib/cvc_process.py", "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c"},
+    {"path": "lib/metamorphic_pilot_runner.py", "sha256": "fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50"},
+    {"path": "lib/research_queue_v3.py", "sha256": "2c923e3acdfc32ebb4905450468908da5ef0f854dda7c3a4e6cfe43a600fcfe7"}
+  ],
+  "focused_test_receipt": {"path": "results/research/survivor-thread-one-child-panic-regression-1/focused-test-receipt-r2.json", "sha256": "2905e2e6f6aea0185ed57d5b7269ccda983deb63ea1c0e30c9d88cdc84ea037c"}
+}

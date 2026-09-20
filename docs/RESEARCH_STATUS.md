@@ -67,8 +67,9 @@ research directions.
   acceptance difference, current upstream defect or external action. The
   [assessment](../results/research/survivor-thread-one-determinism-1/determinism-assessment.json)
   ran no process. `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` is selected
-  ACTIVE under its separately bound plan and committed prelaunch package; no
-  offline build or checker process has yet launched.
+  ACTIVE under its separately bound plan and committed R2 prelaunch package.
+  Its preserved R1 controller import error preceded every process invocation;
+  no offline build or checker process has yet launched.
 
 - Completed `METAMORPHIC-REPRESENTATION-PILOT-2` on 2026-09-20 with SUCCESS.
   The separate continuation preserved pilot 1 unchanged, diagnosed its hidden
