@@ -123,7 +123,7 @@ def build():
         'external_actions_pending_review': len(pending),
         'current_external_actions_pending_review': sum(r['source'] == ACTION_PATHS[0] for r in pending),
         'historical_study_external_actions_pending_review': sum(r['source'] == ACTION_PATHS[1] for r in pending),
-        'authorized_runner': 'manifest-required finite phase and total budgets, input bindings, immutable attempt logs and resume checks',
+        'authorized_runner': 'manifest-required exact input bindings, immutable attempt logs, nonterminal process safety controls and resume checks',
         'input_materialization': 'exact-hash local donor materialization on the declared platform',
         'successor_packet_status': packet['status'] if packet is not None else 'NOT_YET_RECORDED',
     }
@@ -131,19 +131,18 @@ def build():
     for item in sorted(queue['items'], key=lambda row: row['priority']):
         if item['status'] == 'COMPLETE':
             continue
-        budget = item['budget']
         next_steps.append({
             'priority': item['priority'], 'id': item['id'], 'title': item['title'],
             'status': item['status'], 'target': item['target'], 'action': item['action'],
             'completion': item['completion'], 'stop_condition': item['stop_condition'],
             'rank_rationale': item['rank_rationale'], 'entry_gate': item['entry_gate'],
-            'mechanism': f"At most {budget['max_sessions']} sessions of {budget['session_minutes']} active minutes; {budget['checker_launches']} validator launches. Additional plan limits apply.",
+            'mechanism': 'No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.',
             'authorization': item['status'] + ': ' + item['entry_gate'],
         })
     selected = next(row for row in queue['items'] if row['id'] == queue['selected_item'])
     paused = handoff_status(queue) == 'PAUSED'
     queue_sources = [queue['plan'], *[str(p.relative_to(ROOT)) for p in sorted((ROOT / 'results/research/queue-reviews').glob('*.json'))]]
-    if queue['schema_version'] == 3:
+    if queue['schema_version'] in {3, 4}:
         queue_sources.append(queue['strategic_review']['path'])
     for item in queue['items']:
         queue_sources.extend(item['evidence_refs'])
@@ -161,11 +160,11 @@ def build():
                  'evidence': 'The current snapshot separates scoped mutation results, cross-validator observations and unresolved triage; the completed pilot does not establish general method strength.',
                  'next_improvement': 'Prefer additional shared regression value and independent transfer over a larger coverage percentage.'},
                 {'goal': 'Durable reproducibility', 'assessment': 'Historical evidence remains bound; successor runner is manifest-governed',
-                 'evidence': 'The authorized-run manifest binds inputs, platform, finite budgets and completion condition; materialization verifies exact local donor bytes.',
+                 'evidence': 'The authorized-run manifest binds inputs, platform, process safety controls and completion condition; materialization verifies exact local donor bytes.',
                  'next_improvement': 'Preserve dated disposition successors alongside original submission and scientific evidence bindings.'},
                 {'goal': 'Scoped claims and preserved uncertainty', 'assessment': 'Aligned',
                  'evidence': 'The pilot retains its one-obligation denominator, provisional candidates and known-negative limitation. The broader FAIL state and unresolved survivors remain visible.',
-                 'next_improvement': 'Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence.'},
+                 'next_improvement': 'Continue to distinguish artifacts from distinct defects and scoped negative evidence from equivalence.'},
                 {'goal': 'Improve shared assets', 'assessment': 'Shared corpus contributions and a ranked research portfolio',
                  'evidence': 'The canonical external-contribution ledger records dated upstream dispositions and locally prepared candidates with evidence links. Its current observations are reproduced separately below; the queue and governing plan determine the research frontier. Local preparation does not establish adoption or authorize submission.',
                  'next_improvement': 'Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations.'},
@@ -175,7 +174,7 @@ def build():
                 {'goal': 'Concrete recommendations with human control', 'assessment': 'Aligned',
                  'evidence': 'Schema-backed action records now preserve approval, deferral, separate PR URLs, exact branch commits, and the latest-upstream duplicate preflight.',
                  'next_improvement': 'Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control.'},
-                {'goal': 'Highest-value bounded work and replaceable strategy', 'assessment': ('PAUSED: no executable item' if paused else 'Explicit ranked research successor'),
+                {'goal': 'Highest-value scoped work and replaceable strategy', 'assessment': ('PAUSED: no executable item' if paused else 'Explicit ranked research successor'),
                  'evidence': selected['rank_rationale'],
                  'next_improvement': (queue['handoff']['required_decision'] if paused else 'Complete ' + selected['id'] + ': ' + selected['title'] + '; record the result and rerank before the next item.')},
             ],
@@ -183,14 +182,14 @@ def build():
                 'The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.',
                 'Frozen study tests and validators now run against their committed frontier through an explicit successor; current and future tests remain live, and both groups must pass.',
                 'Exact historical evidence can validate without local checker payloads; fresh execution still needs reproducible materialization of the ignored corpus/coverage/observer inputs.',
-                'run-campaign now requires an authorized manifest that binds the active frontier, governing plan, exact inputs, declared platform, finite phase and total budgets, and a completion predicate before launch or resume.',
+                'run-campaign binds the active frontier, governing plan, exact inputs, declared platform, process safety controls and a completion predicate before launch or resume. Attempt totals do not authorize termination.',
                 'materialize-run-inputs supports exact-hash local donor materialization for a clean clone; it refuses mismatched existing files and does not rebuild omitted payloads.',
                 'run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.',
                 'The successor admitted two fixed witnesses without new checker execution, reducing the pending mechanical survivor queue from nine to seven while preserving unresolved semantic status.',
                 'A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.',
                 'The earlier CLI preflight failure remains historical. A dated successor verifies working read-only GitHub connector access; it does not prove CLI repair or authorize external writes.',
                 'No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.',
-                'Queue integrity validation checks bounded selection and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
+                'Queue integrity validation checks scoped selection, persistent execution policy and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.',
             ],
             'improvements_completed': ['Gates 11 and 12 closed with a generated decision/report and historical validator.',
                                        'The corpus-integration successor completed two current-Arena package builds, an exact tutorial comparison, and a separate Ultra proof-parameter review.',
@@ -205,10 +204,10 @@ def build():
                                            'triage': [{'mutant_id': row.get('mutant_id'), 'status': row.get('status'), 'reason': row.get('reason')} for row in packet['triage']],
                                            'external_actions': packet['external_actions']} if packet is not None else None),
             'pending_external_actions': pending, 'proposed_next_steps': next_steps,
-            'autonomy_policy': {'automatic': ['Hash and inventory checks', 'Already-authorized bounded execution and checkpointing', 'Deterministic normalization, report generation and validation', 'Read-only evidence assembly and preparation of concrete drafts'],
+            'autonomy_policy': {'automatic': ['Hash and inventory checks', 'Already-authorized scoped execution and checkpointing', 'Deterministic normalization, report generation and validation', 'Read-only evidence assembly and preparation of concrete drafts'],
                                 'model_review': ['Frontier design and novelty assessment', 'Unexplained checker differences and semantic ambiguity', 'Source-to-claim interpretation under frozen authority rules'],
                                 'human_decision': ['New normative source approvals', 'Target-specific external publication/submission', 'Scope beyond standing local authorization or an unsatisfied milestone gate']},
-            'cost_policy': ['No model calls inside checker/build/minimization loops.', 'Batch independent mechanical work; stop on budget/input/semantic exceptions.', 'Use Luna for routine edits and Terra for bounded implementation; reserve Ultra for a named difficult question.', 'Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.', 'Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions per bounded investigation.'],
+            'cost_policy': ['No model calls inside checker/build/minimization loops.', 'Batch independent mechanical work; engineering failures trigger repair and retry.', 'Use Luna for routine edits and Terra for scoped implementation; reserve Ultra for a named difficult question.', 'Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.', 'Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions as observations, never stopping authority.'],
             'new_research_authorized_by_this_review': False}
 
 
@@ -241,7 +240,7 @@ def render(review):
     lines += ['## Autonomous workflow', '', '| Work | Default mechanism |', '|---|---|']
     for category, values in review['autonomy_policy'].items():
         lines.append('| ' + category.replace('_', ' ').capitalize() + ' | ' + '; '.join(values) + ' |')
-    lines += ['', 'Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/build-project-review --check` to detect stale review inputs. Each research run should have one exact manifest, finite budgets and an executable completion condition. Scripts run through the authorized work; models handle exceptions. Prepare a concrete review packet before requesting any required owner decision.', '', '## Operational findings', '']
+    lines += ['', 'Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/build-project-review --check` to detect stale review inputs. Each research run should have one exact manifest, a fixed scientific scope, nonterminal process safety controls and an executable completion condition. Scripts run through the authorized work; models handle exceptions. Prepare a concrete review packet before requesting any required owner decision.', '', '## Operational findings', '']
     lines += ['- ' + value for value in review['operational_findings']]
     lines += ['', '## Efficiency rules', ''] + ['- ' + value for value in review['cost_policy']]
     lines += ['', '## Changes completed in this task', ''] + ['- ' + value for value in review['improvements_completed']]

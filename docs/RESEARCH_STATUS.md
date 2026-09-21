@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-20
+Last updated: 2026-09-21
 
 ## How Status Is Tracked
 
@@ -10,7 +10,7 @@ This document is the canonical human-readable research tracker:
   engineering work.
 - `Research Frontier` selects the authorized theme. Only its `Active` subsection
   defines what should be investigated next. The linked
-  [canonical work queue](../config/research-queue.json) ranks bounded items
+   [canonical work queue](../config/research-queue.json) ranks scoped items
   beneath that theme and retains explicitly deferred alternatives.
 - `Waiting` records work blocked on upstream adjudication without allowing it to
   displace executable local work.
@@ -33,8 +33,8 @@ submission records remain authoritative for their detailed historical claims.
 
 Use [Research workflow](RESEARCH_WORKFLOW.md) to rank by expected ecosystem
 value, information gained, transfer, feasibility/cost, and urgency. Complete a
-bounded item before reevaluating; record exceptions and preserve consumed
-budgets. Every stopping-point review leaves a selected executable next item or
+scoped item before reevaluating; record every attempt and observed cost without
+using counts as permission or termination limits. Every stopping-point review leaves a selected executable next item or
 an explicit blocker requiring a decision. Literature/reuse assessments are
 first-class queue items before new methods and at periodic review boundaries.
 Validate queue/status agreement with `scripts/validate-research-queue`.
@@ -48,7 +48,8 @@ completion condition and terminate in at least one of:
 - a regression or corpus contribution;
 - an upstream action recommendation;
 - a demonstrated negative result; or
-- an explicitly bounded unresolved result.
+- an unresolved result caused by a genuine authority, invalidated-input or
+  unavailable-capability boundary after feasible repairs.
 
 Keep the number of top-level Active research themes small. The normal target is
 one or two coherent frontier themes, with parallel work occurring through
@@ -66,11 +67,12 @@ research directions.
   stderr, 48 positive RSS samples and complete cleanup are preserved; no export
   or checker cell exists, so no scientific or checker claim follows. A minimal
   repair removes controller-owned manifest state and adds a regression, but was
-  not relaunched after the 1/1 cap. A post-terminal local Lake help diagnostic
+  not relaunched because the former policy incorrectly treated its 1/1 cap as
+  terminal. A post-terminal local Lake help diagnostic
   attempted and failed a latest-release query, returned no network data and is
   retained as a protocol deviation. `PIPELINE-COMPLETENESS-PILOT-2` is selected
-  READY and unstarted as a separately bounded continuation with a mandatory
-  configuration preflight and one new producer reservation.
+  READY as the live continuation of the unanswered question. Its configuration
+  preflight, build and checker work now follow persistent repair-and-retry policy.
 
 - Completed `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` on 2026-09-20 with
   `BOUNDED_UNRESOLVED`. Its R1 controller import error occurred before any
@@ -2986,13 +2988,14 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `PIPELINE-COMPLETENESS-PILOT-2`.
 
-It is READY and unstarted under a separate
+It is READY under a
 [continuation plan](research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md). Pilot 1's
-scientific inputs, exact failed attempt and charged producer reservation remain
-frozen. The continuation must first commit a fresh controller and pass a
-supervised offline Lake configuration preflight that performs no compilation,
-export or checker invocation. Only then may it spend its one new producer
-reservation on the unchanged twelve-theorem, two-adapter, three-fault matrix.
+scientific inputs and exact failed attempt remain frozen as historical evidence.
+The old attempt cap is not a live stopping rule. The continuation must first
+commit a fresh controller and pass a supervised offline Lake configuration
+preflight that performs no compilation, export or checker invocation. It must
+then repair and continue through the unchanged twelve-theorem, two-adapter,
+three-fault matrix until the scientific result or a genuine blocker exists.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -3162,12 +3165,13 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item:
-`PIPELINE-COMPLETENESS-PILOT-2`, selected and unstarted.
+`PIPELINE-COMPLETENESS-PILOT-2`, selected under persistent execution policy.
 The source-lock audit, provenance intake and compact child-panic confirmation
 are complete. The selected pilot now returns the frontier to broader reusable
 assurance after preserving pilot 1's pre-compilation controller failure. It will
 test whether a successful checker run is mechanically tied to the exact intended
-theorem and dependencies, but only after the new configuration preflight passes.
+theorem and dependencies after the new configuration preflight passes. Routine
+engineering failures require repair and retry, not closure or a successor item.
 The earlier representation pilot 1 remains frozen at its tooling cap; its own
 pilot 2 is the successful separate representation continuation and retains that
 completed reusable package.

@@ -21,17 +21,23 @@ class PipelineCompletenessPilot2ProtocolTests(unittest.TestCase):
             self.assertEqual(row["sha256"],
                              hashlib.sha256((ROOT / row["path"]).read_bytes()).hexdigest())
 
-    def test_lineage_cost_and_new_limits_are_not_reset(self):
-        limits = self.protocol["limits"]
-        self.assertEqual(limits["new_producer_builds"], 1)
-        self.assertEqual(limits["lineage_producer_builds_including_pilot_1"], 2)
-        self.assertEqual(self.protocol["historical_attempt"]["producer_reservations_consumed"], 1)
-        self.assertEqual(limits["maximum_checker_launches"], 12)
+    def test_attempt_counts_are_observational_not_terminal(self):
+        policy = self.protocol["execution_policy"]
+        self.assertEqual(policy["attempt_caps"], "NONE")
+        self.assertEqual(policy["accounting"], "OBSERVABILITY_ONLY")
+        self.assertEqual(policy["engineering_failure"], "REPAIR_AND_RETRY_WITHIN_ITEM")
+        self.assertFalse(self.protocol["process_safety"]["safety_event_is_terminal"])
+        self.assertNotIn("limits", self.protocol)
+
+    def test_scientific_matrix_remains_fixed(self):
+        matrix = self.protocol["matrix"]
+        self.assertEqual(matrix["scientific_cells"], 8)
+        self.assertFalse(matrix["engineering_retries_change_scientific_matrix"])
 
     def test_preflight_precedes_new_producer(self):
         gate = self.protocol["entry_gate"]
         self.assertIn("no compilation", gate["preflight_before_producer"].lower())
-        self.assertTrue(any("preflight receipt" in row for row in gate["commit_before_producer"]))
+        self.assertTrue(any("preflight evidence" in row for row in gate["commit_before_producer"]))
 
 
 if __name__ == "__main__":

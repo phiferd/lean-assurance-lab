@@ -41,18 +41,18 @@ and literature or reuse. A completed plan or a blocked next milestone is not,
 by itself, a reason to declare that no work remains or pause the project.
 
 The owner's standing instruction of 2026-09-08 authorizes agents to select and
-record bounded local successor work, including a changed research direction,
+record scoped local successor work, including a changed research direction,
 and to update its explicit plan, Active status and canonical queue together.
 No new permission is needed merely because the best local direction differs
 from the completed plan. This includes local investigation, implementation and
 experiments after their exact entry, scientific-input and launch gates pass.
-It does not override the constitution, extend an item's budget, reopen frozen
-history, authorize an external action, or permit crossing an assurance milestone
+It does not override the constitution, broaden frozen scientific scope, reopen
+frozen history, authorize an external action, or permit crossing an assurance milestone
 whose prerequisite gate is unsatisfied. Record the successor in durable state
 before executing it; a conversational recommendation is insufficient authority.
 
 At handoff select the highest-value feasible authorized READY item after that
-comparison. Reevaluate bounded local blocker-removal and alternative work before
+comparison. Reevaluate scoped local blocker-removal and alternative work before
 using PAUSED, and record the actual evidence-bound blockers and unblocking
 conditions if no useful local item exists. Do not manufacture activity or repeat
 planning without a concrete useful output. Selecting the next item does not
@@ -64,34 +64,37 @@ strategic-review checks; older queues retain their original historical rules.
 
 Treat an ordinary engineering failure as work to diagnose and repair within the
 active item, not as a scientific negative, completion, or reason to create a
-successor. Within the authorized scope and remaining budget, preserve the raw
-failure evidence, identify the cause, add the smallest meaningful regression,
-repair it, and rerun the affected validation. Do not reset counters, reuse a
-completed attempt, weaken a gate, or edit frozen evidence to make the repair
-pass.
+successor. Within the authorized scientific scope, preserve the raw failure
+evidence, identify the cause, add the smallest meaningful regression, repair it,
+and rerun the affected validation. Attempt, build, checker, session and elapsed-
+time counts are observations, never authorization limits or stopping conditions.
+Do not reuse a completed attempt, weaken a gate, or edit frozen evidence to make
+the repair pass.
 
 Freeze scientific inputs and preserve every prior evidence/tooling binding.
 Parsers, audit implementations, runner controls and tests may be repaired within
 the SAME active item through a new exact tooling revision. A frozen controller
 may require a new execution-manifest revision, but that is not a new research
-item or a budget reset. Validate old attempts against their original tooling.
+item. Validate old attempts against their original tooling.
 Classify an output-format or audit-code defect as a repair pause, not as a
 scientific mismatch or automatic terminal result.
 
 Pause launches for accounting, timeout, cleanup or process-control failures;
-reconcile conservatively before resuming. One owner binds exact scientific,
-source, tooling and test inputs before each batch. Charge actual cumulative
-active work; checkpoints do not consume whole time allocations. Preserve all
-failed build reservations. Apply these rules prospectively through
+reconcile conservatively, repair, and resume. One owner binds exact scientific,
+source, tooling and test inputs before each batch. Record actual cumulative work
+and preserve every failed attempt as evidence. Per-process timeout, memory and
+cleanup controls remain safety mechanisms, but hitting one requires diagnosis
+and repair rather than closing the item. Apply these rules prospectively through
 `docs/RESEARCH_WORKFLOW.md` and the current bound protocol; historical runs keep
 their original rules and are never reopened.
 
 Run focused checks during repairs and the required full suite at logical item
 closure, or earlier for a material assurance change. Documentation or tooling
-checkpoints do not automatically close or rerank research. Stop only for a real
-cap, authority/external blocker, scientific-input change or documented gap with
-no feasible authorized repair path. Preserve attempted repairs and explain the
-remaining blocker.
+checkpoints do not automatically close or rerank research. Stop only when the
+scientific question is answered, the owner stops the work, required external
+authority or input is unavailable, a scientific input is invalidated, or a
+required capability remains genuinely unavailable after feasible repairs.
+Preserve attempted repairs and explain any remaining blocker.
 
 ## Repository delivery and external actions
 

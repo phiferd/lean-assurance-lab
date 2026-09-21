@@ -1,8 +1,8 @@
 # Research selection and stopping-point review
 
 Effective 2026-09-06 under the owner's instruction to maintain a prioritized
-list and finish bounded work before reevaluating; extended 2026-09-08 by the
-owner's standing instruction for project-wide reassessment and bounded local
+list and finish scoped work before reevaluating; extended 2026-09-08 by the
+owner's standing instruction for project-wide reassessment and scoped local
 successors. This operating procedure is subordinate to the constitution. Active
 execution follows the frontier recorded in RESEARCH_STATUS; a stopping-point
 review may replace that frontier through the explicit process below.
@@ -19,18 +19,18 @@ overrides the repository's frontier or queue.
 
 Use `scripts/validate-research-queue` before selecting work. One writer owns
 queue changes. The validator checks unique contiguous ranks, dependencies,
-finite budgets, completion records, one active item, the highest-ranked eligible
+scientific-scope declarations, completion records, one active item, the highest-ranked eligible
 selection, and agreement with the Active status marker. It does not prove a
 priority judgment correct or substitute for exact experiment entry gates.
 
 The owner's standing authorization permits selecting, recording and executing
-bounded local successor work that best advances the constitutional goal, even
+scoped local successor work that best advances the constitutional goal, even
 when its method or research direction differs from the completed plan. At a
 logical stopping point, update the explicit successor plan, Active status and
 queue together before execution. This is the durable route for changing the
 frontier, not a silent prompt override. Local source investigations, regression
 construction, implementation and experiments can qualify. Scientific-input
-freezes, exact launch controls, finite cumulative budgets, milestone prerequisite
+freezes, exact launch controls, process safety controls, milestone prerequisite
 gates and frozen history still apply. External publication, contact and changes
 still require authorization for that exact action and target. A task-specific
 limit such as one completed item controls when to stop, not whether useful next
@@ -39,7 +39,7 @@ work may be selected READY.
 ## What makes an item executable
 
 Every item names its question/action, target, expected ecosystem value,
-supporting evidence, rank rationale, prerequisites, entry gate, finite budget,
+supporting evidence, rank rationale, prerequisites, entry gate, fixed scientific scope,
 completion evidence, stopping condition, and any linked Issue. A vague idea is
 `DEFERRED` until it can be made this concrete.
 
@@ -63,7 +63,7 @@ interrupt it only with the explicit checkpoint described below.
 ## How to rank
 
 First exclude work outside authorization, with unmet prerequisites, or without
-a finite useful stopping point. For the remaining choices, compare:
+a concrete useful completion condition. For the remaining choices, compare:
 
 1. Expected improvement to ecosystem trust or a shared asset: severity,
    relevance to real artifacts, and likely usefulness to others.
@@ -72,7 +72,7 @@ a finite useful stopping point. For the remaining choices, compare:
 3. Evidence and transfer: strength of the starting evidence and usefulness
    across independent implementations or sources.
 4. Cost and feasibility: effort, execution expense, dependency risk, and the
-   likelihood of reaching a useful result within the bound.
+   likelihood of reaching a useful result with available capabilities.
 5. Urgency: a substantive maintainer request, expiring evidence, or a known
    assurance failure can make closure more valuable now.
 
@@ -96,7 +96,7 @@ PLANNED follow-ups with dependencies and result-dependent promotion gates.
 Describe what both a positive and negative finding would lead to. Do not force
 equal category quotas, fabricate work, or make all branches depend on one
 speculative investigation. The canonical queue checks ranks, dependencies,
-budgets and selection; the strategic review records why the comparison is useful.
+scientific scope and selection; the strategic review records why the comparison is useful.
 
 Before expensive investigation, name the potential external artifact and its
 beneficiary. Current implementation correctness excludes a current-defect claim;
@@ -116,16 +116,18 @@ to maintainers' stated needs; combine related clarification questions.
 ## Finish, then reassess
 
 Choose the first eligible READY item and set it ACTIVE with the start date,
-owner, input identities, execution authority, and remaining budget in its work
-record. Keep the commitment until its success, negative-result, unresolved,
-or budget stop. Record new ideas as candidates; novelty alone does not displace
+owner, input identities, execution authority, and fixed scientific scope in its
+work record. Keep the commitment until its success, negative result, genuine
+external/capability blocker, invalidated scientific input, or owner stop. Record
+new ideas as candidates; novelty alone does not displace
 an active item. Checkpoints for breaks or context handoff resume the same item.
 
-Ordinary implementation or test failures stay inside the active item while
-its scope and budget permit repair. Use the versioned repair procedure below;
-complete the item only at its scientific result, real cumulative cap, authority
-or external blocker, scientific-input transition, or a documented implementation
-gap for which no feasible authorized repair remains.
+Ordinary implementation, configuration, build, test, parser and process-control
+failures stay inside the active item. Use the versioned repair procedure below;
+attempt, session, build, checker and elapsed-time counts never close the item.
+Complete it only at its scientific result, owner stop, authority or external
+blocker, scientific-input invalidation, or a required capability that remains
+unavailable after feasible authorized repair.
 
 At every stop:
 
@@ -141,40 +143,40 @@ At every stop:
    upstream needs, and literature/reuse currency. Reassess waiting follow-through
    and deferred work, with concrete evidence and a reason when a category offers
    no useful candidate. Promote a PLANNED item only if its entry gate is met and
-   it still merits the cost. Create a bounded local successor when a better
+   it still merits the cost. Create a scoped local successor when a better
    direction is available under the standing owner authorization.
 4. Update the ranked queue and Active status together. Append a dated decision
    under `results/research/queue-reviews/` with the stopped item/outcome, before
    and after ordering, evidence paths, selected next item, and reasons. The
-   current schema-v3 queue also binds a project-wide strategic review with the
+   current queue also binds a project-wide strategic review with the
    compared candidates, exact supporting evidence, category coverage, concrete
    blockers and selected-item agreement. Preserve earlier decisions; never
    overwrite the result to justify a preferred rank.
 5. Validate the queue and regenerate its review through the existing refresh
-   path. Mirror the bounded task to GitHub only within existing authorization.
+   path. Mirror the scoped task to GitHub only within existing authorization.
 
 Reprioritize an unfinished item only for explicit owner redirection, invalidated
-inputs/assumptions, exhausted bounds, a material blocker, or urgent credible
-correctness evidence/maintainer deadline. Record the interruption, preserved
-checkpoint, consumed budget, and reason before switching. Do not silently reset
-budgets or extend scope. A bounded unresolved result cannot satisfy a downstream
+inputs/assumptions, a material blocker, or urgent credible correctness evidence/
+maintainer deadline. Record the interruption, preserved checkpoint, observed
+cost, and reason before switching. Do not silently extend scientific scope. An
+unresolved result cannot satisfy a downstream
 dependency that needs success; revise or replace that task explicitly.
 
 Maintain a useful executable frontier by selecting the highest-value feasible
 authorized READY item at handoff. A completed plan, a blocked planned milestone,
 or a change of local direction alone does not justify PAUSED or another request
-for authorization. Before concluding there is no work, assess whether a bounded
+for authorization. Before concluding there is no work, assess whether a scoped
 local investigation, regression, implementation, maintenance action or
 blocker-removal task would advance the constitutional goal. Prefer work with a
 decisive shared output over successive planning-only items. If no valuable local
 task is feasible, preserve the evidence and identify the actual external input,
-target-specific authorization, technical capability, scientific gate, exhausted
-bound or lack of a useful bounded question. State what would unblock it. Do not
+target-specific authorization, technical capability, scientific gate or lack of
+a useful scoped question. State what would unblock it. Do not
 invent a nominal task or run an endless planning loop. The validator refuses to
 present an empty/blocked queue as operationally ready. Selecting a successor
 does not execute it; stop after one item when the request specifies that bound.
 
-The explicit schema-v2/v3 handoff represents this case as `PAUSED`, with the
+The explicit schema-v2/v3/v4 handoff represents this case as `PAUSED`, with the
 highest-ranked WAITING/DEFERRED decision selected, no READY/ACTIVE items, a
 nonempty reason, exact required decision and existing evidence references.
 `Queue handoff: PAUSED.` must appear in Active status. Integrity validation
@@ -186,7 +188,7 @@ the selected waiting entry. Version 2 retains its exact original validation
 rules through `lib/research_queue_v2.py`; new project-wide review requirements
 are implemented only in the explicit `lib/research_queue_v3.py` successor.
 
-For schema v3, `strategic_review` binds a dated JSON review by path and SHA-256.
+For schema v3 and v4, `strategic_review` binds a dated JSON review by path and SHA-256.
 It records `PROJECT_WIDE` scope, `ENTRY` or `CLOSURE`, the completed item at
 closure, the selected successor, and the digest of the current queue excluding
 that review reference. It binds the constitution, this workflow, the current
@@ -203,9 +205,16 @@ assessed local blocker-removal candidates need exact blocker evidence; no
 FEASIBLE candidate may remain. ENTRY applies only while the selected item is
 ACTIVE; a READY or PAUSED handoff requires CLOSURE and its completed-item
 reference. A CLOSURE review leaves the next item unstarted.
-The checks enforce scope recording, finite queue items, evidence freshness and
+The checks enforce scope recording, persistent execution policy, evidence freshness and
 selection consistency. They cannot prove the LLM's research judgment correct,
 prove a natural-language blocker genuine, or confer semantic authority.
+
+Schema v4 is the live queue policy. Every unfinished item has `budget: null` and
+the queue binds `REPAIR_AND_CONTINUE`, no attempt caps, observational accounting,
+and nonterminal per-process safety controls. Completed items retain their old
+budget objects strictly as frozen historical records. A build, test, checker,
+parser, timeout or cleanup failure cannot be classified as completion merely
+because it increments a counter; repair and retry remain part of the same item.
 
 Deliver the completed item on `main` using `scripts/push-main`, as required by
 `AGENTS.md`. A push to a task branch is not completed repository delivery.
@@ -218,8 +227,8 @@ failed attempts, frozen manifests and historical decisions retain their bytes
 and original interpretation.
 
 Freeze the scientific question: input meaning, target declarations, permitted
-assumptions, expected outcomes, selected runtime/dependency identities and total
-resource ceilings. Version the engineering implementation: output parsers,
+assumptions, expected outcomes, selected runtime/dependency identities and the
+scientific matrix. Version the engineering implementation: output parsers,
 auditing code, runner controls, proof implementation and tests. A tooling defect
 is not a scientific mismatch or a reason to close the active research item.
 A parser or audit failure pauses new launches for diagnosis; only an actual
@@ -232,21 +241,18 @@ validation evidence and reason. Every attempt binds the scientific manifest,
 tooling revision, exact source and generated compiler input before launch.
 Validate old attempts with their original bound tooling, not the latest parser.
 If a frozen controller cannot represent the repair, use a new controller or
-manifest revision under the SAME active research item; carry all consumed
-counters and time. A controller revision is not a new research item, a free
-attempt, or permission to reinterpret earlier evidence. Never reopen a terminal
-historical run; a separately identified continuation can inherit its costs.
+manifest revision under the SAME active research item. Preserve all counters and
+time as observations. A controller revision is not a new research item or
+permission to reinterpret earlier evidence. Never rewrite a terminal historical
+run; correct its live continuation policy explicitly when needed.
 
-Charge actual cumulative active work, including implementation, diagnosis and
-proof work, using paired UTC/monotonic interval records. Breaks and checkpoints
-may subdivide the allowance without forfeiting unused time or resetting costs.
-For protocols adopting this policy, queue `max_sessions × session_minutes`
-specifies the cumulative time allocation; recorded work intervals do not consume
-whole allocations. The new protocol must enforce its explicit remaining-second
-ceiling and per-process timeout. Closed protocols retain their original session
-rules. Every actual build reservation still counts, including failures, setup,
-baselines and interrupted launches. Unknown costs stay unknown or receive the
-recorded conservative charge; they never become zero.
+Record actual cumulative work, including implementation, diagnosis and proof
+work, using paired UTC/monotonic interval records where available. Counts and
+elapsed time are observability data, not permission or termination controls.
+Per-process timeouts, memory ceilings and cleanup checks protect the machine from
+hung or runaway processes; reaching one pauses the next launch for diagnosis and
+repair, then execution resumes. Closed historical protocols retain their bytes
+and original interpretation. Unknown costs stay unknown; they never become zero.
 
 Keep one launch owner. Pause and reconcile accounting, timeout, process-control
 or cleanup faults before any further launch. Tooling repair must preserve the
@@ -265,7 +271,7 @@ manifest rather than duplicating it for every command.
 
 ## Literature is a first-class task
 
-Perform a bounded literature and existing-tool search before a new theory,
+Perform a scoped literature and existing-tool search before a new theory,
 method, representation, proof technique, or substantial tool is adopted, and
 when a result appears to duplicate existing work. At each stopping-point
 review, record whether the relevant search remains current. After 30 days of
@@ -279,7 +285,7 @@ boundaries. Record query/date/source/version/relevance and inclusion/exclusion
 reasons. Preserve enough exact source identity for another person to challenge
 the conclusion; bind any source used by a formal claim through its evidence path.
 
-Every search has a decision question, finite time/source budget, and terminal
+Every search has a decision question, explicit source scope, and terminal
 recommendation: reuse, extend, build only the missing part, or stop. Capture
 inaccessible sources and uncertainty. Search exhaustion is not global novelty;
 a current repository is not proof that all its stated theorems are complete.
@@ -287,15 +293,15 @@ a current repository is not proof that all its stated theorems are complete.
 ## GitHub Issues and external follow-through
 
 An Issue should identify the queue ID and frontier, question, evidence,
-deliverables, dependencies, budget, stopping criteria, and owner. Contributors
-claim bounded work there; repository records establish results and priorities.
+deliverables, dependencies, scientific scope, completion criteria, and owner.
+Contributors claim scoped work there; repository records establish results and priorities.
 Closing an Issue requires the repository closure evidence, and an Issue does
 not automatically become next because it is new, old, assigned, or popular.
 
 Keep pending upstream decisions linked to Waiting records with an unblocking
-condition and a bounded next status check. At review boundaries, prioritize
+condition and an explicit next status check. At review boundaries, prioritize
 substantive feedback by value and urgency. A read-only status check can be a
-finite maintenance item; a watcher or recurring automation is a separate
+scoped maintenance item; a watcher or recurring automation is a separate
 operational request. External issues, comments, PRs, and other messages still
 need target-specific owner authorization. Local work and drafts can proceed
 without publishing a tracking Issue first.

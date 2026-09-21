@@ -1,5 +1,5 @@
 {
-  "schema_version": 1,
+  "schema_version": 2,
   "item_id": "PIPELINE-COMPLETENESS-PILOT-2",
   "status": "READY",
   "continuation_of": "PIPELINE-COMPLETENESS-PILOT-1",
@@ -20,7 +20,7 @@
   "historical_attempt": {
     "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/result.json",
     "outcome": "ENGINEERING_FAILURE",
-    "producer_reservations_consumed": 1
+    "interpretation": "Preserved engineering evidence; not a scientific result or live execution limit."
   },
   "repair_input": {
     "path": "results/research/pipeline-completeness-pilot-1/tooling-revision-02.json",
@@ -29,40 +29,49 @@
   },
   "entry_gate": {
     "queue_status": "READY",
-    "preflight_before_producer": "One supervised offline pinned-toolchain Lake configuration check in a fresh workspace; no compilation, exporter or checker process.",
+    "preflight_before_producer": "A passing supervised offline pinned-toolchain Lake configuration check in a fresh workspace; no compilation, exporter or checker process.",
     "commit_before_producer": [
       "new pilot-2 controller and fresh paths",
       "exact inherited bindings",
-      "preflight receipt",
-      "work and accounting records"
+      "passing preflight evidence",
+      "execution policy"
     ]
   },
   "matrix": {
     "artifacts": ["BASELINE", "OMISSION", "SUBSTITUTION", "TRUNCATION"],
     "adapters": ["official", "lean4lean"],
-    "primary_checker_launches": 8,
-    "repair_reserve": 4,
-    "maximum_checker_launches": 12
+    "scientific_cells": 8,
+    "engineering_retries_change_scientific_matrix": false
   },
-  "limits": {
-    "active_minutes": 180,
-    "configuration_preflights": 2,
-    "configuration_preflight_seconds_each": 60,
-    "configuration_preflight_memory_bytes_each": 1073741824,
-    "new_producer_builds": 1,
-    "lineage_producer_builds_including_pilot_1": 2,
+  "execution_policy": {
+    "attempt_caps": "NONE",
+    "accounting": "OBSERVABILITY_ONLY",
+    "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
+    "terminal_conditions": [
+      "SCIENTIFIC_QUESTION_ANSWERED",
+      "OWNER_STOP",
+      "REQUIRED_EXTERNAL_AUTHORITY_OR_INPUT_UNAVAILABLE",
+      "SCIENTIFIC_INPUT_INVALIDATED",
+      "REQUIRED_CAPABILITY_UNAVAILABLE_AFTER_FEASIBLE_REPAIRS"
+    ]
+  },
+  "process_safety": {
+    "configuration_preflight_seconds": 60,
+    "configuration_preflight_memory_bytes": 1073741824,
     "producer_seconds": 600,
     "producer_memory_bytes": 4294967296,
     "checker_seconds_each": 120,
     "checker_memory_bytes_each": 2147483648,
-    "maximum_checker_launches": 12,
+    "safety_event_is_terminal": false
+  },
+  "authority_limits": {
     "network_requests": 0,
     "external_actions": 0
   },
   "forbidden": [
     "editing inherited expected contents, source, faults, adapters or matrix",
     "reinterpreting or deleting the pilot-1 failed attempt",
-    "treating a controller revision as a reset of lineage costs",
+    "closing the item because an attempt, build, checker, session or elapsed-time count was reached",
     "launching a producer before a committed passing configuration preflight",
     "checker launch before committed export, inventory, faults and execution manifest"
   ]

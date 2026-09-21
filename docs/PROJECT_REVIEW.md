@@ -16,11 +16,11 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 |---|---|---|
 | Measured ecosystem trust | Aligned, with limited generalization | Prefer additional shared regression value and independent transfer over a larger coverage percentage. |
 | Durable reproducibility | Historical evidence remains bound; successor runner is manifest-governed | Preserve dated disposition successors alongside original submission and scientific evidence bindings. |
-| Scoped claims and preserved uncertainty | Aligned | Continue to distinguish artifacts from distinct defects and bounded search exhaustion from equivalence. |
+| Scoped claims and preserved uncertainty | Aligned | Continue to distinguish artifacts from distinct defects and scoped negative evidence from equivalence. |
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked research successor | Complete PIPELINE-COMPLETENESS-PILOT-2: Complete intended-theorem pipeline completeness; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete PIPELINE-COMPLETENESS-PILOT-2: Complete intended-theorem pipeline completeness; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
@@ -52,15 +52,15 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 Validate the repaired minimal Lake workspace, then produce, inventory and execute the unchanged checked-object sentinel matrix under fresh continuation receipts.
 
-**Why this rank:** Highest-value feasible local blocker removal: pilot 1 isolated a pre-compilation controller defect, the scientific inputs and checker matrix remain untested and fixed, and one cheap configuration preflight now guards the only new producer reservation.
+**Why this rank:** Highest-value feasible local blocker removal: pilot 1 isolated a pre-compilation controller defect while the fixed scientific inputs and checker matrix remain untested. Repairing and continuing yields the intended reusable checked-object evidence.
 
-**Completion:** The unchanged eight-cell sentinel matrix with exact receipts and a scoped reuse recommendation, or a new preserved setup/tooling/observability boundary at the first finite cap.
+**Completion:** The unchanged eight-cell sentinel matrix with exact receipts and a scoped reuse recommendation, or a genuine authority, invalidated-input or unavailable-capability boundary after feasible repairs.
 
-**Stop:** 180 active minutes; 2 configuration preflights <=60 seconds and 1GiB each; one new producer build <=600 seconds and 4GiB (two total across the lineage); 12 checker reservations <=120 seconds and 2GiB each; zero network, proof, scientific-source mutation, production-checker edit, milestone advance or external write.
+**Stop:** Scientific result, owner stop, unavailable required authority/input, invalidated scientific input, or required capability unavailable after feasible repairs. Per-process time/memory/cleanup controls are nonterminal safety mechanisms. Zero network, proof, scientific-source mutation, production-checker edit, milestone advance or external write.
 
-**Execution:** At most 2 sessions of 90 active minutes; 12 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY and unstarted under the continuation plan. Pilot-1 science and failure evidence are inherited by hash. Before the sole new producer build, commit a fresh pilot-2 controller/work record and a passing supervised offline Lake configuration preflight that performs no compilation, export or checker launch.
+**Boundary:** READY: READY under the continuation plan. Pilot-1 science and failure evidence are inherited by hash. Commit a fresh pilot-2 controller/work record and a passing supervised offline Lake configuration preflight that performs no compilation, export or checker launch; repair and retry any engineering failure.
 
 ### 3. VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases
 
@@ -72,25 +72,25 @@ Construct terms with typing derivations under independently reviewed rules, then
 
 **Completion:** A derivation-carrying generator, fixed positive suite and complete failure/outcome record, or a precise construction/semantic boundary.
 
-**Stop:** Candidate ceiling 360 active minutes, 50 closed terms and 120 checker attempts; freeze separate generation/tooling/build/process caps before READY; no replacement of difficult cases or external writes.
+**Stop:** Complete the fixed 50-term scientific suite or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; no replacement of difficult cases or external writes. Per-process safety controls are nonterminal.
 
-**Execution:** At most 4 sessions of 90 active minutes; 120 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: independently review typing-rule encoding, generator reuse, exporter support and a finite staged construction protocol; exclude previous imax/ownership cases, inductives, quotients and native literals before promotion.
+**Boundary:** PLANNED: PLANNED: independently review typing-rule encoding, generator reuse, exporter support and a staged construction protocol; exclude previous imax/ownership cases, inductives, quotients and native literals before promotion.
 
 ### 4. ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences
 
-**Target:** One retained recursor-type candidate/control and one bounded downstream use
+**Target:** One retained recursor-type candidate/control and one scoped downstream use
 
 First reproduce the fixed pair at a current exact revision; only a surviving compatible-control acceptance premise permits the downstream consequence phase.
 
 **Why this rank:** Fourth: high potential impact, conditional on a current premise that the source-only import review did not establish.
 
-**Completion:** One minimal consequence witness, stale-premise result, scoped tested-use explanation, or bounded unresolved result with concrete recommendation.
+**Completion:** One minimal consequence witness, stale-premise result, scoped tested-use explanation, or genuine evidence-bound blocker with concrete recommendation.
 
-**Stop:** Candidate ceiling 360 active minutes and 24 checker/proof attempts for one pair/use; freeze exact construction/search/assumption and process caps before READY; zero external writes.
+**Stop:** Complete the fixed pair/use study or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; freeze exact construction/search/assumption scope before READY; zero external writes.
 
-**Execution:** At most 4 sessions of 90 active minutes; 24 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** PLANNED: PLANNED: record a separate staged reproduction/impact plan and assumption audit. Current reproduction is a phase, not a prerequisite to starting its investigation; compatible control and actual candidate acceptance gate only downstream construction.
 
@@ -104,9 +104,9 @@ Compare exact expected transitive assumptions to Lean/export/report outputs and 
 
 **Completion:** One assumption-preservation matrix and integration regression set, or a precise unsupported/reporting boundary.
 
-**Stop:** Candidate ceiling 180 active minutes, six fixtures, two paths and 24 checker attempts; bind generation/build/tooling/process caps before READY; no external writes.
+**Stop:** Complete the fixed six-fixture, two-path matrix or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
 
-**Execution:** At most 2 sessions of 90 active minutes; 24 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** PLANNED: PLANNED: pin toolchain trust mechanisms, expected assumption sets and observable report paths; assess Comparator/axiom tooling reuse and bind staged integration protocol before promotion.
 
@@ -120,9 +120,9 @@ Compare a target in a fresh environment with the same target after successful/re
 
 **Completion:** One stateful conformance suite with fixed comparisons or a precise absent-contract/reachability boundary.
 
-**Stop:** Candidate ceiling 240 active minutes, six sequences, two APIs and 48 checker attempts; bound individual requests and all setup/tooling/process costs before READY; no external writes.
+**Stop:** Complete the fixed six-sequence, two-API study or reach a genuine authority, contract or unavailable-capability boundary after feasible repairs; individual process safety controls are nonterminal; no external writes.
 
-**Execution:** At most 4 sessions of 60 active minutes; 48 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** PLANNED: PLANNED: establish supported session, termination, rollback, fresh-name and dependency-order contracts plus public reachability in a staged protocol; do not assume an API continues after rejection.
 
@@ -136,15 +136,15 @@ Freeze feature-based selection before outcomes, preserve full dependency/environ
 
 **Completion:** Twelve dispositions with provenance-preserving slices and scoped outcomes, retaining oversize/extraction failures, or an exact closure/payload boundary.
 
-**Stop:** Candidate ceiling 360 active minutes, twelve declarations, three exports and 48 checker attempts; freeze size, extraction/build/tooling and process caps before READY; no external writes.
+**Stop:** Complete the fixed twelve-declaration, three-export study or reach a genuine payload, authority or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
 
-**Execution:** At most 4 sessions of 90 active minutes; 48 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** PLANNED: PLANNED: establish retained payload availability, complete dependency/environment accounting, size limits and fixed feature selection in a staged plan; observed libraries are not fresh holdouts.
 
 ### 8. BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model
 
-**Target:** At most 10000 finite terms/contexts and two supported internal operation APIs
+**Target:** A fixed suite of 10000 finite terms/contexts and two supported internal operation APIs
 
 Review reuse, implement a named-variable capture-avoiding model and compare lifting/substitution compositions with independently audited translation.
 
@@ -152,11 +152,11 @@ Review reuse, implement a named-variable capture-avoiding model and compare lift
 
 **Completion:** One executable model, portable operation vectors and complete comparison outcomes or an exact model/API boundary.
 
-**Stop:** Candidate ceiling 360 active minutes, 10000 finite cases and 24 comparison processes; enumerate semantic checks inside processes and freeze construction/build/tooling caps before READY; no external writes.
+**Stop:** Complete the fixed 10000-case, two-API study or reach a genuine model, authority or unavailable-capability boundary after feasible repairs; enumerate semantic checks and use nonterminal process safety controls; no external writes.
 
-**Execution:** At most 4 sessions of 90 active minutes; 24 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: identify tractable fragment/API seams and review capture avoidance, alpha-equivalence, translation and formalization reuse; record a finite staged comparison protocol before promotion.
+**Boundary:** PLANNED: PLANNED: identify tractable fragment/API seams and review capture avoidance, alpha-equivalence, translation and formalization reuse; record a staged comparison protocol before promotion.
 
 ### 9. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
@@ -168,11 +168,11 @@ Select input-influenced arithmetic/assertion sites before constructing cases, th
 
 **Completion:** One exact build-mode matrix and useful regression or a scoped no-difference/unsupported-configuration result.
 
-**Stop:** Candidate ceiling 240 active minutes, three builds, eight fixtures and 24 checker attempts; record finite setup/build/test/process limits before READY; no external writes.
+**Stop:** Complete the fixed three-configuration, eight-fixture matrix or reach a genuine toolchain, authority or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
 
-**Execution:** At most 4 sessions of 60 active minutes; 24 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain and source-selected sites plus finite build/controller protocol; arithmetic presence alone is not defect evidence.
+**Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain and source-selected sites plus a fixed build/controller protocol; arithmetic presence alone is not defect evidence.
 
 ### 10. RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs
 
@@ -184,11 +184,11 @@ Measure fixed time/memory envelopes with stop-at-first-limit per family/implemen
 
 **Completion:** One resource-regression corpus and measured envelope, or a precise validity/measurement boundary.
 
-**Stop:** Candidate ceiling 180 active minutes and 24 checker attempts x10s, two families/six sizes/two implementations; freeze generation/setup/tooling/memory caps before READY; no external writes.
+**Stop:** Complete the fixed two-family, six-size, two-implementation matrix or reach a genuine validity, measurement or unavailable-capability boundary after feasible repairs. Stop increasing size within a cell at its safety limit, record the observation and continue the remaining cells; no external writes.
 
-**Execution:** At most 2 sessions of 90 active minutes; 24 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: bind valid families, comparable supported fragments, reliable resource measurement, memory limits and cleanup in a staged protocol; finite samples establish no asymptotic theorem.
+**Boundary:** PLANNED: PLANNED: bind valid families, comparable supported fragments, reliable resource measurement, memory limits and cleanup in a staged protocol; the fixed samples establish no asymptotic theorem.
 
 ### 27. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
@@ -200,11 +200,11 @@ Compare existing accepts and asymmetric over-rejection risk; package existing by
 
 **Completion:** One small validated accept companion with distinct value, or explicit duplicate/no-value decision.
 
-**Stop:** 60 active minutes, 6 GETs, 1 static build <=300s; zero checker/proof/mutation/new export/external launches.
+**Stop:** Complete the fixed existing-byte coverage decision or reach a genuine authority/input/capability boundary after feasible repairs; zero checker/proof/mutation/new export/external launches. Static-build safety controls are nonterminal.
 
-**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a bounded work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process accounting before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent bounded audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
+**Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a scoped work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process observations before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
 
 ### 46. CVC-4: Connect the contract to real validation behavior
 
@@ -216,11 +216,11 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Completion:** Exact bytes, observer profiles, raw outcomes and source-to-contract mapping; explicitly retain any unproved implementation bridge.
 
-**Stop:** Three sessions, four pairs or 16 launches of at most 30 seconds; stop on invalid inputs or unresolved adapter boundary.
+**Stop:** Complete the fixed four-pair comparison or stop on invalid scientific inputs or a genuine adapter/capability boundary after feasible repairs. Per-process safety controls are nonterminal.
 
-**Execution:** At most 3 sessions of 90 active minutes; 16 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; finite new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
+**Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; the fixed new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
 ### 47. CVC-5: Prepare shared evidence and decide the next phase
 
@@ -232,9 +232,9 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Completion:** Stand-alone contribution or no-action recommendation plus phase decision and updated ranked queue.
 
-**Stop:** Two sessions with existing evidence only; external publication is not part of local completion.
+**Stop:** Complete the existing-evidence package and phase decision, or stop for owner direction or a genuine authority/input boundary. External publication is not part of local completion.
 
-**Execution:** At most 2 sessions of 90 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
@@ -248,9 +248,9 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Completion:** One content-bound intake result naming the supplied package, prior-knowledge/access boundary, exact unmet gates or qualified eligibility and a concrete next recommendation. No experiment is authorized by eligibility alone.
 
-**Stop:** One 60-minute metadata-only assessment after the input gate; zero checker/proof/build/scientific-byte/external-action launches. Do not contact a provider, poll, create a dataset, unseal outcomes, implement a checker or extend the search. Stop at eligibility/rejection or exact missing evidence.
+**Stop:** Complete the metadata-only eligibility/rejection decision after the input gate, or record the exact unavailable required evidence. Zero checker/proof/build/scientific-byte/external-action launches. Do not contact a provider, poll, create a dataset, unseal outcomes, implement a checker or extend the search.
 
-**Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
@@ -258,33 +258,33 @@ After the required input and authorization arrive, audit exact identities, selec
 
 | Work | Default mechanism |
 |---|---|
-| Automatic | Hash and inventory checks; Already-authorized bounded execution and checkpointing; Deterministic normalization, report generation and validation; Read-only evidence assembly and preparation of concrete drafts |
+| Automatic | Hash and inventory checks; Already-authorized scoped execution and checkpointing; Deterministic normalization, report generation and validation; Read-only evidence assembly and preparation of concrete drafts |
 | Model review | Frontier design and novelty assessment; Unexplained checker differences and semantic ambiguity; Source-to-claim interpretation under frozen authority rules |
 | Human decision | New normative source approvals; Target-specific external publication/submission; Scope beyond standing local authorization or an unsatisfied milestone gate |
 
-Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/build-project-review --check` to detect stale review inputs. Each research run should have one exact manifest, finite budgets and an executable completion condition. Scripts run through the authorized work; models handle exceptions. Prepare a concrete review packet before requesting any required owner decision.
+Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/build-project-review --check` to detect stale review inputs. Each research run should have one exact manifest, a fixed scientific scope, nonterminal process safety controls and an executable completion condition. Scripts run through the authorized work; models handle exceptions. Prepare a concrete review packet before requesting any required owner decision.
 
 ## Operational findings
 
 - The old human Current Metrics block had drifted from canonical assurance records. It is now explicitly a legacy snapshot, with current facts generated from machine artifacts.
 - Frozen study tests and validators now run against their committed frontier through an explicit successor; current and future tests remain live, and both groups must pass.
 - Exact historical evidence can validate without local checker payloads; fresh execution still needs reproducible materialization of the ignored corpus/coverage/observer inputs.
-- run-campaign now requires an authorized manifest that binds the active frontier, governing plan, exact inputs, declared platform, finite phase and total budgets, and a completion predicate before launch or resume.
+- run-campaign binds the active frontier, governing plan, exact inputs, declared platform, process safety controls and a completion predicate before launch or resume. Attempt totals do not authorize termination.
 - materialize-run-inputs supports exact-hash local donor materialization for a clean clone; it refuses mismatched existing files and does not rebuild omitted payloads.
 - run-autonomous-campaigns is retired: it refuses broad generation and directs callers to an exact authorized manifest.
 - The successor admitted two fixed witnesses without new checker execution, reducing the pending mechanical survivor queue from nine to seven while preserving unresolved semantic status.
 - A completed run-campaign phase can be resumed mechanically. Normative qualification, unexpected semantic interpretation and target-specific external submission retain deliberate judgment boundaries.
 - The earlier CLI preflight failure remains historical. A dated successor verifies working read-only GitHub connector access; it does not prove CLI repair or authorize external writes.
 - No per-task model-token or total end-to-end cost record is available here; claimed token savings should be measured, not inferred from short checker runtime.
-- Queue integrity validation checks bounded selection and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.
+- Queue integrity validation checks scoped selection, persistent execution policy and status agreement, including explicit PAUSED handoffs. Use validate-research-queue --require-ready to require an executable selection. Ranking remains an evidence-backed judgment. Existing corpus packet next_steps remain historical follow-through context and no longer drive the current priority order.
 
 ## Efficiency rules
 
 - No model calls inside checker/build/minimization loops.
-- Batch independent mechanical work; stop on budget/input/semantic exceptions.
-- Use Luna for routine edits and Terra for bounded implementation; reserve Ultra for a named difficult question.
+- Batch independent mechanical work; engineering failures trigger repair and retry.
+- Use Luna for routine edits and Terra for scoped implementation; reserve Ultra for a named difficult question.
 - Run focused tests during implementation and required full gates at closure; do not repeat broad suites without a relevant change.
-- Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions per bounded investigation.
+- Measure wall time, checker attempts, resumed work, model calls/tokens and accepted shared contributions as observations, never stopping authority.
 
 ## Changes completed in this task
 

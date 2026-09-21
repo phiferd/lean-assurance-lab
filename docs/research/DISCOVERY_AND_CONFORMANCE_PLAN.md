@@ -36,14 +36,14 @@ evidence. `SOURCE-PROVENANCE-INTAKE-1` completed SUCCESS by binding the exact
 `CHILD-PANIC-CONFIRMATION-1` then completed SUCCESS: both controls accepted and
 both candidate cells rejected, with the expected direct-versus-worker/join
 diagnostic distinction. It is not an acceptance or soundness difference.
-`PIPELINE-COMPLETENESS-PILOT-1` then closed BOUNDED_UNRESOLVED at its 1/1
-producer cap when a hand-authored Lake manifest failed before compilation. The
-failure, process receipt and repaired regression are preserved, and no export or
-checker claim exists. Its separately bounded
+`PIPELINE-COMPLETENESS-PILOT-1` then recorded a hand-authored Lake-manifest
+failure before compilation and was incorrectly closed because of an attempt cap.
+The historical closure, process receipt and repaired regression remain preserved,
+and no export or checker claim exists. Its live
 [continuation](PIPELINE_COMPLETENESS_PILOT_2_PLAN.md) is now selected READY and
-unstarted. It inherits the scientific freeze without resetting the failed
-attempt and must pass an offline no-compilation configuration preflight before
-its one new producer reservation.
+unstarted under the corrected persistent-execution policy. It inherits the
+scientific freeze, treats the failed attempt as evidence rather than a limit,
+and must pass an offline no-compilation configuration preflight before building.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
@@ -62,29 +62,28 @@ candidates with independent promotion gates, not dependencies on pilot success.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
-| Rank / item | Useful output and finite proposed scope | Promotion gate beyond recorded selection |
+| Rank / item | Useful output and fixed scientific scope | Promotion gate beyond recorded selection |
 | --- | --- | --- |
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
-| 2 `PIPELINE-COMPLETENESS-PILOT-2` | Complete the unchanged checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters, three omission/substitution/truncation faults; 180 active minutes, one new producer and 12 checker attempts | READY under the continuation plan; preserve pilot 1 and first commit a fresh controller plus passing offline no-compilation Lake preflight, then freeze the exact export before ACTIVE execution |
-| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels; 360 active minutes, 120 checker attempts | Bind independently reviewed typing rules, generator reuse decision, exporter support and finite construction protocol; exclude prior imax/ownership cases, native literals, inductives and quotients |
-| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control; 360 active minutes, 24 checker/proof attempts | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
-| 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths; 180 active minutes, 24 checker attempts | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
-| 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons, at most two public APIs; 240 active minutes, 48 checker attempts | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
-| 7 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer; 360 active minutes, 48 checker attempts | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
-| 8 `BINDER-MODEL-PILOT-1` | Independent named-variable model and at most 10,000 finite operation vectors; two implementation APIs; 360 active minutes, 24 comparison processes | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
-| 9 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-build matrix for one checker, at most four source sites and eight fixed boundary/control fixtures; 240 active minutes, 24 checker attempts | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; freeze build/process limits; do not presume arithmetic sites are defects |
-| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations; 180 active minutes, 24 checker attempts at ten seconds each | Bind validity evidence, comparable fragments and verified memory/time/cleanup controls; freeze stop-at-first-limit and resource measurement; no asymptotic claim from finite samples |
+| 2 `PIPELINE-COMPLETENESS-PILOT-2` | Complete the unchanged checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | READY under the continuation plan; preserve pilot 1 and first commit a fresh controller plus passing offline no-compilation Lake preflight, then freeze the exact export before ACTIVE execution |
+| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | Bind independently reviewed typing rules, generator reuse decision, exporter support and construction protocol; exclude prior imax/ownership cases, native literals, inductives and quotients |
+| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
+| 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Fixed six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
+| 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
+| 7 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
+| 8 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
+| 9 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; use nonterminal process safety controls; do not presume arithmetic sites are defects |
+| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | Bind validity evidence, comparable fragments and verified memory/time/cleanup controls; freeze stop-at-first-limit within each matrix cell and resource measurement; no asymptotic claim from fixed samples |
 
 The completed representation and pipeline pilot 1 records remain frozen outside
-this live horizon. The PLANNED caps
-are maximum candidate allocations, not launch permissions.
-Before promotion each needs its own staged plan with exact source/setup, build,
-tooling-test, generation, checker/proof, process-time and memory ceilings plus
-mechanical gates. A comparison process containing multiple semantic checks must
-state and bound those checks; a process cap alone does not bound scientific work.
+this live horizon. Unfinished work has no attempt/session/build/checker cap.
+Before promotion each needs its own staged plan with exact source/setup, fixed
+scientific matrix and nonterminal per-process time, memory and cleanup controls
+plus mechanical gates. A comparison process containing multiple semantic checks
+must state those checks so the scientific scope remains fixed.
 The required source/reuse and implementation preparation may be phases within
 the promoted item; do not demand a successful experiment before permitting its
-bounded investigation. Ordinary implementation repairs remain inside that item.
+scoped investigation. Ordinary implementation repairs remain inside that item.
 
 ## Reserves and preserved work
 
@@ -118,7 +117,7 @@ follow the standing rules.
 
 ## Evidence, closure and strategy
 
-One owner manages the active item, frozen scientific inputs and launch counters.
+One owner manages the active item, frozen scientific inputs and observed launches.
 Reuse existing process-accounting machinery and repository historical bindings.
 One or two coherent themes and one ACTIVE item are enough; the wider candidate
 horizon provides alternatives without ten simultaneous investigations.
@@ -127,15 +126,15 @@ Before adopting a method, refresh its focused literature/reuse assessment using
 primary sources and exact implementation/format evidence. An earlier methods map
 is background, not proof of current support or novelty. Every completed pilot
 must produce executable evidence, a characterized boundary, a reusable asset or
-a bounded negative/unresolved result, with a concrete action, beneficiary,
+a genuine evidence-bound negative/unresolved result, with a concrete action, beneficiary,
 priority and prerequisites. A source-only checkpoint is not a successful pilot
-closure while feasible implementation/execution remain inside its scope/budget.
+closure while feasible implementation/execution remain inside its scope.
 
 At closure compare useful new behavior exposed, reusable/adoptable artifacts,
 remaining uncertainty and actual cumulative cost. Do not optimize closed-item,
 variant, survivor or purported bug counts. Reassess these ten candidates,
 contribution follow-through, actual maintainer needs, independent transfer and
-bounded blocker removal. Record the chosen successor before starting it.
+scoped blocker removal. Record the chosen successor before starting it.
 
 Run affected validators and the complete current/historical full-payload suite
 at logical closure, regenerate current state through

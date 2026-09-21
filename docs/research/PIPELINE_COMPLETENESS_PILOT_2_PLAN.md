@@ -1,20 +1,22 @@
 # Pipeline completeness pilot 2
 
-Status: READY and unstarted continuation of
-`PIPELINE-COMPLETENESS-PILOT-1`. This plan does not reopen pilot 1 or reset its
-consumed producer reservation.
+Status: READY continuation of `PIPELINE-COMPLETENESS-PILOT-1` under the
+corrected persistent-execution policy. Pilot 1 remains frozen, but its routine
+configuration failure is not treated as scientific completion. This continuation
+finishes the same unanswered question.
 
 ## Objective
 
-Complete the unchanged checked-object question from pilot 1: can an independent
-sentinel prove that the exact intended twelve-theorem module, statement set and
-dependency closure is the artifact actually passed to each supported checker,
-and fail closed on omission, substitution and truncation?
+Determine whether an independent sentinel can prove that the exact intended
+twelve-theorem module, statement set and dependency closure is the artifact
+actually passed to each supported checker, and fail closed on omission,
+substitution and truncation.
 
 The beneficiary is Lean Assurance Lab and any Arena-based conformance workflow
 that could otherwise mistake process success for validation of the requested
 object. The useful output is an executable receipt/sentinel package and exact
-two-adapter regression matrix, or a new evidence-bound boundary.
+two-adapter regression matrix, or a genuine evidence-bound authority,
+scientific-input or unavailable-capability boundary.
 
 ## Inherited scientific freeze
 
@@ -22,59 +24,57 @@ Pilot 2 inherits by hash, without editing:
 
 - pilot 1's independent expected module;
 - pilot 1's protocol, producer and adapter identities, root target, receipt
-  meaning, exact three fault constructions and eight primary cells;
-- the exact Lean source committed at pilot 1 tooling commit `17980fd`;
-- the pilot 1 terminal attempt and its charged 1/1 producer reservation.
+  meaning, exact three fault constructions and eight scientific cells;
+- the exact Lean source committed at pilot 1 tooling commit `17980fd`; and
+- pilot 1's failed producer attempt as preserved engineering evidence.
 
-Changing any expected declaration, fault, adapter, process acceptance rule or
-scientific matrix ends this continuation before launch. The repaired controller
-is engineering input, not semantic authority.
+Changing an expected declaration, fault, adapter, process acceptance rule or
+scientific matrix requires an explicit scientific-input transition. The repaired
+controller is engineering input, not semantic authority.
 
 ## Repair gate
 
-The failure was a hand-authored `lake-manifest.json` rejected before compilation.
-Pilot 2 must use a fresh workspace and a new controller/manifest revision. Before
-the one producer launch it must:
+The prior failure was a hand-authored `lake-manifest.json` rejected before
+compilation. Pilot 2 uses a fresh workspace and a new controller/manifest
+revision. Before the producer build it must:
 
 1. bind the repaired controller and regression that forbid controller-owned
    `lake-manifest.json` state;
-2. run one supervised, offline Lake configuration preflight under the pinned
+2. run a supervised, offline Lake configuration preflight under the pinned
    4.29.1 toolchain, with no module compilation or exporter/checker invocation;
-3. preserve its stdout, stderr, RSS, timeout and cleanup receipt; and
-4. commit the passing preflight, controller, execution inputs and remaining
-   counters.
+3. preserve stdout, stderr, RSS, timeout and cleanup evidence; and
+4. commit the passing preflight, controller and execution inputs.
 
-One further preflight reservation exists only for a receipt-preserving
-engineering repair. It may not compile the module or alter the scientific
-freeze. Both preflight reservations count even on failure.
+If any step fails, diagnose, repair, add or update the smallest useful
+regression, and retry. Preflight/build/attempt counts and elapsed time are
+observability data, never stopping conditions.
 
 ## Production and execution gates
 
-After the repair gate passes, run one new supervised producer build in a fresh
+After the repair gate passes, run a supervised producer build in a fresh
 workspace. Freeze the exact export, parsed ordered inventory, dependency closure
 and derived fault artifacts. The baseline sentinel must pass and all three fault
 sentinels must return their preregistered distinct failures. Commit those bytes,
 bindings, process receipt and an exact execution manifest before marking pilot 2
 ACTIVE.
 
-Execute baseline before faults through official and Lean4Lean. Both baseline
+Execute the baseline before faults through official and Lean4Lean. Both baseline
 checker cells must accept. Fault checker exits remain observations only: each
 fault succeeds scientifically when the independent sentinel fails with its exact
-expected class, even if a checker exits zero. The four checker reservations after
-the eight primary cells are only for receipt-preserving engineering repair and
-cannot repeat or enlarge the scientific matrix.
+expected class, even if a checker exits zero. Engineering retries preserve the
+same scientific cell identity and do not add or replace cells.
 
-## Finite limits and closure
+## Execution policy and closure
 
-Pilot 2 has 180 cumulative active minutes, two configuration-preflight
-reservations up to 60 seconds and 1 GiB each, one new producer build up to 600
-seconds and 4 GiB, and twelve checker reservations up to 120 seconds and 2 GiB
-each. Across the lineage this means at most two producer reservations: the one
-already consumed by pilot 1 and the one newly authorized here. Network requests,
-proof search, scientific source mutation, production checker edits, assurance
-milestone advances and external writes are zero.
+There is no attempt, build, checker, session or elapsed-time cap. Per-process
+timeouts, memory ceilings and cleanup checks remain machine-safety controls; a
+safety event requires diagnosis and repair before retry, not item closure.
+Network requests, proof search, scientific-source mutation, production-checker
+edits, assurance milestone advances and external writes remain unauthorized.
 
-Close with the exact matrix and a scoped reuse/contribution recommendation, or
-with a preserved setup/tooling/observability boundary at the first exhausted cap.
-Run focused checks during engineering repair and the complete current/historical
+Close with the exact eight-cell matrix and a scoped reuse/contribution
+recommendation. Stop without that result only for owner direction, unavailable
+required external authority/input, invalidated scientific input, or a required
+capability that remains genuinely unavailable after feasible repairs. Run
+focused checks during engineering repair and the complete current/historical
 suite at item closure. Select but do not start the next queue item.

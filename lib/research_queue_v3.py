@@ -71,10 +71,10 @@ def queue_digest(data: dict[str, Any]) -> str:
 
 
 def handoff_status(data: dict[str, Any]) -> str:
-    return data["handoff"]["status"] if data["schema_version"] in {2, 3} else "EXECUTABLE"
+    return data["handoff"]["status"] if data["schema_version"] in {2, 3, 4} else "EXECUTABLE"
 
 
-def _review(data: dict[str, Any], root: Path) -> None:
+def _review(data: dict[str, Any], root: Path, *, digest_function=queue_digest) -> None:
     binding = _fields(data["strategic_review"], {"path", "sha256"}, "strategic_review")
     path = _safe_file(root, binding["path"], "strategic_review.path")
     if hashlib.sha256(path.read_bytes()).hexdigest() != _digest(binding["sha256"], "strategic_review.sha256"):
@@ -88,7 +88,7 @@ def _review(data: dict[str, Any], root: Path) -> None:
         raise ValueError("invalid strategic review phase")
     if review["reviewed_at"] != data["updated_at"]:
         raise ValueError("strategic review date does not match queue")
-    if _digest(review["queue_sha256"], "queue_sha256") != queue_digest(data):
+    if _digest(review["queue_sha256"], "queue_sha256") != digest_function(data):
         raise ValueError("strategic review queue binding is stale")
     if review["selected_item"] != data["selected_item"]:
         raise ValueError("strategic review selected_item disagrees with queue")
@@ -188,6 +188,10 @@ def _review(data: dict[str, Any], root: Path) -> None:
 
 
 def validate_queue(data: Any, root: Path = ROOT, *, require_ready: bool = False) -> None:
+    if isinstance(data, dict) and type(data.get("schema_version")) is int and data["schema_version"] == 4:
+        from lib.research_queue_v4 import validate_queue as validate_v4
+        validate_v4(data, root, require_ready=require_ready)
+        return
     if not isinstance(data, dict) or type(data.get("schema_version")) is not int or data["schema_version"] != 3:
         validate_v2(data, root, require_ready=require_ready)
         return
@@ -209,7 +213,7 @@ def load_queue(root: Path = ROOT, *, require_ready: bool = False) -> dict[str, A
         data = json.loads(path.read_text(encoding="utf-8"))
     except (OSError, UnicodeError, json.JSONDecodeError) as error:
         raise ValueError(f"could not load research queue: {error}") from error
-    if isinstance(data, dict) and type(data.get("schema_version")) is int and data["schema_version"] == 3:
+    if isinstance(data, dict) and type(data.get("schema_version")) is int and data["schema_version"] in {3, 4}:
         data = _json(path)
     validate_queue(data, root, require_ready=require_ready)
     return data
