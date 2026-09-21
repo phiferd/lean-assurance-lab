@@ -3003,7 +3003,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `VALID-DEPENDENT-TERM-PILOT-1`.
 
-It is READY and unstarted under the
+It is ACTIVE under the
 [valid dependent-term plan](research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md).
 Its first phase reviews reuse, independently states the restricted fragment's
 typing rules, and designs a negative-capable derivation auditor. Commit the
@@ -3041,7 +3041,7 @@ no external action is recommended now.
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
-| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | READY, selected and unstarted |
+| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | ACTIVE, source/reuse and typing-rule phase |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
@@ -3193,12 +3193,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item:
-`VALID-DEPENDENT-TERM-PILOT-1`, selected and unstarted under persistent execution
-policy. Pipeline completeness is complete with a reusable local receipt asset.
-The selected successor begins with source/reuse and independent typing-rule
-review; routine engineering failures require repair and retry, not closure or a
-successor item.
+The canonical queue has one ACTIVE item:
+`VALID-DEPENDENT-TERM-PILOT-1`, executing under persistent execution policy.
+Pipeline completeness is complete with a reusable local receipt asset. The
+active item is in its source/reuse and independent typing-rule phase; routine
+engineering failures require repair and retry, not closure or a successor item.
 The earlier representation pilot 1 remains frozen at its tooling cap; its own
 pilot 2 is the successful separate representation continuation and retains that
 completed reusable package.
