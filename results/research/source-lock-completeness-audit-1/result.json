@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+  "outcome": "SUCCESS",
+  "conclusion": "The frozen 22-file source lock has one direct compile-time Rust inclusion dependency: src/main.rs includes ../README.md, resolving to README.md. That path is neither locked nor present in the pinned Nanoda evidence. No other direct include_str/include_bytes literal was found in the locked Rust sources.",
+  "audit": {
+    "path": "results/research/source-lock-completeness-audit-1/run-0001/audit.json",
+    "sha256": "641a260a91e476ec195fd38d4a64354ffaf360c5fbae53f46abf01d899cd37f8"
+  },
+  "ledger": {
+    "locked_source_file_count": 22,
+    "direct_literal_include_count": 1,
+    "locked_include_count": 0,
+    "missing_include_count": 1,
+    "missing_paths": ["README.md"]
+  },
+  "attempt_accounting": {
+    "sessions": 1,
+    "source_setup_inspections": 3,
+    "R1_tooling_failure_before_source_content": 1,
+    "R2_tooling_failure_after_static_scan_before_ledger_write": 1,
+    "R3_ledger_writes": 1,
+    "conservative_active_seconds": 90,
+    "builds": 0,
+    "checkers": 0,
+    "network_requests": 0,
+    "new_source_or_export_bytes": 0,
+    "new_mutation_identities": 0,
+    "external_actions": 0
+  },
+  "evidence": {
+    "source_lock": {"path": "results/research/alt-survivors-2026-09-08/source-lock.json", "sha256": "fb8ddc20e941aed1f56288ce83a83016e718d8abdf9756b34b96384236fdd472"},
+    "predecessor_source_materialization_audit": {"path": "results/research/survivor-thread-one-child-panic-regression-1/source-materialization-closure-audit.json", "sha256": "fd5de25fd695742706f9e9e168bf1690d5cf778dac74df9cd0189f256da43f35"},
+    "R1_tooling_repair": {"path": "results/research/source-lock-completeness-audit-1/tooling-repair-0001.json", "sha256": "1203f9ad2cce831eebd2edfa480c3ea0ab468e8f3e60710ea1d579d9fb22c08b"},
+    "R2_tooling_repair": {"path": "results/research/source-lock-completeness-audit-1/tooling-repair-0002.json", "sha256": "80710bcf451ce00f08db17bcfcada7c15b52d7f050a4c3b9e692834c3774f304"}
+  },
+  "claim_limits": [
+    "This is a static inventory result, not a Cargo build, checker result, semantic observation or current-upstream claim.",
+    "The exact README byte was not fetched, invented, substituted or added to the frozen source lock.",
+    "The two controller failures are preserved as engineering evidence and do not change the ledger result or source inputs."
+  ],
+  "recommendation": "Do not retry the child-panic build under the incomplete frozen materialization. A separately authorized source-provenance intake may first locate and independently bind the exact README.md for the locked upstream revision; it must not treat this static result as semantic evidence."
+}

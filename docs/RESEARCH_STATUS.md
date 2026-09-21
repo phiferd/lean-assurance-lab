@@ -65,12 +65,13 @@ research directions.
   Neither exact source byte is locally pinned nor may it be fetched or
   substituted within this item, so no observer, control or candidate cell ran.
   This is a source-materialization boundary, not an acceptance, semantic or
-  current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE
-  under committed source-only static-audit bindings. Its R1 controller attempt
-  found a binding-shape error before reading pinned source content; R2 scanned
-  the locked source but could not write its ledger beside the preserved R1
-  error. An R3 output-path-only repair is committed; no build, checker or
-  network operation occurred.
+  current-upstream result. `SOURCE-LOCK-COMPLETENESS-AUDIT-1` completed SUCCESS
+  for a static 22-file ledger: `src/main.rs` directly includes `README.md`,
+  which is neither locked nor pinned. Its two controller incidents are
+  preserved engineering evidence; no build, checker or network operation
+  occurred. `SOURCE-PROVENANCE-INTAKE-1` then completed SUCCESS by binding the
+  exact 6517-byte README from the pinned revision without editing frozen history.
+  `CHILD-PANIC-CONFIRMATION-1` is ACTIVE for one supervised four-cell result.
 
 - Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
   for a source-supported, unexecuted one-thread child-panic diagnostic protocol.
@@ -2964,12 +2965,13 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `SOURCE-LOCK-COMPLETENESS-AUDIT-1`.
+Selected next item: `CHILD-PANIC-CONFIRMATION-1`.
 
-Its R3 entry package preserves both controller incidents and is committed before
-the static ledger. The current work is limited to a source-only ledger of
-compile-time Rust inclusion dependencies; it performs no build, checker launch,
-network request, byte substitution or source retrieval.
+The exact upstream `README.md` byte is now independently bound outside the
+historical lock. The active confirmation reuses the unchanged control,
+candidate, mutation, configuration and runtime for two offline builds and four
+supervised checker cells. It will close as an operational diagnostic result,
+not an acceptance or soundness difference.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -3136,12 +3138,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item: the selected and unstarted
-source-lock completeness audit. The child-panic regression is complete
-BOUNDED_UNRESOLVED on the pinned missing-README build boundary. The wider horizon
-still includes nine independently gated PLANNED discovery candidates. Pilot 1
-remains frozen at its tooling cap; pilot 2 is its successful separate continuation
-and retains the completed reusable package.
+The canonical queue selects `CHILD-PANIC-CONFIRMATION-1` ACTIVE. The source-lock
+audit and provenance intake are complete; this single confirmation is the final
+bounded follow-through before returning to the broader PLANNED discovery
+horizon. Pilot 1 remains frozen at its tooling cap; pilot 2 is its successful
+separate continuation and retains the completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

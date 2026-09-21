@@ -27,11 +27,14 @@ completed SUCCESS as a source-only assessment and selected
 `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1`, which closed
 BOUNDED_UNRESOLVED after its first actual offline build exposed an omitted
 `README.md` dependency in the frozen source inventory. Its source-only successor
-`SOURCE-LOCK-COMPLETENESS-AUDIT-1` is selected ACTIVE under its committed
-source-only static-audit bindings. Its first audit-controller attempt exposed a
-binding-shape error before source content was read; R2 then scanned the locked
-sources but could not write its ledger beside the preserved R1 error. The
-preserving R3 audit-output repair is committed for the single allowed ledger.
+`SOURCE-LOCK-COMPLETENESS-AUDIT-1` completed SUCCESS for its static ledger. It
+found exactly one direct compile-time include edge, `src/main.rs` to
+`README.md`, and that file is absent from both the 22-file source lock and
+pinned evidence. Its two controller incidents are preserved engineering
+evidence. `SOURCE-PROVENANCE-INTAKE-1` completed SUCCESS by binding the exact
+6517-byte README from the pinned revision without changing the historical lock.
+`CHILD-PANIC-CONFIRMATION-1` is ACTIVE for one compact supervised four-cell
+confirmation before the frontier returns to broader shared-assurance work.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
@@ -83,10 +86,12 @@ network or launches. Its separate successor
 `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` closed BOUNDED_UNRESOLVED under
 its [bounded execution plan](SURVIVOR_THREAD_ONE_CHILD_PANIC_REGRESSION_PLAN.md):
 the first actual baseline build was completely supervised but could not read the
-omitted pinned `README.md`. Its new
-[source-only successor](SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md) is selected READY
-and unstarted to audit the local source-lock boundary without fetching or
-substituting any byte. No historical budget or counter is reset.
+omitted pinned `README.md`. Its
+[source-only successor](SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md) completed
+SUCCESS, and the separately authorized provenance intake bound the exact missing
+README without changing frozen history. A fresh confirmation item now uses that
+complete materialization under its own budget. No historical budget or counter
+is reset.
 
 The theorem companion, original CVC-4/CVC-5 and independent transfer intake retain
 their exact unmet gates and scopes. The nine new candidates neither inherit nor

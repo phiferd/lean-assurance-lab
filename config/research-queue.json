@@ -3,7 +3,7 @@
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
   "updated_at": "2026-09-20",
-  "selected_item": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
+  "selected_item": "CHILD-PANIC-CONFIRMATION-1",
   "items": [
     {
       "id": "METAMORPHIC-REPRESENTATION-PILOT-2",
@@ -456,8 +456,50 @@
       "blocked_reason": ""
     },
     {
+      "id": "SOURCE-PROVENANCE-INTAKE-1",
+      "priority": 52,
+      "title": "Establish provenance for the missing pinned README byte",
+      "target": "README.md from ammkrn/nanoda_lib at locked revision 6ae1f0cd962f081f6c423454c5da729d841236a7",
+      "action": "After the exact source-input gate, inspect at most one local immutable object or two read-only canonical source responses, then record origin, revision, content hash, license compatibility and the relationship to the frozen source lock without adding the byte to that lock.",
+      "expected_value": "Replace the known materialization omission with a reproducible provenance intake result that a separate source-materialization successor can evaluate.",
+      "rank_rationale": "The completed audit shows that README.md is the sole direct literal include edge missing from the frozen inventory. Exact provenance is the smallest useful next question; it can resolve availability without reopening the static result or running Cargo.",
+      "entry_gate": "WAITING for explicit owner authorization for one read-only provenance intake from the named repository and revision, or an already-local immutable object proving the same origin. Bind exact request/object identity, revision, license, expected path, request budget and no-substitution rule before any source request.",
+      "completion": "One content-bound provenance result with exact origin/hash/license and next recommendation, or an evidence-bound availability/provenance failure.",
+      "stop_condition": "One 45-active-minute session, two local or read-only source requests, and zero Cargo builds, checker processes, proofs, source substitutions, source-lock edits, mutations, external writes or assurance-milestone advances.",
+      "kind": "OPERATIONS",
+      "status": "COMPLETE",
+      "depends_on": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1"],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 45,
+        "checker_launches": 0
+      },
+      "evidence_refs": [
+        "docs/research/SOURCE_PROVENANCE_INTAKE_PLAN.md",
+        "results/research/source-lock-completeness-audit-1/result.json",
+        "results/research/source-lock-completeness-audit-1/work-closure.json",
+        "results/research/alt-survivors-2026-09-08/source-lock.json",
+        "results/research/source-provenance-intake-1/evidence/README.md",
+        "results/research/source-provenance-intake-1/provenance.json",
+        "results/research/source-provenance-intake-1/result.json",
+        "results/research/source-provenance-intake-1/work-closure.json"
+      ],
+      "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/source-provenance-intake-1/evidence/README.md",
+          "results/research/source-provenance-intake-1/provenance.json",
+          "results/research/source-provenance-intake-1/result.json",
+          "results/research/source-provenance-intake-1/work-closure.json"
+        ],
+        "recommendation": "Use the exact separately bound README with the unchanged historical source lock in one fresh four-cell confirmation; do not rewrite frozen history or infer a checker result from provenance alone."
+      },
+      "blocked_reason": ""
+    },
+    {
       "id": "SOURCE-LOCK-COMPLETENESS-AUDIT-1",
-      "priority": 65,
+      "priority": 66,
       "title": "Audit pinned source-lock completeness before offline compilation",
       "target": "The locally pinned Nanoda source evidence, Cargo metadata and frozen source-lock inventory",
       "action": "Statically trace path-valued Rust inclusion directives from the pinned crate root, compare them to the existing source lock, and record every locked or missing source dependency without fetching or substituting any byte.",
@@ -467,7 +509,7 @@
       "completion": "A static dependency ledger with exact locked/missing dispositions and a closure regression, or a bounded parser/reachability limitation with preserved input evidence.",
       "stop_condition": "One 30-active-minute session, eight source/setup inspections, and zero builds, checker processes, network requests, proofs, new source/export bytes, mutation identities, external actions or assurance-milestone advances.",
       "kind": "OPERATIONS",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [],
       "budget": {
         "max_sessions": 1,
@@ -491,7 +533,56 @@
         "results/research/source-lock-completeness-audit-1/focused-test-receipt-r2.json",
         "results/research/source-lock-completeness-audit-1/focused-test-receipt-r3.json",
         "results/research/source-lock-completeness-audit-1/tooling-repair-0001.json",
-        "results/research/source-lock-completeness-audit-1/tooling-repair-0002.json"
+        "results/research/source-lock-completeness-audit-1/tooling-repair-0002.json",
+        "results/research/source-lock-completeness-audit-1/run-0001/audit.json",
+        "results/research/source-lock-completeness-audit-1/result.json",
+        "results/research/source-lock-completeness-audit-1/report.md",
+        "results/research/source-lock-completeness-audit-1/work-closure.json",
+        "tests/test_source_lock_completeness_audit_closure.py"
+      ],
+      "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/source-lock-completeness-audit-1/run-0001/audit.json",
+          "results/research/source-lock-completeness-audit-1/result.json",
+          "results/research/source-lock-completeness-audit-1/report.md",
+          "results/research/source-lock-completeness-audit-1/work-closure.json",
+          "tests/test_source_lock_completeness_audit_closure.py"
+        ],
+        "recommendation": "Retain the static ledger and two tooling-repair incidents as source-materialization evidence. The only direct missing include is README.md; select SOURCE-PROVENANCE-INTAKE-1 WAITING for exact read-only provenance authority and do not rebuild the frozen child-panic protocol."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "CHILD-PANIC-CONFIRMATION-1",
+      "priority": 67,
+      "title": "Confirm the one-worker panic diagnostic on complete pinned source",
+      "target": "The exact historical control, candidate, one-line thread-boundary mutant and Nanoda revision, augmented only by the separately provenanced README build input",
+      "action": "Materialize fresh baseline and mutant workspaces, run two supervised offline release builds and the fixed four-cell matrix, and preserve raw stdout, stderr, RSS, timeout and cleanup receipts.",
+      "expected_value": "Resolve the prior materialization boundary with one durable operational result, then stop spending frontier effort on this narrow survivor unless it yields a reusable community regression.",
+      "rank_rationale": "The exact missing source byte is now bound and manual feasibility has already reproduced the expected distinction. One compact supervised confirmation closes the evidence gap at low cost before returning to broader shared-assurance work.",
+      "entry_gate": "ACTIVE under the committed confirmation plan, manifest, work record, exact source provenance, historical lock, existing bytes, mutation and runtime. No new scientific input, network request or external action is authorized.",
+      "completion": "One receipt-bound four-cell result with both controls accepting and either the preregistered diagnostic distinction or an exact counter-result/infrastructure boundary.",
+      "stop_condition": "One 30-active-minute session, two offline release builds up to 600 seconds, four checker processes up to 30 seconds, 2GiB per process, and zero network requests, new mutations, new exports, proofs or external actions.",
+      "kind": "EXPERIMENT",
+      "status": "ACTIVE",
+      "depends_on": ["SOURCE-PROVENANCE-INTAKE-1"],
+      "budget": {
+        "max_sessions": 1,
+        "session_minutes": 30,
+        "checker_launches": 4
+      },
+      "evidence_refs": [
+        "docs/research/CHILD_PANIC_CONFIRMATION_PLAN.md",
+        "config/child-panic-confirmation-0001.json",
+        "results/research/child-panic-confirmation-1/work-record.json",
+        "results/research/source-provenance-intake-1/provenance.json",
+        "results/research/alt-survivors-2026-09-08/source-lock.json",
+        "mutations/nanoda-gen-2bdfe18a9ec2.json",
+        "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson",
+        "corpus/generated/nanoda-gen-21ef4d1d32a1-let-value-type-mismatch.ndjson",
+        "tests/test_child_panic_confirmation.py"
       ],
       "issue_urls": [],
       "closure": null,
@@ -2283,7 +2374,7 @@
     },
     {
       "id": "TRANSFER-HOLDOUT-INTAKE-1",
-      "priority": 52,
+      "priority": 65,
       "title": "Audit a supplied independent transfer input package",
       "target": "One owner-designated curator/dataset package or provider-supplied functioning checker profile",
       "action": "After the required input and authorization arrive, audit exact identities, selection provenance, prior exposure, outcome custody and target correspondence; record eligibility or explicit rejection without unsealing outcomes.",
@@ -2793,7 +2884,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-20-source-lock-completeness-entry-r3.json",
-    "sha256": "2d4ed47222155358a0a559f6c07c7b38b8792c0678e283a000c7e60a3b360bc2"
+    "path": "results/research/queue-reviews/2026-09-20-child-panic-confirmation-entry.json",
+    "sha256": "fef37b3affd7def669dffe0212fbf44107cd8bda6483d4bd70befca43b5b5234"
   }
 }
