@@ -3006,9 +3006,19 @@ Selected next item: `VALID-DEPENDENT-TERM-PILOT-1`.
 It is READY and unstarted under the
 [valid dependent-term plan](research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md).
 Its first phase reviews reuse, independently states the restricted fragment's
-typing rules, and designs a negative-capable derivation auditor. No generated
-term or checker launch is authorized until the exact 50-case manifest, generator,
-auditor, profiles, deterministic seed and tests are committed.
+typing rules, and designs a negative-capable derivation auditor. Commit the
+design, profiles, deterministic seed, size policy, generator, auditor and tests
+before constructing the cohort. Construction and independent audit then produce
+the exact 50-case manifest; commit that manifest and its audit results before
+any target checker observes a scientific case. Existing-fixture engineering smoke
+tests are preparation, not observations of the scientific cohort.
+
+The [2026-09-21 owner-directed review](../results/research/queue-reviews/2026-09-21-progress-correction.json)
+corrects the former circular pre-generation
+manifest gate and retains this selection for fresh semantic coverage. Local
+preparation is part of the item's work and cost, not a reason to prefer a
+lower-value already-prepared diagnostic task. Reuse and repair the existing
+execution tools within the selected item through its corpus and matrix result.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3044,8 +3054,8 @@ no external action is recommended now.
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 
-Each PLANNED candidate has its own concrete promotion gate and finite candidate
-cap in the canonical queue and successor plan. Reassess actual value and
+Each PLANNED candidate has its own concrete promotion gate and fixed scientific
+scope in the canonical queue and successor plan. Reassess actual value and
 feasibility at closure. The completed continuation used exactly the inherited
 two originals, two transformations and two profiles. Sixteen checker attempts
 were consumed across one infrastructure-invalid run and one exact confirmation;

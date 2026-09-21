@@ -107,9 +107,11 @@ scientific ambiguity. Review and model agreement do not establish authority.
 Run focused tests while engineering, then the required complete suite at the
 gate boundary. Repeat broad checks only after relevant changes or unresolved
 failures. Prefer a durable exact-input checkpoint to rerunning completed work.
-Report progress at meaningful boundaries; unattended mechanical loops should
-stop on changed inputs, depleted budgets, an exceptional result or an action
-requiring human judgment.
+Report progress at meaningful boundaries; unattended mechanical loops pause on
+invalidated scientific inputs, a process-control failure, an exceptional result
+requiring interpretation or an action requiring human judgment. Attempt counts
+and elapsed time do not stop live research; repair engineering failures within
+the same item under the current persistent-execution policy.
 
 Keep repairing ordinary engineering defects within the same active item.
 Follow the versioned repair procedure in `docs/RESEARCH_WORKFLOW.md`: scientific
@@ -117,8 +119,8 @@ inputs and old evidence stay fixed, while new attempts may bind corrected
 tooling. A controller/manifest revision is an implementation checkpoint, not a
 new research item. Output-format/audit-code failures pause launches for repair
 without becoming scientific results. Preserve failed reservations and actual
-cumulative active time across checkpoints; do not forfeit unused time because
-a work interval ended. Reconcile process/accounting faults before resuming.
+cumulative active time across checkpoints as observations, never allowances.
+Reconcile process/accounting faults before resuming.
 Use focused checks for repairs and the required full suite at logical closure
 or when a material change warrants it. Documentation checkpoints validate only
 affected state, generators and checks. These rules apply prospectively and do

@@ -62,8 +62,13 @@ interrupt it only with the explicit checkpoint described below.
 
 ## How to rank
 
-First exclude work outside authorization, with unmet prerequisites, or without
-a concrete useful completion condition. For the remaining choices, compare:
+First exclude work outside authorization, with unavailable required inputs or
+capabilities, or without a concrete useful completion condition. Distinguish
+those barriers from local preparation: writing a protocol, checking source
+completeness, building an adapter or establishing an oracle can be phases of the
+candidate itself. Compare the value and cost of that whole item before selecting
+an already prepared alternative. Exact scientific and launch gates still apply
+before their dependent phases. For the remaining choices, compare:
 
 1. Expected improvement to ecosystem trust or a shared asset: severity,
    relevance to real artifacts, and likely usefulness to others.
@@ -81,6 +86,13 @@ outranks the next alternative. Use ordinal ranks rather than a weighted score
 that pretends these uncertain judgments are exact. Prefer the smaller decisive
 item when value is otherwise similar. Account for accumulated deferral so
 maintenance cannot be forgotten, but age alone is not proof of value.
+
+Being the only already-READY item is not a value argument. At selection, assess
+whether a higher-value PLANNED candidate can be made READY for its preparation
+phase under standing local authority. Do not split an ordinary setup or repair
+into successive research items merely to obtain another closure. A diagnostic
+distinction with unchanged acceptance needs a concrete consumer or consequential
+question to outrank fresh semantic coverage.
 
 ### Contribution paths and planning horizon
 

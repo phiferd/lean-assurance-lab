@@ -1,7 +1,8 @@
 # Valid dependent-term pilot 1
 
-Status: READY for source/reuse and typing-rule review. No generator output or
-checker launch is authorized until the phase gates below are committed.
+Status: READY and unstarted. Source/reuse review, implementation and independent
+auditing are phases of this item. Corpus construction and checker observation
+have separate gates below; an exact corpus manifest is produced by construction.
 
 ## Question and value
 
@@ -29,10 +30,38 @@ outcome-guided replacement are excluded.
    of every target checker. Have a separate audit implementation reject malformed
    derivations and term/derivation mismatches.
 3. Bind exact exporter and checker profiles, deterministic generation seed,
-   category counts, size policy and nonterminal process safety controls.
-4. Commit the generator, auditor, tests and an exact 50-case manifest before
-   generating observable checker outcomes.
-5. Preserve every generated case and execute the complete frozen matrix.
+   category counts, size policy and nonterminal process safety controls. Commit
+   this design, the generator, auditor and focused tests before constructing the
+   scientific cohort. Construction emits both terms and derivations, not target
+   checker outcomes.
+4. Construct and independently audit the fixed 50-case cohort. Preserve failed
+   construction/audit evidence; repair generator or auditor defects within this
+   item without changing the seed, categories or selection rule. Commit the
+   exact term/derivation hashes, audit results and execution manifest before any
+   target checker observes a scientific case.
+5. Execute the complete frozen matrix and interpret its outcomes. Preserve every
+   case, including difficult or rejected cases; never replace a case after
+   checker observation.
+
+## Implementation approach
+
+Reuse the repaired supervisor, supported exporter workflow and checked-object
+receipt checks where compatible. Establish their basic build/export/check path
+with existing fixtures before cohort construction; these engineering smoke tests
+are not members of the 50-case scientific cohort or evidence about its outcomes.
+Generator/auditor development fixtures are also separate from that cohort; the
+construction gate does not prohibit implementing and testing the generator.
+Use ordinary tool-supported project setup and preserve actual build output.
+Successful builds may emit stdout; acceptance must follow the command's contract.
+
+Bind the source inputs actually needed to build, including non-code includes,
+and the transitive local tooling used by each attempt, not just its wrapper.
+Attempts use fresh evidence directories so a partial failure remains retryable.
+Stage generated outputs there and promote the corpus only after its audit passes.
+Check timeout, memory, monitoring and cleanup receipts before the next launch,
+independently of the semantic outcome label; a safety failure pauses for repair.
+Apply these requirements in the pilot's implementation and focused regressions;
+do not create a separate supervisor/framework or maintenance research item.
 
 An engineering failure in any phase is repaired and retried inside this item.
 Attempt, build, checker, session and elapsed-time counts are observational only.
@@ -45,5 +74,6 @@ Complete with the exact 50-case corpus, derivations, audit results, full support
 checker matrix and scoped reuse/contribution recommendation. Stop without that
 result only for owner direction, unavailable required authority/input,
 invalidated scientific input, or a required capability that remains unavailable
-after feasible repairs. Network access, production checker edits, assurance
-milestone changes and external writes require separate authority.
+after feasible repairs. Read-only source/reuse research and exact-input
+materialization are permitted as preparation. Production checker edits,
+assurance milestone changes and external writes require separate authority.

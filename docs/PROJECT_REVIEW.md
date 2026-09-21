@@ -51,7 +51,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 Construct terms with typing derivations under independently reviewed rules, then compare a frozen supported cohort without replacing failures.
 
-**Why this rank:** Third: broad semantic exploration, but a larger typing-oracle/generator construction burden than representation testing.
+**Why this rank:** Highest-value unfinished item: fresh dependent-term coverage and independently auditable validity evidence provide broader reusable semantic value than another rejection-diagnostic distinction. Generator/oracle preparation is part of this item, not a reason to select a lower-value already-prepared reserve. Acceptance-impact reproduction remains the next alternative, with less certain reuse value until its current premise is established.
 
 **Completion:** A derivation-carrying generator, fixed positive suite and complete failure/outcome record, or a precise construction/semantic boundary.
 
@@ -59,7 +59,7 @@ Construct terms with typing derivations under independently reviewed rules, then
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY for source/reuse and typing-rule review under docs/research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md. No term generation or checker launch is authorized until the independent rules, derivation auditor, exact profiles, deterministic seed, size policy, tests and 50-case manifest are committed.
+**Boundary:** READY: READY and unstarted under docs/research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md. Review reuse/rules and implement within this item. Commit the design, auditor, generator, profiles, seed, size policy and tests before scientific cohort construction; then construct and independently audit the cohort and commit its exact 50-case manifest before target checker observation. Existing-fixture engineering smoke tests are permitted preparation; repairs do not close or replace the item.
 
 ### 4. ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences
 
