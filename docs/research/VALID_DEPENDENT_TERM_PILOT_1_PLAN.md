@@ -1,8 +1,9 @@
 # Valid dependent-term pilot 1
 
-Status: READY and unstarted. Source/reuse review, implementation and independent
-auditing are phases of this item. Corpus construction and checker observation
-have separate gates below; an exact corpus manifest is produced by construction.
+Status: ACTIVE in design/tooling preparation. Source/reuse review,
+implementation and independent auditing are phases of this item. Corpus
+construction and checker observation have separate gates below; an exact corpus
+manifest is produced by construction.
 
 ## Question and value
 
