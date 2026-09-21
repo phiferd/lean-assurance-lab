@@ -7,20 +7,40 @@ absolute workspace identity recorded by the original process receipts.
 from __future__ import annotations
 
 import inspect
+import json
 from pathlib import Path, PurePosixPath
 import subprocess
 import sys
 
 from lib import portfolio_historical_snapshot as legacy
+from lib.research_queue_v4 import load_queue
 
 
 CLOSURE = legacy.CLOSURE
 MODULES = legacy.MODULES
-validate_live_transition = legacy.validate_live_transition
 _compare_bytes = legacy._compare_bytes
 _compare_queue = legacy._compare_queue
 _attach_payloads = legacy._attach_payloads
 _snapshot = legacy._snapshot
+
+
+def validate_live_transition(root):
+    """Preserve frozen bytes while validating the schema-v4 live queue."""
+
+    root = Path(root).resolve()
+    tree = legacy._tree(root)
+    paths = legacy._preserved_paths(root, tree)
+    for path in sorted(paths):
+        current = root / path
+        if not current.is_file() or current.is_symlink():
+            raise ValueError("frozen portfolio input missing or linked: " + path)
+        legacy._compare_bytes(path, current.read_bytes(), legacy._bytes(root, path))
+    old = json.loads(legacy._bytes(root, "config/research-queue.json"))
+    current = load_queue(root, require_ready=True)
+    legacy._compare_queue(old, current)
+    return {"status": "PASS", "historical_commit": CLOSURE,
+            "preserved_paths": len(paths), "selected_item": current["selected_item"],
+            "historical_modules": sorted(MODULES)}
 
 
 def historical_modules(root):

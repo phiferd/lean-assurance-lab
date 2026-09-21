@@ -20,20 +20,19 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete PIPELINE-COMPLETENESS-PILOT-2: Complete intended-theorem pipeline completeness; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **PIPELINE-COMPLETENESS-PILOT-2**.
+Selected next item: **VALID-DEPENDENT-TERM-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 2 | PIPELINE-COMPLETENESS-PILOT-2: Complete intended-theorem pipeline completeness | READY |
-| 3 | VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases | PLANNED |
+| 3 | VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases | READY |
 | 4 | ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences | PLANNED |
 | 5 | TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports | PLANNED |
 | 6 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | PLANNED |
@@ -45,22 +44,6 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-
-### 2. PIPELINE-COMPLETENESS-PILOT-2: Complete intended-theorem pipeline completeness
-
-**Target:** The unchanged twelve-declaration expectation, producer/adapters and omission/substitution/truncation matrix frozen by pilot 1
-
-Validate the repaired minimal Lake workspace, then produce, inventory and execute the unchanged checked-object sentinel matrix under fresh continuation receipts.
-
-**Why this rank:** Highest-value feasible local blocker removal: pilot 1 isolated a pre-compilation controller defect while the fixed scientific inputs and checker matrix remain untested. Repairing and continuing yields the intended reusable checked-object evidence.
-
-**Completion:** The unchanged eight-cell sentinel matrix with exact receipts and a scoped reuse recommendation, or a genuine authority, invalidated-input or unavailable-capability boundary after feasible repairs.
-
-**Stop:** Scientific result, owner stop, unavailable required authority/input, invalidated scientific input, or required capability unavailable after feasible repairs. Per-process time/memory/cleanup controls are nonterminal safety mechanisms. Zero network, proof, scientific-source mutation, production-checker edit, milestone advance or external write.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** READY: READY under the continuation plan. Pilot-1 science and failure evidence are inherited by hash. Commit a fresh pilot-2 controller/work record and a passing supervised offline Lake configuration preflight that performs no compilation, export or checker launch; repair and retry any engineering failure.
 
 ### 3. VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases
 
@@ -76,7 +59,7 @@ Construct terms with typing derivations under independently reviewed rules, then
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: independently review typing-rule encoding, generator reuse, exporter support and a staged construction protocol; exclude previous imax/ownership cases, inductives, quotients and native literals before promotion.
+**Boundary:** READY: READY for source/reuse and typing-rule review under docs/research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md. No term generation or checker launch is authorized until the independent rules, derivation auditor, exact profiles, deterministic seed, size policy, tests and 50-case manifest are committed.
 
 ### 4. ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences
 
@@ -295,6 +278,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: PIPELINE-COMPLETENESS-PILOT-2 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: VALID-DEPENDENT-TERM-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

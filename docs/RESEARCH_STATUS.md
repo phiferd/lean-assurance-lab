@@ -58,6 +58,21 @@ research directions.
 
 ## Attempted
 
+- Completed `PIPELINE-COMPLETENESS-PILOT-2` on 2026-09-21 with SUCCESS under
+  the corrected persistent-execution policy. The pinned Lean 4.29.1 producer
+  generated the exact twelve-theorem module; an independent parser bound its
+  ordered declarations, `True` statements and complete value-dependency chain.
+  Official Lean and Lean4Lean accepted the exact baseline. Both also accepted
+  the target-omission and compatible-substitution artifacts, while both rejected
+  the truncated record. The sentinel independently returned the preregistered
+  failure in all six fault cells, demonstrating that checker exit success alone
+  does not prove the supplied artifact was the requested object. Three routine
+  supervisor/controller incidents were preserved, repaired and retried without
+  changing the scientific matrix or closing the item. Retain the executable
+  receipt package locally; no checker-soundness claim or external action follows.
+  `VALID-DEPENDENT-TERM-PILOT-1` is selected READY and unstarted for its
+  source/reuse and independent typing-rule phase.
+
 - Completed `PIPELINE-COMPLETENESS-PILOT-1` on 2026-09-20 with
   `BOUNDED_UNRESOLVED`. The independent twelve-theorem expectation, strict
   export parser, intended-object sentinel, dependency checks, three faults and
@@ -2986,16 +3001,20 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `PIPELINE-COMPLETENESS-PILOT-2`.
+Selected next item: `VALID-DEPENDENT-TERM-PILOT-1`.
 
-It is ACTIVE under a
-[continuation plan](research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md). Pilot 1's
-scientific inputs and exact failed attempt remain frozen as historical evidence.
-The old attempt cap is not a live stopping rule. The continuation has committed
-a fresh controller, passed a supervised offline no-compilation Lake preflight,
-and frozen the independently inventoried baseline plus three faults. It must now
-repair and continue through the unchanged twelve-theorem, two-adapter,
-three-fault matrix until the scientific result or a genuine blocker exists.
+It is READY and unstarted under the
+[valid dependent-term plan](research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md).
+Its first phase reviews reuse, independently states the restricted fragment's
+typing rules, and designs a negative-capable derivation auditor. No generated
+term or checker launch is authorized until the exact 50-case manifest, generator,
+auditor, profiles, deterministic seed and tests are committed.
+
+The pipeline-completeness continuation completed SUCCESS. Its exact baseline
+was accepted by both bound checkers; omission and compatible substitution were
+also accepted by both, while the sentinel rejected all six fault cells with the
+preregistered distinct classifications. This establishes a reusable
+checked-object receipt pattern, not a checker defect or general semantic claim.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -3011,8 +3030,8 @@ no external action is recommended now.
 | Rank | Candidate | State |
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
-| 2 | `PIPELINE-COMPLETENESS-PILOT-2` | ACTIVE, fixed matrix authorized |
-| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
+| 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
+| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | READY, selected and unstarted |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
@@ -3164,13 +3183,12 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item:
-`PIPELINE-COMPLETENESS-PILOT-2`, selected under persistent execution policy.
-The source-lock audit, provenance intake and compact child-panic confirmation
-are complete. The selected pilot has passed its no-compilation configuration
-preflight, produced and independently inventoried the exact four frozen
-artifacts, and is authorized to run its fixed eight-cell checker matrix. Routine
-engineering failures require repair and retry, not closure or a successor item.
+The canonical queue retains one READY item:
+`VALID-DEPENDENT-TERM-PILOT-1`, selected and unstarted under persistent execution
+policy. Pipeline completeness is complete with a reusable local receipt asset.
+The selected successor begins with source/reuse and independent typing-rule
+review; routine engineering failures require repair and retry, not closure or a
+successor item.
 The earlier representation pilot 1 remains frozen at its tooling cap; its own
 pilot 2 is the successful separate representation continuation and retains that
 completed reusable package.

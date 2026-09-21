@@ -7,8 +7,8 @@ import tempfile
 import unittest
 from pathlib import Path
 
-from lib.research_queue_v3 import CATEGORIES, load_queue
-from lib.research_queue_v4 import POLICY, queue_digest, validate_queue
+from lib.research_queue_v3 import CATEGORIES
+from lib.research_queue_v4 import POLICY, load_queue, queue_digest, validate_queue
 
 
 class ResearchQueueV4Tests(unittest.TestCase):
@@ -83,7 +83,6 @@ class ResearchQueueV4Tests(unittest.TestCase):
         self.queue["items"].append(completed)
         self.bind()
         validate_queue(self.queue, self.root)
-
 
 if __name__ == "__main__":
     unittest.main()

@@ -40,19 +40,22 @@ diagnostic distinction. It is not an acceptance or soundness difference.
 failure before compilation and was incorrectly closed because of an attempt cap.
 The historical closure, process receipt and repaired regression remain preserved,
 and no export or checker claim exists. Its live
-[continuation](PIPELINE_COMPLETENESS_PILOT_2_PLAN.md) is now selected READY and
-unstarted under the corrected persistent-execution policy. It inherits the
-scientific freeze, treats the failed attempt as evidence rather than a limit,
-and must pass an offline no-compilation configuration preflight before building.
+[continuation](PIPELINE_COMPLETENESS_PILOT_2_PLAN.md) completed SUCCESS under the
+corrected persistent-execution policy. Both bound checkers accepted the exact
+baseline, omitted-target artifact and compatible substituted artifact, while the
+independent sentinel accepted only the baseline and returned the preregistered
+failure on all six fault cells. The package is retained as a local checked-object
+receipt asset; it supports no checker-defect or general semantic claim.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
 confined to replaceable supervision. At closure the one-thread source assessment
-identified a bounded diagnostic follow-through, now completed without a
-semantic difference. Pipeline completeness is the next practical discovery
-alternative, and its receipt-semantics protocol gate is now passed;
-valid-term generation follows because its typing oracle and generator demand
-more construction. These are ordinal judgments, not estimated defect rates.
+identified a scoped diagnostic follow-through, now completed without a semantic
+difference. Pipeline completeness then delivered the next shared assurance
+asset. `VALID-DEPENDENT-TERM-PILOT-1` is now selected READY for its source/reuse
+and independent typing-rule phase because positive dependent-term generation is
+the highest-ranked fresh semantic exploration and its preparation is explicitly
+part of the item. These are ordinal judgments, not estimated defect rates.
 
 ## Ranked candidate horizon
 
@@ -65,8 +68,8 @@ fixed sequence or promote every idea to READY.
 | Rank / item | Useful output and fixed scientific scope | Promotion gate beyond recorded selection |
 | --- | --- | --- |
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
-| 2 `PIPELINE-COMPLETENESS-PILOT-2` | Complete the unchanged checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | READY under the continuation plan; preserve pilot 1 and first commit a fresh controller plus passing offline no-compilation Lake preflight, then freeze the exact export before ACTIVE execution |
-| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | Bind independently reviewed typing rules, generator reuse decision, exporter support and construction protocol; exclude prior imax/ownership cases, native literals, inductives and quotients |
+| 2 `PIPELINE-COMPLETENESS-PILOT-2` | Completed checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | COMPLETE, SUCCESS; retained as a local checked-object receipt asset |
+| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | READY for source/reuse and independent typing-rule review; generation/checker gates remain closed until the exact auditor, profiles, seed, size policy, tests and 50-case manifest are committed |
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Fixed six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
 | 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |

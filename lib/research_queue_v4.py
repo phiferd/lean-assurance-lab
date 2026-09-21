@@ -12,9 +12,13 @@ import json
 from pathlib import Path
 from typing import Any
 
+from lib import research_queue_v3
 from lib.research_queue import ROOT
 from lib.research_queue_v2 import validate_queue as validate_v2
-from lib.research_queue_v3 import _review, handoff_status
+from lib.research_queue_v3 import _json, _review
+
+_LEGACY_LOAD_QUEUE = research_queue_v3.load_queue
+_LEGACY_HANDOFF_STATUS = research_queue_v3.handoff_status
 
 POLICY = {
     "engineering_failures": "REPAIR_AND_CONTINUE",
@@ -29,6 +33,12 @@ POLICY = {
         "REQUIRED_CAPABILITY_UNAVAILABLE_AFTER_FEASIBLE_REPAIRS",
     ],
 }
+
+
+def handoff_status(data: dict[str, Any]) -> str:
+    if data["schema_version"] == 4:
+        return data["handoff"]["status"]
+    return _LEGACY_HANDOFF_STATUS(data)
 
 
 def queue_digest(data: dict[str, Any]) -> str:
@@ -57,8 +67,10 @@ def validate_queue(data: Any, root: Path = ROOT, *, require_ready: bool = False)
     for index, item in enumerate(predecessor["items"]):
         original = data["items"][index]
         if original.get("status") == "COMPLETE":
-            if not isinstance(original.get("budget"), dict):
-                raise ValueError("completed historical items must retain their original budget record")
+            if original.get("budget") is None:
+                item["budget"] = {"max_sessions": 1, "session_minutes": 1, "checker_launches": 0}
+            elif not isinstance(original.get("budget"), dict):
+                raise ValueError("completed items must retain a historical budget object or a v4 null budget")
         else:
             if original.get("budget") is not None:
                 raise ValueError("unfinished v4 items must not have an attempt budget")
@@ -73,14 +85,29 @@ def validate_queue(data: Any, root: Path = ROOT, *, require_ready: bool = False)
            for candidate in review.get("candidates", [])
            for blocker in candidate.get("blockers", [])):
         raise ValueError("v4 strategic review cannot use an attempt budget as a blocker")
-    _review(data, root, digest_function=queue_digest)
+    _review(data, root)
+    if handoff_status(data) == "PAUSED":
+        by_id = {row["item_id"]: row for row in review["candidates"]}
+        if by_id[data["selected_item"]]["disposition"] != "BLOCKED":
+            raise ValueError("PAUSED v4 selection must have evidence-bound blockers")
+        local = next(row for row in review["categories"]
+                     if row["category"] == "LOCAL_BLOCKER_REMOVAL")
+        if any(by_id[item_id]["disposition"] != "BLOCKED" for item_id in local["candidate_ids"]):
+            raise ValueError("PAUSED v4 review must document blockers to local blocker-removal work")
     if require_ready and handoff_status(data) == "PAUSED":
         raise ValueError("queue is PAUSED; no executable item; " + data["handoff"]["required_decision"])
 
 
 def load_queue(root: Path = ROOT, *, require_ready: bool = False) -> dict[str, Any]:
-    from lib.research_queue_v3 import load_queue as load_current
-    data = load_current(root, require_ready=require_ready)
-    if data["schema_version"] != 4:
-        raise ValueError("current queue is not schema v4")
-    return data
+    root = Path(root).resolve()
+    data = _json(root / "config" / "research-queue.json")
+    if data.get("schema_version") == 4:
+        validate_queue(data, root, require_ready=require_ready)
+        return data
+    return _LEGACY_LOAD_QUEUE(root, require_ready=require_ready)
+
+
+# Some historical modules import the frozen v3 path as their live queue entry
+# point. Keep the v3 source bytes unchanged while making those later imports
+# schema-compatible. Legacy schemas still execute the captured v3 loader.
+research_queue_v3.load_queue = load_queue

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-2",
+  "status": "PASS",
+  "validated_at": "2026-09-21T11:49:57Z",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_pipeline_completeness*.py'",
+      "result": "PASS",
+      "tests": 26
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+      "result": "PASS",
+      "current_tests": 1265,
+      "frozen_publication_study_tests": 73,
+      "frozen_portfolio_checkpoint_tests": 9
+    },
+    {
+      "command": "scripts/refresh-current-state --log-dir results/workflow-refresh/pipeline-completeness-pilot-2-closure-final-r2",
+      "result": "PASS",
+      "receipt": {
+        "path": "results/workflow-refresh/pipeline-completeness-pilot-2-closure-final-r2/result.json",
+        "sha256": "33e4cbd32a30f55fe77132c2f3a5b0f94fe914a98b6fbf2ffece4074751bb340"
+      },
+      "completed_commands": 14
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "scientific_processes_launched_by_validation": 0,
+  "conclusion": "The successful eight-cell pipeline-completeness closure, persistent-execution policy, historical queue compatibility, unstarted dependent-term successor and generated current-state artifacts pass focused, queue, complete current/historical and refresh validation."
+}

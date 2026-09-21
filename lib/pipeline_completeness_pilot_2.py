@@ -49,7 +49,7 @@ def _protocols() -> tuple[dict[str, Any], dict[str, Any]]:
 
 
 def _selected(status: str) -> None:
-    from lib.research_queue_v3 import load_queue
+    from lib.research_queue_v4 import load_queue
     queue = load_queue(ROOT, require_ready=True)
     item = next(row for row in queue["items"] if row["id"] == ITEM)
     require(queue["selected_item"] == ITEM and item["status"] == status,
