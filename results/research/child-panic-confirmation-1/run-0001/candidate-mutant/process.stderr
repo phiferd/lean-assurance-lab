@@ -1,0 +1,35 @@
+
+thread 'thread_0' (49155541) panicked at src/tc.rs:921:71:
+assertion failed: self.def_eq(u, v)
+stack backtrace:
+   0:        0x1007f6244 - <<std[61a5f0013896dfb1]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[aedb9fd4ead64aec]::fmt::Display>::fmt
+   1:        0x10077a0ec - core[aedb9fd4ead64aec]::fmt::write
+   2:        0x1007f57b0 - <std[61a5f0013896dfb1]::sys::stdio::unix::Stderr as std[61a5f0013896dfb1]::io::Write>::write_fmt
+   3:        0x1007f5400 - std[61a5f0013896dfb1]::panicking::panic_with_hook
+   4:        0x100813a80 - std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}
+   5:        0x100813a10 - std[61a5f0013896dfb1]::sys::backtrace::__rust_end_short_backtrace::<std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}, !>
+   6:        0x100813ef0 - __rustc[667454f86b37ac2d]::rust_begin_unwind
+   7:        0x100819074 - core[aedb9fd4ead64aec]::panicking::panic_fmt
+   8:        0x1008191cc - core[aedb9fd4ead64aec]::panicking::panic
+   9:        0x100798ed4 - <nanoda_lib[7ca227f3c4123618]::tc::TypeChecker>::infer
+  10:        0x100785554 - <nanoda_lib[7ca227f3c4123618]::util::ExportFile>::check_declar
+  11:        0x1007cf784 - std[61a5f0013896dfb1]::sys::backtrace::__rust_begin_short_backtrace::<<nanoda_lib[7ca227f3c4123618]::util::ExportFile>::check_all_declars_par::{closure#0}::{closure#0}, ()>
+  12:        0x1007cc668 - <std[61a5f0013896dfb1]::thread::lifecycle::spawn_unchecked<<nanoda_lib[7ca227f3c4123618]::util::ExportFile>::check_all_declars_par::{closure#0}::{closure#0}, ()>::{closure#1} as core[aedb9fd4ead64aec]::ops::function::FnOnce<()>>::call_once::{shim:vtable#0}
+  13:        0x10081437c - <std[61a5f0013896dfb1]::sys::thread::unix::Thread>::new::thread_start
+  14:        0x19d2d7bc8 - __pthread_cond_wait
+
+thread 'main' (49155540) panicked at src/tc.rs:139:26:
+A thread in `check_all_declars` panicked while being joined: Any { .. }
+stack backtrace:
+   0:        0x1007f6244 - <<std[61a5f0013896dfb1]::sys::backtrace::BacktraceLock>::print::DisplayBacktrace as core[aedb9fd4ead64aec]::fmt::Display>::fmt
+   1:        0x10077a0ec - core[aedb9fd4ead64aec]::fmt::write
+   2:        0x1007f57b0 - <std[61a5f0013896dfb1]::sys::stdio::unix::Stderr as std[61a5f0013896dfb1]::io::Write>::write_fmt
+   3:        0x1007f5400 - std[61a5f0013896dfb1]::panicking::panic_with_hook
+   4:        0x100813a54 - std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}
+   5:        0x100813a10 - std[61a5f0013896dfb1]::sys::backtrace::__rust_end_short_backtrace::<std[61a5f0013896dfb1]::panicking::panic_handler::{closure#0}, !>
+   6:        0x100813ef0 - __rustc[667454f86b37ac2d]::rust_begin_unwind
+   7:        0x100819074 - core[aedb9fd4ead64aec]::panicking::panic_fmt
+   8:        0x10081929c - core[aedb9fd4ead64aec]::result::unwrap_failed
+   9:        0x100775a60 - nanoda_bin[efdb8cf40ef0ad3d]::main
+  10:        0x10077193c - std[61a5f0013896dfb1]::sys::backtrace::__rust_begin_short_backtrace::<fn() -> core[aedb9fd4ead64aec]::result::Result<(), nanoda_bin[efdb8cf40ef0ad3d]::MainError>, core[aedb9fd4ead64aec]::result::Result<(), nanoda_bin[efdb8cf40ef0ad3d]::MainError>>
+  11:        0x1007790f0 - _main

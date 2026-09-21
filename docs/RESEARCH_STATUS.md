@@ -71,7 +71,11 @@ research directions.
   preserved engineering evidence; no build, checker or network operation
   occurred. `SOURCE-PROVENANCE-INTAKE-1` then completed SUCCESS by binding the
   exact 6517-byte README from the pinned revision without editing frozen history.
-  `CHILD-PANIC-CONFIRMATION-1` is ACTIVE for one supervised four-cell result.
+  `CHILD-PANIC-CONFIRMATION-1` then completed SUCCESS: both controls accepted,
+  while the baseline candidate failed on the main thread and the one-worker
+  mutant failed in `thread_0` followed by the parent join panic. This is a
+  diagnostic regression only; both observers reject the candidate, so there is
+  no acceptance or soundness difference and no upstream action is recommended.
 
 - Completed `SURVIVOR-THREAD-ONE-DETERMINISM-1` on 2026-09-20 with SUCCESS
   for a source-supported, unexecuted one-thread child-panic diagnostic protocol.
@@ -2965,13 +2969,15 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `CHILD-PANIC-CONFIRMATION-1`.
+Selected next item: `PIPELINE-COMPLETENESS-PILOT-1`.
 
-The exact upstream `README.md` byte is now independently bound outside the
-historical lock. The active confirmation reuses the unchanged control,
-candidate, mutation, configuration and runtime for two offline builds and four
-supervised checker cells. It will close as an operational diagnostic result,
-not an acceptance or soundness difference.
+It is READY and unstarted under a dedicated staged
+[plan](research/PIPELINE_COMPLETENESS_PILOT_PLAN.md). The plan binds one pinned
+Lean4export producer, the official and Lean4Lean adapters, an independently
+specified twelve-theorem dependency chain, a checked-object receipt contract,
+and omission/substitution/truncation faults. Before any checker launch it must
+implement and test the sentinel, produce and freeze one exact export, and commit
+the complete execution manifest.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -2987,7 +2993,7 @@ no external action is recommended now.
 | Rank | Candidate | State |
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
-| 2 | `PIPELINE-COMPLETENESS-PILOT-1` | PLANNED |
+| 2 | `PIPELINE-COMPLETENESS-PILOT-1` | READY, selected and unstarted |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
@@ -2997,7 +3003,8 @@ no external action is recommended now.
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
 | 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
-| 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | READY, selected and unstarted |
+| 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
+| 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan. Reassess actual value and
@@ -3138,11 +3145,14 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue selects `CHILD-PANIC-CONFIRMATION-1` ACTIVE. The source-lock
-audit and provenance intake are complete; this single confirmation is the final
-bounded follow-through before returning to the broader PLANNED discovery
-horizon. Pilot 1 remains frozen at its tooling cap; pilot 2 is its successful
-separate continuation and retains the completed reusable package.
+The canonical queue retains one READY item:
+`PIPELINE-COMPLETENESS-PILOT-1`, selected and unstarted.
+The source-lock audit, provenance intake and compact child-panic confirmation
+are complete. The selected pilot now returns the frontier to broader reusable
+assurance: it will test whether a successful checker run is mechanically tied
+to the exact intended theorem and dependencies. Pilot 1 remains frozen at its
+tooling cap; pilot 2 is its successful separate continuation and retains the
+completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155
 current tests passed and its draft remains locally held. Four Nanoda drafts and

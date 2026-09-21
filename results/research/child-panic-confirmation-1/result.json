@@ -1,0 +1,94 @@
+{
+  "schema_version": 1,
+  "item_id": "CHILD-PANIC-CONFIRMATION-1",
+  "outcome": "SUCCESS",
+  "generated_at": "2026-09-21T00:24:06.293053+00:00",
+  "builds": {
+    "baseline": {
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/build-baseline/supervisor.json",
+        "sha256": "0c33f63321e3cc5255e52f76fa9fee6979e592ba26542f260caec6dc7ad393b8"
+      },
+      "binary_sha256": "49392904e78a9757eec46d5c2bbe852e48abcb4d204cc76e41ab418ac1b41d77"
+    },
+    "mutant": {
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/build-mutant/supervisor.json",
+        "sha256": "68f3b181310147ae1ae6e4ed3f80918c1fafab0b9530a06f5a2eef4fbf5faab8"
+      },
+      "binary_sha256": "ab3ec2b288c065e233460e2abd21e6f99e651b9fcae6bb7e83f5b074eefed33c"
+    }
+  },
+  "cells": [
+    {
+      "cell": "control-baseline",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-baseline/supervisor.json",
+        "sha256": "77ec8a8cf1afca37230e85fc9b60a9ff66dbae39885b2e844e2b2b2b1e18e9ea"
+      },
+      "stdout": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-baseline/process.stdout",
+        "sha256": "a9afe4d37ecd98326f69a843a168ac994a12120107a93624db78671ab94b59c2"
+      },
+      "stderr": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-baseline/process.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "cell": "control-mutant",
+      "expected": "ACCEPT",
+      "actual": "ACCEPT",
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-mutant/supervisor.json",
+        "sha256": "315b3b3327bd259cd9e2e8242230aa9964b1e51ee0eb4d22b5d3740b2ba0e0d9"
+      },
+      "stdout": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-mutant/process.stdout",
+        "sha256": "a9afe4d37ecd98326f69a843a168ac994a12120107a93624db78671ab94b59c2"
+      },
+      "stderr": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/control-mutant/process.stderr",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      }
+    },
+    {
+      "cell": "candidate-baseline",
+      "expected": "DIRECT_ASSERTION_REFUSAL",
+      "actual": "DIRECT_ASSERTION_REFUSAL",
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-baseline/supervisor.json",
+        "sha256": "6ba2add2e43073d0022c13df59c8359fb040ab2d86816f64557e5bfd09d4e134"
+      },
+      "stdout": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-baseline/process.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-baseline/process.stderr",
+        "sha256": "f68c21b5ff49f62dd9584318af89212a0497d1761df95961bedf5118fefc78ef"
+      }
+    },
+    {
+      "cell": "candidate-mutant",
+      "expected": "WORKER_PANIC_JOIN_REFUSAL",
+      "actual": "WORKER_PANIC_JOIN_REFUSAL",
+      "receipt": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-mutant/supervisor.json",
+        "sha256": "bf75e6e0c779f7f980886054bf27f8adfe895fb35bac80c98b1ac8731238c478"
+      },
+      "stdout": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-mutant/process.stdout",
+        "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+      },
+      "stderr": {
+        "path": "results/research/child-panic-confirmation-1/run-0001/candidate-mutant/process.stderr",
+        "sha256": "aa06355013dc6b2fa31f68d66563810e944975583f2343402fb735cda8fbba06"
+      }
+    }
+  ],
+  "conclusion": "Both controls accepted. The baseline candidate failed directly on the main thread; the exact one-worker mutant failed in thread_0 and then at the parent join.",
+  "claim_limit": "Operational diagnostic distinction only; both observers reject the candidate, so this is not an acceptance or soundness difference."
+}

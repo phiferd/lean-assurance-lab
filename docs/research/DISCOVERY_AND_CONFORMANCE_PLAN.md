@@ -33,16 +33,18 @@ found exactly one direct compile-time include edge, `src/main.rs` to
 pinned evidence. Its two controller incidents are preserved engineering
 evidence. `SOURCE-PROVENANCE-INTAKE-1` completed SUCCESS by binding the exact
 6517-byte README from the pinned revision without changing the historical lock.
-`CHILD-PANIC-CONFIRMATION-1` is ACTIVE for one compact supervised four-cell
-confirmation before the frontier returns to broader shared-assurance work.
+`CHILD-PANIC-CONFIRMATION-1` then completed SUCCESS: both controls accepted and
+both candidate cells rejected, with the expected direct-versus-worker/join
+diagnostic distinction. It is not an acceptance or soundness difference.
+`PIPELINE-COMPLETENESS-PILOT-1` is now selected READY and unstarted under its
+dedicated checked-object receipt plan.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
 confined to replaceable supervision. At closure the one-thread source assessment
-identified a bounded diagnostic follow-through, now closed on a pinned
-source-materialization boundary. The selected source-lock audit is a bounded
-local follow-through; pipeline completeness remains the next practical discovery alternative
-after its receipt-semantics protocol gate;
+identified a bounded diagnostic follow-through, now completed without a
+semantic difference. Pipeline completeness is the next practical discovery
+alternative, and its receipt-semantics protocol gate is now passed;
 valid-term generation follows because its typing oracle and generator demand
 more construction. These are ordinal judgments, not estimated defect rates.
 
@@ -57,7 +59,7 @@ fixed sequence or promote every idea to READY.
 | Rank / item | Useful output and finite proposed scope | Promotion gate beyond recorded selection |
 | --- | --- | --- |
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
-| 2 `PIPELINE-COMPLETENESS-PILOT-1` | Checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters, three omission/substitution/truncation faults; 180 active minutes, 12 checker attempts | Name supported producer and adapters, checked-object receipt semantics, independent expected module contents and exact fault rubric; reuse Comparator where applicable; record a staged implementation/execution plan |
+| 2 `PIPELINE-COMPLETENESS-PILOT-1` | Checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters, three omission/substitution/truncation faults; 180 active minutes, 12 checker attempts | READY under the dedicated staged plan with pinned producer/adapters, independent expected contents, receipt semantics, exact faults and finite process limits; implement/test and freeze the exact export before ACTIVE execution |
 | 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels; 360 active minutes, 120 checker attempts | Bind independently reviewed typing rules, generator reuse decision, exporter support and finite construction protocol; exclude prior imax/ownership cases, native literals, inductives and quotients |
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control; 360 active minutes, 24 checker/proof attempts | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths; 180 active minutes, 24 checker attempts | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
@@ -89,9 +91,9 @@ the first actual baseline build was completely supervised but could not read the
 omitted pinned `README.md`. Its
 [source-only successor](SOURCE_LOCK_COMPLETENESS_AUDIT_PLAN.md) completed
 SUCCESS, and the separately authorized provenance intake bound the exact missing
-README without changing frozen history. A fresh confirmation item now uses that
-complete materialization under its own budget. No historical budget or counter
-is reset.
+README without changing frozen history. The fresh confirmation completed its
+fixed four-cell matrix and found only the preregistered diagnostic distinction.
+No historical budget or counter is reset.
 
 The theorem companion, original CVC-4/CVC-5 and independent transfer intake retain
 their exact unmet gates and scopes. The nine new candidates neither inherit nor

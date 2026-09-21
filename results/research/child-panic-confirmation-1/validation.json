@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "item_id": "CHILD-PANIC-CONFIRMATION-1",
+  "status": "PASS_AFTER_FOCUSED_REPAIR",
+  "validated_at": "2026-09-21T00:25:28Z",
+  "checks": [
+    {"command": "scripts/validate-research-queue --require-ready", "returncode": 0, "result": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_child_panic_confirmation_closure.py", "returncode": 0, "tests_run": 3, "result": "PASS"},
+    {"command": "python3 -m unittest discover -s tests -p test_pipeline_completeness_protocol.py", "returncode": 0, "tests_run": 3, "result": "PASS"},
+    {"command": "scripts/run-unit-tests", "returncode": 1, "current_suite_tests_run": 1239, "current_suite_passed": 1238, "current_suite_errors": 1, "historical_partition_tests_run": 82, "historical_partition_passed": 82, "result": "REPAIR_REQUIRED", "detail": "The sole error was the historical READY-count parser rejecting status prose that selected the only READY item without the exact phrase 'canonical queue retains one READY item'."},
+    {"command": "python3 -m unittest discover -s tests -p test_arena_let_regression_erratum.py", "returncode": 0, "tests_run": 6, "result": "PASS_AFTER_PROSE_REPAIR"},
+    {"command": "scripts/refresh-current-state --log-dir results/workflow-refresh/child-panic-confirmation-1-closure", "returncode": 0, "result": "PASS", "receipt": {"path": "results/workflow-refresh/child-panic-confirmation-1-closure/result.json", "sha256": "fee0557e9932300318f71a401da7bb4ce6fc1e6e2804797caa80b9f64ca900b5"}},
+    {"command": "git diff --check", "returncode": 0, "result": "PASS"}
+  ],
+  "rerun_scope": "The repair changed one status sentence only. Its complete six-test module, the closure tests, the successor protocol tests, the queue validator and the full current-state refresh passed; the 1238 unaffected current-suite tests and all 82 historical-partition tests were not rerun.",
+  "current_state_bindings": [
+    {"path": "config/research-queue.json", "sha256": "7a57a88ff1064b1c3a454db9dece91b3e63f6e1e2ccda15f33dcd241b7c6c732"},
+    {"path": "docs/RESEARCH_STATUS.md", "sha256": "cdcefd96b8b84ba334bc98cd989171bfa358f4dfc33ca51c8f333e2a4ab81d00"},
+    {"path": "results/artifacts/graph.json", "sha256": "06cf6608d554de7b353eb8c6e02bd302f014678e2c3eb5b524544cd520db930c"},
+    {"path": "results/assurance/current.json", "sha256": "fcd3bf495b3983881c96e90ca49ab26f2b25f8976f83ea43586cef28c2ba2206"},
+    {"path": "results/research/project-review.json", "sha256": "a786d0f5287f431e623b37846f626b35aac0f39a307a4b4d183cce9513c03d3a"}
+  ]
+}

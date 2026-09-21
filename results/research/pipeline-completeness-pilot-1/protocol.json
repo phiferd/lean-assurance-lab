@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-1",
+  "status": "READY",
+  "arena": {
+    "path": "external/lean-kernel-arena",
+    "revision": "37f7525b732808a49b746dc6999d53c3717db124",
+    "clean_at_review": true,
+    "controller": {"path": "external/lean-kernel-arena/lka.py", "sha256": "afd8d245cfa5ac02071ee90c6e9d4b42fc60aa4edfc0f38b0cf2aec40728bd6a"}
+  },
+  "producer": {
+    "id": "arena-lean4export-v4.29.1",
+    "path": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/.lake/build/bin/lean4export",
+    "sha256": "11c28bf9a0e1dfd0cb1130fb5d79ab5bff10503a67990039e23e23f03bd5cecc",
+    "format_version": "3.1.0",
+    "lean_version": "4.29.1"
+  },
+  "adapters": [
+    {
+      "id": "official",
+      "command_shape": ["{binary}", "{artifact}"],
+      "binary": {"path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel", "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"}
+    },
+    {
+      "id": "lean4lean",
+      "command_shape": ["{binary}", "--import", "{artifact}"],
+      "binary": {"path": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean", "sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc"}
+    }
+  ],
+  "receipt_contract": {
+    "intention": ["expected module binding", "root target", "ordered declaration names", "statements", "direct and transitive dependencies"],
+    "artifact": ["path", "byte count", "sha256", "metadata", "parsed ordered declaration inventory", "statement fingerprints", "dependency closure"],
+    "execution": ["adapter identity", "binary sha256", "exact argv", "artifact sha256 passed to process", "exit status", "raw stdout/stderr bindings", "sampled RSS", "timeout", "cleanup"],
+    "success_rule": "A checker exit of zero is necessary but never sufficient. PASS requires the independently expected target, statement and dependency closure to match the exact artifact hash passed to that checker."
+  },
+  "faults": [
+    {"id": "OMISSION", "construction": "Structurally remove the final target declaration records from a copy of the baseline export.", "required_sentinel_result": "FAIL_MISSING_TARGET"},
+    {"id": "SUBSTITUTION", "construction": "Pass one different existing compatible Arena export while retaining the baseline intention receipt.", "required_sentinel_result": "FAIL_ARTIFACT_OR_DECLARATION_IDENTITY"},
+    {"id": "TRUNCATION", "construction": "Remove the final nonempty NDJSON record bytes from a copy of the baseline export.", "required_sentinel_result": "FAIL_PARSE_OR_DEPENDENCY_CLOSURE"}
+  ],
+  "matrix": {"artifacts": ["BASELINE", "OMISSION", "SUBSTITUTION", "TRUNCATION"], "adapters": ["official", "lean4lean"], "primary_checker_launches": 8, "repair_reserve": 4, "maximum_checker_launches": 12},
+  "limits": {"active_minutes": 180, "producer_builds": 1, "producer_seconds": 600, "producer_memory_bytes": 4294967296, "checker_seconds_each": 120, "checker_memory_bytes_each": 2147483648, "network_requests": 0, "external_actions": 0}
+}

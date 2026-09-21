@@ -20,19 +20,19 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value bounded work and replaceable strategy | Explicit ranked research successor | Complete SOURCE-LOCK-COMPLETENESS-AUDIT-1: Audit pinned source-lock completeness before offline compilation; record the result and rerank before the next item. |
+| Highest-value bounded work and replaceable strategy | Explicit ranked research successor | Complete PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **SOURCE-LOCK-COMPLETENESS-AUDIT-1**.
+Selected next item: **PIPELINE-COMPLETENESS-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 2 | PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness | PLANNED |
+| 2 | PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness | READY |
 | 3 | VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases | PLANNED |
 | 4 | ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences | PLANNED |
 | 5 | TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports | PLANNED |
@@ -44,8 +44,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 27 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 52 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 65 | SOURCE-LOCK-COMPLETENESS-AUDIT-1: Audit pinned source-lock completeness before offline compilation | ACTIVE |
+| 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
 ### 2. PIPELINE-COMPLETENESS-PILOT-1: Verify intended-theorem pipeline completeness
 
@@ -57,11 +56,11 @@ Trace intended theorem identity, statement and required dependencies to actual c
 
 **Completion:** One end-to-end completeness sentinel and regression matrix, or a precise unsupported/observability boundary with a next action.
 
-**Stop:** Candidate ceiling 180 active minutes and 12 checker attempts; one module, two adapters, three faults. Before READY bind source/setup/build/tooling/process/memory caps; no external writes.
+**Stop:** 180 active minutes; one supervised producer build <=600 seconds and 4GiB; 12 checker reservations <=120 seconds and 2GiB each, including eight fixed primary cells; one module, two adapters, three faults; zero network requests or external writes.
 
 **Execution:** At most 2 sessions of 90 active minutes; 12 validator launches. Additional plan limits apply.
 
-**Boundary:** PLANNED: PLANNED: name supported producer/adapters, checked-object receipt semantics, independently expected module contents and a fault rubric in a staged bounded plan; then record promotion. Exact phase gates follow within that item.
+**Boundary:** READY: READY and unstarted under the dedicated staged plan. The pinned Arena producer, official and Lean4Lean adapters, independent twelve-declaration expectation, checked-object receipt contract, three-fault rubric and process limits are bound. Before any checker launch implement and test the sentinel, run one supervised producer build, freeze the exact artifact and parsed inventory, and commit the complete execution manifest; only then mark ACTIVE.
 
 ### 3. VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases
 
@@ -239,7 +238,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 52. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
+### 65. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
 
 **Target:** One owner-designated curator/dataset package or provider-supplied functioning checker profile
 
@@ -254,22 +253,6 @@ After the required input and authorization arrive, audit exact identities, selec
 **Execution:** At most 1 sessions of 60 active minutes; 0 validator launches. Additional plan limits apply.
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
-
-### 65. SOURCE-LOCK-COMPLETENESS-AUDIT-1: Audit pinned source-lock completeness before offline compilation
-
-**Target:** The locally pinned Nanoda source evidence, Cargo metadata and frozen source-lock inventory
-
-Statically trace path-valued Rust inclusion directives from the pinned crate root, compare them to the existing source lock, and record every locked or missing source dependency without fetching or substituting any byte.
-
-**Why this rank:** The bounded child-panic execution stopped solely on incomplete source materialization. A source-only audit is the highest-value feasible local follow-through because it can improve future source binding without relaxing the frozen run or needing external access.
-
-**Completion:** A static dependency ledger with exact locked/missing dispositions and a closure regression, or a bounded parser/reachability limitation with preserved input evidence.
-
-**Stop:** One 30-active-minute session, eight source/setup inspections, and zero builds, checker processes, network requests, proofs, new source/export bytes, mutation identities, external actions or assurance-milestone advances.
-
-**Execution:** At most 1 sessions of 30 active minutes; 0 validator launches. Additional plan limits apply.
-
-**Boundary:** ACTIVE: READY and unstarted. Before any source inspection, bind the completed child-panic closure, the frozen source lock, exact pinned Cargo metadata and a static directive parser/audit plan. No build, checker, network request, byte substitution or source retrieval is authorized.
 
 ## Autonomous workflow
 
@@ -312,6 +295,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: SOURCE-LOCK-COMPLETENESS-AUDIT-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: PIPELINE-COMPLETENESS-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.
