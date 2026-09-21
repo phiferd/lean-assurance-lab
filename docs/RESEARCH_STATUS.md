@@ -2988,13 +2988,13 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `PIPELINE-COMPLETENESS-PILOT-2`.
 
-It is READY under a
+It is ACTIVE under a
 [continuation plan](research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md). Pilot 1's
 scientific inputs and exact failed attempt remain frozen as historical evidence.
-The old attempt cap is not a live stopping rule. The continuation must first
-commit a fresh controller and pass a supervised offline Lake configuration
-preflight that performs no compilation, export or checker invocation. It must
-then repair and continue through the unchanged twelve-theorem, two-adapter,
+The old attempt cap is not a live stopping rule. The continuation has committed
+a fresh controller, passed a supervised offline no-compilation Lake preflight,
+and frozen the independently inventoried baseline plus three faults. It must now
+repair and continue through the unchanged twelve-theorem, two-adapter,
 three-fault matrix until the scientific result or a genuine blocker exists.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
@@ -3011,7 +3011,7 @@ no external action is recommended now.
 | Rank | Candidate | State |
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
-| 2 | `PIPELINE-COMPLETENESS-PILOT-2` | READY, selected and unstarted continuation |
+| 2 | `PIPELINE-COMPLETENESS-PILOT-2` | ACTIVE, fixed matrix authorized |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
@@ -3164,13 +3164,12 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item:
+The canonical queue has one ACTIVE item:
 `PIPELINE-COMPLETENESS-PILOT-2`, selected under persistent execution policy.
 The source-lock audit, provenance intake and compact child-panic confirmation
-are complete. The selected pilot now returns the frontier to broader reusable
-assurance after preserving pilot 1's pre-compilation controller failure. It will
-test whether a successful checker run is mechanically tied to the exact intended
-theorem and dependencies after the new configuration preflight passes. Routine
+are complete. The selected pilot has passed its no-compilation configuration
+preflight, produced and independently inventoried the exact four frozen
+artifacts, and is authorized to run its fixed eight-cell checker matrix. Routine
 engineering failures require repair and retry, not closure or a successor item.
 The earlier representation pilot 1 remains frozen at its tooling cap; its own
 pilot 2 is the successful separate representation continuation and retains that

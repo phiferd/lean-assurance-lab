@@ -1,0 +1,171 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-2",
+  "inputs": [
+    {
+      "path": "docs/research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md",
+      "bytes": 4053,
+      "sha256": "641ee05cfb819d968ed23467a71da1f4c211fd0cb0e408044e620ae2d5a88d77"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/protocol.json",
+      "bytes": 3101,
+      "sha256": "5e74739523bedb77f9109d2928d21f5121f06e833ad13f537969b73792ecd0d6"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-1/protocol.json",
+      "bytes": 3067,
+      "sha256": "c232e6c800f831598494602334f05f61d91a06e836cf3f66edbc9d1a112e64fc"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-1/expected-module.json",
+      "bytes": 2388,
+      "sha256": "a2303f909775382d7b9bb5239cd49e2acd24f37dd2be64c9bfb1a694c7dd25dc"
+    },
+    {
+      "path": "corpus/pipeline-completeness-pilot-1/PipelineCompletenessSentinel.lean",
+      "bytes": 377,
+      "sha256": "ba03bfd6b366b9becbfb84bc9cf52bb72d7283d2ccf0c6e4efe3d9b78de47b25"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/preflight.json",
+      "bytes": 1358,
+      "sha256": "9a47f437a8a7c81ee907dc844dc165c5d35c1ee89b66c57fafe1a48deaa28d51"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/artifact-inventory.json",
+      "bytes": 6240,
+      "sha256": "fba68b486dd8bebdce3ccba0f20196f27e72234c63b947fa371da97530bf5966"
+    }
+  ],
+  "tooling": [
+    {
+      "path": "lib/pipeline_completeness_pilot_2.py",
+      "bytes": 18009,
+      "sha256": "69a51e021b1490a2f0f09ec205cea241d2831071e61262f28c7bcb39bbc918d2"
+    },
+    {
+      "path": "scripts/preflight-pipeline-completeness-pilot-2",
+      "bytes": 259,
+      "sha256": "8609c94bab373ae32a8ef84cc86e3e93a9b0fca0e8312b58394e913c535b17ca"
+    },
+    {
+      "path": "scripts/prepare-pipeline-completeness-pilot-2",
+      "bytes": 255,
+      "sha256": "ce6e106843d39b781c6629c7fa67a9baebd1939ce18e515b2f6fd0e9d9180ecc"
+    },
+    {
+      "path": "scripts/activate-pipeline-completeness-pilot-2",
+      "bytes": 257,
+      "sha256": "f5cf062f13ba875b9023d725d1c06ac6f59c16dd35916c460a52b9212117b136"
+    },
+    {
+      "path": "scripts/execute-pipeline-completeness-pilot-2",
+      "bytes": 497,
+      "sha256": "5727d8e645c6f081889cadd4bdc6284747ac1f6a5350d7d339f0c2fed718a4a6"
+    }
+  ],
+  "artifacts": [
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/inputs/baseline.ndjson",
+      "bytes": 3302,
+      "sha256": "d9e51643e1533b667d897f8dfeaba3c6a0f6e64936b54162b414574e930b24e3"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/inputs/omission.ndjson",
+      "bytes": 3234,
+      "sha256": "f944fae229c5bb9e079413d26302cc872abb1d9d6be29601421a82c1dbd7808c"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/inputs/substitution.ndjson",
+      "bytes": 3370,
+      "sha256": "5b26944343c4b1b2d8be678e2335947b7d6977328a6d8d2a9cfeb20db2b36825"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-2/inputs/truncation.ndjson",
+      "bytes": 3267,
+      "sha256": "1d589430e4a421c9e297071f46455a2d061e4bd55bbee10d17ed87a5dd2cda28"
+    }
+  ],
+  "adapter_profiles": [
+    {
+      "id": "official",
+      "binary": {
+        "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+        "bytes": 100401632,
+        "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"
+      },
+      "arguments_before_artifact": []
+    },
+    {
+      "id": "lean4lean",
+      "binary": {
+        "path": "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean",
+        "bytes": 176820896,
+        "sha256": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc"
+      },
+      "arguments_before_artifact": [
+        "--import"
+      ]
+    }
+  ],
+  "matrix": [
+    {
+      "artifact": "baseline",
+      "adapter": "official",
+      "expected_sentinel": "PASS"
+    },
+    {
+      "artifact": "baseline",
+      "adapter": "lean4lean",
+      "expected_sentinel": "PASS"
+    },
+    {
+      "artifact": "omission",
+      "adapter": "official",
+      "expected_sentinel": "FAIL_MISSING_TARGET"
+    },
+    {
+      "artifact": "omission",
+      "adapter": "lean4lean",
+      "expected_sentinel": "FAIL_MISSING_TARGET"
+    },
+    {
+      "artifact": "substitution",
+      "adapter": "official",
+      "expected_sentinel": "FAIL_ARTIFACT_OR_DECLARATION_IDENTITY"
+    },
+    {
+      "artifact": "substitution",
+      "adapter": "lean4lean",
+      "expected_sentinel": "FAIL_ARTIFACT_OR_DECLARATION_IDENTITY"
+    },
+    {
+      "artifact": "truncation",
+      "adapter": "official",
+      "expected_sentinel": "FAIL_PARSE_OR_DEPENDENCY_CLOSURE"
+    },
+    {
+      "artifact": "truncation",
+      "adapter": "lean4lean",
+      "expected_sentinel": "FAIL_PARSE_OR_DEPENDENCY_CLOSURE"
+    }
+  ],
+  "work_record": {
+    "path": "results/research/pipeline-completeness-pilot-2/work-record.json",
+    "bytes": 813,
+    "sha256": "2371d95a5337486a338bb44e4502286fe5ff93260e59848ae6ead26dab205cd8"
+  },
+  "execution_policy": {
+    "attempt_caps": "NONE",
+    "accounting": "OBSERVABILITY_ONLY",
+    "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
+    "terminal_conditions": [
+      "SCIENTIFIC_QUESTION_ANSWERED",
+      "OWNER_STOP",
+      "REQUIRED_EXTERNAL_AUTHORITY_OR_INPUT_UNAVAILABLE",
+      "SCIENTIFIC_INPUT_INVALIDATED",
+      "REQUIRED_CAPABILITY_UNAVAILABLE_AFTER_FEASIBLE_REPAIRS"
+    ]
+  }
+}
