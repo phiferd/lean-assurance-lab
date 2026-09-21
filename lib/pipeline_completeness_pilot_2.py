@@ -65,6 +65,16 @@ def _committed_controller() -> None:
         committed(ROOT, path)
 
 
+def _verify_binding(row: dict[str, Any]) -> Path:
+    """Accept the repository's path/hash/byte binding and verify all fields."""
+    require(isinstance(row, dict) and set(row) == {"path", "sha256", "bytes"}
+            and type(row["bytes"]) is int and row["bytes"] >= 0,
+            "invalid file binding")
+    path = bind(ROOT, {"path": row["path"], "sha256": row["sha256"]})
+    require(path.stat().st_size == row["bytes"], "binding byte count differs: " + row["path"])
+    return path
+
+
 def _environment(inherited: dict[str, Any]) -> tuple[Path, Path, str]:
     arena = ROOT / inherited["arena"]["path"]
     revision = subprocess.check_output(["git", "rev-parse", "HEAD"], cwd=arena, text=True).strip()
@@ -140,7 +150,7 @@ def prepare() -> dict[str, Any]:
     preflight_record = load_json(ROOT / PREFLIGHT)
     require(preflight_record["outcome"] == "ACCEPT" and not preflight_record["compilation_performed"],
             "passing no-compilation preflight is absent")
-    bind(ROOT, preflight_record["attempt_result"])
+    _verify_binding(preflight_record["attempt_result"])
     committed(ROOT, PREFLIGHT)
 
     attempt, run_dir, workspace = _next_attempt("producer")
@@ -214,7 +224,7 @@ def activate() -> dict[str, Any]:
     protocol, inherited = _protocols()
     _selected("READY")
     _committed_controller()
-    bind(ROOT, load_json(ROOT / BASE / "producer-result.json")["inventory"])
+    _verify_binding(load_json(ROOT / BASE / "producer-result.json")["inventory"])
     inventory_record = load_json(ROOT / INVENTORY)
     work = {
         "schema_version": 1, "item_id": ITEM,
@@ -261,16 +271,16 @@ def _validate_execution_manifest() -> dict[str, Any]:
             "execution policy differs")
     for section in ("inputs", "tooling", "artifacts"):
         for row in manifest[section]:
-            bind(ROOT, row)
+            _verify_binding(row)
             committed(ROOT, row["path"])
     expected_adapters = {row["id"]: row for row in inherited["adapters"]}
     require({row["id"] for row in manifest["adapter_profiles"]} == set(expected_adapters),
             "adapter profile identities differ")
     for row in manifest["adapter_profiles"]:
-        bind(ROOT, row["binary"])
+        _verify_binding(row["binary"])
         require(row["binary"]["path"] == expected_adapters[row["id"]]["binary"]["path"],
                 f"adapter binary differs for {row['id']}")
-    work = load_json(bind(ROOT, manifest["work_record"]))
+    work = load_json(_verify_binding(manifest["work_record"]))
     require(work["status"] == "ACTIVE" and work["item_id"] == ITEM,
             "work record is not ACTIVE")
     require(manifest["matrix"] == [{"artifact": artifact, "adapter": adapter,

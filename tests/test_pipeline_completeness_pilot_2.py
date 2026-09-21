@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import tempfile
+import hashlib
 from pathlib import Path
 import unittest
 from unittest.mock import patch
@@ -26,6 +27,19 @@ class PipelineCompletenessPilot2Tests(unittest.TestCase):
 
     def test_fixed_matrix_has_eight_cells(self):
         self.assertEqual(len(p.expected_matrix()), 8)
+
+    def test_three_field_file_binding_is_verified(self):
+        with tempfile.TemporaryDirectory() as directory:
+            root = Path(directory)
+            path = root / "evidence.txt"
+            path.write_bytes(b"evidence")
+            row = {"path": "evidence.txt", "bytes": 8,
+                   "sha256": hashlib.sha256(b"evidence").hexdigest()}
+            with patch.object(p, "ROOT", root):
+                self.assertEqual(p._verify_binding(row), path)
+                row["bytes"] = 7
+                with self.assertRaisesRegex(ValueError, "byte count differs"):
+                    p._verify_binding(row)
 
 
 if __name__ == "__main__":
