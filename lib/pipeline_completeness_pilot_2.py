@@ -96,6 +96,11 @@ def _next_attempt(kind: str) -> tuple[int, Path, Path]:
     return index, run_dir, workspace
 
 
+def _producer_succeeded(process: str, temporary_export: Path) -> bool:
+    """Lake build chatter is evidence, not exporter output or a failure."""
+    return process == "ACCEPT" and temporary_export.is_file() and temporary_export.stat().st_size > 0
+
+
 def _materialize_workspace(workspace: Path) -> None:
     workspace.mkdir(parents=True, exist_ok=False)
     shutil.copyfile(ROOT / SOURCE, workspace / "PipelineCompletenessSentinel.lean")
@@ -175,7 +180,7 @@ def prepare() -> dict[str, Any]:
         "temporary_export_exists": temporary.is_file(),
     }
     atomic(run_dir / "result.json", attempt_result)
-    require(process == "ACCEPT" and stdout == b"" and temporary.is_file(),
+    require(_producer_succeeded(process, temporary),
             "producer build failed; repair and retry")
 
     input_dir = safe(ROOT, INPUTS, exists=False)

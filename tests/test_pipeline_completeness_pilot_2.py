@@ -41,6 +41,13 @@ class PipelineCompletenessPilot2Tests(unittest.TestCase):
                 with self.assertRaisesRegex(ValueError, "byte count differs"):
                     p._verify_binding(row)
 
+    def test_successful_producer_allows_preserved_lake_stdout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            export = Path(directory) / "baseline.ndjson.tmp"
+            export.write_bytes(b"export\n")
+            self.assertTrue(p._producer_succeeded("ACCEPT", export))
+            self.assertFalse(p._producer_succeeded("REJECT", export))
+
 
 if __name__ == "__main__":
     unittest.main()
