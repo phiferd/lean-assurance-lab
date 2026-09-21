@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-1",
+  "attempt": 1,
+  "outcome": "ENGINEERING_FAILURE",
+  "failure_class": "INVALID_GENERATED_LAKE_MANIFEST",
+  "reservation_consumed": true,
+  "producer_builds_consumed": 1,
+  "producer_builds_cap": 1,
+  "process_receipt": {
+    "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/process/supervisor.json",
+    "sha256": "6059d5c3e2d1842ad369900f7cd761ff36106da88b5a3adead0a9113cda7ed67"
+  },
+  "stdout": {
+    "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/process/process.stdout",
+    "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "bytes": 0
+  },
+  "stderr": {
+    "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/process/process.stderr",
+    "sha256": "a8427b7d05dddb1c6926f76079337798a3dea18e911949ddd7bb8824786932a1",
+    "bytes": 185
+  },
+  "controller_workspace": [
+    {
+      "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/controller-workspace/lean-toolchain",
+      "sha256": "7dc000621e0046d1aada809e2b7177e64454645cf4c741e9daaf79c99ec2e7a2"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/controller-workspace/lakefile.toml",
+      "sha256": "c0f585109729c2551c597e0c74c47c4c2e9247518b48d3d25da45db3caf99498"
+    },
+    {
+      "path": "results/research/pipeline-completeness-pilot-1/producer-run-0001/controller-workspace/lake-manifest.json",
+      "sha256": "8fcbed8e8525bfcc43fd59d34901085188252eb1d5132a8e492c0ebc058c61a7"
+    }
+  ],
+  "process": {
+    "exit_code": 1,
+    "elapsed_seconds": 1.7295254579512402,
+    "memory_monitor_samples": 48,
+    "maximum_observed_rss_bytes": 26001408,
+    "timed_out": false,
+    "memory_exceeded": false,
+    "cleanup_complete": true
+  },
+  "diagnosis": "The controller wrote a hand-authored lake-manifest.json whose package name used a JSON string where Lake 5 expected its encoded Name representation. Lake rejected the manifest before compiling the module or invoking lean4export.",
+  "terminal_effect": "The nonrenewable one-producer-build cap is exhausted. No export, fault artifact or checker cell exists, and the scientific question was not reached."
+}

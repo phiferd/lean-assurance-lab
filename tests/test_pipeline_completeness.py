@@ -10,6 +10,7 @@ ROOT = Path(__file__).resolve().parents[1]
 from lib.pipeline_completeness import (
     SentinelError, expected_matrix, inventory, omission_fault,
     parse_artifact, process_classification, sentinel, truncation_fault,
+    workspace_control_files,
 )
 
 
@@ -91,6 +92,12 @@ class PipelineCompletenessTests(unittest.TestCase):
         bad = receipt(0)
         bad["memory_monitor_samples"] = 0
         self.assertEqual(process_classification(bad), "INFRASTRUCTURE_FAILURE")
+
+    def test_minimal_lake_workspace_does_not_preempt_lake_manifest_generation(self):
+        controls = workspace_control_files()
+        self.assertEqual(set(controls), {"lean-toolchain", "lakefile.toml"})
+        self.assertNotIn("lake-manifest.json", controls)
+        self.assertIn(b'[[lean_lib]]', controls["lakefile.toml"])
 
 
 if __name__ == "__main__":

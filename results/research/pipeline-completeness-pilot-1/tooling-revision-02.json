@@ -1,0 +1,20 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-1",
+  "revision": 2,
+  "status": "REPAIRED_AFTER_TERMINAL_ATTEMPT",
+  "reason": "Remove the invalid hand-authored Lake manifest and let Lake own generated manifest state.",
+  "scientific_inputs_changed": false,
+  "source": {
+    "path": "lib/pipeline_completeness.py",
+    "sha256": "d4ab07a047a3b62922152e14461fd0eb8e019f5156f9344f09ff2a128df2b221"
+  },
+  "tests": {
+    "path": "tests/test_pipeline_completeness.py",
+    "sha256": "179fae9149f6a1c0db9d4f175498e8426b6a236ed124c6a266f819cb9679b792"
+  },
+  "regression": "test_minimal_lake_workspace_does_not_preempt_lake_manifest_generation",
+  "validation_command": "python3 -m unittest discover -s tests -p 'test_pipeline_completeness*.py'",
+  "validation_result": "PASS: 10 tests",
+  "launch_authority": "NONE: this repair does not restore the exhausted producer reservation."
+}

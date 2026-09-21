@@ -36,8 +36,14 @@ evidence. `SOURCE-PROVENANCE-INTAKE-1` completed SUCCESS by binding the exact
 `CHILD-PANIC-CONFIRMATION-1` then completed SUCCESS: both controls accepted and
 both candidate cells rejected, with the expected direct-versus-worker/join
 diagnostic distinction. It is not an acceptance or soundness difference.
-`PIPELINE-COMPLETENESS-PILOT-1` is now selected READY and unstarted under its
-dedicated checked-object receipt plan.
+`PIPELINE-COMPLETENESS-PILOT-1` then closed BOUNDED_UNRESOLVED at its 1/1
+producer cap when a hand-authored Lake manifest failed before compilation. The
+failure, process receipt and repaired regression are preserved, and no export or
+checker claim exists. Its separately bounded
+[continuation](PIPELINE_COMPLETENESS_PILOT_2_PLAN.md) is now selected READY and
+unstarted. It inherits the scientific freeze without resetting the failed
+attempt and must pass an offline no-compilation configuration preflight before
+its one new producer reservation.
 
 The completed continuation outranked intended-theorem completeness because its
 scientific inputs and two profiles were already frozen and its blocker was
@@ -59,7 +65,7 @@ fixed sequence or promote every idea to READY.
 | Rank / item | Useful output and finite proposed scope | Promotion gate beyond recorded selection |
 | --- | --- | --- |
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
-| 2 `PIPELINE-COMPLETENESS-PILOT-1` | Checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters, three omission/substitution/truncation faults; 180 active minutes, 12 checker attempts | READY under the dedicated staged plan with pinned producer/adapters, independent expected contents, receipt semantics, exact faults and finite process limits; implement/test and freeze the exact export before ACTIVE execution |
+| 2 `PIPELINE-COMPLETENESS-PILOT-2` | Complete the unchanged checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters, three omission/substitution/truncation faults; 180 active minutes, one new producer and 12 checker attempts | READY under the continuation plan; preserve pilot 1 and first commit a fresh controller plus passing offline no-compilation Lake preflight, then freeze the exact export before ACTIVE execution |
 | 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels; 360 active minutes, 120 checker attempts | Bind independently reviewed typing rules, generator reuse decision, exporter support and finite construction protocol; exclude prior imax/ownership cases, native literals, inductives and quotients |
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control; 360 active minutes, 24 checker/proof attempts | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths; 180 active minutes, 24 checker attempts | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
@@ -69,7 +75,8 @@ fixed sequence or promote every idea to READY.
 | 9 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-build matrix for one checker, at most four source sites and eight fixed boundary/control fixtures; 240 active minutes, 24 checker attempts | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; freeze build/process limits; do not presume arithmetic sites are defects |
 | 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations; 180 active minutes, 24 checker attempts at ten seconds each | Bind validity evidence, comparable fragments and verified memory/time/cleanup controls; freeze stop-at-first-limit and resource measurement; no asymptotic claim from finite samples |
 
-The completed pilot 1 remains frozen outside this live horizon. The PLANNED caps
+The completed representation and pipeline pilot 1 records remain frozen outside
+this live horizon. The PLANNED caps
 are maximum candidate allocations, not launch permissions.
 Before promotion each needs its own staged plan with exact source/setup, build,
 tooling-test, generation, checker/proof, process-time and memory ceilings plus

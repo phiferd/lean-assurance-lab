@@ -340,6 +340,19 @@ def process_classification(receipt: dict[str, Any]) -> str:
     return "UNKNOWN"
 
 
+def workspace_control_files() -> dict[str, bytes]:
+    """Return the minimal Lake controls; Lake owns any generated manifest."""
+    return {
+        "lean-toolchain": b"leanprover/lean4:v4.29.1\n",
+        "lakefile.toml": (
+            b'name = "pipeline-completeness-pilot"\n'
+            b'defaultTargets = ["PipelineCompletenessSentinel"]\n\n'
+            b'[[lean_lib]]\n'
+            b'name = "PipelineCompletenessSentinel"\n'
+        ),
+    }
+
+
 def _supervise(directory: Path, argv: list[str], cwd: Path, env: dict[str, str],
                seconds: int, memory: int) -> tuple[dict[str, Any], bytes, bytes]:
     directory.mkdir(parents=True, exist_ok=False)
@@ -381,13 +394,8 @@ def prepare() -> dict[str, Any]:
     input_dir.mkdir(parents=True)
     workspace.mkdir(parents=True)
     shutil.copyfile(ROOT / SOURCE, workspace / "PipelineCompletenessSentinel.lean")
-    (workspace / "lean-toolchain").write_text("leanprover/lean4:v4.29.1\n", encoding="utf-8")
-    (workspace / "lakefile.toml").write_text(
-        'name = "pipeline-completeness-pilot"\ndefaultTargets = ["PipelineCompletenessSentinel"]\n\n'
-        '[[lean_lib]]\nname = "PipelineCompletenessSentinel"\n', encoding="utf-8")
-    (workspace / "lake-manifest.json").write_text(
-        '{"version":"1.1.0","packagesDir":".lake/packages","packages":[],"name":"pipeline-completeness-pilot","lakeDir":".lake"}\n',
-        encoding="utf-8")
+    for name, content in workspace_control_files().items():
+        (workspace / name).write_bytes(content)
     temporary = run_dir / "baseline.ndjson.tmp"
     command = ('set -eu\nlake build PipelineCompletenessSentinel\n'
                'lake env "$PIPELINE_EXPORTER" PipelineCompletenessSentinel -- PipelineCompleteness.d12 > "$PIPELINE_OUTPUT"')

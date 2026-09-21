@@ -57,6 +57,21 @@ research directions.
 
 ## Attempted
 
+- Completed `PIPELINE-COMPLETENESS-PILOT-1` on 2026-09-20 with
+  `BOUNDED_UNRESOLVED`. The independent twelve-theorem expectation, strict
+  export parser, intended-object sentinel, dependency checks, three faults and
+  fixed eight-cell matrix were implemented and passed focused tests. Its sole
+  supervised producer reservation then failed before compilation because the
+  controller supplied Lake an invalid hand-authored manifest. The exact exit,
+  stderr, 48 positive RSS samples and complete cleanup are preserved; no export
+  or checker cell exists, so no scientific or checker claim follows. A minimal
+  repair removes controller-owned manifest state and adds a regression, but was
+  not relaunched after the 1/1 cap. A post-terminal local Lake help diagnostic
+  attempted and failed a latest-release query, returned no network data and is
+  retained as a protocol deviation. `PIPELINE-COMPLETENESS-PILOT-2` is selected
+  READY and unstarted as a separately bounded continuation with a mandatory
+  configuration preflight and one new producer reservation.
+
 - Completed `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` on 2026-09-20 with
   `BOUNDED_UNRESOLVED`. Its R1 controller import error occurred before any
   supervised process and is preserved separately. The R2 baseline Cargo build
@@ -2969,15 +2984,15 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `PIPELINE-COMPLETENESS-PILOT-1`.
+Selected next item: `PIPELINE-COMPLETENESS-PILOT-2`.
 
-It is READY and unstarted under a dedicated staged
-[plan](research/PIPELINE_COMPLETENESS_PILOT_PLAN.md). The plan binds one pinned
-Lean4export producer, the official and Lean4Lean adapters, an independently
-specified twelve-theorem dependency chain, a checked-object receipt contract,
-and omission/substitution/truncation faults. Before any checker launch it must
-implement and test the sentinel, produce and freeze one exact export, and commit
-the complete execution manifest.
+It is READY and unstarted under a separate
+[continuation plan](research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md). Pilot 1's
+scientific inputs, exact failed attempt and charged producer reservation remain
+frozen. The continuation must first commit a fresh controller and pass a
+supervised offline Lake configuration preflight that performs no compilation,
+export or checker invocation. Only then may it spend its one new producer
+reservation on the unchanged twelve-theorem, two-adapter, three-fault matrix.
 
 The original [representation pilot](research/METAMORPHIC_REPRESENTATION_PILOT_PLAN.md)
 remains immutable BOUNDED_UNRESOLVED. Its separately identified
@@ -2993,7 +3008,7 @@ no external action is recommended now.
 | Rank | Candidate | State |
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
-| 2 | `PIPELINE-COMPLETENESS-PILOT-1` | READY, selected and unstarted |
+| 2 | `PIPELINE-COMPLETENESS-PILOT-2` | READY, selected and unstarted continuation |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | PLANNED |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
@@ -3005,6 +3020,7 @@ no external action is recommended now.
 | 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
+| 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 
 Each PLANNED candidate has its own concrete promotion gate and finite candidate
 cap in the canonical queue and successor plan. Reassess actual value and
@@ -3146,12 +3162,14 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item:
-`PIPELINE-COMPLETENESS-PILOT-1`, selected and unstarted.
+`PIPELINE-COMPLETENESS-PILOT-2`, selected and unstarted.
 The source-lock audit, provenance intake and compact child-panic confirmation
 are complete. The selected pilot now returns the frontier to broader reusable
-assurance: it will test whether a successful checker run is mechanically tied
-to the exact intended theorem and dependencies. Pilot 1 remains frozen at its
-tooling cap; pilot 2 is its successful separate continuation and retains the
+assurance after preserving pilot 1's pre-compilation controller failure. It will
+test whether a successful checker run is mechanically tied to the exact intended
+theorem and dependencies, but only after the new configuration preflight passes.
+The earlier representation pilot 1 remains frozen at its tooling cap; its own
+pilot 2 is the successful separate representation continuation and retains that
 completed reusable package.
 
 Both Kiota constructor-index items are complete; its focused 2/2 and all 155

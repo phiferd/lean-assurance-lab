@@ -1,0 +1,39 @@
+{
+  "schema_version": 1,
+  "item_id": "PIPELINE-COMPLETENESS-PILOT-1",
+  "status": "PASS",
+  "validated_at": "2026-09-21T01:35:40Z",
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_pipeline_completeness*.py'",
+      "result": "PASS",
+      "tests": 16
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+      "result": "PASS",
+      "current_tests": 1252,
+      "frozen_publication_study_tests": 73,
+      "frozen_portfolio_checkpoint_tests": 9
+    },
+    {
+      "command": "scripts/refresh-current-state",
+      "result": "PASS",
+      "receipt": {
+        "path": "results/workflow-refresh/pipeline-completeness-pilot-1-closure-final-r2/result.json",
+        "sha256": "f9c039ced4c7281a1108f3608e2bf6609174ade7b0b0680302dc7f1944a36940"
+      },
+      "completed_commands": 14
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "scientific_processes_launched_by_validation": 0,
+  "conclusion": "The bounded-unresolved closure, preserved failure, repaired regression, unstarted continuation and generated current-state artifacts pass focused, queue, complete current/historical and refresh validation."
+}

@@ -3,7 +3,7 @@
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
   "updated_at": "2026-09-20",
-  "selected_item": "PIPELINE-COMPLETENESS-PILOT-1",
+  "selected_item": "PIPELINE-COMPLETENESS-PILOT-2",
   "items": [
     {
       "id": "METAMORPHIC-REPRESENTATION-PILOT-2",
@@ -100,7 +100,7 @@
     },
     {
       "id": "PIPELINE-COMPLETENESS-PILOT-1",
-      "priority": 2,
+      "priority": 68,
       "title": "Verify intended-theorem pipeline completeness",
       "target": "One twelve-declaration module, two supported producer/checker adapters and three omission/substitution/truncation controls",
       "action": "Trace intended theorem identity, statement and required dependencies to actual checked-object receipts; reuse Comparator/Lab capabilities.",
@@ -110,7 +110,7 @@
       "completion": "One end-to-end completeness sentinel and regression matrix, or a precise unsupported/observability boundary with a next action.",
       "stop_condition": "180 active minutes; one supervised producer build <=600 seconds and 4GiB; 12 checker reservations <=120 seconds and 2GiB each, including eight fixed primary cells; one module, two adapters, three faults; zero network requests or external writes.",
       "kind": "EXPERIMENT",
-      "status": "READY",
+      "status": "COMPLETE",
       "depends_on": [],
       "budget": {
         "max_sessions": 2,
@@ -124,7 +124,60 @@
         "docs/research/PIPELINE_COMPLETENESS_PILOT_PLAN.md",
         "results/research/pipeline-completeness-pilot-1/expected-module.json",
         "results/research/pipeline-completeness-pilot-1/protocol.json",
-        "tests/test_pipeline_completeness_protocol.py"
+        "tests/test_pipeline_completeness_protocol.py",
+        "results/research/pipeline-completeness-pilot-1/producer-run-0001/result.json",
+        "results/research/pipeline-completeness-pilot-1/tooling-revision-02.json",
+        "results/research/pipeline-completeness-pilot-1/result.json",
+        "results/research/pipeline-completeness-pilot-1/report.md",
+        "results/research/pipeline-completeness-pilot-1/work-record.json",
+        "results/research/pipeline-completeness-pilot-1/validation.json",
+        "tests/test_pipeline_completeness_closure.py"
+      ],
+      "issue_urls": [],
+      "closure": {
+        "outcome": "BOUNDED_UNRESOLVED",
+        "evidence_refs": [
+          "results/research/pipeline-completeness-pilot-1/producer-run-0001/result.json",
+          "results/research/pipeline-completeness-pilot-1/tooling-revision-02.json",
+          "results/research/pipeline-completeness-pilot-1/result.json",
+          "results/research/pipeline-completeness-pilot-1/report.md",
+          "results/research/pipeline-completeness-pilot-1/work-record.json",
+          "results/research/pipeline-completeness-pilot-1/validation.json",
+          "tests/test_pipeline_completeness_closure.py"
+        ],
+        "recommendation": "Do not reopen or reset pilot 1. Its one producer reservation was charged by a supervised pre-compilation Lake-manifest failure, so no export or checker claim exists. Retain the repaired sentinel and exact failure evidence. Select PIPELINE-COMPLETENESS-PILOT-2 READY and unstarted as a separately bounded continuation with one configuration preflight and one new producer reservation."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "PIPELINE-COMPLETENESS-PILOT-2",
+      "priority": 2,
+      "title": "Complete intended-theorem pipeline completeness",
+      "target": "The unchanged twelve-declaration expectation, producer/adapters and omission/substitution/truncation matrix frozen by pilot 1",
+      "action": "Validate the repaired minimal Lake workspace, then produce, inventory and execute the unchanged checked-object sentinel matrix under fresh continuation receipts.",
+      "expected_value": "Recover the community-reusable checked-object receipt asset without erasing the charged pilot-1 failure or changing the scientific question.",
+      "rank_rationale": "Highest-value feasible local blocker removal: pilot 1 isolated a pre-compilation controller defect, the scientific inputs and checker matrix remain untested and fixed, and one cheap configuration preflight now guards the only new producer reservation.",
+      "entry_gate": "READY and unstarted under the continuation plan. Pilot-1 science and failure evidence are inherited by hash. Before the sole new producer build, commit a fresh pilot-2 controller/work record and a passing supervised offline Lake configuration preflight that performs no compilation, export or checker launch.",
+      "completion": "The unchanged eight-cell sentinel matrix with exact receipts and a scoped reuse recommendation, or a new preserved setup/tooling/observability boundary at the first finite cap.",
+      "stop_condition": "180 active minutes; 2 configuration preflights <=60 seconds and 1GiB each; one new producer build <=600 seconds and 4GiB (two total across the lineage); 12 checker reservations <=120 seconds and 2GiB each; zero network, proof, scientific-source mutation, production-checker edit, milestone advance or external write.",
+      "kind": "EXPERIMENT",
+      "status": "READY",
+      "depends_on": [],
+      "budget": {
+        "max_sessions": 2,
+        "session_minutes": 90,
+        "checker_launches": 12
+      },
+      "evidence_refs": [
+        "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
+        "docs/research/PIPELINE_COMPLETENESS_PILOT_2_PLAN.md",
+        "results/research/pipeline-completeness-pilot-2/protocol.json",
+        "results/research/pipeline-completeness-pilot-1/expected-module.json",
+        "results/research/pipeline-completeness-pilot-1/protocol.json",
+        "results/research/pipeline-completeness-pilot-1/producer-run-0001/result.json",
+        "results/research/pipeline-completeness-pilot-1/tooling-revision-02.json",
+        "results/research/pipeline-completeness-pilot-1/result.json",
+        "tests/test_pipeline_completeness_pilot_2_protocol.py"
       ],
       "issue_urls": [],
       "closure": null,
@@ -2903,7 +2956,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-20-child-panic-confirmation-closure.json",
-    "sha256": "9ec8a3d30431de05f8aa21f66d8a8666dbe9249766113091a00d7990a38e098e"
+    "path": "results/research/queue-reviews/2026-09-20-pipeline-completeness-pilot-1-closure.json",
+    "sha256": "e7bd42a228b9b3cea9848c8e5e6c44370ce97e1c1fa31e579679d4d98e334f49"
   }
 }
