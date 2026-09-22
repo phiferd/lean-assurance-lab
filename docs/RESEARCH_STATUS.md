@@ -3037,9 +3037,10 @@ rejected it with the exact `Invalid recursor LALNest.rec_1` diagnostic. All
 four cells had positive RSS observations and complete cleanup. The Stage-2
 assumption audit, fixed five-application consequence contract, deterministic
 producer, independent structural auditor and bounded controller are committed,
-and their exact tooling revision is frozen. The fixed construction is now
-authorized; checker observation remains forbidden until the generated pair,
-independent PASS audit and exact execution manifest are committed.
+and their exact tooling revision is frozen. The deterministic producer emitted
+the two fixed 121-record artifacts; the independent structural audit passed and
+the exact four-cell execution manifest is committed. Stage-2 observation is
+authorized under that immutable matrix.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
