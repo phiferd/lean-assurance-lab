@@ -1,0 +1,84 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
+  "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
+  "status": "ACTIVE",
+  "current_phase": "IMPLEMENTATION",
+  "plan": "docs/research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md",
+  "target_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "source_archive": {
+    "path": "results/research/semantic-import-contract-1/kiota-source.tar.gz",
+    "bytes": 4587521,
+    "sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8"
+  },
+  "pristine_source_bindings": [
+    {"path": "src/expr.rs", "bytes": 30728, "sha256": "264c6063e5dd0f2deb5481881907d0bd1702bdfe9575cc405fc2936930abac02"},
+    {"path": "src/parser.rs", "bytes": 46528, "sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e"},
+    {"path": "src/tc.rs", "bytes": 545983, "sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b"},
+    {"path": "src/env.rs", "bytes": 4057, "sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b"},
+    {"path": "tests/exports.rs", "bytes": 49582, "sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a"}
+  ],
+  "workspace": {
+    "path": "/tmp/kiota-recursor-type-repair-1",
+    "materialization": "Extract the exact source archive after this entry commit; never edit the pristine ignored source tree."
+  },
+  "intended_patch_paths": ["src/parser.rs", "src/tc.rs", "src/expr.rs", "src/env.rs"],
+  "intended_test_paths": [
+    "tests/exports.rs",
+    "tests/fixtures/recursor-type-reconstruction.accept.ndjson",
+    "tests/fixtures/recursor-type-reconstruction.reject.ndjson"
+  ],
+  "frozen_inputs": [
+    "results/research/kiota-recursor-type-design-1/construction-design.json",
+    "results/research/kiota-recursor-type-design-1/acceptance-fixtures.json",
+    "results/research/kiota-recursor-type-design-1/design-audit.json",
+    "results/research/recursor-type-trust-boundary-1/regression-contract.json"
+  ],
+  "fixed_stages": [
+    "MATERIALIZE_EXACT_SOURCE",
+    "IMPLEMENT_BASE_AND_NESTED_RECONSTRUCTION",
+    "IMPLEMENT_TRANSACTIONAL_VALIDATION_AND_REPLACEMENT",
+    "ADD_FOCUSED_REGRESSIONS",
+    "INDEPENDENT_PATCH_REVIEW",
+    "BIND_PATCH_BINARY_COMMANDS",
+    "RUN_FOCUSED_AND_SIX_CELL_MATRIX",
+    "RUN_COMPLETE_KIOTA_SUITE",
+    "PREPARE_LOCAL_PR_DRAFT"
+  ],
+  "prelaunch_gate": {
+    "required": [
+      "exact patch and changed-path inventory",
+      "exact copied candidate/control hashes and four frozen fixture hashes",
+      "independent design and circular-trust patch review",
+      "offline Cargo and dependency lock",
+      "exact commands and expected outcomes",
+      "supervisor implementation and tests"
+    ],
+    "status": "PENDING"
+  },
+  "process_safety": {
+    "build_seconds": 1200,
+    "build_memory_bytes": 4294967296,
+    "test_seconds_each": 1200,
+    "test_memory_bytes_each": 4294967296,
+    "fixture_cell_seconds_each": 180,
+    "fixture_cell_memory_bytes_each": 2147483648,
+    "positive_rss_sampling_required": true,
+    "complete_process_group_cleanup_required": true,
+    "offline_locked_cargo_required": true,
+    "safety_event_is_terminal": false
+  },
+  "execution_policy": {
+    "attempt_caps": "NONE",
+    "accounting": "OBSERVABILITY_ONLY",
+    "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
+    "process_safety": "NONTERMINAL"
+  },
+  "authority_limits": {
+    "network_requests": false,
+    "external_writes": false,
+    "catalog_edits": false,
+    "fixture_replacement": false,
+    "gate_weakening": false
+  }
+}

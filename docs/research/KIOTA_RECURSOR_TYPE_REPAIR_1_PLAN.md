@@ -1,6 +1,6 @@
 # Kiota recursor type repair 1 plan
 
-Status: **READY — selected and unstarted**
+Status: **ACTIVE — implementation and regression**
 
 Item: `KIOTA-RECURSOR-TYPE-REPAIR-1`
 

@@ -64,8 +64,9 @@ completed SUCCESS with a validated complete Kiota design derived from exact
 local APIs and the archived Lean 4.33.0 kernel algorithm. It freezes positional
 universe alpha normalization, fail-closed definitional comparison,
 reconstructed-type replacement and four accepted fixtures plus the inherited
-negative/control pair. `KIOTA-RECURSOR-TYPE-REPAIR-1` is selected READY and
-unstarted for the separately gated implementation and regression matrix. These
+negative/control pair. `KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under a
+committed entry protocol for the separately gated implementation and regression
+matrix. These
 are ordinal judgments, not estimated defect rates.
 
 ## Ranked candidate horizon
@@ -73,7 +74,7 @@ are ordinal judgments, not estimated defect rates.
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
 numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Four are complete; the remaining original
 horizon contains six PLANNED candidates with independent promotion gates. The
-selected READY item is the evidence-driven recursor-repair successor appended
+selected ACTIVE item is the evidence-driven recursor-repair successor appended
 after that historical ordering.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.

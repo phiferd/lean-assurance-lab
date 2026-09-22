@@ -68,7 +68,8 @@ research directions.
   exact accepted fixtures and the inherited reject-candidate/accept-control pair
   are frozen. No checker launch, build, production edit, generated scientific
   byte, network, catalog or external action occurred. The separately gated
-  `KIOTA-RECURSOR-TYPE-REPAIR-1` is selected READY and unstarted.
+  `KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under a committed implementation
+  work record and protocol.
 
 - Completed `RECURSOR-TYPE-TRUST-BOUNDARY-1` on 2026-09-22 with
   `VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY`. Exact Kiota `9fa2c297`
@@ -3041,7 +3042,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `KIOTA-RECURSOR-TYPE-REPAIR-1`.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
@@ -3089,11 +3090,12 @@ universe alpha normalization, Kiota definitional equality, fail-closed mismatch
 handling and reconstructed-type replacement. Its four accepted fixtures and
 inherited candidate/control pair are frozen; no checker or production action ran.
 
-`KIOTA-RECURSOR-TYPE-REPAIR-1` is READY and unstarted under its
-[implementation plan](research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md). Entry
-requires a fresh committed work record and protocol plus exact patch, fixture,
-independent-review and supervised build/test bindings before any production edit
-or launch.
+`KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under its
+[implementation plan](research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md) and fresh
+committed work record and protocol. The entry binds exact source, intended
+production and test files, frozen fixtures, independent prelaunch review and
+offline supervised process controls. Exact patch, binary and command manifests
+remain required before the first launch.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
@@ -3137,7 +3139,7 @@ no external action is recommended now.
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
 | 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | COMPLETE, SUCCESS — `VALIDATED_COMPLETE_KIOTA_DESIGN` |
-| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | READY, selected and unstarted |
+| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | ACTIVE, implementation and regression |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and
@@ -3278,9 +3280,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one READY item and no ACTIVE item:
-`KIOTA-RECURSOR-TYPE-REPAIR-1`, selected and unstarted under persistent
-execution policy.
+The canonical queue has one ACTIVE item and no READY item:
+`KIOTA-RECURSOR-TYPE-REPAIR-1`, executing implementation and regression under
+persistent execution policy.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful
@@ -3295,8 +3297,9 @@ Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
 Historical results, completed-record content, consumed budgets, pending counts,
 external-write gates and the failing assurance state remain unchanged. The
 completed design item has a committed work record and validated closure. The
-selected implementation item still requires a fresh work record and exact
-fixture, patch, review and execution manifests before any edit or launch.
+selected implementation item has its fresh committed work record and fixed
+source, fixture, file and process boundaries. Exact patch, independent review,
+binary and execution manifests remain required before any launch.
 
 ### Waiting
 
