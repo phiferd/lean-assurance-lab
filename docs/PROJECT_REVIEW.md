@@ -20,20 +20,19 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **VALID-DEPENDENT-TERM-PILOT-1**.
+Selected next item: **ACCEPTANCE-IMPACT-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 3 | VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases | ACTIVE |
-| 4 | ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences | PLANNED |
+| 4 | ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences | READY |
 | 5 | TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports | PLANNED |
 | 6 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | PLANNED |
 | 7 | REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs | PLANNED |
@@ -45,37 +44,21 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
-### 3. VALID-DEPENDENT-TERM-PILOT-1: Generate valid dependent-term conformance cases
-
-**Target:** Fifty closed terms in Pi/lambda/application/let with closed numeric universe levels
-
-Construct terms with typing derivations under independently reviewed rules, then compare a frozen supported cohort without replacing failures.
-
-**Why this rank:** Highest-value unfinished item: fresh dependent-term coverage and independently auditable validity evidence provide broader reusable semantic value than another rejection-diagnostic distinction. Generator/oracle preparation is part of this item, not a reason to select a lower-value already-prepared reserve. Acceptance-impact reproduction remains the next alternative, with less certain reuse value until its current premise is established.
-
-**Completion:** A derivation-carrying generator, fixed positive suite and complete failure/outcome record, or a precise construction/semantic boundary.
-
-**Stop:** Complete the fixed 50-term scientific suite or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; no replacement of difficult cases or external writes. Per-process safety controls are nonterminal.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** ACTIVE: READY and unstarted under docs/research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md. Review reuse/rules and implement within this item. Commit the design, auditor, generator, profiles, seed, size policy and tests before scientific cohort construction; then construct and independently audit the cohort and commit its exact 50-case manifest before target checker observation. Existing-fixture engineering smoke tests are permitted preparation; repairs do not close or replace the item.
-
 ### 4. ACCEPTANCE-IMPACT-PILOT-1: Follow a suspicious acceptance to its consequences
 
 **Target:** One retained recursor-type candidate/control and one scoped downstream use
 
 First reproduce the fixed pair at a current exact revision; only a surviving compatible-control acceptance premise permits the downstream consequence phase.
 
-**Why this rank:** Fourth: high potential impact, conditional on a current premise that the source-only import review did not establish.
+**Why this rank:** Highest-value feasible unfinished item after the positive dependent-term asset completed: the exact recursor-type pair and current Kiota source archive already exist, so a four-cell reproduction can resolve the stale-premise risk before any downstream construction. A reproduced premise would open the highest-impact remaining semantic question; a failed premise is itself a bounded result.
 
 **Completion:** One minimal consequence witness, stale-premise result, scoped tested-use explanation, or genuine evidence-bound blocker with concrete recommendation.
 
-**Stop:** Complete the fixed pair/use study or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; freeze exact construction/search/assumption scope before READY; zero external writes.
+**Stop:** Complete the fixed current pair reproduction and, only if its exact premise gate passes, the one fixed matched-use consequence study; otherwise close the exact stale/incompatible result. Ordinary engineering failures are repaired within the item, process safety controls are nonterminal, and external writes remain forbidden.
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: record a separate staged reproduction/impact plan and assumption audit. Current reproduction is a phase, not a prerequisite to starting its investigation; compatible control and actual candidate acceptance gate only downstream construction.
+**Boundary:** READY: READY and unstarted under docs/research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md and results/research/acceptance-impact-pilot-1/protocol.json. Verify the retained single-scalar pair, materialize and build the archived Kiota 9fa2c297 source without edits, bind current-target and official-reference profiles, and commit the exact four-cell manifest before observation. Downstream construction is forbidden unless both controls accept, current Kiota accepts the candidate and official Lean rejects it; then commit the assumption audit and fixed consequence contract before construction.
 
 ### 5. TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports
 
@@ -278,6 +261,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: VALID-DEPENDENT-TERM-PILOT-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: ACCEPTANCE-IMPACT-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

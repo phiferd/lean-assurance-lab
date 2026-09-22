@@ -58,6 +58,19 @@ research directions.
 
 ## Attempted
 
+- Completed `VALID-DEPENDENT-TERM-PILOT-1` on 2026-09-21 with SUCCESS. The
+  derivation-directed generator produced the exact fifty-case corpus with ten
+  cases each for Pi, lambda, application, let and mixed terms. An independent
+  negative-capable auditor passed every case, and the checked-object bridge
+  bound each one-declaration export before observation. Official Lean 4.33.0
+  and Nanoda `6ae1f0c` accepted all 100 frozen matrix cells with no observed
+  conformance difference. Two preparation defects were preserved and repaired
+  without replacing a scientific case. Retain the generator, auditor, corpus,
+  receipts and guarded runner as a local positive-conformance asset; no
+  external action follows from an all-accept result. `ACCEPTANCE-IMPACT-PILOT-1`
+  is selected READY and unstarted for exact current reproduction, with
+  downstream construction gated on the premise reproducing.
+
 - Completed `PIPELINE-COMPLETENESS-PILOT-2` on 2026-09-21 with SUCCESS under
   the corrected persistent-execution policy. The pinned Lean 4.29.1 producer
   generated the exact twelve-theorem module; an independent parser bound its
@@ -3001,24 +3014,26 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `VALID-DEPENDENT-TERM-PILOT-1`.
+Selected next item: `ACCEPTANCE-IMPACT-PILOT-1`.
 
-It is ACTIVE under the
-[valid dependent-term plan](research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md).
-Its source/reuse review, checker-neutral fragment, deterministic design,
-generator, negative-capable independent auditor, checked-object bridge and 38
-focused development regressions are committed. It is constructing and auditing
-the exact 50-case cohort and its one-declaration exports. Commit that manifest,
-its audit results and the 100-cell execution manifest before any target checker
-observes a scientific case. Existing-fixture engineering smoke tests remain
-preparation, not observations of the scientific cohort.
+The canonical queue retains one READY item.
 
-The [2026-09-21 owner-directed review](../results/research/queue-reviews/2026-09-21-progress-correction.json)
-corrects the former circular pre-generation
-manifest gate and retains this selection for fresh semantic coverage. Local
-preparation is part of the item's work and cost, not a reason to prefer a
-lower-value already-prepared diagnostic task. Reuse and repair the existing
-execution tools within the selected item through its corpus and matrix result.
+It is READY and unstarted under the
+[acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
+retained `LALNest.rec_1` candidate/control pair and archived Kiota `9fa2c297`
+source are bound. The first stage is a fixed four-cell current reproduction
+against Kiota and official Lean. Downstream construction remains forbidden
+unless both controls accept, current Kiota accepts the candidate and official
+Lean rejects it. If that gate passes, commit the assumption audit, one matched
+consequence criterion and exact execution manifest before constructing or
+observing the use. The selected item has not started.
+
+The dependent-term pilot completed its exact fifty-case matrix with 100/100
+ACCEPT observations and no profile difference. Its generator and independent
+auditor are retained as a local asset. The project-wide closure review selects
+acceptance impact because its bounded reproduction can resolve the highest
+remaining semantic premise; the narrower trust-assumption reporting study
+remains PLANNED behind its own source and integration gates.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3041,8 +3056,8 @@ no external action is recommended now.
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
-| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | ACTIVE, cohort construction and audit phase |
-| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
+| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
+| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | READY, unstarted staged reproduction |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
 | 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |

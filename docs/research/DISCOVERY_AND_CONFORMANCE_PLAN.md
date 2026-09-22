@@ -52,16 +52,21 @@ scientific inputs and two profiles were already frozen and its blocker was
 confined to replaceable supervision. At closure the one-thread source assessment
 identified a scoped diagnostic follow-through, now completed without a semantic
 difference. Pipeline completeness then delivered the next shared assurance
-asset. `VALID-DEPENDENT-TERM-PILOT-1` is now selected READY for its source/reuse
-and independent typing-rule phase because positive dependent-term generation is
-the highest-ranked fresh semantic exploration and its preparation is explicitly
-part of the item. These are ordinal judgments, not estimated defect rates.
+asset. `VALID-DEPENDENT-TERM-PILOT-1` completed SUCCESS: its exact fifty-case,
+independently audited positive corpus was accepted in all 100 frozen cells by
+official Lean 4.33.0 and Nanoda `6ae1f0c`, with no observed conformance
+difference. The generator, auditor, checked-object receipts and guarded runner
+remain reusable local assets. `ACCEPTANCE-IMPACT-PILOT-1` is now selected READY
+and unstarted because its exact retained pair and current Kiota source archive
+make premise reproduction feasible, while its staged gate forbids downstream
+construction unless that current acceptance difference actually reproduces.
+These are ordinal judgments, not estimated defect rates.
 
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
-numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Two are complete; the remaining horizon
-contains one READY and seven PLANNED candidates with independent promotion gates.
+numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Three are complete; the remaining horizon
+contains one READY and six PLANNED candidates with independent promotion gates.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -69,8 +74,8 @@ fixed sequence or promote every idea to READY.
 | --- | --- | --- |
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
 | 2 `PIPELINE-COMPLETENESS-PILOT-2` | Completed checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | COMPLETE, SUCCESS; retained as a local checked-object receipt asset |
-| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | READY: review reuse/rules and implement; commit the design, generator, auditor and tests; construct/audit the cohort; then commit its exact manifest before checker observation |
-| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control | Record a separate staged plan permitting current reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; freeze assumption audit and consequence criterion before construction |
+| 3 `VALID-DEPENDENT-TERM-PILOT-1` | Completed derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | COMPLETE, SUCCESS; 100/100 frozen cells accepted with no observed difference; retained as a local positive-conformance asset |
+| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control | READY under its staged plan: commit the exact current four-cell reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; commit the assumption audit and consequence contract before construction |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Fixed six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
 | 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
 | 7 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
@@ -88,13 +93,14 @@ The required source/reuse and implementation preparation may be phases within
 the promoted item; do not demand a successful experiment before permitting its
 scoped investigation. Ordinary implementation repairs remain inside that item.
 
-The 2026-09-21 owner-directed review retains the dependent-term selection for its
-fresh semantic coverage and reusable validity evidence. The completed one-thread
-chain settled only rejection diagnostics; its earlier selection merely because
-it was already gated is not a precedent. Compare local preparation as part of
-each candidate's cost and value. Reuse the completed representation and receipt
-tools inside the selected experiment rather than launching another repair or
-asset-packaging detour without a concrete consumer.
+The 2026-09-21 dependent-term closure review selects acceptance impact after the
+positive generator delivered its full reusable asset with no divergence. The
+retained recursor-type pair, archived current Kiota source and bounded four-cell
+reproduction make the stale-premise question feasible. Trust-assumption work
+remains useful but narrower and still lacks its exact two-path reporting
+contract. Reuse the completed representation and receipt tools inside the
+selected experiment rather than launching another repair or asset-packaging
+detour without a concrete consumer.
 
 ## Reserves and preserved work
 

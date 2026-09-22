@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "item_id": "ACCEPTANCE-IMPACT-PILOT-1",
+  "status": "READY",
+  "current_phase": null,
+  "plan": "docs/research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md",
+  "scientific_scope": {
+    "candidate": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "bytes": 6332,
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd"
+    },
+    "control": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "bytes": 6332,
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae"
+    },
+    "exact_delta": {
+      "pointer": "/104/inductive/recs/0/type",
+      "control": 49,
+      "candidate": 68,
+      "name_and_expression_nodes_unchanged": true
+    },
+    "target_source": {
+      "repository": "https://github.com/sankalpsthakur/kiota",
+      "revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "source_lock": "results/research/kiota-ctor-index-test-1/source-lock.json",
+      "archive": "results/research/kiota-ctor-index-test-1/kiota-source.tar.gz",
+      "archive_sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8"
+    },
+    "stage_1_cells": 4,
+    "stage_2_maximum_uses": 2,
+    "outcome_guided_replacement": false
+  },
+  "stage_1_entry_gate": [
+    "verify exact candidate/control bytes and single scalar difference",
+    "materialize and build the archived Kiota revision without source edits",
+    "bind exact current Kiota and official Lean 4.33.0 profiles",
+    "commit supervised tooling tests and the exact four-cell reproduction manifest before checker observation"
+  ],
+  "stage_2_gate": {
+    "required_stage_1_observation": "both controls ACCEPT, current Kiota candidate ACCEPT, official Lean candidate REJECT as intended object",
+    "required_committed_inputs": [
+      "stage-1 result and exact receipts",
+      "assumption audit separating observation from semantic authority",
+      "one fixed consequence criterion and matched control",
+      "dependency-complete construction design, independent audit and exact execution manifest"
+    ],
+    "criterion": "one closed use that relies on LALNest.rec_1 retaining expression-68 type, plus one matched use of the unmodified expression-49 type",
+    "adaptive_search": false
+  },
+  "execution_policy": {
+    "attempt_caps": "NONE",
+    "accounting": "OBSERVABILITY_ONLY",
+    "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
+    "process_safety": "NONTERMINAL",
+    "terminal_conditions": [
+      "SCIENTIFIC_QUESTION_ANSWERED",
+      "OWNER_STOP",
+      "REQUIRED_EXTERNAL_AUTHORITY_OR_INPUT_UNAVAILABLE",
+      "SCIENTIFIC_INPUT_INVALIDATED",
+      "REQUIRED_CAPABILITY_UNAVAILABLE_AFTER_FEASIBLE_REPAIRS"
+    ]
+  },
+  "process_safety": {
+    "build_seconds": 1200,
+    "build_memory_bytes": 4294967296,
+    "checker_seconds_each": 120,
+    "checker_memory_bytes_each": 2147483648,
+    "positive_rss_sampling_required": true,
+    "complete_cleanup_required": true,
+    "safety_event_is_terminal": false
+  },
+  "authority_limits": {
+    "read_only_exact_input_materialization": true,
+    "production_checker_edits": false,
+    "assurance_milestone_advance": false,
+    "external_writes": false
+  },
+  "forbidden": [
+    "downstream construction before the committed current-premise gate passes",
+    "editing the retained candidate or control",
+    "changing the target or reference after an observed outcome",
+    "adaptive consequence search or case replacement",
+    "treating checker consensus or disagreement as semantic authority",
+    "closing because an attempt, build, checker, session or elapsed-time count was reached",
+    "external issue, pull request, comment or submission"
+  ]
+}
