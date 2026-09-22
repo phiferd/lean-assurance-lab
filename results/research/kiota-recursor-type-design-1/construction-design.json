@@ -1,0 +1,161 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-DESIGN-1",
+  "status": "COMPLETE",
+  "outcome": "VALIDATED_COMPLETE_KIOTA_DESIGN",
+  "target_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "authority": {
+    "class": "SOURCE_BOUND_LOCAL_IMPORT_POLICY",
+    "reference_algorithm": "Lean 4.33.0 src/kernel/inductive.cpp at GitHub blob 118ed7badeb3940a4a2dc1dd6c2e11ca5a50c664",
+    "claim": "This is a complete semantic recursor-type construction for the pinned Kiota importer and its supported ordinary, mutual and nested shapes; it is not a universal export-format law or semantic authority for other checkers."
+  },
+  "input_contract": {
+    "stage": "After type and constructor records pass Kiota's existing group checks, before any recursor record from the current block is visible in the environment",
+    "trusted_inputs": [
+      "the prior validated environment",
+      "the current block's checked inductive type order, shared universe parameters and shared parameter telescope",
+      "the current block's checked constructor order and types"
+    ],
+    "untrusted_inputs": [
+      "serialized recursor type",
+      "serialized recursor universe parameter names and counts",
+      "serialized numMotives, numMinors and numIndices",
+      "serialized recursor all/group associations"
+    ],
+    "safe_alpha_input": "A supplied fresh elimination-universe parameter identifier may be reused only as an alpha binder label after positional shape and distinctness checks; it contributes no type structure."
+  },
+  "scoped_representation": {
+    "method": "Build with scoped local handles carrying types and BinderInfo, then close scopes into Kiota de Bruijn Expr values with shift/instantiate. Never construct generated telescopes by guessing raw indices.",
+    "binder_policy": [
+      "Preserve BinderInfo for copied source parameters, indices and constructor fields.",
+      "Use Default for generated motives, major premises, recursive hypotheses and minor premises.",
+      "Do not run Lean's elaborator-facing strict infer_implicit pass: Kiota checks fully elaborated kernel terms and its definitional equality ignores Pi BinderInfo. The stored reconstructed type is therefore canonical for Kiota modulo non-semantic binder annotations."
+    ],
+    "level_alpha_policy": "Represent recursor level parameters positionally while building. Compare supplied and reconstructed types after mapping their declared level-parameter lists to the same collision-free canonical positional parameters. Store the reconstructed type using the validated supplied elimination-level identifier only as an alpha name when a fresh elimination level is required."
+  },
+  "base_construction": {
+    "source_lines": [[478, 790]],
+    "steps": [
+      {
+        "id": "B1_ELIMINATION_LEVEL",
+        "rule": "Derive the common inductive result level. Use level 0 when Lean's restricted Prop-elimination predicate holds; otherwise introduce one fresh elimination universe parameter distinct from every declaration universe parameter. Recursor level parameters are [elim, declaration...] in the latter case and declaration parameters alone in the former."
+      },
+      {
+        "id": "B2_MOTIVES",
+        "rule": "For every member I_j in group order, peel the shared parameters and its own indices. Create C_j : Pi indices_j, Pi major : I_j params indices_j, Sort elim. Motive order is exactly group order."
+      },
+      {
+        "id": "B3_CONSTRUCTOR_FIELDS",
+        "rule": "For every constructor in group-member order then constructor order, instantiate the shared parameters, retain all remaining fields b_u in telescope order, and derive the constructor result member and result indices."
+      },
+      {
+        "id": "B4_RECURSIVE_HYPOTHESES",
+        "rule": "A field is recursive when WHNF followed by peeling zero or more Pi binders ends in a valid application of a current group member to the shared parameters and that member's indices. For each recursive field u in field order, append one IH v : Pi xs, C_target indices (u xs). Append all fields first and all IHs second, matching Lean's minor type."
+      },
+      {
+        "id": "B5_MINORS",
+        "rule": "For constructor K returning I_j params resultIndices, construct minor(K) : Pi b_u, Pi v, C_j resultIndices (K params b_u). Concatenate minors by group-member order and then constructor order."
+      },
+      {
+        "id": "B6_TARGET_RECURSOR_TYPES",
+        "rule": "For every target member I_j, construct Pi params, Pi all motives, Pi all minors, Pi indices_j, Pi major : I_j params indices_j, C_j indices_j major. This fixes the exact parameter, motive, minor, index, major and result ordering."
+      },
+      {
+        "id": "B7_DERIVED_METADATA",
+        "rule": "Derive numParams from the shared telescope, numIndices per target member, numMotives from total transformed group members and numMinors from the concatenated transformed constructors. Do not use serialized counts to build the type."
+      }
+    ]
+  },
+  "nested_construction": {
+    "source_lines": [[887, 1090], [1093, 1259]],
+    "steps": [
+      {
+        "id": "N1_DISCOVER",
+        "rule": "Start with the original group in declaration order and scan constructor types breadth-first. A nested occurrence is an application of a prior inductive whose parameter arguments contain a current group type and contain no loose bound variable."
+      },
+      {
+        "id": "N2_SPECIALIZE",
+        "rule": "For the first structural occurrence of prior mutual group J at fixed parameter specialization Ds, copy every J member and its constructors into the auxiliary mutual group. Replace J Ds indices by auxiliary-J currentParams indices. Key specializations structurally after replacing each constructor-local parameter instance with the group's canonical parameter locals."
+      },
+      {
+        "id": "N3_CLOSE_WORKLIST",
+        "rule": "Append copied members in the prior group's all-order and continue the breadth-first constructor scan until no new specialization appears. Original members precede auxiliaries; discovery order fixes auxiliary motive and minor positions."
+      },
+      {
+        "id": "N4_BUILD",
+        "rule": "Run B1-B7 on the complete auxiliary mutual group, so ordinary, mutual and nested cases share one base construction."
+      },
+      {
+        "id": "N5_RESTORE",
+        "rule": "Replace every auxiliary type application with its recorded prior-inductive specialization, restore copied constructor references, and rename auxiliary recursors in auxiliary-member order to <first-original-type>.rec_1, .rec_2, and so on. Main original members retain their own .rec names."
+      },
+      {
+        "id": "N6_RECHECK",
+        "rule": "Type-check every restored reconstructed recursor type in the restored environment before comparing it with serialized data. A restoration error rejects or declines closed; it never falls back to the supplied type."
+      }
+    ],
+    "completeness_boundary": "This covers the same nested shapes accepted by the pinned Kiota parser because it ports the exact Lean 4.33.0 auxiliary transform rather than relying on Kiota's current counted_nested/name-order heuristics."
+  },
+  "comparison_adjudication": {
+    "structural_equality": {
+      "selected": false,
+      "reason": "It would reject harmless BinderInfo and alpha-level-parameter differences and is stronger than Kiota's kernel typing relation."
+    },
+    "normalized_structural_equality": {
+      "selected": false,
+      "reason": "Kiota has multiple reduction paths and bounded decline behavior but no source-bound canonical normal-form contract for this importer gate."
+    },
+    "definitional_equality_then_replacement": {
+      "selected": true,
+      "rule": "Require the supplied closed type to infer to a sort in an environment containing the checked types and constructors but no current-block recursors. Alpha-normalize declared universe parameters positionally; then require Checker::is_def_eq(empty_ctx, supplied, reconstructed) == true. False is REJECT; Decline or any inference/restoration failure is fail-closed DECLINE/REJECT. After agreement, install only the reconstructed type, never the supplied type.",
+      "reason": "Definitional equality is Kiota's native conversion relation and preserves semantically valid inputs, while replacement prevents later typing and reduction helpers from depending on unvalidated serialized structure."
+    }
+  },
+  "transactional_import_order": [
+    "Parse names, levels and expressions as today.",
+    "Parse the block records into an uncommitted block value.",
+    "Validate and provisionally install only the current types and constructors.",
+    "Construct and type-check the complete derived recursor records without exposing supplied current-block recursors.",
+    "Match supplied recursor names to the derived main and auxiliary name order; compare derived counts and alpha-normalized level-parameter shape.",
+    "Infer supplied recursor types and compare them definitionally with derived types; fail closed on every mismatch or decline.",
+    "Commit recursor records using reconstructed types and derived grouping/count metadata; retain serialized rule data only under its existing separate checks, which this item does not broaden.",
+    "Run the existing inductive-group checks and continue stream processing only after the transaction commits."
+  ],
+  "regression_effect": {
+    "candidate": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "expected": "REJECT",
+      "reason": "Its fifth recursor domain LALNest is not definitionally equal to the reconstructed LALWrap LALNest domain."
+    },
+    "control": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "expected": "ACCEPT",
+      "reason": "Its serialized recursor type is expected to agree definitionally with reconstruction and is then replaced by the reconstructed type."
+    }
+  },
+  "implementation_seams": [
+    {
+      "file": "src/expr.rs",
+      "change": "Add only scoped close/abstract helpers that cannot be expressed safely by existing shift and instantiate calls; keep generated expressions in the existing hash-consed representation."
+    },
+    {
+      "file": "src/parser.rs",
+      "change": "Split inductive block parsing from environment commit, call the derived builder, compare all recursor types before commit, and remove supplied-type exposure."
+    },
+    {
+      "file": "src/tc.rs",
+      "change": "Host the source-bound builder beside the existing inductive checks so it can reuse WHNF, inference, elimination-level and conversion logic without duplicating a second semantic engine."
+    },
+    {
+      "file": "src/env.rs",
+      "change": "No representation change is required; commit ConstantInfo::Recursor with the reconstructed typ and derived counts."
+    }
+  ],
+  "out_of_scope": [
+    "changing serialized recursor rule validation beyond the existing contract",
+    "claiming official record equality is a universal format requirement",
+    "modifying declaration-validation catalog authority",
+    "editing or running the production checker in this design item",
+    "external publication or upstream action"
+  ]
+}

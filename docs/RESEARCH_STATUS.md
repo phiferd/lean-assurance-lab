@@ -58,6 +58,18 @@ research directions.
 
 ## Attempted
 
+- Completed `KIOTA-RECURSOR-TYPE-DESIGN-1` on 2026-09-22 with
+  `VALIDATED_COMPLETE_KIOTA_DESIGN`. Exact pinned Kiota source provides the
+  required expression, universe, inference and conversion APIs, while an
+  already archived provenance-bound Lean 4.33.0 kernel source supplies the
+  complete ordinary, mutual and nested construction algorithm. The local rule
+  is positional universe alpha normalization, fail-closed Kiota definitional
+  equality and unconditional replacement with the reconstructed type. Four
+  exact accepted fixtures and the inherited reject-candidate/accept-control pair
+  are frozen. No checker launch, build, production edit, generated scientific
+  byte, network, catalog or external action occurred. The separately gated
+  `KIOTA-RECURSOR-TYPE-REPAIR-1` is selected READY and unstarted.
+
 - Completed `RECURSOR-TYPE-TRUST-BOUNDARY-1` on 2026-09-22 with
   `VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY`. Exact Kiota `9fa2c297`
   source inspection shows the serialized recursor type is stored and later used
@@ -67,10 +79,9 @@ research directions.
   extended fifth-domain diagnostics. The preserved one-scalar pair is now a
   mechanically validated reject-candidate/accept-control regression target.
   No checker launch, production edit, catalog change or external action occurred.
-  Production repair remains gated on a Kiota-native complete recursor-type
-  construction and explicit comparison/replacement relation.
-  `KIOTA-RECURSOR-TYPE-DESIGN-1` is ACTIVE for that exact source/design
-  prerequisite under a committed read-only work record.
+  The later design item has now supplied the previously missing complete
+  construction and comparison/replacement relation; production repair remains
+  separately gated under its own selected READY item.
 
 - Completed `VALID-DEPENDENT-TERM-PILOT-1` on 2026-09-21 with SUCCESS. The
   derivation-directed generator produced the exact fifty-case corpus with ten
@@ -3028,9 +3039,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `KIOTA-RECURSOR-TYPE-DESIGN-1`.
+Selected next item: `KIOTA-RECURSOR-TYPE-REPAIR-1`.
 
-The canonical queue retains one ACTIVE item and no READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
@@ -3070,13 +3081,19 @@ locations, states a narrow local import policy and freezes the exact
 reject-candidate/accept-control regression. Its result is a validated regression
 target with a source boundary, not a production repair or universal format rule.
 
-`KIOTA-RECURSOR-TYPE-DESIGN-1` is ACTIVE in source/design analysis under its
-[source/design plan](research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md). It uses
-only already bound local evidence to specify complete recursor-type construction
-for supported ordinary, mutual and nested groups, choose and justify the local
-comparison or replacement relation, and freeze acceptance-preservation fixtures.
-No checker launch, build, production edit, generated scientific byte, network
-request or external action is authorized in that item.
+`KIOTA-RECURSOR-TYPE-DESIGN-1` is COMPLETE under its
+[source/design plan](research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md). It validated
+a complete construction for ordinary, mutual and nested groups from the exact
+Kiota APIs and archived Lean 4.33.0 kernel algorithm. It selected positional
+universe alpha normalization, Kiota definitional equality, fail-closed mismatch
+handling and reconstructed-type replacement. Its four accepted fixtures and
+inherited candidate/control pair are frozen; no checker or production action ran.
+
+`KIOTA-RECURSOR-TYPE-REPAIR-1` is READY and unstarted under its
+[implementation plan](research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md). Entry
+requires a fresh committed work record and protocol plus exact patch, fixture,
+independent-review and supervised build/test bindings before any production edit
+or launch.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
@@ -3119,7 +3136,8 @@ no external action is recommended now.
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
-| 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | ACTIVE, source/design analysis |
+| 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | COMPLETE, SUCCESS — `VALIDATED_COMPLETE_KIOTA_DESIGN` |
+| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | READY, selected and unstarted |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and
@@ -3260,8 +3278,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item and no READY item:
-`KIOTA-RECURSOR-TYPE-DESIGN-1`, executing source/design analysis under persistent
+The canonical queue has one READY item and no ACTIVE item:
+`KIOTA-RECURSOR-TYPE-REPAIR-1`, selected and unstarted under persistent
 execution policy.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
@@ -3276,9 +3294,9 @@ gates. This review did not refresh external discussions or infer capacity.
 Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
 Historical results, completed-record content, consumed budgets, pending counts,
 external-write gates and the failing assurance state remain unchanged. The
-selected item has a fresh committed work record and ACTIVE transition. Its
-separately gated later implementation would
-require exact fixture, patch, review and execution manifests before any launch.
+completed design item has a committed work record and validated closure. The
+selected implementation item still requires a fresh work record and exact
+fixture, patch, review and execution manifests before any edit or launch.
 
 ### Waiting
 

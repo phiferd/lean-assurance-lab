@@ -1,6 +1,6 @@
 # Kiota recursor type design 1 plan
 
-Status: **ACTIVE — source/design analysis**
+Status: **COMPLETE — validated complete Kiota design**
 
 Item: `KIOTA-RECURSOR-TYPE-DESIGN-1`
 
@@ -52,3 +52,14 @@ Close with a validated Kiota-specific complete recursor-type construction and
 comparison/replacement design plus frozen acceptance-preservation fixtures, or
 with a precise source/authority boundary and concrete unblocking condition.
 Select but do not start the next item.
+
+## Closure
+
+Completed on 2026-09-22 with `VALIDATED_COMPLETE_KIOTA_DESIGN`. The exact
+already archived Lean 4.33.0 kernel source supplied the complete base and nested
+construction algorithm. The selected local rule is positional universe-level
+alpha normalization, Kiota-native definitional equality, fail-closed mismatch
+handling, and unconditional replacement with the reconstructed type. Four
+accepted fixtures plus the inherited reject-candidate/accept-control pair are
+frozen for the separately gated implementation successor
+`KIOTA-RECURSOR-TYPE-REPAIR-1`.

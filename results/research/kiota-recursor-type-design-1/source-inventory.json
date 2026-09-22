@@ -1,0 +1,127 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-DESIGN-1",
+  "status": "COMPLETE",
+  "target_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "source_bindings": {
+    "kiota_archive": {
+      "path": "results/research/semantic-import-contract-1/kiota-source.tar.gz",
+      "bytes": 4587521,
+      "sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8"
+    },
+    "kiota_parser": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs",
+      "bytes": 46528,
+      "sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e"
+    },
+    "kiota_environment": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/env.rs",
+      "bytes": 4057,
+      "sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b"
+    },
+    "kiota_type_checker": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/tc.rs",
+      "bytes": 545983,
+      "sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b"
+    },
+    "kiota_expression": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/expr.rs",
+      "bytes": 30728,
+      "sha256": "264c6063e5dd0f2deb5481881907d0bd1702bdfe9575cc405fc2936930abac02"
+    },
+    "kiota_level": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/level.rs",
+      "bytes": 7771,
+      "sha256": "af5a1a5a18b1224130140296b4f5c811f11f28d244e7e9dcfcd6f4892c6f82ed"
+    },
+    "kiota_export_tests": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs",
+      "bytes": 49582,
+      "sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a"
+    },
+    "lean_4_33_inductive_kernel": {
+      "path": "results/research/evidence/proof-parameter-contract-review/lean4-v4.33.0-inductive.cpp",
+      "bytes": 63881,
+      "sha256": "3f7a71c8f5081b41a9a8e625ca555d6dd41b0451c8d6671b828679fd533dc78b"
+    },
+    "lean_4_33_inductive_provenance": {
+      "path": "results/research/evidence/proof-parameter-contract-review/lean4-v4.33.0-inductive.json",
+      "bytes": 88880,
+      "sha256": "fccf15a9f4776d55996112cdcb5a2dfb140d180f106f302e1732635923118fa1"
+    }
+  },
+  "source_findings": [
+    {
+      "id": "KIOTA_SUPPLIED_TYPE_IS_ONLY_SHAPE_CHECKED",
+      "binding_role": "kiota_parser",
+      "line_ranges": [[484, 579]],
+      "finding": "The parser reads the serialized recursor type, checks only manifest Pi-telescope length plus partial metadata constraints, and installs the supplied type."
+    },
+    {
+      "id": "KIOTA_REDUCTION_CONSUMES_DECLARED_TYPE_METADATA",
+      "binding_role": "kiota_type_checker",
+      "line_ranges": [[4273, 5251]],
+      "finding": "Iota reduction and nested-recursion selection consume declared recursor types and counts, but this code does not construct a recursor signature from inductive and constructor declarations."
+    },
+    {
+      "id": "KIOTA_HAS_REQUIRED_TERM_OPERATIONS",
+      "binding_role": "kiota_expression",
+      "line_ranges": [[130, 160], [415, 653]],
+      "finding": "Kiota already provides closedness, application, Pi/lambda construction, shifting, term instantiation, universe substitution and application-spine operations needed by a native builder."
+    },
+    {
+      "id": "KIOTA_HAS_REQUIRED_TYPING_RELATION",
+      "binding_role": "kiota_type_checker",
+      "line_ranges": [[1740, 1946], [3747, 4022]],
+      "finding": "Kiota exposes Pi decomposition, type inference and definitional equality; its Pi comparison deliberately ignores BinderInfo and compares domains and bodies."
+    },
+    {
+      "id": "KIOTA_HAS_REQUIRED_UNIVERSE_OPERATIONS",
+      "binding_role": "kiota_level",
+      "line_ranges": [[14, 153], [225, 250]],
+      "finding": "Kiota provides the universe constructors, substitution and definitional comparison required to derive and alpha-normalize recursor levels."
+    },
+    {
+      "id": "LEAN_SOURCE_DEFINES_COMPLETE_BASE_CONSTRUCTION",
+      "binding_role": "lean_4_33_inductive_kernel",
+      "line_ranges": [[478, 790]],
+      "finding": "Official Lean 4.33.0 defines the elimination-universe rule, motive construction, minor-premise construction, recursive hypotheses, exact ordering, recursor type assembly and level-parameter ordering."
+    },
+    {
+      "id": "LEAN_SOURCE_DEFINES_COMPLETE_NESTED_CONSTRUCTION",
+      "binding_role": "lean_4_33_inductive_kernel",
+      "line_ranges": [[887, 1090], [1093, 1259]],
+      "finding": "Official Lean 4.33.0 eliminates nested occurrences into a breadth-first auxiliary mutual declaration, constructs base recursors there, then restores nested types, constructors and auxiliary recursor names in deterministic order."
+    }
+  ],
+  "kiota_native_capability_map": {
+    "already_present": [
+      "hash-consed de Bruijn expressions and universe levels",
+      "closedness, shift, instantiate and universe-substitution primitives",
+      "environment lookup for prior inductives and constructors",
+      "WHNF, type inference and definitional equality",
+      "inductive parameter, index, constructor, positivity and elimination checks"
+    ],
+    "implementation_components_to_add": [
+      "a scoped-local recursor builder that closes generated locals into de Bruijn expressions",
+      "a deterministic nested auxiliary-declaration transform and restoration pass",
+      "a derived recursor record containing type, level-parameter positions and reconstructed counts",
+      "transactional parser staging that withholds supplied recursor constants until validation"
+    ],
+    "missing_source_or_authority": []
+  },
+  "conclusion": {
+    "complete_design_supported": true,
+    "reason": "The exact Kiota term, universe and typing APIs are sufficient to host a port, and the already archived official Lean 4.33.0 kernel source supplies the complete ordinary, mutual and nested construction semantics and ordering that Kiota itself lacks.",
+    "authority_class": "PINNED_REFERENCE_ALGORITHM_FOR_LOCAL_KIOTA_IMPORT_POLICY"
+  },
+  "observations": {
+    "local_source_files_inspected": 9,
+    "checker_attempts": 0,
+    "builds": 0,
+    "production_edits": 0,
+    "generated_scientific_bytes": 0,
+    "network_requests": 0,
+    "external_actions": 0
+  }
+}

@@ -1,0 +1,90 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-DESIGN-1",
+  "status": "FROZEN_FOR_LATER_IMPLEMENTATION",
+  "target_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "accepted_fixture_bindings": [
+    {
+      "id": "ORDINARY_INDEXED_EQ",
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/067_eqRec.accept.ndjson",
+      "bytes": 3369,
+      "sha256": "693007cd24f0763cc6c7776840bdc05539645a0e35897af2688bde984f2551e2",
+      "expected_after_repair": "ACCEPT",
+      "coverage": ["ordinary", "indexed", "Prop elimination", "shared parameters"],
+      "static_profile": {"blocks": 1, "multi_type_blocks": 0, "nested_blocks": 0, "max_motives": 1, "max_minors": 1, "max_rule_count": 1}
+    },
+    {
+      "id": "NESTED_TWO_SAME_CONTAINER_SPECIALIZATIONS",
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/lean-value-two-list-specializations.accept.ndjson",
+      "bytes": 550476,
+      "sha256": "a7df00d85687467150799db404d7069763370823b2c12a8748ca1ba0ebe23ce1",
+      "expected_after_repair": "ACCEPT",
+      "coverage": ["nested", "two List specializations", "auxiliary recursor ordering", "shared global minor numbering"],
+      "static_profile": {"blocks": 41, "multi_type_blocks": 0, "nested_blocks": 1, "max_motives": 4, "max_minors": 8, "max_rule_count": 3}
+    },
+    {
+      "id": "PARAMETRIC_DEEP_NESTED",
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/lean-doc-block-nested-rec-param-shift.accept.ndjson",
+      "bytes": 796409,
+      "sha256": "a7ad63de1347bc87000d0c84e769681b217dfbd162ddfec4569b2f43d2219702",
+      "expected_after_repair": "ACCEPT",
+      "coverage": ["nested", "two source parameters", "deep auxiliary worklist", "parameter de Bruijn shifts"],
+      "static_profile": {"blocks": 45, "multi_type_blocks": 0, "nested_blocks": 2, "max_motives": 9, "max_minors": 19, "max_rule_count": 11}
+    },
+    {
+      "id": "MUTUAL_AND_NESTED_LCNF",
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/lean-compiler-lcnf-code-ctorelim.accept.ndjson",
+      "bytes": 905093,
+      "sha256": "04e2d1d4de32bdc3501f9e2c29989121728f2e0f20c94a51177be76093a4f152",
+      "expected_after_repair": "ACCEPT",
+      "coverage": ["mutual group", "nested auxiliaries", "six motives", "nineteen minors", "constructor/minor order"],
+      "static_profile": {"blocks": 67, "multi_type_blocks": 1, "nested_blocks": 2, "max_motives": 6, "max_minors": 19, "max_rule_count": 15}
+    }
+  ],
+  "inherited_regression": {
+    "pair_audit": {
+      "path": "results/research/acceptance-impact-pilot-1/pair-audit.json",
+      "bytes": 6097,
+      "sha256": "bc3e9f48fd17f3c6ebcf96efa8d7b98133f88fc6a7b09f9b1699a8e549379007"
+    },
+    "contract": {
+      "path": "results/research/recursor-type-trust-boundary-1/regression-contract.json",
+      "bytes": 3219,
+      "sha256": "eb14c51345b43ad5898344c183dfd651f805e08e6ec0e5fbb84e296be1fb8c2b"
+    },
+    "candidate": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "bytes": 6332,
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd",
+      "expected_after_repair": "REJECT"
+    },
+    "control": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "bytes": 6332,
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+      "expected_after_repair": "ACCEPT"
+    },
+    "only_scalar_difference": {"pointer": "/104/inductive/recs/0/type", "candidate": 68, "control": 49},
+    "same_manifest_pi_arity": 5,
+    "candidate_fifth_domain": "LALNest",
+    "control_fifth_domain": "LALWrap LALNest"
+  },
+  "later_execution_matrix": {
+    "required_cells": [
+      "all four accepted fixture bindings on the patched Kiota checker",
+      "the unchanged inherited candidate on the patched Kiota checker",
+      "the unchanged inherited control on the patched Kiota checker",
+      "focused builder unit tests for ordinary, mutual and nested derived signatures",
+      "the complete existing Kiota test suite"
+    ],
+    "pass_condition": "Every accepted fixture remains ACCEPT, the inherited candidate is REJECT, the inherited control is ACCEPT, all focused construction assertions pass and the complete existing suite passes.",
+    "gate": "No execution is authorized by this manifest. The separately selected implementation item must bind the exact patch, binary, commands, per-process controls and output receipts before launch."
+  },
+  "observations": {
+    "fixture_bytes_generated": 0,
+    "checker_attempts": 0,
+    "builds": 0,
+    "network_requests": 0,
+    "external_actions": 0
+  }
+}
