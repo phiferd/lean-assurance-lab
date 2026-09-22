@@ -60,7 +60,7 @@ remain reusable local assets. `ACCEPTANCE-IMPACT-PILOT-1` completed at its
 immutable construction-or-semantic boundary, and its source-bound successor
 `RECURSOR-TYPE-TRUST-BOUNDARY-1` completed with a validated exact regression
 target plus a production-design boundary. `KIOTA-RECURSOR-TYPE-DESIGN-1` is
-selected READY and unstarted to specify the missing Kiota-native complete
+ACTIVE in source/design analysis to specify the missing Kiota-native complete
 recursor-type construction and comparison/replacement relation from already
 bound local evidence. These are ordinal judgments, not estimated defect rates.
 
@@ -69,7 +69,7 @@ bound local evidence. These are ordinal judgments, not estimated defect rates.
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
 numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Four are complete; the remaining original
 horizon contains six PLANNED candidates with independent promotion gates. The
-selected READY item is the evidence-driven recursor-design successor appended
+selected ACTIVE item is the evidence-driven recursor-design successor appended
 after that historical ordering.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.

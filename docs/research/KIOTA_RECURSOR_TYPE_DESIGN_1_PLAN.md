@@ -1,6 +1,6 @@
 # Kiota recursor type design 1 plan
 
-Status: **READY — unstarted source/design successor**
+Status: **ACTIVE — source/design analysis**
 
 Item: `KIOTA-RECURSOR-TYPE-DESIGN-1`
 

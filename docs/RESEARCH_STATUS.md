@@ -69,8 +69,8 @@ research directions.
   No checker launch, production edit, catalog change or external action occurred.
   Production repair remains gated on a Kiota-native complete recursor-type
   construction and explicit comparison/replacement relation.
-  `KIOTA-RECURSOR-TYPE-DESIGN-1` is selected READY and unstarted for that exact
-  source/design prerequisite.
+  `KIOTA-RECURSOR-TYPE-DESIGN-1` is ACTIVE for that exact source/design
+  prerequisite under a committed read-only work record.
 
 - Completed `VALID-DEPENDENT-TERM-PILOT-1` on 2026-09-21 with SUCCESS. The
   derivation-directed generator produced the exact fifty-case corpus with ten
@@ -3030,7 +3030,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `KIOTA-RECURSOR-TYPE-DESIGN-1`.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
@@ -3070,8 +3070,8 @@ locations, states a narrow local import policy and freezes the exact
 reject-candidate/accept-control regression. Its result is a validated regression
 target with a source boundary, not a production repair or universal format rule.
 
-`KIOTA-RECURSOR-TYPE-DESIGN-1` is READY and unstarted under its
-[source/design plan](research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md). It will use
+`KIOTA-RECURSOR-TYPE-DESIGN-1` is ACTIVE in source/design analysis under its
+[source/design plan](research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md). It uses
 only already bound local evidence to specify complete recursor-type construction
 for supported ordinary, mutual and nested groups, choose and justify the local
 comparison or replacement relation, and freeze acceptance-preservation fixtures.
@@ -3119,7 +3119,7 @@ no external action is recommended now.
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
-| 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | READY, unstarted source/design successor |
+| 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | ACTIVE, source/design analysis |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and
@@ -3260,8 +3260,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one READY item and no ACTIVE item:
-`KIOTA-RECURSOR-TYPE-DESIGN-1`, unstarted under persistent execution policy.
+The canonical queue has one ACTIVE item and no READY item:
+`KIOTA-RECURSOR-TYPE-DESIGN-1`, executing source/design analysis under persistent
+execution policy.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful
@@ -3275,8 +3276,8 @@ gates. This review did not refresh external discussions or infer capacity.
 Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
 Historical results, completed-record content, consumed budgets, pending counts,
 external-write gates and the failing assurance state remain unchanged. The
-selected item requires a fresh work record and ACTIVE transition before
-substantive source/design work. Its separately gated later implementation would
+selected item has a fresh committed work record and ACTIVE transition. Its
+separately gated later implementation would
 require exact fixture, patch, review and execution manifests before any launch.
 
 ### Waiting
