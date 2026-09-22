@@ -1,6 +1,6 @@
 # Recursor type trust boundary 1 plan
 
-Status: **READY, UNSTARTED**
+Status: **ACTIVE — source-policy adjudication**
 
 Item: `RECURSOR-TYPE-TRUST-BOUNDARY-1`
 

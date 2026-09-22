@@ -3016,7 +3016,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `RECURSOR-TYPE-TRUST-BOUNDARY-1`.
 
-The canonical queue retains one READY item, unstarted, and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
@@ -3049,12 +3049,12 @@ that exact result without relabeling it, while recording the narrower evidence
 that the fixed declaration exposes a downstream cross-observer typing
 difference.
 
-`RECURSOR-TYPE-TRUST-BOUNDARY-1` is READY and unstarted under its
+`RECURSOR-TYPE-TRUST-BOUNDARY-1` is ACTIVE in source-policy adjudication under its
 [source-bound plan](research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md). It reuses
 the exact archived source, pair, audit and raw receipts to adjudicate imported
-recursor-type policy and local regression/repair readiness. Selection authorizes
-no checker launch, production edit or external action; the completed pilot is
-not rerun or relabeled.
+recursor-type policy and local regression/repair readiness. Activation authorizes
+read-only offline source adjudication only; no new checker launch, production edit
+or external action has started, and the completed pilot is not rerun or relabeled.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
@@ -3096,7 +3096,7 @@ no external action is recommended now.
 | 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
-| 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | READY, unstarted |
+| 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | ACTIVE, source-policy adjudication |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and
