@@ -3031,8 +3031,13 @@ observable build/execution controller now pass their focused preparation tests.
 The exact offline release build passed in 17.45 seconds with 549 positive RSS
 samples, a 362,283,008-byte maximum observation and complete cleanup; its
 post-build 90-file source tree remains archive-identical. The exact four-cell
-execution manifest is frozen and committed-ready; no target or reference
-checker observation has started.
+execution manifest produced a complete current-premise result: both controls
+accepted, Kiota `9fa2c297` accepted the candidate and official Lean 4.33.0
+rejected it with the exact `Invalid recursor LALNest.rec_1` diagnostic. All
+four cells had positive RSS observations and complete cleanup. Stage 2 is now
+eligible, but construction remains forbidden until its assumption audit,
+fixed five-application consequence contract, producer, independent audit and
+exact target/reference matrix are separately committed.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
