@@ -1,0 +1,112 @@
+#!/usr/bin/env python3
+"""Generate or validate the deterministic VALID-DEPENDENT-TERM-PILOT-1 suite."""
+
+from __future__ import annotations
+
+import argparse
+import hashlib
+import sys
+from pathlib import Path
+from typing import Any, Mapping, Sequence
+
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from lib.valid_dependent_term_generator import (  # noqa: E402
+    GenerationError,
+    canonical_bytes,
+    expr_hash,
+    generate_all,
+    load_design,
+    render_module,
+)
+
+
+def _sha256(payload: bytes) -> str:
+    return hashlib.sha256(payload).hexdigest()
+
+
+def _manifest(
+    design: Mapping[str, Any], cases: Sequence[Mapping[str, Any]], module_bytes: bytes
+) -> tuple[dict[str, Any], list[tuple[str, bytes]]]:
+    files: list[tuple[str, bytes]] = []
+    rows: list[dict[str, Any]] = []
+    for case in cases:
+        relative = f"cases/{case['case_id']}.json"
+        payload = canonical_bytes(case, newline=True)
+        files.append((relative, payload))
+        rows.append(
+            {
+                "bytes": len(payload),
+                "case_id": case["case_id"],
+                "derivation_sha256": _sha256(canonical_bytes(case["derivation"])),
+                "expected_type_nf_sha256": expr_hash(case["expected_type_nf"]),
+                "path": relative,
+                "sha256": _sha256(payload),
+                "term_sha256": expr_hash(case["term"]),
+            }
+        )
+    module_path = f"{design['source_rendering']['module']}.lean"
+    files.append((module_path, module_bytes))
+    manifest = {
+        "case_count": len(cases),
+        "cases": rows,
+        "design_id": design["design_id"],
+        "design_sha256": _sha256(canonical_bytes(design, newline=True)),
+        "module": {
+            "bytes": len(module_bytes),
+            "path": module_path,
+            "sha256": _sha256(module_bytes),
+        },
+        "schema_version": 1,
+    }
+    return manifest, files
+
+
+def build(root: Path = ROOT) -> tuple[dict[str, Any], list[tuple[str, bytes]]]:
+    design = load_design(root)
+    cases = generate_all(design)
+    module_bytes = render_module(cases).encode("utf-8")
+    return _manifest(design, cases, module_bytes)
+
+
+def write_fresh(output_dir: Path, manifest: Mapping[str, Any], files: Sequence[tuple[str, bytes]]) -> None:
+    """Write a new staging directory, refusing every overwrite."""
+    output_dir.mkdir(parents=True, exist_ok=False)
+    for relative, payload in files:
+        destination = output_dir / relative
+        destination.parent.mkdir(parents=True, exist_ok=True)
+        with destination.open("xb") as handle:
+            handle.write(payload)
+    with (output_dir / "manifest.json").open("xb") as handle:
+        handle.write(canonical_bytes(manifest, newline=True))
+
+
+def main(argv: Sequence[str] | None = None) -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument(
+        "--output-dir",
+        required=True,
+        type=Path,
+        help="fresh explicit staging directory; never inferred from repository state",
+    )
+    parser.add_argument(
+        "--validate-only",
+        action="store_true",
+        help="emit the would-be manifest and hashes without creating the output directory",
+    )
+    args = parser.parse_args(argv)
+    try:
+        manifest, files = build()
+        if not args.validate_only:
+            write_fresh(args.output_dir, manifest, files)
+        sys.stdout.buffer.write(canonical_bytes(manifest, newline=True))
+    except (GenerationError, OSError) as exc:
+        print(f"FAIL: {exc}", file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())
