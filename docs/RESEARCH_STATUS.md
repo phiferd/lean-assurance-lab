@@ -3026,7 +3026,9 @@ against Kiota and official Lean. Downstream construction remains forbidden
 unless both controls accept, current Kiota accepts the candidate and official
 Lean rejects it. If that gate passes, commit the assumption audit, one matched
 consequence criterion and exact execution manifest before constructing or
-observing the use. No target or reference checker observation has started.
+observing the use. The exact pair audit, safe archived-source materializer and
+observable build/execution controller now pass their focused preparation tests;
+no target or reference checker observation has started.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
