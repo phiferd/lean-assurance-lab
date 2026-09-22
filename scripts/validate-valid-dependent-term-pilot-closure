@@ -1,0 +1,122 @@
+#!/usr/bin/env python3
+"""Validate the frozen dependent-term result and raw complete matrix."""
+from __future__ import annotations
+
+from collections import Counter
+import hashlib
+import json
+from pathlib import Path
+import re
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+BASE = ROOT / "results/research/valid-dependent-term-pilot-1"
+
+
+def fail(message: str) -> None:
+    raise SystemExit("FAIL: " + message)
+
+
+def load(path: Path) -> object:
+    try:
+        return json.loads(path.read_text(encoding="utf-8"))
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        fail(f"cannot load {path.relative_to(ROOT)}: {error}")
+
+
+def sha(path: Path) -> str:
+    digest = hashlib.sha256()
+    with path.open("rb") as stream:
+        for block in iter(lambda: stream.read(1024 * 1024), b""):
+            digest.update(block)
+    return digest.hexdigest()
+
+
+def binding(row: object, *, bytes_required: bool = True) -> Path:
+    keys = {"path", "sha256", "bytes"} if bytes_required else {"path", "sha256"}
+    if (not isinstance(row, dict) or not keys.issubset(row)
+            or not isinstance(row.get("path"), str)
+            or Path(row["path"]).is_absolute() or ".." in Path(row["path"]).parts
+            or not isinstance(row.get("sha256"), str)
+            or re.fullmatch(r"[0-9a-f]{64}", row["sha256"]) is None):
+        fail("invalid binding")
+    path = ROOT / row["path"]
+    if not path.is_file() or path.is_symlink() or sha(path) != row["sha256"]:
+        fail("binding differs: " + row["path"])
+    if bytes_required and (type(row["bytes"]) is not int or path.stat().st_size != row["bytes"]):
+        fail("binding byte count differs: " + row["path"])
+    return path
+
+
+def main() -> int:
+    result = load(BASE / "result.json")
+    closure = load(BASE / "closure.json")
+    if not isinstance(result, dict) or result.get("status") != "SUCCESS":
+        fail("result is not SUCCESS")
+    if not isinstance(closure, dict) or closure.get("status") != "SUCCESS":
+        fail("closure is not SUCCESS")
+    for name in ("design", "source_reuse_review"):
+        binding(result.get(name), bytes_required=False)
+    corpus_path = binding(result.get("corpus_manifest"))
+    execution_path = binding(result.get("execution_manifest"))
+    audit_path = binding(result.get("independent_corpus_audit"))
+    run_path = binding(result.get("matrix_run"))
+    for attempt in result.get("preparation_history", []):
+        binding(attempt.get("evidence"))
+
+    corpus = load(corpus_path)
+    execution = load(execution_path)
+    audit = load(audit_path)
+    run = load(run_path)
+    if (not isinstance(corpus, dict) or corpus.get("case_count") != 50
+            or len(corpus.get("cases", [])) != 50):
+        fail("corpus manifest is not the exact fifty-case freeze")
+    expected_categories = {"pi": 10, "lambda": 10, "application": 10, "let": 10, "mixed": 10}
+    if (not isinstance(audit, dict) or audit.get("status") != "PASS"
+            or audit.get("case_count") != 50 or audit.get("category_counts") != expected_categories):
+        fail("independent corpus audit differs")
+    matrix = execution.get("matrix") if isinstance(execution, dict) else None
+    cells = run.get("cells") if isinstance(run, dict) else None
+    if not isinstance(matrix, list) or len(matrix) != 100 or not isinstance(cells, list) or len(cells) != 100:
+        fail("matrix is not exactly one hundred cells")
+    if run.get("status") != "COMPLETE" or run.get("checker_attempts") != 100:
+        fail("run is not complete")
+    if [row.get("ordinal") for row in cells] != list(range(1, 101)):
+        fail("run ordinals differ")
+    if len({row.get("cell_id") for row in cells}) != 100:
+        fail("run cell identities are not unique")
+    for frozen, observed in zip(matrix, cells):
+        if any(observed.get(key) != frozen.get(key) for key in ("ordinal", "cell_id", "profile_id", "case_id", "artifact")):
+            fail("observed cell differs from frozen matrix")
+        if observed.get("outcome") != "ACCEPT":
+            fail("non-ACCEPT outcome in successful closure")
+        for name in ("receipt", "stdout", "stderr"):
+            path = binding(observed.get(name))
+            if name == "receipt":
+                receipt = load(path)
+                if (not isinstance(receipt, dict) or receipt.get("exit_code") != 0
+                        or receipt.get("timed_out") or receipt.get("memory_exceeded")
+                        or receipt.get("memory_monitor_error") is not None
+                        or type(receipt.get("memory_monitor_samples")) is not int
+                        or receipt["memory_monitor_samples"] <= 0
+                        or not receipt.get("cleanup_complete")):
+                    fail("unsafe or incomplete process receipt")
+    profiles = Counter(row["profile_id"] for row in cells)
+    if profiles != Counter({"official-lean-4.33.0": 50, "nanoda-6ae1f0c": 50}):
+        fail("profile counts differ")
+    if result.get("outcomes", {}).get("total") != {"ACCEPT": 100}:
+        fail("result outcome summary differs")
+    if (closure.get("case_count") != 50 or closure.get("matrix_cells") != 100
+            or closure.get("accepted_cells") != 100 or closure.get("conformance_differences") != 0):
+        fail("closure summary differs")
+    if closure.get("result") != "results/research/valid-dependent-term-pilot-1/result.json":
+        fail("closure result path differs")
+    report = ROOT / str(closure.get("report", ""))
+    if not report.is_file() or "Status: **SUCCESS**" not in report.read_text(encoding="utf-8"):
+        fail("closure report is absent or not successful")
+    print("PASS: 50 audited cases; 100/100 ACCEPT; exact raw receipts verified")
+    return 0
+
+
+if __name__ == "__main__":
+    sys.exit(main())

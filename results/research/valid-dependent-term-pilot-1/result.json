@@ -1,0 +1,85 @@
+{
+  "schema_version": 1,
+  "item_id": "VALID-DEPENDENT-TERM-PILOT-1",
+  "status": "SUCCESS",
+  "completed_at": "2026-09-22T00:08:53Z",
+  "scientific_question_answered": true,
+  "design": {
+    "path": "results/research/valid-dependent-term-pilot-1/design.json",
+    "sha256": "997ca7b135fece9265ff3b5e5f9d8734acf46986b556e81866e592dea30087f0"
+  },
+  "source_reuse_review": {
+    "path": "results/research/valid-dependent-term-pilot-1/source-reuse-review.json",
+    "sha256": "f0ac341e4dda307f10f21fc566b04be183c2f3341e64e000ef0f9fec441ccada"
+  },
+  "corpus_manifest": {
+    "path": "results/research/valid-dependent-term-pilot-1/corpus-manifest.json",
+    "bytes": 54204,
+    "sha256": "33f5aca9a61fb8006f281adf4695b18fd4eff58ecd31ea1601240b81bab1c9fb"
+  },
+  "execution_manifest": {
+    "path": "results/research/valid-dependent-term-pilot-1/execution-manifest.json",
+    "bytes": 40436,
+    "sha256": "c07c325debf481f6bb1953880d147c13ed367b520d656ed67f1cdff8d06f5d81"
+  },
+  "independent_corpus_audit": {
+    "path": "corpus/valid-dependent-term-pilot-1/audits/corpus.json",
+    "bytes": 30224,
+    "sha256": "13afc3543e0e5fc0f7a397244728d0446892e6d6777a93f0a164468d73a6f3da",
+    "status": "PASS",
+    "case_count": 50,
+    "category_counts": {"pi": 10, "lambda": 10, "application": 10, "let": 10, "mixed": 10}
+  },
+  "matrix_run": {
+    "path": "results/research/valid-dependent-term-pilot-1/checker-run-0001/result.json",
+    "bytes": 99572,
+    "sha256": "209e11a8b2b958f1beecde96d8a5ea73d5e59c57bcbfe4393e8b286bb2fa1061",
+    "cells": 100,
+    "checker_attempts": 100,
+    "process_seconds": 4.570214539999142
+  },
+  "outcomes": {
+    "total": {"ACCEPT": 100},
+    "by_profile": {
+      "official-lean-4.33.0": {"ACCEPT": 50},
+      "nanoda-6ae1f0c": {"ACCEPT": 50}
+    },
+    "by_category_across_profiles": {
+      "pi": {"ACCEPT": 20},
+      "lambda": {"ACCEPT": 20},
+      "application": {"ACCEPT": 20},
+      "let": {"ACCEPT": 20},
+      "mixed": {"ACCEPT": 20}
+    },
+    "conformance_difference_count": 0
+  },
+  "preparation_history": [
+    {
+      "attempt": 1,
+      "classification": "REPAIR_PAUSE_PRELAUNCH_MEMORY_MONITOR_PERMISSION",
+      "checker_launches": 0,
+      "evidence": {"path": "results/research/valid-dependent-term-pilot-1/prepare-run-0001/failure.json", "bytes": 291, "sha256": "39461bbc187571e97396b8a9a68d01087aa3196617641029e75a39332654618e"}
+    },
+    {
+      "attempt": 2,
+      "classification": "REPAIR_PAUSE_EXPORT_RECEIPT_HINT_SCHEMA",
+      "checker_launches": 0,
+      "evidence": {"path": "results/research/valid-dependent-term-pilot-1/prepare-run-0002/failure.json", "bytes": 213, "sha256": "b4826dca6e431593ede978ff5929c7200274e2607371fa859fcde89e763bb9f5"}
+    },
+    {
+      "attempt": 3,
+      "classification": "PREPARED",
+      "checker_launches": 0,
+      "evidence": {"path": "results/research/valid-dependent-term-pilot-1/prepare-run-0003/result.json", "bytes": 565, "sha256": "b4fd641f4613c547b19098d37809211234e5146c593776ad010bb061e5032af5"}
+    }
+  ],
+  "conclusion": "The derivation-directed generator produced the exact independently audited fifty-case positive corpus, and both bound observer profiles accepted every case. No conformance difference was observed in the frozen Pi, lambda, application, let or mixed fragment.",
+  "reuse_recommendation": "Retain the generator, independent auditor, one-declaration exporter bridge, corpus and guarded runner as a local positive-conformance asset. Reuse the corpus for regression checks when a supported checker changes, but preserve its exact bindings and do not treat two-profile agreement as semantic authority.",
+  "contribution_recommendation": "No external contribution is recommended from this all-accept result alone. Reassess upstream packaging only after a fresh duplicate/maintenance review identifies a concrete consumer and separate external-action authorization is obtained.",
+  "claim_limits": [
+    "The result is bounded to the exact fifty cases, producer, observers and tooling revisions.",
+    "Independent audit and observer agreement are evidence under the frozen rules, not semantic authority.",
+    "The beta-zeta conversion subset does not cover eta, proof irrelevance, delta, iota, inductives, quotients, literals, constants or imax syntax.",
+    "All-accept outcomes do not establish implementation correctness outside this corpus."
+  ]
+}
