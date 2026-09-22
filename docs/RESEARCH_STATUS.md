@@ -3005,13 +3005,13 @@ Selected next item: `VALID-DEPENDENT-TERM-PILOT-1`.
 
 It is ACTIVE under the
 [valid dependent-term plan](research/VALID_DEPENDENT_TERM_PILOT_1_PLAN.md).
-Its first phase reviews reuse, independently states the restricted fragment's
-typing rules, and designs a negative-capable derivation auditor. Commit the
-design, profiles, deterministic seed, size policy, generator, auditor and tests
-before constructing the cohort. Construction and independent audit then produce
-the exact 50-case manifest; commit that manifest and its audit results before
-any target checker observes a scientific case. Existing-fixture engineering smoke
-tests are preparation, not observations of the scientific cohort.
+Its source/reuse review, checker-neutral fragment, deterministic design,
+generator, negative-capable independent auditor, checked-object bridge and 38
+focused development regressions are committed. It is constructing and auditing
+the exact 50-case cohort and its one-declaration exports. Commit that manifest,
+its audit results and the 100-cell execution manifest before any target checker
+observes a scientific case. Existing-fixture engineering smoke tests remain
+preparation, not observations of the scientific cohort.
 
 The [2026-09-21 owner-directed review](../results/research/queue-reviews/2026-09-21-progress-correction.json)
 corrects the former circular pre-generation
@@ -3041,7 +3041,7 @@ no external action is recommended now.
 | --- | --- | --- |
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
-| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | ACTIVE, source/reuse and typing-rule phase |
+| 3 | `VALID-DEPENDENT-TERM-PILOT-1` | ACTIVE, cohort construction and audit phase |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | PLANNED |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
