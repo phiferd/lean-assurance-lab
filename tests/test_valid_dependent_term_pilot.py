@@ -24,7 +24,7 @@ def export_bytes(*rows: dict) -> bytes:
 
 
 def simple_export(*, body: dict | None = None, binder_info: str = "default",
-                  nondep: bool = False) -> bytes:
+                  nondep: bool = False, hints: object = None) -> bytes:
     expression = body or {
         "ie": 1,
         "forallE": {"name": 3, "type": 0, "body": 0, "binderInfo": binder_info},
@@ -37,7 +37,8 @@ def simple_export(*, body: dict | None = None, binder_info: str = "default",
         {"ie": 0, "sort": 0},
         expression,
         {"ie": 2, "sort": 1},
-        {"def": {"all": [2], "hints": "opaque", "levelParams": [], "name": 2,
+        {"def": {"all": [2], "hints": {"regular": 1} if hints is None else hints,
+                 "levelParams": [], "name": 2,
                  "safety": "safe", "type": 2, "value": 1}},
     )
 
@@ -74,6 +75,17 @@ class ExportBridgeTests(unittest.TestCase):
         self.assertEqual(receipt["reconstructed_type_sha256"],
                          pilot.object_sha256(case()["expected_type_nf"]))
         self.assertTrue(receipt["fragment_proof"]["closed_bound_variables"])
+
+    def test_accepts_all_documented_definition_hint_shapes(self):
+        for hints in ("opaque", "abbrev", {"regular": 0}, {"regular": 4}):
+            pilot.ExportGraph(simple_export(hints=hints), lean_revision="lean-revision",
+                              expected_name="ValidDependentTermPilot1.pi01")
+
+    def test_rejects_malformed_definition_hint(self):
+        with self.assertRaisesRegex(pilot.BridgeError, "hint"):
+            pilot.ExportGraph(simple_export(hints={"regular": True}),
+                              lean_revision="lean-revision",
+                              expected_name="ValidDependentTermPilot1.pi01")
 
     def test_existing_let_fixture_rehydrates_without_generator_helpers(self):
         path = pilot.ROOT / "corpus/controls/nanoda-gen-21ef4d1d32a1-matching-let-control.ndjson"

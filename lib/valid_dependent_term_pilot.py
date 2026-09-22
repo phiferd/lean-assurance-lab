@@ -357,7 +357,12 @@ class ExportGraph:
             raise BridgeError("unexpected definition name")
         if value["levelParams"] != []:
             raise BridgeError("definition level parameters are not empty")
-        if value["hints"] != "opaque" or value["safety"] != "safe":
+        hints = value["hints"]
+        known_hints = isinstance(hints, str) and hints in {"opaque", "abbrev"}
+        if isinstance(hints, dict) and set(hints) == {"regular"}:
+            _nat(hints["regular"], "definition regular hint")
+            known_hints = True
+        if not known_hints or value["safety"] != "safe":
             raise BridgeError("definition hints or safety differ")
         if (not isinstance(value["all"], list)
                 or any(type(entry) is not int or entry not in self.names for entry in value["all"])
