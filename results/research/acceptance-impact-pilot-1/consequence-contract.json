@@ -1,0 +1,100 @@
+{
+  "schema_version": 1,
+  "item_id": "ACCEPTANCE-IMPACT-PILOT-1",
+  "stage": "STAGE_2",
+  "status": "FROZEN_BEFORE_CONSTRUCTION",
+  "criterion": "Add one dependency-complete closed value-bearing declaration whose body has LALNest.rec_1 as its head and exactly five left-associated applications at retained expression-68 type, plus one fixed expression-49 matched control.",
+  "producer": "lib/acceptance_impact_stage2_producer.py",
+  "independent_auditor": "lib/acceptance_impact_stage2_audit.py",
+  "artifacts": {
+    "candidate_use": "corpus/acceptance-impact-pilot-1/five-app-candidate.ndjson",
+    "control_use": "corpus/acceptance-impact-pilot-1/five-app-control.ndjson"
+  },
+  "base_bindings": {
+    "candidate_use": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "bytes": 6332,
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd"
+    },
+    "control_use": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "bytes": 6332,
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae"
+    }
+  },
+  "fixed_declaration": {
+    "name_id": 20,
+    "name": "LALNest.rec_1_impact",
+    "name_record": {"in": 20, "str": {"pre": 10, "str": "rec_1_impact"}},
+    "level_parameters": [],
+    "constant": {"name": 13, "universes": [1]},
+    "first_four_arguments": [81, 82, 84, 86],
+    "fifth_argument": 2,
+    "application_spine": [88, 89, 90, 91, 92],
+    "value_expression": 93,
+    "type_expression": 94,
+    "declaration_record_index": 120,
+    "total_records": 121
+  },
+  "fixed_append_records_common": [
+    {"in": 20, "str": {"pre": 10, "str": "rec_1_impact"}},
+    {"ie": 81, "lam": {"binderInfo": "default", "body": 28, "name": 8, "type": 28}},
+    {"ie": 82, "lam": {"binderInfo": "default", "body": 28, "name": 8, "type": 29}},
+    {"ie": 83, "lam": {"binderInfo": "default", "body": 2, "name": 17, "type": 28}},
+    {"ie": 84, "lam": {"binderInfo": "default", "body": 83, "name": 12, "type": 29}},
+    {"ie": 85, "lam": {"binderInfo": "default", "body": 2, "name": 18, "type": 28}},
+    {"ie": 86, "lam": {"binderInfo": "default", "body": 85, "name": 4, "type": 28}},
+    {"const": {"name": 13, "us": [1]}, "ie": 87},
+    {"app": {"arg": 81, "fn": 87}, "ie": 88},
+    {"app": {"arg": 82, "fn": 88}, "ie": 89},
+    {"app": {"arg": 84, "fn": 89}, "ie": 90},
+    {"app": {"arg": 86, "fn": 90}, "ie": 91},
+    {"app": {"arg": 2, "fn": 91}, "ie": 92}
+  ],
+  "candidate_tail": [
+    {"ie": 93, "lam": {"binderInfo": "default", "body": 92, "name": 8, "type": 28}},
+    {"forallE": {"binderInfo": "default", "body": 28, "name": 8, "type": 28}, "ie": 94},
+    {"def": {"all": [20], "hints": "opaque", "levelParams": [], "name": 20, "safety": "safe", "type": 94, "value": 93}}
+  ],
+  "control_tail": [
+    {"ie": 93, "lam": {"binderInfo": "default", "body": 92, "name": 8, "type": 29}},
+    {"forallE": {"binderInfo": "default", "body": 28, "name": 8, "type": 29}, "ie": 94},
+    {"def": {"all": [20], "hints": "opaque", "levelParams": [], "name": 20, "safety": "safe", "type": 94, "value": 93}}
+  ],
+  "required_structural_audit": [
+    "strict duplicate-key-free NDJSON with terminal newline",
+    "exact unchanged 105-record base prefix for each artifact",
+    "exact unique new name 20 and expression IDs 81 through 94",
+    "exactly one added value-bearing declaration at record 120",
+    "one LALNest.rec_1 constant occurrence at universe level 1",
+    "exactly five left-associated application nodes 88 through 92 with arguments 81, 82, 84, 86 and 2",
+    "candidate fifth binder and declaration domain are LALNest expression 28",
+    "control fifth binder and declaration domain are LALWrap LALNest expression 29",
+    "all new references are backward-defined and the complete expression is closed",
+    "no extra candidate, control, name, declaration or adaptive alternative"
+  ],
+  "matrix": [
+    {"ordinal": 1, "cell_id": "kiota-9fa2c297::control-use", "profile_id": "kiota-9fa2c297", "artifact_id": "control_use"},
+    {"ordinal": 2, "cell_id": "kiota-9fa2c297::candidate-use", "profile_id": "kiota-9fa2c297", "artifact_id": "candidate_use"},
+    {"ordinal": 3, "cell_id": "official-lean-4.33.0::control-use", "profile_id": "official-lean-4.33.0", "artifact_id": "control_use"},
+    {"ordinal": 4, "cell_id": "official-lean-4.33.0::candidate-use", "profile_id": "official-lean-4.33.0", "artifact_id": "candidate_use"}
+  ],
+  "expected_consequential_matrix": {
+    "kiota-9fa2c297::control-use": "ACCEPT",
+    "kiota-9fa2c297::candidate-use": "ACCEPT",
+    "official-lean-4.33.0::control-use": "ACCEPT",
+    "official-lean-4.33.0::candidate-use": "INTENDED_RECURSOR_REJECT"
+  },
+  "decisions": {
+    "CONSEQUENTIAL_WITHIN_FIXED_USE": "All structural invariants pass and the exact expected matrix is observed. Kiota reached and accepted the appended candidate declaration whose fifth argument is admitted only under retained type 68.",
+    "HARMLESS_WITHIN_TESTED_USE": "All structural invariants and three comparison cells pass, but Kiota rejects the candidate specifically at the appended declaration with a normalized downstream type-policy rejection.",
+    "CONSTRUCTION_OR_SEMANTIC_BOUNDARY": "Any malformed structure, unresolved name, universe mismatch, unrelated declaration-type mismatch, control failure, earlier candidate rejection or ambiguous diagnostic.",
+    "REPAIR_REQUIRED": "Any timeout, crash, cleanup failure, missing positive RSS evidence, receipt mismatch or other infrastructure failure."
+  },
+  "claim_limits": [
+    "The tested consequence is downstream type exposure, not reduction behavior.",
+    "Official Lean rejects the candidate before adjudicating the appended use.",
+    "No false theorem, inconsistency, exploitability or universal semantic policy is established.",
+    "No adaptive replacement or alternative use is permitted after construction."
+  ]
+}

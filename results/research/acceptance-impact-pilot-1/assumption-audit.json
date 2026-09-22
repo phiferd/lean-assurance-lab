@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "item_id": "ACCEPTANCE-IMPACT-PILOT-1",
+  "stage": "STAGE_2",
+  "status": "FROZEN_BEFORE_CONSTRUCTION",
+  "evidence_bindings": [
+    {
+      "path": "results/research/acceptance-impact-pilot-1/stage-1-run-0001/result.json",
+      "bytes": 9776,
+      "sha256": "5292903191d359fc2cd307366d0eaff53e569d001e07e7b0ddd701a6b17ee1e7",
+      "claim": "Current Kiota accepts both bases; official Lean 4.33.0 accepts the control and rejects the candidate as Invalid recursor LALNest.rec_1."
+    },
+    {
+      "path": "results/research/acceptance-impact-pilot-1/pair-audit.json",
+      "bytes": 6097,
+      "sha256": "bc3e9f48fd17f3c6ebcf96efa8d7b98133f88fc6a7b09f9b1699a8e549379007",
+      "claim": "The bases differ only at /104/inductive/recs/0/type, 49 to 68; name and expression tables are identical."
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/current-kiota-review.json",
+      "bytes": 44651,
+      "sha256": "cc79a1d5bb02c76147e44b3457c278f6148f26662bbd59cf80ad566d585d8fc9",
+      "claim": "Exact Kiota 9fa source retains the supplied recursor type and infer_const returns its level-instantiated stored type."
+    },
+    {
+      "path": "results/research/semantic-import-contract-1/reference-source-review.json",
+      "bytes": 6401,
+      "sha256": "f3d1e6a9938d4644038feb4ca0b37e60ea3e380a3b76d1d36016b0e0ff2d53a1",
+      "claim": "Inspected Lean replay source regenerates recursors and compares complete postponed recursor records."
+    }
+  ],
+  "observations": [
+    {
+      "id": "OBS_STAGE1_MATRIX",
+      "statement": "The committed current four-cell premise gate passed.",
+      "authority": "OBSERVER_RESULT_ONLY"
+    },
+    {
+      "id": "OBS_KIOTA_RETAIN",
+      "statement": "Exact source parses recursor.type through require_expr, stores it in ConstantInfo::Recursor and does not regenerate and compare a complete recursor type.",
+      "authority": "EXACT_SOURCE_BEHAVIOR"
+    },
+    {
+      "id": "OBS_KIOTA_EXPOSE",
+      "statement": "infer_const returns instantiate_level_params(ci.typ()), and ordinary App inference checks each argument against the successive Pi domain.",
+      "authority": "EXACT_SOURCE_BEHAVIOR"
+    },
+    {
+      "id": "OBS_REFERENCE_POLICY",
+      "statement": "The retained Lean replay source reconstructs and compares recursor records; the official candidate receipt reports Invalid recursor LALNest.rec_1.",
+      "authority": "REFERENCE_POLICY_AND_OBSERVATION_ONLY"
+    }
+  ],
+  "assumptions": [
+    {
+      "id": "A1_EXACT_BINDINGS",
+      "statement": "Stage 2 uses the unchanged committed pair, exact Kiota 9fa binary/source binding, official Lean 4.33.0 profile and Stage 1 contracts.",
+      "status": "REQUIRED_PRECONDITION"
+    },
+    {
+      "id": "A2_SHARED_PREFIX",
+      "statement": "Expressions 49 and 68 share the first four Pi binders exactly: motive_1, motive_2, node and mk.",
+      "status": "STRUCTURALLY_DERIVED"
+    },
+    {
+      "id": "A3_TYPE49_TAIL",
+      "statement": "Expression 49 ends with t : LALWrap LALNest and result motive_2 t.",
+      "status": "STRUCTURALLY_DERIVED"
+    },
+    {
+      "id": "A4_TYPE68_TAIL",
+      "statement": "Expression 68 ends with t : LALNest and result motive_1 t.",
+      "status": "STRUCTURALLY_DERIVED"
+    },
+    {
+      "id": "A5_DISTINCT_DOMAINS",
+      "statement": "LALNest and LALWrap LALNest are not definitionally equal in the frozen environment because both are rigid inductive applications with distinct heads.",
+      "status": "EXPLICIT_SEMANTIC_ASSUMPTION",
+      "mechanical_support": "The independent audit must bind expression 28 to LALNest, expression 29 to LALWrap LALNest and both declarations to the frozen inductive records."
+    },
+    {
+      "id": "A6_LATER_DECLARATION_SEES_RETAINED_TYPE",
+      "statement": "After the inductive block, a later definition referencing LALNest.rec_1 is inferred from stored candidate type 68 or control type 49.",
+      "status": "SOURCE_SUPPORTED_ASSUMPTION"
+    },
+    {
+      "id": "A7_FIVE_APPLICATIONS_FORCE_TAIL",
+      "statement": "A left-associated application with exactly five arguments consumes the complete retained Pi spine, so the fifth domain difference cannot remain latent.",
+      "status": "SOURCE_SUPPORTED_ASSUMPTION"
+    },
+    {
+      "id": "A8_VALUE_IS_CHECKED",
+      "statement": "The fixed use is a value-bearing opaque definition, not an axiom; the checker reaches it and checks its type and value.",
+      "status": "CONSTRUCTION_PRECONDITION"
+    },
+    {
+      "id": "A9_FIXED_MATCHED_CONSTRUCTION",
+      "statement": "Candidate and control are produced once by the same committed producer, use the same first four arguments and differ only at the inherited recursor pointer plus the fixed fifth-domain/result declaration nodes.",
+      "status": "CONSTRUCTION_PRECONDITION"
+    },
+    {
+      "id": "A10_NO_REDUCTION_OR_FALSEHOOD_CLAIM",
+      "statement": "The use establishes a downstream typing effect only; it does not establish an incorrect reduction, false theorem, inconsistency or exploitability.",
+      "status": "CLAIM_LIMIT"
+    },
+    {
+      "id": "A11_OBSERVERS_NOT_AUTHORITY",
+      "statement": "Kiota acceptance, official rejection, source inspection and LLM reasoning are not universal semantic authority. The conclusion is limited to the frozen observers and fixed use.",
+      "status": "CLAIM_LIMIT"
+    },
+    {
+      "id": "A12_NO_ADAPTATION",
+      "statement": "No term, name, argument, expected type, profile or outcome rule changes after the construction and matrix are committed.",
+      "status": "PROTOCOL_REQUIREMENT"
+    }
+  ]
+}
