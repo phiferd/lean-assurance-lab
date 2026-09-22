@@ -1,0 +1,74 @@
+{
+  "schema_version": 1,
+  "item_id": "RECURSOR-TYPE-TRUST-BOUNDARY-1",
+  "status": "FROZEN_REPAIR_READINESS",
+  "policy": "results/research/recursor-type-trust-boundary-1/source-policy.json",
+  "preserved_pair": {
+    "audit": {
+      "path": "results/research/acceptance-impact-pilot-1/pair-audit.json",
+      "bytes": 6097,
+      "sha256": "bc3e9f48fd17f3c6ebcf96efa8d7b98133f88fc6a7b09f9b1699a8e549379007"
+    },
+    "candidate": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "bytes": 6332,
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd"
+    },
+    "control": {
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "bytes": 6332,
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae"
+    },
+    "only_scalar_difference": {
+      "pointer": "/104/inductive/recs/0/type",
+      "candidate": 68,
+      "control": 49
+    },
+    "same_manifest_pi_arity": 5,
+    "candidate_fifth_domain": "LALNest",
+    "control_fifth_domain": "LALWrap LALNest"
+  },
+  "required_regression": {
+    "candidate_expected": "REJECT",
+    "control_expected": "ACCEPT",
+    "candidate_identity": "PRESERVED_EXACTLY",
+    "control_identity": "PRESERVED_EXACTLY",
+    "adaptive_replacement": false,
+    "reuse_completed_attempt_as_new_result": false
+  },
+  "local_test_seam": {
+    "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs",
+    "bytes": 49582,
+    "sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+    "accept_helper_lines": [19, 29],
+    "reject_helper_lines": [31, 58],
+    "existing_wrong_arity_regression_lines": [263, 267]
+  },
+  "preserved_observation_bindings": {
+    "stage_1_result": {
+      "path": "results/research/acceptance-impact-pilot-1/stage-1-run-0001/result.json",
+      "bytes": 9776,
+      "sha256": "5292903191d359fc2cd307366d0eaff53e569d001e07e7b0ddd701a6b17ee1e7"
+    },
+    "stage_2_audit": {
+      "path": "results/research/acceptance-impact-pilot-1/stage-2-artifact-audit.json",
+      "bytes": 6890,
+      "sha256": "55576511780da56dda66a78de20d42d03b5124f233a59ecc6b046ba9848245e5"
+    },
+    "stage_2_result": {
+      "path": "results/research/acceptance-impact-pilot-1/stage-2-run-0001/result.json",
+      "bytes": 9582,
+      "sha256": "b967b13e481f781a97b365a8c3556cd1fa6fe5b1a2e5508f5840d56a77f10fbb"
+    }
+  },
+  "repair_readiness": {
+    "outcome": "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY",
+    "production_edit_ready": false,
+    "reason": "The exact regression target and required behavior are fixed, but Kiota has no source-bound complete recursor-type constructor or authorized equality/replacement relation.",
+    "exact_unblocking_condition": "Commit and validate a Kiota-specific design that constructs the complete recursor type for supported ordinary, mutual, and nested inductive groups and specifies a sound comparison or replacement rule with acceptance-preservation fixtures before editing production checker behavior."
+  },
+  "fresh_launch_manifest": null,
+  "new_checker_attempts": 0,
+  "production_checker_edits": 0,
+  "external_actions": 0
+}

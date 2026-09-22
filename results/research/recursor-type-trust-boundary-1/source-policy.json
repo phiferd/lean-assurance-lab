@@ -1,0 +1,117 @@
+{
+  "schema_version": 1,
+  "item_id": "RECURSOR-TYPE-TRUST-BOUNDARY-1",
+  "status": "COMPLETE",
+  "adjudication_scope": "Exact Kiota 9fa2c297 source, exact official Lean 4.33.0 replay source, and preserved ACCEPTANCE-IMPACT-PILOT-1 evidence only.",
+  "source_bindings": {
+    "kiota_archive": {
+      "path": "results/research/semantic-import-contract-1/kiota-source.tar.gz",
+      "bytes": 4587521,
+      "sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8"
+    },
+    "kiota_parser": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs",
+      "bytes": 46528,
+      "sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e"
+    },
+    "kiota_environment": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/env.rs",
+      "bytes": 4057,
+      "sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b"
+    },
+    "kiota_type_checker": {
+      "path": "external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/tc.rs",
+      "bytes": 545983,
+      "sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b"
+    },
+    "official_parser": {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/lean4export-f297dfe2-Parse.lean",
+      "bytes": 20491,
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286"
+    },
+    "official_replay": {
+      "path": "results/research/arena-inductive-isolation-1/importer-evidence/installed-lean4-v4.33.0-Replay.lean",
+      "bytes": 7691,
+      "sha256": "5ea88ea9b6c374ad74b8c6f5d36117cec00ec64202aff37f7cff0c6765fb746d"
+    },
+    "official_wrapper": {
+      "path": "external/lean-kernel-arena/checkers/official-v4.33.0/Main.lean",
+      "bytes": 968,
+      "sha256": "f0c209172f79e2b0b6599f7acc989e15a158f4118a6ddab0a567773b75f333bb"
+    }
+  },
+  "source_findings": [
+    {
+      "id": "KIOTA_RETAINS_SUPPLIED_TYPE",
+      "binding_role": "kiota_parser",
+      "line_ranges": [[484, 515], [565, 579]],
+      "finding": "Kiota parses the supplied recursor type, checks its manifest telescope length against metadata, and stores that same type in ConstantInfo::Recursor."
+    },
+    {
+      "id": "KIOTA_EXPOSES_SUPPLIED_TYPE",
+      "binding_role": "kiota_environment",
+      "line_ranges": [[75, 86], [102, 112]],
+      "finding": "ConstantInfo::typ returns the stored recursor type without reconstructing it."
+    },
+    {
+      "id": "KIOTA_USES_SUPPLIED_TYPE",
+      "binding_role": "kiota_type_checker",
+      "line_ranges": [[1858, 1889], [1930, 1946], [8465, 8705]],
+      "finding": "Constant inference and later application checking use the stored type; the inductive-group checks do not construct and compare a complete canonical recursor type."
+    },
+    {
+      "id": "KIOTA_STREAM_ORDER",
+      "binding_role": "kiota_parser",
+      "line_ranges": [[866, 936]],
+      "finding": "Kiota checks declarations in stream order, so a later declaration may be typed using the already stored recursor type."
+    },
+    {
+      "id": "OFFICIAL_RETAINS_INPUT_RECORD",
+      "binding_role": "official_parser",
+      "line_ranges": [[392, 432]],
+      "finding": "The official profile parser retains the supplied recursor type in the parsed recursor record."
+    },
+    {
+      "id": "OFFICIAL_REGENERATES_AND_COMPARES",
+      "binding_role": "official_replay",
+      "line_ranges": [[74, 128], [156, 164], [170, 189]],
+      "finding": "Official replay recursively replays dependencies, regenerates recursors with the inductive declaration, postpones supplied recursor records, and compares complete regenerated and supplied records with equality."
+    }
+  ],
+  "observed_ordering": {
+    "bare_candidate": {
+      "evidence_path": "results/research/acceptance-impact-pilot-1/stage-1-run-0001/raw/04-official-lean-4.33.0-candidate.stderr",
+      "sha256": "ba89f6a7d2d19bb689184487a50bf53762f5cbf63111299a79aa0942e5689fc1",
+      "diagnostic": "Invalid recursor LALNest.rec_1",
+      "explanation": "With no later declaration depending on the recursor, replay reaches the final postponed-record comparison and rejects the supplied record."
+    },
+    "extended_candidate": {
+      "evidence_path": "results/research/acceptance-impact-pilot-1/stage-2-run-0001/raw/04-official-lean-4.33.0-candidate_use.stderr",
+      "sha256": "ce7a9a7e2c744ef35487c26c7073c7088eb3c574554eecc81e4aec4480915f6f",
+      "diagnostic": "application type mismatch",
+      "explanation": "Dependency-first replay regenerates LALNest.rec_1 before checking LALNest.rec_1_impact, so the appended fifth application fails under the regenerated LALWrap LALNest domain before the final postponed-record comparison."
+    }
+  },
+  "policy": "For an imported inductive block, a local checker must not make downstream typing depend on an unvalidated serialized recursor type. It should validate that type against, or replace it with, a recursor type reconstructed from the same accepted inductive and constructor group; unchanged inputs that agree must remain accepted.",
+  "authority_class": "SOURCE_BOUND_LOCAL_IMPORT_POLICY",
+  "implementation_boundary": {
+    "status": "REPAIR_ALGORITHM_NOT_YET_AUTHORIZED",
+    "missing_inputs": [
+      "A Kiota-native construction of the complete recursor type from an accepted inductive and constructor group.",
+      "A specified comparison relation for the supplied and reconstructed types, including whether equality is structural, normalized, or definitional."
+    ],
+    "exact_unblocking_condition": "Commit and validate a Kiota-specific design that constructs the complete recursor type for supported ordinary, mutual, and nested inductive groups and specifies a sound comparison or replacement rule with acceptance-preservation fixtures before editing production checker behavior."
+  },
+  "catalog_action": {
+    "action": "NONE",
+    "reason": "The declaration-validation catalog governs the ordinary-declaration contract slice; this recursor/inductive importer policy is an implementation boundary and supplies no new normative catalog authority."
+  },
+  "claim_limits": [
+    "Official replay's complete-record equality is a concrete importer policy, not a universal independent-checker law.",
+    "Observer agreement or disagreement is not normative authority.",
+    "No false-theorem, inconsistency, exploitability, soundness, or universal-format claim follows from this adjudication."
+  ],
+  "new_checker_attempts": 0,
+  "production_checker_edits": 0,
+  "external_actions": 0
+}
