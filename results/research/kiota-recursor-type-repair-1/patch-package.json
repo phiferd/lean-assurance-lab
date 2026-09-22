@@ -1,0 +1,91 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "source_archive": {
+    "path": "results/research/semantic-import-contract-1/kiota-source.tar.gz",
+    "bytes": 4587521,
+    "sha256": "dacbc7bdb92471f2df8fbd4a31b6b6b07c1a0d3f435bfab9e9b093ddad06aaa8",
+    "top_level": "kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/"
+  },
+  "patch": {
+    "path": "results/research/kiota-recursor-type-repair-1/kiota-recursor-type-repair.patch",
+    "bytes": 86648,
+    "sha256": "b89817fbe1ef2e1678a7cf4ac9edbbfdab5969897e60d1825680ba79dc8c51cf"
+  },
+  "changed_paths": [
+    "src/env.rs",
+    "src/parser.rs",
+    "src/tc.rs",
+    "tests/exports.rs",
+    "tests/fixtures/recursor-type-reconstruction.accept.ndjson",
+    "tests/fixtures/recursor-type-reconstruction.reject.ndjson"
+  ],
+  "changed_files": [
+    {
+      "path": "src/env.rs",
+      "kind": "MODIFIED",
+      "base_bytes": 4057,
+      "base_sha256": "b8665c8b96f770ffffe6d6ff50e05bd4a468edfb835c665ce98485b1bac0107b",
+      "patched_bytes": 4064,
+      "patched_sha256": "85e1bbe896c8efe4a4b51ba9ec23ee527c8f2d6cff7e61954b6791fb5833dbdb"
+    },
+    {
+      "path": "src/parser.rs",
+      "kind": "MODIFIED",
+      "base_bytes": 46528,
+      "base_sha256": "537d94a883cfdceafd20299502a954c9680e177b6ffb20252fa733bc83383f7e",
+      "patched_bytes": 49044,
+      "patched_sha256": "71c60704a4d587cfd4a7148294c8b3d222ec9a6a2cb14cc36cb8e8be8566260d"
+    },
+    {
+      "path": "src/tc.rs",
+      "kind": "MODIFIED",
+      "base_bytes": 545983,
+      "base_sha256": "c5ea600b20ab058f2de4be555391e63b6ae44e38b42a6895946779e6b61b8e3b",
+      "patched_bytes": 596570,
+      "patched_sha256": "af2e91b4a5b578aec6b8889ba9467e3892d1bf719af7c16f094139e780d8fd3d"
+    },
+    {
+      "path": "tests/exports.rs",
+      "kind": "MODIFIED",
+      "base_bytes": 49582,
+      "base_sha256": "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a",
+      "patched_bytes": 55574,
+      "patched_sha256": "986087ebcd39433ee3da91a0eb5b4a933ab61aa63676e8a0bc762ca2fc14577e"
+    },
+    {
+      "path": "tests/fixtures/recursor-type-reconstruction.accept.ndjson",
+      "kind": "ADDED",
+      "base_bytes": 0,
+      "base_sha256": null,
+      "patched_bytes": 6332,
+      "patched_sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae",
+      "source_path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "source_bytes": 6332,
+      "source_sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae"
+    },
+    {
+      "path": "tests/fixtures/recursor-type-reconstruction.reject.ndjson",
+      "kind": "ADDED",
+      "base_bytes": 0,
+      "base_sha256": null,
+      "patched_bytes": 6332,
+      "patched_sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd",
+      "source_path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "source_bytes": 6332,
+      "source_sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd"
+    }
+  ],
+  "patch_application_check": {
+    "command": ["git", "apply", "--check", "kiota-recursor-type-repair.patch"],
+    "strip_components": 1,
+    "result": "PASS",
+    "post_apply_tree_comparison": "BYTE_IDENTICAL_TO_BOUND_PATCHED_SOURCE"
+  },
+  "scientific_inputs": {
+    "candidate_identity": "PRESERVED_EXACTLY",
+    "control_identity": "PRESERVED_EXACTLY",
+    "accepted_fixture_substitutions": 0
+  }
+}

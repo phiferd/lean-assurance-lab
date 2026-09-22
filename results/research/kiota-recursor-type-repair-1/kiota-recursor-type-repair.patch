@@ -1,0 +1,2124 @@
+diff --git a/src/env.rs b/src/env.rs
+index 689020b..e26f861 100644
+--- a/src/env.rs
++++ b/src/env.rs
+@@ -132,7 +132,7 @@ impl ConstantInfo {
+     }
+ }
+ 
+-#[derive(Default)]
++#[derive(Clone, Default)]
+ pub struct Environment {
+     pub consts: FxHashMap<u32, ConstantInfo>,
+     /// Inductive type name → recursor name, filled in by the parser.
+diff --git a/src/parser.rs b/src/parser.rs
+index 253d2fb..21e7eeb 100644
+--- a/src/parser.rs
++++ b/src/parser.rs
+@@ -481,9 +481,36 @@ impl Parser {
+                 },
+             );
+         }
++        struct PendingRecursor {
++            name: u32,
++            level_params: Vec<u32>,
++            supplied_type: Expr,
++            all: Vec<u32>,
++            num_params: u32,
++            num_indices: u32,
++            num_motives: u32,
++            num_minors: u32,
++            rules: Vec<RecRule>,
++            k: bool,
++        }
++
++        // Decode recursor records without exposing any of them through the
++        // environment.  Their redundant type and count fields are assertions
++        // to compare with reconstruction, never inputs to later typing.
++        let mut pending_recs = Vec::with_capacity(recs.len());
++        let mut pending_names = FxHashSet::default();
+         for r in &recs {
+             let name = Self::require_u32(r, "name")?;
+             self.reject_if_dup(name)?;
++            if !pending_names.insert(name) {
++                return Err(TcError::Reject(format!(
++                    "duplicate declaration of {}",
++                    self.names
++                        .get(name as usize)
++                        .map(|s| s.as_str())
++                        .unwrap_or("?")
++                )));
++            }
+             let level_params = Self::get_vec_u32(r, "levelParams");
+             let typ = self.require_expr(r, "type")?;
+             let all = Self::get_vec_u32(r, "all");
+@@ -502,53 +529,6 @@ impl Parser {
+                         .unwrap_or("?")
+                 )));
+             }
+-            let expected =
+-                num_params as u64 + num_indices as u64 + num_motives as u64 + num_minors as u64 + 1;
+-            let arity = pi_telescope_len(&typ);
+-            if arity as u64 != expected {
+-                return Err(TcError::Reject(format!(
+-                    "recursor `{}` type telescope length {arity} != {expected}",
+-                    self.names
+-                        .get(name as usize)
+-                        .map(|s| s.as_str())
+-                        .unwrap_or("?")
+-                )));
+-            }
+-            // A recursor is only genuine if it was actually derived from
+-            // an inductive declaration; nothing here re-derives it from
+-            // one, so at minimum require that `all` isn't empty and that
+-            // every name in it is a real inductive type declared in this
+-            // same block. Without this, an `all: []` (or an `all`
+-            // pointing at an undeclared name — the recursor-side twin of
+-            // `orphan-ctor`'s constructor-side hole) recursor is added to
+-            // the environment as a callable constant with no inductive
+-            // ever associated with it, and nothing that only checks the
+-            // recursors an inductive *does* claim ever looks at it again
+-            // (`orphan-rec`: `all: []` on a `False`-typed `rogue`
+-            // recursor with no motives/minors/rules, added anyway, then
+-            // used directly as a "proof" of `False`).
+-            if all.is_empty() {
+-                return Err(TcError::Reject(format!(
+-                    "recursor `{}` has an empty `all` (not derived from any inductive)",
+-                    self.names.get(name as usize).map(|s| s.as_str()).unwrap_or("?")
+-                )));
+-            }
+-            for ind in &all {
+-                if !declared_ctors.contains_key(ind) {
+-                    return Err(TcError::Reject(format!(
+-                        "recursor `{}` claims inductive `{}`, which this block does not declare",
+-                        self.names.get(name as usize).map(|s| s.as_str()).unwrap_or("?"),
+-                        self.names.get(*ind as usize).map(|s| s.as_str()).unwrap_or("?"),
+-                    )));
+-                }
+-            }
+-            // Large-elimination check: see `Checker::elim_only_at_universe_zero`
+-            // (`tc.rs`), run from `check_inductive_group` once this whole
+-            // block's constants are in `self.env` and full type inference
+-            // is available (needed for the "does a field live in Prop"
+-            // part of Lean's own rule — not decidable from bare syntax
+-            // the way the old, narrower `ctors.len() >= 2`-only check
+-            // here used to approximate it).
+             let rules = if let Some(arr) = r.get("rules").and_then(|x| x.as_array()) {
+                 let mut out = Vec::with_capacity(arr.len());
+                 for rule in arr {
+@@ -562,21 +542,18 @@ impl Parser {
+             } else {
+                 Vec::new()
+             };
+-            self.env.insert(
++            pending_recs.push(PendingRecursor {
+                 name,
+-                ConstantInfo::Recursor {
+-                    level_params,
+-                    typ,
+-                    all,
+-                    num_params,
+-                    num_indices,
+-                    num_motives,
+-                    num_minors,
+-                    rules,
+-                    k,
+-                    is_unsafe,
+-                },
+-            );
++                level_params,
++                supplied_type: typ,
++                all,
++                num_params,
++                num_indices,
++                num_motives,
++                num_minors,
++                rules,
++                k,
++            });
+         }
+ 
+         // Recursor identity is the inductive of this recursor's *rule
+@@ -591,15 +568,102 @@ impl Parser {
+         // reconstructed from ctor fields`, or two recs claiming the same
+         // group type. Exported `numNested` / `k` / rule RHS are not trusted.
+         let type_names: Vec<u32> = types.iter().map(|t| Self::get_u32(t, "name")).collect();
+-        let nested_n = self.counted_nested(&type_names);
+-        let nested = nested_n > 0;
+-        let expected_recs = type_names.len() + nested_n;
+-        if recs.len() > expected_recs {
++        if type_names.is_empty() {
++            return Err(TcError::Reject("empty inductive group".into()));
++        }
++        if pending_recs.is_empty() {
++            return Err(TcError::Reject(
++                "inductive group is missing recursors".into(),
++            ));
++        }
++        let nat_ref = self.name_by_str.get("Nat").copied();
++        let string_ref = self.name_by_str.get("String").copied();
++        for &name in &type_names {
++            Checker::new(&self.env, &self.names, nat_ref, string_ref)
++                .check_inductive_group_structure(name)?;
++        }
++        let supplied_level_params = pending_recs[0].level_params.clone();
++        let derived = Checker::new(&self.env, &self.names, nat_ref, string_ref)
++            .reconstruct_recursors(&type_names, &supplied_level_params)?;
++        if pending_recs.len() != derived.len() {
+             return Err(TcError::Reject(format!(
+-                "extra recursor in inductive group ({} recs, expected {expected_recs})",
+-                recs.len()
++                "inductive group has {} recursors but reconstruction requires {}",
++                pending_recs.len(),
++                derived.len()
+             )));
+         }
++
++        let first_name = self.name_str(type_names[0]).to_string();
++        let mut ordered = Vec::with_capacity(derived.len());
++        for (i, d) in derived.iter().enumerate() {
++            let expected_name = if i < type_names.len() {
++                format!("{}.rec", self.name_str(type_names[i]))
++            } else {
++                format!("{first_name}.rec_{}", i - type_names.len() + 1)
++            };
++            let Some(pos) = pending_recs
++                .iter()
++                .position(|r| self.name_str(r.name) == expected_name)
++            else {
++                return Err(TcError::Reject(format!(
++                    "inductive group is missing reconstructed recursor `{expected_name}`"
++                )));
++            };
++            let r = pending_recs.remove(pos);
++            let rname = self.name_str(r.name);
++            if r.all != d.all
++                || r.num_params != d.num_params
++                || r.num_indices != d.num_indices
++                || r.num_motives != d.num_motives
++                || r.num_minors != d.num_minors
++                || r.k != d.k
++            {
++                return Err(TcError::Reject(format!(
++                    "recursor `{rname}` metadata does not match reconstruction"
++                )));
++            }
++            Checker::new(&self.env, &self.names, nat_ref, string_ref)
++                .validate_reconstructed_type(
++                    &r.supplied_type,
++                    &r.level_params,
++                    &d.typ,
++                    &d.level_params,
++                )
++                .map_err(|e| match e {
++                    TcError::Reject(_) | TcError::Decline(_) | TcError::Other(_) => {
++                        TcError::Reject(format!(
++                            "recursor `{rname}` type does not match reconstructed type"
++                        ))
++                    }
++                })?;
++            // Store the reconstructed type under this declaration's own
++            // validated alpha labels.  No serialized type structure crosses
++            // the transaction boundary.
++            let levels: Vec<Level> = r.level_params.iter().copied().map(level::param).collect();
++            let subst = level::subst_map(&d.level_params, &levels);
++            let mut stored = d.clone();
++            stored.typ = expr::instantiate_level_params(&d.typ, &subst);
++            stored.level_params = r.level_params.clone();
++            ordered.push((r, stored));
++        }
++        for (r, d) in ordered {
++            self.env.insert(
++                r.name,
++                ConstantInfo::Recursor {
++                    level_params: d.level_params,
++                    typ: d.typ,
++                    all: d.all,
++                    num_params: d.num_params,
++                    num_indices: d.num_indices,
++                    num_motives: d.num_motives,
++                    num_minors: d.num_minors,
++                    rules: r.rules,
++                    k: d.k,
++                    is_unsafe: false,
++                },
++            );
++        }
++        let nested = derived.len() > type_names.len();
+         // `I.rec` is the name Lean reserves for `I`'s recursor, and it is the
+         // name every user of the recursor is compiled against. An export
+         // that supplies `I.not_rec` instead is not offering a constant the
+@@ -920,20 +984,31 @@ impl Parser {
+             return Ok(());
+         }
+         if let Some(d) = v.get("inductive") {
+-            self.handle_inductive_block(d)?;
+-            let names: Vec<u32> = d
+-                .get("types")
+-                .and_then(|x| x.as_array())
+-                .map(|a| a.iter().map(|t| Self::get_u32(t, "name")).collect())
+-                .unwrap_or_default();
+-            let nat_ref = self.name_by_str.get("Nat").copied();
+-            let string_ref = self.name_by_str.get("String").copied();
+-            for n in names {
+-                Checker::new(&self.env, &self.names, nat_ref, string_ref)
+-                    .check_inductive_group(n)
+-                    .map_err(|e| self.annotate(n, e))?;
++            // An inductive block is one kernel transaction.  In particular,
++            // a malformed supplied recursor type must not leave the block's
++            // types, constructors, recursors, or ownership maps visible to a
++            // later declaration in the stream.
++            let saved_env = self.env.clone();
++            let result = (|| {
++                self.handle_inductive_block(d)?;
++                let names: Vec<u32> = d
++                    .get("types")
++                    .and_then(|x| x.as_array())
++                    .map(|a| a.iter().map(|t| Self::get_u32(t, "name")).collect())
++                    .unwrap_or_default();
++                let nat_ref = self.name_by_str.get("Nat").copied();
++                let string_ref = self.name_by_str.get("String").copied();
++                for n in names {
++                    Checker::new(&self.env, &self.names, nat_ref, string_ref)
++                        .check_inductive_group(n)
++                        .map_err(|e| self.annotate(n, e))?;
++                }
++                Ok(())
++            })();
++            if result.is_err() {
++                self.env = saved_env;
+             }
+-            return Ok(());
++            return result;
+         }
+         Ok(())
+     }
+diff --git a/src/tc.rs b/src/tc.rs
+index ca1d1a9..2ef7695 100644
+--- a/src/tc.rs
++++ b/src/tc.rs
+@@ -85,6 +85,183 @@ pub enum TcError {
+ }
+ pub type R<T> = Result<T, TcError>;
+ 
++/// A recursor declaration reconstructed from the inductive declarations in
++/// the current environment.  In particular, `typ` and every count here are
++/// derived; the parser must never copy their serialized counterparts into the
++/// environment.  The parser supplies the declaration name and rules only
++/// after it has compared the supplied type with `typ` and checked the rules.
++#[derive(Clone, Debug)]
++pub(crate) struct DerivedRecursor {
++    pub typ: Expr,
++    pub level_params: Vec<u32>,
++    pub all: Vec<u32>,
++    pub num_params: u32,
++    pub num_indices: u32,
++    pub num_motives: u32,
++    pub num_minors: u32,
++    pub k: bool,
++}
++
++/// A binder whose type is expressed in the context formed by the preceding
++/// entries.  Closing this list in reverse is the only place the recursor
++/// builder manufactures Pi nodes; callers therefore never need to guess a
++/// de Bruijn index while closing a telescope.
++#[derive(Clone)]
++struct RecBinder {
++    info: BinderInfo,
++    typ: Expr,
++}
++
++/// A constructor in the semantic (possibly nested-expanded) mutual group.
++/// `typ` has the current declaration's shared parameter telescope, even when
++/// the constructor was copied from a prior inductive at a specialization whose
++/// own parameter count differs.  `name` and `levels` are the restored source
++/// constructor, so no temporary auxiliary declaration ever enters the
++/// checker environment.
++#[derive(Clone)]
++struct RecConstructor {
++    name: u32,
++    levels: Vec<Level>,
++    typ: Expr,
++}
++
++/// One member of Lean's auxiliary mutual group, represented directly in its
++/// restored form.  For an original member, `fixed_params` are the current
++/// declaration parameters.  For a nested member copied from `source_name`,
++/// they are the prior inductive specialization which caused that member to be
++/// copied.  Every expression in `fixed_params` lives in the canonical context
++/// containing exactly the current declaration parameters.
++#[derive(Clone)]
++struct RecMember {
++    source_name: u32,
++    source_levels: Vec<Level>,
++    fixed_params: Vec<Expr>,
++    typ: Expr,
++    num_indices: u32,
++    ctors: Vec<RecConstructor>,
++}
++
++struct NestedOccurrence {
++    source_name: u32,
++    source_levels: Vec<Level>,
++    fixed_params: Vec<Expr>,
++    source_all: Vec<u32>,
++    source_num_params: u32,
++}
++
++fn close_rec_telescope(binders: &[RecBinder], mut result: Expr) -> Expr {
++    for b in binders.iter().rev() {
++        result = expr::pi(b.info, b.typ.clone(), result);
++    }
++    result
++}
++
++fn ids_are_pairwise_distinct(ids: &[u32]) -> bool {
++    let mut seen = Vec::with_capacity(ids.len());
++    for id in ids {
++        if seen.contains(id) {
++            return false;
++        }
++        seen.push(*id);
++    }
++    true
++}
++
++/// `ExprNode::eq` is intentionally pointer identity because the live interner
++/// normally canonicalizes nodes.  Environment expressions can outlive an
++/// interner clear, though, so nested-specialization keys need an explicit
++/// structural comparison rather than assuming both terms came from the same
++/// interner generation.
++fn rec_expr_eq(a: &Expr, b: &Expr) -> bool {
++    if Rc::ptr_eq(a, b) {
++        return true;
++    }
++    match (&***a, &***b) {
++        (ExprData::BVar(i), ExprData::BVar(j)) => i == j,
++        (ExprData::Sort(u), ExprData::Sort(v)) => u == v,
++        (ExprData::Const(n, us), ExprData::Const(m, vs)) => n == m && us == vs,
++        (ExprData::App(f, x), ExprData::App(g, y)) => rec_expr_eq(f, g) && rec_expr_eq(x, y),
++        (ExprData::Lam(bi, ty, body), ExprData::Lam(bj, ty2, body2))
++        | (ExprData::Pi(bi, ty, body), ExprData::Pi(bj, ty2, body2)) => {
++            bi == bj && rec_expr_eq(ty, ty2) && rec_expr_eq(body, body2)
++        }
++        (ExprData::Let(ty, val, body), ExprData::Let(ty2, val2, body2)) => {
++            rec_expr_eq(ty, ty2) && rec_expr_eq(val, val2) && rec_expr_eq(body, body2)
++        }
++        (ExprData::Proj(s, i, v), ExprData::Proj(t, j, w)) => {
++            s == t && i == j && rec_expr_eq(v, w)
++        }
++        (ExprData::Lit(x), ExprData::Lit(y)) => x == y,
++        _ => false,
++    }
++}
++
++fn rec_exprs_eq(a: &[Expr], b: &[Expr]) -> bool {
++    a.len() == b.len() && a.iter().zip(b.iter()).all(|(x, y)| rec_expr_eq(x, y))
++}
++
++fn has_bvar_in_range(e: &Expr, lo: u32, hi: u32, inner: u32) -> bool {
++    match &***e {
++        ExprData::BVar(i) => *i >= inner + lo && *i < inner + hi,
++        ExprData::Sort(_) | ExprData::Const(_, _) | ExprData::Lit(_) => false,
++        ExprData::App(f, a) => {
++            has_bvar_in_range(f, lo, hi, inner) || has_bvar_in_range(a, lo, hi, inner)
++        }
++        ExprData::Lam(_, ty, body) | ExprData::Pi(_, ty, body) => {
++            has_bvar_in_range(ty, lo, hi, inner)
++                || has_bvar_in_range(body, lo, hi, inner + 1)
++        }
++        ExprData::Let(ty, val, body) => {
++            has_bvar_in_range(ty, lo, hi, inner)
++                || has_bvar_in_range(val, lo, hi, inner)
++                || has_bvar_in_range(body, lo, hi, inner + 1)
++        }
++        ExprData::Proj(_, _, v) => has_bvar_in_range(v, lo, hi, inner),
++    }
++}
++
++fn collect_level_ids_level(l: &Level, out: &mut Vec<u32>) {
++    match &**l {
++        crate::level::LevelData::Zero => {}
++        crate::level::LevelData::Succ(a) => collect_level_ids_level(a, out),
++        crate::level::LevelData::Max(a, b) | crate::level::LevelData::IMax(a, b) => {
++            collect_level_ids_level(a, out);
++            collect_level_ids_level(b, out);
++        }
++        crate::level::LevelData::Param(id) => {
++            if !out.contains(id) {
++                out.push(*id);
++            }
++        }
++    }
++}
++
++fn collect_level_ids_expr(e: &Expr, out: &mut Vec<u32>) {
++    match &***e {
++        ExprData::BVar(_) | ExprData::Lit(_) => {}
++        ExprData::Sort(l) => collect_level_ids_level(l, out),
++        ExprData::Const(_, ls) => {
++            for l in ls.iter() {
++                collect_level_ids_level(l, out);
++            }
++        }
++        ExprData::App(f, a) => {
++            collect_level_ids_expr(f, out);
++            collect_level_ids_expr(a, out);
++        }
++        ExprData::Lam(_, ty, body) | ExprData::Pi(_, ty, body) => {
++            collect_level_ids_expr(ty, out);
++            collect_level_ids_expr(body, out);
++        }
++        ExprData::Let(ty, val, body) => {
++            collect_level_ids_expr(ty, out);
++            collect_level_ids_expr(val, out);
++            collect_level_ids_expr(body, out);
++        }
++        ExprData::Proj(_, _, v) => collect_level_ids_expr(v, out),
++    }
++}
++
+ fn reject<T>(msg: impl Into<String>) -> R<T> {
+     Err(TcError::Reject(msg.into()))
+ }
+@@ -8462,7 +8639,14 @@ impl<'e> Checker<'e> {
+         Ok(false)
+     }
+ 
+-    pub fn check_inductive_group(&self, first_name: u32) -> R<()> {
++    /// Check the part of an inductive block which does not mention a
++    /// recursor.  The parser calls this on its staged environment before it
++    /// asks `reconstruct_recursors` to make any current-block recursor
++    /// visible.  Keeping this separate is important: `infer_const` obtains a
++    /// constant's type from the environment, so installing an untrusted
++    /// recursor before this point would make the subsequent construction
++    /// circular.
++    pub(crate) fn check_inductive_group_structure(&self, first_name: u32) -> R<()> {
+         let ci = self
+             .env
+             .get(first_name)
+@@ -8646,6 +8830,20 @@ impl<'e> Checker<'e> {
+                 }
+             }
+         }
++        Ok(())
++    }
++
++    /// Validate the recursor-dependent part of a group after the parser has
++    /// atomically installed *derived* recursors and ownership maps.
++    fn check_inductive_group_large_elim(&self, first_name: u32) -> R<()> {
++        let ci = self
++            .env
++            .get(first_name)
++            .ok_or_else(|| TcError::Other("missing inductive".into()))?;
++        let all = match ci {
++            ConstantInfo::InductiveType { all, .. } => all.clone(),
++            _ => return Ok(()),
++        };
+         // Large-elimination check, once per group (not once per member —
+         // `check_inductive_group` runs once per type name in the block,
+         // all sharing the same `all`). See `elim_only_at_universe_zero`'s
+@@ -8705,6 +8903,1163 @@ impl<'e> Checker<'e> {
+         Ok(())
+     }
+ 
++    /// Full inductive validation, retained for all existing call sites after
++    /// a block has committed.  New parser code uses the structural phase
++    /// before reconstruction and this method after its transaction commits.
++    pub fn check_inductive_group(&self, first_name: u32) -> R<()> {
++        self.check_inductive_group_structure(first_name)?;
++        self.check_inductive_group_large_elim(first_name)
++    }
++
++    fn rec_params(
++        &self,
++        first_typ: &Expr,
++        num_params: u32,
++        level_subst: &FxHashMap<u32, Level>,
++    ) -> R<Vec<RecBinder>> {
++        let mut ctx = Ctx::new();
++        let mut cur = expr::instantiate_level_params(first_typ, level_subst);
++        let mut params = Vec::with_capacity(num_params as usize);
++        for _ in 0..num_params {
++            let (bi, dom, body) = self.ensure_pi(&ctx, &cur)?;
++            params.push(RecBinder {
++                info: bi,
++                typ: dom.clone(),
++            });
++            ctx.push(dom);
++            cur = body;
++        }
++        Ok(params)
++    }
++
++    fn original_rec_members(
++        &self,
++        all: &[u32],
++        num_params: u32,
++        params: &[RecBinder],
++        level_subst: &FxHashMap<u32, Level>,
++        decl_levels: &[Level],
++    ) -> R<Vec<RecMember>> {
++        let fixed_params: Vec<Expr> = (0..num_params as usize)
++            .map(|i| expr::bvar((num_params as usize - 1 - i) as u32))
++            .collect();
++        let mut members = Vec::with_capacity(all.len());
++        for tname in all {
++            let (typ, num_indices, ctor_names) = match self.env.get(*tname) {
++                Some(ConstantInfo::InductiveType {
++                    typ,
++                    num_indices,
++                    ctors,
++                    ..
++                }) => (
++                    expr::instantiate_level_params(typ, level_subst),
++                    *num_indices,
++                    ctors.clone(),
++                ),
++                _ => return reject("missing original inductive during recursor reconstruction"),
++            };
++            let mut ctors = Vec::with_capacity(ctor_names.len());
++            for cname in ctor_names {
++                let ctyp = match self.env.get(cname) {
++                    Some(ConstantInfo::Constructor { typ, .. }) => {
++                        expr::instantiate_level_params(typ, level_subst)
++                    }
++                    _ => return reject("missing original constructor during recursor reconstruction"),
++                };
++                ctors.push(RecConstructor {
++                    name: cname,
++                    levels: decl_levels.to_vec(),
++                    typ: ctyp,
++                });
++            }
++            members.push(RecMember {
++                source_name: *tname,
++                source_levels: decl_levels.to_vec(),
++                fixed_params: fixed_params.clone(),
++                typ,
++                num_indices,
++                ctors,
++            });
++        }
++        if members.iter().any(|m| m.fixed_params.len() != num_params as usize) {
++            return Err(TcError::Other("original recursor parameter arity changed".into()));
++        }
++        let _ = params;
++        Ok(members)
++    }
++
++    fn specialize_prior_telescope(
++        &self,
++        typ: &Expr,
++        prior_level_params: &[u32],
++        occurrence_levels: &[Level],
++        prior_num_params: u32,
++        fixed_params: &[Expr],
++        current_params: &[RecBinder],
++    ) -> R<Expr> {
++        if prior_level_params.len() != occurrence_levels.len()
++            || fixed_params.len() != prior_num_params as usize
++        {
++            return reject("nested inductive specialization has the wrong arity");
++        }
++        let subst = level::subst_map(prior_level_params, occurrence_levels);
++        let mut cur = expr::instantiate_level_params(typ, &subst);
++        let mut ctx = Ctx::new();
++        for _ in 0..prior_num_params {
++            let (_, dom, body) = self.ensure_pi(&ctx, &cur)?;
++            ctx.push(dom);
++            cur = body;
++        }
++        let reverse_params: Vec<Expr> = fixed_params.iter().rev().cloned().collect();
++        let body = expr::instantiate(&cur, &reverse_params);
++        Ok(close_rec_telescope(current_params, body))
++    }
++
++    fn member_prefix_matches_at_depth(
++        &self,
++        member: &RecMember,
++        e: &Expr,
++        current_num_params: u32,
++        total_depth: usize,
++    ) -> Option<Vec<Expr>> {
++        let (head, args) = expr::unfold_apps(e);
++        let ExprData::Const(n, levels) = &**head else {
++            return None;
++        };
++        if *n != member.source_name
++            || levels.as_slice() != member.source_levels.as_slice()
++            || args.len() < member.fixed_params.len()
++            || total_depth < current_num_params as usize
++        {
++            return None;
++        }
++        let shift_by = (total_depth - current_num_params as usize) as i32;
++        for (actual, fixed) in args.iter().zip(member.fixed_params.iter()) {
++            if !rec_expr_eq(actual, &expr::shift(fixed, shift_by, 0)) {
++                return None;
++            }
++        }
++        Some(args[member.fixed_params.len()..].to_vec())
++    }
++
++    fn member_matches_at_depth(
++        &self,
++        member: &RecMember,
++        e: &Expr,
++        current_num_params: u32,
++        total_depth: usize,
++    ) -> Option<Vec<Expr>> {
++        let indices = self.member_prefix_matches_at_depth(
++            member,
++            e,
++            current_num_params,
++            total_depth,
++        )?;
++        (indices.len() == member.num_indices as usize).then_some(indices)
++    }
++
++    fn find_member_target(
++        &self,
++        members: &[RecMember],
++        e: &Expr,
++        current_num_params: u32,
++        total_depth: usize,
++    ) -> Option<(usize, Vec<Expr>)> {
++        members.iter().enumerate().find_map(|(i, member)| {
++            self.member_matches_at_depth(member, e, current_num_params, total_depth)
++                .map(|indices| (i, indices))
++        })
++    }
++
++    fn find_member_target_defeq(
++        &self,
++        members: &[RecMember],
++        e: &Expr,
++        current_num_params: u32,
++        ctx: &Ctx,
++    ) -> R<Option<(usize, Vec<Expr>)>> {
++        let (head, args) = expr::unfold_apps(e);
++        let ExprData::Const(name, levels) = &**head else {
++            return Ok(None);
++        };
++        let shift_by = ctx
++            .len()
++            .checked_sub(current_num_params as usize)
++            .ok_or_else(|| TcError::Other("recursive target context underflow".into()))?
++            as i32;
++        for (member_pos, member) in members.iter().enumerate() {
++            if *name != member.source_name
++                || levels.len() != member.source_levels.len()
++                || !levels
++                    .iter()
++                    .zip(member.source_levels.iter())
++                    .all(|(a, b)| level::is_def_eq(a, b))
++                || args.len() != member.fixed_params.len() + member.num_indices as usize
++            {
++                continue;
++            }
++            let mut params_match = true;
++            for (actual, fixed) in args.iter().zip(member.fixed_params.iter()) {
++                let expected = expr::shift(fixed, shift_by, 0);
++                if !self.is_def_eq(ctx, actual, &expected)? {
++                    params_match = false;
++                    break;
++                }
++            }
++            if params_match {
++                return Ok(Some((
++                    member_pos,
++                    args[member.fixed_params.len()..].to_vec(),
++                )));
++            }
++        }
++        Ok(None)
++    }
++
++    fn contains_current_member(
++        &self,
++        e: &Expr,
++        local_depth: u32,
++        current_num_params: u32,
++        original_names: &[u32],
++        members: &[RecMember],
++    ) -> bool {
++        if let ExprData::Const(n, _) = &***e {
++            if original_names.contains(n) {
++                return true;
++            }
++        }
++        if members.iter().any(|member| {
++            self.member_prefix_matches_at_depth(
++                member,
++                e,
++                current_num_params,
++                current_num_params as usize + local_depth as usize,
++            )
++            .is_some()
++        })
++        {
++            return true;
++        }
++        match &***e {
++            ExprData::BVar(_) | ExprData::Sort(_) | ExprData::Const(_, _) | ExprData::Lit(_) => {
++                false
++            }
++            ExprData::App(f, a) => {
++                self.contains_current_member(
++                    f,
++                    local_depth,
++                    current_num_params,
++                    original_names,
++                    members,
++                ) || self.contains_current_member(
++                    a,
++                    local_depth,
++                    current_num_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Lam(_, ty, body) | ExprData::Pi(_, ty, body) => {
++                self.contains_current_member(
++                    ty,
++                    local_depth,
++                    current_num_params,
++                    original_names,
++                    members,
++                ) || self.contains_current_member(
++                    body,
++                    local_depth + 1,
++                    current_num_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Let(ty, val, body) => {
++                self.contains_current_member(
++                    ty,
++                    local_depth,
++                    current_num_params,
++                    original_names,
++                    members,
++                ) || self.contains_current_member(
++                    val,
++                    local_depth,
++                    current_num_params,
++                    original_names,
++                    members,
++                ) || self.contains_current_member(
++                    body,
++                    local_depth + 1,
++                    current_num_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Proj(_, _, v) => self.contains_current_member(
++                v,
++                local_depth,
++                current_num_params,
++                original_names,
++                members,
++            ),
++        }
++    }
++
++    fn nested_occurrence(
++        &self,
++        e: &Expr,
++        local_depth: u32,
++        current_num_params: u32,
++        original_names: &[u32],
++        members: &[RecMember],
++    ) -> R<Option<NestedOccurrence>> {
++        if !matches!(&***e, ExprData::App(_, _)) {
++            return Ok(None);
++        }
++        let (head, args) = expr::unfold_apps(e);
++        let ExprData::Const(source_name, source_levels) = &**head else {
++            return Ok(None);
++        };
++        // The official transform consults the prior environment.  Current
++        // block names are already staged in Kiota's environment, so exclude
++        // them explicitly to recover the same boundary.
++        if original_names.contains(source_name) {
++            return Ok(None);
++        }
++        let (source_all, source_num_params) = match self.env.get(*source_name) {
++            Some(ConstantInfo::InductiveType {
++                all, num_params, ..
++            }) => (all.clone(), *num_params),
++            _ => return Ok(None),
++        };
++        if args.len() < source_num_params as usize {
++            return Ok(None);
++        }
++        let source_params = &args[..source_num_params as usize];
++        if !source_params.iter().any(|p| {
++            self.contains_current_member(
++                p,
++                local_depth,
++                current_num_params,
++                original_names,
++                members,
++            )
++        }) {
++            return Ok(None);
++        }
++        if source_params
++            .iter()
++            .any(|p| has_bvar_in_range(p, 0, local_depth, 0))
++        {
++            return reject(format!(
++                "invalid nested inductive datatype `{}`: parameters contain constructor-local variables",
++                self.name_str(*source_name)
++            ));
++        }
++        let fixed_params = source_params
++            .iter()
++            .map(|p| expr::shift(p, -(local_depth as i32), 0))
++            .collect();
++        Ok(Some(NestedOccurrence {
++            source_name: *source_name,
++            source_levels: source_levels.as_ref().clone(),
++            fixed_params,
++            source_all,
++            source_num_params,
++        }))
++    }
++
++    fn add_nested_specialization(
++        &self,
++        occurrence: NestedOccurrence,
++        current_params: &[RecBinder],
++        members: &mut Vec<RecMember>,
++    ) -> R<()> {
++        if members.iter().any(|member| {
++            member.source_name == occurrence.source_name
++                && member.source_levels == occurrence.source_levels
++                && rec_exprs_eq(&member.fixed_params, &occurrence.fixed_params)
++        }) {
++            return Ok(());
++        }
++        for source_member in &occurrence.source_all {
++            let (level_params, typ, num_params, num_indices, ctor_names) =
++                match self.env.get(*source_member) {
++                    Some(ConstantInfo::InductiveType {
++                        level_params,
++                        typ,
++                        num_params,
++                        num_indices,
++                        ctors,
++                        all,
++                        ..
++                    }) if all == &occurrence.source_all => (
++                        level_params.clone(),
++                        typ.clone(),
++                        *num_params,
++                        *num_indices,
++                        ctors.clone(),
++                    ),
++                    _ => return reject("invalid prior mutual group during nested reconstruction"),
++                };
++            if num_params != occurrence.source_num_params {
++                return reject("inconsistent parameter count in prior nested mutual group");
++            }
++            let specialized_typ = self.specialize_prior_telescope(
++                &typ,
++                &level_params,
++                &occurrence.source_levels,
++                num_params,
++                &occurrence.fixed_params,
++                current_params,
++            )?;
++            let mut ctors = Vec::with_capacity(ctor_names.len());
++            for cname in ctor_names {
++                let (ctor_level_params, ctor_typ, ctor_num_params) = match self.env.get(cname) {
++                    Some(ConstantInfo::Constructor {
++                        level_params,
++                        typ,
++                        num_params,
++                        ..
++                    }) => (level_params.clone(), typ.clone(), *num_params),
++                    _ => return reject("missing prior constructor during nested reconstruction"),
++                };
++                if ctor_num_params != num_params {
++                    return reject("prior nested constructor has inconsistent parameters");
++                }
++                let specialized_ctor = self.specialize_prior_telescope(
++                    &ctor_typ,
++                    &ctor_level_params,
++                    &occurrence.source_levels,
++                    num_params,
++                    &occurrence.fixed_params,
++                    current_params,
++                )?;
++                ctors.push(RecConstructor {
++                    name: cname,
++                    levels: occurrence.source_levels.clone(),
++                    typ: specialized_ctor,
++                });
++            }
++            members.push(RecMember {
++                source_name: *source_member,
++                source_levels: occurrence.source_levels.clone(),
++                fixed_params: occurrence.fixed_params.clone(),
++                typ: specialized_typ,
++                num_indices,
++                ctors,
++            });
++        }
++        Ok(())
++    }
++
++    fn scan_nested_expr(
++        &self,
++        e: &Expr,
++        local_depth: u32,
++        current_num_params: u32,
++        current_params: &[RecBinder],
++        original_names: &[u32],
++        members: &mut Vec<RecMember>,
++    ) -> R<()> {
++        if let Some(occurrence) = self.nested_occurrence(
++            e,
++            local_depth,
++            current_num_params,
++            original_names,
++            members,
++        )? {
++            // `replace` in Lean's transform is outermost-first.  Once this
++            // application becomes an auxiliary target it does not descend
++            // into its parameters; copied constructors expose deeper
++            // specializations to later BFS worklist entries instead.
++            return self.add_nested_specialization(occurrence, current_params, members);
++        }
++        match &***e {
++            ExprData::BVar(_) | ExprData::Sort(_) | ExprData::Const(_, _) | ExprData::Lit(_) => {
++                Ok(())
++            }
++            ExprData::App(f, a) => {
++                self.scan_nested_expr(
++                    f,
++                    local_depth,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )?;
++                self.scan_nested_expr(
++                    a,
++                    local_depth,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Lam(_, ty, body) | ExprData::Pi(_, ty, body) => {
++                self.scan_nested_expr(
++                    ty,
++                    local_depth,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )?;
++                self.scan_nested_expr(
++                    body,
++                    local_depth + 1,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Let(ty, val, body) => {
++                self.scan_nested_expr(
++                    ty,
++                    local_depth,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )?;
++                self.scan_nested_expr(
++                    val,
++                    local_depth,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )?;
++                self.scan_nested_expr(
++                    body,
++                    local_depth + 1,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )
++            }
++            ExprData::Proj(_, _, v) => self.scan_nested_expr(
++                v,
++                local_depth,
++                current_num_params,
++                current_params,
++                original_names,
++                members,
++            ),
++        }
++    }
++
++    fn expand_nested_members(
++        &self,
++        original_names: &[u32],
++        current_num_params: u32,
++        current_params: &[RecBinder],
++        members: &mut Vec<RecMember>,
++    ) -> R<()> {
++        let mut qhead = 0usize;
++        while qhead < members.len() {
++            let ctors = members[qhead].ctors.clone();
++            for ctor in ctors {
++                let mut ctx = Ctx::new();
++                let mut cur = ctor.typ;
++                for _ in 0..current_num_params {
++                    let (_, dom, body) = self.ensure_pi(&ctx, &cur)?;
++                    ctx.push(dom);
++                    cur = body;
++                }
++                self.scan_nested_expr(
++                    &cur,
++                    0,
++                    current_num_params,
++                    current_params,
++                    original_names,
++                    members,
++                )?;
++            }
++            qhead += 1;
++        }
++        Ok(())
++    }
++
++    fn expanded_prop_only(
++        &self,
++        original_names: &[u32],
++        members: &[RecMember],
++        num_params: u32,
++    ) -> R<bool> {
++        let mut result_level: Option<Level> = None;
++        for member in members {
++            let mut ctx = Ctx::new();
++            let mut cur = member.typ.clone();
++            for _ in 0..(num_params + member.num_indices) {
++                let (_, dom, body) = self.ensure_pi(&ctx, &cur)?;
++                ctx.push(dom);
++                cur = body;
++            }
++            let member_level = self.ensure_sort(&ctx, &cur)?;
++            if let Some(first_level) = &result_level {
++                if !level::is_def_eq(first_level, &member_level) {
++                    return reject(
++                        "nested auxiliary member has a different result universe",
++                    );
++                }
++            } else {
++                result_level = Some(member_level);
++            }
++        }
++        if members.len() == original_names.len() {
++            return self.elim_only_at_universe_zero(original_names);
++        }
++        let result_level = result_level
++            .ok_or_else(|| TcError::Other("expanded recursor group is empty".into()))?;
++        // The transformed declaration is mutual as soon as it has one copied
++        // member, so Lean restricts every possibly-Prop result to Prop.
++        Ok(!level::is_not_zero(&result_level))
++    }
++
++    /// Reconstruct ordinary, mutual and nested recursor types from checked
++    /// types and constructors.  Nested members are discovered by the same
++    /// breadth-first transformation order as Lean, but are represented in
++    /// restored form throughout: no auxiliary name or supplied recursor is
++    /// ever made visible in the environment.
++    pub(crate) fn reconstruct_recursors(
++        &self,
++        type_names: &[u32],
++        supplied_level_params: &[u32],
++    ) -> R<Vec<DerivedRecursor>> {
++        let Some(&first) = type_names.first() else {
++            return reject("cannot reconstruct recursors for an empty inductive group");
++        };
++        let (all, num_params, shared_lparams, first_typ) = match self.env.get(first) {
++            Some(ConstantInfo::InductiveType {
++                all,
++                num_params,
++                level_params,
++                typ,
++                ..
++            }) => (all.clone(), *num_params, level_params.clone(), typ.clone()),
++            _ => return reject("recursor reconstruction requires an inductive type"),
++        };
++        if all.as_slice() != type_names {
++            return reject("recursor reconstruction group is not the inductive declaration order");
++        }
++        for t in &all {
++            match self.env.get(*t) {
++                Some(ConstantInfo::InductiveType {
++                    all: a,
++                    num_params: p,
++                    level_params,
++                    ..
++                }) if a == &all && *p == num_params && level_params == &shared_lparams => {}
++                _ => {
++                    return reject(
++                        "inconsistent mutual inductive group during recursor reconstruction",
++                    )
++                }
++            }
++        }
++
++        // Discovery precedes the elimination-level decision because adding a
++        // nested member changes Lean's Prop-elimination rule.  Use the checked
++        // declaration level names for this shape-only pass.
++        let discovery_levels: Vec<Level> =
++            shared_lparams.iter().copied().map(level::param).collect();
++        let discovery_subst = level::subst_map(&shared_lparams, &discovery_levels);
++        let discovery_params = self.rec_params(&first_typ, num_params, &discovery_subst)?;
++        let mut discovery_members = self.original_rec_members(
++            &all,
++            num_params,
++            &discovery_params,
++            &discovery_subst,
++            &discovery_levels,
++        )?;
++        self.expand_nested_members(
++            &all,
++            num_params,
++            &discovery_params,
++            &mut discovery_members,
++        )?;
++        let prop_only =
++            self.expanded_prop_only(&all, &discovery_members, num_params)?;
++
++        if !ids_are_pairwise_distinct(supplied_level_params) {
++            return reject("recursor has duplicate universe parameters");
++        }
++        let level_params = if prop_only {
++            if supplied_level_params.len() != shared_lparams.len() {
++                return reject("Prop-only recursor has the wrong universe-parameter shape");
++            }
++            supplied_level_params.to_vec()
++        } else {
++            if supplied_level_params.len() != shared_lparams.len() + 1 {
++                return reject("recursor is missing its fresh elimination universe parameter");
++            }
++            // Pairwise distinctness above establishes freshness against the
++            // supplied declaration tail, which is the alpha-renamed tail
++            // actually used to construct this recursor.
++            supplied_level_params.to_vec()
++        };
++        let elim_level = if prop_only {
++            level::zero()
++        } else {
++            level::param(level_params[0])
++        };
++        let decl_levels: Vec<Level> = if prop_only {
++            level_params.iter().copied().map(level::param).collect()
++        } else {
++            level_params[1..].iter().copied().map(level::param).collect()
++        };
++        let level_subst = level::subst_map(&shared_lparams, &decl_levels);
++        let params = self.rec_params(&first_typ, num_params, &level_subst)?;
++        let mut members = self.original_rec_members(
++            &all,
++            num_params,
++            &params,
++            &level_subst,
++            &decl_levels,
++        )?;
++        self.expand_nested_members(&all, num_params, &params, &mut members)?;
++        if members.len() != discovery_members.len() {
++            return Err(TcError::Other(
++                "nested recursor discovery changed under universe alpha-renaming".into(),
++            ));
++        }
++
++        let num_minors: u32 = members.iter().map(|m| m.ctors.len() as u32).sum();
++        let k = members.len() == 1 && self.is_k_like(&all)?;
++        let mut out = Vec::with_capacity(members.len());
++        for target_pos in 0..members.len() {
++            let typ = self.build_base_recursor_type(
++                &all,
++                &members,
++                target_pos,
++                num_params,
++                &params,
++                elim_level.clone(),
++            )?;
++            out.push(DerivedRecursor {
++                typ,
++                level_params: level_params.clone(),
++                // Lean restores every recursor's metadata to the original
++                // declared group, even auxiliary `.rec_N` recursors.
++                all: all.clone(),
++                num_params,
++                num_indices: members[target_pos].num_indices,
++                num_motives: members.len() as u32,
++                num_minors,
++                k,
++            });
++        }
++        Ok(out)
++    }
++
++    /// Infer both closed types after positional universe-alpha normalization,
++    /// then compare them in the empty context.  Collision-free canonical
++    /// parameters keep undeclared parameters (which inference must itself
++    /// reject or preserve) from being accidentally captured by normalization.
++    pub(crate) fn validate_reconstructed_type(
++        &self,
++        supplied: &Expr,
++        supplied_level_params: &[u32],
++        reconstructed: &Expr,
++        reconstructed_level_params: &[u32],
++    ) -> R<()> {
++        if !expr::is_closed(supplied) || !expr::is_closed(reconstructed) {
++            return reject("recursor type is not closed");
++        }
++        if supplied_level_params.len() != reconstructed_level_params.len()
++            || !ids_are_pairwise_distinct(supplied_level_params)
++            || !ids_are_pairwise_distinct(reconstructed_level_params)
++        {
++            return reject("recursor universe parameters do not match positionally");
++        }
++        let mut supplied_used = Vec::new();
++        collect_level_ids_expr(supplied, &mut supplied_used);
++        if supplied_used
++            .iter()
++            .any(|id| !supplied_level_params.contains(id))
++        {
++            return reject("recursor type uses an undeclared universe parameter");
++        }
++        let mut reconstructed_used = Vec::new();
++        collect_level_ids_expr(reconstructed, &mut reconstructed_used);
++        if reconstructed_used
++            .iter()
++            .any(|id| !reconstructed_level_params.contains(id))
++        {
++            return Err(TcError::Other(
++                "reconstructed recursor uses an undeclared universe parameter".into(),
++            ));
++        }
++        let mut used = supplied_level_params.to_vec();
++        for id in reconstructed_level_params {
++            if !used.contains(id) {
++                used.push(*id);
++            }
++        }
++        for id in supplied_used.into_iter().chain(reconstructed_used) {
++            if !used.contains(&id) {
++                used.push(id);
++            }
++        }
++        let mut next = u32::MAX;
++        let mut canonical = Vec::with_capacity(supplied_level_params.len());
++        for _ in supplied_level_params {
++            while used.contains(&next) {
++                next = next
++                    .checked_sub(1)
++                    .ok_or_else(|| TcError::Other("cannot allocate canonical universe parameter".into()))?;
++            }
++            canonical.push(level::param(next));
++            used.push(next);
++            next = next
++                .checked_sub(1)
++                .ok_or_else(|| TcError::Other("cannot allocate canonical universe parameter".into()))?;
++        }
++        let supplied_subst = level::subst_map(supplied_level_params, &canonical);
++        let reconstructed_subst =
++            level::subst_map(reconstructed_level_params, &canonical);
++        let supplied = expr::instantiate_level_params(supplied, &supplied_subst);
++        let reconstructed =
++            expr::instantiate_level_params(reconstructed, &reconstructed_subst);
++        let ctx = Ctx::new();
++        self.ensure_sort(&ctx, &self.infer_type(&ctx, &supplied)?)?;
++        self.ensure_sort(&ctx, &self.infer_type(&ctx, &reconstructed)?)?;
++        if self.is_def_eq(&ctx, &supplied, &reconstructed)? {
++            Ok(())
++        } else {
++            reject("recursor type does not match reconstructed type")
++        }
++    }
++
++    fn member_app(
++        &self,
++        member: &RecMember,
++        num_params: u32,
++        total_depth: usize,
++        indices: &[Expr],
++    ) -> R<Expr> {
++        let shift_by = total_depth
++            .checked_sub(num_params as usize)
++            .ok_or_else(|| TcError::Other("recursor member context underflow".into()))?
++            as i32;
++        let mut args: Vec<Expr> = member
++            .fixed_params
++            .iter()
++            .map(|p| expr::shift(p, shift_by, 0))
++            .collect();
++        args.extend(indices.iter().cloned());
++        Ok(expr::apps(
++            expr::const_(member.source_name, member.source_levels.clone()),
++            &args,
++        ))
++    }
++
++    fn build_base_recursor_type(
++        &self,
++        original_names: &[u32],
++        members: &[RecMember],
++        target_pos: usize,
++        num_params: u32,
++        params: &[RecBinder],
++        elim_level: Level,
++    ) -> R<Expr> {
++        let mut binders = params.to_vec();
++
++        for member in members {
++            let motive_base = binders.len();
++            let mut src_ctx = Ctx::new();
++            let mut cur = member.typ.clone();
++            for _ in 0..num_params {
++                let (_, dom, body) = self.ensure_pi(&src_ctx, &cur)?;
++                src_ctx.push(dom);
++                cur = body;
++            }
++            let mut indices = Vec::with_capacity(member.num_indices as usize);
++            for index_pos in 0..member.num_indices as usize {
++                let (bi, dom, body) = self.ensure_pi(&src_ctx, &cur)?;
++                let shift_by = motive_base
++                    .checked_sub(num_params as usize)
++                    .ok_or_else(|| TcError::Other("motive context underflow".into()))?
++                    as i32;
++                indices.push(RecBinder {
++                    info: bi,
++                    // Preserve already-open index locals; only the outer
++                    // shared-parameter context moves past earlier motives.
++                    typ: expr::shift(&dom, shift_by, index_pos as u32),
++                });
++                src_ctx.push(dom);
++                cur = body;
++            }
++            let depth = motive_base + indices.len();
++            let index_args: Vec<Expr> = (0..indices.len())
++                .map(|i| expr::bvar((indices.len() - 1 - i) as u32))
++                .collect();
++            let major = self.member_app(member, num_params, depth, &index_args)?;
++            let result = expr::pi(
++                BinderInfo::Default,
++                major,
++                expr::sort(elim_level.clone()),
++            );
++            binders.push(RecBinder {
++                info: BinderInfo::Default,
++                typ: close_rec_telescope(&indices, result),
++            });
++        }
++
++        for (owner_pos, owner) in members.iter().enumerate() {
++            for ctor in &owner.ctors {
++                let minor = self.build_minor_type(
++                    original_names,
++                    members,
++                    owner_pos,
++                    ctor,
++                    num_params,
++                    binders.len(),
++                )?;
++                binders.push(RecBinder {
++                    info: BinderInfo::Default,
++                    typ: minor,
++                });
++            }
++        }
++
++        let target = &members[target_pos];
++        let mut src_ctx = Ctx::new();
++        let mut cur = target.typ.clone();
++        for _ in 0..num_params {
++            let (_, dom, body) = self.ensure_pi(&src_ctx, &cur)?;
++            src_ctx.push(dom);
++            cur = body;
++        }
++        let indices_base = binders.len();
++        for index_pos in 0..target.num_indices as usize {
++            let (bi, dom, body) = self.ensure_pi(&src_ctx, &cur)?;
++            let shift_by = indices_base
++                .checked_sub(num_params as usize)
++                .ok_or_else(|| TcError::Other("target-index context underflow".into()))?
++                as i32;
++            binders.push(RecBinder {
++                info: bi,
++                typ: expr::shift(&dom, shift_by, index_pos as u32),
++            });
++            src_ctx.push(dom);
++            cur = body;
++        }
++        let before_major = binders.len();
++        let index_args: Vec<Expr> = (0..target.num_indices as usize)
++            .map(|i| expr::bvar((target.num_indices as usize - 1 - i) as u32))
++            .collect();
++        let major_ty = self.member_app(target, num_params, before_major, &index_args)?;
++        binders.push(RecBinder {
++            info: BinderInfo::Default,
++            typ: major_ty,
++        });
++
++        let depth = binders.len();
++        let motive_pos = num_params as usize + target_pos;
++        let motive = expr::bvar((depth - 1 - motive_pos) as u32);
++        let mut result_args: Vec<Expr> = (0..target.num_indices as usize)
++            .map(|i| expr::bvar(target.num_indices - i as u32))
++            .collect();
++        result_args.push(expr::bvar(0));
++        Ok(close_rec_telescope(
++            &binders,
++            expr::apps(motive, &result_args),
++        ))
++    }
++
++    fn build_minor_type(
++        &self,
++        original_names: &[u32],
++        members: &[RecMember],
++        owner_pos: usize,
++        ctor: &RecConstructor,
++        num_params: u32,
++        outer_depth: usize,
++    ) -> R<Expr> {
++        let mut src_ctx = Ctx::new();
++        let mut cur = ctor.typ.clone();
++        for _ in 0..num_params {
++            let (_, dom, body) = self.ensure_pi(&src_ctx, &cur)?;
++            src_ctx.push(dom);
++            cur = body;
++        }
++        struct Field {
++            info: BinderInfo,
++            dom: Expr,
++            ctx: Ctx,
++        }
++        let mut fields = Vec::new();
++        loop {
++            match self.ensure_pi(&src_ctx, &cur) {
++                Ok((bi, dom, body)) => {
++                    fields.push(Field {
++                        info: bi,
++                        dom: dom.clone(),
++                        ctx: src_ctx.clone(),
++                    });
++                    src_ctx.push(dom);
++                    cur = body;
++                }
++                Err(_) => break,
++            }
++        }
++        let field_count = fields.len();
++        let mut local = Vec::with_capacity(field_count);
++        let field_shift = outer_depth
++            .checked_sub(num_params as usize)
++            .ok_or_else(|| TcError::Other("minor context underflow".into()))?
++            as i32;
++        for (field_pos, field) in fields.iter().enumerate() {
++            local.push(RecBinder {
++                info: field.info,
++                // Earlier constructor fields stay local; only the parameter
++                // prefix moves across motives and preceding minors.
++                typ: expr::shift(&field.dom, field_shift, field_pos as u32),
++            });
++        }
++
++        let Some((conclusion_owner, conclusion_indices)) = self.find_member_target(
++            members,
++            &cur,
++            num_params,
++            num_params as usize + field_count,
++        ) else {
++            return reject("constructor conclusion is outside reconstructed mutual group");
++        };
++        if conclusion_owner != owner_pos {
++            return reject("constructor conclusion has the wrong reconstructed owner");
++        }
++
++        let mut ih_count = 0usize;
++        for (field_pos, field) in fields.iter().enumerate() {
++            let mut fctx = field.ctx.clone();
++            let mut fcur = self.whnf(&fctx, &field.dom)?;
++            let mut arg_binders = Vec::new();
++            loop {
++                match self.ensure_pi(&fctx, &fcur) {
++                    Ok((bi, dom, body)) => {
++                        let base = outer_depth + field_count + ih_count;
++                        let shift_by = base.checked_sub(field.ctx.len()).ok_or_else(|| {
++                            TcError::Other("recursive-field context underflow".into())
++                        })? as i32;
++                        arg_binders.push(RecBinder {
++                            info: bi,
++                            typ: expr::shift(&dom, shift_by, arg_binders.len() as u32),
++                        });
++                        fctx.push(dom);
++                        fcur = body;
++                    }
++                    Err(_) => break,
++                }
++            }
++            let recursive_target = if let Some(found) = self.find_member_target(
++                members,
++                &fcur,
++                num_params,
++                fctx.len(),
++            ) {
++                Some(found)
++            } else {
++                self.find_member_target_defeq(members, &fcur, num_params, &fctx)?
++            };
++            let Some((member_pos, recursive_indices)) = recursive_target else {
++                let local_depth = fctx
++                    .len()
++                    .checked_sub(num_params as usize)
++                    .ok_or_else(|| {
++                        TcError::Other("recursive-field source context underflow".into())
++                    })? as u32;
++                if self.contains_current_member(
++                    &fcur,
++                    local_depth,
++                    num_params,
++                    original_names,
++                    members,
++                ) {
++                    return reject(
++                        "recursive field does not exactly match a reconstructed member specialization",
++                    );
++                }
++                continue;
++            };
++            let base = outer_depth + field_count + ih_count;
++            let shift_by = base
++                .checked_sub(field.ctx.len())
++                .ok_or_else(|| TcError::Other("recursive target context underflow".into()))?
++                as i32;
++            let arg_count = arg_binders.len();
++            let depth = base + arg_count;
++            let motive_pos = num_params as usize + member_pos;
++            let motive = expr::bvar((depth - 1 - motive_pos) as u32);
++            let mut ih_args: Vec<Expr> = recursive_indices
++                .iter()
++                .map(|a| expr::shift(a, shift_by, arg_count as u32))
++                .collect();
++            let field_value = expr::bvar(
++                (field_count + ih_count + arg_count - 1 - field_pos) as u32,
++            );
++            let function_args: Vec<Expr> = (0..arg_count)
++                .map(|i| expr::bvar((arg_count - 1 - i) as u32))
++                .collect();
++            ih_args.push(expr::apps(field_value, &function_args));
++            local.push(RecBinder {
++                info: BinderInfo::Default,
++                typ: close_rec_telescope(&arg_binders, expr::apps(motive, &ih_args)),
++            });
++            ih_count += 1;
++        }
++
++        let depth = outer_depth + field_count + ih_count;
++        let conclusion_outer_shift = outer_depth
++            .checked_sub(num_params as usize)
++            .ok_or_else(|| TcError::Other("constructor conclusion context underflow".into()))?
++            as i32;
++        let motive = expr::bvar((depth - 1 - (num_params as usize + owner_pos)) as u32);
++        let mut result_args: Vec<Expr> = conclusion_indices
++            .iter()
++            .map(|a| {
++                // First insert motives/minors between parameters and fields;
++                // then insert the accumulated IHs above every field.  A
++                // single shift with `field_count` cutoff would leave field
++                // bvars pointing at those newly inserted IH binders.
++                let with_outer = expr::shift(
++                    a,
++                    conclusion_outer_shift,
++                    field_count as u32,
++                );
++                expr::shift(&with_outer, ih_count as i32, 0)
++            })
++            .collect();
++        let owner = &members[owner_pos];
++        let fixed_shift = depth
++            .checked_sub(num_params as usize)
++            .ok_or_else(|| TcError::Other("constructor application context underflow".into()))?
++            as i32;
++        let mut ctor_args: Vec<Expr> = owner
++            .fixed_params
++            .iter()
++            .map(|p| expr::shift(p, fixed_shift, 0))
++            .collect();
++        ctor_args.extend(
++            (0..field_count)
++                .map(|i| expr::bvar((field_count + ih_count - 1 - i) as u32)),
++        );
++        result_args.push(expr::apps(
++            expr::const_(ctor.name, ctor.levels.clone()),
++            &ctor_args,
++        ));
++        Ok(close_rec_telescope(
++            &local,
++            expr::apps(motive, &result_args),
++        ))
++    }
++
+     /// Walk a constructor's argument telescope; each argument type must be
+     /// strictly positive in the names being defined (`bound`).
+     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+diff --git a/tests/exports.rs b/tests/exports.rs
+index c1ae79a..ddcfe05 100644
+--- a/tests/exports.rs
++++ b/tests/exports.rs
+@@ -4,6 +4,8 @@
+ //! `080_RBTree.id_spec` pins the iota field-then-rec order: two recursive
+ //! fields must become `minor f1 f2 (rec f1) (rec f2)`, not interleaved.
+ 
++use kiota::env::ConstantInfo;
++use kiota::expr::{self, Expr, ExprData};
+ use kiota::parser::Parser;
+ use kiota::tc::TcError;
+ use std::fs;
+@@ -23,8 +25,26 @@ fn check_file(path: &std::path::Path) -> Result<(), TcError> {
+ }
+ 
+ fn assert_accept(name: &str) {
++    let _ = parse_accept(name);
++}
++
++fn parse_accept(name: &str) -> Parser {
+     let path = fixture(name);
+-    check_file(&path).unwrap_or_else(|e| panic!("{name} should accept, got {e:?}"));
++    let bytes = fs::read(&path).unwrap_or_else(|e| panic!("read {}: {e}", path.display()));
++    let mut parser = Parser::new();
++    parser
++        .run(Cursor::new(bytes))
++        .unwrap_or_else(|e| panic!("{name} should accept, got {e:?}"));
++    parser
++}
++
++fn pi_domains(mut typ: Expr) -> Vec<Expr> {
++    let mut domains = Vec::new();
++    while let ExprData::Pi(_, domain, body) = &*typ {
++        domains.push(domain.clone());
++        typ = body.clone();
++    }
++    domains
+ }
+ 
+ /// Like `assert_accept`, but runs on a thread with a large stack, matching
+@@ -54,6 +74,176 @@ fn assert_reject(name: &str) {
+     }
+ }
+ 
++fn assert_reject_exact(name: &str, expected: &str) {
++    let path = fixture(name);
++    match check_file(&path) {
++        Err(TcError::Reject(message)) if message == expected => {}
++        other => panic!("{name} should reject with {expected:?}, got {other:?}"),
++    }
++}
++
++#[test]
++fn recursor_type_reconstruction_control_accepts() {
++    let parser = parse_accept("recursor-type-reconstruction.accept.ndjson");
++    let nest = parser.name_by_str["LALNest"];
++    let wrap = parser.name_by_str["LALWrap"];
++    for rec_name in ["LALNest.rec", "LALNest.rec_1"] {
++        let rec = parser.name_by_str[rec_name];
++        let ConstantInfo::Recursor {
++            typ,
++            all,
++            num_params,
++            num_indices,
++            num_motives,
++            num_minors,
++            ..
++        } = parser
++            .env
++            .get(rec)
++            .expect("reconstructed recursor is installed")
++        else {
++            panic!("{rec_name} is not a recursor")
++        };
++        assert_eq!(all, &[nest]);
++        assert_eq!(
++            (*num_params, *num_indices, *num_motives, *num_minors),
++            (0, 0, 2, 2)
++        );
++        let domains = pi_domains(typ.clone());
++        assert_eq!(domains.len(), 5, "two motives, two minors and one major");
++        let (head, args) = expr::unfold_apps(&domains[4]);
++        match rec_name {
++            "LALNest.rec" => {
++                assert!(matches!(&*head, ExprData::Const(name, _) if *name == nest));
++                assert!(args.is_empty());
++            }
++            "LALNest.rec_1" => {
++                assert!(matches!(&*head, ExprData::Const(name, _) if *name == wrap));
++                assert_eq!(args.len(), 1);
++                assert!(matches!(&*args[0], ExprData::Const(name, _) if *name == nest));
++            }
++            _ => unreachable!(),
++        }
++    }
++}
++
++#[test]
++fn recursor_type_reconstruction_candidate_rejects_exactly() {
++    assert_reject_exact(
++        "recursor-type-reconstruction.reject.ndjson",
++        "recursor `LALNest.rec_1` type does not match reconstructed type",
++    );
++}
++
++#[test]
++fn recursor_type_reconstruction_rejection_is_atomic() {
++    let path = fixture("recursor-type-reconstruction.reject.ndjson");
++    let bytes = fs::read(&path).expect("read recursor mismatch fixture");
++    let mut parser = Parser::new();
++    assert!(matches!(
++        parser.run(Cursor::new(bytes)),
++        Err(TcError::Reject(message))
++            if message == "recursor `LALNest.rec_1` type does not match reconstructed type"
++    ));
++    let names = ["LALNest", "LALNest.node", "LALNest.rec", "LALNest.rec_1"];
++    let ids: Vec<u32> = names
++        .iter()
++        .map(|name| {
++            *parser
++                .name_by_str
++                .get(*name)
++                .unwrap_or_else(|| panic!("fixture declares {name}"))
++        })
++        .collect();
++    for (name, id) in names.iter().zip(&ids) {
++        assert!(
++            parser.env.get(*id).is_none(),
++            "a rejected block must not leak {name} into the environment"
++        );
++        assert!(
++            !parser.env.rec_group.contains_key(id),
++            "a rejected block must not leak a recursor-group entry for {name}"
++        );
++    }
++    assert!(
++        !parser.env.rec_of.contains_key(&ids[0]),
++        "a rejected block must not leak recursor ownership"
++    );
++}
++
++#[test]
++fn recursor_type_reconstruction_ordinary_indexed_accepts() {
++    let parser = parse_accept("067_eqRec.accept.ndjson");
++    let eq = parser.name_by_str["Eq"];
++    let rec = parser.name_by_str["Eq.rec"];
++    let ConstantInfo::Recursor {
++        all,
++        num_params,
++        num_indices,
++        num_motives,
++        num_minors,
++        ..
++    } = parser.env.get(rec).expect("Eq.rec is installed")
++    else {
++        panic!("Eq.rec is not a recursor")
++    };
++    assert_eq!(all, &[eq]);
++    assert_eq!(
++        (*num_params, *num_indices, *num_motives, *num_minors),
++        (2, 1, 1, 1)
++    );
++}
++
++#[test]
++fn recursor_type_reconstruction_two_nested_specializations_accept() {
++    assert_accept("lean-value-two-list-specializations.accept.ndjson");
++}
++
++#[test]
++fn recursor_type_reconstruction_deep_parametric_nested_accepts() {
++    assert_accept("lean-doc-block-nested-rec-param-shift.accept.ndjson");
++}
++
++#[test]
++fn recursor_type_reconstruction_mutual_nested_accepts() {
++    let parser = parse_accept("lean-compiler-lcnf-code-ctorelim.accept.ndjson");
++    let all_names = [
++        "Lean.Compiler.LCNF.Alt",
++        "Lean.Compiler.LCNF.FunDecl",
++        "Lean.Compiler.LCNF.Cases",
++        "Lean.Compiler.LCNF.Code",
++    ];
++    let all: Vec<u32> = all_names
++        .iter()
++        .map(|name| parser.name_by_str[*name])
++        .collect();
++    for rec_name in [
++        "Lean.Compiler.LCNF.Alt.rec",
++        "Lean.Compiler.LCNF.FunDecl.rec",
++        "Lean.Compiler.LCNF.Cases.rec",
++        "Lean.Compiler.LCNF.Code.rec",
++        "Lean.Compiler.LCNF.Alt.rec_1",
++        "Lean.Compiler.LCNF.Alt.rec_2",
++    ] {
++        let rec = parser.name_by_str[rec_name];
++        let ConstantInfo::Recursor {
++            all: rec_all,
++            num_params,
++            num_motives,
++            num_minors,
++            ..
++        } = parser
++            .env
++            .get(rec)
++            .expect("mutual/nested recursor is installed")
++        else {
++            panic!("{rec_name} is not a recursor")
++        };
++        assert_eq!(rec_all, &all);
++        assert_eq!((*num_params, *num_motives, *num_minors), (1, 6, 19));
++    }
++}
++
+ #[test]
+ fn eq_rec_accepts() {
+     assert_accept("067_eqRec.accept.ndjson");
+diff --git a/tests/fixtures/recursor-type-reconstruction.accept.ndjson b/tests/fixtures/recursor-type-reconstruction.accept.ndjson
+new file mode 100644
+index 0000000..f5fe787
+--- /dev/null
++++ b/tests/fixtures/recursor-type-reconstruction.accept.ndjson
+@@ -0,0 +1,105 @@
++{"meta":{"exporter":{"name":"lean4export","version":"3.1.0"},"format":{"version":"3.1.0"},"lean":{"githash":"f72c35b3f637c8c6571d353742168ab66cc22c00","version":"4.29.1"}}}
++{"in":1,"str":{"pre":0,"str":"LALWrap"}}
++{"in":2,"str":{"pre":0,"str":"alpha"}}
++{"il":1,"succ":0}
++{"ie":0,"sort":1}
++{"forallE":{"binderInfo":"default","body":0,"name":2,"type":0},"ie":1}
++{"in":3,"str":{"pre":1,"str":"mk"}}
++{"in":4,"str":{"pre":0,"str":"value"}}
++{"bvar":0,"ie":2}
++{"const":{"name":1,"us":[]},"ie":3}
++{"bvar":1,"ie":4}
++{"app":{"arg":4,"fn":3},"ie":5}
++{"forallE":{"binderInfo":"default","body":5,"name":4,"type":2},"ie":6}
++{"forallE":{"binderInfo":"implicit","body":6,"name":2,"type":0},"ie":7}
++{"in":5,"str":{"pre":1,"str":"rec"}}
++{"in":6,"str":{"pre":0,"str":"u"}}
++{"il":2,"param":6}
++{"in":7,"str":{"pre":0,"str":"motive"}}
++{"in":8,"str":{"pre":0,"str":"t"}}
++{"app":{"arg":2,"fn":3},"ie":8}
++{"ie":9,"sort":2}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":8},"ie":10}
++{"in":9,"str":{"pre":0,"str":"mk"}}
++{"const":{"name":3,"us":[]},"ie":11}
++{"bvar":2,"ie":12}
++{"app":{"arg":12,"fn":11},"ie":13}
++{"app":{"arg":2,"fn":13},"ie":14}
++{"app":{"arg":14,"fn":4},"ie":15}
++{"forallE":{"binderInfo":"default","body":15,"name":4,"type":4},"ie":16}
++{"app":{"arg":12,"fn":3},"ie":17}
++{"app":{"arg":2,"fn":12},"ie":18}
++{"forallE":{"binderInfo":"default","body":18,"name":8,"type":17},"ie":19}
++{"forallE":{"binderInfo":"default","body":19,"name":9,"type":16},"ie":20}
++{"forallE":{"binderInfo":"implicit","body":20,"name":7,"type":10},"ie":21}
++{"forallE":{"binderInfo":"implicit","body":21,"name":2,"type":0},"ie":22}
++{"app":{"arg":2,"fn":4},"ie":23}
++{"ie":24,"lam":{"binderInfo":"default","body":23,"name":4,"type":12}}
++{"ie":25,"lam":{"binderInfo":"default","body":24,"name":9,"type":16}}
++{"ie":26,"lam":{"binderInfo":"default","body":25,"name":7,"type":10}}
++{"ie":27,"lam":{"binderInfo":"default","body":26,"name":2,"type":0}}
++{"inductive":{"ctors":[{"cidx":0,"induct":1,"isUnsafe":false,"levelParams":[],"name":3,"numFields":1,"numParams":1,"type":7}],"recs":[{"all":[1],"isUnsafe":false,"k":false,"levelParams":[6],"name":5,"numIndices":0,"numMinors":1,"numMotives":1,"numParams":1,"rules":[{"ctor":3,"nfields":1,"rhs":27}],"type":22}],"types":[{"all":[1],"ctors":[3],"isRec":false,"isReflexive":false,"isUnsafe":false,"levelParams":[],"name":1,"numIndices":0,"numNested":0,"numParams":1,"type":1}]}}
++{"in":10,"str":{"pre":0,"str":"LALNest"}}
++{"in":11,"str":{"pre":10,"str":"node"}}
++{"in":12,"str":{"pre":0,"str":"children"}}
++{"const":{"name":10,"us":[]},"ie":28}
++{"app":{"arg":28,"fn":3},"ie":29}
++{"forallE":{"binderInfo":"default","body":28,"name":12,"type":29},"ie":30}
++{"in":13,"str":{"pre":10,"str":"rec_1"}}
++{"in":14,"str":{"pre":0,"str":"motive_1"}}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":28},"ie":31}
++{"in":15,"str":{"pre":0,"str":"motive_2"}}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":29},"ie":32}
++{"in":16,"str":{"pre":0,"str":"node"}}
++{"in":17,"str":{"pre":0,"str":"children_ih"}}
++{"bvar":3,"ie":33}
++{"const":{"name":11,"us":[]},"ie":34}
++{"app":{"arg":4,"fn":34},"ie":35}
++{"app":{"arg":35,"fn":33},"ie":36}
++{"forallE":{"binderInfo":"default","body":36,"name":17,"type":23},"ie":37}
++{"forallE":{"binderInfo":"default","body":37,"name":12,"type":29},"ie":38}
++{"in":18,"str":{"pre":0,"str":"value_ih"}}
++{"app":{"arg":2,"fn":33},"ie":39}
++{"app":{"arg":28,"fn":11},"ie":40}
++{"app":{"arg":4,"fn":40},"ie":41}
++{"app":{"arg":41,"fn":33},"ie":42}
++{"forallE":{"binderInfo":"default","body":42,"name":18,"type":39},"ie":43}
++{"forallE":{"binderInfo":"default","body":43,"name":4,"type":28},"ie":44}
++{"forallE":{"binderInfo":"default","body":39,"name":8,"type":29},"ie":45}
++{"forallE":{"binderInfo":"default","body":45,"name":9,"type":44},"ie":46}
++{"forallE":{"binderInfo":"default","body":46,"name":16,"type":38},"ie":47}
++{"forallE":{"binderInfo":"implicit","body":47,"name":15,"type":32},"ie":48}
++{"forallE":{"binderInfo":"implicit","body":48,"name":14,"type":31},"ie":49}
++{"in":19,"str":{"pre":10,"str":"rec"}}
++{"const":{"name":19,"us":[2]},"ie":50}
++{"bvar":4,"ie":51}
++{"app":{"arg":51,"fn":50},"ie":52}
++{"app":{"arg":33,"fn":52},"ie":53}
++{"app":{"arg":12,"fn":53},"ie":54}
++{"app":{"arg":4,"fn":54},"ie":55}
++{"app":{"arg":2,"fn":55},"ie":56}
++{"app":{"arg":56,"fn":23},"ie":57}
++{"ie":58,"lam":{"binderInfo":"default","body":57,"name":4,"type":28}}
++{"ie":59,"lam":{"binderInfo":"default","body":58,"name":9,"type":44}}
++{"ie":60,"lam":{"binderInfo":"default","body":59,"name":16,"type":38}}
++{"ie":61,"lam":{"binderInfo":"default","body":60,"name":15,"type":32}}
++{"ie":62,"lam":{"binderInfo":"default","body":61,"name":14,"type":31}}
++{"app":{"arg":2,"fn":51},"ie":63}
++{"forallE":{"binderInfo":"default","body":63,"name":8,"type":28},"ie":64}
++{"forallE":{"binderInfo":"default","body":64,"name":9,"type":44},"ie":65}
++{"forallE":{"binderInfo":"default","body":65,"name":16,"type":38},"ie":66}
++{"forallE":{"binderInfo":"implicit","body":66,"name":15,"type":32},"ie":67}
++{"forallE":{"binderInfo":"implicit","body":67,"name":14,"type":31},"ie":68}
++{"const":{"name":13,"us":[2]},"ie":69}
++{"app":{"arg":51,"fn":69},"ie":70}
++{"app":{"arg":33,"fn":70},"ie":71}
++{"app":{"arg":12,"fn":71},"ie":72}
++{"app":{"arg":4,"fn":72},"ie":73}
++{"app":{"arg":2,"fn":73},"ie":74}
++{"app":{"arg":74,"fn":18},"ie":75}
++{"ie":76,"lam":{"binderInfo":"default","body":75,"name":12,"type":29}}
++{"ie":77,"lam":{"binderInfo":"default","body":76,"name":9,"type":44}}
++{"ie":78,"lam":{"binderInfo":"default","body":77,"name":16,"type":38}}
++{"ie":79,"lam":{"binderInfo":"default","body":78,"name":15,"type":32}}
++{"ie":80,"lam":{"binderInfo":"default","body":79,"name":14,"type":31}}
++{"inductive":{"ctors":[{"cidx":0,"induct":10,"isUnsafe":false,"levelParams":[],"name":11,"numFields":1,"numParams":0,"type":30}],"recs":[{"all":[10],"isUnsafe":false,"k":false,"levelParams":[6],"name":13,"numIndices":0,"numMinors":2,"numMotives":2,"numParams":0,"rules":[{"ctor":3,"nfields":1,"rhs":62}],"type":49},{"all":[10],"isUnsafe":false,"k":false,"levelParams":[6],"name":19,"numIndices":0,"numMinors":2,"numMotives":2,"numParams":0,"rules":[{"ctor":11,"nfields":1,"rhs":80}],"type":68}],"types":[{"all":[10],"ctors":[11],"isRec":true,"isReflexive":false,"isUnsafe":false,"levelParams":[],"name":10,"numIndices":0,"numNested":1,"numParams":0,"type":0}]}}
+diff --git a/tests/fixtures/recursor-type-reconstruction.reject.ndjson b/tests/fixtures/recursor-type-reconstruction.reject.ndjson
+new file mode 100644
+index 0000000..9f32c47
+--- /dev/null
++++ b/tests/fixtures/recursor-type-reconstruction.reject.ndjson
+@@ -0,0 +1,105 @@
++{"meta":{"exporter":{"name":"lean4export","version":"3.1.0"},"format":{"version":"3.1.0"},"lean":{"githash":"f72c35b3f637c8c6571d353742168ab66cc22c00","version":"4.29.1"}}}
++{"in":1,"str":{"pre":0,"str":"LALWrap"}}
++{"in":2,"str":{"pre":0,"str":"alpha"}}
++{"il":1,"succ":0}
++{"ie":0,"sort":1}
++{"forallE":{"binderInfo":"default","body":0,"name":2,"type":0},"ie":1}
++{"in":3,"str":{"pre":1,"str":"mk"}}
++{"in":4,"str":{"pre":0,"str":"value"}}
++{"bvar":0,"ie":2}
++{"const":{"name":1,"us":[]},"ie":3}
++{"bvar":1,"ie":4}
++{"app":{"arg":4,"fn":3},"ie":5}
++{"forallE":{"binderInfo":"default","body":5,"name":4,"type":2},"ie":6}
++{"forallE":{"binderInfo":"implicit","body":6,"name":2,"type":0},"ie":7}
++{"in":5,"str":{"pre":1,"str":"rec"}}
++{"in":6,"str":{"pre":0,"str":"u"}}
++{"il":2,"param":6}
++{"in":7,"str":{"pre":0,"str":"motive"}}
++{"in":8,"str":{"pre":0,"str":"t"}}
++{"app":{"arg":2,"fn":3},"ie":8}
++{"ie":9,"sort":2}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":8},"ie":10}
++{"in":9,"str":{"pre":0,"str":"mk"}}
++{"const":{"name":3,"us":[]},"ie":11}
++{"bvar":2,"ie":12}
++{"app":{"arg":12,"fn":11},"ie":13}
++{"app":{"arg":2,"fn":13},"ie":14}
++{"app":{"arg":14,"fn":4},"ie":15}
++{"forallE":{"binderInfo":"default","body":15,"name":4,"type":4},"ie":16}
++{"app":{"arg":12,"fn":3},"ie":17}
++{"app":{"arg":2,"fn":12},"ie":18}
++{"forallE":{"binderInfo":"default","body":18,"name":8,"type":17},"ie":19}
++{"forallE":{"binderInfo":"default","body":19,"name":9,"type":16},"ie":20}
++{"forallE":{"binderInfo":"implicit","body":20,"name":7,"type":10},"ie":21}
++{"forallE":{"binderInfo":"implicit","body":21,"name":2,"type":0},"ie":22}
++{"app":{"arg":2,"fn":4},"ie":23}
++{"ie":24,"lam":{"binderInfo":"default","body":23,"name":4,"type":12}}
++{"ie":25,"lam":{"binderInfo":"default","body":24,"name":9,"type":16}}
++{"ie":26,"lam":{"binderInfo":"default","body":25,"name":7,"type":10}}
++{"ie":27,"lam":{"binderInfo":"default","body":26,"name":2,"type":0}}
++{"inductive":{"ctors":[{"cidx":0,"induct":1,"isUnsafe":false,"levelParams":[],"name":3,"numFields":1,"numParams":1,"type":7}],"recs":[{"all":[1],"isUnsafe":false,"k":false,"levelParams":[6],"name":5,"numIndices":0,"numMinors":1,"numMotives":1,"numParams":1,"rules":[{"ctor":3,"nfields":1,"rhs":27}],"type":22}],"types":[{"all":[1],"ctors":[3],"isRec":false,"isReflexive":false,"isUnsafe":false,"levelParams":[],"name":1,"numIndices":0,"numNested":0,"numParams":1,"type":1}]}}
++{"in":10,"str":{"pre":0,"str":"LALNest"}}
++{"in":11,"str":{"pre":10,"str":"node"}}
++{"in":12,"str":{"pre":0,"str":"children"}}
++{"const":{"name":10,"us":[]},"ie":28}
++{"app":{"arg":28,"fn":3},"ie":29}
++{"forallE":{"binderInfo":"default","body":28,"name":12,"type":29},"ie":30}
++{"in":13,"str":{"pre":10,"str":"rec_1"}}
++{"in":14,"str":{"pre":0,"str":"motive_1"}}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":28},"ie":31}
++{"in":15,"str":{"pre":0,"str":"motive_2"}}
++{"forallE":{"binderInfo":"default","body":9,"name":8,"type":29},"ie":32}
++{"in":16,"str":{"pre":0,"str":"node"}}
++{"in":17,"str":{"pre":0,"str":"children_ih"}}
++{"bvar":3,"ie":33}
++{"const":{"name":11,"us":[]},"ie":34}
++{"app":{"arg":4,"fn":34},"ie":35}
++{"app":{"arg":35,"fn":33},"ie":36}
++{"forallE":{"binderInfo":"default","body":36,"name":17,"type":23},"ie":37}
++{"forallE":{"binderInfo":"default","body":37,"name":12,"type":29},"ie":38}
++{"in":18,"str":{"pre":0,"str":"value_ih"}}
++{"app":{"arg":2,"fn":33},"ie":39}
++{"app":{"arg":28,"fn":11},"ie":40}
++{"app":{"arg":4,"fn":40},"ie":41}
++{"app":{"arg":41,"fn":33},"ie":42}
++{"forallE":{"binderInfo":"default","body":42,"name":18,"type":39},"ie":43}
++{"forallE":{"binderInfo":"default","body":43,"name":4,"type":28},"ie":44}
++{"forallE":{"binderInfo":"default","body":39,"name":8,"type":29},"ie":45}
++{"forallE":{"binderInfo":"default","body":45,"name":9,"type":44},"ie":46}
++{"forallE":{"binderInfo":"default","body":46,"name":16,"type":38},"ie":47}
++{"forallE":{"binderInfo":"implicit","body":47,"name":15,"type":32},"ie":48}
++{"forallE":{"binderInfo":"implicit","body":48,"name":14,"type":31},"ie":49}
++{"in":19,"str":{"pre":10,"str":"rec"}}
++{"const":{"name":19,"us":[2]},"ie":50}
++{"bvar":4,"ie":51}
++{"app":{"arg":51,"fn":50},"ie":52}
++{"app":{"arg":33,"fn":52},"ie":53}
++{"app":{"arg":12,"fn":53},"ie":54}
++{"app":{"arg":4,"fn":54},"ie":55}
++{"app":{"arg":2,"fn":55},"ie":56}
++{"app":{"arg":56,"fn":23},"ie":57}
++{"ie":58,"lam":{"binderInfo":"default","body":57,"name":4,"type":28}}
++{"ie":59,"lam":{"binderInfo":"default","body":58,"name":9,"type":44}}
++{"ie":60,"lam":{"binderInfo":"default","body":59,"name":16,"type":38}}
++{"ie":61,"lam":{"binderInfo":"default","body":60,"name":15,"type":32}}
++{"ie":62,"lam":{"binderInfo":"default","body":61,"name":14,"type":31}}
++{"app":{"arg":2,"fn":51},"ie":63}
++{"forallE":{"binderInfo":"default","body":63,"name":8,"type":28},"ie":64}
++{"forallE":{"binderInfo":"default","body":64,"name":9,"type":44},"ie":65}
++{"forallE":{"binderInfo":"default","body":65,"name":16,"type":38},"ie":66}
++{"forallE":{"binderInfo":"implicit","body":66,"name":15,"type":32},"ie":67}
++{"forallE":{"binderInfo":"implicit","body":67,"name":14,"type":31},"ie":68}
++{"const":{"name":13,"us":[2]},"ie":69}
++{"app":{"arg":51,"fn":69},"ie":70}
++{"app":{"arg":33,"fn":70},"ie":71}
++{"app":{"arg":12,"fn":71},"ie":72}
++{"app":{"arg":4,"fn":72},"ie":73}
++{"app":{"arg":2,"fn":73},"ie":74}
++{"app":{"arg":74,"fn":18},"ie":75}
++{"ie":76,"lam":{"binderInfo":"default","body":75,"name":12,"type":29}}
++{"ie":77,"lam":{"binderInfo":"default","body":76,"name":9,"type":44}}
++{"ie":78,"lam":{"binderInfo":"default","body":77,"name":16,"type":38}}
++{"ie":79,"lam":{"binderInfo":"default","body":78,"name":15,"type":32}}
++{"ie":80,"lam":{"binderInfo":"default","body":79,"name":14,"type":31}}
++{"inductive":{"ctors":[{"cidx":0,"induct":10,"isUnsafe":false,"levelParams":[],"name":11,"numFields":1,"numParams":0,"type":30}],"recs":[{"all":[10],"isUnsafe":false,"k":false,"levelParams":[6],"name":13,"numIndices":0,"numMinors":2,"numMotives":2,"numParams":0,"rules":[{"ctor":3,"nfields":1,"rhs":62}],"type":68},{"all":[10],"isUnsafe":false,"k":false,"levelParams":[6],"name":19,"numIndices":0,"numMinors":2,"numMotives":2,"numParams":0,"rules":[{"ctor":11,"nfields":1,"rhs":80}],"type":68}],"types":[{"all":[10],"ctors":[11],"isRec":true,"isReflexive":false,"isUnsafe":false,"levelParams":[],"name":10,"numIndices":0,"numNested":1,"numParams":0,"type":0}]}}

@@ -3,7 +3,7 @@
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "status": "ACTIVE",
-  "current_phase": "IMPLEMENTATION",
+  "current_phase": "EXECUTION_READY",
   "plan": "docs/research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md",
   "target_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
   "source_archive": {
@@ -54,7 +54,18 @@
       "exact commands and expected outcomes",
       "supervisor implementation and tests"
     ],
-    "status": "PENDING"
+    "status": "PASS",
+    "evidence": [
+      "results/research/kiota-recursor-type-repair-1/patch-package.json",
+      "results/research/kiota-recursor-type-repair-1/patch-review.json",
+      "results/research/kiota-recursor-type-repair-1/dependency-lock.json",
+      "results/research/kiota-recursor-type-repair-1/run-cell.py",
+      "results/research/kiota-recursor-type-repair-1/test-runner.py",
+      "results/research/kiota-recursor-type-repair-1/runner-test-result.json",
+      "results/research/kiota-recursor-type-repair-1/runner-review.json",
+      "results/research/kiota-recursor-type-repair-1/execution"
+    ],
+    "commit_required_before_launch": true
   },
   "process_safety": {
     "build_seconds": 1200,
@@ -74,6 +85,17 @@
     "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
     "process_safety": "NONTERMINAL"
   },
+  "execution_cells": [
+    {"id": "001-build", "expected": "BUILD_PASS"},
+    {"id": "002-focused", "expected": "7_PASS_72_FILTERED"},
+    {"id": "003-candidate", "expected": "1_PASS_78_FILTERED_EXACT_REJECT_CONFIRMED"},
+    {"id": "004-control", "expected": "1_PASS_78_FILTERED_ACCEPT"},
+    {"id": "005-ordinary", "expected": "1_PASS_78_FILTERED_ACCEPT"},
+    {"id": "006-nested-two", "expected": "1_PASS_78_FILTERED_ACCEPT"},
+    {"id": "007-nested-deep", "expected": "1_PASS_78_FILTERED_ACCEPT"},
+    {"id": "008-nested-mutual", "expected": "1_PASS_78_FILTERED_ACCEPT"},
+    {"id": "009-full", "expected": "162_PASS_0_FAIL"}
+  ],
   "authority_limits": {
     "network_requests": false,
     "external_writes": false,

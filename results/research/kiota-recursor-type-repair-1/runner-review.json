@@ -1,0 +1,93 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
+  "status": "PASS",
+  "completed_at": "2026-09-22T23:36:45Z",
+  "review_class": "INDEPENDENT_STATIC_AND_MOCKED_SUPERVISOR_REVIEW",
+  "bindings": [
+    {
+      "role": "supervisor",
+      "path": "results/research/kiota-recursor-type-repair-1/run-cell.py",
+      "bytes": 36365,
+      "sha256": "7abad0b09b6073d9f6ff10388c7f69d9c944dd107ffac4e863ff8356db1f7887"
+    },
+    {
+      "role": "supervisor_tests",
+      "path": "results/research/kiota-recursor-type-repair-1/test-runner.py",
+      "bytes": 11536,
+      "sha256": "dbcd73618e411f7233a12ad912b393b478b9035ec15dbfad1a5c3955eceed048"
+    },
+    {
+      "role": "process_supervisor",
+      "path": "lib/metamorphic_pilot_runner.py",
+      "bytes": 15986,
+      "sha256": "fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50"
+    },
+    {
+      "role": "atomic_helper",
+      "path": "lib/cvc_process.py",
+      "bytes": 8271,
+      "sha256": "1465f099b567379f654808786b3cfa728108df6f20053037529267b491f4447c"
+    },
+    {
+      "role": "test_result",
+      "path": "results/research/kiota-recursor-type-repair-1/runner-test-result.json",
+      "bytes": 1317,
+      "sha256": "c0b9f74ad6b546a746b61364f23d936b242381c161b9062bc88b6fc7332897e6"
+    }
+  ],
+  "checks": [
+    {
+      "id": "FIXED_COMMAND_SURFACE",
+      "result": "PASS",
+      "evidence": "The CLI accepts only the nine fixed cell identifiers and derives every Cargo argument from in-source constants; manifests cannot select another command."
+    },
+    {
+      "id": "COMMITTED_CONTROL_PLANE",
+      "result": "PASS",
+      "evidence": "Every relative binding and the selected manifest must equal its committed HEAD bytes before reservation."
+    },
+    {
+      "id": "EXACT_SOURCE_AND_PATCH",
+      "result": "PASS",
+      "evidence": "The runner reconstructs the archive inventory, proves every unchanged byte, verifies every modified or added ledger entry, and rejects symlinks or unlisted files."
+    },
+    {
+      "id": "OFFLINE_DEPENDENCIES",
+      "result": "PASS",
+      "evidence": "Cargo.lock, every registry package tree, Cargo/Rust binaries, absent configuration search paths, --offline, --locked and an exact minimal environment are bound."
+    },
+    {
+      "id": "PROCESS_SAFETY",
+      "result": "PASS",
+      "evidence": "Each cell uses a process group, timeout, RSS ceiling with positive sampling, complete post-run group-absence check, and raw output plus receipt preservation."
+    },
+    {
+      "id": "PERSISTENT_ACCOUNTING",
+      "result": "PASS",
+      "evidence": "Attempts are unlimited observational records in unique directories; a safety or engineering failure remains nonterminal, while missing cleanup leaves the item blocked for reconciliation."
+    },
+    {
+      "id": "RESULT_CLASSIFICATION",
+      "result": "PASS",
+      "evidence": "Focused cells require exact named tests and harness counts; the full cell requires the four bound harness summaries totaling 162 passing tests."
+    },
+    {
+      "id": "MOCKED_REGRESSION_SUITE",
+      "result": "PASS",
+      "evidence": "Nineteen pure/mocked tests passed, covering RSS and cleanup failures, uncapped attempts, fixed sequencing, candidate semantics, count drift, durable receipts and spawn failure."
+    }
+  ],
+  "observations": {
+    "runner_tests": 19,
+    "cargo_launches": 0,
+    "checker_launches": 0,
+    "network_requests": 0,
+    "external_actions": 0
+  },
+  "verdict": {
+    "ready_for_exact_manifest_binding": true,
+    "authorizes_scientific_execution_by_itself": false,
+    "remaining_gate": "Commit the exact patch package, independent patch review and all nine execution manifests."
+  }
+}
