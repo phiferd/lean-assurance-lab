@@ -1,0 +1,165 @@
+{
+  "artifacts": {
+    "candidate": {
+      "bytes": 6332,
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-aux-type.ndjson",
+      "sha256": "13900d3c26371111800a6c85ba8a9cc3d472beb384cf2c5fde574b8a9e7f36bd"
+    },
+    "control": {
+      "bytes": 6332,
+      "path": "corpus/generated/nanoda-gen-7b603be7dc87-valid-control.ndjson",
+      "sha256": "3b66763082822a74a203fb4dda773ff473e853e73077b8f564c603b56e9610ae"
+    }
+  },
+  "build_result": {
+    "bytes": 2447,
+    "path": "results/research/acceptance-impact-pilot-1/build-0001/result.json",
+    "sha256": "26bebd94ec5e6a48128919dda77242db3a91b2b3792d7769a745c06d7aa32a65"
+  },
+  "cells": [
+    {
+      "artifact_id": "control",
+      "cell_id": "kiota-9fa2c297::control",
+      "ordinal": 1,
+      "profile_id": "kiota-9fa2c297"
+    },
+    {
+      "artifact_id": "candidate",
+      "cell_id": "kiota-9fa2c297::candidate",
+      "ordinal": 2,
+      "profile_id": "kiota-9fa2c297"
+    },
+    {
+      "artifact_id": "control",
+      "cell_id": "official-lean-4.33.0::control",
+      "ordinal": 3,
+      "profile_id": "official-lean-4.33.0"
+    },
+    {
+      "artifact_id": "candidate",
+      "cell_id": "official-lean-4.33.0::candidate",
+      "ordinal": 4,
+      "profile_id": "official-lean-4.33.0"
+    }
+  ],
+  "downstream_construction_before_pass": "FORBIDDEN",
+  "environment": {
+    "LANG": "C",
+    "PATH": "/usr/bin:/bin:/usr/sbin:/sbin",
+    "RUST_BACKTRACE": "0"
+  },
+  "expected_premise_gate": {
+    "kiota-9fa2c297::candidate": "ACCEPT",
+    "kiota-9fa2c297::control": "ACCEPT",
+    "official-lean-4.33.0::candidate": "INTENDED_RECURSOR_REJECT",
+    "official-lean-4.33.0::control": "ACCEPT"
+  },
+  "item_id": "ACCEPTANCE-IMPACT-PILOT-1",
+  "launch_owner": "root",
+  "memory_bytes_each": 2147483648,
+  "pair_audit": {
+    "bytes": 6097,
+    "path": "results/research/acceptance-impact-pilot-1/pair-audit.json",
+    "sha256": "bc3e9f48fd17f3c6ebcf96efa8d7b98133f88fc6a7b09f9b1699a8e549379007"
+  },
+  "profiles": {
+    "kiota-9fa2c297": {
+      "binary": {
+        "bytes": 1353760,
+        "path": "external/acceptance-impact-pilot-1-kiota/target/release/kiota",
+        "sha256": "b86473cd7d33d534bcf113e82bee3d9a6fe55d306a8c89816df85ba74b6961b1"
+      },
+      "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+      "success_contract": "exit 0; stdout empty; stderr empty"
+    },
+    "official-lean-4.33.0": {
+      "binary": {
+        "bytes": 100401632,
+        "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+        "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585"
+      },
+      "definition": {
+        "bytes": 214,
+        "path": "external/lean-kernel-arena/checkers/official.yaml",
+        "sha256": "4463cc2522d3a4f474515dc6781c193bc0e69e9b358a37ce11f0bb2eba9e556a"
+      },
+      "success_contract": "exit 0; stdout matches ^Accepted [0-9]+ declarations[.]\\n$; stderr empty",
+      "toolchain": {
+        "bytes": 25,
+        "path": "external/lean-kernel-arena/_build/checkers/official/src/lean-toolchain",
+        "sha256": "302cd63c54178885b89e669f33b38f12f4dd7ae7e5cac537b3203e3768d8fb2b"
+      }
+    }
+  },
+  "ps": {
+    "bytes": 170816,
+    "path": "/bin/ps",
+    "sha256": "57b93ca9ccbeb77e261f0792e9722eb44189dd81a81e26a90280a73a2f5a73bb"
+  },
+  "run_directory": "results/research/acceptance-impact-pilot-1/stage-1-run-0001",
+  "schema_version": 1,
+  "stage": "CURRENT_PREMISE_REPRODUCTION",
+  "timeout_seconds_each": 120,
+  "tooling": [
+    {
+      "bytes": 26250,
+      "path": "lib/acceptance_impact_pilot.py",
+      "sha256": "831ab3eadc731c51e7e49e361a969158e3bf05c32dc1433dc86f3c0ed0278e7f"
+    },
+    {
+      "bytes": 17996,
+      "path": "lib/acceptance_impact_source.py",
+      "sha256": "1da6197556692fd7518e04f5168a54217bb7c7c4370c25b58b569fbfc99e229b"
+    },
+    {
+      "bytes": 20263,
+      "path": "lib/acceptance_impact_pair.py",
+      "sha256": "e132cdc19c9e6ec544e681b9927633889e9906e5112ace7c7f26a176eaef9271"
+    },
+    {
+      "bytes": 15986,
+      "path": "lib/metamorphic_pilot_runner.py",
+      "sha256": "fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50"
+    },
+    {
+      "bytes": 1025,
+      "path": "scripts/build-acceptance-impact-target",
+      "sha256": "144a93361474a3511eae16c6bd5be23e4955cae46819dfaa7d9ba8a9176de344"
+    },
+    {
+      "bytes": 1043,
+      "path": "scripts/execute-acceptance-impact-stage-1",
+      "sha256": "511d37bda94a56a54d4e6effa3235539d14ce2eb4843044745008e5f248faa63"
+    },
+    {
+      "bytes": 855,
+      "path": "scripts/validate-acceptance-impact-pilot-1",
+      "sha256": "58220ec4e600e6046fb56272beb159c711a8762a5955a248e413435dc156bb5c"
+    },
+    {
+      "bytes": 745,
+      "path": "scripts/prepare-acceptance-impact-source",
+      "sha256": "7f8560e430a3739030c40bbd5c070c028aab2aa2095303c724f545699f4c3ff7"
+    },
+    {
+      "bytes": 1135,
+      "path": "scripts/build-acceptance-impact-pair-audit",
+      "sha256": "645f49bb383fb618134e00fa57e97591c2bc1e0e2493f574ae3d533a18a178d2"
+    },
+    {
+      "bytes": 4613,
+      "path": "tests/test_acceptance_impact_pilot.py",
+      "sha256": "451e6af5f8a983ee18b47dfb9b619fdb9bcd74c2a35e3eb37cfc21089f47e358"
+    },
+    {
+      "bytes": 3265,
+      "path": "tests/test_acceptance_impact_source.py",
+      "sha256": "b8287bdbbcf718ad296a11b67077aa3efccb3707feacebc49e9af66db4c4bc5d"
+    },
+    {
+      "bytes": 6649,
+      "path": "tests/test_acceptance_impact_pair.py",
+      "sha256": "d5e7dd3014f7a88db8e27f4fe41e97145a917edb5bf3e597ac6fc5bfc6c0211f"
+    }
+  ]
+}

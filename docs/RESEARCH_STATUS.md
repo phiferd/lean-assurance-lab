@@ -3030,9 +3030,9 @@ observing the use. The exact pair audit, safe archived-source materializer and
 observable build/execution controller now pass their focused preparation tests.
 The exact offline release build passed in 17.45 seconds with 549 positive RSS
 samples, a 362,283,008-byte maximum observation and complete cleanup; its
-post-build 90-file source tree remains archive-identical. The four-cell
-execution manifest is not yet committed and no target or reference checker
-observation has started.
+post-build 90-file source tree remains archive-identical. The exact four-cell
+execution manifest is frozen and committed-ready; no target or reference
+checker observation has started.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
