@@ -3034,10 +3034,12 @@ post-build 90-file source tree remains archive-identical. The exact four-cell
 execution manifest produced a complete current-premise result: both controls
 accepted, Kiota `9fa2c297` accepted the candidate and official Lean 4.33.0
 rejected it with the exact `Invalid recursor LALNest.rec_1` diagnostic. All
-four cells had positive RSS observations and complete cleanup. Stage 2 is now
-eligible, but construction remains forbidden until its assumption audit,
-fixed five-application consequence contract, producer, independent audit and
-exact target/reference matrix are separately committed.
+four cells had positive RSS observations and complete cleanup. The Stage-2
+assumption audit, fixed five-application consequence contract, deterministic
+producer, independent structural auditor and bounded controller are committed,
+and their exact tooling revision is frozen. The fixed construction is now
+authorized; checker observation remains forbidden until the generated pair,
+independent PASS audit and exact execution manifest are committed.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
