@@ -80,7 +80,9 @@ class SupervisorTests(unittest.TestCase):
 
     def test_normal_exit_is_observed(self):
         receipt, stdout, stderr = self.run_case(
-            "normal.with.dots", "print('supervised-ok')", timeout=5,
+            "normal.with.dots",
+            "import time; print('supervised-ok'); time.sleep(0.1)",
+            timeout=5,
         )
         self.assertEqual(receipt["exit_code"], 0, json.dumps(receipt, sort_keys=True))
         self.assertFalse(receipt["timed_out"])

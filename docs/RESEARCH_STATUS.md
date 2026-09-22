@@ -3016,7 +3016,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `RECURSOR-TYPE-TRUST-BOUNDARY-1`.
 
-The canonical queue retains one READY, unstarted item and no ACTIVE item.
+The canonical queue retains one READY item, unstarted, and no ACTIVE item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
