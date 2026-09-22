@@ -3,7 +3,7 @@
   "item_id": "ACCEPTANCE-IMPACT-PILOT-1",
   "stage": "STAGE_2",
   "status": "FROZEN_BEFORE_CONSTRUCTION",
-  "criterion": "Add one dependency-complete closed value-bearing declaration whose body has LALNest.rec_1 as its head and exactly five left-associated applications at retained expression-68 type, plus one fixed expression-49 matched control.",
+  "criterion": "Add one dependency-complete closed value-bearing declaration whose lambda body is an exactly five-node left-associated application spine headed by LALNest.rec_1 at retained expression-68 type, plus one fixed expression-49 matched control.",
   "producer": "lib/acceptance_impact_stage2_producer.py",
   "independent_auditor": "lib/acceptance_impact_stage2_audit.py",
   "artifacts": {
@@ -68,8 +68,13 @@
     "exactly one added value-bearing declaration at record 120",
     "one LALNest.rec_1 constant occurrence at universe level 1",
     "exactly five left-associated application nodes 88 through 92 with arguments 81, 82, 84, 86 and 2",
+    "expression 28 is Const name 10 LALNest and expression 29 is App of Const name 1 LALWrap to expression 28",
+    "names 1 and 10 are distinct frozen inductive heads, not unfoldable definitions",
+    "universe level 1 is the closed successor of level 0",
+    "arguments 81, 82, 84 and 86 inhabit the shared first four Pi domains after universe instantiation 1",
     "candidate fifth binder and declaration domain are LALNest expression 28",
     "control fifth binder and declaration domain are LALWrap LALNest expression 29",
+    "counterfactually the candidate fifth argument has domain 28 while expression 49 requires 29, and the control fifth argument has domain 29 while expression 68 requires 28",
     "all new references are backward-defined and the complete expression is closed",
     "no extra candidate, control, name, declaration or adaptive alternative"
   ],
@@ -86,7 +91,7 @@
     "official-lean-4.33.0::candidate-use": "INTENDED_RECURSOR_REJECT"
   },
   "decisions": {
-    "CONSEQUENTIAL_WITHIN_FIXED_USE": "All structural invariants pass and the exact expected matrix is observed. Kiota reached and accepted the appended candidate declaration whose fifth argument is admitted only under retained type 68.",
+    "CONSEQUENTIAL_WITHIN_FIXED_USE": "All structural invariants pass and the exact expected matrix is observed. Kiota reached and accepted the appended candidate declaration whose lambda body has a fifth argument admitted only under retained type 68.",
     "HARMLESS_WITHIN_TESTED_USE": "All structural invariants and three comparison cells pass, but Kiota rejects the candidate specifically at the appended declaration with a normalized downstream type-policy rejection.",
     "CONSTRUCTION_OR_SEMANTIC_BOUNDARY": "Any malformed structure, unresolved name, universe mismatch, unrelated declaration-type mismatch, control failure, earlier candidate rejection or ambiguous diagnostic.",
     "REPAIR_REQUIRED": "Any timeout, crash, cleanup failure, missing positive RSS evidence, receipt mismatch or other infrastructure failure."
