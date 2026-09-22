@@ -3016,9 +3016,9 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `ACCEPTANCE-IMPACT-PILOT-1`.
 
-The canonical queue retains one READY item.
+The canonical queue retains one ACTIVE item.
 
-It is READY and unstarted under the
+It is ACTIVE in Stage 1 preparation under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
 retained `LALNest.rec_1` candidate/control pair and archived Kiota `9fa2c297`
 source are bound. The first stage is a fixed four-cell current reproduction
@@ -3026,7 +3026,7 @@ against Kiota and official Lean. Downstream construction remains forbidden
 unless both controls accept, current Kiota accepts the candidate and official
 Lean rejects it. If that gate passes, commit the assumption audit, one matched
 consequence criterion and exact execution manifest before constructing or
-observing the use. The selected item has not started.
+observing the use. No target or reference checker observation has started.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
@@ -3057,7 +3057,7 @@ no external action is recommended now.
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
-| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | READY, unstarted staged reproduction |
+| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | ACTIVE, Stage 1 preparation |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
 | 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |

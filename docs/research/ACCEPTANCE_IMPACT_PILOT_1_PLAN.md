@@ -1,6 +1,6 @@
 # Acceptance Impact Pilot 1
 
-Status: **READY, unstarted**  
+Status: **ACTIVE in Stage 1 preparation**
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`  
 Item: `ACCEPTANCE-IMPACT-PILOT-1`
 
