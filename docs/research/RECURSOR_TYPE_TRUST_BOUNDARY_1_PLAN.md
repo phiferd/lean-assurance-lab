@@ -1,6 +1,6 @@
 # Recursor type trust boundary 1 plan
 
-Status: **ACTIVE — source-policy adjudication**
+Status: **COMPLETE — validated regression target with source boundary**
 
 Item: `RECURSOR-TYPE-TRUST-BOUNDARY-1`
 
@@ -59,3 +59,14 @@ the source-bound adjudication.
 Close with an evidence-bound policy adjudication plus a minimal validated local
 regression/repair-readiness package, or with a genuine source/authority boundary
 that names the missing input and exact unblocking condition.
+
+## Result
+
+Completed with `VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY`. Exact source
+inspection establishes a narrow local import policy: downstream typing must not
+depend on an unvalidated serialized recursor type. The preserved one-scalar
+candidate must reject and its unchanged control must accept in any later repair
+regression. No production repair was attempted because Kiota `9fa2c297` has no
+source-bound complete recursor-type constructor or specified equality/replacement
+relation. The closure names the exact design prerequisite; it makes no universal
+format, soundness, false-theorem, inconsistency or exploitability claim.

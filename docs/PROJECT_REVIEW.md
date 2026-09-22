@@ -20,13 +20,13 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RECURSOR-TYPE-TRUST-BOUNDARY-1: Adjudicate imported recursor-type trust and repair readiness; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete KIOTA-RECURSOR-TYPE-DESIGN-1: Design complete Kiota recursor-type reconstruction and equality policy; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **RECURSOR-TYPE-TRUST-BOUNDARY-1**.
+Selected next item: **KIOTA-RECURSOR-TYPE-DESIGN-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -42,7 +42,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
-| 69 | RECURSOR-TYPE-TRUST-BOUNDARY-1: Adjudicate imported recursor-type trust and repair readiness | READY |
+| 70 | KIOTA-RECURSOR-TYPE-DESIGN-1: Design complete Kiota recursor-type reconstruction and equality policy | READY |
 
 ### 5. TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports
 
@@ -204,21 +204,21 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
-### 69. RECURSOR-TYPE-TRUST-BOUNDARY-1: Adjudicate imported recursor-type trust and repair readiness
+### 70. KIOTA-RECURSOR-TYPE-DESIGN-1: Design complete Kiota recursor-type reconstruction and equality policy
 
-**Target:** Exact Kiota 9fa2c297 recursor-type ingestion path, official replay staging and the preserved candidate/control boundary
+**Target:** Exact Kiota 9fa2c297 recursor representation and supported ordinary, mutual and nested inductive-group construction paths
 
-Bind the source-level trust policy and replay ordering, then freeze and assess the smallest local reject-candidate/accept-control regression or repair-readiness package.
+Specify a Kiota-native complete recursor-type construction, justify a supplied-versus-reconstructed comparison or replacement relation, and freeze acceptance-preservation fixtures without editing or running the checker.
 
-**Why this rank:** Highest-value feasible successor after acceptance impact: the exact source archive, five-application pair, independent audit and raw reference mismatch are already bound. This direct core-checker trust boundary outranks the broader reporting-assumption pilot, whose six-fixture and two-path contract is still unbound. The appended ordinal preserves historical queue numbering; the closure review supplies the current strategic rank.
+**Why this rank:** Highest-value feasible local blocker removal after the recursor trust-boundary closure. It directly reuses exact archived source, preserved pair and frozen regression contract. The broader trust-assumption reporting pilot and other original candidates still lack their entry protocols; no external input is needed here.
 
-**Completion:** An evidence-bound imported-recursor-type policy plus a minimal validated local regression/repair-readiness package, or a precise source/authority boundary with concrete prerequisites.
+**Completion:** A validated Kiota-specific complete recursor-type construction and comparison/replacement design with frozen acceptance-preservation fixtures, or a precise source/authority boundary with a concrete unblocking condition.
 
-**Stop:** Answer the fixed policy and repair-readiness question without relabeling or rerunning the completed pilot as new evidence. Repair ordinary engineering failures within the item; process controls are nonterminal; no external writes.
+**Stop:** Answer the fixed design question from already bound local source and evidence. Stop only on a completed design, owner stop, invalidated input or genuine required source/authority/capability boundary after feasible analysis; no checker launch, build, production edit, generated scientific byte, network request or external write. Select but do not start a successor.
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY and unstarted under docs/research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md and results/research/recursor-type-trust-boundary-1/protocol.json. Read-only offline source adjudication may begin after activation. Commit a fresh exact regression/repair manifest before any new checker observation, and commit the policy conclusion plus candidate/control regression contract before any production edit.
+**Boundary:** READY: READY and unstarted under docs/research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md. Before substantive work commit a fresh work record and mark ACTIVE. The item is read-only and offline: no checker launch, build, production edit, generated scientific byte, network request or external action. Bind the exact source/evidence and independently validate the complete construction and equality/replacement design plus acceptance-preservation fixtures.
 
 ## Autonomous workflow
 
@@ -261,6 +261,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1. Selected next item: RECURSOR-TYPE-TRUST-BOUNDARY-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1. Selected next item: KIOTA-RECURSOR-TYPE-DESIGN-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

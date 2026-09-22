@@ -11,12 +11,22 @@ from pathlib import Path
 import re
 from typing import Any
 
+from lib.research_queue_v4 import queue_digest
+
 
 ROOT = Path(__file__).resolve().parents[1]
 ITEM = "RECURSOR-TYPE-TRUST-BOUNDARY-1"
 BASE = Path("results/research/recursor-type-trust-boundary-1")
 POLICY = BASE / "source-policy.json"
 CONTRACT = BASE / "regression-contract.json"
+RESULT = BASE / "result.json"
+CLOSURE = BASE / "closure.json"
+REPORT = BASE / "report.md"
+WORK = BASE / "work-record.json"
+PROTOCOL = BASE / "protocol.json"
+QUEUE = Path("config/research-queue.json")
+SUCCESSOR = "KIOTA-RECURSOR-TYPE-DESIGN-1"
+REVIEW = Path("results/research/queue-reviews/2026-09-22-recursor-type-trust-boundary-1-closure.json")
 
 EXPECTED_POLICY = (
     "For an imported inductive block, a local checker must not make downstream "
@@ -84,6 +94,17 @@ OBSERVATION_BINDINGS = {
 
 TEST_SEAM = ("external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs", 49582,
              "db3b6313093d4d31830b32699b01a818b86620e968c42465668ac67d35304b8a")
+
+RESULT_BINDINGS = {
+    "source_policy": (POLICY.as_posix(), 6630,
+                      "5ea52cf6dd37791f7d44e42f28e9b9bc121b2671038f5960e7c56547d0558058"),
+    "regression_contract": (CONTRACT.as_posix(), 3219,
+                            "eb14c51345b43ad5898344c183dfd651f805e08e6ec0e5fbb84e296be1fb8c2b"),
+    "validator": ("scripts/validate-recursor-type-trust-boundary-1", 527,
+                  "c59760c8968f36f3017ec561f8e49ee71b9fe9cf29d92864b3b2a65ea6924284"),
+    "adversarial_tests": ("tests/test_recursor_type_trust_boundary.py", 4896,
+                          "870e5927cdf560f1ae4eb5ac9aacbae06a71aa8305708d9577abef9fec3af795"),
+}
 
 
 class BoundaryError(ValueError):
@@ -319,12 +340,151 @@ def validate_contract_value(contract: dict[str, Any], root: Path = ROOT) -> None
         raise BoundaryError("contract records an unauthorized launch or edit")
 
 
+def validate_result_value(result: dict[str, Any], root: Path = ROOT) -> None:
+    expected_keys = {
+        "schema_version", "item_id", "status", "outcome", "authority_class",
+        "conclusion", "policy", "ordering_explanation", "regression_requirement",
+        "repair_boundary", "claim_limits", "evidence", "new_checker_attempts",
+        "production_checker_edits", "external_actions",
+    }
+    if set(result) != expected_keys:
+        raise BoundaryError("result fields differ")
+    if (result.get("schema_version") != 1 or result.get("item_id") != ITEM
+            or result.get("status") != "COMPLETE"
+            or result.get("outcome") != "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"
+            or result.get("authority_class") != "SOURCE_BOUND_LOCAL_IMPORT_POLICY"
+            or result.get("policy") != EXPECTED_POLICY):
+        raise BoundaryError("result identity or policy differs")
+    conclusion = result.get("conclusion", "")
+    for token in ("stores", "Official Lean 4.33.0", "regenerates", "regression target",
+                  "does not by itself authorize"):
+        if token not in conclusion:
+            raise BoundaryError(f"result conclusion omits {token}")
+    if result.get("regression_requirement") != {
+        "candidate": "REJECT", "control": "ACCEPT", "pair_replacement": "FORBIDDEN",
+        "completed_attempt_reuse_as_new_result": "FORBIDDEN",
+    }:
+        raise BoundaryError("result regression requirement differs")
+    repair = result.get("repair_boundary")
+    if (not isinstance(repair, dict) or repair.get("production_edit_ready") is not False
+            or repair.get("exact_unblocking_condition") != UNBLOCK
+            or "complete recursor-type construction" not in repair.get("missing_input", "")):
+        raise BoundaryError("result production repair boundary differs")
+    limits = " ".join(result.get("claim_limits", [])) if isinstance(result.get("claim_limits"), list) else ""
+    for token in ("not a universal", "does not establish checker soundness", "no new normative authority"):
+        if token not in limits:
+            raise BoundaryError(f"result limits omit {token}")
+    evidence = result.get("evidence")
+    if not isinstance(evidence, dict) or set(evidence) != set(RESULT_BINDINGS):
+        raise BoundaryError("result evidence roles differ")
+    for role, expected in RESULT_BINDINGS.items():
+        verify_binding(root, evidence[role], expected)
+    if [result.get(name) for name in ("new_checker_attempts", "production_checker_edits", "external_actions")] != [0, 0, 0]:
+        raise BoundaryError("result records an unauthorized action")
+
+
+def _validate_closure(root: Path) -> None:
+    closure = load_json(root / CLOSURE)
+    if set(closure) != {
+        "schema_version", "item_id", "status", "outcome", "result", "report",
+        "source_policy", "regression_contract", "production_edit_ready",
+        "new_checker_attempts", "production_checker_edits", "external_actions",
+        "completion_boundary",
+    }:
+        raise BoundaryError("closure fields differ")
+    if (closure.get("schema_version") != 1 or closure.get("item_id") != ITEM
+            or closure.get("status") != "COMPLETE"
+            or closure.get("outcome") != "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"
+            or closure.get("result") != RESULT.as_posix()
+            or closure.get("report") != REPORT.as_posix()
+            or closure.get("source_policy") != POLICY.as_posix()
+            or closure.get("regression_contract") != CONTRACT.as_posix()
+            or closure.get("production_edit_ready") is not False
+            or [closure.get(name) for name in ("new_checker_attempts", "production_checker_edits", "external_actions")] != [0, 0, 0]
+            or "complete recursor-type construction" not in closure.get("completion_boundary", "")):
+        raise BoundaryError("closure boundary differs")
+    report = (root / REPORT).read_text(encoding="utf-8")
+    for token in (
+        "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY", "Kiota revision `9fa2c297`",
+        "Invalid recursor LALNest.rec_1", "LALNest.rec_1_impact", "LALWrap LALNest",
+        "candidate: reject", "unchanged control: accept", "not an authorized production algorithm",
+        "No checker was launched", "does not change the declaration-validation catalog",
+    ):
+        if token.lower() not in report.lower():
+            raise BoundaryError(f"report omits {token}")
+
+
+def _validate_final_state(root: Path) -> None:
+    work = load_json(root / WORK)
+    if (work.get("item_id") != ITEM or work.get("status") != "COMPLETE"
+            or work.get("current_phase") != "COMPLETE"
+            or work.get("observations") != {"source_requests": 0, "checker_attempts": 0,
+                                             "production_edits": 0, "external_actions": 0}
+            or work.get("result", {}).get("outcome") != "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"
+            or work.get("result", {}).get("production_edit_ready") is not False
+            or work.get("result", {}).get("exact_unblocking_condition") != UNBLOCK):
+        raise BoundaryError("final work record differs")
+    required_refs = {POLICY.as_posix(), CONTRACT.as_posix(), RESULT.as_posix(), CLOSURE.as_posix(),
+                     REPORT.as_posix(), "scripts/validate-recursor-type-trust-boundary-1",
+                     "tests/test_recursor_type_trust_boundary.py"}
+    if not required_refs.issubset(set(work.get("evidence_refs", []))):
+        raise BoundaryError("final work record evidence is incomplete")
+
+    protocol = load_json(root / PROTOCOL)
+    protocol_result = protocol.get("result", {})
+    if (protocol.get("item_id") != ITEM or protocol.get("status") != "COMPLETE"
+            or protocol.get("current_phase") != "COMPLETE"
+            or protocol_result.get("outcome") != "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"
+            or protocol_result.get("production_edit_ready") is not False
+            or [protocol_result.get(name) for name in ("new_checker_attempts", "production_checker_edits", "external_actions")] != [0, 0, 0]):
+        raise BoundaryError("final protocol differs")
+
+    queue = load_json(root / QUEUE)
+    if (queue.get("schema_version") != 4 or queue.get("selected_item") != SUCCESSOR
+            or queue.get("handoff", {}).get("status") != "EXECUTABLE"):
+        raise BoundaryError("final queue selection differs")
+    items = queue.get("items")
+    by_id = {row.get("id"): row for row in items if isinstance(row, dict)} if isinstance(items, list) else {}
+    item, successor = by_id.get(ITEM), by_id.get(SUCCESSOR)
+    if (not isinstance(item, dict) or item.get("status") != "COMPLETE"
+            or item.get("closure", {}).get("outcome") != "BOUNDED_UNRESOLVED"
+            or not required_refs.issubset(set(item.get("closure", {}).get("evidence_refs", [])))
+            or SUCCESSOR not in item.get("closure", {}).get("recommendation", "")
+            or not isinstance(successor, dict) or successor.get("status") != "READY"
+            or successor.get("budget") is not None or successor.get("depends_on") != []
+            or any(row.get("status") == "ACTIVE" for row in items if isinstance(row, dict))):
+        raise BoundaryError("final queue item or successor differs")
+    review_binding = queue.get("strategic_review")
+    if (not isinstance(review_binding, dict) or set(review_binding) != {"path", "sha256"}
+            or review_binding.get("path") != REVIEW.as_posix()
+            or sha256(root / REVIEW) != review_binding.get("sha256")):
+        raise BoundaryError("final strategic review binding differs")
+    review = load_json(root / REVIEW)
+    if (review.get("phase") != "CLOSURE" or review.get("stopped_item") != ITEM
+            or review.get("selected_item") != SUCCESSOR
+            or review.get("queue_sha256") != queue_digest(queue)):
+        raise BoundaryError("final strategic review differs")
+
+    old_plan = (root / "docs/research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md").read_text(encoding="utf-8")
+    new_plan = (root / "docs/research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md").read_text(encoding="utf-8")
+    status = (root / "docs/RESEARCH_STATUS.md").read_text(encoding="utf-8")
+    if "Status: **COMPLETE" not in old_plan or "Status: **READY" not in new_plan:
+        raise BoundaryError("plan status handoff differs")
+    for token in (f"Selected next item: `{SUCCESSOR}`", "one READY item and no ACTIVE item",
+                  "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"):
+        if token not in status:
+            raise BoundaryError(f"research status omits {token}")
+
+
 def validate(root: Path = ROOT) -> dict[str, Any]:
     root = Path(root).resolve()
     policy = load_json(root / POLICY)
     contract = load_json(root / CONTRACT)
     validate_policy_value(policy, root)
     validate_contract_value(contract, root)
+    validate_result_value(load_json(root / RESULT), root)
+    _validate_closure(root)
+    _validate_final_state(root)
     return {
         "schema_version": 1,
         "item_id": ITEM,
@@ -334,4 +494,5 @@ def validate(root: Path = ROOT) -> dict[str, Any]:
         "new_checker_attempts": 0,
         "production_checker_edits": 0,
         "external_actions": 0,
+        "successor": SUCCESSOR,
     }

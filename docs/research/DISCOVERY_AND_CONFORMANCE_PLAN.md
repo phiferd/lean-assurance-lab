@@ -56,17 +56,21 @@ asset. `VALID-DEPENDENT-TERM-PILOT-1` completed SUCCESS: its exact fifty-case,
 independently audited positive corpus was accepted in all 100 frozen cells by
 official Lean 4.33.0 and Nanoda `6ae1f0c`, with no observed conformance
 difference. The generator, auditor, checked-object receipts and guarded runner
-remain reusable local assets. `ACCEPTANCE-IMPACT-PILOT-1` is now selected READY
-and unstarted because its exact retained pair and current Kiota source archive
-make premise reproduction feasible, while its staged gate forbids downstream
-construction unless that current acceptance difference actually reproduces.
-These are ordinal judgments, not estimated defect rates.
+remain reusable local assets. `ACCEPTANCE-IMPACT-PILOT-1` completed at its
+immutable construction-or-semantic boundary, and its source-bound successor
+`RECURSOR-TYPE-TRUST-BOUNDARY-1` completed with a validated exact regression
+target plus a production-design boundary. `KIOTA-RECURSOR-TYPE-DESIGN-1` is
+selected READY and unstarted to specify the missing Kiota-native complete
+recursor-type construction and comparison/replacement relation from already
+bound local evidence. These are ordinal judgments, not estimated defect rates.
 
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
-numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Three are complete; the remaining horizon
-contains one READY and six PLANNED candidates with independent promotion gates.
+numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Four are complete; the remaining original
+horizon contains six PLANNED candidates with independent promotion gates. The
+selected READY item is the evidence-driven recursor-design successor appended
+after that historical ordering.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -75,7 +79,7 @@ fixed sequence or promote every idea to READY.
 | 1 `METAMORPHIC-REPRESENTATION-PILOT-2` | Completed host-native supervisor, transformation/preservation tools, generated pairs and exact inherited observation matrix | COMPLETE, SUCCESS; retained as a local conformance asset |
 | 2 `PIPELINE-COMPLETENESS-PILOT-2` | Completed checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | COMPLETE, SUCCESS; retained as a local checked-object receipt asset |
 | 3 `VALID-DEPENDENT-TERM-PILOT-1` | Completed derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | COMPLETE, SUCCESS; 100/100 frozen cells accepted with no observed difference; retained as a local positive-conformance asset |
-| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Current reproduction plus one downstream consequence study, or stale/harmless-within-tested-use/unresolved result; one retained recursor-type candidate/control | READY under its staged plan: commit the exact current four-cell reproduction first; only a reproduced compatible-control/current-acceptance pair permits the downstream phase; commit the assumption audit and consequence contract before construction |
+| 4 `ACCEPTANCE-IMPACT-PILOT-1` | Completed current reproduction and downstream consequence study over one retained recursor-type candidate/control | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY; the later source-bound successor preserves its result without relabeling |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Fixed six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
 | 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
 | 7 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
@@ -93,14 +97,15 @@ The required source/reuse and implementation preparation may be phases within
 the promoted item; do not demand a successful experiment before permitting its
 scoped investigation. Ordinary implementation repairs remain inside that item.
 
-The 2026-09-22 acceptance-impact closure review selects the source-bound
-recursor-type trust boundary after the exact downstream use exposed a precise
-observer difference but falsified the preregistered reference-rejection order.
-Its archived source, fixed pair, independent audit and receipts make policy
-adjudication immediately feasible. The broader trust-assumption reporting study
-remains useful but still lacks its exact two-path contract. Reuse the completed
-representation and receipt tools inside the selected investigation rather than
-launching an unrelated packaging detour without a concrete consumer.
+The 2026-09-22 recursor trust-boundary closure review selects
+`KIOTA-RECURSOR-TYPE-DESIGN-1` after source inspection established the exact
+local policy and froze the reject-candidate/accept-control regression, but found
+no Kiota-native complete recursor-type constructor or specified equality rule.
+The selected source/design item directly removes that local blocker without a
+checker launch or production edit. The broader trust-assumption reporting study
+remains useful but still lacks its exact six-fixture, two-path contract. Reuse
+the completed representation and receipt tools inside later gated implementation
+work rather than launching an unrelated packaging detour without a consumer.
 
 ## Reserves and preserved work
 

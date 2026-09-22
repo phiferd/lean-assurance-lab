@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "RECURSOR-TYPE-TRUST-BOUNDARY-1",
+  "status": "COMPLETE",
+  "outcome": "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY",
+  "authority_class": "SOURCE_BOUND_LOCAL_IMPORT_POLICY",
+  "conclusion": "Kiota 9fa2c297 parses, stores and later exposes the supplied recursor type to downstream type inference without reconstructing the complete canonical type. Official Lean 4.33.0 replay regenerates recursors from the accepted inductive group and compares postponed supplied records. The exact candidate/control therefore defines a valid local reject-candidate/accept-control regression target, but it does not by itself authorize a production repair algorithm.",
+  "policy": "For an imported inductive block, a local checker must not make downstream typing depend on an unvalidated serialized recursor type. It should validate that type against, or replace it with, a recursor type reconstructed from the same accepted inductive and constructor group; unchanged inputs that agree must remain accepted.",
+  "ordering_explanation": {
+    "bare_candidate": "Without a later dependent declaration, official replay reaches the final postponed recursor-record comparison and reports Invalid recursor LALNest.rec_1.",
+    "extended_candidate": "Dependency-first replay regenerates the recursor before checking LALNest.rec_1_impact, so its fifth application fails at the canonical LALWrap LALNest domain before the final postponed-record comparison."
+  },
+  "regression_requirement": {
+    "candidate": "REJECT",
+    "control": "ACCEPT",
+    "pair_replacement": "FORBIDDEN",
+    "completed_attempt_reuse_as_new_result": "FORBIDDEN"
+  },
+  "repair_boundary": {
+    "production_edit_ready": false,
+    "missing_input": "A Kiota-native complete recursor-type construction and an explicit structural, normalized, or definitional comparison/replacement relation.",
+    "exact_unblocking_condition": "Commit and validate a Kiota-specific design that constructs the complete recursor type for supported ordinary, mutual, and nested inductive groups and specifies a sound comparison or replacement rule with acceptance-preservation fixtures before editing production checker behavior."
+  },
+  "claim_limits": [
+    "Official complete-record equality is one concrete importer policy, not a universal format law.",
+    "The result does not establish checker soundness, unsoundness, a false theorem, inconsistency or exploitability.",
+    "The declaration-validation catalog receives no new normative authority or implementation mapping from this item."
+  ],
+  "evidence": {
+    "source_policy": {
+      "path": "results/research/recursor-type-trust-boundary-1/source-policy.json",
+      "bytes": 6630,
+      "sha256": "5ea52cf6dd37791f7d44e42f28e9b9bc121b2671038f5960e7c56547d0558058"
+    },
+    "regression_contract": {
+      "path": "results/research/recursor-type-trust-boundary-1/regression-contract.json",
+      "bytes": 3219,
+      "sha256": "eb14c51345b43ad5898344c183dfd651f805e08e6ec0e5fbb84e296be1fb8c2b"
+    },
+    "validator": {
+      "path": "scripts/validate-recursor-type-trust-boundary-1",
+      "bytes": 527,
+      "sha256": "c59760c8968f36f3017ec561f8e49ee71b9fe9cf29d92864b3b2a65ea6924284"
+    },
+    "adversarial_tests": {
+      "path": "tests/test_recursor_type_trust_boundary.py",
+      "bytes": 4896,
+      "sha256": "870e5927cdf560f1ae4eb5ac9aacbae06a71aa8305708d9577abef9fec3af795"
+    }
+  },
+  "new_checker_attempts": 0,
+  "production_checker_edits": 0,
+  "external_actions": 0
+}

@@ -19,6 +19,7 @@ class RecursorTypeTrustBoundaryTests(unittest.TestCase):
         result = boundary.validate(boundary.ROOT)
         self.assertEqual(result["status"], "PASS")
         self.assertEqual(result["new_checker_attempts"], 0)
+        self.assertEqual(result["successor"], boundary.SUCCESSOR)
 
     def test_source_hash_and_locator_tampering_fail(self):
         policy = copy.deepcopy(self.policy)
@@ -74,6 +75,25 @@ class RecursorTypeTrustBoundaryTests(unittest.TestCase):
         contract["repair_readiness"]["production_edit_ready"] = True
         with self.assertRaisesRegex(boundary.BoundaryError, "readiness boundary"):
             boundary.validate_contract_value(contract)
+
+    def test_result_cannot_promote_production_readiness(self):
+        result = boundary.load_json(boundary.ROOT / boundary.RESULT)
+        result["repair_boundary"]["production_edit_ready"] = True
+        with self.assertRaisesRegex(boundary.BoundaryError, "production repair boundary"):
+            boundary.validate_result_value(result)
+
+    def test_result_cannot_claim_universal_authority(self):
+        result = boundary.load_json(boundary.ROOT / boundary.RESULT)
+        result["claim_limits"] = ["Universal format law established."]
+        with self.assertRaisesRegex(boundary.BoundaryError, "result limits omit"):
+            boundary.validate_result_value(result)
+
+    def test_final_state_requires_ready_unstarted_successor(self):
+        queue = boundary.load_json(boundary.ROOT / boundary.QUEUE)
+        successor = next(row for row in queue["items"] if row["id"] == boundary.SUCCESSOR)
+        self.assertEqual(successor["status"], "READY")
+        self.assertEqual(successor["budget"], None)
+        self.assertFalse(any(row["status"] == "ACTIVE" for row in queue["items"]))
 
 
 if __name__ == "__main__":
