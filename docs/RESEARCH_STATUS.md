@@ -3014,11 +3014,11 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `ACCEPTANCE-IMPACT-PILOT-1`.
+Selected next item: `RECURSOR-TYPE-TRUST-BOUNDARY-1`.
 
-The canonical queue retains one ACTIVE item.
+The canonical queue retains one READY, unstarted item and no ACTIVE item.
 
-It is ACTIVE in Stage 1 preparation under the
+`ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
 retained `LALNest.rec_1` candidate/control pair and archived Kiota `9fa2c297`
 source are bound. The first stage is a fixed four-cell current reproduction
@@ -3044,8 +3044,17 @@ complete under that immutable matrix. Both Kiota cells and the official control
 accepted. The official candidate reached `LALNest.rec_1_impact` and rejected its
 fifth argument with an application type mismatch, rather than the precommitted
 `Invalid recursor LALNest.rec_1` diagnostic. The immutable decision replay is
-therefore `CONSTRUCTION_OR_SEMANTIC_BOUNDARY`; closure must preserve this exact
-result and may not relabel it after observation.
+therefore `CONSTRUCTION_OR_SEMANTIC_BOUNDARY`. The completed closure preserves
+that exact result without relabeling it, while recording the narrower evidence
+that the fixed declaration exposes a downstream cross-observer typing
+difference.
+
+`RECURSOR-TYPE-TRUST-BOUNDARY-1` is READY and unstarted under its
+[source-bound plan](research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md). It reuses
+the exact archived source, pair, audit and raw receipts to adjudicate imported
+recursor-type policy and local regression/repair readiness. Selection authorizes
+no checker launch, production edit or external action; the completed pilot is
+not rerun or relabeled.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
@@ -3076,7 +3085,7 @@ no external action is recommended now.
 | 1 | `METAMORPHIC-REPRESENTATION-PILOT-2` | COMPLETE, SUCCESS |
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
-| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | ACTIVE, Stage 1 preparation |
+| 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
 | 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
@@ -3087,6 +3096,7 @@ no external action is recommended now.
 | 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
+| 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | READY, unstarted |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and

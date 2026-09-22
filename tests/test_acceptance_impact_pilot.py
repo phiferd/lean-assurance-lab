@@ -68,12 +68,11 @@ class AcceptanceImpactPilotTests(unittest.TestCase):
         with self.assertRaisesRegex(pilot.PilotError, "required-absent"):
             pilot._build_environment(manifest)
 
-    def test_validate_only_never_invokes_supervisor(self) -> None:
+    def test_completed_item_refuses_live_preparation_validation(self) -> None:
         with mock.patch.object(pilot, "run_supervised",
                                side_effect=AssertionError("must not launch")):
-            result = pilot.validate_preparation(require_commit=False)
-        self.assertEqual(result["pair_audit"], "PASS")
-        self.assertEqual(result["source_environment"], "PASS")
+            with self.assertRaisesRegex(pilot.PilotError, "protocol is not ACTIVE"):
+                pilot.validate_preparation(require_commit=False)
 
     def test_raw_receipt_replay_rejects_tampering(self) -> None:
         with tempfile.TemporaryDirectory(dir=pilot.ROOT) as raw:

@@ -93,14 +93,14 @@ The required source/reuse and implementation preparation may be phases within
 the promoted item; do not demand a successful experiment before permitting its
 scoped investigation. Ordinary implementation repairs remain inside that item.
 
-The 2026-09-21 dependent-term closure review selects acceptance impact after the
-positive generator delivered its full reusable asset with no divergence. The
-retained recursor-type pair, archived current Kiota source and bounded four-cell
-reproduction make the stale-premise question feasible. Trust-assumption work
-remains useful but narrower and still lacks its exact two-path reporting
-contract. Reuse the completed representation and receipt tools inside the
-selected experiment rather than launching another repair or asset-packaging
-detour without a concrete consumer.
+The 2026-09-22 acceptance-impact closure review selects the source-bound
+recursor-type trust boundary after the exact downstream use exposed a precise
+observer difference but falsified the preregistered reference-rejection order.
+Its archived source, fixed pair, independent audit and receipts make policy
+adjudication immediately feasible. The broader trust-assumption reporting study
+remains useful but still lacks its exact two-path contract. Reuse the completed
+representation and receipt tools inside the selected investigation rather than
+launching an unrelated packaging detour without a concrete consumer.
 
 ## Reserves and preserved work
 

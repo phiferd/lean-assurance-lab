@@ -4,7 +4,6 @@ from pathlib import Path
 import unittest
 
 from lib import acceptance_impact_stage2 as stage2
-from lib import acceptance_impact_pilot as stage1
 
 
 class AcceptanceImpactStage2Tests(unittest.TestCase):
@@ -27,9 +26,9 @@ class AcceptanceImpactStage2Tests(unittest.TestCase):
         self.assertEqual(stage2._decision(rows, stage2.EXPECTED_CONSEQUENTIAL, stage2.ROOT),
                          "CONSTRUCTION_OR_SEMANTIC_BOUNDARY")
 
-    def test_validate_available_never_launches(self) -> None:
-        result = stage2.validate_available(require_commit=False)
-        self.assertEqual(result["item_id"], stage1.ITEM)
+    def test_completed_item_refuses_live_stage2_validation(self) -> None:
+        with self.assertRaisesRegex(ValueError, "protocol is not ACTIVE"):
+            stage2.validate_available(require_commit=False)
 
     def test_launch_lock_is_exclusive_and_removed(self) -> None:
         lock = stage2.ROOT / stage2.BASE / ".stage-2-launch.lock"

@@ -1,6 +1,6 @@
 # Acceptance Impact Pilot 1
 
-Status: **ACTIVE in Stage 1 preparation**
+Status: **COMPLETE — CONSTRUCTION_OR_SEMANTIC_BOUNDARY**
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`  
 Item: `ACCEPTANCE-IMPACT-PILOT-1`
 
@@ -101,6 +101,16 @@ Preserve every failed engineering attempt and repair it within this item.
 Per-process time, memory and cleanup controls are nonterminal. No production
 checker edit, assurance-milestone advance, network write or external action is
 authorized.
+
+## Closure
+
+Both stages completed. The exact downstream use exposed the fifth-domain
+difference, but official Lean reached the appended declaration and reported an
+application type mismatch rather than the preregistered earlier invalid-recursor
+diagnostic. The immutable outcome is therefore
+`CONSTRUCTION_OR_SEMANTIC_BOUNDARY`; see the canonical result and report under
+`results/research/acceptance-impact-pilot-1/`. No adaptive relabeling or rerun is
+permitted.
 
 ## Required closure
 
