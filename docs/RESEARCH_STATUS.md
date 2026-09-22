@@ -3040,7 +3040,12 @@ producer, independent structural auditor and bounded controller are committed,
 and their exact tooling revision is frozen. The deterministic producer emitted
 the two fixed 121-record artifacts; the independent structural audit passed and
 the exact four-cell execution manifest is committed. Stage-2 observation is
-authorized under that immutable matrix.
+complete under that immutable matrix. Both Kiota cells and the official control
+accepted. The official candidate reached `LALNest.rec_1_impact` and rejected its
+fifth argument with an application type mismatch, rather than the precommitted
+`Invalid recursor LALNest.rec_1` diagnostic. The immutable decision replay is
+therefore `CONSTRUCTION_OR_SEMANTIC_BOUNDARY`; closure must preserve this exact
+result and may not relabel it after observation.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
