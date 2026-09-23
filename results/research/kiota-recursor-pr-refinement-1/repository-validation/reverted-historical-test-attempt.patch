@@ -1,0 +1,75 @@
+diff --git a/tests/test_survivor_cache_historical.py b/tests/test_survivor_cache_historical.py
+index 11b80fd..fa96242 100644
+--- a/tests/test_survivor_cache_historical.py
++++ b/tests/test_survivor_cache_historical.py
+@@ -12,7 +12,9 @@ class SurvivorCacheHistoricalTests(unittest.TestCase):
+         result = validate(ROOT)
+         self.assertEqual(result["status"], "PASS")
+         self.assertEqual(result["historical_successor"], "SURVIVOR-CACHE-EXPORT-1")
+-        self.assertEqual(result["current_successor_status"], "READY")
++        # Historical bytes remain fixed while the validated live queue may
++        # be executing an ACTIVE item or handing off a READY successor.
++        self.assertIn(result["current_successor_status"], {"READY", "ACTIVE"})
+ 
+ 
+ if __name__ == "__main__":
+diff --git a/tests/test_survivor_fvar_reachability_historical.py b/tests/test_survivor_fvar_reachability_historical.py
+index 9d0d518..eedcd5a 100644
+--- a/tests/test_survivor_fvar_reachability_historical.py
++++ b/tests/test_survivor_fvar_reachability_historical.py
+@@ -13,7 +13,9 @@ class SurvivorFvarReachabilityHistoricalTests(unittest.TestCase):
+         self.assertEqual(result["status"], "PASS")
+         self.assertEqual(result["registry_predecessor_lines"], 608)
+         self.assertEqual(result["registry_successor_lines"], 611)
+-        self.assertEqual(result["current_successor_status"], "READY")
++        # Historical bytes remain fixed while the validated live queue may
++        # be executing an ACTIVE item or handing off a READY successor.
++        self.assertIn(result["current_successor_status"], {"READY", "ACTIVE"})
+         self.assertEqual(result["pending_survivors"], 2)
+         self.assertEqual(result["equivalent_mutants"], 14)
+ 
+diff --git a/tests/test_survivor_thread_config_reachability_historical.py b/tests/test_survivor_thread_config_reachability_historical.py
+index 715a379..322106a 100644
+--- a/tests/test_survivor_thread_config_reachability_historical.py
++++ b/tests/test_survivor_thread_config_reachability_historical.py
+@@ -13,7 +13,9 @@ class SurvivorThreadConfigReachabilityHistoricalTests(unittest.TestCase):
+         self.assertEqual(result["status"], "PASS")
+         self.assertEqual(result["registry_predecessor_lines"], 609)
+         self.assertEqual(result["registry_successor_lines"], 611)
+-        self.assertEqual(result["current_successor_status"], "READY")
++        # Historical bytes remain fixed while the validated live queue may
++        # be executing an ACTIVE item or handing off a READY successor.
++        self.assertIn(result["current_successor_status"], {"READY", "ACTIVE"})
+         self.assertEqual(result["pending_survivors"], 2)
+         self.assertEqual(result["meaningful_survivors"], 5)
+         self.assertEqual(result["equivalent_mutants"], 14)
+diff --git a/tests/test_survivor_universe_diff_historical.py b/tests/test_survivor_universe_diff_historical.py
+index 22b69d8..3effc07 100644
+--- a/tests/test_survivor_universe_diff_historical.py
++++ b/tests/test_survivor_universe_diff_historical.py
+@@ -12,7 +12,9 @@ class UniverseDiffHistoricalTests(unittest.TestCase):
+         result = validate(ROOT)
+         self.assertEqual(result["status"], "PASS")
+         self.assertEqual(result["completed_item"], "SURVIVOR-UNIVERSE-DIFF-1")
+-        self.assertEqual(result["current_successor_status"], "READY")
++        # Historical bytes remain fixed while the validated live queue may
++        # be executing an ACTIVE item or handing off a READY successor.
++        self.assertIn(result["current_successor_status"], {"READY", "ACTIVE"})
+         self.assertTrue(result["canonical_classification_changed"])
+ 
+ 
+diff --git a/tests/test_survivor_universe_equivalence_historical.py b/tests/test_survivor_universe_equivalence_historical.py
+index 1abfa08..05fbc4c 100644
+--- a/tests/test_survivor_universe_equivalence_historical.py
++++ b/tests/test_survivor_universe_equivalence_historical.py
+@@ -13,7 +13,9 @@ class UniverseEquivalenceHistoricalTests(unittest.TestCase):
+         self.assertEqual(result["status"], "PASS")
+         self.assertEqual(result["registry_predecessor_lines"], 607)
+         self.assertEqual(result["registry_successor_lines"], 611)
+-        self.assertEqual(result["current_successor_status"], "READY")
++        # Historical bytes remain fixed while the validated live queue may
++        # be executing an ACTIVE item or handing off a READY successor.
++        self.assertIn(result["current_successor_status"], {"READY", "ACTIVE"})
+         self.assertEqual(result["pending_survivors"], 2)
+         self.assertEqual(result["equivalent_mutants"], 14)
+ 

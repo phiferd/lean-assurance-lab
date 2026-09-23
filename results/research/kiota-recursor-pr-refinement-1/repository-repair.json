@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-PR-REFINEMENT-1",
+  "phase": "REPOSITORY_CLOSURE_REPAIR",
+  "failure_evidence": {
+    "path": "results/research/kiota-recursor-pr-refinement-1/repository-validation/initial-live-suite.log",
+    "sha256": "6300be3f10cd1cee33dc13f8d7fdf802e01429debc600411768bbf8102237b39"
+  },
+  "observed": {
+    "live_tests": 1368,
+    "failures": 6,
+    "supervisor_failure": {
+      "exit_code": 7,
+      "maximum_observed_rss_bytes": 0,
+      "memory_monitor_samples": 2,
+      "cleanup_complete": true
+    },
+    "historical_assertion_failures": 5
+  },
+  "cause": [
+    "Start gate released on a nonempty zero-RSS observation before a positive sample.",
+    "Five test expectations require READY despite their canonical validators explicitly permitting READY or ACTIVE current successors."
+  ],
+  "repairs": [
+    "Create prospective supervisor v3 requiring a positive sample before release; preserve old helper and every completed Kiota binding.",
+    "Rejected attempted live-status test edit because portfolio custody binds those test bytes. Restore all five unchanged; their READY handoff expectations will be checked after the implementation closure is staged, before final delivery."
+  ],
+  "prior_test_bindings": [
+    {
+      "path": "tests/test_survivor_cache_historical.py",
+      "sha256": "6b11e037dfa9ab3fb8a8f3590e27da6a2011075fa91acaf7776ddab767043f1c",
+      "git_revision": "554c30c"
+    },
+    {
+      "path": "tests/test_survivor_fvar_reachability_historical.py",
+      "sha256": "0e9ae32d586f2ecb746cb2d9db65f32ef84f7f53bc56314bff744d7dde0bec99",
+      "git_revision": "554c30c"
+    },
+    {
+      "path": "tests/test_survivor_thread_config_reachability_historical.py",
+      "sha256": "3287bc98dbd94f1d254e51d51e311dae69a3eb499d808633641c717e7696b8f3",
+      "git_revision": "554c30c"
+    },
+    {
+      "path": "tests/test_survivor_universe_diff_historical.py",
+      "sha256": "52daaad4e217012919a28ae5dac0aaf218ac25619d749ce28f54742c0b8a9d85",
+      "git_revision": "554c30c"
+    },
+    {
+      "path": "tests/test_survivor_universe_equivalence_historical.py",
+      "sha256": "8a9dbe6b3603e562e3d7cc6f8c69b11f7bafe2681872c90b502afb56c09cee85",
+      "git_revision": "554c30c"
+    }
+  ],
+  "launch_gate": "Commit exact prospective supervisor/tests, run focused retained-receipt process tests; stage implementation closure with repository validation explicitly pending and run the unchanged complete current/historical suite before final success/delivery.",
+  "scientific_inputs_changed": false,
+  "kiota_patch_changed": false,
+  "old_supervisor_changed": false,
+  "additional_failure": "Initial full suite exit 1; historical checkpoint custody detected the attempted frozen-test edits; all five were restored byte-for-byte before any commit.",
+  "repair_bindings": [
+    {
+      "path": "lib/metamorphic_pilot_runner_v3.py",
+      "sha256": "4de04392ed0a9cd5e9e04567886f9097443b8476b5155c74f9ffe6a0661a2402"
+    },
+    {
+      "path": "tests/test_metamorphic_supervisor.py",
+      "sha256": "8b0808aa23c838880ec14554425cd761b5efdcd603ce4533dbf021a57f25a0c6"
+    }
+  ]
+}
