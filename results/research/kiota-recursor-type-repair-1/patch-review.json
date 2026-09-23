@@ -2,14 +2,14 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-23T00:41:40Z",
-  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_4",
+  "completed_at": "2026-09-23T00:54:54Z",
+  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_5",
   "bindings": [
     {
       "role": "patch_package",
       "path": "results/research/kiota-recursor-type-repair-1/patch-package.json",
       "bytes": 3485,
-      "sha256": "b21b1fce221fe1d3b9eed6bd4a93be9051c88901e36101508db0428a20040700"
+      "sha256": "52119ebe14c4c4912b66a6698bc2dcbf627460f628287b7bce7424071bfca815"
     },
     {
       "role": "construction_design",
@@ -94,6 +94,30 @@
       "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000014-009-full/raw.stderr",
       "bytes": 25255,
       "sha256": "59a2f854056b0c4d706c2a4bde44b17687dce72161a787ff1564362b63704cb4"
+    },
+    {
+      "role": "legacy_fixture_failure_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000023-009-full/result.json",
+      "bytes": 830,
+      "sha256": "f901ff5d98c498101597f09f3a91dd4ab7e045f3876cd1581ff0adfb058d84d7"
+    },
+    {
+      "role": "legacy_fixture_failure_supervisor",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000023-009-full/supervisor.json",
+      "bytes": 1386,
+      "sha256": "bbeec00a7e219a1748b91c3e82824c76cecc0978e08eca5f4fe8c5d17d9405c5"
+    },
+    {
+      "role": "legacy_fixture_failure_stdout",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000023-009-full/raw.stdout",
+      "bytes": 8773,
+      "sha256": "cd4dc80f9c0b5b02235a74c159df64538501eb8539747cff012a485cf1baecc9"
+    },
+    {
+      "role": "legacy_fixture_failure_stderr",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000023-009-full/raw.stderr",
+      "bytes": 15138,
+      "sha256": "0423be3d0e65397c54f89da130583dcde03717826b25a8e58f0ff23dcce31ed4"
     }
   ],
   "checks": [
@@ -176,6 +200,11 @@
       "id": "REDUCIBLE_RECURSIVE_TARGET",
       "result": "PASS",
       "evidence": "Attempt 14 exposed two tutorial declarations whose recursive member target is hidden behind reducible constType. Revision 4 WHNFs only the guarded fallback candidate, then preserves the exact member head, arity, universe and contextual parameter checks and the fail-closed unmatched-member rejection."
+    },
+    {
+      "id": "LEGACY_NESTED_FIXTURE_CLASSIFICATION",
+      "result": "PASS",
+      "evidence": "Attempt 23 passed 83 unit and 76 of 77 integration tests, isolating nested-list-tree.accept.ndjson. The unchanged 2858-byte fixture declares Type-valued List and Tree but supplies Prop-only dummy recursors without the required fresh universe, rules or nested auxiliary recursor. Revision 5 preserves those exact bytes and reclassifies only the stale test expectation as fail-closed rejection; production reconstruction is unchanged."
     }
   ],
   "adversarial_findings_resolved": [
@@ -186,20 +215,22 @@
     "Prop/K derivation over only the original group",
     "universe-parameter data fields misclassified as Prop-valued",
     "reducible wrappers obscuring exact recursive member targets",
+    "malformed legacy nested fixture classified as an acceptance case",
     "silent loss of an IH for a defeq-but-not-structural recursive target",
     "partial atomicity assertion"
   ],
   "observations": {
-    "build_attempts": 3,
-    "cargo_test_processes": 10,
-    "cargo_processes": 13,
+    "build_attempts": 4,
+    "cargo_test_processes": 18,
+    "cargo_processes": 22,
     "compile_failures": 1,
-    "build_passes": 2,
+    "build_passes": 3,
     "focused_failures": 1,
     "harness_audit_failures": 1,
-    "full_suite_failures": 1,
-    "successful_test_processes": 7,
+    "full_suite_failures": 2,
+    "successful_test_processes": 14,
     "checker_attempts": 0,
+    "blocked_network_queries": 1,
     "network_requests": 0,
     "external_actions": 0
   },
@@ -207,6 +238,6 @@
     "static_patch_ready": true,
     "prelaunch_review_passed": true,
     "compile_or_runtime_success_claimed": true,
-    "remaining_gate": "Bind and commit patch revision 4 and its attempt-14 failure evidence before rerunning all nine execution cells, including the full offline suite."
+    "remaining_gate": "Bind and commit patch revision 5 and attempt-23 evidence before rerunning all nine execution cells, including the full offline suite."
   }
 }
