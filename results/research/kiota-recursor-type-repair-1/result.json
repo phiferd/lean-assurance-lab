@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
+  "status": "COMPLETE",
+  "outcome": "SUCCESS",
+  "authority_class": "PINNED_SOURCE_LOCAL_REPAIR",
+  "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
+  "conclusion": "Kiota can reconstruct complete ordinary, mutual and nested recursor types from checked inductive types and constructors, compare supplied signatures only after positional universe alpha-normalization with fail-closed definitional equality, and install only reconstructed types without exposing current-block serialized recursors.",
+  "implementation": {
+    "changed_paths": 6,
+    "production_paths": ["src/env.rs", "src/parser.rs", "src/tc.rs"],
+    "test_paths": ["tests/exports.rs", "tests/fixtures/recursor-type-reconstruction.accept.ndjson", "tests/fixtures/recursor-type-reconstruction.reject.ndjson"],
+    "insertions": 1960,
+    "deletions": 90,
+    "patch": "results/research/kiota-recursor-type-repair-1/kiota-recursor-type-repair.patch",
+    "patch_sha256": "d2ced83d4658e54a6d198fa31ad2811d5443b8ba9d7ec993e33807a3ff1dfd7c"
+  },
+  "validation": {
+    "build": "PASS",
+    "focused": {"passed": 7, "filtered_out": 70},
+    "candidate": "REJECT",
+    "control": "ACCEPT",
+    "ordinary": "ACCEPT",
+    "nested_two_specializations": "ACCEPT",
+    "nested_deep": "ACCEPT",
+    "nested_mutual": "ACCEPT",
+    "full_suite": {"unit_passed": 83, "integration_passed": 77, "total_passed": 160, "failed": 0, "ignored": 0}
+  },
+  "legacy_fixture_disposition": {
+    "path": "tests/fixtures/nested-list-tree.accept.ndjson",
+    "bytes_changed": false,
+    "new_expectation": "REJECT",
+    "reason": "The synthetic Type-valued List and Tree declarations contain Prop-only dummy recursors without a fresh elimination universe, computation rules or the required nested auxiliary recursor; accepting them would weaken the reconstruction boundary."
+  },
+  "external_action": {
+    "state": "LOCAL_DRAFT",
+    "draft": "results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md",
+    "submission_authorized": false,
+    "next_gate": "Refresh target source, duplicate/open-PR and maintainer context; rebase and retest if needed; then obtain exact human authorization for a PR to sankalpsthakur/kiota."
+  },
+  "next_item": "TRUST-ASSUMPTION-PIPELINE-PILOT-1",
+  "next_item_started": false,
+  "evidence": [
+    "results/research/kiota-recursor-type-repair-1/patch-package.json",
+    "results/research/kiota-recursor-type-repair-1/patch-review.json",
+    "results/research/kiota-recursor-type-repair-1/execution-review.json",
+    "results/research/kiota-recursor-type-repair-1/closure-validation.json",
+    "results/research/kiota-recursor-type-repair-1/execution/attempt-000032-009-full/result.json",
+    "results/research/kiota-recursor-type-repair-1/execution/attempt-000032-009-full/supervisor.json"
+  ],
+  "claim_limits": [
+    "Pinned Kiota 9fa2c297 only; no current-tip result.",
+    "No universal serialized-format rule, complete checker-soundness claim or declaration-validation catalog change.",
+    "The local PR draft is not an external submission and conveys no maintainer acceptance or capacity signal."
+  ]
+}

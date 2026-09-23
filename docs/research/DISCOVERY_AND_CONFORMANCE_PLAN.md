@@ -64,18 +64,19 @@ completed SUCCESS with a validated complete Kiota design derived from exact
 local APIs and the archived Lean 4.33.0 kernel algorithm. It freezes positional
 universe alpha normalization, fail-closed definitional comparison,
 reconstructed-type replacement and four accepted fixtures plus the inherited
-negative/control pair. `KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under a
-committed entry protocol for the separately gated implementation and regression
-matrix. These
+negative/control pair. `KIOTA-RECURSOR-TYPE-REPAIR-1` completed SUCCESS with a
+validated source patch, passing frozen regression/full-suite matrix and indexed
+but unsubmitted local PR draft. These
 are ordinal judgments, not estimated defect rates.
 
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
 numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Four are complete; the remaining original
-horizon contains six PLANNED candidates with independent promotion gates. The
-selected ACTIVE item is the evidence-driven recursor-repair successor appended
-after that historical ordering.
+horizon contains one READY and five PLANNED candidates with independent launch
+gates. The separately appended recursor-repair successor is complete, and
+`TRUST-ASSUMPTION-PIPELINE-PILOT-1` is selected READY and unstarted for its
+source/reuse assessment and staged protocol binding.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -102,15 +103,14 @@ The required source/reuse and implementation preparation may be phases within
 the promoted item; do not demand a successful experiment before permitting its
 scoped investigation. Ordinary implementation repairs remain inside that item.
 
-The 2026-09-22 recursor design closure completed
-`KIOTA-RECURSOR-TYPE-DESIGN-1` after the already archived Lean 4.33.0 kernel
-source supplied the complete base and nested construction semantics missing from
-Kiota. The selected `KIOTA-RECURSOR-TYPE-REPAIR-1` directly implements that
-validated local design and exact frozen matrix. The broader trust-assumption
-reporting study remains useful but still lacks its exact six-fixture, two-path
-contract. Reuse the completed representation and receipt tools inside this
-gated implementation rather than launching an unrelated packaging detour
-without a consumer.
+The 2026-09-22 recursor design and repair sequence completed after the already
+archived Lean 4.33.0 kernel source supplied the complete base and nested
+construction semantics missing from Kiota. The validated local source patch and
+exact frozen matrix are retained. The selected trust-assumption reporting item
+is READY only for source/reuse assessment and staged protocol binding; its
+scientific launch still requires an exact six-fixture, two-path contract. Reuse
+the completed representation and receipt tools rather than launching an
+unrelated packaging detour without a consumer.
 
 ## Reserves and preserved work
 

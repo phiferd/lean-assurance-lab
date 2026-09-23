@@ -1,6 +1,6 @@
 # Kiota recursor type repair 1 plan
 
-Status: **ACTIVE — implementation and regression**
+Status: **COMPLETE — SUCCESS; validated source repair and local PR draft**
 
 Item: `KIOTA-RECURSOR-TYPE-REPAIR-1`
 

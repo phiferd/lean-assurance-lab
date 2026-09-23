@@ -9,9 +9,10 @@ import hashlib
 import json
 from pathlib import Path
 import re
+import subprocess
 from typing import Any
 
-from lib.research_queue_v4 import queue_digest
+from lib.research_queue_v4 import load_queue, queue_digest
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -27,6 +28,7 @@ PROTOCOL = BASE / "protocol.json"
 QUEUE = Path("config/research-queue.json")
 SUCCESSOR = "KIOTA-RECURSOR-TYPE-DESIGN-1"
 REVIEW = Path("results/research/queue-reviews/2026-09-22-recursor-type-trust-boundary-1-closure.json")
+SNAPSHOT = "bd0e637267d51f6c7f684038b84c840a59f1c03a"
 
 EXPECTED_POLICY = (
     "For an imported inductive block, a local checker must not make downstream "
@@ -138,6 +140,25 @@ def sha256(path: Path) -> str:
         for block in iter(lambda: stream.read(1024 * 1024), b""):
             digest.update(block)
     return digest.hexdigest()
+
+
+def git_bytes(root: Path, path: Path | str) -> bytes:
+    try:
+        return subprocess.check_output(
+            ["git", "show", f"{SNAPSHOT}:{Path(path).as_posix()}"],
+            cwd=root,
+        )
+    except (OSError, subprocess.CalledProcessError) as error:
+        raise BoundaryError(f"historical snapshot input unavailable: {path}") from error
+
+
+def verify_historical_binding(root: Path, row: Any, expected: tuple[str, int, str]) -> None:
+    wanted = expected_binding(expected)
+    if row != wanted:
+        raise BoundaryError(f"binding differs: {row!r}")
+    data = git_bytes(root, wanted["path"])
+    if len(data) != wanted["bytes"] or hashlib.sha256(data).hexdigest() != wanted["sha256"]:
+        raise BoundaryError(f"historical bound file differs: {wanted['path']}")
 
 
 def _safe(root: Path, relative: Any) -> Path:
@@ -378,7 +399,10 @@ def validate_result_value(result: dict[str, Any], root: Path = ROOT) -> None:
     if not isinstance(evidence, dict) or set(evidence) != set(RESULT_BINDINGS):
         raise BoundaryError("result evidence roles differ")
     for role, expected in RESULT_BINDINGS.items():
-        verify_binding(root, evidence[role], expected)
+        if role in {"validator", "adversarial_tests"}:
+            verify_historical_binding(root, evidence[role], expected)
+        else:
+            verify_binding(root, evidence[role], expected)
     if [result.get(name) for name in ("new_checker_attempts", "production_checker_edits", "external_actions")] != [0, 0, 0]:
         raise BoundaryError("result records an unauthorized action")
 
@@ -439,10 +463,10 @@ def _validate_final_state(root: Path) -> None:
             or [protocol_result.get(name) for name in ("new_checker_attempts", "production_checker_edits", "external_actions")] != [0, 0, 0]):
         raise BoundaryError("final protocol differs")
 
-    queue = load_json(root / QUEUE)
+    queue = json.loads(git_bytes(root, QUEUE))
     if (queue.get("schema_version") != 4 or queue.get("selected_item") != SUCCESSOR
             or queue.get("handoff", {}).get("status") != "EXECUTABLE"):
-        raise BoundaryError("final queue selection differs")
+        raise BoundaryError("historical queue selection differs")
     items = queue.get("items")
     by_id = {row.get("id"): row for row in items if isinstance(row, dict)} if isinstance(items, list) else {}
     item, successor = by_id.get(ITEM), by_id.get(SUCCESSOR)
@@ -453,27 +477,50 @@ def _validate_final_state(root: Path) -> None:
             or not isinstance(successor, dict) or successor.get("status") != "READY"
             or successor.get("budget") is not None or successor.get("depends_on") != []
             or any(row.get("status") == "ACTIVE" for row in items if isinstance(row, dict))):
-        raise BoundaryError("final queue item or successor differs")
+        raise BoundaryError("historical queue item or successor differs")
     review_binding = queue.get("strategic_review")
     if (not isinstance(review_binding, dict) or set(review_binding) != {"path", "sha256"}
             or review_binding.get("path") != REVIEW.as_posix()
-            or sha256(root / REVIEW) != review_binding.get("sha256")):
-        raise BoundaryError("final strategic review binding differs")
-    review = load_json(root / REVIEW)
+            or hashlib.sha256(git_bytes(root, REVIEW)).hexdigest() != review_binding.get("sha256")):
+        raise BoundaryError("historical strategic review binding differs")
+    review = json.loads(git_bytes(root, REVIEW))
     if (review.get("phase") != "CLOSURE" or review.get("stopped_item") != ITEM
             or review.get("selected_item") != SUCCESSOR
             or review.get("queue_sha256") != queue_digest(queue)):
-        raise BoundaryError("final strategic review differs")
+        raise BoundaryError("historical strategic review differs")
 
-    old_plan = (root / "docs/research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md").read_text(encoding="utf-8")
-    new_plan = (root / "docs/research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md").read_text(encoding="utf-8")
-    status = (root / "docs/RESEARCH_STATUS.md").read_text(encoding="utf-8")
+    old_plan = git_bytes(root, "docs/research/RECURSOR_TYPE_TRUST_BOUNDARY_1_PLAN.md").decode()
+    new_plan = git_bytes(root, "docs/research/KIOTA_RECURSOR_TYPE_DESIGN_1_PLAN.md").decode()
+    status = git_bytes(root, "docs/RESEARCH_STATUS.md").decode()
     if "Status: **COMPLETE" not in old_plan or "Status: **READY" not in new_plan:
         raise BoundaryError("plan status handoff differs")
     for token in (f"Selected next item: `{SUCCESSOR}`", "one READY item and no ACTIVE item",
                   "VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY"):
         if token not in status:
             raise BoundaryError(f"research status omits {token}")
+
+    current_queue = load_queue(root, require_ready=True)
+    current_items = current_queue.get("items")
+    current_by_id = ({row.get("id"): row for row in current_items if isinstance(row, dict)}
+                     if isinstance(current_items, list) else {})
+    current_item = current_by_id.get(ITEM)
+    current_design = current_by_id.get(SUCCESSOR)
+    current_repair = current_by_id.get("KIOTA-RECURSOR-TYPE-REPAIR-1")
+    selected = current_by_id.get(current_queue.get("selected_item"))
+    if (current_queue.get("schema_version") != 4
+            or current_queue.get("handoff", {}).get("status") != "EXECUTABLE"
+            or not isinstance(current_item, dict)
+            or current_item.get("status") != "COMPLETE"
+            or current_item.get("closure") != item.get("closure")
+            or not isinstance(current_design, dict)
+            or current_design.get("status") != "COMPLETE"
+            or current_design.get("closure", {}).get("outcome") != "SUCCESS"
+            or not isinstance(current_repair, dict)
+            or current_repair.get("status") != "COMPLETE"
+            or current_repair.get("closure", {}).get("outcome") != "SUCCESS"
+            or not isinstance(selected, dict)
+            or selected.get("status") not in {"READY", "ACTIVE"}):
+        raise BoundaryError("current queue does not preserve and advance the historical successor")
 
 
 def validate(root: Path = ROOT) -> dict[str, Any]:

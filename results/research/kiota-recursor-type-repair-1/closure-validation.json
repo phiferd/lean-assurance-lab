@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
+  "status": "PASS",
+  "repository_suite": {
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "initial_run": {
+      "outcome": "REPAIR_REQUIRED",
+      "live_tests_run": 1368,
+      "failures": 1,
+      "errors": 5,
+      "diagnosis": [
+        "Four metamorphic-supervisor errors were process-observation failures caused by sandbox denial of /bin/ps, not scientific mismatches.",
+        "Two recursor trust-boundary checks coupled a historical closure to the mutable current queue and therefore failed after the completed repair successor was recorded."
+      ]
+    },
+    "repairs": [
+      {
+        "kind": "EXECUTION_ENVIRONMENT",
+        "change": "Reran the complete suite with approved process-observation access required by the supervisor tests."
+      },
+      {
+        "kind": "HISTORICAL_VALIDATION",
+        "change": "Bound the historical recursor trust-boundary queue, review, plan, status, validator and test inputs to git snapshot bd0e637267d51f6c7f684038b84c840a59f1c03a while validating the current queue independently through the canonical version-4 loader."
+      }
+    ],
+    "final_run": {
+      "outcome": "PASS",
+      "live_tests": 1368,
+      "frozen_publication_study_tests": 73,
+      "successor_tests": 9,
+      "total_tests": 1450,
+      "failures": 0
+    }
+  },
+  "focused_validation": {
+    "recursor_trust_boundary_tests": 12,
+    "recursor_trust_boundary_validator": "PASS",
+    "research_queue_validator": "PASS",
+    "external_contribution_view": "PASS",
+    "kiota_runner_tests": 22,
+    "current_state_refresh": "PASS"
+  },
+  "scope_limits": [
+    "These repository checks validate the local source-repair package and durable closure; they do not refresh or validate Kiota current tip.",
+    "No scientific successor launch or external submission was performed."
+  ]
+}

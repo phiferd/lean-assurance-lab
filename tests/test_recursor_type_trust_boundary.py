@@ -88,12 +88,21 @@ class RecursorTypeTrustBoundaryTests(unittest.TestCase):
         with self.assertRaisesRegex(boundary.BoundaryError, "result limits omit"):
             boundary.validate_result_value(result)
 
-    def test_final_state_requires_ready_unstarted_successor(self):
-        queue = boundary.load_json(boundary.ROOT / boundary.QUEUE)
-        successor = next(row for row in queue["items"] if row["id"] == boundary.SUCCESSOR)
-        self.assertEqual(successor["status"], "READY")
-        self.assertEqual(successor["budget"], None)
-        self.assertFalse(any(row["status"] == "ACTIVE" for row in queue["items"]))
+    def test_historical_ready_handoff_survives_later_successors(self):
+        historical = json.loads(boundary.git_bytes(boundary.ROOT, boundary.QUEUE))
+        historical_successor = next(
+            row for row in historical["items"] if row["id"] == boundary.SUCCESSOR
+        )
+        self.assertEqual(historical["selected_item"], boundary.SUCCESSOR)
+        self.assertEqual(historical_successor["status"], "READY")
+        self.assertEqual(historical_successor["budget"], None)
+        self.assertFalse(any(row["status"] == "ACTIVE" for row in historical["items"]))
+
+        current = boundary.load_queue(boundary.ROOT, require_ready=True)
+        current_by_id = {row["id"]: row for row in current["items"]}
+        self.assertEqual(current_by_id[boundary.SUCCESSOR]["status"], "COMPLETE")
+        self.assertEqual(current_by_id["KIOTA-RECURSOR-TYPE-REPAIR-1"]["status"], "COMPLETE")
+        self.assertIn(current_by_id[current["selected_item"]]["status"], {"READY", "ACTIVE"})
 
 
 if __name__ == "__main__":

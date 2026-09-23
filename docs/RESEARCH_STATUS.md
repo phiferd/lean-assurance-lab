@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- Completed `KIOTA-RECURSOR-TYPE-REPAIR-1` on 2026-09-22 with SUCCESS. The
+  source patch reconstructs complete ordinary, mutual and nested recursor types,
+  withholds current-block serialized recursors during checking, compares supplied
+  signatures fail-closed and installs only reconstructed types. The exact
+  negative/control and four valid acceptance cells matched their expectations,
+  seven focused tests passed and the complete 160-test suite passed. The local
+  PR draft is indexed but unsubmitted; current-tip refresh and exact human
+  authorization remain required for any external action.
+
 - Completed `KIOTA-RECURSOR-TYPE-DESIGN-1` on 2026-09-22 with
   `VALIDATED_COMPLETE_KIOTA_DESIGN`. Exact pinned Kiota source provides the
   required expression, universe, inference and conversion APIs, while an
@@ -68,8 +77,8 @@ research directions.
   exact accepted fixtures and the inherited reject-candidate/accept-control pair
   are frozen. No checker launch, build, production edit, generated scientific
   byte, network, catalog or external action occurred. The separately gated
-  `KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under a committed implementation
-  work record and protocol.
+  `KIOTA-RECURSOR-TYPE-REPAIR-1` subsequently completed with a validated local
+  source patch, regression evidence and unsubmitted PR draft.
 
 - Completed `RECURSOR-TYPE-TRUST-BOUNDARY-1` on 2026-09-22 with
   `VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY`. Exact Kiota `9fa2c297`
@@ -80,9 +89,9 @@ research directions.
   extended fifth-domain diagnostics. The preserved one-scalar pair is now a
   mechanically validated reject-candidate/accept-control regression target.
   No checker launch, production edit, catalog change or external action occurred.
-  The later design item has now supplied the previously missing complete
-  construction and comparison/replacement relation; production repair remains
-  separately gated under its own selected READY item.
+  The later design item supplied the previously missing complete construction
+  and comparison/replacement relation; its separate production-repair item then
+  completed with a validated source patch and unsubmitted local PR draft.
 
 - Completed `VALID-DEPENDENT-TERM-PILOT-1` on 2026-09-21 with SUCCESS. The
   derivation-directed generator produced the exact fifty-case corpus with ten
@@ -3040,9 +3049,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `KIOTA-RECURSOR-TYPE-REPAIR-1`.
+Selected next item: `TRUST-ASSUMPTION-PIPELINE-PILOT-1`.
 
-The canonical queue retains one ACTIVE item and no READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact
@@ -3090,19 +3099,22 @@ universe alpha normalization, Kiota definitional equality, fail-closed mismatch
 handling and reconstructed-type replacement. Its four accepted fixtures and
 inherited candidate/control pair are frozen; no checker or production action ran.
 
-`KIOTA-RECURSOR-TYPE-REPAIR-1` is ACTIVE under its
-[implementation plan](research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md) and fresh
-committed work record and protocol. The entry binds exact source, intended
-production and test files, frozen fixtures, independent prelaunch review and
-offline supervised process controls. Exact patch, binary and command manifests
-remain required before the first launch.
+`KIOTA-RECURSOR-TYPE-REPAIR-1` is COMPLETE with SUCCESS under its
+[implementation plan](research/KIOTA_RECURSOR_TYPE_REPAIR_1_PLAN.md). The
+source repair reconstructs complete ordinary, mutual and nested recursor types,
+compares supplied signatures fail-closed and installs only reconstructed types.
+Its exact candidate rejects, the unchanged control and four valid acceptance
+cells accept, seven focused tests pass and the complete 160-test suite passes.
+The retained malformed legacy nested fixture is byte-identical and now expected
+to reject. The source patch, execution evidence and indexed PR draft remain
+local; no external submission occurred.
 
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
-auditor are retained as a local asset. The project-wide closure review selects
-acceptance impact because its bounded reproduction can resolve the highest
-remaining semantic premise; the narrower trust-assumption reporting study
-remains PLANNED behind its own source and integration gates.
+auditor are retained as a local asset. After the recursor repair closure, the
+project-wide review selects the trust-assumption reporting study READY and
+unstarted for source/reuse assessment and staged protocol binding; its
+scientific launches remain behind exact fixture and integration gates.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3127,7 +3139,7 @@ no external action is recommended now.
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
-| 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | PLANNED |
+| 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | READY, unstarted source/reuse and protocol-binding phase |
 | 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
 | 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
@@ -3139,7 +3151,7 @@ no external action is recommended now.
 | 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
 | 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | COMPLETE, SUCCESS — `VALIDATED_COMPLETE_KIOTA_DESIGN` |
-| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | ACTIVE, implementation and regression |
+| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | COMPLETE, SUCCESS — validated source repair and local PR draft |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and
@@ -3280,9 +3292,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item and no READY item:
-`KIOTA-RECURSOR-TYPE-REPAIR-1`, executing implementation and regression under
-persistent execution policy.
+The canonical queue has one READY item and no ACTIVE item:
+`TRUST-ASSUMPTION-PIPELINE-PILOT-1`, selected and unstarted for its source/reuse
+assessment and staged protocol-binding phase.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful
@@ -3296,10 +3308,10 @@ gates. This review did not refresh external discussions or infer capacity.
 Theorem distinct-risk, independent-transfer and original CVC gates remain unmet.
 Historical results, completed-record content, consumed budgets, pending counts,
 external-write gates and the failing assurance state remain unchanged. The
-completed design item has a committed work record and validated closure. The
-selected implementation item has its fresh committed work record and fixed
-source, fixture, file and process boundaries. Exact patch, independent review,
-binary and execution manifests remain required before any launch.
+completed recursor repair retains its exact patch, independent review, binary
+and execution manifests, successful frozen matrix and local PR draft. The
+selected assumption-reporting item must bind its exact fixtures, expected
+transitive sets, observable paths and staged protocol before any launch.
 
 ### Waiting
 
