@@ -1,6 +1,6 @@
 # CI source portability repair — 2026-09-23
 
-Status: LOCAL VALIDATION COMPLETE; awaiting GitHub CI on the pushed repair.
+Status: COMPLETE — local suites and GitHub Linux CI pass.
 
 Repair the existing unit-test entry point's assumptions about ignored Kiota
 source materialization and a particular macOS Cargo registry/toolchain. This is
