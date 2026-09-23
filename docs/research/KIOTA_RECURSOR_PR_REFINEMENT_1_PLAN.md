@@ -1,6 +1,6 @@
 # Kiota recursor PR refinement 1 plan
 
-Status: **ACTIVE — owner-requested local PR refinement**
+Status: **COMPLETE — SUCCESS; refined patch and validated local PR draft**
 
 Item: `KIOTA-RECURSOR-PR-REFINEMENT-1`
 

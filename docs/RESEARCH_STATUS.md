@@ -58,6 +58,14 @@ research directions.
 
 ## Attempted
 
+- Completed `KIOTA-RECURSOR-PR-REFINEMENT-1` on 2026-09-22 with SUCCESS.
+  The successor replaces full-environment copies with a block-local undo journal,
+  preserves ignored/recomputed K metadata, extracts documented reconstruction,
+  and adds eight comparison/rollback regressions. Fifteen focused tests, the six
+  original preservation cells and all 168 Kiota tests pass. The revised local PR
+  description leads with the concrete fifth-domain error and downstream impact;
+  the original package remains unchanged. No external submission occurred.
+
 - Completed `KIOTA-RECURSOR-TYPE-REPAIR-1` on 2026-09-22 with SUCCESS. The
   source patch reconstructs complete ordinary, mutual and nested recursor types,
   withholds current-block serialized recursors during checking, compares supplied
@@ -3049,16 +3057,20 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `KIOTA-RECURSOR-PR-REFINEMENT-1`.
+Selected next item: `TRUST-ASSUMPTION-PIPELINE-PILOT-1`.
 
-The canonical queue retains one READY item and one ACTIVE item.
+The canonical queue retains one READY item and no ACTIVE item.
 
-`KIOTA-RECURSOR-PR-REFINEMENT-1` is ACTIVE under its
-[refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The owner
-requested improvements to rollback cost, comparison/compatibility coverage and
-upstream explanation. The completed repair remains immutable; a separate
-source/patch/draft revision will preserve its scientific inputs and bind fresh
-validation. The trust-assumption pilot remains READY and unstarted.
+`KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
+[refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
+successor removes full-environment copies, restores documented K compatibility,
+adds direct boundary tests and rewrites the upstream rationale. Fifteen focused
+tests, six preserved fixture cells and all 168 Kiota tests pass; the full
+repository current/historical suite passes. The earlier package remains
+immutable. Read-only preflight found the same upstream main and no apparent
+open duplicate; the revised PR remains local and unsubmitted. The selected
+trust-assumption pilot is READY and unstarted.
+
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
 [acceptance-impact plan](research/ACCEPTANCE_IMPACT_PILOT_1_PLAN.md). Its exact

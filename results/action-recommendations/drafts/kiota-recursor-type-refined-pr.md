@@ -9,9 +9,10 @@ types without fully reconstructing them. A malformed signature can therefore
 pass import validation and be used to type later declarations.
 
 The regression changes `LALNest.rec_1`'s fifth argument type from
-`LALWrap LALNest` to `LALNest` while preserving its argument count. Kiota accepts
-the malformed export; Lean rejects it. A subsequent application also demonstrates
-that Kiota uses the incorrect argument type. Rejecting the signature at import
+`LALWrap LALNest` to `LALNest` while preserving its argument count. At Kiota
+`9fa2c297`, the malformed export is accepted; official Lean 4.33.0 rejects it.
+A subsequent application also demonstrates that Kiota uses the incorrect
+argument type. Rejecting the signature at import
 closes this validation gap before other declarations can depend on it.
 
 This change reconstructs ordinary, mutual, and nested recursor signatures from
@@ -39,4 +40,7 @@ cargo test --offline --locked --test exports recursor_type_reconstruction
 cargo test --offline --locked
 ```
 
-Validation results are pending for this local successor revision.
+Both commands pass with Rust 1.98.0: 15 focused tests and the full suite of
+83 unit plus 85 integration tests (168 total), with no failures or ignored
+tests. The malformed signature rejects; its unchanged valid control and four
+ordinary/mutual/nested acceptance cases accept.

@@ -172,8 +172,12 @@ assurance failure, catalog authority, corpus or pending-survivor measurements.
 
 ## Owner-directed PR refinement — 2026-09-22
 
-`KIOTA-RECURSOR-PR-REFINEMENT-1` is selected ACTIVE under its
-[separate plan](KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md), preserving the completed
-repair. Removing concrete review and import-cost obstacles from an evidenced
-checker fix currently outranks starting the assumption-reporting pilot. That
-pilot remains READY and unstarted; no external submission is authorized.
+`KIOTA-RECURSOR-PR-REFINEMENT-1` completed SUCCESS under its
+[separate plan](KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The refined patch replaces
+full-environment copies, preserves K compatibility, adds eight boundary/rollback
+tests and isolates documented reconstruction. All 168 Kiota tests and the six
+preserved cells pass. The original repair and draft remain unchanged; the new
+submission candidate is local. No additional ungated implementation work or
+external action is implied by closure. The project-wide review selects
+`TRUST-ASSUMPTION-PIPELINE-PILOT-1` READY and unstarted to investigate transitive
+assumption reporting using retained local assets and explicit staged gates.
