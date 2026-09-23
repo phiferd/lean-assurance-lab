@@ -169,3 +169,11 @@ at logical closure, regenerate current state through
 and public artifact freshness. This frontier change uses that same complete
 validation to guard the historical transition; it does not change the existing
 assurance failure, catalog authority, corpus or pending-survivor measurements.
+
+## Owner-directed PR refinement — 2026-09-22
+
+`KIOTA-RECURSOR-PR-REFINEMENT-1` is selected ACTIVE under its
+[separate plan](KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md), preserving the completed
+repair. Removing concrete review and import-cost obstacles from an evidenced
+checker fix currently outranks starting the assumption-reporting pilot. That
+pilot remains READY and unstarted; no external submission is authorized.

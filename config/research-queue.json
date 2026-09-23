@@ -3,7 +3,7 @@
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
   "updated_at": "2026-09-22",
-  "selected_item": "TRUST-ASSUMPTION-PIPELINE-PILOT-1",
+  "selected_item": "KIOTA-RECURSOR-PR-REFINEMENT-1",
   "execution_policy": {
     "engineering_failures": "REPAIR_AND_CONTINUE",
     "attempt_caps": "NONE",
@@ -520,7 +520,9 @@
       "stop_condition": "One 60-minute session; four source/setup inspections; two offline builds x600s; four checker processes x30s; 2GiB sampled RSS per process; zero network, proof, production checker edit, new export byte, new mutation identity, external action or assurance-milestone advance.",
       "kind": "EXPERIMENT",
       "status": "COMPLETE",
-      "depends_on": ["SURVIVOR-THREAD-ONE-DETERMINISM-1"],
+      "depends_on": [
+        "SURVIVOR-THREAD-ONE-DETERMINISM-1"
+      ],
       "budget": {
         "max_sessions": 1,
         "session_minutes": 60,
@@ -571,7 +573,9 @@
       "stop_condition": "One 45-active-minute session, two local or read-only source requests, and zero Cargo builds, checker processes, proofs, source substitutions, source-lock edits, mutations, external writes or assurance-milestone advances.",
       "kind": "OPERATIONS",
       "status": "COMPLETE",
-      "depends_on": ["SOURCE-LOCK-COMPLETENESS-AUDIT-1"],
+      "depends_on": [
+        "SOURCE-LOCK-COMPLETENESS-AUDIT-1"
+      ],
       "budget": {
         "max_sessions": 1,
         "session_minutes": 45,
@@ -670,7 +674,9 @@
       "stop_condition": "One 30-active-minute session, two offline release builds up to 600 seconds, four checker processes up to 30 seconds, 2GiB per process, and zero network requests, new mutations, new exports, proofs or external actions.",
       "kind": "EXPERIMENT",
       "status": "COMPLETE",
-      "depends_on": ["SOURCE-PROVENANCE-INTAKE-1"],
+      "depends_on": [
+        "SOURCE-PROVENANCE-INTAKE-1"
+      ],
       "budget": {
         "max_sessions": 1,
         "session_minutes": 30,
@@ -3139,6 +3145,33 @@
         "recommendation": "Retain the exact source patch, validation evidence and PR draft locally. Before any external submission, refresh the target source, duplicates and maintainer context, rebase and retest if required, and obtain exact human authorization. Select TRUST-ASSUMPTION-PIPELINE-PILOT-1 READY and unstarted for its source/reuse and protocol-binding phase."
       },
       "blocked_reason": ""
+    },
+    {
+      "id": "KIOTA-RECURSOR-PR-REFINEMENT-1",
+      "priority": 72,
+      "title": "Refine Kiota recursor repair for upstream review",
+      "target": "Exact archived Kiota 9fa2c297 parser, environment, expression and type-checker source bound by KIOTA-RECURSOR-TYPE-DESIGN-1",
+      "action": "Replace environment-wide rollback copies, expand comparison and compatibility regressions, add algorithm references and rewrite the local PR description.",
+      "expected_value": "Remove concrete adoption and performance risks from a demonstrated validation repair.",
+      "rank_rationale": "Owner-requested refinement of a proven repair with concrete upstream consumer outranks starting the broader reporting pilot; the completed repair remains immutable.",
+      "entry_gate": "Committed successor plan, work record and protocol authorize preparation; exact independent review, source/test and runner manifests must pass before launch.",
+      "completion": "Revised reproducible patch and draft, expanded focused and full suite, inherited six-cell matrix, independent review and complete repository validation.",
+      "stop_condition": "Persistent scoped engineering; no caps, frozen evidence edits, external write, weakened gate or successor execution.",
+      "kind": "IMPLEMENTATION",
+      "status": "ACTIVE",
+      "depends_on": [
+        "KIOTA-RECURSOR-TYPE-REPAIR-1"
+      ],
+      "budget": null,
+      "evidence_refs": [
+        "docs/research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md",
+        "results/research/kiota-recursor-pr-refinement-1/work-record.json",
+        "results/research/kiota-recursor-pr-refinement-1/protocol.json",
+        "results/research/kiota-recursor-type-repair-1/patch-package.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
     }
   ],
   "handoff": {
@@ -3148,7 +3181,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-22-kiota-recursor-type-repair-1-closure.json",
-    "sha256": "2eb4a3af4a3c95e9f1e9c924a0a3d7ab215e1b9b0791dbe39efd17e191721e16"
+    "path": "results/research/queue-reviews/2026-09-22-kiota-recursor-pr-refinement-1-entry.json",
+    "sha256": "b8b63225e19f4f1c51a140dbfc7bd87e4a2ab2cb28a42959fe28f7109eb298d4"
   }
 }
