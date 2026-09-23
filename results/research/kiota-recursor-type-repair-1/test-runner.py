@@ -184,6 +184,17 @@ class AccountingTests(unittest.TestCase):
         with self.assertRaisesRegex(runner.RunnerError, "cleanup"):
             runner.validate_sequence(account, "001-build")
 
+    def test_safety_hold_blocks_without_misclassifying_attempt_as_pending(self):
+        account = runner.new_account()
+        account["safety_hold"] = {
+            "attempt": 1,
+            "cell_id": "001-build",
+            "reason": "PROCESS_ABSENCE_OR_CLEANUP_NOT_PROVEN",
+            "result": "mock-result.json",
+        }
+        with self.assertRaisesRegex(runner.RunnerError, "process absence"):
+            runner.validate_sequence(account, "001-build")
+
 
 class MockedExecutionTests(unittest.TestCase):
     def setUp(self):
@@ -231,7 +242,7 @@ class MockedExecutionTests(unittest.TestCase):
         account = json.loads((self.execution / "accounting.json").read_text())
         self.assertIsNone(account["pending"])
 
-    def test_mocked_unproven_cleanup_leaves_pending_block(self):
+    def test_mocked_unproven_cleanup_reconciles_and_sets_safety_hold(self):
         def failed_supervisor(*, raw_prefix, argv, cwd, memory_bytes, **_kwargs):
             Path(str(raw_prefix) + ".stdout").write_bytes(b"mock build\n")
             Path(str(raw_prefix) + ".stderr").write_bytes(b"")
@@ -244,11 +255,12 @@ class MockedExecutionTests(unittest.TestCase):
             result = runner.execute_cell("001-build")
         self.assertEqual(result["status"], "FAIL")
         account = json.loads((self.execution / "accounting.json").read_text())
-        self.assertEqual(account["pending"], 1)
-        with self.assertRaisesRegex(runner.RunnerError, "cleanup"):
+        self.assertIsNone(account["pending"])
+        self.assertEqual(account["safety_hold"]["attempt"], 1)
+        with self.assertRaisesRegex(runner.RunnerError, "process absence"):
             runner.validate_sequence(account, "001-build")
 
-    def test_mocked_spawn_exception_is_preserved_without_claiming_cleanup(self):
+    def test_mocked_unknown_exception_reconciles_with_safety_hold(self):
         with patch.object(runner, "BASE", self.base), \
              patch.object(runner, "verify_manifest", return_value=self.manifest()), \
              patch.object(runner, "run_supervised", side_effect=OSError("mock spawn failure")):
@@ -256,7 +268,61 @@ class MockedExecutionTests(unittest.TestCase):
         self.assertEqual(result["status"], "FAIL")
         self.assertEqual(result["outcome"], "INFRASTRUCTURE_AUDIT_FAILURE")
         account = json.loads((self.execution / "accounting.json").read_text())
-        self.assertEqual(account["pending"], 1)
+        self.assertIsNone(account["pending"])
+        self.assertEqual(account["safety_hold"]["attempt"], 1)
+
+    def test_mocked_prelaunch_backend_failure_reconciles_and_allows_retry(self):
+        failure = runner.RunnerError(
+            "memory monitor backend unavailable before launch: PermissionError: mock"
+        )
+        with patch.object(runner, "BASE", self.base), \
+             patch.object(runner, "verify_manifest", return_value=self.manifest()), \
+             patch.object(runner, "run_supervised", side_effect=failure):
+            result = runner.execute_cell("001-build")
+        self.assertEqual(result["status"], "FAIL")
+        account = json.loads((self.execution / "accounting.json").read_text())
+        self.assertIsNone(account["pending"])
+        self.assertIsNone(account["safety_hold"])
+        runner.validate_sequence(account, "001-build")
+
+    def test_load_account_repairs_attempt_one_style_completed_pending_state(self):
+        attempt = self.execution / "attempt-000001-001-build"
+        attempt.mkdir()
+        reservation = {
+            "attempt": 1,
+            "cell_id": "001-build",
+            "directory": "execution/attempt-000001-001-build",
+            "manifest": str(self.manifest_path),
+            "manifest_sha256": "a" * 64,
+            "status": "RESERVED",
+        }
+        result = {
+            "schema_version": 1,
+            "item_id": runner.ITEM,
+            "attempt": 1,
+            "cell_id": "001-build",
+            "manifest_sha256": "a" * 64,
+            "status": "FAIL",
+            "outcome": "INFRASTRUCTURE_AUDIT_FAILURE",
+            "reason": "RunnerError: memory monitor backend unavailable before launch: PermissionError: mock",
+            "receipt": None,
+        }
+        (attempt / "reservation.json").write_text(json.dumps(reservation) + "\n")
+        (attempt / "result.json").write_text(json.dumps(result) + "\n")
+        account = runner.new_account()
+        account["attempts"] = [{**reservation, "status": "FAIL",
+                               "outcome": result["outcome"],
+                               "result": str(attempt / "result.json")}]
+        account["next_attempt"] = 2
+        account["observations"] = {"processes": 1, "builds": 1, "tests": 0}
+        account["pending"] = 1
+        del account["safety_hold"]
+        (self.execution / "accounting.json").write_text(json.dumps(account) + "\n")
+        with patch.object(runner, "ROOT", Path(self.temp.name)):
+            repaired = runner.load_account(self.execution)
+        self.assertIsNone(repaired["pending"])
+        self.assertIsNone(repaired["safety_hold"])
+        self.assertEqual(repaired["attempts"][0]["status"], "FAIL")
 
 
 if __name__ == "__main__":

@@ -641,7 +641,78 @@ def new_account() -> dict[str, Any]:
         "observations": {"processes": 0, "builds": 0, "tests": 0},
         "attempts": [],
         "pending": None,
+        "safety_hold": None,
     }
+
+
+def known_prelaunch_failure(reason: Any) -> bool:
+    """Return true only for failures proven to precede child creation.
+
+    ``run_supervised`` performs its /bin/ps backend preflight before creating
+    pipes or invoking Popen. These exact diagnostics therefore prove that no
+    Cargo process exists and need no cleanup hold.
+    """
+    if not isinstance(reason, str):
+        return False
+    return any(marker in reason for marker in (
+        "memory monitor backend unavailable before launch:",
+        "memory monitor backend returned no current-process-group sample",
+        "RunnerError: /bin/ps is unavailable",
+    ))
+
+
+def result_receipt_cleanup(result: dict[str, Any]) -> bool:
+    value = result.get("receipt")
+    if not isinstance(value, str):
+        return False
+    path = Path(value)
+    path = path if path.is_absolute() else ROOT / safe_relative(value, "attempt receipt")
+    if not path.is_file():
+        return False
+    receipt = json.loads(path.read_text())
+    return receipt.get("cleanup_complete") is True
+
+
+def safety_hold_for(result: dict[str, Any]) -> dict[str, Any] | None:
+    if result_receipt_cleanup(result) or known_prelaunch_failure(result.get("reason")):
+        return None
+    return {
+        "attempt": result["attempt"],
+        "cell_id": result["cell_id"],
+        "reason": "PROCESS_ABSENCE_OR_CLEANUP_NOT_PROVEN",
+        "result": result["result_path"],
+    }
+
+
+def reconcile_completed_pending(account: dict[str, Any], execution: Path) -> bool:
+    """Recover an attempt whose durable result outlived accounting finalization."""
+    pending = account.get("pending")
+    if pending is None:
+        return False
+    attempts = account.get("attempts")
+    require(isinstance(attempts, list), "accounting attempts must be a list")
+    matches = [row for row in attempts if row.get("attempt") == pending]
+    require(len(matches) == 1, "pending attempt is not uniquely accounted")
+    row = matches[0]
+    directory = execution / f"attempt-{pending:06d}-{row.get('cell_id')}"
+    result_path = directory / "result.json"
+    if not result_path.is_file():
+        return False
+    result = json.loads(result_path.read_text())
+    require(result.get("schema_version") == 1 and result.get("item_id") == ITEM and
+            result.get("attempt") == pending and result.get("cell_id") == row.get("cell_id") and
+            result.get("manifest_sha256") == row.get("manifest_sha256") and
+            result.get("status") in ("PASS", "FAIL"),
+            "durable pending-attempt result does not match its reservation")
+    relative_result = display_path(result_path)
+    result["result_path"] = relative_result
+    row["status"] = result["status"]
+    row["outcome"] = result.get("outcome")
+    row["result"] = relative_result
+    account["pending"] = None
+    account["safety_hold"] = safety_hold_for(result)
+    atomic(execution / "accounting.json", account)
+    return True
 
 
 def validate_account(account: dict[str, Any], execution: Path) -> None:
@@ -673,12 +744,23 @@ def validate_account(account: dict[str, Any], execution: Path) -> None:
         require(attempts and pending == attempts[-1]["attempt"] and
                 attempts[-1].get("status") == "RESERVED",
                 "invalid pending attempt")
+    hold = account.get("safety_hold")
+    if hold is not None:
+        require(isinstance(hold, dict) and hold.get("reason") ==
+                "PROCESS_ABSENCE_OR_CLEANUP_NOT_PROVEN",
+                "invalid process-safety hold")
+        matches = [row for row in attempts if row.get("attempt") == hold.get("attempt")]
+        require(len(matches) == 1 and matches[0].get("cell_id") == hold.get("cell_id") and
+                matches[0].get("status") == "FAIL" and matches[0].get("result") == hold.get("result"),
+                "process-safety hold does not bind one failed attempt")
 
 
 def load_account(execution: Path) -> dict[str, Any]:
     path = execution / "accounting.json"
     if path.exists():
         account = json.loads(path.read_text())
+        account.setdefault("safety_hold", None)
+        reconcile_completed_pending(account, execution)
     else:
         require(not any(candidate.is_dir() and candidate.name.startswith("attempt-")
                         for candidate in execution.iterdir()),
@@ -691,6 +773,8 @@ def load_account(execution: Path) -> dict[str, Any]:
 def validate_sequence(account: dict[str, Any], cell: str) -> None:
     require(account.get("pending") is None,
             "a prior attempt lacks proven cleanup and reconciliation")
+    require(account.get("safety_hold") is None,
+            "a prior attempt has no proof of process absence or complete cleanup")
     successful = {row["cell_id"] for row in account["attempts"] if row.get("status") == "PASS"}
     predecessors = CELL_ORDER[:CELL_ORDER.index(cell)]
     missing = [candidate for candidate in predecessors if candidate not in successful]
@@ -765,12 +849,13 @@ def execute_cell(cell: str) -> dict[str, Any]:
         "raw_stdout": display_path(Path(str(raw_prefix) + ".stdout")),
         "raw_stderr": display_path(Path(str(raw_prefix) + ".stderr")),
     }
+    result["result_path"] = display_path(directory / "result.json")
     atomic(directory / "result.json", result)
     row["status"] = result["status"]
     row["outcome"] = outcome
-    row["result"] = display_path(directory / "result.json")
-    if receipt is not None and receipt.get("cleanup_complete") is True:
-        account["pending"] = None
+    row["result"] = result["result_path"]
+    account["pending"] = None
+    account["safety_hold"] = safety_hold_for(result)
     atomic(execution / "accounting.json", account)
     return result
 

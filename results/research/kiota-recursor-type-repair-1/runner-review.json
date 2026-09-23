@@ -2,20 +2,20 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-22T23:36:45Z",
-  "review_class": "INDEPENDENT_STATIC_AND_MOCKED_SUPERVISOR_REVIEW",
+  "completed_at": "2026-09-23T00:02:01Z",
+  "review_class": "INDEPENDENT_STATIC_AND_MOCKED_SUPERVISOR_REVIEW_REVISION_2",
   "bindings": [
     {
       "role": "supervisor",
       "path": "results/research/kiota-recursor-type-repair-1/run-cell.py",
-      "bytes": 36365,
-      "sha256": "7abad0b09b6073d9f6ff10388c7f69d9c944dd107ffac4e863ff8356db1f7887"
+      "bytes": 40164,
+      "sha256": "13f2fffb5a56c527c425961fd9cf0b19ce69f52329af4c1fc79977488f63ff06"
     },
     {
       "role": "supervisor_tests",
       "path": "results/research/kiota-recursor-type-repair-1/test-runner.py",
-      "bytes": 11536,
-      "sha256": "dbcd73618e411f7233a12ad912b393b478b9035ec15dbfad1a5c3955eceed048"
+      "bytes": 14725,
+      "sha256": "35ead2d33db0b8e56f654c3b29bead327ed0ea3b1e68729106a6aec73a86a7f6"
     },
     {
       "role": "process_supervisor",
@@ -32,8 +32,20 @@
     {
       "role": "test_result",
       "path": "results/research/kiota-recursor-type-repair-1/runner-test-result.json",
-      "bytes": 1317,
-      "sha256": "c0b9f74ad6b546a746b61364f23d936b242381c161b9062bc88b6fc7332897e6"
+      "bytes": 1320,
+      "sha256": "e4669b0ff37a6243e9536a67b0cbd0cd45e7e9897b12ade80f93159837048a4d"
+    },
+    {
+      "role": "failed_prelaunch_reservation",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/reservation.json",
+      "bytes": 308,
+      "sha256": "447e6681995bb6e32c810645cb7c01259c77d4bbb21836ece4586e264b94e940"
+    },
+    {
+      "role": "failed_prelaunch_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/result.json",
+      "bytes": 745,
+      "sha256": "4338884cebbe5dcdb50d5ae1d5fb895723b2909ee54832f4fa8b6cfe35b6d67e"
     }
   ],
   "checks": [
@@ -65,7 +77,12 @@
     {
       "id": "PERSISTENT_ACCOUNTING",
       "result": "PASS",
-      "evidence": "Attempts are unlimited observational records in unique directories; a safety or engineering failure remains nonterminal, while missing cleanup leaves the item blocked for reconciliation."
+      "evidence": "Attempts are unlimited observational records in unique directories; every durable result clears pending, while a separate safety hold blocks retries when neither complete cleanup nor prelaunch process absence is proven."
+    },
+    {
+      "id": "PRELAUNCH_FAILURE_RECONCILIATION",
+      "result": "PASS",
+      "evidence": "The first attempt's exact /bin/ps diagnostic occurs in the shared supervisor before Popen, with no supervisor receipt or raw child output. Revision 2 atomically reconciles that completed record and permits retry without weakening cleanup holds for ambiguous failures."
     },
     {
       "id": "RESULT_CLASSIFICATION",
@@ -75,11 +92,12 @@
     {
       "id": "MOCKED_REGRESSION_SUITE",
       "result": "PASS",
-      "evidence": "Nineteen pure/mocked tests passed, covering RSS and cleanup failures, uncapped attempts, fixed sequencing, candidate semantics, count drift, durable receipts and spawn failure."
+      "evidence": "Twenty-two pure/mocked tests passed, covering RSS and cleanup failures, uncapped attempts, fixed sequencing, candidate semantics, count drift, durable receipts, prelaunch recovery and ambiguous-failure safety holds."
     }
   ],
   "observations": {
-    "runner_tests": 19,
+    "runner_tests": 22,
+    "prelaunch_execution_attempts": 1,
     "cargo_launches": 0,
     "checker_launches": 0,
     "network_requests": 0,
@@ -88,6 +106,6 @@
   "verdict": {
     "ready_for_exact_manifest_binding": true,
     "authorizes_scientific_execution_by_itself": false,
-    "remaining_gate": "Commit the exact patch package, independent patch review and all nine execution manifests."
+    "remaining_gate": "Commit supervisor revision 2, the preserved first-attempt evidence and rebound nine execution manifests before retry."
   }
 }

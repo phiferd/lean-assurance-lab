@@ -46,6 +46,7 @@
     "PREPARE_LOCAL_PR_DRAFT"
   ],
   "prelaunch_gate": {
+    "tooling_revision": 2,
     "required": [
       "exact patch and changed-path inventory",
       "exact copied candidate/control hashes and four frozen fixture hashes",
@@ -67,6 +68,20 @@
     ],
     "commit_required_before_launch": true
   },
+  "repair_history": [
+    {
+      "attempt": 1,
+      "cell": "001-build",
+      "outcome": "INFRASTRUCTURE_AUDIT_FAILURE",
+      "cause": "The sandbox denied the supervisor's /bin/ps memory-backend preflight before Popen.",
+      "cargo_process_started": false,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/reservation.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/result.json"
+      ],
+      "repair": "Supervisor revision 2 durably reconciles completed attempts, permits exact known-prelaunch failures to retry, and retains a separate safety hold whenever process absence or cleanup is unproven."
+    }
+  ],
   "process_safety": {
     "build_seconds": 1200,
     "build_memory_bytes": 4294967296,
