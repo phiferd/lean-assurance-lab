@@ -3068,8 +3068,10 @@ adds direct boundary tests and rewrites the upstream rationale. Fifteen focused
 tests, six preserved fixture cells and all 168 Kiota tests pass; the full
 repository current/historical suite passes. The earlier package remains
 immutable. Read-only preflight found the same upstream main and no apparent
-open duplicate; the revised PR remains local and unsubmitted. The selected
-trust-assumption pilot is READY and unstarted.
+open duplicate. On 2026-09-23, the owner authorized the fork and submission;
+the exact reviewed patch is now [Kiota PR #11](https://github.com/sankalpsthakur/kiota/pull/11),
+OPEN and ready for review at the dated ledger observation. The selected
+trust-assumption pilot remains READY and unstarted.
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the

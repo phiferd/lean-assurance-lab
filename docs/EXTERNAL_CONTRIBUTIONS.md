@@ -8,8 +8,8 @@ Ledger updated: **2026-09-23**. Upstream states are dated observations, not a li
 
 ## At a glance
 
-- Awaiting upstream: **2**
-- Local drafts: **7**
+- Awaiting upstream: **3**
+- Local drafts: **6**
 - Merged: **4**
 
 ## Awaiting upstream
@@ -18,6 +18,7 @@ Ledger updated: **2026-09-23**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
 | [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
+| [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-09-23 | no activity; not reported | Await maintainer feedback on Kiota PR#11. Investigate feedback locally; any later external modification requires exact authorization. |
 
 ## Local drafts
 
@@ -29,7 +30,6 @@ Ledger updated: **2026-09-23**. Upstream states are dated observations, not a li
 | [test: cover String reconstruction shape and configuration boundaries](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-STRING-RECONSTRUCTION-TEST-1` | — | Keep this preventive internal String reconstruction patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Refresh source, duplicates, rebasing/tests and maintainer capacity before seeking exact owner approval for a PR to ammkrn/nanoda_lib. |
 | [test: cover constructor owner-index validation](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md) | `sankalpsthakur/kiota` | `KIOTA-CTOR-INDEX-TEST-1` | — | Before seeking exact approval for a PR to sankalpsthakur/kiota, refresh source, duplicate/open-PR state and maintainer context, rebase and retest if needed, and present the exact tested package for human authorization. |
 | [Historical draft: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Preserved historical draft; superseded for submission by KIOTA-RECURSOR-TYPE-REFINED-PR-DRAFT. |
-| [fix: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-refined-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-PR-REFINEMENT-1` | — | Obtain explicit fork authorization required by automatic approval review, then publish the exact reviewed commit to phiferd/kiota and open the owner-requested PR against sankalpsthakur/kiota. |
 
 ## Merged
 
