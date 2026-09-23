@@ -1,0 +1,69 @@
+{
+  "schema_version": 1,
+  "item_id": "TRUST-ASSUMPTION-PIPELINE-PILOT-1",
+  "classification": "OUTPUT_FORMAT_TOOLING_REPAIR",
+  "scientific_manifest": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/scientific-manifest.json",
+    "bytes": 3534,
+    "sha256": "56b38523464b442e54385e20b38b84e493e9721629a2c3ea023509948a892944"
+  },
+  "failed_attempt": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/execution/attempt-0001/observation.json",
+    "bytes": 2701,
+    "sha256": "0fe4a1ab3c66976d10ec77592959c8c728c0b9f3eaa466619d114354a35e1aae"
+  },
+  "original_protocol": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/protocol-r1.json",
+    "bytes": 2686,
+    "sha256": "5a8a42191720f88ccfadd8884ad9606ead17ea304466b2e2108773a136e5e1c4"
+  },
+  "diagnosis": "The fixture sets printing options within its namespace, and end restores the original global defaults before #print axioms. The local report uses the user spelling of its private native axiom. R1 correctly records a report mismatch; this is not evidence of lost assumptions.",
+  "repair": "R2 passes -Dpp.privateNames=true and -Dpp.fullNames=true before the unchanged file argument; canonical internal names are global defaults. No alias mapping, fixture change or expected-set change. Rerun local in a fresh attempt and commit all generated .olean/.ir family files before import.",
+  "acceptance_predicate": "UNCHANGED",
+  "r1_preservation": "All R1 sources, protocol, tests, fixture bytes and raw observation retained; R2 has separately named code and result.",
+  "process_accounting": {
+    "r1_launches": 1,
+    "r1_elapsed_seconds": 0.6462733749940526,
+    "r1_cleanup_complete": true
+  },
+  "prelaunch_issue": "Scoped option placement was missed by both initial source reviews; exact raw evidence exposed it before imported observation.",
+  "source_bindings": [
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/repair-sources-r2/Lean/Shell.lean",
+      "bytes": 22984,
+      "sha256": "4f584ae4d4cc859f39cdbb550df8e09417d1fd8e95046829ef821c2c95e2f940"
+    },
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/repair-sources-r2/Lean/Elab/Command.lean",
+      "bytes": 39432,
+      "sha256": "144be283be181e428cada561e868552bef3d8af17354965e4cf96916074c3140"
+    },
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/repair-sources-r2/Lean/Elab/BuiltinCommand.lean",
+      "bytes": 36358,
+      "sha256": "8e609af80c82dda4e676a07563096a8787f2f37e02fd834bad2394eef1399829"
+    },
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/repair-sources-r2/Lean/Elab/Frontend.lean",
+      "bytes": 19531,
+      "sha256": "e3e9037222c00308edc4fed589da83a80620bf5b35108779564fc485d8c17774"
+    }
+  ],
+  "original_tooling_replay": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/r1-replay.json",
+    "bytes": 2635,
+    "sha256": "584754333ccb767b5dffb81e86832fd02aba73e3f8a7a73c86eeae6fa9234c45"
+  },
+  "r1_additional_generated_files": [
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/execution/attempt-0001/TrustFixtures.ir",
+      "bytes": 1216,
+      "sha256": "0ce97766b3ef7c30ab7999da47253d740849622e61ebf532a27f54b0c35f381f"
+    },
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/execution/attempt-0001/TrustFixtures.ir.sig",
+      "bytes": 176,
+      "sha256": "bdeea9d461f40acdbbcbf7fdecbad84d8136f799a76eaef6b166331ab0731961"
+    }
+  ]
+}
