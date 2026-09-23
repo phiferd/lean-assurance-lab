@@ -47,6 +47,7 @@
   ],
   "prelaunch_gate": {
     "tooling_revision": 2,
+    "patch_revision": 2,
     "required": [
       "exact patch and changed-path inventory",
       "exact copied candidate/control hashes and four frozen fixture hashes",
@@ -80,6 +81,20 @@
         "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/result.json"
       ],
       "repair": "Supervisor revision 2 durably reconciles completed attempts, permits exact known-prelaunch failures to retry, and retains a separate safety hold whenever process absence or cleanup is unproven."
+    },
+    {
+      "attempt": 2,
+      "cell": "001-build",
+      "outcome": "ENGINEERING_FAILURE",
+      "cause": "Four test-only Expr wrapper dereferences used &* where the pinned API requires &**; the production library compiled before rustc rejected tests/exports.rs.",
+      "cargo_process_started": true,
+      "cleanup_complete": true,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/result.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/supervisor.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/raw.stderr"
+      ],
+      "repair": "Patch revision 2 adds the required second dereference at exactly the four compiler-reported test expressions; the scientific fixtures and production reconstruction are unchanged."
     }
   ],
   "process_safety": {

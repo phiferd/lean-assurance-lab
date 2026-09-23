@@ -1715,7 +1715,7 @@ index c1ae79a..ddcfe05 100644
 +
 +fn pi_domains(mut typ: Expr) -> Vec<Expr> {
 +    let mut domains = Vec::new();
-+    while let ExprData::Pi(_, domain, body) = &*typ {
++    while let ExprData::Pi(_, domain, body) = &**typ {
 +        domains.push(domain.clone());
 +        typ = body.clone();
 +    }
@@ -1767,13 +1767,13 @@ index c1ae79a..ddcfe05 100644
 +        let (head, args) = expr::unfold_apps(&domains[4]);
 +        match rec_name {
 +            "LALNest.rec" => {
-+                assert!(matches!(&*head, ExprData::Const(name, _) if *name == nest));
++                assert!(matches!(&**head, ExprData::Const(name, _) if *name == nest));
 +                assert!(args.is_empty());
 +            }
 +            "LALNest.rec_1" => {
-+                assert!(matches!(&*head, ExprData::Const(name, _) if *name == wrap));
++                assert!(matches!(&**head, ExprData::Const(name, _) if *name == wrap));
 +                assert_eq!(args.len(), 1);
-+                assert!(matches!(&*args[0], ExprData::Const(name, _) if *name == nest));
++                assert!(matches!(&**args[0], ExprData::Const(name, _) if *name == nest));
 +            }
 +            _ => unreachable!(),
 +        }

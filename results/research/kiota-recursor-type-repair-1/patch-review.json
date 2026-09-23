@@ -2,14 +2,14 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-22T23:47:48Z",
-  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW",
+  "completed_at": "2026-09-23T00:12:35Z",
+  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_2",
   "bindings": [
     {
       "role": "patch_package",
       "path": "results/research/kiota-recursor-type-repair-1/patch-package.json",
       "bytes": 3485,
-      "sha256": "13d088618d1292762443b5b7fb3bbcb3edeeac83da3a74888bb34555859dd049"
+      "sha256": "65ed708e47ac7cb26417932ac1a78744645c60b6ee7e9ffed7678b627de4f340"
     },
     {
       "role": "construction_design",
@@ -34,6 +34,24 @@
       "path": "results/research/recursor-type-trust-boundary-1/regression-contract.json",
       "bytes": 3219,
       "sha256": "eb14c51345b43ad5898344c183dfd651f805e08e6ec0e5fbb84e296be1fb8c2b"
+    },
+    {
+      "role": "compile_failure_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/result.json",
+      "bytes": 835,
+      "sha256": "8b83ed9fe069c6528956af8fb4e32fa7b04d6f531c2184cbd7bfbce262f617d1"
+    },
+    {
+      "role": "compile_failure_supervisor",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/supervisor.json",
+      "bytes": 1373,
+      "sha256": "7f31836d6ed0b236ffd10f3e2f3ff1445d9be6604ef81799e6f270cf56150a32"
+    },
+    {
+      "role": "compile_failure_stderr",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/raw.stderr",
+      "bytes": 13887,
+      "sha256": "59cff80e5e1ebf158440338914ff182d789d2cebbcf20bd583f3e7990b4d63f6"
     }
   ],
   "checks": [
@@ -96,6 +114,11 @@
       "id": "STATIC_PARSE",
       "result": "PASS",
       "evidence": "rustfmt parsed all four modified Rust files. The pinned tc.rs baseline is not rustfmt-clean, so formatting differences were not applied project-wide."
+    },
+    {
+      "id": "COMPILER_DIAGNOSTIC_REPAIR",
+      "result": "PASS",
+      "evidence": "Attempt 2 compiled the production library and then reported exactly four E0308 mismatches in tests/exports.rs. Patch revision 2 applies rustc's required second dereference at those four wrapper matches only; production source and frozen fixture bytes are unchanged."
     }
   ],
   "adversarial_findings_resolved": [
@@ -108,8 +131,9 @@
     "partial atomicity assertion"
   ],
   "observations": {
-    "build_attempts": 0,
-    "cargo_test_processes": 0,
+    "build_attempts": 1,
+    "cargo_test_processes": 1,
+    "compile_failures": 1,
     "checker_attempts": 0,
     "network_requests": 0,
     "external_actions": 0
@@ -118,6 +142,6 @@
     "static_patch_ready": true,
     "prelaunch_review_passed": true,
     "compile_or_runtime_success_claimed": false,
-    "remaining_gate": "Bind and commit the exact dependency lock, runner and nine execution manifests before launch."
+    "remaining_gate": "Bind and commit patch revision 2 and all nine updated execution manifests before retrying the build cell."
   }
 }
