@@ -1,0 +1,26 @@
+{
+  "schema_version": 1,
+  "date": "2026-09-23",
+  "decision": "REUSE_COLLECTION_AND_POLICY_CONTRACT_BUILD_ONLY_STRICT_REPORT_BRIDGE",
+  "question": "Which supported routes expose transitive assumptions without assuming historical native-evaluation mechanisms?",
+  "sources": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/source-manifest.json",
+    "bytes": 6793,
+    "sha256": "19229897cf8177b8c59a4633d0c71c9d8cdd6c49cb138425923cb10c191787ab"
+  },
+  "findings": [
+    "CollectAxioms traverses local types and values and serializes per-declaration transitive arrays into exportedAxiomsExt; downstream requests consume those arrays.",
+    "Native.lean compiles and evaluates then creates an auxiliary axiom. Prop proof elaboration exits exporting, so CoreM/PrivateName give _private.TrustFixtures.0.TrustAssumptionPilot.nativeEval._native.native_decide.ax_1. Both modules enable pp.fullNames and pp.privateNames to preserve that exact internal Name. Deprecated ofReduceBool/trustCompiler is not expected.",
+    "Comparator Axioms.lean checks dependency closure against legalAxioms on Export.ExportedEnv; its strict membership contract is reused, not its incompatible export execution pipeline.",
+    "Adapt the retained CVC full-report parsing algorithm in a prospective module to admit numeric Name components; preserve private prefixes and require exact report order and empty remainder. The frozen CVC parser remains unchanged.",
+    "Keep native-evaluation and sorry assumptions visible even when compilation exits successfully. warn.sorry is intentionally disabled only to make the raw report channel machine-comparable; sorryAx remains a required report member."
+  ],
+  "recommendation": "Extend existing transcript parser and positive-RSS supervisor with a small strict two-route consumer; do not build or claim an independent axiom-collection algorithm.",
+  "network_observations": [
+    "GitHub public API exact Comparator master commit retrieved; raw and un-escalated API requests failed DNS; escalated read-only contents API retrieved exact Comparator.lean and Axioms.lean. No external write."
+  ],
+  "primary_urls": [
+    "https://github.com/leanprover/lean4/tree/v4.33.0",
+    "https://github.com/leanprover/comparator/blob/32bd61da1d68fbaa310234964e9b820b03a0f82f/Comparator/Axioms.lean"
+  ]
+}

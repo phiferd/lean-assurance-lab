@@ -1,0 +1,143 @@
+{
+  "schema_version": 1,
+  "item_id": "TRUST-ASSUMPTION-PIPELINE-PILOT-1",
+  "fixtures": [
+    {
+      "id": "pure",
+      "target": "TrustAssumptionPilot.pure",
+      "expected_axioms": []
+    },
+    {
+      "id": "explicitLeaf",
+      "target": "TrustAssumptionPilot.explicitLeaf",
+      "expected_axioms": [
+        "TrustAssumptionPilot.explicit"
+      ]
+    },
+    {
+      "id": "propextLeaf",
+      "target": "TrustAssumptionPilot.propextLeaf",
+      "expected_axioms": [
+        "propext"
+      ]
+    },
+    {
+      "id": "choiceLeaf",
+      "target": "TrustAssumptionPilot.choiceLeaf",
+      "expected_axioms": [
+        "Classical.choice"
+      ]
+    },
+    {
+      "id": "sorryLeaf",
+      "target": "TrustAssumptionPilot.sorryLeaf",
+      "expected_axioms": [
+        "sorryAx"
+      ]
+    },
+    {
+      "id": "nativeLeaf",
+      "target": "TrustAssumptionPilot.nativeLeaf",
+      "expected_axioms": [
+        "_private.TrustFixtures.0.TrustAssumptionPilot.nativeEval._native.native_decide.ax_1"
+      ]
+    }
+  ],
+  "paths": [
+    "local-body-traversal",
+    "imported-olean-metadata"
+  ],
+  "cells": [
+    {
+      "path": "local-body-traversal",
+      "fixture": "pure"
+    },
+    {
+      "path": "local-body-traversal",
+      "fixture": "explicitLeaf"
+    },
+    {
+      "path": "local-body-traversal",
+      "fixture": "propextLeaf"
+    },
+    {
+      "path": "local-body-traversal",
+      "fixture": "choiceLeaf"
+    },
+    {
+      "path": "local-body-traversal",
+      "fixture": "sorryLeaf"
+    },
+    {
+      "path": "local-body-traversal",
+      "fixture": "nativeLeaf"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "pure"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "explicitLeaf"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "propextLeaf"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "choiceLeaf"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "sorryLeaf"
+    },
+    {
+      "path": "imported-olean-metadata",
+      "fixture": "nativeLeaf"
+    }
+  ],
+  "permission_control": {
+    "target": "explicitLeaf",
+    "sufficient": [
+      "TrustAssumptionPilot.explicit"
+    ],
+    "insufficient": [],
+    "expected": [
+      "PERMITTED",
+      "DENIED"
+    ],
+    "paths": [
+      "local-body-traversal",
+      "imported-olean-metadata"
+    ]
+  },
+  "fixture_bindings": [
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/fixtures/ImportedReports.lean",
+      "bytes": 355,
+      "sha256": "37731398ac94bec9a5e13cc8a4752da0a5f6e162168676cf9d6f5b0ee5dee1df"
+    },
+    {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/fixtures/TrustFixtures.lean",
+      "bytes": 1098,
+      "sha256": "7de9c5b2a0b92b823587dd34d4da413f7fb2ded93a3a63710332a15803b0207c"
+    }
+  ],
+  "source_manifest": {
+    "path": "results/research/trust-assumption-pipeline-pilot-1/source-manifest.json",
+    "bytes": 6793,
+    "sha256": "19229897cf8177b8c59a4633d0c71c9d8cdd6c49cb138425923cb10c191787ab"
+  },
+  "claim_limits": [
+    "Two reporting routes within official Lean 4.33.0, not independent implementations.",
+    "Assumption preservation does not establish soundness.",
+    "Compiled module export is .olean axiom metadata, not lean4export NDJSON.",
+    "Permission consumer is local reporting policy, not executed Comparator or kernel refusal."
+  ],
+  "safety": {
+    "timeout_seconds": 120,
+    "memory_bytes": 2147483648,
+    "failures": "REPAIR_AND_CONTINUE"
+  }
+}
