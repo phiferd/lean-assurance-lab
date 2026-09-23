@@ -47,7 +47,7 @@
   ],
   "prelaunch_gate": {
     "tooling_revision": 2,
-    "patch_revision": 2,
+    "patch_revision": 3,
     "required": [
       "exact patch and changed-path inventory",
       "exact copied candidate/control hashes and four frozen fixture hashes",
@@ -95,6 +95,32 @@
         "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/raw.stderr"
       ],
       "repair": "Patch revision 2 adds the required second dereference at exactly the four compiler-reported test expressions; the scientific fixtures and production reconstruction are unchanged."
+    },
+    {
+      "attempt": 3,
+      "cell": "001-build",
+      "outcome": "BUILD_PASS",
+      "cargo_process_started": true,
+      "cleanup_complete": true,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000003-001-build/result.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000003-001-build/supervisor.json"
+      ]
+    },
+    {
+      "attempt": 4,
+      "cell": "002-focused",
+      "outcome": "ENGINEERING_FAILURE",
+      "cause": "The ordinary recursive Nat.le step minor exposed a two-region de Bruijn relocation defect: a uniform shift moved its predecessor index from #1 to #3.",
+      "cargo_process_started": true,
+      "cleanup_complete": true,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/result.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/supervisor.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/raw.stdout",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/raw.stderr"
+      ],
+      "repair": "Patch revision 3 separately inserts motives/minors outside prior fields and current/later fields plus prior IHs inside them, for both higher-order argument domains and recursive indices."
     }
   ],
   "process_safety": {

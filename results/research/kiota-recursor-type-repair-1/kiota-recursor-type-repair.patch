@@ -294,7 +294,7 @@ index 253d2fb..21e7eeb 100644
          Ok(())
      }
 diff --git a/src/tc.rs b/src/tc.rs
-index ca1d1a9..2ef7695 100644
+index ca1d1a9..17d880e 100644
 --- a/src/tc.rs
 +++ b/src/tc.rs
 @@ -85,6 +85,183 @@ pub enum TcError {
@@ -518,7 +518,7 @@ index ca1d1a9..2ef7695 100644
          // Large-elimination check, once per group (not once per member —
          // `check_inductive_group` runs once per type name in the block,
          // all sharing the same `all`). See `elim_only_at_universe_zero`'s
-@@ -8705,6 +8903,1163 @@ impl<'e> Checker<'e> {
+@@ -8705,6 +8903,1186 @@ impl<'e> Checker<'e> {
          Ok(())
      }
  
@@ -1563,13 +1563,28 @@ index ca1d1a9..2ef7695 100644
 +            loop {
 +                match self.ensure_pi(&fctx, &fcur) {
 +                    Ok((bi, dom, body)) => {
-+                        let base = outer_depth + field_count + ih_count;
-+                        let shift_by = base.checked_sub(field.ctx.len()).ok_or_else(|| {
-+                            TcError::Other("recursive-field context underflow".into())
-+                        })? as i32;
++                        let outer_shift = outer_depth
++                            .checked_sub(num_params as usize)
++                            .ok_or_else(|| {
++                                TcError::Other("recursive-field outer context underflow".into())
++                            })? as i32;
++                        let arg_depth = arg_binders.len();
++                        let with_outer = expr::shift(
++                            &dom,
++                            outer_shift,
++                            (arg_depth + field_pos) as u32,
++                        );
++                        let inner_shift = field_count - field_pos + ih_count;
 +                        arg_binders.push(RecBinder {
 +                            info: bi,
-+                            typ: expr::shift(&dom, shift_by, arg_binders.len() as u32),
++                            // Source: params, prior fields, prior function args.
++                            // Destination: params, motives/minors, all fields,
++                            // prior IHs, prior function args.  Motives/minors
++                            // are inserted outside the prior fields, whereas
++                            // the current/later fields and prior IHs are
++                            // inserted inside them, so this cannot be one
++                            // uniform shift.
++                            typ: expr::shift(&with_outer, inner_shift as i32, arg_depth as u32),
 +                        });
 +                        fctx.push(dom);
 +                        fcur = body;
@@ -1608,17 +1623,25 @@ index ca1d1a9..2ef7695 100644
 +                continue;
 +            };
 +            let base = outer_depth + field_count + ih_count;
-+            let shift_by = base
-+                .checked_sub(field.ctx.len())
-+                .ok_or_else(|| TcError::Other("recursive target context underflow".into()))?
++            let outer_shift = outer_depth
++                .checked_sub(num_params as usize)
++                .ok_or_else(|| TcError::Other("recursive target outer context underflow".into()))?
 +                as i32;
++            let inner_shift = field_count - field_pos + ih_count;
 +            let arg_count = arg_binders.len();
 +            let depth = base + arg_count;
 +            let motive_pos = num_params as usize + member_pos;
 +            let motive = expr::bvar((depth - 1 - motive_pos) as u32);
 +            let mut ih_args: Vec<Expr> = recursive_indices
 +                .iter()
-+                .map(|a| expr::shift(a, shift_by, arg_count as u32))
++                .map(|a| {
++                    let with_outer = expr::shift(
++                        a,
++                        outer_shift,
++                        (arg_count + field_pos) as u32,
++                    );
++                    expr::shift(&with_outer, inner_shift as i32, arg_count as u32)
++                })
 +                .collect();
 +            let field_value = expr::bvar(
 +                (field_count + ih_count + arg_count - 1 - field_pos) as u32,
@@ -1683,7 +1706,7 @@ index ca1d1a9..2ef7695 100644
      /// strictly positive in the names being defined (`bound`).
      fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
 diff --git a/tests/exports.rs b/tests/exports.rs
-index c1ae79a..ddcfe05 100644
+index c1ae79a..16a20e0 100644
 --- a/tests/exports.rs
 +++ b/tests/exports.rs
 @@ -4,6 +4,8 @@

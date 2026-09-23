@@ -2,14 +2,14 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-23T00:12:35Z",
-  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_2",
+  "completed_at": "2026-09-23T00:23:36Z",
+  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_3",
   "bindings": [
     {
       "role": "patch_package",
       "path": "results/research/kiota-recursor-type-repair-1/patch-package.json",
       "bytes": 3485,
-      "sha256": "65ed708e47ac7cb26417932ac1a78744645c60b6ee7e9ffed7678b627de4f340"
+      "sha256": "a17f2c008d69abbab6b93d04ecc0a998e394887364531ea0474d8bd38707794c"
     },
     {
       "role": "construction_design",
@@ -52,6 +52,24 @@
       "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000002-001-build/raw.stderr",
       "bytes": 13887,
       "sha256": "59cff80e5e1ebf158440338914ff182d789d2cebbcf20bd583f3e7990b4d63f6"
+    },
+    {
+      "role": "successful_rebound_build",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000003-001-build/result.json",
+      "bytes": 845,
+      "sha256": "294bcd760beabad9ed6cb7871f0e7804dd9960f0759e7932acc77402419a4691"
+    },
+    {
+      "role": "focused_failure_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/result.json",
+      "bytes": 847,
+      "sha256": "9cca05eac38c7d86adfaf2fb08fe7ca1f0e4ddfa4c8cfaba44920f0abb1c2224"
+    },
+    {
+      "role": "focused_failure_stdout",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/raw.stdout",
+      "bytes": 799,
+      "sha256": "31001f53fec09e5426e7246e4f75eb843eb28911a8c24898620cdb5b1e00b4f9"
     }
   ],
   "checks": [
@@ -119,6 +137,11 @@
       "id": "COMPILER_DIAGNOSTIC_REPAIR",
       "result": "PASS",
       "evidence": "Attempt 2 compiled the production library and then reported exactly four E0308 mismatches in tests/exports.rs. Patch revision 2 applies rustc's required second dereference at those four wrapper matches only; production source and frozen fixture bytes are unchanged."
+    },
+    {
+      "id": "RECURSIVE_CONTEXT_RELOCATION",
+      "result": "PASS",
+      "evidence": "Attempt 4 localized all three focused failures to Nat.le.rec. Independent review confirmed revision 3 maps source [parameters, prior fields, arguments] to destination [parameters, motives/minors, all fields, prior IHs, arguments] using cutoffs argument-depth plus field-position, then argument-depth; Nat.le.step's predecessor remains #1 instead of the former #3."
     }
   ],
   "adversarial_findings_resolved": [
@@ -131,9 +154,11 @@
     "partial atomicity assertion"
   ],
   "observations": {
-    "build_attempts": 1,
-    "cargo_test_processes": 1,
+    "build_attempts": 2,
+    "cargo_test_processes": 3,
     "compile_failures": 1,
+    "build_passes": 1,
+    "focused_failures": 1,
     "checker_attempts": 0,
     "network_requests": 0,
     "external_actions": 0
@@ -142,6 +167,6 @@
     "static_patch_ready": true,
     "prelaunch_review_passed": true,
     "compile_or_runtime_success_claimed": false,
-    "remaining_gate": "Bind and commit patch revision 2 and all nine updated execution manifests before retrying the build cell."
+    "remaining_gate": "Bind and commit patch revision 3 and all nine updated execution manifests before rerunning build and focused cells."
   }
 }
