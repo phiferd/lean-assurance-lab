@@ -14,6 +14,86 @@ loader.exec_module(runner)
 
 
 class UnitRunnerBoundaryTests(unittest.TestCase):
+    def setUp(self):
+        host = patch.object(runner, 'missing_host_payload', return_value=[])
+        source = patch.object(runner, 'prepare_test_source', return_value={"status": "PASS"})
+        self.host = host.start()
+        self.source = source.start()
+        self.addCleanup(host.stop)
+        self.addCleanup(source.stop)
+
+    def test_only_exact_host_tests_are_skipped(self):
+        tests = []
+        for test_id in sorted(runner.HOST_PAYLOAD_TEST_IDS):
+            test = unittest.FunctionTestCase(lambda: self.fail('missing host test must skip'))
+            test.id = lambda test_id=test_id: test_id
+            tests.append(test)
+        unrelated = unittest.FunctionTestCase(lambda: self.fail('future tests must still run'))
+        unrelated.id = lambda: 'test_acceptance_impact_source.AcceptanceImpactSourceTests.future'
+        tests.append(unittest.TestSuite([unrelated]))
+        result = unittest.TestResult()
+        runner._rewrite_suite(unittest.TestSuite(tests), False, True).run(result)
+        self.assertEqual({test.id() for test, _ in result.skipped}, runner.HOST_PAYLOAD_TEST_IDS)
+        self.assertEqual(len(result.failures), 1)
+        self.assertEqual(result.testsRun, 4)
+
+    def test_default_run_keeps_missing_host_tests_visible(self):
+        self.host.return_value = [Path('/missing/frozen/cargo')]
+        tests = []
+        for test_id in sorted(runner.HOST_PAYLOAD_TEST_IDS):
+            test = unittest.FunctionTestCase(lambda: self.fail('missing integration must skip'))
+            test.id = lambda test_id=test_id: test_id
+            tests.append(test)
+        output = io.StringIO()
+        with patch('sys.argv', ['run-unit-tests']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner, '_historical_modules', return_value=set()), \
+             patch.object(runner, 'portfolio_modules', return_value=set()), \
+             patch.object(runner, 'run_portfolio_history', return_value=True), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover',
+                          return_value=unittest.TestSuite(tests)), \
+             contextlib.redirect_stderr(output):
+            self.assertEqual(runner.main(), 0)
+        self.assertIn('skipped=3', output.getvalue())
+        self.source.assert_called_once_with(ROOT)
+
+    def test_present_host_payload_keeps_original_failure(self):
+        test = unittest.FunctionTestCase(lambda: self.fail('corruption must fail'))
+        test.id = lambda: next(iter(runner.HOST_PAYLOAD_TEST_IDS))
+        result = unittest.TestResult()
+        runner._rewrite_suite(unittest.TestSuite([test]), False, False).run(result)
+        self.assertEqual(len(result.failures), 1)
+        self.assertEqual(result.skipped, [])
+
+    def test_required_host_payload_fails_before_discovery_or_source_writes(self):
+        self.host.return_value = [Path('/missing/frozen/cargo')]
+        with patch('sys.argv', ['run-unit-tests', '--require-full-payload']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover') as discover, \
+             contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(runner.main(), 2)
+        discover.assert_not_called()
+        self.source.assert_not_called()
+
+    def test_corrupt_present_host_payload_cannot_be_skipped(self):
+        self.host.side_effect = ValueError('bound file digest differs')
+        with patch('sys.argv', ['run-unit-tests']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover') as discover, \
+             contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(runner.main(), 2)
+        discover.assert_not_called()
+        self.source.assert_not_called()
+
+    def test_source_payload_mismatch_fails_before_discovery(self):
+        self.source.side_effect = ValueError('materialized source tree manifest differs')
+        with patch('sys.argv', ['run-unit-tests']), \
+             patch.object(runner, '_load_payload_status', return_value=(set(), [])), \
+             patch.object(runner.unittest.defaultTestLoader, 'discover') as discover, \
+             contextlib.redirect_stderr(io.StringIO()):
+            self.assertEqual(runner.main(), 2)
+        discover.assert_not_called()
+
     def test_current_suite_runs_inside_portable_cache_history_context(self):
         entered = []
 

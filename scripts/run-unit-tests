@@ -16,6 +16,8 @@ sys.path.insert(0, str(ROOT))
 from lib.portfolio_historical_snapshot_v2 import historical_modules as portfolio_modules
 from lib.portfolio_historical_snapshot_v2 import run_historical_tests as run_portfolio_history
 from lib.survivor_cache_historical_v2 import portable_validation as portable_cache_history
+from lib.acceptance_impact_test_payload import missing_host_payload
+from lib.kiota_source_payload import prepare_test_source
 GATE8_INPUT_PATH = (
     ROOT
     / "results"
@@ -32,8 +34,22 @@ SKIP_REASON = (
 )
 
 
-class _SkippedGate8PayloadTest(unittest.TestCase):
-    """Keep the exact frozen test visible as a skip when payload is absent."""
+HOST_PAYLOAD_TEST_IDS = frozenset(
+    "test_acceptance_impact_source.AcceptanceImpactSourceTests." + name
+    for name in (
+        "test_archive_dependencies_and_toolchain_match_frozen_inputs",
+        "test_prepare_is_exact_idempotent_and_non_observational",
+        "test_materialized_source_tampering_is_rejected",
+    )
+)
+HOST_SKIP_REASON = (
+    "frozen host integration unavailable: exact macOS Cargo registry or toolchain "
+    "payload is absent; portable source/verification regressions run separately"
+)
+
+
+class _SkippedPayloadTest(unittest.TestCase):
+    """Keep an exact frozen integration test visible when its payload is absent."""
 
     def __init__(self, test_id: str, reason: str):
         super().__init__()
@@ -75,13 +91,16 @@ def _load_payload_status() -> tuple[set[Path], list[Path]]:
     return required, sorted(path for path in required if not path.is_file())
 
 
-def _rewrite_suite(suite: unittest.TestSuite, missing: bool) -> unittest.TestSuite:
+def _rewrite_suite(suite: unittest.TestSuite, missing: bool,
+                   missing_host: bool = False) -> unittest.TestSuite:
     rewritten = unittest.TestSuite()
     for test in suite:
         if isinstance(test, unittest.TestSuite):
-            rewritten.addTest(_rewrite_suite(test, missing))
+            rewritten.addTest(_rewrite_suite(test, missing, missing_host))
         elif missing and test.id() == GATE8_TEST_ID:
-            rewritten.addTest(_SkippedGate8PayloadTest(GATE8_TEST_ID, SKIP_REASON))
+            rewritten.addTest(_SkippedPayloadTest(GATE8_TEST_ID, SKIP_REASON))
+        elif missing_host and test.id() in HOST_PAYLOAD_TEST_IDS:
+            rewritten.addTest(_SkippedPayloadTest(test.id(), HOST_SKIP_REASON))
         else:
             rewritten.addTest(test)
     return rewritten
@@ -117,7 +136,7 @@ def main() -> int:
     parser.add_argument(
         "--require-full-payload",
         action="store_true",
-        help="fail before running tests when any frozen Gate-8 payload is missing",
+        help="fail before running tests when any frozen Gate-8 or host integration payload is missing",
     )
     args = parser.parse_args()
 
@@ -136,11 +155,23 @@ def main() -> int:
             print(f"  {path.relative_to(ROOT)}", file=sys.stderr)
         return 2
 
+    try:
+        missing_host = missing_host_payload(ROOT)
+        if args.require_full_payload and missing_host:
+            print("full-payload preflight failed; missing frozen host inputs:", file=sys.stderr)
+            for path in missing_host:
+                print(f"  {path}", file=sys.stderr)
+            return 2
+        prepare_test_source(ROOT)
+    except (ValueError, OSError) as error:
+        print(f"unit-test source/host preflight failed: {error}", file=sys.stderr)
+        return 2
+
     suite = unittest.defaultTestLoader.discover(str(ROOT / "tests"))
     historical_modules = _historical_modules()
     checkpoint_modules = portfolio_modules(ROOT)
     suite = _current_suite(suite, historical_modules | checkpoint_modules)
-    suite = _rewrite_suite(suite, bool(missing))
+    suite = _rewrite_suite(suite, bool(missing), bool(missing_host))
     with portable_cache_history():
         result = unittest.TextTestRunner(verbosity=2).run(suite)
     historical_ok = True

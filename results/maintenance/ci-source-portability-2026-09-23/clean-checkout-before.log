@@ -1,0 +1,166 @@
+test_archive_dependencies_and_toolchain_match_frozen_inputs (test_acceptance_impact_source.AcceptanceImpactSourceTests) ... ok
+test_materialized_source_tampering_is_rejected (test_acceptance_impact_source.AcceptanceImpactSourceTests) ... ERROR
+test_prepare_is_exact_idempotent_and_non_observational (test_acceptance_impact_source.AcceptanceImpactSourceTests) ... ERROR
+test_audit_cannot_authorize_production_edit (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ok
+test_base_or_nested_stage_omission_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ok
+test_circular_current_rec_environment_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ok
+test_exact_package_passes (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ERROR
+test_fixture_hash_profile_or_outcome_tampering_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... FAIL
+test_result_cannot_overclaim_or_record_actions (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ok
+test_source_hash_or_locator_tampering_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... FAIL
+test_weaker_comparison_relation_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests) ... ok
+test_exact_package_passes (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ERROR
+test_historical_ready_handoff_survives_later_successors (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+test_launch_edit_and_external_action_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... FAIL
+test_missing_unblock_condition_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... FAIL
+test_pair_delta_tampering_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+test_policy_overclaim_and_catalog_promotion_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+test_production_ready_without_design_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... FAIL
+test_raw_diagnostic_hash_tampering_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... FAIL
+test_result_cannot_claim_universal_authority (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+test_result_cannot_promote_production_readiness (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+test_source_hash_and_locator_tampering_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... FAIL
+test_swapped_or_weakened_regression_outcomes_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests) ... ok
+
+======================================================================
+ERROR: test_materialized_source_tampering_is_rejected (test_acceptance_impact_source.AcceptanceImpactSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_acceptance_impact_source.py", line 48, in test_materialized_source_tampering_is_rejected
+    with tempfile.TemporaryDirectory(prefix="acceptance-impact-source-tamper-", dir=external) as raw:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/tempfile.py", line 819, in __init__
+    self.name = mkdtemp(suffix, prefix, dir)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/tempfile.py", line 368, in mkdtemp
+    _os.mkdir(file, 0o700)
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/lean-ci-repair-20260923/clean-checkout/external/acceptance-impact-source-tamper-l6ywo9ty'
+
+======================================================================
+ERROR: test_prepare_is_exact_idempotent_and_non_observational (test_acceptance_impact_source.AcceptanceImpactSourceTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_acceptance_impact_source.py", line 28, in test_prepare_is_exact_idempotent_and_non_observational
+    with tempfile.TemporaryDirectory(prefix="acceptance-impact-source-test-", dir=external) as raw:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/tempfile.py", line 819, in __init__
+    self.name = mkdtemp(suffix, prefix, dir)
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/tempfile.py", line 368, in mkdtemp
+    _os.mkdir(file, 0o700)
+FileNotFoundError: [Errno 2] No such file or directory: '/private/tmp/lean-ci-repair-20260923/clean-checkout/external/acceptance-impact-source-test-2ez4zvet'
+
+======================================================================
+ERROR: test_exact_package_passes (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_kiota_recursor_type_design.py", line 20, in test_exact_package_passes
+    result = design.validate_package(design.ROOT)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/kiota_recursor_type_design.py", line 379, in validate_package
+    validate_source_value(load_json(root / SOURCE), root)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/kiota_recursor_type_design.py", line 173, in validate_source_value
+    paths = {role: _verify_binding(root, bindings[role], expected)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/kiota_recursor_type_design.py", line 173, in <dictcomp>
+    paths = {role: _verify_binding(root, bindings[role], expected)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/kiota_recursor_type_design.py", line 151, in _verify_binding
+    raise DesignError(f"bound file differs: {wanted['path']}")
+lib.kiota_recursor_type_design.DesignError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+======================================================================
+ERROR: test_exact_package_passes (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 19, in test_exact_package_passes
+    result = boundary.validate(boundary.ROOT)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/recursor_type_trust_boundary.py", line 530, in validate
+    validate_policy_value(policy, root)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/recursor_type_trust_boundary.py", line 222, in validate_policy_value
+    paths[role] = verify_binding(root, bindings[role], expected)
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/lib/recursor_type_trust_boundary.py", line 188, in verify_binding
+    raise BoundaryError(f"bound file differs: {wanted['path']}")
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+======================================================================
+FAIL: test_fixture_hash_profile_or_outcome_tampering_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests)
+----------------------------------------------------------------------
+lib.kiota_recursor_type_design.DesignError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/067_eqRec.accept.ndjson
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_kiota_recursor_type_design.py", line 60, in test_fixture_hash_profile_or_outcome_tampering_fails
+    with self.assertRaisesRegex(design.DesignError, "fixture expectation or profile"):
+AssertionError: "fixture expectation or profile" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/fixtures/067_eqRec.accept.ndjson"
+
+======================================================================
+FAIL: test_source_hash_or_locator_tampering_fails (test_kiota_recursor_type_design.KiotaRecursorTypeDesignTests)
+----------------------------------------------------------------------
+lib.kiota_recursor_type_design.DesignError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_kiota_recursor_type_design.py", line 31, in test_source_hash_or_locator_tampering_fails
+    with self.assertRaisesRegex(design.DesignError, "source finding differs"):
+AssertionError: "source finding differs" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs"
+
+======================================================================
+FAIL: test_launch_edit_and_external_action_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 70, in test_launch_edit_and_external_action_fail
+    with self.assertRaisesRegex(boundary.BoundaryError, "unauthorized launch or edit"):
+AssertionError: "unauthorized launch or edit" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs"
+
+======================================================================
+FAIL: test_missing_unblock_condition_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 44, in test_missing_unblock_condition_fails
+    with self.assertRaisesRegex(boundary.BoundaryError, "unblock condition"):
+AssertionError: "unblock condition" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs"
+
+======================================================================
+FAIL: test_production_ready_without_design_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 76, in test_production_ready_without_design_fails
+    with self.assertRaisesRegex(boundary.BoundaryError, "readiness boundary"):
+AssertionError: "readiness boundary" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/tests/exports.rs"
+
+======================================================================
+FAIL: test_raw_diagnostic_hash_tampering_fails (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 50, in test_raw_diagnostic_hash_tampering_fails
+    with self.assertRaisesRegex(boundary.BoundaryError, "ordering evidence differs"):
+AssertionError: "ordering evidence differs" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs"
+
+======================================================================
+FAIL: test_source_hash_and_locator_tampering_fail (test_recursor_type_trust_boundary.RecursorTypeTrustBoundaryTests)
+----------------------------------------------------------------------
+lib.recursor_type_trust_boundary.BoundaryError: bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs
+
+During handling of the above exception, another exception occurred:
+
+Traceback (most recent call last):
+  File "/private/tmp/lean-ci-repair-20260923/clean-checkout/tests/test_recursor_type_trust_boundary.py", line 31, in test_source_hash_and_locator_tampering_fail
+    with self.assertRaisesRegex(boundary.BoundaryError, "source finding differs"):
+AssertionError: "source finding differs" does not match "bound file differs: external/acceptance-impact-pilot-1-kiota/kiota-9fa2c297dd700fe8fd1712a86bdbb258e1c01c42/src/parser.rs"
+
+----------------------------------------------------------------------
+Ran 23 tests in 0.293s
+
+FAILED (failures=7, errors=4)

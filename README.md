@@ -267,16 +267,25 @@ python3 -m venv .venv
 .venv/bin/python scripts/run-unit-tests
 ```
 
-The clone-safe runner executes the unchanged unit suite and skips only the
-frozen Gate-8 input-freeze test when its inventoried observer binaries,
-coverage files, or corpus files are absent. The skip is reported as
-`full-payload integration unavailable`. Missing tracked inputs fail preflight;
-when all payloads are present, the original test runs and hash mismatches fail. CI uses this clone-safe mode. Use `--require-full-payload`
-when all frozen inputs are expected locally. This mode does not replace the
-full-payload assurance validator. Existing materialization-dependent tests
-retain their explicit skips. The publication-study tests also
-inspect immutable predecessor commits, so retain complete Git history (use
-`fetch-depth: 0` in CI); shallow clones can fail during test setup.
+The clone-safe runner restores the exact Kiota source and Lean wrapper needed
+by historical source checks from committed custody copies, without network
+access, compilation, or checker execution. Existing modified payloads fail
+preflight instead of being overwritten.
+
+It reports explicit integration skips for the frozen Gate-8 input-freeze test
+when its observer, coverage, or corpus payload is absent, and for three frozen
+acceptance-impact tests when their exact macOS Cargo registry/toolchain payload
+is absent. Portable regressions still exercise source preparation and host
+verification logic. Missing tracked inputs and corrupt present host resources
+fail preflight, including when other host resources are absent. CI uses this
+clone-safe mode; `--require-full-payload` refuses missing Gate-8 or host inputs
+and runs the original integration tests when all are present. This mode does
+not replace the full-payload assurance validator. Existing materialization
+dependent tests retain their explicit skips.
+
+Publication-study tests inspect immutable predecessor commits, so retain
+complete Git history (`fetch-depth: 0` in CI); shallow clones can fail during
+test setup.
 
 Full experiments additionally require Git, Cargo, Rust, Elan, `uv`, the Arena
 system prerequisites, and substantial disk space. `scripts/setup-arena` clones
