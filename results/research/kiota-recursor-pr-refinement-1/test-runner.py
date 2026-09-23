@@ -1,0 +1,447 @@
+#!/usr/bin/env python3
+"""Pure and fully mocked regressions for the recursor-repair supervisor.
+
+No test in this file starts Cargo, a checker, an inert child, or a network
+operation. Process execution is replaced with an in-process fake.
+"""
+from __future__ import annotations
+
+import importlib.util
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+
+
+HERE = Path(__file__).resolve().parent
+SPEC = importlib.util.spec_from_file_location("kiota_recursor_repair_runner", HERE / "run-cell.py")
+assert SPEC is not None and SPEC.loader is not None
+runner = importlib.util.module_from_spec(SPEC)
+SPEC.loader.exec_module(runner)
+
+
+def good_receipt(**overrides):
+    receipt = {
+        "argv": ["mock"],
+        "cwd": "/mock",
+        "exit_code": 0,
+        "timed_out": False,
+        "memory_limit_bytes": 1024,
+        "memory_enforcement": "per-process-rss-process-group-monitor-v2",
+        "memory_exceeded": False,
+        "memory_monitor_samples": 3,
+        "maximum_observed_rss_bytes": 512,
+        "memory_monitor_error": None,
+        "cleanup_complete": True,
+    }
+    receipt.update(overrides)
+    return receipt
+
+
+def summary(passed, failed=0, ignored=0, measured=0, filtered=0):
+    status = "ok" if failed == 0 else "FAILED"
+    return (
+        f"test result: {status}. {passed} passed; {failed} failed; {ignored} ignored; "
+        f"{measured} measured; {filtered} filtered out; finished in 0.01s\n"
+    )
+
+
+class SourceInventoryTests(unittest.TestCase):
+    """Exercise inventory changes without processes or external source files."""
+
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.root = Path(self.temp.name)
+        self.source = self.root / "source"
+        self.source.mkdir()
+        self.authored = b"// reconstructed recursors\nfn example() {}\n"
+        self.archived = {"src/tc.rs": b"original\n", "tests/old.accept.ndjson": b"fixture\n"}
+        self.files = {"src/tc.rs": b"mod recursor;\n", "src/tc/recursor.rs": self.authored,
+                      "tests/new.reject.ndjson": b"fixture\n"}
+        for name, content in self.files.items():
+            path = self.source / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_bytes(content)
+        (self.root / "fixture.ndjson").write_bytes(b"fixture\n")
+        self.patch = (b"diff --git a/src/tc/recursor.rs b/src/tc/recursor.rs\n"
+                      b"new file mode 100644\nindex 0000000..1234567\n"
+                      b"--- /dev/null\n+++ b/src/tc/recursor.rs\n@@ -0,0 +1,2 @@\n"
+                      b"+// reconstructed recursors\n+fn example() {}\n")
+        self.patch_path = self.root / "source.patch"
+        self.patch_path.write_bytes(self.patch)
+        self.package_path = self.root / "package.json"
+        self.archive = self.root / "archive.tar.gz"
+        self.archive_row = {"bytes": 1, "sha256": "a" * 64}
+        self.rows = []
+        for name, content in self.files.items():
+            base = self.archived.get(name)
+            row = {"path": name, "kind": "MODIFIED" if base is not None else "ADDED",
+                   "base_bytes": len(base) if base is not None else 0,
+                   "base_sha256": runner.digest(base) if base is not None else None,
+                   "patched_bytes": len(content), "patched_sha256": runner.digest(content)}
+            if name == "src/tc/recursor.rs":
+                row["origin"] = "AUTHORED"
+            elif base is None:
+                row.update(source_path="fixture.ndjson", source_bytes=len(content),
+                           source_sha256=runner.digest(content))
+            self.rows.append(row)
+        old = self.archived["tests/old.accept.ndjson"]
+        self.rows.append({"path": "tests/old.accept.ndjson", "kind": "DELETED",
+                          "base_bytes": len(old), "base_sha256": runner.digest(old),
+                          "patched_bytes": 0, "patched_sha256": None})
+        self.protocol = {"intended_patch_paths": list(self.files) + ["tests/old.accept.ndjson"]}
+        self.package = {"schema_version": 1, "item_id": runner.ITEM,
+                        "source_revision": runner.REVISION,
+                        "source_archive": {"path": "archive.tar.gz", **self.archive_row,
+                                           "top_level": f"kiota-{runner.REVISION}/"},
+                        "changed_files": self.rows}
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def verify(self):
+        content = self.patch_path.read_bytes()
+        self.package["patch"] = {"path": "source.patch", "bytes": len(content),
+                                 "sha256": runner.digest(content)}
+        self.package_path.write_text(json.dumps(self.package))
+        with patch.object(runner, "ROOT", self.root), \
+             patch.object(runner, "archive_files", return_value=self.archived):
+            return runner.verify_source(self.package_path, (self.archive_row, self.archive),
+                                        self.source, self.protocol)
+
+    def test_authored_module_and_fixture_rename_preserve_exact_inventory(self):
+        self.assertEqual(self.verify()["changed_files"], self.rows)
+
+    def test_tampered_authored_file_fails(self):
+        (self.source / "src/tc/recursor.rs").write_bytes(b"different\n")
+        with self.assertRaisesRegex(runner.RunnerError, "patched source mismatch"):
+            self.verify()
+
+    def test_authored_ledger_cannot_disagree_with_bound_patch(self):
+        row = next(row for row in self.rows if row.get("origin") == "AUTHORED")
+        row["patched_sha256"] = "f" * 64
+        with self.assertRaisesRegex(runner.RunnerError, "exact patch payload"):
+            self.verify()
+
+    def test_tampered_patch_payload_fails_even_when_patch_hash_is_rebound(self):
+        self.patch_path.write_bytes(self.patch.replace(b"fn example()", b"fn changed()"))
+        with self.assertRaisesRegex(runner.RunnerError, "exact patch payload"):
+            self.verify()
+
+    def test_missing_authored_file_fails(self):
+        (self.source / "src/tc/recursor.rs").unlink()
+        with self.assertRaisesRegex(runner.RunnerError, "inventory mismatch"):
+            self.verify()
+
+    def test_extra_source_file_fails(self):
+        (self.source / "unlisted.rs").write_bytes(b"extra\n")
+        with self.assertRaisesRegex(runner.RunnerError, "inventory mismatch"):
+            self.verify()
+
+    def test_deleted_fixture_reappearing_fails(self):
+        (self.source / "tests/old.accept.ndjson").write_bytes(b"fixture\n")
+        with self.assertRaisesRegex(runner.RunnerError, "inventory mismatch"):
+            self.verify()
+
+    def test_deleted_fixture_wrong_pristine_binding_fails(self):
+        self.rows[-1]["base_sha256"] = "f" * 64
+        with self.assertRaisesRegex(runner.RunnerError, "wrong pristine binding"):
+            self.verify()
+
+    def test_authored_patch_duplicate_section_fails(self):
+        self.patch_path.write_bytes(self.patch * 2)
+        with self.assertRaisesRegex(runner.RunnerError, "one exact patch section"):
+            self.verify()
+
+    def test_authored_patch_incomplete_hunk_fails(self):
+        self.patch_path.write_bytes(self.patch.replace(b"+1,2", b"+1,3"))
+        with self.assertRaisesRegex(runner.RunnerError, "incomplete"):
+            self.verify()
+
+    def test_authored_payload_preserves_newline_before_next_patch_section(self):
+        suffix = b"diff --git a/other b/other\n--- a/other\n+++ b/other\n"
+        self.patch_path.write_bytes(self.patch + suffix)
+        self.verify()
+
+
+class ReceiptAuditTests(unittest.TestCase):
+    def test_positive_complete_receipt_passes_audit(self):
+        self.assertIsNone(runner.receipt_failure(good_receipt()))
+
+    def test_zero_samples_fail_closed(self):
+        outcome = runner.receipt_failure(good_receipt(memory_monitor_samples=0))
+        self.assertEqual(outcome[0], "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_nonpositive_rss_fails_closed(self):
+        outcome = runner.receipt_failure(good_receipt(maximum_observed_rss_bytes=0))
+        self.assertEqual(outcome[0], "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_monitor_error_fails_closed(self):
+        outcome = runner.receipt_failure(good_receipt(memory_monitor_error="mock failure"))
+        self.assertEqual(outcome[0], "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_memory_limit_is_nonterminal_process_failure(self):
+        outcome = runner.receipt_failure(good_receipt(memory_exceeded=True, exit_code=-9))
+        self.assertEqual(outcome[0], "PROCESS_SAFETY_FAILURE")
+
+    def test_timeout_is_nonterminal_process_failure(self):
+        outcome = runner.receipt_failure(good_receipt(timed_out=True, exit_code=-9))
+        self.assertEqual(outcome[0], "PROCESS_SAFETY_FAILURE")
+
+    def test_unproven_cleanup_fails_closed(self):
+        outcome = runner.receipt_failure(good_receipt(cleanup_complete=False))
+        self.assertEqual(outcome[0], "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_nonzero_cargo_is_engineering_not_scientific_failure(self):
+        outcome = runner.receipt_failure(good_receipt(exit_code=101))
+        self.assertEqual(outcome[0], "ENGINEERING_FAILURE")
+
+
+class ClassificationTests(unittest.TestCase):
+    def focused_manifest(self, cell, filtered):
+        spec = runner.CELL_SPECS[cell]
+        return {
+            "argv": ["mock"],
+            "cwd": "/mock",
+            "memory_bytes": 1024,
+            "expected": {
+                "exit": 0,
+                "outcome": spec["outcome"],
+                "named_tests": list(spec["tests"]),
+                "integration_passed": len(spec["tests"]),
+                "failed": 0,
+                "ignored": 0,
+                "filtered_out": filtered,
+            }
+        }
+
+    def focused_output(self, cell, filtered):
+        lines = "".join(f"test {name} ... ok\n" for name in runner.CELL_SPECS[cell]["tests"])
+        return (lines + "\n" + summary(len(runner.CELL_SPECS[cell]["tests"]), filtered=filtered)).encode()
+
+    def test_candidate_confirmation_is_a_passing_scientific_cell(self):
+        manifest = self.focused_manifest("003-candidate", 84)
+        passed, outcome, _ = runner.classify(
+            "003-candidate", manifest, good_receipt(), self.focused_output("003-candidate", 84), b""
+        )
+        self.assertTrue(passed)
+        self.assertEqual(outcome, "EXPECTED_REJECT_CONFIRMED")
+
+    def test_missing_named_test_fails_closed(self):
+        manifest = self.focused_manifest("004-control", 84)
+        output = summary(1, filtered=84).encode()
+        passed, outcome, _ = runner.classify("004-control", manifest, good_receipt(), output, b"")
+        self.assertFalse(passed)
+        self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_focused_count_drift_fails_closed(self):
+        manifest = self.focused_manifest("002-focused", 70)
+        output = self.focused_output("002-focused", 69)
+        passed, outcome, _ = runner.classify("002-focused", manifest, good_receipt(), output, b"")
+        self.assertFalse(passed)
+        self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_full_suite_requires_all_four_exact_harness_counts(self):
+        manifest = {"argv": ["mock"], "cwd": "/mock", "memory_bytes": 1024, "expected": {
+            "exit": 0,
+            "outcome": "FULL_SUITE_PASS",
+            "unit_passed": 83,
+            "binary_passed": 0,
+            "integration_passed": 85,
+            "doctest_passed": 0,
+            "total_passed": 168,
+            "failed": 0,
+            "ignored": 0,
+        }}
+        output = (summary(83) + summary(0) + summary(85) + summary(0)).encode()
+        passed, outcome, _ = runner.classify("009-full", manifest, good_receipt(), output, b"")
+        self.assertTrue(passed)
+        self.assertEqual(outcome, "FULL_SUITE_PASS")
+        drift = (summary(83) + summary(0) + summary(84) + summary(0)).encode()
+        passed, outcome, _ = runner.classify("009-full", manifest, good_receipt(), drift, b"")
+        self.assertFalse(passed)
+        self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
+
+    def test_valid_output_cannot_override_bad_cleanup(self):
+        manifest = self.focused_manifest("005-ordinary", 84)
+        passed, outcome, _ = runner.classify(
+            "005-ordinary", manifest, good_receipt(cleanup_complete=False),
+            self.focused_output("005-ordinary", 84), b""
+        )
+        self.assertFalse(passed)
+        self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
+
+
+class AccountingTests(unittest.TestCase):
+    def test_attempts_are_observational_and_uncapped(self):
+        account = runner.new_account()
+        for number in range(1, 1001):
+            account["attempts"].append({
+                "attempt": number,
+                "cell_id": "001-build",
+                "directory": f"execution/attempt-{number:06d}-001-build",
+                "status": "FAIL",
+            })
+        account["next_attempt"] = 1001
+        account["observations"] = {"processes": 1000, "builds": 1000, "tests": 0}
+        account["pending"] = None
+        runner.validate_sequence(account, "001-build")
+        self.assertEqual(account["policy"]["attempt_caps"], "NONE")
+
+    def test_fixed_order_requires_predecessor_success(self):
+        account = runner.new_account()
+        with self.assertRaisesRegex(runner.RunnerError, "earlier fixed cells"):
+            runner.validate_sequence(account, "002-focused")
+        account["attempts"].append({"cell_id": "001-build", "status": "PASS"})
+        runner.validate_sequence(account, "002-focused")
+
+    def test_pending_cleanup_blocks_every_retry(self):
+        account = runner.new_account()
+        account["pending"] = 1
+        with self.assertRaisesRegex(runner.RunnerError, "cleanup"):
+            runner.validate_sequence(account, "001-build")
+
+    def test_safety_hold_blocks_without_misclassifying_attempt_as_pending(self):
+        account = runner.new_account()
+        account["safety_hold"] = {
+            "attempt": 1,
+            "cell_id": "001-build",
+            "reason": "PROCESS_ABSENCE_OR_CLEANUP_NOT_PROVEN",
+            "result": "mock-result.json",
+        }
+        with self.assertRaisesRegex(runner.RunnerError, "process absence"):
+            runner.validate_sequence(account, "001-build")
+
+
+class MockedExecutionTests(unittest.TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.base = Path(self.temp.name) / "item"
+        self.execution = self.base / "execution"
+        self.execution.mkdir(parents=True)
+        self.source = Path(self.temp.name) / "source"
+        self.source.mkdir()
+        self.manifest_path = self.execution / "001-build-manifest.json"
+        self.manifest_path.write_text("{}\n")
+
+    def tearDown(self):
+        self.temp.cleanup()
+
+    def manifest(self):
+        return {
+            "_path": self.manifest_path,
+            "_sha256": "a" * 64,
+            "argv": ["mock-cargo", "test", "--offline", "--locked", "--no-run"],
+            "cwd": str(self.source),
+            "environment": {"CARGO_NET_OFFLINE": "true"},
+            "timeout_seconds": 1,
+            "memory_bytes": 1024,
+            "expected": {"exit": 0, "outcome": "BUILD_PASS"},
+        }
+
+    @staticmethod
+    def fake_supervisor(*, raw_prefix, argv, cwd, memory_bytes, **_kwargs):
+        Path(str(raw_prefix) + ".stdout").write_bytes(b"mock build\n")
+        Path(str(raw_prefix) + ".stderr").write_bytes(b"")
+        return good_receipt(argv=argv, cwd=str(cwd), memory_limit_bytes=memory_bytes)
+
+    def test_execute_cell_uses_mock_and_writes_durable_receipts(self):
+        with patch.object(runner, "BASE", self.base), \
+             patch.object(runner, "verify_manifest", return_value=self.manifest()), \
+             patch.object(runner, "run_supervised", side_effect=self.fake_supervisor) as mocked:
+            result = runner.execute_cell("001-build")
+        self.assertEqual(result["status"], "PASS")
+        mocked.assert_called_once()
+        attempt = self.execution / "attempt-000001-001-build"
+        self.assertTrue((attempt / "reservation.json").is_file())
+        self.assertTrue((attempt / "supervisor.json").is_file())
+        self.assertTrue((attempt / "result.json").is_file())
+        account = json.loads((self.execution / "accounting.json").read_text())
+        self.assertIsNone(account["pending"])
+
+    def test_mocked_unproven_cleanup_reconciles_and_sets_safety_hold(self):
+        def failed_supervisor(*, raw_prefix, argv, cwd, memory_bytes, **_kwargs):
+            Path(str(raw_prefix) + ".stdout").write_bytes(b"mock build\n")
+            Path(str(raw_prefix) + ".stderr").write_bytes(b"")
+            return good_receipt(argv=argv, cwd=str(cwd), memory_limit_bytes=memory_bytes,
+                                cleanup_complete=False)
+
+        with patch.object(runner, "BASE", self.base), \
+             patch.object(runner, "verify_manifest", return_value=self.manifest()), \
+             patch.object(runner, "run_supervised", side_effect=failed_supervisor):
+            result = runner.execute_cell("001-build")
+        self.assertEqual(result["status"], "FAIL")
+        account = json.loads((self.execution / "accounting.json").read_text())
+        self.assertIsNone(account["pending"])
+        self.assertEqual(account["safety_hold"]["attempt"], 1)
+        with self.assertRaisesRegex(runner.RunnerError, "process absence"):
+            runner.validate_sequence(account, "001-build")
+
+    def test_mocked_unknown_exception_reconciles_with_safety_hold(self):
+        with patch.object(runner, "BASE", self.base), \
+             patch.object(runner, "verify_manifest", return_value=self.manifest()), \
+             patch.object(runner, "run_supervised", side_effect=OSError("mock spawn failure")):
+            result = runner.execute_cell("001-build")
+        self.assertEqual(result["status"], "FAIL")
+        self.assertEqual(result["outcome"], "INFRASTRUCTURE_AUDIT_FAILURE")
+        account = json.loads((self.execution / "accounting.json").read_text())
+        self.assertIsNone(account["pending"])
+        self.assertEqual(account["safety_hold"]["attempt"], 1)
+
+    def test_mocked_prelaunch_backend_failure_reconciles_and_allows_retry(self):
+        failure = runner.RunnerError(
+            "memory monitor backend unavailable before launch: PermissionError: mock"
+        )
+        with patch.object(runner, "BASE", self.base), \
+             patch.object(runner, "verify_manifest", return_value=self.manifest()), \
+             patch.object(runner, "run_supervised", side_effect=failure):
+            result = runner.execute_cell("001-build")
+        self.assertEqual(result["status"], "FAIL")
+        account = json.loads((self.execution / "accounting.json").read_text())
+        self.assertIsNone(account["pending"])
+        self.assertIsNone(account["safety_hold"])
+        runner.validate_sequence(account, "001-build")
+
+    def test_load_account_repairs_attempt_one_style_completed_pending_state(self):
+        attempt = self.execution / "attempt-000001-001-build"
+        attempt.mkdir()
+        reservation = {
+            "attempt": 1,
+            "cell_id": "001-build",
+            "directory": "execution/attempt-000001-001-build",
+            "manifest": str(self.manifest_path),
+            "manifest_sha256": "a" * 64,
+            "status": "RESERVED",
+        }
+        result = {
+            "schema_version": 1,
+            "item_id": runner.ITEM,
+            "attempt": 1,
+            "cell_id": "001-build",
+            "manifest_sha256": "a" * 64,
+            "status": "FAIL",
+            "outcome": "INFRASTRUCTURE_AUDIT_FAILURE",
+            "reason": "RunnerError: memory monitor backend unavailable before launch: PermissionError: mock",
+            "receipt": None,
+        }
+        (attempt / "reservation.json").write_text(json.dumps(reservation) + "\n")
+        (attempt / "result.json").write_text(json.dumps(result) + "\n")
+        account = runner.new_account()
+        account["attempts"] = [{**reservation, "status": "FAIL",
+                               "outcome": result["outcome"],
+                               "result": str(attempt / "result.json")}]
+        account["next_attempt"] = 2
+        account["observations"] = {"processes": 1, "builds": 1, "tests": 0}
+        account["pending"] = 1
+        del account["safety_hold"]
+        (self.execution / "accounting.json").write_text(json.dumps(account) + "\n")
+        with patch.object(runner, "ROOT", Path(self.temp.name)):
+            repaired = runner.load_account(self.execution)
+        self.assertIsNone(repaired["pending"])
+        self.assertIsNone(repaired["safety_hold"])
+        self.assertEqual(repaired["attempts"][0]["status"], "FAIL")
+
+
+if __name__ == "__main__":
+    unittest.main()

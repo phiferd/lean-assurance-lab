@@ -4,9 +4,7 @@
   "phase": "PREPARATION",
   "plan": "docs/research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md",
   "source_revision": "9fa2c297dd700fe8fd1712a86bdbb258e1c01c42",
-  "workspace": {
-    "path": "/tmp/kiota-recursor-pr-refinement-1"
-  },
+  "workspace": "/tmp/kiota-recursor-pr-refinement-1",
   "owner": "parent",
   "frozen_predecessor_bindings": [
     {
@@ -73,37 +71,6 @@
   ],
   "policy_change": "Restore serialized k ignored/recomputed compatibility; stored k always derived. Other semantic gates unchanged.",
   "launch_gate": "Exact independent review, full source inventory, committed manifests, offline dependencies, validated controlled runner before launch",
-  "execution_policy": {
-    "attempt_caps": "NONE",
-    "accounting": "OBSERVABILITY_ONLY",
-    "engineering_failure": "REPAIR_AND_RETRY_WITHIN_ITEM",
-    "process_safety": "NONTERMINAL"
-  },
-  "external_writes": false,
-  "status": "ACTIVE",
-  "intended_patch_paths": [
-    "src/env.rs",
-    "src/parser.rs",
-    "src/tc.rs",
-    "src/tc/recursor.rs"
-  ],
-  "intended_test_paths": [
-    "tests/exports.rs",
-    "tests/fixtures/nested-list-tree.accept.ndjson",
-    "tests/fixtures/nested-list-tree.reject.ndjson",
-    "tests/fixtures/recursor-type-reconstruction.accept.ndjson",
-    "tests/fixtures/recursor-type-reconstruction.reject.ndjson"
-  ],
-  "process_safety": {
-    "build_seconds": 1200,
-    "build_memory_bytes": 4294967296,
-    "test_seconds_each": 1200,
-    "test_memory_bytes_each": 4294967296,
-    "fixture_cell_seconds_each": 180,
-    "fixture_cell_memory_bytes_each": 2147483648,
-    "positive_rss_sampling_required": true,
-    "complete_process_group_cleanup_required": true,
-    "offline_locked_cargo_required": true,
-    "safety_event_is_terminal": false
-  }
+  "execution_policy": "REPAIR_AND_CONTINUE",
+  "external_writes": false
 }

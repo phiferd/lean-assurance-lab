@@ -1,0 +1,64 @@
+{
+  "schema_version": 1,
+  "item_id": "KIOTA-RECURSOR-PR-REFINEMENT-1",
+  "status": "PASS",
+  "review_class": "PARENT_AND_INDEPENDENT_DELEGATE_PRELAUNCH_REVIEW",
+  "bindings": [
+    {
+      "path": "results/research/kiota-recursor-pr-refinement-1/patch-package.json",
+      "sha256": "ebc841f67ae91a4e62cd89f954009ad1422319fb798903559db371db3deebe38"
+    },
+    {
+      "path": "results/research/kiota-recursor-pr-refinement-1/kiota-recursor-type-refined.patch",
+      "sha256": "133ee813dffa0f970f3110615232e4eb4bcd2ecbfa440629bcb099382e30bdf7"
+    },
+    {
+      "path": "results/research/kiota-recursor-pr-refinement-1/runner-review.json",
+      "sha256": "1c938c6c014b7423909382a92c0287d098411d7223a222d723a31df6b759294a"
+    }
+  ],
+  "checks": [
+    {
+      "id": "BLOCK_LOCAL_UNDO",
+      "result": "PASS",
+      "evidence": "All five staged insertion sites journal moved prior values; reverse rollback changes only current-block writes. No Environment Clone implementation or environment-wide snapshot remains."
+    },
+    {
+      "id": "NO_SUPPLIED_RECURSOR_EXPOSURE",
+      "result": "PASS",
+      "evidence": "Every supplied recursor remains pending until structural checks, reconstruction and all signature comparisons complete. Only derived types and K status are installed."
+    },
+    {
+      "id": "K_COMPATIBILITY",
+      "result": "PASS",
+      "evidence": "Supplied k is ignored as documented at pinned upstream; derived k is stored. Test toggles supplied flags in both directions."
+    },
+    {
+      "id": "RECONSTRUCTION_EXTRACTION",
+      "result": "PASS",
+      "evidence": "Builder and helper bodies retain predecessor semantics; only unused original_rec_members parameter removed. Dedicated module documents pinned Lean reference and restored-form representation."
+    },
+    {
+      "id": "BOUNDARY_TESTS",
+      "result": "PASS",
+      "evidence": "15 focused tests include alpha-renaming/canonical collision, let conversion and replacement, positional mismatch, duplicate and undeclared universes, k compatibility, early and late rollback, successful retry and unchanged prior allocation."
+    },
+    {
+      "id": "INDEPENDENT_REVIEW_FINDING_RESOLVED",
+      "result": "PASS",
+      "evidence": "Code reviewer found late failure covered rec_group but not rec_of insertion. Tests delegate added a separate duplicate-owner case within same test and inspected all five production write sites."
+    },
+    {
+      "id": "PACKAGE_REPRODUCIBILITY",
+      "result": "PASS",
+      "evidence": "Clean git apply --check and apply to pristine archived source produced a byte-identical 93-file tree; inherited candidate/control and accepted fixtures unchanged."
+    },
+    {
+      "id": "RUNNER_SOURCE_BOUNDARY",
+      "result": "PASS",
+      "evidence": "Separate reviewer inspected exact authored payload, deleted inventory and negative tests; full patch replay is enforced by package generation."
+    }
+  ],
+  "remaining_gate": "Commit exact package, protocol, runner, tests and nine manifests before launching offline Cargo.",
+  "runtime_success_claimed": false
+}

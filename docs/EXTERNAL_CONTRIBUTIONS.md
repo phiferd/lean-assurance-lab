@@ -9,7 +9,7 @@ Ledger updated: **2026-09-22**. Upstream states are dated observations, not a li
 ## At a glance
 
 - Awaiting upstream: **2**
-- Local drafts: **6**
+- Local drafts: **7**
 - Merged: **4**
 
 ## Awaiting upstream
@@ -28,7 +28,8 @@ Ledger updated: **2026-09-22**. Upstream states are dated observations, not a li
 | [test: cover reserved nested namespace traversal and declaration guards](../results/action-recommendations/drafts/nanoda-nested-namespace-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-NESTED-TEST-1` | 2026-09-16 | Keep this preventive test patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Review source, duplicates, rebase/retest and maintainer capacity before seeking exact approval for a PR to ammkrn/nanoda_lib. |
 | [test: cover String reconstruction shape and configuration boundaries](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-STRING-RECONSTRUCTION-TEST-1` | — | Keep this preventive internal String reconstruction patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Refresh source, duplicates, rebasing/tests and maintainer capacity before seeking exact owner approval for a PR to ammkrn/nanoda_lib. |
 | [test: cover constructor owner-index validation](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md) | `sankalpsthakur/kiota` | `KIOTA-CTOR-INDEX-TEST-1` | — | Before seeking exact approval for a PR to sankalpsthakur/kiota, refresh source, duplicate/open-PR state and maintainer context, rebase and retest if needed, and present the exact tested package for human authorization. |
-| [fix: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Before seeking exact approval for a PR to sankalpsthakur/kiota, refresh target source, duplicate/open-PR and maintainer context, rebase and rerun the bound validation if needed, and present the exact tested package for human authorization. |
+| [Historical draft: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Preserved historical draft; superseded for submission by KIOTA-RECURSOR-TYPE-REFINED-PR-DRAFT. |
+| [fix: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-refined-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-PR-REFINEMENT-1` | — | Finish and validate the local successor code and description; refresh upstream again if stale and obtain exact human authorization before submission. |
 
 ## Merged
 
