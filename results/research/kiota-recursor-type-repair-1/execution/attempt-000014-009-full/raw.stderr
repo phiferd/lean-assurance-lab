@@ -1,0 +1,563 @@
+warning: unused import: `std::io::Write`
+ --> src/expr.rs:6:5
+  |
+6 | use std::io::Write;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/tc.rs:5255:13
+     |
+5255 |         let mut cctx = ctx.clone();
+     |             ----^^^^
+     |             |
+     |             help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type`
+    --> src/tc.rs:1962:5
+     |
+1962 |     pub fn infer_type(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::infer_type` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+     = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::whnf`
+    --> src/tc.rs:2985:5
+     |
+2985 |     pub fn whnf(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::whnf` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq`
+    --> src/tc.rs:3924:5
+     |
+3924 |     pub fn is_def_eq(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq_via_nbe`
+     --> src/tc.rs:10432:5
+      |
+10432 |     pub(crate) fn is_def_eq_via_nbe(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq_via_nbe` is reachable at visibility `pub(crate)`
+      |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type_value`
+     --> src/tc.rs:11349:5
+      |
+11349 | /     pub(crate) fn infer_type_value(
+11350 | |         &self,
+11351 | |         ctx: &Ctx,
+11352 | |         tys: &[Rc<nbe::Thunk>],
+11353 | |         env: &nbe::VEnv,
+11354 | |         e: &Expr,
+11355 | |     ) -> R<Rc<nbe::Value>> {
+      | |__________________________^ method `Checker::<'e>::infer_type_value` is reachable at visibility `pub(crate)`
+      |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: methods `counted_nested`, `collect_nested_in`, and `note_nested_app` are never used
+   --> src/parser.rs:807:8
+    |
+ 29 | impl Parser {
+    | ----------- methods in this implementation
+...
+807 |     fn counted_nested(&self, type_names: &[u32]) -> usize {
+    |        ^^^^^^^^^^^^^^
+...
+832 |     fn collect_nested_in(
+    |        ^^^^^^^^^^^^^^^^^
+...
+867 |     fn note_nested_app(
+    |        ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `kind_or_direct` is never used
+    --> src/parser.rs:1095:4
+     |
+1095 | fn kind_or_direct(_v: &Value) {}
+     |    ^^^^^^^^^^^^^^
+
+warning: function `pi_telescope_len` is never used
+    --> src/parser.rs:1097:4
+     |
+1097 | fn pi_telescope_len(typ: &Expr) -> u32 {
+     |    ^^^^^^^^^^^^^^^^
+
+warning: function `ctor_field_tys` is never used
+    --> src/parser.rs:1112:4
+     |
+1112 | fn ctor_field_tys(typ: &Expr, num_params: u32, inst: Option<&[Expr]>) -> Vec<Expr> {
+     |    ^^^^^^^^^^^^^^
+
+warning: function `expr_occurs_names` is never used
+    --> src/parser.rs:1168:4
+     |
+1168 | fn expr_occurs_names(e: &Expr, names: &[u32]) -> bool {
+     |    ^^^^^^^^^^^^^^^^^
+
+warning: method `concat` is never used
+   --> src/tc.rs:663:8
+    |
+612 | impl CrMon {
+    | ---------- method in this implementation
+...
+663 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: methods `insert`, `insert_go`, and `concat` are never used
+   --> src/tc.rs:736:8
+    |
+704 | impl CrPoly {
+    | ----------- methods in this implementation
+...
+736 |     fn insert(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^
+...
+746 |     fn insert_go(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^^^^
+...
+768 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: method `is_empty` is never used
+    --> src/tc.rs:1325:8
+     |
+1252 | impl Ctx {
+     | -------- method in this implementation
+...
+1325 |     fn is_empty(&self) -> bool {
+     |        ^^^^^^^^
+
+warning: multiple associated items are never used
+     --> src/tc.rs:1860:8
+      |
+ 1421 | impl<'e> Checker<'e> {
+      | -------------------- associated items in this implementation
+...
+ 1860 |     fn whnf_abbrev(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+      |        ^^^^^^^^^^^
+...
+ 2260 |     fn occurs_bvar(e: &Expr, i: u32) -> bool {
+      |        ^^^^^^^^^^^
+...
+ 3700 |     fn type_is_packed_structure(&self, typ: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 3714 |     fn def_is_packed_structure(&self, n: u32) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 4661 |     pub(crate) fn iota_lit_memo_miss_count(&self) -> u32 {
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 6400 |     fn int_zero(&self) -> Option<Expr> {
+      |        ^^^^^^^^
+...
+ 7014 |     fn mk_int_bin(&self, op: &str, a: Expr, b: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^^
+...
+ 7019 |     fn mk_int_un(&self, op: &str, a: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^
+...
+ 8214 |     fn is_int_of_nat_zero(&self, e: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^
+...
+10088 |     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+      |        ^^^^^^^^^^^^^^^^
+...
+11007 |     fn vctx_new() -> (Vec<Rc<nbe::Thunk>>, nbe::VEnv) {
+      |        ^^^^^^^^
+
+warning: field `num_params` is never read
+    --> src/tc.rs:8683:13
+     |
+8682 |         struct TInfo {
+     |                ----- field in this struct
+8683 |             num_params: u32,
+     |             ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::infer_type`
+    --> src/tc.rs:1962:5
+     |
+1962 |     pub fn infer_type(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::infer_type` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+     = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::whnf`
+    --> src/tc.rs:2985:5
+     |
+2985 |     pub fn whnf(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::whnf` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::is_def_eq`
+    --> src/tc.rs:3924:5
+     |
+3924 |     pub fn is_def_eq(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::is_def_eq` is reachable at visibility `pub`
+     |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::is_def_eq_via_nbe`
+     --> src/tc.rs:10432:5
+      |
+10432 |     pub(crate) fn is_def_eq_via_nbe(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `tc::Checker::<'e>::is_def_eq_via_nbe` is reachable at visibility `pub(crate)`
+      |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: type `tc::Ctx` is more private than the item `tc::Checker::<'e>::infer_type_value`
+     --> src/tc.rs:11349:5
+      |
+11349 | /     pub(crate) fn infer_type_value(
+11350 | |         &self,
+11351 | |         ctx: &Ctx,
+11352 | |         tys: &[Rc<nbe::Thunk>],
+11353 | |         env: &nbe::VEnv,
+11354 | |         e: &Expr,
+11355 | |     ) -> R<Rc<nbe::Value>> {
+      | |__________________________^ method `tc::Checker::<'e>::infer_type_value` is reachable at visibility `pub(crate)`
+      |
+note: but type `tc::Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: multiple associated items are never used
+     --> src/tc.rs:1860:8
+      |
+ 1421 | impl<'e> Checker<'e> {
+      | -------------------- associated items in this implementation
+...
+ 1860 |     fn whnf_abbrev(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+      |        ^^^^^^^^^^^
+...
+ 2260 |     fn occurs_bvar(e: &Expr, i: u32) -> bool {
+      |        ^^^^^^^^^^^
+...
+ 3700 |     fn type_is_packed_structure(&self, typ: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 3714 |     fn def_is_packed_structure(&self, n: u32) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 6400 |     fn int_zero(&self) -> Option<Expr> {
+      |        ^^^^^^^^
+...
+ 7014 |     fn mk_int_bin(&self, op: &str, a: Expr, b: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^^
+...
+ 7019 |     fn mk_int_un(&self, op: &str, a: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^
+...
+ 8214 |     fn is_int_of_nat_zero(&self, e: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^
+...
+10088 |     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+      |        ^^^^^^^^^^^^^^^^
+
+warning: function `nest_apps` is never used
+     --> src/tc.rs:11815:8
+      |
+11815 |     fn nest_apps(base: Expr, n: u32) -> Expr {
+      |        ^^^^^^^^^
+
+warning: `kiota` (lib) generated 17 warnings (run `cargo fix --lib -p kiota` to apply 2 suggestions)
+warning: `kiota` (lib test) generated 18 warnings (11 duplicates)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running unittests src/lib.rs (/tmp/kiota-recursor-type-repair-1/target/debug/deps/kiota-54b97b51a5482a38)
+     Running unittests src/main.rs (/tmp/kiota-recursor-type-repair-1/target/debug/deps/kiota-f95268e1d7ad06cf)
+     Running tests/exports.rs (/tmp/kiota-recursor-type-repair-1/target/debug/deps/exports-d0d6d4eb481ddc7d)
+
+thread 'nested_list_tree_accepts' (3489165) panicked at tests/exports.rs:37:29:
+nested-list-tree.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::nested_list_tree_accepts
+             at ./tests/exports.rs:534:5
+   7: exports::nested_list_tree_accepts::{closure#0}
+             at ./tests/exports.rs:533:30
+   8: <exports::nested_list_tree_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #100] def Nat.beq.match_1
+[decl #100] def absurd
+[decl #100] def absurd
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+[decl #100] def Nat.le.below.casesOn
+[decl #100] def absurd
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+
+thread 'int_neg_succ_mul_sub_nat_nat_accepts' (3489149) panicked at tests/exports.rs:37:29:
+int-negSucc-mul-subNatNat.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::int_neg_succ_mul_sub_nat_nat_accepts
+             at ./tests/exports.rs:775:5
+   7: exports::int_neg_succ_mul_sub_nat_nat_accepts::{closure#0}
+             at ./tests/exports.rs:774:42
+   8: <exports::int_neg_succ_mul_sub_nat_nat_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #100] def absurd
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+[decl #200] def _private.Init.Prelude.0.Nat.lt_or_ge.match_1_3
+[decl #200] def List.utf8Encode
+[decl #200] def _private.Init.Prelude.0.Nat.pow_pos.match_1_1
+[decl #200] def List.utf8Encode
+[decl #100] def _private.Init.Prelude.0.Nat.ble_eq_true_of_le.match_1_4
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #200] def List.utf8Encode
+[decl #300] theorem eq_self
+[decl #300] theorem of_eq_true
+[decl #200] def List.utf8Encode
+
+thread 'std_iterm_allm_pure_accepts' (3489211) panicked at tests/exports.rs:37:29:
+std-iterm-allm-pure.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::std_iterm_allm_pure_accepts
+             at ./tests/exports.rs:805:5
+   7: exports::std_iterm_allm_pure_accepts::{closure#0}
+             at ./tests/exports.rs:804:33
+   8: <exports::std_iterm_allm_pure_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #100] def _private.Init.Prelude.0.Nat.le_of_ble_eq_true.match_1_1
+[decl #400] def _private.Init.Core.0.ite_eq_left.match_1_1
+[decl #100] def _private.Init.Prelude.0.Nat.le_of_ble_eq_true.match_1_1
+
+thread 'rat_inst_encodable_and_rec_theorem_major_accepts' (3489181) panicked at tests/exports.rs:37:29:
+rat-instEncodable-and-rec-theorem-major.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::rat_inst_encodable_and_rec_theorem_major_accepts
+             at ./tests/exports.rs:1148:5
+   7: exports::rat_inst_encodable_and_rec_theorem_major_accepts::{closure#0}
+             at ./tests/exports.rs:1147:54
+   8: <exports::rat_inst_encodable_and_rec_theorem_major_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #400] theorem Function.RightInverse.comp_eq_id
+[decl #200] theorem Nat.mod_lt
+[decl #200] theorem Nat.lt_of_not_le
+
+thread 'tutorial_089_proj_prop1_accepts' (3489234) panicked at tests/exports.rs:37:29:
+tutorial-089-projProp1.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::tutorial_089_proj_prop1_accepts
+             at ./tests/exports.rs:686:5
+   7: exports::tutorial_089_proj_prop1_accepts::{closure#0}
+             at ./tests/exports.rs:685:37
+   8: <exports::tutorial_089_proj_prop1_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'tutorial_091_proj_prop3_accepts' (3489235) panicked at tests/exports.rs:37:29:
+tutorial-091-projProp3.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::tutorial_091_proj_prop3_accepts
+             at ./tests/exports.rs:698:5
+   7: exports::tutorial_091_proj_prop3_accepts::{closure#0}
+             at ./tests/exports.rs:697:37
+   8: <exports::tutorial_091_proj_prop3_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'tutorial_123_reduce_ctor_param_refl_accepts' (3489237) panicked at tests/exports.rs:37:29:
+tutorial-123-reduceCtorParamRefl-mk.accept.ndjson should accept, got Reject("recursive field does not exactly match a reconstructed member specialization")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::tutorial_123_reduce_ctor_param_refl_accepts
+             at ./tests/exports.rs:705:5
+   7: exports::tutorial_123_reduce_ctor_param_refl_accepts::{closure#0}
+             at ./tests/exports.rs:704:49
+   8: <exports::tutorial_123_reduce_ctor_param_refl_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+
+thread 'tutorial_124_reduce_ctor_param_refl2_accepts' (3489238) panicked at tests/exports.rs:37:29:
+tutorial-124-reduceCtorParamRefl2-mk.accept.ndjson should accept, got Reject("recursive field does not exactly match a reconstructed member specialization")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+  [decl #300] theorem AddMonoid.add_assoc
+ 6: exports::tutorial_124_reduce_ctor_param_refl2_accepts
+             at ./tests/exports.rs:712:5
+   7: exports::tutorial_124_reduce_ctor_param_refl2_accepts::{closure#0}
+             at ./tests/exports.rs:711:50
+   8: <exports::tutorial_124_reduce_ctor_param_refl2_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #500] theorem mul_one
+[decl #300] def FunLike
+
+thread 'submonoid_log_mul_multiplicative_nat_accepts' (3489215) panicked at tests/exports.rs:37:29:
+submonoid-log-mul-multiplicative-nat.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::submonoid_log_mul_multiplicative_nat_accepts
+             at ./tests/exports.rs:1170:5
+   7: exports::submonoid_log_mul_multiplicative_nat_accepts::{closure#0}
+             at ./tests/exports.rs:1169:50
+   8: <exports::submonoid_log_mul_multiplicative_nat_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+[decl #400] def Nat.zero_add._f
+[decl #500] def Multiplicative.commSemigroup
+[decl #600] def Zero.ofOfNat0
+
+thread 'freegroup_unit_equiv_int_multiplicative_accepts' (3489145) panicked at tests/exports.rs:37:29:
+freegroup-unit-equiv-int-multiplicative.accept.ndjson should accept, got Reject("recursor is missing its fresh elimination universe parameter")
+stack backtrace:
+   0: __rustc::rust_begin_unwind
+   1: core::panicking::panic_fmt
+   2: exports::parse_accept::{closure#1}
+             at ./tests/exports.rs:37:29
+   3: <core::result::Result<(), kiota::tc::TcError>>::unwrap_or_else::<exports::parse_accept::{closure#1}>
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/result.rs:1620:23
+   4: exports::parse_accept
+             at ./tests/exports.rs:37:10
+   5: exports::assert_accept
+             at ./tests/exports.rs:28:13
+   6: exports::freegroup_unit_equiv_int_multiplicative_accepts
+             at ./tests/exports.rs:1204:5
+   7: exports::freegroup_unit_equiv_int_multiplicative_accepts::{closure#0}
+             at ./tests/exports.rs:1203:53
+   8: <exports::freegroup_unit_equiv_int_multiplicative_accepts::{closure#0} as core::ops::function::FnOnce<()>>::call_once
+             at /opt/homebrew/Cellar/rust/1.98.0/lib/rustlib/src/rust/library/core/src/ops/function.rs:250:5
+note: Some details are omitted, run with `RUST_BACKTRACE=full` for a verbose backtrace.
+error: test failed, to rerun pass `--test exports`

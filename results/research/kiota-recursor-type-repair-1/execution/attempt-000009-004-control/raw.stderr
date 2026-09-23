@@ -1,0 +1,209 @@
+warning: unused import: `std::io::Write`
+ --> src/expr.rs:6:5
+  |
+6 | use std::io::Write;
+  |     ^^^^^^^^^^^^^^
+  |
+  = note: `#[warn(unused_imports)]` (part of `#[warn(unused)]`) on by default
+
+warning: variable does not need to be mutable
+    --> src/tc.rs:5255:13
+     |
+5255 |         let mut cctx = ctx.clone();
+     |             ----^^^^
+     |             |
+     |             help: remove this `mut`
+     |
+     = note: `#[warn(unused_mut)]` (part of `#[warn(unused)]`) on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type`
+    --> src/tc.rs:1962:5
+     |
+1962 |     pub fn infer_type(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::infer_type` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+     = note: `#[warn(private_interfaces)]` on by default
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::whnf`
+    --> src/tc.rs:2985:5
+     |
+2985 |     pub fn whnf(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::whnf` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq`
+    --> src/tc.rs:3924:5
+     |
+3924 |     pub fn is_def_eq(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+     |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq` is reachable at visibility `pub`
+     |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+    --> src/tc.rs:1232:1
+     |
+1232 | struct Ctx {
+     | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::is_def_eq_via_nbe`
+     --> src/tc.rs:10432:5
+      |
+10432 |     pub(crate) fn is_def_eq_via_nbe(&self, ctx: &Ctx, a: &Expr, b: &Expr) -> R<bool> {
+      |     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^ method `Checker::<'e>::is_def_eq_via_nbe` is reachable at visibility `pub(crate)`
+      |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: type `Ctx` is more private than the item `Checker::<'e>::infer_type_value`
+     --> src/tc.rs:11349:5
+      |
+11349 | /     pub(crate) fn infer_type_value(
+11350 | |         &self,
+11351 | |         ctx: &Ctx,
+11352 | |         tys: &[Rc<nbe::Thunk>],
+11353 | |         env: &nbe::VEnv,
+11354 | |         e: &Expr,
+11355 | |     ) -> R<Rc<nbe::Value>> {
+      | |__________________________^ method `Checker::<'e>::infer_type_value` is reachable at visibility `pub(crate)`
+      |
+note: but type `Ctx` is only usable at visibility `pub(self)`
+     --> src/tc.rs:1232:1
+      |
+ 1232 | struct Ctx {
+      | ^^^^^^^^^^
+
+warning: methods `counted_nested`, `collect_nested_in`, and `note_nested_app` are never used
+   --> src/parser.rs:807:8
+    |
+ 29 | impl Parser {
+    | ----------- methods in this implementation
+...
+807 |     fn counted_nested(&self, type_names: &[u32]) -> usize {
+    |        ^^^^^^^^^^^^^^
+...
+832 |     fn collect_nested_in(
+    |        ^^^^^^^^^^^^^^^^^
+...
+867 |     fn note_nested_app(
+    |        ^^^^^^^^^^^^^^^
+    |
+    = note: `#[warn(dead_code)]` (part of `#[warn(unused)]`) on by default
+
+warning: function `kind_or_direct` is never used
+    --> src/parser.rs:1095:4
+     |
+1095 | fn kind_or_direct(_v: &Value) {}
+     |    ^^^^^^^^^^^^^^
+
+warning: function `pi_telescope_len` is never used
+    --> src/parser.rs:1097:4
+     |
+1097 | fn pi_telescope_len(typ: &Expr) -> u32 {
+     |    ^^^^^^^^^^^^^^^^
+
+warning: function `ctor_field_tys` is never used
+    --> src/parser.rs:1112:4
+     |
+1112 | fn ctor_field_tys(typ: &Expr, num_params: u32, inst: Option<&[Expr]>) -> Vec<Expr> {
+     |    ^^^^^^^^^^^^^^
+
+warning: function `expr_occurs_names` is never used
+    --> src/parser.rs:1168:4
+     |
+1168 | fn expr_occurs_names(e: &Expr, names: &[u32]) -> bool {
+     |    ^^^^^^^^^^^^^^^^^
+
+warning: method `concat` is never used
+   --> src/tc.rs:663:8
+    |
+612 | impl CrMon {
+    | ---------- method in this implementation
+...
+663 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: methods `insert`, `insert_go`, and `concat` are never used
+   --> src/tc.rs:736:8
+    |
+704 | impl CrPoly {
+    | ----------- methods in this implementation
+...
+736 |     fn insert(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^
+...
+746 |     fn insert_go(&self, k: &BigInt, m: &CrMon) -> Self {
+    |        ^^^^^^^^^
+...
+768 |     fn concat(&self, other: &Self) -> Self {
+    |        ^^^^^^
+
+warning: method `is_empty` is never used
+    --> src/tc.rs:1325:8
+     |
+1252 | impl Ctx {
+     | -------- method in this implementation
+...
+1325 |     fn is_empty(&self) -> bool {
+     |        ^^^^^^^^
+
+warning: multiple associated items are never used
+     --> src/tc.rs:1860:8
+      |
+ 1421 | impl<'e> Checker<'e> {
+      | -------------------- associated items in this implementation
+...
+ 1860 |     fn whnf_abbrev(&self, ctx: &Ctx, e: &Expr) -> R<Expr> {
+      |        ^^^^^^^^^^^
+...
+ 2260 |     fn occurs_bvar(e: &Expr, i: u32) -> bool {
+      |        ^^^^^^^^^^^
+...
+ 3700 |     fn type_is_packed_structure(&self, typ: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 3714 |     fn def_is_packed_structure(&self, n: u32) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 4661 |     pub(crate) fn iota_lit_memo_miss_count(&self) -> u32 {
+      |                   ^^^^^^^^^^^^^^^^^^^^^^^^
+...
+ 6400 |     fn int_zero(&self) -> Option<Expr> {
+      |        ^^^^^^^^
+...
+ 7014 |     fn mk_int_bin(&self, op: &str, a: Expr, b: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^^
+...
+ 7019 |     fn mk_int_un(&self, op: &str, a: Expr) -> Option<Expr> {
+      |        ^^^^^^^^^
+...
+ 8214 |     fn is_int_of_nat_zero(&self, e: &Expr) -> bool {
+      |        ^^^^^^^^^^^^^^^^^^
+...
+10088 |     fn check_positivity(&self, ctx: &Ctx, e: &Expr, bound: &[u32], _strict_pos_ok: bool) -> R<()> {
+      |        ^^^^^^^^^^^^^^^^
+...
+11007 |     fn vctx_new() -> (Vec<Rc<nbe::Thunk>>, nbe::VEnv) {
+      |        ^^^^^^^^
+
+warning: field `num_params` is never read
+    --> src/tc.rs:8683:13
+     |
+8682 |         struct TInfo {
+     |                ----- field in this struct
+8683 |             num_params: u32,
+     |             ^^^^^^^^^^
+
+warning: `kiota` (lib) generated 17 warnings (run `cargo fix --lib -p kiota` to apply 2 suggestions)
+    Finished `test` profile [unoptimized + debuginfo] target(s) in 0.01s
+     Running tests/exports.rs (/tmp/kiota-recursor-type-repair-1/target/debug/deps/exports-d0d6d4eb481ddc7d)

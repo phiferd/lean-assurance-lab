@@ -2,14 +2,14 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-23T00:23:36Z",
-  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_3",
+  "completed_at": "2026-09-23T00:41:40Z",
+  "review_class": "INDEPENDENT_DESIGN_CIRCULAR_TRUST_AND_STATIC_IMPLEMENTATION_REVIEW_PATCH_REVISION_4",
   "bindings": [
     {
       "role": "patch_package",
       "path": "results/research/kiota-recursor-type-repair-1/patch-package.json",
       "bytes": 3485,
-      "sha256": "a17f2c008d69abbab6b93d04ecc0a998e394887364531ea0474d8bd38707794c"
+      "sha256": "b21b1fce221fe1d3b9eed6bd4a93be9051c88901e36101508db0428a20040700"
     },
     {
       "role": "construction_design",
@@ -70,6 +70,30 @@
       "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/raw.stdout",
       "bytes": 799,
       "sha256": "31001f53fec09e5426e7246e4f75eb843eb28911a8c24898620cdb5b1e00b4f9"
+    },
+    {
+      "role": "full_suite_failure_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000014-009-full/result.json",
+      "bytes": 830,
+      "sha256": "916789c97d7a722c1f1fb9c44ca72ac515626fe0cd65ebec8842ec68b2899f6c"
+    },
+    {
+      "role": "full_suite_failure_supervisor",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000014-009-full/supervisor.json",
+      "bytes": 1387,
+      "sha256": "446e9739d34bc14458d9a9d48712450e47e5e7115a693119aa557025fb3aa1b4"
+    },
+    {
+      "role": "full_suite_failure_stdout",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000014-009-full/raw.stdout",
+      "bytes": 9206,
+      "sha256": "d7f4ff606896dedece581c191220fe8d8e1c5a345c2cc0df5930d58362aeb24e"
+    },
+    {
+      "role": "full_suite_failure_stderr",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000014-009-full/raw.stderr",
+      "bytes": 25255,
+      "sha256": "59a2f854056b0c4d706c2a4bde44b17687dce72161a787ff1564362b63704cb4"
     }
   ],
   "checks": [
@@ -142,6 +166,16 @@
       "id": "RECURSIVE_CONTEXT_RELOCATION",
       "result": "PASS",
       "evidence": "Attempt 4 localized all three focused failures to Nat.le.rec. Independent review confirmed revision 3 maps source [parameters, prior fields, arguments] to destination [parameters, motives/minors, all fields, prior IHs, arguments] using cutoffs argument-depth plus field-position, then argument-depth; Nat.le.step's predecessor remains #1 instead of the former #3."
+    },
+    {
+      "id": "FIELD_ZERO_CLASSIFICATION",
+      "result": "PASS",
+      "evidence": "Attempt 14 exposed eight standard-corpus regressions where data-field sorts use a universe parameter that can instantiate to zero. Revision 4 mirrors the kernel field test by treating only levels definitionally equal to zero as Prop, while retaining the stricter provably-nonzero test for the inductive result sort."
+    },
+    {
+      "id": "REDUCIBLE_RECURSIVE_TARGET",
+      "result": "PASS",
+      "evidence": "Attempt 14 exposed two tutorial declarations whose recursive member target is hidden behind reducible constType. Revision 4 WHNFs only the guarded fallback candidate, then preserves the exact member head, arity, universe and contextual parameter checks and the fail-closed unmatched-member rejection."
     }
   ],
   "adversarial_findings_resolved": [
@@ -150,15 +184,21 @@
     "constructor conclusion fields displaced by IH insertion",
     "raw universe-label equality instead of positional alpha comparison",
     "Prop/K derivation over only the original group",
+    "universe-parameter data fields misclassified as Prop-valued",
+    "reducible wrappers obscuring exact recursive member targets",
     "silent loss of an IH for a defeq-but-not-structural recursive target",
     "partial atomicity assertion"
   ],
   "observations": {
-    "build_attempts": 2,
-    "cargo_test_processes": 3,
+    "build_attempts": 3,
+    "cargo_test_processes": 10,
+    "cargo_processes": 13,
     "compile_failures": 1,
-    "build_passes": 1,
+    "build_passes": 2,
     "focused_failures": 1,
+    "harness_audit_failures": 1,
+    "full_suite_failures": 1,
+    "successful_test_processes": 7,
     "checker_attempts": 0,
     "network_requests": 0,
     "external_actions": 0
@@ -166,7 +206,7 @@
   "verdict": {
     "static_patch_ready": true,
     "prelaunch_review_passed": true,
-    "compile_or_runtime_success_claimed": false,
-    "remaining_gate": "Bind and commit patch revision 3 and all nine updated execution manifests before rerunning build and focused cells."
+    "compile_or_runtime_success_claimed": true,
+    "remaining_gate": "Bind and commit patch revision 4 and its attempt-14 failure evidence before rerunning all nine execution cells, including the full offline suite."
   }
 }

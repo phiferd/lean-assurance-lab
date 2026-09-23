@@ -294,7 +294,7 @@ index 253d2fb..21e7eeb 100644
          Ok(())
      }
 diff --git a/src/tc.rs b/src/tc.rs
-index ca1d1a9..17d880e 100644
+index ca1d1a9..50fc88c 100644
 --- a/src/tc.rs
 +++ b/src/tc.rs
 @@ -85,6 +85,183 @@ pub enum TcError {
@@ -481,7 +481,36 @@ index ca1d1a9..17d880e 100644
  fn reject<T>(msg: impl Into<String>) -> R<T> {
      Err(TcError::Reject(msg.into()))
  }
-@@ -8462,7 +8639,14 @@ impl<'e> Checker<'e> {
+@@ -8360,10 +8537,10 @@ impl<'e> Checker<'e> {
+     ///   1. `all.len() > 1`: mutually recursive predicates.
+     ///   2. the type has more than one constructor.
+     ///   3. the type has exactly one constructor with a field that is
+-    ///      not itself Prop-valued (case 1 below fails) *and* does not
++    ///      not itself definitionally Prop-valued (case 1 below fails) *and* does not
+     ///      occur in the constructor's own conclusion (case 2 fails) —
+     ///      e.g. `inductive Bad : Prop | mk (x : Sort 1)`: `x`'s own
+-    ///      type is `Sort 1` (not Prop, `is_not_zero`), and `Bad` has no
++    ///      type is `Sort 1` (not Prop), and `Bad` has no
+     ///      indices at all for `x` to occur in, so a `Bad.rec` motive
+     ///      that reaches `Sort 1` could pull `x` itself out of an opaque
+     ///      `Bad` proof — combined with proof irrelevance (any two
+@@ -8428,7 +8605,14 @@ impl<'e> Checker<'e> {
+                     if pos >= c_np {
+                         if let Ok(ds) = self.infer_type(&cctx, dom) {
+                             if let Ok(field_lvl) = self.ensure_sort(&cctx, &ds) {
+-                                if level::is_not_zero(&field_lvl) {
++                                // The kernel's field test is `!isZero`: a
++                                // universe parameter is not definitionally
++                                // zero even though it may later be
++                                // instantiated with zero.  `is_not_zero`
++                                // would ask the different question whether
++                                // the level is provably nonzero and would
++                                // incorrectly classify such data as a proof.
++                                if !level::is_def_eq(&field_lvl, &level::zero()) {
+                                     to_check.push(pos);
+                                 }
+                             }
+@@ -8462,7 +8646,14 @@ impl<'e> Checker<'e> {
          Ok(false)
      }
  
@@ -497,7 +526,7 @@ index ca1d1a9..17d880e 100644
          let ci = self
              .env
              .get(first_name)
-@@ -8646,6 +8830,20 @@ impl<'e> Checker<'e> {
+@@ -8646,6 +8837,20 @@ impl<'e> Checker<'e> {
                  }
              }
          }
@@ -518,7 +547,7 @@ index ca1d1a9..17d880e 100644
          // Large-elimination check, once per group (not once per member —
          // `check_inductive_group` runs once per type name in the block,
          // all sharing the same `all`). See `elim_only_at_universe_zero`'s
-@@ -8705,6 +8903,1186 @@ impl<'e> Checker<'e> {
+@@ -8705,6 +8910,1192 @@ impl<'e> Checker<'e> {
          Ok(())
      }
  
@@ -697,7 +726,13 @@ index ca1d1a9..17d880e 100644
 +        current_num_params: u32,
 +        ctx: &Ctx,
 +    ) -> R<Option<(usize, Vec<Expr>)>> {
-+        let (head, args) = expr::unfold_apps(e);
++        // A recursive target may be hidden behind an ordinary reducible
++        // definition such as `constType`.  Normalize before inspecting the
++        // application head, then retain the same exact member/arity and
++        // contextual parameter checks below.  Failure to normalize remains
++        // fail-closed through `whnf`'s error.
++        let normalized = self.whnf(ctx, e)?;
++        let (head, args) = expr::unfold_apps(&normalized);
 +        let ExprData::Const(name, levels) = &**head else {
 +            return Ok(None);
 +        };
