@@ -103,23 +103,23 @@ class ClassificationTests(unittest.TestCase):
         return (lines + "\n" + summary(len(runner.CELL_SPECS[cell]["tests"]), filtered=filtered)).encode()
 
     def test_candidate_confirmation_is_a_passing_scientific_cell(self):
-        manifest = self.focused_manifest("003-candidate", 78)
+        manifest = self.focused_manifest("003-candidate", 76)
         passed, outcome, _ = runner.classify(
-            "003-candidate", manifest, good_receipt(), self.focused_output("003-candidate", 78), b""
+            "003-candidate", manifest, good_receipt(), self.focused_output("003-candidate", 76), b""
         )
         self.assertTrue(passed)
         self.assertEqual(outcome, "EXPECTED_REJECT_CONFIRMED")
 
     def test_missing_named_test_fails_closed(self):
-        manifest = self.focused_manifest("004-control", 78)
-        output = summary(1, filtered=78).encode()
+        manifest = self.focused_manifest("004-control", 76)
+        output = summary(1, filtered=76).encode()
         passed, outcome, _ = runner.classify("004-control", manifest, good_receipt(), output, b"")
         self.assertFalse(passed)
         self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
 
     def test_focused_count_drift_fails_closed(self):
-        manifest = self.focused_manifest("002-focused", 72)
-        output = self.focused_output("002-focused", 71)
+        manifest = self.focused_manifest("002-focused", 70)
+        output = self.focused_output("002-focused", 69)
         passed, outcome, _ = runner.classify("002-focused", manifest, good_receipt(), output, b"")
         self.assertFalse(passed)
         self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
@@ -130,26 +130,26 @@ class ClassificationTests(unittest.TestCase):
             "outcome": "FULL_SUITE_PASS",
             "unit_passed": 83,
             "binary_passed": 0,
-            "integration_passed": 79,
+            "integration_passed": 77,
             "doctest_passed": 0,
-            "total_passed": 162,
+            "total_passed": 160,
             "failed": 0,
             "ignored": 0,
         }}
-        output = (summary(83) + summary(0) + summary(79) + summary(0)).encode()
+        output = (summary(83) + summary(0) + summary(77) + summary(0)).encode()
         passed, outcome, _ = runner.classify("009-full", manifest, good_receipt(), output, b"")
         self.assertTrue(passed)
         self.assertEqual(outcome, "FULL_SUITE_PASS")
-        drift = (summary(83) + summary(0) + summary(78) + summary(0)).encode()
+        drift = (summary(83) + summary(0) + summary(76) + summary(0)).encode()
         passed, outcome, _ = runner.classify("009-full", manifest, good_receipt(), drift, b"")
         self.assertFalse(passed)
         self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")
 
     def test_valid_output_cannot_override_bad_cleanup(self):
-        manifest = self.focused_manifest("005-ordinary", 78)
+        manifest = self.focused_manifest("005-ordinary", 76)
         passed, outcome, _ = runner.classify(
             "005-ordinary", manifest, good_receipt(cleanup_complete=False),
-            self.focused_output("005-ordinary", 78), b""
+            self.focused_output("005-ordinary", 76), b""
         )
         self.assertFalse(passed)
         self.assertEqual(outcome, "INFRASTRUCTURE_AUDIT_FAILURE")

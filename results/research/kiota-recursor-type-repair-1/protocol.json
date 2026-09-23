@@ -46,7 +46,7 @@
     "PREPARE_LOCAL_PR_DRAFT"
   ],
   "prelaunch_gate": {
-    "tooling_revision": 2,
+    "tooling_revision": 3,
     "patch_revision": 3,
     "required": [
       "exact patch and changed-path inventory",
@@ -121,6 +121,31 @@
         "results/research/kiota-recursor-type-repair-1/execution/attempt-000004-002-focused/raw.stderr"
       ],
       "repair": "Patch revision 3 separately inserts motives/minors outside prior fields and current/later fields plus prior IHs inside them, for both higher-order argument domains and recursive indices."
+    },
+    {
+      "attempt": 5,
+      "cell": "001-build",
+      "outcome": "BUILD_PASS",
+      "cargo_process_started": true,
+      "cleanup_complete": true,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000005-001-build/result.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000005-001-build/supervisor.json"
+      ]
+    },
+    {
+      "attempt": 6,
+      "cell": "002-focused",
+      "outcome": "INFRASTRUCTURE_AUDIT_FAILURE",
+      "cause": "All seven named regressions passed, but the manifest expected 72 filtered tests while the bound exports harness contains and reported 70 other tests.",
+      "cargo_process_started": true,
+      "cleanup_complete": true,
+      "evidence": [
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000006-002-focused/result.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000006-002-focused/supervisor.json",
+        "results/research/kiota-recursor-type-repair-1/execution/attempt-000006-002-focused/raw.stdout"
+      ],
+      "repair": "Tooling revision 3 binds the statically enumerated and observed 77-test integration harness: 70 filtered for the seven-test cell, 76 for single-test cells, and 160 total tests in the full suite."
     }
   ],
   "process_safety": {
@@ -143,14 +168,14 @@
   },
   "execution_cells": [
     {"id": "001-build", "expected": "BUILD_PASS"},
-    {"id": "002-focused", "expected": "7_PASS_72_FILTERED"},
-    {"id": "003-candidate", "expected": "1_PASS_78_FILTERED_EXACT_REJECT_CONFIRMED"},
-    {"id": "004-control", "expected": "1_PASS_78_FILTERED_ACCEPT"},
-    {"id": "005-ordinary", "expected": "1_PASS_78_FILTERED_ACCEPT"},
-    {"id": "006-nested-two", "expected": "1_PASS_78_FILTERED_ACCEPT"},
-    {"id": "007-nested-deep", "expected": "1_PASS_78_FILTERED_ACCEPT"},
-    {"id": "008-nested-mutual", "expected": "1_PASS_78_FILTERED_ACCEPT"},
-    {"id": "009-full", "expected": "162_PASS_0_FAIL"}
+    {"id": "002-focused", "expected": "7_PASS_70_FILTERED"},
+    {"id": "003-candidate", "expected": "1_PASS_76_FILTERED_EXACT_REJECT_CONFIRMED"},
+    {"id": "004-control", "expected": "1_PASS_76_FILTERED_ACCEPT"},
+    {"id": "005-ordinary", "expected": "1_PASS_76_FILTERED_ACCEPT"},
+    {"id": "006-nested-two", "expected": "1_PASS_76_FILTERED_ACCEPT"},
+    {"id": "007-nested-deep", "expected": "1_PASS_76_FILTERED_ACCEPT"},
+    {"id": "008-nested-mutual", "expected": "1_PASS_76_FILTERED_ACCEPT"},
+    {"id": "009-full", "expected": "160_PASS_0_FAIL"}
   ],
   "authority_limits": {
     "network_requests": false,

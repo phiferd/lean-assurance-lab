@@ -2,8 +2,8 @@
   "schema_version": 1,
   "item_id": "KIOTA-RECURSOR-TYPE-REPAIR-1",
   "status": "PASS",
-  "completed_at": "2026-09-23T00:02:01Z",
-  "review_class": "INDEPENDENT_STATIC_AND_MOCKED_SUPERVISOR_REVIEW_REVISION_2",
+  "completed_at": "2026-09-23T00:27:55Z",
+  "review_class": "INDEPENDENT_STATIC_AND_MOCKED_SUPERVISOR_REVIEW_REVISION_3",
   "bindings": [
     {
       "role": "supervisor",
@@ -15,7 +15,7 @@
       "role": "supervisor_tests",
       "path": "results/research/kiota-recursor-type-repair-1/test-runner.py",
       "bytes": 14725,
-      "sha256": "35ead2d33db0b8e56f654c3b29bead327ed0ea3b1e68729106a6aec73a86a7f6"
+      "sha256": "7a77ae27765ffdebccea5094e8932035ce074cd2c3493e066b5c693102bdc9ce"
     },
     {
       "role": "process_supervisor",
@@ -33,7 +33,7 @@
       "role": "test_result",
       "path": "results/research/kiota-recursor-type-repair-1/runner-test-result.json",
       "bytes": 1320,
-      "sha256": "e4669b0ff37a6243e9536a67b0cbd0cd45e7e9897b12ade80f93159837048a4d"
+      "sha256": "ab7eb8f530a0ca4b0d1de1807802d9cdd01d745e496f3819f2145c1ab61e8086"
     },
     {
       "role": "failed_prelaunch_reservation",
@@ -46,6 +46,18 @@
       "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000001-001-build/result.json",
       "bytes": 745,
       "sha256": "4338884cebbe5dcdb50d5ae1d5fb895723b2909ee54832f4fa8b6cfe35b6d67e"
+    },
+    {
+      "role": "focused_count_audit_result",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000006-002-focused/result.json",
+      "bytes": 893,
+      "sha256": "5ca25fcee74b9ddfc2ee496a2584b08b68770aeed0c81271f30822ec0cd4c858"
+    },
+    {
+      "role": "focused_count_audit_stdout",
+      "path": "results/research/kiota-recursor-type-repair-1/execution/attempt-000006-002-focused/raw.stdout",
+      "bytes": 575,
+      "sha256": "6b3997fe60b3ed313e13841b8e25fe1468be74d4270e081b79c319a453d96754"
     }
   ],
   "checks": [
@@ -87,7 +99,12 @@
     {
       "id": "RESULT_CLASSIFICATION",
       "result": "PASS",
-      "evidence": "Focused cells require exact named tests and harness counts; the full cell requires the four bound harness summaries totaling 162 passing tests."
+      "evidence": "Focused cells require exact named tests and the observed 77-test integration harness counts; the full cell requires the four bound harness summaries totaling 160 passing tests."
+    },
+    {
+      "id": "HARNESS_COUNT_RECONCILIATION",
+      "result": "PASS",
+      "evidence": "Attempt 6 passed all seven named tests with 70 filtered. Static enumeration confirms tests/exports.rs contains exactly 77 test declarations, so single-test cells bind 76 filtered and the complete suite binds 83 unit plus 77 integration tests."
     },
     {
       "id": "MOCKED_REGRESSION_SUITE",
@@ -98,6 +115,7 @@
   "observations": {
     "runner_tests": 22,
     "prelaunch_execution_attempts": 1,
+    "harness_count_audit_failures": 1,
     "cargo_launches": 0,
     "checker_launches": 0,
     "network_requests": 0,
@@ -106,6 +124,6 @@
   "verdict": {
     "ready_for_exact_manifest_binding": true,
     "authorizes_scientific_execution_by_itself": false,
-    "remaining_gate": "Commit supervisor revision 2, the preserved first-attempt evidence and rebound nine execution manifests before retry."
+    "remaining_gate": "Commit the corrected 77-test harness counts, refreshed mocked test result and rebound nine execution manifests before retry."
   }
 }
