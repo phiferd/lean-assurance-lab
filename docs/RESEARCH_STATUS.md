@@ -3059,7 +3059,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `TRUST-ASSUMPTION-PIPELINE-PILOT-1`.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3071,7 +3071,8 @@ immutable. Read-only preflight found the same upstream main and no apparent
 open duplicate. On 2026-09-23, the owner authorized the fork and submission;
 the exact reviewed patch is now [Kiota PR #11](https://github.com/sankalpsthakur/kiota/pull/11),
 OPEN and ready for review at the dated ledger observation. The selected
-trust-assumption pilot remains READY and unstarted.
+trust-assumption pilot is ACTIVE for source/reuse and exact protocol preparation under
+[its plan](research/TRUST_ASSUMPTION_PIPELINE_PILOT_1_PLAN.md).
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
