@@ -1,0 +1,89 @@
+{
+  "schema_version": 1,
+  "item_id": "TRUST-ASSUMPTION-PIPELINE-PILOT-1",
+  "status": "PASS",
+  "validated_at": "2026-09-26T22:57:57Z",
+  "scientific_result_date": "2026-09-23",
+  "environment_incident": {
+    "classification": "SANDBOX_HOST_PROCESS_PERMISSION",
+    "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+    "log": {
+      "path": "results/research/trust-assumption-pipeline-pilot-1/repository-validation-2026-09-26.log",
+      "bytes": 200172,
+      "sha256": "1d12d8ecd51099fda26b93870094a3cbcb535e6b99ee4d52241e16c49ae037a8"
+    },
+    "current_tests": 1420,
+    "current_errors": 4,
+    "frozen_publication_study_tests_passed": 73,
+    "frozen_portfolio_checkpoint_tests_passed": 9,
+    "cause": "Sandbox denied /bin/ps during the supervisor RSS backend preflight in four tests. No scientific launch, input, expected result or assurance gate was changed."
+  },
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_trust_assumption_pilot*.py' -v",
+      "result": "PASS",
+      "tests": 24,
+      "existing_log": {
+        "path": "results/research/trust-assumption-pipeline-pilot-1/focused-closure.log",
+        "bytes": 2347,
+        "sha256": "e3ed788377895db1ed7d15ac4cdba5f0721f7906d9053ddfe80955400b7005c2"
+      }
+    },
+    {
+      "command": "scripts/trust-assumption-pilot-1-r2 validate",
+      "result": "SUCCESS",
+      "meaning": "Rebuilds the canonical result and replays the preserved R1 interpretation through original tooling."
+    },
+    {
+      "command": "scripts/render-trust-assumption-pilot-1 --check",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/run-unit-tests-with-signal-retry --require-full-payload",
+      "result": "PASS",
+      "execution_environment": "host-process access for required /bin/ps RSS preflight",
+      "log": {
+        "path": "results/research/trust-assumption-pipeline-pilot-1/repository-validation-2026-09-26-host-process.log",
+        "bytes": 191052,
+        "sha256": "a7d6b1fa349e387a94f1b9d4356770f539185feefd3c335d98931da59a4c5e9d"
+      },
+      "current_tests": 1420,
+      "frozen_publication_study_tests": 73,
+      "frozen_portfolio_checkpoint_tests": 9
+    },
+    {
+      "command": "scripts/refresh-current-state --log-dir results/workflow-refresh/trust-assumption-pipeline-pilot-1-closure-2026-09-26",
+      "result": "PASS",
+      "receipt": {
+        "path": "results/workflow-refresh/trust-assumption-pipeline-pilot-1-closure-2026-09-26/result.json",
+        "bytes": 3373,
+        "sha256": "26e35f5c3ceb8d366acf87408cb16fc85d50fb0d65958d19d53bbd07d4589926"
+      },
+      "completed_commands": 14
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-project-review --check",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/build-external-contributions --check",
+      "result": "PASS"
+    },
+    {
+      "command": "scripts/artifact-status --require-current",
+      "result": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "result": "PASS"
+    }
+  ],
+  "scientific_processes_launched_by_validation": 0,
+  "next_item": "STATEFUL-VALIDATION-PILOT-1",
+  "next_item_started": false,
+  "conclusion": "Exact twelve-cell result and four permission decisions validate; the complete current, frozen publication and portfolio suites pass, generated state is current, and the selected successor remains unstarted."
+}

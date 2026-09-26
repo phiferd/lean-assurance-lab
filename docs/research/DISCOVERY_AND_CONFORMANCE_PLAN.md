@@ -72,11 +72,12 @@ are ordinal judgments, not estimated defect rates.
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. The first ten ranks map to proposal
-numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Four are complete; the remaining original
-horizon contains one READY and five PLANNED candidates with independent launch
+numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Five are complete; the remaining original
+horizon contains one READY and four PLANNED candidates with independent launch
 gates. The separately appended recursor-repair successor is complete, and
-`TRUST-ASSUMPTION-PIPELINE-PILOT-1` is selected READY and unstarted for its
-source/reuse assessment and staged protocol binding.
+`TRUST-ASSUMPTION-PIPELINE-PILOT-1` completed its exact reporting matrix.
+`STATEFUL-VALIDATION-PILOT-1` is selected READY and unstarted for supported
+public API/source-contract preparation under its explicit plan.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -86,7 +87,7 @@ fixed sequence or promote every idea to READY.
 | 2 `PIPELINE-COMPLETENESS-PILOT-2` | Completed checked-theorem identity/statement/dependency sentinel; one 12-declaration module, two adapters and three omission/substitution/truncation faults | COMPLETE, SUCCESS; retained as a local checked-object receipt asset |
 | 3 `VALID-DEPENDENT-TERM-PILOT-1` | Completed derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | COMPLETE, SUCCESS; 100/100 frozen cells accepted with no observed difference; retained as a local positive-conformance asset |
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Completed current reproduction and downstream consequence study over one retained recursor-type candidate/control | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY; the later source-bound successor preserves its result without relabeling |
-| 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Fixed six-fixture transitive-assumption matrix and negative allowed-axiom control over two supported paths | Pin exact toolchain trust mechanisms, expected assumption sets and observable report paths; reuse existing axiom/Comparator capabilities; distinguish allowed assumptions from unsoundness |
+| 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Completed six-fixture/two-route transitive-assumption matrix and paired allowed-set control | COMPLETE, SUCCESS: twelve preserved sets and four expected policy decisions; one preserved/repaired rendering incident |
 | 6 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
 | 7 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
 | 8 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
@@ -181,3 +182,24 @@ submission candidate is local. No additional ungated implementation work or
 external action is implied by closure. The project-wide review selects
 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` READY and unstarted to investigate transitive
 assumption reporting using retained local assets and explicit staged gates.
+
+## Trust-reporting closure — 2026-09-23
+
+The [trust-assumption report](../../results/research/trust-assumption-pipeline-pilot-1/report.md)
+records twelve preserved assumption sets and four expected local policy decisions.
+Its R1 rendering incident remains unchanged; R2 repaired global print options
+with the same scientific bytes. Retain the strict report/permission bridge as a
+local regression asset; no external issue follows from this all-preserved result.
+The immediate report-consumer gap is now covered by executable negative tests.
+A broad integration into unrelated exporters would require separate scope and
+has less evidence of need than the distinct stateful public-API question.
+
+Select `STATEFUL-VALIDATION-PILOT-1` READY and unstarted under
+[its staged plan](STATEFUL_VALIDATION_PILOT_1_PLAN.md). Establishing supported
+session and recovery contracts is its initial preparation phase; no such
+contract or public reachability is presumed at handoff. This smaller distinct
+conformance question outranks retained real-proof slicing's payload/closure
+cost and binder-model construction's independent-oracle cost. Contribution
+follow-through retains dated ledger observations and exact external-action
+authorization; no fresh maintainer feedback is inferred. All earlier assurance,
+history, independent-transfer and theorem gates remain unchanged.

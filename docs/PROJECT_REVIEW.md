@@ -20,20 +20,19 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete STATEFUL-VALIDATION-PILOT-1: Test validation across request histories; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **TRUST-ASSUMPTION-PIPELINE-PILOT-1**.
+Selected next item: **STATEFUL-VALIDATION-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 5 | TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports | ACTIVE |
-| 6 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | PLANNED |
+| 6 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | READY |
 | 7 | REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs | PLANNED |
 | 8 | BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model | PLANNED |
 | 9 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
@@ -43,29 +42,13 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
-### 5. TRUST-ASSUMPTION-PIPELINE-PILOT-1: Preserve transitive trust assumptions in validation reports
-
-**Target:** Six fixtures covering logical, explicit, sorry and native-evaluation assumptions over two supported paths
-
-Compare exact expected transitive assumptions to Lean/export/report outputs and test an insufficient permitted-axiom set.
-
-**Why this rank:** Highest-value feasible successor after the validated Kiota source repair. Existing axiom and report tooling supports an immediate source/reuse and protocol-binding phase; scientific launches remain gated on exact six-fixture expectations and two observable paths.
-
-**Completion:** One assumption-preservation matrix and integration regression set, or a precise unsupported/reporting boundary.
-
-**Stop:** Complete the fixed six-fixture, two-path matrix or reach a genuine authority, input or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** ACTIVE: ACTIVE under docs/research/TRUST_ASSUMPTION_PIPELINE_PILOT_1_PLAN.md. Source/reuse preparation authorized; no scientific launch until committed exact protocol, scientific/tooling/source bindings and independent review pass.
-
 ### 6. STATEFUL-VALIDATION-PILOT-1: Test validation across request histories
 
 **Target:** Six fixed request sequences through at most two supported public session APIs
 
 Compare a target in a fresh environment with the same target after successful/rejected prefixes and legal independent declaration orders.
 
-**Why this rank:** Sixth: distinct stateful behavior with useful regressions, but session/rollback promises must first be established.
+**Why this rank:** Highest-value feasible preparation after the all-preserved trust-reporting matrix: stateful public request histories expose a distinct conformance boundary with a small fixed suite. This outranks larger retained proof slicing and new binder-model construction; session contracts remain to be established within the item.
 
 **Completion:** One stateful conformance suite with fixed comparisons or a precise absent-contract/reachability boundary.
 
@@ -73,7 +56,7 @@ Compare a target in a fresh environment with the same target after successful/re
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: establish supported session, termination, rollback, fresh-name and dependency-order contracts plus public reachability in a staged protocol; do not assume an API continues after rejection.
+**Boundary:** READY: READY and unstarted for supported public API/source-contract preparation under docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md. Exact session/recovery contracts, six frozen histories, independent review and committed runtime/tooling/process controls remain required before scientific execution.
 
 ### 7. REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs
 
@@ -244,6 +227,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1. Selected next item: TRUST-ASSUMPTION-PIPELINE-PILOT-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1. Selected next item: STATEFUL-VALIDATION-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

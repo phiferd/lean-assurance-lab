@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-22
+Last updated: 2026-09-26
 
 ## How Status Is Tracked
 
@@ -57,6 +57,20 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- Completed `TRUST-ASSUMPTION-PIPELINE-PILOT-1` on 2026-09-23 with SUCCESS.
+  Official Lean 4.33.0's local body traversal and imported `.olean` axiom
+  metadata preserved all six fixtures' exact source-derived transitive sets,
+  twelve cells total. The report consumer permitted the sufficient explicit
+  allow-set and denied the empty set on both paths. One local name-rendering
+  incident is preserved and repaired through globally scoped printing options
+  under R2, without changing scientific inputs or relabeling R1. This is
+  reporting/policy evidence within one Lean implementation, not soundness,
+  independent-checker consensus, lean4export behavior or kernel policy
+  enforcement. Retain the local regression package; no external action follows.
+  `STATEFUL-VALIDATION-PILOT-1` is selected READY and unstarted for supported
+  public API/source-contract preparation. See the
+  [report](../results/research/trust-assumption-pipeline-pilot-1/report.md).
 
 - Completed `KIOTA-RECURSOR-PR-REFINEMENT-1` on 2026-09-22 with SUCCESS.
   The successor replaces full-environment copies with a block-local undo journal,
@@ -3057,9 +3071,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `TRUST-ASSUMPTION-PIPELINE-PILOT-1`.
+Selected next item: `STATEFUL-VALIDATION-PILOT-1`.
 
-The canonical queue retains one ACTIVE item and no READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3070,9 +3084,11 @@ repository current/historical suite passes. The earlier package remains
 immutable. Read-only preflight found the same upstream main and no apparent
 open duplicate. On 2026-09-23, the owner authorized the fork and submission;
 the exact reviewed patch is now [Kiota PR #11](https://github.com/sankalpsthakur/kiota/pull/11),
-OPEN and ready for review at the dated ledger observation. The selected
-trust-assumption pilot is ACTIVE for source/reuse and exact protocol preparation under
-[its plan](research/TRUST_ASSUMPTION_PIPELINE_PILOT_1_PLAN.md).
+OPEN and ready for review at the dated ledger observation. The trust-assumption
+pilot is COMPLETE with SUCCESS;
+[its report](../results/research/trust-assumption-pipeline-pilot-1/report.md)
+preserves the exact scope and original reporting incident. The selected stateful
+pilot remains unstarted under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md).
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3134,9 +3150,10 @@ local; no external submission occurred.
 The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
 auditor are retained as a local asset. After the recursor repair closure, the
-project-wide review selects the trust-assumption reporting study READY and
-unstarted for source/reuse assessment and staged protocol binding; its
-scientific launches remain behind exact fixture and integration gates.
+trust-assumption study subsequently completed its twelve-cell reporting matrix.
+The project-wide review now selects stateful public-request validation READY for
+source/API contract preparation; no successor scientific launch is authorized
+until its exact contracts, fixtures and controls are committed.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3161,8 +3178,8 @@ no external action is recommended now.
 | 2 | `PIPELINE-COMPLETENESS-PILOT-2` | COMPLETE, SUCCESS |
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
-| 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | READY, unstarted source/reuse and protocol-binding phase |
-| 6 | `STATEFUL-VALIDATION-PILOT-1` | PLANNED |
+| 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
+| 6 | `STATEFUL-VALIDATION-PILOT-1` | READY, unstarted API/source-contract preparation |
 | 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
 | 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
@@ -3315,8 +3332,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 Queue handoff: EXECUTABLE.
 
 The canonical queue has one READY item and no ACTIVE item:
-`TRUST-ASSUMPTION-PIPELINE-PILOT-1`, selected and unstarted for its source/reuse
-assessment and staged protocol-binding phase.
+`STATEFUL-VALIDATION-PILOT-1`, selected and unstarted for supported public
+API/source-contract preparation. The six histories remain behind their exact
+scientific and launch gates.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful
@@ -3332,8 +3350,9 @@ Historical results, completed-record content, consumed budgets, pending counts,
 external-write gates and the failing assurance state remain unchanged. The
 completed recursor repair retains its exact patch, independent review, binary
 and execution manifests, successful frozen matrix and local PR draft. The
-selected assumption-reporting item must bind its exact fixtures, expected
-transitive sets, observable paths and staged protocol before any launch.
+completed assumption-reporting item retains twelve exact matched cells and
+its negative permission comparison. The selected stateful item must establish
+public session/recovery contracts before freezing and launching its six histories.
 
 ### Waiting
 
