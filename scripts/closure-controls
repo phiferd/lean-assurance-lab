@@ -1,0 +1,38 @@
+#!/usr/bin/env python3
+"""Prospective exact-input and ordered current-item closure controls."""
+import argparse
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.closure_controls import committed_inventory, finish, host_rss_preflight, write_new
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    sub = parser.add_subparsers(dest="action", required=True)
+    sub.add_parser("preflight", help="exercise actual /bin/ps RSS capability")
+    inventory = sub.add_parser("inventory", help="seal exact committed bytes for a declared scope")
+    inventory.add_argument("--scope-file", required=True)
+    inventory.add_argument("--output", required=True, type=Path)
+    close = sub.add_parser("finish", help="preflight, inventory, full suite, validation, refresh and checks")
+    close.add_argument("--scope-file", required=True)
+    close.add_argument("--output-dir", required=True, type=Path)
+    args = parser.parse_args()
+    try:
+        if args.action == "preflight":
+            print(host_rss_preflight())
+        elif args.action == "inventory":
+            write_new(args.output, committed_inventory(ROOT, args.scope_file))
+            print(args.output)
+        else:
+            return finish(ROOT, args.scope_file, args.output_dir)
+    except (ValueError, OSError) as error:
+        print(error, file=sys.stderr)
+        return 1
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

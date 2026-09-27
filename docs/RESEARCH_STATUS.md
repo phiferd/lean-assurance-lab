@@ -58,6 +58,8 @@ research directions.
 
 ## Attempted
 
+- `WORKFLOW-CLOSURE-AUTOMATION-1` closes on 2026-09-27 with SUCCESS upon its required final validation receipt. The scoped successor adds an actual-host RSS preflight, declared exact committed-byte inventory and a one-command full-suite, validation-record, dependency-ordered refresh and freshness path. Thirteen focused closure-control regressions pass. A source-only comparison bound one lazylean revision and its 24-file source inventory, with no build or scientific launch; it selected `LAZY-REDUCTION-CONFORMANCE-PILOT-1` READY for preparation while retaining STATEFUL READY as an alternative. [Candidate and final gate](../results/research/workflow-closure-automation-1/closure-candidate.json); [source comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md). No external action occurred.
+
 - Completed `TRUST-ASSUMPTION-PIPELINE-PILOT-1` on 2026-09-23 with SUCCESS.
   Official Lean 4.33.0's local body traversal and imported `.olean` axiom
   metadata preserved all six fixtures' exact source-derived transitive sets,
@@ -3071,9 +3073,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `WORKFLOW-CLOSURE-AUTOMATION-1`.
+Selected next item: `LAZY-REDUCTION-CONFORMANCE-PILOT-1`.
 
-The canonical queue has one ACTIVE engineering successor; `STATEFUL-VALIDATION-PILOT-1` remains READY and unstarted. The [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; the ledger observations are dated and are not refreshed here.
+The closure-automation engineering successor is a candidate COMPLETE with final full-suite and refresh checks pending in its immutable closure receipt. Its [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact declared committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The [comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md) supports selecting the [lazy-reduction pilot](research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md) READY for preparation only. STATEFUL remains READY and unstarted as a feasible alternative. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; ledger observations remain dated.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3087,8 +3089,7 @@ the exact reviewed patch is now [Kiota PR #11](https://github.com/sankalpsthakur
 OPEN and ready for review at the dated ledger observation. The trust-assumption
 pilot is COMPLETE with SUCCESS;
 [its report](../results/research/trust-assumption-pipeline-pilot-1/report.md)
-preserves the exact scope and original reporting incident. The selected stateful
-pilot remains unstarted under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md).
+preserves the exact scope and original reporting incident. The stateful pilot remains unstarted and READY under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md); the later lazy-reduction candidate is selected READY for preparation.
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3151,9 +3152,10 @@ The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
 auditor are retained as a local asset. After the recursor repair closure, the
 trust-assumption study subsequently completed its twelve-cell reporting matrix.
-The project-wide review now selects stateful public-request validation READY for
-source/API contract preparation; no successor scientific launch is authorized
-until its exact contracts, fixtures and controls are committed.
+The 2026-09-27 project-wide review selects lazy-reduction conformance READY for
+source/build/adapter preparation, with STATEFUL public-request validation READY
+as an alternative. Neither successor scientific launch is authorized until its
+exact contracts, fixtures and controls are committed.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3179,18 +3181,19 @@ no external action is recommended now.
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
-| 6 | `STATEFUL-VALIDATION-PILOT-1` | READY, unstarted API/source-contract preparation |
-| 7 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
-| 8 | `BINDER-MODEL-PILOT-1` | PLANNED |
-| 9 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
-| 10 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
-| 11 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
-| 64 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
-| 67 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
-| 68 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
-| 69 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
-| 70 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | COMPLETE, SUCCESS — `VALIDATED_COMPLETE_KIOTA_DESIGN` |
-| 71 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | COMPLETE, SUCCESS — validated source repair and local PR draft |
+| 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | READY, unstarted source/build/adapter preparation |
+| 7 | `STATEFUL-VALIDATION-PILOT-1` | READY, unstarted API/source-contract preparation |
+| 8 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
+| 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
+| 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
+| 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
+| 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
+| 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
+| 69 | `PIPELINE-COMPLETENESS-PILOT-1` | COMPLETE, BOUNDED_UNRESOLVED |
+| 70 | `RECURSOR-TYPE-TRUST-BOUNDARY-1` | COMPLETE, VALIDATED_REGRESSION_TARGET_WITH_SOURCE_BOUNDARY |
+| 71 | `KIOTA-RECURSOR-TYPE-DESIGN-1` | COMPLETE, SUCCESS — `VALIDATED_COMPLETE_KIOTA_DESIGN` |
+| 72 | `KIOTA-RECURSOR-TYPE-REPAIR-1` | COMPLETE, SUCCESS — validated source repair and local PR draft |
 
 Each PLANNED candidate has its own concrete promotion gate and fixed scientific
 scope in the canonical queue and successor plan. Reassess actual value and

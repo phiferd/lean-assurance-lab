@@ -281,6 +281,30 @@ checkpoints require queue/status agreement, affected generation checks and diff
 checks. Preserve exact validation inputs and logs; reuse an unchanged input
 manifest rather than duplicating it for every command.
 
+For a prospective logical closure that uses `scripts/closure-controls`, first
+finalize and commit the candidate plan, queue/status, source evidence, tests and
+the item's declared scope file. The scope names the exact files being checked;
+its committed-byte inventory is a claim about those files only. It does not
+replace the item's scientific input lock or historical content bindings. The
+`preflight` subcommand exercises the actual host `/bin/ps` RSS backend before
+the costly suite and reports a missing permission directly. The `inventory`
+subcommand can be used at an exact launch boundary and refuses missing,
+uncommitted or dirty declared files. Neither subcommand escalates permissions.
+
+At final closure, `scripts/closure-controls finish --scope-file PATH
+--output-dir NEW_DIRECTORY` checks that backend and the committed scope before
+running the unchanged full-payload suite. It checks the same inputs again
+afterward, writes an exclusive validation record, then invokes the existing
+`scripts/refresh-current-state` dependency chain. It finally checks the queue,
+external contribution view, project review, artifact freshness and diff, with
+separate logs and a terminal result. A failed step stops downstream work and
+preserves its receipt. The validation record is sealed before generation; the
+terminal result records generation and checks separately, so adding a check
+receipt cannot invalidate a canonical input after refresh. The item's own
+validators and milestone/historical gates still run when applicable. A closure
+candidate whose required validation fails must be repaired and revalidated;
+its provisional queue state is not a completed result.
+
 ## Literature is a first-class task
 
 Perform a scoped literature and existing-tool search before a new theory,
