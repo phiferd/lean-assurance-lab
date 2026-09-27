@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "item_id": "WORKFLOW-CLOSURE-AUTOMATION-1",
+  "repair_revision": "R2",
+  "date": "2026-09-27",
+  "failed_attempt": {
+    "preflight.json": {
+      "path": "results/research/workflow-closure-automation-1/final-closure-20260927-1/preflight.json",
+      "sha256": "3f18df7c9931c7a600352533c29491346544baebfcc46ad8770ef967dac023d6",
+      "bytes": 122
+    },
+    "input-inventory.json": {
+      "path": "results/research/workflow-closure-automation-1/final-closure-20260927-1/input-inventory.json",
+      "sha256": "7800f772819750659149bca51bcd9658a6ae7255272c3149f833bf92d52702c5",
+      "bytes": 16954
+    },
+    "full-suite.log": {
+      "path": "results/research/workflow-closure-automation-1/final-closure-20260927-1/full-suite.log",
+      "sha256": "4c66ce51050bd1c9393ad5a797c800aef434d6110e3e7f51cb51e1646d41a26d",
+      "bytes": 193727
+    },
+    "result.json": {
+      "path": "results/research/workflow-closure-automation-1/final-closure-20260927-1/result.json",
+      "sha256": "e93ae638dd5a9fc22f304404ef71775e3d2670a02e4d4141b9af78e841312e1e",
+      "bytes": 311
+    }
+  },
+  "observed_failure": "Full current partition ran 1434 tests with one ERROR in test_status_ready_count_matches_the_canonical_queue: Active status lacked the required exact count phrase and retained stale one-READY text. Frozen publication 73 tests and portfolio 9 tests passed; coordinator exited before validation record or refresh.",
+  "classification": "ORDINARY_STATUS_HANDOFF_FORMAT_REPAIR",
+  "cause": "The queue/status validator enforced selected-item marker but a separate existing historical regression also requires canonical READY count prose. The successor added a second READY alternative and failed to update a later Active-section handoff paragraph.",
+  "repair": "Change only current Active status to two READY items naming selected LAZY and alternate STATEFUL; reuse existing test_arena_let_regression_erratum.py as a cheap pre-suite coordinator check. Add a focused ordering/failure regression. Keep initial failed attempt and all scientific inputs unchanged.",
+  "pre_suite_regression": "Six existing arena-let erratum tests pass after status/review rebinding; fifteen focused closure-control tests pass, including original-commit binding replay.",
+  "next_attempt": "Use a new output directory and exact new committed tooling/status/scope revision. Do not reuse first attempt or its validation state."
+}

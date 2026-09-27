@@ -17,6 +17,8 @@ import os
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE = ["scripts/run-unit-tests-with-signal-retry", "--require-full-payload"]
+STATUS_PREFLIGHT = ["python3", "-m", "unittest", "discover", "-s", "tests",
+                    "-p", "test_arena_let_regression_erratum.py"]
 CHECKS = [
     ["scripts/validate-research-queue", "--require-ready"],
     ["scripts/build-external-contributions", "--check"],
@@ -116,6 +118,12 @@ def finish(root: Path, scope_file: str, output_dir: Path) -> int:
         before = committed_inventory(root, scope_file)
         write_new(output_dir / "input-inventory.json", before)
         terminal["completed_steps"].append("committed-input-inventory")
+        status_log = output_dir / "status-preflight.log"
+        code = _run_logged(root, STATUS_PREFLIGHT, status_log)
+        terminal["status_preflight_returncode"] = code
+        if code:
+            raise ValueError(f"status/queue readiness preflight failed ({code}); see {status_log}")
+        terminal["completed_steps"].append("status-queue-readiness-preflight")
         env = os.environ.copy()
         env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"] = str(output_dir / "supervisor-receipts")
         suite_log = output_dir / "full-suite.log"

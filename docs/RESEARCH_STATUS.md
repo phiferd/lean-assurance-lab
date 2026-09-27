@@ -58,7 +58,7 @@ research directions.
 
 ## Attempted
 
-- `WORKFLOW-CLOSURE-AUTOMATION-1` closes on 2026-09-27 with SUCCESS upon its required final validation receipt. The scoped successor adds an actual-host RSS preflight, declared exact committed-byte inventory and a one-command full-suite, validation-record, dependency-ordered refresh and freshness path. Thirteen focused closure-control regressions pass. A source-only comparison bound one lazylean revision and its 24-file source inventory, with no build or scientific launch; it selected `LAZY-REDUCTION-CONFORMANCE-PILOT-1` READY for preparation while retaining STATEFUL READY as an alternative. [Candidate and final gate](../results/research/workflow-closure-automation-1/closure-candidate.json); [source comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md). No external action occurred.
+- `WORKFLOW-CLOSURE-AUTOMATION-1` closes on 2026-09-27 with SUCCESS upon its required final validation receipt. The scoped successor adds an actual-host RSS preflight, declared exact committed-byte inventory and a one-command full-suite, validation-record, dependency-ordered refresh and freshness path. Fifteen focused closure-control regressions pass. Its first full-suite attempt found a stale Active READY-count line; the [R2 repair](../results/research/workflow-closure-automation-1/repair-r2.json) preserves that failed attempt and runs the existing count regression before future full suites. A source-only comparison bound one lazylean revision and its 24-file source inventory, with no build or scientific launch; it selected `LAZY-REDUCTION-CONFORMANCE-PILOT-1` READY for preparation while retaining STATEFUL READY as an alternative. [Candidate and final gate](../results/research/workflow-closure-automation-1/closure-candidate.json); [source comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md). No external action occurred.
 
 - Completed `TRUST-ASSUMPTION-PIPELINE-PILOT-1` on 2026-09-23 with SUCCESS.
   Official Lean 4.33.0's local body traversal and imported `.olean` axiom
@@ -3075,7 +3075,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `LAZY-REDUCTION-CONFORMANCE-PILOT-1`.
 
-The closure-automation engineering successor is a candidate COMPLETE with final full-suite and refresh checks pending in its immutable closure receipt. Its [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact declared committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The [comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md) supports selecting the [lazy-reduction pilot](research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md) READY for preparation only. STATEFUL remains READY and unstarted as a feasible alternative. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; ledger observations remain dated.
+The closure-automation engineering successor is complete upon its final full-suite and refresh receipt. Its [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact declared committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The first full suite found a stale handoff count, preserved and repaired in [R2](../results/research/workflow-closure-automation-1/repair-r2.json) without changing scientific inputs. The [comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md) supports selecting the [lazy-reduction pilot](research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md) READY for preparation only. STATEFUL remains READY and unstarted as a feasible alternative. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; ledger observations remain dated.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3334,10 +3334,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one READY item and no ACTIVE item:
-`STATEFUL-VALIDATION-PILOT-1`, selected and unstarted for supported public
-API/source-contract preparation. The six histories remain behind their exact
-scientific and launch gates.
+The canonical queue retains two READY items and no ACTIVE item:
+`LAZY-REDUCTION-CONFORMANCE-PILOT-1` is selected and unstarted for pinned
+source/build/adapter preparation; `STATEFUL-VALIDATION-PILOT-1` remains a READY
+alternative for supported public API/source-contract preparation. Both
+experiments remain behind their exact scientific and launch gates.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful

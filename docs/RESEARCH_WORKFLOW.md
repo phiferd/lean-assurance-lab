@@ -292,8 +292,9 @@ subcommand can be used at an exact launch boundary and refuses missing,
 uncommitted or dirty declared files. Neither subcommand escalates permissions.
 
 At final closure, `scripts/closure-controls finish --scope-file PATH
---output-dir NEW_DIRECTORY` checks that backend and the committed scope before
-running the unchanged full-payload suite. It checks the same inputs again
+--output-dir NEW_DIRECTORY` checks that backend and the committed scope, then
+reuses the existing lightweight status/READY-count regression before running
+the unchanged full-payload suite. It checks the same inputs again
 afterward, writes an exclusive validation record, then invokes the existing
 `scripts/refresh-current-state` dependency chain. It finally checks the queue,
 external contribution view, project review, artifact freshness and diff, with

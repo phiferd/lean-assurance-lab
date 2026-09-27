@@ -2,11 +2,13 @@
 from pathlib import Path
 from types import SimpleNamespace
 from unittest import TestCase, mock
+import hashlib
 import json
 import subprocess
 import tempfile
 
 from lib import closure_controls as cc
+ROOT = cc.ROOT
 
 
 def git(root, *args):
@@ -93,6 +95,19 @@ class ClosureOrderTests(TestCase):
             run.assert_not_called()
             self.assertFalse((out / "validation.json").exists())
 
+    def test_status_preflight_failure_prevents_expensive_suite(self):
+        inventory = {"commit": "a" * 40, "files": []}
+        with tempfile.TemporaryDirectory() as d, \
+             mock.patch.object(cc, "host_rss_preflight", return_value={"status": "PASS"}), \
+             mock.patch.object(cc, "committed_inventory", return_value=inventory), \
+             mock.patch.object(cc, "_run_logged", return_value=4) as run:
+            out = Path(d) / "out"
+            self.assertEqual(cc.finish(Path(d), "scope.json", out), 1)
+            self.assertEqual(run.call_args.args[1], cc.STATUS_PREFLIGHT)
+            run.assert_called_once()
+            self.assertFalse((out / "full-suite.log").exists())
+            self.assertFalse((out / "validation.json").exists())
+
     def test_post_suite_input_drift_prevents_validation_and_refresh(self):
         inventories = [{"commit": "a" * 40, "files": []}, {"commit": "b" * 40, "files": []}]
         with tempfile.TemporaryDirectory() as d, \
@@ -105,7 +120,8 @@ class ClosureOrderTests(TestCase):
                 return 0
             run.side_effect = fake_run
             self.assertEqual(cc.finish(Path(d), "scope.json", out), 1)
-            run.assert_called_once()
+            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_args.args[1], cc.SUITE)
             self.assertFalse((out / "validation.json").exists())
 
     def test_refresh_failure_retains_validation_and_stops_final_checks(self):
@@ -120,7 +136,7 @@ class ClosureOrderTests(TestCase):
                 return 6 if command[0] == "scripts/refresh-current-state" else 0
             run.side_effect = fake_run
             self.assertEqual(cc.finish(Path(d), "scope.json", out), 1)
-            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_count, 3)
             self.assertTrue((out / "validation.json").is_file())
             self.assertEqual(json.loads((out / "result.json").read_text())["status"], "FAILED")
 
@@ -167,9 +183,10 @@ class ClosureOrderTests(TestCase):
                 return 0
             run.side_effect = fake_run
             self.assertEqual(cc.finish(Path(d), "scope.json", out), 0)
-            self.assertEqual(calls[0], cc.SUITE)
-            self.assertEqual(calls[1][0], "scripts/refresh-current-state")
-            self.assertEqual(calls[2:], cc.CHECKS)
+            self.assertEqual(calls[0], cc.STATUS_PREFLIGHT)
+            self.assertEqual(calls[1], cc.SUITE)
+            self.assertEqual(calls[2][0], "scripts/refresh-current-state")
+            self.assertEqual(calls[3:], cc.CHECKS)
             self.assertEqual(json.loads((out / "result.json").read_text())["status"], "COMPLETE")
             self.assertEqual(json.loads((out / "validation.json").read_text())["status"], "PASS")
 
@@ -179,9 +196,39 @@ class ClosureOrderTests(TestCase):
         with tempfile.TemporaryDirectory() as d, \
              mock.patch.object(cc, "host_rss_preflight", return_value={"status": "PASS"}), \
              mock.patch.object(cc, "committed_inventory", return_value=inventory), \
-             mock.patch.object(cc, "_run_logged", return_value=7) as run:
+             mock.patch.object(cc, "_run_logged", side_effect=[0, 7]) as run:
             out = Path(d) / "out"
             self.assertEqual(cc.finish(Path(d), "scope.json", out), 1)
-            run.assert_called_once()
+            self.assertEqual(run.call_count, 2)
+            self.assertEqual(run.call_args.args[1], cc.SUITE)
             self.assertFalse((out / "validation.json").exists())
             self.assertEqual(json.loads((out / "result.json").read_text())["full_suite_returncode"], 7)
+
+
+class FailedAttemptBindingTests(TestCase):
+    def test_r1_failure_remains_bound_to_original_committed_inputs(self):
+        base = ROOT / "results/research/workflow-closure-automation-1"
+        repair = json.loads((base / "repair-r2.json").read_text())
+        for ref in repair["failed_attempt"].values():
+            with self.subTest(path=ref["path"]):
+                raw = (ROOT / ref["path"]).read_bytes()
+                self.assertEqual(len(raw), ref["bytes"])
+                self.assertEqual(hashlib.sha256(raw).hexdigest(), ref["sha256"])
+        attempt = base / "final-closure-20260927-1"
+        result = json.loads((attempt / "result.json").read_text())
+        self.assertEqual(result["status"], "FAILED")
+        self.assertEqual(result["full_suite_returncode"], 1)
+        self.assertFalse((attempt / "validation.json").exists())
+        self.assertFalse((attempt / "refresh").exists())
+        inventory = json.loads((attempt / "input-inventory.json").read_text())
+        self.assertEqual(inventory["commit"], "1972a55f59458e9443507a1de824d4013ebd5819")
+        for row in inventory["files"]:
+            with self.subTest(input=row["path"]):
+                committed = subprocess.check_output(
+                    ["git", "show", inventory["commit"] + ":" + row["path"]], cwd=ROOT)
+                self.assertEqual(len(committed), row["bytes"])
+                self.assertEqual(hashlib.sha256(committed).hexdigest(), row["sha256"])
+                blob = subprocess.check_output(
+                    ["git", "rev-parse", inventory["commit"] + ":" + row["path"]],
+                    cwd=ROOT, text=True).strip()
+                self.assertEqual(blob, row["git_blob"])
