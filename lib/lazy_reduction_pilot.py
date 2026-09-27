@@ -130,7 +130,7 @@ def prepare():
     write_new(BASE/'source-r1.json',value)
     return value
 
-def freeze_build():
+def freeze_build(scan_attempt='dependency-scan-0002'):
     active(); source=prepare()
     review=load(BASE/'portability-review-r1.json')
     if review['verdict']!='PASS' or review['patch']!=source['patch']: raise ValueError('exact patch review missing')
@@ -142,14 +142,18 @@ def freeze_build():
     sdk=Path(subprocess.check_output(['/usr/bin/xcrun','--show-sdk-path'],text=True).strip()).resolve()
     gmp=Path('/opt/homebrew/opt/gmp').resolve()
     flags=['-std=c++20','-O2','-g','-isysroot',str(sdk),'-I',str(ROOT/SOURCE/'src'),'-I',str(gmp/'include')]
-    depdir=ROOT/BASE/'dependency-scan-r1'
+    depdir=ROOT/BASE/scan_attempt
     if depdir.exists(): raise ValueError('dependency scan already exists')
     depdir.mkdir()
     deps=set(); scans=[]
     for unit in UNITS:
         argv=[str(compiler),*flags,'-M',str(ROOT/SOURCE/'src'/f'{unit}.cpp')]
-        receipt=run_supervised(argv=argv,cwd=ROOT,stdin=None,env=ENV,timeout_seconds=60,memory_bytes=2147483648,raw_prefix=depdir/unit)
-        scans.append(receipt); write_new(BASE/'dependency-scan-r1'/f'{unit}.json',receipt)
+        try:
+            receipt=run_supervised(argv=argv,cwd=ROOT,stdin=None,env=ENV,timeout_seconds=60,memory_bytes=2147483648,raw_prefix=depdir/unit)
+        except Exception as error:
+            write_new(BASE/scan_attempt/f'{unit}-prelaunch-error.json',dict(error=repr(error),argv=argv,compiler_launched=False))
+            raise
+        scans.append(receipt); write_new(BASE/scan_attempt/f'{unit}.json',receipt)
         stdout,stderr=raw(receipt); safe(receipt)
         if receipt['exit_code'] or stderr: raise ValueError('dependency scan failed')
         words=shlex.split(stdout.decode().replace('\\\n',' ').split(':',1)[1])
@@ -166,7 +170,7 @@ def freeze_build():
                   sdk=str(sdk),compiler_version=subprocess.check_output([str(compiler),'--version'],text=True),
                   host_version=subprocess.check_output(['/usr/bin/sw_vers'],text=True),
                   runtime_scope='Host system C++/libSystem runtime supplied by recorded macOS; SDK link interfaces bound, GMP statically linked.',
-                  scan_receipts=[bind(BASE/'dependency-scan-r1'/f'{x}.json') for x in UNITS])
+                  scan_receipts=[bind(BASE/scan_attempt/f'{x}.json') for x in UNITS])
     write_new(BASE/'build-manifest-r1.json',manifest)
     return {'dependencies':len(deps),'manifest':str(BASE/'build-manifest-r1.json')}
 
