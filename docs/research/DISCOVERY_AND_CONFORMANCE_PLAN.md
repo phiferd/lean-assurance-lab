@@ -76,9 +76,9 @@ to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Five completed; the
 stateful candidate remains READY, and four original candidates remain PLANNED
 with independent launch gates. The recursor-repair and trust-reporting work is
 complete. The 2026-09-27 source comparison adds a new rank-6 lazy-reduction
-candidate, selected READY and unstarted for preparation; the original ordinal
-proposal mapping remains historical. `STATEFUL-VALIDATION-PILOT-1` remains a
-feasible READY alternative under its explicit plan.
+candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original ordinal
+proposal mapping remains historical. `STATEFUL-VALIDATION-PILOT-1` is selected
+READY and unstarted under its explicit plan.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -89,8 +89,8 @@ fixed sequence or promote every idea to READY.
 | 3 `VALID-DEPENDENT-TERM-PILOT-1` | Completed derivation-carrying generator and fixed 50-term positive suite; Pi/lambda/application/let only, closed numeric universe levels | COMPLETE, SUCCESS; 100/100 frozen cells accepted with no observed difference; retained as a local positive-conformance asset |
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Completed current reproduction and downstream consequence study over one retained recursor-type candidate/control | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY; the later source-bound successor preserves its result without relabeling |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Completed six-fixture/two-route transitive-assumption matrix and paired allowed-set control | COMPLETE, SUCCESS: twelve preserved sets and four expected policy decisions; one preserved/repaired rendering incident |
-| 6 `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | Six demand-directed type-conversion cases on two explicit reduction paths; four separate capability-gate cells | READY for pinned source, portable build/adapter and independently reviewed case preparation only; mode 3 is experimental and observed machine beta/zeta demand is required |
-| 7 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | READY as alternative; establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
+| 6 `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | Completed six demand-directed type-conversion cases on two explicit reduction paths; four capability cells | COMPLETE, SUCCESS: 12/12 ACCEPT with all six KAM demand gates; retain exact local adapter/regressions and experimental-profile limitations |
+| 7 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Selected READY and unstarted; establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
 | 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
 | 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
 | 10 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; use nonterminal process safety controls; do not presume arithmetic sites are defects |

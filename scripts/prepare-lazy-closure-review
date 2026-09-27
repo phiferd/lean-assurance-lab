@@ -1,0 +1,41 @@
+#!/usr/bin/env python3
+"""Render the LLM's explicit closure comparison with exact live evidence hashes."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from lib.research_queue_v4 import queue_digest
+q=json.loads((ROOT/'config/research-queue.json').read_text())
+lazy='LAZY-REDUCTION-CONFORMANCE-PILOT-1'; state='STATEFUL-VALIDATION-PILOT-1'
+proof='REAL-PROOF-SLICES-PILOT-1'; binder='BINDER-MODEL-PILOT-1'; build='BUILD-MODE-CONFORMANCE-PILOT-1'; resource='RESOURCE-ENVELOPE-PILOT-1'
+base='results/research/lazy-reduction-conformance-pilot-1/'
+frontier='docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md'
+state_plan='docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md'
+categories=[
+ ('METHODS_AND_FRONTIERS','The fixed lazy question is answered with twelve ACCEPT cells and qualified demand. Public session history is a distinct next boundary, with six bounded comparisons. Larger proof slicing and new binder models offer useful alternatives but require broader scientific construction; no present evidence warrants extending the completed lazy scope.',[state,proof,binder,build,resource]),
+ ('UNRESOLVED_AND_SHARED_ASSETS','Retain the new observer adapter, six independent conversion cases, custody auditor and exact receipts. STATEFUL can reuse the receipt/supervision discipline while resolving fresh-versus-prefixed behavior; old unresolved authority claims are unchanged and no checker disagreement was hidden.',[state,proof]),
+ ('MAINTENANCE_AND_UPSTREAM','Owner holds Kiota/Nanoda follow-up absent substantive feedback. No new current upstream state was fetched and no external action is inferred. Existing ledger observations remain dated; speculative polling or an issue from all-accept results offers less information than local stateful preparation.',[state]),
+ ('LITERATURE_AND_REUSE','The 2026-09-27 pinned lazylean source/reuse review and independently implemented bounded typing auditor remain current for this completed fragment. Stateful source/API and recovery-contract reuse must be refreshed inside that item before freezing histories. No global novelty claim or new formalization is adopted.',[state,binder]),
+ ('LOCAL_BLOCKER_REMOVAL','The portability/compiler-driver and strict custody controls were repaired inside this item. Stateful public API/session contracts are feasible authorized local preparation, not an external blocker. Proof slices still need exact payload/environment closure; other planned gates are scientific preparation, not proven missing capability.',[state,proof,build,resource])]
+candidates=[dict(item_id=state,disposition='FEASIBLE',rationale='Highest-value distinct conformance question after preserved conversion behavior. Supported public API/session/recovery investigation is authorized within the existing staged item; do not start it here.',evidence_refs=[state_plan,base+'result.json',base+'report.md'],blockers=[])]
+for name,reason in [
+ (proof,'Exact retained payload inventory, full dependency/environment closure, size ceiling and feature-based twelve-slice rule are not frozen.'),
+ (binder,'Named-variable capture-avoiding model, translation/alpha-equivalence audit and supported two-operation-API seams are not frozen.'),
+ (build,'Supported three configurations, four source-selected sites and eight exact boundary/control fixtures are not frozen.'),
+ (resource,'Comparable validity, two families/six sizes/two implementations and measurement protocol are not frozen.')]:
+ candidates.append(dict(item_id=name,disposition='BLOCKED',rationale='Retained concrete planned alternative; its scientific preparation is locally possible, but no current evidence ranks it above the smaller distinct stateful boundary. '+reason,evidence_refs=[frontier],blockers=[dict(kind='SCIENTIFIC_GATE',reason=reason,evidence_refs=[frontier])]))
+paths=['CONSTITUTION.md','docs/RESEARCH_WORKFLOW.md',frontier,state_plan,'docs/research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md',
+ base+'result.json',base+'report.md',base+'work-accounting.json',base+'closure.json',base+'evidence-replay.json',
+ 'results/research/workflow-closure-automation-1/observer-comparison/report.md','results/research/external-contributions.json']
+review=dict(schema_version=1,scope='PROJECT_WIDE',phase='CLOSURE',reviewed_at=q['updated_at'],stopped_item=lazy,selected_item=state,
+ queue_sha256=queue_digest(q),decision='Complete the fixed lazy pilot after required final validation/refresh. Retain its demand-qualified local regression asset; no defect or external action follows. Select STATEFUL READY and unstarted, because public request histories provide a distinct feasible next conformance question. Do not execute the successor in this one-item request.',
+ categories=[dict(category=k,assessment=v,candidate_ids=ids) for k,v,ids in categories],candidates=candidates,
+ evidence_bindings=[dict(path=x,sha256=hashlib.sha256((ROOT/x).read_bytes()).hexdigest()) for x in paths])
+decision=dict(item_id=lazy,outcome='SUCCESS',reviewed_at=q['updated_at'],
+ before=dict(selected=lazy,status='ACTIVE',ranks=[lazy,state,proof,binder,build,resource]),
+ after=dict(selected=state,status='READY_UNSTARTED',completed=[lazy],ranks=[lazy,state,proof,binder,build,resource]),
+ rank_change='Ordinal ranks preserved; the next highest eligible item is selected after closing rank 6.',
+ supporting_evidence=paths,reason=review['decision'])
+print(json.dumps({'review':review,'decision':decision},indent=2))

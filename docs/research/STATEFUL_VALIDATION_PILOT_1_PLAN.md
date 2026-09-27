@@ -3,7 +3,11 @@
 Status: READY and unstarted. Selection authorizes source/reuse and supported-API
 contract preparation; it does not assert that session or rollback promises are
 already established. This item was selected after the trust-reporting matrix
-completed and must not start in that predecessor's one-item request.
+and reselected on 2026-09-27 after the demand-qualified lazy-reduction pilot.
+It must not start in either predecessor's one-item request. The fresh session
+boundary outranks expanding the completed pure-conversion scope; exact public
+API, failure recovery and dependency contracts remain preparation inside this
+item, not an assertion of launch readiness.
 
 ## Question and fixed scope
 

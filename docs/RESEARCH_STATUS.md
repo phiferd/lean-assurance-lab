@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-26
+Last updated: 2026-09-27
 
 ## How Status Is Tracked
 
@@ -57,6 +57,19 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `LAZY-REDUCTION-CONFORMANCE-PILOT-1` completes on 2026-09-27 with SUCCESS
+  subject to its final repository validation/refresh receipt. Both pinned
+  lazylean reduction profiles accepted all six independently audited conversion
+  cases, twelve cells total, with every required KAM beta/zeta demand observed.
+  All four retained capability cells matched. The local portable build preserves
+  its first linker failure and corrected C++ driver identity; source/scientific
+  inputs did not change. Retain the exact adapter and demand-qualified regression
+  package. Agreement within one implementation supplies no independent semantic
+  authority, soundness or performance claim; no external action follows.
+  `STATEFUL-VALIDATION-PILOT-1` is selected READY and unstarted for supported
+  public API/session/recovery preparation. See the
+  [report](../results/research/lazy-reduction-conformance-pilot-1/report.md).
 
 - `WORKFLOW-CLOSURE-AUTOMATION-1` closes on 2026-09-27 with SUCCESS upon its required final validation receipt. The scoped successor adds an actual-host RSS preflight, declared exact committed-byte inventory and a one-command full-suite, validation-record, dependency-ordered refresh and freshness path. Fifteen focused closure-control regressions pass. Its first full-suite attempt found a stale Active READY-count line; the [R2 repair](../results/research/workflow-closure-automation-1/repair-r2.json) preserves that failed attempt and runs the existing count regression before future full suites. A source-only comparison bound one lazylean revision and its 24-file source inventory, with no build or scientific launch; it selected `LAZY-REDUCTION-CONFORMANCE-PILOT-1` READY for preparation while retaining STATEFUL READY as an alternative. [Candidate and final gate](../results/research/workflow-closure-automation-1/closure-candidate.json); [source comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md). No external action occurred.
 
@@ -3073,9 +3086,19 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `LAZY-REDUCTION-CONFORMANCE-PILOT-1`.
+Selected next item: `STATEFUL-VALIDATION-PILOT-1`.
 
-The closure-automation engineering successor is complete upon its final full-suite and refresh receipt. Its [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact declared committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The first full suite found a stale handoff count, preserved and repaired in [R2](../results/research/workflow-closure-automation-1/repair-r2.json) without changing scientific inputs. The [comparison](../results/research/workflow-closure-automation-1/observer-comparison/report.md) supports selecting the [lazy-reduction pilot](research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md) READY for preparation only. STATEFUL remains READY and unstarted as a feasible alternative. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; ledger observations remain dated.
+The closure-automation successor completed its full-suite and refresh gates.
+Its source-only comparison selected the now-completed
+[lazy-reduction pilot](research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md).
+The exact twelve scientific cells all accepted with the six required KAM
+demand observations, and all four capability cells matched. Its reviewed
+adapter, independent auditor, six regressions and preserved build repair remain
+local assets; [the report](../results/research/lazy-reduction-conformance-pilot-1/report.md)
+scopes the same-implementation and host/profile limits. STATEFUL is selected
+READY and unstarted for public API/session/recovery preparation. The 2026-09-27
+owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
+ledger observations remain dated.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3089,7 +3112,9 @@ the exact reviewed patch is now [Kiota PR #11](https://github.com/sankalpsthakur
 OPEN and ready for review at the dated ledger observation. The trust-assumption
 pilot is COMPLETE with SUCCESS;
 [its report](../results/research/trust-assumption-pipeline-pilot-1/report.md)
-preserves the exact scope and original reporting incident. The stateful pilot remains unstarted and READY under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md); the later lazy-reduction candidate is selected READY for preparation.
+preserves the exact scope and original reporting incident. The stateful pilot
+is selected READY and unstarted under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
+after completion of the later lazy-reduction pilot.
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3152,10 +3177,9 @@ The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
 auditor are retained as a local asset. After the recursor repair closure, the
 trust-assumption study subsequently completed its twelve-cell reporting matrix.
-The 2026-09-27 project-wide review selects lazy-reduction conformance READY for
-source/build/adapter preparation, with STATEFUL public-request validation READY
-as an alternative. Neither successor scientific launch is authorized until its
-exact contracts, fixtures and controls are committed.
+The 2026-09-27 lazy-reduction closure review selects STATEFUL public-request
+validation READY and unstarted. Its scientific launch remains gated on exact
+session/recovery contracts, six comparisons, fixtures and controls.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3181,7 +3205,7 @@ no external action is recommended now.
 | 3 | `VALID-DEPENDENT-TERM-PILOT-1` | COMPLETE, SUCCESS |
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
-| 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | READY, unstarted source/build/adapter preparation |
+| 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | READY, unstarted API/source-contract preparation |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
 | 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
@@ -3334,11 +3358,11 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and one ACTIVE item:
-`LAZY-REDUCTION-CONFORMANCE-PILOT-1` is selected and ACTIVE for pinned
-source/build/adapter preparation; `STATEFUL-VALIDATION-PILOT-1` remains a READY
-alternative for supported public API/source-contract preparation. Both
-experiments remain behind their exact scientific and launch gates.
+The canonical queue retains one READY item and no ACTIVE item:
+`STATEFUL-VALIDATION-PILOT-1` is selected and unstarted for supported public
+API/source-contract preparation. The lazy-reduction pilot is complete with
+twelve ACCEPT cells and all six KAM demand requirements. The stateful experiment
+remains behind its exact session/recovery, scientific and launch gates.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful

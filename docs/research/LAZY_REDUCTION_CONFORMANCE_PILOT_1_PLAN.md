@@ -1,9 +1,16 @@
 # Lazy reduction conformance pilot 1
 
-Status: ACTIVE, staged preparation began 2026-09-27. Frontier: `F-DISCOVERY-AND-CONFORMANCE`.
+Status: COMPLETE scientific SUCCESS on 2026-09-27; repository closure requires the final current/historical validation and refresh receipt. Frontier: `F-DISCOVERY-AND-CONFORMANCE`.
 Selected by the 2026-09-27 closure comparison in
 `results/research/workflow-closure-automation-1/observer-comparison/report.md`.
 No scientific launch or build is authorized by this selection alone.
+
+The staged gates subsequently passed. The exact twelve cells all accepted with
+six qualified KAM demand observations; four capability cells matched. The
+[result](../../results/research/lazy-reduction-conformance-pilot-1/result.json)
+and [report](../../results/research/lazy-reduction-conformance-pilot-1/report.md)
+retain failed preparation/build attempts and same-item repairs. The closure
+selects STATEFUL READY and unstarted; no successor work begins in this request.
 
 ## Question and fixed envelope
 

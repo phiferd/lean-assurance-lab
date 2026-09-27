@@ -1,0 +1,50 @@
+#!/usr/bin/env python3
+"""Create immutable scientific result/accounting and a prospective closure candidate."""
+import json
+from pathlib import Path
+import sys
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from lib import lazy_reduction_pilot as p
+from lib import lazy_reduction_science as s
+from lib.lazy_reduction_validation import validate
+
+replay=validate()
+if not replay['acceptance_matched'] or not replay['demand_qualified']: raise ValueError('success candidate requires exact acceptance/demand result')
+base=p.BASE
+p.write_new(base/'evidence-replay.json',replay)
+records=[p.load(base/x/'result.json')['receipt'] for x in ['build-0001','build-0002']]
+scans=[p.load(base/'dependency-scan-0002'/f'{name}.json') for name in p.UNITS]
+cap=p.load(s.CAPABILITY); sci=p.load(base/'science-0001/result.json')
+observers=[x['receipt'] for x in cap['cells']+sci['cells']]
+accounting=dict(item_id=p.ITEM,dependency_scan_processes=10,build_attempts=2,failed_build_attempts=1,
+ capability_cells=4,scientific_cells=12,total_checker_processes=16,scientific_files_generated=6,
+ supervised_processes=28,prelaunch_rss_denials=1,compiler_dry_link_metadata_attempts=2,
+ dependency_scan_seconds=sum(x['elapsed_seconds'] for x in scans),build_seconds=sum(x['elapsed_seconds'] for x in records),
+ checker_seconds=sum(x['elapsed_seconds'] for x in observers),
+ total_supervised_seconds=sum(x['elapsed_seconds'] for x in scans+records+observers),
+ positive_rss_samples=sum(x['memory_monitor_samples'] for x in scans+records+observers),
+ every_supervised_process_cleanup_complete=all(x['cleanup_complete'] for x in scans+records+observers),
+ maximum_single_process_observed_rss_bytes=max(x['maximum_observed_rss_bytes'] for x in scans+records+observers),
+ scientific_utc_interval=[sci['cells'][0]['started_at'],sci['cells'][-1]['finished_at']],
+ manual_engineering_and_review_elapsed_seconds=None,
+ unknown_cost_note='Manual/source/review time was not measured with paired monotonic intervals and remains unknown. Metadata-only failed dry-link stdout/stderr were not captured on its first attempt; limitation preserved separately.',
+ policy='Counts and elapsed time are observations, never authorization or stopping limits.')
+p.write_new(base/'work-accounting.json',accounting)
+result=dict(item_id=p.ITEM,outcome='SUCCESS',scientific_result='PRESERVED_ACCEPTANCE_WITH_DEMAND',
+ source_revision='68c66fa18c1afe029512b90ecfe0b162c0dcd8fb',
+ execution_manifest=p.bind(s.EXECUTION),matrix=p.bind(base/'science-0001/result.json'),
+ capability=p.bind(s.CAPABILITY),contract=p.bind(s.CONTRACT),audit=p.bind(s.AUDIT),replay=p.bind(base/'evidence-replay.json'),
+ scientific_cells=12,accepted_cells=12,qualified_kam_cases=6,
+ recommendation=dict(action='RETAIN_LOCAL_REGRESSION_PACKAGE',target='Pinned lazylean substitution/experimental KAM conversion consumers',priority='NORMAL',
+ prerequisites='Reuse only with exact source, portability, binary, contract, graph audit and profile bindings; changed inputs need a new explicit successor.',
+ reason='Six independently justified conversion cases preserve acceptance with required observed beta/zeta demand. No defect or external issue is supported by this all-preserved result.',external_action='NONE'),
+ nonclaims=p.load(s.CONTRACT)['nonclaims'],successor='STATEFUL-VALIDATION-PILOT-1',successor_execution='NOT_STARTED')
+p.write_new(base/'result.json',result)
+p.write_new(base/'closure.json',dict(item_id=p.ITEM,outcome='SUCCESS',result=p.bind(base/'result.json'),
+  accounting=p.bind(base/'work-accounting.json'),focused_tests=22,
+  required_final_gate=str(base/'final-closure/result.json'),
+  closure_condition='Complete only when required final gate status is COMPLETE, full current/historical suite passes, dependency-ordered refresh is current and main delivery is verified.',
+  historical_inputs='Unchanged; R1 build/prelaunch failures preserved and R2 compiler-driver repair changes no source/scientific input.',
+  successor='STATEFUL-VALIDATION-PILOT-1',successor_started=False))
+print(json.dumps({'result':p.bind(base/'result.json'),'accounting':accounting},indent=2))
