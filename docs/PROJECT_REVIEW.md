@@ -20,29 +20,46 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete STATEFUL-VALIDATION-PILOT-1: Test validation across request histories; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete LAZY-REDUCTION-CONFORMANCE-PILOT-1: Compare demand-directed lazy and substitution reduction paths; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **STATEFUL-VALIDATION-PILOT-1**.
+Selected next item: **LAZY-REDUCTION-CONFORMANCE-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 6 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | READY |
-| 7 | REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs | PLANNED |
-| 8 | BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model | PLANNED |
-| 9 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
-| 10 | RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs | PLANNED |
-| 27 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
-| 46 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 47 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 65 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 6 | LAZY-REDUCTION-CONFORMANCE-PILOT-1: Compare demand-directed lazy and substitution reduction paths | READY |
+| 7 | STATEFUL-VALIDATION-PILOT-1: Test validation across request histories | READY |
+| 8 | REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs | PLANNED |
+| 9 | BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model | PLANNED |
+| 10 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
+| 11 | RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs | PLANNED |
+| 28 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
+| 47 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 48 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 66 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
-### 6. STATEFUL-VALIDATION-PILOT-1: Test validation across request histories
+### 6. LAZY-REDUCTION-CONFORMANCE-PILOT-1: Compare demand-directed lazy and substitution reduction paths
+
+**Target:** Pinned lazylean v0.3.0 68c66fa18c1afe029512b90ecfe0b162c0dcd8fb with bounded Lean4export conversion cases
+
+Prepare a controlled portable adapter and six independently audited demand-directed type-conversion cases; after exact source, build, capability, scientific-input and manifest gates, compare substitution and experimental KAM mode 3 in fresh processes.
+
+**Why this rank:** Pinned complete source exposes a concrete type-conversion seam and distinct KAM reduction mechanism with reusable bounded typing rules. Preparation/build gates remain, but are local and explicit. STATEFUL stays READY; its supported public session APIs are not yet bound. This is an ordinal source-evidence judgment, not a defect-probability or full-independence claim.
+
+**Completion:** A fixed twelve-cell conformance result with audited beta/zeta demand and four capability cells, reusable adapter/regressions, or a precise source, demand or capability boundary after feasible repairs.
+
+**Stop:** Answer the fixed six-case relation question or preserve a genuine terminal boundary. Engineering failures remain inside the item. No attempt cap, frozen-history edit, scope enlargement, ungated scientific launch or external write.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** READY: READY only for staged source, nonsemantic portability, build/adapter and independent protocol preparation under docs/research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md. No build or scientific launch was made in the predecessor.
+
+### 7. STATEFUL-VALIDATION-PILOT-1: Test validation across request histories
 
 **Target:** Six fixed request sequences through at most two supported public session APIs
 
@@ -58,7 +75,7 @@ Compare a target in a fresh environment with the same target after successful/re
 
 **Boundary:** READY: READY and unstarted for supported public API/source-contract preparation under docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md. Exact session/recovery contracts, six frozen histories, independent review and committed runtime/tooling/process controls remain required before scientific execution.
 
-### 7. REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs
+### 8. REAL-PROOF-SLICES-PILOT-1: Extract compact conformance cases from real proofs
 
 **Target:** Twelve declarations from three available retained library exports
 
@@ -74,7 +91,7 @@ Freeze feature-based selection before outcomes, preserve full dependency/environ
 
 **Boundary:** PLANNED: PLANNED: establish retained payload availability, complete dependency/environment accounting, size limits and fixed feature selection in a staged plan; observed libraries are not fresh holdouts.
 
-### 8. BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model
+### 9. BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model
 
 **Target:** A fixed suite of 10000 finite terms/contexts and two supported internal operation APIs
 
@@ -90,7 +107,7 @@ Review reuse, implement a named-variable capture-avoiding model and compare lift
 
 **Boundary:** PLANNED: PLANNED: identify tractable fragment/API seams and review capture avoidance, alpha-equivalence, translation and formalization reuse; record a staged comparison protocol before promotion.
 
-### 9. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
+### 10. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
 **Target:** One checker, three supported build configurations, at most four source sites and eight boundary/control fixtures
 
@@ -106,7 +123,7 @@ Select input-influenced arithmetic/assertion sites before constructing cases, th
 
 **Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain and source-selected sites plus a fixed build/controller protocol; arithmetic presence alone is not defect evidence.
 
-### 10. RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs
+### 11. RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs
 
 **Target:** Two valid term families, six sizes and two supported implementations
 
@@ -122,7 +139,7 @@ Measure fixed time/memory envelopes with stop-at-first-limit per family/implemen
 
 **Boundary:** PLANNED: PLANNED: bind valid families, comparable supported fragments, reliable resource measurement, memory limits and cleanup in a staged protocol; the fixed samples establish no asymptotic theorem.
 
-### 27. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
+### 28. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
 **Target:** Arena tutorial/012_nonPropThm and retained publication-study theorem control
 
@@ -138,7 +155,7 @@ Compare existing accepts and asymmetric over-rejection risk; package existing by
 
 **Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a scoped work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process observations before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
 
-### 46. CVC-4: Connect the contract to real validation behavior
+### 47. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -154,7 +171,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; the fixed new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 47. CVC-5: Prepare shared evidence and decide the next phase
+### 48. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -170,7 +187,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 65. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
+### 66. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
 
 **Target:** One owner-designated curator/dataset package or provider-supplied functioning checker profile
 
@@ -227,6 +244,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1. Selected next item: STATEFUL-VALIDATION-PILOT-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1. Selected next item: LAZY-REDUCTION-CONFORMANCE-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.
