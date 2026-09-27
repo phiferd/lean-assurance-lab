@@ -2,8 +2,8 @@
   "schema_version": 4,
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
-  "updated_at": "2026-09-23",
-  "selected_item": "STATEFUL-VALIDATION-PILOT-1",
+  "updated_at": "2026-09-27",
+  "selected_item": "WORKFLOW-CLOSURE-AUTOMATION-1",
   "execution_policy": {
     "engineering_failures": "REPAIR_AND_CONTINUE",
     "attempt_caps": "NONE",
@@ -3217,6 +3217,34 @@
         "recommendation": "Use the revised local patch and PR draft as the Kiota submission candidate; exact human authorization is still required. Refresh target state if stale before submitting. Resume TRUST-ASSUMPTION-PIPELINE-PILOT-1 READY and unstarted for source/reuse and protocol binding."
       },
       "blocked_reason": ""
+    },
+    {
+      "id": "WORKFLOW-CLOSURE-AUTOMATION-1",
+      "priority": 73,
+      "title": "Automate exact closure gates and compare one independent observer",
+      "target": "Current repository closure flow and one source-pinned independent semantic observer candidate",
+      "action": "Implement capability preflight, exact committed-byte inventories and validation-before-generation closure control; compare one independent observer with the stateful pilot without launching either experiment.",
+      "expected_value": "Prevent late false closure and invalidated derived outputs, while making the next semantic-coverage choice evidence-bound.",
+      "rank_rationale": "The owner selected this small cross-project closure repair before an expensive stateful launch. Existing late host capability failure and repeated refresh receipts provide concrete regressions; a bounded observer comparison can prevent an ill-chosen experiment. STATEFUL remains READY but unstarted.",
+      "entry_gate": "ACTIVE under docs/research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md and work-record.json from clean main 27714a7. Engineering/source-only scope; no scientific launch.",
+      "completion": "Passing failure/success regressions, actual-host capability result, committed-byte inventory, one complete current/historical suite, immutable validation receipt, dependency-ordered refresh and freshness checks, plus source-pinned observer decision and project-wide successor review.",
+      "stop_condition": "Finish the bounded engineering/source comparison with exact evidence and select but do not start the successor. Ordinary failures are repaired inside the item; no count cap, external write, scientific launch, frozen edit or assurance-gate change.",
+      "kind": "IMPLEMENTATION",
+      "status": "ACTIVE",
+      "depends_on": [],
+      "budget": null,
+      "evidence_refs": [
+        "docs/research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md",
+        "results/research/workflow-closure-automation-1/work-record.json",
+        "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
+        "docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md",
+        "docs/RESEARCH_WORKFLOW.md",
+        "scripts/refresh-current-state",
+        "results/research/queue-reviews/2026-09-23-trust-assumption-pipeline-pilot-1-closure.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
     }
   ],
   "handoff": {
@@ -3226,7 +3254,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-23-trust-assumption-pipeline-pilot-1-closure.json",
-    "sha256": "cb8159b3e23e9af72715518e26922a2a99c9f2ea0db9a06c57a8ee44317bd638"
+    "path": "results/research/queue-reviews/2026-09-27-workflow-closure-automation-1-entry.json",
+    "sha256": "5f223b9ec3fd6e9e01fa04ce48f9ea0ee8a787758c3774ced63d69712e8e981c"
   }
 }

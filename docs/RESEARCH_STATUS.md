@@ -3071,9 +3071,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `STATEFUL-VALIDATION-PILOT-1`.
+Selected next item: `WORKFLOW-CLOSURE-AUTOMATION-1`.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue has one ACTIVE engineering successor; `STATEFUL-VALIDATION-PILOT-1` remains READY and unstarted. The [scoped plan](research/WORKFLOW_CLOSURE_AUTOMATION_1_PLAN.md) binds an actual-host closure preflight, exact committed-byte inventories, validation-before-generation ordering, and one source-only independent-observer comparison. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent substantive feedback; the ledger observations are dated and are not refreshed here.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
