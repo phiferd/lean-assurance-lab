@@ -112,7 +112,12 @@ def classify(receipt,stdout,stderr,case,line_number):
     if (receipt['exit_code']==1 and not stdout and len(loaded)==1 and loaded[0] and int(loaded[0][1])==1
         and len(failures)==1 and failures[0].startswith(prefix)
         and all(x.startswith(('loaded ',prefix,'  inferred: ','  declared: ')) for x in lines)):
-        return dict(verdict='SEMANTIC_REJECT',diagnostic=failures[0])
+        diagnostic=failures[0][len(prefix):]
+        if any(x in diagnostic.lower() for x in ['timeout','maximum recursion depth','deep recursion','memory','resource']):
+            return dict(verdict='RESOURCE_LIMIT',diagnostic=failures[0])
+        if diagnostic==f"declaration type mismatch for '{case['declaration_name']}'":
+            return dict(verdict='SEMANTIC_REJECT',diagnostic=failures[0])
+        return dict(verdict='INTERNAL_OR_UNKNOWN_FAILURE',diagnostic=failures[0])
     return observation
 
 def demand(observation,stderr,engine,case):

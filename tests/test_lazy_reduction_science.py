@@ -45,8 +45,12 @@ class IndependentAuditTests(unittest.TestCase):
         from lib.lazy_reduction_science import classify
         case=c.templates()[0]
         receipt=dict(exit_code=1,memory_monitor_samples=1,maximum_observed_rss_bytes=1024,cleanup_complete=True,timed_out=False,memory_exceeded=False,memory_monitor_error=None)
-        raw=b'loaded 1 declarations, 7 exprs (8 unique), 2 names in 0.01s\nFAIL LAL_lazy_beta (line 20): type mismatch for LAL_lazy_beta\n  inferred: Sort 1\n  declared: Sort 2\n'
+        raw=b"loaded 1 declarations, 7 exprs (8 unique), 2 names in 0.01s\nFAIL LAL_lazy_beta (line 20): declaration type mismatch for 'LAL_lazy_beta'\n  inferred: Sort 1\n  declared: Sort 2\n"
         self.assertEqual(classify(receipt,b'',raw,case,20)['verdict'],'SEMANTIC_REJECT')
         self.assertNotEqual(classify(receipt,b'',raw+b'error: later failure\n',case,20)['verdict'],'SEMANTIC_REJECT')
+        timed=raw.replace(b"declaration type mismatch for 'LAL_lazy_beta'",b'(kernel) deterministic timeout in whnf/lazy delta')
+        self.assertEqual(classify(receipt,b'',timed,case,20)['verdict'],'RESOURCE_LIMIT')
+        internal=raw.replace(b"declaration type mismatch for 'LAL_lazy_beta'",b'unreachable bvar')
+        self.assertEqual(classify(receipt,b'',internal,case,20)['verdict'],'INTERNAL_OR_UNKNOWN_FAILURE')
 
 if __name__=='__main__': unittest.main()
