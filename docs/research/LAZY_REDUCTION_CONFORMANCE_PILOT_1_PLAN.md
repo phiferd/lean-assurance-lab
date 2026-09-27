@@ -1,6 +1,6 @@
 # Lazy reduction conformance pilot 1
 
-Status: READY, unstarted preparation. Frontier: `F-DISCOVERY-AND-CONFORMANCE`.
+Status: ACTIVE, staged preparation began 2026-09-27. Frontier: `F-DISCOVERY-AND-CONFORMANCE`.
 Selected by the 2026-09-27 closure comparison in
 `results/research/workflow-closure-automation-1/observer-comparison/report.md`.
 No scientific launch or build is authorized by this selection alone.

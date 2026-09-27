@@ -1,0 +1,31 @@
+#!/usr/bin/env python3
+"""Generate the scoped prospective lazy-pilot entry review from committed policy."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.research_queue_v4 import queue_digest
+q = json.loads((ROOT / 'config/research-queue.json').read_text())
+lazy = 'LAZY-REDUCTION-CONFORMANCE-PILOT-1'
+stateful = 'STATEFUL-VALIDATION-PILOT-1'
+paths = ['CONSTITUTION.md', 'docs/RESEARCH_WORKFLOW.md', q['plan'],
+         'docs/research/LAZY_REDUCTION_CONFORMANCE_PILOT_1_PLAN.md',
+         'docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md',
+         'results/research/lazy-reduction-conformance-pilot-1/work-record.json',
+         'results/research/workflow-closure-automation-1/observer-comparison/report.md']
+assessments = {
+ 'METHODS_AND_FRONTIERS': 'The pinned distinct reduction paths and reusable bounded typing rules support a smaller decisive conformance study; STATEFUL remains a feasible distinct session-history comparison.',
+ 'UNRESOLVED_AND_SHARED_ASSETS': 'The observer adapter and six independently audited demand cases will add a reusable local regression package. Prior disagreements and historical scope remain unchanged.',
+ 'MAINTENANCE_AND_UPSTREAM': 'Owner holds Kiota/Nanoda follow-up absent substantive feedback; dated observations are not refreshed. No upstream action or current defect is presumed.',
+ 'LITERATURE_AND_REUSE': 'The source-pinned 2026-09-27 observer/reuse comparison is current; reuse existing positive-fragment auditor and process controls and build the missing adapter only.',
+ 'LOCAL_BLOCKER_REMOVAL': 'Exact nonsemantic Darwin patch, dependency lock, controlled build, capability pair, independently reviewed derivations and committed manifests remove local gates inside this item.'}
+review = dict(schema_version=1, scope='PROJECT_WIDE', phase='ENTRY', reviewed_at=q['updated_at'],
+ stopped_item=None, selected_item=lazy, queue_sha256=queue_digest(q),
+ decision='Activate the selected fixed lazy-reduction pilot through its staged gates. STATEFUL remains READY, with no successor work started.',
+ categories=[dict(category=k, assessment=v, candidate_ids=[lazy,stateful]) for k,v in assessments.items()],
+ candidates=[dict(item_id=lazy, disposition='FEASIBLE', rationale=assessments['LOCAL_BLOCKER_REMOVAL'], evidence_refs=[paths[3],paths[5],paths[6]], blockers=[]),
+             dict(item_id=stateful, disposition='FEASIBLE', rationale='Supported API/source preparation remains authorized but unstarted; lazy has the more concrete pinned reduction seam.', evidence_refs=[paths[4]], blockers=[])],
+ evidence_bindings=[dict(path=p,sha256=hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in paths])
+print(json.dumps(review,indent=2))

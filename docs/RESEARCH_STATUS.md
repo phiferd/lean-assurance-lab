@@ -3334,8 +3334,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items and no ACTIVE item:
-`LAZY-REDUCTION-CONFORMANCE-PILOT-1` is selected and unstarted for pinned
+The canonical queue retains one READY item and one ACTIVE item:
+`LAZY-REDUCTION-CONFORMANCE-PILOT-1` is selected and ACTIVE for pinned
 source/build/adapter preparation; `STATEFUL-VALIDATION-PILOT-1` remains a READY
 alternative for supported public API/source-contract preparation. Both
 experiments remain behind their exact scientific and launch gates.

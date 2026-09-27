@@ -1,0 +1,50 @@
+--- a/src/kam.cpp
++++ b/src/kam.cpp
+@@ -25,7 +25,11 @@
+ int g_memo = getenv("LL_MEMO") ? atoi(getenv("LL_MEMO")) : 1;   // default on; LL_MEMO=0 / --no-memo to disable
+ u64 g_k_app = 0, g_k_bvar = 0, g_k_beta = 0, g_k_let = 0, g_k_delta = 0, g_k_iota = 0, g_k_proj = 0, g_k_projk = 0, g_k_reck = 0, g_k_natk = 0, g_k_enter_val = 0, g_k_enter_delayed = 0, g_k_reeval = 0;
+ u64 g_nat_ops = 0, g_nat_cycles = 0, g_nat_limbs = 0, g_natlit_cycles = 0;
++#if defined(__i386__) || defined(__x86_64__)
+ static inline u64 rdtsc_() { unsigned lo, hi; __asm__ __volatile__("rdtsc" : "=a"(lo), "=d"(hi)); return ((u64)hi << 32) | lo; }
++#else
++static inline u64 rdtsc_() { return 0; } // profiling only; cycles unavailable
++#endif
+ 
+ int g_engine = 1;
+ extern bool g_trace_steps;
+--- a/src/main.cpp
++++ b/src/main.cpp
+@@ -11,7 +11,9 @@
+ #include <fstream>
+ #include <sys/resource.h>
+ #include <cstdlib>
++#ifdef __linux__
+ #include <malloc.h>
++#endif
+ #include <sys/mman.h>
+ #include <sys/wait.h>
+ #include <unistd.h>
+@@ -320,7 +322,10 @@
+       }
+       // A failed declaration may have left a lot of capacity behind: give it back, so that the
+       // resident-set limit does not keep tripping on the declarations that follow.
+-      g_lctx.decls.clear(); g_exprs->trim(); kam_pools_trim(); malloc_trim(0);
++      g_lctx.decls.clear(); g_exprs->trim(); kam_pools_trim();
++#ifdef __linux__
++      malloc_trim(0);
++#endif
+       // add unchecked so later declarations can proceed
+       for (auto c : d.consts) if (!env.contains(c.name)) env.add(c);
+     }
+--- a/src/name.cpp
++++ b/src/name.cpp
+@@ -13,7 +13,9 @@
+   if (off || bytes < 4 * huge || !p) return;
+   uintptr_t b = ((uintptr_t)p + huge - 1) & ~(uintptr_t)(huge - 1);
+   uintptr_t e = ((uintptr_t)p + bytes) & ~(uintptr_t)(huge - 1);
++#ifdef MADV_HUGEPAGE
+   if (e > b) madvise((void*)b, e - b, MADV_HUGEPAGE);
++#endif
+ }
+ Names N;
+ 
