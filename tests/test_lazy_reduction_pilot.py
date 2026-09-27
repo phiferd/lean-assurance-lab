@@ -1,9 +1,9 @@
 import unittest
-from lib.lazy_reduction_pilot import classify
+from lib.lazy_reduction_pilot import classify, load, SOURCE_LOCK, PATCHES, ROOT, digest
 
 class AdapterTests(unittest.TestCase):
     def setUp(self):
-        self.receipt=dict(exit_code=0,memory_monitor_samples=1,maximum_observed_rss_bytes=1024,cleanup_complete=True)
+        self.receipt=dict(exit_code=0,memory_monitor_samples=1,maximum_observed_rss_bytes=1024,cleanup_complete=True,timed_out=False,memory_exceeded=False,memory_monitor_error=None)
         self.output=b'loaded 1 declarations, 7 exprs (8 unique), 2 names in 0.01s\nchecked 1 declarations, 0 failed, 0 added unchecked, in 0.01s; 2 reduction steps; 8 exprs live\nmachine: app 1, bvar 1, beta 1, let 0, delta 0, iota 0, proj 0, enter value/delayed/re-eval 1/0/0, memo hit/insert 0/0\n'
     def test_accept_and_machine(self):
         result=classify(self.receipt,b'',self.output,1)
@@ -21,11 +21,31 @@ class AdapterTests(unittest.TestCase):
         self.assertEqual(classify(r,b'',output,1,failure)['verdict'],'INTENDED_REJECT')
         self.assertNotEqual(classify(r,b'',output,1,'other')['verdict'],'INTENDED_REJECT')
         self.assertNotEqual(classify(r,b'',failure.encode(),1,failure)['verdict'],'INTENDED_REJECT')
+        for bad in [output+b'error: later process error\n',output+self.output.split(b'checked')[1],output+failure.encode()+b'\n']:
+            self.assertNotEqual(classify(r,b'',bad,1,failure)['verdict'],'INTENDED_REJECT')
+        self.assertEqual(classify(self.receipt,b'',output,1,failure)['verdict'],'OUTPUT_CONTRACT_FAILURE')
     def test_resource_and_cleanup_fail_closed(self):
         for updates in [dict(timed_out=True),dict(memory_exceeded=True),dict(cleanup_complete=False),dict(memory_monitor_samples=0)]:
             self.assertEqual(classify({**self.receipt,**updates},b'',self.output,1)['verdict'],'PROCESS_CONTROL_FAILURE')
+    def test_missing_receipt_fields_fail_closed(self):
+        for key in self.receipt:
+            bad=dict(self.receipt); del bad[key]
+            self.assertEqual(classify(bad,b'',self.output,1)['verdict'],'PROCESS_CONTROL_FAILURE')
     def test_signal_and_parse_not_reject(self):
         self.assertEqual(classify({**self.receipt,'exit_code':-9},b'',b'',1)['verdict'],'PROCESS_FAILURE')
         self.assertNotEqual(classify({**self.receipt,'exit_code':1},b'',b'error: invalid JSON\n',1)['verdict'],'INTENDED_REJECT')
+
+    def test_pinned_source_inventory_and_patch_anchors(self):
+        rows=load(SOURCE_LOCK)['source_entries']
+        self.assertEqual(len(rows),24)
+        changed=[]
+        for row in rows:
+            self.assertEqual(digest(ROOT/row['path']),row['sha256'])
+            content=(ROOT/row['path']).read_text()
+            for old,new in PATCHES.get(row['repository_path'],[]):
+                self.assertEqual(content.count(old),1)
+                content=content.replace(old,new)
+                changed.append(row['repository_path'])
+        self.assertEqual(sorted(set(changed)),['src/kam.cpp','src/main.cpp','src/name.cpp'])
 
 if __name__=='__main__': unittest.main()

@@ -79,6 +79,12 @@ def require_committed(rows):
         if not Path(row['path']).is_absolute(): committed(ROOT,row['path'])
 
 def safe(receipt):
+    for field in ['timed_out','memory_exceeded','cleanup_complete']:
+        if type(receipt.get(field)) is not bool: raise ValueError('missing/malformed process safety field')
+    for field in ['exit_code','memory_monitor_samples','maximum_observed_rss_bytes']:
+        if type(receipt.get(field)) is not int: raise ValueError('missing/malformed process numeric field')
+    if 'memory_monitor_error' not in receipt or (receipt['memory_monitor_error'] is not None and not isinstance(receipt['memory_monitor_error'],str)):
+        raise ValueError('missing/malformed monitor error field')
     if receipt.get('memory_monitor_error') or not receipt.get('cleanup_complete'):
         raise ValueError('process observation/cleanup failure; repair before another launch')
     if receipt.get('timed_out') or receipt.get('memory_exceeded'):
@@ -128,6 +134,10 @@ def freeze_build():
     active(); source=prepare()
     review=load(BASE/'portability-review-r1.json')
     if review['verdict']!='PASS' or review['patch']!=source['patch']: raise ValueError('exact patch review missing')
+    require_committed([bind(BASE/'source-r1.json'),bind(BASE/'portability-r1.patch'),
+                       bind(BASE/'portability-review-r1.json'),bind(SOURCE_LOCK),*tooling(),
+                       bind(Path('config/research-queue.json')),bind(Path('docs/RESEARCH_STATUS.md')),
+                       bind(BASE/'work-record.json')])
     compiler=Path(subprocess.check_output(['/usr/bin/xcrun','--find','clang++'],text=True).strip()).resolve()
     sdk=Path(subprocess.check_output(['/usr/bin/xcrun','--show-sdk-path'],text=True).strip()).resolve()
     gmp=Path('/opt/homebrew/opt/gmp').resolve()
@@ -164,16 +174,23 @@ def build(attempt):
     active(); m=load(BASE/'build-manifest-r1.json')
     require_committed([bind(BASE/'build-manifest-r1.json'),m['source'],m['patch_review'],*m['tooling']])
     for row in m['dependencies']: verify(row)
+    require_committed(m['scan_receipts'])
+    for row in m['scan_receipts']:
+        scan=load(Path(row['path'])); safe(scan); raw(scan)
+        if scan['exit_code']!=0: raise ValueError('dependency scan not successful')
     for row in load(BASE/'source-r1.json')['files']: verify(row)
+    if (ROOT/BINARY).exists(): raise ValueError('build output already exists; refuse stale binary')
     out=BASE/attempt
     if (ROOT/out).exists(): raise ValueError('attempt exists')
     (ROOT/out).mkdir()
     receipt=run_supervised(argv=m['argv'],cwd=ROOT,stdin=None,env=m['environment'],timeout_seconds=m['timeout_seconds'],memory_bytes=m['memory_bytes'],raw_prefix=ROOT/out/'build')
     result=dict(item_id=ITEM,manifest=bind(BASE/'build-manifest-r1.json'),receipt=receipt)
-    if receipt['exit_code']==0 and (ROOT/BINARY).is_file(): result['binary']=bind(BINARY)
+    if receipt['exit_code']==0 and (ROOT/BINARY).is_file() and os.access(ROOT/BINARY,os.X_OK): result['binary']=bind(BINARY)
     write_new(out/'result.json',result)
     safe(receipt)
     if receipt['exit_code']!=0: raise ValueError('build failure preserved; repair')
+    if 'binary' not in result: raise ValueError('compiler reported success without a new executable')
+    for row in m['dependencies']: verify(row)
     return result
 
 MACHINE=re.compile(r'machine: app (\d+), bvar (\d+), beta (\d+), let (\d+), delta (\d+), iota (\d+), proj (\d+), enter value/delayed/re-eval (\d+)/(\d+)/(\d+), memo hit/insert (\d+)/(\d+)')
@@ -185,16 +202,23 @@ def classify(receipt,stdout,stderr,expected_declarations,expected_rejection=None
     except ValueError as e: return dict(verdict='PROCESS_CONTROL_FAILURE',reason=str(e))
     if receipt['exit_code']<0: return dict(verdict='PROCESS_FAILURE')
     if stdout: return dict(verdict='OUTPUT_CONTRACT_FAILURE')
-    lines=stderr.decode('utf-8',errors='strict').splitlines()
+    try: lines=stderr.decode('utf-8',errors='strict').splitlines()
+    except UnicodeError: return dict(verdict='OUTPUT_CONTRACT_FAILURE')
     loaded=[LOADED.fullmatch(x) for x in lines if x.startswith('loaded ')]
     if len(loaded)!=1 or not loaded[0] or int(loaded[0][1])!=expected_declarations:
-        return dict(verdict='PARSER_OR_OUTPUT_FAILURE')
+        return dict(verdict='PARSER_FAILURE' if receipt['exit_code']==1 and any('json' in x.lower() for x in lines) else 'OUTPUT_CONTRACT_FAILURE')
     fail=[x for x in lines if x.startswith('FAIL ')]
+    if any(x.startswith(('error:','skip ','unknown option')) for x in lines):
+        return dict(verdict='PROCESS_FAILURE' if receipt['exit_code']!=0 else 'OUTPUT_CONTRACT_FAILURE')
     if fail:
+        if receipt['exit_code']!=1 or len(fail)!=1 or any(x.startswith(('checked ','machine:')) for x in lines):
+            return dict(verdict='OUTPUT_CONTRACT_FAILURE')
+        if any(not (x.startswith(('loaded ','FAIL ','  exported: ','  derived:  '))) for x in lines):
+            return dict(verdict='OUTPUT_CONTRACT_FAILURE')
         if receipt['exit_code']==1 and len(fail)==1 and expected_rejection and fail[0]==expected_rejection:
             return dict(verdict='INTENDED_REJECT',diagnostic=fail[0])
         return dict(verdict='SEMANTIC_REJECTION_OTHER',diagnostics=fail)
-    if receipt['exit_code']!=0: return dict(verdict='PROCESS_OR_PARSE_FAILURE')
+    if receipt['exit_code']!=0: return dict(verdict='PROCESS_FAILURE')
     checked=[CHECKED.fullmatch(x) for x in lines if x.startswith('checked ')]
     machines=[MACHINE.fullmatch(x) for x in lines if x.startswith('machine: ')]
     if len(checked)!=1 or not checked[0] or [int(checked[0][i]) for i in [1,2,3]]!=[expected_declarations,0,0] or len(machines)!=1 or not machines[0]:
