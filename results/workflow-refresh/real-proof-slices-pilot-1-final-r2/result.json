@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "status": "FAILED",
+  "completed_steps": [
+    "host-rss-preflight",
+    "committed-input-inventory",
+    "status-queue-readiness-preflight",
+    "full-current-historical-suite",
+    "sealed-validation-record",
+    "dependency-ordered-refresh",
+    "scripts/validate-research-queue --require-ready",
+    "scripts/build-external-contributions --check",
+    "scripts/build-project-review --check",
+    "scripts/artifact-status --require-current",
+    "git diff --check"
+  ],
+  "status_preflight_returncode": 0,
+  "full_suite_returncode": 0,
+  "refresh_returncode": 0,
+  "error": "declared input differs from committed bytes: results/research/project-review.json"
+}
