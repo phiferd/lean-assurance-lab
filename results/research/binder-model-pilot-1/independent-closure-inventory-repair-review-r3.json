@@ -1,0 +1,170 @@
+{
+  "schema": "binder-model-independent-review-v1",
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "CLOSURE_INVENTORY_REPAIR_R3",
+  "reviewed_at": "2026-09-28T19:34:52.378449+00:00",
+  "reviewer": "independent binder_review agent",
+  "plain_language": {
+    "what_did_we_find": "The second closure run finished with one failing test among 1,539 current tests because it still expected 14 registered evidence families. There are 15, including the already registered binder pilot. Its 73 historical and 9 additional tests passed. No science changed.",
+    "is_it_interesting": "No new scientific result follows. The test expectation was stale; the evidence registry and portable replay were already correct. The finite 30,000-output binder agreement remains unchanged.",
+    "does_it_require_more_work": "Commit the narrow 14-to-15 test repair and revised scope, then run a fresh full closure attempt. Keep both failed attempts. No next-item execution or external action follows."
+  },
+  "verdict": "PASS_FOR_NEW_CLOSURE_ATTEMPT_AFTER_COMMIT",
+  "findings": {
+    "diagnosis": "Independent discover/validate found exactly 15 registered families,353 receipt files,406 receipt objects and 780 raw streams. Binder contributes 44 files containing 46 receipt objects. No workflow-refresh output entered discovery, which still scans results/research only.",
+    "repair": "Only expected family count changed 14 to 15 in the inventory test. Exact family-ID equality, sorted registry uniqueness, every path digest/count, frozen baseline membership, mandatory replay/foreign-checkout registration and raw-stream checks remain unchanged.",
+    "negative_controls": "The focused tests still reject an unregistered family, a newly registered family without portability coverage, and changed raw bytes. Foreign-checkout binder replay copies actual evidence, rejects production-checkout reads and reports zero launches, then rejects raw-output tampering.",
+    "failure_custody": "Terminal R 2 FAILED has returncode 1 after full driver completion. Log records 1539 current tests/onefailure,73 historicalPASS and 9 additionalPASS. No validation seal or refresh followed. Input inventory, host preflight, all four supervisor fixtures/receipts/streams, failed log/result and repair record are retained.",
+    "scope": "R3 contains 359 sorted unique declared inputs plus automatically added scope=360 files. It preserves all R2 scope inputs and adds R2 scope, this review, complete failed evidence and exact changed test. Generated project-review views stay outside immutable input inventory and require final freshness checks.",
+    "remaining": "Commit exact repair/scope/review before a fresh workflow-refresh output attempt. Full successful current/historical suite, ordered refresh/freshness and verified main delivery remain pending."
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=.:tests python3 -m unittest test_evidence_replay_inventory test_evidence_replay_portability.EvidenceReplayPortabilityTests.test_binder_model_replay_without_original_checkout_or_host_tools",
+      "result": "PASS,4tests independently rerun"
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "result": "PASS"
+    },
+    {
+      "command": "Independent discovery and registration/raw-custody validation",
+      "result": "PASS,15families/353files/406receipts/780streams"
+    },
+    {
+      "command": "lib.closure_controls._scope plus input-set comparison",
+      "result": "PASS,360inventory paths and no prior input removed"
+    },
+    {
+      "command": "scripts/check-portable-evidence-replay",
+      "result": "PASS independently rerun; complete registry/raw custody plus 10 portable replay tests"
+    }
+  ],
+  "reviewed_paths": [
+    {
+      "path": "results/research/binder-model-pilot-1/closure-scope-2026-09-28-r3.json",
+      "bytes": 30583,
+      "sha256": "f469c0a4a745fb189f032ccc2a88b37b217814e1e7d22b234e7c5e13ca145ae6"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/closure-scope-2026-09-28-r2.json",
+      "bytes": 28670,
+      "sha256": "c840cabe8e296b81a955e82fea1c9a63b30cb3a5948da46c2db8ffcac567fe64"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/independent-closure-preflight-repair-review-r2.json",
+      "bytes": 5367,
+      "sha256": "a71f955680cf19d374e9863856a9b7037790732742e53b8de3cfe831a97e5d58"
+    },
+    {
+      "path": "tests/test_evidence_replay_inventory.py",
+      "bytes": 2832,
+      "sha256": "f1f47c917f918b23cc5adab886d4f65c4d87a48685c929fbcccc57e58053303d"
+    },
+    {
+      "path": "tests/test_evidence_replay_portability.py",
+      "bytes": 9926,
+      "sha256": "ad4c25b5bd3ac4c1edd5e07ba5397ed82eec98eb4f4c5db5d82598ffccd027eb"
+    },
+    {
+      "path": "lib/evidence_replay_portability.py",
+      "bytes": 8780,
+      "sha256": "ce3b8a3a692fc82f3dd5a7ac35a0f28dfeff9399a5bc0783c4bd4e30e6b405a8"
+    },
+    {
+      "path": "config/evidence-replay-portability.json",
+      "bytes": 6115,
+      "sha256": "9b066524f72dd2d7b50a4dba113073e93f6b74f8035bc378a8e5382f1b9bc2c6"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/full-suite.log",
+      "bytes": 204910,
+      "sha256": "dfee49c4f98fae38550a70c4f1ee9732b393f4b1b663930e913bf62f8d81e28a"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/input-inventory.json",
+      "bytes": 92897,
+      "sha256": "a563d67592304eecd2dfe0fdb49cbb893a871134bd383f5717816c4892e1488b"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/preflight.json",
+      "bytes": 122,
+      "sha256": "b21ba5b85c304d1d164dd15d708eef920eba1160139d36a823eb6b3047e9933a"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/repair-r2.json",
+      "bytes": 2308,
+      "sha256": "8295932836634a31099b5fd3fbb14a942aced35759fdb2da378cd18d74e1b1bd"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/result.json",
+      "bytes": 369,
+      "sha256": "f20c1abf40ead347cd810b52a6bc27ed263f85e9f0c5be9ae1c65703e56c1a98"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/status-preflight.log",
+      "bytes": 104,
+      "sha256": "91c701e2ef81ee719dd3b26dd12b098bc5f5f13af460800d0ae4a81073bc8383"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/memory.receipt.json",
+      "bytes": 1444,
+      "sha256": "a560d7c153c099f0da660afd556d4906375e1a6150b8c5d808c72f99f7adc0ab"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/memory.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/memory.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/nonzero.receipt.json",
+      "bytes": 1361,
+      "sha256": "22465c7f0d50aa5270b6f01a9604100e493ace90413a385db2fdaefcf6aea27e"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/nonzero.stderr",
+      "bytes": 8,
+      "sha256": "f275e78f584f2487c39b2c6dd94cd8e5403e7b39a685c89469f0c94ac448f92e"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/nonzero.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/normal.with.dots.receipt.json",
+      "bytes": 1384,
+      "sha256": "d4c1f4b31efc52c8dbac2a3e117c0fa3e24df614a3b348c079d9d6fa6502ffac"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/normal.with.dots.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/normal.with.dots.stdout",
+      "bytes": 14,
+      "sha256": "be4e6d9f59f595dfb16e765ea2adb6edb2bea6c24b39c57d414d40d2182f0be2"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/timeout.receipt.json",
+      "bytes": 1417,
+      "sha256": "7472ad2512e1d561337b456093dfb89619a69c2f8f4baa9dafd4bd2d913c487d"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/timeout.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts/timeout.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  ]
+}

@@ -1,0 +1,43 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "attempt": "binder-model-pilot-1-final-2",
+  "classification": "FULL_SUITE_PORTABILITY_INVENTORY_ASSERTION_REPAIR",
+  "preflight_and_inventory": "PASS; actual-host RSS capability, exact committed R2 input inventory, and status/queue preflight passed.",
+  "full_suite": {
+    "status": "FAILED",
+    "current_suite_tests": 1539,
+    "failure_count": 1,
+    "historical_suite_tests": 73,
+    "historical_suite_status": "PASS",
+    "additional_registered_replay_tests": 9,
+    "additional_registered_replay_status": "PASS",
+    "failure": "tests/test_evidence_replay_inventory.py::EvidenceReplayInventoryTests::test_repository_receipts_and_registered_replay_tests_are_current expected 14 process families; current exact inventory and registry contain 15, including the already registered binder-model-pilot-1 family.",
+    "inventory_metrics": {
+      "families": 15,
+      "receipt_files": 353,
+      "receipts": 406,
+      "raw_streams": 780,
+      "binder_model_receipt_files": 44
+    },
+    "refresh_started": false
+  },
+  "repair": {
+    "change": "Updated only the explicit expected family count in tests/test_evidence_replay_inventory.py from 14 to 15. Preserved the exact-count assertion, registry, family/path digests, and registration/replay requirements.",
+    "focused_checks": [
+      "python3 -m unittest discover -s tests -p 'test_evidence_replay_inventory.py'; PASS, 3 tests",
+      "python3 -m unittest discover -s tests -p 'test_evidence_replay_portability.py'; PASS, 10 tests including foreign-checkout binder replay",
+      "scripts/check-portable-evidence-replay; PASS (15 families, 353 receipt files, 406 receipts, 780 raw streams)"
+    ],
+    "scientific_inputs_changed": false,
+    "observers_launched": false
+  },
+  "preserved_attempt_outputs": [
+    "results/workflow-refresh/binder-model-pilot-1-final-2/preflight.json",
+    "results/workflow-refresh/binder-model-pilot-1-final-2/input-inventory.json",
+    "results/workflow-refresh/binder-model-pilot-1-final-2/status-preflight.log",
+    "results/workflow-refresh/binder-model-pilot-1-final-2/full-suite.log",
+    "results/workflow-refresh/binder-model-pilot-1-final-2/result.json",
+    "results/workflow-refresh/binder-model-pilot-1-final-2/supervisor-receipts"
+  ]
+}
