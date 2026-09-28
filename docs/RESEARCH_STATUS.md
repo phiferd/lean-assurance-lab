@@ -58,6 +58,19 @@ research directions.
 
 ## Attempted
 
+- `BINDER-MODEL-PILOT-1` completes its fixed finite syntactic comparison.
+  **What did we find?** Two selected APIs matched the independent
+  named-variable model on all 10,000 rows and 30,000 stage outputs; the corpus
+  has 5,091 distinct structural inputs and 2,000 capture-collision cases. It
+  did not test typed Lean programs/proofs, other APIs, whole-kernel correctness
+  or performance. **Is it interesting?** Yes, as a reusable local regression
+  corpus with independently checked expectations; this finite agreement is not
+  a correctness proof. **Does it require more work?** Retain the model, auditor,
+  vectors and portable replay; no external action follows. The separate
+  `RESOURCE-ENVELOPE-PILOT-1` question is selected READY and unstarted for
+  source, validity and measurement preparation only. See the
+  [report](../results/research/binder-model-pilot-1/report.md).
+
 - `REAL-PROOF-SLICES-PILOT-1` completes its fixed 2026-09-28 scientific
   question with SUCCESS, subject to its required final repository
   validation/refresh receipt. Twelve exact declarations from three retained
@@ -3127,7 +3140,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `BINDER-MODEL-PILOT-1`.
+Selected next item: `RESOURCE-ENVELOPE-PILOT-1`.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3143,12 +3156,16 @@ REAL-PROOF-SLICES completed twelve fixed dispositions, including nine accepted
 slices and three oversize `std` selections. Its provenance-preserving slicer
 and independent auditor remain local assets under the exact
 [report](../results/research/real-proof-slices-pilot-1/report.md).
-BINDER-MODEL is ACTIVE for staged source/reuse and supported API/fragment
-preparation under its [plan](research/BINDER_MODEL_PILOT_1_PLAN.md). Its exact
-scientific vectors and observers remain gated on frozen source/API/model inputs
-and independent translation audit. The 2026-09-27
-owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
-ledger observations remain dated.
+BINDER-MODEL completed its exact finite comparison: both selected APIs matched
+on 30,000 outputs across 10,000 rows. The scoped plain-language finding,
+limits, and retained local assets are in its [report](../results/research/binder-model-pilot-1/report.md).
+RESOURCE-ENVELOPE is READY and unstarted for preparation only under its
+[plan](research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md). It retains two families,
+six sizes and two observers, with independent validity, comparable checking,
+startup/import baselines, sampled-RSS uncertainty and cleanup as pre-freeze
+and pre-launch gates. The binder operation RSS/time values are not comparable
+profiles. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent
+substantive feedback; ledger observations remain dated.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3262,9 +3279,9 @@ no external action is recommended now.
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
-| 9 | `BINDER-MODEL-PILOT-1` | ACTIVE, staged source/API/fragment preparation |
-| 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
-| 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
+| 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
+| 10 | `RESOURCE-ENVELOPE-PILOT-1` | READY, preparation only; unstarted |
+| 11 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
@@ -3412,10 +3429,13 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item: `BINDER-MODEL-PILOT-1` is under staged
-source/reuse and supported API/fragment preparation. Its exact scientific vectors,
-named-variable model and observers remain gated on source/API bindings, fragment
-selection and independent translation audit.
+The canonical queue has no ACTIVE item and selects `RESOURCE-ENVELOPE-PILOT-1`
+READY and unstarted for source, validity and measurement preparation only. The
+binder-model result is COMPLETE with 30,000 scoped outputs matched; its model,
+auditor, vectors and portable replay remain local regression assets. Resource
+work remains gated on independent input validity, two comparable observers,
+startup/import baseline accounting, sampled-RSS uncertainty and nonterminal
+process controls before freeze or launch.
 The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
 demand requirements. The stateful pilot is complete with six preserved public
 kernel API relations, twelve histories and 25 requests; its R4 custody repair
@@ -3439,8 +3459,12 @@ completed assumption-reporting item retains twelve exact matched cells and
 its negative permission comparison. The completed real-proof slice item
 retains twelve fixed dispositions: nine accepted slices, three visible
 oversize cases, and no observed compatibility difference or fresh-holdout
-claim. The binder-model item must pass its exact fragment, source/reuse, independent-audit
-and execution gates before vector construction or observer launch.
+claim. The binder-model item's exact fragment, source/reuse, independent-audit
+and execution gates passed before its vectors and observers were run; retain
+its bounded corpus and portable replay locally. The selected resource-envelope
+successor remains unstarted and must establish independent validity,
+comparable profiles, startup/import baselines and sampled-RSS uncertainty before
+freezing or launching its fixed matrix.
 
 ### Waiting
 

@@ -20,65 +20,32 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **BINDER-MODEL-PILOT-1**.
+Selected next item: **RESOURCE-ENVELOPE-PILOT-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 9 | BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model | READY |
-| 10 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
-| 11 | RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs | PLANNED |
+| 10 | RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs | READY |
+| 11 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
 | 28 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 47 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 48 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 66 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
-### 9. BINDER-MODEL-PILOT-1: Compare substitution with an independent finite model
-
-**Target:** A fixed suite of 10000 finite terms/contexts and two supported internal operation APIs
-
-Review reuse, implement a named-variable capture-avoiding model and compare lifting/substitution compositions with independently audited translation.
-
-**Why this rank:** Highest-value feasible successor after nine accepted real-proof slices and three visible oversize selections: a separately derived named-variable model offers independent expectations beyond another fixed-library agreement or size-ceiling adjustment. Supported API, fragment and translation audits remain staged gates before construction.
-
-**Completion:** One executable model, portable operation vectors and complete comparison outcomes or an exact model/API boundary.
-
-**Stop:** Complete the fixed 10000-case, two-API study or reach a genuine model, authority or unavailable-capability boundary after feasible repairs; enumerate semantic checks and use nonterminal process safety controls; no external writes.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** READY: READY and unstarted under docs/research/BINDER_MODEL_PILOT_1_PLAN.md for focused source/formalization reuse, tractable valid fragment, two supported operation APIs, capture avoidance, alpha-equivalence and independent translation audit. Freeze the exact 10,000-vector scientific suite, model and execution controls before construction or launch; no full-kernel claim or external action.
-
-### 10. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
-
-**Target:** One checker, three supported build configurations, at most four source sites and eight boundary/control fixtures
-
-Select input-influenced arithmetic/assertion sites before constructing cases, then compare debug/release/overflow-check behavior.
-
-**Why this rank:** Ninth: concrete compiler-mode surface, but build/setup cost and source-site selection precede useful evidence.
-
-**Completion:** One exact build-mode matrix and useful regression or a scoped no-difference/unsupported-configuration result.
-
-**Stop:** Complete the fixed three-configuration, eight-fixture matrix or reach a genuine toolchain, authority or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain and source-selected sites plus a fixed build/controller protocol; arithmetic presence alone is not defect evidence.
-
-### 11. RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs
+### 10. RESOURCE-ENVELOPE-PILOT-1: Measure resource cliffs for compact valid inputs
 
 **Target:** Two valid term families, six sizes and two supported implementations
 
 Measure fixed time/memory envelopes with stop-at-first-limit per family/implementation and preserve every attempted size.
 
-**Why this rank:** Tenth: meaningful operational value, but comparable validity and reliable host resource controls are necessary before interpretation.
+**Why this rank:** Selected ahead of build-mode conformance for staged preparation because existing audited positive-term/importer assets and portable supervision can inform a fixed resource-envelope design, while real-proof slicing exposed three concrete oversize dispositions whose terms remain semantically unobserved. The binder pilot contributes only portable supervision mechanics: its Lean and Kiota RSS/time values used different operation harnesses and are not comparable resource evidence. Validity, comparable profile, startup/import baseline and measurement gates still require exact evidence before freeze or launch.
 
 **Completion:** One resource-regression corpus and measured envelope, or a precise validity/measurement boundary.
 
@@ -86,7 +53,23 @@ Measure fixed time/memory envelopes with stop-at-first-limit per family/implemen
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED: bind valid families, comparable supported fragments, reliable resource measurement, memory limits and cleanup in a staged protocol; the fixed samples establish no asymptotic theorem.
+**Boundary:** READY: READY for source, validity and measurement preparation only under docs/research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md. Preserve two valid term families, six fixed size points and two supported comparable observers. Before freeze bind independent validity, equivalent checking profiles, exact runtimes/importers, startup/import and idle-baseline accounting, sampled-RSS uncertainty, timeout interpretation, memory limits and cleanup; obtain independent review and committed scientific/execution inputs. No term generation, setup or scientific launch is authorized by READY selection.
+
+### 11. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
+
+**Target:** One checker, three supported build configurations, at most four source sites and eight boundary/control fixtures
+
+Select input-influenced arithmetic/assertion sites before constructing cases, then compare debug/release/overflow-check behavior.
+
+**Why this rank:** Retained immediately after resource preparation: a distinct and potentially useful question, but its supported configurations and source-selected input-influenced sites are not yet bound. Promote only when source/config review identifies a concrete observable site and a reproducible fixed protocol.
+
+**Completion:** One exact build-mode matrix and useful regression or a scoped no-difference/unsupported-configuration result.
+
+**Stop:** Complete the fixed three-configuration, eight-fixture matrix or reach a genuine toolchain, authority or unavailable-capability boundary after feasible repairs; per-process safety controls are nonterminal; no external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain, source-selected input-influenced sites and fixed build/controller protocol; arithmetic presence alone is not defect evidence.
 
 ### 28. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
@@ -193,6 +176,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1. Selected next item: BINDER-MODEL-PILOT-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1. Selected next item: RESOURCE-ENVELOPE-PILOT-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

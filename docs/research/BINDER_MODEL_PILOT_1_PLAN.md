@@ -1,12 +1,16 @@
 # Binder model pilot 1
 
-Status: ACTIVE as of 2026-09-28 under the selected-item handoff. Staged
-source/reuse and supported API/fragment preparation is underway. Model writing
-follows review of exact source/API identities and a common tractable fragment.
-Scientific vector construction follows the frozen model/protocol/construction
-rule and independent negative-capable translation/expectation audit. Observer
-launch follows the committed scientific and execution inputs plus actual-host
-RSS preflight.
+Status: COMPLETE with a scoped NO_OBSERVED_DIFFERENCE result. The original
+plan bytes are preserved unchanged at
+[plan-at-freeze.md](../../results/research/binder-model-pilot-1/source/plan-at-freeze.md)
+and remain bound by the scientific manifest. The exact finite finding and
+limits are in the [result report](../../results/research/binder-model-pilot-1/report.md).
+
+Two selected APIs matched the independent named-variable model on all 10,000
+rows and 30,000 stage outputs. This syntactically scoped result makes no claim
+about typed Lean programs or proofs, other APIs, whole-kernel correctness,
+universal correctness, or performance. Retain the corpus, auditor, and
+portable replay as local regression assets; no external action follows.
 
 ## Question and fixed scope
 
