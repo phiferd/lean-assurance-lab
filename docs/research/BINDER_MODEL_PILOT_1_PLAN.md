@@ -1,9 +1,12 @@
 # Binder model pilot 1
 
-Status: READY and unstarted, selected at the 2026-09-28 real-proof-slices
-closure. Selection authorizes staged source and reuse preparation in a future
-requested item. It does not establish the scientific or execution gates or
-start model construction.
+Status: ACTIVE as of 2026-09-28 under the selected-item handoff. Staged
+source/reuse and supported API/fragment preparation is underway. Model writing
+follows review of exact source/API identities and a common tractable fragment.
+Scientific vector construction follows the frozen model/protocol/construction
+rule and independent negative-capable translation/expectation audit. Observer
+launch follows the committed scientific and execution inputs plus actual-host
+RSS preflight.
 
 ## Question and fixed scope
 

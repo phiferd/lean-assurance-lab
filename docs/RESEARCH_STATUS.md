@@ -3143,9 +3143,10 @@ REAL-PROOF-SLICES completed twelve fixed dispositions, including nine accepted
 slices and three oversize `std` selections. Its provenance-preserving slicer
 and independent auditor remain local assets under the exact
 [report](../results/research/real-proof-slices-pilot-1/report.md).
-BINDER-MODEL is READY and unstarted for source/reuse, supported API and
-independent-model preparation under its
-[staged plan](research/BINDER_MODEL_PILOT_1_PLAN.md). The 2026-09-27
+BINDER-MODEL is ACTIVE for staged source/reuse and supported API/fragment
+preparation under its [plan](research/BINDER_MODEL_PILOT_1_PLAN.md). Its exact
+scientific vectors and observers remain gated on frozen source/API/model inputs
+and independent translation audit. The 2026-09-27
 owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
 ledger observations remain dated.
 
@@ -3261,7 +3262,7 @@ no external action is recommended now.
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
-| 9 | `BINDER-MODEL-PILOT-1` | READY, unstarted staged preparation |
+| 9 | `BINDER-MODEL-PILOT-1` | ACTIVE, staged source/API/fragment preparation |
 | 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
@@ -3411,10 +3412,10 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and no ACTIVE item:
-`BINDER-MODEL-PILOT-1` is selected and unstarted for supported API/fragment,
-named-variable-model reuse, capture avoidance and independently audited
-translation preparation.
+The canonical queue has one ACTIVE item: `BINDER-MODEL-PILOT-1` is under staged
+source/reuse and supported API/fragment preparation. Its exact scientific vectors,
+named-variable model and observers remain gated on source/API bindings, fragment
+selection and independent translation audit.
 The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
 demand requirements. The stateful pilot is complete with six preserved public
 kernel API relations, twelve histories and 25 requests; its R4 custody repair
@@ -3438,9 +3439,8 @@ completed assumption-reporting item retains twelve exact matched cells and
 its negative permission comparison. The completed real-proof slice item
 retains twelve fixed dispositions: nine accepted slices, three visible
 oversize cases, and no observed compatibility difference or fresh-holdout
-claim. The binder-model successor remains unstarted and must pass its exact
-fragment, source/reuse, independent-audit and execution gates before any
-construction or launch.
+claim. The binder-model item must pass its exact fragment, source/reuse, independent-audit
+and execution gates before vector construction or observer launch.
 
 ### Waiting
 
