@@ -1,7 +1,10 @@
 # Stateful validation pilot 1
 
-Status: ACTIVE from 2026-09-27 under the owner's one-item execution request.
-Selection authorizes source/reuse and supported-API
+Status: COMPLETE with SUCCESS, subject to the required final repository
+validation/refresh receipt. All six comparisons, twelve fresh histories and 25
+requests matched the independent model through one public kernel API; see the
+[report](../../results/research/stateful-validation-pilot-1/report.md).
+The original selection authorized source/reuse and supported-API
 contract preparation; it does not assert that session or rollback promises are
 already established. This item was selected after the trust-reporting matrix
 and reselected on 2026-09-27 after the demand-qualified lazy-reduction pilot.

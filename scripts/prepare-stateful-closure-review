@@ -1,0 +1,53 @@
+#!/usr/bin/env python3
+"""Bind the explicit project-wide closure comparison and declare final scope."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from lib.research_queue_v4 import queue_digest
+q=json.loads((ROOT/'config/research-queue.json').read_text())
+state='STATEFUL-VALIDATION-PILOT-1'; proof='REAL-PROOF-SLICES-PILOT-1'
+binder='BINDER-MODEL-PILOT-1'; build='BUILD-MODE-CONFORMANCE-PILOT-1'; resource='RESOURCE-ENVELOPE-PILOT-1'
+base='results/research/stateful-validation-pilot-1/'
+frontier=q['plan']; successor='docs/research/REAL_PROOF_SLICES_PILOT_1_PLAN.md'
+freeze='results/research/declaration-validation-publication-study-gate-8-input-freeze.json'
+categories=[
+ ('METHODS_AND_FRONTIERS','Six public kernel history relations are answered with every target/outcome/environment projection preserved. Real-library dependency-complete slices bridge small synthetic suites and retained workloads; this now offers more new shared information than enlarging the same functional-API fragment or constructing a new binder model.',[proof,binder,build,resource]),
+ ('UNRESOLVED_AND_SHARED_ASSETS','Retain the exact public API harness, independent model auditor, histories and raw evidence. The next concrete shared asset is a provenance/closure-preserving slicer. Existing catalog disagreements and authority boundaries remain unchanged; old source coverage cannot stand in for new semantic coverage.',[proof,binder]),
+ ('MAINTENANCE_AND_UPSTREAM','The owner holds Kiota/Nanoda follow-up absent substantive feedback. No new current external status is inferred and the ledger remains a dated observation. The preserved generation-custody repair is now mechanically covered within this item; no separate maintenance item or speculative external action outranks real-library preparation.',[proof]),
+ ('LITERATURE_AND_REUSE','The 2026-09-27 primary-source API and state-machine reuse review is current for this completed item. Reuse strict receipts, positive-RSS supervision and existing parsers only after the slice protocol verifies their fragment/closure fit. Real-proof preparation refreshes focused extraction/reuse evidence; no global novelty or fresh-holdout claim.',[proof,binder]),
+ ('LOCAL_BLOCKER_REMOVAL','Two compile integration defects and the late canonical-generation guard defect were repaired here without replacing scientific inputs. Real-proof retained-source inventory, streaming feasibility, complete dependency closure, size ceilings and feature selection are authorized preparation inside the successor, not proof of missing external capability. Bind them before construction or observation.',[proof,build,resource])]
+candidates=[dict(item_id=proof,disposition='FEASIBLE',rationale='Highest-value feasible preparation after the stateful question is answered. Existing retained export provenance supplies a concrete starting point; exact twelve-case/three-export scientific selection remains a staged gate, with legacy coverage limitations preserved.',evidence_refs=[successor,base+'report.md',freeze],blockers=[])]
+for name,reason in [(binder,'Supported operation seams, named-variable model, capture avoidance and independent translation/alpha-equivalence audit are not frozen.'),
+                    (build,'Three supported configurations, exact source-selected sites and eight fixed boundary/control inputs are not frozen.'),
+                    (resource,'Comparable validity, two term families, six sizes, two implementations and exact measurement controls are not frozen.')]:
+    candidates.append(dict(item_id=name,disposition='BLOCKED',rationale='Locally preparable alternative retained, but offers less immediate transfer to real artifacts than selected proof slicing. '+reason,evidence_refs=[frontier],blockers=[dict(kind='SCIENTIFIC_GATE',reason=reason,evidence_refs=[frontier])]))
+paths=['CONSTITUTION.md','docs/RESEARCH_WORKFLOW.md',frontier,successor,'docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md',
+       base+'result.json',base+'report.md',base+'work-accounting.json',base+'closure.json',base+'evidence-replay.json',
+       base+'source-reuse-review.md',base+'repair-r4.json',freeze,'results/research/external-contributions.json']
+review=dict(schema_version=1,scope='PROJECT_WIDE',phase='CLOSURE',reviewed_at=q['updated_at'],stopped_item=state,selected_item=proof,
+ queue_sha256=queue_digest(q),decision='Complete the exact stateful pilot after required final validation/refresh; retain its local regression asset with scoped nonclaims and no external action. Select REAL-PROOF-SLICES-PILOT-1 READY and unstarted for staged retained-source/reuse/closure preparation. Do not execute the successor.',
+ categories=[dict(category=k,assessment=v,candidate_ids=ids) for k,v,ids in categories],candidates=candidates,
+ evidence_bindings=[dict(path=x,sha256=hashlib.sha256((ROOT/x).read_bytes()).hexdigest()) for x in paths])
+review_path='results/research/queue-reviews/2026-09-27-stateful-validation-pilot-1-closure.json'
+(ROOT/review_path).write_text(json.dumps(review,indent=2)+'\n')
+q['strategic_review']=dict(path=review_path,sha256=hashlib.sha256((ROOT/review_path).read_bytes()).hexdigest())
+(ROOT/'config/research-queue.json').write_text(json.dumps(q,indent=2)+'\n')
+decision=dict(item_id=state,outcome='SUCCESS',reviewed_at=q['updated_at'],before=dict(selected=state,status='ACTIVE'),
+ after=dict(selected=proof,status='READY_UNSTARTED',completed=[state]),ranks=[state,proof,binder,build,resource],
+ rank_change='Ordinal ranks preserved; selected highest eligible successor after rank7 closure.',supporting_evidence=paths,reason=review['decision'])
+decision_path='results/research/queue-reviews/2026-09-27-stateful-validation-pilot-1-decision.json'
+(ROOT/decision_path).write_text(json.dumps(decision,indent=2)+'\n')
+scope=set(paths+['AGENTS.md','config/research-queue.json','docs/RESEARCH_STATUS.md',review_path,decision_path,
+ 'results/research/queue-reviews/2026-09-27-stateful-validation-pilot-1-entry.json',
+ 'results/research/trust-assumption-pipeline-pilot-1/runtime-manifest.json',
+ 'lib/metamorphic_pilot_runner.py','lib/metamorphic_pilot_runner_v3.py','lib/closure_controls.py',
+ 'scripts/closure-controls','scripts/refresh-current-state','scripts/run-unit-tests-with-signal-retry'])
+for glob in ['lib/stateful_validation*.py','tests/test_stateful_validation*.py','scripts/*stateful*']:
+    scope.update(str(p.relative_to(ROOT)) for p in ROOT.glob(glob) if p.is_file())
+scope.update(str(p.relative_to(ROOT)) for p in (ROOT/base).rglob('*')
+             if p.is_file() and p.name!='closure-scope.json' and 'final-closure' not in p.parts)
+(ROOT/base/'closure-scope.json').write_text(json.dumps(dict(schema_version=1,scope='STATEFUL-VALIDATION-PILOT-1 exact scientific, historical repair and closure candidate inputs',paths=sorted(scope)),indent=2)+'\n')
+print(json.dumps(dict(review=review_path,declared_scope_files=len(scope)),indent=2))

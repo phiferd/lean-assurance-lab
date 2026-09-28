@@ -72,13 +72,13 @@ are ordinal judgments, not estimated defect rates.
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped
-to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. Five completed; the
-stateful candidate remains READY, and four original candidates remain PLANNED
+to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful pilot is now
+complete; real-proof slicing is READY, and three original candidates remain PLANNED
 with independent launch gates. The recursor-repair and trust-reporting work is
 complete. The 2026-09-27 source comparison adds a new rank-6 lazy-reduction
 candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original ordinal
-proposal mapping remains historical. `STATEFUL-VALIDATION-PILOT-1` is selected
-READY and unstarted under its explicit plan.
+proposal mapping remains historical. `REAL-PROOF-SLICES-PILOT-1` is selected
+READY and unstarted under its explicit staged plan.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -90,8 +90,8 @@ fixed sequence or promote every idea to READY.
 | 4 `ACCEPTANCE-IMPACT-PILOT-1` | Completed current reproduction and downstream consequence study over one retained recursor-type candidate/control | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY; the later source-bound successor preserves its result without relabeling |
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Completed six-fixture/two-route transitive-assumption matrix and paired allowed-set control | COMPLETE, SUCCESS: twelve preserved sets and four expected policy decisions; one preserved/repaired rendering incident |
 | 6 `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | Completed six demand-directed type-conversion cases on two explicit reduction paths; four capability cells | COMPLETE, SUCCESS: 12/12 ACCEPT with all six KAM demand gates; retain exact local adapter/regressions and experimental-profile limitations |
-| 7 `STATEFUL-VALIDATION-PILOT-1` | Six fixed fresh-versus-prefixed session comparisons through two public APIs | Selected READY and unstarted; establish actual session, failure recovery and dependency-order contracts, public reachability and fresh-name policy; do not assume continuation after a terminating rejection |
-| 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Establish available source payloads, dependency/environment closure checks, size ceilings and a feature-based selection rule; no claim that selected cases prove absent corpus coverage or fresh holdout status |
+| 7 `STATEFUL-VALIDATION-PILOT-1` | Completed six fixed comparisons through one supported public kernel API | COMPLETE, SUCCESS: twelve histories and 25 requests preserve all expected outcomes and environment projections; no persistent-cache/CoreM rollback claim |
+| 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Selected READY and unstarted under its staged plan; establish payloads, dependency/environment closure, size ceilings and feature selection before scientific execution; no absent-coverage or fresh-holdout claim |
 | 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
 | 10 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; use nonterminal process safety controls; do not presume arithmetic sites are defects |
 | 11 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | Bind validity evidence, comparable fragments and verified memory/time/cleanup controls; freeze stop-at-first-limit within each matrix cell and resource measurement; no asymptotic claim from fixed samples |
@@ -219,3 +219,23 @@ READY for preparation only, with six demand-directed conversion cases and two
 fresh-process profiles. STATEFUL remains READY as a feasible alternative.
 Neither experiment has been started. Kiota/Nanoda follow-up remains held absent
 substantive feedback; the ledger is a dated observation, not a current poll.
+
+## Stateful closure — 2026-09-27
+
+The [stateful report](../../results/research/stateful-validation-pilot-1/report.md)
+records all six relations preserved across twelve fresh histories and 25
+requests through official Lean 4.33.0's functional public kernel API. Every
+outcome and complete environment projection matches the independent model.
+The package preserves two generic compile failures and a late generation-gate
+review disagreement. R4 enforces canonical identity and adopts the same exact
+fixture bytes under both independent reviews before scientific launch.
+
+Retain this local regression asset; no external issue follows. Its one API and
+per-declaration checker state do not justify a persistent-cache or general
+rollback claim. Select [REAL-PROOF-SLICES-PILOT-1](REAL_PROOF_SLICES_PILOT_1_PLAN.md)
+READY and unstarted. Dependency-complete real-library slices now offer a more
+useful bridge to retained workloads than enlarging the completed small fragment
+or building a new binder model. Bind exact payloads, streaming feasibility,
+closure and fixed selection within that item's preparation; prior corpus
+observation/provenance limitations remain. Maintenance/upstream needs are held
+absent substantive feedback, and no successor is executed here.

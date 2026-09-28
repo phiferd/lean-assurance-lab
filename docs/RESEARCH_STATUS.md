@@ -58,6 +58,19 @@ research directions.
 
 ## Attempted
 
+- `STATEFUL-VALIDATION-PILOT-1` completes on 2026-09-27 with SUCCESS subject
+  to its required final repository validation/refresh receipt. All six public
+  kernel environment-history relations preserved, with twelve fresh-process
+  histories and 25 exact requests matching every expected outcome and full
+  environment projection. Two generic compile failures and a generation
+  manifest-custody defect remain preserved; reviewed R4 revalidated and adopted
+  the exact existing fixture bytes without replacing scientific inputs. Retain
+  the local regression package. This is one API/implementation and supplies no
+  persistent-cache, general rollback or soundness claim; no external action
+  follows. `REAL-PROOF-SLICES-PILOT-1` is selected READY and unstarted for staged
+  source/reuse and dependency-closure preparation. See the
+  [report](../results/research/stateful-validation-pilot-1/report.md).
+
 - `LAZY-REDUCTION-CONFORMANCE-PILOT-1` completes on 2026-09-27 with SUCCESS
   subject to its final repository validation/refresh receipt. Both pinned
   lazylean reduction profiles accepted all six independently audited conversion
@@ -3086,7 +3099,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `STATEFUL-VALIDATION-PILOT-1`.
+Selected next item: `REAL-PROOF-SLICES-PILOT-1`.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3095,8 +3108,11 @@ The exact twelve scientific cells all accepted with the six required KAM
 demand observations, and all four capability cells matched. Its reviewed
 adapter, independent auditor, six regressions and preserved build repair remain
 local assets; [the report](../results/research/lazy-reduction-conformance-pilot-1/report.md)
-scopes the same-implementation and host/profile limits. STATEFUL is now ACTIVE
-for public API/session/recovery preparation under the owner's one-item request. The 2026-09-27
+scopes the same-implementation and host/profile limits. STATEFUL subsequently
+completed all six public kernel environment-history comparisons, twelve
+histories and 25 requests under [its exact report](../results/research/stateful-validation-pilot-1/report.md).
+REAL-PROOF-SLICES is selected READY and unstarted for retained-source/reuse,
+dependency closure and fixed selection preparation. The 2026-09-27
 owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
 ledger observations remain dated.
 
@@ -3113,8 +3129,10 @@ OPEN and ready for review at the dated ledger observation. The trust-assumption
 pilot is COMPLETE with SUCCESS;
 [its report](../results/research/trust-assumption-pipeline-pilot-1/report.md)
 preserves the exact scope and original reporting incident. The stateful pilot
-is ACTIVE under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
-after completion of the later lazy-reduction pilot.
+is COMPLETE under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
+after completion of the later lazy-reduction pilot. Its exact public API
+comparison preserves all six relations; the real-proof slice successor remains
+READY and unstarted under [its staged plan](research/REAL_PROOF_SLICES_PILOT_1_PLAN.md).
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3177,9 +3195,11 @@ The dependent-term pilot completed its exact fifty-case matrix with 100/100
 ACCEPT observations and no profile difference. Its generator and independent
 auditor are retained as a local asset. After the recursor repair closure, the
 trust-assumption study subsequently completed its twelve-cell reporting matrix.
-The 2026-09-27 lazy-reduction closure review selects STATEFUL public-request
-validation, now ACTIVE. Its scientific launch remains gated on exact
-session/recovery contracts, six comparisons, fixtures and controls.
+The 2026-09-27 lazy-reduction closure review selected STATEFUL public-request
+validation, now COMPLETE. Its exact six comparisons through the functional
+kernel API preserve every expected outcome and environment projection. The
+closure review selects real-proof slicing for its distinct real-library and
+dependency-provenance value; its own scientific gates remain preparation.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
 was accepted by both bound checkers; omission and compatible substitution were
@@ -3206,8 +3226,8 @@ no external action is recommended now.
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
-| 7 | `STATEFUL-VALIDATION-PILOT-1` | ACTIVE, API/source-contract preparation |
-| 8 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
+| 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
+| 8 | `REAL-PROOF-SLICES-PILOT-1` | READY, unstarted staged preparation |
 | 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
@@ -3358,11 +3378,13 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains no READY items and one ACTIVE item:
-`STATEFUL-VALIDATION-PILOT-1` is selected for supported public
-API/source-contract preparation. The lazy-reduction pilot is complete with
-twelve ACCEPT cells and all six KAM demand requirements. The stateful experiment
-remains behind its exact session/recovery, scientific and launch gates.
+The canonical queue retains one READY item and no ACTIVE item:
+`REAL-PROOF-SLICES-PILOT-1` is selected and unstarted for retained-source/reuse,
+dependency/environment closure and fixed feature-based selection preparation.
+The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
+demand requirements. The stateful pilot is complete with six preserved public
+kernel API relations, twelve histories and 25 requests; its R4 custody repair
+adopts the unchanged original fixtures and preserves every failed attempt.
 The completed recursor trust-boundary item retains the exact source policy,
 regression contract and production-design boundary. The earlier representation
 pilot 1 remains frozen at its tooling cap; its own pilot 2 is the successful
@@ -3379,8 +3401,10 @@ external-write gates and the failing assurance state remain unchanged. The
 completed recursor repair retains its exact patch, independent review, binary
 and execution manifests, successful frozen matrix and local PR draft. The
 completed assumption-reporting item retains twelve exact matched cells and
-its negative permission comparison. The selected stateful item must establish
-public session/recovery contracts before freezing and launching its six histories.
+its negative permission comparison. The selected real-proof slice item must
+establish exact retained payloads, complete dependency/environment accounting,
+size ceilings and a fixed twelve-declaration selection across three exports
+before construction and gated observation. It has not started.
 
 ### Waiting
 

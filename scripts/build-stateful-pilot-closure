@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""Derive one prospective closure from exact audited stateful evidence."""
+import json
+import sys
+from pathlib import Path
+sys.path.insert(0,str(Path(__file__).resolve().parents[1]))
+from lib import stateful_validation_pilot as p
+from lib.stateful_validation_closure import validate,accounting
+replay=validate()
+p.write_new(p.BASE/'evidence-replay.json',replay)
+p.write_new(p.BASE/'work-accounting.json',accounting())
+result=dict(item_id=p.ITEM,outcome='SUCCESS',scientific_result='SIX_PRESERVED_ENVIRONMENT_HISTORY_RELATIONS',
+ contract=p.bind(p.CONTRACT),execution=p.bind(p.BASE/'execution-0001/result.json'),
+ artifact_audit=p.bind(p.BASE/'artifact-audit.json'),replay=p.bind(p.BASE/'evidence-replay.json'),
+ comparisons=6,histories=12,requests=25,api='Lean.Kernel.Environment.addDecl',
+ recommendation=dict(action='RETAIN_LOCAL_REGRESSION_PACKAGE',target='Official Lean public kernel API callers and future environment-history conformance consumers',
+   priority='NORMAL',prerequisites='Reuse exact contract, source/runtime, explicit checked options, auditor, harness and process manifest; changed inputs need new exact bindings.',
+   reason='Every prefix outcome, target and full environment projection matched the independent bounded model. No supported violation or external defect report follows.',external_action='NONE'),
+ nonclaims=p.read(p.CONTRACT)['limits'],successor='REAL-PROOF-SLICES-PILOT-1',successor_execution='NOT_STARTED')
+p.write_new(p.BASE/'result.json',result)
+p.write_new(p.BASE/'closure.json',dict(item_id=p.ITEM,outcome='SUCCESS',result=p.bind(p.BASE/'result.json'),
+ accounting=p.bind(p.BASE/'work-accounting.json'),required_final_gate=str(p.BASE/'final-closure/result.json'),
+ closure_condition='Complete only after the required full current/historical suite, ordered current-state refresh, freshness checks and verified origin/main delivery.',
+ historical_inputs='Unchanged: three exact generic compile revisions retain both failed attempts. The six scientific comparisons, source/runtime and safety controls never changed.',
+ successor='REAL-PROOF-SLICES-PILOT-1',successor_started=False))
+print(json.dumps(result,indent=2))

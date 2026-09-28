@@ -1,0 +1,45 @@
+{
+  "item_id": "STATEFUL-VALIDATION-PILOT-1",
+  "outcome": "SUCCESS",
+  "scientific_result": "SIX_PRESERVED_ENVIRONMENT_HISTORY_RELATIONS",
+  "contract": {
+    "path": "results/research/stateful-validation-pilot-1/scientific-contract.json",
+    "bytes": 5716,
+    "sha256": "3e3c5163971270408408c9c97e1a29fda17d60cd467fc9130b78f82c355ddb7b"
+  },
+  "execution": {
+    "path": "results/research/stateful-validation-pilot-1/execution-0001/result.json",
+    "bytes": 3143,
+    "sha256": "d828764e63b2223f842e0773599c43565a7f0ccc186e0ff8889e8b496e7aa891"
+  },
+  "artifact_audit": {
+    "path": "results/research/stateful-validation-pilot-1/artifact-audit.json",
+    "bytes": 16387,
+    "sha256": "d3ec27242d1244a1e710392032a335d62b8e7e1f2794ba690893451d59ea57a8"
+  },
+  "replay": {
+    "path": "results/research/stateful-validation-pilot-1/evidence-replay.json",
+    "bytes": 4630,
+    "sha256": "6fc035c768c487c23ab6d25fa492f9c83f784dd00928061af4011cae2262bdaf"
+  },
+  "comparisons": 6,
+  "histories": 12,
+  "requests": 25,
+  "api": "Lean.Kernel.Environment.addDecl",
+  "recommendation": {
+    "action": "RETAIN_LOCAL_REGRESSION_PACKAGE",
+    "target": "Official Lean public kernel API callers and future environment-history conformance consumers",
+    "priority": "NORMAL",
+    "prerequisites": "Reuse exact contract, source/runtime, explicit checked options, auditor, harness and process manifest; changed inputs need new exact bindings.",
+    "reason": "Every prefix outcome, target and full environment projection matched the independent bounded model. No supported violation or external defect report follows.",
+    "external_action": "NONE"
+  },
+  "nonclaims": [
+    "One official Lean implementation and one functional public API; no independent-checker agreement or soundness claim.",
+    "This is environment-history conformance. Type-checker caches and fresh-name state are per declaration; no persistent-cache stress claim.",
+    "Recovery means an explicit Except.error leaves the caller's immutable input environment available. No claim about CoreM addDecl, command elaboration, server sessions, panic recovery or rollback of hidden mutable state.",
+    "Six fixed comparisons and 25 requests do not establish general history invariance, performance or statistical novelty."
+  ],
+  "successor": "REAL-PROOF-SLICES-PILOT-1",
+  "successor_execution": "NOT_STARTED"
+}
