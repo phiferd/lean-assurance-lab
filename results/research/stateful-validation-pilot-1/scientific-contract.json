@@ -1,0 +1,48 @@
+{
+  "schema_version": 1,
+  "item_id": "STATEFUL-VALIDATION-PILOT-1",
+  "api": "Lean.Kernel.Environment.addDecl",
+  "source_commit": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+  "toolchain": "leanprover/lean4:v4.33.0",
+  "options": {"debug.skipKernelTC": false, "maxRecDepth": 1000, "maxHeartbeats": 200000},
+  "base_environment": "Lean.mkEmptyEnvironment 0 then toKernelEnv; no imported declarations",
+  "freshness": "Each of the twelve histories runs in its own fresh Lean process. Within each history, the sole env variable is updated only from Except.ok; Except.error preserves that input env. No panic catching or internal mutation.",
+  "declarations": {
+    "identity": {
+      "name": "LALState.Target",
+      "type": ["pi", ["sort", 1], ["pi", ["var", 0], ["var", 1]]],
+      "value": ["lam", ["sort", 1], ["lam", ["var", 0], ["var", 0]]]
+    },
+    "a": {"name": "LALState.A", "type": ["sort", 1], "value": ["sort", 0]},
+    "b": {"name": "LALState.B", "type": ["sort", 1], "value": ["sort", 0]},
+    "alias": {"name": "LALState.Alias", "type": ["sort", 2], "value": ["sort", 1]},
+    "reduced": {"name": "LALState.Reduced", "type": ["const", "LALState.Alias"], "value": ["sort", 0]},
+    "alias_identity": {
+      "name": "LALState.Target",
+      "type": ["pi", ["const", "LALState.Alias"], ["pi", ["var", 0], ["var", 1]]],
+      "value": ["lam", ["const", "LALState.Alias"], ["lam", ["var", 0], ["var", 0]]]
+    },
+    "bad": {"name": "LALState.Bad", "type": ["sort", 0], "value": ["sort", 0]},
+    "duplicate_a": {"name": "LALState.A", "type": ["sort", 2], "value": ["sort", 1]},
+    "reuse": {"name": "LALState.Reuse", "type": ["sort", 1], "value": ["sort", 0]},
+    "bad_reuse": {"name": "LALState.Reuse", "type": ["sort", 0], "value": ["sort", 0]},
+    "ordered": {
+      "name": "LALState.Ordered",
+      "type": ["sort", 1],
+      "value": ["pi", ["const", "LALState.A"], ["const", "LALState.B"]]
+    }
+  },
+  "comparisons": [
+    {"id": "accepted-independent", "fresh": ["identity"], "prefixed": ["a", "identity"], "fresh_outcomes": ["ACCEPT"], "prefixed_outcomes": ["ACCEPT", "ACCEPT"], "target": "identity", "relation": "Unrelated accepted definition preserves the identical closed identity target."},
+    {"id": "accepted-reduction", "fresh": ["alias", "alias_identity"], "prefixed": ["alias", "reduced", "alias_identity"], "fresh_outcomes": ["ACCEPT", "ACCEPT"], "prefixed_outcomes": ["ACCEPT", "ACCEPT", "ACCEPT"], "target": "alias_identity", "relation": "The same alias dependency is installed in both histories; an extra accepted definition requires alias conversion before the identical target."},
+    {"id": "rejected-malformed", "fresh": ["identity"], "prefixed": ["bad", "identity"], "fresh_outcomes": ["ACCEPT"], "prefixed_outcomes": ["declTypeMismatch", "ACCEPT"], "target": "identity", "relation": "A safe definition with type Prop but value Prop is rejected; the caller retains the input environment and the identical target accepts."},
+    {"id": "rejected-duplicate", "fresh": ["a", "identity"], "prefixed": ["a", "duplicate_a", "identity"], "fresh_outcomes": ["ACCEPT", "ACCEPT"], "prefixed_outcomes": ["ACCEPT", "alreadyDeclared", "ACCEPT"], "target": "identity", "relation": "The duplicate attempt must not overwrite A's type or body; the identical target remains accepted."},
+    {"id": "rejected-name-reuse", "fresh": ["reuse"], "prefixed": ["bad_reuse", "reuse"], "fresh_outcomes": ["ACCEPT"], "prefixed_outcomes": ["declTypeMismatch", "ACCEPT"], "target": "reuse", "relation": "A rejected safe definition does not reserve its name; the valid same-name target is identical to the fresh request."},
+    {"id": "independent-order", "fresh": ["a", "b", "ordered"], "prefixed": ["b", "a", "ordered"], "fresh_outcomes": ["ACCEPT", "ACCEPT", "ACCEPT"], "prefixed_outcomes": ["ACCEPT", "ACCEPT", "ACCEPT"], "target": "ordered", "relation": "Independent definitions A and B may be added in either order before the same target referencing both."}
+  ],
+  "encoding": "JSON array DSL: sort natural-level; var de-Bruijn-index; const full dotted Name; pi or lam domain body. Only monomorphic safe defnDecl with reducibility hints abbrev; explicit binder names x; default binderInfo. No other expression or declaration constructors.",
+  "observations": "Every ordered step emits the actual reconstructed request AST, outcome/exception constructor and complete sorted environment declaration projection (name,type,value,safety,levelParams). All names absent initially. No unchecked insertion. Exactly twelve BEGIN/END-bounded histories and 25 step receipts overall.",
+  "controls": {"timeout_seconds": 120, "memory_bytes": 2147483648, "jobs": 1, "failure_policy": "REPAIR_AND_CONTINUE", "launch_owner": "stateful_lead"},
+  "decision": "SUCCESS only if all six target relations, all expected prefix outcomes and all complete environment snapshots match the independent model. A supported relation violation requires local minimization/regression and recommendation. Transport/process/audit defects pause and repair within this item; never relabel them semantic results.",
+  "limits": ["One official Lean implementation and one functional public API; no independent-checker agreement or soundness claim.", "This is environment-history conformance. Type-checker caches and fresh-name state are per declaration; no persistent-cache stress claim.", "Recovery means an explicit Except.error leaves the caller's immutable input environment available. No claim about CoreM addDecl, command elaboration, server sessions, panic recovery or rollback of hidden mutable state.", "Six fixed comparisons and 25 requests do not establish general history invariance, performance or statistical novelty."]
+}
