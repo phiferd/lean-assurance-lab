@@ -1,0 +1,25 @@
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner.py", line 61, in _verify_memory_monitor_backend
+    values = _group_rss_bytes(process_group)
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner.py", line 45, in _group_rss_bytes
+    completed = subprocess.run(
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 503, in run
+    with Popen(*popenargs, **kwargs) as process:
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 971, in __init__
+    self._execute_child(args, executable, preexec_fn, close_fds,
+  File "/Library/Frameworks/Python.framework/Versions/3.10/lib/python3.10/subprocess.py", line 1847, in _execute_child
+    raise child_exception_type(errno_num, err_msg, err_filename)
+PermissionError: [Errno 1] Operation not permitted: '/bin/ps'
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/scripts/real-proof-slices-execute", line 15, in <module>
+    print(json.dumps(actions[args.stage](),sort_keys=True))
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/real_proof_slices_execute.py", line 138, in rss_preflight
+    receipt=run_supervised(argv=[sys.executable,"-c","import time; time.sleep(0.1)"],cwd=ROOT,stdin=None,env=ENVIRONMENT,
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner_v3.py", line 33, in run_supervised
+    backend = _verify_memory_monitor_backend()
+  File "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/lib/metamorphic_pilot_runner.py", line 63, in _verify_memory_monitor_backend
+    raise RunnerError(
+lib.metamorphic_pilot_runner.RunnerError: memory monitor backend unavailable before launch: PermissionError: [Errno 1] Operation not permitted: '/bin/ps'
