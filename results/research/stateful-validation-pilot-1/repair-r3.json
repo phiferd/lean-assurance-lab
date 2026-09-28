@@ -1,0 +1,10 @@
+{
+  "item_id": "STATEFUL-VALIDATION-PILOT-1",
+  "revision": "R3",
+  "failure": "compile-0002/result.json",
+  "diagnosis": "Lean 4.33.0 Options has typed Options.set and setBool, but no Options.setNat (the latter belongs to KVMap). Compilation failed before main.",
+  "repair": "Exclusively generate StatefulHarnessR3.lean from R2, replacing only two setter names with supported Options.set and explicit Nat values; preserve every R1/R2 byte and attempt.",
+  "regression": "New focused test checks exact source-backed setter delta and failed receipt; fresh supervised compile-only attempt exercises the actual compiler.",
+  "scientific_change": "NONE: maxRecDepth=1000 and maxHeartbeats=200000 remain exactly the frozen Nat values; no fixtures generated or requests observed.",
+  "disposition": "REPAIR_AND_CONTINUE"
+}

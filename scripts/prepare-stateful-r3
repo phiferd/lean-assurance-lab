@@ -1,0 +1,12 @@
+#!/usr/bin/env python3
+"""Create an exclusive R3 harness from preserved R2 with one source-backed API repair."""
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+base=ROOT/'results/research/stateful-validation-pilot-1'
+old=(base/'StatefulHarnessR2.lean').read_text()
+before='|>.setNat `maxRecDepth 1000 |>.setNat `maxHeartbeats 200000'
+after='|>.set `maxRecDepth (1000 : Nat) |>.set `maxHeartbeats (200000 : Nat)'
+assert old.count(before)==1
+with (base/'StatefulHarnessR3.lean').open('x') as out: out.write(old.replace(before,after))
+installed=Path('/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0/src/lean/Lean/Data/Options.lean')
+with (base/'tooling-options.lean').open('xb') as out: out.write(installed.read_bytes())
