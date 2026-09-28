@@ -1,0 +1,60 @@
+{
+  "schema": "real-proof-slices-protocol-v1",
+  "item_id": "REAL-PROOF-SLICES-PILOT-1",
+  "question": "Can twelve dependency-complete declaration slices from three retained library exports expose compatibility boundaries that large smoke-test artifacts make difficult to localize?",
+  "source_contract": {
+    "format": "lean4export NDJSON 3.1.0",
+    "producer": "lean4export 3.1.0, Lean 4.29.1, githash f72c35b3f637c8c6571d353742168ab66cc22c00",
+    "exporter_source_revision": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+    "format_spec_sha256": "f82a21e17e4258a1043895d0653ea4333bef8cb07aad2e3d6c1fc4be52b138e3",
+    "gate8_freeze": "results/research/declaration-validation-publication-study-gate-8-input-freeze.json",
+    "legacy_coverage_revision_mismatch_preserved": true,
+    "fresh_holdout_claim": false,
+    "sources": [
+      {"id": "init", "path": "external/lean-kernel-arena/_build/tests/init.ndjson", "bytes": 324561407, "sha256": "02a2260b17c8e5be2eb0463c7d3131c35889337b51817f56756faee1241b7b91"},
+      {"id": "std", "path": "external/lean-kernel-arena/_build/tests/std.ndjson", "bytes": 551674936, "sha256": "0f7993829d6fcc8b07d177a3879024fbbc8908f7c6fd9cb2fa93370e4397e204"},
+      {"id": "cedar", "path": "external/lean-kernel-arena/_build/tests/cedar.ndjson", "bytes": 829313103, "sha256": "baff5ac59983ad30481a4d3b2d5f8cbcd665aebad43a3931f833cdac4c840f05"}
+    ]
+  },
+  "selection": {
+    "order": ["init", "std", "cedar"],
+    "per_source": 4,
+    "skip_first_theorem_records": {"init": 156, "std": 0, "cedar": 0},
+    "name_prefix": {"init": "Nat.", "std": "Std.", "cedar": "Cedar."},
+    "predicate": "theorem record whose fully rendered name begins with the source prefix, whose referenced type root tag is forallE and whose referenced value root tag is lam",
+    "tie_break": "first four matching theorem records after the per-source skip, in source declaration order",
+    "rationale": "The 156-theorem Init.Prelude prefix is shared by the retained larger exports; skip that prefix in init to select non-Prelude Nat proofs. Namespace predicates make std and cedar selections source-specific while the forallE/lam root pair fixes a checkable syntax feature. These are observed libraries and supply no fresh-holdout claim.",
+    "freeze_before_observation": true,
+    "replacement_after_outcome": false
+  },
+  "closure": {
+    "typed_references": ["Name parent", "Level parents/parameters", "Expr children, universe levels, binder names, projection type names", "declaration names, levels, type and value", "all mutual names", "inductive type, constructor, recursor and rule metadata", "all four quotient declarations"],
+    "environment": "Every expression constant, projection type name, mutual all/member and recursor rule constructor resolves to its source declaration owner; add that complete declaration record and repeat to fixed point.",
+    "order": "preserve original record order; renumber primitive identifiers only",
+    "provenance": "receipt stores exact original source line, byte offset, byte length and SHA-256 for every included row",
+    "independent_auditor": "lib/real_proof_slices_audit.py",
+    "negative_controls": ["missing reference", "missing environment owner", "extra declaration", "reordered declaration", "changed source row", "incomplete inductive or quotient package"]
+  },
+  "size_ceiling": {"bytes_per_slice": 8000000, "records_per_slice": 120000},
+  "dispositions": ["READY", "OVERSIZE", "EXTRACTION_FAILURE", "UNSUPPORTED", "UNAVAILABLE"],
+  "observer_profiles": [
+    {"id": "official-lean-4.33.0", "binary": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel", "sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585", "source_revision": "37f7525b732808a49b746dc6999d53c3717db124", "importer_revision": "f297dfe2a8557e8674fe892bb49dffe4bfadc0e9", "argv": ["{binary}", "{artifact}"], "stdin": null},
+    {"id": "nanoda-6ae1f0c", "binary": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin", "sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41", "source_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7", "cwd": "external/lean-kernel-arena/_build/checkers/nanoda/src", "argv": ["target/release/nanoda_bin", "config.json"], "stdin": "artifact bytes", "config_sha256": "a71e26cccc305652ceae2037435f6d99984a8299c53c7bdace6e90af8d5556f6"}
+  ],
+  "execution_controls": {
+    "one_owner": true,
+    "actual_host_rss_preflight": true,
+    "per_process_timeout_seconds": 120,
+    "per_process_memory_bytes": 2147483648,
+    "cleanup_required": true,
+    "limits_are_nonterminal": true,
+    "no_attempt_or_elapsed_time_cap": true,
+    "exact_manifest_committed_before_launch": true
+  },
+  "source_reuse_review": {
+    "format_spec": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/format_ndjson.md",
+    "existing_primitive_auditor": "lib/metamorphic_ndjson_audit.py",
+    "existing_supervision": "lib/metamorphic_pilot_runner_v3.py",
+    "decision": "Reuse primitive reference schema and supervised process controls; implement grouped inductive, quotient and environment closure as a scoped successor tool."
+  }
+}
