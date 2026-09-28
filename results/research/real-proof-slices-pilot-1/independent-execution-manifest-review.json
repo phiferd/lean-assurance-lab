@@ -1,0 +1,90 @@
+{
+  "authorized_next_step": "Commit the exact execution manifest and this review; run the actual-host supervised RSS preflight under those committed bytes, preserve and commit its receipt, then obtain independent final launch clearance.",
+  "candidate_manifest_sha256": "b9e3035559376b57d9c41423fd572e14641b2657d8f3e2ffe78c9f9d461ebfe9",
+  "findings": {
+    "artifact_binding": "All twelve receipt hashes match committed generated evidence; nine READY artifact byte lengths and hashes match. Three OVERSIZE std cases remain in non_ready_cases with no launch artifact.",
+    "matrix": "Exact projection of the frozen 24-cell control matrix yields 18 launch cells, preserving original ordinals and profile order with no replacement or hidden cell.",
+    "runtime": "Exporter and format-spec source identities, official/importer and Nanoda source revisions, both binary hashes and Nanoda config hash match locally. Official uses artifact argv; Nanoda uses its configured argv and artifact bytes on stdin.",
+    "safety": "One owner, actual-host RSS preflight, 120-second per-process timeout, 2 GiB RSS ceiling, mandatory cleanup, and nonterminal repair policy are bound. The execution runner requires committed manifest/tooling/artifact bytes and a committed preflight receipt before launch.",
+    "tooling": "Four exact tooling hashes match the current R2 producer, independent auditor, supervisor and execution runner; manifest, control, protocol and scientific hashes agree."
+  },
+  "item_id": "REAL-PROOF-SLICES-PILOT-1",
+  "limits": [
+    "This review authorizes committing the exact execution manifest and proceeding to actual-host RSS preflight; it is not checker launch clearance.",
+    "The preflight receipt must be reviewed and committed before observer execution.",
+    "A checker result needs raw process receipts, preserved failed attempts, and scoped interpretation; observer agreement is not semantic authority."
+  ],
+  "observers": [
+    {
+      "argv": [
+        "{binary}",
+        "{artifact}"
+      ],
+      "binary_bytes": 100401632,
+      "binary_path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+      "binary_sha256": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "cwd": null,
+      "id": "official-lean-4.33.0",
+      "stdin": null
+    },
+    {
+      "argv": [
+        "target/release/nanoda_bin",
+        "config.json"
+      ],
+      "binary_bytes": 1198176,
+      "binary_path": "external/lean-kernel-arena/_build/checkers/nanoda/src/target/release/nanoda_bin",
+      "binary_sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+      "cwd": "external/lean-kernel-arena/_build/checkers/nanoda/src",
+      "id": "nanoda-6ae1f0c",
+      "stdin": "artifact bytes"
+    }
+  ],
+  "phase": "PRE_RSS_PREFLIGHT",
+  "reviewed_at": "2026-09-28T15:45:34.746959+00:00",
+  "reviewed_paths": [
+    {
+      "bytes": 8031,
+      "path": "results/research/real-proof-slices-pilot-1/execution-manifest.json",
+      "sha256": "b9e3035559376b57d9c41423fd572e14641b2657d8f3e2ffe78c9f9d461ebfe9"
+    },
+    {
+      "bytes": 4956,
+      "path": "results/research/real-proof-slices-pilot-1/execution-controls.json",
+      "sha256": "c6bada91de0110d4da467219fba7b08fde37ebdd67c6c1afc301b7cf356d8f5c"
+    },
+    {
+      "bytes": 5204,
+      "path": "results/research/real-proof-slices-pilot-1/protocol.json",
+      "sha256": "1234dc261c4c46098cb6feef9f57354c02a490881c300de4f11a8f32ecc36e83"
+    },
+    {
+      "bytes": 5950,
+      "path": "results/research/real-proof-slices-pilot-1/scientific-manifest.json",
+      "sha256": "c81afea1c9203c0774d1456224eda3d50c07acfaddc37caab06661056979f652"
+    },
+    {
+      "bytes": 12248,
+      "path": "results/research/real-proof-slices-pilot-1/independent-artifact-audit-review.json",
+      "sha256": "f742bd71ffb6bd79803ab5384c89e170ea20fc5722c1fa9faffa7b0b86375f78"
+    },
+    {
+      "bytes": 1645,
+      "path": "results/research/real-proof-slices-pilot-1/audit-attempts/attempt-0003.json",
+      "sha256": "eb3f395b423b7dc7d8cb6548fdbf4b2432f7cdaa7ab964bfc5846450fbdb8a9c"
+    },
+    {
+      "bytes": 11327,
+      "path": "lib/real_proof_slices_execute.py",
+      "sha256": "5124cd7853875c0c09a3876ba0b311ed00f43e5e9ec444014eea5195971b338d"
+    },
+    {
+      "bytes": 5295,
+      "path": "lib/metamorphic_pilot_runner_v3.py",
+      "sha256": "4de04392ed0a9cd5e9e04567886f9097443b8476b5155c74f9ffe6a0661a2402"
+    }
+  ],
+  "reviewer": "independent gate-review subagent; no observer launch or manifest/tooling edit",
+  "schema": "real-proof-slices-independent-execution-manifest-review-v1",
+  "verdict": "PASS"
+}
