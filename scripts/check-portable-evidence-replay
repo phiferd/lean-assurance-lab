@@ -1,10 +1,18 @@
 #!/usr/bin/env python3
 """Run the fast fresh-checkout evidence replay gate used by CI."""
+import argparse
 from pathlib import Path
 import subprocess
 import sys
 
 ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.evidence_replay_portability import validate
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument("--require-foreign-checkout", action="store_true")
+args = parser.parse_args()
+print(validate(ROOT, require_foreign_checkout=args.require_foreign_checkout), flush=True)
 tests = subprocess.run(
     [sys.executable, "-m", "unittest", "discover", "-s", "tests",
      "-p", "test_evidence_replay_portability.py", "-v"],

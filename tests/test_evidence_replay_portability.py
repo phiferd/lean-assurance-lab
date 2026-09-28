@@ -9,6 +9,7 @@ from unittest.mock import patch
 
 from lib import lazy_reduction_pilot
 from lib import lazy_reduction_validation_r2 as lazy_reduction_validation
+from lib import kiota_receipt_replay
 from lib import stateful_validation_closure_portable as stateful_validation_closure
 from lib import stateful_validation_pilot
 from lib import trust_assumption_pilot_r2
@@ -100,6 +101,24 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
                 case.run(result)
             self.assertEqual(result.errors, [])
             self.assertEqual(result.failures, [])
+
+    def test_kiota_repair_receipts_replay_without_original_checkout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = self.alternate_checkout(directory)
+            result = kiota_receipt_replay.validate(checkout, "kiota-recursor-type-repair-1")
+        self.assertEqual(result["attempts"], 31)
+        self.assertEqual(result["manifest_bound_attempts"], 9)
+        self.assertEqual(result["historical_manifest_mismatches"], 22)
+        self.assertEqual(result["host_launches"], 0)
+
+    def test_kiota_refinement_receipts_replay_without_original_checkout(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = self.alternate_checkout(directory)
+            result = kiota_receipt_replay.validate(checkout, "kiota-recursor-pr-refinement-1")
+        self.assertEqual(result["attempts"], 9)
+        self.assertEqual(result["manifest_bound_attempts"], 9)
+        self.assertEqual(result["historical_manifest_mismatches"], 0)
+        self.assertEqual(result["host_launches"], 0)
 
 
 if __name__ == "__main__":

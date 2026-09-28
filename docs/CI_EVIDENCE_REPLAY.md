@@ -17,6 +17,17 @@ Current replay code must:
   frozen tooling input. Never edit a bound historical validator or manifest to
   make a new checkout pass.
 
+The gate discovers process receipts in every `results/research/*` family on
+each run. `config/evidence-replay-portability.json` registers the exact receipt
+file inventory and an active replay test for each family. A new family is
+rejected until it also has a dedicated alternate-checkout portability test;
+new receipt files in an existing family require an explicit inventory update.
+The gate verifies repository-relative raw output bytes and hashes without
+resolving the recorded executable or working directory on the current host.
+The complete unit suite runs the registered replay tests. This registration
+is an inventory and custody control, not a substitute for a family's semantic
+validator.
+
 Before delivery, run:
 
 ```sh
@@ -33,11 +44,22 @@ python scripts/validate-lazy-reduction-conformance-pilot-1-portable
 python scripts/validate-stateful-validation-pilot-1-portable
 ```
 
-The first command replays each registered host-bound evidence family through an
-alternate checkout path. Add a regression there whenever a new evidence family
-records absolute paths. GitHub Actions runs this gate explicitly on Linux before
-the complete unit suite. Passing only on the evidence-producing machine is a
-closure defect, not an allowed CI exception.
+The first command inventories all recorded process families and runs the
+dedicated alternate-checkout regressions. Add a replay test and a dedicated
+portability regression when a new family records process receipts. GitHub
+Actions runs the gate with `--require-foreign-checkout` on Linux before the
+complete unit suite; this refuses a checkout whose path equals any recorded
+production working directory. Passing only on the evidence-producing machine
+is a closure defect, not an allowed CI exception.
+
+The frozen Kiota recursor type-repair package has one pre-launch infrastructure
+failure without a process receipt. Of its 31 launched attempts, 22 refer to
+manifest hashes that no longer match the current manifest files. Portable
+replay preserves and checks their reservation/result identity and raw-stream
+custody, reports that historical binding gap explicitly, and verifies the nine
+remaining exact manifest/command bindings. It does not claim to reconstruct
+the missing historical manifest bytes or edit frozen evidence. The related
+refinement package has nine exact manifest-bound launched attempts.
 
 One frozen trust-pipeline unit fixture used the same host-root record for both a
 historical failed attempt and receipts synthesized during the test. A foreign

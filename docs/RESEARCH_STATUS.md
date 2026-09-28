@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-27
+Last updated: 2026-09-28
 
 ## How Status Is Tracked
 
@@ -57,6 +57,19 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- The 2026-09-28 CI evidence-replay portability repair inventories all 13
+  recorded process families (303 JSON files, 337 receipts and 642 raw streams)
+  on every checkout, requires registered replay tests and alternate-checkout
+  regressions for new families, and checks raw custody without resolving the
+  original macOS paths. GitHub CI requires a foreign checkout before the full
+  unit suite. The two older Kiota packages now have read-only portable receipt
+  replay; the type-repair history explicitly retains one pre-launch failure and
+  22 launched attempts whose original manifest hashes no longer match current
+  files, while nine launched attempts remain exact-manifest-bound. The full
+  repository test runner passed. This is engineering maintenance, not a new
+  scientific result or a frontier change. `REAL-PROOF-SLICES-PILOT-1` remains
+  selected READY and unstarted. See [CI evidence replay portability](CI_EVIDENCE_REPLAY.md).
 
 - `STATEFUL-VALIDATION-PILOT-1` completes on 2026-09-27 with SUCCESS subject
   to its required final repository validation/refresh receipt. All six public

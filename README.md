@@ -292,7 +292,9 @@ are retained unchanged because they are frozen historical tooling inputs.
 GitHub Actions runs that fresh-checkout gate explicitly on Linux. A validator
 that passes only from the evidence-producing machine is a closure defect, not a
 CI exception. See [CI evidence replay portability](docs/CI_EVIDENCE_REPLAY.md)
-for the required validation and immutable-history rules.
+for the automatic receipt-family inventory, required new-family replay
+registration, and immutable-history rules. CI also requires its checkout path
+to differ from every recorded evidence-production working directory.
 
 It reports explicit integration skips for the frozen Gate-8 input-freeze test
 when its observer, coverage, or corpus payload is absent, and for three frozen
