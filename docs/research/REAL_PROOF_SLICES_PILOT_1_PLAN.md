@@ -1,8 +1,8 @@
 # Real proof slices pilot 1
 
-Status: READY and unstarted, selected at the 2026-09-27 stateful-pilot closure.
-Selection authorizes a future requested item's staged preparation; it does not
-start this work or assert that the scientific/execution gates already pass.
+Status: ACTIVE as of 2026-09-28 for staged preparation under the owner's
+one-item request. Scientific input, independent audit and execution gates
+remain separate prerequisites to construction or launch.
 
 ## Question and fixed scope
 

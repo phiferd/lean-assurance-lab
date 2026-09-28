@@ -3124,8 +3124,8 @@ local assets; [the report](../results/research/lazy-reduction-conformance-pilot-
 scopes the same-implementation and host/profile limits. STATEFUL subsequently
 completed all six public kernel environment-history comparisons, twelve
 histories and 25 requests under [its exact report](../results/research/stateful-validation-pilot-1/report.md).
-REAL-PROOF-SLICES is selected READY and unstarted for retained-source/reuse,
-dependency closure and fixed selection preparation. The 2026-09-27
+REAL-PROOF-SLICES is ACTIVE for retained-source/reuse, dependency closure and
+fixed selection preparation under its staged gates. The 2026-09-27
 owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
 ledger observations remain dated.
 
@@ -3144,8 +3144,8 @@ pilot is COMPLETE with SUCCESS;
 preserves the exact scope and original reporting incident. The stateful pilot
 is COMPLETE under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
 after completion of the later lazy-reduction pilot. Its exact public API
-comparison preserves all six relations; the real-proof slice successor remains
-READY and unstarted under [its staged plan](research/REAL_PROOF_SLICES_PILOT_1_PLAN.md).
+comparison preserves all six relations; the real-proof slice successor is
+ACTIVE under [its staged plan](research/REAL_PROOF_SLICES_PILOT_1_PLAN.md).
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3240,7 +3240,7 @@ no external action is recommended now.
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
-| 8 | `REAL-PROOF-SLICES-PILOT-1` | READY, unstarted staged preparation |
+| 8 | `REAL-PROOF-SLICES-PILOT-1` | ACTIVE, staged preparation |
 | 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
@@ -3391,8 +3391,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and no ACTIVE item:
-`REAL-PROOF-SLICES-PILOT-1` is selected and unstarted for retained-source/reuse,
+The canonical queue retains one ACTIVE item and no READY item:
+`REAL-PROOF-SLICES-PILOT-1` is selected for retained-source/reuse,
 dependency/environment closure and fixed feature-based selection preparation.
 The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
 demand requirements. The stateful pilot is complete with six preserved public
