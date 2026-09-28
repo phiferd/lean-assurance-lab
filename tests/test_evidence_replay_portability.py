@@ -16,6 +16,8 @@ from lib import trust_assumption_pilot_r2
 from lib import trust_assumption_pilot_r3
 from lib.portable_evidence_replay import portable_validation
 import test_trust_assumption_pilot_r2 as legacy_trust_tests
+from lib import real_proof_slices_replay
+from lib import evidence_replay_portability
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -119,6 +121,44 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
         self.assertEqual(result["manifest_bound_attempts"], 9)
         self.assertEqual(result["historical_manifest_mismatches"], 0)
         self.assertEqual(result["host_launches"], 0)
+
+    def test_real_proof_slices_replay_without_original_checkout_or_host_tools(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = self.alternate_checkout(directory)
+            result = real_proof_slices_replay.replay(checkout)
+            groups, receipts = evidence_replay_portability.discover(checkout)
+            family = set(groups["real-proof-slices-pilot-1"])
+            family_receipts = [(path, receipt) for path, receipt in receipts if path in family]
+            streams, roots = evidence_replay_portability.validate_raw_custody(
+                checkout, family_receipts)
+        self.assertEqual(result, {"status": "PASS", "cases": 12, "ready": 9,
+                                  "oversize": 3, "processes": 18, "accepted": 18,
+                                  "host_launches": 0})
+        self.assertEqual(len(family_receipts), 23)
+        self.assertEqual(streams, 46)
+        self.assertNotIn(str(checkout), roots)
+
+    def test_real_proof_slices_replay_rejects_command_and_raw_tampering(self):
+        original_json = real_proof_slices_replay._json
+        original_read = real_proof_slices_replay._read
+        result_path = real_proof_slices_replay.BASE / "execution/attempt-0001/result.json"
+        def changed_command(root, relative):
+            document = original_json(root, relative)
+            if Path(relative) == result_path:
+                document = copy.deepcopy(document)
+                document["cells"][0]["process_receipt"]["argv"][0] = "/forged/kernel"
+            return document
+        with patch.object(real_proof_slices_replay, "_json", side_effect=changed_command):
+            with self.assertRaisesRegex(real_proof_slices_replay.ReplayError,
+                                        "recorded command/cwd differs"):
+                real_proof_slices_replay.replay(ROOT)
+        raw_path = Path("results/research/real-proof-slices-pilot-1/execution/attempt-0001/raw/001-init-01-official-lean-4.33.0.stdout")
+        def changed_raw(root, relative):
+            return b"forged\n" if Path(relative) == raw_path else original_read(root, relative)
+        with patch.object(real_proof_slices_replay, "_read", side_effect=changed_raw):
+            with self.assertRaisesRegex(real_proof_slices_replay.ReplayError,
+                                        "bound bytes differ"):
+                real_proof_slices_replay.replay(ROOT)
 
 
 if __name__ == "__main__":
