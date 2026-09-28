@@ -1,8 +1,8 @@
 # Real proof slices pilot 1
 
-Status: ACTIVE as of 2026-09-28 for staged preparation under the owner's
-one-item request. Scientific input, independent audit and execution gates
-remain separate prerequisites to construction or launch.
+Status: COMPLETE, SUCCESS on 2026-09-28, subject to the required final
+repository validation/refresh receipt. The scientific inputs, independent
+audit and execution gates passed under their exact committed revisions.
 
 ## Question and fixed scope
 

@@ -58,6 +58,21 @@ research directions.
 
 ## Attempted
 
+- `REAL-PROOF-SLICES-PILOT-1` completes its fixed 2026-09-28 scientific
+  question with SUCCESS, subject to its required final repository
+  validation/refresh receipt. Twelve exact declarations from three retained
+  exports received independently audited dependency-closure dispositions.
+  Nine slices met the committed size ceilings, and official Lean 4.33.0 and
+  Nanoda `6ae1f0c` accepted all 18 supervised cells. The other three fixed
+  `std` cases remain OVERSIZE without semantic observations. A prose-only
+  audit binding defect was preserved and repaired as R2; two sandbox RSS
+  preflight failures and the successful actual-host retry are preserved.
+  Retain the slicer, auditor and nine accepted slices locally. Agreement is
+  scoped to the exact profiles, observed libraries are not fresh holdouts,
+  and no external action follows. `BINDER-MODEL-PILOT-1` is selected READY
+  and unstarted for staged source, API and model preparation. See the
+  [report](../results/research/real-proof-slices-pilot-1/report.md).
+
 - The 2026-09-28 CI evidence-replay portability repair inventories all 13
   recorded process families (303 JSON files, 337 receipts and 642 raw streams)
   on every checkout, requires registered replay tests and alternate-checkout
@@ -3112,7 +3127,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `REAL-PROOF-SLICES-PILOT-1`.
+Selected next item: `BINDER-MODEL-PILOT-1`.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3124,8 +3139,13 @@ local assets; [the report](../results/research/lazy-reduction-conformance-pilot-
 scopes the same-implementation and host/profile limits. STATEFUL subsequently
 completed all six public kernel environment-history comparisons, twelve
 histories and 25 requests under [its exact report](../results/research/stateful-validation-pilot-1/report.md).
-REAL-PROOF-SLICES is ACTIVE for retained-source/reuse, dependency closure and
-fixed selection preparation under its staged gates. The 2026-09-27
+REAL-PROOF-SLICES completed twelve fixed dispositions, including nine accepted
+slices and three oversize `std` selections. Its provenance-preserving slicer
+and independent auditor remain local assets under the exact
+[report](../results/research/real-proof-slices-pilot-1/report.md).
+BINDER-MODEL is READY and unstarted for source/reuse, supported API and
+independent-model preparation under its
+[staged plan](research/BINDER_MODEL_PILOT_1_PLAN.md). The 2026-09-27
 owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
 ledger observations remain dated.
 
@@ -3145,7 +3165,7 @@ preserves the exact scope and original reporting incident. The stateful pilot
 is COMPLETE under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
 after completion of the later lazy-reduction pilot. Its exact public API
 comparison preserves all six relations; the real-proof slice successor is
-ACTIVE under [its staged plan](research/REAL_PROOF_SLICES_PILOT_1_PLAN.md).
+COMPLETE under [its staged plan](research/REAL_PROOF_SLICES_PILOT_1_PLAN.md).
 
 
 `ACCEPTANCE-IMPACT-PILOT-1` is COMPLETE under the
@@ -3240,8 +3260,8 @@ no external action is recommended now.
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
-| 8 | `REAL-PROOF-SLICES-PILOT-1` | ACTIVE, staged preparation |
-| 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
+| 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
+| 9 | `BINDER-MODEL-PILOT-1` | READY, unstarted staged preparation |
 | 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 11 | `RESOURCE-ENVELOPE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
@@ -3391,9 +3411,10 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item and no READY item:
-`REAL-PROOF-SLICES-PILOT-1` is selected for retained-source/reuse,
-dependency/environment closure and fixed feature-based selection preparation.
+The canonical queue retains one READY item and no ACTIVE item:
+`BINDER-MODEL-PILOT-1` is selected and unstarted for supported API/fragment,
+named-variable-model reuse, capture avoidance and independently audited
+translation preparation.
 The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
 demand requirements. The stateful pilot is complete with six preserved public
 kernel API relations, twelve histories and 25 requests; its R4 custody repair
@@ -3414,10 +3435,12 @@ external-write gates and the failing assurance state remain unchanged. The
 completed recursor repair retains its exact patch, independent review, binary
 and execution manifests, successful frozen matrix and local PR draft. The
 completed assumption-reporting item retains twelve exact matched cells and
-its negative permission comparison. The selected real-proof slice item must
-establish exact retained payloads, complete dependency/environment accounting,
-size ceilings and a fixed twelve-declaration selection across three exports
-before construction and gated observation. It has not started.
+its negative permission comparison. The completed real-proof slice item
+retains twelve fixed dispositions: nine accepted slices, three visible
+oversize cases, and no observed compatibility difference or fresh-holdout
+claim. The binder-model successor remains unstarted and must pass its exact
+fragment, source/reuse, independent-audit and execution gates before any
+construction or launch.
 
 ### Waiting
 

@@ -72,12 +72,12 @@ are ordinal judgments, not estimated defect rates.
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped
-to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful pilot is now
-complete; real-proof slicing is READY, and three original candidates remain PLANNED
+to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful and real-proof
+slice pilots are now complete; the binder-model pilot is READY, and two original candidates remain PLANNED
 with independent launch gates. The recursor-repair and trust-reporting work is
 complete. The 2026-09-27 source comparison adds a new rank-6 lazy-reduction
 candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original ordinal
-proposal mapping remains historical. `REAL-PROOF-SLICES-PILOT-1` is selected
+proposal mapping remains historical. `BINDER-MODEL-PILOT-1` is selected
 READY and unstarted under its explicit staged plan.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
@@ -91,8 +91,8 @@ fixed sequence or promote every idea to READY.
 | 5 `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | Completed six-fixture/two-route transitive-assumption matrix and paired allowed-set control | COMPLETE, SUCCESS: twelve preserved sets and four expected policy decisions; one preserved/repaired rendering incident |
 | 6 `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | Completed six demand-directed type-conversion cases on two explicit reduction paths; four capability cells | COMPLETE, SUCCESS: 12/12 ACCEPT with all six KAM demand gates; retain exact local adapter/regressions and experimental-profile limitations |
 | 7 `STATEFUL-VALIDATION-PILOT-1` | Completed six fixed comparisons through one supported public kernel API | COMPLETE, SUCCESS: twelve histories and 25 requests preserve all expected outcomes and environment projections; no persistent-cache/CoreM rollback claim |
-| 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | Selected READY and unstarted under its staged plan; establish payloads, dependency/environment closure, size ceilings and feature selection before scientific execution; no absent-coverage or fresh-holdout claim |
-| 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Identify a tractable fragment and supported API seams; review capture avoidance, translation and alpha-equivalence independently; assess existing formalization reuse |
+| 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | COMPLETE, SUCCESS: nine slices accepted by both exact observers in 18 cells; three fixed Std selections remain oversize and unobserved; no absent-coverage or fresh-holdout claim |
+| 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | Selected READY and unstarted under its staged plan; identify a tractable fragment and supported API seams, review capture avoidance, translation and alpha-equivalence independently, and assess formalization reuse before scientific construction |
 | 10 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | Bind supported debug/release/overflow configurations, source-selected sites and reproducible toolchain; use nonterminal process safety controls; do not presume arithmetic sites are defects |
 | 11 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | Bind validity evidence, comparable fragments and verified memory/time/cleanup controls; freeze stop-at-first-limit within each matrix cell and resource measurement; no asymptotic claim from fixed samples |
 
