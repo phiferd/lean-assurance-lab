@@ -3,6 +3,7 @@ import os
 import copy
 import hashlib
 from pathlib import Path
+import shutil
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -18,6 +19,7 @@ from lib.portable_evidence_replay import portable_validation
 import test_trust_assumption_pilot_r2 as legacy_trust_tests
 from lib import real_proof_slices_replay
 from lib import evidence_replay_portability
+from lib import binder_model_replay
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -28,6 +30,32 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
         checkout = Path(directory) / "fresh-linux-checkout"
         os.symlink(ROOT, checkout, target_is_directory=True)
         return checkout
+
+    def test_binder_model_replay_without_original_checkout_or_host_tools(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = Path(directory) / "foreign-checkout"
+            source = ROOT / binder_model_replay.BASE
+            destination = checkout / binder_model_replay.BASE
+            destination.parent.mkdir(parents=True)
+            shutil.copytree(source, destination)
+            original_read = Path.read_bytes
+
+            def reject_original(path):
+                if Path(path).is_relative_to(ROOT):
+                    raise AssertionError("replay opened the evidence-production checkout")
+                return original_read(path)
+
+            with patch.object(Path, "read_bytes", reject_original):
+                result = binder_model_replay.replay(checkout)
+            self.assertEqual(result["status"], "PASS")
+            self.assertEqual((result["processes"], result["vector_observations"],
+                              result["stage_outputs"], result["host_launches"]),
+                             (40, 20000, 30000, 0))
+
+            raw = destination / "runs/attempt-0001/kiota-2d2a9fa/batch-00/process.stdout"
+            raw.write_bytes(raw.read_bytes() + b"\n")
+            with self.assertRaises(binder_model_replay.ReplayError):
+                binder_model_replay.replay(checkout)
 
     def test_lazy_replay_does_not_require_original_checkout_path(self):
         with tempfile.TemporaryDirectory() as directory:
