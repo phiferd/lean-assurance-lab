@@ -3141,7 +3141,7 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `RESOURCE-ENVELOPE-PILOT-1`.
-The canonical queue retains one READY item. No item is ACTIVE; selection does not start execution.
+The canonical queue retains zero READY items. The resource study has started with source, validity and measurement preparation; no selected terms or observer setup/launch have begun. Existing independently audited positive cases make validity planning concrete, but different observer input paths and settings mean their earlier results are not a matched resource baseline. The next work must bind one common checking task, import/startup baselines, and RSS sampling controls before selected inputs are generated.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3160,8 +3160,9 @@ and independent auditor remain local assets under the exact
 BINDER-MODEL completed its exact finite comparison: both selected APIs matched
 on 30,000 outputs across 10,000 rows. The scoped plain-language finding,
 limits, and retained local assets are in its [report](../results/research/binder-model-pilot-1/report.md).
-RESOURCE-ENVELOPE is READY and unstarted for preparation only under its
-[plan](research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md). It retains two families,
+RESOURCE-ENVELOPE is ACTIVE for preparation only under its
+[plan](research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md) and
+[work record](../results/research/resource-envelope-pilot-1/work-record.json). It retains two families,
 six sizes and two observers, with independent validity, comparable checking,
 startup/import baselines, sampled-RSS uncertainty and cleanup as pre-freeze
 and pre-launch gates. The binder operation RSS/time values are not comparable
@@ -3281,7 +3282,7 @@ no external action is recommended now.
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
-| 10 | `RESOURCE-ENVELOPE-PILOT-1` | READY, preparation only; unstarted |
+| 10 | `RESOURCE-ENVELOPE-PILOT-1` | ACTIVE, source/validity/measurement preparation only; no selected inputs or setup |
 | 11 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
@@ -3430,8 +3431,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue has no ACTIVE item and selects `RESOURCE-ENVELOPE-PILOT-1`
-READY and unstarted for source, validity and measurement preparation only. The
+The canonical queue selects `RESOURCE-ENVELOPE-PILOT-1` ACTIVE for source,
+validity and measurement preparation only; zero other READY items remain. The
 binder-model result is COMPLETE with 30,000 scoped outputs matched; its model,
 auditor, vectors and portable replay remain local regression assets. Resource
 work remains gated on independent input validity, two comparable observers,

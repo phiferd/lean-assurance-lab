@@ -72,13 +72,15 @@ are ordinal judgments, not estimated defect rates.
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped
-to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful and real-proof
-slice pilots are now complete; the binder-model pilot is READY, and two original candidates remain PLANNED
-with independent launch gates. The recursor-repair and trust-reporting work is
+to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful, real-proof
+slice and binder-model pilots are complete; the resource-envelope pilot is ACTIVE
+for preparation only, and the build-mode candidate remains PLANNED with its
+independent launch gates. The recursor-repair and trust-reporting work is
 complete. The 2026-09-27 source comparison adds a new rank-6 lazy-reduction
-candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original ordinal
-proposal mapping remains historical. `BINDER-MODEL-PILOT-1` is selected
-READY and unstarted under its explicit staged plan.
+candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original
+ordinal proposal mapping remains historical. RESOURCE-ENVELOPE-PILOT-1 is the
+selected item under its staged plan; selected input generation and observer
+setup/launch remain gated on frozen, reviewed, committed inputs.
 At each closure reconsider the actual evidence; do not execute this table as a
 fixed sequence or promote every idea to READY.
 
@@ -93,7 +95,7 @@ fixed sequence or promote every idea to READY.
 | 7 `STATEFUL-VALIDATION-PILOT-1` | Completed six fixed comparisons through one supported public kernel API | COMPLETE, SUCCESS: twelve histories and 25 requests preserve all expected outcomes and environment projections; no persistent-cache/CoreM rollback claim |
 | 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | COMPLETE, SUCCESS: nine slices accepted by both exact observers in 18 cells; three fixed Std selections remain oversize and unobserved; no absent-coverage or fresh-holdout claim |
 | 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | COMPLETE: all 30,000 scoped outputs matched; retain model, auditor, vectors and replay as a local regression asset |
-| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | Selected READY and unstarted for source, validity and measurement preparation only; preserve fixed scope and pass independent validity, comparability, baseline/import accounting, sampled-RSS uncertainty and cleanup gates before freeze or launch |
+| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | ACTIVE for source, validity and measurement preparation only; selected inputs and observer setup/launch remain gated on independent validity, comparable profiles, baseline/import accounting, sampled-RSS uncertainty and cleanup controls |
 | 11 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | PLANNED: bind supported configurations, source-selected input-influenced sites, reproducible toolchain and exact fixture/build protocol |
 
 The completed representation and pipeline pilot 1 records remain frozen outside
@@ -245,4 +247,4 @@ absent substantive feedback, and no successor is executed here.
 
 The [binder-model report](../../results/research/binder-model-pilot-1/report.md) records 10,000 syntactically well-scoped operation rows, 5,091 distinct structural inputs and 30,000 matched stage outputs across two selected APIs. No difference was observed. The result establishes no typed-program/proof, whole-kernel, universal-correctness or performance claim; retain its corpus, independent model/auditor and portable replay locally. No external action follows.
 
-Select [RESOURCE-ENVELOPE-PILOT-1](RESOURCE_ENVELOPE_PILOT_1_PLAN.md) READY and unstarted for preparation only. Existing audited positive-term/importer assets and portable supervisor controls provide reuse leads; the three real-proof oversize selections remain semantically unobserved and are not resource inputs. Do not infer comparable speed or memory from binder's Lean and Kiota operation harnesses. Before freeze or launch, bind two independently valid term families, six exact sizes, two comparable supported observers, startup/import and idle baselines, sampled-RSS uncertainty, timeout interpretation, memory ceiling and cleanup. BUILD-MODE remains PLANNED until a concrete supported configuration and input-influenced source site are selected. Hold Kiota/Nanoda follow-up absent substantive feedback; independent transfer still awaits its external holdout input.
+[RESOURCE-ENVELOPE-PILOT-1](RESOURCE_ENVELOPE_PILOT_1_PLAN.md) is ACTIVE for preparation only. Existing audited positive-term/importer assets and portable supervisor controls provide reuse leads; the three real-proof oversize selections remain semantically unobserved and are not resource inputs. Binder's Lean and Kiota operation measurements are not a matched resource baseline. Before selected input generation or launch, bind two independently valid term families, six exact sizes, two comparable supported observers, startup/import and idle baselines, sampled-RSS uncertainty, timeout interpretation, memory ceiling and cleanup. BUILD-MODE remains PLANNED until a concrete supported configuration and input-influenced source site are selected. Hold Kiota/Nanoda follow-up absent substantive feedback; independent transfer still awaits its external holdout input.

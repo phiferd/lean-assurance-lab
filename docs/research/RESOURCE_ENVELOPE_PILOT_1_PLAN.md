@@ -1,8 +1,8 @@
 # Resource envelope pilot 1
 
-Status: READY for source, validity and measurement preparation only. No terms
-have been generated, no observer setup has started, and no scientific input or
-launch is authorized by this selection.
+Status: ACTIVE for source, validity and measurement preparation only. This entry does not authorize selected term generation, observer setup/builds, or scientific launch. Use only synthetic, disjoint fixtures for pre-freeze tooling checks. Exact scientific and execution inputs must be frozen, independently reviewed, and committed before selected input generation or launch.
+
+The current work record is [results/research/resource-envelope-pilot-1/work-record.json](../../results/research/resource-envelope-pilot-1/work-record.json).
 
 ## Question and fixed scope
 
