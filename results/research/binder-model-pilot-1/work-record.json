@@ -10,5 +10,17 @@
   "repair_policy": "REPAIR_AND_CONTINUE; counts and elapsed time observational; preserve every failed attempt and frozen scientific input.",
   "external_actions": "None.",
   "accounting_start": "Read-only inventory preceded ACTIVE entry; exact active duration was not measured and must not be represented as zero.",
-  "attempts": []
+  "attempts": [],
+  "preconstruction_incidents": [
+    {
+      "id": "BINDER-MODEL-PILOT-1-PREFREEZE-AUDITOR-ROWS-R1",
+      "classification": "PREPARATION_CUSTODY_GATE_REPAIR",
+      "summary": "The first 12-test auditor suite passed while embedding four exact selected scientific ordinals as in-memory rows before the scientific freeze. No complete corpus file, model-generated corpus, checker observer launch or observer outcome occurred.",
+      "preserved_snapshot": "results/research/binder-model-pilot-1/review-evidence/prefreeze-auditor-tests-r1.py.txt",
+      "preserved_snapshot_sha256": "5753daf556268ca7baedc3d4f33138272bc87d73ce75ab475a65424811b3bffa",
+      "independent_review": "results/research/binder-model-pilot-1/independent-preconstruction-review-r1.json",
+      "repair": "The live auditor tests now use ordinal-free synthetic operation records. The four unchanged selected records are separately preserved in selected-input-adoption.json and require exact committed deterministic replay plus independent audit before full corpus construction.",
+      "initial_check": "PYTHONPATH=. python3 tests/test_binder_model_audit.py; PASS, 12 tests; initial test suite construction is not described as non-scientific smoke."
+    }
+  ]
 }

@@ -1,0 +1,84 @@
+{
+  "schema": "binder-model-independent-review-v1",
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "PRECONSTRUCTION_R1",
+  "reviewed_at": "2026-09-28T18:23:41.873426+00:00",
+  "reviewer": "independent binder_review agent",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the model and auditor pass 17 focused checks, but four auditor fixtures already spell out selected scientific vectors before the committed construction gate. No observer outcome was produced by this review. One further negative test is needed to check that a consistently changed named/index expectation still fails the direct-operation comparison.",
+    "is_it_interesting": "Yes as a workflow and audit-integrity finding. The four prewritten rows cannot be described as separate smoke fixtures merely because they were entered by hand. This is not an observed disagreement between implementations.",
+    "does_it_require_more_work": "Preserve the prefreeze fixture evidence, record exact adoption of unchanged scientific inputs without outcome feedback, and add a negative that exercises the direct expectation comparison before approving scientific construction."
+  },
+  "verdict": "REPAIR_REQUIRED_BEFORE_CONSTRUCTION",
+  "findings": [
+    {
+      "id": "R1-PREFREEZE-SELECTED-ROWS",
+      "severity": "gate",
+      "evidence": "results/research/binder-model-pilot-1/review-evidence/prefreeze-auditor-tests-r1.py.txt",
+      "details": "Four literal positive test rows have frozen IDs/ordinals 0, 2500, 5000 and 7500 and pass the actual deterministic ordinal replay. They are selected scientific records produced before the scientific/execution commit. This review ran the 12-test file, which constructs those four dictionaries in memory; no corpus file or observer outcome was generated.",
+      "repair": "Preserve the exact prefreeze snapshot. Explicitly adopt unchanged bytes/meaning with the frozen deterministic rule and independent review; retain the no-observer/no-feedback limit. Future tooling fixtures must use separate IDs or a clearly isolated primitive interface."
+    },
+    {
+      "id": "R1-DIRECT-EXPECTATION-NEGATIVE",
+      "severity": "audit",
+      "details": "Current expected-only mutation fails E_TRANSLATION first. It does not show audit_vector rejects a wrong named_expected paired with its own matching wrong DB expected output.",
+      "repair": "Add a hand-calculated wrong but internally consistent expectation that reaches E_EXPECTATION and prove missing this operation comparison makes the negative fail."
+    }
+  ],
+  "positive_findings": [
+    "Named model uses name-based replacement and alpha-renaming, while auditor uses direct index recurrences and independent translation with no model/producer imports.",
+    "Exact deterministic membership replay plus ascending order and strict canonical NDJSON protect corpus custody; they share the specified construction rule and do not provide independent semantic authority.",
+    "Independent named-model hand checks covered capture, target shadowing, nested same-name binder/domain scope and let type/value scope.",
+    "Independent auditor hand checks covered capture, cutoff, let scope, shadow translation and bool/negative/float/arity rejection.",
+    "Five separate smoke expectations contain seven correctly calculated stage outputs."
+  ],
+  "validation": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_binder_model_audit.py",
+      "result": "PASS",
+      "tests": 12
+    },
+    {
+      "command": "PYTHONPATH=. python3 tests/test_binder_named_model.py",
+      "result": "PASS",
+      "tests": 5
+    }
+  ],
+  "reviewed_paths": [
+    {
+      "path": "lib/binder_model_audit.py",
+      "bytes": 20457,
+      "sha256": "c14985b01974cfdf03456ed84c8e34161d52ed9d165d95c6d93daa33f6789341"
+    },
+    {
+      "path": "lib/binder_model_vectors.py",
+      "bytes": 6875,
+      "sha256": "bebde089370a9293f1e3b1cf195825fc498f0ac61df068f6010261c874096647"
+    },
+    {
+      "path": "lib/binder_named_model.py",
+      "bytes": 6451,
+      "sha256": "129c569a2b9d24d0717657ff55b8efa460fa96633ec7c08fefedbca93704dcb0"
+    },
+    {
+      "path": "tests/test_binder_model_audit.py",
+      "bytes": 7349,
+      "sha256": "5753daf556268ca7baedc3d4f33138272bc87d73ce75ab475a65424811b3bffa"
+    },
+    {
+      "path": "tests/test_binder_named_model.py",
+      "bytes": 1874,
+      "sha256": "0a477b34d9671815f94dd2cf3a9bc909cccd3ef2c750f55e5d095c2f5287d6d7"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/review-evidence/prefreeze-auditor-tests-r1.py.txt",
+      "bytes": 7349,
+      "sha256": "5753daf556268ca7baedc3d4f33138272bc87d73ce75ab475a65424811b3bffa"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/protocol.md",
+      "bytes": 8430,
+      "sha256": "d7acd70f83238bed2e75962c8880d4cf4df40a8c79ed175ebdec6e595158e92d"
+    }
+  ]
+}

@@ -1,0 +1,49 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "reviewed_at": "2026-09-28",
+  "decision_question": "Are two supported structural expression APIs available on one well-scoped lambda/application/let fragment, and does an existing independent named-variable model make a new one unnecessary?",
+  "common_fragment": {
+    "constructors": ["bvar", "sort_zero", "app", "lam_default", "let"],
+    "validity": "Every de Bruijn variable is bound by an enclosing lambda/let or a declared finite external context. This is syntactic scope validity, not Lean type correctness. Structural shift and instantiation APIs accept these expressions without a kernel type-checking environment.",
+    "excluded": ["forall", "fvar", "mvar", "constants", "projections", "universe parameters", "literals", "metadata", "type checking", "reduction"],
+    "binder_depth": "Lambda domain and let type/value remain at current depth; lambda/let body gains one binder. Sort zero is an inert atom."
+  },
+  "apis": [
+    {
+      "profile": "official-lean-4.33.0",
+      "revision": "d8b18978322de05a8f3dba51ef03cf5461676c17",
+      "source": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0/src/lean/Lean/Expr.lean",
+      "sha256": "b9a91d9d170201c2a3622b9c55d694466f54e0e1b8f6068a2d296ff98650169c",
+      "seams": ["Lean.Expr.liftLooseBVars e s d", "Lean.Expr.instantiate1 e subst"],
+      "source_lines": "1360-1362, 1403-1446",
+      "contract": "Lift loose indices at or above cutoff; instantiate loose index zero with a depth-lifted replacement and lower larger loose indices."
+    },
+    {
+      "profile": "kiota-2d2a9fa",
+      "revision": "2d2a9fa31cba31abdd49543c3bb667591207577e",
+      "source": "external/ecosystem-closure-kiota/src/expr.rs",
+      "sha256": "1bef44e113babd84daae57d4d0198e6dd6919b8156d025afb95b349aca8d7d21",
+      "seams": ["kiota::expr::shift(e, by, cutoff)", "kiota::expr::instantiate1(e, arg)"],
+      "source_lines": "462-498, 504-575",
+      "contract": "Nonnegative small shift at a cutoff and single instantiation use the same loose-index and binder-depth contract as the selected official API. Negative shifts and large indices are excluded."
+    }
+  ],
+  "reuse_review": [
+    {
+      "source": "results/research/evidence/declaration-validation-publication-study/lean4lean-ecb3b666-Axioms.lean",
+      "revision": "ecb3b6661c14f8147be1069b126c629114baf4a8",
+      "sha256": "52fe205cd54e3b38b53862694e4d673b406eb89c99710248cc17f87ef226b43c",
+      "finding": "Lean4Lean defines de Bruijn liftLooseBVars' and instantiate1' and states equality with official opaque operations as axioms. It cross-checks the intended structural clauses, including let depth, but is neither a named-variable oracle nor a proof of the opaque APIs' correctness."
+    },
+    {
+      "source": "lib/valid_dependent_term_generator.py and lib/valid_dependent_term_audit.py",
+      "finding": "The completed positive-term pilot has reusable supervision and separate generator/auditor patterns. Its inference-oriented substitution and typing rules are not a named-variable model for these open structural operations."
+    },
+    {
+      "source": "external/ecosystem-triage-nanoda/src/expr.rs",
+      "finding": "The retained Nanoda instantiation path does not implement general depth-lifted open-argument substitution or higher-index lowering, and it exposes no matching lift seam. It is excluded from this common API contract."
+    }
+  ],
+  "recommendation": "Build the missing small named-variable model and a separate negative-capable de Bruijn/translation auditor; use the two selected public operation APIs. Pin Kiota source bytes in the pilot package before execution. Do not infer type soundness or formal correctness from either implementation or Lean4Lean's stated axioms."
+}

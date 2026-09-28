@@ -1,0 +1,48 @@
+#!/usr/bin/env python3
+"""Staged exact controls for the binder model pilot."""
+import argparse
+import json
+import sys
+from pathlib import Path
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from lib.binder_model_control import (  # noqa: E402
+    construct, freeze_execution, freeze_science, seal_corpus,
+)
+from lib.binder_model_execute import (  # noqa: E402
+    freeze_smoke, rss_preflight, run_science, run_smoke,
+)
+
+
+def main() -> None:
+    parser = argparse.ArgumentParser()
+    parser.add_argument("action", choices=("freeze-science", "freeze-execution",
+                                           "freeze-smoke", "construct", "seal-corpus",
+                                           "preflight", "smoke", "run"))
+    parser.add_argument("--attempt", type=int)
+    args = parser.parse_args()
+    if args.action == "freeze-science":
+        result = freeze_science()
+    elif args.action == "freeze-execution":
+        result = freeze_execution()
+    elif args.action == "freeze-smoke":
+        result = freeze_smoke()
+    elif args.action == "construct":
+        result = construct()
+    elif args.action == "seal-corpus":
+        if args.attempt is None or args.attempt < 1:
+            parser.error("seal-corpus requires --attempt N")
+        result = seal_corpus(args.attempt)
+    elif args.action == "preflight":
+        result = rss_preflight()
+    elif args.action == "smoke":
+        result = run_smoke()
+    else:
+        result = run_science()
+    print(json.dumps(result, indent=2, sort_keys=True))
+
+
+if __name__ == "__main__":
+    main()

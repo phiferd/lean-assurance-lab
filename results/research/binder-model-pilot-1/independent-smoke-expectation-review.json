@@ -1,0 +1,58 @@
+{
+  "schema": "binder-model-independent-review-v1",
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "HANDWRITTEN_SMOKE_EXPECTATIONS",
+  "reviewed_at": "2026-09-28T18:19:09.639339+00:00",
+  "reviewer": "independent binder_review agent; no observer/model/auditor edits",
+  "plain_language": {
+    "what_did_we_find": "Provisional: five hand-written adapter checks have seven correctly calculated expected intermediate/final outputs. No observer has run these checks at this review.",
+    "is_it_interesting": "Yes as an adapter check: they expose cutoff handling, replacement capture, let scope and both composition sequences. They are not scientific results from the fixed 10,000-vector suite.",
+    "does_it_require_more_work": "Bind these separate capability inputs and expected outputs with runtime/source identities and resource controls, commit the exact manifest, and pass actual-host RSS before invoking an observer."
+  },
+  "verdict": "PASS_EXPECTATIONS_ONLY",
+  "checks": [
+    {
+      "id": "smoke-lift-binder-cutoff",
+      "finding": "Domain b0 stays below cutoff 1; body b2 reaches cutoff+depth=2 and becomes b4; body b0 remains bound."
+    },
+    {
+      "id": "smoke-subst-capture",
+      "finding": "Replacement b0 is lifted to b1 under the lambda; existing bound b0 remains bound."
+    },
+    {
+      "id": "smoke-let-depth",
+      "finding": "Type target b0 becomes argument b0; unselected value b1 lowers to b0; body target b1 gets depth-lifted b1, and bound b0 stays."
+    },
+    {
+      "id": "smoke-lift-composition",
+      "finding": "First outputs app(b1,b3); second cutoff 2 leaves b1 and raises b3 to b5."
+    },
+    {
+      "id": "smoke-subst-composition",
+      "finding": "First replaces b0 with b0 and lowers b2 to b1; second replaces b0 with sort zero and lowers b1 to b0."
+    }
+  ],
+  "remaining_gate": "The exact smoke manifest should state initial context length (three suffices for every case) and argument-stage contexts. This review is not launch authorization.",
+  "reviewed_paths": [
+    {
+      "path": "results/research/binder-model-pilot-1/smoke/inputs.ndjson",
+      "bytes": 690,
+      "sha256": "efbb4fb0bd07f54650fb8ef4caf824479f0354135285c0423640a480bf76550e"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/smoke/expected.ndjson",
+      "bytes": 413,
+      "sha256": "3d7978b2896eecf448585b43157c1433a607d99f25f726a3c73f32980cd54d93"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/BinderObserver.lean",
+      "bytes": 3353,
+      "sha256": "4f3f51f8017277cf8f007041176b783902f92c8d775285ad1f8b8c735e2d2d2c"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/kiota-observer/src/main.rs",
+      "bytes": 4584,
+      "sha256": "a18582bcd19c611b400bd1440ef1f18aadb4d89feb8b1ffe8c929cc08ab5c618"
+    }
+  ]
+}

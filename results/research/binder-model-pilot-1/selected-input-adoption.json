@@ -1,0 +1,451 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "status": "ADOPTED_UNCHANGED_PENDING_DETERMINISTIC_REPLAY",
+  "prepared_at": "2026-09-28",
+  "purpose": "Record the exact prefreeze selected records and propose unchanged adoption; this record is not construction or launch authorization.",
+  "plain_language": {
+    "what_did_we_find": "Four exact suite ordinals (0, 2500, 5000 and 7500) appeared as in-memory audit test records before scientific freeze. The test suite ran, but no full corpus file or observer outcome was produced.",
+    "is_it_interesting": "Yes as a custody and audit-process incident. The reviewer found the recorded intermediate and final expectations hand-calculated correctly; this is not a checker comparison or semantic discovery.",
+    "does_it_require_more_work": "Freeze these four unchanged record meanings alongside the deterministic generation rule, require exact replay from the committed producer, and bind them in the scientific manifest after owner and independent review. Do not adapt later ordinals based on observer results."
+  },
+  "incident": {
+    "raw_snapshot_path": "results/research/binder-model-pilot-1/review-evidence/prefreeze-auditor-tests-r1.py.txt",
+    "raw_snapshot_bytes": 7349,
+    "raw_snapshot_sha256": "5753daf556268ca7baedc3d4f33138272bc87d73ce75ab475a65424811b3bffa",
+    "preconstruction_review_path": "results/research/binder-model-pilot-1/independent-preconstruction-review-r1.json",
+    "preconstruction_review_sha256": "e14df5f952c909a4a58903e9195c07accfad0f719278773ef1ac490c732ef62c",
+    "initial_focused_test_command": "PYTHONPATH=. python3 tests/test_binder_model_audit.py",
+    "initial_focused_test_outcome": "PASS, 12 tests; the run instantiated these four literal records only in memory.",
+    "observer_launches": 0,
+    "observer_outcomes": 0,
+    "full_corpus_file_created": false,
+    "adaptive_feedback_used": false
+  },
+  "adoption_rule": {
+    "decision": "UNCHANGED_ADOPTION_ACCEPTED_CONDITIONAL_ON_REPLAY",
+    "ordinal_source": "The fixed SplitMix64 seed XOR ordinal, five source constructors and replacement rule in the staged producer, independently replayed by the auditor; exact source/API/protocol/generator/auditor hashes are committed in the later scientific freeze.",
+    "requirement": "Before full corpus construction, the exact committed producer must regenerate only these four ordinals in memory, each canonical record must equal the saved record byte-for-byte, and each must pass the independent auditor. Any mismatch blocks construction; no record may be edited, replaced, selectively omitted, or adapted to observer feedback.",
+    "review_limits": "Adopting these expectations preserves initial test bytes and does not upgrade them into observations by either implementation. Full fixed-suite audit and observer evidence remain required."
+  },
+  "records": [
+    {
+      "fixture_function": "lift_row_0",
+      "id": "bmp1-00000",
+      "ordinal": 0,
+      "operation": "LIFT",
+      "canonical_record_sha256": "a6f1b6d7bc0d0af423e8528c85dc22155afb3d4c478934bc3341ec41c52ea8dd",
+      "record": {
+        "id": "bmp1-00000",
+        "ordinal": 0,
+        "operation": "LIFT",
+        "family": 0,
+        "variant": 0,
+        "context": [
+          "c0",
+          "c1",
+          "c2",
+          "c3"
+        ],
+        "named_source": [
+          "a",
+          [
+            "v",
+            "c0"
+          ],
+          [
+            "v",
+            "c3"
+          ]
+        ],
+        "source": [
+          "a",
+          [
+            "b",
+            0
+          ],
+          [
+            "b",
+            3
+          ]
+        ],
+        "named_arguments": [],
+        "arguments": [],
+        "parameters": {
+          "s": 3,
+          "d": 1
+        },
+        "contexts_after": [
+          [
+            "c0",
+            "c1",
+            "c2",
+            "j0_1_0",
+            "c3"
+          ]
+        ],
+        "named_expected": [
+          [
+            "a",
+            [
+              "v",
+              "c0"
+            ],
+            [
+              "v",
+              "c3"
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              4
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "fixture_function": "subst_row_2500",
+      "id": "bmp1-02500",
+      "ordinal": 2500,
+      "operation": "SUBST",
+      "canonical_record_sha256": "64cf6d08368e5a5704a615784602417e2b8eb9716bf2ac3d9e090a12d44b890f",
+      "record": {
+        "id": "bmp1-02500",
+        "ordinal": 2500,
+        "operation": "SUBST",
+        "family": 0,
+        "variant": 0,
+        "context": [
+          "c0",
+          "c1",
+          "c2",
+          "c3",
+          "c4"
+        ],
+        "named_source": [
+          "a",
+          [
+            "v",
+            "c0"
+          ],
+          [
+            "v",
+            "c4"
+          ]
+        ],
+        "source": [
+          "a",
+          [
+            "b",
+            0
+          ],
+          [
+            "b",
+            4
+          ]
+        ],
+        "named_arguments": [
+          [
+            "v",
+            "c1"
+          ]
+        ],
+        "arguments": [
+          [
+            "b",
+            0
+          ]
+        ],
+        "parameters": {},
+        "contexts_after": [
+          [
+            "c1",
+            "c2",
+            "c3",
+            "c4"
+          ]
+        ],
+        "named_expected": [
+          [
+            "a",
+            [
+              "v",
+              "c1"
+            ],
+            [
+              "v",
+              "c4"
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              3
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "fixture_function": "lift_compose_row_5000",
+      "id": "bmp1-05000",
+      "ordinal": 5000,
+      "operation": "LIFT_COMPOSE",
+      "canonical_record_sha256": "d1f10d74c8e2110ea927cdd5c86b6c27cba1c423235d5a23f0809fbf1a43c318",
+      "record": {
+        "id": "bmp1-05000",
+        "ordinal": 5000,
+        "operation": "LIFT_COMPOSE",
+        "family": 0,
+        "variant": 0,
+        "context": [
+          "c0",
+          "c1",
+          "c2",
+          "c3",
+          "c4",
+          "c5"
+        ],
+        "named_source": [
+          "a",
+          [
+            "v",
+            "c0"
+          ],
+          [
+            "v",
+            "c4"
+          ]
+        ],
+        "source": [
+          "a",
+          [
+            "b",
+            0
+          ],
+          [
+            "b",
+            4
+          ]
+        ],
+        "named_arguments": [],
+        "arguments": [],
+        "parameters": {
+          "s1": 5,
+          "d1": 0,
+          "s2": 6,
+          "d2": 2
+        },
+        "contexts_after": [
+          [
+            "c0",
+            "c1",
+            "c2",
+            "c3",
+            "c4",
+            "c5"
+          ],
+          [
+            "c0",
+            "c1",
+            "c2",
+            "c3",
+            "c4",
+            "c5",
+            "j5000_2_0",
+            "j5000_2_1"
+          ]
+        ],
+        "named_expected": [
+          [
+            "a",
+            [
+              "v",
+              "c0"
+            ],
+            [
+              "v",
+              "c4"
+            ]
+          ],
+          [
+            "a",
+            [
+              "v",
+              "c0"
+            ],
+            [
+              "v",
+              "c4"
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              4
+            ]
+          ],
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              4
+            ]
+          ]
+        ]
+      }
+    },
+    {
+      "fixture_function": "subst_compose_row_7500",
+      "id": "bmp1-07500",
+      "ordinal": 7500,
+      "operation": "SUBST_COMPOSE",
+      "canonical_record_sha256": "d9de45a13606f41ab476c72f3c1b4a5536c219c1603ec6bcea9304d631721986",
+      "record": {
+        "id": "bmp1-07500",
+        "ordinal": 7500,
+        "operation": "SUBST_COMPOSE",
+        "family": 0,
+        "variant": 0,
+        "context": [
+          "c0",
+          "c1",
+          "c2"
+        ],
+        "named_source": [
+          "a",
+          [
+            "v",
+            "c0"
+          ],
+          [
+            "v",
+            "c2"
+          ]
+        ],
+        "source": [
+          "a",
+          [
+            "b",
+            0
+          ],
+          [
+            "b",
+            2
+          ]
+        ],
+        "named_arguments": [
+          [
+            "v",
+            "c1"
+          ],
+          [
+            "v",
+            "c2"
+          ]
+        ],
+        "arguments": [
+          [
+            "b",
+            0
+          ],
+          [
+            "b",
+            0
+          ]
+        ],
+        "parameters": {},
+        "contexts_after": [
+          [
+            "c1",
+            "c2"
+          ],
+          [
+            "c2"
+          ]
+        ],
+        "named_expected": [
+          [
+            "a",
+            [
+              "v",
+              "c1"
+            ],
+            [
+              "v",
+              "c2"
+            ]
+          ],
+          [
+            "a",
+            [
+              "v",
+              "c2"
+            ],
+            [
+              "v",
+              "c2"
+            ]
+          ]
+        ],
+        "expected": [
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              1
+            ]
+          ],
+          [
+            "a",
+            [
+              "b",
+              0
+            ],
+            [
+              "b",
+              0
+            ]
+          ]
+        ]
+      }
+    }
+  ],
+  "owner_decision": {
+    "decision": "ACCEPT_UNCHANGED_BYTE_ADOPTION",
+    "authority": "Standing same-item local authorization; recorded by the orchestration/item owner on 2026-09-28 after independent substantive adoption review.",
+    "scope": "Preserve the exact four prefreeze records and their expected meanings as fixed ordinal records; no relabeling, replacement, omission or adaptive change.",
+    "condition": "Before full corpus construction, exact committed producer, named model, protocol and auditor revisions must be frozen; regenerate only these four ordinals in memory, require byte-identical canonical records, run the independent auditor on each, and stop before full construction if any comparison fails."
+  }
+}

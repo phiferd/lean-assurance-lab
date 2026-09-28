@@ -1,0 +1,41 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "preparation_before_scientific_freeze",
+  "process_control": "These were ordinary unsupervised local Cargo preparation commands, not scientific observer launches. They have compiler stdout/stderr custody but no RSS, process-group cleanup, paired UTC/monotonic interval, or complete R1 input snapshot. Their exact elapsed time is unknown, not zero.",
+  "attempts": [
+    {
+      "revision": "R1",
+      "command": "cargo check --offline --manifest-path results/research/binder-model-pilot-1/kiota-observer/Cargo.toml",
+      "exit_code": 101,
+      "stdout": "results/research/binder-model-pilot-1/preparation/kiota-check-r1.stdout",
+      "stderr": "results/research/binder-model-pilot-1/preparation/kiota-check-r1.stderr",
+      "stderr_sha256": "0613361410271483234d6f53f9557035f91e2f546ac0c50b6c1b399c9d6ff677",
+      "adapter_source_binding": "UNAVAILABLE: R1 source was edited before an exact byte snapshot or hash was recorded; the compiler diagnostic and known one-token dereference difference are preserved, but R1 cannot be replayed as exactly bound.",
+      "exact_elapsed_seconds": null,
+      "cause": "The adapter matched ExprData against &ExprNode, one dereference short of Kiota's public Rc<ExprNode> -> ExprNode -> ExprData representation. This was a generic adapter compile defect, not a scientific observation."
+    },
+    {
+      "revision": "R2",
+      "change": "Match against &***e in the adapter encoder; no source API or scientific input was changed.",
+      "command": "cargo check --offline --manifest-path results/research/binder-model-pilot-1/kiota-observer/Cargo.toml",
+      "exit_code": 0,
+      "stdout": "results/research/binder-model-pilot-1/preparation/kiota-check-r2.stdout",
+      "stderr": "results/research/binder-model-pilot-1/preparation/kiota-check-r2.stderr"
+      ,"stderr_sha256": "b8fe8014f8e33b7ce93ffa8f22bdbfc4f31c6d6adeb0b6654a3cbdf584ec259f",
+      "adapter_source_sha256": "a18582bcd19c611b400bd1440ef1f18aadb4d89feb8b1ffe8c929cc08ab5c618",
+      "exact_elapsed_seconds": null
+    },
+    {
+      "revision": "R2_RELEASE_BUILD",
+      "command": "cargo build --release --offline --manifest-path results/research/binder-model-pilot-1/kiota-observer/Cargo.toml -j 2",
+      "exit_code": 0,
+      "stdout": "results/research/binder-model-pilot-1/preparation/kiota-build-r2.stdout",
+      "stderr": "results/research/binder-model-pilot-1/preparation/kiota-build-r2.stderr",
+      "stderr_sha256": "ccc6c207106c639de87997824db5550b8798cdea864e47e296a84e3514bbc8c2",
+      "adapter_source_sha256": "a18582bcd19c611b400bd1440ef1f18aadb4d89feb8b1ffe8c929cc08ab5c618",
+      "copied_binary_sha256": "702737dfd95ae2e80c5303bc50c26956bcb319edfcdb86471b90b70fed5baa94",
+      "exact_elapsed_seconds": null
+    }
+  ]
+}

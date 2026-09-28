@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "question": "Do two public structural expression APIs agree with a separately written capture-avoiding named-variable model for lifting and single substitution, including two-step compositions, on exactly 10,000 finite well-scoped operation vectors?",
+  "validity": "Syntactically well-scoped in an explicit finite nearest-first external context; no type-checking or well-typedness claim.",
+  "seed_hex": "b17d3a9e5c204f61",
+  "prng": "SplitMix64 with per-ordinal initial state seed XOR ordinal, unsigned 64-bit wraparound and modulo draws",
+  "ordinal_range": [0, 9999],
+  "operation_order": ["LIFT", "SUBST", "LIFT_COMPOSE", "SUBST_COMPOSE"],
+  "operation_counts": [2500, 2500, 2500, 2500],
+  "family_counts_per_operation": [500, 500, 500, 500, 500],
+  "context_order": "nearest-first",
+  "initial_context_length": [3, 6],
+  "source_node_ceiling": 20,
+  "source_binder_depth_ceiling": 3,
+  "replacement_node_ceiling": 7,
+  "lift_increment_values": [0, 1, 2],
+  "lift_cutoff_rule": "0 through current context length inclusive",
+  "compositions_check_intermediate": true,
+  "expected_outputs_per_observer": 15000,
+  "observers": [
+    "official-lean-4.33.0:Lean.Expr.liftLooseBVars,Lean.Expr.instantiate1",
+    "kiota-2d2a9fa:kiota::expr::shift,kiota::expr::instantiate1"
+  ],
+  "excluded_claims": [
+    "full Lean kernel correctness",
+    "type soundness",
+    "all expression constructors",
+    "all sizes or contexts",
+    "Lean4Lean axiom discharge",
+    "external implementation defect without a distinguishing case"
+  ]
+}

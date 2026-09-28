@@ -1,0 +1,174 @@
+from __future__ import annotations
+
+import copy
+import json
+from pathlib import Path
+import tempfile
+import unittest
+
+from lib import binder_model_audit as audit
+
+
+def lift_row_0():
+    return {
+        "id": "bmp1-00000", "ordinal": 0, "operation": "LIFT", "family": 0,
+        "variant": 0, "context": ["c0", "c1", "c2", "c3"],
+        "named_source": ["a", ["v", "c0"], ["v", "c3"]],
+        "source": ["a", ["b", 0], ["b", 3]], "named_arguments": [],
+        "arguments": [], "parameters": {"s": 3, "d": 1},
+        "contexts_after": [["c0", "c1", "c2", "j0_1_0", "c3"]],
+        "named_expected": [["a", ["v", "c0"], ["v", "c3"]]],
+        "expected": [["a", ["b", 0], ["b", 4]]],
+    }
+
+
+def subst_row_2500():
+    return {
+        "id": "bmp1-02500", "ordinal": 2500, "operation": "SUBST", "family": 0,
+        "variant": 0, "context": ["c0", "c1", "c2", "c3", "c4"],
+        "named_source": ["a", ["v", "c0"], ["v", "c4"]],
+        "source": ["a", ["b", 0], ["b", 4]],
+        "named_arguments": [["v", "c1"]], "arguments": [["b", 0]],
+        "parameters": {}, "contexts_after": [["c1", "c2", "c3", "c4"]],
+        "named_expected": [["a", ["v", "c1"], ["v", "c4"]]],
+        "expected": [["a", ["b", 0], ["b", 3]]],
+    }
+
+
+def lift_compose_row_5000():
+    return {
+        "id": "bmp1-05000", "ordinal": 5000, "operation": "LIFT_COMPOSE", "family": 0,
+        "variant": 0, "context": ["c0", "c1", "c2", "c3", "c4", "c5"],
+        "named_source": ["a", ["v", "c0"], ["v", "c4"]],
+        "source": ["a", ["b", 0], ["b", 4]], "named_arguments": [],
+        "arguments": [], "parameters": {"s1": 5, "d1": 0, "s2": 6, "d2": 2},
+        "contexts_after": [
+            ["c0", "c1", "c2", "c3", "c4", "c5"],
+            ["c0", "c1", "c2", "c3", "c4", "c5", "j5000_2_0", "j5000_2_1"],
+        ],
+        "named_expected": [
+            ["a", ["v", "c0"], ["v", "c4"]],
+            ["a", ["v", "c0"], ["v", "c4"]],
+        ],
+        "expected": [
+            ["a", ["b", 0], ["b", 4]],
+            ["a", ["b", 0], ["b", 4]],
+        ],
+    }
+
+
+def subst_compose_row_7500():
+    return {
+        "id": "bmp1-07500", "ordinal": 7500, "operation": "SUBST_COMPOSE", "family": 0,
+        "variant": 0, "context": ["c0", "c1", "c2"],
+        "named_source": ["a", ["v", "c0"], ["v", "c2"]],
+        "source": ["a", ["b", 0], ["b", 2]],
+        "named_arguments": [["v", "c1"], ["v", "c2"]],
+        "arguments": [["b", 0], ["b", 0]], "parameters": {},
+        "contexts_after": [["c1", "c2"], ["c2"]],
+        "named_expected": [
+            ["a", ["v", "c1"], ["v", "c2"]],
+            ["a", ["v", "c2"], ["v", "c2"]],
+        ],
+        "expected": [
+            ["a", ["b", 0], ["b", 1]],
+            ["a", ["b", 0], ["b", 0]],
+        ],
+    }
+
+
+class HandWrittenSmokeTests(unittest.TestCase):
+    def test_lift_inserts_context_name_at_cutoff(self):
+        self.assertEqual(audit.audit_vector(lift_row_0())["status"], "PASS")
+
+    def test_substitution_lowers_later_context_index(self):
+        self.assertEqual(audit.audit_vector(subst_row_2500())["status"], "PASS")
+
+    def test_lift_composition_checks_both_intermediate_and_final(self):
+        self.assertEqual(audit.audit_vector(lift_compose_row_5000())["status"], "PASS")
+
+    def test_substitution_composition_checks_both_contexts(self):
+        self.assertEqual(audit.audit_vector(subst_compose_row_7500())["status"], "PASS")
+
+    def test_capture_avoidance_and_alpha_translation(self):
+        source = ["l", "c1", ["s"], ["v", "c0"]]
+        replacement = ["v", "c1"]
+        source_db = audit._translate(source, ["c0", "c1"])
+        replacement_db = audit._translate(replacement, ["c1"])
+        direct = audit._instantiate1(source_db, replacement_db)
+        renamed = ["l", "renamed", ["s"], ["v", "c1"]]
+        naive_capture = ["l", "c1", ["s"], ["v", "c1"]]
+        self.assertEqual(direct, audit._translate(renamed, ["c1"]))
+        self.assertNotEqual(direct, audit._translate(naive_capture, ["c1"]))
+
+    def test_nested_shadowing_uses_the_nearest_binder(self):
+        term = ["l", "x", ["s"], ["l", "x", ["s"], ["v", "x"]]]
+        self.assertEqual(audit._translate(term, ["x"]),
+                         ["l", ["s"], ["l", ["s"], ["b", 0]]])
+
+
+class DepthAndNegativeTests(unittest.TestCase):
+    def test_lambda_domains_and_let_type_value_stay_at_outer_depth(self):
+        lam = ["l", ["b", 0], ["a", ["b", 0], ["b", 1]]]
+        self.assertEqual(audit._shift(lam, 1),
+                         ["l", ["b", 1], ["a", ["b", 0], ["b", 2]]])
+        let = ["t", ["b", 0], ["b", 0], ["a", ["b", 0], ["b", 1]]]
+        self.assertEqual(audit._shift(let, 1),
+                         ["t", ["b", 1], ["b", 1], ["a", ["b", 0], ["b", 2]]])
+
+    def test_instantiation_depth_lifts_argument_and_lowers_later_indices(self):
+        term = ["l", ["b", 0], ["a", ["b", 0], ["b", 2]]]
+        arg = ["b", 0]
+        self.assertEqual(audit._instantiate1(term, arg),
+                         ["l", ["b", 0], ["a", ["b", 0], ["b", 1]]])
+        self.assertEqual(audit._instantiate1(["a", ["b", 0], ["b", 2]], arg),
+                         ["a", ["b", 0], ["b", 1]])
+
+    def test_cutoff_mutation_and_expected_mutation_are_rejected(self):
+        row = lift_row_0()
+        row["expected"][0][2][1] = 3
+        with self.assertRaisesRegex(audit.AuditError, "E_TRANSLATION"):
+            audit.audit_vector(row)
+        row = lift_row_0()
+        row["parameters"]["s"] = 2
+        with self.assertRaisesRegex(audit.AuditError, "E_REPLAY_MISMATCH"):
+            audit.audit_vector(row)
+
+    def test_exact_ordinal_input_replay_rejects_replacement(self):
+        row = lift_row_0()
+        row["named_source"][2] = ["v", "c2"]
+        with self.assertRaisesRegex(audit.AuditError, "E_REPLAY_MISMATCH"):
+            audit.audit_vector(row)
+
+    def test_bad_indices_and_bool_integer_are_rejected(self):
+        row = lift_row_0()
+        row["source"][1][1] = True
+        with self.assertRaisesRegex(audit.AuditError, "E_NATURAL"):
+            audit.audit_vector(row)
+        with self.assertRaisesRegex(audit.AuditError, "E_NATURAL"):
+            audit._validate_db(["b", -1])
+
+    def test_missing_duplicate_extra_and_reordered_rows_fail(self):
+        with self.assertRaisesRegex(audit.AuditError, "E_COHORT"):
+            audit.audit_corpus([])
+        with self.assertRaisesRegex(audit.AuditError, "E_DUPLICATE_ORDINAL"):
+            audit.audit_corpus([lift_row_0(), lift_row_0()])
+        extra = lift_row_0(); extra["ordinal"] = 10_000; extra["id"] = "bmp1-10000"
+        with self.assertRaisesRegex(audit.AuditError, "E_ORDINAL"):
+            audit.audit_corpus([extra])
+        with self.assertRaisesRegex(audit.AuditError, "E_ORDER"):
+            audit.audit_corpus([subst_row_2500(), lift_row_0()])
+
+    def test_ndjson_rejects_duplicate_keys_and_noncanonical_bytes(self):
+        with tempfile.TemporaryDirectory() as temporary:
+            path = Path(temporary) / "vectors.ndjson"
+            path.write_text('{"id":"a","id":"b"}\n')
+            with self.assertRaisesRegex(audit.AuditError, "E_JSON_DUPLICATE_KEY"):
+                audit.audit_corpus(path)
+            path.write_text('{ "id": "a" }\n')
+            with self.assertRaisesRegex(audit.AuditError, "E_NDJSON_CANONICAL"):
+                audit.audit_corpus(path)
+
+
+if __name__ == "__main__":
+    unittest.main()
