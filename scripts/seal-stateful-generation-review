@@ -1,0 +1,21 @@
+#!/usr/bin/env python3
+"""Record the independent generation verdict received for the exact R3 inventory."""
+import json
+import sys
+from pathlib import Path
+ROOT=Path(__file__).resolve().parents[1]
+sys.path.insert(0,str(ROOT))
+from lib import stateful_validation_pilot_r3
+from lib import stateful_validation_pilot as p
+manifest=p.read(p.BASE/'compile-manifest-r3.json')
+p.require(manifest['tooling']==p.tooling(),'reviewed R3 tooling changed')
+p.write_new(p.BASE/'tooling-review-r1.json',dict(item_id=p.ITEM,verdict='PASS',reviewer='/root/stateful_protocol_review',
+  tooling=p.tooling(),scientific_contract=p.bind(p.CONTRACT),source=p.bind(p.SOURCE),
+  reviewed_compile_manifest=p.bind(p.BASE/'compile-manifest-r3.json'),compile_evidence=p.bind(p.BASE/'compile-0003/result.json'),
+  focused_tests=15,auditor_commit='84ec1b2',
+  findings=['Exact 19-file R3 scientific tooling inventory checked independently.',
+            'Generator creates deterministic comparison/side fixtures exclusively after committed gate and independent audit; generation invokes no Lean process.',
+            'Negative tests cover changed contract/options/outcomes, fixture/schema/duplicate keys, missing/extra/order records, rejected-state pollution/name reservation, duplicate overwrite and raw receipt/memory custody.',
+            'R3 compile succeeds with empty outputs, positive RSS and complete cleanup; prior failures preserved.'],
+  scope='Generation only. Exact independently reviewed execution manifest and artifact gate required before --run.'))
+print(p.bind(p.BASE/'tooling-review-r1.json'))
