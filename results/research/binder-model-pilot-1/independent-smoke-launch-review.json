@@ -1,0 +1,71 @@
+{
+  "schema": "binder-model-independent-review-v1",
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "SMOKE_LAUNCH",
+  "reviewed_at": "2026-09-28T18:41:11.948416+00:00",
+  "reviewer": "independent binder_review agent",
+  "plain_language": {
+    "what_did_we_find": "The actual host successfully measured memory for the supervised preflight process and confirmed cleanup. One earlier sandbox-denied preflight is preserved. The five adapter examples still have no observer results.",
+    "is_it_interesting": "Yes as a launch-control check: the machine can observe and stop the selected process profile. It says nothing about variable-operation correctness.",
+    "does_it_require_more_work": "Run only the separately registered five-case smoke on both exact observer profiles, preserving raw outputs and every failed attempt. The scientific matrix needs its own reviewed corpus and launch gate afterward."
+  },
+  "verdict": "PASS_FOR_SMOKE_LAUNCH",
+  "scientific_manifest_sha256": "9a91106376d277bd663c063de0f4c35a8a8612f6bba8a6799e7804988b5009e5",
+  "execution_manifest_sha256": "ab9295770bcd106658e4a1582a5f190a2c9987f8583173eb7acb07b1434389d2",
+  "smoke_manifest_sha256": "821c12d2cc5e08031d04607cc0f5b4f315d4ebad4b16181f7a2f44eaba582a29",
+  "rss_preflight_sha256": "6e7ce7b0a3583c3c72b3f26ac6886bc9cf534102dfc57f3c8033d929ce1ae37e",
+  "findings": {
+    "committed_gate": "check_frozen_inputs, committed smoke manifest and committed RSS preflight independently passed. All runtime/tooling/scientific bindings still match.",
+    "resource": "Attempt 2 records actual macOS ps backend; positive backend preflight and five process samples, peak observed child RSS 9,945,088 bytes, no timeout/memory/monitor fault, zero exit/stderr and cleanup_complete=true. Raw stream lengths and hashes match.",
+    "failure": "Attempt 1 records sandbox /bin/ps EPERM before child launch and remains unchanged; retry on actual host resolves capability without erasing failure.",
+    "scope": "Five fixed hand-written smoke cases, seven stage outputs on each of two profiles, are separately manifest-bound and excluded from scientific vector counts. Their expected output trees were independently hand-calculated earlier.",
+    "limits": "This authorizes the registered smoke under exact controls only. Scientific launch awaits committed corpus lock, smoke-result audit and separate prelaunch review."
+  },
+  "reviewed_paths": [
+    {
+      "path": "results/research/binder-model-pilot-1/scientific-manifest.json",
+      "bytes": 6315,
+      "sha256": "9a91106376d277bd663c063de0f4c35a8a8612f6bba8a6799e7804988b5009e5"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/execution-manifest.json",
+      "bytes": 5786,
+      "sha256": "ab9295770bcd106658e4a1582a5f190a2c9987f8583173eb7acb07b1434389d2"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/smoke/manifest.json",
+      "bytes": 3069,
+      "sha256": "821c12d2cc5e08031d04607cc0f5b4f315d4ebad4b16181f7a2f44eaba582a29"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/rss-preflight.json",
+      "bytes": 1630,
+      "sha256": "6e7ce7b0a3583c3c72b3f26ac6886bc9cf534102dfc57f3c8033d929ce1ae37e"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/preflight/attempt-0001/result.json",
+      "bytes": 415,
+      "sha256": "ae7e37f4d5f18ca2fe38f4f28cd11694857e5999433c4d9e6fa69e8b7a448ee2"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/preflight/attempt-0002/result.json",
+      "bytes": 1630,
+      "sha256": "6e7ce7b0a3583c3c72b3f26ac6886bc9cf534102dfc57f3c8033d929ce1ae37e"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/preflight/attempt-0002/process.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/preflight/attempt-0002/process.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/independent-smoke-expectation-review.json",
+      "bytes": 2803,
+      "sha256": "df108ade0531e9a1899f7f21b60a280bebe3b7580b5a7395ec38433300d5f419"
+    }
+  ]
+}
