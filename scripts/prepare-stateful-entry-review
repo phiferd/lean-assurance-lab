@@ -1,0 +1,34 @@
+#!/usr/bin/env python3
+"""Write the explicitly scoped stateful entry assessment and bind live policy."""
+import hashlib
+import json
+from pathlib import Path
+import sys
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.research_queue_v4 import queue_digest
+q = json.loads((ROOT / 'config/research-queue.json').read_text())
+state = 'STATEFUL-VALIDATION-PILOT-1'
+proof = 'REAL-PROOF-SLICES-PILOT-1'
+paths = ['CONSTITUTION.md', 'docs/RESEARCH_WORKFLOW.md', q['plan'],
+         'docs/research/STATEFUL_VALIDATION_PILOT_1_PLAN.md',
+         'results/research/stateful-validation-pilot-1/work-record.json',
+         'results/research/lazy-reduction-conformance-pilot-1/report.md']
+assessments = {
+ 'METHODS_AND_FRONTIERS': 'Public request history is a distinct conformance boundary after twelve preserved lazy-conversion cells. The six-comparison scope is smaller than proof slicing or a new binder model.',
+ 'UNRESOLVED_AND_SHARED_ASSETS': 'Reuse exact process and receipt controls while adding a public session regression asset; do not reinterpret old disagreements or claim semantic authority from agreement.',
+ 'MAINTENANCE_AND_UPSTREAM': 'Owner holds Kiota/Nanoda follow-up absent substantive feedback. Dated ledger observations remain unchanged; no external contact is required.',
+ 'LITERATURE_AND_REUSE': 'Refresh focused primary-source/API/recovery evidence inside this item; prior process and strict evidence auditor assets remain directly reusable.',
+ 'LOCAL_BLOCKER_REMOVAL': 'API selection, supported recovery, independent six-history audit and exact launch controls are authorized preparation in this item. Proof slicing requires broader payload and closure preparation.'}
+review = dict(schema_version=1, scope='PROJECT_WIDE', phase='ENTRY', reviewed_at=q['updated_at'],
+ stopped_item=None, selected_item=state, queue_sha256=queue_digest(q),
+ decision='Activate the selected six-comparison stateful pilot through staged gates. No successor execution or external action.',
+ categories=[dict(category=k, assessment=v, candidate_ids=[state,proof]) for k,v in assessments.items()],
+ candidates=[dict(item_id=state, disposition='FEASIBLE', rationale=assessments['LOCAL_BLOCKER_REMOVAL'], evidence_refs=paths[3:], blockers=[]),
+             dict(item_id=proof, disposition='BLOCKED', rationale='Retained useful alternative; payload availability, dependency/environment closure, size ceiling and feature-based selection remain unfrozen.', evidence_refs=[paths[2]], blockers=[dict(kind='SCIENTIFIC_GATE',reason='Exact twelve-slice scientific inputs and complete dependency/environment closure are not frozen.', evidence_refs=[paths[2]])])],
+ evidence_bindings=[dict(path=p,sha256=hashlib.sha256((ROOT/p).read_bytes()).hexdigest()) for p in paths])
+dest = ROOT/'results/research/queue-reviews/2026-09-27-stateful-validation-pilot-1-entry.json'
+dest.write_text(json.dumps(review,indent=2)+'\n')
+q['strategic_review']={'path':str(dest.relative_to(ROOT)), 'sha256':hashlib.sha256(dest.read_bytes()).hexdigest()}
+(ROOT/'config/research-queue.json').write_text(json.dumps(q,indent=2)+'\n')
+print(dest.relative_to(ROOT))

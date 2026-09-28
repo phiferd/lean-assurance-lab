@@ -1,6 +1,7 @@
 # Stateful validation pilot 1
 
-Status: READY and unstarted. Selection authorizes source/reuse and supported-API
+Status: ACTIVE from 2026-09-27 under the owner's one-item execution request.
+Selection authorizes source/reuse and supported-API
 contract preparation; it does not assert that session or rollback promises are
 already established. This item was selected after the trust-reporting matrix
 and reselected on 2026-09-27 after the demand-qualified lazy-reduction pilot.

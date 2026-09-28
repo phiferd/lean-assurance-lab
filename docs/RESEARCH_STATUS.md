@@ -3095,8 +3095,8 @@ The exact twelve scientific cells all accepted with the six required KAM
 demand observations, and all four capability cells matched. Its reviewed
 adapter, independent auditor, six regressions and preserved build repair remain
 local assets; [the report](../results/research/lazy-reduction-conformance-pilot-1/report.md)
-scopes the same-implementation and host/profile limits. STATEFUL is selected
-READY and unstarted for public API/session/recovery preparation. The 2026-09-27
+scopes the same-implementation and host/profile limits. STATEFUL is now ACTIVE
+for public API/session/recovery preparation under the owner's one-item request. The 2026-09-27
 owner direction holds Kiota/Nanoda follow-up absent substantive feedback;
 ledger observations remain dated.
 
@@ -3113,7 +3113,7 @@ OPEN and ready for review at the dated ledger observation. The trust-assumption
 pilot is COMPLETE with SUCCESS;
 [its report](../results/research/trust-assumption-pipeline-pilot-1/report.md)
 preserves the exact scope and original reporting incident. The stateful pilot
-is selected READY and unstarted under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
+is ACTIVE under [its plan](research/STATEFUL_VALIDATION_PILOT_1_PLAN.md)
 after completion of the later lazy-reduction pilot.
 
 
@@ -3178,7 +3178,7 @@ ACCEPT observations and no profile difference. Its generator and independent
 auditor are retained as a local asset. After the recursor repair closure, the
 trust-assumption study subsequently completed its twelve-cell reporting matrix.
 The 2026-09-27 lazy-reduction closure review selects STATEFUL public-request
-validation READY and unstarted. Its scientific launch remains gated on exact
+validation, now ACTIVE. Its scientific launch remains gated on exact
 session/recovery contracts, six comparisons, fixtures and controls.
 
 The pipeline-completeness continuation completed SUCCESS. Its exact baseline
@@ -3206,7 +3206,7 @@ no external action is recommended now.
 | 4 | `ACCEPTANCE-IMPACT-PILOT-1` | COMPLETE, CONSTRUCTION_OR_SEMANTIC_BOUNDARY |
 | 5 | `TRUST-ASSUMPTION-PIPELINE-PILOT-1` | COMPLETE, SUCCESS |
 | 6 | `LAZY-REDUCTION-CONFORMANCE-PILOT-1` | COMPLETE, SUCCESS; twelve ACCEPT cells and qualified KAM demand |
-| 7 | `STATEFUL-VALIDATION-PILOT-1` | READY, unstarted API/source-contract preparation |
+| 7 | `STATEFUL-VALIDATION-PILOT-1` | ACTIVE, API/source-contract preparation |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | PLANNED |
 | 9 | `BINDER-MODEL-PILOT-1` | PLANNED |
 | 10 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
@@ -3358,8 +3358,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and no ACTIVE item:
-`STATEFUL-VALIDATION-PILOT-1` is selected and unstarted for supported public
+The canonical queue retains no READY items and one ACTIVE item:
+`STATEFUL-VALIDATION-PILOT-1` is selected for supported public
 API/source-contract preparation. The lazy-reduction pilot is complete with
 twelve ACCEPT cells and all six KAM demand requirements. The stateful experiment
 remains behind its exact session/recovery, scientific and launch gates.
