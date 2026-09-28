@@ -1,0 +1,35 @@
+{
+  "schema": "real-proof-slices-source-reuse-review-v1",
+  "date": "2026-09-28",
+  "item_id": "REAL-PROOF-SLICES-PILOT-1",
+  "primary_source": {
+    "path": "external/lean-kernel-arena/_build/lean4export/leanprover_lean4_v4.29.1/format_ndjson.md",
+    "sha256": "f82a21e17e4258a1043895d0653ea4333bef8cb07aad2e3d6c1fc4be52b138e3",
+    "exporter_revision": "cacf989bd75f608700820f6afc595f32e7a99a4d",
+    "finding": "Format 3.1.0 has typed Name, Level and Expr primitive references. Inductive records group types, constructors and recursors, including redundant but checker-relevant metadata; quot is a four-declaration package. Closure must preserve these records and referenced environment owners."
+  },
+  "retained_payloads": {
+    "freeze": "results/research/declaration-validation-publication-study-gate-8-input-freeze.json",
+    "available": ["init", "std", "cedar", "cslib", "mathlib"],
+    "chosen": ["init", "std", "cedar"],
+    "reason": "The three smallest available retained exports cover Init, Std and Cedar namespaces while keeping full-byte source verification and prefix indexing feasible on the actual host.",
+    "selection_and_host_memory": "results/research/real-proof-slices-pilot-1/scientific-manifest.json; results/research/real-proof-slices-pilot-1/memory-preflight.json",
+    "legacy_coverage_revision_mismatch_preserved": true,
+    "fresh_holdout_claim": false
+  },
+  "reuse": [
+    {
+      "path": "lib/metamorphic_ndjson_audit.py",
+      "decision": "Reuse its primitive typed-reference and fail-closed validation patterns. Its declaration set excludes grouped inductive and quot records, so it cannot alone audit this slice contract."
+    },
+    {
+      "path": "lib/metamorphic_pilot_runner_v3.py",
+      "decision": "Reuse supervised positive-RSS start gate, per-process memory/timeout controls, raw-stream custody and cleanup accounting."
+    },
+    {
+      "path": "results/research/valid-dependent-term-pilot-1/design.json",
+      "decision": "Reuse the exact supported official Lean 4.33.0 and Nanoda 6ae1f0c observer profiles, then verify current source/binary/configuration identities before this launch."
+    }
+  ],
+  "build_decision": "Implement only the missing grouped declaration, quotient and environment-closure slicer with an independent negative-capable auditor. Bind a deterministic selection and exact source/observer controls before construction and observation."
+}

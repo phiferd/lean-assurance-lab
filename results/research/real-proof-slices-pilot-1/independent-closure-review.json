@@ -1,0 +1,79 @@
+{
+  "checks": [
+    {
+      "command": "python3 scripts/validate-real-proof-slices-pilot-1",
+      "result": "PASS; 12 independently re-audited cases, nine READY, three OVERSIZE, 18 exact ACCEPT cells; raw/process, profile, tooling, launch preflight, custody, and classification bindings verified"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_real_proof_slices_closure.py -q",
+      "result": "PASS; two focused tamper negatives"
+    },
+    {
+      "command": "python3 scripts/build-real-proof-slices-pilot-1-report --check",
+      "result": "PASS; report equals bound canonical result"
+    }
+  ],
+  "item_id": "REAL-PROOF-SLICES-PILOT-1",
+  "next_gate": "Commit closure implementation, canonical result, derived report and this review; run required full current/historical payload suite and dependency-ordered refresh; independently review project-wide successor selection. Do not start successor.",
+  "reviewed_files": [
+    {
+      "path": "lib/real_proof_slices_closure.py",
+      "sha256": "9763ef938b49030a2e494f4cff586b7361c71a2d975b57a6332a91575fe9b4f2"
+    },
+    {
+      "path": "lib/real_proof_slices_report.py",
+      "sha256": "69fb3ac9afcc37159d49ec8982ed62874a9dc9b2669576fae038d6939dbdc6fa"
+    },
+    {
+      "path": "scripts/validate-real-proof-slices-pilot-1",
+      "sha256": "71d45f0ea836ccb965060fe40047a927b007449de038cff6b1ef016a42bd5b29"
+    },
+    {
+      "path": "scripts/build-real-proof-slices-pilot-1-report",
+      "sha256": "1b7d43eb9531ebf3c4bf80c773bc4b1fda2ce2498825b603a4532598c53ddff8"
+    },
+    {
+      "path": "tests/test_real_proof_slices_closure.py",
+      "sha256": "1fa148bfe17fa7be01631165073710c61744aefa890da6cd1b3774e7168321e0"
+    },
+    {
+      "path": "results/research/real-proof-slices-pilot-1/closure-validation.json",
+      "sha256": "e2ee1eae4475744f491fb609ae3f09eb1a47c78ec4422589a58a1c260ebcf3f2"
+    },
+    {
+      "path": "results/research/real-proof-slices-pilot-1/result.json",
+      "sha256": "20145aff97960b835a63966905ce486307eb90d82649c1f2d4c26c851a5ff2b0"
+    },
+    {
+      "path": "results/research/real-proof-slices-pilot-1/report.md",
+      "sha256": "82b93e38178ca7e2b1772c157d55fc35dc4f87ff1f3669b1466c6e1c1f3f8c27"
+    },
+    {
+      "path": "results/research/real-proof-slices-pilot-1/independent-observation-review.json",
+      "sha256": "d285eb1cf9a4ec144aa626fec08a589451c456491a5c1e45c850855345cacdae"
+    },
+    {
+      "path": "results/research/real-proof-slices-pilot-1/execution/attempt-0001/result.json",
+      "sha256": "a06eb9c9d543aab58a80e44c34a6bea2e2cb49be519d83d81b5740a7a71673b7"
+    }
+  ],
+  "reviewer": "independent gate-review subagent; no producer, auditor, execution, or closure implementation edit",
+  "schema": "real-proof-slices-independent-closure-review-v1",
+  "scientific_disposition": {
+    "maximum_observed_rss_bytes": 50561024,
+    "nanoda_accept": 9,
+    "official_accept": 9,
+    "oversize": [
+      "std-02",
+      "std-03",
+      "std-04"
+    ],
+    "ready": 9
+  },
+  "scope_limits": [
+    "Nanoda silent exit-zero is accepted under its frozen profile; no checked-object trace is claimed.",
+    "Three fixed standard-library cases exceed the prebound construction ceiling and were not launched.",
+    "This pilot supports a local regression asset, not a broader semantic assurance claim."
+  ],
+  "verdict": "PASS"
+}
