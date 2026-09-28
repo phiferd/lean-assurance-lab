@@ -272,6 +272,28 @@ by historical source checks from committed custody copies, without network
 access, compilation, or checker execution. Existing modified payloads fail
 preflight instead of being overwritten.
 
+Historical process receipts retain the original absolute executable, checkout,
+and working-directory strings as evidence. Replay validators must compare those
+strings with the frozen manifests and repository-relative artifact identities;
+they must not require the current checkout to occupy the original host path or
+require an original untracked host executable to exist. Run the dedicated gate
+before the complete suite:
+
+```sh
+python scripts/check-portable-evidence-replay
+python scripts/run-unit-tests
+```
+
+For direct replay, use the successor commands
+`scripts/validate-lazy-reduction-conformance-pilot-1-portable` and
+`scripts/validate-stateful-validation-pilot-1-portable`. The unsuffixed commands
+are retained unchanged because they are frozen historical tooling inputs.
+
+GitHub Actions runs that fresh-checkout gate explicitly on Linux. A validator
+that passes only from the evidence-producing machine is a closure defect, not a
+CI exception. See [CI evidence replay portability](docs/CI_EVIDENCE_REPLAY.md)
+for the required validation and immutable-history rules.
+
 It reports explicit integration skips for the frozen Gate-8 input-freeze test
 when its observer, coverage, or corpus payload is absent, and for three frozen
 acceptance-impact tests when their exact macOS Cargo registry/toolchain payload

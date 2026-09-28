@@ -16,6 +16,7 @@ sys.path.insert(0, str(ROOT))
 from lib.portfolio_historical_snapshot_v2 import historical_modules as portfolio_modules
 from lib.portfolio_historical_snapshot_v2 import run_historical_tests as run_portfolio_history
 from lib.survivor_cache_historical_v2 import portable_validation as portable_cache_history
+from lib.portable_evidence_replay import portable_validation as portable_host_evidence
 from lib.acceptance_impact_test_payload import missing_host_payload
 from lib.kiota_source_payload import prepare_test_source
 GATE8_INPUT_PATH = (
@@ -172,7 +173,7 @@ def main() -> int:
     checkpoint_modules = portfolio_modules(ROOT)
     suite = _current_suite(suite, historical_modules | checkpoint_modules)
     suite = _rewrite_suite(suite, bool(missing), bool(missing_host))
-    with portable_cache_history():
+    with portable_cache_history(), portable_host_evidence():
         result = unittest.TextTestRunner(verbosity=2).run(suite)
     historical_ok = True
     if historical_modules:

@@ -1,7 +1,7 @@
 import copy
 import unittest
 from unittest.mock import patch
-from lib import stateful_validation_closure as c
+from lib import stateful_validation_closure_portable as c
 
 class StatefulClosureTests(unittest.TestCase):
     def test_exact_science_and_all_historical_compile_receipts_replay(self):

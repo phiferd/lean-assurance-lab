@@ -3,7 +3,7 @@ import unittest
 from unittest.mock import patch
 from lib import lazy_reduction_pilot as p
 from lib import lazy_reduction_science as s
-from lib.lazy_reduction_validation import validate, validate_closure
+from lib.lazy_reduction_validation_r2 import validate, validate_closure
 
 class EvidenceReplayTests(unittest.TestCase):
     def test_exact_capability_and_scientific_receipts_replay(self):
