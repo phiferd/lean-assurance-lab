@@ -32,6 +32,32 @@ When work changes the frontier, update the durable state and its canonical
 derived artifacts through their defined generation paths. Never advance into a
 subsequent milestone unless durable research state authorizes it.
 
+## Plain-language results first
+
+Every human-facing research report, status summary, handoff, and final response
+must begin with a short explanation that a reader outside the implementation
+work can understand. Answer these questions directly and in this order:
+
+1. **What did we find?** State the observed result, including what was not
+   tested or remains unknown. Use concrete counts when they matter.
+2. **Is it interesting?** Say yes, no, or unclear, and explain why it matters
+   (or why it does not). A passing test or agreement between checkers is not by
+   itself a correctness claim.
+3. **Does it require more work?** Name the specific follow-up, target, and
+   reason, or say plainly that none follows from this result. Distinguish a
+   result-driven follow-up from the next, separate project queue item.
+
+Put technical methods, artifact IDs, hashes, status codes, and qualifications
+after that explanation. Define any unavoidable specialist term on first use.
+Do not make the reader infer the finding from a table, a `SUCCESS` label, a
+validator receipt, or a recommendation buried at the end. For an unfinished or
+blocked item, label the summary provisional and state what is still needed.
+Keep the plain explanation faithful to the bound evidence; it does not replace
+the canonical result or soften uncertainty. Use
+[`docs/PLAIN_LANGUAGE_RESULTS.md`](docs/PLAIN_LANGUAGE_RESULTS.md) as the
+writing and review standard. Preserve frozen reports unchanged; add a dated
+reader companion when an older result needs a clearer explanation.
+
 ## Project-wide reassessment and standing local authorization
 
 At each logical item closure, use the LLM to reassess what best advances the
