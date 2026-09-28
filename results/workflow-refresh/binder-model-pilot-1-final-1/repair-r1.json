@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "attempt": "binder-model-pilot-1-final-1",
+  "classification": "STATUS_QUEUE_READINESS_PREFLIGHT_REPAIR",
+  "preflight": "PASS; actual-host /bin/ps returned a positive RSS sample",
+  "committed_input_inventory": {
+    "commit": "ab3ba65e3c00ef9f13e209f60517f81486d117a1",
+    "path": "results/workflow-refresh/binder-model-pilot-1-final-1/input-inventory.json",
+    "scope_sha256": "a7e31dccdce216a55b528d0604345017338c8cbed9e96eabfcdc0eb5778ada33"
+  },
+  "failure": {
+    "step": "historical status/queue readiness preflight",
+    "test": "tests/test_arena_let_regression_erratum.py::test_status_ready_count_matches_the_canonical_queue",
+    "cause": "docs/RESEARCH_STATUS.md Active subsection lacked the exact canonical READY count sentence required by the historical regression; the queue selected one READY item",
+    "suite_started": false,
+    "scientific_inputs_changed": false,
+    "observer_launched": false
+  },
+  "preserved_attempt_outputs": [
+    "results/workflow-refresh/binder-model-pilot-1-final-1/preflight.json",
+    "results/workflow-refresh/binder-model-pilot-1-final-1/input-inventory.json",
+    "results/workflow-refresh/binder-model-pilot-1-final-1/status-preflight.log",
+    "results/workflow-refresh/binder-model-pilot-1-final-1/result.json"
+  ],
+  "repair": {
+    "change": "Added 'The canonical queue retains one READY item. No item is ACTIVE; selection does not start execution.' to the Active status section while preserving the selected-item marker.",
+    "focused_recheck": "python3 -m unittest discover -s tests -p 'test_arena_let_regression_erratum.py'; PASS, 6 tests",
+    "queue_check": "scripts/validate-research-queue --require-ready; PASS",
+    "project_review_check": "scripts/build-project-review --check; PASS"
+  },
+  "other_invocation_error": "An initial focused unittest module-name invocation failed to import tests.test_arena_let_regression_erratum because tests is not an importable package; the corrected discovery command above passed."
+}

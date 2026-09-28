@@ -3141,6 +3141,7 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `RESOURCE-ENVELOPE-PILOT-1`.
+The canonical queue retains one READY item. No item is ACTIVE; selection does not start execution.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed

@@ -1,0 +1,100 @@
+{
+  "schema": "binder-model-independent-review-v1",
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "phase": "CLOSURE_PREFLIGHT_REPAIR_R2",
+  "reviewed_at": "2026-09-28T19:18:00.638457+00:00",
+  "reviewer": "independent binder_review agent",
+  "plain_language": {
+    "what_did_we_find": "The first final-validation attempt stopped before the full suite because the status text omitted the exact READY-item count sentence required by a historical check. Its positive memory preflight, input inventory and failed test log remain preserved. No science changed.",
+    "is_it_interesting": "No scientific finding follows; this is a narrow reporting consistency repair. The earlier 30,000 matching outputs remain a finite syntax-only result.",
+    "does_it_require_more_work": "Yes. Commit the one-line status repair and revised exact scope, then run a new final-validation attempt. The next research item remains selected and unstarted."
+  },
+  "verdict": "PASS_FOR_NEW_CLOSURE_ATTEMPT_AFTER_COMMIT",
+  "findings": {
+    "cause_and_repair": "Independent inspection confirms missing canonical READY count was the only historical preflight error (six tests, one error). A single line now states one READY item, no ACTIVE item and selection does not start execution. Historical test code is unchanged.",
+    "failed_attempt": "R1 ended after host RSS preflight (13984 KiB) and a331-file inventory at ab3ba65e3c00ef9f13e209f60517f81486d117a1. No full-suite, refresh or scientific launch occurred. Four original files and repair record remain separate from retry output.",
+    "binding_continuity": "Original closure-input review, R1 scope and scientific/execution manifests remain unchanged. Original review binds the prior status bytes; this R2 review binds the one-line repaired status. Strategic decision and evidence hashes still match.",
+    "revised_scope": "338 sorted unique declared files plus automatically inventoried scope file (339 total), preserving all330original declared paths and adding original scope, failed attempt evidence, repair record, historical test and this review. Self-reference was removed before approval. All other declared files exist; generated project-review views remain excluded and final freshness-checked.",
+    "retry_output": "Use a fresh path under results/workflow-refresh, outside results/research dynamic scientific receipt discovery. Do not reuse R1 or alter frozen science."
+  },
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p test_arena_let_regression_erratum.py",
+      "result": "PASS, 6 tests independently rerun"
+    },
+    {
+      "command": "scripts/validate-research-queue --require-ready",
+      "result": "PASS independently rerun"
+    },
+    {
+      "command": "scripts/validate-binder-model-pilot-1",
+      "result": "PASS independently rerun; 0 launches"
+    },
+    {
+      "command": "lib.closure_controls._scope on revised scope; independent strategic SHA-256 recomputation",
+      "result": "PASS"
+    }
+  ],
+  "reviewed_paths": [
+    {
+      "path": "docs/RESEARCH_STATUS.md",
+      "bytes": 240695,
+      "sha256": "c23c5c8d2a12b668063d0779ccf0de2b0d9aa7adb5d86836db274344d162cf00"
+    },
+    {
+      "path": "config/research-queue.json",
+      "bytes": 275107,
+      "sha256": "43c730fa865195dd4c81a37d45acb106d545a76ea1754bdc06a4d02bffdea866"
+    },
+    {
+      "path": "results/research/queue-reviews/2026-09-28-binder-model-pilot-1-closure.json",
+      "bytes": 11008,
+      "sha256": "a094b2843aa574e13a9e768367678d057fe82eb8fdb0b1d5bd247e3ba53d1b49"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/independent-closure-input-review.json",
+      "bytes": 7564,
+      "sha256": "58584e065b8f3a94b9457e1d72bb6d196b8db0fbae0b4254228ba989fd0332fe"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/closure-scope-2026-09-28-r2.json",
+      "bytes": 28670,
+      "sha256": "c840cabe8e296b81a955e82fea1c9a63b30cb3a5948da46c2db8ffcac567fe64"
+    },
+    {
+      "path": "results/research/binder-model-pilot-1/closure-scope-2026-09-28.json",
+      "bytes": 28089,
+      "sha256": "a7e31dccdce216a55b528d0604345017338c8cbed9e96eabfcdc0eb5778ada33"
+    },
+    {
+      "path": "tests/test_arena_let_regression_erratum.py",
+      "bytes": 7047,
+      "sha256": "c07dafb0888762c72fd30916f01ffca0e2f97fc08f0bd941805e29f6140ec0b8"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-1/input-inventory.json",
+      "bytes": 90799,
+      "sha256": "f5f4ae601a93f79bce0ac19d5327af43cf2dfe7b238817d90e68775c3b08b914"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-1/preflight.json",
+      "bytes": 122,
+      "sha256": "124a09c36639b86a0c4321bb8beb7741eeff9239bcbf8b988ec1d12569cdcca8"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-1/repair-r1.json",
+      "bytes": 2051,
+      "sha256": "7357a49e55a58de71952ebcf1a77809d09ff6efca36722761d14df2a98408835"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-1/result.json",
+      "bytes": 308,
+      "sha256": "27dfe8c8859d5d2c92aeba8acda398d7e5a8f4e75c5fec0444f7cf8066458241"
+    },
+    {
+      "path": "results/workflow-refresh/binder-model-pilot-1-final-1/status-preflight.log",
+      "bytes": 912,
+      "sha256": "71988f7a0fde7e188252751cdca59e214736c45f50d4c4fa56d5ec08ff06450b"
+    }
+  ]
+}
