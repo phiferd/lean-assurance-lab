@@ -35,10 +35,12 @@ def _bound_selection(source: str, slot: int) -> tuple[int, str, dict[str, Any]]:
     protocol_bytes = (base / "protocol.json").read_bytes()
     protocol = json.loads(protocol_bytes)
     scientific = json.loads((base / "scientific-manifest.json").read_bytes())
+    frozen_selection = dict(protocol.get("selection", {}))
+    frozen_selection.pop("rationale", None)
     if (protocol.get("schema") != "real-proof-slices-protocol-v1"
             or scientific.get("schema") != "real-proof-slices-scientific-manifest-v1"
             or scientific.get("protocol_sha256") != _sha(protocol_bytes)
-            or scientific.get("selection_rule") != protocol.get("selection")):
+            or scientific.get("selection_rule") != frozen_selection):
         raise AuditError("protocol/scientific-manifest binding mismatch")
     selection = protocol["selection"]
     if (selection.get("per_source") != 4 or selection.get("order") != ["init", "std", "cedar"]

@@ -39,7 +39,8 @@ class SliceAuditTest(unittest.TestCase):
             "selection": {"order": ["init", "std", "cedar"], "per_source": 4,
                           "skip_first_theorem_records": {"init": 0, "std": 0, "cedar": 0},
                           "name_prefix": {"init": "Nat.", "std": "Std.", "cedar": "Cedar."},
-                          "freeze_before_observation": True, "replacement_after_outcome": False},
+                          "freeze_before_observation": True, "replacement_after_outcome": False,
+                          "rationale": "Prose explanation is not part of the frozen mechanical rule."},
         }
         self.receipt_path = self.root / "receipt.json"
         self.patch_root = patch.object(audit, "ROOT", self.root)
@@ -76,7 +77,7 @@ class SliceAuditTest(unittest.TestCase):
         science = {
             "schema": "real-proof-slices-scientific-manifest-v1",
             "protocol_sha256": hashlib.sha256(protocol_bytes).hexdigest(),
-            "selection_rule": self.protocol["selection"],
+            "selection_rule": {k: v for k, v in self.protocol["selection"].items() if k != "rationale"},
             "sources": [{"source": name, "source_path": f"external/lean-kernel-arena/_build/tests/{name}.ndjson",
                          "source_bytes": spec[0], "source_sha256": spec[1],
                          "selected": selected if name == "init" else [None] * 4}
@@ -145,6 +146,13 @@ class SliceAuditTest(unittest.TestCase):
         science["sources"][0]["selected"][0]["name"] = "Nat.b"
         path.write_text(json.dumps(science))
         with self.assertRaisesRegex(audit.AuditError, "frozen scientific manifest"): self.check()
+
+    def test_changed_mechanical_selection_rejected(self):
+        path = self.root / "results/research/real-proof-slices-pilot-1/scientific-manifest.json"
+        science = json.loads(path.read_text())
+        science["selection_rule"]["name_prefix"]["init"] = "Other."
+        path.write_text(json.dumps(science))
+        with self.assertRaisesRegex(audit.AuditError, "protocol/scientific-manifest binding mismatch"): self.check()
 
     def test_missing_environment_owner_rejected(self):
         self.rows[10]["thm"]["all"] = [2]
