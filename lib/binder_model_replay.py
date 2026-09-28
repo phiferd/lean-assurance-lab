@@ -133,6 +133,8 @@ def replay(root: Path) -> dict:
     stages = 0
     observations = 0
     peak_rss = {}
+    profile_counts = {profile: {"processes": 0, "vector_observations": 0,
+                                "stage_outputs": 0} for profile in PROFILES}
     recorded_root = None
     for cell_index, (profile, batch) in enumerate(
             (profile, batch) for profile in PROFILES for batch in range(20)):
@@ -210,10 +212,14 @@ def replay(root: Path) -> dict:
             raise ReplayError("retained result cell differs")
         observations += 500
         stages += counted
+        profile_counts[profile]["processes"] += 1
+        profile_counts[profile]["vector_observations"] += 500
+        profile_counts[profile]["stage_outputs"] += counted
     if (observations, stages) != (20000, 30000):
         raise ReplayError("replayed accounting differs")
     if (result.get("vector_observations"), result.get("stage_outputs")) != (observations, stages):
         raise ReplayError("recorded accounting differs")
     return {"status": "PASS", "processes": 40, "vector_observations": observations,
             "stage_outputs": stages, "mismatches": 0, "peak_rss_bytes": peak_rss,
+            "profiles": profile_counts,
             "host_launches": 0}

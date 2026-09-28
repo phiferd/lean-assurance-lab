@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "item_id": "BINDER-MODEL-PILOT-1",
+  "status": "COMPLETE",
+  "outcome": "NO_OBSERVED_DIFFERENCE",
+  "question_answered": true,
+  "plain_language": {
+    "what_did_we_find": "Two implementations of moving and replacing variables inside expression trees matched a separate named-variable model on all 10,000 selected records: 15,000 checked outputs per implementation and no difference. The records represent 5,091 distinct structural inputs. The trees use variables validly within declared contexts; we did not test whether they form valid typed Lean programs or proofs, or test other APIs.",
+    "is_it_interesting": "Yes. The independently audited corpus includes 2,000 cases where a replacement variable could be wrongly captured by a surrounding binder, plus reusable checks for variable movement and replacement. It found no implementation defect. Finite checker agreement is not a correctness proof.",
+    "does_it_require_more_work": "Retain the fixed model, auditor and corpus as a local regression asset for future API changes. This result alone warrants no external issue or contribution. The next queue item is a separate research question."
+  },
+  "scientific_conclusion": "Within the frozen, well-scoped syntactic fragment, both selected public APIs produced exactly the named-model de Bruijn output for every recorded stage. No difference was observed; no typing, whole-kernel, universal correctness or performance claim follows.",
+  "scope": {
+    "validity": "well-scoped syntax in declared finite contexts; no typechecking claim",
+    "profiles": ["official-lean-4.33.0", "kiota-2d2a9fa"],
+    "vector_rows": 10000,
+    "distinct_structural_operation_inputs": 5091,
+    "distinct_projection": "operation, context length, de Bruijn source, de Bruijn arguments and parameters; excludes ID, ordinal, family, variant and named labels",
+    "capture_collision_rows": 2000,
+    "operation_family_strata": 20,
+    "observer_processes": 40,
+    "vector_observations": 20000,
+    "stage_outputs_per_profile": 15000,
+    "stage_outputs_total": 30000
+  },
+  "observations": {
+    "mismatches": 0,
+    "official-lean-4.33.0": {"processes": 20, "vector_observations": 10000, "stage_outputs": 15000, "maximum_observed_rss_bytes": 1335721984},
+    "kiota-2d2a9fa": {"processes": 20, "vector_observations": 10000, "stage_outputs": 15000, "maximum_observed_rss_bytes": 2326528},
+    "process_control": "All scientific processes exited zero with positive RSS samples, empty stderr, no timeout or monitor error, and complete cleanup below the frozen 3-GiB ceiling.",
+    "timing_limit": "Recorded process times are not a benchmark and omit preparation and review time."
+  },
+  "evidence": {
+    "scientific_manifest": {"path": "results/research/binder-model-pilot-1/scientific-manifest.json", "sha256": "9a91106376d277bd663c063de0f4c35a8a8612f6bba8a6799e7804988b5009e5"},
+    "execution_manifest": {"path": "results/research/binder-model-pilot-1/execution-manifest.json", "sha256": "ab9295770bcd106658e4a1582a5f190a2c9987f8583173eb7acb07b1434389d2"},
+    "corpus_lock": {"path": "results/research/binder-model-pilot-1/corpus-lock.json", "sha256": "93d22c32af33d42bbdb6c194231a15aa683dac2cafd01a4ab9128adb3fbe02b7"},
+    "scientific_attempt": {"path": "results/research/binder-model-pilot-1/runs/attempt-0001/result.json", "sha256": "bc5276de00131d547956f639ddcc02770a8a0bf5fac445bbf642919856245402"},
+    "independent_observation_review": {"path": "results/research/binder-model-pilot-1/independent-observation-review.json", "sha256": "f4ed249081c561d6f0016f75270961758452905a132d15d6f9f484efc43c8efe"},
+    "independent_replay": "results/research/binder-model-pilot-1/review-evidence/independent-science-audit.py",
+    "portable_replay": "lib/binder_model_replay.py"
+  },
+  "repair_history": [
+    "An unsupervised Kiota adapter check failed and was repaired before science; the first source bytes and exact elapsed cost are unavailable and recorded as such.",
+    "Four selected scientific records appeared in prefreeze auditor tests; their exact bytes were preserved and adopted unchanged after independent review and deterministic replay, with no observer feedback.",
+    "The first RSS preflight was denied by the sandbox before a child launch; an unchanged actual-host retry passed and both attempts remain preserved."
+  ],
+  "recommendation": {
+    "action": "RETAIN_LOCAL_REGRESSION_ASSET",
+    "priority": "NORMAL",
+    "target": "Lean Assurance Lab structural binder-operation regression package",
+    "reason": "The exact frozen corpus and independent model/auditor can detect future API or adapter changes; this run found no distinguishing case to minimize or upstream defect to report.",
+    "external_action": "NONE"
+  }
+}
