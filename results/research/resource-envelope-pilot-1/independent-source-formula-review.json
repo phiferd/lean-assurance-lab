@@ -1,0 +1,90 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "SOURCE_FORMULAS_AND_PURE_PRODUCER",
+  "reviewed_at": "2026-09-28T23:50:18.197097+00:00",
+  "reviewer": "independent binder_review agent; no producer or auditor edits",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the two proposed expression families have direct typing arguments, and the retained checker binaries match their source identities. Five pure-producer tests pass using synthetic small cases only. No selected workload or observer result exists yet.",
+    "is_it_interesting": "Potentially. The families exercise different declaration-checking paths and can provide a finite resource baseline, but small inputs may remain dominated by startup. No resource behavior has been measured.",
+    "does_it_require_more_work": "Yes. Complete independent validity/identity auditing and measurement-control tests, resolve the protocol details below, and freeze reviewed committed inputs before construction or launch."
+  },
+  "verdict": "PASS_SOURCE_FORMULAS_AND_PURE_PRODUCER_ONLY",
+  "findings": {
+    "source_identity": "Independently verified arena 37f7525b732808a49b746dc6999d53c3717db124, Nanoda 6ae1f0cd962f081f6c423454c5da729d841236a7, producer cacf989bd75f608700820f6afc595f32e7a99a4d and official importer f297dfe2a8557e8674fe892bb49dffe4bfadc0e9 revisions. SHA-256 of both selected checker binaries, exporter binary and official Main.lean match the draft.",
+    "checking_path": "Official normal invocation parses then replays safe definitions through addDeclCore; optional parse-only is not selected. Nanoda main calls check_all_declars; serial config avoids prior four-thread setting. Output count alone does not exclude Lean replay skipping unsafe/partial definitions; independent audit must prove exact safe total one-definition metadata.",
+    "typing": "For n >= 1, Pi domains and terminal Sort 0 each have type Sort 1; repeated imax 1 1 gives Sort 1. In the let chain, Sort 0 inhabits the first Sort 1 annotation, each later value references the previous Sort 1 variable, and final body references the last; the result has type Sort 1 and normal form Sort 0. No constants or axioms are needed.",
+    "sizes_and_metrics": "Prespecified n=16,32,64,128,256,512 is a finite static span, not a detected cliff. Expanded value nodes are 2 n+1(Pi) and 3 n+1(let); binderdepth n and root-counted depthn+1. DAG node count and serialized bytes require actual independent export audit.",
+    "producer": "Pure renderer matches exact draft grammar and makes no term at import. Test suite constructs only n=2 source/metric fixtures and disjoint n=3 name strings; selected_slots produces schedule metadata only. Graph metric routine is not a validity oracle and cannot replace the independent auditor.",
+    "baseline": "Six zero-declaration baseline runs per profile with the same normal invocation are a matched startup/empty-input task. They neither isolate size-dependent import time nor justify subtracting RSS peaks. All 12 baseline runs must reconcile separately from 24 science dispositions.",
+    "required_protocol_details": [
+      "Require Pi default binder and let nondep=false explicitly.",
+      "Specify that baseline failures or limits pause for repair, not family scientific-limit classification.",
+      "Define sample-gap endpoints, zero-sample healthy fast exit, monitored-over-limit versus wait4-over-ceiling after exit, and precisely which dispositions stop larger family sizes.",
+      "Define elapsed timing endpoint and pipe-drain/cleanup accounting; avoid any Popen poll/wait/communicate reaping race with wait4.",
+      "Freeze exact build-workspace templates, invocation, environment and limits before constructing selected sources."
+    ],
+    "remaining": "No protocol-freeze, producer/controller construction, auditor, supervisor or launch PASS is issued here. Runtime identities, independent audit/negative tests, committed scientific/execution manifests, exact generated input audit and actual-host process checks remain gates."
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_producer.py",
+      "result": "PASS, 5 synthetic-only tests"
+    },
+    {
+      "command": "SHA-256 and retained repository revision checks",
+      "result": "PASS for exact draft source/binary identities"
+    },
+    {
+      "command": "Retained format 3.1.0 export metadata line inspection",
+      "result": "173 bytes including LF, as the draft specifies"
+    }
+  ],
+  "reviewed_paths": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/source-reuse-review.md",
+      "bytes": 4521,
+      "sha256": "13c82c0886354c09b8e3bc6ceb6233c3b5e427862c1be267c08cf4f060e8fc00"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/protocol.md",
+      "bytes": 14052,
+      "sha256": "d32a2354c07d2a7e1f00ec534566fea1d94fc228cf7d6aed87da34353e410158"
+    },
+    {
+      "path": "lib/resource_envelope_producer.py",
+      "bytes": 7837,
+      "sha256": "7305372f0653818e04447c1371ddcee0c0ff4bbe46464c3db28c55974037fee1"
+    },
+    {
+      "path": "tests/test_resource_envelope_producer.py",
+      "bytes": 2547,
+      "sha256": "7d73e8cc4fce551bba8ccfe32ff5115080b55f29595e5fb1740ae942d0d71fda"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/Main.lean",
+      "bytes": 968,
+      "sha256": "f0c209172f79e2b0b6599f7acc989e15a158f4118a6ddab0a567773b75f333bb"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/packages/lean4export/Export/Parse.lean",
+      "bytes": 20491,
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/main.rs",
+      "bytes": 2524,
+      "sha256": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/tc.rs",
+      "bytes": 56602,
+      "sha256": "622b5aaf04b478485ca462b4938f3576c8da20e11bdf53b32f6e8b9021403efc"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/util.rs",
+      "bytes": 41690,
+      "sha256": "e6de5f6f396dd119bf28eebe36e79a2f2828130549b3f50b9d0d3eaa9d4ea383"
+    }
+  ]
+}

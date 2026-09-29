@@ -1,0 +1,143 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_MEASUREMENT_AND_CONSTRUCTION_TOOLING",
+  "reviewed_at": "2026-09-29T00:14:07.031147+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: all 54 synthetic preparation tests pass. Independent probes also distinguish three valid resource-limit observations from baseline failures. The controls now preserve measurement failures and reject the delayed-exit timeout race found during review. No selected terms or checker outcomes exist.",
+    "is_it_interesting": "Yes. The repaired controls let the finite study report observed time or memory limits without treating a broken monitor, missing accounting or unexpected checker output as a scientific result. Synthetic controls alone do not establish that RSS measurement works on the actual launch host.",
+    "does_it_require_more_work": "Run and independently review a positive actual-host direct-supervisor preflight, commit exact manifests, and obtain construction approval. The observer runner, sealed corpus, positive-profile smoke and launch gates remain separate work."
+  },
+  "verdict": "PASS_PREFREEZE_MEASUREMENT_AND_CONSTRUCTION_TOOLING_ONLY",
+  "reviewed_inputs": [
+    {
+      "path": "lib/resource_envelope_supervisor.py",
+      "bytes": 18461,
+      "sha256": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"
+    },
+    {
+      "path": "lib/resource_envelope_observe.py",
+      "bytes": 9503,
+      "sha256": "bdc09737da04b489c96239e01abf86908048420456dba1c763e50876364979c2"
+    },
+    {
+      "path": "lib/resource_envelope_control.py",
+      "bytes": 16102,
+      "sha256": "13cd1ca282ffc3b13d824c99e1c69cbcce06c1512d2a974d28e9723487b4915a"
+    },
+    {
+      "path": "lib/resource_envelope_construct.py",
+      "bytes": 9920,
+      "sha256": "ae45bef7281afe77d4c3811f992c6c7b6f631a1fc7ae77b57ccbea3a6a7c3203"
+    },
+    {
+      "path": "scripts/resource-envelope-pilot-1",
+      "bytes": 937,
+      "sha256": "a101a2fb900d6a4a6349b63fa261dcefd10c5988169f8a9db8ae3da1bd71b5c3"
+    },
+    {
+      "path": "tests/test_resource_envelope_supervisor.py",
+      "bytes": 11269,
+      "sha256": "371757d809f82fb931988e6fb40a54f351ebca5756a65e728c56eeab397bd7ed"
+    },
+    {
+      "path": "tests/test_resource_envelope_control.py",
+      "bytes": 4912,
+      "sha256": "42281da1a6472aaad7f6f6fe5b4b21ce523cd0b141157771a10a490a1f5a6b39"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/protocol.md",
+      "bytes": 14371,
+      "sha256": "275d96abf7258f390c29812f75493ae4a876308df37b5af256a970eb4621ed98"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/nanoda-single-check.json",
+      "bytes": 201,
+      "sha256": "1d90ad320d2e150beb521171e2f543c43fb7ded8399540cb77bebde940a5da9b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-fixture-contract.json",
+      "bytes": 1395,
+      "sha256": "535fa05f9158be4c1dfe01487bddc34bc9d23068e67c03dc67a56140a0d1b1c2"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-auditor-review-r3.json",
+      "bytes": 7534,
+      "sha256": "89d6d50ad5c6cfda8cf27d413e044f8cabe2bafb51668eb3b95236b1c3266683"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/supervisor-independent-probes.py",
+      "bytes": 1856,
+      "sha256": "a1b9064c96cffea288e0998eed48f83f970c572289d7b4909c5986e6aadaba0d"
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_resource_envelope_*.py' -q",
+      "status": "PASS",
+      "tests": 54,
+      "breakdown": {
+        "auditor": 26,
+        "producer": 5,
+        "supervisor": 16,
+        "control": 7
+      }
+    },
+    {
+      "command": "python3 results/research/resource-envelope-pilot-1/review-evidence/supervisor-independent-probes.py",
+      "status": "PASS",
+      "observed_pairs": [
+        {
+          "science": "OBSERVED_TIME_LIMIT",
+          "baseline": "REPAIR_PAUSE"
+        },
+        {
+          "science": "OBSERVED_MEMORY_LIMIT",
+          "baseline": "REPAIR_PAUSE"
+        },
+        {
+          "science": "OBSERVED_OVER_CEILING_AFTER_EXIT",
+          "baseline": "REPAIR_PAUSE"
+        }
+      ],
+      "selected_observer_invocations": 0
+    }
+  ],
+  "closed_control_findings": [
+    "One direct target and sole wait4 owner; bounded coordinator fallback; raw streams drained concurrently",
+    "Late process snapshots discarded; sample collection start/end, actual gaps and spawn/reap endpoints retained",
+    "Delayed normal exit after time threshold is REPAIR_PAUSE rather than false time-limit observation",
+    "Failed group signal, malformed wait4 accounting, monitor fault, cleanup failure and raw-accounting mutation cannot be accepted",
+    "wait_status decodes to the recorded exit; one valid delivered SIGKILL must follow the exact threshold or above-ceiling sample",
+    "Post-exit high-water disposition requires normal exit and exact checker output; unexpected output remains repair",
+    "All baseline limit dispositions are repair pauses",
+    "Construction checks exact committed manifest/review bindings before rendering and rechecks before each build/export",
+    "Control regression uses synthetic ACTIVE queue state and will remain valid after item closure"
+  ],
+  "measurement_limits": [
+    "Elapsed time is monotonic spawn-to-reap and includes startup/reaping overhead; cleanup/draining recorded separately",
+    "Sampled group RSS is non-atomic, misses transient peaks and can count shared pages repeatedly",
+    "OS child lifetime high-water includes startup/exit, uses bound host units and excludes descendant memory",
+    "Fast zero-sample completions may be valid with complete accounting/cleanup, but the whole interval remains explicitly uncovered",
+    "Polling limits are not instantaneous hard ceilings; a high-water overrun after normal exit is not claimed as enforced protection"
+  ],
+  "smoke_design": {
+    "status": "PASS_DESIGN_ONLY_UNRUN",
+    "fixture": "retained-vdtp1-pi-01",
+    "independent_inspection": "Exact 515-byte export contains one safe total definition, no dependencies, structured name ValidDependentTermPilot1.pi01; its value forall (x0 : Sort 0), x0 has type Sort 0 by imax 1 0 = 0.",
+    "purpose": "Positive acceptance witness under newly serial Nanoda and retained official profiles; outside 24 science cells and 12 zero-declaration baselines."
+  },
+  "remaining_gates": [
+    "Positive actual-host run_direct preflight with live samples, wait4 peak, exact raw accounting and complete group cleanup; prior shell ps success is insufficient",
+    "Commit scientific/execution manifests and independent exact PASS_FOR_CONSTRUCTION",
+    "Independently audit/seal all twelve generated source/export/case records",
+    "Review observer-runner custody, immutable matrix/order, per-profile baselines, per-family stop-after-limit handling and repair resumption",
+    "Separately committed positive smoke invocation and independent smoke-launch approval, then independent result review",
+    "Separate exact scientific launch approval"
+  ],
+  "not_authorized": [
+    "Selected term construction",
+    "Observer setup/build",
+    "Smoke, baseline or scientific observer launch"
+  ]
+}
