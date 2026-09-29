@@ -3180,9 +3180,9 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `WORKFLOW-CLOSURE-RELIABILITY-1`.
-It is READY and unstarted under [its reliability plan](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md).
-The canonical queue retains one READY item, `WORKFLOW-CLOSURE-RELIABILITY-1`,
-and zero ACTIVE items. The exploration protocol implementation introduces a
+It is ACTIVE under [its reliability plan](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md).
+The canonical queue retains zero READY items and one ACTIVE item,
+`WORKFLOW-CLOSURE-RELIABILITY-1`. The exploration protocol implementation introduces a
 lightweight E0 ledger and a separate confirmation boundary, subject to its final
 shared-workflow validation and refresh. No exploratory science has run and no
 cost savings are claimed. The owner prioritizes closure reliability and usage
