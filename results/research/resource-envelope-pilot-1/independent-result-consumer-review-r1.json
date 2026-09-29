@@ -1,0 +1,46 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "FINAL_RESULT_CONSUMER_R1_REVIEW",
+  "reviewed_at": "2026-09-29T02:42:03.350064+00:00",
+  "plain_language": {
+    "what_did_we_find": "The new final result validator accepted a copied smoke result after its output and receipt hash were changed together, even though the smoke result still bound the original receipt bytes. The actual stored scientific evidence remains unchanged.",
+    "is_it_interesting": "Yes, as an engineering defect in replay of the historical smoke approval. It does not show a checker disagreement or invalidate the original live launch checks.",
+    "does_it_require_more_work": "Repair the new result consumer to enforce the retained smoke process bindings and exact successful output. Add this coordinated-tamper regression and inspect construction/failure bindings for the same missing historical-custody check before closure."
+  },
+  "verdict": "REPAIR_REQUIRED_RESULT_CONSUMER_ONLY",
+  "reviewed_checkpoint": "0d10fbf",
+  "reviewed_inputs": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/result-replay-r1-resource_envelope_result_replay.py.txt",
+      "bytes": 12287,
+      "sha256": "92ceed7ff817d06fba83a6a763bd8b6925e4692df360420141a3153c63b0284b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/result-replay-r1-test_resource_envelope_result_replay.py.txt",
+      "bytes": 2615,
+      "sha256": "28cd79a2970ed9773c5960c98df524e451436c6e34326e42c8aac6bba860c836"
+    }
+  ],
+  "reproduction": {
+    "copy": "Complete resource-envelope item into TemporaryDirectory; no original file changed.",
+    "mutation": [
+      "Replace smoke-run-0001/processes/nanoda.stdout with same-length ASCII X bytes.",
+      "Update only stdout_sha256 in smoke-run-0001/processes/nanoda.receipt.json to match new stdout.",
+      "Do not change smoke-result.json or its process receipt binding."
+    ],
+    "observed": {
+      "status": "PASS",
+      "science_cells": 24,
+      "baselines": 12,
+      "accepted": 36,
+      "official_sampled_runs": 18,
+      "nanoda_sampled_runs": 0,
+      "process_receipts": 73,
+      "host_launches": 0
+    },
+    "expected": "Reject changed smoke receipt binding before successful closure replay."
+  },
+  "scientific_artifacts_modified": false,
+  "launch_authorization": false
+}
