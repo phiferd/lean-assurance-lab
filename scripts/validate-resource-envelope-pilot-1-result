@@ -1,0 +1,15 @@
+#!/usr/bin/env python3
+"""Replay the fixed resource-envelope result from repository evidence only."""
+
+from pathlib import Path
+import json
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+
+from lib.resource_envelope_result_replay import replay_result  # noqa: E402
+
+
+if __name__ == "__main__":
+    print(json.dumps(replay_result(ROOT), sort_keys=True))
