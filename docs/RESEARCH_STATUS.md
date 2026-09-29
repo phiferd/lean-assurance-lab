@@ -3231,8 +3231,9 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1`.
-It is READY and unstarted under [its shared closure-repair plan](research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md).
-The canonical queue retains one READY item and zero ACTIVE items. The completed
+It is ACTIVE under [its shared closure-repair plan](research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md),
+with the exact pre-edit controller and validation inputs bound in its work
+record. The canonical queue retains zero READY items and one ACTIVE item. The completed
 Nanoda E0 screen is INCONCLUSIVE: its fixed selector produced no inventory
 because all 170 modeled semantic sites were already represented, while 332
 other parsed sites were outside the retained semantic model. No confirmation
@@ -3386,7 +3387,7 @@ no external action is recommended now.
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
-| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | READY, unstarted; prerequisite before future confirmation |
+| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | ACTIVE; exact pre-edit closure inputs bound |
 | 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; read-only scope retained |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |

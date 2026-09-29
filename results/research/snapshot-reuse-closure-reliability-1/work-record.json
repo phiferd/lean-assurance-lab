@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "item_id": "SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1",
+  "status": "ACTIVE",
+  "started_at": "2026-09-29",
+  "base_commit": "c4e477efcee90cc0df6b55cbfe7e76d07cca1270",
+  "authorized_scope": "Repair immutable validation input isolation, publication matching, and complete per-stage dependency reuse controls; no scientific launch, frozen edit, weakened gate, or external action.",
+  "observed_defects": [
+    {
+      "id": "ABA-LIVE-WORKTREE",
+      "observation": "The full suite executes in the mutable publication worktree. An input can be edited after the initial committed-byte check, observed by validation, and restored before the post-suite check without detection."
+    },
+    {
+      "id": "GLOBAL-HEAD-REUSE",
+      "observation": "Every stage specification hashes one inventory containing the global HEAD commit, so an unrelated commit invalidates the costly suite while transitive stage dependencies are not separately named."
+    }
+  ],
+  "pre_edit_bindings": [
+    {"path": "lib/closure_controls_v2.py", "sha256": "6fdd53bfd3785ee7bc641e0255637dc53858be3dfae1c4204c24b7e8bce044a4"},
+    {"path": "scripts/closure-controls", "sha256": "ac340a25c6289277e1280df4272d7754f78819baf9674c7a738967f8edc372ea"},
+    {"path": "scripts/refresh-current-state", "sha256": "b3b8227dc90b02c7a51460f32540b4b91b6437165cb46b17e7bfe277efebc440"},
+    {"path": "tests/test_closure_controls.py", "sha256": "781cd274badd6e18989987910fece0ef30996542573dc18d01f138e9cc86cf2c"},
+    {"path": "docs/research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md", "sha256": "b64a7e59c362033f5f84d89578c5ce597fd19d373ce7f8cbd566d6554f0ee8bd"}
+  ],
+  "scientific_launches": 0,
+  "external_actions": []
+}
