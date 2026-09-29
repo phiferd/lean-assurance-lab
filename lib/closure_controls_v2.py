@@ -63,7 +63,7 @@ def host_rss_preflight(*, run=subprocess.run, pid: int | None = None) -> dict:
 STAGE_DEPENDENCY_KEYS = {"status", "suite", "publication"}
 
 
-def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[str]]]:
+def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[str]], dict[str, list[str]]]:
     path = Path(scope_file)
     if path.is_absolute() or path.as_posix().startswith("../") or ".." in path.parts:
         raise ValueError("scope file must be a repository-relative path")
@@ -71,9 +71,10 @@ def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[
         scope = json.loads((root / path).read_text())
     except (OSError, json.JSONDecodeError) as error:
         raise ValueError(f"could not read scope file: {error}") from error
-    if (set(scope) not in ({"schema_version", "scope", "paths"},
-                           {"schema_version", "scope", "paths", "stage_dependencies"})
-        or scope["schema_version"] not in {1, 2}
+    allowed_fields = {"schema_version", "scope", "paths", "stage_dependencies",
+                      "stage_dependency_trees"}
+    if (not isinstance(scope, dict) or not set(scope).issubset(allowed_fields)
+        or scope.get("schema_version") not in {1, 2, 3}
         or not isinstance(scope["scope"], str) or not scope["scope"].strip()
         or not isinstance(scope["paths"], list) or not scope["paths"]):
         raise ValueError("invalid declared inventory scope")
@@ -83,9 +84,10 @@ def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[
         or len(set(paths)) != len(paths) or scope["paths"] != sorted(scope["paths"])):
         raise ValueError("scope paths must be sorted, unique repository-relative files")
     if scope["schema_version"] == 1:
-        if "stage_dependencies" in scope:
+        if "stage_dependencies" in scope or "stage_dependency_trees" in scope:
             raise ValueError("schema v1 cannot declare stage dependencies")
         dependencies = {name: list(paths) for name in STAGE_DEPENDENCY_KEYS}
+        tree_dependencies = {name: [] for name in STAGE_DEPENDENCY_KEYS}
     else:
         dependencies = scope.get("stage_dependencies")
         if (not isinstance(dependencies, dict)
@@ -104,11 +106,99 @@ def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[
             raise ValueError("every declared path must belong to at least one stage dependency set")
         dependencies = {name: [scope_file, *values]
                         for name, values in dependencies.items()}
-    return scope["scope"], paths, dependencies
+        tree_dependencies = scope.get("stage_dependency_trees")
+        if scope["schema_version"] == 2:
+            if tree_dependencies is not None:
+                raise ValueError("schema v2 cannot declare tree dependencies")
+            tree_dependencies = {name: [] for name in STAGE_DEPENDENCY_KEYS}
+        elif (not isinstance(tree_dependencies, dict)
+              or set(tree_dependencies) != STAGE_DEPENDENCY_KEYS):
+            raise ValueError("schema v3 must declare status, suite and publication tree dependencies")
+        else:
+            for name, values in tree_dependencies.items():
+                if (not isinstance(values, list) or values != sorted(values)
+                        or len(values) != len(set(values))
+                        or any(not isinstance(value, str) or not value
+                               or Path(value).is_absolute() or ".." in Path(value).parts
+                               or Path(value).as_posix() != value for value in values)):
+                    raise ValueError(f"invalid {name} stage tree dependencies")
+            if not set(tree_dependencies["status"] + tree_dependencies["suite"]).issubset(
+                    set(tree_dependencies["publication"])):
+                raise ValueError("publication tree dependencies must cover status and suite trees")
+    return scope["scope"], paths, dependencies, tree_dependencies
+
+
+def _tree_binding(root: Path, relative: str) -> dict:
+    path = root / relative
+    if path.is_symlink() or not path.is_dir() or not path.resolve().is_relative_to(root.resolve()):
+        raise ValueError(f"declared dependency tree is absent or unsafe: {relative}")
+    changed = subprocess.run(["git", "diff", "--quiet", "HEAD", "--", relative],
+                             cwd=root, check=False).returncode
+    if changed:
+        raise ValueError(f"declared dependency tree differs from committed bytes: {relative}")
+    tree = _git(root, "rev-parse", f"HEAD:{relative}").decode().strip()
+    kind = _git(root, "cat-file", "-t", tree).decode().strip()
+    if kind != "tree":
+        raise ValueError(f"declared dependency is not a Git tree: {relative}")
+    return {"path": relative, "git_tree": tree}
+
+
+_HOST_DIGEST_CACHE: dict[tuple[str, int, int, int, int], str] = {}
+
+
+def _cached_file_sha(path: Path) -> str:
+    stat = path.stat()
+    key = (path.resolve().as_posix(), stat.st_ino, stat.st_size,
+           stat.st_mtime_ns, stat.st_ctime_ns)
+    digest = _HOST_DIGEST_CACHE.get(key)
+    if digest is None:
+        digest = _sha(path.read_bytes())
+        _HOST_DIGEST_CACHE[key] = digest
+    return digest
+
+
+def _host_payload_inventory(root: Path) -> list[dict]:
+    freeze = root / "results/research/declaration-validation-publication-study-gate-8-input-freeze.json"
+    if not freeze.is_file():
+        return []
+    document = json.loads(freeze.read_text(encoding="utf-8"))
+    bindings: dict[str, dict] = {}
+    for observer in document["observer_profiles"]:
+        row = observer["binary"]
+        bindings[row["path"]] = row
+    for inventory in document["materialized_corpora"]:
+        if inventory["root"].startswith("external/"):
+            for row in inventory["files"]:
+                path = f"{inventory['root']}/{row['path']}"
+                bindings[path] = {"path": path, "bytes": row["bytes"],
+                                  "sha256": row["sha256"]}
+    coverage = document["existing_coverage_excerpt"]
+    for key in ("line_to_tests_binding", "test_to_lines_binding"):
+        row = coverage[key]
+        bindings[row["path"]] = row
+    for profile in document["comparator_profiles"].values():
+        for key in ("manifest", "build_manifest", "collection_state", "configuration"):
+            row = profile.get(key)
+            if row and "path" in row:
+                bindings[row["path"]] = row
+    rows = []
+    for relative, expected in sorted(bindings.items()):
+        path = root / relative
+        if path.is_symlink() or not path.is_file():
+            raise ValueError(f"required host payload is missing or linked: {relative}")
+        digest = _cached_file_sha(path)
+        if digest != expected["sha256"] or ("bytes" in expected and path.stat().st_size != expected["bytes"]):
+            raise ValueError(f"required host payload differs: {relative}")
+        rows.append({"path": relative, "bytes": path.stat().st_size, "sha256": digest})
+    arena = root / "external/lean-kernel-arena"
+    if arena.is_dir():
+        revision = _git(arena, "rev-parse", "HEAD").decode().strip()
+        rows.append({"path": "external/lean-kernel-arena", "git_commit": revision})
+    return rows
 
 
 def committed_inventory(root: Path, scope_file: str) -> dict:
-    scope, paths, dependencies = _scope(root, scope_file)
+    scope, paths, dependencies, tree_dependencies = _scope(root, scope_file)
     commit = _git(root, "rev-parse", "--verify", "HEAD^{commit}").decode().strip()
     rows = []
     for path in paths:
@@ -121,8 +211,12 @@ def committed_inventory(root: Path, scope_file: str) -> dict:
         if actual != committed:
             raise ValueError(f"declared input differs from committed bytes: {path}")
         rows.append({"path": path, "git_blob": blob, "sha256": _sha(actual), "bytes": len(actual)})
-    return {"schema_version": 2, "scope": scope, "scope_file": scope_file,
-            "commit": commit, "files": rows, "stage_dependencies": dependencies}
+    tree_paths = sorted(set().union(*(set(values) for values in tree_dependencies.values())))
+    trees = [_tree_binding(root, path) for path in tree_paths]
+    return {"schema_version": 3, "scope": scope, "scope_file": scope_file,
+            "commit": commit, "files": rows, "stage_dependencies": dependencies,
+            "trees": trees, "stage_dependency_trees": tree_dependencies,
+            "host_payload": _host_payload_inventory(root)}
 
 
 def dependency_inventory(inventory: dict, dependency_set: str) -> dict:
@@ -138,8 +232,19 @@ def dependency_inventory(inventory: dict, dependency_set: str) -> dict:
     if (not isinstance(paths, list) or len(paths) != len(set(paths))
             or any(path not in by_path for path in paths)):
         raise ValueError(f"inventory has incomplete {dependency_set} dependencies")
-    return {"schema_version": 1, "scope_file": inventory.get("scope_file"),
-            "dependency_set": dependency_set, "files": [by_path[path] for path in paths]}
+    tree_rows = inventory.get("trees", [])
+    tree_by_path = {row.get("path"): row for row in tree_rows if isinstance(row, dict)}
+    tree_sets = inventory.get("stage_dependency_trees", {})
+    tree_paths = tree_sets.get(dependency_set, []) if isinstance(tree_sets, dict) else []
+    if (not isinstance(tree_paths, list) or len(tree_paths) != len(set(tree_paths))
+            or any(path not in tree_by_path for path in tree_paths)):
+        raise ValueError(f"inventory has incomplete {dependency_set} tree dependencies")
+    value = {"schema_version": 2, "scope_file": inventory.get("scope_file"),
+             "dependency_set": dependency_set, "files": [by_path[path] for path in paths],
+             "trees": [tree_by_path[path] for path in tree_paths]}
+    if dependency_set in {"suite", "publication"}:
+        value["host_payload"] = inventory.get("host_payload", [])
+    return value
 
 
 def matching_publication_inputs(root: Path, scope_file: str, validated: dict) -> dict:
@@ -169,14 +274,16 @@ def validation_snapshot(root: Path, inventory: dict) -> Iterator[Path]:
         # Full-payload integration data are intentionally ignored by Git. Their
         # item validators bind their exact bytes; expose the same host payload to
         # the isolated tracked checkout without copying tens of gigabytes.
-        arena_build = root / "external/lean-kernel-arena/_build"
-        if arena_build.is_dir():
-            target = checkout / "external/lean-kernel-arena/_build"
-            target.parent.mkdir(parents=True, exist_ok=True)
-            target.symlink_to(arena_build, target_is_directory=True)
+        arena = root / "external/lean-kernel-arena"
+        if arena.is_dir():
+            target = checkout / "external/lean-kernel-arena"
+            shutil.copytree(arena, target, ignore=shutil.ignore_patterns("_build"))
+            arena_build = arena / "_build"
+            if arena_build.is_dir():
+                _clone_tree(arena_build, target / "_build")
         coverage = root / "results/coverage"
         if coverage.is_dir():
-            shutil.copytree(coverage, checkout / "results/coverage")
+            _clone_tree(coverage, checkout / "results/coverage")
         snapshot_inventory = committed_inventory(checkout, inventory["scope_file"])
         for name in STAGE_DEPENDENCY_KEYS:
             if dependency_inventory(snapshot_inventory, name) != dependency_inventory(inventory, name):
@@ -190,6 +297,14 @@ def validation_snapshot(root: Path, inventory: dict) -> Iterator[Path]:
         shutil.rmtree(parent, ignore_errors=True)
         subprocess.run(["git", "worktree", "prune"], cwd=root,
                        stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+
+
+def _clone_tree(source: Path, target: Path) -> None:
+    """Create an isolated tree, using copy-on-write where the host supports it."""
+    result = subprocess.run(["cp", "-cR", str(source), str(target)],
+                            stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+    if result.returncode:
+        shutil.copytree(source, target)
 
 
 def write_new(path: Path, value: dict) -> None:
@@ -378,6 +493,11 @@ def _validate_cached_receipt(receipt_path: Path, receipt: dict, output_root: Pat
             or receipt.get("returncode") != 0 or type(receipt.get("outputs")) is not list):
         raise UnknownInvalidation(f"unknown cached stage receipt shape: {receipt_path}")
     stage_dir = receipt_path.parent
+    for path in stage_dir.rglob("*"):
+        if path.is_symlink():
+            raise UnknownInvalidation(f"symlink in cached stage output: {path}")
+        if path.is_dir() and not any(path.iterdir()):
+            raise UnknownInvalidation(f"untracked empty directory in cached stage output: {path}")
     expected = {row.get("path") for row in receipt["outputs"]}
     if (None in expected or len(expected) != len(receipt["outputs"])
             or any(set(row) != {"path", "bytes", "sha256"} for row in receipt["outputs"])):
@@ -431,18 +551,29 @@ def _run_command_stage(root: Path, output_root: Path, stage: str, command: list[
     failure_path = stage_dir / "failure.json"
     actual_command = [part.replace("{stage_dir}", str(stage_dir)) for part in command]
     actual_env = None
+    collected_receipts = None
     if env is not None:
+        if any("{control_receipts}" in value for value in env.values()):
+            collected_receipts = Path(tempfile.mkdtemp(
+                prefix=".closure-control-receipts-", dir=command_root))
         actual_env = {name: value.replace("{stage_dir}", str(stage_dir))
+                                      .replace("{control_receipts}", str(collected_receipts or ""))
                       for name, value in env.items()}
+    def collect_control_receipts() -> None:
+        if collected_receipts is not None and collected_receipts.is_dir():
+            shutil.copytree(collected_receipts, stage_dir / "control-receipts")
+            shutil.rmtree(collected_receipts)
     try:
         code = _run_logged(command_root, actual_command, log, env=actual_env)
     except BaseException as error:
+        collect_control_receipts()
         controls = {"schema_version": 1, "stage": stage, "status": "INTERRUPTED",
                     "specification_sha256": spec_hash, "command": actual_command,
                     "error_type": type(error).__name__,
                     "outputs": _tree_bindings(stage_dir, output_root, omit={"failure.json"})}
         write_new(failure_path, controls)
         raise
+    collect_control_receipts()
     if code:
         write_new(failure_path, {"schema_version": 1, "stage": stage, "status": "FAILED",
                   "specification_sha256": spec_hash, "command": actual_command,
@@ -519,13 +650,13 @@ def finish_resumable(root: Path, scope_file: str, output_dir: Path) -> int:
                                               "suite": suite_inputs,
                                               "publication": publication_inputs},
                                              publication_inputs, [preflight_ref], attempt)
-            status_ref = _run_command_stage(root, output_dir, "02-status-preflight",
-                                            STATUS_PREFLIGHT, status_inputs,
-                                            [], attempt)
             suite_env = os.environ.copy()
             # Control-test receipts stay under this non-research stage directory.
-            suite_env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"] = "{stage_dir}/control-receipts"
+            suite_env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"] = "{control_receipts}"
             with validation_snapshot(root, inventory) as snapshot:
+                status_ref = _run_command_stage(root, output_dir, "02-status-preflight",
+                                                STATUS_PREFLIGHT, status_inputs,
+                                                [], attempt, execution_root=snapshot)
                 suite_ref = _run_command_stage(root, output_dir, "03-full-suite", SUITE,
                                                suite_inputs, [status_ref], attempt,
                                                env=suite_env, execution_root=snapshot)
@@ -537,7 +668,7 @@ def finish_resumable(root: Path, scope_file: str, output_dir: Path) -> int:
                           "publication_input_sha256": _sha(_canonical(publication_inputs)),
                           "suite_receipt": suite_ref}
             validation_ref = _run_value_stage(output_dir, "04-sealed-validation", validation,
-                                              suite_inputs, [suite_ref], attempt)
+                                              publication_inputs, [suite_ref], attempt)
             refresh_ref = _run_command_stage(
                 root, output_dir, "05-dependency-ordered-refresh",
                 ["scripts/refresh-current-state", "--log-dir", "{stage_dir}/refresh"],

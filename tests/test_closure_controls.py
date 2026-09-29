@@ -83,6 +83,33 @@ class CommittedInventoryTests(TestCase):
         with self.assertRaisesRegex(ValueError, "publication stage dependencies"):
             cc.committed_inventory(self.root, self.scope)
 
+    def test_required_host_payload_change_is_detected_before_reuse(self):
+        binary = self.root / "external/frozen/bin"
+        binary.parent.mkdir(parents=True)
+        binary.write_bytes(b"binary\n")
+        coverage = []
+        for name in ("line.json", "test.json"):
+            path = self.root / "results/coverage" / name
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text("{}\n")
+            coverage.append({"path": path.relative_to(self.root).as_posix(),
+                             "bytes": path.stat().st_size,
+                             "sha256": hashlib.sha256(path.read_bytes()).hexdigest()})
+        binding = {"path": binary.relative_to(self.root).as_posix(),
+                   "bytes": binary.stat().st_size,
+                   "sha256": hashlib.sha256(binary.read_bytes()).hexdigest()}
+        freeze = self.root / "results/research/declaration-validation-publication-study-gate-8-input-freeze.json"
+        freeze.parent.mkdir(parents=True, exist_ok=True)
+        freeze.write_text(json.dumps({"observer_profiles": [{"binary": binding}],
+            "materialized_corpora": [],
+            "existing_coverage_excerpt": {"line_to_tests_binding": coverage[0],
+                                            "test_to_lines_binding": coverage[1]},
+            "comparator_profiles": {}}) + "\n")
+        self.assertEqual(len(cc._host_payload_inventory(self.root)), 3)
+        binary.write_bytes(b"changed\n")
+        with self.assertRaisesRegex(ValueError, "required host payload differs"):
+            cc._host_payload_inventory(self.root)
+
 
 class ClosureOrderTests(TestCase):
     def test_host_backend_requires_positive_rss_and_reports_permission(self):
@@ -269,7 +296,7 @@ class ResumableClosureTests(TestCase):
         git(self.root, "commit", "-qm", "fixture")
         self.output = self.root / "results/workflow-validation/closure"
 
-    def fake_run(self, calls, interrupt_suite=False, suite_action=None):
+    def fake_run(self, calls, interrupt_suite=False, suite_action=None, status_action=None):
         interrupted = {"done": False}
 
         def run(command_root, command, log, **kwargs):
@@ -281,12 +308,14 @@ class ResumableClosureTests(TestCase):
                 raise KeyboardInterrupt()
             if command[0] == "suite" and suite_action is not None:
                 suite_action(command_root)
+            if command[0] == "status" and status_action is not None:
+                status_action(command_root)
             env = kwargs.get("env")
             if command[0] == "suite" and env:
                 receipt_dir = Path(env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"])
-                self.assertTrue(receipt_dir.is_relative_to(self.output / "stages/03-full-suite"))
+                self.assertTrue(receipt_dir.is_relative_to(command_root))
                 self.assertFalse(receipt_dir.is_relative_to(self.root / "results/research"))
-                receipt_dir.mkdir(parents=True)
+                receipt_dir.mkdir(parents=True, exist_ok=True)
                 (receipt_dir / "fixture.receipt.json").write_text("{}\n")
             if command[0] == "refresh":
                 refresh_dir = Path(command[2])
@@ -296,7 +325,8 @@ class ResumableClosureTests(TestCase):
 
         return run
 
-    def controls(self, calls, *, interrupt_suite=False, suite_action=None):
+    def controls(self, calls, *, interrupt_suite=False, suite_action=None,
+                 status_action=None):
         return (
             mock.patch.object(cc, "STATUS_PREFLIGHT", ["status"]),
             mock.patch.object(cc, "SUITE", ["suite"]),
@@ -308,7 +338,8 @@ class ResumableClosureTests(TestCase):
                                                                   "tool": command[0]}),
             mock.patch.object(cc, "_worktree_digest", return_value="0" * 64),
             mock.patch.object(cc, "_run_logged",
-                              side_effect=self.fake_run(calls, interrupt_suite, suite_action)),
+                              side_effect=self.fake_run(calls, interrupt_suite, suite_action,
+                                                        status_action)),
         )
 
     def test_repository_owner_is_exclusive_and_os_released(self):
@@ -371,16 +402,36 @@ class ResumableClosureTests(TestCase):
         self.assertEqual(result["publication_match"], "PASS")
         self.assertIn("03-full-suite", result["executed_stages"])
 
+    def test_live_edit_and_restore_cannot_contaminate_snapshot_status(self):
+        calls = []
+
+        def aba(snapshot):
+            self.assertNotEqual(snapshot.resolve(), self.root.resolve())
+            (self.root / "input.txt").write_text("status contamination\n")
+            self.assertEqual((snapshot / "input.txt").read_text(), "stable\n")
+            (self.root / "input.txt").write_text("stable\n")
+
+        patches = self.controls(calls, status_action=aba)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+
     def test_snapshot_hydration_keeps_source_ancestors_ordinary(self):
         (self.root / "external/lean-kernel-arena/_build").mkdir(parents=True)
         (self.root / "external/lean-kernel-arena/_build/payload").write_text("frozen\n")
+        (self.root / "external/lean-kernel-arena/source.txt").write_text("checkout\n")
         (self.root / "results/coverage").mkdir(parents=True)
         (self.root / "results/coverage/manifest.json").write_text("{}\n")
 
         def inspect(snapshot):
             self.assertFalse((snapshot / "external").is_symlink())
             self.assertFalse((snapshot / "external/lean-kernel-arena").is_symlink())
-            self.assertTrue((snapshot / "external/lean-kernel-arena/_build").is_symlink())
+            self.assertEqual((snapshot / "external/lean-kernel-arena/source.txt").read_text(),
+                             "checkout\n")
+            self.assertFalse((snapshot / "external/lean-kernel-arena/_build").is_symlink())
+            (self.root / "external/lean-kernel-arena/_build/payload").write_text("edited\n")
+            self.assertEqual((snapshot / "external/lean-kernel-arena/_build/payload").read_text(),
+                             "frozen\n")
+            (self.root / "external/lean-kernel-arena/_build/payload").write_text("frozen\n")
             self.assertFalse((snapshot / "results/coverage").is_symlink())
             self.assertEqual((snapshot / "results/coverage/manifest.json").read_text(), "{}\n")
 
@@ -430,6 +481,12 @@ class ResumableClosureTests(TestCase):
         result = json.loads((self.output / "attempts/0002/result.json").read_text())
         self.assertIn("03-full-suite", result["reused_stages"])
         self.assertFalse(any(command[0] == "suite" for command in calls2))
+        validation = json.loads((self.output / result["validation_receipt"]["path"]).read_text())
+        value = json.loads((self.output / Path(result["validation_receipt"]["path"]).parent
+                            / "value.json").read_text())
+        self.assertEqual(value["commit"], subprocess.check_output(
+            ["git", "rev-parse", "HEAD"], cwd=self.root, text=True).strip())
+        self.assertEqual(validation["status"], "PASS")
 
     def test_committed_test_dependency_change_invalidates_suite(self):
         calls = []
@@ -446,6 +503,54 @@ class ResumableClosureTests(TestCase):
         result = json.loads((self.output / "attempts/0002/result.json").read_text())
         self.assertIn("03-full-suite", result["executed_stages"])
         self.assertTrue(any(command[0] == "suite" for command in calls2))
+
+    def test_tracked_test_tree_change_invalidates_suite(self):
+        (self.root / "tests").mkdir()
+        (self.root / "tests/test_other.py").write_text("OLD = True\n")
+        scope = json.loads((self.root / self.scope).read_text())
+        scope["schema_version"] = 3
+        scope["stage_dependencies"] = {name: ["input.txt"] for name in
+                                       ("status", "suite", "publication")}
+        scope["stage_dependency_trees"] = {
+            "status": [], "suite": ["tests"], "publication": ["tests"]}
+        (self.root / self.scope).write_text(json.dumps(scope) + "\n")
+        git(self.root, "add", self.scope, "tests/test_other.py")
+        git(self.root, "commit", "-qm", "bind complete test tree")
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        (self.root / "tests/test_other.py").write_text("OLD = False\n")
+        git(self.root, "add", "tests/test_other.py")
+        git(self.root, "commit", "-qm", "change discovered test")
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        self.assertTrue(any(command[0] == "suite" for command in calls2))
+
+    def test_unrelated_root_receipt_directory_is_preserved(self):
+        unrelated = self.root / ".closure-control-receipts"
+        unrelated.mkdir()
+        (unrelated / "user.txt").write_text("keep\n")
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        self.assertEqual((unrelated / "user.txt").read_text(), "keep\n")
+
+    def test_cached_directory_symlink_tamper_fails_closed(self):
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        target = self.output / "stages/03-full-suite/0001/linked-dir"
+        target.symlink_to(self.root, target_is_directory=True)
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 1)
+        self.assertEqual(calls2, [])
 
     def test_interruption_preserves_failure_and_resume_reuses_valid_prefix(self):
         calls = []

@@ -53,11 +53,43 @@
       "command": "python3 -m unittest discover -s tests -p test_closure_controls.py",
       "outcome": "PASS",
       "observation": "All 26 focused controls passed after adding the ordinary-source-ancestor and narrow-host-payload hydration regression."
+    },
+    {
+      "attempt_id": "ordered-closure-0002",
+      "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
+      "outcome": "FULL_SUITE_FAILED",
+      "observation": "The current partition ran 1,658 tests and exposed two closure-state issues: four supervisor cases rejected a retained receipt path outside the snapshot, and five historical successor tests correctly observed the live selected item as ACTIVE rather than their required closure-time READY state. The frozen publication partition also required the retained Arena checkout revision, not only its _build payload. The 73-test frozen publication partition therefore recorded one related failure; the nine portfolio/history tests passed.",
+      "repair": "Collect supervisor receipts first inside the snapshot and copy them into the immutable stage output afterward; copy the small retained Arena checkout excluding _build and link only its 25 GiB frozen build subtree; run final closure only after the current item is COMPLETE and its successor is READY, matching the historical closure contract.",
+      "evidence_refs": [
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0002/result.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0002/failure.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0002/command.log"
+      ]
+    },
+    {
+      "attempt_id": "independent-review-repair-0001",
+      "command": "independent read-only review followed by focused controller repair",
+      "outcome": "PASS",
+      "observation": "Review identified stale sealed-validation reuse, incomplete discovered-test dependencies, mutable and unbound host payload, live-worktree status preflight, overbroad receipt collection, and cached directory-symlink gaps. It also showed that five historical test assertions were narrower than their validators' READY-or-ACTIVE transition contract.",
+      "repair": "Bind complete tracked directory trees and exact host payload identities, clone ignored payload into the snapshot, execute status and suite there, bind validation to publication inputs, use unique explicitly owned receipt directories, reject cached output links/empty directories, align the five current historical tests with their validators, and add focused regressions for every path.",
+      "focused_tests": 31
+    },
+    {
+      "attempt_id": "historical-focused-invocation-0001",
+      "command": "python3 -m unittest discover -s tests -p test_survivor_*historical.py",
+      "outcome": "FAILED_WRONG_HARNESS",
+      "observation": "Six modules imported the frozen v3 queue loader directly and rejected the current v4 queue before their assertions. The canonical full-suite driver installs the committed v4 compatibility bridge before this partition.",
+      "repair": "Do not weaken frozen loaders or infer a historical failure from the direct invocation; validate these tests through scripts/run-unit-tests in ordered closure."
     }
   ],
   "focused_validation": {
-    "tests": 26,
+    "tests": 31,
     "status": "PASS"
+  },
+  "repository_closure": {
+    "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
+    "required_receipt": "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0003/result.json",
+    "required_status": "COMPLETE"
   },
   "scientific_launches": 0,
   "external_actions": []
