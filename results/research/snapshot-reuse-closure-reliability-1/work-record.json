@@ -80,6 +80,18 @@
       "outcome": "FAILED_WRONG_HARNESS",
       "observation": "Six modules imported the frozen v3 queue loader directly and rejected the current v4 queue before their assertions. The canonical full-suite driver installs the committed v4 compatibility bridge before this partition.",
       "repair": "Do not weaken frozen loaders or infer a historical failure from the direct invocation; validate these tests through scripts/run-unit-tests in ordered closure."
+    },
+    {
+      "attempt_id": "ordered-closure-0003",
+      "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
+      "outcome": "FULL_SUITE_FAILED",
+      "observation": "The full-suite driver stopped before test discovery because five modified historical test files no longer matched their frozen portfolio bytes. The failure also confirmed that the historical transition contract expects the current successor to be READY at closure time, not ACTIVE.",
+      "repair": "Restore all five historical test files byte-for-byte. Preserve attempt 0003 and perform the next full ordered validation only after the current item is durably COMPLETE and the selected successor is READY.",
+      "evidence_refs": [
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0003/result.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0003/failure.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0003/command.log"
+      ]
     }
   ],
   "focused_validation": {
