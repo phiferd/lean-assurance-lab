@@ -81,7 +81,13 @@ def discover(root: Path):
         if not found:
             continue
         relative = path.relative_to(root).as_posix()
-        groups[path.relative_to(research).parts[0]].add(relative)
+        parts = path.relative_to(research).parts
+        family = parts[0]
+        if (family == "resource-envelope-pilot-1" and len(parts) >= 3
+                and parts[1].startswith("final-closure-")
+                and parts[2] == "supervisor-receipts"):
+            family = "resource-envelope-closure-controls"
+        groups[family].add(relative)
         receipts.extend((relative, row) for row in found)
     return {key: sorted(value) for key, value in groups.items()}, receipts
 
@@ -137,10 +143,13 @@ def validate_registration(root: Path, groups, registry):
         if not isinstance(replay, str) or not _test_exists(root, replay):
             raise ValueError(f"missing active replay test: {family}")
         portable = row["portability_test"]
+        portable_prefix = ("test_resource_envelope_closure_portability."
+                           if family == "resource-envelope-closure-controls"
+                           else "test_evidence_replay_portability.")
         if family not in BASELINE_FAMILIES and portable is None:
             raise ValueError(f"new receipt family needs a portability test: {family}")
         if portable is not None and (not isinstance(portable, str)
-                                     or not portable.startswith("test_evidence_replay_portability.")
+                                     or not portable.startswith(portable_prefix)
                                      or not _test_exists(root, portable)):
             raise ValueError(f"missing dedicated portability test: {family}")
     return len(rows)

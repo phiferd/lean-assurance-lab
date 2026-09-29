@@ -10,6 +10,7 @@ from collections import Counter
 from hashlib import sha256
 from pathlib import Path
 
+from lib.resource_envelope_attempt_projection import replay_attempts
 from lib.resource_envelope_audit import audit_corpus
 from lib.resource_envelope_observe import classify
 from lib.resource_envelope_producer import canonical_json
@@ -382,7 +383,7 @@ def replay_result(root: Path) -> dict:
         previous_end = end
         samples[profile] += receipt["sample_count"] > 0
         outcomes[(profile, slot["kind"])] += 1
-    custody = replay(root)
+    custody = replay_attempts(root, replay)
     _require(custody["process_receipts"] == 73 and custody["raw_streams"] == 146
              and custody["preserved_accounting_faults"] == 0,
              "complete preserved process inventory differs")

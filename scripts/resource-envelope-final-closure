@@ -1,0 +1,26 @@
+#!/usr/bin/env python3
+"""Run exact resource closure with retained supervisor fixture custody."""
+
+import argparse
+from pathlib import Path
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.resource_envelope_final_closure import finish
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--scope-file", required=True)
+    parser.add_argument("--output-dir", required=True, type=Path)
+    args = parser.parse_args()
+    try:
+        return finish(ROOT, args.scope_file, args.output_dir)
+    except (OSError, ValueError) as error:
+        print(error, file=sys.stderr)
+        return 1
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

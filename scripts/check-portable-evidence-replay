@@ -14,13 +14,21 @@ parser.add_argument("--require-foreign-checkout", action="store_true")
 args = parser.parse_args()
 print(validate(ROOT, require_foreign_checkout=args.require_foreign_checkout), flush=True)
 tests = subprocess.run(
-    [sys.executable, "-m", "unittest", "discover", "-s", "tests",
-     "-p", "test_evidence_replay_portability.py", "-v"],
+    [sys.executable, str(ROOT / "scripts/run-evidence-replay-portability-tests")],
     cwd=ROOT,
     check=False,
 )
 if tests.returncode:
     raise SystemExit(tests.returncode)
+
+closure_tests = subprocess.run(
+    [sys.executable, "-m", "unittest", "discover", "-s", "tests",
+     "-p", "test_resource_envelope_closure_portability.py", "-v"],
+    cwd=ROOT,
+    check=False,
+)
+if closure_tests.returncode:
+    raise SystemExit(closure_tests.returncode)
 
 for script in (
     "validate-lazy-reduction-conformance-pilot-1-portable",

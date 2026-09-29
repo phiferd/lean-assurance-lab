@@ -19,6 +19,8 @@ ROOT = Path(__file__).resolve().parents[1]
 
 class ResourceEnvelopeResultReplayTests(unittest.TestCase):
     def test_committed_matrix_and_foreign_checkout_without_host_tools(self):
+        self.assertTrue((ROOT / REL / "final-closure-2026-09-29-r2"
+                         / "supervisor-receipts/normal.with.dots.receipt.json").is_file())
         self.assertEqual(replay_result(ROOT), {
             "status": "PASS", "science_cells": 24, "baselines": 12,
             "accepted": 36, "official_sampled_runs": 18,
@@ -56,6 +58,16 @@ class ResourceEnvelopeResultReplayTests(unittest.TestCase):
                  patch.object(subprocess, "Popen", side_effect=AssertionError("host launch")), \
                  patch.object(subprocess, "run", side_effect=AssertionError("host launch")):
                 self.assertEqual(replay_result(checkout)["accepted"], 36)
+
+            # A valid duplicate receipt inside the scientific attempt remains
+            # in discovery scope, even while closure fixtures coexist nearby.
+            extra = copied / "science-run-0001/processes/unexpected.receipt.json"
+            shutil.copy2(copied / "science-run-0001/processes/official-before-01.receipt.json",
+                         extra)
+            with self.assertRaisesRegex(ReplayError,
+                                        "complete preserved process inventory differs"):
+                replay_result(checkout)
+            extra.unlink()
 
             ledger = copied / "science-run-0001/ledger.ndjson"
             original_ledger = ledger.read_bytes()
