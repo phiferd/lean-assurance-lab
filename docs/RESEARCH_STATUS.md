@@ -58,6 +58,17 @@ research directions.
 
 ## Attempted
 
+- `EXPLORATORY-EXPERIMENT-PROTOCOL-1` implements the owner-directed E0 lane,
+  subject to final shared-workflow validation and refresh. **What did we find?**
+  Fifteen focused tests pass for cheap negative closure, incomplete measurements,
+  append-only evidence, separate confirmation proposals and lightweight CI.
+  No scientific experiment or measured efficiency result follows. **Is it
+  interesting?** Yes, it makes hypothesis screening a distinct operational path.
+  **Does it require more work?** Retain the lane after final checks; select
+  `WORKFLOW-CLOSURE-RELIABILITY-1` READY and unstarted to repair the separate
+  confirmed coordination/replay defects and measure token cost. The memory audit
+  is deferred. See [the adoption report](../results/research/exploratory-experiment-protocol-1/report.md).
+
 - `RESOURCE-ENVELOPE-PILOT-1` has a reviewed scientific result with SUCCESS;
   final repository completion requires the file-backed full-suite and ordered
   closure receipts. Closure attempt 0001 failed during a temporary state-edit
@@ -3168,17 +3179,15 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
-It is READY and unstarted under its
-[plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
-The canonical queue retains one READY item, `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`,
-and zero ACTIVE items. This is a scoped, read-only audit of the exact eighteen
-Nanoda receipts with zero sampled group-RSS points. It will check receipt labels,
-executable identity, raw and normalized `wait4` fields, supervisor handling,
-primary documentation, and the missing historical kernel-build identity. It
-will not relaunch processes or alter the frozen result. The 10 ms cadence was a
-configured target; actual sampling cadence and why no samples were captured
-remain undetermined.
+Selected next item: `WORKFLOW-CLOSURE-RELIABILITY-1`.
+It is READY and unstarted under [its reliability plan](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md).
+The canonical queue retains one READY item, `WORKFLOW-CLOSURE-RELIABILITY-1`,
+and zero ACTIVE items. The exploration protocol implementation introduces a
+lightweight E0 ledger and a separate confirmation boundary, subject to its final
+shared-workflow validation and refresh. No exploratory science has run and no
+cost savings are claimed. The owner prioritizes closure reliability and usage
+accounting before a new semantic campaign. `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`
+is DEFERRED; its original read-only scope and all resource evidence are retained.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3321,7 +3330,7 @@ no external action is recommended now.
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
-| 11 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | READY, unstarted; read-only audit of the exact 18 Nanoda receipts |
+| 11 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; read-only scope retained after owner process reprioritization |
 | 12 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
@@ -3470,8 +3479,8 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue selects `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY and
-unstarted. The resource matrix is COMPLETE with 24 scientific checks and 12
+The canonical queue selects `WORKFLOW-CLOSURE-RELIABILITY-1` READY and
+unstarted. The memory audit is deferred under the owner-directed process change. The resource matrix is COMPLETE with 24 scientific checks and 12
 baselines ACCEPTED. The 18 Nanoda runs have zero sampled RSS points, so sampled
 group peaks remain unknown. The configured 10 ms target cadence does not
 establish actual cadence or the cause of missing samples; wait4 child-accounting
@@ -3505,9 +3514,9 @@ claim. The binder-model item's exact fragment, source/reuse, independent-audit
 and execution gates passed before its vectors and observers were run; retain
 its bounded corpus and portable replay locally. At that earlier handoff,
 the resource-envelope matrix was selected READY and unstarted; it has since
-completed with a reviewed finite result. The current READY and unstarted
-successor is the [short-process memory audit](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md),
-which reads the exact 18 receipts without launching processes.
+completed with a reviewed finite result. That memory audit is now deferred. The current READY successor is
+[closure reliability](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md);
+its selection does not launch it or any scientific pilot.
 
 ### Waiting
 

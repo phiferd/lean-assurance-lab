@@ -1,0 +1,67 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "E0 exploration ledger event",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["schema_version", "evidence_class", "event", "id", "at", "data"],
+  "properties": {
+    "schema_version": {"const": 1},
+    "evidence_class": {"const": "E0"},
+    "event": {"enum": ["start", "finish", "promote"]},
+    "id": {"type": "string", "pattern": "^EXPLORE-[A-Z0-9-]+$"},
+    "at": {"type": "string", "format": "date-time"},
+    "data": {"type": "object"}
+  },
+  "$defs": {
+    "text": {"type": "string", "pattern": "\\S"},
+    "files": {"type": "array", "minItems": 1, "uniqueItems": true, "items": {"$ref": "#/$defs/text"}},
+    "start": {
+      "type": "object", "additionalProperties": false,
+      "required": ["campaign", "question", "sources", "versions", "commands", "inputs", "sample", "planned_runs", "controls"],
+      "properties": {
+        "campaign": {"$ref": "#/$defs/text"},
+        "question": {"$ref": "#/$defs/text"},
+        "sources": {"type": "array", "minItems": 1, "items": {
+          "type": "object", "additionalProperties": false, "required": ["name", "revision"],
+          "properties": {"name": {"$ref": "#/$defs/text"}, "revision": {"type": "string", "pattern": "^[0-9a-f]{40}$"}, "patch": {"$ref": "#/$defs/text"}}
+        }},
+        "versions": {"$ref": "#/$defs/text"},
+        "commands": {"$ref": "#/$defs/text"},
+        "inputs": {"$ref": "#/$defs/files"},
+        "sample": {"$ref": "#/$defs/text"},
+        "planned_runs": {"type": "integer", "minimum": 1},
+        "controls": {"$ref": "#/$defs/text"}
+      }
+    },
+    "finish": {
+      "type": "object", "additionalProperties": false,
+      "required": ["outcome", "completed_runs", "signal_count", "measurement_complete", "engineering_failures_unresolved", "observations", "limitations", "decision", "raw_output", "cost"],
+      "properties": {
+        "outcome": {"enum": ["NO_SIGNAL", "SIGNAL", "INCONCLUSIVE"]},
+        "completed_runs": {"type": "integer", "minimum": 0},
+        "signal_count": {"type": "integer", "minimum": 0},
+        "measurement_complete": {"type": "boolean"},
+        "engineering_failures_unresolved": {"type": "boolean"},
+        "observations": {"$ref": "#/$defs/text"},
+        "limitations": {"$ref": "#/$defs/text"},
+        "decision": {"$ref": "#/$defs/text"},
+        "raw_output": {"$ref": "#/$defs/files"},
+        "cost": {"$ref": "#/$defs/text"}
+      }
+    },
+    "promote": {
+      "type": "object", "additionalProperties": false,
+      "required": ["confirmation_id", "hypothesis", "reason"],
+      "properties": {
+        "confirmation_id": {"type": "string", "pattern": "^CONFIRM-[A-Z0-9-]+$"},
+        "hypothesis": {"$ref": "#/$defs/text"},
+        "reason": {"$ref": "#/$defs/text"}
+      }
+    }
+  },
+  "allOf": [
+    {"if": {"properties": {"event": {"const": "start"}}}, "then": {"properties": {"data": {"$ref": "#/$defs/start"}}}},
+    {"if": {"properties": {"event": {"const": "finish"}}}, "then": {"properties": {"data": {"$ref": "#/$defs/finish"}}}},
+    {"if": {"properties": {"event": {"const": "promote"}}}, "then": {"properties": {"data": {"$ref": "#/$defs/promote"}}}}
+  ]
+}

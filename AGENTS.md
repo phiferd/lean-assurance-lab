@@ -86,6 +86,21 @@ start it: obey the current request's item count and stopping boundary, including
 an instruction to finish one item and stop. Use the current queue successor's
 strategic-review checks; older queues retain their original historical rules.
 
+## Prospective exploration exception (2026-09-29)
+
+Use [the exploration protocol](docs/EXPLORATORY_EXPERIMENT_PROTOCOL.md) for
+explicitly selected E0 screening campaigns. Each trial records its question and
+identity before execution, retains raw attempts, and closes with NO_SIGNAL,
+SIGNAL or INCONCLUSIVE. Routine E0 records require the exploration ledger check
+and diff check, not independent closure review, full research replay, assurance
+refresh or per-trial project-wide reranking. Aim for one or two commits per
+ordinary pilot; retain all failures regardless of commit count. Campaign
+handoff performs strategic selection once. Shared tooling changes retain
+applicable regression/full-suite requirements. Confirmation always creates a
+separate experiment with fresh execution and its own gates; E0 never supplies
+confirmatory evidence. These explicit prospective exceptions govern E0 over
+the general closure procedures below. Historical and milestone gates remain.
+
 ## Engineering persistence within an active item
 
 Treat an ordinary engineering failure as work to diagnose and repair within the

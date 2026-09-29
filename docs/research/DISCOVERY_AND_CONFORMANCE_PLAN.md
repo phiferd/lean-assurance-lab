@@ -69,6 +69,19 @@ validated source patch, passing frozen regression/full-suite matrix and indexed
 but unsubmitted local PR draft. These
 are ordinal judgments, not estimated defect rates.
 
+## Prospective exploration adoption — 2026-09-29
+
+The owner selected `EXPLORATORY-EXPERIMENT-PROTOCOL-1` before the unstarted
+memory audit. Its [implementation plan](EXPLORATORY_EXPERIMENT_PROTOCOL_PLAN.md)
+introduces the [E0 exploration lane](../EXPLORATORY_EXPERIMENT_PROTOCOL.md).
+E0 questions and samples are recorded before execution but do not inherit
+confirmation's full manifest/closure machinery. E1/E2 and existing milestone
+gates retain their meaning. Campaign selection remains in the canonical queue;
+this adoption itself authorizes no pilot. Its implementation selects
+WORKFLOW-CLOSURE-RELIABILITY-1 READY and unstarted; the memory audit is deferred.
+The earlier ranked handoff below is
+historical context; Active status and the current queue select current work.
+
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped

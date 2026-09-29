@@ -36,6 +36,22 @@ still require authorization for that exact action and target. A task-specific
 limit such as one completed item controls when to stop, not whether useful next
 work may be selected READY.
 
+## Prospective E0 screening lane — 2026-09-29
+
+The owner adopts [EXPLORATORY_EXPERIMENT_PROTOCOL.md](EXPLORATORY_EXPERIMENT_PROTOCOL.md).
+Its E0 lane separates hypothesis screening from E1 confirmation and E2 assurance
+or external claims. The general exact-input-freeze and logical-item closure
+procedures in this document apply to confirmation and shared engineering; E0
+trials use the protocol's minimal start/finish log and focused checks instead.
+One selected ACTIVE E0 campaign can contain multiple declared trials. Their
+ordinary closure does not invoke full-suite replay, independent closure review,
+assurance generation, or repeated project-wide reranking. Reassess at campaign
+handoff. Scientific safety, frozen history and external authority still apply.
+Promotion creates a separate confirmation proposal; it never rewrites E0.
+No completed item is retroactively downgraded, and no existing assurance gate
+is relaxed. This adoption is a shared workflow change requiring full validation;
+future routine E0-only additions are not.
+
 ## What makes an item executable
 
 Every item names its question/action, target, expected ecosystem value,
