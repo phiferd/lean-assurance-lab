@@ -35,10 +35,28 @@
       "command": "python3 -m unittest discover -s tests -p test_closure_controls.py",
       "outcome": "PASS",
       "observation": "All 25 focused closure-control tests passed, including immutable-snapshot ABA isolation, publication mismatch refusal, unrelated-document reuse, real dependency invalidation, resume, ownership, and cached-output tamper controls."
+    },
+    {
+      "attempt_id": "ordered-closure-0001",
+      "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
+      "outcome": "FULL_SUITE_PREFLIGHT_FAILED",
+      "observation": "The detached snapshot exposed the ignored external payload through a top-level directory symlink. The exact source-custody preflight rejected that linked ancestor before test discovery or scientific execution.",
+      "repair": "Keep external as an ordinary snapshot directory, materialize source-only custody inputs there, link only the frozen arena _build subtree, and copy the 23 MiB coverage payload into the snapshot. Preserve attempt 0001 and rerun after committing the exact repair.",
+      "evidence_refs": [
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0001/result.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0001/failure.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0001/command.log"
+      ]
+    },
+    {
+      "attempt_id": "focused-discovery-0002",
+      "command": "python3 -m unittest discover -s tests -p test_closure_controls.py",
+      "outcome": "PASS",
+      "observation": "All 26 focused controls passed after adding the ordinary-source-ancestor and narrow-host-payload hydration regression."
     }
   ],
   "focused_validation": {
-    "tests": 25,
+    "tests": 26,
     "status": "PASS"
   },
   "scientific_launches": 0,

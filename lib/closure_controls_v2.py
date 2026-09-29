@@ -169,12 +169,14 @@ def validation_snapshot(root: Path, inventory: dict) -> Iterator[Path]:
         # Full-payload integration data are intentionally ignored by Git. Their
         # item validators bind their exact bytes; expose the same host payload to
         # the isolated tracked checkout without copying tens of gigabytes.
-        for relative in (Path("external"), Path("results/coverage")):
-            source = root / relative
-            if source.exists():
-                target = checkout / relative
-                target.parent.mkdir(parents=True, exist_ok=True)
-                target.symlink_to(source, target_is_directory=True)
+        arena_build = root / "external/lean-kernel-arena/_build"
+        if arena_build.is_dir():
+            target = checkout / "external/lean-kernel-arena/_build"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.symlink_to(arena_build, target_is_directory=True)
+        coverage = root / "results/coverage"
+        if coverage.is_dir():
+            shutil.copytree(coverage, checkout / "results/coverage")
         snapshot_inventory = committed_inventory(checkout, inventory["scope_file"])
         for name in STAGE_DEPENDENCY_KEYS:
             if dependency_inventory(snapshot_inventory, name) != dependency_inventory(inventory, name):

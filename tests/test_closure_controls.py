@@ -371,6 +371,24 @@ class ResumableClosureTests(TestCase):
         self.assertEqual(result["publication_match"], "PASS")
         self.assertIn("03-full-suite", result["executed_stages"])
 
+    def test_snapshot_hydration_keeps_source_ancestors_ordinary(self):
+        (self.root / "external/lean-kernel-arena/_build").mkdir(parents=True)
+        (self.root / "external/lean-kernel-arena/_build/payload").write_text("frozen\n")
+        (self.root / "results/coverage").mkdir(parents=True)
+        (self.root / "results/coverage/manifest.json").write_text("{}\n")
+
+        def inspect(snapshot):
+            self.assertFalse((snapshot / "external").is_symlink())
+            self.assertFalse((snapshot / "external/lean-kernel-arena").is_symlink())
+            self.assertTrue((snapshot / "external/lean-kernel-arena/_build").is_symlink())
+            self.assertFalse((snapshot / "results/coverage").is_symlink())
+            self.assertEqual((snapshot / "results/coverage/manifest.json").read_text(), "{}\n")
+
+        calls = []
+        patches = self.controls(calls, suite_action=inspect)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+
     def test_publication_change_after_snapshot_refuses_result(self):
         calls = []
 
