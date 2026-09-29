@@ -1,0 +1,90 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "FINAL_RESULT_CONSUMER_R2_AND_REPORT",
+  "reviewed_at": "2026-09-29T02:47:58.073264+00:00",
+  "plain_language": {
+    "what_did_we_find": "The repaired result validator now rejects coordinated changes to smoke and construction outputs and receipts. It accepts the unchanged evidence: twenty-four scientific checks, twelve baselines and all seventy-three retained process records. The report tables match every recorded value after rounding.",
+    "is_it_interesting": "Yes, as a stronger preservation check for the experiment. This is an engineering repair; it does not change the accepted scientific result or resolve the missing Nanoda memory samples.",
+    "does_it_require_more_work": "No further repair follows from these probes. Complete the planned strategic-state review, required full suite and generated-state checks, then verify delivery before declaring project closure."
+  },
+  "verdict": "PASS_RESULT_REPLAY_AND_REPORT",
+  "reviewed_checkpoint": "409f87e",
+  "reviewed_inputs": [
+    {
+      "path": "lib/resource_envelope_result_replay.py",
+      "bytes": 22631,
+      "sha256": "d681af7ea7c376d090b0761fa8d3c30032f5744d8d787d6486753732fdca1305"
+    },
+    {
+      "path": "tests/test_resource_envelope_result_replay.py",
+      "bytes": 5870,
+      "sha256": "a5af486fe76cdb4661f0c691ea3d737096477d14eb88199c0d90f5d81da36734"
+    },
+    {
+      "path": "scripts/validate-resource-envelope-pilot-1-result",
+      "bytes": 390,
+      "sha256": "48a3d0a164006db410249b4a502eef88ec9b50e510b29d83696545aa74922807"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/report.md",
+      "bytes": 10029,
+      "sha256": "4123db3606c819b02e72e1f15ec9976d55bb0cdd08339a2524414fb4ec6a9932"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-result-consumer-review-r1.json",
+      "bytes": 2411,
+      "sha256": "440511b91b4a5ea66a8979fdf6434dc6e4a8b437644be8bd464fa2bb8686678c"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-scientific-result-review-count-erratum.json",
+      "bytes": 1855,
+      "sha256": "f986f23fa2465c05de0bac0be3a16f8509e7de78bfc447215b36f7613157cc94"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/result-consumer-r2-independent-probes.json",
+      "bytes": 1839,
+      "sha256": "6abee824ff507de5f33a8f1681838a19d10b8712a876e349925468a6a204a262"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/science-run-0001/science-result.json",
+      "bytes": 79580,
+      "sha256": "9219251d4fa01523775da79e8aff177f32557b2e52828586c7dc15b42e4f1470"
+    }
+  ],
+  "checks": {
+    "positive_replay": {
+      "science_cells": 24,
+      "baselines": 12,
+      "accepted": 36,
+      "process_receipts": 73,
+      "raw_streams": 146,
+      "host_launches": 0
+    },
+    "coordinated_tamper_probes": "Six rejection probes cover smoke and successful-construction output/receipt edits both with and without review anchoring, plus raw rewrites in both failed construction attempts. Original evidence never changed.",
+    "binding_repair": "Exact scientific result hash and nine independent review hashes anchor reviewed files; construction result directly binds all source/export/case/setup/process files; smoke manifest/result/ledger/process/input/argv/output/limits are directly reconciled; full scientific schedule remains exact.",
+    "portable_test": {
+      "command": "python3 -m unittest discover -s tests -p test_resource_envelope_result_replay.py -v",
+      "tests": 1,
+      "status": "PASS",
+      "seconds": 0.839,
+      "detail": "Copied evidence and required repository files; original checkout reads and host process creation prohibited; mutation/missing-file checks passed."
+    },
+    "report_tables": {
+      "scientific_rows": 24,
+      "baseline_phase_groups": 4,
+      "individual_baseline_runs": 12,
+      "input_metric_rows": 12,
+      "status": "All rounded cells independently reproduced from raw receipts/case metrics."
+    },
+    "plain_language": "Opening correctly distinguishes twelve inputs and twenty-four checks, states sampled Nanoda memory unknown, excludes speed/memory/correctness claims and selects a separate no-relaunch source/receipt audit. Elapsed-only baseline overlap is accurate.",
+    "count_erratum": "Original scientific review preserved; dated companion corrects its one prose coverage sentence from71/142 to73/146, consistent with its original machine replay field."
+  },
+  "remaining_limits": [
+    "All eighteen Nanoda scientific/baseline runs have no RSS samples; sampled group memory stays unknown.",
+    "Official single samples have large gaps; OS child high-water and sampled sums cannot be equated or subtracted.",
+    "No isolated import cost, exact true peak, universal ranking or growth-law claim."
+  ],
+  "scientific_inputs_or_results_changed": false,
+  "closure_authorization": "This approves the repaired result consumer and current report only. Full required repository validation, durable successor/status/queue consistency, generated-state freshness and verified main delivery remain separate gates."
+}
