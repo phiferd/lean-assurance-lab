@@ -7,12 +7,44 @@ evidence is opened; no checker, Lake process, or host monitoring tool runs.
 from __future__ import annotations
 
 from collections import Counter
+from hashlib import sha256
 from pathlib import Path
 
 from lib.resource_envelope_audit import audit_corpus
 from lib.resource_envelope_observe import classify
 from lib.resource_envelope_producer import canonical_json
 from lib.resource_envelope_replay import REL, ReplayError, _bound, _load, replay
+
+RESULT_SHA256 = "9219251d4fa01523775da79e8aff177f32557b2e52828586c7dc15b42e4f1470"
+REVIEWS = {
+    "independent-preflight-review.json": (
+        "PASS_POSITIVE_ACTUAL_HOST_PREFLIGHT",
+        "242e9c7d1d1dafdd16e0ccb95b0cd05b62036c8b3cc26dacfa2de42c117d5c7e"),
+    "independent-construction-failure-review-r1.json": (
+        "REPAIR_REQUIRED_WITH_SCIENTIFIC_INPUTS_UNCHANGED",
+        "8d3a55c90a68f5fb9f8beb1a10bb00f82ecb9651692ae65ba07a2a7a9d1d735b"),
+    "independent-construction-failure-review-r2.json": (
+        "PASS_FOR_SAME_MANIFEST_HOST_RETRY",
+        "fd301ea969e801f030ea7b50cd3ad52e4cf9012d074fd51fb53ca9a44a165199"),
+    "independent-preconstruction-review-r2.json": (
+        "PASS_FOR_CONSTRUCTION",
+        "fed75d07774b7fac61edc21f00527316e889758bf33cdf9b2cf2f8357411eb8e"),
+    "independent-corpus-review.json": (
+        "PASS_FOR_CORPUS_SEALING",
+        "9e4b62adc3463b9d13460d9a8ebbb0d44f50ef1be5e081cc55f84700e719471f"),
+    "independent-smoke-launch-review.json": (
+        "PASS_FOR_SMOKE_LAUNCH",
+        "4a222daf12fc1cd6551f692ab240bc0e64c17cf60ee732a52e8f6f417c721cfa"),
+    "independent-smoke-result-review.json": (
+        "PASS_EXACT_SMOKE_RESULTS",
+        "c70b97c4435a203851c6df29a5a4bb5dd8f857c2be35cd131e5fa5e5e6a1efc1"),
+    "independent-prelaunch-review.json": (
+        "PASS_FOR_SCIENTIFIC_LAUNCH",
+        "41559f3979ee2ec5967d550635b0fb0957a0b0311456d66d729241b5f5655203"),
+    "independent-scientific-result-review.json": (
+        "PASS_COMPLETE_FIXED_MATRIX",
+        "f9ab6eb8054f0f16c90dae9f51759bdaeb369217a364fecfed3d1e051e4245b3"),
+}
 
 
 def _require(condition: bool, message: str) -> None:
@@ -37,11 +69,159 @@ def _schedule() -> list[dict]:
     return slots
 
 
+def _replay_reviews(root: Path, base: Path) -> None:
+    """The independent reviews anchor every retained attempt's raw bindings."""
+    for name, (verdict, digest) in REVIEWS.items():
+        path = base / name
+        _require(sha256(path.read_bytes()).hexdigest() == digest,
+                 f"{name}: committed independent review differs")
+        review = _load(path)
+        rows = review.get("reviewed_inputs")
+        _require(review.get("verdict") == verdict and type(rows) is list and rows,
+                 f"{name}: review verdict or input inventory differs")
+        for row in rows:
+            _bound(root, row)
+
+
+def _replay_construction(root: Path, base: Path, lock: dict) -> None:
+    path = _bound(root, lock["construction_result"])
+    _require(path == base / "construction-run-0003/construction-result.json",
+             "successful construction path differs")
+    result = _load(path)
+    cases = result.get("cases")
+    _require(result.get("status") == "CONSTRUCTED_AND_INDEPENDENTLY_AUDITED"
+             and result.get("independent_audit") == lock["audit"]
+             and type(cases) is list and len(cases) == 12,
+             "successful construction audit differs")
+    _require(_bound(root, result["canonical_index"]) == base / "corpus/index.json",
+             "construction index binding differs")
+    expected_ids = [f"rep1-{family}-{size:03d}"
+                    for family in ("pi", "let")
+                    for size in (16, 32, 64, 128, 256, 512)]
+    _require([row.get("id") for row in cases] == expected_ids,
+             "constructed case order differs")
+    for row in cases:
+        cid = row["id"]
+        for kind, folder, suffix in (("source", "sources", "lean"),
+                                     ("export", "exports", "ndjson"),
+                                     ("case", "cases", "json")):
+            staged = _bound(root, row[kind])
+            canonical = base / f"corpus/{folder}/{cid}.{suffix}"
+            _require(staged == base / f"construction-run-0003/staged/corpus/{folder}/{cid}.{suffix}"
+                     and staged.read_bytes() == canonical.read_bytes(),
+                     f"{cid}: staged/canonical {kind} differs")
+        setup = _bound(root, row["build_setup"])
+        _require(setup == base / f"construction-run-0003/workspaces/{cid}/"
+                 ".lake/build/ir/ResourceEnvelopePilot1.setup.json"
+                 and _load(setup).get("options") == {"maxRecDepth": 8192},
+                 f"{cid}: construction option transport differs")
+        for phase in ("build", "export"):
+            process = row[f"{phase}_process"]
+            _require(set(process) == {"receipt", "stdout", "stderr"},
+                     f"{cid} {phase}: process schema differs")
+            for kind in ("receipt", "stdout", "stderr"):
+                _require(process[kind]["path"] ==
+                         f"{REL.as_posix()}/construction-run-0003/processes/{cid}-{phase}."
+                         + ("receipt.json" if kind == "receipt" else kind),
+                         f"{cid} {phase}: process path differs")
+                _bound(root, process[kind])
+            receipt = _load(root / process["receipt"]["path"])
+            _require(receipt.get("exit_code") == 0 and receipt.get("stop_reason") is None
+                     and receipt.get("reap_complete") is True
+                     and receipt.get("cleanup_complete") is True
+                     and receipt.get("monitor_errors") == []
+                     and receipt.get("pipe_errors") == []
+                     and receipt.get("accounting_error") is None,
+                     f"{cid} {phase}: construction process control differs")
+            if phase == "export":
+                _require((root / process["stdout"]["path"]).read_bytes()
+                         == (root / row["export"]["path"]).read_bytes(),
+                         f"{cid}: export raw differs from selected input")
+
+
+def _replay_smoke(root: Path, base: Path, smoke: dict, execution: dict,
+                  historical_root: str, limits: dict,
+                  science_ref: dict, execution_ref: dict) -> None:
+    manifest_path = _bound(root, smoke["smoke_manifest"])
+    attempt_path = _bound(root, smoke["attempt_result"])
+    _require(manifest_path == base / "smoke-manifest.json"
+             and attempt_path == base / "smoke-run-0001/smoke-result.json"
+             and _load(attempt_path) == {key: value for key, value in smoke.items()
+                                         if key != "attempt_result"},
+             "smoke manifest or attempt result differs")
+    manifest = _load(manifest_path)
+    _require(manifest.get("status") == "FROZEN_BEFORE_SMOKE_LAUNCH"
+             and manifest.get("scientific_manifest") == science_ref
+             and manifest.get("execution_manifest") == execution_ref,
+             "smoke manifest binding differs")
+    _require(manifest.get("fixture_contract") == execution["smoke_fixture_contract"]
+             and [row.get("id") for row in manifest.get("profiles", [])]
+                 == ["official", "nanoda"]
+             and manifest.get("excluded_from_scientific_cells") is True
+             and manifest.get("excluded_from_baseline_runs") is True,
+             "smoke profile contract differs")
+    _bound(root, manifest["input"])
+    _require([row.get("profile") for row in smoke["profiles"]]
+             == ["official", "nanoda"], "smoke profile order differs")
+    ledger = (base / "smoke-run-0001/ledger.ndjson").read_bytes()
+    _require(ledger == b"".join(canonical_json(row) for row in smoke["profiles"]),
+             "smoke ledger differs")
+    previous_end = None
+    for row in smoke["profiles"]:
+        profile = row["profile"]
+        _require(row.get("input") == manifest["input"]
+                 and row.get("disposition", {}).get("status") == "ACCEPTED",
+                 f"smoke {profile}: input or disposition differs")
+        process = row["process"]
+        _require(set(process) == {"receipt", "stdout", "stderr"},
+                 f"smoke {profile}: process schema differs")
+        for kind in ("receipt", "stdout", "stderr"):
+            _require(process[kind]["path"] ==
+                     f"{REL.as_posix()}/smoke-run-0001/processes/{profile}."
+                     + ("receipt.json" if kind == "receipt" else kind),
+                     f"smoke {profile}: process path differs")
+            _bound(root, process[kind])
+        receipt = _load(root / process["receipt"]["path"])
+        stdout = (root / process["stdout"]["path"]).read_bytes()
+        stderr = (root / process["stderr"]["path"]).read_bytes()
+        expected_argv = [arg.replace("{export_path}",
+                         historical_root + "/" + manifest["input"]["path"])
+                         for arg in execution["invocations"][profile]]
+        expected_stdout = (b"Accepted 1 declarations.\n" if profile == "official"
+                           else b"Checked 1 declarations with no errors\n")
+        disposition = classify(receipt, stdout, stderr,
+                               expected_stdout=expected_stdout, baseline=False)
+        _require(receipt.get("argv") == expected_argv
+                 and receipt.get("cwd") == historical_root
+                 and receipt.get("limits") == limits
+                 and row.get("started_monotonic_ns") == receipt.get("started_monotonic_ns")
+                 and receipt.get("raw_stdout_path") == process["stdout"]["path"]
+                 and receipt.get("raw_stderr_path") == process["stderr"]["path"]
+                 and disposition == row["disposition"]
+                 and disposition["status"] == "ACCEPTED",
+                 f"smoke {profile}: raw checker result differs")
+        if profile == "nanoda":
+            _require(receipt.get("stdin_bytes") == manifest["input"]["bytes"]
+                     and receipt.get("stdin_sha256") == manifest["input"]["sha256"],
+                     "smoke Nanoda stdin differs")
+        else:
+            _require(receipt.get("stdin_bytes") is None
+                     and receipt.get("stdin_sha256") is None,
+                     "smoke official stdin differs")
+        start, end = receipt["started_monotonic_ns"], receipt["drained_monotonic_ns"]
+        _require(previous_end is None or start >= previous_end,
+                 "smoke process order overlaps")
+        previous_end = end
+
+
 def replay_result(root: Path) -> dict:
     root = root.resolve()
     base = root / REL
     result_path = base / "science-run-0001/science-result.json"
+    _require(sha256(result_path.read_bytes()).hexdigest() == RESULT_SHA256,
+             "committed scientific result differs")
     result = _load(result_path)
+    _replay_reviews(root, base)
     _require(set(result) == {"baseline_input", "baselines", "cells", "completed_at",
                              "corpus_lock", "events", "execution_manifest", "history",
                              "independent_prelaunch_review", "item_id", "ledger",
@@ -81,6 +261,7 @@ def replay_result(root: Path) -> dict:
         _bound(root, row)
     for key in ("construction_result", "independent_corpus_review"):
         _bound(root, lock[key])
+    _replay_construction(root, base, lock)
     _require(smoke.get("status") == "SMOKE_EXACT_ACCEPTANCE_BOTH_PROFILES"
              and [row.get("profile") for row in smoke.get("profiles", [])]
                  == ["official", "nanoda"]
@@ -126,6 +307,8 @@ def replay_result(root: Path) -> dict:
     expected_limits = {**limits["checker"], **{name: limits[name] for name in (
         "sample_interval_seconds", "max_trace_gap_seconds", "cleanup_seconds",
         "ps_timeout_seconds", "output_cap_bytes")}}
+    _replay_smoke(root, base, smoke, execution, historical_root, expected_limits,
+                  result["scientific_manifest"], result["execution_manifest"])
     seen: set[str] = set()
     previous_end = None
     samples = Counter()

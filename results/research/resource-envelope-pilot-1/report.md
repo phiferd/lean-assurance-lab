@@ -1,7 +1,8 @@
 # Resource envelope pilot 1
 
-**What did we find?** Both checkers accepted all 24 selected cases, and all
-12 empty-input baseline runs completed as expected. No configured process
+**What did we find?** Both checkers accepted each of the twelve selected
+inputs, giving 24 accepted scientific checks; all twelve empty-input baseline
+runs completed as expected. No configured process
 limit was observed. The official checker yielded one sampled group-memory
 reading in each run; Nanoda finished before the first memory sample in all
 18 of its runs. Its sampled group-memory peak is therefore unknown, and this
@@ -13,12 +14,14 @@ disagreement or observed resource boundary. The single, startup-inclusive
 times and sparse memory sampling do not establish a general speed or memory
 ranking, semantic correctness, or a growth law.
 
-**Does it require more work?** Yes. A separate short-process memory audit
-should test a measurement method that observes fast-exiting Nanoda processes
-and quantifies its own gaps before any comparative group-memory claim. Retain
-the twelve audited inputs and this result locally; no upstream issue or
-contribution follows from the accepted cases. That follow-up is driven by the
-measurement gap and does not reopen or extend this frozen matrix.
+**Does it require more work?** Yes. A separate source-and-receipt audit should
+determine what the recorded `wait4` child high-water values can support for
+the eighteen short Nanoda runs that had no group-memory sample. It should use
+the pinned supervision and operating-system sources and retained receipts,
+without relaunching these frozen cases. Retain the twelve audited inputs and
+this result locally; no upstream issue or contribution follows from the
+accepted checks. This follow-up addresses the measurement gap while leaving
+sampled group peaks unknown.
 
 ## Scope and controls
 
@@ -51,7 +54,7 @@ once on this host, in fixed profile/family/size order.
 
 ## Exact input size
 
-Serialized bytes include the full export. DAG nodes count distinct nodes
+Serialized bytes include the full export. DAG (shared expression graph) nodes count distinct nodes
 reachable from the definition value; expanded nodes count shared occurrences
 recursively. Both families have binder depth equal to size. The source and
 graph audit, rather than checker agreement, supports their exact closure and
@@ -75,8 +78,9 @@ typing within the selected grammar.
 ## Scientific observations
 
 Times are milliseconds from supervised spawn to reap, including process
-startup. Child high-water is the macOS `wait4` value in MiB. Sampled group
-RSS is the largest periodically sampled sum in MiB, with `—` meaning no
+startup. Child high-water is the macOS `wait4` value in MiB. RSS means
+resident memory; sampled group RSS is the largest periodically sampled sum
+in MiB, with `—` meaning no
 sample. The final column is the largest uncovered interval in milliseconds,
 including spawn to first sample and last sample to reap. Every row has status
 `ACCEPTED`, zero exit and empty stderr; the official output was `Accepted 1
