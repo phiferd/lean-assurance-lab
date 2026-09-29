@@ -10,7 +10,8 @@ from typing import Any
 
 from lib.resource_envelope_audit import audit_case, audit_corpus
 from lib.resource_envelope_control import (
-    BASE, EMPTY_EXPORT, EXECUTION, EXPORTER_BINARY, LAKEFILE, LEAN_TOOLCHAIN, LIMITS,
+    BASE, CONSTRUCTION_RECURSION_LIMIT, EMPTY_EXPORT, EXECUTION, EXPORTER_BINARY,
+    LAKEFILE, LEAN_TOOLCHAIN, LIMITS,
     ROOT, TOOLCHAIN, GateError, binding, require_construction_gate,
 )
 from lib.resource_envelope_producer import (
@@ -69,6 +70,34 @@ def _safe_process(result: SupervisedResult, label: str) -> None:
         raise GateError(f"{label}: nonzero construction process exit {r.get('exit_code')}")
 
 
+def _check_repair_prefix_bytes(execution: dict[str, Any], case_id: str,
+                               kind: str, raw: bytes) -> None:
+    """The first four accepted R1 scientific inputs must replay byte-for-byte."""
+    prior = {row["id"]: row for row in execution["repair_history"]["completed_prefix"]}
+    if case_id not in prior:
+        return
+    locked = prior[case_id][kind]
+    if len(raw) != locked["bytes"] or sha256(raw) != locked["sha256"]:
+        raise GateError(f"{case_id} {kind}: repaired construction changed R1 accepted bytes")
+    original = ROOT / locked["path"]
+    if original.read_bytes() != raw:
+        raise GateError(f"{case_id} {kind}: R1 file changed since repair freeze")
+
+
+def _check_build_setup(workspace: Path) -> dict[str, Any]:
+    """Confirm Lake transported the construction-only option to Lean setup."""
+    path = workspace / ".lake/build/ir/ResourceEnvelopePilot1.setup.json"
+    try:
+        setup = json.loads(path.read_bytes())
+    except (OSError, ValueError) as exc:
+        raise GateError("Lake module setup missing or malformed") from exc
+    if (type(setup) is not dict
+            or setup.get("name") != "ResourceEnvelopePilot1"
+            or setup.get("options") != {"maxRecDepth": CONSTRUCTION_RECURSION_LIMIT}):
+        raise GateError("Lake did not transport exact construction recursion option")
+    return binding(path)
+
+
 def _run_build_or_export(*, argv: list[str], workspace: Path,
                          stdin_bytes: bytes | None, phase: str,
                          execution: dict[str, Any]) -> SupervisedResult:
@@ -115,6 +144,7 @@ def construct() -> dict[str, Any]:
             current_id = case_id(family, size)
             phase = "render"
             source = render_source(family, size)
+            _check_repair_prefix_bytes(execution, current_id, "source", source)
             _write_new(staged / "sources" / f"{current_id}.lean", source)
             workspace = attempt / "workspaces" / current_id
             workspace.mkdir(parents=True, exist_ok=False)
@@ -128,6 +158,7 @@ def construct() -> dict[str, Any]:
                                          stdin_bytes=None, phase="build", execution=execution)
             build_ref = _record_process(attempt, current_id + "-build", built)
             _safe_process(built, current_id + " build")
+            build_setup = _check_build_setup(workspace)
             phase = "export"
             require_construction_gate()  # The exporter sees the same frozen inputs.
             export_argv = [str(TOOLCHAIN / "lake"), "env", str(ROOT / EXPORTER_BINARY),
@@ -138,16 +169,19 @@ def construct() -> dict[str, Any]:
             export_ref = _record_process(attempt, current_id + "-export", exported)
             _safe_process(exported, current_id + " export")
             export_raw = exported.stdout
+            _check_repair_prefix_bytes(execution, current_id, "export", export_raw)
             _write_new(staged / "exports" / f"{current_id}.ndjson", export_raw)
             phase = "package_and_audit"
             row = make_case_row(ordinal, family, size, source, export_raw)
             details = audit_case(row, export_raw, source)
+            _check_repair_prefix_bytes(execution, current_id, "case", canonical_json(row))
             _json_new(staged / "cases" / f"{current_id}.json", row)
             progress.append({"id": current_id, "ordinal": ordinal,
                              "source": binding(staged / "sources" / f"{current_id}.lean"),
                              "export": binding(staged / "exports" / f"{current_id}.ndjson"),
                              "case": binding(staged / "cases" / f"{current_id}.json"),
-                             "build_process": build_ref, "export_process": export_ref,
+                             "build_process": build_ref, "build_setup": build_setup,
+                             "export_process": export_ref,
                              "independent_audit": details})
         phase = "index"
         index_rows = []

@@ -31,16 +31,20 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
                     control.binding(link)
                 execution = {"execution_inputs": [], "runtime": [],
                              "scientific_manifest": control.binding(science_path),
-                             "python_invocation": identity}
+                             "python_invocation": identity,
+                             "option_transport_sources": [], "repair_history": {},
+                             "construction_recursion_max_depth": control.CONSTRUCTION_RECURSION_LIMIT}
                 execution_path.write_text(json.dumps(execution))
                 review_path.write_text(json.dumps({
                     "verdict": "PASS_FOR_CONSTRUCTION",
                     "scientific_manifest_sha256": control.binding(science_path)["sha256"],
                     "execution_manifest_sha256": control.binding(execution_path)["sha256"]}))
                 with patch.multiple(control, SCIENCE=science_path, EXECUTION=execution_path,
-                                    PRECONSTRUCTION_REVIEW=review_path), \
+                                    PRECONSTRUCTION_REVIEW=review_path,
+                                    OPTION_TRANSPORT_SOURCES=()), \
                      patch.object(control, "_active_frontier"), \
                      patch.object(control, "_committed"), \
+                     patch.object(control, "_repair_history", return_value={}), \
                      patch.object(control, "_source_revisions", return_value={}):
                     control.require_construction_gate()
                     link.unlink()
@@ -77,7 +81,9 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
         science = {"scientific_inputs": [], "source_files": [], "source_revisions": {}}
         execution = {"execution_inputs": [], "runtime": [],
                      "scientific_manifest": {"sha256": "stale"},
-                     "python_invocation": {"synthetic": 1}}
+                     "python_invocation": {"synthetic": 1},
+                     "option_transport_sources": [], "repair_history": {},
+                     "construction_recursion_max_depth": control.CONSTRUCTION_RECURSION_LIMIT}
         review = {"verdict": "PASS_FOR_CONSTRUCTION",
                   "scientific_manifest_sha256": "science", "execution_manifest_sha256": "execution"}
         def fake_read(path):
@@ -88,6 +94,8 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
                     control.EXECUTION: {"sha256": "execution"}}[path]
         with patch.object(control, "_active_frontier"), patch.object(control, "_committed"), \
              patch.object(control, "_source_revisions", return_value={}), \
+             patch.object(control, "_repair_history", return_value={}), \
+             patch.object(control, "OPTION_TRANSPORT_SOURCES", ()), \
              patch.object(control, "_python_invocation_identity", return_value={"synthetic": 1}), \
              patch.object(control, "_read", side_effect=fake_read), \
              patch.object(control, "binding", side_effect=fake_binding):
@@ -96,6 +104,14 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
             execution["scientific_manifest"] = {"sha256": "science"}
             review["execution_manifest_sha256"] = "stale"
             with self.assertRaisesRegex(control.GateError, "independent construction review"):
+                control.require_construction_gate()
+            review["execution_manifest_sha256"] = "execution"
+            execution["repair_history"] = {"stale": True}
+            with self.assertRaisesRegex(control.GateError, "original construction attempt"):
+                control.require_construction_gate()
+            execution["repair_history"] = {}
+            execution["construction_recursion_max_depth"] = 16384
+            with self.assertRaisesRegex(control.GateError, "recursion setting"):
                 control.require_construction_gate()
 
     def test_changed_bound_file_is_rejected(self):
@@ -124,8 +140,53 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
 
     def test_workspace_templates_are_exact_bytes(self):
         self.assertEqual(control.LEAN_TOOLCHAIN, b"leanprover/lean4:v4.29.1\n")
-        self.assertIn(b'name = "ResourceEnvelopePilot1"', control.LAKEFILE)
+        self.assertEqual(control.LAKEFILE, (
+            b'name = "ResourceEnvelopePilot1"\n'
+            b'defaultTargets = ["ResourceEnvelopePilot1"]\n\n'
+            b'[leanOptions]\nmaxRecDepth = 8192\n\n'
+            b'[[lean_lib]]\nname = "ResourceEnvelopePilot1"\n'))
         self.assertEqual(len(sha256(control.LAKEFILE)), 64)
+
+    def test_repair_prefix_requires_byte_identity_not_python_equality(self):
+        with tempfile.TemporaryDirectory() as temp:
+            original = Path(temp) / "synthetic.source"
+            original.write_bytes(b"1")
+            execution = {"repair_history": {"completed_prefix": [
+                {"id": "synthetic-case", "source": control.binding(original)}]}}
+            construction._check_repair_prefix_bytes(execution, "synthetic-case", "source", b"1")
+            with self.assertRaisesRegex(control.GateError, "changed R1 accepted bytes"):
+                construction._check_repair_prefix_bytes(execution, "synthetic-case", "source", b"true")
+            original.write_bytes(b"2")
+            with self.assertRaisesRegex(control.GateError, "R1 file changed"):
+                construction._check_repair_prefix_bytes(execution, "synthetic-case", "source", b"1")
+
+    def test_build_setup_requires_exact_lake_option_transport(self):
+        with tempfile.TemporaryDirectory() as temp:
+            workspace = Path(temp)
+            setup = workspace / ".lake/build/ir/ResourceEnvelopePilot1.setup.json"
+            setup.parent.mkdir(parents=True)
+            setup.write_text(json.dumps({"name": "ResourceEnvelopePilot1",
+                                         "options": {"maxRecDepth": 8192}}))
+            self.assertEqual(construction._check_build_setup(workspace), control.binding(setup))
+            setup.write_text(json.dumps({"name": "ResourceEnvelopePilot1", "options": {}}))
+            with self.assertRaisesRegex(control.GateError, "did not transport"):
+                construction._check_build_setup(workspace)
+            setup.write_text(json.dumps({"name": "ResourceEnvelopePilot1",
+                                         "options": {"maxRecDepth": 8192, "extra": True}}))
+            with self.assertRaisesRegex(control.GateError, "did not transport"):
+                construction._check_build_setup(workspace)
+
+    def test_pinned_lake_option_transport_chain(self):
+        named = {"/".join(path.parts[-3:]): path.read_text()
+                 for path in control.OPTION_TRANSPORT_SOURCES}
+        self.assertIn('maxSynthPendingDepth = 3', named['Lake/CLI/Init.lean'])
+        self.assertIn('def defaultMaxRecDepth := 512', named['lean/Init/Prelude.lean'])
+        self.assertIn('register_builtin_option maxRecDepth : Nat', named['Lean/Util/RecDepth.lean'])
+        self.assertIn('decodeLeanOptionsAux', named['Lake/Load/Toml.lean'])
+        self.assertIn('self.config.leanOptions', named['Lake/Config/Package.lean'])
+        self.assertIn('self.pkg.leanOptions', named['Lake/Config/LeanLib.lean'])
+        self.assertIn('self.lib.leanOptions', named['Lake/Config/Module.lean'])
+        self.assertIn('options := mod.leanOptions', named['Lake/Build/Module.lean'])
 
 
 if __name__ == "__main__":

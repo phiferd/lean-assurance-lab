@@ -22,8 +22,11 @@ from lib.resource_envelope_observe import classify
 ROOT = Path(__file__).resolve().parents[1]
 BASE = ROOT / "results/research/resource-envelope-pilot-1"
 SCIENCE = BASE / "scientific-manifest.json"
-EXECUTION = BASE / "execution-manifest.json"
-PRECONSTRUCTION_REVIEW = BASE / "independent-preconstruction-review.json"
+EXECUTION = BASE / "execution-manifest-r2.json"
+PRECONSTRUCTION_REVIEW = BASE / "independent-preconstruction-review-r2.json"
+ORIGINAL_EXECUTION = BASE / "execution-manifest.json"
+ORIGINAL_PRECONSTRUCTION_REVIEW = BASE / "independent-preconstruction-review.json"
+CONSTRUCTION_R1 = BASE / "construction-run-0001"
 LIVE_PLAN = ROOT / "docs/research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md"
 PLAN_SNAPSHOT = BASE / "source/plan-at-freeze.md"
 
@@ -51,6 +54,12 @@ EXECUTION_PATHS = (
     "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r3.json",
     "results/research/resource-envelope-pilot-1/execution-freeze-attempt-r1.json",
     "results/research/resource-envelope-pilot-1/independent-execution-freeze-repair-review-r1.json",
+    "results/research/resource-envelope-pilot-1/independent-construction-failure-review-r1.json",
+    "results/research/resource-envelope-pilot-1/independent-construction-tooling-repair-review-r2.json",
+    "results/research/resource-envelope-pilot-1/review-evidence/construction-recursion-repair-r2.json",
+    "results/research/resource-envelope-pilot-1/construction-run-0001/construction-failure.json",
+    "results/research/resource-envelope-pilot-1/execution-manifest.json",
+    "results/research/resource-envelope-pilot-1/independent-preconstruction-review.json",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r1-after-first-custody-edit.py.txt",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r1.py.txt",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r2-before-prefix-verifier.py.txt",
@@ -110,10 +119,20 @@ LIMITS = {
     "ps_timeout_seconds": 0.5,
     "output_cap_bytes": 10_000_000,
 }
+CONSTRUCTION_RECURSION_LIMIT = 8192
 LAKEFILE = ("name = \"ResourceEnvelopePilot1\"\n"
             "defaultTargets = [\"ResourceEnvelopePilot1\"]\n\n"
+            f"[leanOptions]\nmaxRecDepth = {CONSTRUCTION_RECURSION_LIMIT}\n\n"
             "[[lean_lib]]\nname = \"ResourceEnvelopePilot1\"\n").encode("ascii")
 LEAN_TOOLCHAIN = b"leanprover/lean4:v4.29.1\n"
+OPTION_TRANSPORT_SOURCES = tuple(
+    Path("/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean") / path
+    for path in ("Lake/Lake/CLI/Init.lean", "Lake/Lake/Load/Toml.lean",
+                 "Lake/Lake/Config/Package.lean", "Lake/Lake/Config/LeanLib.lean",
+                 "Lake/Lake/Config/Module.lean", "Lake/Lake/Build/Module.lean",
+                 "Lean/Util/RecDepth.lean", "Init/Prelude.lean")
+)
+ORIGINAL_COMPLETED_IDS = ("rep1-pi-016", "rep1-pi-032", "rep1-pi-064", "rep1-pi-128")
 EMPTY_EXPORT = (b'{"meta":{"exporter":{"name":"lean4export","version":"3.1.0"},'
                 b'"format":{"version":"3.1.0"},"lean":{"githash":'
                 b'"f72c35b3f637c8c6571d353742168ab66cc22c00","version":"4.29.1"}}}\n')
@@ -265,7 +284,7 @@ def freeze_science() -> dict[str, Any]:
 
 
 def freeze_execution() -> dict[str, Any]:
-    """Bind exact executable/runtime/control bytes after science is committed."""
+    """Bind a new execution revision, retaining the first construction attempt."""
     _active_frontier()
     _committed(SCIENCE)
     science = _read(SCIENCE)
@@ -275,6 +294,7 @@ def freeze_execution() -> dict[str, Any]:
         _check_binding(row, committed=False)
     for path in (ROOT / relative for relative in EXECUTION_PATHS):
         _committed(path)
+    previous = _repair_history()
     _source_revisions()
     if len(EMPTY_EXPORT) != 173:
         raise GateError("empty baseline metadata differs")
@@ -287,6 +307,8 @@ def freeze_execution() -> dict[str, Any]:
                Path("/bin/ps"), Path("/bin/sh"),
                Path("/bin/sleep"), *LEAN_RUNTIME_LIBRARIES]
     for path in runtime:
+        binding(path)
+    for path in OPTION_TRANSPORT_SOURCES:
         binding(path)
     attestation = _read(BASE / "preflight-run-0001/provenance-attestation.json")
     if attestation.get("status") != "POST_RUN_PROVENANCE_ATTESTATION":
@@ -366,16 +388,19 @@ def freeze_execution() -> dict[str, Any]:
     row = {
         "schema_version": 1,
         "item_id": "RESOURCE-ENVELOPE-PILOT-1",
-        "status": "FROZEN_BEFORE_SELECTED_INPUT_CONSTRUCTION",
+        "status": "FROZEN_BEFORE_REPAIR_CONSTRUCTION_RETRY",
         "scientific_manifest": binding(SCIENCE),
         "execution_inputs": [binding(ROOT / relative) for relative in EXECUTION_PATHS],
         "runtime": [binding(path) for path in runtime],
+        "option_transport_sources": [binding(path) for path in OPTION_TRANSPORT_SOURCES],
+        "repair_history": previous,
         "python_invocation": python_identity,
         "runtime_platform": {"system": platform.system(),
                              "release": platform.release(),
                              "machine": platform.machine(),
                              "python_version": sys.version},
         "limits": LIMITS,
+        "construction_recursion_max_depth": CONSTRUCTION_RECURSION_LIMIT,
         "workspace_templates": {"lakefile_toml_sha256": _sha(LAKEFILE),
                                 "lakefile_toml_bytes": len(LAKEFILE),
                                 "lean_toolchain_sha256": _sha(LEAN_TOOLCHAIN),
@@ -412,6 +437,12 @@ def require_construction_gate() -> tuple[dict[str, Any], dict[str, Any]]:
         _check_binding(row, committed=True)
     for row in execution["runtime"]:
         _check_binding(row, committed=False)
+    if execution.get("option_transport_sources") != [binding(path) for path in OPTION_TRANSPORT_SOURCES]:
+        raise GateError("pinned Lake recursion-option transport sources differ")
+    if execution.get("construction_recursion_max_depth") != CONSTRUCTION_RECURSION_LIMIT:
+        raise GateError("construction-only recursion setting differs")
+    if execution.get("repair_history") != _repair_history():
+        raise GateError("original construction attempt binding differs")
     if execution.get("python_invocation") != _python_invocation_identity():
         raise GateError("Python invocation symlink or target differs from frozen execution")
     if execution["scientific_manifest"] != binding(SCIENCE):
@@ -424,3 +455,56 @@ def require_construction_gate() -> tuple[dict[str, Any], dict[str, Any]]:
     if _source_revisions() != science["source_revisions"]:
         raise GateError("source revisions differ")
     return science, execution
+
+
+def _repair_history() -> dict[str, Any]:
+    """Recheck the committed R1 failure and all four accepted prefix inputs."""
+    core = (ORIGINAL_EXECUTION, ORIGINAL_PRECONSTRUCTION_REVIEW,
+            CONSTRUCTION_R1 / "construction-failure.json",
+            BASE / "independent-construction-failure-review-r1.json")
+    for path in core:
+        _committed(path)
+    old_review = _read(ORIGINAL_PRECONSTRUCTION_REVIEW)
+    old_failure = _read(CONSTRUCTION_R1 / "construction-failure.json")
+    failure_review = _read(BASE / "independent-construction-failure-review-r1.json")
+    if (old_review.get("verdict") != "PASS_FOR_CONSTRUCTION"
+            or old_review.get("scientific_manifest_sha256") != binding(SCIENCE)["sha256"]
+            or old_review.get("execution_manifest_sha256") != binding(ORIGINAL_EXECUTION)["sha256"]
+            or old_failure.get("status") != "CONSTRUCTION_FAILURE_REPAIR_PAUSE"
+            or old_failure.get("phase") != "build"
+            or old_failure.get("case_id") != "rep1-pi-256"
+            or old_failure.get("scientific_manifest") != binding(SCIENCE)
+            or old_failure.get("execution_manifest") != binding(ORIGINAL_EXECUTION)
+            or failure_review.get("verdict") != "REPAIR_REQUIRED_WITH_SCIENTIFIC_INPUTS_UNCHANGED"
+            or {row.get("path"): row for row in failure_review.get("reviewed_inputs", [])}.get(
+                binding(CONSTRUCTION_R1 / "construction-failure.json")["path"])
+            != binding(CONSTRUCTION_R1 / "construction-failure.json")):
+        raise GateError("original reviewed construction failure differs")
+    rows = []
+    for case_id in ORIGINAL_COMPLETED_IDS:
+        paths = {kind: CONSTRUCTION_R1 / "staged/corpus" / folder / f"{case_id}.{suffix}"
+                 for kind, folder, suffix in (("source", "sources", "lean"),
+                                              ("export", "exports", "ndjson"),
+                                              ("case", "cases", "json"))}
+        for path in paths.values():
+            _committed(path)
+        rows.append({"id": case_id, **{kind: binding(path) for kind, path in paths.items()}})
+    reviewed = {row.get("path"): row for row in failure_review["reviewed_inputs"]}
+    if len(reviewed) != len(failure_review["reviewed_inputs"]):
+        raise GateError("duplicate R1 independent-review evidence binding")
+    for row in failure_review["reviewed_inputs"]:
+        _check_binding(row, committed=True)
+    for row in failure_review.get("source_support", []):
+        _check_binding(row, committed=False)
+    if (len(old_failure.get("completed_cases", [])) != len(rows)
+            or [row.get("id") for row in old_failure["completed_cases"]] != list(ORIGINAL_COMPLETED_IDS)):
+        raise GateError("original completed prefix differs")
+    for expected, prior in zip(rows, old_failure["completed_cases"]):
+        for kind in ("source", "export", "case"):
+            if prior.get(kind) != expected[kind] or reviewed.get(expected[kind]["path"]) != expected[kind]:
+                raise GateError("original accepted input custody differs")
+    return {"original_execution_manifest": binding(ORIGINAL_EXECUTION),
+            "original_preconstruction_review": binding(ORIGINAL_PRECONSTRUCTION_REVIEW),
+            "failed_attempt": binding(CONSTRUCTION_R1 / "construction-failure.json"),
+            "independent_failure_review": binding(BASE / "independent-construction-failure-review-r1.json"),
+            "completed_prefix": rows}

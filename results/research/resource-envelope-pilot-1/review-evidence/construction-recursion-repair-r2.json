@@ -1,0 +1,105 @@
+{
+  "authorization": "none; separate independent construction review required",
+  "changed_surface": "Lake workspace TOML only, controlled by new execution-tooling revision; selected Lean source, family, sizes, checker configuration, timeout and memory ceilings unchanged",
+  "construction_recursion_max_depth": 8192,
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "lakefile_toml": {
+    "bytes": 156,
+    "exact_text": "name = \"ResourceEnvelopePilot1\"\ndefaultTargets = [\"ResourceEnvelopePilot1\"]\n\n[leanOptions]\nmaxRecDepth = 8192\n\n[[lean_lib]]\nname = \"ResourceEnvelopePilot1\"\n",
+    "sha256": "da59efa616b26a16a1899da6edc234cd6b6aa55c69b51cf0b50cacb33abd0d65"
+  },
+  "pinned_source_files": [
+    {
+      "bytes": 16457,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/CLI/Init.lean",
+      "sha256": "382932517dcaae6276ae7948fcc59dbfd6bf5655ae27bd9b0165744ef65ee4c3"
+    },
+    {
+      "bytes": 21793,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/Load/Toml.lean",
+      "sha256": "2e877af73f37ce7f37ec244a1808cc63a747c5b70e99c7d564279b394c1db5c5"
+    },
+    {
+      "bytes": 16027,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/Config/Package.lean",
+      "sha256": "575e688174440ec8a9233c0d53d9635e2cf269ed8fb2cba1f8c3758b126aa851"
+    },
+    {
+      "bytes": 9153,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/Config/LeanLib.lean",
+      "sha256": "b965ad665f362b9f50be20faa30c96e05111ecf7575b509e8ff5069f859e9581"
+    },
+    {
+      "bytes": 7545,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/Config/Module.lean",
+      "sha256": "a4d0cce90585a467b339295dd96d72523be516c9eecce9354cfee94bacc646bb"
+    },
+    {
+      "bytes": 48297,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lake/Lake/Build/Module.lean",
+      "sha256": "788418f850d491467b49b8f6182097d5c4b008eedc6d29e768932c083f9dd4b3"
+    },
+    {
+      "bytes": 402,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Lean/Util/RecDepth.lean",
+      "sha256": "3bddd0b771df8f67f8ee7305ab60d32f7af0dad832de58fb9355498dcb54ef16"
+    },
+    {
+      "bytes": 232164,
+      "path": "/Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/src/lean/Init/Prelude.lean",
+      "sha256": "1ccea4f50e8d991ec36e6a4bfac19c2075301775fa7834f6818814b923ce0292"
+    }
+  ],
+  "plain_language": {
+    "does_it_require_more_work": "Use a finite Lake compiler option, recheck unchanged source/export bytes, and obtain a new exact execution review before construction resumes.",
+    "is_it_interesting": "This is a frontend construction limit, not a measured checker limit or evidence of an invalid selected term.",
+    "what_did_we_find": "Provisional: four source/export inputs passed audit; constructing the fifth stopped at Lean\u2019s default recursion guard. No checker resource measurements have run."
+  },
+  "preserved_r1": [
+    {
+      "bytes": 6832,
+      "path": "results/research/resource-envelope-pilot-1/scientific-manifest.json",
+      "sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b"
+    },
+    {
+      "bytes": 12339,
+      "path": "results/research/resource-envelope-pilot-1/execution-manifest.json",
+      "sha256": "d261f0f8038bb0624631c8ab21c2885d7cef4f975993716333edb710bb1e9fcb"
+    },
+    {
+      "bytes": 10180,
+      "path": "results/research/resource-envelope-pilot-1/independent-preconstruction-review.json",
+      "sha256": "d6819a5fa93ca3532a2cdf8bf353e3e061961168a4b5caaf931e41d5b2ca739c"
+    },
+    {
+      "bytes": 9513,
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0001/construction-failure.json",
+      "sha256": "ccc17153fccb9dee3706050cfdc399c2f2493909440a990d700564ee809ace11"
+    },
+    {
+      "bytes": 14194,
+      "path": "results/research/resource-envelope-pilot-1/independent-construction-failure-review-r1.json",
+      "sha256": "8d3a55c90a68f5fb9f8beb1a10bb00f82ecb9651692ae65ba07a2a7a9d1d735b"
+    }
+  ],
+  "repair_checks": [
+    "new execution manifest binds R1 manifest/review/failure and all four accepted source/export/case files",
+    "new construction attempt compares first four source/export/case bytes with R1 before corpus publication",
+    "every successful build verifies generated Lake module setup contains only maxRecDepth=8192",
+    "all 12 cases still require independent input audit before observer launch"
+  ],
+  "schema": "resource-envelope-construction-tooling-repair-v2",
+  "scientific_observer_attempts": 0,
+  "source_transport": [
+    "Pinned Lean Init/Prelude.lean defines defaultMaxRecDepth = 512; Lean/Util/RecDepth.lean registers maxRecDepth as a Nat option.",
+    "Pinned Lake CLI/Init.lean emits [leanOptions] TOML; Load/Toml.lean decodes option tables into LeanOption arrays.",
+    "Pinned Lake Config/Package.lean exposes package leanOptions; Config/LeanLib.lean combines package options into library leanOptions; Config/Module.lean forwards library options.",
+    "Pinned Lake Build/Module.lean writes options := mod.leanOptions into module setup. Revised construction checks exact maxRecDepth=8192 in generated module setup before export."
+  ],
+  "status": "CANDIDATE_AWAITING_INDEPENDENT_REVIEW",
+  "unchanged_scientific_manifest": {
+    "bytes": 6832,
+    "path": "results/research/resource-envelope-pilot-1/scientific-manifest.json",
+    "sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b"
+  }
+}
