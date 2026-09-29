@@ -58,6 +58,22 @@ research directions.
 
 ## Attempted
 
+- `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` closes `INCONCLUSIVE` after its one
+  fixed read-only inventory attempt. **What did we find?** The selector could
+  not produce the required six candidates. Its retained diagnostic classified
+  all 502 syntactic sites: 167 matched generated mutation specs, three matched
+  manual controls, 124 were in non-semantic files and 208 were outside the
+  retained modeled semantic functions, leaving zero eligible sites. No mutation
+  was written or registered, and no mutant build or checker run occurred. This
+  did not test semantic behavior and does not show that fresh Nanoda targets are
+  absent in general. **Is it interesting?** Yes, because it cheaply shows that
+  the current pinned-source `semantic-diversity-v1` path is exhausted and should
+  not be promoted directly to confirmation. **Does it require more work?** No
+  confirmation follows from this result. Retain the exact E0 ledger and raw
+  exhaustion counts. Select `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY and
+  unstarted to resolve the separate accounting interpretation gap in eighteen
+  existing receipts.
+
 - `WORKFLOW-CLOSURE-RELIABILITY-1` completes its shared controller repair upon
   the required ordered closure receipt. **What did we find?** Twenty
   closure-control tests and four aggregate-usage tests pass: one repository
@@ -3198,15 +3214,15 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1`.
-It is READY and unstarted under [its E0 plan](research/E0_NANODA_SEMANTIC_DIVERSITY_SCREEN_1_PLAN.md).
+Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+It is READY and unstarted under [its read-only plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
 The canonical queue retains one READY item,
-`E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1`, and zero ACTIVE items. The exploration protocol implementation introduces a
-lightweight E0 ledger and a separate confirmation boundary, subject to its final
-shared-workflow validation and refresh. No exploratory science has run and no
-cost savings are claimed. The owner prioritizes closure reliability and usage
-accounting before a new semantic campaign. `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`
-is DEFERRED; its original read-only scope and all resource evidence are retained.
+`RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`, and zero ACTIVE items. The completed E0
+screen is INCONCLUSIVE: its fixed selector produced no inventory because all 170
+modeled semantic sites were already represented, while 332 other parsed sites
+were outside the retained semantic model. No confirmation proposal follows.
+BUILD-MODE remains PLANNED behind its source/configuration gate; independent
+transfer still waits for an owner-designated holdout package.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed

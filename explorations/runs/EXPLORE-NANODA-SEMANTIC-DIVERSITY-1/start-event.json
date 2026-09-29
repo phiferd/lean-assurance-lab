@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-NANODA-SEMANTIC-DIVERSITY-1",
+  "data": {
+    "campaign": "E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1",
+    "question": "Does the pinned Nanoda source and current retained mutation evidence contain a complete six-candidate fresh selection spanning at least three modeled semantic subsystems and three source functions, with every selected identity absent from the controlled/generated mutation set?",
+    "sources": [
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "6ae1f0cd962f081f6c423454c5da729d841236a7"
+      }
+    ],
+    "versions": "Exact input SHA-256 values, source-tree and 176-file controlled/generated-set aggregate identities, repository base aed1a6835d98ebe8b6273f8532ced1144ec890a5, cargo 1.98.0, rustc 1.98.0 and LLVM 22.1.8 are retained in input-identities.json.",
+    "commands": "scripts/generate-mutations --limit 6 --batch-id e0-nanoda-semantic-diversity-screen-1 --selection semantic-diversity-v1 (without --write, --register or --refresh); stdout, stderr, exit status and elapsed time retained under this exploration run directory.",
+    "inputs": [
+      "explorations/runs/EXPLORE-NANODA-SEMANTIC-DIVERSITY-1/input-identities.json",
+      "config/reproducibility.json",
+      "mutation-model/catalog.json",
+      "results/baseline/outcomes/nanoda-full.jsonl",
+      "results/coverage/nanoda/line-to-tests.json",
+      "results/mutants/registry.jsonl",
+      "scripts/generate-mutations",
+      "tools/nanoda-mutator/Cargo.lock",
+      "tools/nanoda-mutator/Cargo.toml",
+      "tools/nanoda-mutator/src/main.rs"
+    ],
+    "sample": "One deterministic read-only semantic-diversity-v1 selection requesting exactly six candidates; SIGNAL requires six selected identities, at least three modeled semantic subsystems, at least three distinct source-file/function pairs, and no identity present in the retained controlled/generated mutation set.",
+    "planned_runs": 1,
+    "controls": "No mutation files, registry rows or batch manifest may be written; no mutant build or checker launch is permitted. Generator duplicate filtering against mutation specs and manual registry locations supplies the freshness control; input-identities.json binds that exact retained set. Missing inputs, tool/accounting failure or incomplete selection is INCONCLUSIVE after feasible repair."
+  }
+}
