@@ -37,6 +37,15 @@ byte-for-byte and places the prospective controller in
 successor while historical consumers continue to resolve their original bytes.
 All 23 focused stateful-validation transition/replay tests then passed.
 
+The first delivered candidate exposed one Ubuntu-only test-fixture cleanup race.
+After 1,642 current tests, `TemporaryDirectory` could not remove `.git` because
+detached Git auto-maintenance was still touching the short-lived synthetic
+repository. The frozen publication and portfolio/history partitions still
+passed. The repair disables garbage collection and maintenance only for that
+synthetic repository; the failed GitHub Actions run and exact traceback are
+preserved with the other implementation failures. The ordered closure is rerun
+after this dependency change rather than reusing its prior success.
+
 The full-suite fixture receipt directory is materialized inside that suite's
 versioned workflow-validation stage, never below `results/research`. The existing
 resource scientific replay and its attempt-family projection remain unchanged.

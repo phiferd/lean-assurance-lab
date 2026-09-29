@@ -47,7 +47,14 @@ class ExplorationTests(unittest.TestCase):
             id='TEST-CAMPAIGN', status='ACTIVE', evidence_refs=['plan.md'])])
 
     def git(self, *args):
-        return subprocess.check_output(['git', *args], cwd=self.root, stderr=subprocess.PIPE)
+        # The synthetic repository is deleted as soon as each test finishes.
+        # Detached auto-maintenance can otherwise outlive the foreground Git
+        # command and race TemporaryDirectory cleanup on Linux CI.
+        return subprocess.check_output(
+            ['git', '-c', 'gc.auto=0', '-c', 'maintenance.auto=false', *args],
+            cwd=self.root,
+            stderr=subprocess.PIPE,
+        )
 
     def append(self, row):
         with patch('lib.research_queue_v4.load_queue', return_value=self.queue):

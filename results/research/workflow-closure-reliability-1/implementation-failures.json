@@ -48,6 +48,27 @@
         "results/workflow-validation/workflow-closure-reliability-1/stages/03-full-suite/0001/command.log"
       ],
       "scientific_launches": 0
+    },
+    {
+      "attempt_id": "github-actions-36566536986",
+      "command": "python scripts/run-unit-tests",
+      "outcome": "CURRENT_PARTITION_FAILED_ON_UBUNTU",
+      "observation": "The current partition ran 1,642 tests and reported one cleanup error in test_committed_prefix_and_explicit_review_base: Python 3.10 TemporaryDirectory cleanup received OSError 39, Directory not empty: .git. The frozen publication and portfolio/history partitions still passed.",
+      "repair": "Disable detached Git garbage collection and maintenance for the short-lived synthetic repository used by tests/test_exploration.py, so no background Git process can race its immediate cleanup.",
+      "evidence": [
+        "results/research/workflow-closure-reliability-1/ci-failure-36566536986.json",
+        "https://github.com/phiferd/lean-assurance-lab/actions/runs/36566536986"
+      ],
+      "scientific_launches": 0
+    },
+    {
+      "attempt_id": "post-ci-focused-compatibility-0001",
+      "command": "python3 -m unittest discover -s tests -p test_evidence_replay_portability.py -q",
+      "outcome": "FAILED_WRONG_HARNESS",
+      "observation": "The direct module invocation reported that historical resource process-receipt discovery differed from replay coverage because it omitted the canonical suite's historical_attempt_scope projection.",
+      "repair": "Do not alter the frozen replay. Run this compatibility path through scripts/run-unit-tests, which supplies the committed historical attempt projection before executing the test.",
+      "capture_limit": "The exact ReplayError and test count were retained in tool output; this invocation did not create or modify scientific evidence.",
+      "scientific_launches": 0
     }
   ]
 }
