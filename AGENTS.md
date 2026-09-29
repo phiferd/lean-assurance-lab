@@ -6,6 +6,36 @@ the status artifact, read its active research or milestone plan, and load any
 applicable repository skill. Do not treat conversational or model context as
 the sole record of project state.
 
+## Default execution and delegation
+
+“Complete the next work item” means finish exactly one authorized item,
+deliver it, select its successor, and stop without starting that successor.
+The user need not repeat this guide in the task prompt.
+
+Work directly by default. Optimize total model work across the parent and
+subagents, not just the parent's token count. Delegate only when a bounded
+independent task or required independent review offers a concrete benefit.
+This guide authorizes that selective delegation; it does not require agents.
+Give each delegate a specific deliverable, relevant files, ownership and a
+stopping condition. Prefer a concise task brief over full conversation history.
+Do not create standing bookkeeping agents or repeated reviews of routine receipts.
+
+Model recommendations (2026-09-29): use GPT-6 Sol at Medium for ordinary work,
+High for difficult implementation such as closure reliability. For delegated
+work, use GPT-6 Luna at High for narrow inventory/extraction, Sol at Medium or
+High for implementation, and Astra at Medium for a specific difficult reasoning
+or assurance-boundary question. Honor explicit user choices and actual model
+availability. These recommendations do not change the main session's selected
+model; escalate for a named difficulty rather than by default.
+
+Keep one owner for shared state and closure. Do not edit validation inputs while
+validation runs. Use deterministic tools for counts, inventories, logs and
+generation; reserve model judgment for design, interpretation and unfamiliar
+failures. Follow the validation and evidence-class rules below; rerun checks
+when failures or changed dependencies justify them, not for each bookkeeping
+step. Report available aggregate usage and missing coverage without exporting
+private conversation contents or inventing cost estimates.
+
 ## Authority and operating order
 
 Use this precedence order when sources disagree:
