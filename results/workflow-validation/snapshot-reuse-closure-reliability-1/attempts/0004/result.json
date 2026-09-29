@@ -1,0 +1,54 @@
+{
+  "schema_version": 1,
+  "status": "FAILED",
+  "scope_file": "results/research/snapshot-reuse-closure-reliability-1/closure-scope.json",
+  "executed_stages": [
+    "00-host-rss-preflight",
+    "01-committed-input-inventory",
+    "02-status-preflight",
+    "03-full-suite",
+    "04-sealed-validation",
+    "05-dependency-ordered-refresh",
+    "06-check-01",
+    "07-check-02",
+    "08-check-03",
+    "09-check-04",
+    "10-check-05"
+  ],
+  "reused_stages": [],
+  "invalidated_stages": [
+    {
+      "stage": "00-host-rss-preflight",
+      "reason": "DECLARED_DEPENDENCY_CHANGED",
+      "prior_receipt": {
+        "path": "stages/00-host-rss-preflight/0003/receipt.json",
+        "bytes": 456,
+        "sha256": "f02bf4205e6bc9d25d9c48efc7561ffed3c3382f107a68005f9cb67689200da9"
+      }
+    },
+    {
+      "stage": "01-committed-input-inventory",
+      "reason": "DECLARED_DEPENDENCY_CHANGED",
+      "prior_receipt": {
+        "path": "stages/01-committed-input-inventory/0003/receipt.json",
+        "bytes": 480,
+        "sha256": "5bf87d5e074fc527764b6c39a1f8bb4b363333139b3353ab28cad49e4bf38d2e"
+      }
+    },
+    {
+      "stage": "02-status-preflight",
+      "reason": "DECLARED_DEPENDENCY_CHANGED",
+      "prior_receipt": {
+        "path": "stages/02-status-preflight/0002/receipt.json",
+        "bytes": 542,
+        "sha256": "d743c2b203d78b34ac0ff410fb4620de8e2be3502733f0306edc263d4e57762d"
+      }
+    }
+  ],
+  "owner": {
+    "path": "lean-assurance-closure-678707aef21faa7e362659f8.lock",
+    "pid": 91402
+  },
+  "validated_commit": "032c31a01dda1758451935fb4e9552bccd08ccb5",
+  "error": "declared dependency tree differs from committed bytes: docs"
+}

@@ -64,15 +64,17 @@ research directions.
   refused unless every declared publication input still matches that snapshot.
   Stage-specific content bindings reuse the suite after a publication-only
   document change and invalidate it after an actual test dependency change.
-  Thirty-one focused controls pass. Three failed ordered closure attempts
+  Thirty-one focused controls pass. Four failed ordered closure attempts
   remain preserved: the first rejected an unsafe linked source ancestor, the
   second exposed snapshot-local receipt, Arena checkout, and closure-state
-  integration requirements, and the third rejected edits to frozen historical
-  tests before discovery. No scientific experiment ran. **Is it
+  integration requirements, the third rejected edits to frozen historical
+  tests before discovery, and the fourth passed all three test partitions
+  before rejecting generated refresh outputs that had been misclassified as
+  validation inputs. No scientific experiment ran. **Is it
   interesting?** Yes, because arbitrary live edit-and-restore activity can no
   longer contaminate the validated suite, while unrelated commits no longer
   invalidate a stage solely through global `HEAD`. **Does it require more
-  work?** No further repair follows if the prebound attempt 0004 full
+  work?** No further repair follows if the prebound attempt 0005 full
   current/historical closure passes. The separate
   `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` is selected READY and unstarted for
   its fixed read-only audit of eighteen retained receipts.

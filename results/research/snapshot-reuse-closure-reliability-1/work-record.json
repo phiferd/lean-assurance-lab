@@ -92,6 +92,18 @@
         "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0003/failure.json",
         "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0003/command.log"
       ]
+    },
+    {
+      "attempt_id": "ordered-closure-0004",
+      "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
+      "outcome": "FINAL_PUBLICATION_MATCH_FAILED",
+      "observation": "All 1,663 current tests, 73 frozen publication-study tests and nine portfolio/history tests passed. The dependency-ordered refresh then updated generated current-state outputs, and the final publication check correctly rejected the broad docs/results tree bindings because they had incorrectly classified refresh outputs as validation inputs.",
+      "repair": "Preserve attempt 0004. Replace the broad docs/results bindings with complete tracked input subtrees and direct input files while excluding only known refresh-generated views, then rerun exact ordered closure as attempt 0005.",
+      "evidence_refs": [
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0004/result.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0004/receipt.json",
+        "results/workflow-validation/snapshot-reuse-closure-reliability-1/stages/03-full-suite/0004/command.log"
+      ]
     }
   ],
   "focused_validation": {
@@ -100,7 +112,7 @@
   },
   "repository_closure": {
     "command": "scripts/closure-controls finish --scope-file results/research/snapshot-reuse-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/snapshot-reuse-closure-reliability-1",
-    "required_receipt": "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0004/result.json",
+    "required_receipt": "results/workflow-validation/snapshot-reuse-closure-reliability-1/attempts/0005/result.json",
     "required_status": "COMPLETE"
   },
   "scientific_launches": 0,
