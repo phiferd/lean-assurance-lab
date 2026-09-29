@@ -1,0 +1,86 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "ACTUAL_HOST_DIRECT_SUPERVISOR_PREFLIGHT",
+  "reviewed_at": "2026-09-29T00:20:03.583973+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the actual-host synthetic process produced six live memory samples, correct raw output and exit status, and complete cleanup. Its largest sampled group sum was 3,227,648 bytes; wait4 reported a 2,113,536-byte accounting high-water. No selected terms or checkers ran.",
+    "is_it_interesting": "Yes. This confirms that the reviewed supervisor can obtain positive RSS samples and reconcile process accounting on this host; the earlier shell-only ps probe did not establish that. It does not guarantee future control success or an exact simultaneous memory peak.",
+    "does_it_require_more_work": "Commit these exact preflight/review bytes and bind them to the final execution gate. Any measurement-code/runtime change needs a fresh preflight. Construction and all observer launches still require their separate committed-input reviews."
+  },
+  "verdict": "PASS_POSITIVE_ACTUAL_HOST_PREFLIGHT",
+  "reviewed_inputs": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/attempt.json",
+      "bytes": 775,
+      "sha256": "c3e34a74de07945815292c4467fdc89d364e33cc32b73a86eccc887f670130bb"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/process-receipt.json",
+      "bytes": 4613,
+      "sha256": "81c6a3b4aacb1830fbb8b0b443ecb5449e22b84dfe924d1580ee2bbde8352244"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/stdout.raw",
+      "bytes": 12,
+      "sha256": "9648a4e928d10f70d011dbac497d92f2b467c7ecd3da15043bc2a7caa6ab949e"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/stderr.raw",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/summary.json",
+      "bytes": 627,
+      "sha256": "b9d579753ed190bdfb70f47d3b0a57748cf4cf983b0d3d2bcb1cd18ef9f7dc76"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/provenance-attestation.json",
+      "bytes": 2908,
+      "sha256": "411577879522b1a99459c5d77e9bfd38522d4c7c08eb57268209ff2a90075f5a"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/actual-host-supervisor-preflight.py",
+      "bytes": 4417,
+      "sha256": "f24eb60284bd611766d3f5952ab950673e5fd52fac135c0dcd33c77927dd6754"
+    },
+    {
+      "path": "lib/resource_envelope_supervisor.py",
+      "bytes": 18461,
+      "sha256": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"
+    },
+    {
+      "path": "lib/resource_envelope_observe.py",
+      "bytes": 9503,
+      "sha256": "bdc09737da04b489c96239e01abf86908048420456dba1c763e50876364979c2"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-measurement-rss-attribution-correction-r1.json",
+      "bytes": 2602,
+      "sha256": "507040791680b172f434877efe197c1f446e9ecdea5c204c2e35785afdd2df18"
+    }
+  ],
+  "checks": {
+    "raw_hashes_lengths": "Independently recomputed stdout/stderr and receipt bindings, including summary and all twelve provenance bindings.",
+    "exact_output": "stdout preflight-ok (12 bytes); stderr empty; exit=0 and wait_status=0.",
+    "sample_reconciliation": "Six strictly ordered samples; each collection interval within spawn/reap, direct PID present, unique live members and positive RSS; every sum and maximum independently recomputed.",
+    "time_reconciliation": "All process phases ordered; maximum trace gap recomputed as 0.033605125 seconds, below the fixed 1-second bound.",
+    "accounting": "One reaped direct target, pid=pgid, no stop reason/signals/accounting/monitor/pipe/cleanup errors; complete cleanup. Raw ru_maxrss=2113536 bytes agrees with converted high-water.",
+    "provenance": "All exact tooling/runtime/attempt bindings match; supervisor and classifier bytes equal committed preparation checkpoint e798dee. Darwin 24.6.0 arm64 and Python 3.10.10 identity match current host."
+  },
+  "provenance_limit": "The exact runtime/script attestation was recorded after the synthetic preflight and is explicitly labeled POST_RUN_PROVENANCE_ATTESTATION. It is not represented as a preregistered scientific launch manifest. The measurement implementations were already committed at e798dee and remain byte-identical.",
+  "memory_attribution": "wait4 reports child accounting high-water, which may include accounted-for descendants; periodic process-group sums are non-atomic and may double-count shared pages. Neither is asserted to be true simultaneous group peak.",
+  "historical_preservation": "Earlier sandbox EPERM and shell-ps-only probes remain separate; this positive result does not relabel them.",
+  "gate_conditions": [
+    "Commit preflight script, all six attempt files, attribution correction and this exact review before relying on it.",
+    "Final execution inputs must bind identical supervisor/classifier/Python/ps identities; changed measurement code/runtime requires a new positive direct preflight.",
+    "Independent exact construction review follows committed scientific/execution manifests.",
+    "Positive smoke/profile acceptance, corpus audit/seal and scientific launch reviews remain outstanding."
+  ],
+  "checker_invocations": 0,
+  "selected_terms_generated": 0,
+  "observer_launch_authorization": false,
+  "preflight_provenance_sha256": "411577879522b1a99459c5d77e9bfd38522d4c7c08eb57268209ff2a90075f5a",
+  "preflight_receipt_sha256": "81c6a3b4aacb1830fbb8b0b443ecb5449e22b84dfe924d1580ee2bbde8352244"
+}

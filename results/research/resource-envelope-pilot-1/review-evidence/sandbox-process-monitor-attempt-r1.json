@@ -1,0 +1,11 @@
+{
+  "schema_version": 1,
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "synthetic_supervisor_preparation",
+  "classification": "MONITOR_FAULT_REPAIR_PAUSE",
+  "observers_invoked": false,
+  "scientific_terms_constructed": false,
+  "command": "python3 - <<'PY'\nfrom pathlib import Path\nfrom lib.resource_envelope_supervisor import run_direct\nimport os\nr=run_direct(argv=['/bin/sh','-c','sleep 0.1; echo ok'],cwd=Path('.').resolve(),env=dict(os.environ),stdin_bytes=None,timeout_seconds=2,memory_ceiling_bytes=100000000,sample_interval_seconds=.01,max_trace_gap_seconds=1,cleanup_seconds=.5)\nprint({k:v for k,v in r.receipt.items() if k in ('exit_code','sample_count','child_peak_rss_bytes','maximum_sampled_group_rss_bytes','cleanup_complete','monitor_errors','pipe_errors','stop_reason')})\nprint(r.stdout)\nPY",
+  "tool_output": "{'exit_code': -9, 'child_peak_rss_bytes': 786432, 'sample_count': 0, 'maximum_sampled_group_rss_bytes': None, 'monitor_errors': [\"PermissionError: [Errno 1] Operation not permitted: '/bin/ps'\"], 'pipe_errors': [], 'cleanup_complete': False, 'stop_reason': 'MONITOR_FAULT'}\nb''\n",
+  "interpretation": "The sandbox denied /bin/ps during a disjoint /bin/sh synthetic process control. The attempt supplies no positive RSS preflight and no resource data. The direct supervisor returned a structured monitor fault and stopped the child. A separately authorized actual-host positive preflight is required before any observer launch."
+}

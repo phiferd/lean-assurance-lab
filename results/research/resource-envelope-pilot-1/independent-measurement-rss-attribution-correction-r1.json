@@ -1,0 +1,31 @@
+{
+  "schema": "resource-envelope-review-correction-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "recorded_at": "2026-09-29T00:18:09.129725+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: source review shows that the operating-system memory high-water reported when a child exits can include descendants whose usage was accounted to that child. The earlier statement that descendants are excluded is too strong. No selected terms or checker measurements exist.",
+    "is_it_interesting": "Yes, because memory labels must describe what the operating system actually reports. The measurement remains useful but is not guaranteed to be exclusive memory of one executable or simultaneous memory of a whole process group.",
+    "does_it_require_more_work": "Correct the candidate protocol and final report labels before freeze, preserve this correction with the staged review, and keep direct process identity plus sampled group memory as separately qualified observations."
+  },
+  "prior_review": {
+    "path": "results/research/resource-envelope-pilot-1/independent-measurement-tooling-review-r1.json",
+    "sha256": "d8e7937581b9bc1b4b80e4f94772c7ed0a4bebe73ea3d8e4f9d59b3d19bf11dd"
+  },
+  "superseded_statement": "OS child lifetime high-water includes startup/exit, uses bound host units and excludes descendant memory",
+  "corrected_statement": "The wait4-reported child accounting high-water includes startup/exit and may include accounted-for descendants. It is neither a guaranteed exclusive executable peak nor a simultaneous process-group peak. Preserve the raw ru_maxrss value, host units and exact direct target identity.",
+  "source_findings": [
+    {
+      "url": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/kern/kern_exit.c",
+      "locations": "proc_exit final-rusage assembly around lines 2297\u20132305; wait4 copyout around lines 2750\u20132761",
+      "finding": "The final child usage is combined with accumulated child-descendant usage before wait4 returns it."
+    },
+    {
+      "url": "https://raw.githubusercontent.com/apple-oss-distributions/xnu/main/bsd/kern/kern_resource.c",
+      "locations": "ruadd around lines 1750\u20131762",
+      "finding": "The combination takes the larger ru_maxrss rather than adding simultaneous memory."
+    }
+  ],
+  "source_scope": "Read-only inspection of Apple-published XNU main source on the recorded date; this is a conservative attribution caveat, not proof that this exact running kernel equals that source revision.",
+  "scientific_scope_change": false,
+  "launch_authorization": false
+}
