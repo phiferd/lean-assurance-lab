@@ -1,0 +1,38 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-LAZYLEAN-SEMANTIC-EXTENSION-1",
+  "data": {
+    "campaign": "E0-LAZYLEAN-SEMANTIC-EXTENSION-1",
+    "question": "Can pinned LazyLean v0.3.0 execute one source-supported transparent-definition delta candidate/control pair and one constructor-headed recursor iota candidate/control pair on the substitution and KAM-mode-3 profiles, and does either exact pair produce a profile verdict difference with positive targeted KAM demand?",
+    "sources": [
+      {
+        "name": "leanprover-community/lazylean",
+        "revision": "68c66fa18c1afe029512b90ecfe0b162c0dcd8fb",
+        "patch": "results/research/lazy-reduction-conformance-pilot-1/portability-r1.patch"
+      }
+    ],
+    "versions": "Repository base 6bf5d4f8ef73d4d8364e824b0a50543d7af0e493; retained LazyLean v0.3.0 Darwin arm64 binary SHA-256 8132451a5a3c122fcae1d62cf5e7a8d4ca07ed2aa787675d305b399e6d5f6c0e; source inventory ca072cbafc3c3d7bb25d870dbc8e0a406213dea2126299fd2a445ddace70b4c2; portability patch 0a8088c448928a16da1431779adfcf806e3dcde3150c8ee1addcc3f4e1698039; adapter d355e27f1bde2ce8362eaccf4b01fea06114bb102eb66af4cd6a2a89603fed40; supervisor fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50; model output is not semantic authority.",
+    "commands": "After start, construct exactly delta-control.ndjson, delta-candidate.ndjson, iota-control.ndjson and iota-candidate.ndjson from sample-spec.json and source-review.md. Then run python3 explorations/runs/EXPLORE-LAZYLEAN-SEMANTIC-EXTENSION-1/run-screen.py once. It launches each fixture separately on --engine subst and --engine kam, both with --jobs 1 and LL_KAM_MODE=3, under the retained 30-second/2-GiB process-group supervisor.",
+    "inputs": [
+      "docs/research/E0_LAZYLEAN_SEMANTIC_EXTENSION_1_PLAN.md",
+      "explorations/runs/EXPLORE-LAZYLEAN-SEMANTIC-EXTENSION-1/source-review.md",
+      "explorations/runs/EXPLORE-LAZYLEAN-SEMANTIC-EXTENSION-1/sample-spec.json",
+      "explorations/runs/EXPLORE-LAZYLEAN-SEMANTIC-EXTENSION-1/run-screen.py",
+      "results/research/lazy-reduction-conformance-pilot-1/source-r1.json",
+      "results/research/lazy-reduction-conformance-pilot-1/portability-r1.patch",
+      "external/lazy-reduction-conformance-pilot-1/lazylean-r1",
+      "external/lazy-reduction-conformance-pilot-1/source-r1/src/loader.cpp",
+      "external/lazy-reduction-conformance-pilot-1/source-r1/src/tc.cpp",
+      "external/lazy-reduction-conformance-pilot-1/source-r1/src/kam.cpp",
+      "external/lazy-reduction-conformance-pilot-1/source-r1/src/main.cpp",
+      "lib/lazy_reduction_pilot.py",
+      "lib/metamorphic_pilot_runner.py",
+      "results/research/pipeline-completeness-pilot-2/inputs/baseline.ndjson"
+    ],
+    "sample": "Exactly two declared semantic families and four fresh fixtures: one delta control/candidate pair and one iota control/candidate pair, each launched on subst and KAM-mode-3 for eight planned cells. No substitution, retry, or extra family may replace an invalid fixture; feasible engineering repairs remain in the same exploration and preserve every attempt.",
+    "planned_runs": 8,
+    "controls": "Each family control retains the candidate declarations and value but replaces the targeted reducible final declared type with its direct normal form, so both controls must ACCEPT. Candidate KAM delta or iota must be positive; the delta pair contains a third application declaration that forces KAM weak-head reduction of D, while the substitution summary does not separately count recursor iota. Every cell requires exact unchanged input bytes, recognized output, positive RSS, no timeout or memory breach, and complete cleanup. Missing demand, failed control or unresolved process/parser/resource failure is INCONCLUSIVE. A profile verdict difference under those gates is SIGNAL; matching candidate verdicts are NO_SIGNAL only for this exact sample."
+  }
+}

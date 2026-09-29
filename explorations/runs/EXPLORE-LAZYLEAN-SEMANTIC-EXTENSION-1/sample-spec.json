@@ -1,0 +1,33 @@
+{
+  "evidence_class": "E0",
+  "families": [
+    {
+      "candidate": "delta-candidate.ndjson",
+      "control": "delta-control.ndjson",
+      "declarations": 3,
+      "family": "delta",
+      "required_kam_counter": "delta"
+    },
+    {
+      "candidate": "iota-candidate.ndjson",
+      "control": "iota-control.ndjson",
+      "declarations": 2,
+      "family": "iota",
+      "required_kam_counter": "iota"
+    }
+  ],
+  "profiles": [
+    {
+      "argv": ["--engine", "subst", "--jobs", "1"],
+      "environment": {"LL_KAM_MODE": "3"},
+      "id": "subst"
+    },
+    {
+      "argv": ["--engine", "kam", "--jobs", "1"],
+      "environment": {"LL_KAM_MODE": "3"},
+      "id": "kam"
+    }
+  ],
+  "signal": "An exact candidate ACCEPT/REJECT verdict difference between profiles after both family controls ACCEPT, with the candidate KAM target counter positive and no parser, process, resource or cleanup failure.",
+  "limits": {"memory_bytes": 2147483648, "planned_cells": 8, "timeout_seconds": 30}
+}

@@ -58,6 +58,22 @@ research directions.
 
 ## Attempted
 
+- `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` closes `NO_SIGNAL` after its fixed
+  eight-cell delta/iota screen. **What did we find?** Substitution and KAM-mode-3
+  accepted both candidates and both controls in both families, eight accepts
+  total. The KAM candidates recorded one targeted delta and one targeted iota
+  transition while their controls recorded zero; no profile difference was
+  observed. The first sandbox monitor preflight and an initial host-retry
+  wrapper check failed before child launch and remain preserved. **Is it
+  interesting?** Yes, modestly, because it extends executable demand-qualified
+  exploration beyond the six retained beta/zeta cases. The two profiles share
+  one implementation, and this E0 sample supplies no conformance, correctness or
+  general no-difference claim. **Does it require more work?** No confirmation
+  follows from this result. Retain the fixtures and raw evidence. Select
+  `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` READY and unstarted to repair the
+  separate exact-input and stage-dependency closure risks before any future E1
+  confirmation.
+
 - `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` closes `INCONCLUSIVE` after its one
   fixed read-only inventory attempt. **What did we find?** The selector could
   not produce the required six candidates. Its retained diagnostic classified
@@ -3214,15 +3230,16 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-LAZYLEAN-SEMANTIC-EXTENSION-1`.
-It is READY and unstarted under [its two-family E0 plan](research/E0_LAZYLEAN_SEMANTIC_EXTENSION_1_PLAN.md).
+Selected next item: `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1`.
+It is READY and unstarted under [its shared closure-repair plan](research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md).
 The canonical queue retains one READY item and zero ACTIVE items. The completed
 Nanoda E0 screen is INCONCLUSIVE: its fixed selector produced no inventory
 because all 170 modeled semantic sites were already represented, while 332
 other parsed sites were outside the retained semantic model. No confirmation
-proposal follows from that result. The selected LazyLean screen asks a separate
-small delta/iota question beyond the six completed beta/zeta cases; it has not
-constructed or tested new fixtures. The validation-input snapshot and stage-specific reuse closure repair is PLANNED
+proposal follows from that result. The completed LazyLean E0 screen observed no
+signal in eight exact delta/iota cells: all accepted, both candidate KAM demand
+counters were positive, and no confirmation proposal follows. The validation-
+input snapshot and stage-specific reuse closure repair is READY and unstarted
 as a prerequisite before any future confirmation, and the eighteen-receipt
 memory audit is DEFERRED. BUILD-MODE retains its source/configuration gate;
 independent transfer still waits for an owner-designated holdout package.
@@ -3368,8 +3385,8 @@ no external action is recommended now.
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
-| 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | READY, unstarted; delta/iota screening only |
-| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | PLANNED; prerequisite before future confirmation |
+| 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
+| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | READY, unstarted; prerequisite before future confirmation |
 | 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; read-only scope retained |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
