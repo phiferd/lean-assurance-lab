@@ -1,0 +1,135 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_AUDITOR_AND_PRODUCER_R3",
+  "reviewed_at": "2026-09-29T00:11:58.712447+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the independent auditor now rejects the malformed exports found in preparation, preserves exact structured Lean names, and checks a synthetic term deeper than the selected maximum. All 26 auditor tests and five pure-producer tests pass. No selected terms or checker observations have been produced.",
+    "is_it_interesting": "Yes. The audit checks the intended formulas and their input encoding independently of checker agreement, and its new negative cases prevent known identity, parser and depth errors from reaching the study. These tests do not certify ungenerated selected inputs or Lean correctness.",
+    "does_it_require_more_work": "Complete measurement-control review, actual-host RSS proof and committed scientific/execution manifests; then obtain exact construction approval. After construction, audit all twelve exact sources, exports and case records before a separately approved observer launch."
+  },
+  "verdict": "PASS_PREFREEZE_AUDITOR_AND_PURE_PRODUCER",
+  "independence": {
+    "implementation": "Auditor imports only standard-library modules; it does not import the producer, its graph reader or expectation implementation. Separate owner authored it from the protocol.",
+    "semantic_check": "Auditor matches parsed graph against independently built Pi/let formulas, checks lexical scope and structured name components, and derives Sort 1 validity from the explicit rules. Expected source uses the common frozen grammar, so correlated specification error remains a limitation; hand-written disjoint fixtures and direct typing/source review mitigate it.",
+    "metric_check": "Distinct reachable value expression IDs, iterative expanded-node traversal and binder-depth traversal are computed separately from the producer."
+  },
+  "closed_findings": [
+    "Exact 173-byte first metadata record",
+    "Prior-defined references, contiguous namespace IDs and unique structural nodes required by Nanoda",
+    "Synthetic let fixture now interns its Sort 1 node",
+    "Iterative formula, scope and metric traversal passes depth 601",
+    "Declaration and binder names compared as component tuples rather than ambiguous dotted strings",
+    "Actual partial and opaque rejection negatives",
+    "End-to-end synthetic audit_corpus integration with rebound wrong expression, missing file, extra file and duplicate-index negatives"
+  ],
+  "typing": {
+    "pi": "Every Sort 0 domain/codomain has type Sort 1; imax 1 1 = 1 at each Pi. Expanded value nodes 2n+1 and binder depth n.",
+    "let": "Each annotation is Sort 1, initial value Sort 0, subsequent value points to the preceding binder, and final body to the last binder. The closed chain has type Sort 1 and reduces to Sort 0. Expanded value nodes 3n+1 and binder depth n."
+  },
+  "cohort_check": "The production corpus gate independently fixes Pi then let at 16,32,64,128,256,512 and rejects changed membership/order/fields/paths/hashes. Integration substitutes only synthetic expected metadata and disjoint n=2/n=3 fixtures; selected-size test checks metadata only.",
+  "custody_note": "R1 is preserved. R2 finding remains recorded, but its snapshot timing is corrected by independent-auditor-review-r2-custody-erratum.json; do not use those snapshots to reproduce the earlier name false PASS. This review binds separately captured R3 source/tests.",
+  "checks": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_audit.py",
+      "tests": 26,
+      "status": "PASS"
+    },
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_producer.py",
+      "tests": 5,
+      "status": "PASS"
+    }
+  ],
+  "reviewed_inputs": [
+    {
+      "path": "lib/resource_envelope_audit.py",
+      "bytes": 31973,
+      "sha256": "49e8de404e23a522fd8abaed18ea62b33ff565ce43e1ba6017b3fff4521daa32"
+    },
+    {
+      "path": "tests/test_resource_envelope_audit.py",
+      "bytes": 28941,
+      "sha256": "dcc423450a39f276f941c92d8fbdae29af77ae3384cc490c20117f49b6eecec4"
+    },
+    {
+      "path": "lib/resource_envelope_producer.py",
+      "bytes": 7860,
+      "sha256": "ab06371ea4855ad2a541ee612ca6320a87e111e4ff87602200dbe51c7e4cf975"
+    },
+    {
+      "path": "tests/test_resource_envelope_producer.py",
+      "bytes": 2547,
+      "sha256": "7d73e8cc4fce551bba8ccfe32ff5115080b55f29595e5fb1740ae942d0d71fda"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/protocol.md",
+      "bytes": 14371,
+      "sha256": "275d96abf7258f390c29812f75493ae4a876308df37b5af256a970eb4621ed98"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/source-reuse-review.md",
+      "bytes": 4521,
+      "sha256": "13c82c0886354c09b8e3bc6ceb6233c3b5e427862c1be267c08cf4f060e8fc00"
+    },
+    {
+      "path": "docs/research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md",
+      "bytes": 3921,
+      "sha256": "ebd3200eecb26a93b7d5466c718bd953cb9cdfb2dd91353fdf5222977ad58c42"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-source-formula-review.json",
+      "bytes": 6350,
+      "sha256": "9a4bafe9ea3b52f2111390d844b499af919c42ecd3aed9bcfbbadf34e4b1c65b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-auditor-review-r1.json",
+      "bytes": 3920,
+      "sha256": "0e422d68361acbaf9ac1b621d3af8a4e096dc5d499b8153f0ac870bfb1312ada"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-auditor-review-r2.json",
+      "bytes": 2897,
+      "sha256": "78ae8a041e1ec0189b9ec63f8601c0ffcab6d185159e1e01f671a244674f4871"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-auditor-review-r2-custody-erratum.json",
+      "bytes": 843,
+      "sha256": "0e770de01302df1cd6c5eea0d3fca5b3ad17952c6bfd1c18b809bbdf7dcdc661"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/nanoda/src/src/parser.rs",
+      "bytes": 35930,
+      "sha256": "251a879b01ec5405d27475c6bea809f72ce51be9501ec61b28a7f965b0855ac4"
+    },
+    {
+      "path": "external/lean-kernel-arena/_build/checkers/official/src/.lake/packages/lean4export/Export/Parse.lean",
+      "bytes": 20491,
+      "sha256": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286"
+    }
+  ],
+  "reviewed_snapshots": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-prefreeze-r3.py.txt",
+      "bytes": 31973,
+      "sha256": "49e8de404e23a522fd8abaed18ea62b33ff565ce43e1ba6017b3fff4521daa32"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-tests-prefreeze-r3.py.txt",
+      "bytes": 28941,
+      "sha256": "dcc423450a39f276f941c92d8fbdae29af77ae3384cc490c20117f49b6eecec4"
+    }
+  ],
+  "not_authorized": [
+    "Selected source/export construction",
+    "Observer setup/build",
+    "Smoke, baseline or scientific observer invocation"
+  ],
+  "remaining_gates": [
+    "Final supervisor/observer reconciliation and controller/runner integration review with negative controls",
+    "Positive actual-host direct supervisor RSS/accounting/cleanup preflight",
+    "Committed exact scientific and execution manifests plus independent PASS_FOR_CONSTRUCTION",
+    "Independent per-input corpus audit and seal",
+    "Separately reviewed positive profile smoke and scientific launch gates"
+  ]
+}

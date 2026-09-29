@@ -1,0 +1,51 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_AUDITOR_R2",
+  "reviewed_at": "2026-09-29T00:07:40.659516+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the repaired auditor passes 23 synthetic tests and closes the metadata, reference-order, interning and deep-term findings. A further synthetic mutation is accepted even though it changes the declaration name as understood by Lean. No selected terms or observer outcomes exist.",
+    "is_it_interesting": "Yes, as a preconstruction identity-audit repair. A printed dotted name is insufficient to establish the exact structured name being checked. This is not a checker defect or scientific finding.",
+    "does_it_require_more_work": "Require exact name components, add the disjoint negative, and repeat independent review before freeze."
+  },
+  "verdict": "REPAIR_REQUIRED_BEFORE_FREEZE",
+  "resolved_prior_findings": [
+    "Exact 173-byte metadata line",
+    "Earlier references and continuous namespace IDs",
+    "Structural uniqueness of name, level and expression records",
+    "Interned synthetic let fixture",
+    "Iterative formula/scope/metric traversal; synthetic depth 601 PASS"
+  ],
+  "observed_failure": {
+    "fixture": "Existing synthetic n=2 Pi export; delete namespace name record, replace declaration-name node with one component ResourceEnvelopePilot1.pi002, decrement remaining name IDs and references, then rebind export hash and bytes.",
+    "observed": "audit_case returns PASS",
+    "required": "Reject: one string component containing a dot differs from namespace ResourceEnvelopePilot1 followed by component pi002.",
+    "cause": "resolve_name joins components with a period before equality comparison."
+  },
+  "requested_repairs": [
+    "Compare exact name components or restrict all selected name segments to the simple ASCII identifier grammar, excluding embedded dots.",
+    "Add explicit safety=partial and opaque-record negative cases; existing similarly named tests exercise unknown partial field and axiom record."
+  ],
+  "checks": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_audit.py",
+      "result": "23 PASS"
+    },
+    {
+      "command": "Independent disjoint n=2 structured-name identity probe",
+      "result": "Confirmed false PASS; no selected term generated and no observer invoked"
+    }
+  ],
+  "reviewed_snapshots": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-prefreeze-r2.py.txt",
+      "bytes": 31846,
+      "sha256": "f622efcc1457deee79560bee61735fd08ae412c92a8231feeb7a6f707544c7c5"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-tests-prefreeze-r2.py.txt",
+      "bytes": 20965,
+      "sha256": "00d2358d2afa79ad4e2536448e90b44585fbe2686a47f802a36998e4fc81d824"
+    }
+  ]
+}

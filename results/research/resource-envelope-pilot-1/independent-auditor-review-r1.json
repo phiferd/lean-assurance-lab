@@ -1,0 +1,67 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_AUDITOR_R1",
+  "reviewed_at": "2026-09-29T00:02:52.291526+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the first independent auditor accepts two malformed synthetic exports and its recursive metric calculation fails on a disjoint deep graph. Its existing 20 tests pass but do not expose these gaps. No selected terms or observer outcomes exist.",
+    "is_it_interesting": "These are useful preconstruction tooling findings, not checker defects or scientific results. The audit must match both actual importers and handle the selected depths before it can certify input validity.",
+    "does_it_require_more_work": "Repair the auditor and add focused synthetic regressions before scientific freeze and selected input generation. Preserve this reviewed draft and failure description."
+  },
+  "verdict": "REPAIR_REQUIRED_BEFORE_FREEZE",
+  "observed_failures": [
+    {
+      "fixture": "Existing synthetic n=2 Pi fixture with metadata-line JSON spacing changed and case export hash/byte count rebound",
+      "observed": "audit_case returns PASS",
+      "required": "Reject because protocol requires the exact 173-byte first metadata line."
+    },
+    {
+      "fixture": "Existing synthetic n=2 Pi fixture with name records reversed and export hash rebound",
+      "observed": "audit_case returns PASS despite declaration-name prefix reference appearing before its definition",
+      "required": "Reject forward references at the same stage as both streaming importers."
+    },
+    {
+      "fixture": "Generic disjoint 601-level Pi DAG passed to _expanded_nodes; no selected source or case record built",
+      "observed": "RecursionError: maximum recursion depth exceeded",
+      "required": "Use iterative bounded traversal and synthetic deep-boundary tests."
+    }
+  ],
+  "source_findings": [
+    {
+      "evidence": "Retained Nanoda parser.rs BackRef::assert_in/assert_il/assert_ie",
+      "finding": "Each name/level/expression namespace must use continuous insertion IDs and reject structurally duplicate nodes. The R1 auditor checks duplicate IDs but lacks those common-format constraints."
+    },
+    {
+      "evidence": "R1 synthetic let fixture contains identical Sort 1 expression records at IDs 1 and 5",
+      "finding": "Nanoda rejects the repeated structural expression. Revise the fixture to reuse the existing Sort 1 node and test duplicate structural nodes as negatives."
+    }
+  ],
+  "requested_repairs": [
+    "Exact raw metadata line; prior-defined refs and contiguous IDs; structural uniqueness for names, levels and expressions.",
+    "Iterative expression reconstruction/comparison/counting where selected depth could exceed interpreter recursion safety.",
+    "Negative coverage for reordered refs, sparse IDs, structural duplicates, malformed metadata and deep disjoint graphs.",
+    "Retain safe/partial/opaque, exact source/formula, scope, no-dead-record, metrics and full-cohort gates."
+  ],
+  "checks": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_audit.py",
+      "result": "20 existing tests PASS; insufficient to close above findings"
+    },
+    {
+      "command": "Independent synthetic-only metadata, name-order and depth-601 helper probes",
+      "result": "Confirmed above failures; no selected term or observer launch"
+    }
+  ],
+  "reviewed_snapshots": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-prefreeze-r1.py.txt",
+      "bytes": 30799,
+      "sha256": "c60ea6c66a4fa71a1faf95da52e83feb98578b5aaebf97883565e62b8eb4533b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/auditor-tests-prefreeze-r1.py.txt",
+      "bytes": 17251,
+      "sha256": "1dd4c974d7d46cef4020acc19946436a382525e45975b8d35ef2e91043452273"
+    }
+  ]
+}
