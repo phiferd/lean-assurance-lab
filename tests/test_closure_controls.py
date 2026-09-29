@@ -7,7 +7,7 @@ import json
 import subprocess
 import tempfile
 
-from lib import closure_controls as cc
+from lib import closure_controls_v2 as cc
 ROOT = cc.ROOT
 
 

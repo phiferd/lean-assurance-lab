@@ -28,6 +28,15 @@ tree. An unchanged receipt is reusable; a declared dependency change creates a
 new stage version; damaged or structurally unknown cache evidence stops. Raw
 failure logs and interrupted stage directories remain alongside later retries.
 
+The first real ordered closure exposed an additional historical boundary: the
+stateful pilot freezes the exact bytes of `lib/closure_controls.py`. Five replay
+tests rejected the in-place edit after the current partition ran 1,642 tests.
+That failed stage is retained unchanged. The repair restores the old module
+byte-for-byte and places the prospective controller in
+`lib/closure_controls_v2.py`; the live command and focused tests opt into the
+successor while historical consumers continue to resolve their original bytes.
+All 23 focused stateful-validation transition/replay tests then passed.
+
 The full-suite fixture receipt directory is materialized inside that suite's
 versioned workflow-validation stage, never below `results/research`. The existing
 resource scientific replay and its attempt-family projection remain unchanged.

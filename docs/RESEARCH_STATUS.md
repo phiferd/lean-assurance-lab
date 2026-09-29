@@ -65,7 +65,7 @@ research directions.
   dependency changes invalidate downstream reuse, unexplained cached-output
   changes fail closed, and control receipts stay outside scientific evidence.
   Seventeen resource replay/isolation and exploration-ledger compatibility tests
-  also pass. No scientific experiment ran. The response-level baseline contains
+  and 23 stateful historical-transition/replay tests also pass. No scientific experiment ran. The response-level baseline contains
   82 unique records through 11:37:43 UTC: 9,175,446 input tokens (8,904,064
   cached; 271,382 derived uncached), zero cache-write input, 51,800 output and
   16,829 reasoning-output tokens. Final closure/delivery and later responses are

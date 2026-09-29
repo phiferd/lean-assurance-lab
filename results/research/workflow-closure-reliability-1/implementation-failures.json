@@ -35,6 +35,19 @@
       "repair": "Run the unchanged required preflight in the authorized actual-host context.",
       "successful_retry": {"status": "PASS", "rss_kib": 14528},
       "claim_limit": "The sampled self RSS is a capability preflight, not a workload memory measurement."
+    },
+    {
+      "attempt_id": "ordered-closure-0001",
+      "command": "scripts/closure-controls finish --scope-file results/research/workflow-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/workflow-closure-reliability-1",
+      "outcome": "FULL_SUITE_FAILED_BEFORE_REFRESH",
+      "observation": "The current partition ran 1,642 tests and reported five errors. All five historical/stateful replay errors rejected the changed bytes of lib/closure_controls.py, which is bound by the frozen stateful pilot generation manifest. Required historical partitions continued and passed before the controller stopped; no refresh ran.",
+      "repair": "Restore lib/closure_controls.py byte-for-byte and move the prospective controller to explicit successor lib/closure_controls_v2.py. Point only the live command and its focused tests at v2; preserve the failed closure attempt and resume under a newly committed scope.",
+      "evidence": [
+        "results/workflow-validation/workflow-closure-reliability-1/attempts/0001/result.json",
+        "results/workflow-validation/workflow-closure-reliability-1/stages/03-full-suite/0001/failure.json",
+        "results/workflow-validation/workflow-closure-reliability-1/stages/03-full-suite/0001/command.log"
+      ],
+      "scientific_launches": 0
     }
   ]
 }

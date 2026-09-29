@@ -19,6 +19,7 @@
     "closure_control_tests": 20,
     "usage_accounting_tests": 4,
     "compatibility_tests": 17,
+    "historical_transition_tests_after_v2_repair": 23,
     "status": "PASS",
     "compatibility_scope": "Resource result replay, resource closure receipt portability, and E0 exploration ledger tests.",
     "log": "results/workflow-validation/workflow-closure-reliability-1-focused.log"
@@ -37,9 +38,10 @@
     "limit": "The final closure, delivery and responses after the cutoff are not included; no monetary cost or saving is inferred."
   },
   "preserved_failures": "results/research/workflow-closure-reliability-1/implementation-failures.json",
+  "historical_transition": "The first ordered closure correctly rejected an edit to historically bound lib/closure_controls.py. That file is restored unchanged; the prospective implementation is lib/closure_controls_v2.py. Attempt 0001 remains preserved and the resumed candidate must rerun against the new committed inventory.",
   "repository_closure": {
     "command": "scripts/closure-controls finish --scope-file results/research/workflow-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/workflow-closure-reliability-1",
-    "receipt": "results/workflow-validation/workflow-closure-reliability-1/attempts/0001/result.json",
+    "receipt": "results/workflow-validation/workflow-closure-reliability-1/attempts/0002/result.json",
     "required_status": "COMPLETE",
     "claim": "This candidate result becomes the delivered item only when the committed receipt has COMPLETE status and origin/main contains the delivery commit."
   },
