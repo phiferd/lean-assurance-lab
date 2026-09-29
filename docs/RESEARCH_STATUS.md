@@ -78,9 +78,12 @@ research directions.
   READY and unstarted to audit those exact eighteen receipts and define a future
   metadata/reporting rule. Final repository completion still requires a
   successful file-backed full-suite and closure-controls receipt; the first
-  closure attempt 0001 failed during a temporary state-edit race and closure
-  attempt 0002 preserved a status-preflight wording error after passing host
-  RSS preflight. Both remain available as engineering records. See the
+  closure attempt 0001 failed during a temporary state-edit race; attempt 0002
+  preserved a status-preflight wording error after passing host RSS preflight;
+  attempt 0003 passed its preflight gates but exposed a receipt-replay coverage
+  gap in the full suite after closure-control receipts were added. All three
+  remain indexed engineering records and none changes the scientific result.
+  See the
   [report](../results/research/resource-envelope-pilot-1/report.md).
 
 - `BINDER-MODEL-PILOT-1` completes its fixed finite syntactic comparison.
