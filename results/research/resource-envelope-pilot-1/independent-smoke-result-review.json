@@ -1,0 +1,105 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "POSITIVE_SMOKE_RESULT",
+  "reviewed_at": "2026-09-29T02:19:41.796488+00:00",
+  "plain_language": {
+    "what_did_we_find": "Both selected observer profiles accepted the same retained safe definition, with exact output and valid input, accounting and cleanup records. These are two smoke checks; scientific cases and empty-input baselines have not run.",
+    "is_it_interesting": "Yes, as confirmation that both exact profiles can complete the intended checking task under the measurement supervisor. The result is not a general correctness or performance claim.",
+    "does_it_require_more_work": "Commit these results and this review. The scientific matrix still needs its separate exact launch approval."
+  },
+  "verdict": "PASS_EXACT_SMOKE_RESULTS",
+  "smoke_result_sha256": "8784d362fcd6717701002f5cdbca52f796f78c3ce68d64ebe5bfc8e9f2d6421e",
+  "reviewed_inputs": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-result.json",
+      "bytes": 2492,
+      "sha256": "8784d362fcd6717701002f5cdbca52f796f78c3ce68d64ebe5bfc8e9f2d6421e"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/smoke-result.json",
+      "bytes": 2299,
+      "sha256": "640b9705afe740f749e4685a43a09e2fe521fa115f137d244dd497d14e56548e"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-manifest.json",
+      "bytes": 2264,
+      "sha256": "9471877674755fabd31c7fe6d0d29ba0c67fb7dd23e7937d6cf3441633a3aca7"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/corpus-lock.json",
+      "bytes": 9198,
+      "sha256": "75d5d527b70580c26d3cf5118b961af0608e4693e48a1f62bec684f7bbfb5619"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/official.receipt.json",
+      "bytes": 2167,
+      "sha256": "f0221b18b1d0fb83529a19e4491f27b74d64833ac8ac2528c862e69489cb6b80"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/official.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/official.stdout",
+      "bytes": 25,
+      "sha256": "8905b995ad1f24eaa3febbfb9690c1665d2a5d3cfad78923f5673495e0dd43f2"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/nanoda.receipt.json",
+      "bytes": 1931,
+      "sha256": "6ba2e6f16ba8e6a1e237b6597b30587aa4c3da5096c38ae504f509c1ff89577b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/nanoda.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/processes/nanoda.stdout",
+      "bytes": 38,
+      "sha256": "a9afe4d37ecd98326f69a843a168ac994a12120107a93624db78671ab94b59c2"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/smoke-run-0001/ledger.ndjson",
+      "bytes": 1876,
+      "sha256": "1306f86eceae104b683b431e8be54cfdb040a76d7355c7824f664120327321a5"
+    }
+  ],
+  "checks": {
+    "exact_acceptance_both_profiles": true,
+    "same_input_and_expected_invocations": true,
+    "raw_identity_limits_clock_order_custody_and_cleanup_reconciled": true,
+    "metrics": [
+      {
+        "profile": "official",
+        "elapsed_seconds": 0.05508925,
+        "sample_count": 1,
+        "maximum_trace_gap_seconds": 0.032247167,
+        "child_peak_rss_bytes": 38027264,
+        "maximum_sampled_group_rss_bytes": 32768,
+        "cleanup_complete": true
+      },
+      {
+        "profile": "nanoda",
+        "elapsed_seconds": 0.00825825,
+        "sample_count": 0,
+        "maximum_trace_gap_seconds": 0.00825825,
+        "child_peak_rss_bytes": 1900544,
+        "maximum_sampled_group_rss_bytes": null,
+        "cleanup_complete": true
+      }
+    ],
+    "portable_replay": {
+      "status": "PASS",
+      "process_receipts": 37,
+      "raw_streams": 74,
+      "accounting_valid": 37,
+      "preserved_accounting_faults": 0,
+      "host_launches": 0
+    }
+  },
+  "limits": "Smoke measurements are excluded from scientific cells and empty baselines. A zero-sample fast run is valid only with healthy monitoring and complete raw/wait4/cleanup evidence; it leaves the whole lifetime unsampled. Child high-water is OS accounting, possibly including descendants, not an exclusive process or simultaneous group peak.",
+  "scientific_launch_authorization": false
+}
