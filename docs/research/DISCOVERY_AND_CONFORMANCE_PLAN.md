@@ -73,16 +73,24 @@ are ordinal judgments, not estimated defect rates.
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped
 to proposal numbers 2, 1, 4, 3, 9, 5, 7, 6, 8, 10. The stateful, real-proof
-slice and binder-model pilots are complete; the resource-envelope pilot is ACTIVE
-for preparation only, and the build-mode candidate remains PLANNED with its
-independent launch gates. The recursor-repair and trust-reporting work is
+slice and binder-model pilots are complete; the resource-envelope pilot is
+COMPLETE with 24 accepted scientific checks and 12 accepted empty-input
+baselines. Its short-process sampled-RSS limitation selects
+`RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY; BUILD-MODE remains PLANNED with
+its independent launch gates. The recursor-repair and trust-reporting work is
 complete. The 2026-09-27 source comparison adds a new rank-6 lazy-reduction
 candidate, now COMPLETE with twelve demand-qualified ACCEPT cells; the original
-ordinal proposal mapping remains historical. RESOURCE-ENVELOPE-PILOT-1 is the
-selected item under its staged plan; selected input generation and observer
-setup/launch remain gated on frozen, reviewed, committed inputs.
+ordinal proposal mapping remains historical. At the 2026-09-28 handoff,
+RESOURCE-ENVELOPE-PILOT-1 was selected for preparation under its staged plan;
+that matrix has since completed and its current successor is the receipt-only
+audit recorded below.
 At each closure reconsider the actual evidence; do not execute this table as a
-fixed sequence or promote every idea to READY.
+fixed sequence or promote every idea to READY. The resource-envelope closure
+review compared feasible receipt-only blocker removal with BUILD-MODE, Arena,
+CVC-4 and transfer intake. The exact 18-row memory-accounting audit is selected
+READY because it can resolve a concrete interpretation gap from the completed
+matrix without relaunches. Its full-kernel historical identity limit is explicit;
+it may result in a conservative accounting label and a future metadata rule.
 
 | Rank / item | Useful output and fixed scientific scope | Promotion gate beyond recorded selection |
 | --- | --- | --- |
@@ -95,8 +103,9 @@ fixed sequence or promote every idea to READY.
 | 7 `STATEFUL-VALIDATION-PILOT-1` | Completed six fixed comparisons through one supported public kernel API | COMPLETE, SUCCESS: twelve histories and 25 requests preserve all expected outcomes and environment projections; no persistent-cache/CoreM rollback claim |
 | 8 `REAL-PROOF-SLICES-PILOT-1` | Twelve dependency-complete slices from three retained exports and a provenance-preserving slicer | COMPLETE, SUCCESS: nine slices accepted by both exact observers in 18 cells; three fixed Std selections remain oversize and unobserved; no absent-coverage or fresh-holdout claim |
 | 9 `BINDER-MODEL-PILOT-1` | Independent named-variable model and fixed 10,000-operation-vector suite over two implementation APIs | COMPLETE: all 30,000 scoped outputs matched; retain model, auditor, vectors and replay as a local regression asset |
-| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | ACTIVE for source, validity and measurement preparation only; selected inputs and observer setup/launch remain gated on independent validity, comparable profiles, baseline/import accounting, sampled-RSS uncertainty and cleanup controls |
-| 11 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | PLANNED: bind supported configurations, source-selected input-influenced sites, reproducible toolchain and exact fixture/build protocol |
+| 10 `RESOURCE-ENVELOPE-PILOT-1` | Two valid term families, six sizes and two implementations | COMPLETE, SUCCESS: all 24 scientific checks and 12 empty-input baselines ACCEPTED; 18 Nanoda runs have no sampled group-RSS points, so sampled group peaks remain unknown |
+| 11 `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | Exact 18 Nanoda receipts, supervisor `wait4` handling, primary documentation and historical Darwin identity boundary | READY and unstarted; read-only receipt/source/documentation audit only, no process launches; produce a scoped interpretation and future metadata/reporting rule |
+| 12 `BUILD-MODE-CONFORMANCE-PILOT-1` | Three-configuration matrix for one checker, four source sites and eight fixed boundary/control fixtures | PLANNED: bind supported configurations, source-selected input-influenced sites, reproducible toolchain and exact fixture/build protocol |
 
 The completed representation and pipeline pilot 1 records remain frozen outside
 this live horizon. Unfinished work has no attempt/session/build/checker cap.
@@ -247,4 +256,26 @@ absent substantive feedback, and no successor is executed here.
 
 The [binder-model report](../../results/research/binder-model-pilot-1/report.md) records 10,000 syntactically well-scoped operation rows, 5,091 distinct structural inputs and 30,000 matched stage outputs across two selected APIs. No difference was observed. The result establishes no typed-program/proof, whole-kernel, universal-correctness or performance claim; retain its corpus, independent model/auditor and portable replay locally. No external action follows.
 
-[RESOURCE-ENVELOPE-PILOT-1](RESOURCE_ENVELOPE_PILOT_1_PLAN.md) is ACTIVE for preparation only. Existing audited positive-term/importer assets and portable supervisor controls provide reuse leads; the three real-proof oversize selections remain semantically unobserved and are not resource inputs. Binder's Lean and Kiota operation measurements are not a matched resource baseline. Before selected input generation or launch, bind two independently valid term families, six exact sizes, two comparable supported observers, startup/import and idle baselines, sampled-RSS uncertainty, timeout interpretation, memory ceiling and cleanup. BUILD-MODE remains PLANNED until a concrete supported configuration and input-influenced source site are selected. Hold Kiota/Nanoda follow-up absent substantive feedback; independent transfer still awaits its external holdout input.
+At the 2026-09-28 binder-model handoff, [RESOURCE-ENVELOPE-PILOT-1](RESOURCE_ENVELOPE_PILOT_1_PLAN.md) was selected ACTIVE for preparation. Existing audited positive-term/importer assets and portable supervisor controls provided reuse leads; the three real-proof oversize selections remained semantically unobserved and were excluded as resource inputs. Binder's Lean and Kiota operation measurements were not a matched resource baseline. The item subsequently completed its fixed matrix under reviewed input and launch gates. BUILD-MODE remains PLANNED until a concrete supported configuration and input-influenced source site are selected. Hold Kiota/Nanoda follow-up absent substantive feedback; independent transfer still awaits its external holdout input.
+
+
+## Resource-envelope closure and short-process audit selection — 2026-09-29
+
+The fixed resource matrix has a reviewed scientific result with 24 ACCEPTED
+scientific checks and 12 ACCEPTED empty-input baselines. Repository completion requires successful file-backed full-suite and ordered
+closure receipts; closure attempt 0001 failed during the temporary state-edit
+race and remains preserved. No configured limit or process-control fault affected the fixed scientific matrix; closure attempt 0001 failed during the temporary state-edit race and remains preserved.
+All 18 Nanoda runs have zero sampled RSS points; their sampled group peaks are
+unknown. The configured 10 ms target cadence is not evidence of achieved cadence
+or the cause of missing samples. Their `wait4` child-accounting values remain
+separate from process-group peaks. The result is finite to its exact inputs,
+profiles, host, and accounting; it supplies no general performance, correctness,
+or memory-bound conclusion. See the
+[resource report](../../results/research/resource-envelope-pilot-1/report.md).
+
+Project-wide review selected `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY and
+unstarted. Its finite output is an eighteen-row receipt audit, a source-grounded
+interpretation or explicit attribution boundary, and a future kernel-metadata
+and reporting rule. It authorizes no process launches and does not relabel the
+frozen result. BUILD-MODE remains PLANNED pending an exact supported configuration,
+realistic input-influenced source site, and reproducible toolchain/protocol.

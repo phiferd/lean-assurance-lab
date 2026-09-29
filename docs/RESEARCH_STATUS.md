@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-28
+Last updated: 2026-09-29
 
 ## How Status Is Tracked
 
@@ -57,6 +57,30 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `RESOURCE-ENVELOPE-PILOT-1` has a reviewed scientific result with SUCCESS;
+  final repository completion requires the file-backed full-suite and ordered
+  closure receipts. Closure attempt 0001 failed during a temporary state-edit
+  race and remains preserved. **What did we find?** Both observers accepted all twelve independently
+  audited inputs (24 scientific checks), and all twelve empty-input baselines
+  were ACCEPTED. No configured resource limit or process-control fault affected
+  the fixed scientific matrix. The eighteen Nanoda runs have zero sampled RSS
+  points, so their sampled process-group peaks are unknown; the supervisor's
+  configured 10 ms target cadence does not establish the achieved cadence or
+  explain the missing samples. The separate `wait4` child-accounting high-water
+  values are scoped operating-system accounting data, not group peaks. This
+  finite result supplies no general correctness, speed, or memory-bound claim.
+  **Is it interesting?** Yes, as a reusable finite resource package that
+  exposes a short-process measurement gap. Earlier recursion and sandbox
+  monitoring failures remain preserved in its attempt index. **Does it require
+  more work?** Retain the corpus, receipts, portable replay, and report locally;
+  no upstream action follows. Select `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`
+  READY and unstarted to audit those exact eighteen receipts and define a future
+  metadata/reporting rule. Final repository completion still requires a
+  successful file-backed full-suite and closure-controls receipt; the first
+  closure attempt failed during a temporary state-edit race and remains
+  preserved. See the
+  [report](../results/research/resource-envelope-pilot-1/report.md).
 
 - `BINDER-MODEL-PILOT-1` completes its fixed finite syntactic comparison.
   **What did we find?** Two selected APIs matched the independent
@@ -3140,8 +3164,16 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `RESOURCE-ENVELOPE-PILOT-1`.
-The canonical queue retains zero READY items. The resource study has started with source, validity and measurement preparation; no selected terms or observer setup/launch have begun. Existing independently audited positive cases make validity planning concrete, but different observer input paths and settings mean their earlier results are not a matched resource baseline. The next work must bind one common checking task, import/startup baselines, and RSS sampling controls before selected inputs are generated.
+Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+It is READY and unstarted under its
+[plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
+The canonical queue selects one scoped, read-only audit of the exact eighteen
+Nanoda receipts with zero sampled group-RSS points. It will check receipt labels,
+executable identity, raw and normalized `wait4` fields, supervisor handling,
+primary documentation, and the missing historical kernel-build identity. It
+will not relaunch processes or alter the frozen result. The 10 ms cadence was a
+configured target; actual sampling cadence and why no samples were captured
+remain undetermined.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3160,14 +3192,15 @@ and independent auditor remain local assets under the exact
 BINDER-MODEL completed its exact finite comparison: both selected APIs matched
 on 30,000 outputs across 10,000 rows. The scoped plain-language finding,
 limits, and retained local assets are in its [report](../results/research/binder-model-pilot-1/report.md).
-RESOURCE-ENVELOPE is ACTIVE for preparation only under its
+RESOURCE-ENVELOPE is COMPLETE with SUCCESS under its
 [plan](research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md) and
-[work record](../results/research/resource-envelope-pilot-1/work-record.json). It retains two families,
-six sizes and two observers, with independent validity, comparable checking,
-startup/import baselines, sampled-RSS uncertainty and cleanup as pre-freeze
-and pre-launch gates. The binder operation RSS/time values are not comparable
-profiles. The 2026-09-27 owner direction holds Kiota/Nanoda follow-up absent
-substantive feedback; ledger observations remain dated.
+[work record](../results/research/resource-envelope-pilot-1/work-record.json).
+The exact matrix has 24 ACCEPTED scientific checks and 12 ACCEPTED baselines.
+All 18 Nanoda rows have zero sampled RSS points; sampled group peaks remain
+unknown. Earlier construction recursion and sandbox-monitoring failures remain
+preserved in the work-record attempt index. The 2026-09-27 owner direction holds
+Kiota/Nanoda follow-up absent substantive feedback; ledger observations remain
+dated.
 
 `KIOTA-RECURSOR-PR-REFINEMENT-1` is COMPLETE with SUCCESS under its
 [refinement plan](research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md). The reviewed
@@ -3282,8 +3315,9 @@ no external action is recommended now.
 | 7 | `STATEFUL-VALIDATION-PILOT-1` | COMPLETE, SUCCESS; six preserved relations |
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
-| 10 | `RESOURCE-ENVELOPE-PILOT-1` | ACTIVE, source/validity/measurement preparation only; no selected inputs or setup |
-| 11 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
+| 11 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | READY, unstarted; read-only audit of the exact 18 Nanoda receipts |
+| 12 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
@@ -3431,13 +3465,14 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue selects `RESOURCE-ENVELOPE-PILOT-1` ACTIVE for source,
-validity and measurement preparation only; zero other READY items remain. The
-binder-model result is COMPLETE with 30,000 scoped outputs matched; its model,
-auditor, vectors and portable replay remain local regression assets. Resource
-work remains gated on independent input validity, two comparable observers,
-startup/import baseline accounting, sampled-RSS uncertainty and nonterminal
-process controls before freeze or launch.
+The canonical queue selects `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY and
+unstarted. The resource matrix is COMPLETE with 24 scientific checks and 12
+baselines ACCEPTED. The 18 Nanoda runs have zero sampled RSS points, so sampled
+group peaks remain unknown. The configured 10 ms target cadence does not
+establish actual cadence or the cause of missing samples; wait4 child-accounting
+values are not process-group peaks. The binder-model result remains COMPLETE
+with 30,000 scoped outputs matched; its model, auditor, vectors and portable
+replay remain local regression assets.
 The lazy-reduction pilot is complete with twelve ACCEPT cells and all six KAM
 demand requirements. The stateful pilot is complete with six preserved public
 kernel API relations, twelve histories and 25 requests; its R4 custody repair
@@ -3463,10 +3498,11 @@ retains twelve fixed dispositions: nine accepted slices, three visible
 oversize cases, and no observed compatibility difference or fresh-holdout
 claim. The binder-model item's exact fragment, source/reuse, independent-audit
 and execution gates passed before its vectors and observers were run; retain
-its bounded corpus and portable replay locally. The selected resource-envelope
-successor remains unstarted and must establish independent validity,
-comparable profiles, startup/import baselines and sampled-RSS uncertainty before
-freezing or launching its fixed matrix.
+its bounded corpus and portable replay locally. At that earlier handoff,
+the resource-envelope matrix was selected READY and unstarted; it has since
+completed with a reviewed finite result. The current READY and unstarted
+successor is the [short-process memory audit](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md),
+which reads the exact 18 receipts without launching processes.
 
 ### Waiting
 

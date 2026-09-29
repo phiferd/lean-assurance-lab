@@ -1,6 +1,6 @@
 # Resource envelope pilot 1
 
-Status: ACTIVE for source, validity and measurement preparation only. This entry does not authorize selected term generation, observer setup/builds, or scientific launch. Use only synthetic, disjoint fixtures for pre-freeze tooling checks. Exact scientific and execution inputs must be frozen, independently reviewed, and committed before selected input generation or launch.
+Status: Scientific matrix COMPLETE, SUCCESS; repository completion requires final closure receipts. The fixed two-family, six-size, two-observer matrix is complete and independently reviewed. See the [report](../../results/research/resource-envelope-pilot-1/report.md), canonical [science result](../../results/research/resource-envelope-pilot-1/science-run-0001/science-result.json), and [work record](../../results/research/resource-envelope-pilot-1/work-record.json). All 24 scientific checks and 12 empty-input baselines were ACCEPTED; no configured limit or process-control fault affected the fixed scientific matrix. Eighteen Nanoda runs have zero sampled group-RSS points, so their sampled group peaks remain unknown. This finite result establishes no general performance, correctness, or memory-bound claim. Repository completion requires the file-backed full-suite and ordered closure receipts; closure attempt 0001 failed during the temporary state-edit race and remains preserved.
 
 The current work record is [results/research/resource-envelope-pilot-1/work-record.json](../../results/research/resource-envelope-pilot-1/work-record.json).
 
