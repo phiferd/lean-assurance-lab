@@ -1,0 +1,157 @@
+"""Disjoint launch-gate regressions; never render selected inputs or run a checker."""
+
+import json
+from pathlib import Path
+import tempfile
+import unittest
+from unittest.mock import patch
+
+from lib import resource_envelope_launch as launch
+from lib import resource_envelope_control as control
+from lib.resource_envelope_control import GateError, binding
+
+
+def save(path: Path, value: object) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(value, sort_keys=True) + "\n", encoding="utf-8")
+
+
+class ResourceEnvelopeLaunchTests(unittest.TestCase):
+    def test_smoke_gate_rejects_stale_review_and_changed_profile(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            science, execution_path = base / "science.json", base / "execution.json"
+            contract, inp = base / "smoke-fixture-contract.json", base / "synthetic.ndjson"
+            manifest, review = base / "smoke.json", base / "review.json"
+            preflight = base / "independent-preflight-review.json"
+            for path in (science, execution_path, preflight):
+                save(path, {})
+            inp.write_bytes(b'{"synthetic":true}\n')
+            fixture = {"input": binding(inp), "expected_outputs":
+                       {"official": "fixture-official\n", "nanoda": "fixture-nanoda\n"}}
+            save(contract, fixture)
+            checker_limits = {"timeout_seconds": 2, "memory_ceiling_bytes": 4096}
+            execution = {"limits": {"checker": checker_limits},
+                         "invocations": {"official": ["/synthetic/official", "{export_path}"],
+                                         "nanoda": ["/synthetic/nanoda"]}}
+            profile_rows = [
+                {"id": name, "expected_stdout": fixture["expected_outputs"][name],
+                 "expected_stderr": "", "limits": checker_limits,
+                 "invocation": execution["invocations"][name]}
+                for name in ("official", "nanoda")]
+            row = {"status": "FROZEN_BEFORE_SMOKE_LAUNCH",
+                   "scientific_manifest": binding(science),
+                   "execution_manifest": binding(execution_path),
+                   "fixture_contract": binding(contract), "input": binding(inp),
+                   "preflight_review": binding(preflight), "profiles": profile_rows}
+            with patch.object(control, "ROOT", base), \
+                 patch.multiple(launch, ROOT=base, BASE=base, SCIENCE=science,
+                                EXECUTION=execution_path, SMOKE_MANIFEST=manifest,
+                                SMOKE_LAUNCH_REVIEW=review), \
+                 patch.object(launch, "require_construction_gate", return_value=({}, execution)), \
+                 patch.object(control, "_committed"), \
+                 patch.object(launch, "_committed"):
+                fixture["input"] = binding(inp)
+                save(contract, fixture)
+                row.update(scientific_manifest=binding(science),
+                           execution_manifest=binding(execution_path),
+                           fixture_contract=binding(contract),
+                           preflight_review=binding(preflight), input=binding(inp))
+                save(manifest, row)
+                save(review, {"verdict": "PASS_FOR_SMOKE_LAUNCH",
+                              "smoke_manifest_sha256": "stale",
+                              "execution_manifest_sha256": binding(execution_path)["sha256"]})
+                with self.assertRaisesRegex(GateError, "smoke launch review"):
+                    launch.require_smoke_gate()
+                saved_review = json.loads(review.read_text())
+                saved_review["smoke_manifest_sha256"] = binding(manifest)["sha256"]
+                save(review, saved_review)
+                self.assertEqual(launch.require_smoke_gate()[0], row)
+                row["profiles"][0]["expected_stdout"] = "unreviewed-output\n"
+                save(manifest, row)
+                with self.assertRaisesRegex(GateError, "profile contract"):
+                    launch.require_smoke_gate()
+
+    def test_corpus_lock_detects_file_mutation(self):
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            corpus = base / "corpus"
+            corpus.mkdir()
+            indexed = corpus / "index.json"
+            indexed.write_bytes(b'{"synthetic":1}\n')
+            construction = base / "construction-run-0001" / "construction-result.json"
+            review = base / "independent-corpus-review.json"
+            science, execution = base / "science.json", base / "execution.json"
+            for path in (construction, science, execution):
+                save(path, {})
+            save(review, {"verdict": "PASS_FOR_CORPUS_SEALING",
+                          "corpus_index_sha256": binding(indexed)["sha256"],
+                          "construction_result_sha256": binding(construction)["sha256"]})
+            audit = {"status": "PASS", "count": 12}
+            with patch.object(control, "ROOT", base), \
+                 patch.multiple(launch, ROOT=base, BASE=base, CORPUS=corpus,
+                                CORPUS_LOCK=base / "corpus-lock.json",
+                                CORPUS_REVIEW=review, SCIENCE=science, EXECUTION=execution), \
+                 patch.object(launch, "require_construction_gate"), \
+                 patch.object(launch, "audit_corpus", return_value=audit), \
+                 patch.object(control, "_committed"), \
+                 patch.object(launch, "_committed"):
+                launch.seal_corpus()
+                launch.require_corpus_lock()
+                indexed.write_bytes(b'{"synthetic":2}\n')
+                with self.assertRaisesRegex(GateError, "bound file changed"):
+                    launch.require_corpus_lock()
+
+    def test_scientific_gate_blocks_all_observer_launches(self):
+        with patch.object(launch, "require_scientific_launch_gate",
+                          side_effect=GateError("missing independent review")), \
+             patch.object(launch, "run_direct") as observer:
+            with self.assertRaisesRegex(GateError, "missing independent review"):
+                launch.run_science()
+            observer.assert_not_called()
+
+    def test_scientific_ledger_keeps_all_slots_after_one_limit(self):
+        # Synthetic dispositions only: no selected term bytes and no process launch.
+        with tempfile.TemporaryDirectory() as folder:
+            base = Path(folder)
+            (base / "baseline-empty.ndjson").write_bytes(b"synthetic empty\n")
+            seen = []
+
+            def ref(path):
+                return {"path": str(path), "bytes": 1, "sha256": "synthetic"}
+
+            def observed(*, label, profile, export_path, **_kwargs):
+                seen.append(label)
+                status = ("OBSERVED_TIME_LIMIT" if label == "official-rep1-pi-016"
+                          else "ACCEPTED")
+                return {"profile": profile, "input": ref(export_path),
+                        "process": {"synthetic": True},
+                        "disposition": {"status": status, "reason": "synthetic"}}
+
+            execution = {"empty_export": {"sha256": "synthetic"}}
+            with patch.multiple(launch, BASE=base, CORPUS=base / "corpus",
+                                SCIENCE=base / "science.json",
+                                EXECUTION=base / "execution.json",
+                                CORPUS_LOCK=base / "corpus-lock.json",
+                                SMOKE_RESULT=base / "smoke-result.json",
+                                PRELAUNCH_REVIEW=base / "prelaunch.json"), \
+                 patch.object(launch, "require_scientific_launch_gate",
+                              return_value=({}, execution)), \
+                 patch.object(launch, "_profile_run", side_effect=observed), \
+                 patch.object(launch, "binding", side_effect=ref), \
+                 patch.object(launch, "run_direct") as process:
+                result = launch.run_science()
+            self.assertEqual((len(result["baselines"]), len(result["cells"])), (12, 24))
+            stopped = [row for row in result["cells"]
+                       if row["status"] == "NOT_RUN_AFTER_LIMIT"]
+            self.assertEqual(len(stopped), 5)
+            self.assertEqual({row["trigger_cell_id"] for row in stopped},
+                             {"official-rep1-pi-016"})
+            self.assertEqual(len(seen), 31)
+            self.assertEqual([row["baseline_id"] for row in result["baselines"][:3]],
+                             [f"official-before-{i:02d}" for i in (1, 2, 3)])
+            process.assert_not_called()
+
+
+if __name__ == "__main__":
+    unittest.main()

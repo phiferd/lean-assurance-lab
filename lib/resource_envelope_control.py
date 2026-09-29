@@ -16,6 +16,7 @@ import sys
 from typing import Any
 
 from lib.resource_envelope_producer import FAMILIES, SIZES, selected_slots
+from lib.resource_envelope_observe import classify
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -32,6 +33,7 @@ SCIENTIFIC_PATHS = (
     "results/research/resource-envelope-pilot-1/protocol.md",
     "results/research/resource-envelope-pilot-1/independent-source-formula-review.json",
     "results/research/resource-envelope-pilot-1/independent-auditor-review-r3.json",
+    "results/research/resource-envelope-pilot-1/independent-measurement-rss-attribution-correction-r1.json",
     "lib/resource_envelope_producer.py",
     "lib/resource_envelope_audit.py",
     "tests/test_resource_envelope_producer.py",
@@ -39,13 +41,28 @@ SCIENTIFIC_PATHS = (
 )
 EXECUTION_PATHS = (
     "results/research/resource-envelope-pilot-1/nanoda-single-check.json",
+    "results/research/resource-envelope-pilot-1/baseline-empty.ndjson",
     "results/research/resource-envelope-pilot-1/smoke-fixture-contract.json",
+    "results/research/resource-envelope-pilot-1/review-evidence/actual-host-supervisor-preflight.py",
+    "results/research/resource-envelope-pilot-1/preflight-run-0001/provenance-attestation.json",
+    "results/research/resource-envelope-pilot-1/independent-preflight-review.json",
+    "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r1.json",
+    "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r2.json",
+    "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r3.json",
+    "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r1-after-first-custody-edit.py.txt",
+    "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r1.py.txt",
+    "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r2-before-prefix-verifier.py.txt",
+    "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r2-before-prefix-verifier.py.txt",
     "lib/resource_envelope_supervisor.py",
     "lib/resource_envelope_control.py",
     "lib/resource_envelope_construct.py",
     "lib/resource_envelope_observe.py",
+    "lib/resource_envelope_launch.py",
+    "lib/resource_envelope_replay.py",
     "tests/test_resource_envelope_supervisor.py",
     "tests/test_resource_envelope_control.py",
+    "tests/test_resource_envelope_launch.py",
+    "tests/test_evidence_replay_portability.py",
     "scripts/resource-envelope-pilot-1",
 )
 SOURCE_PATHS = (
@@ -240,11 +257,54 @@ def freeze_execution() -> dict[str, Any]:
     _source_revisions()
     if len(EMPTY_EXPORT) != 173:
         raise GateError("empty baseline metadata differs")
+    if (BASE / "baseline-empty.ndjson").read_bytes() != EMPTY_EXPORT:
+        raise GateError("baseline file differs from exact frozen empty export")
     runtime = [ROOT / EXPORTER_BINARY, ROOT / OFFICIAL_BINARY,
                ROOT / NANODA_BINARY, TOOLCHAIN / "lake", TOOLCHAIN / "lean",
-               Path(sys.executable), Path("/bin/ps"), *LEAN_RUNTIME_LIBRARIES]
+               Path(sys.executable), Path("/bin/ps"), Path("/bin/sh"),
+               Path("/bin/sleep"), *LEAN_RUNTIME_LIBRARIES]
     for path in runtime:
         binding(path)
+    attestation = _read(BASE / "preflight-run-0001/provenance-attestation.json")
+    if attestation.get("status") != "POST_RUN_PROVENANCE_ATTESTATION":
+        raise GateError("positive direct-supervisor preflight provenance absent")
+    expected_preflight_tools = [
+        BASE / "review-evidence/actual-host-supervisor-preflight.py",
+        ROOT / "lib/resource_envelope_supervisor.py",
+        ROOT / "lib/resource_envelope_observe.py",
+        Path(sys.executable), Path("/bin/ps"), Path("/bin/sh"), Path("/bin/sleep")]
+    if attestation.get("tooling_runtime") != [binding(path) for path in expected_preflight_tools]:
+        raise GateError("positive preflight did not cover current supervisor/runtime bytes")
+    if (attestation.get("host") != {"system": platform.system(),
+                                     "release": platform.release(),
+                                     "machine": platform.machine(),
+                                     "python_version": sys.version}):
+        raise GateError("positive preflight host identity differs")
+    preflight_files = [BASE / "preflight-run-0001" / name for name in
+                       ("attempt.json", "process-receipt.json", "stdout.raw",
+                        "stderr.raw", "summary.json")]
+    for path in preflight_files:
+        _committed(path)
+    if attestation.get("attempt_files") != [binding(path) for path in preflight_files]:
+        raise GateError("positive preflight raw/receipt binding differs")
+    preflight_receipt = _read(BASE / "preflight-run-0001/process-receipt.json")
+    preflight_stdout = (BASE / "preflight-run-0001/stdout.raw").read_bytes()
+    preflight_stderr = (BASE / "preflight-run-0001/stderr.raw").read_bytes()
+    disposition = classify(preflight_receipt, preflight_stdout, preflight_stderr,
+                           expected_stdout=b"preflight-ok", baseline=False)
+    if (disposition["status"] != "ACCEPTED" or preflight_receipt.get("sample_count", 0) <= 0
+            or preflight_receipt.get("maximum_sampled_group_rss_bytes", 0) <= 0
+            or not preflight_receipt.get("cleanup_complete")
+            or _read(BASE / "preflight-run-0001/summary.json").get("status")
+            != "PASS_POSITIVE_ACTUAL_HOST_RSS_AND_CLEANUP"):
+        raise GateError("positive actual-host direct-supervisor preflight invalid")
+    preflight_review = _read(BASE / "independent-preflight-review.json")
+    if (preflight_review.get("verdict") != "PASS_POSITIVE_ACTUAL_HOST_PREFLIGHT"
+            or preflight_review.get("preflight_provenance_sha256")
+            != binding(BASE / "preflight-run-0001/provenance-attestation.json")["sha256"]
+            or preflight_review.get("preflight_receipt_sha256")
+            != binding(BASE / "preflight-run-0001/process-receipt.json")["sha256"]):
+        raise GateError("independent positive direct-supervisor preflight review differs")
     config = _read(BASE / "nanoda-single-check.json")
     if config != {"use_stdin": True, "num_threads": 1,
                    "print_success_message": True, "print_axioms": False,

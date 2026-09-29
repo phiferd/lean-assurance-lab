@@ -13,18 +13,34 @@ sys.path.insert(0, str(ROOT))
 
 from lib.resource_envelope_construct import construct  # noqa: E402
 from lib.resource_envelope_control import freeze_execution, freeze_science  # noqa: E402
+from lib.resource_envelope_launch import (  # noqa: E402
+    freeze_smoke, run_science, run_smoke, seal_corpus,
+)
 
 
 def main() -> int:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("stage", choices=("freeze-science", "freeze-execution", "construct"))
+    parser.add_argument("stage", choices=("freeze-science", "freeze-execution", "construct",
+                                          "seal-corpus", "freeze-smoke", "run-smoke", "run-science"))
+    parser.add_argument("--resume-pause", type=Path,
+                        help="reviewed prior science-pause.json; only valid with run-science")
     args = parser.parse_args()
+    if args.resume_pause is not None and args.stage != "run-science":
+        parser.error("--resume-pause applies only to run-science")
     if args.stage == "freeze-science":
         output = freeze_science()
     elif args.stage == "freeze-execution":
         output = freeze_execution()
-    else:
+    elif args.stage == "construct":
         output = construct()
+    elif args.stage == "seal-corpus":
+        output = seal_corpus()
+    elif args.stage == "freeze-smoke":
+        output = freeze_smoke()
+    elif args.stage == "run-smoke":
+        output = run_smoke()
+    else:
+        output = run_science(resume_pause=args.resume_pause)
     print(json.dumps(output, sort_keys=True, indent=2))
     return 0
 

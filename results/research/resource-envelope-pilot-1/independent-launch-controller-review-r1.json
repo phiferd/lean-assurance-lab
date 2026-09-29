@@ -1,0 +1,54 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_LAUNCH_CONTROLLER_R1",
+  "reviewed_at": "2026-09-29T00:32:27.510199+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: early runner review found missing input-byte custody checks, incomplete smoke-evidence rechecking, and automatic sequence stopping before the required independent limit diagnosis. Four existing launch tests do not cover baseline or control-failure stops. No selected terms or observers have run.",
+    "is_it_interesting": "Yes, as preparation engineering. These controls prevent changed inputs or incomplete evidence from becoming scientific observations and preserve the distinction between real limits and control failures.",
+    "does_it_require_more_work": "Repair and test the launch controller, add exact limit-review/resume handling, and complete portable receipt coverage before execution freeze or launch."
+  },
+  "verdict": "REPAIR_REQUIRED_BEFORE_EXECUTION_FREEZE",
+  "findings": [
+    {
+      "id": "INPUT_CUSTODY",
+      "observed": "Initial _profile_run read input before launch but bound the path only afterward; actual read bytes were not compared to the sealed expectation.",
+      "required": "Use exact expected binding; verify read bytes and path before launch, after launch, and Nanoda stdin accounting. Retain raw process evidence and explicit custody failure before raising."
+    },
+    {
+      "id": "SMOKE_RAW_CUSTODY",
+      "observed": "Scientific gate checked result/attempt-result hashes but omitted the referenced raw smoke streams, receipts and inputs.",
+      "required": "Check all referenced committed bindings and replay expected smoke dispositions before science."
+    },
+    {
+      "id": "LIMIT_DIAGNOSIS",
+      "observed": "run_science immediately set stop triggers and skipped larger sizes without the frozen protocol independent outcome diagnosis.",
+      "required": "Preserve the triggering cell and pause; bind an independent PASS_FOR_SEQUENCE_STOP review before resuming unrun slots and recording dependent NOT_RUN_AFTER_LIMIT rows."
+    },
+    {
+      "id": "REPAIR_STOPS",
+      "observed": "Existing tests cover stale smoke contract, changed corpus file, a mocked missing gate and one valid-limit matrix. They omit baseline/control-fault immediate-stop and raw-failure retention.",
+      "required": "Add disjoint synthetic baseline and science-control failures proving preserved ledger/raw/failure and no later invocation; add completed-attempt guards and exact prior-prefix custody for resumption."
+    },
+    {
+      "id": "PORTABLE_COVERAGE",
+      "observed": "Initial replay draft targeted preflight-run-0001 only and required integer exit code even for unreaped/accounting failures.",
+      "required": "Cover all preserved preflight and process attempts, compare declared/discovered receipt membership, allow null exit only for explicit fault evidence, and prove foreign-checkout replay makes no process launches."
+    }
+  ],
+  "snapshot_timing": "Producer received the snapshot request after its first custody edit. The snapshot filename explicitly records that timing; it is not presented as the unmodified earlier draft that exhibited INPUT_CUSTODY. Remaining findings were read from the candidate. No pre-edit snapshot was reconstructed.",
+  "reviewed_snapshots": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r1-after-first-custody-edit.py.txt",
+      "bytes": 20688,
+      "sha256": "74855be0f4965d03c7c3467ffd4bc3b9c8e4e2f09499d4618191e1880da8069c"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r1.py.txt",
+      "bytes": 8727,
+      "sha256": "1ce02792a571bff8d211ecc6d73e043852dccab33dc65d990984ddfdf0d1b03e"
+    }
+  ],
+  "accepted_repair_direction": "Independent exact limit review followed by a new resume attempt bound to the immutable completed prefix; do not rerun already completed scientific/baseline slots or mutate old attempts. Preserve any execution revision and its prior raw bindings.",
+  "construction_or_launch_authorization": false
+}

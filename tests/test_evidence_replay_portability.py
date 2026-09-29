@@ -2,8 +2,10 @@
 import os
 import copy
 import hashlib
+import json
 from pathlib import Path
 import shutil
+import subprocess
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -20,6 +22,7 @@ import test_trust_assumption_pilot_r2 as legacy_trust_tests
 from lib import real_proof_slices_replay
 from lib import evidence_replay_portability
 from lib import binder_model_replay
+from lib import resource_envelope_replay
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -30,6 +33,54 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
         checkout = Path(directory) / "fresh-linux-checkout"
         os.symlink(ROOT, checkout, target_is_directory=True)
         return checkout
+
+    def test_resource_envelope_replay_without_original_checkout_or_host_tools(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = Path(directory) / "foreign-checkout"
+            destination = checkout / resource_envelope_replay.REL
+            destination.parent.mkdir(parents=True)
+            shutil.copytree(ROOT / resource_envelope_replay.REL, destination)
+            original_read = Path.read_bytes
+
+            def reject_original(path):
+                if Path(path).is_relative_to(ROOT):
+                    raise AssertionError("replay opened original evidence checkout")
+                return original_read(path)
+
+            with patch.object(Path, "read_bytes", reject_original), \
+                 patch.object(subprocess, "Popen", side_effect=AssertionError("host process launch")), \
+                 patch.object(subprocess, "run", side_effect=AssertionError("host process launch")):
+                result = resource_envelope_replay.replay(checkout)
+            self.assertEqual(result["status"], "PASS")
+            self.assertGreaterEqual(result["process_receipts"], 1)
+            self.assertEqual(result["raw_streams"], 2 * result["process_receipts"])
+            self.assertEqual(result["host_launches"], 0)
+            failed = destination / "preflight-run-0002"
+            failed.mkdir()
+            (failed / "stdout.raw").write_bytes(b"partial")
+            (failed / "stderr.raw").write_bytes(b"")
+            fault = {"cwd": "/historical/checker-host", "argv": ["/bin/sh"],
+                     "exit_code": None, "accounting_error": "synthetic wait4 fault",
+                     "reap_complete": False,
+                     "stdout_bytes": 7, "stdout_sha256": hashlib.sha256(b"partial").hexdigest(),
+                     "stderr_bytes": 0, "stderr_sha256": hashlib.sha256(b"").hexdigest()}
+            (failed / "process-receipt.json").write_text(json.dumps(fault) + "\n")
+            with patch.object(subprocess, "Popen", side_effect=AssertionError("host process launch")), \
+                 patch.object(subprocess, "run", side_effect=AssertionError("host process launch")):
+                repaired = resource_envelope_replay.replay(checkout)
+            self.assertEqual(repaired["process_receipts"], result["process_receipts"] + 1)
+            self.assertEqual(repaired["preserved_accounting_faults"], 1)
+            malformed = dict(fault)
+            del malformed["accounting_error"]
+            del malformed["reap_complete"]
+            (failed / "process-receipt.json").write_text(json.dumps(malformed) + "\n")
+            with self.assertRaises(resource_envelope_replay.ReplayError):
+                resource_envelope_replay.replay(checkout)
+            (failed / "process-receipt.json").write_text(json.dumps(fault) + "\n")
+            raw = destination / "preflight-run-0001/stdout.raw"
+            raw.write_bytes(raw.read_bytes() + b"tamper")
+            with self.assertRaises(resource_envelope_replay.ReplayError):
+                resource_envelope_replay.replay(checkout)
 
     def test_binder_model_replay_without_original_checkout_or_host_tools(self):
         with tempfile.TemporaryDirectory() as directory:

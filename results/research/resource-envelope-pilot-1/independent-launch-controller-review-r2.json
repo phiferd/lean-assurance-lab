@@ -1,0 +1,66 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "PREFREEZE_LAUNCH_CONTROLLER_R2",
+  "reviewed_at": "2026-09-29T00:43:15.134547+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: 62 resource tests and the foreign-checkout replay test pass. The repaired runner now checks sealed input bytes, smoke raw evidence and immediate failure stops, but its resume gate still accepts earlier successful prefix rows with missing process/input evidence. No selected terms or checkers have run.",
+    "is_it_interesting": "Yes, as a custody repair: a resumed study must verify every retained earlier observation, not only the limit that paused it. The passing tests currently overlook this gap.",
+    "does_it_require_more_work": "Verify every completed prefix event, add missing-process and earlier-raw mutation negatives, and register the new process family before freezing execution."
+  },
+  "verdict": "REPAIR_REQUIRED_BEFORE_EXECUTION_FREEZE",
+  "closed_r1_findings": [
+    "Sealed input binding/read-byte checks before and after observer invocation, plus Nanoda stdin identity",
+    "Referenced smoke raw and receipt binding checks with disposition replay before science",
+    "Immediate preserved pause on valid-looking limit, independent review required before later skips/resume",
+    "Baseline/control failure immediate-stop and completed-run guards",
+    "Portable replay now scans all preflight attempts, preserves explicit null-exit accounting failures and rejects unhandled discovered receipt paths",
+    "Foreign-checkout regression rejects original-checkout reads and subprocess launch APIs"
+  ],
+  "remaining_findings": [
+    {
+      "id": "COMPLETE_PREFIX_CUSTODY",
+      "evidence": "tests/test_resource_envelope_launch.py test_resume_requires_exact_independent_limit_review uses three accepted baseline rows with only status=ACCEPTED; the gate accepts them because only triggering process evidence is verified.",
+      "required": "Check exact slot/row identity; all prior executed input/raw/receipt bindings, invocation/limits/stdin and replayed disposition; skipped rows must have a previously reviewed matching sequence trigger. Reject altered earlier raw data or missing process evidence before resumed launch."
+    },
+    {
+      "id": "PROCESS_FAMILY_REGISTRATION",
+      "evidence": "The current registry lacks resource-envelope-pilot-1 and the inventory regression still expects 15 families.",
+      "required": "Register current exact discovered paths and replay/foreign-checkout tests, update exact family count to 16 without weakening frozen-family checks, and pass focused inventory/portable evidence validation."
+    }
+  ],
+  "checks": [
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_resource_envelope_*.py' -q",
+      "status": "PASS",
+      "tests": 62
+    },
+    {
+      "command": "PYTHONPATH=.:tests python3 -m unittest test_evidence_replay_portability.EvidenceReplayPortabilityTests.test_resource_envelope_replay_without_original_checkout_or_host_tools -v",
+      "status": "PASS",
+      "tests": 1
+    },
+    {
+      "command": "cmp docs/research/RESOURCE_ENVELOPE_PILOT_1_PLAN.md results/research/resource-envelope-pilot-1/source/plan-at-freeze.md",
+      "status": "BYTE_IDENTICAL"
+    },
+    {
+      "check": "Result-directory inspection",
+      "status": "Only source, review-evidence and synthetic preflight-run-0001 directories exist; no corpus, construction, smoke or science run."
+    }
+  ],
+  "reviewed_snapshots": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r2-before-prefix-verifier.py.txt",
+      "bytes": 31127,
+      "sha256": "bf66d0b17b3244b3ad068e78f8c06d092403631f792380994b65e17f33d1446a"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r2-before-prefix-verifier.py.txt",
+      "bytes": 25493,
+      "sha256": "af038015630e4d2e8d8a1f733a6a1a51049878c8746700a932d6dbd7f6acf4a8"
+    }
+  ],
+  "snapshot_timing": "Producer preserved these exact candidate bytes before the complete-prefix verifier repair. They include a narrow prior-chain ledger replay improvement made after the first R2-ready message.",
+  "construction_or_launch_authorization": false
+}

@@ -44,12 +44,17 @@ def _json_new(path: Path, value: Any) -> None:
 def _record_process(attempt: Path, label: str,
                     result: SupervisedResult) -> dict[str, Any]:
     prefix = attempt / "processes" / label
-    _write_new(prefix.with_suffix(".stdout"), result.stdout)
-    _write_new(prefix.with_suffix(".stderr"), result.stderr)
-    _json_new(prefix.with_suffix(".receipt.json"), result.receipt)
-    return {"stdout": binding(prefix.with_suffix(".stdout")),
-            "stderr": binding(prefix.with_suffix(".stderr")),
-            "receipt": binding(prefix.with_suffix(".receipt.json"))}
+    stdout_path = prefix.with_suffix(".stdout")
+    stderr_path = prefix.with_suffix(".stderr")
+    receipt_path = prefix.with_suffix(".receipt.json")
+    _write_new(stdout_path, result.stdout)
+    _write_new(stderr_path, result.stderr)
+    receipt = {**result.receipt,
+               "raw_stdout_path": stdout_path.relative_to(ROOT).as_posix(),
+               "raw_stderr_path": stderr_path.relative_to(ROOT).as_posix()}
+    _json_new(receipt_path, receipt)
+    return {"stdout": binding(stdout_path), "stderr": binding(stderr_path),
+            "receipt": binding(receipt_path)}
 
 
 def _safe_process(result: SupervisedResult, label: str) -> None:
