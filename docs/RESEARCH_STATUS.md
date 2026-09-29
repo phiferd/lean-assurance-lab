@@ -78,8 +78,9 @@ research directions.
   READY and unstarted to audit those exact eighteen receipts and define a future
   metadata/reporting rule. Final repository completion still requires a
   successful file-backed full-suite and closure-controls receipt; the first
-  closure attempt failed during a temporary state-edit race and remains
-  preserved. See the
+  closure attempt 0001 failed during a temporary state-edit race and closure
+  attempt 0002 preserved a status-preflight wording error after passing host
+  RSS preflight. Both remain available as engineering records. See the
   [report](../results/research/resource-envelope-pilot-1/report.md).
 
 - `BINDER-MODEL-PILOT-1` completes its fixed finite syntactic comparison.
@@ -3167,7 +3168,8 @@ preserved. The exact accepted authority and entry state remain bound in
 Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
 It is READY and unstarted under its
 [plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
-The canonical queue selects one scoped, read-only audit of the exact eighteen
+The canonical queue retains one READY item, `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`,
+and zero ACTIVE items. This is a scoped, read-only audit of the exact eighteen
 Nanoda receipts with zero sampled group-RSS points. It will check receipt labels,
 executable identity, raw and normalized `wait4` fields, supervisor handling,
 primary documentation, and the missing historical kernel-build identity. It
