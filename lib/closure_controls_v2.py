@@ -152,7 +152,11 @@ def _cached_file_sha(path: Path) -> str:
            stat.st_mtime_ns, stat.st_ctime_ns)
     digest = _HOST_DIGEST_CACHE.get(key)
     if digest is None:
-        digest = _sha(path.read_bytes())
+        hasher = hashlib.sha256()
+        with path.open("rb") as handle:
+            for chunk in iter(lambda: handle.read(8 * 1024 * 1024), b""):
+                hasher.update(chunk)
+        digest = hasher.hexdigest()
         _HOST_DIGEST_CACHE[key] = digest
     return digest
 
