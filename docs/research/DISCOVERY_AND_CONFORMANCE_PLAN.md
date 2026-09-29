@@ -328,3 +328,11 @@ Select `E0-LAZYLEAN-COMPOSED-REDUCTION-1` ACTIVE under [its plan](E0_LAZYLEAN_CO
 Test composition beyond isolated delta/iota with eight cells, raw evidence and
 actual usage coverage. Keep memory accounting DEFERRED until a concrete upcoming
 measurement decision depends on it. Do not add another closure repair campaign.
+
+## Composed screen handoff — 2026-09-29
+
+Eight ACCEPT cells, one attempt, but no KAM delta demand: E0 INCONCLUSIVE.
+This is a fixture-design observation, not a semantic negative. Select `E0-LAZYLEAN-DATA-RECURSOR-1`
+READY and unstarted to test two-constructor data without the singleton-proof
+shortcut. No confirmation or external action follows. Continue the memory-audit
+deferral until an identified upcoming measurement decision needs it.
