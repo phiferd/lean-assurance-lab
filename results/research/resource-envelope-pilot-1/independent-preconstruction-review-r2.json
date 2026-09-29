@@ -1,0 +1,125 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "COMMITTED_R2_MANIFEST_PRECONSTRUCTION",
+  "reviewed_at": "2026-09-29T01:23:06.468572+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the repaired execution manifest is committed and all recorded source, runtime and prior-attempt files match. It raises a finite construction recursion guard while preserving the twelve planned inputs. Four earlier inputs passed audit; the remaining eight are not yet constructed.",
+    "is_it_interesting": "Yes, as a controlled retry of the same scientific plan after an ordinary construction failure. It does not provide checker resource measurements or a correctness claim.",
+    "does_it_require_more_work": "Commit this review and run a fresh supervised construction attempt. Require exact replay of the four earlier input packages and independent validity audit of all twelve before separately reviewing any observer launch."
+  },
+  "verdict": "PASS_FOR_CONSTRUCTION",
+  "revision_verdict": "PASS_FOR_R2_CONSTRUCTION",
+  "scientific_manifest_sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b",
+  "execution_manifest_sha256": "8f55889840260c4ef0849352cc468a7f7f37f6008959b83519bd8fb5ab0141cf",
+  "committed_checkpoints": {
+    "scientific_manifest": "f79b872",
+    "r1_evidence": "c763557",
+    "r2_tooling": "286e337",
+    "r2_execution_manifest": "4e35e36"
+  },
+  "reviewed_inputs": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/scientific-manifest.json",
+      "bytes": 6832,
+      "sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/execution-manifest-r2.json",
+      "bytes": 20031,
+      "sha256": "8f55889840260c4ef0849352cc468a7f7f37f6008959b83519bd8fb5ab0141cf"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/execution-manifest.json",
+      "bytes": 12339,
+      "sha256": "d261f0f8038bb0624631c8ab21c2885d7cef4f975993716333edb710bb1e9fcb"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-preconstruction-review.json",
+      "bytes": 10180,
+      "sha256": "d6819a5fa93ca3532a2cdf8bf353e3e061961168a4b5caaf931e41d5b2ca739c"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-construction-tooling-repair-review-r2.json",
+      "bytes": 8503,
+      "sha256": "61dbce7ecc134c85d054f1cae32204838f4a7c760bd2f196a24ee07663f7c28d"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-construction-failure-review-r1.json",
+      "bytes": 14194,
+      "sha256": "8d3a55c90a68f5fb9f8beb1a10bb00f82ecb9651692ae65ba07a2a7a9d1d735b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0001/construction-failure.json",
+      "bytes": 9513,
+      "sha256": "ccc17153fccb9dee3706050cfdc399c2f2493909440a990d700564ee809ace11"
+    },
+    {
+      "path": "lib/resource_envelope_control.py",
+      "bytes": 28082,
+      "sha256": "53363218b3b28d0d1234b67ceb690946091f2935188b533bb3f63ddd54139517"
+    },
+    {
+      "path": "lib/resource_envelope_construct.py",
+      "bytes": 11903,
+      "sha256": "d61362094812018714d88c266cdb62c9b30102e8c7dac5eb37b2584e972d0233"
+    },
+    {
+      "path": "tests/test_resource_envelope_control.py",
+      "bytes": 11797,
+      "sha256": "ae0b15e6fcc0ff94c6b1192848308ebfe9d005b3a1b132648fc44146eeb5fe01"
+    }
+  ],
+  "checks": [
+    {
+      "check": "Recomputed all manifest counts/hashes, repository committed blobs and source revisions",
+      "status": "PASS",
+      "scientific_inputs": 10,
+      "retained_source_files": 12,
+      "execution_inputs": 32,
+      "runtime_files": 17,
+      "option_transport_sources": 8,
+      "source_revisions": 4
+    },
+    {
+      "check": "R2 repair_history equals freshly rechecked clean committed original manifests, approval, failure, review and four accepted packages",
+      "status": "PASS"
+    },
+    {
+      "check": "Original scientific manifest equals f79b872 bytes; R2 manifest equals4e35e36 bytes",
+      "status": "PASS"
+    },
+    {
+      "check": "R1 versus R2 runtime, Python identity/platform, process limits, checker/build/export invocation, environment, baseline and smoke contract",
+      "status": "UNCHANGED"
+    },
+    {
+      "check": "R2 Lake template156bytes, finite8192 setting and8 exact pinned option source files",
+      "status": "PASS"
+    },
+    {
+      "check": "Absent committed R2 independent review rejects construction gate",
+      "status": "PASS"
+    },
+    {
+      "check": "No construction-run-0002 before this review; working tree clean at review start",
+      "status": "PASS"
+    },
+    {
+      "check": "67 resource preparation tests plus3 inventory tests and1 foreign-checkout replay",
+      "status": "PASS",
+      "timing": "Independently run for staged R2 repair; exact tested control/construct/test bytes match the now committed manifest. No test repetition was needed."
+    }
+  ],
+  "approved_operation": "After this exact review is committed, run a fresh construction attempt using the R2 manifest and frozen producer for all twelve fixed inputs. The first four source/export/case packages must match original bytes, each successful build must retain and verify generated module setup maxRecDepth8192, and all twelve inputs must independently audit before corpus publication.",
+  "failure_policy": "Preserve R1 unchanged. Record all new process receipts/raw streams and any failed attempt; a changed scientific input, failed option transport, control fault or differing old package pauses construction for same-item diagnosis. Do not substitute sizes or treat build failures as checker resource observations.",
+  "measurement_limits": "Sampled RSS uncertainty and wait4 descendant attribution remain as reviewed. The recursion setting affects construction only; observer profiles and per-process safety limits are unchanged.",
+  "observer_launch_authorization": false,
+  "remaining_gates": [
+    "Commit this exact R2 preconstruction review",
+    "Independently review resulting12case corpus and every build/export receipt plus prior/new attempt accounting",
+    "Seal exact corpus after independent approval",
+    "Separate committed smoke-manifest launch approval and positive-profile result review",
+    "Separate scientific launch approval for24cells and12baselines; diagnose any observed scientific limit independently"
+  ]
+}
