@@ -1,6 +1,7 @@
 """Freeze/launch ordering controls; no selected source is rendered here."""
 
 from pathlib import Path
+import json
 import tempfile
 import unittest
 from unittest.mock import patch
@@ -12,6 +13,46 @@ from lib.resource_envelope_supervisor import SupervisedResult
 
 
 class ResourceEnvelopeControlTests(unittest.TestCase):
+    def test_python_runtime_symlink_swap_and_target_bytes_fail_closed(self):
+        with tempfile.TemporaryDirectory() as temp:
+            base = Path(temp)
+            target_a, target_b = base / "python-a", base / "python-b"
+            target_a.write_bytes(b"synthetic interpreter A")
+            target_b.write_bytes(b"synthetic interpreter B")
+            link = base / "python"
+            link.symlink_to(target_a)
+            science_path, execution_path, review_path = (base / name for name in
+                                                         ("science.json", "execution.json", "review.json"))
+            science = {"scientific_inputs": [], "source_files": [], "source_revisions": {}}
+            science_path.write_text(json.dumps(science))
+            with patch.object(control.sys, "executable", str(link)):
+                identity = control._python_invocation_identity()
+                with self.assertRaisesRegex(control.GateError, "missing/nonregular"):
+                    control.binding(link)
+                execution = {"execution_inputs": [], "runtime": [],
+                             "scientific_manifest": control.binding(science_path),
+                             "python_invocation": identity}
+                execution_path.write_text(json.dumps(execution))
+                review_path.write_text(json.dumps({
+                    "verdict": "PASS_FOR_CONSTRUCTION",
+                    "scientific_manifest_sha256": control.binding(science_path)["sha256"],
+                    "execution_manifest_sha256": control.binding(execution_path)["sha256"]}))
+                with patch.multiple(control, SCIENCE=science_path, EXECUTION=execution_path,
+                                    PRECONSTRUCTION_REVIEW=review_path), \
+                     patch.object(control, "_active_frontier"), \
+                     patch.object(control, "_committed"), \
+                     patch.object(control, "_source_revisions", return_value={}):
+                    control.require_construction_gate()
+                    link.unlink()
+                    link.symlink_to(target_b)
+                    with self.assertRaisesRegex(control.GateError, "Python invocation"):
+                        control.require_construction_gate()
+                    link.unlink()
+                    link.symlink_to(target_a)
+                    target_a.write_bytes(b"changed interpreter A")
+                    with self.assertRaisesRegex(control.GateError, "Python invocation"):
+                        control.require_construction_gate()
+
     def test_empty_baseline_bytes_match_retained_metadata(self):
         prior = (control.ROOT /
                  "results/research/valid-dependent-term-pilot-1/prepare-run-0003/staged/exports/vdtp1-pi-01.ndjson")
@@ -35,7 +76,8 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
     def test_construction_manifest_and_review_bindings_fail_closed(self):
         science = {"scientific_inputs": [], "source_files": [], "source_revisions": {}}
         execution = {"execution_inputs": [], "runtime": [],
-                     "scientific_manifest": {"sha256": "stale"}}
+                     "scientific_manifest": {"sha256": "stale"},
+                     "python_invocation": {"synthetic": 1}}
         review = {"verdict": "PASS_FOR_CONSTRUCTION",
                   "scientific_manifest_sha256": "science", "execution_manifest_sha256": "execution"}
         def fake_read(path):
@@ -46,6 +88,7 @@ class ResourceEnvelopeControlTests(unittest.TestCase):
                     control.EXECUTION: {"sha256": "execution"}}[path]
         with patch.object(control, "_active_frontier"), patch.object(control, "_committed"), \
              patch.object(control, "_source_revisions", return_value={}), \
+             patch.object(control, "_python_invocation_identity", return_value={"synthetic": 1}), \
              patch.object(control, "_read", side_effect=fake_read), \
              patch.object(control, "binding", side_effect=fake_binding):
             with self.assertRaisesRegex(control.GateError, "science binding"):

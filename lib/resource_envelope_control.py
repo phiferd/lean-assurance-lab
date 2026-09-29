@@ -49,6 +49,8 @@ EXECUTION_PATHS = (
     "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r1.json",
     "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r2.json",
     "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r3.json",
+    "results/research/resource-envelope-pilot-1/execution-freeze-attempt-r1.json",
+    "results/research/resource-envelope-pilot-1/independent-execution-freeze-repair-review-r1.json",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r1-after-first-custody-edit.py.txt",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-tests-prefreeze-r1.py.txt",
     "results/research/resource-envelope-pilot-1/review-evidence/launch-prefreeze-r2-before-prefix-verifier.py.txt",
@@ -123,6 +125,25 @@ class GateError(ValueError):
 
 def _sha(raw: bytes) -> str:
     return hashlib.sha256(raw).hexdigest()
+
+
+def _python_invocation_identity() -> dict[str, Any]:
+    """Bind the exact symlink invocation and its regular target, narrowly."""
+    invocation = Path(sys.executable)
+    if not invocation.is_symlink():
+        raise GateError("preflight Python invocation is no longer a symlink")
+    target = invocation.resolve(strict=True)
+    if target.is_symlink() or not target.is_file():
+        raise GateError("Python invocation does not resolve to a regular executable")
+    resolved = binding(target)
+    flat_bytes = invocation.read_bytes()
+    if len(flat_bytes) != resolved["bytes"] or _sha(flat_bytes) != resolved["sha256"]:
+        raise GateError("Python symlink bytes differ from resolved target")
+    return {"invocation_path": str(invocation),
+            "link_target": os.readlink(invocation),
+            "resolved_target": resolved,
+            "invocation_bytes": len(flat_bytes),
+            "invocation_sha256": _sha(flat_bytes)}
 
 
 def binding(path: Path) -> dict[str, Any]:
@@ -259,9 +280,11 @@ def freeze_execution() -> dict[str, Any]:
         raise GateError("empty baseline metadata differs")
     if (BASE / "baseline-empty.ndjson").read_bytes() != EMPTY_EXPORT:
         raise GateError("baseline file differs from exact frozen empty export")
+    python_identity = _python_invocation_identity()
     runtime = [ROOT / EXPORTER_BINARY, ROOT / OFFICIAL_BINARY,
                ROOT / NANODA_BINARY, TOOLCHAIN / "lake", TOOLCHAIN / "lean",
-               Path(sys.executable), Path("/bin/ps"), Path("/bin/sh"),
+               Path(python_identity["resolved_target"]["path"]),
+               Path("/bin/ps"), Path("/bin/sh"),
                Path("/bin/sleep"), *LEAN_RUNTIME_LIBRARIES]
     for path in runtime:
         binding(path)
@@ -272,8 +295,14 @@ def freeze_execution() -> dict[str, Any]:
         BASE / "review-evidence/actual-host-supervisor-preflight.py",
         ROOT / "lib/resource_envelope_supervisor.py",
         ROOT / "lib/resource_envelope_observe.py",
-        Path(sys.executable), Path("/bin/ps"), Path("/bin/sh"), Path("/bin/sleep")]
-    if attestation.get("tooling_runtime") != [binding(path) for path in expected_preflight_tools]:
+        Path("/bin/ps"), Path("/bin/sh"), Path("/bin/sleep")]
+    flat_python = {"path": python_identity["invocation_path"],
+                   "bytes": python_identity["invocation_bytes"],
+                   "sha256": python_identity["invocation_sha256"]}
+    expected_preflight_bindings = ([binding(path) for path in expected_preflight_tools[:3]]
+                                   + [flat_python]
+                                   + [binding(path) for path in expected_preflight_tools[3:]])
+    if attestation.get("tooling_runtime") != expected_preflight_bindings:
         raise GateError("positive preflight did not cover current supervisor/runtime bytes")
     if (attestation.get("host") != {"system": platform.system(),
                                      "release": platform.release(),
@@ -341,6 +370,7 @@ def freeze_execution() -> dict[str, Any]:
         "scientific_manifest": binding(SCIENCE),
         "execution_inputs": [binding(ROOT / relative) for relative in EXECUTION_PATHS],
         "runtime": [binding(path) for path in runtime],
+        "python_invocation": python_identity,
         "runtime_platform": {"system": platform.system(),
                              "release": platform.release(),
                              "machine": platform.machine(),
@@ -382,6 +412,8 @@ def require_construction_gate() -> tuple[dict[str, Any], dict[str, Any]]:
         _check_binding(row, committed=True)
     for row in execution["runtime"]:
         _check_binding(row, committed=False)
+    if execution.get("python_invocation") != _python_invocation_identity():
+        raise GateError("Python invocation symlink or target differs from frozen execution")
     if execution["scientific_manifest"] != binding(SCIENCE):
         raise GateError("execution manifest science binding differs")
     review = _read(PRECONSTRUCTION_REVIEW)

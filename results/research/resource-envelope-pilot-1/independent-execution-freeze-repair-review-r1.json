@@ -1,0 +1,125 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "EXECUTION_FREEZE_REPAIR_R1",
+  "reviewed_at": "2026-09-29T01:05:12.513925+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the execution freeze stopped because the Python command is a filesystem link. The repaired control records that link and the exact executable it points to. All 64 synthetic preparation tests pass; no selected terms or checker outcomes exist.",
+    "is_it_interesting": "Yes, as an evidence-custody repair: changing the command link or executable now invalidates approval without allowing links in ordinary scientific inputs. This is not a Lean scientific result.",
+    "does_it_require_more_work": "Commit the exact reviewed repair and failure record, then freeze and commit the execution manifest. Obtain a separate review of both committed manifests before constructing selected inputs."
+  },
+  "verdict": "PASS_EXECUTION_FREEZE_REPAIR_ONLY",
+  "reviewed_inputs": [
+    {
+      "path": "lib/resource_envelope_control.py",
+      "bytes": 22435,
+      "sha256": "34ef30a86e0f2a9635cb0aef48fc0178b544692f9b90330bba558aade5f62b6a"
+    },
+    {
+      "path": "tests/test_resource_envelope_control.py",
+      "bytes": 7635,
+      "sha256": "0692c43bacac138465e856bb4a093c95680ae49f8291177200875086df1ce087"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/execution-freeze-attempt-r1.json",
+      "bytes": 1433,
+      "sha256": "806f8672240eebc6b9458ed0070f668096b0ea34ea452f9b0c8ee71bac8b16bb"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/scientific-manifest.json",
+      "bytes": 6832,
+      "sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/preflight-run-0001/provenance-attestation.json",
+      "bytes": 2908,
+      "sha256": "411577879522b1a99459c5d77e9bfd38522d4c7c08eb57268209ff2a90075f5a"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-preflight-review.json",
+      "bytes": 5828,
+      "sha256": "242e9c7d1d1dafdd16e0ccb95b0cd05b62036c8b3cc26dacfa2de42c117d5c7e"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-launch-controller-review-r3.json",
+      "bytes": 11512,
+      "sha256": "ec83869fc8a5d62626adf50858bb2a26463ed4944c0ff1735a20da8d3a135a50"
+    },
+    {
+      "path": "lib/resource_envelope_supervisor.py",
+      "bytes": 18461,
+      "sha256": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"
+    },
+    {
+      "path": "lib/resource_envelope_observe.py",
+      "bytes": 9503,
+      "sha256": "bdc09737da04b489c96239e01abf86908048420456dba1c763e50876364979c2"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/source/plan-at-freeze.md",
+      "bytes": 3921,
+      "sha256": "ebd3200eecb26a93b7d5466c718bd953cb9cdfb2dd91353fdf5222977ad58c42"
+    }
+  ],
+  "original_failed_control": {
+    "git_commit": "f79b872bd8e4fe77b7a2da630c6e5893e0afd682",
+    "path": "lib/resource_envelope_control.py",
+    "bytes": 20611,
+    "sha256": "bc941aca1c28ebed05cf0df1254ca522e6245fae3554269f98db352e939a1b5c"
+  },
+  "failure_review": [
+    "Preserved failure record identifies original committed control, scientific manifest and preflight attestation; each binding independently matched its original committed blob.",
+    "Failure preceded execution-manifest write. Current tree contains no execution manifest, selected corpus, construction or observer run.",
+    "Historical preflight attestation remains unchanged and is explicitly post-run provenance. This repair does not retroactively claim the symlink identity was recorded at preflight time."
+  ],
+  "repair_review": [
+    "Generic binding and committed-input checks still reject symlinks. Only the already used Python invocation receives a separate narrow identity object.",
+    "Identity binds invocation path, literal link target, resolved regular target path, byte count and SHA256. Construction gates compare the entire identity on every use.",
+    "Resolved executable exactly matches the original preflight flat Python byte/hash binding; supervisor, classifier and actual measurement runtime bytes remain unchanged. No new actual-host measurement is warranted for this custody-only repair.",
+    "Execution manifest retains the resolved runtime binary binding plus explicit invocation identity; construction and launch chains call the same construction gate.",
+    "Changed target and changed target bytes fail the synthetic construction gate; generic symlink inputs continue to fail."
+  ],
+  "python_identity_observed": {
+    "invocation_path": "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+    "link_target": "python3.10",
+    "resolved_target": {
+      "path": "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3.10",
+      "bytes": 152624,
+      "sha256": "aec1c00170b6ad6497ef3e9fa5d98fa9669bc00588df1b25e381cf7857edfe8a"
+    },
+    "invocation_bytes": 152624,
+    "invocation_sha256": "aec1c00170b6ad6497ef3e9fa5d98fa9669bc00588df1b25e381cf7857edfe8a"
+  },
+  "checks": [
+    {
+      "command": "PYTHONPATH=. python3 tests/test_resource_envelope_control.py",
+      "tests": 8,
+      "status": "PASS"
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p 'test_resource_envelope_*.py' -q",
+      "tests": 64,
+      "status": "PASS"
+    },
+    {
+      "command": "git diff --check",
+      "status": "PASS"
+    },
+    {
+      "check": "live item plan versus frozen snapshot",
+      "status": "BYTE_IDENTICAL"
+    },
+    {
+      "check": "original failed-control/science/preflight hashes and current resolved Python versus preflight",
+      "status": "PASS"
+    }
+  ],
+  "scientific_manifest_sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b",
+  "remaining_gates": [
+    "Commit exact repaired control/tests/failure and this review before execution freeze retry",
+    "Freeze and commit execution manifest without changing frozen scientific inputs",
+    "Independent PASS_FOR_CONSTRUCTION review binding both committed manifest hashes",
+    "Independent generated-corpus audit/seal, smoke launch/result review and separate scientific-launch review"
+  ],
+  "construction_or_launch_authorization": false
+}
