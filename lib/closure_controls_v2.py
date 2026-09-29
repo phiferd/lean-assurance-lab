@@ -18,6 +18,7 @@ import subprocess
 import sys
 import os
 import tempfile
+from typing import Iterator
 
 ROOT = Path(__file__).resolve().parents[1]
 SUITE = ["scripts/run-unit-tests-with-signal-retry", "--require-full-payload"]
@@ -59,7 +60,10 @@ def host_rss_preflight(*, run=subprocess.run, pid: int | None = None) -> dict:
     return {"command": command, "rss_kib": int(raw), "status": "PASS"}
 
 
-def _scope(root: Path, scope_file: str) -> tuple[str, list[str]]:
+STAGE_DEPENDENCY_KEYS = {"status", "suite", "publication"}
+
+
+def _scope(root: Path, scope_file: str) -> tuple[str, list[str], dict[str, list[str]]]:
     path = Path(scope_file)
     if path.is_absolute() or path.as_posix().startswith("../") or ".." in path.parts:
         raise ValueError("scope file must be a repository-relative path")
@@ -67,7 +71,9 @@ def _scope(root: Path, scope_file: str) -> tuple[str, list[str]]:
         scope = json.loads((root / path).read_text())
     except (OSError, json.JSONDecodeError) as error:
         raise ValueError(f"could not read scope file: {error}") from error
-    if (set(scope) != {"schema_version", "scope", "paths"} or scope["schema_version"] != 1
+    if (set(scope) not in ({"schema_version", "scope", "paths"},
+                           {"schema_version", "scope", "paths", "stage_dependencies"})
+        or scope["schema_version"] not in {1, 2}
         or not isinstance(scope["scope"], str) or not scope["scope"].strip()
         or not isinstance(scope["paths"], list) or not scope["paths"]):
         raise ValueError("invalid declared inventory scope")
@@ -76,11 +82,33 @@ def _scope(root: Path, scope_file: str) -> tuple[str, list[str]]:
             or ".." in Path(p).parts or Path(p).as_posix() != p for p in paths)
         or len(set(paths)) != len(paths) or scope["paths"] != sorted(scope["paths"])):
         raise ValueError("scope paths must be sorted, unique repository-relative files")
-    return scope["scope"], paths
+    if scope["schema_version"] == 1:
+        if "stage_dependencies" in scope:
+            raise ValueError("schema v1 cannot declare stage dependencies")
+        dependencies = {name: list(paths) for name in STAGE_DEPENDENCY_KEYS}
+    else:
+        dependencies = scope.get("stage_dependencies")
+        if (not isinstance(dependencies, dict)
+                or set(dependencies) != STAGE_DEPENDENCY_KEYS):
+            raise ValueError("schema v2 must declare status, suite and publication dependencies")
+        declared = set(scope["paths"])
+        for name, values in dependencies.items():
+            if (not isinstance(values, list) or not values
+                    or values != sorted(values) or len(values) != len(set(values))
+                    or any(not isinstance(value, str) or value not in declared
+                           for value in values)):
+                raise ValueError(f"invalid {name} stage dependencies")
+        if set(dependencies["publication"]) != declared:
+            raise ValueError("publication dependencies must cover every declared path")
+        if set().union(*(set(values) for values in dependencies.values())) != declared:
+            raise ValueError("every declared path must belong to at least one stage dependency set")
+        dependencies = {name: [scope_file, *values]
+                        for name, values in dependencies.items()}
+    return scope["scope"], paths, dependencies
 
 
 def committed_inventory(root: Path, scope_file: str) -> dict:
-    scope, paths = _scope(root, scope_file)
+    scope, paths, dependencies = _scope(root, scope_file)
     commit = _git(root, "rev-parse", "--verify", "HEAD^{commit}").decode().strip()
     rows = []
     for path in paths:
@@ -93,8 +121,73 @@ def committed_inventory(root: Path, scope_file: str) -> dict:
         if actual != committed:
             raise ValueError(f"declared input differs from committed bytes: {path}")
         rows.append({"path": path, "git_blob": blob, "sha256": _sha(actual), "bytes": len(actual)})
-    return {"schema_version": 1, "scope": scope, "scope_file": scope_file,
-            "commit": commit, "files": rows}
+    return {"schema_version": 2, "scope": scope, "scope_file": scope_file,
+            "commit": commit, "files": rows, "stage_dependencies": dependencies}
+
+
+def dependency_inventory(inventory: dict, dependency_set: str) -> dict:
+    """Return the content-only inputs for one stage, deliberately excluding HEAD."""
+    if dependency_set not in STAGE_DEPENDENCY_KEYS:
+        raise ValueError(f"unknown stage dependency set: {dependency_set}")
+    rows = inventory.get("files")
+    if not isinstance(rows, list):
+        raise ValueError("inventory has no file bindings")
+    by_path = {row.get("path"): row for row in rows if isinstance(row, dict)}
+    declared = inventory.get("stage_dependencies")
+    paths = declared.get(dependency_set) if isinstance(declared, dict) else list(by_path)
+    if (not isinstance(paths, list) or len(paths) != len(set(paths))
+            or any(path not in by_path for path in paths)):
+        raise ValueError(f"inventory has incomplete {dependency_set} dependencies")
+    return {"schema_version": 1, "scope_file": inventory.get("scope_file"),
+            "dependency_set": dependency_set, "files": [by_path[path] for path in paths]}
+
+
+def matching_publication_inputs(root: Path, scope_file: str, validated: dict) -> dict:
+    """Require current publication bytes to match the validated content snapshot."""
+    current = committed_inventory(root, scope_file)
+    expected = dependency_inventory(validated, "publication")
+    actual = dependency_inventory(current, "publication")
+    if actual != expected:
+        raise ValueError("publication inputs no longer match validated snapshot")
+    return actual
+
+
+@contextmanager
+def validation_snapshot(root: Path, inventory: dict) -> Iterator[Path]:
+    """Materialize the bound commit away from the mutable publication worktree."""
+    parent = Path(tempfile.mkdtemp(prefix="lean-assurance-validation-snapshot-"))
+    checkout = parent / "checkout"
+    added = False
+    try:
+        result = subprocess.run(
+            ["git", "worktree", "add", "--detach", str(checkout), inventory["commit"]],
+            cwd=root, stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
+        if result.returncode:
+            raise ValueError("could not materialize validation snapshot: "
+                             + result.stderr.decode(errors="replace").strip())
+        added = True
+        # Full-payload integration data are intentionally ignored by Git. Their
+        # item validators bind their exact bytes; expose the same host payload to
+        # the isolated tracked checkout without copying tens of gigabytes.
+        for relative in (Path("external"), Path("results/coverage")):
+            source = root / relative
+            if source.exists():
+                target = checkout / relative
+                target.parent.mkdir(parents=True, exist_ok=True)
+                target.symlink_to(source, target_is_directory=True)
+        snapshot_inventory = committed_inventory(checkout, inventory["scope_file"])
+        for name in STAGE_DEPENDENCY_KEYS:
+            if dependency_inventory(snapshot_inventory, name) != dependency_inventory(inventory, name):
+                raise ValueError(f"materialized validation snapshot changed {name} inputs")
+        yield checkout
+    finally:
+        if added:
+            subprocess.run(["git", "worktree", "remove", "--force", str(checkout)],
+                           cwd=root, stdout=subprocess.PIPE, stderr=subprocess.PIPE,
+                           check=False)
+        shutil.rmtree(parent, ignore_errors=True)
+        subprocess.run(["git", "worktree", "prune"], cwd=root,
+                       stdout=subprocess.PIPE, stderr=subprocess.PIPE, check=False)
 
 
 def write_new(path: Path, value: dict) -> None:
@@ -311,9 +404,11 @@ def _receipt_ref(path: Path, output_root: Path) -> dict:
 
 def _run_command_stage(root: Path, output_root: Path, stage: str, command: list[str],
                        inventory: dict, prior: list[dict], attempt: dict, *, env=None,
-                       bind_worktree: bool = False) -> dict:
+                       bind_worktree: bool = False,
+                       execution_root: Path | None = None) -> dict:
     stage_root = output_root / "stages" / stage
-    identity = _command_identity(root, command)
+    command_root = execution_root or root
+    identity = _command_identity(command_root, command)
     spec, spec_hash = _stage_spec(stage=stage, inventory=inventory, prior=prior,
                                   command=command, identity=identity,
                                   worktree_sha256=_worktree_digest(root) if bind_worktree else None)
@@ -338,7 +433,7 @@ def _run_command_stage(root: Path, output_root: Path, stage: str, command: list[
         actual_env = {name: value.replace("{stage_dir}", str(stage_dir))
                       for name, value in env.items()}
     try:
-        code = _run_logged(root, actual_command, log, env=actual_env)
+        code = _run_logged(command_root, actual_command, log, env=actual_env)
     except BaseException as error:
         controls = {"schema_version": 1, "stage": stage, "status": "INTERRUPTED",
                     "specification_sha256": spec_hash, "command": actual_command,
@@ -410,37 +505,48 @@ def finish_resumable(root: Path, scope_file: str, output_dir: Path) -> int:
             attempt["owner"] = owner
             preflight = host_rss_preflight()
             inventory = committed_inventory(root, scope_file)
+            attempt["validated_commit"] = inventory["commit"]
+            status_inputs = dependency_inventory(inventory, "status")
+            suite_inputs = dependency_inventory(inventory, "suite")
+            publication_inputs = dependency_inventory(inventory, "publication")
             preflight_ref = _run_value_stage(output_dir, "00-host-rss-preflight", preflight,
-                                             inventory, [], attempt)
+                                             status_inputs, [], attempt)
             inventory_ref = _run_value_stage(output_dir, "01-committed-input-inventory",
-                                             inventory, inventory, [preflight_ref], attempt)
+                                             {"schema_version": 1,
+                                              "status": status_inputs,
+                                              "suite": suite_inputs,
+                                              "publication": publication_inputs},
+                                             publication_inputs, [preflight_ref], attempt)
             status_ref = _run_command_stage(root, output_dir, "02-status-preflight",
-                                            STATUS_PREFLIGHT, inventory, [inventory_ref], attempt)
+                                            STATUS_PREFLIGHT, status_inputs,
+                                            [], attempt)
             suite_env = os.environ.copy()
             # Control-test receipts stay under this non-research stage directory.
             suite_env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"] = "{stage_dir}/control-receipts"
-            suite_ref = _run_command_stage(root, output_dir, "03-full-suite", SUITE,
-                                           inventory, [status_ref], attempt, env=suite_env)
-            if committed_inventory(root, scope_file) != inventory:
-                raise ValueError("declared committed inputs changed during full suite")
+            with validation_snapshot(root, inventory) as snapshot:
+                suite_ref = _run_command_stage(root, output_dir, "03-full-suite", SUITE,
+                                               suite_inputs, [status_ref], attempt,
+                                               env=suite_env, execution_root=snapshot)
+            matching_publication_inputs(root, scope_file, inventory)
             validation = {"schema_version": 1, "status": "PASS",
                           "validated_at": datetime.now(timezone.utc).isoformat(),
                           "commit": inventory["commit"], "scope_file": scope_file,
-                          "input_inventory_sha256": _sha(_canonical(inventory)),
+                          "validation_input_sha256": _sha(_canonical(suite_inputs)),
+                          "publication_input_sha256": _sha(_canonical(publication_inputs)),
                           "suite_receipt": suite_ref}
             validation_ref = _run_value_stage(output_dir, "04-sealed-validation", validation,
-                                              inventory, [suite_ref], attempt)
+                                              suite_inputs, [suite_ref], attempt)
             refresh_ref = _run_command_stage(
                 root, output_dir, "05-dependency-ordered-refresh",
                 ["scripts/refresh-current-state", "--log-dir", "{stage_dir}/refresh"],
-                inventory, [validation_ref], attempt)
+                publication_inputs, [validation_ref], attempt)
             prior = [refresh_ref]
             for index, command in enumerate(CHECKS, 1):
                 prior = [_run_command_stage(root, output_dir, f"{index + 5:02d}-check-{index:02d}",
-                                            command, inventory, prior, attempt,
+                                            command, publication_inputs, prior, attempt,
                                             bind_worktree=True)]
-            if committed_inventory(root, scope_file) != inventory:
-                raise ValueError("declared committed inputs changed during generation or final checks")
+            matching_publication_inputs(root, scope_file, inventory)
+            attempt["publication_match"] = "PASS"
             attempt["status"] = "COMPLETE"
             attempt["validation_receipt"] = validation_ref
             attempt["terminal_receipt"] = prior[0]

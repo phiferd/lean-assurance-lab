@@ -22,6 +22,25 @@
     {"path": "tests/test_closure_controls.py", "sha256": "781cd274badd6e18989987910fece0ef30996542573dc18d01f138e9cc86cf2c"},
     {"path": "docs/research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md", "sha256": "b64a7e59c362033f5f84d89578c5ce597fd19d373ce7f8cbd566d6554f0ee8bd"}
   ],
+  "implementation_attempts": [
+    {
+      "attempt_id": "focused-invocation-0001",
+      "command": "python3 -m unittest tests.test_closure_controls",
+      "outcome": "FAILED_BEFORE_TEST_EXECUTION",
+      "observation": "The tests directory is not an importable Python package under dotted-module invocation; unittest reported one import error and ran no test.",
+      "repair": "Use unittest discovery with the exact test_closure_controls.py pattern."
+    },
+    {
+      "attempt_id": "focused-discovery-0001",
+      "command": "python3 -m unittest discover -s tests -p test_closure_controls.py",
+      "outcome": "PASS",
+      "observation": "All 25 focused closure-control tests passed, including immutable-snapshot ABA isolation, publication mismatch refusal, unrelated-document reuse, real dependency invalidation, resume, ownership, and cached-output tamper controls."
+    }
+  ],
+  "focused_validation": {
+    "tests": 25,
+    "status": "PASS"
+  },
   "scientific_launches": 0,
   "external_actions": []
 }

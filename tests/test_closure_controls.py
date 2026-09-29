@@ -23,6 +23,8 @@ class CommittedInventoryTests(TestCase):
         git(self.root, "init", "-q")
         git(self.root, "config", "user.name", "Test")
         git(self.root, "config", "user.email", "test@example.invalid")
+        git(self.root, "config", "gc.auto", "0")
+        git(self.root, "config", "maintenance.auto", "false")
         (self.root / "input.txt").write_bytes(b"exact input\n")
         self.scope = "scope.json"
         (self.root / self.scope).write_text(json.dumps({"schema_version": 1,
@@ -65,6 +67,21 @@ class CommittedInventoryTests(TestCase):
                     "scope": "fixed local test", "paths": paths}) + "\n")
                 with self.assertRaisesRegex(ValueError, "sorted, unique repository-relative"):
                     cc.committed_inventory(self.root, self.scope)
+
+    def test_v2_requires_complete_named_stage_dependencies(self):
+        value = {"schema_version": 2, "scope": "fixed local test", "paths": ["input.txt"],
+                 "stage_dependencies": {"status": ["input.txt"], "suite": ["input.txt"],
+                                        "publication": ["input.txt"]}}
+        (self.root / self.scope).write_text(json.dumps(value) + "\n")
+        git(self.root, "add", self.scope)
+        git(self.root, "commit", "-qm", "stage dependencies")
+        inventory = cc.committed_inventory(self.root, self.scope)
+        self.assertEqual(cc.dependency_inventory(inventory, "suite")["files"][1]["path"],
+                         "input.txt")
+        value["stage_dependencies"]["publication"] = []
+        (self.root / self.scope).write_text(json.dumps(value) + "\n")
+        with self.assertRaisesRegex(ValueError, "publication stage dependencies"):
+            cc.committed_inventory(self.root, self.scope)
 
 
 class ClosureOrderTests(TestCase):
@@ -242,6 +259,8 @@ class ResumableClosureTests(TestCase):
         git(self.root, "init", "-q")
         git(self.root, "config", "user.name", "Test")
         git(self.root, "config", "user.email", "test@example.invalid")
+        git(self.root, "config", "gc.auto", "0")
+        git(self.root, "config", "maintenance.auto", "false")
         (self.root / "input.txt").write_text("stable\n")
         self.scope = "scope.json"
         (self.root / self.scope).write_text(json.dumps({"schema_version": 1,
@@ -250,16 +269,18 @@ class ResumableClosureTests(TestCase):
         git(self.root, "commit", "-qm", "fixture")
         self.output = self.root / "results/workflow-validation/closure"
 
-    def fake_run(self, calls, interrupt_suite=False):
+    def fake_run(self, calls, interrupt_suite=False, suite_action=None):
         interrupted = {"done": False}
 
-        def run(_root, command, log, **kwargs):
+        def run(command_root, command, log, **kwargs):
             calls.append(command)
             log.parent.mkdir(parents=True, exist_ok=True)
             log.write_text("passed\n")
             if command[0] == "suite" and interrupt_suite and not interrupted["done"]:
                 interrupted["done"] = True
                 raise KeyboardInterrupt()
+            if command[0] == "suite" and suite_action is not None:
+                suite_action(command_root)
             env = kwargs.get("env")
             if command[0] == "suite" and env:
                 receipt_dir = Path(env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"])
@@ -275,7 +296,7 @@ class ResumableClosureTests(TestCase):
 
         return run
 
-    def controls(self, calls, *, interrupt_suite=False):
+    def controls(self, calls, *, interrupt_suite=False, suite_action=None):
         return (
             mock.patch.object(cc, "STATUS_PREFLIGHT", ["status"]),
             mock.patch.object(cc, "SUITE", ["suite"]),
@@ -287,7 +308,7 @@ class ResumableClosureTests(TestCase):
                                                                   "tool": command[0]}),
             mock.patch.object(cc, "_worktree_digest", return_value="0" * 64),
             mock.patch.object(cc, "_run_logged",
-                              side_effect=self.fake_run(calls, interrupt_suite)),
+                              side_effect=self.fake_run(calls, interrupt_suite, suite_action)),
         )
 
     def test_repository_owner_is_exclusive_and_os_released(self):
@@ -333,6 +354,80 @@ class ResumableClosureTests(TestCase):
         self.assertEqual(invalidated, ["03-full-suite", "04-sealed-validation",
                                        "05-dependency-ordered-refresh",
                                        "06-check-01", "07-check-02"])
+
+    def test_live_edit_and_restore_cannot_contaminate_snapshot_suite(self):
+        calls = []
+
+        def aba(snapshot):
+            self.assertNotEqual(snapshot.resolve(), self.root.resolve())
+            (self.root / "input.txt").write_text("contaminating edit\n")
+            self.assertEqual((snapshot / "input.txt").read_text(), "stable\n")
+            (self.root / "input.txt").write_text("stable\n")
+
+        patches = self.controls(calls, suite_action=aba)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        result = json.loads((self.output / "attempts/0001/result.json").read_text())
+        self.assertEqual(result["publication_match"], "PASS")
+        self.assertIn("03-full-suite", result["executed_stages"])
+
+    def test_publication_change_after_snapshot_refuses_result(self):
+        calls = []
+
+        def replace_publication(_snapshot):
+            (self.root / "input.txt").write_text("new committed input\n")
+            git(self.root, "add", "input.txt")
+            git(self.root, "commit", "-qm", "replace publication input")
+
+        patches = self.controls(calls, suite_action=replace_publication)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 1)
+        result = json.loads((self.output / "attempts/0001/result.json").read_text())
+        self.assertIn("publication inputs no longer match validated snapshot", result["error"])
+        self.assertNotIn("04-sealed-validation", result["executed_stages"])
+
+    def test_unrelated_document_commit_reuses_suite(self):
+        (self.root / "unrelated.md").write_text("first\n")
+        (self.root / self.scope).write_text(json.dumps({
+            "schema_version": 2, "scope": "stage-specific fixture",
+            "paths": ["input.txt", "unrelated.md"],
+            "stage_dependencies": {
+                "status": ["input.txt"], "suite": ["input.txt"],
+                "publication": ["input.txt", "unrelated.md"],
+            },
+        }) + "\n")
+        git(self.root, "add", "unrelated.md", self.scope)
+        git(self.root, "commit", "-qm", "unrelated report")
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        (self.root / "unrelated.md").write_text("second\n")
+        git(self.root, "add", "unrelated.md")
+        git(self.root, "commit", "-qm", "update unrelated report")
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        result = json.loads((self.output / "attempts/0002/result.json").read_text())
+        self.assertIn("03-full-suite", result["reused_stages"])
+        self.assertFalse(any(command[0] == "suite" for command in calls2))
+
+    def test_committed_test_dependency_change_invalidates_suite(self):
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        (self.root / "input.txt").write_text("changed test dependency\n")
+        git(self.root, "add", "input.txt")
+        git(self.root, "commit", "-qm", "change test dependency")
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        result = json.loads((self.output / "attempts/0002/result.json").read_text())
+        self.assertIn("03-full-suite", result["executed_stages"])
+        self.assertTrue(any(command[0] == "suite" for command in calls2))
 
     def test_interruption_preserves_failure_and_resume_reuses_valid_prefix(self):
         calls = []
