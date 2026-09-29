@@ -77,6 +77,18 @@
       "observation": "The controller rejected the amended scope because two newly added paths were not lexicographically sorted.",
       "repair": "Sort the two paths and recommit the exact scope before retrying; no closure stage or scientific process ran.",
       "scientific_launches": 0
+    },
+    {
+      "attempt_id": "ordered-closure-0004-reference-repair",
+      "command": "scripts/closure-controls finish --scope-file results/research/workflow-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/workflow-closure-reliability-1",
+      "outcome": "COMPLETE_BUT_RESULT_REFERENCE_STALE",
+      "observation": "Attempt 0004 completed all eleven stages and passed the 1,642-test current, 73-test frozen-publication and 9-test portfolio/history partitions. The result artifact still named attempt 0003 because the earlier scope refusal had consumed that attempt identity.",
+      "repair": "Preserve attempts 0003 and 0004, prebind the next unused identity 0005 in the result artifact, and rerun closure against that exact committed artifact set.",
+      "evidence": [
+        "results/workflow-validation/workflow-closure-reliability-1/attempts/0003/result.json",
+        "results/workflow-validation/workflow-closure-reliability-1/attempts/0004/result.json"
+      ],
+      "scientific_launches": 0
     }
   ]
 }
