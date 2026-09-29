@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "status": "ENGINEERING_VALIDATION_RETRY_REQUIRED",
+  "observed_at_utc": "2026-09-29T02:58:05Z",
+  "command": "python3 scripts/run-unit-tests",
+  "exit_code": 1,
+  "plain_language": {
+    "what_did_we_find": "Provisional: the first full-suite closure attempt failed while the queue and status were being edited together. The current test partition ran 1,608 tests and reported 13 errors; the historical publication partition passed 73 tests. A later portfolio checkpoint also rejected a temporary status hash mismatch. The result does not change any scientific observer outcome.",
+    "is_it_interesting": "No scientific finding follows. It exposed an invalid concurrent closure sequence: validation began before durable status and strategic evidence hashes were stable.",
+    "does_it_require_more_work": "Wait for the state owner to commit and independently review the synchronized status, queue and strategic record. Then rerun the full suite with a file-backed log and continue the ordered closure controls."
+  },
+  "observations": {
+    "current_partition": "Ran 1608 tests in 468.264s; FAILED (errors=13)",
+    "historical_publication_partition": "Ran 73 tests in 152.634s; OK",
+    "first_observed_error_type": "ValueError",
+    "first_observed_error": "Active status section does not contain the selected-item marker",
+    "first_observed_stack": [
+      "lib/survivor_universe_equivalence_historical.py:140 validate",
+      "lib/research_queue_v4.py:105 load_queue",
+      "lib/research_queue_v2.py:136 validate_queue"
+    ],
+    "final_checkpoint_error_type": "ValueError",
+    "final_checkpoint_error": "strategic evidence hash mismatch: docs/RESEARCH_STATUS.md",
+    "final_checkpoint_stack": [
+      "lib/portfolio_historical_snapshot_v2.py:134 run_historical_tests",
+      "lib/portfolio_historical_snapshot_v2.py:39 validate_live_transition",
+      "lib/research_queue_v4.py:105 load_queue",
+      "lib/research_queue_v3.py:120 _review"
+    ]
+  },
+  "capture_limit": "The command used an interactive PTY stream rather than a file-backed log. Tool output chunks were truncated, so the complete raw stdout/stderr cannot be reconstructed. The values and traceback excerpts above are the exact visible output, not a purported full log.",
+  "scientific_launches_during_validation": 0,
+  "recovery": "Run the full suite again only after synchronized state is committed and stable; retain a file-backed complete log for that retry."
+}
