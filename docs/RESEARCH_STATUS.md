@@ -3214,15 +3214,18 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
-It is READY and unstarted under [its read-only plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
-The canonical queue retains one READY item,
-`RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`, and zero ACTIVE items. The completed E0
-screen is INCONCLUSIVE: its fixed selector produced no inventory because all 170
-modeled semantic sites were already represented, while 332 other parsed sites
-were outside the retained semantic model. No confirmation proposal follows.
-BUILD-MODE remains PLANNED behind its source/configuration gate; independent
-transfer still waits for an owner-designated holdout package.
+Selected next item: `E0-LAZYLEAN-SEMANTIC-EXTENSION-1`.
+It is READY and unstarted under [its two-family E0 plan](research/E0_LAZYLEAN_SEMANTIC_EXTENSION_1_PLAN.md).
+The canonical queue retains one READY item and zero ACTIVE items. The completed
+Nanoda E0 screen is INCONCLUSIVE: its fixed selector produced no inventory
+because all 170 modeled semantic sites were already represented, while 332
+other parsed sites were outside the retained semantic model. No confirmation
+proposal follows from that result. The selected LazyLean screen asks a separate
+small delta/iota question beyond the six completed beta/zeta cases; it has not
+constructed or tested new fixtures. The validation-input snapshot and stage-specific reuse closure repair is PLANNED
+as a prerequisite before any future confirmation, and the eighteen-receipt
+memory audit is DEFERRED. BUILD-MODE retains its source/configuration gate;
+independent transfer still waits for an owner-designated holdout package.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3365,8 +3368,10 @@ no external action is recommended now.
 | 8 | `REAL-PROOF-SLICES-PILOT-1` | COMPLETE, SUCCESS; nine accepted slices and three oversize |
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
-| 11 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; read-only scope retained after owner process reprioritization |
-| 12 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | READY, unstarted; delta/iota screening only |
+| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | PLANNED; prerequisite before future confirmation |
+| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; read-only scope retained |
+| 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |

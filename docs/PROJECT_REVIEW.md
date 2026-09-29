@@ -20,32 +20,66 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete E0-LAZYLEAN-SEMANTIC-EXTENSION-1: Screen LazyLean delta and iota semantic cases; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1**.
+Selected next item: **E0-LAZYLEAN-SEMANTIC-EXTENSION-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 11 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | READY |
-| 12 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
-| 29 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
-| 48 | CVC-4: Connect the contract to real validation behavior | PLANNED |
-| 49 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
-| 67 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 11 | E0-LAZYLEAN-SEMANTIC-EXTENSION-1: Screen LazyLean delta and iota semantic cases | READY |
+| 12 | SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1: Isolate validation inputs and repair stage reuse before confirmation | PLANNED |
+| 13 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | DEFERRED |
+| 14 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
+| 31 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
+| 50 | CVC-4: Connect the contract to real validation behavior | PLANNED |
+| 51 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
+| 69 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 
-### 11. RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting
+### 11. E0-LAZYLEAN-SEMANTIC-EXTENSION-1: Screen LazyLean delta and iota semantic cases
+
+**Target:** Pinned lazylean v0.3.0, retained supervised adapter, at most one candidate/control pair each for delta unfolding and constructor-headed iota reduction on two exact profiles
+
+Prepare source-supported lean4export fixtures and run a small E0 screening matrix with retained raw attempts and targeted reduction counters.
+
+**Why this rank:** Selected after the exhausted Nanoda selector because the retained independent implementation and adapter expose delta and iota mechanisms with counters, while the memory audit interprets older receipts and remains feasible later.
+
+**Completion:** Retained E0 start/attempt/finish evidence classifies both declared families as SIGNAL, NO_SIGNAL or INCONCLUSIVE with controls, exact raw output, demand observations, cost and a concrete confirm-or-stop recommendation.
+
+**Stop:** Finish the two-family sample after feasible repairs or record a genuine invalid-input/capability boundary; at most four new fixtures and eight planned profile cells; process safety limits remain nonterminal; no confirmation, assurance-state change, frozen edit or external write.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** READY: READY and unstarted under docs/research/E0_LAZYLEAN_SEMANTIC_EXTENSION_1_PLAN.md. Mark the campaign ACTIVE and append an exact E0 start before constructing or launching trial fixtures; bind pinned source/binary, portability patch, adapter, supervisor and sample. No trial has started.
+
+### 12. SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1: Isolate validation inputs and repair stage reuse before confirmation
+
+**Target:** Immutable validation input checkout or snapshot, matching publication check, stage-specific complete dependencies and historical replay
+
+Prevent arbitrary edit-and-restore contamination of validation; replace global HEAD-based reuse invalidation with complete per-stage dependency bindings.
+
+**Why this rank:** Planned prerequisite for later E1 confirmation, while current E0 proceeds. Distinct from the fresh-checkout exploration-ledger CI repair.
+
+**Completion:** Passing ABA edit-and-restore isolation and publication regression, unrelated-doc reuse and actual test-dependency invalidation regressions, full current/historical suite and separate-checkout ordered closure.
+
+**Stop:** Repair the two scoped closure defects within the same item until exact-input publication and complete stage dependencies pass, or a genuine unavailable capability remains; no scientific launch, frozen edit, weakened gate or external write.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** PLANNED: PLANNED under docs/research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md. Promote by recorded strategic selection after the E0 handoff or when a confirmation proposal requires it; inventory concrete failures and bind inputs before shared tooling edits.
+
+### 13. RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting
 
 **Target:** Exactly 18 Nanoda receipts from RESOURCE-ENVELOPE-PILOT-1: 12 scientific runs and 6 empty-input baselines
 
 Read-only audit of receipt labels and raw/normalized wait4 fields, supervisor source, primary operating-system documentation, and historical Darwin runtime identity; publish a scoped interpretation or explicit attribution boundary and a future metadata/reporting rule.
 
-**Why this rank:** Selected at resource-matrix closure as the highest-value feasible local follow-up: it addresses an observed gap in 18 exact receipts, reuses the prior XNU-main correction and retained supervisor, and has a finite read-only deliverable. BUILD-MODE lacks a concrete input-influenced source site and exact reproducible toolchain; other reviewed candidates retain unmet independent gates.
+**Why this rank:** Deferred after 2026-09-29 project-wide review: the exact eighteen-receipt interpretation gap remains real and feasible, but a bounded new LazyLean semantic E0 screen offers higher near-term discovery value. The audit retains its fixed read-only scope.
 
 **Completion:** A reproducible eighteen-row receipt audit supports a precisely scoped metric interpretation or named historical attribution boundary, and the report gives a concrete future metadata/reporting rule.
 
@@ -53,9 +87,9 @@ Read-only audit of receipt labels and raw/normalized wait4 fields, supervisor so
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY, unstarted under docs/research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md. Before any audit, create and commit a fresh work record binding the exact 18 receipts, frozen result, R2 manifest, prior attribution correction, supervisor/observer sources, and executable/source identity. Scope is read-only receipt/source/documentation review; no process launches, synthetic subprocesses, checker builds, result edits, or external actions.
+**Boundary:** DEFERRED: DEFERRED, unstarted; promote through a later recorded queue selection under docs/research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md. Before any audit, create and commit a fresh work record binding the exact 18 receipts, frozen result, R2 manifest, prior attribution correction, supervisor/observer sources, and executable/source identity. Scope is read-only receipt/source/documentation review; no process launches, synthetic subprocesses, checker builds, result edits, or external actions.
 
-### 12. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
+### 14. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
 **Target:** One checker, three supported build configurations, at most four source sites and eight boundary/control fixtures
 
@@ -71,7 +105,7 @@ Select input-influenced arithmetic/assertion sites before constructing cases, th
 
 **Boundary:** PLANNED: PLANNED: bind supported configurations, reproducible toolchain, source-selected input-influenced sites and fixed build/controller protocol; arithmetic presence alone is not defect evidence.
 
-### 29. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
+### 31. ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion
 
 **Target:** Arena tutorial/012_nonPropThm and retained publication-study theorem control
 
@@ -87,7 +121,7 @@ Compare existing accepts and asymmetric over-rejection risk; package existing by
 
 **Boundary:** PLANNED: Owner-directed portfolio; unstarted. Commit a scoped work record and exact source/evidence/action rubric before substantive work; bind exact inputs, expected cells, tooling and process observations before permitted launches under docs/research/EXTERNAL_CONTRIBUTION_PORTFOLIO_PLAN.md. A current inventory preflight from the let item or an equivalent independent audit must identify a distinct asymmetric refusal risk before promotion; no dependency on the let semantic result.
 
-### 48. CVC-4: Connect the contract to real validation behavior
+### 50. CVC-4: Connect the contract to real validation behavior
 
 **Target:** At most two implementation lineages and four fixed pairs
 
@@ -103,7 +137,7 @@ Map parsing, reconstruction, validation and semantic use; execute only the bound
 
 **Boundary:** PLANNED: CVC-3 proves the preservation target with SUCCESS outcome; review preserves scope; the fixed new-phase launch protocol is valid. A NEGATIVE counterexample requires an explicitly revised or new comparison item rather than satisfying this dependency.
 
-### 49. CVC-5: Prepare shared evidence and decide the next phase
+### 51. CVC-5: Prepare shared evidence and decide the next phase
 
 **Target:** The scoped result and the ecosystem target it benefits
 
@@ -119,7 +153,7 @@ Prepare a regression/formalization/clarification draft or justified no-action re
 
 **Boundary:** PLANNED: CVC-4 succeeds and contribution still has value; earlier negative/unresolved stops perform closure immediately without waiting for this item.
 
-### 67. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
+### 69. TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package
 
 **Target:** One owner-designated curator/dataset package or provider-supplied functioning checker profile
 
@@ -176,6 +210,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1. Selected next item: RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1. Selected next item: E0-LAZYLEAN-SEMANTIC-EXTENSION-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

@@ -141,6 +141,16 @@ not scientific results and never enter the live ledger. Input and raw-output
 references name retained repository-relative files. Full SHA-1 source revisions
 are required; dirty source changes require a retained patch.
 
+The append command records SHA-256 identities for every start input while its
+bytes are available. OPEN trials still require those inputs. For a closed trial,
+ledger validation can use the recorded identity when a local build/coverage
+payload is absent; if present, its bytes must match. This validates the record,
+not the ability to reproduce the run: missing payloads must be reacquired and
+verified before reproduction. Raw output and source patches must always remain
+available. The first historical E0 start is bound through
+`explorations/legacy-input-identities.json` to its already retained identity file;
+neither its ledger rows nor its original evidence is rewritten.
+
 `scripts/exploration-record check --base <prior-commit>` verifies schema,
 lifecycle, paths and the append-only prefix relative to a review base (HEAD by
 default). The check also rejects changes to previously recorded inputs and raw evidence.

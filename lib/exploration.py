@@ -2,8 +2,10 @@
 from collections import Counter
 from datetime import datetime, timezone
 import fcntl
+import hashlib
 import json
 import os
+import re
 from pathlib import Path
 import subprocess
 
@@ -11,6 +13,7 @@ from jsonschema import Draft202012Validator, FormatChecker
 
 ROOT = Path(__file__).resolve().parents[1]
 LEDGER = 'explorations/ledger.jsonl'
+LEGACY_IDENTITIES = 'explorations/legacy-input-identities.json'
 
 
 def read_json(raw):
@@ -26,13 +29,41 @@ def read_json(raw):
     return json.loads(raw, object_pairs_hook=unique, parse_constant=nonfinite)
 
 
-def local_file(root, value):
+def safe_path(root, value):
     path = Path(value)
     target = root / path
     if (path.is_absolute() or '..' in path.parts or target.is_symlink()
-            or not target.resolve().is_relative_to(root.resolve()) or not target.is_file()):
+            or not target.resolve().is_relative_to(root.resolve())):
         raise ValueError('missing or unsafe evidence file: ' + value)
     return target
+
+
+def local_file(root, value):
+    target = safe_path(root, value)
+    if not target.is_file():
+        raise ValueError('missing or unsafe evidence file: ' + value)
+    return target
+
+
+def input_hashes(root, start):
+    hashes = start['data'].get('input_sha256')
+    if hashes is None and (root / LEGACY_IDENTITIES).is_file():
+        # Exact historical start -> previously retained identity file. Never
+        # rewrite an old ledger event or infer identity from today's payload.
+        key = hashlib.sha256(json.dumps(start, sort_keys=True).encode()).hexdigest()
+        binding = read_json(local_file(root, LEGACY_IDENTITIES).read_bytes()).get(key)
+        if binding:
+            raw = local_file(root, binding['path']).read_bytes()
+            if hashlib.sha256(raw).hexdigest() != binding['sha256']:
+                raise ValueError('historical input identity file changed')
+            hashes = dict(read_json(raw)['files'])
+            hashes[binding['path']] = binding['sha256']
+    if hashes is not None:
+        if set(hashes) != set(start['data']['inputs']) or any(
+                not isinstance(h, str) or not re.fullmatch('[0-9a-f]{64}', h)
+                for h in hashes.values()):
+            raise ValueError('input identities must cover exactly the recorded inputs')
+    return hashes
 
 
 def validate(root, raw):
@@ -48,7 +79,7 @@ def validate(root, raw):
         if kind == 'start':
             if state:
                 raise ValueError('duplicate exploration start')
-            for path in data['inputs'] + [s['patch'] for s in data['sources'] if 'patch' in s]:
+            for path in [s['patch'] for s in data['sources'] if 'patch' in s]:
                 local_file(root, path)
             states[ident] = {'start': row, 'at': stamp}
             continue
@@ -76,17 +107,31 @@ def validate(root, raw):
             confirmations.add(target)
             state['promote'] = row
         state['at'] = stamp
+    for state in states.values():
+        hashes = input_hashes(root, state['start'])
+        for path in state['start']['data']['inputs']:
+            target = safe_path(root, path)
+            if 'finish' not in state or hashes is None:
+                local_file(root, path)
+            if not target.exists():
+                state.setdefault('unavailable_inputs', []).append(path)
+            if target.exists():
+                data = local_file(root, path).read_bytes()
+                if hashes is not None and hashlib.sha256(data).hexdigest() != hashes[path]:
+                    raise ValueError('recorded input bytes changed: ' + path)
     return states
 
 
 def committed_prefix(root, raw, base='HEAD'):
     """Git retains the baseline; no second hash graph or receipt hierarchy."""
-    tracked = subprocess.check_output(['git', 'ls-tree', '--name-only', base, '--', LEDGER], cwd=root)
-    if tracked.strip():
+    tracked = subprocess.check_output(
+        ['git', 'ls-tree', '--name-only', base, '--', LEDGER, LEGACY_IDENTITIES],
+        cwd=root).decode().splitlines()
+    if LEDGER in tracked:
         previous = subprocess.check_output(['git', 'show', f'{base}:{LEDGER}'], cwd=root)
         if not raw.startswith(previous):
             raise ValueError('exploration ledger must preserve the committed prefix')
-        retained = set()
+        retained = {LEGACY_IDENTITIES} if LEGACY_IDENTITIES in tracked else set()
         for line in previous.splitlines():
             data = read_json(line)['data']
             retained.update(data.get('inputs', []) + data.get('raw_output', []))
@@ -116,6 +161,12 @@ def append(root, event):
         raw = stream.read()
         committed_prefix(root, raw)
         event = dict(event, at=datetime.now(timezone.utc).isoformat())
+        if event['event'] == 'start':
+            hashes = {p: hashlib.sha256(local_file(root, p).read_bytes()).hexdigest()
+                      for p in event['data']['inputs']}
+            if event['data'].get('input_sha256', hashes) != hashes:
+                raise ValueError('supplied input identities differ from launch inputs')
+            event['data'] = dict(event['data'], input_sha256=hashes)
         encoded = (json.dumps(event, sort_keys=True, allow_nan=False) + '\n').encode()
         validate(root, raw + encoded)
         if event['event'] == 'start':
@@ -136,6 +187,8 @@ def summary(states):
     return {'evidence_class': 'E0', 'started': len(states),
             **{key: counts[key] for key in ('OPEN', 'NO_SIGNAL', 'SIGNAL', 'INCONCLUSIVE')},
             'confirmation_proposals': sum('promote' in s for s in states.values()),
+            'unavailable_input_payloads': sorted({p for s in states.values()
+                                                   for p in s.get('unavailable_inputs', [])}),
             'claim': 'Exploratory observations only; proposals are not confirmed discrepancies.'}
 
 

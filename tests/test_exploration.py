@@ -1,5 +1,6 @@
 import copy
 import json
+import shutil
 from pathlib import Path
 import subprocess
 import tempfile
@@ -230,3 +231,68 @@ class ExplorationTests(unittest.TestCase):
         raw = (e.ROOT / e.LEDGER).read_bytes()
         e.committed_prefix(e.ROOT, raw)
         self.assertEqual(e.summary(e.validate(e.ROOT, raw))['evidence_class'], 'E0')
+
+    def test_closed_identity_survives_fresh_clone_without_ignored_input(self):
+        (self.root / '.gitignore').write_text('local-input.txt\n')
+        (self.root / 'local-input.txt').write_text('ephemeral build data')
+        self.start['data']['inputs'] = ['local-input.txt']
+        event = self.append(self.start)
+        self.assertEqual(len(event['data']['input_sha256']['local-input.txt']), 64)
+        self.append(self.finish)
+        self.git('add', '.')
+        self.git('-c', 'user.name=Test', '-c', 'user.email=test@example.invalid',
+                 '-c', 'commit.gpgsign=false', 'commit', '-qm', 'closed screen')
+        with tempfile.TemporaryDirectory() as tmp:
+            clone = Path(tmp) / 'clone'
+            self.git('clone', '-q', '--no-hardlinks', str(self.root), str(clone))
+            self.assertFalse((clone / 'local-input.txt').exists())
+            raw = (clone / e.LEDGER).read_bytes()
+            e.committed_prefix(clone, raw)
+            self.assertEqual(e.summary(e.validate(clone, raw))['NO_SIGNAL'], 1)
+            self.assertEqual(e.summary(e.validate(clone, raw))['unavailable_input_payloads'],
+                             ['local-input.txt'])
+            (clone / 'raw.txt').unlink()
+            with self.assertRaises(ValueError):
+                e.validate(clone, raw)
+
+    def test_open_input_missing_or_closed_input_changed_is_rejected(self):
+        self.append(self.start)
+        p = self.root / 'input.txt'
+        original = p.read_bytes()
+        p.unlink()
+        with self.assertRaises(ValueError):
+            self.states()
+        p.write_bytes(original)
+        self.append(self.finish)
+        p.write_text('different input')
+        with self.assertRaisesRegex(ValueError, 'recorded input bytes changed'):
+            self.states()
+
+    def test_closed_unbound_missing_input_is_not_silently_accepted(self):
+        self.append(self.start)
+        self.append(self.finish)
+        rows = [json.loads(line) for line in (self.root / e.LEDGER).read_text().splitlines()]
+        del rows[0]['data']['input_sha256']
+        (self.root / 'input.txt').unlink()
+        with self.assertRaises(ValueError):
+            e.validate(self.root, '\n'.join(json.dumps(row) for row in rows).encode())
+
+    def test_live_historical_ledger_without_untracked_payloads(self):
+        raw = (e.ROOT / e.LEDGER).read_bytes()
+        tracked = set(subprocess.check_output(['git', 'ls-files'], cwd=e.ROOT).decode().splitlines())
+        paths = {e.LEGACY_IDENTITIES}
+        for line in raw.splitlines():
+            data = json.loads(line)['data']
+            paths.update(data.get('inputs', []) + data.get('raw_output', []))
+        for path in paths:
+            if path in tracked or path == e.LEGACY_IDENTITIES:
+                destination = self.root / path
+                destination.parent.mkdir(parents=True, exist_ok=True)
+                shutil.copyfile(e.ROOT / path, destination)
+        self.assertFalse((self.root / 'results/baseline/outcomes/nanoda-full.jsonl').exists())
+        self.assertEqual(e.summary(e.validate(self.root, raw))['started'],
+                         sum(json.loads(line)['event'] == 'start' for line in raw.splitlines()))
+        binding = next(iter(json.loads((self.root / e.LEGACY_IDENTITIES).read_text()).values()))
+        (self.root / binding['path']).write_text('{}')
+        with self.assertRaisesRegex(ValueError, 'historical input identity file changed'):
+            e.validate(self.root, raw)

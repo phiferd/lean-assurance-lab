@@ -95,6 +95,22 @@ canonical handoff now selects `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` READY and
 unstarted under its unchanged read-only scope. These sentences authorize no
 successor execution outside the canonical queue.
 
+## Prospective LazyLean E0 handoff — 2026-09-29
+
+The completed Nanoda selector inventory motivates no confirmation of that
+exhausted path. The current queue instead selects
+[`E0-LAZYLEAN-SEMANTIC-EXTENSION-1`](E0_LAZYLEAN_SEMANTIC_EXTENSION_1_PLAN.md)
+READY and unstarted. Its two-family delta/iota sample uses the pinned observer,
+retained supervised adapter and at most eight candidate/control profile cells.
+These are new screening questions, not extensions of the six frozen beta/zeta
+results. No new fixture or checker observation exists yet. The separate
+[`SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1`](SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md)
+is PLANNED to isolate immutable validation inputs from arbitrary edits and
+repair stage-specific cached reuse before a future confirmation; it does not block E0. The eighteen-receipt memory audit
+remains feasible but DEFERRED after this project-wide reassessment. Historical
+handoff text above records its then-current selection and is not current
+execution authority.
+
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped
