@@ -1,0 +1,96 @@
+{
+  "schema": "resource-envelope-independent-review-v1",
+  "item_id": "RESOURCE-ENVELOPE-PILOT-1",
+  "phase": "CONSTRUCTION_RUN_0002_ENVIRONMENT_FAILURE",
+  "reviewed_at": "2026-09-29T02:11:56.278416+00:00",
+  "plain_language": {
+    "what_did_we_find": "Provisional: the second construction attempt stopped before its first build completed because the sandbox denied process monitoring. No input package completed and no scientific observer ran. The rendered first source still exactly matches the frozen formula and first attempt.",
+    "is_it_interesting": "No scientific result follows. This is an execution-environment failure; the retained process evidence shows monitoring and cleanup uncertainty, not a term or checker resource boundary.",
+    "does_it_require_more_work": "Yes. Preserve this failed attempt and retry the same committed construction inputs in the actual-host execution context. A later host snapshot finds no members of the failed process group, and a zero-signal existence check reports that the group no longer exists."
+  },
+  "verdict": "PASS_FOR_SAME_MANIFEST_HOST_RETRY",
+  "reviewed_inputs": [
+    {
+      "path": "results/research/resource-envelope-pilot-1/scientific-manifest.json",
+      "bytes": 6832,
+      "sha256": "9200fe3bc83909f327f8479f031aac1db7ce2b1db0c875d9cdb03ca0fccba28b"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/execution-manifest-r2.json",
+      "bytes": 20031,
+      "sha256": "8f55889840260c4ef0849352cc468a7f7f37f6008959b83519bd8fb5ab0141cf"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/independent-preconstruction-review-r2.json",
+      "bytes": 6518,
+      "sha256": "fed75d07774b7fac61edc21f00527316e889758bf33cdf9b2cf2f8357411eb8e"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0002/construction-failure.json",
+      "bytes": 814,
+      "sha256": "907720bdde77003bf65ac86171141bd00270d63690055ec8c121351bf8971de4"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0002/staged/corpus/sources/rep1-pi-016.lean",
+      "bytes": 574,
+      "sha256": "5bf42bd7be0e7ec7d2406c16ff13d8eccda7f9e7335cfb8f39b126111ea3da03"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0002/processes/rep1-pi-016-build.receipt.json",
+      "bytes": 2063,
+      "sha256": "56eec55fccc5ab16d6f0af3f6e637c5d49d826598702214e763e5ef0d9f44b1f"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0002/processes/rep1-pi-016-build.stderr",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/construction-run-0002/processes/rep1-pi-016-build.stdout",
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/construction-run-0002-host-cleanup.json",
+      "bytes": 644,
+      "sha256": "4c109686b27ef9a531613a0c6db5e0fe2bd53eba001758fbfb339fd75804572c"
+    },
+    {
+      "path": "results/research/resource-envelope-pilot-1/review-evidence/construction-run-0002-host-cleanup.stdout",
+      "bytes": 20021,
+      "sha256": "1c899d35130b389c6fd953eef5e59ceab9d577ed1ed02f8933ed483ec7506d51"
+    }
+  ],
+  "checks": {
+    "review_sha256": "fed75d07774b7fac61edc21f00527316e889758bf33cdf9b2cf2f8357411eb8e",
+    "first_source_bytes_identical": true,
+    "completed_cases": 0,
+    "observed_control_fault": "/bin/ps EPERM in monitor and cleanup",
+    "recorded_exit_code": -9,
+    "recorded_stop_reason": "MONITOR_FAULT",
+    "original_cleanup_complete": false,
+    "post_failure_group_absent": true,
+    "raw_custody_replay": {
+      "status": "PASS",
+      "process_receipts": 21,
+      "raw_streams": 42,
+      "accounting_valid": 21,
+      "preserved_accounting_faults": 0,
+      "host_launches": 0,
+      "coverage_note": "Snapshot during concurrent construction run 0003; includes all receipts present at review time, not a final complete-attempt count."
+    }
+  },
+  "scientific_interpretation": "No scientific limit, rejection, mismatch, resource-envelope point or input invalidity is established. The wait4 value belongs to a supervisor-killed construction launch and is not a checker result.",
+  "authorized_scope": "A fresh attempt using unchanged scientific and R2 execution manifests in the available actual-host context. No tooling, scientific input, observer, process-limit or size selection change.",
+  "remaining_gates": [
+    "Audit all twelve completed packages and original first-four byte identities",
+    "Separate corpus sealing, smoke launch/result and scientific launch reviews"
+  ],
+  "observer_launch_authorization": false,
+  "sequencing_incident": {
+    "status": "PRE_RETRY_CLEANUP_RECONCILIATION_WAS_LATE",
+    "finding": "The actual-host construction retry began before this independent post-failure cleanup reconciliation. The failed attempt remains a monitor/cleanup repair pause; this review is retrospective and does not establish prior independent clearance.",
+    "evidence": "At 2026-09-29T02:11:29.960548+00:00, actual-host ps lists no PGID 37325 member and killpg(37325,0) returns ESRCH. No old process persists at this reconciliation.",
+    "repair": "Retain this sequencing incident and require the owner to reconcile cleanup before any further retry or observer launch. Independently audit every current construction receipt; no scientific observer launch is authorized."
+  }
+}
