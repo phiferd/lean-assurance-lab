@@ -69,6 +69,14 @@
       "repair": "Do not alter the frozen replay. Run this compatibility path through scripts/run-unit-tests, which supplies the committed historical attempt projection before executing the test.",
       "capture_limit": "The exact ReplayError and test count were retained in tool output; this invocation did not create or modify scientific evidence.",
       "scientific_launches": 0
+    },
+    {
+      "attempt_id": "ordered-closure-0003-preflight-0001",
+      "command": "scripts/closure-controls finish --scope-file results/research/workflow-closure-reliability-1/closure-scope.json --output-dir results/workflow-validation/workflow-closure-reliability-1",
+      "outcome": "REFUSED_BEFORE_STAGE_EXECUTION",
+      "observation": "The controller rejected the amended scope because two newly added paths were not lexicographically sorted.",
+      "repair": "Sort the two paths and recommit the exact scope before retrying; no closure stage or scientific process ran.",
+      "scientific_launches": 0
     }
   ]
 }
