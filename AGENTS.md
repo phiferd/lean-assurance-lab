@@ -187,6 +187,9 @@ not authorize switching branches. If the push is rejected, preserve the local
 commits and report the actual blocker. Do not force-push, rewrite history,
 change protection settings, use administrative bypass commands, or discard
 work. Do not report delivery until `origin/main` contains the completed commit.
+For CI repairs, verify that the GitHub Actions run for that exact pushed commit
+passes before reporting the failure fixed. A local pass is insufficient; if
+remote verification is unavailable, report that limitation explicitly.
 
 For every other repository, agents may investigate, prepare local changes,
 draft issues or pull requests, and perform read-only preflights. Creating or
