@@ -3,7 +3,7 @@
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
   "updated_at": "2026-09-29",
-  "selected_item": "WORKFLOW-CLOSURE-RELIABILITY-1",
+  "selected_item": "E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1",
   "execution_policy": {
     "engineering_failures": "REPAIR_AND_CONTINUE",
     "attempt_caps": "NONE",
@@ -3518,7 +3518,7 @@
       "completion": "Focused failure regressions and actual ordered closure; measured intervention/cost baseline with missing coverage explicit; full repository validation.",
       "stop_condition": "Repair ordinary failures within scope; stop at demonstrated controls and measured limits, select but do not execute a successor.",
       "kind": "IMPLEMENTATION",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "EXPLORATORY-EXPERIMENT-PROTOCOL-1"
       ],
@@ -3527,6 +3527,42 @@
         "docs/research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md",
         "lib/closure_controls.py",
         "results/research/resource-envelope-pilot-1/closure-attempt-0001/failure.json"
+      ],
+      "issue_urls": [],
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "results/research/workflow-closure-reliability-1/result.json",
+          "results/research/workflow-closure-reliability-1/report.md",
+          "results/research/workflow-closure-reliability-1/usage-accounting.json",
+          "tests/test_closure_controls.py",
+          "tests/test_model_usage_accounting.py"
+        ],
+        "recommendation": "Retain the exclusive, resumable, dependency-aware shared closure controller and aggregate response-level usage extractor. No scientific finding or measured token saving follows. Select E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1 READY and unstarted for its one read-only candidate-inventory trial; keep RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 deferred."
+      },
+      "blocked_reason": ""
+    },
+    {
+      "id": "E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1",
+      "priority": 78,
+      "title": "Screen for fresh Nanoda semantic-mutation diversity",
+      "target": "Pinned Nanoda 6ae1f0c, current mutation catalog, retained coverage/baseline inputs and controlled/generated identity set",
+      "action": "Run one E0 read-only semantic-diversity-v1 selection of at most six fresh candidates without writing, registering, building or checking them.",
+      "expected_value": "Decide cheaply whether a fresh confirmation campaign has concrete diverse semantic source targets before paying for builds and checker runs.",
+      "rank_rationale": "Selected after closure repair because it reuses the existing deterministic generator and E0 lane to seek new semantic targets; the memory audit remains feasible but interprets an older result and cannot create a fresh test target.",
+      "entry_gate": "READY and unstarted under docs/research/E0_NANODA_SEMANTIC_DIVERSITY_SCREEN_1_PLAN.md. Append an exact E0 start before running the no-write generator; bind source, catalog, coverage, baseline, registry, generator and Rust mutator identities.",
+      "completion": "One retained E0 inventory trial classified SIGNAL, NO_SIGNAL or INCONCLUSIVE with exact raw output, diversity/identity counts, observed cost and a confirm-or-stop recommendation.",
+      "stop_condition": "Complete the one fixed read-only selection after feasible repairs, or owner stop/unavailable required input or capability; no mutation write/registration, build, checker launch, canonical assurance change or external action.",
+      "kind": "EXPERIMENT",
+      "status": "READY",
+      "depends_on": [
+        "WORKFLOW-CLOSURE-RELIABILITY-1"
+      ],
+      "budget": null,
+      "evidence_refs": [
+        "docs/research/E0_NANODA_SEMANTIC_DIVERSITY_SCREEN_1_PLAN.md",
+        "docs/EXPLORATORY_EXPERIMENT_PROTOCOL.md",
+        "scripts/generate-mutations"
       ],
       "issue_urls": [],
       "closure": null,
@@ -3540,7 +3576,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-09-29-workflow-closure-reliability-1-entry.json",
-    "sha256": "259ad93889fcd1cd9433685dd30fab411a3352d262b3f6faa137b515fb20597b"
+    "path": "results/research/queue-reviews/2026-09-29-workflow-closure-reliability-1-closure.json",
+    "sha256": "9d300cae3a285fe760b4169441142e260a052a05ef3641a87845d7101edd48d0"
   }
 }

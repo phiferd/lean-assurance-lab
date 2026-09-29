@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "item_id": "WORKFLOW-CLOSURE-RELIABILITY-1",
+  "status": "REPAIRED",
+  "attempts": [
+    {
+      "attempt_id": "focused-invocation-0001",
+      "command": "python3 -m unittest tests.test_research_queue tests.test_research_queue_v2 tests.test_research_queue_v3 tests.test_research_queue_v4",
+      "outcome": "FAILED_BEFORE_TEST_EXECUTION",
+      "observation": "Four import errors: the tests directory is not an importable package under that invocation form.",
+      "repair": "Use unittest discovery with test_research_queue*.py; 46 tests passed.",
+      "capture_limit": "The failed command used tool-captured output rather than a file-backed log; the exact error class and count are retained, not a purported full raw stream."
+    },
+    {
+      "attempt_id": "implementation-focused-0001",
+      "command": "closure-control and usage focused tests",
+      "outcome": "FAILED",
+      "observation": "The 16 legacy closure tests passed; four new resumable tests errored because the committed-inventory value stage call omitted its inventory argument.",
+      "repair": "Supply the exact inventory as both the recorded value and dependency input; rerun the closure suite.",
+      "capture_limit": "Tool-captured output retained the four identical TypeError traces; no file-backed log was created for this pre-checkpoint failure."
+    },
+    {
+      "attempt_id": "implementation-focused-0002",
+      "command": "closure-control and usage focused tests",
+      "outcome": "FAILED_AFTER_CLOSURE_TESTS_PASSED",
+      "observation": "All 20 closure tests passed; the four usage tests then produced two errors and two assertion failures because a temporary macOS path was compared before resolving its /var to /private/var alias.",
+      "repair": "Resolve both recorded cwd and requested project root before comparison; all four usage tests passed.",
+      "capture_limit": "Tool-captured output retained the exact test/error counts and path-comparison message; no file-backed log was created for this pre-checkpoint failure."
+    },
+    {
+      "attempt_id": "host-rss-preflight-0001",
+      "command": "scripts/closure-controls preflight",
+      "outcome": "SANDBOX_PERMISSION_DENIED",
+      "observation": "/bin/ps returned operation not permitted in the sandbox.",
+      "repair": "Run the unchanged required preflight in the authorized actual-host context.",
+      "successful_retry": {"status": "PASS", "rss_kib": 14528},
+      "claim_limit": "The sampled self RSS is a capability preflight, not a workload memory measurement."
+    }
+  ]
+}

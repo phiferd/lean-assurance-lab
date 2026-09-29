@@ -232,3 +232,135 @@ class FailedAttemptBindingTests(TestCase):
                     ["git", "rev-parse", inventory["commit"] + ":" + row["path"]],
                     cwd=ROOT, text=True).strip()
                 self.assertEqual(blob, row["git_blob"])
+
+
+class ResumableClosureTests(TestCase):
+    def setUp(self):
+        self.temp = tempfile.TemporaryDirectory()
+        self.addCleanup(self.temp.cleanup)
+        self.root = Path(self.temp.name)
+        git(self.root, "init", "-q")
+        git(self.root, "config", "user.name", "Test")
+        git(self.root, "config", "user.email", "test@example.invalid")
+        (self.root / "input.txt").write_text("stable\n")
+        self.scope = "scope.json"
+        (self.root / self.scope).write_text(json.dumps({"schema_version": 1,
+            "scope": "resumable fixture", "paths": ["input.txt"]}) + "\n")
+        git(self.root, "add", "input.txt", self.scope)
+        git(self.root, "commit", "-qm", "fixture")
+        self.output = self.root / "results/workflow-validation/closure"
+
+    def fake_run(self, calls, interrupt_suite=False):
+        interrupted = {"done": False}
+
+        def run(_root, command, log, **kwargs):
+            calls.append(command)
+            log.parent.mkdir(parents=True, exist_ok=True)
+            log.write_text("passed\n")
+            if command[0] == "suite" and interrupt_suite and not interrupted["done"]:
+                interrupted["done"] = True
+                raise KeyboardInterrupt()
+            env = kwargs.get("env")
+            if command[0] == "suite" and env:
+                receipt_dir = Path(env["METAMORPHIC_SUPERVISOR_RECEIPT_DIR"])
+                self.assertTrue(receipt_dir.is_relative_to(self.output / "stages/03-full-suite"))
+                self.assertFalse(receipt_dir.is_relative_to(self.root / "results/research"))
+                receipt_dir.mkdir(parents=True)
+                (receipt_dir / "fixture.receipt.json").write_text("{}\n")
+            if command[0] == "refresh":
+                refresh_dir = Path(command[2])
+                refresh_dir.mkdir(parents=True)
+                (refresh_dir / "result.json").write_text("{}\n")
+            return 0
+
+        return run
+
+    def controls(self, calls, *, interrupt_suite=False):
+        return (
+            mock.patch.object(cc, "STATUS_PREFLIGHT", ["status"]),
+            mock.patch.object(cc, "SUITE", ["suite"]),
+            mock.patch.object(cc, "CHECKS", [["check-a"], ["check-b"]]),
+            mock.patch.object(cc, "host_rss_preflight",
+                              return_value={"status": "PASS", "rss_kib": 1}),
+            mock.patch.object(cc, "_command_identity",
+                              side_effect=lambda _root, command: {"command": command,
+                                                                  "tool": command[0]}),
+            mock.patch.object(cc, "_worktree_digest", return_value="0" * 64),
+            mock.patch.object(cc, "_run_logged",
+                              side_effect=self.fake_run(calls, interrupt_suite)),
+        )
+
+    def test_repository_owner_is_exclusive_and_os_released(self):
+        with cc.closure_owner(self.root):
+            with self.assertRaisesRegex(ValueError, "another closure owner"):
+                with cc.closure_owner(self.root):
+                    pass
+        with cc.closure_owner(self.root):
+            pass
+
+    def test_successful_resume_reuses_every_exact_stage_and_isolates_receipts(self):
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+            first_count = len(calls)
+            self.assertGreater(first_count, 0)
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        self.assertEqual(len(calls), first_count)
+        second = json.loads((self.output / "attempts/0002/result.json").read_text())
+        self.assertEqual(second["status"], "COMPLETE")
+        self.assertEqual(second["executed_stages"], [])
+        self.assertIn("03-full-suite", second["reused_stages"])
+        self.assertTrue((self.output / "stages/03-full-suite/0001/control-receipts"
+                         "/fixture.receipt.json").is_file())
+
+    def test_changed_dependency_invalidates_suite_and_every_dependent_stage(self):
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        first_count = len(calls)
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], mock.patch.object(cc, "SUITE", ["suite-changed"]), \
+             patches[2], patches[3], patches[4], patches[5], \
+             mock.patch.object(cc, "_run_logged", side_effect=self.fake_run(calls2)):
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        self.assertGreater(first_count, 0)
+        self.assertEqual(calls2[0][0], "suite-changed")
+        result = json.loads((self.output / "attempts/0002/result.json").read_text())
+        invalidated = [row["stage"] for row in result["invalidated_stages"]]
+        self.assertEqual(invalidated, ["03-full-suite", "04-sealed-validation",
+                                       "05-dependency-ordered-refresh",
+                                       "06-check-01", "07-check-02"])
+
+    def test_interruption_preserves_failure_and_resume_reuses_valid_prefix(self):
+        calls = []
+        patches = self.controls(calls, interrupt_suite=True)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 130)
+        first = json.loads((self.output / "attempts/0001/result.json").read_text())
+        self.assertTrue(first["interrupted"])
+        self.assertTrue((self.output / "stages/03-full-suite/0001/failure.json").is_file())
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        self.assertEqual(calls2[0], ["suite"])
+        second = json.loads((self.output / "attempts/0002/result.json").read_text())
+        self.assertIn("02-status-preflight", second["reused_stages"])
+
+    def test_cached_output_tamper_fails_closed_without_rerun(self):
+        calls = []
+        patches = self.controls(calls)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 0)
+        suite_log = self.output / "stages/03-full-suite/0001/command.log"
+        suite_log.write_text("tampered\n")
+        calls2 = []
+        patches = self.controls(calls2)
+        with patches[0], patches[1], patches[2], patches[3], patches[4], patches[5], patches[6]:
+            self.assertEqual(cc.finish_resumable(self.root, self.scope, self.output), 1)
+        self.assertEqual(calls2, [])
+        result = json.loads((self.output / "attempts/0002/result.json").read_text())
+        self.assertIn("cached stage output bytes changed", result["error"])

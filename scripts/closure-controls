@@ -6,7 +6,8 @@ import sys
 
 ROOT = Path(__file__).resolve().parents[1]
 sys.path.insert(0, str(ROOT))
-from lib.closure_controls import committed_inventory, finish, host_rss_preflight, write_new
+from lib.closure_controls import (committed_inventory, finish_resumable,
+                                  host_rss_preflight, write_new)
 
 
 def main() -> int:
@@ -27,7 +28,7 @@ def main() -> int:
             write_new(args.output, committed_inventory(ROOT, args.scope_file))
             print(args.output)
         else:
-            return finish(ROOT, args.scope_file, args.output_dir)
+            return finish_resumable(ROOT, args.scope_file, args.output_dir)
     except (ValueError, OSError) as error:
         print(error, file=sys.stderr)
         return 1

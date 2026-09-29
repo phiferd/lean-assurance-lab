@@ -82,6 +82,16 @@ WORKFLOW-CLOSURE-RELIABILITY-1 READY and unstarted; the memory audit is deferred
 The earlier ranked handoff below is
 historical context; Active status and the current queue select current work.
 
+The closure-reliability successor now has passing focused controls for exclusive
+ownership, resumable exact stages, dependency invalidation, receipt isolation
+and aggregate response-level usage. Its handoff selects
+`E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` READY and unstarted under the one-trial
+[E0 plan](E0_NANODA_SEMANTIC_DIVERSITY_SCREEN_1_PLAN.md). The trial may only
+inventory up to six fresh diversity-balanced mutation sites without writing or
+registering them. The exact short-process memory audit remains deferred and
+unchanged. This current handoff supersedes the preceding adoption-time sentence;
+neither sentence authorizes a scientific launch outside the canonical queue.
+
 ## Ranked candidate horizon
 
 The queue is authoritative for ranks/status. Its original first ten ranks mapped

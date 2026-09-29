@@ -58,6 +58,25 @@ research directions.
 
 ## Attempted
 
+- `WORKFLOW-CLOSURE-RELIABILITY-1` completes its shared controller repair upon
+  the required ordered closure receipt. **What did we find?** Twenty
+  closure-control tests and four aggregate-usage tests pass: one repository
+  owner is enforced, interrupted stages are retained and safely resumed, exact
+  dependency changes invalidate downstream reuse, unexplained cached-output
+  changes fail closed, and control receipts stay outside scientific evidence.
+  Seventeen resource replay/isolation and exploration-ledger compatibility tests
+  also pass. No scientific experiment ran. The response-level baseline contains
+  82 unique records through 11:37:43 UTC: 9,175,446 input tokens (8,904,064
+  cached; 271,382 derived uncached), zero cache-write input, 51,800 output and
+  16,829 reasoning-output tokens. Final closure/delivery and later responses are
+  missing by construction; no dollar cost or saving is inferred. **Is it
+  interesting?** Yes, as a reusable repair for the observed state-edit race and
+  control/scientific receipt collision. **Does it require more work?** No repair
+  follows from the passing controls. Select `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1`
+  READY and unstarted for one read-only source-inventory trial. The historical
+  short-process memory audit remains deferred. See the
+  [report](../results/research/workflow-closure-reliability-1/report.md).
+
 - `EXPLORATORY-EXPERIMENT-PROTOCOL-1` implements the owner-directed E0 lane,
   subject to final shared-workflow validation and refresh. **What did we find?**
   Fifteen focused tests pass for cheap negative closure, incomplete measurements,
@@ -3179,10 +3198,10 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `WORKFLOW-CLOSURE-RELIABILITY-1`.
-It is ACTIVE under [its reliability plan](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md).
-The canonical queue retains zero READY items and one ACTIVE item,
-`WORKFLOW-CLOSURE-RELIABILITY-1`. The exploration protocol implementation introduces a
+Selected next item: `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1`.
+It is READY and unstarted under [its E0 plan](research/E0_NANODA_SEMANTIC_DIVERSITY_SCREEN_1_PLAN.md).
+The canonical queue retains one READY item,
+`E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1`, and zero ACTIVE items. The exploration protocol implementation introduces a
 lightweight E0 ledger and a separate confirmation boundary, subject to its final
 shared-workflow validation and refresh. No exploratory science has run and no
 cost savings are claimed. The owner prioritizes closure reliability and usage
@@ -3479,8 +3498,9 @@ type; checking, conditional reduction and raw import remain distinct contracts.
 
 Queue handoff: EXECUTABLE.
 
-The canonical queue selects `WORKFLOW-CLOSURE-RELIABILITY-1` READY and
-unstarted. The memory audit is deferred under the owner-directed process change. The resource matrix is COMPLETE with 24 scientific checks and 12
+The canonical queue selects `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` READY and
+unstarted. Closure reliability is complete subject to its exact ordered receipt;
+the memory audit remains deferred after project-wide comparison. The resource matrix is COMPLETE with 24 scientific checks and 12
 baselines ACCEPTED. The 18 Nanoda runs have zero sampled RSS points, so sampled
 group peaks remain unknown. The configured 10 ms target cadence does not
 establish actual cadence or the cause of missing samples; wait4 child-accounting
