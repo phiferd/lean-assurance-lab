@@ -6,7 +6,7 @@ publication worktree. It refuses publication if declared current inputs differ
 from the validated snapshot. Separate content dependencies for status, suite,
 and publication reuse the suite after a publication-only document change but
 rerun it after a real test dependency changes. Thirty-one focused controls
-pass. Two failed ordered closure attempts are preserved and repaired. No
+pass. Three failed ordered closure attempts are preserved and repaired. No
 scientific experiment ran.
 
 **Is it interesting?** Yes. An arbitrary edit followed by restoration could
@@ -48,8 +48,11 @@ controls remain passing.
 Attempt 0001 stopped before test discovery because a top-level `external`
 symlink violated source custody. Attempt 0002 ran all current and historical
 partitions and exposed snapshot-local receipt, retained Arena checkout, and
-closure-time successor-state requirements. Both attempts remain immutable.
-Attempt 0003 is the required final current/historical closure receipt.
+closure-time successor-state requirements. Attempt 0003 stopped before test
+discovery because edits to five frozen historical tests violated their exact
+portfolio bytes; those edits were restored. All three attempts remain
+immutable. Attempt 0004 is the required final current/historical closure
+receipt against the completed item and READY successor state.
 
 This is workflow evidence, not evidence about Lean semantics, checker
 correctness, resource performance, or scientific confirmation. The dependency

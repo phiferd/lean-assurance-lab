@@ -58,22 +58,24 @@ research directions.
 
 ## Attempted
 
-- Provisional `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` closure candidate awaits
-  its repaired ordered repository receipt. **What did we find?** The costly
+- `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` completes subject to its prebound
+  final ordered repository receipt. **What did we find?** The costly
   suite now runs from a detached exact-commit snapshot, and publication is
   refused unless every declared publication input still matches that snapshot.
   Stage-specific content bindings reuse the suite after a publication-only
   document change and invalidate it after an actual test dependency change.
-  Thirty-one focused controls pass. Two ordered closure attempts remain
-  preserved: the first rejected an unsafe linked source ancestor, and the
+  Thirty-one focused controls pass. Three failed ordered closure attempts
+  remain preserved: the first rejected an unsafe linked source ancestor, the
   second exposed snapshot-local receipt, Arena checkout, and closure-state
-  integration requirements. No scientific experiment ran. **Is it
+  integration requirements, and the third rejected edits to frozen historical
+  tests before discovery. No scientific experiment ran. **Is it
   interesting?** Yes, because arbitrary live edit-and-restore activity can no
   longer contaminate the validated suite, while unrelated commits no longer
   invalidate a stage solely through global `HEAD`. **Does it require more
-  work?** Run the repaired full current/historical closure. The separate
-  `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` remains deferred and unstarted until
-  that receipt passes.
+  work?** No further repair follows if the prebound attempt 0004 full
+  current/historical closure passes. The separate
+  `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` is selected READY and unstarted for
+  its fixed read-only audit of eighteen retained receipts.
 
 - `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` closes `NO_SIGNAL` after its fixed
   eight-cell delta/iota screen. **What did we find?** Substitution and KAM-mode-3
@@ -3247,9 +3249,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1`.
-It is ACTIVE under [its closure-repair plan](research/SNAPSHOT_REUSE_CLOSURE_RELIABILITY_1_PLAN.md).
-The canonical queue retains zero READY items and one ACTIVE item. The completed
+Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+It is READY and unstarted under [its fixed read-only plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
+The canonical queue retains one READY item and zero ACTIVE items. The completed
 Nanoda E0 screen is INCONCLUSIVE: its fixed selector produced no inventory
 because all 170 modeled semantic sites were already represented, while 332
 other parsed sites were outside the retained semantic model. No confirmation
@@ -3257,8 +3259,8 @@ proposal follows from that result. The completed LazyLean E0 screen observed no
 signal in eight exact delta/iota cells: all accepted, both candidate KAM demand
 counters were positive, and no confirmation proposal follows. The validation-
 input snapshot and stage-specific reuse closure repair has a passing focused
-control set and awaits its repaired full closure. The eighteen-receipt memory
-audit remains DEFERRED. BUILD-MODE retains its source/configuration gate;
+control set and prebinds its final ordered closure. The eighteen-receipt memory
+audit is READY but has not started. BUILD-MODE retains its source/configuration gate;
 independent transfer still waits for an owner-designated holdout package.
 
 The closure-automation successor completed its full-suite and refresh gates.
@@ -3403,8 +3405,8 @@ no external action is recommended now.
 | 9 | `BINDER-MODEL-PILOT-1` | COMPLETE, NO_OBSERVED_DIFFERENCE; 30,000 scoped outputs matched |
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
-| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | ACTIVE; focused controls pass, repaired ordered closure pending |
-| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; selected successor candidate after passing closure |
+| 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
+| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | READY, unstarted; selected fixed read-only audit |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
