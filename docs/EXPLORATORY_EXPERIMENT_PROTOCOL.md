@@ -87,9 +87,15 @@ rules. Never use E0 to relabel a production fix as an untested experiment.
 At campaign handoff, summarize all started pilots (including OPEN and
 INCONCLUSIVE), cost and recommendations once; perform one strategic selection
 and its applicable queue/view checks. That administrative update is not E2
-promotion and does not require scientific replay for each pilot. The queue's
-current derived views may need refresh when the campaign selection changes;
-individual E0 ledger additions do not feed assurance claims or artifact graphs.
+promotion and does not require scientific replay for each pilot.
+Use `scripts/exploration-handoff --base <pre-campaign-commit> --write`, then
+`--check`. This validates the ledger, queue and strategic selection and updates
+only `results/research/project-review.json` and `docs/PROJECT_REVIEW.md` through
+their existing builder. It reads retained assurance observations but does not
+replay or reattest them. It creates no extra log/receipt tree. Do not call the
+general `refresh-current-state` pipeline for this handoff: E0 completion and
+successor selection do not change assurance evidence. Retain raw attempts once;
+no additional narrative or closure receipt is required for each retry.
 
 ## Outcomes and promotion
 
@@ -155,8 +161,12 @@ neither its ledger rows nor its original evidence is rewritten.
 lifecycle, paths and the append-only prefix relative to a review base (HEAD by
 default). The check also rejects changes to previously recorded inputs and raw evidence.
 Keep new raw files under `explorations/runs/<id>/`. CI uses the lightweight
-check only when the complete change is confined to that directory and the
-ledger; shared tooling, schema, workflow or other changes take the full CI path.
+check for ledger/raw-only changes, or the handoff command when a completed E0
+campaign also updates its queue, current planning documents, new plans/review
+records and the two project-planning views. Existing research-plan edits,
+shared tooling, schema, workflow, assurance or unknown changes take the full CI
+path. The handoff check validates closed trials and a consistent unstarted
+successor; changing a queue file alone cannot select the E0 shortcut.
 `scripts/exploration-record proposal CONFIRM-EXAMPLE-1` renders the separate
 proposal after its promotion event is recorded. The command never launches,
 changes the queue, refreshes assurance or grants external-write authorization.

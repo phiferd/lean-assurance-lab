@@ -35,7 +35,12 @@ jobs:
             echo "lane=full" >> "$GITHUB_OUTPUT"
           fi
       - name: Check portable evidence replay
-        if: steps.lane.outputs.lane != 'exploration'
+        if: steps.lane.outputs.lane != 'exploration' && steps.lane.outputs.lane != 'exploration-handoff'
         run: python scripts/check-portable-evidence-replay --require-foreign-checkout
-      - if: steps.lane.outputs.lane != 'exploration'
+      - name: Check E0 campaign handoff
+        if: steps.lane.outputs.lane == 'exploration-handoff'
+        env:
+          BASE: ${{ github.event.pull_request.base.sha || github.event.before }}
+        run: python scripts/exploration-handoff --base "$BASE" --check
+      - if: steps.lane.outputs.lane != 'exploration' && steps.lane.outputs.lane != 'exploration-handoff'
         run: python scripts/run-unit-tests

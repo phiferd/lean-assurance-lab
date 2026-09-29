@@ -125,7 +125,14 @@ SIGNAL or INCONCLUSIVE. Routine E0 records require the exploration ledger check
 and diff check, not independent closure review, full research replay, assurance
 refresh or per-trial project-wide reranking. Aim for one or two commits per
 ordinary pilot; retain all failures regardless of commit count. Campaign
-handoff performs strategic selection once. Shared tooling changes retain
+handoff performs strategic selection once. Use `scripts/exploration-handoff
+--base <pre-campaign-commit> --write`, then `--check`, for E0 campaign handoff:
+it validates the ledger/queue and updates only the two project-planning views.
+Do not run `refresh-current-state`, assurance generation, artifact-graph refresh,
+or create workflow-refresh/closure receipts solely for E0 completion or successor
+selection. This also applies when generated prose recommends a general refresh.
+CI recognizes eligible E0 planning handoffs; shared code, schema, workflow and
+assurance changes still take the full path. Shared tooling changes retain
 applicable regression/full-suite requirements. Confirmation always creates a
 separate experiment with fresh execution and its own gates; E0 never supplies
 confirmatory evidence. These explicit prospective exceptions govern E0 over

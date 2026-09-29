@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+"""Validate an E0 campaign handoff; optionally update its two planning views."""
+import argparse
+import json
+from pathlib import Path
+import subprocess
+import sys
+
+ROOT = Path(__file__).resolve().parents[1]
+sys.path.insert(0, str(ROOT))
+from lib.exploration_handoff import handoff
+
+parser = argparse.ArgumentParser(description=__doc__)
+parser.add_argument('--base', required=True, help='revision before this E0 campaign/handoff')
+mode = parser.add_mutually_exclusive_group(required=True)
+mode.add_argument('--write', action='store_true')
+mode.add_argument('--check', action='store_true')
+args = parser.parse_args()
+try:
+    print(json.dumps(handoff(ROOT, args.base, write=args.write), indent=2))
+except (OSError, ValueError, KeyError, StopIteration, subprocess.CalledProcessError) as error:
+    parser.exit(1, str(error) + '\n')

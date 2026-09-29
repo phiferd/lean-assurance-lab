@@ -207,7 +207,9 @@ def proposal(states, confirmation_id):
 
 
 def validation_lane(root, base):
-    """Only ledger/raw additions bypass full CI; any shared change uses full CI."""
+    """E0 records and bounded planning handoffs bypass scientific replay."""
     paths = subprocess.check_output(['git', 'diff', '--name-only', base, 'HEAD', '--'], cwd=root).decode().splitlines()
-    return 'exploration' if paths and all(
-        p == LEDGER or p.startswith('explorations/runs/') for p in paths) else 'full'
+    if paths and all(p == LEDGER or p.startswith('explorations/runs/') for p in paths):
+        return 'exploration'
+    from lib.exploration_handoff import qualifies
+    return 'exploration-handoff' if qualifies(root, base, paths) else 'full'
