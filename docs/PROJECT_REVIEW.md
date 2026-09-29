@@ -20,24 +20,25 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete E0-LAZYLEAN-COMPOSED-REDUCTION-1: Screen composed delta/iota reduction on two LazyLean engines; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1**.
+Selected next item: **E0-LAZYLEAN-COMPOSED-REDUCTION-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 13 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | READY |
+| 13 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | DEFERRED |
 | 14 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
 | 31 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 50 | CVC-4: Connect the contract to real validation behavior | PLANNED |
 | 51 | CVC-5: Prepare shared evidence and decide the next phase | PLANNED |
 | 69 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
+| 81 | E0-LAZYLEAN-COMPOSED-REDUCTION-1: Screen composed delta/iota reduction on two LazyLean engines | ACTIVE |
 
 ### 13. RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting
 
@@ -45,7 +46,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 Read-only audit of receipt labels and raw/normalized wait4 fields, supervisor source, primary operating-system documentation, and historical Darwin runtime identity; publish a scoped interpretation or explicit attribution boundary and a future metadata/reporting rule.
 
-**Why this rank:** Selected after the snapshot/reuse controller repair because the exact eighteen-receipt interpretation gap is concrete, fully local and evidence-bounded. It improves the wording boundary of an existing result without a process launch; build mode and independent transfer retain unsatisfied gates.
+**Why this rank:** Owner-directed deferral: reopen only when a concrete upcoming measurement decision requires the eighteen-receipt wait4 interpretation. No dependency for semantics screening.
 
 **Completion:** A reproducible eighteen-row receipt audit supports a precisely scoped metric interpretation or named historical attribution boundary, and the report gives a concrete future metadata/reporting rule.
 
@@ -53,7 +54,7 @@ Read-only audit of receipt labels and raw/normalized wait4 fields, supervisor so
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY and unstarted under docs/research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md. Before any audit, create and commit a fresh work record binding the exact 18 receipts, frozen result, R2 manifest, prior attribution correction, supervisor/observer sources, and executable/source identity. Scope is read-only receipt/source/documentation review; no process launches, synthetic subprocesses, checker builds, result edits, or external actions.
+**Boundary:** DEFERRED: READY and unstarted under docs/research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md. Before any audit, create and commit a fresh work record binding the exact 18 receipts, frozen result, R2 manifest, prior attribution correction, supervisor/observer sources, and executable/source identity. Scope is read-only receipt/source/documentation review; no process launches, synthetic subprocesses, checker builds, result edits, or external actions.
 
 ### 14. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
@@ -135,6 +136,22 @@ After the required input and authorization arrive, audit exact identities, selec
 
 **Boundary:** WAITING: Owner supplies one concrete curator/dataset proposal or new functioning target evidence and separately authorizes this named metadata-only intake. No inputs or independent custodian are currently supplied.
 
+### 81. E0-LAZYLEAN-COMPOSED-REDUCTION-1: Screen composed delta/iota reduction on two LazyLean engines
+
+**Target:** Transparent proof alias chains of depths 1 and 4 as recursor major premises
+
+Run one eight-cell E0 trial with retained supervision and usage accounting.
+
+**Why this rank:** Owner-directed semantic exploration outranks accounting maintenance; composition differs from prior isolated reductions.
+
+**Completion:** One closed E0 trial, raw attempts, measured usage coverage/retries/commits and lightweight handoff.
+
+**Stop:** Answer the fixed screen or record genuinely unavailable observation after feasible repairs; no external writes or assurance claims.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** ACTIVE: Selected ACTIVE under the E0 plan; append question and verified input identities before launch.
+
 ## Autonomous workflow
 
 | Work | Default mechanism |
@@ -176,6 +193,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1. Selected next item: RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, METAMORPHIC-REPRESENTATION-PILOT-1, PIPELINE-COMPLETENESS-PILOT-1, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-PROVENANCE-INTAKE-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1. Selected next item: E0-LAZYLEAN-COMPOSED-REDUCTION-1 (ACTIVE).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

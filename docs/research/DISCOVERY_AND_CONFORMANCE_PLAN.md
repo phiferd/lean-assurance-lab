@@ -321,3 +321,10 @@ interpretation or explicit attribution boundary, and a future kernel-metadata
 and reporting rule. It authorizes no process launches and does not relabel the
 frozen result. BUILD-MODE remains PLANNED pending an exact supported configuration,
 realistic input-influenced source site, and reproducible toolchain/protocol.
+
+## Owner-directed lightweight semantics campaign — 2026-09-29
+
+Select `E0-LAZYLEAN-COMPOSED-REDUCTION-1` ACTIVE under [its plan](E0_LAZYLEAN_COMPOSED_REDUCTION_1_PLAN.md).
+Test composition beyond isolated delta/iota with eight cells, raw evidence and
+actual usage coverage. Keep memory accounting DEFERRED until a concrete upcoming
+measurement decision depends on it. Do not add another closure repair campaign.

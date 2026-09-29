@@ -3251,19 +3251,15 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
-It is READY and unstarted under [its fixed read-only plan](research/RESOURCE_SHORT_PROCESS_MEMORY_AUDIT_1_PLAN.md).
-The canonical queue retains one READY item and zero ACTIVE items. The completed
-Nanoda E0 screen is INCONCLUSIVE: its fixed selector produced no inventory
-because all 170 modeled semantic sites were already represented, while 332
-other parsed sites were outside the retained semantic model. No confirmation
-proposal follows from that result. The completed LazyLean E0 screen observed no
-signal in eight exact delta/iota cells: all accepted, both candidate KAM demand
-counters were positive, and no confirmation proposal follows. The validation-
-input snapshot and stage-specific reuse closure repair has a passing focused
-control set and prebinds its final ordered closure. The eighteen-receipt memory
-audit is READY but has not started. BUILD-MODE retains its source/configuration gate;
-independent transfer still waits for an owner-designated holdout package.
+Selected next item: `E0-LAZYLEAN-COMPOSED-REDUCTION-1`.
+It is ACTIVE under [its E0 plan](research/E0_LAZYLEAN_COMPOSED_REDUCTION_1_PLAN.md).
+Owner direction on 2026-09-29 selects one eight-cell composed-reduction screen
+and actual usage/retry/commit accounting through the lightweight path.
+RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 is DEFERRED until a concrete upcoming
+measurement decision needs its interpretation. No such dependency exists here.
+Prior isolated LazyLean delta/iota cases were NO_SIGNAL; their evidence remains
+unchanged. Snapshot/reuse repair completed, but operational savings are unproven.
+BUILD-MODE remains PLANNED; independent transfer retains its external input gate.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
