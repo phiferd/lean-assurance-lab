@@ -336,3 +336,13 @@ This is a fixture-design observation, not a semantic negative. Select `E0-LAZYLE
 READY and unstarted to test two-constructor data without the singleton-proof
 shortcut. No confirmation or external action follows. Continue the memory-audit
 deferral until an identified upcoming measurement decision needs it.
+
+## Owner-selected six-trial E0 portfolio — 2026-09-29
+
+What did we find? Existing finite results agree and the latest composed screen
+lacks intended demand. Is it interesting? Yes, as a reason to diversify the next
+screening campaign across algorithms, independent implementations and checking
+completeness. Does it require more work? Select `E0-SEMANTIC-ASSURANCE-SCREENING-1` READY and unstarted
+under [its plan](E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md). Fold standalone data
+recursion into trial 1, retain memory-audit deferral and perform strategic review
+once at campaign handoff. No trial or external action starts with this update.

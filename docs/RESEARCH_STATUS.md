@@ -3251,21 +3251,23 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-LAZYLEAN-DATA-RECURSOR-1`.
-It is READY and unstarted under [its E0 plan](research/E0_LAZYLEAN_DATA_RECURSOR_1_PLAN.md).
+Selected next item: `E0-SEMANTIC-ASSURANCE-SCREENING-1`.
+It is READY and unstarted under [the six-trial E0 plan](research/E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md).
 The canonical queue retains one READY item and zero ACTIVE items.
-The composed-reduction screen completed eight ACCEPT cells in one attempt, but
-its KAM candidates recorded delta=0 and iota=1 at both depths. It is E0
-INCONCLUSIVE: the intended interaction was not observed, and no confirmation
-or external action follows. Source inspection identifies a singleton-proof
-shortcut as a plausible explanation, not a traced execution claim.
-The separate next screen uses two-constructor data to avoid that shortcut.
-RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 remains DEFERRED until a concrete upcoming
-measurement decision requires it. No such dependency exists in this campaign.
-Usage coverage, raw observations and retry counts are retained with the
-[trial](../explorations/runs/EXPLORE-LAZYLEAN-COMPOSED-REDUCTION-1/finish-event.json). Snapshot/reuse engineering remains
-complete; this E0 handoff does not refresh or reattest assurance evidence.
-BUILD-MODE remains PLANNED and independent transfer retains its input gate.
+Owner-directed selection broadens screening across three questions: reduction
+algorithm behavior, independent transfer of two small real proof slices, and
+checking completeness. The data-recursion and expression-sharing trials cover
+the first question; invalid-target and substituted-target trials cover the third.
+The former standalone data-recursion item is DEFERRED because campaign trial 1
+owns its unchanged construction question. No new trial has started.
+The preceding composed screen remains E0 INCONCLUSIVE: all eight checks accepted,
+but candidate KAM delta demand was absent. Its original evidence is unchanged.
+Each new trial records its question and inputs before execution, retains raw
+attempts and reports its own outcome. Campaign handoff assesses shared assets,
+confirmation value and actual usage coverage/retries/commits once.
+RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 remains DEFERRED unless a concrete upcoming
+measurement decision requires it. None is identified for this campaign.
+BUILD-MODE remains PLANNED; independent transfer retains its external input gate.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
