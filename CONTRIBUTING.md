@@ -1,5 +1,44 @@
 # Contributing to Lean Assurance Lab
 
+## Your first small contribution
+
+Pick one [bounded task card](docs/contributor-tasks/README.md): Python CLI testing,
+a retained diagnostic fixture, or a Lean-expert source-boundary review. Agree on
+the question, owner and expected artifact before starting; the cards are proposals
+for review. A source map, a meaningful regression or a documented stopping boundary
+can be useful even when no defect is found.
+
+1. Read the task's starting evidence and the [Constitution](CONSTITUTION.md).
+   Check the selected item in [Research Status](docs/RESEARCH_STATUS.md);
+   an issue or task proposal does not activate a scientific campaign.
+2. Use the task's stated prerequisites. Source review requires no checker build.
+   Python fixture work uses the dependencies in `requirements-dev.txt`; it does
+   not require materializing the approximately 9.5 GB survivor corpus. Setup time
+   and host compatibility are not guaranteed. The full survivor investigation,
+   including issue12, is an advanced path rather than the beginner entrypoint.
+3. Return the named artifact, exact source/fixture identity, reproduction command
+   where applicable, and the result or stopping boundary. Keep captured evidence
+   unchanged. Agree the validation lane with the maintainer before a costly run.
+
+For an explicitly selected E0 exploration, use the existing
+[exploration protocol](docs/EXPLORATORY_EXPERIMENT_PROTOCOL.md): one declared
+question, retained raw observations and a scoped conclusion. A source-only task
+does not authorize a checker launch. E0-only record changes use
+`scripts/exploration-record check` and `git diff --check`; campaign handoff uses
+the existing `exploration-handoff` path. Shared Python/tooling changes still
+need affected regressions and the repository's current/historical unit runner.
+Neither an E0 agreement nor checker consensus establishes correctness.
+
+For the small helper's existing regression examples, run:
+
+```sh
+python3 -m unittest discover -s tests -p 'test_exploration_bookkeeping.py'
+```
+
+The broader assurance/contribution requirements below apply when that is the
+agreed contribution scope. You do not need to begin with every historical study
+or a new evidence system to propose a small task.
+
 Lean Assurance Lab welcomes contributions that improve the measured assurance
 state of the Lean ecosystem. `CONSTITUTION.md` governs acceptance. A
 contribution is reviewed by whether it adds scoped, durable evidence that is
@@ -30,7 +69,7 @@ The normal validation commands are:
 
 ```sh
 scripts/validate-contribution --check-catalog
-python3 -m unittest discover -s tests -p 'test_*.py' -v
+python3 scripts/run-unit-tests
 scripts/current-assurance-snapshot
 scripts/artifact-status --require-current
 ```

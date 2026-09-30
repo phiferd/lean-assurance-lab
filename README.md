@@ -1,5 +1,12 @@
 # Lean Assurance Lab
 
+**Make a first small contribution:** choose a [source review or Python fixture task](docs/contributor-tasks/README.md),
+then agree on one question and artifact with the maintainer. Start with
+[the short contribution path](CONTRIBUTING.md#your-first-small-contribution).
+These tasks use repository sources or retained fixtures; the full survivor
+investigation and its large corpus are a separate path. Task cards are local
+review drafts until assigned, not active campaigns.
+
 **New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](docs/INTRODUCTION.md). For a real kernel failure and
 an honest assessment of this project's limits, read the
