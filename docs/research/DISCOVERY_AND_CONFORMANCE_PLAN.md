@@ -362,3 +362,7 @@ diagnostic triage. The original E0 observations remain exploratory. Memory
 accounting stays deferred without a measurement dependency; broad build-mode
 work lacks exact configurations, and independent holdout intake lacks input.
 See the [campaign summary](../../explorations/runs/EXPLORE-SEMANTIC-ASSURANCE-CAMPAIGN-1/summary.md).
+
+## Diagnostic triage handoff — 2026-09-30
+
+Source-only triage is E0 INCONCLUSIVE about original build provenance. Candidate exception-environment rebinding supports a separate diagnostic regression hypothesis; no build or checker launch occurred. Select EXPLORATION-BOOKKEEPING-HELPER-1 READY and unstarted for the owner-approved minimal mechanical helper. Memory audit stays DEFERRED.

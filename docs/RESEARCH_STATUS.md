@@ -3266,20 +3266,17 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1`.
-It is READY and unstarted under [the source-only diagnostic plan](research/E0_LEAN4LEAN_DIAGNOSTIC_PANIC_TRIAGE_1_PLAN.md).
+Selected next item: `EXPLORATION-BOOKKEEPING-HELPER-1`.
+It is READY and unstarted under [the local helper plan](research/EXPLORATION_BOOKKEEPING_HELPER_1_PLAN.md).
 The canonical queue retains one READY item and zero ACTIVE items.
-The completed six-trial campaign found no missed semantic or target detection:
-34 accepts and six expected ill-typed rejections across 40 final cells, with 48
-actual launches including a preserved construction failure and repair. Both real
-proof slices transferred. Serialized sharing agreed but loader interning means
-persistent internal sharing was not tested. Lean4Lean rejected the three bad
-targets while emitting error-formatting panics. Source-only triage now targets
-that practical diagnostic route; no invalid-proof acceptance, current-tip defect
-or correctness claim follows. All six screens remain E0 NO_SIGNAL.
+The source-only diagnostic triage closes E0 INCONCLUSIVE: the retained binary
+hash matches, but original source/binary correspondence is unavailable. Candidate
+source preserves the old environment in declTypeMismatch despite sibling rebinding;
+this supports a minimal diagnostic-regression hypothesis, not a confirmed cause.
+Zero builds or checker launches occurred. See [the source map](../explorations/runs/EXPLORE-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1/summary.md).
 No semantic confirmation or external action follows. The memory audit remains
-DEFERRED without a named measurement dependency; BUILD-MODE stays PLANNED and
-independent transfer retains its external-input gate. No successor has started.
+DEFERRED without a named measurement dependency. The six closed screens and
+all original evidence remain unchanged.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
@@ -3424,7 +3421,7 @@ no external action is recommended now.
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
-| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | READY, unstarted; selected fixed read-only audit |
+| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
