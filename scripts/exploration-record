@@ -17,12 +17,25 @@ check = sub.add_parser('check')
 check.add_argument('--base', default='HEAD', help='Git revision whose ledger prefix must be preserved')
 sub.add_parser('proposal').add_argument('confirmation_id')
 sub.add_parser('lane').add_argument('--base', required=True)
+draft = sub.add_parser('draft', help='Print an unappended schema-backed draft with unresolved researcher fields')
+draft.add_argument('event', choices=('start', 'finish'))
+draft.add_argument('id')
+draft.add_argument('--raw-output', action='append', default=[])
+draft.add_argument('--final-result', help='Explicit final result in --raw-output; derive supported finish counts')
+counts = sub.add_parser('counts', help='Count supported existing receipts; never launch or append')
+counts.add_argument('--campaign', required=True)
+counts.add_argument('--final-result', action='append', required=True,
+                    help='One retained final result path per closed trial; explicit selection avoids construction ambiguity')
 args = parser.parse_args()
 try:
     if args.command == 'lane':
         print('lane=' + e.validation_lane(ROOT, args.base))
         raise SystemExit(0)
-    if args.command == 'append':
+    if args.command in ('draft', 'counts'):
+        from lib import exploration_bookkeeping as b
+        result = (b.draft(ROOT, args.event, args.id, args.raw_output, args.final_result) if args.command == 'draft'
+                  else b.counts(ROOT, args.campaign, args.final_result))
+    elif args.command == 'append':
         result = e.append(ROOT, e.read_json(args.event.read_text()))
     else:
         raw = e.local_file(ROOT, e.LEDGER).read_bytes()

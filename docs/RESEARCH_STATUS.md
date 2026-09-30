@@ -3266,17 +3266,22 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `EXPLORATION-BOOKKEEPING-HELPER-1`.
-It is READY and unstarted under [the local helper plan](research/EXPLORATION_BOOKKEEPING_HELPER_1_PLAN.md).
+Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
+It is READY and unstarted under [the source/fixture preparation plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md).
 The canonical queue retains one READY item and zero ACTIVE items.
-The source-only diagnostic triage closes E0 INCONCLUSIVE: the retained binary
-hash matches, but original source/binary correspondence is unavailable. Candidate
-source preserves the old environment in declTypeMismatch despite sibling rebinding;
-this supports a minimal diagnostic-regression hypothesis, not a confirmed cause.
-Zero builds or checker launches occurred. See [the source map](../explorations/runs/EXPLORE-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1/summary.md).
-No semantic confirmation or external action follows. The memory audit remains
-DEFERRED without a named measurement dependency. The six closed screens and
-all original evidence remain unchanged.
+The local helper reproduces 40 final cells, 48 launches, three prelaunch failures
+and eight retained nonfinal cells. All non-skipped current/historical tests passed
+across the full invocation plus unchanged host supervisor retry; the initial
+sandbox-only errors and six missing-payload skips remain retained. No single clean
+full runner or full-payload integration is claimed. Scientific judgments remain researcher-owned.
+The source-only diagnostic triage is E0 INCONCLUSIVE on exact historical source/binary
+provenance, with zero builds/checker launches and a separate diagnostic regression
+hypothesis. [Source map](../explorations/runs/EXPLORE-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1/summary.md).
+Pinned-source feasibility recommends the PR15373 alias-preserved function-type seam;
+no confirmed defect or experiment follows. The four-case pilot requires preserving
+the raw alias and an available exact pinned runner without a large build. PR15374
+is secondary; known eta families are duplicates, not broad novelty.
+Memory audit stays DEFERRED without a named dependency. No external action follows.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed

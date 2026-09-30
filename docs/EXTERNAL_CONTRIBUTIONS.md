@@ -17,7 +17,7 @@ Ledger updated: **2026-09-23**. Upstream states are dated observations, not a li
 | Contribution | Repository | Observed | Review/checks | Next step |
 |---|---|---|---|---|
 | [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
-| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
+| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-30 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
 | [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-09-23 | no activity; not reported | Await maintainer feedback on Kiota PR#11. Investigate feedback locally; any later external modification requires exact authorization. |
 
 ## Local drafts

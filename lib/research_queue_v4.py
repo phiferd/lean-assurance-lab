@@ -9,6 +9,7 @@ from __future__ import annotations
 import copy
 import hashlib
 import json
+import re
 from pathlib import Path
 from typing import Any
 
@@ -86,6 +87,15 @@ def validate_queue(data: Any, root: Path = ROOT, *, require_ready: bool = False)
            for blocker in candidate.get("blockers", [])):
         raise ValueError("v4 strategic review cannot use an attempt budget as a blocker")
     _review(data, root)
+    # Current planning tables must agree with their canonical unfinished items.
+    # Historical Attempted prose and completed result labels retain their scope.
+    status = (root / 'docs/RESEARCH_STATUS.md').read_text(encoding='utf-8')
+    active = status.split('### Active', 1)[-1].split('### Waiting', 1)[0]
+    by_id = {item['id']: item for item in data['items']}
+    for ident, state in re.findall(r'^\|[^|]*\|\s*`([^`]+)`\s*\|\s*([A-Z_]+)', active, re.MULTILINE):
+        item = by_id.get(ident)
+        if item and item['status'] != 'COMPLETE' and state != item['status']:
+            raise ValueError('current status table disagrees with queue: ' + ident)
     if handoff_status(data) == "PAUSED":
         by_id = {row["item_id"]: row for row in review["candidates"]}
         if by_id[data["selected_item"]]["disposition"] != "BLOCKED":

@@ -75,6 +75,19 @@ class ResearchQueueV4Tests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "prohibit terminal attempt budgets"):
             validate_queue(self.queue, self.root)
 
+    def test_current_table_cannot_select_a_deferred_item(self):
+        self.queue['items'][1]['status'] = 'DEFERRED'
+        self.queue['items'][1]['blocked_reason'] = 'No named measurement dependency.'
+        self.review['candidates'][1]['disposition'] = 'DEFERRED'
+        self.bind()
+        path = self.root / 'docs/RESEARCH_STATUS.md'
+        original = path.read_text()
+        path.write_text(original.replace('### Waiting', '| 2 | `two` | READY, selected |\n### Waiting'))
+        with self.assertRaisesRegex(ValueError, 'status table disagrees'):
+            validate_queue(self.queue, self.root)
+        path.write_text(path.read_text().replace('| READY, selected |', '| DEFERRED |'))
+        validate_queue(self.queue, self.root)
+
     def test_completed_historical_item_retains_original_budget(self):
         completed = self.item("done", 3, "COMPLETE")
         completed["budget"] = {"max_sessions": 1, "session_minutes": 60, "checker_launches": 4}

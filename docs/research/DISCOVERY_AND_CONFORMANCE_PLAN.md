@@ -366,3 +366,7 @@ See the [campaign summary](../../explorations/runs/EXPLORE-SEMANTIC-ASSURANCE-CA
 ## Diagnostic triage handoff — 2026-09-30
 
 Source-only triage is E0 INCONCLUSIVE about original build provenance. Candidate exception-environment rebinding supports a separate diagnostic regression hypothesis; no build or checker launch occurred. Select EXPLORATION-BOOKKEEPING-HELPER-1 READY and unstarted for the owner-approved minimal mechanical helper. Memory audit stays DEFERRED.
+
+## Local helper and eta preparation — 2026-09-30
+
+Existing-CLI drafts and supported receipt counts reproduce 40/48/3/8; all non-skipped current/historical tests passed across the full invocation plus unchanged host supervisor retry; the initial sandbox-only failure and missing-payload skips remain retained. Select LEAN-ETA-ALIAS-PILOT-PREPARATION-1 READY and unstarted, with four prospective cases, preserved-alias/duplicate/runner stop gates and no large build or checker launch. Source-only triage remains inconclusive about original build provenance; no defect claimed.
