@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1",
+  "data": {
+    "campaign": "E0-SEMANTIC-ASSURANCE-SCREENING-1",
+    "question": "Does the retained checker/report route identify when a well-typed but different target proposition or target name was checked under the original requested-object expectation?",
+    "sources": [
+      {
+        "name": "lean-assurance-lab",
+        "revision": "035e77bbadcf63cf0b95df8442969e0f8d5573e5"
+      },
+      {
+        "name": "lean-kernel-arena",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124"
+      }
+    ],
+    "versions": "Python 3.10.10; macOS-15.8.1-arm64-arm-64bit; retained lean4export 3.1.0/Lean 4.29.1 baseline; official and Lean4Lean binary SHA-256 bound in inputs. New fixture/runner files are separately SHA-256 bound.",
+    "commands": "python3 explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/prepare.py (already used to freeze fixtures; no checker launched); python3 explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/run.py (one supervised attempt, 6 ordered checker cells), using lib.pipeline_completeness sentinel/process_classification and retained run_supervised with protocol checker timeout and memory limits.",
+    "inputs": [
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/baseline.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/changed-proposition.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/changed-name.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/prepare.py",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/run.py",
+      "results/research/pipeline-completeness-pilot-2/inputs/baseline.ndjson",
+      "results/research/pipeline-completeness-pilot-1/protocol.json",
+      "results/research/pipeline-completeness-pilot-2/protocol.json",
+      "results/research/pipeline-completeness-pilot-1/expected-module.json",
+      "lib/pipeline_completeness.py",
+      "lib/metamorphic_pilot_runner.py",
+      "docs/research/E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md",
+      "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel",
+      "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean"
+    ],
+    "input_sha256": {
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/baseline.ndjson": "d9e51643e1533b667d897f8dfeaba3c6a0f6e64936b54162b414574e930b24e3",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/changed-proposition.ndjson": "81c6e8e3b6841da71b9671a18f60d166a26841511cc04d79fb96b54ea7609dff",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/changed-name.ndjson": "ddb1e6ac4d9eadd0ac21c18b540359664d4f4766638a5faf3215dbe731fc0d5f",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/prepare.py": "fd0934a1167978ddbeac09e628d3723d2d81daa046c5962a314df1adb0239b23",
+      "explorations/runs/EXPLORE-SEMANTIC-SUBSTITUTED-TARGET-1/run.py": "7b7abc1074f49a2baf22bc6da910215a5d194033fb66e4489f817dd76c0ebb17",
+      "results/research/pipeline-completeness-pilot-2/inputs/baseline.ndjson": "d9e51643e1533b667d897f8dfeaba3c6a0f6e64936b54162b414574e930b24e3",
+      "results/research/pipeline-completeness-pilot-1/protocol.json": "c232e6c800f831598494602334f05f61d91a06e836cf3f66edbc9d1a112e64fc",
+      "results/research/pipeline-completeness-pilot-2/protocol.json": "5e74739523bedb77f9109d2928d21f5121f06e833ad13f537969b73792ecd0d6",
+      "results/research/pipeline-completeness-pilot-1/expected-module.json": "a2303f909775382d7b9bb5239cd49e2acd24f37dd2be64c9bfb1a694c7dd25dc",
+      "lib/pipeline_completeness.py": "d4ab07a047a3b62922152e14461fd0eb8e019f5156f9344f09ff2a128df2b221",
+      "lib/metamorphic_pilot_runner.py": "fd7b622443406bb4a205df225e202fed50e8f65a67a2282f01d7da42d326cd50",
+      "docs/research/E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md": "3390da526988fc53bafa7a50e0e097243ca88a8720f9082fdf8f3802ff89b72a",
+      "external/lean-kernel-arena/_build/checkers/official/src/.lake/build/bin/kernel": "87efe83ae56410a4689b49ff5276dd9663fc85ae3641849d123b5fcef1692585",
+      "external/lean-kernel-arena/_build/checkers/lean4lean/src/.lake/build/bin/lean4lean": "a48d684928795bf318782abc5c5ab07b1eed68ad39f63947554e04f94d8ff6bc"
+    },
+    "sample": "Three fixed NDJSON artifacts: exact baseline; d12 at same name with proposition True -> True and identity-lambda proof; d12 renamed d12_substituted with original True proposition/proof. Official and Lean4Lean each check all three, six supervised launches.",
+    "planned_runs": 6,
+    "controls": "Baseline sentinel PASS and both checker ACCEPT. Changed-proposition and changed-name must remain well typed and accepted; independent target sentinel must distinguish both from exact requested d12 : True. Checker acceptance of valid substituted artifact is expected, not a soundness signal. Positive RSS, no timeout, cleanup required. Stop on failed baseline or process-control fault."
+  }
+}

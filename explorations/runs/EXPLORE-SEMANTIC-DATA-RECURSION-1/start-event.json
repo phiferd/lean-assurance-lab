@@ -1,0 +1,35 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-SEMANTIC-DATA-RECURSION-1",
+  "data": {
+    "campaign": "E0-SEMANTIC-ASSURANCE-SCREENING-1",
+    "question": "Do two-constructor data recursors over transparent aliases of depths 1 and 4 produce delta/iota demand and profile disagreement?",
+    "sources": [
+      {
+        "name": "leanprover-community/lazylean",
+        "revision": "68c66fa18c1afe029512b90ecfe0b162c0dcd8fb",
+        "patch": "results/research/lazy-reduction-conformance-pilot-1/portability-r1.patch"
+      }
+    ],
+    "versions": "Retained LazyLean Darwin binary, Python 3.10; current session model with two bounded delegates for separate trials.",
+    "commands": "python3 explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/screen.py --prepare; python3 explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/screen.py attempt-0001 (host retry attempt-0002 only if monitor preflight denied)",
+    "inputs": [
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/depth-1-candidate.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/depth-1-control.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/depth-4-candidate.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/depth-4-control.ndjson",
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/inputs.json",
+      "explorations/runs/EXPLORE-SEMANTIC-DATA-RECURSION-1/screen.py",
+      "results/research/lazy-reduction-conformance-pilot-1/source-r1.json",
+      "results/research/lazy-reduction-conformance-pilot-1/portability-r1.patch",
+      "external/lazy-reduction-conformance-pilot-1/lazylean-r1",
+      "lib/lazy_reduction_pilot.py",
+      "lib/metamorphic_pilot_runner.py"
+    ],
+    "sample": "Two alias depths x candidate/control x subst/KAM-mode-3 = eight cells; nonrecursive data Sort 1 with two nullary constructors and distinct branch types.",
+    "planned_runs": 8,
+    "controls": "Controls must ACCEPT; candidate matching ACCEPT requires positive KAM delta and iota at both depths. Recognized ACCEPT/semantic rejection difference is a candidate signal requiring diagnostic review; unknown output/process errors or missing demand are INCONCLUSIVE. Positive RSS and safe cleanup required; halt on control failures."
+  }
+}

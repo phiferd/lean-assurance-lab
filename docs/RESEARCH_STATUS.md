@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-29
+Last updated: 2026-09-30
 
 ## How Status Is Tracked
 
@@ -57,6 +57,21 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `E0-SEMANTIC-ASSURANCE-SCREENING-1` completes six E0 NO_SIGNAL screens.
+  **What did we find?** Forty final checker cells contain 34 accepts and six
+  expected ill-typed rejections; both retained real proof slices transfer, and
+  the recursor candidates demand delta/iota at depths 1 and 4. Sharing pairs
+  agree but duplicate expressions are merged on import. The identity sentinel
+  detects both valid substitutions. Lean4Lean emits formatting panics while
+  rejecting all three bad targets. **Is it interesting?** Yes, modestly: reusable
+  demanded-reduction, proof-transfer and intended-target controls, plus a concrete
+  diagnostic limitation. No correctness or general completeness claim follows.
+  **Does it require more work?** No semantic confirmation follows. Select
+  `E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1` READY and unstarted for the separate
+  source-only diagnostic question. Forty-eight actual launches, three preserved
+  sandbox prelaunch failures and one fixture repair remain retained. See the
+  [campaign summary](../explorations/runs/EXPLORE-SEMANTIC-ASSURANCE-CAMPAIGN-1/summary.md).
 
 - `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` completes subject to its prebound
   final ordered repository receipt. **What did we find?** The costly
@@ -3251,23 +3266,20 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-SEMANTIC-ASSURANCE-SCREENING-1`.
-It is READY and unstarted under [the six-trial E0 plan](research/E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md).
+Selected next item: `E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1`.
+It is READY and unstarted under [the source-only diagnostic plan](research/E0_LEAN4LEAN_DIAGNOSTIC_PANIC_TRIAGE_1_PLAN.md).
 The canonical queue retains one READY item and zero ACTIVE items.
-Owner-directed selection broadens screening across three questions: reduction
-algorithm behavior, independent transfer of two small real proof slices, and
-checking completeness. The data-recursion and expression-sharing trials cover
-the first question; invalid-target and substituted-target trials cover the third.
-The former standalone data-recursion item is DEFERRED because campaign trial 1
-owns its unchanged construction question. No new trial has started.
-The preceding composed screen remains E0 INCONCLUSIVE: all eight checks accepted,
-but candidate KAM delta demand was absent. Its original evidence is unchanged.
-Each new trial records its question and inputs before execution, retains raw
-attempts and reports its own outcome. Campaign handoff assesses shared assets,
-confirmation value and actual usage coverage/retries/commits once.
-RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1 remains DEFERRED unless a concrete upcoming
-measurement decision requires it. None is identified for this campaign.
-BUILD-MODE remains PLANNED; independent transfer retains its external input gate.
+The completed six-trial campaign found no missed semantic or target detection:
+34 accepts and six expected ill-typed rejections across 40 final cells, with 48
+actual launches including a preserved construction failure and repair. Both real
+proof slices transferred. Serialized sharing agreed but loader interning means
+persistent internal sharing was not tested. Lean4Lean rejected the three bad
+targets while emitting error-formatting panics. Source-only triage now targets
+that practical diagnostic route; no invalid-proof acceptance, current-tip defect
+or correctness claim follows. All six screens remain E0 NO_SIGNAL.
+No semantic confirmation or external action follows. The memory audit remains
+DEFERRED without a named measurement dependency; BUILD-MODE stays PLANNED and
+independent transfer retains its external-input gate. No successor has started.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed

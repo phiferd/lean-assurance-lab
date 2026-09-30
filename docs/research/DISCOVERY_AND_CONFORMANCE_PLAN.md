@@ -346,3 +346,19 @@ completeness. Does it require more work? Select `E0-SEMANTIC-ASSURANCE-SCREENING
 under [its plan](E0_SEMANTIC_ASSURANCE_SCREENING_1_PLAN.md). Fold standalone data
 recursion into trial 1, retain memory-audit deferral and perform strategic review
 once at campaign handoff. No trial or external action starts with this update.
+
+## Six-trial campaign closure — 2026-09-30
+
+What did we find? Six E0 NO_SIGNAL screens produced 34 accepts and six expected
+rejections in 40 final cells; 48 actual launches retain the initial construction
+failure. Both proof slices transferred, delta/iota demand was observed, and the
+identity sentinel detected valid substituted targets. Duplicate expression nodes
+were merged by the importer, leaving persistent runtime sharing untested.
+Is it interesting? Yes, modestly, as reusable fixtures and finite compatibility
+evidence, plus a visible Lean4Lean error-formatting panic on all three bad targets.
+Does it require more work? No semantic confirmation follows. Select
+E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1 READY and unstarted for exact source-only
+diagnostic triage. The original E0 observations remain exploratory. Memory
+accounting stays deferred without a measurement dependency; broad build-mode
+work lacks exact configurations, and independent holdout intake lacks input.
+See the [campaign summary](../../explorations/runs/EXPLORE-SEMANTIC-ASSURANCE-CAMPAIGN-1/summary.md).
