@@ -1,0 +1,4232 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+    true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : (nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁶ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝² : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁶ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝³ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁶ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝³ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Expr
+v✝⁸ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁸
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁸ = Except.ok v✝⁷
+x✝⁶ : Except CheckError Level
+v✝⁶ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁵ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁸) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁸ st =
+    Except.ok v✝⁵
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁵.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝⁴ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝⁴
+h✝ : ¬(nestResHead v✝⁵.2.2.fst && v✝⁵.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝³
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁵.2.2.snd.keys, active := v✝⁵.2.2.snd.active,
+        ctorNfs := v✝⁵.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁵.2.fst v✝⁵.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁵.2.2.snd.keys, active := v✝⁵.2.2.snd.active,
+          ctorNfs := v✝⁵.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁵.2.fst v✝⁵.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝³
+x✝⁴ : Except CheckError Expr
+v✝² : Expr
+heq✝⁴ : ops.inferType env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError Level
+v✝¹ : Level
+heq✝³ : ops.ensureSort env hi v✝² = Except.ok v✝¹
+x✝² : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝² :
+  nestFields (rec v✝³) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝³ st =
+    Except.ok v✝
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝.2.fst hi v✝.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝.2.2.fst && v✝.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝.2.2.snd.keys, active := v✝.2.2.snd.active,
+        ctorNfs := v✝.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝.2.fst v✝.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝.2.2.snd.keys, active := v✝.2.2.snd.active,
+          ctorNfs := v✝.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝.2.fst v✝.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝.fst, closeTelescope v✝.2.fst hi v✝.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁴ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁴ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError Level
+v✝² : Level
+heq✝³ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝² : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝² :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁵ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝³
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁵ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+    true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁸ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁸
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : (nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝¹
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁹ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁹ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁸ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁶ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝² : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁹ : Except CheckError Unit
+v✝⁸ : Unit
+heq✝⁹ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁸
+x✝⁸ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁶ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝³ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+    true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝²
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁹ : Except CheckError Unit
+v✝⁸ : Unit
+heq✝⁹ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁸
+x✝⁸ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁶ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝³ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝³
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁹ : Except CheckError Unit
+v✝⁹ : Unit
+heq✝⁹ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁹
+x✝⁸ : Except CheckError Expr
+v✝⁸ : Expr
+heq✝⁸ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁸
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ : ops.inferType env hi v✝⁸ = Except.ok v✝⁷
+x✝⁶ : Except CheckError Level
+v✝⁶ : Level
+heq✝⁶ : ops.ensureSort env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁵ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁵ :
+  nestFields (rec v✝⁸) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁸ st =
+    Except.ok v✝⁵
+h✝¹ :
+  ((List.range nf).any fun i =>
+      v✝⁵.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+        structUsedLater (closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) 0 i) =
+    true
+x✝⁴ : Except CheckError Unit
+v✝⁴ : Unit
+heq✝⁴ :
+  throw
+      (CheckError.invalid
+        "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)") =
+    Except.ok v✝⁴
+h✝ : ¬(nestResHead v✝⁵.2.2.fst && v✝⁵.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝³
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁵.2.2.snd.keys, active := v✝⁵.2.2.snd.active,
+        ctorNfs := v✝⁵.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁵.2.fst v✝⁵.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁵.2.2.snd.keys, active := v✝⁵.2.2.snd.active,
+          ctorNfs := v✝⁵.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁵.2.fst v✝⁵.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁵.fst, closeTelescope v✝⁵.2.fst hi v✝⁵.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Unit
+v✝⁴ : Unit
+heq✝⁶ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝³
+x✝⁴ : Except CheckError Expr
+v✝² : Expr
+heq✝⁴ : ops.inferType env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError Level
+v✝¹ : Level
+heq✝³ : ops.ensureSort env hi v✝² = Except.ok v✝¹
+x✝² : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝² :
+  nestFields (rec v✝³) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝³ st =
+    Except.ok v✝
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝.2.fst hi v✝.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝.2.2.fst && v✝.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝.2.2.snd.keys, active := v✝.2.2.snd.active,
+        ctorNfs := v✝.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝.2.fst v✝.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝.2.2.snd.keys, active := v✝.2.2.snd.active,
+          ctorNfs := v✝.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝.2.fst v✝.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝.fst, closeTelescope v✝.2.fst hi v✝.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁵ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁶ : Except CheckError Unit
+v✝⁵ : Unit
+heq✝⁶ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁴ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁴ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError Level
+v✝² : Level
+heq✝³ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝² : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝² :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁵ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : (nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁵ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁴
+x✝⁵ : Except CheckError Expr
+v✝³ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError Level
+v✝² : Level
+heq✝⁴ : ops.ensureSort env hi v✝³ = Except.ok v✝²
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝¹ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁴) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁴ st =
+    Except.ok v✝¹
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝¹.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝¹.2.2.fst && v✝¹.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+        ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } =
+    Except.error err✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝¹.2.2.snd.keys, active := v✝¹.2.2.snd.active,
+          ctorNfs := v✝¹.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝¹.2.fst v✝¹.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝¹.fst, closeTelescope v✝¹.2.fst hi v✝¹.2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝¹ = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁷ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁶ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁵ : Except CheckError Level
+v✝³ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝¹ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝¹ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.error err✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.error err✝¹ = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.error err✝
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.error err✝ = Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁷ : Except CheckError Unit
+v✝⁶ : Unit
+heq✝⁷ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁵
+x✝⁵ : Except CheckError Expr
+v✝⁴ : Expr
+heq✝⁵ : ops.inferType env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError Level
+v✝³ : Level
+heq✝⁴ : ops.ensureSort env hi v✝⁴ = Except.ok v✝³
+x✝³ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝² : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝³ :
+  nestFields (rec v✝⁵) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁵ st =
+    Except.ok v✝²
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝².fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝².2.fst hi v✝².2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝².2.2.fst && v✝².2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝² : Except CheckError Unit
+v✝¹ : Unit
+heq✝² :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+        ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝².2.2.snd.keys, active := v✝².2.2.snd.active,
+          ctorNfs := v✝².2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝².2.fst v✝².2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v.fst, v.snd)) =
+    Except.error err✝
+⊢ Except.ok ((v✝².fst, closeTelescope v✝².2.fst hi v✝².2.2.fst) :: v✝.fst, v✝.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+
+case h_1
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁷ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁷
+x✝⁷ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁶
+x✝⁶ : Except CheckError Expr
+v✝⁵ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁶ = Except.ok v✝⁵
+x✝⁵ : Except CheckError Level
+v✝⁴ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁵ = Except.ok v✝⁴
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝³ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁶) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁶ st =
+    Except.ok v✝³
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝³.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝³.2.fst hi v✝³.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝³.2.2.fst && v✝³.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝² : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝²
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+        ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } =
+    Except.ok v✝¹
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝³.2.2.snd.keys, active := v✝³.2.2.snd.active,
+          ctorNfs := v✝³.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝³.2.fst v✝³.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+err✝ : CheckError
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝.snd = Except.error err✝
+⊢ Except.ok ((v✝³.fst, closeTelescope v✝³.2.fst hi v✝³.2.2.fst) :: v✝¹.fst, v✝¹.snd) = Except.error err✝
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:277:18: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) ?st
+in the target expression
+  Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+
+case h_2
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+h✝² : ¬Name.nodup cv.levelParams = true
+x✝⁸ : Except CheckError Unit
+v✝⁸ : Unit
+heq✝⁸ :
+  throw
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)") =
+    Except.ok v✝⁸
+x✝⁷ : Except CheckError Expr
+v✝⁷ : Expr
+heq✝⁷ :
+  unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)") =
+    Except.ok v✝⁷
+x✝⁶ : Except CheckError Expr
+v✝⁶ : Expr
+heq✝⁶ : ops.inferType env hi v✝⁷ = Except.ok v✝⁶
+x✝⁵ : Except CheckError Level
+v✝⁵ : Level
+heq✝⁵ : ops.ensureSort env hi v✝⁶ = Except.ok v✝⁵
+x✝⁴ : Except CheckError (List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState)
+v✝⁴ : List NestFieldKind × List (Expr × BinderMeta) × Expr × NestState
+heq✝⁴ :
+  nestFields (rec v✝⁷) prog hi
+      (CheckError.invalid
+        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+      nf 0 v✝⁷ st =
+    Except.ok v✝⁴
+h✝¹ :
+  ¬((List.range nf).any fun i =>
+        v✝⁴.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) 0 i) =
+      true
+h✝ : ¬(nestResHead v✝⁴.2.2.fst && v✝⁴.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) = true
+x✝³ : Except CheckError Unit
+v✝³ : Unit
+heq✝³ :
+  throw
+      (CheckError.invalid "nested positivity: invalid return type — a constructor's result index mentions the block") =
+    Except.ok v✝³
+x✝² : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝² : List (List NestFieldKind × Expr) × NestState
+heq✝² :
+  nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys)
+      { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+        ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } =
+    Except.ok v✝²
+x✝¹ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝¹ : List (List NestFieldKind × Expr) × NestState
+heq✝¹ :
+  (match
+      nestCtors ctx ops env rec prog hi us ds names holes xs
+        { keys := v✝⁴.2.2.snd.keys, active := v✝⁴.2.2.snd.active,
+          ctorNfs := v✝⁴.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv v✝⁴.2.fst v✝⁴.2.2.fst) } with
+    | Except.error err => Except.error err
+    | Except.ok v => Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v.fst, v.snd)) =
+    Except.ok v✝¹
+x✝ : Except CheckError (List (List NestFieldKind × Expr) × NestState)
+v✝ : List (List NestFieldKind × Expr) × NestState
+heq✝ : nestCtors ctx ops env rec prog hi us ds names holes ys v✝¹.snd = Except.ok v✝
+⊢ Except.ok ((v✝⁴.fst, closeTelescope v✝⁴.2.fst hi v✝⁴.2.2.fst) :: v✝².fst, v✝².snd) =
+    Except.ok (v✝¹.fst ++ v✝.fst, v✝.snd)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:275:49: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind, pure, Except.pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:275:54: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, pure, Except.pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:275:66: warning: This simp argument is unused:
+  pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, Except.bind, Except.pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:275:71: warning: This simp argument is unused:
+  Except.pure
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, Except.bind, pure]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+'Tree2TowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.uniform_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_holes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2TowerWalk.0.Tree2TowerWalk.ctor_append' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

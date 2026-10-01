@@ -1,0 +1,15 @@
+theorem Tree2TowerNative.Core.tower_core_certificate : ∀ {N : Nat} (n d fuel : Nat),
+  2 ≤ d →
+    n + 3 ≤ fuel →
+      inferTypeCore CheckMode.verified (En N) fuel d (tower n) = Except.ok S ∧
+        whnf CheckMode.verified (En N) fuel d (tower n) = Except.ok (tower n) ∧
+          (tower n).fvarB ≤ d ∧ Expr.looseBVarsBounded 0 (tower n) = true :=
+fun {N} n d fuel hd hf =>
+  ⟨inferTypeCore_mono hf (Core.infer_tower_at_bound n d hd),
+    ⟨whnf_mono (Decidable.byContradiction fun a => Core.tower_core_certificate._proof_1_1 n d fuel hf a)
+        (Core.whnf_tower_at_bound n d),
+      ⟨Eq.mpr (id (congrArg (fun _a => _a ≤ d) (Expr.fvarB_eq (tower n))))
+          (Eq.mpr (id (congrArg (fun _a => _a ≤ d) (tower_range n))) hd),
+        tower_closed n⟩⟩⟩
+'Tree2TowerNative.Core.tower_core_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.Core.cons_crest_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]

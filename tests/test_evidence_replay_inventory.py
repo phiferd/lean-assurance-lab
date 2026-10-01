@@ -16,7 +16,7 @@ class EvidenceReplayInventoryTests(unittest.TestCase):
     def test_lean_action_successor_mapping_is_specific(self):
         groups, _ = audit.discover(ROOT)
         registry = json.loads((ROOT / "config/evidence-replay-portability.json").read_text())
-        self.assertEqual(audit.validate_registration(ROOT, groups, registry), 18)
+        self.assertEqual(audit.validate_registration(ROOT, groups, registry), 19)
         changed = copy.deepcopy(registry)
         row = next(row for row in changed["families"]
                    if row["id"] == "lean-action-regression-preparation-1")
@@ -34,7 +34,7 @@ class EvidenceReplayInventoryTests(unittest.TestCase):
 
     def test_repository_receipts_and_registered_replay_tests_are_current(self):
         result = audit.validate(ROOT)
-        self.assertEqual(result["families"], 18)
+        self.assertEqual(result["families"], 19)
         self.assertGreater(result["raw_streams"], 600)
 
     def test_new_family_cannot_enter_without_portable_replay(self):

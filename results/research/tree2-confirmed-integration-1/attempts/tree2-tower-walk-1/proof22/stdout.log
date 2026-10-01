@@ -1,0 +1,112 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:318:13: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:318:18: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem Tree2TowerWalk.automatic_run : ∀ (N F : Nat),
+  N + 5 ≤ F → ∃ r, nestedBlockPositivity (checker F) (En N) (Cn N) [roots N] = Except.ok r :=
+fun N F hf =>
+  Exists.casesOn (constructors_run N F hf { } rfl) fun os h =>
+    Exists.casesOn h fun st' h =>
+      And.casesOn h fun hr right =>
+        have hroot :=
+          id
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      (do
+                          let __x ← _a
+                          match __x with
+                            | (o, st) => pure ([o], st)) =
+                        Except.ok ([os], st'))
+                    hr))
+                (Eq.refl do
+                  let __x ← Except.ok (os, st')
+                  match __x with
+                    | (o, st) => pure ([o], st))));
+        id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  ∃ r,
+                    (do
+                        let holes ←
+                          unwrapOr _a (CheckError.internal "nested positivity: a member is not a stored former")
+                        nestUniform (Cn N) [roots N]
+                        let __x ← nestRoot (checker F) (En N) (Cn N) holes [roots N] { }
+                        match __x with
+                          | (outs, st) =>
+                            pure
+                              { keys := st.keys, kinds := List.map (fun x => List.map (fun x => x.fst) x) outs,
+                                normals := List.map (fun x => List.map (fun x => x.snd) x) outs,
+                                ctorNfs := st.ctorNfs }) =
+                      Except.ok r)
+                (root_holes N)))
+            (id
+              (Eq.mpr
+                (id
+                  (congrArg
+                    (fun _a =>
+                      ∃ r,
+                        (match _a with
+                          | Except.error err => Except.error err
+                          | Except.ok v =>
+                            match nestRoot (checker F) (En N) (Cn N) [X] [roots N] { } with
+                            | Except.error err => Except.error err
+                            | Except.ok v =>
+                              Except.ok
+                                { keys := v.snd.keys, kinds := List.map (fun x => List.map (fun x => x.fst) x) v.fst,
+                                  normals := List.map (fun x => List.map (fun x => x.snd) x) v.fst,
+                                  ctorNfs := v.snd.ctorNfs }) =
+                          Except.ok r)
+                    (uniform_roots N)))
+                (id
+                  (Eq.mpr
+                    (id
+                      (congrArg
+                        (fun _a =>
+                          ∃ r,
+                            (match _a with
+                              | Except.error err => Except.error err
+                              | Except.ok v =>
+                                Except.ok
+                                  { keys := v.snd.keys, kinds := List.map (fun x => List.map (fun x => x.fst) x) v.fst,
+                                    normals := List.map (fun x => List.map (fun x => x.snd) x) v.fst,
+                                    ctorNfs := v.snd.ctorNfs }) =
+                              Except.ok r)
+                        hroot))
+                    (Exists.intro
+                      { keys := ([os], st').snd.keys,
+                        kinds := List.map (fun x => List.map (fun x => x.fst) x) ([os], st').fst,
+                        normals := List.map (fun x => List.map (fun x => x.snd) x) ([os], st').fst,
+                        ctorNfs := ([os], st').snd.ctorNfs }
+                      rfl))))))
+theorem Tree2TowerWalk.automatic_run_at_bound : ∀ (N : Nat),
+  ∃ r, nestedBlockPositivity (checker (N + 5)) (En N) (Cn N) [roots N] = Except.ok r :=
+fun N => automatic_run N (N + 5) (Decidable.byContradiction fun a => automatic_run_at_bound._proof_1_1 N a)
+'Tree2TowerWalk.tower_depth_lower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.uniform_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_holes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2TowerWalk.0.Tree2TowerWalk.ctor_append' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.constructors_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.automatic_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.automatic_run_at_bound' depends on axioms: [propext, Classical.choice, Quot.sound]

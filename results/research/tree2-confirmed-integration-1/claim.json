@@ -1,0 +1,39 @@
+{
+  "status": "LOCAL_E2_READINESS_PENDING_GATES",
+  "theorem": "Tree2TowerCorrespondence.representation_package",
+  "exact_statement": "theorem representation_package (N F : Nat) (hf : N+5 \u2264 F) :\n Official.elimNested (context N) (declaration N) (N+2) = .ok (target N) \u2227\n PosDR (checker F) (En N) (Cn N) (N+1)\n   (.ctors [] [] 2 [] [A] [Tn] [X] (roots N)) \u2227\n (\u2203 r, nestedBlockPositivity (checker F) (En N) (Cn N) [roots N] = .ok r) \u2227\n officialRows N = (signature N).map (List.map some) \u2227\n nativeRows N = (signature N).map (List.map some) \u2227\n (\u2200 i, i < N \u2192\n   (target N).types[i+1]? = some (Tree2TowerOfficial.row N (N-i)) \u2227\n   officialSlot N (auxExpr (i+1)) = nativeSlot (some (holeAt (N-i-1))) Y)",
+  "only_hypothesis": "N+5<=F",
+  "scope": "Fixed monomorphic List-tower constructor-crest representation; natural depth including zero",
+  "signature": "T=alpha+R_N; R_0=T; R_j=1+R_(j-1)*R_j",
+  "official_queue_fuel": "N+2",
+  "native_posdr_index": "N+1",
+  "verified_core_bound": "F>=N+5",
+  "final_stdout_sha256": "130ff4163efae4f4e02438e73cf60de70f1e95dd8de13b67ba26c73310be9b43",
+  "axioms": [
+    "propext",
+    "Classical.choice",
+    "Quot.sound"
+  ],
+  "axiom_reports": 16,
+  "source_commit": "e94d00b624951ccc0b4dd0a317eb5e952d948696",
+  "upstream_pin": "10fe085e21773ff0b62a6aacf6db29fccf849bae",
+  "toolchain": "leanprover/lean4:v4.33.0",
+  "fresh_confirmation": {
+    "upstream_modules": 101,
+    "proof_modules": 7,
+    "exact_final_stdout": true,
+    "no_prior_con_leche_cache": true,
+    "elapsed_seconds": 134.742182416,
+    "sampled_peak_bytes": 1804779520
+  },
+  "unproved": [
+    "Exact native returned observations",
+    "Datatype/fold semantics",
+    "Arbitrary containers",
+    "Minimum fuel",
+    "Generated recursor correctness",
+    "Official whole positivity acceptance",
+    "Whole validator or compiled/C++ parity"
+  ],
+  "external_action": false
+}

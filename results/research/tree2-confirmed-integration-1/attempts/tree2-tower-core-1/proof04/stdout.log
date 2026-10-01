@@ -1,0 +1,285 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:58:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  isDefEqCore CheckMode.verified E f d S S
+in the target expression
+  (match Except.ok S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match isDefEqCore CheckMode.verified E f d v S with
+      | Except.error err => Except.error err
+      | Except.ok v =>
+        if v = true then pure (S.instantiate1 a)
+        else
+          match throw (CheckError.invalid "application type mismatch") with
+          | Except.error err => Except.error err
+          | Except.ok v => pure (S.instantiate1 a)) =
+    Except.ok S
+
+a : Expr
+d f : Nat
+hf : 2 ≤ f
+ha : inferTypeCore CheckMode.verified E f d a = Except.ok S
+hc : inferTypeCore CheckMode.verified E f d (Expr.const Ln [Level.zero]) = Except.ok (arr S S)
+hw : whnf CheckMode.verified E f d (arr S S) = Except.ok (arr S S)
+he : isDefEqCore CheckMode.verified E f d S S = Except.ok true
+⊢ (match Except.ok S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match isDefEqCore CheckMode.verified E f d v S with
+      | Except.error err => Except.error err
+      | Except.ok v =>
+        if v = true then pure (S.instantiate1 a)
+        else
+          match throw (CheckError.invalid "application type mismatch") with
+          | Except.error err => Except.error err
+          | Except.ok v => pure (S.instantiate1 a)) =
+    Except.ok S
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:117:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  whnf CheckMode.verified E (n + 3) d (Expr.sort Level.zero.succ)
+in the target expression
+  (match whnf CheckMode.verified E (n + 3) d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match inferTypeCore CheckMode.verified E (n + 3) (d + 1) (X.instantiate1 (Expr.fvar d (tower n))) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E (n + 3) (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+
+n d : Nat
+hd : 2 ≤ d
+ht : inferTypeCore CheckMode.verified E (n + 3) d (tower n) = Except.ok S
+hx : inferTypeCore CheckMode.verified E (n + 3) (d + 1) X = Except.ok S
+hs : whnf CheckMode.verified E (n + 3) d (Expr.sort Level.zero.succ) = Except.ok (Expr.sort Level.zero.succ)
+hb : whnf CheckMode.verified E (n + 3) (d + 1) (Expr.sort Level.zero.succ) = Except.ok (Expr.sort Level.zero.succ)
+⊢ (match whnf CheckMode.verified E (n + 3) d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match inferTypeCore CheckMode.verified E (n + 3) (d + 1) (X.instantiate1 (Expr.fvar d (tower n))) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E (n + 3) (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:145:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  whnf CheckMode.verified E 3 d (Expr.sort Level.zero.succ)
+in the target expression
+  (match whnf CheckMode.verified E 3 d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match inferTypeCore CheckMode.verified E 3 (d + 1) (Y.instantiate1 (Expr.fvar d Y)) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E 3 (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+
+d : Nat
+hd : 3 ≤ d
+hy : inferTypeCore CheckMode.verified E 3 d Y = Except.ok S
+hyb : inferTypeCore CheckMode.verified E 3 (d + 1) Y = Except.ok S
+hs : whnf CheckMode.verified E 3 d (Expr.sort Level.zero.succ) = Except.ok (Expr.sort Level.zero.succ)
+hsb : whnf CheckMode.verified E 3 (d + 1) (Expr.sort Level.zero.succ) = Except.ok (Expr.sort Level.zero.succ)
+⊢ (match whnf CheckMode.verified E 3 d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match inferTypeCore CheckMode.verified E 3 (d + 1) (Y.instantiate1 (Expr.fvar d Y)) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E 3 (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:177:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  whnf CheckMode.verified E (n + 4) d (Expr.sort Level.zero.succ)
+in the target expression
+  (match whnf CheckMode.verified E (n + 4) d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match
+          inferTypeCore CheckMode.verified E (n + 4) (d + 1)
+            ((Y.forallE Y bm).instantiate1 (Expr.fvar d (tower n))) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E (n + 4) (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ)))
+
+n d : Nat
+hd : 3 ≤ d
+ht : inferTypeCore CheckMode.verified E (n + 4) d (tower n) = Except.ok S
+hi :
+  inferTypeCore CheckMode.verified E (n + 4) (d + 1) (arr Y Y) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+hs : whnf CheckMode.verified E (n + 4) d (Expr.sort Level.zero.succ) = Except.ok (Expr.sort Level.zero.succ)
+hsb :
+  whnf CheckMode.verified E (n + 4) (d + 1) (Expr.sort (Level.zero.succ.imax Level.zero.succ)) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+⊢ (match whnf CheckMode.verified E (n + 4) d S with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match v with
+      | Expr.sort u =>
+        match
+          inferTypeCore CheckMode.verified E (n + 4) (d + 1)
+            ((Y.forallE Y bm).instantiate1 (Expr.fvar d (tower n))) with
+        | Except.error err => Except.error err
+        | Except.ok v =>
+          match
+            match whnf CheckMode.verified E (n + 4) (d + 1) v with
+            | Except.error err => Except.error err
+            | Except.ok v =>
+              match v with
+              | Expr.sort u => pure u
+              | x => throw (CheckError.invalid "expected a sort") with
+          | Except.error err => Except.error err
+          | Except.ok v =>
+            if CheckMode.verified.verifiedChecks = true then
+              if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+              else
+                match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+                | Except.error err => Except.error err
+                | Except.ok v_1 => pure (Expr.sort (u.imax v))
+            else pure (Expr.sort (u.imax v))
+      | x => throw (CheckError.invalid "expected a sort")) =
+    Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ)))
+theorem Tree2TowerCore.tower_core_certificate : ∀ (n d fuel : Nat),
+  2 ≤ d →
+    n + 3 ≤ fuel →
+      inferTypeCore CheckMode.verified E fuel d (tower n) = Except.ok S ∧
+        whnf CheckMode.verified E fuel d (tower n) = Except.ok (tower n) ∧
+          (tower n).fvarB ≤ d ∧ Expr.looseBVarsBounded 0 (tower n) = true :=
+fun n d fuel hd hf =>
+  ⟨inferTypeCore_mono hf (infer_tower_at_bound n d hd),
+    ⟨whnf_mono (Decidable.byContradiction fun a => tower_core_certificate._proof_1_1 n d fuel hf a)
+        (whnf_tower_at_bound n d),
+      ⟨Eq.mpr (id (congrArg (fun _a => _a ≤ d) (Expr.fvarB_eq (tower n))))
+          (Eq.mpr (id (congrArg (fun _a => _a ≤ d) (tower_range n))) hd),
+        tower_closed n⟩⟩⟩
+theorem Tree2TowerCore.infer_tower_at_bound : ∀ (n d : Nat),
+  2 ≤ d → inferTypeCore CheckMode.verified E (n + 3) d (tower n) = Except.ok S :=
+fun n d hd =>
+  Nat.recAux
+    (inferTypeCore_mono (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_1 d a) (infer_X d hd))
+    (fun n ih =>
+      infer_list_step (tower n) d (n + 3) (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_2 d n a) ih)
+    n
+theorem Tree2TowerCore.whnf_tower_at_bound : ∀ (n d : Nat),
+  whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n) :=
+fun n d =>
+  Nat.casesAuxOn (motive := fun a => n = a → whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n)) n
+    (fun h => Eq.symm h ▸ whnf_mono (Decidable.byContradiction fun a => whnf_tower_at_bound._proof_1_1 a) (whnf_X d))
+    (fun n_1 h => Eq.symm h ▸ whnf_list (tower n_1) d) (Eq.refl n)
+theorem Tree2TowerCore.node_crest_certificate : ∀ (n d fuel : Nat),
+  2 ≤ d →
+    n + 4 ≤ fuel →
+      inferTypeCore CheckMode.verified E fuel d (arr (tower n) X) =
+        Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ)) :=
+fun n d fuel hd hf => inferTypeCore_mono hf (infer_node_crest_at_bound n d hd)
+theorem Tree2TowerCore.cons_crest_certificate : ∀ (n d fuel : Nat),
+  3 ≤ d →
+    n + 5 ≤ fuel →
+      inferTypeCore CheckMode.verified E fuel d (arr (tower n) (arr Y Y)) =
+        Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ))) :=
+fun n d fuel hd hf => inferTypeCore_mono hf (infer_cons_crest_at_bound n d hd)
+'Tree2TowerCore.infer_list_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_former' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.defeq_S' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_list_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_tower_at_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_tower_at_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.tower_core_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_sort' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_Y' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_node_crest_at_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_self_arrow' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_cons_crest_at_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.node_crest_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.cons_crest_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

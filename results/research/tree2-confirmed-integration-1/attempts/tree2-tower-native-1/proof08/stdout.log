@@ -1,0 +1,168 @@
+theorem Tree2TowerNative.tower_field : ∀ (N F : Nat),
+  N + 5 ≤ F →
+    ∀ (k : Nat),
+      k ≤ N →
+        ∀ (act : List NestKey) (prog : List NestHole) (d : Nat),
+          FreshBelow k act →
+            ProgScoped (Cn N) prog →
+              PosDR (checker F) (En N) (Cn N) (k + 1) (PosJR.field act prog d 0 (tower k) (fieldKind k) (tower k)) :=
+fun N F hf k hk act prog d ha hp =>
+  Nat.recAux (motive := fun k =>
+    k ≤ N →
+      ∀ (act : List NestKey) (prog : List NestHole) (d : Nat),
+        FreshBelow k act →
+          ProgScoped (Cn N) prog →
+            PosDR (checker F) (En N) (Cn N) (k + 1) (PosJR.field act prog d 0 (tower k) (fieldKind k) (tower k)))
+    (fun hk act prog d ha hp =>
+      member_field N F (Decidable.byContradiction fun a => tower_field._proof_1_1 N F hf a) act prog d)
+    (fun k ih hk act prog d ha hp =>
+      have hfr :=
+        PosDR.frame (of_eq_true (Eq.trans (congrArg Not (List.cons_ne_self._simp_1 (Ln, S) [])) not_false_eq_true))
+          ⟨Eq.refl ((Cn N).names.contains ([(Ln, S)].headD default).fst), of_decide_eq_true (id (Eq.refl true))⟩
+          (Exists.intro listCs (list_container N))
+          (of_eq_true
+            (Eq.trans
+              (Eq.trans (congrArg List.Nodup (Eq.trans List.map_cons (congrArg (List.cons Ln) List.map_nil)))
+                List.nodup_cons._simp_1)
+              (Eq.trans
+                (congr (congrArg And (Eq.trans (congrArg Not List.not_mem_nil._simp_1) not_false_eq_true))
+                  List.nodup_nil._simp_1)
+                (and_self True))))
+          (fun p hpm =>
+            Eq.symm
+                (Eq.mp
+                  (Eq.trans tower_field._simp_1_2
+                    (Eq.trans (congrArg (Or (p = (Ln, S))) tower_field._simp_1_3) (or_false (p = (Ln, S)))))
+                  hpm) ▸
+              Exists.intro 0 (list_inst N k 2))
+          (of_eq_true
+            (Eq.trans
+              (forall_congr fun p =>
+                Eq.trans
+                  (implies_congr List.not_mem_nil._simp_1
+                    (Eq.trans
+                      (congrFun'
+                        (congrArg Eq
+                          (Eq.trans
+                            (congrFun'
+                              (congrArg List.contains
+                                (congrArg (nestBlockOf (Cn N)) (congrArg Prod.fst List.headD_eq_head?_getD)))
+                              p.fst)
+                            (List.contains_eq_mem p.fst (nestBlockOf (Cn N) Ln))))
+                        true)
+                      decide_eq_true_eq))
+                  (false_implies (p.fst ∈ nestBlockOf (Cn N) Ln)))
+              (implies_true (Name × Expr))))
+          (Eq.refl (List.map (fun x => x.fst) [(Ln, S)]))
+          (Eq.refl (groupCtors (Cn N) [tower k].length (List.map (fun x => x.fst) [(Ln, S)])))
+          (Exists.intro S
+            (Core.tower_core_certificate (k + 1) 2 F (Decidable.byContradiction fun a => tower_field._proof_1_4 N F k a)
+                (Decidable.byContradiction fun a => tower_field._proof_1_5 N F hf k hk a)).left)
+          (Decidable.byContradiction fun a => tower_field._proof_1_6 N F k a)
+          (id
+            (PosDR.ctorsCons (of_decide_eq_true (id (Eq.refl true))) (tower_list_crest k).left
+              (inferTypeCore_mono (Decidable.byContradiction fun a => tower_field._proof_1_7 N F hf k a)
+                (Core.infer_Y 3 (Decidable.byContradiction fun a => tower_field._proof_1_8 N F k a)))
+              (ensure_sort N F 3 Level.zero.succ (Decidable.byContradiction fun a => tower_field._proof_1_9 N F hf k a))
+              (Decidable.byContradiction fun a => tower_field._proof_1_10 N F k a) PosDR.teleNil
+              (Eq.refl
+                ((List.range 0).any fun i =>
+                  [].getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                    structUsedLater (closeTelescope [] 3 Y) 0 i))
+              (Eq.refl (nestResHead Y)) (Eq.refl (Y.getAppArgs.all fun x => !Expr.nestOcc (Cn N).names (Cn N).nP 3 x))
+              (Decidable.byContradiction fun a => tower_field._proof_1_6 N F k a)
+              (PosDR.ctorsCons (of_decide_eq_true (id (Eq.refl true))) (tower_list_crest k).right.left
+                (Core.cons_crest_certificate k 3 F (Decidable.byContradiction fun a => tower_field._proof_1_8 N F k a)
+                  (Decidable.byContradiction fun a => tower_field._proof_1_11 N F hf k hk a))
+                (ensure_sort N F 3 (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ))
+                  (Decidable.byContradiction fun a => tower_field._proof_1_9 N F hf k a))
+                (Decidable.byContradiction fun a => tower_field._proof_1_6 N F k a)
+                (PosDR.teleCons (Decidable.byContradiction fun a => tower_field._proof_1_6 N F k a)
+                  (ih (Decidable.byContradiction fun a => tower_field._proof_1_12 N F k hk a) (towerKey k :: act)
+                    [holeAt k] 3 (fresh_push k act ha) (frame_scoped N k))
+                  (Decidable.byContradiction fun a => tower_field._proof_1_13 N F k a)
+                  (PosDR.teleCons (Decidable.byContradiction fun a => tower_field._proof_1_14 N F k a)
+                    (self_field N F k (Decidable.byContradiction fun a => tower_field._proof_1_9 N F hf k a)
+                      (towerKey k :: act) 4)
+                    (Decidable.byContradiction fun a => tower_field._proof_1_15 N F k a) PosDR.teleNil))
+                (cons_u4 (tower k) (fieldKind k)) (Eq.refl (nestResHead Y))
+                (Eq.refl (Y.getAppArgs.all fun x => !Expr.nestOcc (Cn N).names (Cn N).nP 3 x))
+                (Decidable.byContradiction fun a => tower_field._proof_1_10 N F k a) PosDR.ctorsNil)));
+      PosDR.cont
+        (whnf_mono (Decidable.byContradiction fun a => tower_field._proof_1_16 N F hf k a)
+          (Core.whnf_tower_at_bound (k + 1) d))
+        (tower_occ N (k + 1) prog) (Eq.refl (tower (k + 1)).getAppFn) (Eq.refl ((Cn N).names.contains Ln))
+        (list_container N) (Eq.refl (tower (k + 1)).getAppArgs.length) (of_decide_eq_true (id (Eq.refl true)))
+        (of_eq_true
+          (Eq.trans
+            (forall_congr fun x =>
+              Eq.trans
+                (implies_congr
+                  (Eq.trans
+                    (congrFun'
+                      (congrArg Membership.mem
+                        (Eq.trans
+                          (Eq.trans
+                            (congrArg (List.drop 1) (Expr.getAppArgs.eq_1 (Expr.const Ln [Level.zero]) (tower k)))
+                            List.drop_succ_cons)
+                          List.drop_nil))
+                      x)
+                    List.not_mem_nil._simp_1)
+                  (Eq.refl (Expr.nestOcc (Cn N).names (Cn N).nP ((Cn N).hiAt prog.length) x = false)))
+                (false_implies (Expr.nestOcc (Cn N).names (Cn N).nP ((Cn N).hiAt prog.length) x = false)))
+            (implies_true Expr)))
+        (fun x hx =>
+          have hxx :=
+            Eq.mp
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Membership.mem
+                      (Eq.trans (congrArg (List.take 1) (Expr.getAppArgs.eq_1 (Expr.const Ln [Level.zero]) (tower k)))
+                        (congrArg (List.cons (tower k)) List.take_nil)))
+                    x)
+                  List.mem_cons._simp_1)
+                (Eq.trans (congrArg (Or (x = tower k)) List.not_mem_nil._simp_1) (or_false (x = tower k))))
+              hx;
+          Eq.ndrec (motive := fun x =>
+            x ∈ List.take 1 (tower (k + 1)).getAppArgs → x.bvarB = 0 ∧ x.fvarB ≤ (Cn N).hiAt prog.length)
+            (fun hx =>
+              ⟨tower_bvar k,
+                Eq.mpr (id (congrArg (fun _a => _a ≤ (Cn N).hiAt prog.length) (Expr.fvarB_eq (tower k))))
+                  (Eq.mpr (id (congrArg (fun _a => _a ≤ (Cn N).hiAt prog.length) (tower_range k)))
+                    (id (Decidable.byContradiction fun a => tower_field._proof_1_17 N F k prog a)))⟩)
+            (Eq.symm hxx) hx)
+        (fun x hx =>
+          have hxx :=
+            Eq.mp
+              (Eq.trans
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Membership.mem
+                      (Eq.trans (congrArg (List.take 1) (Expr.getAppArgs.eq_1 (Expr.const Ln [Level.zero]) (tower k)))
+                        (congrArg (List.cons (tower k)) List.take_nil)))
+                    x)
+                  List.mem_cons._simp_1)
+                (Eq.trans (congrArg (Or (x = tower k)) List.not_mem_nil._simp_1) (or_false (x = tower k))))
+              hx;
+          Eq.ndrec (motive := fun x =>
+            x ∈ List.take 1 (tower (k + 1)).getAppArgs → Expr.WScoped ((Cn N).hiAt prog.length) x)
+            (fun hx =>
+              tower_scope k ((Cn N).hiAt prog.length)
+                (id (Decidable.byContradiction fun a => tower_field._proof_1_17 N F k prog a)))
+            (Eq.symm hxx) hx)
+        hp (list_inst N k ((Cn N).hiAt prog.length))
+        (ha k (Decidable.byContradiction fun a => tower_field._proof_1_18 N F k a))
+        (Eq.refl ([(Ln, S)].headD default).fst) (Decidable.byContradiction fun a => tower_field._proof_1_19 N F k a)
+        (id
+          (Eq.mpr
+            (id
+              (congrArg
+                (fun _a =>
+                  PosDR (checker F) (En N) (Cn N) (k + 1) (PosJR.frame act _a [Level.zero] [tower k] [(Ln, S)]))
+                (stack_reset N k prog)))
+            hfr)))
+    k hk act prog d ha hp
+'Tree2TowerNative.tower_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.node_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.Core.tower_core_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]

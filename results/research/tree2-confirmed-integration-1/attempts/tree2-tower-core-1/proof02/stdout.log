@@ -1,0 +1,100 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:59:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  isDefEqCore CheckMode.verified E f d S S
+in the target expression
+  (match arr S S with
+    | ty.forallE body _mt =>
+      match isDefEqCore CheckMode.verified E f d S ty with
+      | Except.error err => Except.error err
+      | Except.ok v =>
+        if v = true then pure (body.instantiate1 a)
+        else
+          match throw (CheckError.invalid "application type mismatch") with
+          | Except.error err => Except.error err
+          | Except.ok v => pure (body.instantiate1 a)
+    | x => throw (CheckError.invalid "function expected")) =
+    Except.ok S
+
+a : Expr
+d f : Nat
+hf : 2 ≤ f
+ha : inferTypeCore CheckMode.verified E f d a = Except.ok S
+hc : inferTypeCore CheckMode.verified E f d (Expr.const Ln [Level.zero]) = Except.ok (arr S S)
+hw : whnf CheckMode.verified E f d (arr S S) = Except.ok (arr S S)
+he : isDefEqCore CheckMode.verified E f d S S = Except.ok true
+⊢ (match arr S S with
+    | ty.forallE body _mt =>
+      match isDefEqCore CheckMode.verified E f d S ty with
+      | Except.error err => Except.error err
+      | Except.ok v =>
+        if v = true then pure (body.instantiate1 a)
+        else
+          match throw (CheckError.invalid "application type mismatch") with
+          | Except.error err => Except.error err
+          | Except.ok v => pure (body.instantiate1 a)
+    | x => throw (CheckError.invalid "function expected")) =
+    Except.ok S
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:56:13: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:56:19: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:58:13: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:58:19: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+theorem Tree2TowerCore.tower_core_certificate : ∀ (n d fuel : Nat),
+  2 ≤ d →
+    n + 3 ≤ fuel →
+      inferTypeCore CheckMode.verified E fuel d (tower n) = Except.ok S ∧
+        whnf CheckMode.verified E fuel d (tower n) = Except.ok (tower n) ∧
+          (tower n).fvarB ≤ d ∧ Expr.looseBVarsBounded 0 (tower n) = true :=
+fun n d fuel hd hf =>
+  ⟨inferTypeCore_mono hf (infer_tower_at_bound n d hd),
+    ⟨whnf_mono (Decidable.byContradiction fun a => tower_core_certificate._proof_1_1 n d fuel hf a)
+        (whnf_tower_at_bound n d),
+      ⟨Eq.mpr (id (congrArg (fun _a => _a ≤ d) (Expr.fvarB_eq (tower n))))
+          (Eq.mpr (id (congrArg (fun _a => _a ≤ d) (tower_range n))) hd),
+        tower_closed n⟩⟩⟩
+theorem Tree2TowerCore.infer_tower_at_bound : ∀ (n d : Nat),
+  2 ≤ d → inferTypeCore CheckMode.verified E (n + 3) d (tower n) = Except.ok S :=
+fun n d hd =>
+  Nat.recAux
+    (inferTypeCore_mono (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_1 d a) (infer_X d hd))
+    (fun n ih =>
+      infer_list_step (tower n) d (n + 3) (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_2 d n a) ih)
+    n
+theorem Tree2TowerCore.whnf_tower_at_bound : ∀ (n d : Nat),
+  whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n) :=
+fun n d =>
+  Nat.casesAuxOn (motive := fun a => n = a → whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n)) n
+    (fun h => Eq.symm h ▸ whnf_mono (Decidable.byContradiction fun a => whnf_tower_at_bound._proof_1_1 a) (whnf_X d))
+    (fun n_1 h => Eq.symm h ▸ whnf_list (tower n_1) d) (Eq.refl n)
+'Tree2TowerCore.infer_list_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_former' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.defeq_S' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_list_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_tower_at_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_tower_at_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.tower_core_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

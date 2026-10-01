@@ -1,0 +1,36 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerOfficial.lean:124:2: error: 'change' tactic failed, pattern
+  (match List.lookup (pow (n + 1) tr) st.aux with
+    | some a => Except.ok (some ((Expr.const a []).app A), st)
+    | none => ?m.72) =
+    Except.ok (some ((Expr.const a []).app A), st)
+is not definitionally equal to target
+  (match
+      match Except.ok (some (Ln, [Level.zero], 1, [pow n tr])) with
+      | Except.error err => Except.error err
+      | Except.ok v => Except.ok (v, st) with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      (match v.fst with
+        | none => StateT.pure none
+        | some (I, us, np, args) =>
+          match List.lookup ((Expr.const I us).mkAppN (List.take np args)) st.aux with
+          | some a =>
+            StateT.pure (some (((Expr.const a (context N).lvls).mkAppN (context N).ps).mkAppN (List.drop np args)))
+          | none =>
+            StateT.bind (Official.copyBlock (context N) us (List.take np args) (Official.blockOf (context N) I))
+              fun __r =>
+              StateT.get.bind fun __do_lift =>
+                match List.lookup ((Expr.const I us).mkAppN (List.take np args)) __do_lift.aux with
+                | some a =>
+                  StateT.pure
+                    (some (((Expr.const a (context N).lvls).mkAppN (context N).ps).mkAppN (List.drop np args)))
+                | none => throw Official.illFormed)
+        v.snd) =
+    Except.ok (some ((Expr.const a []).app A), st)
+'Tree2TowerOfficial.fresh_supply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.tower_key_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.tower_key_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.copied_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.nested_tower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.copy_tower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.replace_hit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,3 @@
+# Independent read-only outcome audit — PASS
+
+Reviewer /root/review_bridge. All108 compilations succeeded:101 pinned upstream modules and seven unchanged proof modules in frozen order. Source/output/resolved-import hashes match records; all resolved dependencies lie under fresh outputs or official toolchain, none under original compiled cache. Final stdout exactly equals frozen expectation;16 reports contain only propext, Classical.choice, Quot.sound. Launch inputs and pin auxiliary files unchanged. Supervisor exit0,134.742s,peak1,804,779,520bytes,cleanup complete,no stop/accounting/trace-gap fault. Bounded fresh-build reproducibility confirmed; no new mathematical/E2 claim. No edits or builds by reviewer.

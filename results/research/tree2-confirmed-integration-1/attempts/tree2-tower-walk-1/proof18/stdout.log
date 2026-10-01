@@ -1,0 +1,559 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:276:4: error: Tactic `rfl` failed: The left-hand side
+  if Name.nodup cv.levelParams = true then do
+    let crest ←
+      unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+    let ty ← ops.inferType env hi crest
+    let _ ← ops.ensureSort env hi ty
+    let __x ←
+      nestFields (rec crest) prog hi
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+          nf 0 crest st
+    if
+          ((List.range nf).any fun i =>
+              __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+            true then
+        do
+        throw
+            (CheckError.invalid
+              "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+        if
+              (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                true then
+            do
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+          else do
+            throw
+                (CheckError.invalid
+                  "nested positivity: invalid return type — a constructor's result index mentions the block")
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+      else
+        if
+            (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+              true then
+          do
+          let x ←
+            nestCtors ctx ops env rec prog hi us ds names holes xs
+                { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                  ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+          let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+          let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+          pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else do
+          throw
+              (CheckError.invalid
+                "nested positivity: invalid return type — a constructor's result index mentions the block")
+          let x ←
+            nestCtors ctx ops env rec prog hi us ds names holes xs
+                { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                  ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+          let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+          let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+          pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+  else do
+    throw
+        (CheckError.invalid
+          "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+    let crest ←
+      unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+    let ty ← ops.inferType env hi crest
+    let _ ← ops.ensureSort env hi ty
+    let __x ←
+      nestFields (rec crest) prog hi
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+          nf 0 crest st
+    if
+          ((List.range nf).any fun i =>
+              __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+            true then
+        do
+        throw
+            (CheckError.invalid
+              "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+        if
+              (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                true then
+            do
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+          else do
+            throw
+                (CheckError.invalid
+                  "nested positivity: invalid return type — a constructor's result index mentions the block")
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+      else
+        if
+            (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+              true then
+          do
+          let x ←
+            nestCtors ctx ops env rec prog hi us ds names holes xs
+                { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                  ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+          let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+          let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+          pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else do
+          throw
+              (CheckError.invalid
+                "nested positivity: invalid return type — a constructor's result index mentions the block")
+          let x ←
+            nestCtors ctx ops env rec prog hi us ds names holes xs
+                { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                  ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+          let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+          let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+          pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+is not definitionally equal to the right-hand side
+  do
+    let __x ←
+      if Name.nodup cv.levelParams = true then do
+          let crest ←
+            unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if
+                ((List.range nf).any fun i =>
+                    __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                      structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+                  true then
+              do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+              if
+                    (nestResHead __x.2.2.fst &&
+                        __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                      true then
+                  do
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+                else do
+                  throw
+                      (CheckError.invalid
+                        "nested positivity: invalid return type — a constructor's result index mentions the block")
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else
+              if
+                  (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                    true then
+                do
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+              else do
+                throw
+                    (CheckError.invalid
+                      "nested positivity: invalid return type — a constructor's result index mentions the block")
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else do
+          throw
+              (CheckError.invalid
+                "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+          let crest ←
+            unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if
+                ((List.range nf).any fun i =>
+                    __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                      structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+                  true then
+              do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+              if
+                    (nestResHead __x.2.2.fst &&
+                        __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                      true then
+                  do
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+                else do
+                  throw
+                      (CheckError.invalid
+                        "nested positivity: invalid return type — a constructor's result index mentions the block")
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else
+              if
+                  (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                    true then
+                do
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+              else do
+                throw
+                    (CheckError.invalid
+                      "nested positivity: invalid return type — a constructor's result index mentions the block")
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+    let __x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys __x.snd
+    pure (__x.fst ++ __x_1.fst, __x_1.snd)
+
+case cons
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | (ps, st'') => pure (os ++ ps, st'')
+st : NestState
+cv : ConstantVal
+nf : Nat
+⊢ (if Name.nodup cv.levelParams = true then do
+      let crest ←
+        unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+      let ty ← ops.inferType env hi crest
+      let _ ← ops.ensureSort env hi ty
+      let __x ←
+        nestFields (rec crest) prog hi
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+            nf 0 crest st
+      if
+            ((List.range nf).any fun i =>
+                __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                  structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+              true then
+          do
+          throw
+              (CheckError.invalid
+                "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+          if
+                (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                  true then
+              do
+              let x ←
+                nestCtors ctx ops env rec prog hi us ds names holes xs
+                    { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                      ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+              let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+              let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+              pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: invalid return type — a constructor's result index mentions the block")
+              let x ←
+                nestCtors ctx ops env rec prog hi us ds names holes xs
+                    { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                      ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+              let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+              let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+              pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else
+          if
+              (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                true then
+            do
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+          else do
+            throw
+                (CheckError.invalid
+                  "nested positivity: invalid return type — a constructor's result index mentions the block")
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+    else do
+      throw
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+      let crest ←
+        unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+      let ty ← ops.inferType env hi crest
+      let _ ← ops.ensureSort env hi ty
+      let __x ←
+        nestFields (rec crest) prog hi
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+            nf 0 crest st
+      if
+            ((List.range nf).any fun i =>
+                __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                  structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+              true then
+          do
+          throw
+              (CheckError.invalid
+                "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+          if
+                (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                  true then
+              do
+              let x ←
+                nestCtors ctx ops env rec prog hi us ds names holes xs
+                    { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                      ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+              let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+              let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+              pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: invalid return type — a constructor's result index mentions the block")
+              let x ←
+                nestCtors ctx ops env rec prog hi us ds names holes xs
+                    { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                      ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+              let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+              let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+              pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else
+          if
+              (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                true then
+            do
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+          else do
+            throw
+                (CheckError.invalid
+                  "nested positivity: invalid return type — a constructor's result index mentions the block")
+            let x ←
+              nestCtors ctx ops env rec prog hi us ds names holes xs
+                  { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                    ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+            let x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys x.snd
+            let __x_1 ← pure (x.fst ++ x_1.fst, x_1.snd)
+            pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)) =
+    do
+    let __x ←
+      if Name.nodup cv.levelParams = true then do
+          let crest ←
+            unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if
+                ((List.range nf).any fun i =>
+                    __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                      structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+                  true then
+              do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+              if
+                    (nestResHead __x.2.2.fst &&
+                        __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                      true then
+                  do
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+                else do
+                  throw
+                      (CheckError.invalid
+                        "nested positivity: invalid return type — a constructor's result index mentions the block")
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else
+              if
+                  (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                    true then
+                do
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+              else do
+                throw
+                    (CheckError.invalid
+                      "nested positivity: invalid return type — a constructor's result index mentions the block")
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+        else do
+          throw
+              (CheckError.invalid
+                "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+          let crest ←
+            unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams cv.levelParams us cv.type))
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if
+                ((List.range nf).any fun i =>
+                    __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                      structUsedLater (closeTelescope __x.2.fst hi __x.2.2.fst) 0 i) =
+                  true then
+              do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+              if
+                    (nestResHead __x.2.2.fst &&
+                        __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                      true then
+                  do
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+                else do
+                  throw
+                      (CheckError.invalid
+                        "nested positivity: invalid return type — a constructor's result index mentions the block")
+                  let __x_1 ←
+                    nestCtors ctx ops env rec prog hi us ds names holes xs
+                        { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                          ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                  pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+            else
+              if
+                  (nestResHead __x.2.2.fst && __x.2.2.fst.getAppArgs.all fun x => !Expr.nestOcc ctx.names ctx.nP hi x) =
+                    true then
+                do
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+              else do
+                throw
+                    (CheckError.invalid
+                      "nested positivity: invalid return type — a constructor's result index mentions the block")
+                let __x_1 ←
+                  nestCtors ctx ops env rec prog hi us ds names holes xs
+                      { keys := __x.2.2.snd.keys, active := __x.2.2.snd.active,
+                        ctorNfs := __x.2.2.snd.ctorNfs.push (nestCtorNf ctx prog hi us ds cv __x.2.fst __x.2.2.fst) }
+                pure ((__x.fst, closeTelescope __x.2.fst hi __x.2.2.fst) :: __x_1.fst, __x_1.snd)
+    let __x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys __x.snd
+    pure (__x.fst ++ __x_1.fst, __x_1.snd)
+'Tree2TowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.uniform_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_holes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2TowerWalk.0.Tree2TowerWalk.ctor_append' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

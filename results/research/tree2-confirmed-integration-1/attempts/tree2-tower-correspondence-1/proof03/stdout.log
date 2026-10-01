@@ -1,0 +1,37 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCorrespondence.lean:131:74: error: unsolved goals
+N : Nat
+⊢ ((if tower N = Expr.fvar 0 S then some Slot.parameter
+        else if tower N = Expr.fvar 2 S then none else Option.map Slot.row (towerDepth (tower N))).bind
+      fun a' => some ([a'], Slot.row 0)) =
+    some ([Slot.row N], Slot.row 0)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCorrespondence.lean:137:38: warning: This simp argument is unused:
+  native_parameter
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [rootSignature, decodeRow, arr, pi, native_member_tower, X, nativeSlot, A, Y, towerDepth]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCorrespondence.lean:137:55: warning: This simp argument is unused:
+  native_member_tower
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [rootSignature, decodeRow, arr, pi, native_parameter, X, nativeSlot, A, Y, towerDepth]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCorrespondence.lean:141:37: error: unsolved goals
+k : Nat
+⊢ ((if tower k = Expr.fvar 0 S then some Slot.parameter
+        else if tower k = Expr.fvar 2 S then some (Slot.row (k + 1)) else some (Slot.row k)).bind
+      fun a' => some ([a', Slot.row (k + 1)], Slot.row (k + 1))) =
+    some ([Slot.row k, Slot.row (k + 1)], Slot.row (k + 1))
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCorrespondence.lean:149:38: warning: This simp argument is unused:
+  native_member_tower
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [listSignature, decodeRow, arr, pi, Y, nativeSlot, A, holeAt, towerKey, towerDepth_exact]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tree2TowerCorrespondence.native_interpretation (N : Nat) : nativeRows N = List.map (List.map some) (signature N)
+Tree2TowerCorrespondence.official_interpretation (N : Nat) : officialRows N = List.map (List.map some) (signature N)
+'Tree2TowerCorrespondence.native_interpretation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCorrespondence.official_interpretation' depends on axioms: [propext, Classical.choice, Quot.sound]

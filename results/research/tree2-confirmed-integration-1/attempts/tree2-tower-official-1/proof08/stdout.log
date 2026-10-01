@@ -1,0 +1,55 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerOfficial.lean:126:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.lookup (l (pow n tr)) st.aux
+in the target expression
+  (match List.lookup ((Expr.const Ln [Level.zero]).app (pow n tr)) st.aux with
+      | some a => StateT.pure (some ((Expr.const a []).app A))
+      | none =>
+        StateT.bind
+          (Official.copyBlock
+            { find? := (En N).find?, ctorsOf := fun c => if (c == Ln) = true then listCs else [], lvls := [], ps := [A],
+              auxName := freshName }
+            [Level.zero] [pow n tr]
+            (Official.blockOf
+              { find? := (En N).find?, ctorsOf := fun c => if (c == Ln) = true then listCs else [], lvls := [],
+                ps := [A], auxName := freshName }
+              Ln))
+          fun __r =>
+          StateT.get.bind fun __do_lift =>
+            match List.lookup ((Expr.const Ln [Level.zero]).app (pow n tr)) __do_lift.aux with
+            | some a => StateT.pure (some ((Expr.const a []).app A))
+            | none => throw Official.illFormed)
+      st =
+    Except.ok (some ((Expr.const a []).app A), st)
+
+N n : Nat
+st : Official.ElimSt
+a : Name
+hn : (List.map (fun x => x.name) st.types.toList).contains Tn = true
+hk : List.lookup (pow (n + 1) tr) st.aux = some a
+hk' : List.lookup (l (pow n tr)) st.aux = some a
+⊢ (match List.lookup ((Expr.const Ln [Level.zero]).app (pow n tr)) st.aux with
+      | some a => StateT.pure (some ((Expr.const a []).app A))
+      | none =>
+        StateT.bind
+          (Official.copyBlock
+            { find? := (En N).find?, ctorsOf := fun c => if (c == Ln) = true then listCs else [], lvls := [], ps := [A],
+              auxName := freshName }
+            [Level.zero] [pow n tr]
+            (Official.blockOf
+              { find? := (En N).find?, ctorsOf := fun c => if (c == Ln) = true then listCs else [], lvls := [],
+                ps := [A], auxName := freshName }
+              Ln))
+          fun __r =>
+          StateT.get.bind fun __do_lift =>
+            match List.lookup ((Expr.const Ln [Level.zero]).app (pow n tr)) __do_lift.aux with
+            | some a => StateT.pure (some ((Expr.const a []).app A))
+            | none => throw Official.illFormed)
+      st =
+    Except.ok (some ((Expr.const a []).app A), st)
+'Tree2TowerOfficial.fresh_supply' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.tower_key_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.tower_key_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.copied_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.nested_tower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.copy_tower' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.replace_hit' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,88 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerNative.lean:264:8: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Expr.replaceApps ?f ?b ?n (Expr.app ?a ?x)
+in the target expression
+  Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 (l (pow n e)) =
+    l (pow n (Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 e))
+
+case succ
+e : Expr
+n : Nat
+ih : Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 (pow n e) = pow n (Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 e)
+⊢ Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 (l (pow n e)) =
+    l (pow n (Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 e))
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerNative.lean:276:2: error: Type mismatch: After simplification, term
+  hp
+ has type
+  (pow n ((Expr.const Tn []).app (Expr.bvar 0))).hasLevelParam = false
+but is expected to have type
+  (pow n ((Expr.const Tn []).app (Expr.bvar 0))).hasLevelParam = false ∧
+    (match ConLeche.PropWhen.repr✝ PropWhen.never with
+      | ConLeche.PropWhenRepr.never✝ => false
+      | ConLeche.PropWhenRepr.always✝ => false
+      | x => true) =
+      false
+theorem Tree2TowerNative.node_crest : ∀ (n : Nat),
+  nestCrest [Tn] [] [A] [X] (Expr.instantiateLevelParams [] [] (node n).type) = some (arr (tower n) X) :=
+fun n =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => nestCrest [Tn] [] [A] [X] _a = some (arr (tower n) X))
+        (Expr.instantiateLevelParams_eq_self (node_no_levels n))))
+    (id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (congrArg (Option.map fun x => Expr.replaceFVars (nestKeyMap [A] [X]) x)
+                    (congrArg (Option.map fun x => Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 x)
+                      (Eq.trans (instPisWith.eq_2 P [] S ((pow n (t (Expr.bvar 0))).forallE (t (Expr.bvar 1)) bm) bm)
+                        (congrArg some
+                          (congrFun'
+                            (congrFun' (congrArg Expr.forallE (pow_inst n (t (Expr.bvar 0)) P 0))
+                              ((t (Expr.bvar 1)).instantiate1 P (0 + 1)))
+                            bm))))))
+                (some (arr (tower n) X))))
+            (id
+              (have hq := rfl;
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg some
+                        (congrArg (Expr.replaceFVars (nestKeyMap [A] [X]))
+                          (Eq.trans (Expr.replaceApps.eq_4 (nestCanonSub [Tn] [] 1) 0 1 (pow n (t P)) (t P) bm)
+                            (congrFun'
+                              (congr (congrArg Expr.forallE (Eq.trans (pow_canon n (t P)) (congrArg (pow n) hq))) hq)
+                              bm)))))
+                    (some ((tower n).forallE X bm))))
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg some
+                          (congrFun'
+                            (congrFun' (congrArg Expr.forallE (pow_fvars n Q (nestKeyMap [A] [X])))
+                              (Expr.replaceFVars (nestKeyMap [A] [X]) Q))
+                            bm)))
+                      (some ((tower n).forallE X bm))))
+                  (have hx := rfl;
+                  Eq.mpr (id (congrArg (fun _a => some ((pow n _a).forallE _a bm) = some ((tower n).forallE X bm)) hx))
+                    (Eq.mpr (id (congrArg (fun _a => some (_a.forallE X bm) = some ((tower n).forallE X bm)) (pow_X n)))
+                      (Eq.refl (some ((tower n).forallE X bm))))))))))))
+'Tree2TowerNative.node_crest' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+theorem Tree2TowerNative.Core.tower_core_certificate : ∀ {N : Nat} (n d fuel : Nat),
+  2 ≤ d →
+    n + 3 ≤ fuel →
+      inferTypeCore CheckMode.verified (En N) fuel d (tower n) = Except.ok S ∧
+        whnf CheckMode.verified (En N) fuel d (tower n) = Except.ok (tower n) ∧
+          (tower n).fvarB ≤ d ∧ Expr.looseBVarsBounded 0 (tower n) = true :=
+fun {N} n d fuel hd hf =>
+  ⟨inferTypeCore_mono hf (Core.infer_tower_at_bound n d hd),
+    ⟨whnf_mono (Decidable.byContradiction fun a => Core.tower_core_certificate._proof_1_1 n d fuel hf a)
+        (Core.whnf_tower_at_bound n d),
+      ⟨Eq.mpr (id (congrArg (fun _a => _a ≤ d) (Expr.fvarB_eq (tower n))))
+          (Eq.mpr (id (congrArg (fun _a => _a ≤ d) (tower_range n))) hd),
+        tower_closed n⟩⟩⟩
+'Tree2TowerNative.Core.tower_core_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]

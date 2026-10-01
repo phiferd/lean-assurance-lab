@@ -1,0 +1,45 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:268:11: error: Tactic `rfl` failed: The left-hand side
+  nestCtors ctx ops env rec prog hi us ds names holes ([] ++ ys) st
+is not definitionally equal to the right-hand side
+  do
+    let __x ← nestCtors ctx ops env rec prog hi us ds names holes [] st
+    match __x with
+      | (os, st') => do
+        let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+        match __x with
+          | (ps, st'') => pure (os ++ ps, st'')
+
+case nil
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM (NestFieldKind × Expr × NestState)
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys : List (ConstantVal × Nat)
+st : NestState
+⊢ nestCtors ctx ops env rec prog hi us ds names holes ([] ++ ys) st = do
+    let __x ← nestCtors ctx ops env rec prog hi us ds names holes [] st
+    match __x with
+      | (os, st') => do
+        let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+        match __x with
+          | (ps, st'') => pure (os ++ ps, st'')
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:272:14: error: `simp` made no progress
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:272:14: error: `simp` made no progress
+'Tree2TowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.uniform_node' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_ok' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_holes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_run' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2TowerWalk.0.Tree2TowerWalk.ctor_append' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]

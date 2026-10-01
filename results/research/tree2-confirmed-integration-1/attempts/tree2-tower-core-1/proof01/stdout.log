@@ -1,0 +1,44 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:37:47: error: unsolved goals
+d : Nat
+hd : 2 ≤ d
+hs : 1 < d
+⊢ pure S = Except.ok S
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:53:13: error(lean.unknownIdentifier): Unknown constant `Except.bind_ok`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerCore.lean:53:2: error: `simp` made no progress
+theorem Tree2TowerCore.tower_core_certificate : ∀ (n d fuel : Nat),
+  2 ≤ d →
+    n + 3 ≤ fuel →
+      inferTypeCore CheckMode.verified E fuel d (tower n) = Except.ok S ∧
+        whnf CheckMode.verified E fuel d (tower n) = Except.ok (tower n) ∧
+          (tower n).fvarB ≤ d ∧ Expr.looseBVarsBounded 0 (tower n) = true :=
+fun n d fuel hd hf =>
+  ⟨inferTypeCore_mono hf (infer_tower_at_bound n d hd),
+    ⟨whnf_mono (Decidable.byContradiction fun a => tower_core_certificate._proof_1_1 n d fuel hf a)
+        (whnf_tower_at_bound n d),
+      ⟨Eq.mpr (id (congrArg (fun _a => _a ≤ d) (Expr.fvarB_eq (tower n))))
+          (Eq.mpr (id (congrArg (fun _a => _a ≤ d) (tower_range n))) hd),
+        tower_closed n⟩⟩⟩
+theorem Tree2TowerCore.infer_tower_at_bound : ∀ (n d : Nat),
+  2 ≤ d → inferTypeCore CheckMode.verified E (n + 3) d (tower n) = Except.ok S :=
+fun n d hd =>
+  Nat.recAux
+    (inferTypeCore_mono (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_1 d a) (infer_X d hd))
+    (fun n ih =>
+      infer_list_step (tower n) d (n + 3) (Decidable.byContradiction fun a => infer_tower_at_bound._proof_1_2 d n a) ih)
+    n
+theorem Tree2TowerCore.whnf_tower_at_bound : ∀ (n d : Nat),
+  whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n) :=
+fun n d =>
+  Nat.casesAuxOn (motive := fun a => n = a → whnf CheckMode.verified E 3 d (tower n) = Except.ok (tower n)) n
+    (fun h => Eq.symm h ▸ whnf_mono (Decidable.byContradiction fun a => whnf_tower_at_bound._proof_1_1 a) (whnf_X d))
+    (fun n_1 h => Eq.symm h ▸ whnf_list (tower n_1) d) (Eq.refl n)
+'Tree2TowerCore.infer_list_head' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_former' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_list' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_X' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.defeq_S' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_X' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_list_step' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.infer_tower_at_bound' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerCore.whnf_tower_at_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerCore.tower_core_certificate' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

@@ -1,0 +1,100 @@
+Tree2Bridge.lean:63:37: error: unsolved goals
+⊢ (match
+      List.find? (fun x => x.toConstantVal.name == Name.anonymous.str "List")
+        [ConstantInfo.indInfo
+            { name := Name.anonymous.str "List", levelParams := [un],
+              type := pi (Expr.sort (Level.param un).succ) (Expr.sort (Level.param un).succ) }
+            { all := [Name.anonymous.str "List"], nparams := 1, ctors := [nilCV.name, consCV.name] },
+          ConstantInfo.ctorInfo nilCV 1 0, ConstantInfo.ctorInfo consCV 1 2,
+          ConstantInfo.indInfo treeCV
+            { all := [Name.anonymous.str "Tree2"], nparams := 1, ctors := [leafCV.name, nodeCV.name] }] with
+    | some (ConstantInfo.indInfo val caps) =>
+      if 1 < caps.nparams then pure none
+      else
+        if
+            ∀ (x : Expr),
+              x ∈
+                  List.take caps.nparams
+                    [(Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                        ((Expr.const (Name.anonymous.str "Tree2") []).app A)] →
+                Expr.nestOcc [Name.anonymous.str "Tree2"] 0 0 x = false then
+          pure none
+        else
+          if
+              ∃ x,
+                x ∈
+                    List.take caps.nparams
+                      [(Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                          ((Expr.const (Name.anonymous.str "Tree2") []).app A)] ∧
+                  ¬x.bvarBound = 0 then
+            throw (CheckError.invalid "official: nested inductive datatypes parameters cannot contain local variables")
+          else
+            pure
+              (some
+                (Name.anonymous.str "List", [Level.zero], caps.nparams,
+                  [(Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                      ((Expr.const (Name.anonymous.str "Tree2") []).app A)]))
+    | x => pure none) =
+    Except.ok
+      (some
+        (Name.anonymous.str "List", [Level.zero], 1,
+          [(Expr.const (Name.anonymous.str "List") [Level.zero]).app
+              ((Expr.const (Name.anonymous.str "Tree2") []).app A)]))
+Tree2Bridge.lean:64:135: warning: This simp argument is unused:
+  Expr.nestOcc
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Official.isNestedApp, O, E, Env.find?, ConstantInfo.name, listCV, listCs, Ln, Tn, nm, tr, t, l,
+    Expr.getAppFn, Expr.getAppArgs, Expr.bvarB_eq, Expr.bvarBound, quotName]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tree2Bridge.lean:64:164: warning: This simp argument is unused:
+  Expr.bvarBound
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [Official.isNestedApp, O, E, Env.find?, ConstantInfo.name, listCV, listCs, Ln, Tn, nm, tr, t, l,
+    Expr.getAppFn, Expr.getAppArgs, Expr.nestOcc, Expr.bvarB_eq, quotName]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+Tree2Bridge.lean:67:77: error: maximum recursion depth has been reached
+use `set_option maxRecDepth <num>` to increase limit
+use `set_option diagnostics true` to get diagnostic information
+Tree2Bridge.lean:311:1: error: Tactic `apply` failed: could not unify the conclusion of `PosDR.cont`
+  PosDR ?m.10 ?m.11 ?m.12 ?m.13 (PosJR.field ?m.16 ?m.17 ?m.18 ?m.19 ?m.20 (NestFieldKind.nested (?m.19 != 0)) (l X))
+with the goal
+  PosDR ops E C 3 (PosJR.field [] [] 2 0 (l (l X)) (NestFieldKind.nested false) (l (l X)))
+
+Note: The full type of `PosDR.cont` is
+  CheckerOps.whnf ?m.10 ?m.11 ?m.18 ?m.20 = Except.ok (l X) →
+    Expr.nestOcc (NestCtx.names ?m.12) (NestCtx.nP ?m.12) (NestCtx.hiAt ?m.12 (List.length ?m.17)) (l X) = true →
+      (l X).getAppFn = Expr.const Ln [Level.zero] →
+        (NestCtx.names ?m.12).contains Ln = false →
+          nestContainer ?m.12 Ln = some (1, listCs) →
+            (l X).getAppArgs.length = 1 + 0 →
+              Ln ≠ quotName →
+                (∀ (x : Expr),
+                    x ∈ List.drop 1 (l X).getAppArgs →
+                      Expr.nestOcc (NestCtx.names ?m.12) (NestCtx.nP ?m.12) (NestCtx.hiAt ?m.12 (List.length ?m.17)) x =
+                        false) →
+                  (∀ (x : Expr),
+                      x ∈ List.take 1 (l X).getAppArgs →
+                        x.bvarB = 0 ∧ x.fvarB ≤ NestCtx.hiAt ?m.12 (List.length ?m.17)) →
+                    (∀ (x : Expr),
+                        x ∈ List.take 1 (l X).getAppArgs → Expr.WScoped (NestCtx.hiAt ?m.12 (List.length ?m.17)) x) →
+                      ProgScoped ?m.12 ?m.17 →
+                        nestInstType ?m.12 (NestCtx.hiAt ?m.12 (List.length ?m.17))
+                              { cname := Ln, lvls := [Level.zero], ds := List.take 1 (l X).getAppArgs } =
+                            Except.ok (0, S) →
+                          ¬{ cname := Ln, lvls := [Level.zero], ds := List.take 1 (l X).getAppArgs } ∈ ?m.16 →
+                            ([(Ln, S)].headD default).fst = Ln →
+                              2 < ?m.13 →
+                                PosDR ?m.10 ?m.11 ?m.12 2
+                                    (PosJR.frame ?m.16 (nestWalkStack ?m.12 ?m.17 (List.take 1 (l X).getAppArgs))
+                                      [Level.zero] (List.take 1 (l X).getAppArgs) [(Ln, S)]) →
+                                  PosDR ?m.10 ?m.11 ?m.12 ?m.13
+                                    (PosJR.field ?m.16 ?m.17 ?m.18 ?m.19 ?m.20 (NestFieldKind.nested (?m.19 != 0))
+                                      (l X))
+
+⊢ PosDR ops E C 3 (PosJR.field [] [] 2 0 (l (l X)) (NestFieldKind.nested false) (l (l X)))
+'Tree2Bridge.official_lowering' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2Bridge.root_derivation' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

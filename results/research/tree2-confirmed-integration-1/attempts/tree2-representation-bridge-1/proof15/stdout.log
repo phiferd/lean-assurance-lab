@@ -1,0 +1,25 @@
+Tree2Bridge.lean:437:61: error: Tactic `rfl` failed: The left-hand side
+  whnfWalkFuel (arr A X)
+is not definitionally equal to the right-hand side
+  1026
+
+case left
+⊢ whnfWalkFuel (arr A X) = 1026
+Tree2Bridge.lean:437:61: error: Tactic `rfl` failed: The left-hand side
+  whnfWalkFuel (arr (l (l X)) X)
+is not definitionally equal to the right-hand side
+  1028
+
+case right
+⊢ whnfWalkFuel (arr (l (l X)) X) = 1028
+theorem Tree2Bridge.tree2_bridge : Official.elimNested O decl 4 = Except.ok lowered ∧
+  PosDR ops E C 3 (PosJR.ctors [] [] 2 [] [A] [Tn] [X] rootCs) ∧
+    List.map (fun ty => List.map (row officialSlot) ty.ctors) lowered.types.toList =
+        List.map (List.map some) signature ∧
+      nativeRows = List.map (List.map some) signature :=
+⟨official_lowering, ⟨root_derivation, row_correspondence⟩⟩
+'Tree2Bridge.official_lowering' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Bridge.root_derivation' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Bridge.row_correspondence' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Bridge.native_run_complete' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Bridge.tree2_bridge' depends on axioms: [propext, Classical.choice, Quot.sound]

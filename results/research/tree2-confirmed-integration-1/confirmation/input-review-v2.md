@@ -1,0 +1,3 @@
+# Independent preexecution input review v2 — PASS
+
+Reviewer /root/review_bridge, read-only before execution. Corrected closure and timeout-recording gaps resolved.101 upstream/108 total, PinGen.Dump before NatOpPins, every local import precedes consumer. Seven proof hashes match delivered commit;101 upstream source files and five pin auxiliary files equal pinned Git blobs. External imports only official Init.Util,Lean,Std.Data.HashMap. Fresh checkout has no .olean or .lake cache. Exact theorem, only F>=N+5 and final stdout16 standard reports remain frozen. Dynamic counts/index, timeout partial output and resolver restrictions checked. Sequential600s/4GiB envelope intact. Approval is for bounded attempt, not outcome. No compile or edits by reviewer.

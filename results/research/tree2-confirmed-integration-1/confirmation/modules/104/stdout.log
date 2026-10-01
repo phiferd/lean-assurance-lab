@@ -1,0 +1,101 @@
+theorem Tree2TowerNative.native_family : ∀ (N F : Nat),
+  N + 5 ≤ F → PosDR (checker F) (En N) (Cn N) (N + 1) (PosJR.ctors [] [] 2 [] [A] [Tn] [X] (roots N)) :=
+fun N F hf =>
+  PosDR.ctorsCons (of_decide_eq_true (id (Eq.refl true))) root_crests.left
+    (leaf_infer N F (Decidable.byContradiction fun a => native_family._proof_1_1 N F hf a))
+    (ensure_sort N F 2 (Level.zero.succ.imax Level.zero.succ)
+      (Decidable.byContradiction fun a => native_family._proof_1_2 N F hf a))
+    (Decidable.byContradiction fun a => native_family._proof_1_3 N F a)
+    (PosDR.teleCons (Decidable.byContradiction fun a => native_family._proof_1_4 N F a)
+      (ordinary_field N F (Decidable.byContradiction fun a => native_family._proof_1_2 N F hf a))
+      (Decidable.byContradiction fun a => native_family._proof_1_5 N F a) PosDR.teleNil)
+    (Eq.refl
+      ((List.range 1).any fun i =>
+        [NestFieldKind.ordinary].getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+          structUsedLater (closeTelescope [(A, bm)] 2 X) 0 i))
+    (Eq.refl (nestResHead X)) (Eq.refl (X.getAppArgs.all fun x => !Expr.nestOcc (Cn N).names (Cn N).nP 2 x))
+    (Decidable.byContradiction fun a => native_family._proof_1_6 N F a)
+    (PosDR.ctorsCons (Eq.refl (Name.nodup (node N).levelParams)) (node_crest N)
+      (Core.node_crest_certificate N 2 F (Decidable.byContradiction fun a => native_family._proof_1_7 N F a)
+        (Decidable.byContradiction fun a => native_family._proof_1_8 N F hf a))
+      (ensure_sort N F 2 (Level.zero.succ.imax Level.zero.succ)
+        (Decidable.byContradiction fun a => native_family._proof_1_2 N F hf a))
+      (Decidable.byContradiction fun a => native_family._proof_1_6 N F a)
+      (PosDR.teleCons (Decidable.byContradiction fun a => native_family._proof_1_6 N F a)
+        (tower_field N F hf N (Decidable.byContradiction fun a => native_family._proof_1_9 N F a) [] [] 2
+          (fun i hi => of_eq_true (Eq.trans (congrArg Not List.not_mem_nil._simp_1) not_false_eq_true)) ProgScoped.nil)
+        (Decidable.byContradiction fun a => native_family._proof_1_10 N F a) PosDR.teleNil)
+      (node_u4 (tower N) (fieldKind N)) (Eq.refl (nestResHead X))
+      (Eq.refl (X.getAppArgs.all fun x => !Expr.nestOcc (Cn N).names (Cn N).nP 2 x))
+      (Decidable.byContradiction fun a => native_family._proof_1_10 N F a) PosDR.ctorsNil)
+theorem Tree2TowerNative.native_family_at_bound : ∀ (N : Nat),
+  PosDR (checker (N + 5)) (En N) (Cn N) (N + 1) (PosJR.ctors [] [] 2 [] [A] [Tn] [X] (roots N)) :=
+fun N => native_family N (N + 5) (Decidable.byContradiction fun a => native_family_at_bound._proof_1_1 N a)
+theorem Tree2TowerNative.lookup_interface : ∀ (N : Nat),
+  (En N).find? Ln = E.find? Ln ∧
+    (En N).find? nilCV.name = E.find? nilCV.name ∧
+      (En N).find? consCV.name = E.find? consCV.name ∧
+        (En N).find? Tn = E.find? Tn ∧ (En N).find? nodeCV.name = some (ConstantInfo.ctorInfo (node N) 1 1) :=
+fun N => ⟨rfl, ⟨rfl, ⟨rfl, ⟨rfl, rfl⟩⟩⟩⟩
+theorem Tree2TowerNative.node_crest : ∀ (n : Nat),
+  nestCrest [Tn] [] [A] [X] (Expr.instantiateLevelParams [] [] (node n).type) = some (arr (tower n) X) :=
+fun n =>
+  Eq.mpr
+    (id
+      (congrArg (fun _a => nestCrest [Tn] [] [A] [X] _a = some (arr (tower n) X))
+        (Expr.instantiateLevelParams_eq_self (node_no_levels n))))
+    (id
+      (id
+        (id
+          (Eq.mpr
+            (id
+              (congrFun'
+                (congrArg Eq
+                  (congrArg (Option.map fun x => Expr.replaceFVars (nestKeyMap [A] [X]) x)
+                    (congrArg (Option.map fun x => Expr.replaceApps (nestCanonSub [Tn] [] 1) 0 1 x)
+                      (Eq.trans (instPisWith.eq_2 P [] S ((pow n (t (Expr.bvar 0))).forallE (t (Expr.bvar 1)) bm) bm)
+                        (congrArg some
+                          (congrFun'
+                            (congrFun' (congrArg Expr.forallE (pow_inst n (t (Expr.bvar 0)) P 0))
+                              ((t (Expr.bvar 1)).instantiate1 P (0 + 1)))
+                            bm))))))
+                (some (arr (tower n) X))))
+            (id
+              (have hq := rfl;
+              Eq.mpr
+                (id
+                  (congrFun'
+                    (congrArg Eq
+                      (congrArg some
+                        (congrArg (Expr.replaceFVars (nestKeyMap [A] [X]))
+                          (Eq.trans (Expr.replaceApps.eq_4 (nestCanonSub [Tn] [] 1) 0 1 (pow n (t P)) (t P) bm)
+                            (congrFun'
+                              (congr (congrArg Expr.forallE (Eq.trans (pow_canon n (t P)) (congrArg (pow n) hq))) hq)
+                              bm)))))
+                    (some ((tower n).forallE X bm))))
+                (Eq.mpr
+                  (id
+                    (congrFun'
+                      (congrArg Eq
+                        (congrArg some
+                          (congrFun'
+                            (congrFun' (congrArg Expr.forallE (pow_fvars n Q (nestKeyMap [A] [X])))
+                              (Expr.replaceFVars (nestKeyMap [A] [X]) Q))
+                            bm)))
+                      (some ((tower n).forallE X bm))))
+                  (have hx := rfl;
+                  Eq.mpr (id (congrArg (fun _a => some ((pow n _a).forallE _a bm) = some ((tower n).forallE X bm)) hx))
+                    (Eq.mpr (id (congrArg (fun _a => some (_a.forallE X bm) = some ((tower n).forallE X bm)) (pow_X n)))
+                      (Eq.refl (some ((tower n).forallE X bm))))))))))))
+'Tree2TowerNative.native_family' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.native_family_at_bound' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.tower_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.node_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.lookup_interface' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.fresh_push' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.frame_scoped' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.self_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.stack_reset' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.node_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.Core.tower_core_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerNative.Core.cons_crest_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]

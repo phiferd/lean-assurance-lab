@@ -1,0 +1,184 @@
+theorem Tree2TowerSupport.tower_key_frame : ∀ (k : Nat) (prog : List NestHole),
+  (tower k).fvarB = 2 ∧ nestWalkStack C prog [tower k] = [] ∧ ∀ (j : Nat), towerKey j = towerKey k ↔ j = k :=
+fun k prog =>
+  have hr :=
+    Eq.mpr (id (congrArg (fun _a => _a = 2) (Expr.fvarB_eq (tower k))))
+      (Eq.mpr (id (congrArg (fun _a => _a = 2) (tower_range k))) (Eq.refl 2));
+  ⟨hr,
+    ⟨of_eq_true
+        (Eq.trans
+          (congrFun'
+            (congrArg Eq
+              (ite_cond_eq_true [] prog
+                (Eq.trans
+                  (congrFun'
+                    (congrArg Eq
+                      (Eq.trans
+                        (congrArg [tower k].all
+                          (funext fun x =>
+                            Decidable.decide.congr_simp (x.fvarB ≤ C.hiAt 0) (x.fvarB ≤ 2)
+                              (congrArg (LE.le x.fvarB)
+                                (congrFun' (congrArg HAdd.hAdd (congrArg (HAdd.hAdd 1) (Nat.zero_add 1))) 0))))
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg and
+                              (Eq.trans
+                                (Decidable.decide.congr_simp ((tower k).fvarB ≤ 2) True
+                                  (Eq.trans (congrFun' (congrArg LE.le hr) 2) (Std.le_refl._simp_1 2)))
+                                (decide_true instDecidableTrue)))
+                            true)
+                          (Bool.and_self true))))
+                    true)
+                  (eq_self true))))
+            [])
+          (eq_self [])),
+      fun j =>
+      {
+        mp := fun h =>
+          have hd := congrArg NestKey.ds h;
+          tower_injective (List.cons.inj hd).left,
+        mpr := fun h => Eq.symm h ▸ Eq.refl (towerKey k) }⟩⟩
+theorem Tree2TowerSupport.canonical_list_crest_substitution : ∀ (d h : Expr),
+  nestCrest [Ln] [Level.zero] [d] [h] (Expr.instantiateLevelParams [un] [Level.zero] nilCV.type) = some h ∧
+    nestCrest [Ln] [Level.zero] [d] [h] (Expr.instantiateLevelParams [un] [Level.zero] consCV.type) =
+      some (arr d (arr h h)) :=
+fun d h =>
+  ⟨id
+      (Eq.mpr
+        (id
+          (congrArg (fun _a => Option.map (fun x => Expr.replaceFVars (nestKeyMap [d] [h]) x) _a = some h)
+            canonical_list.left))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg some
+                  (congrFun'
+                    (congrArg Option.getD
+                      (Eq.trans
+                        (ite_cond_eq_false [d][1]? [h][1 - [d].length]?
+                          (Eq.trans (congrArg (LT.lt 1) (Nat.zero_add 1)) (Nat.lt_irrefl._simp_1 1)))
+                        (Eq.trans
+                          (congrArg (getElem? [h])
+                            (Eq.trans (congrArg (HSub.hSub 1) (Nat.zero_add 1)) (Nat.sub_self 1)))
+                          (getElem?_pos [h] 0
+                            (of_eq_true (Eq.trans (congrArg (LT.lt 0) (Nat.zero_add 1)) (Nat.lt_add_one._simp_1 0)))))))
+                    (Expr.fvar 1 (Expr.sort Level.zero)))))
+              (some h))
+            (eq_self (some h))))),
+    id
+      (Eq.mpr
+        (id
+          (congrArg
+            (fun _a => Option.map (fun x => Expr.replaceFVars (nestKeyMap [d] [h]) x) _a = some (arr d (arr h h)))
+            canonical_list.right))
+        (of_eq_true
+          (Eq.trans
+            (congrFun'
+              (congrArg Eq
+                (congrArg some
+                  (congrFun'
+                    (congr
+                      (congrArg Expr.forallE
+                        (congrFun'
+                          (congrArg Option.getD
+                            (Eq.trans
+                              (ite_cond_eq_true [d][0]? [h][0 - [d].length]?
+                                (Eq.trans (congrArg (LT.lt 0) (Nat.zero_add 1)) (Nat.lt_add_one._simp_1 0)))
+                              (getElem?_pos [d] 0
+                                (of_eq_true
+                                  (Eq.trans (congrArg (LT.lt 0) (Nat.zero_add 1)) (Nat.lt_add_one._simp_1 0))))))
+                          (Expr.fvar 0 (Expr.sort Level.zero))))
+                      (congrFun'
+                        (congr
+                          (congrArg Expr.forallE
+                            (congrFun'
+                              (congrArg Option.getD
+                                (Eq.trans
+                                  (ite_cond_eq_false [d][1]? [h][1 - [d].length]?
+                                    (Eq.trans (congrArg (LT.lt 1) (Nat.zero_add 1)) (Nat.lt_irrefl._simp_1 1)))
+                                  (Eq.trans
+                                    (congrArg (getElem? [h])
+                                      (Eq.trans (congrArg (HSub.hSub 1) (Nat.zero_add 1)) (Nat.sub_self 1)))
+                                    (getElem?_pos [h] 0
+                                      (of_eq_true
+                                        (Eq.trans (congrArg (LT.lt 0) (Nat.zero_add 1)) (Nat.lt_add_one._simp_1 0)))))))
+                              (Expr.fvar 1 (Expr.sort Level.zero))))
+                          (congrFun'
+                            (congrArg Option.getD
+                              (Eq.trans
+                                (ite_cond_eq_false [d][1]? [h][1 - [d].length]?
+                                  (Eq.trans (congrArg (LT.lt 1) (Nat.zero_add 1)) (Nat.lt_irrefl._simp_1 1)))
+                                (Eq.trans
+                                  (congrArg (getElem? [h])
+                                    (Eq.trans (congrArg (HSub.hSub 1) (Nat.zero_add 1)) (Nat.sub_self 1)))
+                                  (getElem?_pos [h] 0
+                                    (of_eq_true
+                                      (Eq.trans (congrArg (LT.lt 0) (Nat.zero_add 1)) (Nat.lt_add_one._simp_1 0)))))))
+                            (Expr.fvar 1 (Expr.sort Level.zero))))
+                        bm))
+                    bm)))
+              (some (d.forallE (h.forallE h bm) bm)))
+            (eq_self (some (d.forallE (h.forallE h bm) bm))))))⟩
+theorem Tree2TowerSupport.canonical_list_crest_closed : ∀ (d h : Expr),
+  Expr.looseBVarsBounded 0 d = true →
+    Expr.looseBVarsBounded 0 h = true →
+      nestCrest [Ln] [Level.zero] [d] [h] (Expr.instantiateLevelParams [un] [Level.zero] nilCV.type) = some h ∧
+        nestCrest [Ln] [Level.zero] [d] [h] (Expr.instantiateLevelParams [un] [Level.zero] consCV.type) =
+            some (arr d (arr h h)) ∧
+          Expr.looseBVarsBounded 0 (arr d (arr h h)) = true ∧
+            ∀ (depth : Nat), Expr.looseBVarsBounded depth d = true ∧ Expr.looseBVarsBounded depth h = true :=
+fun d h hd hh =>
+  have db := Nat.eq_zero_of_le_zero (Expr.looseBVarsBounded_iff.mp hd);
+  have hb := Nat.eq_zero_of_le_zero (Expr.looseBVarsBounded_iff.mp hh);
+  ⟨(canonical_list_crest_substitution d h).left,
+    ⟨(canonical_list_crest_substitution d h).right,
+      ⟨Expr.looseBVarsBounded_iff.mpr
+          (of_eq_true
+            (Eq.trans
+              (congrFun'
+                (congrArg LE.le
+                  (Eq.trans (Expr.bvarBound.eq_8 d (h.forallE h bm) bm)
+                    (Eq.trans
+                      (congr (congrArg max db)
+                        (Eq.trans
+                          (congrFun'
+                            (congrArg HSub.hSub
+                              (Eq.trans
+                                (congr (congrArg max hb)
+                                  (Eq.trans (congrFun' (congrArg HSub.hSub hb) 1)
+                                    (Nat.sub_eq_zero_of_le (of_eq_true (Nat.zero_le._simp_1 1)))))
+                                (Nat.max_eq_right (of_eq_true (Std.le_refl._simp_1 0)))))
+                            1)
+                          (Nat.sub_eq_zero_of_le (of_eq_true (Nat.zero_le._simp_1 1)))))
+                      (Nat.max_eq_right (of_eq_true (Std.le_refl._simp_1 0))))))
+                0)
+              (Std.le_refl._simp_1 0))),
+        fun depth =>
+        ⟨Expr.looseBVarsBounded_iff.mpr
+            (of_eq_true (Eq.trans (congrFun' (congrArg LE.le db) depth) (Nat.zero_le._simp_1 depth))),
+          Expr.looseBVarsBounded_iff.mpr
+            (of_eq_true (Eq.trans (congrFun' (congrArg LE.le hb) depth) (Nat.zero_le._simp_1 depth)))⟩⟩⟩⟩
+theorem Tree2TowerSupport.tower_list_crest : ∀ (k : Nat),
+  nestCrest [Ln] [Level.zero] [tower k] [Y] (Expr.instantiateLevelParams [un] [Level.zero] nilCV.type) = some Y ∧
+    nestCrest [Ln] [Level.zero] [tower k] [Y] (Expr.instantiateLevelParams [un] [Level.zero] consCV.type) =
+        some (arr (tower k) (arr Y Y)) ∧
+      Expr.looseBVarsBounded 0 (arr (tower k) (arr Y Y)) = true :=
+fun k =>
+  have hy := rfl;
+  have hc := canonical_list_crest_closed (tower k) Y (tower_closed k) hy;
+  ⟨hc.left, ⟨hc.right.left, hc.right.right.left⟩⟩
+theorem Tree2TowerSupport.loose_self_capture_example : nestCrest [Ln] [Level.zero] [S] [Expr.bvar 0]
+      (Expr.instantiateLevelParams [un] [Level.zero] consCV.type) =
+    some (arr S (arr (Expr.bvar 0) (Expr.bvar 0))) ∧
+  Expr.looseBVarsBounded 0 (Expr.bvar 0) = false ∧
+    Expr.looseBVarsBounded 0 (arr S (arr (Expr.bvar 0) (Expr.bvar 0))) = true :=
+⟨(canonical_list_crest_substitution S (Expr.bvar 0)).right, ⟨rfl, rfl⟩⟩
+'Tree2TowerSupport.tower_range' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.tower_injective' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.tower_key_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.canonical_list_crest_substitution' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.canonical_list_crest_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.tower_closed' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.tower_list_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerSupport.loose_self_capture_example' depends on axioms: [propext, Classical.choice, Quot.sound]

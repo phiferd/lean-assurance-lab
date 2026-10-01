@@ -1,0 +1,238 @@
+import ConLeche.Complete.OfficialNested
+import ConLeche.Complete.PosDerivComplete
+
+/- Local AI-authored exploratory proof. No upstream submission authorized. -/
+namespace Tree2Bridge
+open ConLeche
+
+def nm (s : String) : Name := .str .anonymous s
+def Tn := nm "Tree2"
+def Ln := nm "List"
+def un := nm "u"
+def rn := nm "Rows"
+def cn := nm "Children"
+def S : Expr := .sort (.succ .zero)
+def bm : BinderMeta := ⟨.never⟩
+def pi (a b : Expr) : Expr := .forallE a b bm
+def arr := pi
+def l (a : Expr) : Expr := .app (.const Ln [.zero]) a
+def t (a : Expr) : Expr := .app (.const Tn []) a
+def A : Expr := .fvar 0 S
+def X : Expr := .fvar 1 S
+def Y : Expr := .fvar 2 S
+def P : Expr := .fvar 0 (.sort .zero)
+def Q : Expr := .fvar 1 (.sort .zero)
+def listCV : ConstantVal := ⟨Ln, [un], pi (.sort (.succ (.param un))) (.sort (.succ (.param un)))⟩
+def nilCV : ConstantVal := ⟨nm "List.nil", [un], pi (.sort (.succ (.param un)))
+  (.app (.const Ln [.param un]) (.bvar 0))⟩
+def consCV : ConstantVal := ⟨nm "List.cons", [un], pi (.sort (.succ (.param un)))
+  (pi (.bvar 0) (pi (.app (.const Ln [.param un]) (.bvar 1))
+    (.app (.const Ln [.param un]) (.bvar 2))))⟩
+def treeCV : ConstantVal := ⟨Tn, [], pi S S⟩
+def leafCV : ConstantVal := ⟨nm "Tree2.leaf", [], pi S (pi (.bvar 0) (t (.bvar 1)))⟩
+def nodeCV : ConstantVal := ⟨nm "Tree2.node", [], pi S (pi (l (l (t (.bvar 0)))) (t (.bvar 1)))⟩
+def listCs : List (ConstantVal × Nat) := [(nilCV,0),(consCV,2)]
+def rootCs : List (ConstantVal × Nat) := [(leafCV,1),(nodeCV,1)]
+def E : Env := ⟨[.indInfo listCV {all := [Ln], nparams := 1, ctors := [nilCV.name,consCV.name]}, .ctorInfo nilCV 1 0, .ctorInfo consCV 1 2,
+  .indInfo treeCV {all := [Tn], nparams := 1, ctors := [leafCV.name,nodeCV.name]}]⟩
+def C : NestCtx := ⟨[Tn], [], 1, [0], [A], .succ .zero, E.find?⟩
+def ops : CheckerOps CheckM := fueledOps .verified 64
+def Ko : NestKey := ⟨Ln, [.zero], [l X]⟩
+def Ki : NestKey := ⟨Ln, [.zero], [X]⟩
+def Ho : NestHole := ⟨Ko,2⟩
+def Hi : NestHole := ⟨Ki,2⟩
+def O : Official.ElimCtx :=
+ {find? := E.find?, ctorsOf := fun n => if n == Ln then listCs else [],
+  lvls := [], ps := [A], auxName := fun i => if i == 1 then rn else cn}
+def decl : List Official.MemberDecl := [⟨Tn,treeCV.type,[leafCV.type,nodeCV.type]⟩]
+def tr : Expr := t A
+def rows : Expr := .app (.const rn []) A
+def children : Expr := .app (.const cn []) A
+def lowered : Official.ElimSt :=
+ {aux := [(l (l tr),rn),(l tr,cn)], next := 3,
+  types := #[⟨Tn,S,[arr A tr,arr rows tr]⟩,
+    ⟨rn,S,[rows,arr children (arr rows rows)]⟩,
+    ⟨cn,S,[children,arr tr (arr children children)]⟩]}
+
+set_option maxRecDepth 20000
+set_option maxHeartbeats 1000000
+
+attribute [local cbv_eval] Expr.bvarB_eq Expr.fvarB_eq ConLeche.Expr.Expr.hasLP_eq
+
+theorem official_lowering : Official.elimNested O decl 4 = .ok lowered := by cbv
+
+theorem canonical_list :
+ nestCanonCrest [Ln] [.zero] 1 (nilCV.type.instantiateLevelParams [un] [.zero]) = some Q ∧
+ nestCanonCrest [Ln] [.zero] 1 (consCV.type.instantiateLevelParams [un] [.zero]) =
+   some (arr P (arr Q Q)) := by exact ⟨rfl,rfl⟩
+
+theorem root_crests :
+ nestCrest [Tn] [] [A] [X] leafCV.type = some (arr A X) ∧
+ nestCrest [Tn] [] [A] [X] nodeCV.type = some (arr (l (l X)) X) := by exact ⟨rfl,rfl⟩
+
+theorem container_crests :
+ nestCrest [Ln] [.zero] [l X] [Y] (consCV.type.instantiateLevelParams [un] [.zero]) =
+   some (arr (l X) (arr Y Y)) ∧
+ nestCrest [Ln] [.zero] [X] [Y] (consCV.type.instantiateLevelParams [un] [.zero]) =
+   some (arr X (arr Y Y)) := by exact ⟨rfl,rfl⟩
+
+theorem frame_reset : nestWalkStack C [Ho] [X] = [] ∧
+ grpKeys [.zero] [X] [(Ln,S)] ++ [Ko] = [Ki,Ko] ∧ Ki ≠ Ko := by
+ constructor
+ · unfold nestWalkStack
+   have h : [X].all (fun x => x.fvarB ≤ C.hiAt 0) = true := by
+     simp [Expr.fvarB_eq, Expr.fvarRange, X, C, NestCtx.hiAt]
+   rw [h]
+   rfl
+ constructor
+ · cbv
+ intro h
+ have hds := congrArg NestKey.ds h
+ have hx : X = l X := (List.cons.inj hds).1
+ have hh := congrArg Expr.getAppFn hx
+ change Expr.fvar 1 S = Expr.const Ln [.zero] at hh
+ cases hh
+
+-- Concrete pure-Core checks; no successful-operation hypotheses.
+theorem infer_A : ops.inferType E 2 A = .ok S := by cbv
+theorem infer_lX : ops.inferType E 2 (l X) = .ok S := by cbv
+theorem infer_llX : ops.inferType E 2 (l (l X)) = .ok S := by cbv
+theorem infer_leaf : ops.inferType E 2 (arr A X) =
+ .ok (.sort (.imax (.succ .zero) (.succ .zero))) := by cbv
+theorem infer_node : ops.inferType E 2 (arr (l (l X)) X) =
+ .ok (.sort (.imax (.succ .zero) (.succ .zero))) := by cbv
+theorem infer_outer : ops.inferType E 3 (arr (l X) (arr Y Y)) =
+ .ok (.sort (.imax (.succ .zero) (.imax (.succ .zero) (.succ .zero)))) := by cbv
+theorem infer_inner : ops.inferType E 3 (arr X (arr Y Y)) =
+ .ok (.sort (.imax (.succ .zero) (.imax (.succ .zero) (.succ .zero)))) := by cbv
+
+-- Native derivations are constructed from the rules, never extracted from runs.
+theorem ordinary (act : List NestKey) (prog : List NestHole) (d : Nat) :
+ PosDR ops E C 1 (.field act prog d 0 A .ordinary A) := by
+ apply PosDR.const (w := A) (n := 0)
+ · cbv
+ · cbv
+
+theorem member (act : List NestKey) (prog : List NestHole) (d : Nat) :
+ PosDR ops E C 1 (.field act prog d 0 X (.recursive 0) X) := by
+ apply PosDR.hole (w := X) (i := 1) (ty := S) (n := 0)
+ · cbv
+ · cbv
+ · rfl
+ · cbv
+ · cbv
+ · cbv
+ · simp [X, Expr.getAppArgs]
+
+theorem self (act : List NestKey) (ds : Expr) (d : Nat) :
+ PosDR ops E C 1 (.field act [⟨⟨Ln,[.zero],[ds]⟩,2⟩] d 0 Y .inProgress Y) := by
+ apply PosDR.frameHole (w := Y) (i := 2) (ty := S)
+   (h := ⟨⟨Ln,[.zero],[ds]⟩,2⟩) (n := 0)
+ · cbv
+ · cbv
+ · rfl
+ · cbv
+ · cbv
+ · cbv
+ · simp [Y, Expr.getAppArgs]
+ · cbv
+
+theorem inner_tele : PosDR ops E C 1
+ (.tele [Ki,Ko] [Hi] 3 2 0 (arr X (arr Y Y))
+   [.recursive 0,.inProgress] [(X,bm),(Y,bm)] Y) := by
+ apply PosDR.teleCons (m₁ := 1) (m₃ := 1)
+ · omega
+ · exact member _ _ _
+ · omega
+ · apply PosDR.teleCons (m₁ := 1) (m₃ := 0)
+   · omega
+   · exact self _ X _
+   · omega
+   · exact PosDR.teleNil
+
+theorem inner_ctors : PosDR ops E C 1
+ (.ctors [Ki,Ko] [Hi] 3 [.zero] [X] [Ln] [Y] listCs) := by
+ apply PosDR.ctorsCons (crest := Y) (ty := S) (sv := .succ .zero)
+   (m₁ := 0) (m₂ := 1) (ks := []) (nds := []) (cur := Y)
+ · cbv
+ · exact rfl
+ · cbv
+ · cbv
+ · omega
+ · exact PosDR.teleNil
+ · cbv
+ · cbv
+ · cbv
+ · omega
+ · apply PosDR.ctorsCons (crest := arr X (arr Y Y))
+     (ty := .sort (.imax (.succ .zero) (.imax (.succ .zero) (.succ .zero))))
+     (sv := .imax (.succ .zero) (.imax (.succ .zero) (.succ .zero)))
+     (m₁ := 1) (m₂ := 0) (ks := [.recursive 0,.inProgress])
+     (nds := [(X,bm),(Y,bm)]) (cur := Y)
+   · cbv
+   · exact container_crests.2
+   · exact infer_inner
+   · cbv
+   · omega
+   · exact inner_tele
+   · cbv
+   · cbv
+   · cbv
+   · omega
+   · exact PosDR.ctorsNil
+
+theorem inner_frame : PosDR ops E C 1 (.frame [Ko] [] [.zero] [X] [(Ln,S)]) := by
+ apply PosDR.frame (m := 1) (ctors := listCs)
+ · simp
+ · cbv
+ · exact ⟨listCs,by cbv⟩
+ · simp
+ · intro p hp
+   simp only [List.mem_cons, List.not_mem_nil, or_false] at hp
+   subst p
+   exact ⟨0,by cbv⟩
+ · simp
+ · cbv
+ · cbv
+ · exact ⟨S,infer_lX⟩
+ · omega
+ · exact inner_ctors
+
+theorem scoped_outer : ProgScoped C [Ho] := by
+ have h : ∀ x ∈ [l X], Expr.WScoped (C.hiAt 0) x := by
+   intro x hx
+   simp only [List.mem_cons, List.not_mem_nil, or_false] at hx
+   subst x
+   cbv
+ exact ProgScoped.push (us := [.zero]) (ds := [l X]) ProgScoped.nil h [(Ln,S)]
+
+theorem inner_field : PosDR ops E C 2
+ (.field [Ko] [Ho] 3 0 (l X) (.nested false) (l X)) := by
+ apply PosDR.cont (w := l X) (c := Ln) (us := [.zero]) (L := listCs)
+   (nPc := 1) (nI := 0) (cty := S) (grp := [(Ln,S)]) (m := 1)
+ · cbv
+ · cbv
+ · rfl
+ · cbv
+ · cbv
+ · cbv
+ · intro h; cases h
+ · simp [l, Expr.getAppArgs]
+ · intro x hx
+   have hh : x = X := by simpa [l, Expr.getAppArgs] using hx
+   subst x
+   cbv
+ · intro x hx
+   have hh : x = X := by simpa [l, Expr.getAppArgs] using hx
+   subst x
+   cbv
+ · exact scoped_outer
+ · cbv
+ · exact frame_reset.2.2
+ · rfl
+ · omega
+ · simpa only [frame_reset.1] using inner_frame
+
+#print axioms official_lowering
+#print axioms inner_field
+end Tree2Bridge

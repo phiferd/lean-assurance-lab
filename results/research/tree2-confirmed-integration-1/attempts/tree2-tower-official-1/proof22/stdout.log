@@ -1,0 +1,40 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerOfficial.lean:410:2: error: unsolved goals
+case refine_2
+p n : Nat
+hd : p + n + 2 - p = n + 2
+hn : p + n + 2 - (p + 1) = n + 1
+hr :
+  (let __src := rawRow (p + 1) (n + 2);
+    { name := __src.name, type := __src.type,
+      ctors := [auxExpr (p + 1), arr (auxExpr (p + 2)) (arr (auxExpr (p + 1)) (auxExpr (p + 1)))] }) =
+    row (p + n + 2) (n + 2)
+hs :
+  (front (p + n + 2) p ++ [rawRow (p + 1) (n + 2), rawRow (p + 2) (n + 1)]).toArray.set! (p + 1)
+      (row (p + n + 2) (n + 2)) =
+    (front (p + n + 2) p ++ [row (p + n + 2) (n + 2), rawRow (p + 2) (n + 1)]).toArray
+⊢ (front (p + n + 2) p ++ [row (p + n + 2) (n + 2), rawRow (p + 2) (n + 1)]).toArray =
+    (front (p + n + 2) p ++ ([row (p + n + 2) (n + 2)] ++ [rawRow (p + 1 + 1) (n + 1)])).toArray
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerOfficial.lean:421:4: error: omega could not prove the goal:
+a possible counterexample may satisfy the constraints
+  b ≥ 0
+  a ≥ 1
+  a ≥ 0
+where
+ a := ↑(p + n + 2 - (p + 1))
+ b := ↑p
+case refine_3
+p n : Nat
+hd : p + n + 2 - p = n + 2
+hn : p + n + 2 - (p + 1) = n + 1
+⊢ True
+'Tree2TowerOfficial.terminal_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.descending_row' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.keys_fresh' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.keys_hit' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.terminal_frontier' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2TowerOfficial.0.Tree2TowerOfficial.descending_state' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'Tree2TowerOfficial.descending_frontier' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerOfficial.queue_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

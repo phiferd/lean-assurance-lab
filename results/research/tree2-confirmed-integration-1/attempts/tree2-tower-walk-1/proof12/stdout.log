@@ -1,0 +1,30 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:126:22: error: Expected type must not contain free variables
+  0 < (Cn N).nP
+
+Hint: Use the `+revert` option to automatically clean up and revert free variables
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:152:14: error: unsolved goals
+case succ
+N : Nat
+ih : Expr.nestOcc [Tn] 0 0 (pow N Q) = false
+⊢ Expr.nestOcc [Name.anonymous.str "Tree2"] 0 0 (pow N Q) = false
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:152:51: warning: This simp argument is unused:
+  ih
+
+Hint: Omit it from the simp argument list.
+  [apply] simp [pow, l, Expr.nestOcc, Ln, Tn, nm]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/con-leche/Tree2TowerWalk.lean:162:2: error: 'change' tactic failed, pattern
+  (!false && !decide (Expr.nestOcc [Tn] 0 0 (arr (pow N Q) Q) = true)) = true
+is not definitionally equal to target
+  (!false &&
+      match some (arr (pow N Q) Q) with
+      | some crest => !Expr.nestOcc (Cn N).names 0 0 crest
+      | none => false) =
+    true
+'Tree2TowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.uniform_node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_ok' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2TowerWalk.root_holes' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2TowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
