@@ -15,7 +15,7 @@ ROOT = Path(__file__).resolve().parents[1]
 class EvidenceReplayInventoryTests(unittest.TestCase):
     def test_repository_receipts_and_registered_replay_tests_are_current(self):
         result = audit.validate(ROOT)
-        self.assertEqual(result["families"], 17)
+        self.assertEqual(result["families"], 18)
         self.assertGreater(result["raw_streams"], 600)
 
     def test_new_family_cannot_enter_without_portable_replay(self):
