@@ -58,6 +58,22 @@ research directions.
 
 ## Attempted
 
+- `EXPLORE-TREE2-ARROW-TOWER-1`: Lean checked a nonvacuous restricted completeness
+  family for every List depth, including zero. Actual official acceptance excludes
+  the negative function domain and yields exact lowering, constructed native
+  derivations and native success. Fresh seven-module replay and independent
+  review pass with only standard three axioms. This is useful modest progress,
+  not arbitrary proof reconstruction or production correctness. Next within the
+  same ACTIVE campaign: assess a small symbolic domain grammar and its exact
+  preservation obligations; no folds auto-start. See the [report](../explorations/runs/EXPLORE-TREE2-ARROW-TOWER-1/report.md).
+
+- `EXPLORE-TREE2-SYMBOLIC-ASSESSMENT-1`: Lean checked reusable successful-fuel
+  uniqueness for the official elimination algorithm and exact-output acceptance
+  extraction. This is useful modest progress beyond fuel-case enumeration, with
+  fresh replay and independent review. Arbitrary-depth function completeness is
+  unproved; next is the exact parametric function source and root-row invariant.
+  The same Tree2 campaign remains ACTIVE. See the [report](../explorations/runs/EXPLORE-TREE2-SYMBOLIC-ASSESSMENT-1/report.md).
+
 - `E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1` closes `NO_SIGNAL` for the exact
   whole-module input retained by `E0-LEAN-ACTION-BUNDLED-REAL-1`.
   **What did we find?** The retry accepted 59,349 declarations in 28.691 seconds,
@@ -3299,6 +3315,7 @@ The owner selected one Tree2 scientific continuation campaign on 2026-10-01.
 
 Selected next item: `E0-TREE2-COMPUTATION-PILOT-1`.
 ACTIVE under its [prospective plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md).
+The canonical queue retains zero READY items.
 The canonical queue has one ACTIVE scientific campaign; alias preparation is deferred and unstarted. The first question connects actual returned Tree2 constructor records to the existing lowering theorem; value/fold correspondence is conditional, not already proved.
 Checkpoint 2026-10-01: three fresh Lean-checked lemmas connect exact frame images,
 six supplied constructor readbacks and official replacement to all six actual

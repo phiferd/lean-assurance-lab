@@ -4,13 +4,14 @@ A checked theorem now relates the constructor shapes used by two different
 representations of a restricted nested datatype. That is useful because an
 agreement about constructor structure can expose an error that another accepted
 example would miss. It is not yet an agreement about values or computation.
-The depth-two continuation now proves the exact returned structure and its
-constructor-type lowering. A subsequent bounded function-field theorem now consumes official acceptance
-to obtain native success. Broader completeness and value/fold goals remain open.
+The depth-two continuation proves the exact returned structure and its
+constructor-type lowering. The newest result covers every List depth for a
+restricted function field: official acceptance excludes a Tree function domain
+and yields constructed native positivity. Its positive branch is proved for
+every depth. General domain grammars and value/fold goals remain open.
 
-This is local AI-authored research for human review. The existing proof archive
-is published; the continuation and this overview await separate publication
-approval. There is no unsupported claim that this theorem is novel research or
+This is local AI-authored research for human review. The owner authorized lab publication of the continuation on 2026-10-01;
+upstream submissions and community messages remain unauthorized. There is no unsupported claim that this theorem is novel research or
 that Lean's production kernel has been verified.
 
 ## A small example
@@ -367,3 +368,54 @@ python3 explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/replay-v2.py \
 
 Use a new nonexistent destination. The executed replay is `fresh-final-replay`;
 no full lab E2 closure or clean upstream rebuild is claimed for this pilot.
+
+## 2026-10-01: reusable deterministic lowering prerequisite
+
+Lean now proves that successful official elimination has a unique output for
+any context and declaration, regardless of sufficient fuel. Actual acceptance
+can therefore be read at an independently proved exact output. This removes the
+finite fuel-case enumeration: checked consumers cover the existing all-depth
+List tower and the fixed function-domain exclusion. This is useful modest
+progress, not an arbitrary-depth function completeness theorem.
+
+The next step is an exact parametric function source environment and a changed
+root-row queue invariant, followed by separate leaf/node native budgets. Existing
+tower and fixed-function environments encode different constructors and cannot
+be substituted silently. See the [checked statements, assumptions, evidence and
+next obligations](../explorations/runs/EXPLORE-TREE2-SYMBOLIC-ASSESSMENT-1/report.md).
+All seven new axiom reports use only propext, Classical.choice and Quot.sound;
+fresh replay and independent review pass. The same campaign remains ACTIVE.
+
+## 2026-10-01: nonvacuous bridge for every List depth
+
+Lean checked the family with `leaf : alpha → Tree alpha` and
+`node : (D → List^N (Tree alpha)) → Tree alpha`, where D is exactly alpha or
+Tree alpha. The official positivity model accepts exactly D=alpha for every
+natural N, including zero. Actual acceptance then yields the exact specified
+lowering, a constructed native derivation, and native positivity success. This
+extends the earlier fixed function-field stage; it does not change the original
+Tree2 proof archives or claim a value isomorphism.
+
+This is useful modest progress: an infinite restricted class and an operative
+acceptance premise replace the two-case/depth2 result. The proof first excludes
+the negative domain and then constructs the native derivation by depth induction.
+It does not reconstruct arbitrary official proofs. Positive official witnesses,
+exact environments and verified reducer facts are all proved; no conversion or
+native-success oracle is assumed. The final package is
+`Tree2ArrowTowerBridge.restricted_completeness N`, using native Core budget N+5,
+separate constructor derivations leaf1/nodeN+2, and real automatic walk budgets.
+
+Fresh seven-module replay and independent review pass. Final axioms are only
+`propext`, `Classical.choice`, and `Quot.sound`. Official auxiliary row allocation
+is proved; native returned records remain existential. The [result report](../explorations/runs/EXPLORE-TREE2-ARROW-TOWER-1/report.md)
+contains statements, trust accounting, exact source, preserved failures and
+reproduction commands. This is likely useful for human review as a restricted
+model theorem, with no kernel-correctness, full-validator, novelty, generated
+recursor or fold claim.
+
+The bounded result is complete. The next scientific action in the same ACTIVE
+campaign is to assess a small symbolic domain grammar and its typing/occurrence
+preservation obligations before implementing it. No broader grammar or fold work
+starts here. User lab-publication authorization was verified in the original
+parent conversation; publication remains subject to the repository's validated
+non-forced main delivery and exact remote/CI verification.

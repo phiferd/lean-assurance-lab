@@ -1,0 +1,142 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:10:15: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:47:29: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:69:26: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:75:24: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:82:21: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:333:29: warning: Variable name `bad` is not explicitly referenced.
+
+Hint: The binding can be removed (if unused) or named `_` (if used implicitly). Alternatively, prefix the name with `_` to silence this warning:
+  [apply] _bad
+
+Note: This linter can be disabled with `set_option linter.unusedVariables false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:669:1: error: 'change' tactic failed, pattern
+  (match (officialEnv N).find? (refName N j) with
+    | some (ConstantInfo.recInfo val majorIdx rulePrefix rules) => ?m.65 val majorIdx rulePrefix rules
+    | x => ?m.69 x) =
+    ?m.56
+is not definitionally equal to target
+  whnfStep (pureFns CheckMode.verified (officialEnv N) 2) (officialEnv N) d
+      (whnfLoop (pureFns CheckMode.verified (officialEnv N) 2) (officialEnv N) d 99999)
+      ((Expr.const (refName N j) []).app A) =
+    Except.ok ((Expr.const (refName N j) []).app A)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:684:1: error: 'change' tactic failed, pattern
+  (match List.find? (fun t => t.name == n) (Tree2ArrowTowerSchema.target false N).types.toList with
+    | none => 0
+    | some ty => ty.type.piBinders.fst.length) =
+    0
+is not definitionally equal to target
+  (positiveOracle N).nIdx n = 0
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:698:12: warning: This simp argument is unused:
+  Function.comp_apply
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [he]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:703:1: error: Tactic `rfl` failed: The left-hand side
+  Expr.const (refName N j) [] == Expr.const (refName N j) (positiveOracle N).lvls &&
+        ([] ++ [A]).length == (positiveOracle N).ps.length + 0 &&
+      List.take (positiveOracle N).ps.length ([] ++ [A]) == (positiveOracle N).ps &&
+    (List.drop (positiveOracle N).ps.length ([] ++ [A])).all fun x => !(positiveOracle N).occ x
+is not definitionally equal to the right-hand side
+  true
+
+N j : Nat
+hj : j ≤ N
+⊢ (Expr.const (refName N j) [] == Expr.const (refName N j) (positiveOracle N).lvls &&
+          ([] ++ [A]).length == (positiveOracle N).ps.length + 0 &&
+        List.take (positiveOracle N).ps.length ([] ++ [A]) == (positiveOracle N).ps &&
+      (List.drop (positiveOracle N).ps.length ([] ++ [A])).all fun x => !(positiveOracle N).occ x) =
+    true
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:713:11: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case zero
+N f d : Nat
+hj : 0 ≤ N
+hv : (positiveOracle N).valid ((Expr.const Tn []).app A) = true
+⊢ (if (!(positiveOracle N).occ ((Expr.const Tn []).app A)) = true then pure ()
+    else
+      if (positiveOracle N).valid ((Expr.const Tn []).app A) = true then pure ()
+      else throw (CheckError.invalid "official: non valid occurrence of the datatypes being declared")) =
+    Except.ok ()
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:713:11: error: Tactic `split` failed: Could not split an `if` or `match` expression in the goal
+
+Hint: Use `set_option trace.split.failure true` to display additional diagnostic information
+
+case succ
+N f d n✝ : Nat
+hj : n✝ + 1 ≤ N
+hv : (positiveOracle N).valid ((Expr.const (Tree2TowerOfficial.freshName (N - n✝)) []).app A) = true
+⊢ (if (!(positiveOracle N).occ ((Expr.const (Tree2TowerOfficial.freshName (N - n✝)) []).app A)) = true then pure ()
+    else
+      if (positiveOracle N).valid ((Expr.const (Tree2TowerOfficial.freshName (N - n✝)) []).app A) = true then pure ()
+      else throw (CheckError.invalid "official: non valid occurrence of the datatypes being declared")) =
+    Except.ok ()
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:744:7: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:744:19: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.error` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.error`
+  [apply] `EST.Out.error`
+  [apply] `EStateM.Result.error`
+  [apply] `Lean.Exception.error`
+  [apply] `Lean.MessageSeverity.error`
+  [apply] `Lean.Parser.error`
+  [apply] `Lean.TraceResult.error`
+  [apply] `Lean.Lsp.DiagnosticSeverity.error`
+  [apply] `Lean.Lsp.MessageType.error`
+  [apply] `Lean.Macro.Exception.error`
+  [apply] `Lean.Server.FileWorker.FileSetupResult.error`
+  [apply] `Std.Internal.Parsec.ParseResult.error`
+  [apply] `Lean.Meta.Tactic.TryThis.SuggestionStyle.error`
+  [apply] `Std.Http.Protocol.H1.Machine.error`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerOfficial.lean:744:70: error(lean.invalidDottedIdent): Invalid dotted identifier notation: The expected type of `.ok` could not be determined
+
+Hint: Using one of these would be unambiguous:
+  [apply] `Except.ok`
+  [apply] `EST.Out.ok`
+  [apply] `EStateM.Result.ok`
+  [apply] `Lean.Meta.DefEqArgsFirstPassResult.ok`
+  [apply] `Std.Http.Response.ok`
+  [apply] `Std.Http.Status.ok`
+  [apply] `Lean.Meta.Grind.CheckCoverageResult.ok`
+'Tree2ArrowTowerOfficial.lowering' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerOfficial.negative_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerOfficial.negative_ctor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerOfficial.acceptance_domain' depends on axioms: [propext, Classical.choice, Quot.sound]

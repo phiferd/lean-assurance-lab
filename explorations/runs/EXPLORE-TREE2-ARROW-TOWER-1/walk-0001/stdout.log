@@ -1,0 +1,90 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerWalk.lean:132:27: error: Type mismatch: After simplification, term
+  hx
+ has type
+  x ∈ (Tree2ArrowTowerSchema.ctx false N).params
+but is expected to have type
+  x = A
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerWalk.lean:147:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Expr.instantiateLevelParams ?m.15 ?m.16 (Tree2ArrowTowerSchema.node false N).type
+in the target expression
+  nestCanonCrest [Tn] [] 1 (Expr.instantiateLevelParams [] [] (node N).type) =
+    some (arr (arr P (Tree2TowerNative.pow N Q)) Q)
+
+N : Nat
+⊢ nestCanonCrest [Tn] [] 1 (Expr.instantiateLevelParams [] [] (node N).type) =
+    some (arr (arr P (Tree2TowerNative.pow N Q)) Q)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerWalk.lean:175:6: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Expr.nestOcc [Tn] 0 0 (Tree2TowerNative.pow ?N Q)
+in the target expression
+  (!false &&
+      !(Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 P ||
+            Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 (Tree2TowerNative.pow N Q) ||
+          Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 Q)) =
+    true
+
+N : Nat
+hdom : Expr.piDomsOcc (Cn N).names (Cn N).nP ((Cn N).hiAt 0) (Cn N).nP (node N).type = false
+⊢ (!false &&
+      !(Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 P ||
+            Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 (Tree2TowerNative.pow N Q) ||
+          Expr.nestOcc (Tree2ArrowTowerSchema.ctx false N).names 0 0 Q)) =
+    true
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerWalk.lean:258:10: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestCrest [Tn] [] [A] [X] (Expr.instantiateLevelParams [] [] (Tree2ArrowTowerSchema.node false N).type)
+in the target expression
+  nestCrest [Tn] [] [A] [X] (Expr.instantiateLevelParams [] [] (node N).type) = some crest
+
+N F : Nat
+hf : N + 5 ≤ F
+st : NestState
+hs : RInv (Cn N) st []
+crest : Expr
+hx : (node N, 1) ∈ [(node N, 1)]
+hc : nestCrest [Tn] [] [A] [X] (Expr.instantiateLevelParams [] [] (node N).type) = some crest
+⊢ N + 2 ≤ whnfWalkFuel crest
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerWalk.lean:308:19: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  nestUniformOk (Cn ?N) (node ?N)
+in the target expression
+  (match
+      match
+        match !true with
+        | true => some (leafCV, 1)
+        | false =>
+          match !nestUniformOk (Cn N) (Tree2ArrowTowerSchema.node false N) with
+          | true => some (Tree2ArrowTowerSchema.node false N, 1)
+          | false => none with
+      | some b => some b
+      | none => none with
+    | some c =>
+      throw
+        (CheckError.invalid
+          (toString "invalid occurrence of a datatype being declared in the type of " ++ toString c.fst.name ++
+            toString ": it must be applied to the parameters and universe levels of the mutual declaration"))
+    | none => pure ()) =
+    Except.ok ()
+
+N : Nat
+⊢ (match
+      match
+        match !true with
+        | true => some (leafCV, 1)
+        | false =>
+          match !nestUniformOk (Cn N) (Tree2ArrowTowerSchema.node false N) with
+          | true => some (Tree2ArrowTowerSchema.node false N, 1)
+          | false => none with
+      | some b => some b
+      | none => none with
+    | some c =>
+      throw
+        (CheckError.invalid
+          (toString "invalid occurrence of a datatype being declared in the type of " ++ toString c.fst.name ++
+            toString ": it must be applied to the parameters and universe levels of the mutual declaration"))
+    | none => pure ()) =
+    Except.ok ()
+'Tree2ArrowTowerNative.node_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerWalk.uniform_node' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2ArrowTowerNative.function_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerWalk.leaf_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerWalk.node_singleton' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerWalk.node_walk_budget' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerWalk.automatic_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

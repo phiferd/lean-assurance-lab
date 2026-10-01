@@ -1,0 +1,54 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2EliminationDeterminism.lean:26:12: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  st.types[q]?
+in the target expression
+  (match some t with
+      | none => StateT.pure ()
+      | some t =>
+        StateT.bind (List.mapM (replaceAll c) t.ctors) fun cs =>
+          StateT.bind
+            (modify fun st =>
+              { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := cs },
+                next := st.next })
+            fun __r => elimLoop c m (q + 1))
+      st =
+    Except.ok ((), out)
+
+case succ.succ.some
+c : ElimCtx
+f : Nat
+ih :
+  ∀ (more q : Nat) (st out : ElimSt),
+    f ≤ more →
+      StateT.run (elimLoop c f q) st = Except.ok ((), out) → StateT.run (elimLoop c more q) st = Except.ok ((), out)
+q : Nat
+st out : ElimSt
+m : Nat
+hf : f + 1 ≤ m + 1
+hm : f ≤ m
+t : AuxType
+h :
+  (match some t with
+      | none => StateT.pure ()
+      | some t =>
+        StateT.bind (List.mapM (replaceAll c) t.ctors) fun cs =>
+          StateT.bind
+            (modify fun st =>
+              { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := cs },
+                next := st.next })
+            fun __r => elimLoop c f (q + 1))
+      st =
+    Except.ok ((), out)
+ht : st.types[q]? = some t
+⊢ (match some t with
+      | none => StateT.pure ()
+      | some t =>
+        StateT.bind (List.mapM (replaceAll c) t.ctors) fun cs =>
+          StateT.bind
+            (modify fun st =>
+              { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := cs },
+                next := st.next })
+            fun __r => elimLoop c m (q + 1))
+      st =
+    Except.ok ((), out)
+'Tree2EliminationDeterminism.loop_success_mono' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2EliminationDeterminism.loop_success_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

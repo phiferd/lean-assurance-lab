@@ -1,0 +1,59 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2EliminationDeterminism.lean:28:23: error: `simp` made no progress
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2EliminationDeterminism.lean:31:14: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  List.mapM (replaceAll c) t.ctors st
+in the target expression
+  (match st.types[q]? with
+      | none => StateT.pure ()
+      | some t =>
+        StateT.bind (List.mapM (replaceAll c) t.ctors) fun cs =>
+          StateT.bind
+            (modify fun st =>
+              { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := cs },
+                next := st.next })
+            fun __r => elimLoop c f (q + 1))
+      st =
+    Except.ok ((), out)
+
+case succ.succ.some.ok
+c : ElimCtx
+f : Nat
+ih :
+  ∀ (more q : Nat) (st out : ElimSt),
+    f ≤ more →
+      StateT.run (elimLoop c f q) st = Except.ok ((), out) → StateT.run (elimLoop c more q) st = Except.ok ((), out)
+q : Nat
+st out : ElimSt
+h :
+  (match st.types[q]? with
+      | none => StateT.pure ()
+      | some t =>
+        StateT.bind (List.mapM (replaceAll c) t.ctors) fun cs =>
+          StateT.bind
+            (modify fun st =>
+              { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := cs },
+                next := st.next })
+            fun __r => elimLoop c f (q + 1))
+      st =
+    Except.ok ((), out)
+m : Nat
+hf : f + 1 ≤ m + 1
+hm : f ≤ m
+t : AuxType
+ht : st.types[q]? = some t
+cs : List Expr
+st1 : ElimSt
+hc : List.mapM (replaceAll c) t.ctors st = Except.ok (cs, st1)
+⊢ (match Except.ok (cs, st1) with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      match
+        modify
+          (fun st =>
+            { aux := st.aux, types := st.types.set! q { name := t.name, type := t.type, ctors := v.fst },
+              next := st.next })
+          v.snd with
+      | Except.error err => Except.error err
+      | Except.ok v => elimLoop c m (q + 1) v.snd) =
+    Except.ok ((), out)
+'Tree2EliminationDeterminism.loop_success_mono' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2EliminationDeterminism.loop_success_unique' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

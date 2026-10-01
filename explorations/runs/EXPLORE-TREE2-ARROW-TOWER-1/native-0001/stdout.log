@@ -1,0 +1,43 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerNative.lean:464:12: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerNative.lean:464:17: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowTowerNative.lean:508:1: error: Tactic `apply` failed: could not unify the conclusion of `PosDR.pi`
+  PosDR ?m.22 ?m.23 ?m.24 ?m.25
+    (PosJR.field ?m.32 ?m.33 ?m.34 ?m.35 ?m.36 ?m.37 (A.forallE ((tower N).abstract1 ?m.34) bm))
+with the goal
+  PosDR (checker F) (En N) (Cn N) (N + 2)
+    (PosJR.field [] [] 2 0 (arr A (tower N)) (NestFieldKind.nested true) (arr A (tower N)))
+
+Note: The full type of `PosDR.pi` is
+  CheckerOps.whnf ?m.22 ?m.23 ?m.34 ?m.36 = Except.ok (A.forallE (tower N) bm) →
+    Expr.nestOcc (NestCtx.names ?m.24) (NestCtx.nP ?m.24) (NestCtx.hiAt ?m.24 (List.length ?m.33))
+          (A.forallE (tower N) bm) =
+        true →
+      Expr.nestOcc (NestCtx.names ?m.24) (NestCtx.nP ?m.24) (NestCtx.hiAt ?m.24 (List.length ?m.33)) A = false →
+        N + 1 < ?m.25 →
+          PosDR ?m.22 ?m.23 ?m.24 (N + 1)
+              (PosJR.field ?m.32 ?m.33 (?m.34 + 1) (?m.35 + 1) ((tower N).instantiate1 (Expr.fvar ?m.34 A)) ?m.37
+                (tower N)) →
+            PosDR ?m.22 ?m.23 ?m.24 ?m.25
+              (PosJR.field ?m.32 ?m.33 ?m.34 ?m.35 ?m.36 ?m.37 (A.forallE ((tower N).abstract1 ?m.34) bm))
+
+N F : Nat
+hf : N + 5 ≤ F
+⊢ PosDR (checker F) (En N) (Cn N) (N + 2)
+    (PosJR.field [] [] 2 0 (arr A (tower N)) (NestFieldKind.nested true) (arr A (tower N)))
+'Tree2ArrowTowerNative.function_infer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerNative.function_crest_infer' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerNative.function_field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2ArrowTowerNative.node_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowTowerNative.tower_field' depends on axioms: [propext, Classical.choice, Quot.sound]
