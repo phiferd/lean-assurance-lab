@@ -1,0 +1,46 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-NANODA-CONGRUENCE-FAULT-1",
+  "data": {
+    "campaign": "E0-NANODA-CONGRUENCE-FAULT-PILOT-1",
+    "question": "Does omitting only try_eq_const_app's pairwise argument-equality guard make current Nanoda accept the fixed invalid F A versus F B declaration, and does the existing corpus detect that same fault?",
+    "sources": [
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+        "patch": "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/fault.patch"
+      },
+      {
+        "name": "lean-assurance-lab",
+        "revision": "36c552fab7bdea239911f71f4fc81b91eb5ea2aa"
+      }
+    ],
+    "versions": "Nanoda 0.4.19 source; cargo 1.98.0; rustc 1.98.0; lean4export format 3.1.0; exact hashes in preflight.json and input_sha256.",
+    "commands": "Apply the retained one-conjunct patch in a separate task-local copy. Use lib/resource_envelope_supervisor.py run_direct for baseline build, fault build, four checker cells, and faulted cargo test. No network or external write.",
+    "inputs": [
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/plan.md",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/preflight.json",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/fault.patch",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/control.ndjson",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/candidate.ndjson",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/control-config.json",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/candidate-config.json",
+      "lib/resource_envelope_supervisor.py"
+    ],
+    "input_sha256": {
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/plan.md": "e3e4582aeb163b6d79b66395d612001ed5a5f88d0535e601b3d6b0c4c60fbbf6",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/preflight.json": "2bc18ce92364ed96406bf4739ef3ca84466d1498401b7076a482fa78ebcb01e3",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/fault.patch": "f8c83387664876cb20aa2cb8f744333cf108eb1ff72eb948c367ee98f6e423db",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/control.ndjson": "96688dd2e3d76c0722e6b9b72a12b188ec7f41801213460f054fc81a46716642",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/candidate.ndjson": "76fe486e09ea605be4ca602c7e10ea8c2fad69b35024e077580b91c6db1c0e07",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/control-config.json": "436c550cc429334fad13ade681e33e4b9ebca8d3ce6d51948f2cdb9be9844120",
+      "explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/candidate-config.json": "f11726647faa519383abc8b35bfce8c18b40dc4a4966f79bec9ebab68a983f65",
+      "lib/resource_envelope_supervisor.py": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"
+    },
+    "sample": "One explicit well-formed invalid candidate bad : F B := v where v : F A, one matched valid control ok : F A := v, baseline and one-conjunct-fault binaries, plus Nanoda's existing Rust tests.",
+    "planned_runs": 7,
+    "controls": "Exact explicit axiom allowlist A/B/v; one thread; no native extensions; baseline must accept control and reject candidate; fault must accept control before candidate result counts; complete supervisor cleanup required; malformed/masked/incomplete cases are INCONCLUSIVE."
+  }
+}

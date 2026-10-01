@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "id": "EXPLORE-NANODA-CONGRUENCE-FAULT-1",
+  "source_revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+  "source_clean_before_execution": true,
+  "fault": {
+    "description": "Removed only the pairwise application-argument def_eq conjunct from try_eq_const_app.",
+    "patch": "fault.patch",
+    "patch_sha256": "f8c83387664876cb20aa2cb8f744333cf108eb1ff72eb948c367ee98f6e423db",
+    "faulted_tc_rs_sha256": "eb96b30be4a02ea25ff6076ab2314b326c6d8355fb999440638c9daf9a68c2b6"
+  },
+  "binaries": {
+    "baseline_sha256": "7e615fcd4813846daf1ee31435d56582aeadd7e9ffd0c490a1a706aaeb433d3f",
+    "fault_sha256": "66da9710d8ae33169549398133ba449af8b7dd48659e23969a5d2fb88bdec816"
+  },
+  "matrix": [
+    {"binary": "baseline", "fixture": "control", "exit_code": 0, "verdict": "ACCEPT", "receipt": "attempts/baseline-control/receipt.json"},
+    {"binary": "baseline", "fixture": "candidate", "exit_code": 101, "verdict": "REJECT", "receipt": "attempts/baseline-candidate/receipt.json"},
+    {"binary": "fault", "fixture": "control", "exit_code": 0, "verdict": "ACCEPT", "receipt": "attempts/fault-control/receipt.json"},
+    {"binary": "fault", "fixture": "candidate", "exit_code": 0, "verdict": "ACCEPT", "receipt": "attempts/fault-candidate/receipt.json"}
+  ],
+  "existing_corpus": {
+    "command": "cargo test --release --offline",
+    "faulted_exit_code": 0,
+    "unit_tests_passed": 44,
+    "unit_tests_failed": 0,
+    "doctests_ignored": 8,
+    "receipt": "attempts/fault-cargo-test/receipt.json",
+    "interpretation": "The current upstream test corpus does not detect the seeded fault."
+  },
+  "regression_candidate": {
+    "patch": "regression.patch",
+    "patch_sha256": "a3092131284a34c5c5842d75aeed6653ec0680b326405324f5898c79ae6b38b8",
+    "apply_check_against_clean_source": "PASS",
+    "baseline_focused": "PASS: 1 passed",
+    "fault_focused": "EXPECTED FAIL: test did not panic as expected",
+    "baseline_full": "PASS: 45 passed, 0 failed; 8 doctests ignored",
+    "nonvacuity": "The test unwraps fixture parsing and checks all declarations, so missing/malformed input cannot satisfy should_panic with the expected type-equality assertion text."
+  },
+  "attempt_accounting": {
+    "receipts": 12,
+    "aggregate_elapsed_seconds": 82.350093335,
+    "maximum_child_peak_rss_bytes": 547880960,
+    "complete_supervised_attempts": 11,
+    "retained_failures": [
+      "baseline-build: sandbox /bin/ps monitor fault before compilation",
+      "baseline-regression-test: zero tests due incomplete exact filter; corrected in r2"
+    ],
+    "resource_interruptions_after_host_observation_enabled": 0
+  },
+  "outcome": "SIGNAL",
+  "signal_count": 1,
+  "observation": "A public declaration distinguishes the exact baseline from the one-conjunct fault, the existing corpus misses the fault, and a three-file local regression patch kills it.",
+  "limitations": "This is deliberate fault-injection evidence about test sensitivity at one Nanoda revision. It is not evidence of a production Nanoda soundness bug, Lean kernel vulnerability, exploitability, whole-checker assurance, arbitrary congruence coverage, or all external corpora. The axioms are explicit fixture constants and do not assume A equals B or the target result. The NDJSON is hand-authored; embedded Lean/exporter metadata is format metadata, not evidence that Lean generated or validated it. Causal reachability is established by the sole-source-difference verdict change, not an instrumented branch trace.",
+  "recommended_action": "Retain the regression candidate locally and consider a separately authorized human review/confirmation step before any upstream action. No external action follows from E0."
+}
