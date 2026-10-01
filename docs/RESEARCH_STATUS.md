@@ -3324,6 +3324,14 @@ completeness source fit before generalization/folds: the
 [checked blueprint and missing-lemma map](../explorations/runs/EXPLORE-TREE2-COMPLETENESS-FIT-1/report.md)
 make the official acceptance-to-PosDR gap explicit. Assembly checks; that gap is
 not solved. The canonical family conditional has an unused official premise.
+A subsequent [bounded acceptance-driven trial](../explorations/runs/EXPLORE-TREE2-ACCEPTANCE-BRIDGE-1/report.md)
+is COMPLETE: the two node-function schemas (parameter vs recursive domain) are
+classified by actual official positivity acceptance; that evidence excludes the
+negative domain before native PosDR4/success is constructed with pure Core16.
+Positive official acceptance is witnessed; all schema/oracle/typing/restoration/
+guard/budget obligations are discharged. Fresh3-module replay and independent
+review pass with standard-three axioms. This supplies a finite half(A) instance,
+not the general unproved converter. The earlier exact-output proof is preserved.
 No value/fold trial or external action has started. Production lowering/recursor
 fidelity stays an explicit boundary.
 

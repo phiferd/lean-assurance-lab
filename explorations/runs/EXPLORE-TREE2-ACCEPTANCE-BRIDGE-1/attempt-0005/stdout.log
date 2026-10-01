@@ -1,0 +1,96 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowSchema.lean:100:85: error: unexpected token 'else'; expected ')', ',' or ':'
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowSchema.lean:92:10: error: invalid `do` notation, expected type is not a monad application
+  Prop
+You can use the `do` notation in pure code by writing `Id.run do` instead of `do`, where `Id` is the identity monad.
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowSchema.lean:111:28: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  Official.checkPositivity ((target true).oracle (context true) officialWhnf) ?fuel ?d (arr tr (R 2 2))
+in the target expression
+  (if ((target true).oracle (context true) officialWhnf).validAt Tn (arr (arr tr (R 2 2)) tr) = true then pure ()
+    else throw (CheckError.invalid "official: invalid return type")) ≠
+    Except.ok ()
+
+case succ
+fuel nb : Nat
+⊢ (if ((target true).oracle (context true) officialWhnf).validAt Tn (arr (arr tr (R 2 2)) tr) = true then pure ()
+    else throw (CheckError.invalid "official: invalid return type")) ≠
+    Except.ok ()
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowSchema.lean:125:67: error: unsolved goals
+f : Nat
+helim : Official.elimNested (context true) (declaration true) f = Except.ok (target true)
+hctors :
+  ∀ (t : Official.AuxType),
+    t ∈ (target true).types.toList →
+      ∀ (ct : Expr),
+        ct ∈ t.ctors →
+          ∃ fuel nb,
+            Official.checkCtorPos ((target true).oracle (context true) officialWhnf) t.name fuel nb 2 ct =
+              Except.ok PUnit.unit
+⊢ List.Mem
+    { name := Name.anonymous.str "Tree2", type := Expr.sort Level.zero.succ,
+      ctors :=
+        [(Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE
+            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+            { pw := { repr := ConLeche.PropWhenRepr.never✝ } },
+          (((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+                ((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+                { pw := { repr := ConLeche.PropWhenRepr.never✝ } }).forallE
+            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+            { pw := { repr := ConLeche.PropWhenRepr.never✝ } }] }
+    [{ name := Name.anonymous.str "Tree2", type := Expr.sort Level.zero.succ,
+        ctors :=
+          [(Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE
+              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+              { pw := { repr := ConLeche.PropWhenRepr.never✝ } },
+            (((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+                  ((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app
+                    (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } }).forallE
+              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+              { pw := { repr := ConLeche.PropWhenRepr.never✝ } }] },
+      { name := (Name.anonymous.str "TowerAux").num 1, type := Expr.sort Level.zero.succ,
+        ctors :=
+          [(Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)),
+            ((Expr.const ((Name.anonymous.str "TowerAux").num 2) []).app
+                  (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+              (((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app
+                    (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+                ((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+              { pw := { repr := ConLeche.PropWhenRepr.never✝ } }] },
+      { name := (Name.anonymous.str "TowerAux").num 2, type := Expr.sort Level.zero.succ,
+        ctors :=
+          [(Expr.const ((Name.anonymous.str "TowerAux").num 2) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)),
+            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+              (((Expr.const ((Name.anonymous.str "TowerAux").num 2) []).app
+                    (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+                ((Expr.const ((Name.anonymous.str "TowerAux").num 2) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+              { pw := { repr := ConLeche.PropWhenRepr.never✝ } }] }]
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowSchema.lean:126:72: error: unsolved goals
+f : Nat
+helim : Official.elimNested (context true) (declaration true) f = Except.ok (target true)
+hctors :
+  ∀ (t : Official.AuxType),
+    t ∈ (target true).types.toList →
+      ∀ (ct : Expr),
+        ct ∈ t.ctors →
+          ∃ fuel nb,
+            Official.checkCtorPos ((target true).oracle (context true) officialWhnf) t.name fuel nb 2 ct =
+              Except.ok PUnit.unit
+ht : (target true).types[0] ∈ (target true).types.toList
+⊢ List.Mem
+    ((((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+          ((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+          { pw := { repr := ConLeche.PropWhenRepr.never✝ } }).forallE
+      ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+    [(Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE
+        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+        { pw := { repr := ConLeche.PropWhenRepr.never✝ } },
+      (((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ))).forallE
+            ((Expr.const ((Name.anonymous.str "TowerAux").num 1) []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+            { pw := { repr := ConLeche.PropWhenRepr.never✝ } }).forallE
+        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.fvar 0 (Expr.sort Level.zero.succ)))
+        { pw := { repr := ConLeche.PropWhenRepr.never✝ } }]
+'Tree2ArrowSchema.node_crest' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowSchema.lowering' depends on axioms: [propext, Classical.choice, Quot.sound]

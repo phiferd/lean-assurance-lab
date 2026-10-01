@@ -1,0 +1,113 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:40: error(lean.unknownIdentifier): Unknown constant `Bool.true_eq_true`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:467:1: error: Tactic `rfl` failed: The left-hand side
+  match pure v with
+  | Except.error err => Except.error err
+  | Except.ok v =>
+    if CheckMode.verified.verifiedChecks = true then
+      if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+      else
+        match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+        | Except.error err => Except.error err
+        | Except.ok v_1 => pure (Expr.sort (u.imax v))
+    else pure (Expr.sort (u.imax v))
+is not definitionally equal to the right-hand side
+  Except.ok (Expr.sort (u.imax v))
+
+a b : Expr
+u v : Level
+d f : Nat
+hf : 2 ≤ f
+ha : inferTypeCore CheckMode.verified (En 2) f d a = Except.ok (Expr.sort u)
+hb : inferTypeCore CheckMode.verified (En 2) f (d + 1) b = Except.ok (Expr.sort v)
+hi : b.instantiate1 (Expr.fvar d a) = b
+hv : v.zeronessOf = bm.pw
+wu : whnf CheckMode.verified (En 2) f d (Expr.sort u) = Except.ok (Expr.sort u)
+wv : whnf CheckMode.verified (En 2) f (d + 1) (Expr.sort v) = Except.ok (Expr.sort v)
+⊢ (match pure v with
+    | Except.error err => Except.error err
+    | Except.ok v =>
+      if CheckMode.verified.verifiedChecks = true then
+        if (v.zeronessOf == bm.pw) = true then pure (Expr.sort (u.imax v))
+        else
+          match throw (CheckError.notImplemented "sort-annotation mismatch (forall-cod)") with
+          | Except.error err => Except.error err
+          | Except.ok v_1 => pure (Expr.sort (u.imax v))
+      else pure (Expr.sort (u.imax v))) =
+    Except.ok (Expr.sort (u.imax v))
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:464:12: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:464:17: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:12: warning: This simp argument is unused:
+  bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [Except.bind, hv, BEq.rfl, Bool.true_eq_true, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:17: warning: This simp argument is unused:
+  Except.bind
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, hv, BEq.rfl, Bool.true_eq_true, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:29: warning: This simp argument is unused:
+  hv
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, Except.bind, BEq.rfl, Bool.true_eq_true, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:32: warning: This simp argument is unused:
+  BEq.rfl
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, Except.bind, hv, Bool.true_eq_true, if_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:466:58: warning: This simp argument is unused:
+  if_true
+
+Hint: Omit it from the simp argument list.
+  [apply] simp only [bind, Except.bind, hv, BEq.rfl, Bool.true_eq_true]
+
+Note: This linter can be disabled with `set_option linter.unusedSimpArgs false`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:499:16: error: Invalid argument name `w` for function `PosDR.pi`
+
+Hint: Perhaps you meant one of the following parameter names:
+  • `ops`: w̵o̲p̲s̲
+  • `env`: w̵e̲n̲v̲
+  • `ctx`: w̵c̲t̲x̲
+  • `n`: w̵n̲
+  • `act`: w̵a̲c̲t̲
+  • `prog`: w̵p̲r̲o̲g̲
+  • `dep`: w̵d̲e̲p̲
+  • `kb`: w̵k̲b̲
+  • `e`: w̵e̲
+  • `a`: w̵a̲
+  • `b`: w̵b̲
+  • `bm`: w̵b̲m̲
+  • `k`: w̵k̲
+  • `nb`: w̵n̲b̲
+  • `hw`: h̲w
+  • `hocc`: w̵h̲o̲c̲c̲
+  • `ha`: w̵h̲a̲
+  • `hm`: w̵h̲m̲
+  • `hb`: w̵h̲b̲
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2ArrowNative.lean:500:1: error: No goals to be solved
+'Tree2ArrowNative.function_infer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2ArrowNative.function_crest_infer' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2ArrowNative.function_field' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]
+'Tree2ArrowNative.tower_field' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2ArrowNative.Core.tower_core_certificate' depends on axioms: [propext, Classical.choice, Quot.sound]

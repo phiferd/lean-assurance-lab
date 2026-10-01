@@ -5,8 +5,8 @@ representations of a restricted nested datatype. That is useful because an
 agreement about constructor structure can expose an error that another accepted
 example would miss. It is not yet an agreement about values or computation.
 The depth-two continuation now proves the exact returned structure and its
-constructor-type lowering. The active continuation targets arbitrary depth,
-then inverse value translations and general fold preservation.
+constructor-type lowering. A subsequent bounded function-field theorem now consumes official acceptance
+to obtain native success. Broader completeness and value/fold goals remain open.
 
 This is local AI-authored research for human review. The existing proof archive
 is published; the continuation and this overview await separate publication
@@ -201,6 +201,35 @@ large N, while separate leaf1/nodeN+1 proofs already compose correctly. The fit
 report states the oracle/environment, lowering inverse, side-check, freshness,
 stack and budget obligations precisely. No production theorem or upstream
 contributor invitation is inferred. No external action is authorized.
+
+## Bounded acceptance-driven result: function outside List2
+
+The [new bounded trial](../explorations/runs/EXPLORE-TREE2-ACCEPTANCE-BRIDGE-1/report.md)
+now closes the proposed discriminating bridge. It admits node fields
+`alpha → List (List Tree)` and `Tree → List (List Tree)`, with the exact same
+ordinary List schema and two canonical keys. The function stays outside the keys.
+Official model acceptance holds exactly for the parameter-domain choice.
+The proof uses its actual constructor check to exclude the recursive negative
+domain, then constructs native PosDR index4 and actual native success under
+verified pure Core16. Positive official acceptance is also proved using all six
+actual lowered constructor checks, so the implication is nonvacuous.
+
+This acceptance premise is USED, unlike the earlier canonical-family corollary.
+The explicit changed native node lookup, separately opaque official environment,
+all-successful-fuel elimination, paired WHNF, frame readback/restoration, typing,
+U4, uniformity and real automatic walk budgets are discharged. No native
+acceptance/derivation/output or missing converter premise is assumed.
+
+Fresh Schema/Native/Bridge replay and independent AI review pass; all24 axiom
+reports contain only the standard three. The source proof is
+[Tree2ArrowBridge.lean](../explorations/runs/EXPLORE-TREE2-ACCEPTANCE-BRIDGE-1/sources/final/Tree2ArrowBridge.lean).
+This is a finite two-schema classification plus constructive derivation, not
+general official-derivation reconstruction. The generic half(A) remains open.
+The arrow-family result does not identify its full returned observation; the
+previous exact six-record theorem applies to the original Tree2 and is preserved.
+No folds, arbitrary grammar expansion or external action ran. The campaign stays
+ACTIVE; this bounded trial is COMPLETE. Library overview version1 remains the
+prior delivered checkpoint; this newer update is local only.
 
 ## Expanded endpoint and dependencies
 
