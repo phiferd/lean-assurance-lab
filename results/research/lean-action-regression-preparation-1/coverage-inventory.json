@@ -1,0 +1,333 @@
+[
+  {
+    "pr": 191,
+    "revision": "686ffeb3765c6bf5edfb3193ac5cb6a46d2ac345",
+    "test_workflow_paths": [
+      ".github/functional_tests/auto_config_false/action.yml",
+      ".github/functional_tests/auto_config_true/action.yml",
+      ".github/functional_tests/axiom_audit/action.yml",
+      ".github/functional_tests/lake_build_args/action.yml",
+      ".github/functional_tests/lake_check/action.yml",
+      ".github/functional_tests/lake_check_test_failure/action.yml",
+      ".github/functional_tests/lake_check_unsupported/action.yml",
+      ".github/functional_tests/lake_init_failure/action.yml",
+      ".github/functional_tests/lake_init_success/action.yml",
+      ".github/functional_tests/lake_lint_args/action.yml",
+      ".github/functional_tests/lake_lint_failure/action.yml",
+      ".github/functional_tests/lake_lint_success/action.yml",
+      ".github/functional_tests/lake_test_args/action.yml",
+      ".github/functional_tests/lake_test_failure/action.yml",
+      ".github/functional_tests/lake_test_success/action.yml",
+      ".github/functional_tests/mathlib_dependency/action.yml",
+      ".github/functional_tests/mk_all-check/action.yml",
+      ".github/functional_tests/mk_all_args/action.yml",
+      ".github/functional_tests/reinstall-transient-toolchain/action.yml",
+      ".github/functional_tests/subdirectory_lake_package/action.yml",
+      ".github/functional_tests/subdirectory_lake_package_lean_checker/action.yml",
+      ".github/functional_tests/test_helpers/verify_action_output.sh",
+      ".github/workflows/actionlint.yml",
+      ".github/workflows/functional_tests.yml",
+      ".github/workflows/nanoda-daily.yml",
+      ".github/workflows/release.yml",
+      ".github/workflows/shellcheck.yml",
+      ".github/workflows/update_functional_test_toolchain.yml"
+    ],
+    "relevant_hits": [
+      {
+        "path": ".github/functional_tests/lake_check/action.yml",
+        "sha256": "c7d7d5df93421ca529c55a1d9a2aae557fa042af5be0372dff1ee2678b33ff1c",
+        "hits": [
+          {
+            "line": 8,
+            "text": "    description: 'Value for the `lake-check-sandbox` input. GitHub-hosted runners need one; a privileged Namespace container needs none.'"
+          },
+          {
+            "line": 34,
+            "text": "        lake-check-sandbox: ${{ inputs.sandbox }}"
+          },
+          {
+            "line": 58,
+            "text": "        lake-check-sandbox: ${{ inputs.sandbox }}"
+          }
+        ]
+      },
+      {
+        "path": ".github/workflows/functional_tests.yml",
+        "sha256": "613b538a0fb76b20ff9649e7241e6d1362a86172e304785826334f89a747465b",
+        "hits": [
+          {
+            "line": 275,
+            "text": "          sandbox: apparmor"
+          }
+        ]
+      },
+      {
+        "path": ".github/workflows/nanoda-daily.yml",
+        "sha256": "24ee23fbbb36f6d795212945ab800f8037a566b051bb7f80a79ff6d4e18fafe6",
+        "hits": [
+          {
+            "line": 1,
+            "text": "# Reusable workflow for daily nanoda verification"
+          },
+          {
+            "line": 4,
+            "text": "#   name: Daily nanoda verification"
+          },
+          {
+            "line": 11,
+            "text": "#       uses: leanprover/lean-action/.github/workflows/nanoda-daily.yml@v1"
+          },
+          {
+            "line": 16,
+            "text": "name: nanoda Daily Verification"
+          },
+          {
+            "line": 36,
+            "text": "        default: 'nanoda'"
+          },
+          {
+            "line": 50,
+            "text": "  nanoda-verify:"
+          },
+          {
+            "line": 56,
+            "text": "      - name: Run lean-action with nanoda"
+          },
+          {
+            "line": 60,
+            "text": "          nanoda: true"
+          },
+          {
+            "line": 61,
+            "text": "          nanoda-allow-sorry: ${{ inputs.allow-sorry }}"
+          },
+          {
+            "line": 72,
+            "text": "              title: '\u274c Daily nanoda verification failed',"
+          },
+          {
+            "line": 73,
+            "text": "              body: `The daily nanoda type checker verification failed.\\n\\n**Commit:** ${context.sha}\\n**Run:** [View workflow run](${runUrl})\\n\\nPlease investigate and fix any type checking issues.`,"
+          },
+          {
+            "line": 74,
+            "text": "              labels: ['nanoda', 'automated', 'ci-failure']"
+          },
+          {
+            "line": 93,
+            "text": "              \\\"text\\\": \\\"$EMOJI nanoda daily verification: $STATUS\\\","
+          },
+          {
+            "line": 99,
+            "text": "                    \\\"text\\\": \\\"$EMOJI *nanoda daily verification*: $STATUS\\n<$RUN_URL|View run> | Commit: \\`${{ github.sha }}\\`\\\""
+          },
+          {
+            "line": 134,
+            "text": "            \u2705 nanoda daily verification [succeeded](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on `${{ github.sha }}`"
+          },
+          {
+            "line": 147,
+            "text": "            \u274c nanoda daily verification [failed](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on `${{ github.sha }}`"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "pr": 192,
+    "revision": "209c085c3370c2fbae9e8bdfc87955f0c49a1082",
+    "test_workflow_paths": [
+      ".github/functional_tests/auto_config_false/action.yml",
+      ".github/functional_tests/auto_config_true/action.yml",
+      ".github/functional_tests/axiom_audit/action.yml",
+      ".github/functional_tests/lake_build_args/action.yml",
+      ".github/functional_tests/lake_check_test_failure/action.yml",
+      ".github/functional_tests/lake_init_failure/action.yml",
+      ".github/functional_tests/lake_init_success/action.yml",
+      ".github/functional_tests/lake_lint_args/action.yml",
+      ".github/functional_tests/lake_lint_failure/action.yml",
+      ".github/functional_tests/lake_lint_success/action.yml",
+      ".github/functional_tests/lake_test_args/action.yml",
+      ".github/functional_tests/lake_test_failure/action.yml",
+      ".github/functional_tests/lake_test_success/action.yml",
+      ".github/functional_tests/mathlib_dependency/action.yml",
+      ".github/functional_tests/mk_all-check/action.yml",
+      ".github/functional_tests/mk_all_args/action.yml",
+      ".github/functional_tests/nanoda_bundled/action.yml",
+      ".github/functional_tests/reinstall-transient-toolchain/action.yml",
+      ".github/functional_tests/subdirectory_lake_package/action.yml",
+      ".github/functional_tests/subdirectory_lake_package_lean_checker/action.yml",
+      ".github/functional_tests/test_helpers/verify_action_output.sh",
+      ".github/workflows/actionlint.yml",
+      ".github/workflows/functional_tests.yml",
+      ".github/workflows/nanoda-daily.yml",
+      ".github/workflows/release.yml",
+      ".github/workflows/shellcheck.yml",
+      ".github/workflows/update_functional_test_toolchain.yml"
+    ],
+    "relevant_hits": [
+      {
+        "path": ".github/functional_tests/nanoda_bundled/action.yml",
+        "sha256": "0c1e1f8035af2fcf26e5d4bc7ae605994637e3557bcca9dc0a5f27a3d0db49f1",
+        "hits": [
+          {
+            "line": 1,
+            "text": "name: 'nanoda bundled binaries test'"
+          },
+          {
+            "line": 2,
+            "text": "description: 'Verify `nanoda: true` succeeds using the leanexport and nanoda_bin bundled with a recent toolchain, without building either from source.'"
+          },
+          {
+            "line": 5,
+            "text": "    description: 'Toolchain to use for the test. Must bundle `leanexport` and `nanoda_bin`.'"
+          },
+          {
+            "line": 29,
+            "text": "        elan which nanoda_bin"
+          },
+          {
+            "line": 32,
+            "text": "    - name: \"run `lean-action` with `nanoda: true`\""
+          },
+          {
+            "line": 33,
+            "text": "      id: lean-action-nanoda"
+          },
+          {
+            "line": 37,
+            "text": "        nanoda: true"
+          },
+          {
+            "line": 39,
+            "text": "    - name: verify nanoda accepted the clean package"
+          },
+          {
+            "line": 41,
+            "text": "        OUTPUT_NAME: \"nanoda-status\""
+          },
+          {
+            "line": 43,
+            "text": "        ACTUAL_VALUE: ${{ steps.lean-action-nanoda.outputs.nanoda-status }}"
+          },
+          {
+            "line": 47,
+            "text": "    # The point of the change is that no Rust toolchain and no source builds are needed when the"
+          },
+          {
+            "line": 51,
+            "text": "        if [ -d _lean4export ] || [ -d _nanoda_lib ]; then"
+          },
+          {
+            "line": 52,
+            "text": "          echo \"::error::the source-build fallback ran even though the toolchain bundles leanexport and nanoda_bin\""
+          },
+          {
+            "line": 55,
+            "text": "        echo \"no source builds, as expected\""
+          }
+        ]
+      },
+      {
+        "path": ".github/workflows/functional_tests.yml",
+        "sha256": "fca89d0851b60c92cc3ddd751a75a1e9420366e40f9a72048411d7ae4624cea1",
+        "hits": [
+          {
+            "line": 31,
+            "text": "  # Bundles `leanexport` and `nanoda_bin`, which the `nanoda` step now prefers over building"
+          },
+          {
+            "line": 32,
+            "text": "  # lean4export and nanoda_lib from source."
+          },
+          {
+            "line": 33,
+            "text": "  bundled_nanoda_toolchain: leanprover/lean4:v4.35.0-rc2"
+          },
+          {
+            "line": 249,
+            "text": "  nanoda-bundled:"
+          },
+          {
+            "line": 253,
+            "text": "      - uses: ./.github/functional_tests/nanoda_bundled"
+          },
+          {
+            "line": 255,
+            "text": "          toolchain: ${{ env.bundled_nanoda_toolchain }}"
+          }
+        ]
+      },
+      {
+        "path": ".github/workflows/nanoda-daily.yml",
+        "sha256": "24ee23fbbb36f6d795212945ab800f8037a566b051bb7f80a79ff6d4e18fafe6",
+        "hits": [
+          {
+            "line": 1,
+            "text": "# Reusable workflow for daily nanoda verification"
+          },
+          {
+            "line": 4,
+            "text": "#   name: Daily nanoda verification"
+          },
+          {
+            "line": 11,
+            "text": "#       uses: leanprover/lean-action/.github/workflows/nanoda-daily.yml@v1"
+          },
+          {
+            "line": 16,
+            "text": "name: nanoda Daily Verification"
+          },
+          {
+            "line": 36,
+            "text": "        default: 'nanoda'"
+          },
+          {
+            "line": 50,
+            "text": "  nanoda-verify:"
+          },
+          {
+            "line": 56,
+            "text": "      - name: Run lean-action with nanoda"
+          },
+          {
+            "line": 60,
+            "text": "          nanoda: true"
+          },
+          {
+            "line": 61,
+            "text": "          nanoda-allow-sorry: ${{ inputs.allow-sorry }}"
+          },
+          {
+            "line": 72,
+            "text": "              title: '\u274c Daily nanoda verification failed',"
+          },
+          {
+            "line": 73,
+            "text": "              body: `The daily nanoda type checker verification failed.\\n\\n**Commit:** ${context.sha}\\n**Run:** [View workflow run](${runUrl})\\n\\nPlease investigate and fix any type checking issues.`,"
+          },
+          {
+            "line": 74,
+            "text": "              labels: ['nanoda', 'automated', 'ci-failure']"
+          },
+          {
+            "line": 93,
+            "text": "              \\\"text\\\": \\\"$EMOJI nanoda daily verification: $STATUS\\\","
+          },
+          {
+            "line": 99,
+            "text": "                    \\\"text\\\": \\\"$EMOJI *nanoda daily verification*: $STATUS\\n<$RUN_URL|View run> | Commit: \\`${{ github.sha }}\\`\\\""
+          },
+          {
+            "line": 134,
+            "text": "            \u2705 nanoda daily verification [succeeded](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on `${{ github.sha }}`"
+          },
+          {
+            "line": 147,
+            "text": "            \u274c nanoda daily verification [failed](${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}) on `${{ github.sha }}`"
+          }
+        ]
+      }
+    ]
+  }
+]

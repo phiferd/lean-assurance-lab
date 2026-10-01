@@ -3267,11 +3267,11 @@ preserved. The exact accepted authority and entry state remain bound in
    milestone and preserves its completed work and external-action gates.
 
 Selected next item: `LEAN-ACTION-REGRESSION-PREPARATION-1`.
-The canonical queue retains one READY item and zero ACTIVE items.
+The canonical queue retains zero READY items and one ACTIVE item.
 Lean-action campaign closes E0 SIGNAL:13 completed mocked shell controls; matching configurations and expected exit/reporting behavior; cleanup defeats PR192 no-source-build assertion; PR191 policy guard/write path mismatch is source-only.
 Actual checker axiom parity remains INCONCLUSIVE without exact4.35.0-rc2.
 [Scoped finding and raw attempts](../explorations/runs/EXPLORE-LEAN-ACTION-1/summary.md).
-Fresh regression preparation is READY and unstarted under [the plan](research/LEAN_ACTION_REGRESSION_PREPARATION_1_PLAN.md).
+Fresh regression preparation is ACTIVE under [the plan](research/LEAN_ACTION_REGRESSION_PREPARATION_1_PLAN.md).
 `LEAN-ETA-ALIAS-PILOT-PREPARATION-1` remains DEFERRED and unstarted; its scope is unchanged.
 No publication, upstream message or privileged security change occurred.
 

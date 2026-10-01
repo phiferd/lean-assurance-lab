@@ -1,0 +1,61 @@
+name: 'nanoda bundled binaries test'
+description: 'Verify `nanoda: true` succeeds using the leanexport and nanoda_bin bundled with a recent toolchain, without building either from source.'
+inputs:
+  toolchain:
+    description: 'Toolchain to use for the test. Must bundle `leanexport` and `nanoda_bin`.'
+    required: true
+runs:
+  using: 'composite'
+  steps:
+    # TODO: once `lean-action` supports just setup, use it here
+    - name: install elan
+      run: |
+        set -o pipefail
+        curl https://raw.githubusercontent.com/leanprover/elan/master/elan-init.sh -sSf | sh -s -- -y --default-toolchain ${{ inputs.toolchain }}
+        echo "$HOME/.elan/bin" >> "$GITHUB_PATH"
+      shell: bash
+
+    - name: create a clean lake library
+      run: |
+        lake init foo lib
+        lake update
+      shell: bash
+
+    # `elan` sets the default toolchain without downloading it, so this can only run once
+    # something has actually used it: `lake update` above is the first thing that does.
+    - name: confirm the toolchain really does bundle both binaries
+      run: |
+        elan which leanexport
+        elan which nanoda_bin
+      shell: bash
+
+    - name: "run `lean-action` with `nanoda: true`"
+      id: lean-action-nanoda
+      uses: ./
+      with:
+        use-github-cache: false
+        nanoda: true
+
+    - name: verify nanoda accepted the clean package
+      env:
+        OUTPUT_NAME: "nanoda-status"
+        EXPECTED_VALUE: "SUCCESS"
+        ACTUAL_VALUE: ${{ steps.lean-action-nanoda.outputs.nanoda-status }}
+      run: .github/functional_tests/test_helpers/verify_action_output.sh
+      shell: bash
+
+    # Cleanup removes the source directories, so observe actual command dispatch instead.
+    # Run the script directly after the action: its elan installation changes PATH.
+    - name: verify the nanoda script invokes bundled tools without source builds
+      run: |
+        tool_env="$(mktemp)"
+        tool_path="$(mktemp)"
+        GITHUB_ENV="$tool_env" GITHUB_PATH="$tool_path" \
+          .github/functional_tests/test_helpers/observe_nanoda_tools.sh --install
+        while IFS='=' read -r variable value; do
+          export "$variable=$value"
+        done < "$tool_env"
+        export PATH="$(cat "$tool_path"):$PATH"
+        NANODA_ALLOW_SORRY=false scripts/run_nanoda.sh
+        .github/functional_tests/test_helpers/observe_nanoda_tools.sh --check
+      shell: bash

@@ -1,0 +1,19 @@
+--- a/scripts/run_lake_check.sh
++++ b/scripts/run_lake_check.sh
+@@ -150,10 +150,12 @@
+                 failure_message="\`lake-check-sandbox: apparmor\` needs \`apparmor_parser\`, which is not on this runner. Use \"sysctl\" or \"setuid\" instead."
+                 exit 2
+             fi
+-            if [ -e /etc/apparmor.d/bwrap ]; then
+-                failure_message="\`lake-check-sandbox: apparmor\` will not overwrite the existing AppArmor policy at /etc/apparmor.d/bwrap. Remove it, or grant bubblewrap user namespaces yourself."
+-                exit 2
+-            fi
++            for policy_file in /etc/apparmor.d/bwrap /etc/apparmor.d/lean-action-bwrap; do
++                if [ -e "$policy_file" ]; then
++                    failure_message="\`lake-check-sandbox: apparmor\` will not overwrite the existing AppArmor policy at ${policy_file}. Remove it, or grant bubblewrap user namespaces yourself."
++                    exit 2
++                fi
++            done
+             echo "::warning::\`lake-check-sandbox: apparmor\` is installing an AppArmor profile granting ${sandbox_exe}, and the processes it starts, permission to create user namespaces. The runner's restriction stays in force for everything else. On a persistent self-hosted runner the profile outlives this job."
+             if ! sudo tee /etc/apparmor.d/lean-action-bwrap > /dev/null <<PROFILE
+ abi <abi/4.0>,

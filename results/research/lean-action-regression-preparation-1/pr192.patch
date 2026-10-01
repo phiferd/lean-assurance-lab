@@ -1,0 +1,112 @@
+--- a/.github/functional_tests/nanoda_bundled/action.yml
++++ b/.github/functional_tests/nanoda_bundled/action.yml
+@@ -44,13 +44,18 @@
+       run: .github/functional_tests/test_helpers/verify_action_output.sh
+       shell: bash
+ 
+-    # The point of the change is that no Rust toolchain and no source builds are needed when the
+-    # toolchain ships the binaries, so assert the source-build path did not run.
+-    - name: verify nothing was built from source
++    # Cleanup removes the source directories, so observe actual command dispatch instead.
++    # Run the script directly after the action: its elan installation changes PATH.
++    - name: verify the nanoda script invokes bundled tools without source builds
+       run: |
+-        if [ -d _lean4export ] || [ -d _nanoda_lib ]; then
+-          echo "::error::the source-build fallback ran even though the toolchain bundles leanexport and nanoda_bin"
+-          exit 1
+-        fi
+-        echo "no source builds, as expected"
++        tool_env="$(mktemp)"
++        tool_path="$(mktemp)"
++        GITHUB_ENV="$tool_env" GITHUB_PATH="$tool_path" \
++          .github/functional_tests/test_helpers/observe_nanoda_tools.sh --install
++        while IFS='=' read -r variable value; do
++          export "$variable=$value"
++        done < "$tool_env"
++        export PATH="$(cat "$tool_path"):$PATH"
++        NANODA_ALLOW_SORRY=false scripts/run_nanoda.sh
++        .github/functional_tests/test_helpers/observe_nanoda_tools.sh --check
+       shell: bash
+diff --git a/.github/functional_tests/test_helpers/observe_nanoda_tools.sh b/.github/functional_tests/test_helpers/observe_nanoda_tools.sh
+new file mode 100755
+--- /dev/null
++++ b/.github/functional_tests/test_helpers/observe_nanoda_tools.sh
+@@ -0,0 +1,78 @@
++#!/usr/bin/env bash
++# Functional-test observation only. Run --install before the action, --check afterwards.
++set -euo pipefail
++case "${1:-}" in
++  --install)
++    trace_dir="$(mktemp -d "${RUNNER_TEMP:?}/nanoda-tools.XXXXXX")"
++    export NANODA_TOOL_TRACE_DIR="$trace_dir"
++    export NANODA_OBSERVED_ELAN="$(command -v elan)"
++    export NANODA_OBSERVED_GIT="$(command -v git)"
++    export NANODA_OBSERVED_CARGO="$(command -v cargo || true)"
++    export NANODA_OBSERVED_EXPORTER="$(elan which leanexport)"
++    export NANODA_OBSERVED_CHECKER="$(elan which nanoda_bin)"
++    test -x "$NANODA_OBSERVED_EXPORTER"
++    test -x "$NANODA_OBSERVED_CHECKER"
++    mkdir "$trace_dir/bin"
++    : > "$trace_dir/invocations"
++    cat > "$trace_dir/bin/tool" <<'WRAPPER'
++#!/usr/bin/env bash
++set -euo pipefail
++record() { printf '%s\n' "$1" >> "${NANODA_TOOL_TRACE_DIR:?}/invocations"; }
++case "${0##*/}" in
++  elan)
++    if [ "${1:-}" = which ] && [ "${2:-}" = leanexport ]; then
++      "$NANODA_OBSERVED_ELAN" "$@" >/dev/null
++      printf '%s\n' "$NANODA_TOOL_TRACE_DIR/bin/leanexport"
++    elif [ "${1:-}" = which ] && [ "${2:-}" = nanoda_bin ]; then
++      "$NANODA_OBSERVED_ELAN" "$@" >/dev/null
++      printf '%s\n' "$NANODA_TOOL_TRACE_DIR/bin/nanoda_bin"
++    else
++      exec "$NANODA_OBSERVED_ELAN" "$@"
++    fi ;;
++  leanexport) record bundled-exporter; exec "$NANODA_OBSERVED_EXPORTER" "$@" ;;
++  nanoda_bin) record bundled-checker; exec "$NANODA_OBSERVED_CHECKER" "$@" ;;
++  git)
++    if [ "${1:-}" = clone ]; then
++      for arg in "$@"; do
++        case "$arg" in
++          https://github.com/leanprover/lean4export.git|https://github.com/ammkrn/nanoda_lib.git)
++            record forbidden-source-clone
++            if [ "${NANODA_TEST_ALLOW_FALLBACK:-false}" != true ]; then
++              echo 'Unexpected nanoda source clone in bundled-binaries test' >&2; exit 37
++            fi ;;
++        esac
++      done
++    fi
++    exec "$NANODA_OBSERVED_GIT" "$@" ;;
++  cargo)
++    if [ "${1:-}" = build ]; then
++      record forbidden-source-build
++      if [ "${NANODA_TEST_ALLOW_FALLBACK:-false}" != true ]; then
++        echo 'Unexpected Cargo build in bundled-binaries test' >&2; exit 37
++      fi
++    fi
++    test -n "$NANODA_OBSERVED_CARGO"
++    exec "$NANODA_OBSERVED_CARGO" "$@" ;;
++  *) exit 98 ;;
++esac
++WRAPPER
++    chmod +x "$trace_dir/bin/tool"
++    for tool in elan git cargo leanexport nanoda_bin; do
++      cp "$trace_dir/bin/tool" "$trace_dir/bin/$tool"
++    done
++    for variable in NANODA_TOOL_TRACE_DIR NANODA_OBSERVED_ELAN NANODA_OBSERVED_GIT NANODA_OBSERVED_CARGO NANODA_OBSERVED_EXPORTER NANODA_OBSERVED_CHECKER; do
++      printf '%s=%s\n' "$variable" "${!variable}" >> "${GITHUB_ENV:?}"
++    done
++    printf '%s\n' "$trace_dir/bin" >> "${GITHUB_PATH:?}"
++    ;;
++  --check)
++    trace="${NANODA_TOOL_TRACE_DIR:?}/invocations"
++    grep -qx bundled-exporter "$trace"
++    grep -qx bundled-checker "$trace"
++    if grep -q '^forbidden-source-' "$trace"; then
++      echo 'The source fallback ran despite the bundled-binaries expectation' >&2; exit 1
++    fi
++    echo 'Both bundled tools ran; no source clone or build was observed'
++    ;;
++  *) echo 'Use --install or --check' >&2; exit 2 ;;
++esac
