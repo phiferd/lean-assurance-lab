@@ -1,0 +1,269 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:74:77: error: unsolved goals
+ht :
+  (En 2).find? (Name.anonymous.str "Tree2") =
+    some
+      (ConstantInfo.indInfo
+        { name := Name.anonymous.str "Tree2", levelParams := [],
+          type := (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ) { pw := PropWhen.never } }
+        { sortZ := PropWhen.never, all := [Name.anonymous.str "Tree2"], nparams := 1,
+          ctors := [leafCV.name, nodeCV.name] })
+hl :
+  (En 2).find? (Name.anonymous.str "List") =
+    some
+      (ConstantInfo.indInfo
+        { name := Name.anonymous.str "List", levelParams := [un],
+          type := (Expr.sort (Level.param un).succ).forallE (Expr.sort (Level.param un).succ) { pw := PropWhen.never } }
+        { sortZ := PropWhen.never, all := [Name.anonymous.str "List"], nparams := 1,
+          ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] })
+hn :
+  (En 2).find? (Name.anonymous.str "List.nil") =
+    some
+      (ConstantInfo.ctorInfo
+        { name := Name.anonymous.str "List.nil", levelParams := [un],
+          type :=
+            (Expr.sort (Level.param un).succ).forallE
+              ((Expr.const (Name.anonymous.str "List") [Level.param un]).app (Expr.bvar 0)) { pw := PropWhen.never } }
+        1 0)
+hc :
+  (En 2).find? (Name.anonymous.str "List.cons") =
+    some
+      (ConstantInfo.ctorInfo
+        { name := Name.anonymous.str "List.cons", levelParams := [un],
+          type :=
+            (Expr.sort (Level.param un).succ).forallE
+              ((Expr.bvar 0).forallE
+                (((Expr.const (Name.anonymous.str "List") [Level.param un]).app (Expr.bvar 1)).forallE
+                  ((Expr.const (Name.anonymous.str "List") [Level.param un]).app (Expr.bvar 2))
+                  { pw := PropWhen.never })
+                { pw := PropWhen.never })
+              { pw := PropWhen.never } }
+        1 2)
+ha :
+  ∀ (d : Nat),
+    whnf CheckMode.verified (En 2) 7 d (Expr.fvar 0 (Expr.sort Level.zero.succ)) =
+      Except.ok (Expr.fvar 0 (Expr.sort Level.zero.succ))
+hx :
+  ∀ (d : Nat),
+    whnf CheckMode.verified (En 2) 7 d (Expr.fvar 1 (Expr.sort Level.zero.succ)) =
+      Except.ok (Expr.fvar 1 (Expr.sort Level.zero.succ))
+hy :
+  ∀ (d : Nat),
+    whnf CheckMode.verified (En 2) 7 d (Expr.fvar 2 (Expr.sort Level.zero.succ)) =
+      Except.ok (Expr.fvar 2 (Expr.sort Level.zero.succ))
+hw :
+  ∀ (a : Expr) (d : Nat),
+    whnf CheckMode.verified (En 2) 7 d ((Expr.const (Name.anonymous.str "List") [Level.zero]).app a) =
+      Except.ok ((Expr.const (Name.anonymous.str "List") [Level.zero]).app a)
+hi0 :
+  inferTypeCore CheckMode.verified (En 2) 7 2
+      ((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ))) =
+    Except.ok (Expr.sort Level.zero.succ)
+hi1 :
+  inferTypeCore CheckMode.verified (En 2) 7 2
+      ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+        ((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ)))) =
+    Except.ok (Expr.sort Level.zero.succ)
+hi3 :
+  inferTypeCore CheckMode.verified (En 2) 7 3
+      ((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ))) =
+    Except.ok (Expr.sort Level.zero.succ)
+hiy :
+  inferTypeCore CheckMode.verified (En 2) 7 3 (Expr.fvar 2 (Expr.sort Level.zero.succ)) =
+    Except.ok (Expr.sort Level.zero.succ)
+hleaf :
+  inferTypeCore CheckMode.verified (En 2) 7 2
+      ((Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 1 (Expr.sort Level.zero.succ))
+        { pw := PropWhen.never }) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+hnode :
+  inferTypeCore CheckMode.verified (En 2) 7 2
+      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+              (Expr.fvar 1 (Expr.sort Level.zero.succ)))).forallE
+        (Expr.fvar 1 (Expr.sort Level.zero.succ)) { pw := PropWhen.never }) =
+    Except.ok (Expr.sort (Level.zero.succ.imax Level.zero.succ))
+hcons0 :
+  inferTypeCore CheckMode.verified (En 2) 7 3
+      ((Expr.fvar 1 (Expr.sort Level.zero.succ)).forallE
+        ((Expr.fvar 2 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 2 (Expr.sort Level.zero.succ))
+          { pw := PropWhen.never })
+        { pw := PropWhen.never }) =
+    Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ)))
+hcons1 :
+  inferTypeCore CheckMode.verified (En 2) 7 3
+      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ))).forallE
+        ((Expr.fvar 2 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 2 (Expr.sort Level.zero.succ))
+          { pw := PropWhen.never })
+        { pw := PropWhen.never }) =
+    Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ)))
+hs : ∀ (d : Nat) (u : Level), ensureSortCore CheckMode.verified (En 2) 7 d (Expr.sort u) = Except.ok u
+⊢ (match
+      match
+        match
+          inferTypeCore CheckMode.verified (En 2) 7 2
+            ((Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 1 (Expr.sort Level.zero.succ))
+              { pw := { repr := ConLeche.PropWhenRepr.never✝ } }) with
+        | Except.error a => Except.error a
+        | Except.ok ty => do
+          let _ ← ensureSortCore CheckMode.verified (En 2) 7 2 ty
+          let __x ←
+            nestFields
+                (nestPos
+                  { annotate := fun env => annotateCore CheckMode.verified env 7,
+                    inferType := fun env => inferTypeCore CheckMode.verified env 7,
+                    isDefEq := fun env => isDefEqCore CheckMode.verified env 7,
+                    ensureSort := fun env => ensureSortCore CheckMode.verified env 7,
+                    whnf := fun env => whnf CheckMode.verified env 7,
+                    orElse := fun x k =>
+                      match x with
+                      | Except.ok true => pure PUnit.unit
+                      | x => k none }
+                  (En 2)
+                  { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                    params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                    find? := (En 2).find? }
+                  (whnfWalkFuel
+                    ((Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 1 (Expr.sort Level.zero.succ))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })))
+                [] 2
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                1 0
+                ((Expr.fvar 0 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 1 (Expr.sort Level.zero.succ))
+                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                { }
+          if
+                ((List.range 1).any fun i =>
+                    __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                      structUsedLater (closeTelescope __x.snd.fst 2 __x.snd.snd.fst) 0 i) =
+                  true then
+              do
+              throw
+                  (CheckError.invalid
+                    "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+              if
+                    (nestResHead __x.snd.snd.fst &&
+                        __x.snd.snd.fst.getAppArgs.all fun x => !Expr.nestOcc [Name.anonymous.str "Tree2"] 1 2 x) =
+                      true then
+                  do
+                  let __x_1 ←
+                    nestCtors
+                        { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                          params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                          find? := (En 2).find? }
+                        { annotate := fun env => annotateCore CheckMode.verified env 7,
+                          inferType := fun env => inferTypeCore CheckMode.verified env 7,
+                          isDefEq := fun env => isDefEqCore CheckMode.verified env 7,
+                          ensureSort := fun env => ensureSortCore CheckMode.verified env 7,
+                          whnf := fun env => whnf CheckMode.verified env 7,
+                          orElse := fun x k =>
+                            match x with
+                            | Except.ok true => pure PUnit.unit
+                            | x => k none }
+                        (En 2)
+                        (fun crest =>
+                          nestPos
+                            { annotate := fun env => annotateCore CheckMode.verified env 7,
+                              inferType := fun env => inferTypeCore CheckMode.verified env 7,
+                              isDefEq := fun env => isDefEqCore CheckMode.verified env 7,
+                              ensureSort := fun env => ensureSortCore CheckMode.verified env 7,
+                              whnf := fun env => whnf CheckMode.verified env 7,
+                              orElse := fun x k =>
+                                match x with
+                                | Except.ok true => pure PUnit.unit
+                                | x => k none }
+                            (En 2)
+                            { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                              params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                              find? := (En 2).find? }
+                            (whnfWalkFuel crest))
+                        [] 2 [] [Expr.fvar 0 (Expr.sort Level.zero.succ)] [Name.anonymous.str "Tree2"]
+                        [Expr.fvar 1 (Expr.sort Level.zero.succ)]
+                        [({ name := Name.anonymous.str "Tree2.node", levelParams := [],
+                              type :=
+                                (Expr.sort Level.zero.succ).forallE
+                                  (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                        ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } },
+                            1)]
+                        { keys := __x.snd.snd.snd.keys, active := __x.snd.snd.snd.active,
+                          ctorNfs :=
+                            __x.snd.snd.snd.ctorNfs.push
+                              (nestCtorNf
+                                { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                                  params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                                  find? := (En 2).find? }
+                                [] 2 [] [Expr.fvar 0 (Expr.sort Level.zero.succ)]
+                                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                __x.snd.fst __x.snd.snd.fst) }
+                  pure ((__x.fst, closeTelescope __x.snd.fst 2 __x.snd.snd.fst) :: __x_1.fst, __x_1.snd)
+                else do
+                  throw
+                      (CheckError.invalid
+                        "nested positivity: invalid return type — a constructor's result index mentions the block")
+                  let __x_1 ←
+                    nestCtors
+                        { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                          params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                          find? := (En 2).find? }
+                        { annotate := fun env => annotateCore CheckMode.verified env 7,
+                          inferType := fun env => inferTypeCore CheckMode.verified env 7,
+                          isDefEq := fun env => isDefEqCore CheckMode.verified env 7,
+                          ensureSort := fun env => ensureSortCore CheckMode.verified env 7,
+                          whnf := fun env => whnf CheckMode.verified env 7,
+                          orElse := fun x k =>
+                            match x with
+                            | Except.ok true => pure PUnit.unit
+                            | x => k none }
+                        (En 2)
+                        (fun crest =>
+                          nestPos
+                            { annotate := fun env => annotateCore CheckMode.verified env 7,
+                              inferType := fun env => inferTypeCore CheckMode.verified env 7,
+                              isDefEq := fun env => isDefEqCore CheckMode.verified env 7,
+                              ensureSort := fun env => ensureSortCore CheckMode.verified env 7,
+                              whnf := fun env => whnf CheckMode.verified env 7,
+                              orElse := fun x k =>
+                                match x with
+                                | Except.ok true => pure PUnit.unit
+                                | x => k none }
+                            (En 2)
+                            { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                              params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                              find? := (En 2).find? }
+                            (whnfWalkFuel crest))
+                        [] 2 [] [Expr.fvar 0 (Expr.sort Level.zero.succ)] [Name.anonymous.str "Tree2"]
+                        [Expr.fvar 1 (Expr.sort Level.zero.succ)]
+                        [({ name := Name.anonymous.str "Tree2.node", levelParams := [],
+                              type :=
+                                (Expr.sort Level.zero.succ).forallE
+                                  (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                        ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } },
+                            1)]
+                        { keys := __x.snd.snd.snd.keys, active := __x.snd.snd.snd.active,
+                          ctorNfs :=
+                            __x.snd.snd.snd.ctorNfs.push
+                              (nestCtorNf
+                                { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                                  params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                                  find? := (En 2).find? }
+                                [] 2 [] [Expr.fvar 0 (Expr.sort Level.zero.succ)]
+                                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWh

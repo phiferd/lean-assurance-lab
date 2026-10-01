@@ -21,6 +21,7 @@ characterize validation boundaries.
 **Want to contribute?**
 
 - Claimable work: [GitHub Issues](https://github.com/phiferd/lean-assurance-lab/issues)
+- A worked nested-datatype theorem and its limits: [Tree2 correspondence](docs/TREE2_CORRESPONDENCE.md)
 - Research priority and context: [`docs/RESEARCH_STATUS.md`](docs/RESEARCH_STATUS.md)
 - Ranked work and selection process: [`docs/RESEARCH_WORKFLOW.md`](docs/RESEARCH_WORKFLOW.md)
 - Contribution and evidence contract: [`CONTRIBUTING.md`](CONTRIBUTING.md)

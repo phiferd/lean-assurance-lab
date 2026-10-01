@@ -69,7 +69,7 @@ research directions.
   previously missing verdict is now available; it establishes no checker
   correctness, general conformance, workflow execution or host-security claim.
   **Does it require more work?** No further run follows from this result. The
-  separate alias preparation remains READY and unstarted. See the
+  separate alias preparation remains DEFERRED and unstarted. See the
   [original screen](../explorations/runs/EXPLORE-LEAN-ACTION-BUNDLED-REAL-1/summary.md)
   and [whole-module retry](../explorations/runs/EXPLORE-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1/summary.md).
 
@@ -3295,16 +3295,27 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-The canonical queue retains one READY item, selected and unstarted.
+The owner selected one Tree2 scientific continuation campaign on 2026-10-01.
 
-Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
-The canonical queue retains one READY item and zero ACTIVE items.
+Selected next item: `E0-TREE2-COMPUTATION-PILOT-1`.
+ACTIVE under its [prospective plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md).
+The canonical queue has one ACTIVE scientific campaign; alias preparation is deferred and unstarted. The first question connects actual returned Tree2 constructor records to the existing lowering theorem; value/fold correspondence is conditional, not already proved.
+Checkpoint 2026-10-01: three fresh Lean-checked lemmas connect exact frame images,
+six supplied constructor readbacks and official replacement to all six actual
+lowered types, with the completed allocation unchanged. The original exact
+returned-observation trial closes INCONCLUSIVE; it has not proved that the full
+checker emits those records. This campaign stays ACTIVE for a newly recorded
+staged output trial, not a fold trial. See the human-readable
+[overview](TREE2_CORRESPONDENCE.md) and
+[checkpoint](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/checkpoint.json).
+No further run has started at this checkpoint.
+
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.
 The restricted Tree2/List-tower proof and its unchanged historical closure are published. Queue and summary restoration does not reattest current-tree strict closure.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
-The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
-The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. No new scientific run, external message or privileged security setting change follows.
+The alias source/fixture preparation is DEFERRED and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
+The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. That cleanup is complete. The separately authorized Tree2 continuation remains local; no new Git publication, external message or privileged security setting change is authorized.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed

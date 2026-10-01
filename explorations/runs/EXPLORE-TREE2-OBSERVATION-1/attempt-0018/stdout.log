@@ -1,0 +1,1562 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:119:152: error(lean.unknownIdentifier): Unknown constant `ConLeche.PropWhen.ofRepr`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:108:120: error: unsolved goals
+f : Nat
+ns : Array NestCtorNf
+hm :
+  ∀ (f : Nat) (st : NestState),
+    nestPos
+        { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+          inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+          isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+          ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+          whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+          orElse := fun x k =>
+            match x with
+            | Except.ok true => pure PUnit.unit
+            | x => k none }
+        {
+          consts :=
+            [ConstantInfo.indInfo
+                { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                  ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                        (Expr.bvar 0))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 0,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.bvar 0).forallE
+                        (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                              (Expr.bvar 1)).forallE
+                          ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 2))
+                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 2,
+              ConstantInfo.indInfo
+                { name := Name.anonymous.str "Tree2", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                  ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1] }
+        { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+          params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+          find? :=
+            {
+                consts :=
+                  [ConstantInfo.indInfo
+                      { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"],
+                        nparams := 1, ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                              (Expr.bvar 0))
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 0,
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            ((Expr.bvar 0).forallE
+                              (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                    (Expr.bvar 1)).forallE
+                                ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                  (Expr.bvar 2))
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 2,
+                    ConstantInfo.indInfo
+                      { name := Name.anonymous.str "Tree2", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"],
+                        nparams := 1, ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE
+                            ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 1,
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE
+                            (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                  ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 1] }.find? }
+        (f + 1) [{ key := { cname := Name.anonymous.str "List", lvls := [Level.zero], ds := [tower 0] }, base := 2 }] 3
+        0 (Expr.fvar 1 (Expr.sort Level.zero.succ)) st =
+      Except.ok (NestFieldKind.recursive 0, Expr.fvar 1 (Expr.sort Level.zero.succ), st)
+ht :
+  ∀ (f k : Nat) (st : NestState),
+    nestPos
+        { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+          inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+          isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+          ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+          whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+          orElse := fun x k =>
+            match x with
+            | Except.ok true => pure PUnit.unit
+            | x => k none }
+        {
+          consts :=
+            [ConstantInfo.indInfo
+                { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                  ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                        (Expr.bvar 0))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 0,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.bvar 0).forallE
+                        (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                              (Expr.bvar 1)).forallE
+                          ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 2))
+                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 2,
+              ConstantInfo.indInfo
+                { name := Name.anonymous.str "Tree2", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                  ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1] }
+        { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+          params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+          find? :=
+            {
+                consts :=
+                  [ConstantInfo.indInfo
+                      { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"],
+                        nparams := 1, ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                              (Expr.bvar 0))
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 0,
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                        type :=
+                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                            ((Expr.bvar 0).forallE
+                              (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                    (Expr.bvar 1)).forallE
+                                ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                  (Expr.bvar 2))
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 2,
+                    ConstantInfo.indInfo
+                      { name := Name.anonymous.str "Tree2", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"],
+                        nparams := 1, ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE
+                            ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 1,
+                    ConstantInfo.ctorInfo
+                      { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                        type :=
+                          (Expr.sort Level.zero.succ).forallE
+                            (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                  ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                      1 1] }.find? }
+        (f + 1) [{ key := { cname := Name.anonymous.str "List", lvls := [Level.zero], ds := [tower k] }, base := 2 }] 4
+        0 (Expr.fvar 2 (Expr.sort Level.zero.succ)) st =
+      Except.ok (NestFieldKind.inProgress, Expr.fvar 2 (Expr.sort Level.zero.succ), st)
+hi0 :
+  inferTypeCore CheckMode.verified
+      {
+        consts :=
+          [ConstantInfo.indInfo
+              { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app (Expr.bvar 0))
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 0,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.bvar 0).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 1)).forallE
+                        ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                          (Expr.bvar 2))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 2,
+            ConstantInfo.indInfo
+              { name := Name.anonymous.str "Tree2", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                          ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                      ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1] }
+      7 2 ((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ))) =
+    Except.ok (Expr.sort Level.zero.succ)
+hi3 :
+  inferTypeCore CheckMode.verified
+      {
+        consts :=
+          [ConstantInfo.indInfo
+              { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app (Expr.bvar 0))
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 0,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.bvar 0).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 1)).forallE
+                        ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                          (Expr.bvar 2))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 2,
+            ConstantInfo.indInfo
+              { name := Name.anonymous.str "Tree2", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                          ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                      ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1] }
+      7 3 ((Expr.const (Name.anonymous.str "List") [Level.zero]).app (Expr.fvar 1 (Expr.sort Level.zero.succ))) =
+    Except.ok (Expr.sort Level.zero.succ)
+hiy :
+  inferTypeCore CheckMode.verified
+      {
+        consts :=
+          [ConstantInfo.indInfo
+              { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app (Expr.bvar 0))
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 0,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.bvar 0).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 1)).forallE
+                        ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                          (Expr.bvar 2))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 2,
+            ConstantInfo.indInfo
+              { name := Name.anonymous.str "Tree2", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                          ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                      ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1] }
+      7 3 (Expr.fvar 2 (Expr.sort Level.zero.succ)) =
+    Except.ok (Expr.sort Level.zero.succ)
+hc0 :
+  inferTypeCore CheckMode.verified
+      {
+        consts :=
+          [ConstantInfo.indInfo
+              { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app (Expr.bvar 0))
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 0,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                type :=
+                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                    ((Expr.bvar 0).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 1)).forallE
+                        ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                          (Expr.bvar 2))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 2,
+            ConstantInfo.indInfo
+              { name := Name.anonymous.str "Tree2", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1,
+            ConstantInfo.ctorInfo
+              { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                type :=
+                  (Expr.sort Level.zero.succ).forallE
+                    (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                          ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                      ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+              1 1] }
+      7 3
+      ((Expr.fvar 1 (Expr.sort Level.zero.succ)).forallE
+        ((Expr.fvar 2 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 2 (Expr.sort Level.zero.succ))
+          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+        { pw := { repr := ConLeche.PropWhenRepr.never✝ } }) =
+    Except.ok (Expr.sort (Level.zero.succ.imax (Level.zero.succ.imax Level.zero.succ)))
+hs :
+  ∀ (d : Nat) (u : Level),
+    ensureSortCore CheckMode.verified
+        {
+          consts :=
+            [ConstantInfo.indInfo
+                { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"], nparams := 1,
+                  ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                        (Expr.bvar 0))
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 0,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                  type :=
+                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                      ((Expr.bvar 0).forallE
+                        (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                              (Expr.bvar 1)).forallE
+                          ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                            (Expr.bvar 2))
+                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 2,
+              ConstantInfo.indInfo
+                { name := Name.anonymous.str "Tree2", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"], nparams := 1,
+                  ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1,
+              ConstantInfo.ctorInfo
+                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                  type :=
+                    (Expr.sort Level.zero.succ).forallE
+                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                1 1] }
+        7 d (Expr.sort u) =
+      Except.ok u
+⊢ (match
+      match
+        match
+          match
+            match
+              match
+                nestPos
+                  { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                    inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                    isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                    ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                    whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                    orElse := fun x k =>
+                      match x with
+                      | Except.ok true => pure PUnit.unit
+                      | x => k none }
+                  {
+                    consts :=
+                      [ConstantInfo.indInfo
+                          { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                            type :=
+                              (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"],
+                            nparams := 1, ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                        ConstantInfo.ctorInfo
+                          { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                            type :=
+                              (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                  (Expr.bvar 0))
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          1 0,
+                        ConstantInfo.ctorInfo
+                          { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                            type :=
+                              (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                ((Expr.bvar 0).forallE
+                                  (((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                        (Expr.bvar 1)).forallE
+                                    ((Expr.const (Name.anonymous.str "List") [Level.param (Name.anonymous.str "u")]).app
+                                      (Expr.bvar 2))
+                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          1 2,
+                        ConstantInfo.indInfo
+                          { name := Name.anonymous.str "Tree2", levelParams := [],
+                            type :=
+                              (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "Tree2"],
+                            nparams := 1, ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                        ConstantInfo.ctorInfo
+                          { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                            type :=
+                              (Expr.sort Level.zero.succ).forallE
+                                ((Expr.bvar 0).forallE ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          1 1,
+                        ConstantInfo.ctorInfo
+                          { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                            type :=
+                              (Expr.sort Level.zero.succ).forallE
+                                (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                      ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                                  ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                          1 1] }
+                  { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                    params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                    find? :=
+                      {
+                          consts :=
+                            [ConstantInfo.indInfo
+                                { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"],
+                                  nparams := 1,
+                                  ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      ((Expr.const (Name.anonymous.str "List")
+                                            [Level.param (Name.anonymous.str "u")]).app
+                                        (Expr.bvar 0))
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 0,
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        (((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 1)).forallE
+                                          ((Expr.const (Name.anonymous.str "List")
+                                                [Level.param (Name.anonymous.str "u")]).app
+                                            (Expr.bvar 2))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 2,
+                              ConstantInfo.indInfo
+                                { name := Name.anonymous.str "Tree2", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                  all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                  ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 1,
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 1] }.find? }
+                  f.succ
+                  [{
+                      key :=
+                        { cname := Name.anonymous.str "List", lvls := [Level.zero],
+                          ds := [Expr.fvar 1 (Expr.sort Level.zero.succ)] },
+                      base := 2 }]
+                  3 0 (Expr.fvar 1 (Expr.sort Level.zero.succ))
+                  {
+                    active :=
+                      [{ cname := Name.anonymous.str "List", lvls := [Level.zero],
+                          ds := [Expr.fvar 1 (Expr.sort Level.zero.succ)] },
+                        { cname := Name.anonymous.str "List", lvls := [Level.zero],
+                          ds :=
+                            [(Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                (Expr.fvar 1 (Expr.sort Level.zero.succ))] }],
+                    ctorNfs :=
+                      {
+                        toList :=
+                          match ns.1,
+                            { ctor := Name.anonymous.str "List.nil", lvls := [Level.zero],
+                              ds :=
+                                [(Expr.const (Name.anonymous.str "Tree2") []).app
+                                    (Expr.fvar 0 (Expr.sort Level.zero.succ))],
+                              ty :=
+                                (Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                  ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                    (Expr.fvar 0 (Expr.sort Level.zero.succ))) } with
+                          | [], b => [b]
+                          | a :: as, b => a :: as.concat b } } with
+              | Except.error a => Except.error a
+              | Except.ok __x => do
+                let __x_1 ←
+                  nestFields
+                      (nestPos
+                        { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                          inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                          isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                          ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                          whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                          orElse := fun x k =>
+                            match x with
+                            | Except.ok true => pure PUnit.unit
+                            | x => k none }
+                        {
+                          consts :=
+                            [ConstantInfo.indInfo
+                                { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ }, all := [Name.anonymous.str "List"],
+                                  nparams := 1,
+                                  ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      ((Expr.const (Name.anonymous.str "List")
+                                            [Level.param (Name.anonymous.str "u")]).app
+                                        (Expr.bvar 0))
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 0,
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                  type :=
+                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        (((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 1)).forallE
+                                          ((Expr.const (Name.anonymous.str "List")
+                                                [Level.param (Name.anonymous.str "u")]).app
+                                            (Expr.bvar 2))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 2,
+                              ConstantInfo.indInfo
+                                { name := Name.anonymous.str "Tree2", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                  all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                  ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      ((Expr.bvar 0).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 1,
+                              ConstantInfo.ctorInfo
+                                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                  type :=
+                                    (Expr.sort Level.zero.succ).forallE
+                                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 0)))).forallE
+                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                1 1] }
+                        { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                          params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                          find? :=
+                            {
+                                consts :=
+                                  [ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "List"], nparams := 1,
+                                        ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 0))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 0,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              (((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 1)).forallE
+                                                ((Expr.const (Name.anonymous.str "List")
+                                                      [Level.param (Name.anonymous.str "u")]).app
+                                                  (Expr.bvar 2))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 2,
+                                    ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "Tree2", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                        ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                  ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                    ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                      (Expr.bvar 0)))).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1] }.find? }
+                        f.succ)
+                      [{
+                          key :=
+                            { cname := Name.anonymous.str "List", lvls := [Level.zero],
+                              ds := [Expr.fvar 1 (Expr.sort Level.zero.succ)] },
+                          base := 2 }]
+                      3
+                      (CheckError.invalid
+                        "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                      1 (0 + 1)
+                      (((Expr.fvar 2 (Expr.sort Level.zero.succ)).forallE (Expr.fvar 2 (Expr.sort Level.zero.succ))
+                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } }).instantiate1
+                        (Expr.fvar (3 + 0) (Expr.fvar 1 (Expr.sort Level.zero.succ))))
+                      __x.snd.snd
+                pure
+                    (__x.fst :: __x_1.fst,
+                      (__x.snd.fst, { pw := { repr := ConLeche.PropWhenRepr.never✝ } }) :: __x_1.snd.fst,
+                      __x_1.snd.snd.fst, __x_1.snd.snd.snd) with
+            | ⋯ => Except.error a
+            | ⋯ =>
+              if
+                  ((List.range 2).any fun i =>
+                      __x.fst.getD i NestFieldKind.ordinary != NestFieldKind.ordinary &&
+                        structUsedLater (closeTelescope __x.snd.fst 3 __x.snd.snd.fst) 0 i) =
+                    true then
+                do
+                throw
+                    (CheckError.invalid
+                      "nested positivity: non valid occurrence of the datatypes being declared (a later field or the result depends on a recursive or nested field)")
+                if
+                      (nestResHead __x.snd.snd.fst &&
+                          __x.snd.snd.fst.getAppArgs.all fun x => !Expr.nestOcc [Name.anonymous.str "Tree2"] 1 3 x) =
+                        true then
+                    do
+                    let __x_1 ←
+                      nestCtors
+                          { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                            params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                            find? :=
+                              {
+                                  consts :=
+                                    [ConstantInfo.indInfo
+                                        { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                          all := [Name.anonymous.str "List"], nparams := 1,
+                                          ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "List.nil",
+                                          levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              ((Expr.const (Name.anonymous.str "List")
+                                                    [Level.param (Name.anonymous.str "u")]).app
+                                                (Expr.bvar 0))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 0,
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "List.cons",
+                                          levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              ((Expr.bvar 0).forallE
+                                                (((Expr.const (Name.anonymous.str "List")
+                                                          [Level.param (Name.anonymous.str "u")]).app
+                                                      (Expr.bvar 1)).forallE
+                                                  ((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 2))
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 2,
+                                      ConstantInfo.indInfo
+                                        { name := Name.anonymous.str "Tree2", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                          all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                          ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE
+                                              ((Expr.bvar 0).forallE
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 1,
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE
+                                              (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                    ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                      ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                        (Expr.bvar 0)))).forallE
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 1] }.find? }
+                          { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                            inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                            isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                            ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                            whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                            orElse := fun x k =>
+                              match x with
+                              | Except.ok true => pure PUnit.unit
+                              | x => k none }
+                          {
+                            consts :=
+                              [ConstantInfo.indInfo
+                                  { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                    all := [Name.anonymous.str "List"], nparams := 1,
+                                    ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        ((Expr.const (Name.anonymous.str "List")
+                                              [Level.param (Name.anonymous.str "u")]).app
+                                          (Expr.bvar 0))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 0,
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        ((Expr.bvar 0).forallE
+                                          (((Expr.const (Name.anonymous.str "List")
+                                                    [Level.param (Name.anonymous.str "u")]).app
+                                                (Expr.bvar 1)).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 2))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 2,
+                                ConstantInfo.indInfo
+                                  { name := Name.anonymous.str "Tree2", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                    all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                    ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE
+                                        ((Expr.bvar 0).forallE
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 1,
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE
+                                        (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                              ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                  (Expr.bvar 0)))).forallE
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 1] }
+                          (fun x =>
+                            nestPos
+                              { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                                inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                                isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                                ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                                whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                                orElse := fun x k =>
+                                  match x with
+                                  | Except.ok true => pure PUnit.unit
+                                  | x => k none }
+                              {
+                                consts :=
+                                  [ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "List"], nparams := 1,
+                                        ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 0))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 0,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              (((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 1)).forallE
+                                                ((Expr.const (Name.anonymous.str "List")
+                                                      [Level.param (Name.anonymous.str "u")]).app
+                                                  (Expr.bvar 2))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 2,
+                                    ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "Tree2", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                        ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                  ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                    ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                      (Expr.bvar 0)))).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1] }
+                              { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                                params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                                find? :=
+                                  {
+                                      consts :=
+                                        [ConstantInfo.indInfo
+                                            { name := Name.anonymous.str "List",
+                                              levelParams := [Name.anonymous.str "u"],
+                                              type :=
+                                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                              all := [Name.anonymous.str "List"], nparams := 1,
+                                              ctors :=
+                                                [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                          ConstantInfo.ctorInfo
+                                            { name := Name.anonymous.str "List.nil",
+                                              levelParams := [Name.anonymous.str "u"],
+                                              type :=
+                                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                  ((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 0))
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            1 0,
+                                          ConstantInfo.ctorInfo
+                                            { name := Name.anonymous.str "List.cons",
+                                              levelParams := [Name.anonymous.str "u"],
+                                              type :=
+                                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                  ((Expr.bvar 0).forallE
+                                                    (((Expr.const (Name.anonymous.str "List")
+                                                              [Level.param (Name.anonymous.str "u")]).app
+                                                          (Expr.bvar 1)).forallE
+                                                      ((Expr.const (Name.anonymous.str "List")
+                                                            [Level.param (Name.anonymous.str "u")]).app
+                                                        (Expr.bvar 2))
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            1 2,
+                                          ConstantInfo.indInfo
+                                            { name := Name.anonymous.str "Tree2", levelParams := [],
+                                              type :=
+                                                (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                              all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                              ctors :=
+                                                [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                          ConstantInfo.ctorInfo
+                                            { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                              type :=
+                                                (Expr.sort Level.zero.succ).forallE
+                                                  ((Expr.bvar 0).forallE
+                                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            1 1,
+                                          ConstantInfo.ctorInfo
+                                            { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                              type :=
+                                                (Expr.sort Level.zero.succ).forallE
+                                                  (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                        ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                          ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                            (Expr.bvar 0)))).forallE
+                                                    ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                    { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            1 1] }.find? }
+                              f.succ)
+                          [{
+                              key :=
+                                { cname := Name.anonymous.str "List", lvls := [Level.zero],
+                                  ds := [Expr.fvar 1 (Expr.sort Level.zero.succ)] },
+                              base := 2 }]
+                          3 [Level.zero] [Expr.fvar 1 (Expr.sort Level.zero.succ)] [Name.anonymous.str "List"]
+                          [Expr.fvar 2 (Expr.sort Level.zero.succ)] []
+                          { keys := __x.snd.snd.snd.keys, active := __x.snd.snd.snd.active,
+                            ctorNfs :=
+                              __x.snd.snd.snd.ctorNfs.push
+                                (nestCtorNf
+                                  { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                                    params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                                    find? :=
+                                      {
+                                          consts :=
+                                            [ConstantInfo.indInfo
+                                                { name := Name.anonymous.str "List",
+                                                  levelParams := [Name.anonymous.str "u"],
+                                                  type :=
+                                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                                  all := [Name.anonymous.str "List"], nparams := 1,
+                                                  ctors :=
+                                                    [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                              ConstantInfo.ctorInfo
+                                                { name := Name.anonymous.str "List.nil",
+                                                  levelParams := [Name.anonymous.str "u"],
+                                                  type :=
+                                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                      ((Expr.const (Name.anonymous.str "List")
+                                                            [Level.param (Name.anonymous.str "u")]).app
+                                                        (Expr.bvar 0))
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                1 0,
+                                              ConstantInfo.ctorInfo
+                                                { name := Name.anonymous.str "List.cons",
+                                                  levelParams := [Name.anonymous.str "u"],
+                                                  type :=
+                                                    (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                      ((Expr.bvar 0).forallE
+                                                        (((Expr.const (Name.anonymous.str "List")
+                                                                  [Level.param (Name.anonymous.str "u")]).app
+                                                              (Expr.bvar 1)).forallE
+                                                          ((Expr.const (Name.anonymous.str "List")
+                                                                [Level.param (Name.anonymous.str "u")]).app
+                                                            (Expr.bvar 2))
+                                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                1 2,
+                                              ConstantInfo.indInfo
+                                                { name := Name.anonymous.str "Tree2", levelParams := [],
+                                                  type :=
+                                                    (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                                  all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                                  ctors :=
+                                                    [Name.anonymous.str "Tree2.leaf",
+                                                      Name.anonymous.str "Tree2.node"] },
+                                              ConstantInfo.ctorInfo
+                                                { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                                  type :=
+                                                    (Expr.sort Level.zero.succ).forallE
+                                                      ((Expr.bvar 0).forallE
+                                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                1 1,
+                                              ConstantInfo.ctorInfo
+                                                { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                                  type :=
+                                                    (Expr.sort Level.zero.succ).forallE
+                                                      (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                            ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                              ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                                (Expr.bvar 0)))).forallE
+                                                        ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                      { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                                1 1] }.find? }
+                                  [{
+                                      key :=
+                                        { cname := Name.anonymous.str "List", lvls := [Level.zero],
+                                          ds := [Expr.fvar 1 (Expr.sort Level.zero.succ)] },
+                                      base := 2 }]
+                                  3 [Level.zero] [Expr.fvar 1 (Expr.sort Level.zero.succ)]
+                                  { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        ((Expr.bvar 0).forallE
+                                          (((Expr.const (Name.anonymous.str "List")
+                                                    [Level.param (Name.anonymous.str "u")]).app
+                                                (Expr.bvar 1)).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 2))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  __x.snd.fst __x.snd.snd.fst) }
+                    pure ((__x.fst, closeTelescope __x.snd.fst 3 __x.snd.snd.fst) :: __x_1.fst, __x_1.snd)
+                  else do
+                    throw
+                        (CheckError.invalid
+                          "nested positivity: invalid return type — a constructor's result index mentions the block")
+                    let __x_1 ←
+                      nestCtors
+                          { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                            params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                            find? :=
+                              {
+                                  consts :=
+                                    [ConstantInfo.indInfo
+                                        { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                          all := [Name.anonymous.str "List"], nparams := 1,
+                                          ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "List.nil",
+                                          levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              ((Expr.const (Name.anonymous.str "List")
+                                                    [Level.param (Name.anonymous.str "u")]).app
+                                                (Expr.bvar 0))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 0,
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "List.cons",
+                                          levelParams := [Name.anonymous.str "u"],
+                                          type :=
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                              ((Expr.bvar 0).forallE
+                                                (((Expr.const (Name.anonymous.str "List")
+                                                          [Level.param (Name.anonymous.str "u")]).app
+                                                      (Expr.bvar 1)).forallE
+                                                  ((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 2))
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 2,
+                                      ConstantInfo.indInfo
+                                        { name := Name.anonymous.str "Tree2", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                          all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                          ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE
+                                              ((Expr.bvar 0).forallE
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 1,
+                                      ConstantInfo.ctorInfo
+                                        { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                          type :=
+                                            (Expr.sort Level.zero.succ).forallE
+                                              (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                    ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                      ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                        (Expr.bvar 0)))).forallE
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                        1 1] }.find? }
+                          { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                            inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                            isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                            ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                            whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                            orElse := fun x k =>
+                              match x with
+                              | Except.ok true => pure PUnit.unit
+                              | x => k none }
+                          {
+                            consts :=
+                              [ConstantInfo.indInfo
+                                  { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                    all := [Name.anonymous.str "List"], nparams := 1,
+                                    ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        ((Expr.const (Name.anonymous.str "List")
+                                              [Level.param (Name.anonymous.str "u")]).app
+                                          (Expr.bvar 0))
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 0,
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                    type :=
+                                      (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                        ((Expr.bvar 0).forallE
+                                          (((Expr.const (Name.anonymous.str "List")
+                                                    [Level.param (Name.anonymous.str "u")]).app
+                                                (Expr.bvar 1)).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 2))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 2,
+                                ConstantInfo.indInfo
+                                  { name := Name.anonymous.str "Tree2", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                    all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                    ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE
+                                        ((Expr.bvar 0).forallE
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 1,
+                                ConstantInfo.ctorInfo
+                                  { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                    type :=
+                                      (Expr.sort Level.zero.succ).forallE
+                                        (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                              ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                  (Expr.bvar 0)))).forallE
+                                          ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                          { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                        { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                  1 1] }
+                          (fun x =>
+                            nestPos
+                              { annotate := fun env d e => annotateCore CheckMode.verified env 7 d e,
+                                inferType := fun env d e => inferTypeCore CheckMode.verified env 7 d e,
+                                isDefEq := fun env d a b => isDefEqCore CheckMode.verified env 7 d a b,
+                                ensureSort := fun env d e => ensureSortCore CheckMode.verified env 7 d e,
+                                whnf := fun env d e => whnf CheckMode.verified env 7 d e,
+                                orElse := fun x k =>
+                                  match x with
+                                  | Except.ok true => pure PUnit.unit
+                                  | x => k none }
+                              {
+                                consts :=
+                                  [ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "List", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "List"], nparams := 1,
+                                        ctors := [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.nil", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.const (Name.anonymous.str "List")
+                                                  [Level.param (Name.anonymous.str "u")]).app
+                                              (Expr.bvar 0))
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 0,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "List.cons", levelParams := [Name.anonymous.str "u"],
+                                        type :=
+                                          (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              (((Expr.const (Name.anonymous.str "List")
+                                                        [Level.param (Name.anonymous.str "u")]).app
+                                                    (Expr.bvar 1)).forallE
+                                                ((Expr.const (Name.anonymous.str "List")
+                                                      [Level.param (Name.anonymous.str "u")]).app
+                                                  (Expr.bvar 2))
+                                                { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 2,
+                                    ConstantInfo.indInfo
+                                      { name := Name.anonymous.str "Tree2", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE (Expr.sort Level.zero.succ)
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                        all := [Name.anonymous.str "Tree2"], nparams := 1,
+                                        ctors := [Name.anonymous.str "Tree2.leaf", Name.anonymous.str "Tree2.node"] },
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.leaf", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            ((Expr.bvar 0).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1,
+                                    ConstantInfo.ctorInfo
+                                      { name := Name.anonymous.str "Tree2.node", levelParams := [],
+                                        type :=
+                                          (Expr.sort Level.zero.succ).forallE
+                                            (((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                  ((Expr.const (Name.anonymous.str "List") [Level.zero]).app
+                                                    ((Expr.const (Name.anonymous.str "Tree2") []).app
+                                                      (Expr.bvar 0)))).forallE
+                                              ((Expr.const (Name.anonymous.str "Tree2") []).app (Expr.bvar 1))
+                                              { pw := { repr := ConLeche.PropWhenRepr.never✝ } })
+                                            { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                      1 1] }
+                              { names := [Name.anonymous.str "Tree2"], lps := [], nP := 1, nIdxs := [0],
+                                params := [Expr.fvar 0 (Expr.sort Level.zero.succ)], sort := Level.zero.succ,
+                                find? :=
+                                  {
+                                      consts :=
+                                        [ConstantInfo.indInfo
+                                            { name := Name.anonymous.str "List",
+                                              levelParams := [Name.anonymous.str "u"],
+                                              type :=
+                                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                                                  (Expr.sort (Level.param (Name.anonymous.str "u")).succ)
+                                                  { pw := { repr := ConLeche.PropWhenRepr.never✝ } } }
+                                            { sortZ := { repr := ConLeche.PropWhenRepr.never✝ },
+                                              all := [Name.anonymous.str "List"], nparams := 1,
+                                              ctors :=
+                                                [Name.anonymous.str "List.nil", Name.anonymous.str "List.cons"] },
+                                          ConstantInfo.ctorInfo
+                                            { name := Name.anonymous.str "List.nil",
+                                              levelParams := [Name.anonymous.str "u"],
+                                              type :=
+                                                (Expr.sort (Level.param (Name.anonymous.str "u")).succ).forallE
+                     

@@ -1,0 +1,167 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:74:25: error: unsolved goals
+f d : Nat
+st : NestState
+⊢ (match (checker 7).5 (En 2) d (Expr.fvar 0 (Expr.sort Level.zero.succ)) with
+    | Except.error a => Except.error a
+    | Except.ok w =>
+      if (!Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [].length) w) = true then
+        pure
+          (NestFieldKind.ordinary,
+            if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [].length) A = true then w else A, st)
+      else
+        match w with
+        | a.forallE b bm =>
+          have __do_jp := fun __r => do
+            let __x ← nestPos (checker 7) (En 2) (Cn 2) f [] (d + 1) (0 + 1) (b.instantiate1 (Expr.fvar d a)) st
+            match __x with
+              | (k, nb, st) => pure (k, a.forallE (nb.abstract1 d) bm, st);
+          if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [].length) a = true then do
+            let __r ←
+              throw (CheckError.invalid "nested positivity: non positive occurrence of the datatypes being declared")
+            __do_jp __r
+          else __do_jp PUnit.unit
+        | x =>
+          have args := w.getAppArgs;
+          match w.getAppFn with
+          | Expr.fvar i type =>
+            match nestHoleAt (Cn 2) [] i with
+            | some h =>
+              if
+                  ((args.all fun x => !Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [].length) x) &&
+                      args.length + h.key.ds.length == nestArity (Cn 2) h.key.cname) =
+                    true then
+                pure
+                  (if i < (Cn 2).hiAt 0 then
+                      if (0 == 0) = true then NestFieldKind.recursive (i - (Cn 2).nP)
+                      else NestFieldKind.reflexive (i - (Cn 2).nP)
+                    else NestFieldKind.inProgress,
+                    w, st)
+              else throw nestNonValid
+            | none => throw nestNonValid
+          | Expr.const n us =>
+            have __do_jp := fun __r => do
+              let __x ← nestCont (Cn 2) (checker 7) (En 2) (nestPos (checker 7) (En 2) (Cn 2) f) [] 0 n us args st
+              match __x with
+                | (k, st) => pure (k, w, st);
+            if List.elem n (Cn 2).names = true then do
+              let __r ← throw nestNonValid
+              __do_jp __r
+            else __do_jp PUnit.unit
+          | x => throw nestNonValid) =
+    Except.ok (NestFieldKind.ordinary, Expr.fvar 0 (Expr.sort Level.zero.succ), st)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:79:28: error: unsolved goals
+f : Nat
+st : NestState
+⊢ (match (checker 7).5 (En 2) 3 (Expr.fvar 1 (Expr.sort Level.zero.succ)) with
+    | Except.error a => Except.error a
+    | Except.ok w =>
+      if (!Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt 0].length) w) = true then
+        pure
+          (NestFieldKind.ordinary,
+            if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt 0].length) X = true then w else X, st)
+      else
+        match w with
+        | a.forallE b bm =>
+          have __do_jp := fun __r => do
+            let __x ← nestPos (checker 7) (En 2) (Cn 2) f [holeAt 0] (3 + 1) (0 + 1) (b.instantiate1 (Expr.fvar 3 a)) st
+            match __x with
+              | (k, nb, st) => pure (k, a.forallE (nb.abstract1 3) bm, st);
+          if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt 0].length) a = true then do
+            let __r ←
+              throw (CheckError.invalid "nested positivity: non positive occurrence of the datatypes being declared")
+            __do_jp __r
+          else __do_jp PUnit.unit
+        | x =>
+          have args := w.getAppArgs;
+          match w.getAppFn with
+          | Expr.fvar i type =>
+            match nestHoleAt (Cn 2) [holeAt 0] i with
+            | some h =>
+              if
+                  ((args.all fun x => !Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt 0].length) x) &&
+                      args.length + h.key.ds.length == nestArity (Cn 2) h.key.cname) =
+                    true then
+                pure
+                  (if i < (Cn 2).hiAt 0 then
+                      if (0 == 0) = true then NestFieldKind.recursive (i - (Cn 2).nP)
+                      else NestFieldKind.reflexive (i - (Cn 2).nP)
+                    else NestFieldKind.inProgress,
+                    w, st)
+              else throw nestNonValid
+            | none => throw nestNonValid
+          | Expr.const n us =>
+            have __do_jp := fun __r => do
+              let __x ←
+                nestCont (Cn 2) (checker 7) (En 2) (nestPos (checker 7) (En 2) (Cn 2) f) [holeAt 0] 0 n us args st
+              match __x with
+                | (k, st) => pure (k, w, st);
+            if List.elem n (Cn 2).names = true then do
+              let __r ← throw nestNonValid
+              __do_jp __r
+            else __do_jp PUnit.unit
+          | x => throw nestNonValid) =
+    Except.ok (NestFieldKind.recursive 0, Expr.fvar 1 (Expr.sort Level.zero.succ), st)
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Observation.lean:84:27: error: unsolved goals
+f k : Nat
+st : NestState
+⊢ (match (checker 7).5 (En 2) 4 (Expr.fvar 2 (Expr.sort Level.zero.succ)) with
+    | Except.error a => Except.error a
+    | Except.ok w =>
+      if (!Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt k].length) w) = true then
+        pure
+          (NestFieldKind.ordinary,
+            if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt k].length) Y = true then w else Y, st)
+      else
+        match w with
+        | a.forallE b bm =>
+          have __do_jp := fun __r => do
+            let __x ← nestPos (checker 7) (En 2) (Cn 2) f [holeAt k] (4 + 1) (0 + 1) (b.instantiate1 (Expr.fvar 4 a)) st
+            match __x with
+              | (k, nb, st) => pure (k, a.forallE (nb.abstract1 4) bm, st);
+          if Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt k].length) a = true then do
+            let __r ←
+              throw (CheckError.invalid "nested positivity: non positive occurrence of the datatypes being declared")
+            __do_jp __r
+          else __do_jp PUnit.unit
+        | x =>
+          have args := w.getAppArgs;
+          match w.getAppFn with
+          | Expr.fvar i type =>
+            match nestHoleAt (Cn 2) [holeAt k] i with
+            | some h =>
+              if
+                  ((args.all fun x => !Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt [holeAt k].length) x) &&
+                      args.length + h.key.ds.length == nestArity (Cn 2) h.key.cname) =
+                    true then
+                pure
+                  (if i < (Cn 2).hiAt 0 then
+                      if (0 == 0) = true then NestFieldKind.recursive (i - (Cn 2).nP)
+                      else NestFieldKind.reflexive (i - (Cn 2).nP)
+                    else NestFieldKind.inProgress,
+                    w, st)
+              else throw nestNonValid
+            | none => throw nestNonValid
+          | Expr.const n us =>
+            have __do_jp := fun __r => do
+              let __x ←
+                nestCont (Cn 2) (checker 7) (En 2) (nestPos (checker 7) (En 2) (Cn 2) f) [holeAt k] 0 n us args st
+              match __x with
+                | (k, st) => pure (k, w, st);
+            if List.elem n (Cn 2).names = true then do
+              let __r ← throw nestNonValid
+              __do_jp __r
+            else __do_jp PUnit.unit
+          | x => throw nestNonValid) =
+    Except.ok (NestFieldKind.inProgress, Expr.fvar 2 (Expr.sort Level.zero.succ), st)
+'_private.Tree2Observation.0.Tree2Observation.ordinary_run' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.Tree2Observation.0.Tree2Observation.member_run' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'_private.Tree2Observation.0.Tree2Observation.self_run' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
