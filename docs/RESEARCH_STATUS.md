@@ -3345,8 +3345,8 @@ No further grammar, output, value/fold or completeness expansion is selected.
 
 Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
 The existing [source-preparation plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md)
-is restored READY and unstarted. The canonical queue has zero ACTIVE campaigns
-and one READY item. This disposition does not execute that successor, launch
+is restored READY and unstarted. The canonical queue retains one READY item
+and has zero ACTIVE campaigns. This disposition does not execute that successor, launch
 a checker or build, or authorize upstream outreach. The original
 [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all closed trial
 reports remain historical evidence.
