@@ -1,0 +1,63 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Execution.lean:443:5: error: Tactic `rewrite` failed: Did not find an occurrence of the pattern
+  decide ([l X].length < 1) || !(List.drop 1 [l X]).all fun x => !Expr.nestOcc ⋯ ⋯ ⋯ x
+in the target expression
+  (if (decide ⋯ || !⋯) = true then do
+      throw nestNonValid
+      if ⋯ = true then do
+          ⋯
+          ⋯
+        else if ⋯ then ⋯ else ⋯
+    else
+      if (Ln == quotName) = true then do
+        throw nestNonValid
+        if ⋯ then ⋯ else ⋯
+      else
+        if ⋯ = true then do
+          let ni ← ⋯
+          ⋯
+        else do
+          ⋯
+          let ni ← ⋯
+          ⋯) =
+    Except.ok (NestFieldKind.nested false, { keys := ⋯.toArray, ctorNfs := ⋯.push outerCons })
+
+f : Nat
+ns : Array NestCtorNf
+hfirst : (decide ([⋯, ⋯].length < 1) || !(List.drop 1 [⋯, ⋯]).all fun x => !⋯) = false
+hquot : (Ln == quotName) = false
+hp : ((List.take 1 [l X]).all fun x => x.bvarB == 0 && decide (⋯ ≤ ⋯)) = true
+hi :
+  nestInstType (Cn 2) ((Cn 2).hiAt 0) { cname := Ln, lvls := [Level.zero], ds := List.take 1 [l X] } = Except.ok (0, S)
+⊢ (if (decide ⋯ || !⋯) = true then do
+      throw nestNonValid
+      if ⋯ = true then do
+          ⋯
+          ⋯
+        else if ⋯ then ⋯ else ⋯
+    else
+      if (Ln == quotName) = true then do
+        throw nestNonValid
+        if ⋯ then ⋯ else ⋯
+      else
+        if ⋯ = true then do
+          let ni ← ⋯
+          ⋯
+        else do
+          ⋯
+          let ni ← ⋯
+          ⋯) =
+    Except.ok (NestFieldKind.nested false, { keys := ⋯.toArray, ctorNfs := ⋯.push outerCons })
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Execution.lean:467:78: error: Type mismatch
+  tower_occ 2 2 ?m.75
+has type
+  Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt (List.length ?m.75)) (tower 2) = true
+but is expected to have type
+  Expr.nestOcc (Cn 2).names (Cn 2).nP ((Cn 2).hiAt 0) (l (l X)) = true
+'Tree2Execution.outer_ctors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Execution.outer_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.outer_new' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.outer_cont' depends on axioms: [propext,
+ sorryAx,
+ Classical.choice,
+ Quot.sound]
+'Tree2Execution.outer_run' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

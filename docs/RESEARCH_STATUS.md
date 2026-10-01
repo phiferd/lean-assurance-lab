@@ -3308,13 +3308,24 @@ checker emits those records. This campaign stays ACTIVE for a newly recorded
 staged output trial, not a fold trial. See the human-readable
 [overview](TREE2_CORRESPONDENCE.md) and
 [checkpoint](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/checkpoint.json).
-A subsequent [staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
-is OPEN: four fixed-N=2 actual inner execution equations now check through
-nestFields, nestCtors, nestFrame and nestContNew. Fresh replay and independent
-source review pass. The inner caller, outer frame and full root observation
-remain to be composed; see its
+The subsequent [staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
+is now COMPLETE (E0 NO_SIGNAL, no mismatch): exact fixed-N2 native output,
+automatic walk fuels and official replacement of its actual six returned records
+are Lean-checked. `fixed_bridge` packages exact official fuel4 lowering,
+constructed native PosDR index3 and the returned-record equation. Fresh four-
+module replay and independent AI source review pass; all printed theorem axioms
+are the standard three. See its
 [checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json).
-No fold trial or external action has started.
+The campaign remains the single ACTIVE selection for the owner's expanded
+restricted List-tower endpoint: arbitrary-depth actual output, signature-linked
+inverse value translations and general compatible-algebra fold preservation.
+Those expanded results remain unproved. The owner now prioritizes parked-
+completeness source fit before generalization/folds: the
+[checked blueprint and missing-lemma map](../explorations/runs/EXPLORE-TREE2-COMPLETENESS-FIT-1/report.md)
+make the official acceptance-to-PosDR gap explicit. Assembly checks; that gap is
+not solved. The canonical family conditional has an unused official premise.
+No value/fold trial or external action has started. Production lowering/recursor
+fidelity stays an explicit boundary.
 
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.

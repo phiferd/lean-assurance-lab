@@ -4,8 +4,9 @@ A checked theorem now relates the constructor shapes used by two different
 representations of a restricted nested datatype. That is useful because an
 agreement about constructor structure can expose an error that another accepted
 example would miss. It is not yet an agreement about values or computation.
-The current continuation asks whether the native checker returns the same
-structure it is subsequently supposed to use for recursors.
+The depth-two continuation now proves the exact returned structure and its
+constructor-type lowering. The active continuation targets arbitrary depth,
+then inverse value translations and general fold preservation.
 
 This is local AI-authored research for human review. The existing proof archive
 is published; the continuation and this overview await separate publication
@@ -120,61 +121,114 @@ must therefore stay distinguishable even though they have the same name.
 F=7 and asks for the actual complete returned observation and a connection to
 the six lowered rows. Expected key order is inner List then outer List;
 expected record order is leaf, outer nil, inner nil, inner cons, outer cons,
-node. The full returned observation remains unproved. The smaller checked result below
-relates supplied candidate telescopes to exact output expressions; it does not
-assert that the full checker produced those telescopes or that record order.
+node. The staged proof below now certifies that complete observation and its
+connection to the actual six lowered constructor types. The earlier supplied-
+telescope theorem remains useful and retains its original, smaller claim.
 
 Existing general recorded-constructor and recursor laws are reusable, but their
 well-scoped environment, derivation and stage hypotheses must be discharged.
 They are not automatically supplied by an existential successful walk.
 
-## Staged execution checkpoint: fixed Tree2
+## Exact execution and lowering: fixed Tree2
 
-The [new staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
-now connects supplied expressions to actual execution for the **inner** List
-frame. This continuation fixes N=2 and verified pure Core fuel 7; unlike the
-original representation package, it is not an all-N returned-output theorem.
+The [staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
+now proves the complete fixed-N=2 output with verified pure Core fuel 7.
+[Tree2Execution.actual_output](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/final/Tree2Execution.lean)
+says exactly:
 
-[Tree2Execution.lean](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/Tree2Execution.lean)
-contains four checked public statements:
+```lean
+nestedBlockPositivity (checker 7) (En 2) (Cn 2) [roots 2]
+  = .ok Tree2Execution.expected
+```
 
-- `inner_fields` executes the actual two-field telescope, returning recursive
-  Tree and in-progress inner self kinds with exact walked field/result types.
-- `inner_ctors` executes both actual List constructors for any initial state
-  and natural fuel excess. It returns their exact kinds and walked types,
-  appending exactly the inner nil and cons records to the existing prefix.
-- `inner_frame` runs the actual frame's key typing and constructor lookup,
-  then emits that exact two-record update. The progress stack is empty here.
-- `inner_new` starts at actual `nestContNew`, with the fixed inner key and S
-  as its supplied former. It preserves the active outer key, emits the two
-  inner records and caches exactly the inner key. It does not yet prove that
-  enclosing `nestPos` reaches this helper call.
+The independently specified result has child-first keys (inner, outer), root
+kinds ordinary/nested, exact leaf/node normal forms, and six constructor records
+in order leaf, outer nil, inner nil, inner cons, outer cons, node. Intermediate
+lemmas execute the real inner and outer fields, constructors, frames and caller
+guards; the root composition uses the actual automatic walk budgets 1026 and
+1028. These are separate from pure Core fuel 7 and PosDR index 3.
 
-These execution statements have no emitted-telescope, acceptance, PosDR or
-successful-Core-operation premise. They use the exact environment and proved
-finite Core facts. Independent AI source review accepted their restricted,
-non-circular scope. A fresh compile passed in 1.466 seconds with sampled peak
-RSS 1.415 GB, with all historical cache hashes reverified and cleanup complete.
-All four public statements and the private nil/cons dependencies report only
-`propext`, `Classical.choice`, and `Quot.sound`.
+[Tree2ObservationBridge.actual_lowering](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/final/Tree2ObservationBridge.lean)
+first runs that checker, then groups the **returned** constructor types in
+Tree/Rows/Children order and runs real `Official.replaceAll`. It returns exactly
+all six constructor types of `target 2`, with that completed allocation state
+unchanged. Its `fixed_bridge` packages this equation with the exact official
+queue-fuel-4 lowering, constructed native PosDR index 3 and exact observation.
+No emitted-record, acceptance, PosDR or successful-Core-operation assumption is
+used. This closes the fixed-depth input/output seam rather than adding another
+acceptance example. No novelty claim follows without broader literature review.
 
-The proof avoids the previous expansion problem by preserving original checker
-calls and using monad laws, then separate finite typing, guard and readback
-facts. Twenty-four retained revisions cost 481.799 seconds in aggregate;
-seven hit RSS safety limits, and every process was cleaned up. These counts are
-observations, not a stopping budget. Rejected proofs are not accepted evidence.
+A fresh four-module replay compiled the fuel helper, execution proof, existing
+readback and final bridge in 5.761 seconds total, peak sampled RSS 1.472 GB.
+The pinned compiler and all 108 historical import hashes were verified before
+compilation; dependency logs show the new helper/execution/readback artifacts
+resolved from this fresh directory. Every replay process cleaned up. All printed
+accepted theorems have only `propext`, `Classical.choice` and `Quot.sound`.
+The 52 retained compile revisions cost 910.442 seconds, including 13 RSS safety
+interruptions; all cleanup completed. Failed elaborations with automatic
+`sorryAx` remain rejected evidence. Counts are cost observations, not limits.
 
-The staged trial remains OPEN and the single Tree2 campaign ACTIVE. The exact
-remaining path is the inner caller, outer frame/constructors, root leaf/node
-composition, and actual automatic walk fuels. Only then can we identify all
-returned keys, kinds, normals and six records. No source-model mismatch has
-been observed. Fold work remains conditional and unstarted.
+The fuel helper uses an identifier-only macro to name the pinned imported
+private `Tree2TowerWalk.depth_eq_height` theorem. It creates no oracle or axiom:
+Lean checks the resulting proof term normally. That private declaration name is
+an explicit portability dependency on the pinned module identity. No
+`native_decide`, `sorry`, `admit` or new axiom appears in accepted final sources.
 
-See the [checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json),
-[axiom output](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-replay/compile-stdout.log)
-and [independent review](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/independent-review.md).
-The earlier delivered Library overview remains version 0; this local update
-has not been uploaded or published.
+The [checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json),
+[fresh axiom output](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-final-replay/Tree2ObservationBridge-compile-stdout.log)
+and [final independent AI review](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/independent-review-final.md)
+retain the evidence. This fixed trial is COMPLETE with E0 NO_SIGNAL: no
+source-model mismatch was found; the mathematical bridge was proved. The one
+Tree2 campaign remains ACTIVE for the owner's expanded endpoint. Earlier
+inner-only evidence and the original INCONCLUSIVE trial remain historical.
+The delivered Library overview still has identity
+`libfile_14f671019e4c8191b23aa2e52406a215`, version 0; this update is local only.
+
+## Current priority: fit with parked completeness
+
+The owner has prioritized source-level completeness fit before generalization
+and folds. The [fit analysis and exact lemma map](../explorations/runs/EXPLORE-TREE2-COMPLETENESS-FIT-1/report.md)
+inspects the real `OfficialPosAccepts`, `posDR_run` and root wrapper. A fresh
+checked blueprint exposes the missing acceptance-to-PosDR converter as an
+explicit parameter. It proves assembly, not that converter. The canonical
+all-depth family already has unconditional native derivations and success, so
+its literal conditional official-to-native corollary has an unused official
+premise and adds no acceptance-driven general completeness result.
+
+A significant target detail is separate constructor budgeting: assigning one
+N+1 derivation index to every constructor fails the leaf budget for sufficiently
+large N, while separate leaf1/nodeN+1 proofs already compose correctly. The fit
+report states the oracle/environment, lowering inverse, side-check, freshness,
+stack and budget obligations precisely. No production theorem or upstream
+contributor invitation is inferred. No external action is authorized.
+
+## Expanded endpoint and dependencies
+
+For this restricted List-tower family, sufficient model correspondence needs:
+
+1. An exact returned-output and returned-record lowering theorem for every
+   natural depth, including zero, with explicit sufficient Core fuel and exact
+   key/record ordering. Existing all-depth acceptance and input-crest decoding
+   do not imply that equation.
+2. Independently specified nested and lowered value models tied to those proved
+   constructor signatures and allocation/frame meanings, with translations in
+   both directions and both inverse laws. Handwritten lookalike datatypes alone
+   would leave this connection missing. Group boundaries and empty rows matter.
+3. Fold preservation for arbitrary result types and compatible leaf/node/list
+   operations. Leaf counting is only an example, not the general theorem.
+
+After the prioritized completeness fit assessment, the deferred output proof
+question is induction over actual List-frame discovery and the
+record-prefix updates; the finite composition suggests the right boundaries,
+while the required all-depth state invariant is still unproved. The prospective
+next trial must record that invariant and stop criteria before compiling.
+Value/fold execution has not started. These obligations are substantive proof
+work; no elapsed-time promise is inferred from the small fresh replay.
+
+Completing them would support a restricted simplified-model equivalence claim.
+Production lowering fidelity, installed/generated recursor correctness and
+compiled-checker parity remain separately identified obligations. The campaign
+will not silently expand to unrestricted datatypes or dependent/indexed fields.
 
 ## Trust and remaining gaps
 
@@ -193,8 +247,8 @@ are acknowledged; another accepted example alone would add little value.
 
 A later value theorem should preserve group boundaries and connect encoding,
 decoding and the node fold equation `fold(node xss) = b(map(map fold) xss)`.
-That equation is a goal, not a present result. Even proving it for independently
-written datatypes would still require a connection to actual generated recursors.
+That equation is a goal, not a present result. A production/generated-recursors claim would additionally require a connection
+to actual generated recursors; that is separate from the restricted model endpoint.
 
 ## Reproduction and pilot outcome
 
@@ -215,12 +269,10 @@ The continuation has checked three finite lemmas in
 
 This is a useful intermediate result: it connects exact constructor expressions
 through the frame-sensitive readback function and existing lowering code. It is
-stronger than counting constructors or showing another accepted example. It
-remains weaker than the original pilot goal: the full walk must still be shown
-to generate those telescopes and append those records, together with its keys,
-kinds and normals. No missing premise is disguised as an arbitrary environment
-oracle. The immediate gap is composing the finite checker calls into an exact
-returned-state equation; no mathematical counterexample has been observed.
+stronger than counting constructors or showing another accepted example. At that earlier checkpoint, it remained weaker than the original pilot goal.
+The subsequent staged trial above has now proved the full walk generates those
+records, together with its keys, kinds and normals. The earlier trial closure
+is preserved; no mathematical counterexample has been observed.
 
 A fresh affected-module replay succeeded in 1.309 seconds with sampled peak RSS
 1.410 GB and cleanup complete. All 108 existing cached module hashes were
@@ -243,7 +295,8 @@ cost accounting, not an attempt budget or a reason to end the active campaign.
 The staged output trial described above exposes one container/frame
 boundary at a time and rewrites its exact Core and field-walk facts.
 Broad `cbv` reduction expanded environments before certificate matching and
-proved unsuitable here. Conditional value/fold work has not begun. The canonical
+proved unsuitable here. The fixed output composition now succeeds; expanded value/fold work has not
+begun. The canonical
 queue keeps this one scientific campaign ACTIVE; alias work remains deferred.
 
 The following invocation was executed successfully from the lab checkout on the
@@ -271,3 +324,17 @@ To replay the execution checkpoint with the same verified compiler/cache, use
 a fresh nonexistent destination. This exact invocation was verified with
 `--destination explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-replay`;
 the other flags are the compiler/cache paths in the command above.
+
+To replay the complete fixed bridge, use the retained `replay-v2.py` (the earlier
+one-module runner and replay remain unchanged):
+
+```sh
+python3 explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/replay-v2.py \
+  --compiler /Users/danphifer/.elan/toolchains/leanprover--lean4---v4.33.0/bin/lean \
+  --cache /Users/danphifer/Documents/Codex/2026-09-30/task-4/confirmation-fresh \
+  --source explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/final \
+  --destination explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-final-replay-2
+```
+
+Use a new nonexistent destination. The executed replay is `fresh-final-replay`;
+no full lab E2 closure or clean upstream rebuild is claimed for this pilot.
