@@ -13,6 +13,25 @@ ROOT = Path(__file__).resolve().parents[1]
 
 
 class EvidenceReplayInventoryTests(unittest.TestCase):
+    def test_lean_action_successor_mapping_is_specific(self):
+        groups, _ = audit.discover(ROOT)
+        registry = json.loads((ROOT / "config/evidence-replay-portability.json").read_text())
+        self.assertEqual(audit.validate_registration(ROOT, groups, registry), 18)
+        changed = copy.deepcopy(registry)
+        row = next(row for row in changed["families"]
+                   if row["id"] == "lean-action-regression-preparation-1")
+        row["portability_test"] = "test_evidence_replay_portability.EvidenceReplayPortabilityTests.test_resource_envelope_replay_without_original_checkout_or_host_tools"
+        with self.assertRaisesRegex(ValueError, "missing dedicated portability test"):
+            audit.validate_registration(ROOT, groups, changed)
+        changed = copy.deepcopy(registry)
+        lean = next(row for row in changed["families"]
+                    if row["id"] == "lean-action-regression-preparation-1")
+        other = next(row for row in changed["families"]
+                     if row["id"] == "binder-model-pilot-1")
+        other["portability_test"] = lean["portability_test"]
+        with self.assertRaisesRegex(ValueError, "missing dedicated portability test"):
+            audit.validate_registration(ROOT, groups, changed)
+
     def test_repository_receipts_and_registered_replay_tests_are_current(self):
         result = audit.validate(ROOT)
         self.assertEqual(result["families"], 18)

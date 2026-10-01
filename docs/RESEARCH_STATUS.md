@@ -3268,7 +3268,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
 The canonical queue retains one READY item and zero ACTIVE items.
-Lean-action regression preparation has26 fresh reviewed shell/model controls and two local comment/patch candidates. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
+Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 Actual checker parity, YAML workflow execution and host-security effects remain untested.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
 The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.

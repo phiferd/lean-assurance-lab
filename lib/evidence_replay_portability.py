@@ -145,6 +145,8 @@ def validate_registration(root: Path, groups, registry):
         portable = row["portability_test"]
         portable_prefix = ("test_resource_envelope_closure_portability."
                            if family == "resource-envelope-closure-controls"
+                           else "test_evidence_replay_portability_lean_action."
+                           if family == "lean-action-regression-preparation-1"
                            else "test_evidence_replay_portability.")
         if family not in BASELINE_FAMILIES and portable is None:
             raise ValueError(f"new receipt family needs a portability test: {family}")

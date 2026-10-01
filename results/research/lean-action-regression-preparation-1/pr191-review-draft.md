@@ -1,3 +1,11 @@
+# INTERNAL HISTORICAL DRAFT — NOT FOR POSTING
+
+AI-authored text below is retained only as historical local work. It is not submission material or a proposed community comment. This notice supersedes earlier references to user approval for posting these drafts. Technical evidence and patches are local material for human understanding and independent manual review.
+
+Public community guidelines prohibit LLM-written GitHub/Zulip comments: https://leanprover-community.github.io/community_guidelines.html . The target CONTRIBUTING guide links to Lean4 PR submission rules, requiring AI assistance disclosure and manual checking and stating solely AI-authored PRs are unwelcome: https://github.com/leanprover/lean-action/blob/main/CONTRIBUTING.md ; https://github.com/leanprover/lean4/blob/master/CONTRIBUTING.md . No automatic patch sharing, comment, appeal, reposting, publication or external action is authorized.
+
+---
+
 When setup is needed, the guard checks one policy pathname while the writer uses another. The original branch overwrites an existing destination-file fixture in the synthetic model; the patch refuses it and preserves its bytes. This is worth fixing to honor the existing-policy refusal. Check both policy filenames before writing.
 
 Private standalone review draft for [lean-action PR191](https://github.com/leanprover/lean-action/pull/191), head `686ffeb3765c6bf5edfb3193ac5cb6a46d2ac345` (stacked on PR190). Not sent; publication requires separate approval and applicable E2 gates.

@@ -13,7 +13,7 @@ from lib.resource_envelope_legacy_portability import historical_attempt_scope
 
 if __name__ == "__main__":
     suite = unittest.defaultTestLoader.discover(
-        str(ROOT / "tests"), pattern="test_evidence_replay_portability.py")
+        str(ROOT / "tests"), pattern="test_evidence_replay_portability*.py")
     with historical_attempt_scope():
         result = unittest.TextTestRunner(verbosity=2).run(suite)
     raise SystemExit(0 if result.wasSuccessful() else 1)

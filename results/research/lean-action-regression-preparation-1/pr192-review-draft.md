@@ -1,3 +1,11 @@
+# INTERNAL HISTORICAL DRAFT — NOT FOR POSTING
+
+AI-authored text below is retained only as historical local work. It is not submission material or a proposed community comment. This notice supersedes earlier references to user approval for posting these drafts. Technical evidence and patches are local material for human understanding and independent manual review.
+
+Public community guidelines prohibit LLM-written GitHub/Zulip comments: https://leanprover-community.github.io/community_guidelines.html . The target CONTRIBUTING guide links to Lean4 PR submission rules, requiring AI assistance disclosure and manual checking and stating solely AI-authored PRs are unwelcome: https://github.com/leanprover/lean-action/blob/main/CONTRIBUTING.md ; https://github.com/leanprover/lean4/blob/master/CONTRIBUTING.md . No automatic patch sharing, comment, appeal, reposting, publication or external action is authorized.
+
+---
+
 The current directory assertion can pass after a successful source fallback, because the action removes those directories before the assertion runs. This is worth fixing: avoiding the source build is the behavior this test promises to protect. Replace it with observations of tool invocations that survive cleanup.
 
 Private standalone review draft for [lean-action PR192](https://github.com/leanprover/lean-action/pull/192), head `209c085c3370c2fbae9e8bdfc87955f0c49a1082`. Not sent; publication requires separate approval and applicable E2 gates.
