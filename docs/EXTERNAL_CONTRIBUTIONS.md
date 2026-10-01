@@ -4,12 +4,12 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-09-23**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-10-01**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
 - Awaiting upstream: **3**
-- Local drafts: **6**
+- Local drafts: **8**
 - Merged: **4**
 
 ## Awaiting upstream
@@ -30,6 +30,8 @@ Ledger updated: **2026-09-23**. Upstream states are dated observations, not a li
 | [test: cover String reconstruction shape and configuration boundaries](../results/action-recommendations/drafts/nanoda-string-reconstruction-tests-pr.md) | `ammkrn/nanoda_lib` | `NANODA-STRING-RECONSTRUCTION-TEST-1` | — | Keep this preventive internal String reconstruction patch and other local candidates on hold while Nanoda #32/#33 await acknowledgment. Refresh source, duplicates, rebasing/tests and maintainer capacity before seeking exact owner approval for a PR to ammkrn/nanoda_lib. |
 | [test: cover constructor owner-index validation](../results/action-recommendations/drafts/kiota-constructor-index-regression-pr.md) | `sankalpsthakur/kiota` | `KIOTA-CTOR-INDEX-TEST-1` | — | Before seeking exact approval for a PR to sankalpsthakur/kiota, refresh source, duplicate/open-PR state and maintainer context, rebase and retest if needed, and present the exact tested package for human authorization. |
 | [Historical draft: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Preserved historical draft; superseded for submission by KIOTA-RECURSOR-TYPE-REFINED-PR-DRAFT. |
+| [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/pr192-review-draft.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Private draft for existing PR192: parent review, applicable full lab/E2 gates, fresh source preflight and exact human approval before any external comment. |
+| [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/pr191-review-draft.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Private draft for existing PR191: parent review, applicable full lab/E2 gates, fresh source preflight and exact human approval before any external comment. |
 
 ## Merged
 

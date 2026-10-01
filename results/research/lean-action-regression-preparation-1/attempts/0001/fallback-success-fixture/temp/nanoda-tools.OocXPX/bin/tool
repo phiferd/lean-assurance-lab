@@ -1,0 +1,40 @@
+#!/usr/bin/env bash
+set -euo pipefail
+record() { printf '%s\n' "$1" >> "${NANODA_TOOL_TRACE_DIR:?}/invocations"; }
+case "${0##*/}" in
+  elan)
+    if [ "${1:-}" = which ] && [ "${2:-}" = leanexport ]; then
+      "$NANODA_OBSERVED_ELAN" "$@" >/dev/null
+      printf '%s\n' "$NANODA_TOOL_TRACE_DIR/bin/leanexport"
+    elif [ "${1:-}" = which ] && [ "${2:-}" = nanoda_bin ]; then
+      "$NANODA_OBSERVED_ELAN" "$@" >/dev/null
+      printf '%s\n' "$NANODA_TOOL_TRACE_DIR/bin/nanoda_bin"
+    else
+      exec "$NANODA_OBSERVED_ELAN" "$@"
+    fi ;;
+  leanexport) record bundled-exporter; exec "$NANODA_OBSERVED_EXPORTER" "$@" ;;
+  nanoda_bin) record bundled-checker; exec "$NANODA_OBSERVED_CHECKER" "$@" ;;
+  git)
+    if [ "${1:-}" = clone ]; then
+      for arg in "$@"; do
+        case "$arg" in
+          https://github.com/leanprover/lean4export.git|https://github.com/ammkrn/nanoda_lib.git)
+            record forbidden-source-clone
+            if [ "${NANODA_TEST_ALLOW_FALLBACK:-false}" != true ]; then
+              echo 'Unexpected nanoda source clone in bundled-binaries test' >&2; exit 37
+            fi ;;
+        esac
+      done
+    fi
+    exec "$NANODA_OBSERVED_GIT" "$@" ;;
+  cargo)
+    if [ "${1:-}" = build ]; then
+      record forbidden-source-build
+      if [ "${NANODA_TEST_ALLOW_FALLBACK:-false}" != true ]; then
+        echo 'Unexpected Cargo build in bundled-binaries test' >&2; exit 37
+      fi
+    fi
+    test -n "$NANODA_OBSERVED_CARGO"
+    exec "$NANODA_OBSERVED_CARGO" "$@" ;;
+  *) exit 98 ;;
+esac

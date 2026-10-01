@@ -1,0 +1,1 @@
+exec /bin/bash "/Users/danphifer/Documents/Codex/2026-09-30/task-3/lab/results/research/lean-action-regression-preparation-1/observe_nanoda_tools.sh" --check
