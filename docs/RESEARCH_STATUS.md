@@ -3343,7 +3343,7 @@ The earlier claim about a missing general bridge described pinned main only;
 it did not establish absence from upstream's preserved branch.
 No further grammar, output, value/fold or completeness expansion is selected.
 
-Selected next item: `E0-NANODA-CONGRUENCE-FAULT-PILOT-1`.
+Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
 The existing [source-preparation plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md)
 is restored READY and unstarted. The canonical queue retains one READY item
 and has zero ACTIVE campaigns. This disposition does not execute that successor, launch
@@ -3357,6 +3357,16 @@ constant-application congruence fault against a preregistered invalid declaratio
 matched valid control and existing corpus. `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`
 is DEFERRED without execution while this campaign is active. No Nanoda upstream
 write, broad mutation campaign, checker-defect claim or security claim is authorized.
+
+`E0-NANODA-CONGRUENCE-FAULT-PILOT-1` completed with E0 SIGNAL on 2026-10-01.
+At current Nanoda `3a240721`, the clean checker accepted the valid control and
+rejected the invalid `F A`/`F B` declaration; the one-conjunct intentional fault
+accepted both. All 44 existing active tests passed under the fault. A minimal
+three-file regression passes baseline, fails under the fault, and the baseline
+full suite passes 45/45; independent scientific review passed. This is a local
+test-sensitivity result, not a production checker defect or Lean vulnerability.
+No upstream action occurred. The canonical queue again selects
+`LEAN-ETA-ALIAS-PILOT-PREPARATION-1` READY and unstarted with zero ACTIVE campaigns.
 
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.
