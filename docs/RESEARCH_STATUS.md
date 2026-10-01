@@ -3266,6 +3266,8 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
+The canonical queue retains one READY item, selected and unstarted.
+
 Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
 The canonical queue retains one READY item and zero ACTIVE items.
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
