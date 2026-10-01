@@ -3266,14 +3266,13 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `LEAN-ACTION-REGRESSION-PREPARATION-1`.
-The canonical queue retains zero READY items and one ACTIVE item.
-Lean-action campaign closes E0 SIGNAL:13 completed mocked shell controls; matching configurations and expected exit/reporting behavior; cleanup defeats PR192 no-source-build assertion; PR191 policy guard/write path mismatch is source-only.
-Actual checker axiom parity remains INCONCLUSIVE without exact4.35.0-rc2.
-[Scoped finding and raw attempts](../explorations/runs/EXPLORE-LEAN-ACTION-1/summary.md).
-Fresh regression preparation is ACTIVE under [the plan](research/LEAN_ACTION_REGRESSION_PREPARATION_1_PLAN.md).
-`LEAN-ETA-ALIAS-PILOT-PREPARATION-1` remains DEFERRED and unstarted; its scope is unchanged.
-No publication, upstream message or privileged security change occurred.
+Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
+The canonical queue retains one READY item and zero ACTIVE items.
+Lean-action regression preparation has26 fresh reviewed shell/model controls and two local comment/patch candidates. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
+Actual checker parity, YAML workflow execution and host-security effects remain untested.
+[Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
+The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
+No external message, main push or privileged security setting change is authorized.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
