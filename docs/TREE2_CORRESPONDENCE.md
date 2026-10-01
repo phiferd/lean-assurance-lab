@@ -1,18 +1,18 @@
 # What a nested tree means to two positivity models
 
-A checked theorem now relates the constructor shapes used by two different
-representations of a restricted nested datatype. That is useful because an
-agreement about constructor structure can expose an error that another accepted
-example would miss. It is not yet an agreement about values or computation.
-The depth-two continuation proves the exact returned structure and its
-constructor-type lowering. The newest result covers every List depth for a
-restricted function field. The domain can now be any finite nondependent
-function type built from alpha and Tree alpha. Structural induction proves
-that actual official acceptance excludes every Tree occurrence in that domain
-and supplies the native occurrence-free and typing facts needed to construct
-positivity. The positive branch is proved for every admitted domain and depth.
-Containers inside domains, arbitrary derivation reconstruction and value/fold
-goals remain open. See the [structural domain report](../explorations/runs/EXPLORE-TREE2-DOMAIN-GRAMMAR-1/report.md).
+The checked results relate restricted constructor representations and prove
+model positivity for fixed schemas and a structural function-domain family.
+Their downstream usefulness was tested and **not demonstrated**. The actual
+preserved upstream completeness branch already proves the general occurrence,
+substitution and restoration facts; our specialized equations do not discharge
+its remaining simulation, typing, freshness or key-restriction premises.
+
+The Tree2 campaign is stopped and retained as a checked model case study. No
+further grammar, output, fold or proof-framework expansion is selected. The
+[utility disposition](../results/research/tree2-utility-disposition-1/report.md)
+corrects the earlier target-fit rationale while preserving every historical
+proof, outcome and review. The descriptions below document achieved results
+and earlier unexecuted proposals; they do not authorize additional research.
 
 This is local AI-authored research for human review. The owner authorized lab publication of the continuation on 2026-10-01;
 upstream submissions and community messages remain unauthorized. There is no unsupported claim that this theorem is novel research or
@@ -113,7 +113,7 @@ proved for this environment, rather than assumed for arbitrary lookups.
 Inferred sorts can contain `imax`; no unsupported syntactic replacement by
 `Sort 1` is made.
 
-## The current continuation: input shape versus returned output
+## Historical continuation: input shape versus returned output
 
 The existing `nativeRows` function interprets **input constructor crests**.
 Its success theorem says there exists a returned record, without identifying
@@ -183,29 +183,26 @@ The [checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.j
 [fresh axiom output](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-final-replay/Tree2ObservationBridge-compile-stdout.log)
 and [final independent AI review](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/independent-review-final.md)
 retain the evidence. This fixed trial is COMPLETE with E0 NO_SIGNAL: no
-source-model mismatch was found; the mathematical bridge was proved. The one
-Tree2 campaign remains ACTIVE for the owner's expanded endpoint. Earlier
+source-model mismatch was found; the mathematical bridge was proved. At that checkpoint the Tree2 campaign was ACTIVE for an expanded endpoint;
+that endpoint is now withdrawn and the campaign stopped. Earlier
 inner-only evidence and the original INCONCLUSIVE trial remain historical.
 The delivered Library overview still has identity
 `libfile_14f671019e4c8191b23aa2e52406a215`, version 0; this update is local only.
 
-## Current priority: fit with parked completeness
+## Disposition: no demonstrated upstream reuse
 
-The owner has prioritized source-level completeness fit before generalization
-and folds. The [fit analysis and exact lemma map](../explorations/runs/EXPLORE-TREE2-COMPLETENESS-FIT-1/report.md)
-inspects the real `OfficialPosAccepts`, `posDR_run` and root wrapper. A fresh
-checked blueprint exposes the missing acceptance-to-PosDR converter as an
-explicit parameter. It proves assembly, not that converter. The canonical
-all-depth family already has unconditional native derivations and success, so
-its literal conditional official-to-native corollary has an unused official
-premise and adds no acceptance-driven general completeness result.
+Pinned main contains the official-model spec and native-derivation completeness
+theorem, but no acceptance-driven converter. That is not a claim that upstream
+has no such work: `complete3-parked` preserves an actual acceptance-to-native
+success-or-decline theorem with explicit remaining premises. Its general
+occurrence/substitution/restoration proofs already exist. Our earlier blueprint
+assembled an assumed converter and did not remove any of those premises.
 
-A significant target detail is separate constructor budgeting: assigning one
-N+1 derivation index to every constructor fails the leaf budget for sufficiently
-large N, while separate leaf1/nodeN+1 proofs already compose correctly. The fit
-report states the oracle/environment, lowering inverse, side-check, freshness,
-stack and budget obligations precisely. No production theorem or upstream
-contributor invitation is inferred. No external action is authorized.
+See the [exact target and before/after dependency assessment](../results/research/tree2-utility-disposition-1/report.md).
+Independent source review confirmed no concrete application. The historical
+branch was inspected, not rebuilt. The restricted proofs remain valid; their
+proof quality and broader syntax coverage alone do not establish scientific
+novelty or downstream usefulness.
 
 ## Bounded acceptance-driven result: function outside List2
 
@@ -229,14 +226,14 @@ Fresh Schema/Native/Bridge replay and independent AI review pass; all24 axiom
 reports contain only the standard three. The source proof is
 [Tree2ArrowBridge.lean](../explorations/runs/EXPLORE-TREE2-ACCEPTANCE-BRIDGE-1/sources/final/Tree2ArrowBridge.lean).
 This is a finite two-schema classification plus constructive derivation, not
-general official-derivation reconstruction. The generic half(A) remains open.
+general official-derivation reconstruction. The historical upstream half(A) theorem retains explicit premises; our result does not discharge them.
 The arrow-family result does not identify its full returned observation; the
 previous exact six-record theorem applies to the original Tree2 and is preserved.
-No folds, arbitrary grammar expansion or external action ran. The campaign stays
-ACTIVE; this bounded trial is COMPLETE. Library overview version1 remains the
-prior delivered checkpoint; this newer update is local only.
+No folds, arbitrary grammar expansion or external action ran. At that checkpoint the campaign was ACTIVE and the bounded trial COMPLETE.
+The campaign is now stopped under the utility disposition; Library overview
+version1 remains the older delivered checkpoint.
 
-## Expanded endpoint and dependencies
+## Earlier unexecuted endpoint proposal (withdrawn)
 
 For this restricted List-tower family, sufficient model correspondence needs:
 
@@ -251,18 +248,10 @@ For this restricted List-tower family, sufficient model correspondence needs:
 3. Fold preservation for arbitrary result types and compatible leaf/node/list
    operations. Leaf counting is only an example, not the general theorem.
 
-After the prioritized completeness fit assessment, the deferred output proof
-question is induction over actual List-frame discovery and the
-record-prefix updates; the finite composition suggests the right boundaries,
-while the required all-depth state invariant is still unproved. The prospective
-next trial must record that invariant and stop criteria before compiling.
-Value/fold execution has not started. These obligations are substantive proof
-work; no elapsed-time promise is inferred from the small fresh replay.
-
-Completing them would support a restricted simplified-model equivalence claim.
-Production lowering fidelity, installed/generated recursor correctness and
-compiled-checker parity remain separately identified obligations. The campaign
-will not silently expand to unrestricted datatypes or dependent/indexed fields.
+This endpoint proposal is withdrawn for lack of demonstrated downstream use.
+The list above records unproved obligations, not selected next steps. No value/
+fold trial started. Production lowering, installed recursor correctness and
+compiled-checker parity remain separate claims outside the achieved case study.
 
 ## Trust and remaining gaps
 
@@ -323,15 +312,16 @@ unresolved. The archive preserves 23 source compile revisions (554.832 seconds
 in aggregate), including eight RSS safety interruptions and every rejected
 elaboration. Failed attempts' automatic `sorryAx` reports are never counted as
 proofs. Safety cleanup succeeded for all attempts. A failed replay with a
-relative path is retained alongside the corrected replay. This is observational
-cost accounting, not an attempt budget or a reason to end the active campaign.
+relative path is retained alongside the corrected replay. This is observational cost accounting, not an attempt budget. The later
+utility assessment, rather than these attempt counts, stops the campaign.
 
 The staged output trial described above exposes one container/frame
 boundary at a time and rewrites its exact Core and field-walk facts.
 Broad `cbv` reduction expanded environments before certificate matching and
 proved unsuitable here. The fixed output composition now succeeds; expanded value/fold work has not
 begun. The canonical
-queue keeps this one scientific campaign ACTIVE; alias work remains deferred.
+queue at that checkpoint kept Tree2 ACTIVE and alias work deferred. The
+current queue closes Tree2 and restores alias preparation READY/unstarted.
 
 The following invocation was executed successfully from the lab checkout on the
 connected Mac, with the pinned compiler and historical cache. Substitute a fresh
@@ -382,13 +372,11 @@ finite fuel-case enumeration: checked consumers cover the existing all-depth
 List tower and the fixed function-domain exclusion. This is useful modest
 progress, not an arbitrary-depth function completeness theorem.
 
-The next step is an exact parametric function source environment and a changed
-root-row queue invariant, followed by separate leaf/node native budgets. Existing
-tower and fixed-function environments encode different constructors and cannot
-be substituted silently. See the [checked statements, assumptions, evidence and
-next obligations](../explorations/runs/EXPLORE-TREE2-SYMBOLIC-ASSESSMENT-1/report.md).
+That historical next step led to the retained arrow-tower and domain results.
+The subsequent utility assessment found no remaining upstream obligation they
+discharge; no further scientific step is selected here.
 All seven new axiom reports use only propext, Classical.choice and Quot.sound;
-fresh replay and independent review pass. The same campaign remains ACTIVE.
+fresh replay and independent review passed at that checkpoint; the campaign is now stopped.
 
 ## 2026-10-01: nonvacuous bridge for every List depth
 
@@ -400,8 +388,8 @@ lowering, a constructed native derivation, and native positivity success. This
 extends the earlier fixed function-field stage; it does not change the original
 Tree2 proof archives or claim a value isomorphism.
 
-This is useful modest progress: an infinite restricted class and an operative
-acceptance premise replace the two-case/depth2 result. The proof first excludes
+This expands the checked restricted class and uses the acceptance premise.
+The later utility assessment found no concrete upstream consumer for it. The proof first excludes
 the negative domain and then constructs the native derivation by depth induction.
 It does not reconstruct arbitrary official proofs. Positive official witnesses,
 exact environments and verified reducer facts are all proved; no conversion or
@@ -413,13 +401,11 @@ Fresh seven-module replay and independent review pass. Final axioms are only
 `propext`, `Classical.choice`, and `Quot.sound`. Official auxiliary row allocation
 is proved; native returned records remain existential. The [result report](../explorations/runs/EXPLORE-TREE2-ARROW-TOWER-1/report.md)
 contains statements, trust accounting, exact source, preserved failures and
-reproduction commands. This is likely useful for human review as a restricted
-model theorem, with no kernel-correctness, full-validator, novelty, generated
-recursor or fold claim.
+reproduction commands. It remains a checked restricted model theorem;
+downstream usefulness was not demonstrated. No kernel-correctness, full-validator,
+novelty, generated recursor or fold claim follows.
 
-The bounded result is complete. The next scientific action in the same ACTIVE
-campaign is to assess a small symbolic domain grammar and its typing/occurrence
-preservation obligations before implementing it. No broader grammar or fold work
-starts here. User lab-publication authorization was verified in the original
-parent conversation; publication remains subject to the repository's validated
-non-forced main delivery and exact remote/CI verification.
+The bounded proof result is complete and preserved. The later utility assessment
+stops this expansion; no next grammar or fold trial is selected. Lab publication
+remains limited to documented findings under the existing authorization, with
+ordinary main delivery and exact remote/CI verification.

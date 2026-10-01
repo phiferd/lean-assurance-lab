@@ -58,6 +58,19 @@ research directions.
 
 ## Attempted
 
+- `TREE2-UTILITY-DISPOSITION-1`: no existing published lemma was shown to
+  discharge a remaining upstream completeness premise. The preserved upstream
+  branch already has general occurrence, substitution and restoration proofs.
+  Independent source review agrees. Stop Tree2 expansion and retain the checked
+  case study; no proof/evidence outcome is rewritten. See the
+  [negative utility assessment](../results/research/tree2-utility-disposition-1/report.md).
+
+
+The following three Tree2 entries describe historical checkpoints. Their
+usefulness recommendations and ACTIVE/next-step wording are superseded by the
+negative utility disposition above; their proof and evidence outcomes remain
+unchanged.
+
 - `EXPLORE-TREE2-DOMAIN-GRAMMAR-1`: Lean checked a structural acceptance bridge
   for every finite parameter/self/arrow domain and every List depth. Actual
   acceptance supplies occurrence freedom; independent substitution and typing
@@ -3320,59 +3333,29 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-The owner selected one Tree2 scientific continuation campaign on 2026-10-01.
+The Tree2 continuation is stopped as of 2026-10-01.
+`E0-TREE2-COMPUTATION-PILOT-1` is COMPLETE with a NEGATIVE usefulness outcome:
+the checked restricted model proofs are preserved, but no concrete downstream
+obligation was discharged. The [utility assessment](../results/research/tree2-utility-disposition-1/report.md)
+found the actual historical success-or-decline theorem in `complete3-parked`,
+with explicit simulation, typing, freshness and key-restriction premises.
+The earlier claim about a missing general bridge described pinned main only;
+it did not establish absence from upstream's preserved branch.
+No further grammar, output, value/fold or completeness expansion is selected.
 
-Selected next item: `E0-TREE2-COMPUTATION-PILOT-1`.
-ACTIVE under its [prospective plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md).
-The canonical queue retains zero READY items.
-Current checkpoint 2026-10-01: the all-depth two-domain theorem was published
-with passing CI, followed by a checked structural parameter/self/arrow domain
-conversion class. The new class supplies occurrence preservation, exact typing
-and a nonvacuous acceptance-to-PosDR bridge; independent review recommends a
-focused human maintainer target-fit assessment before expanding the grammar.
-The same single campaign remains ACTIVE. The paragraphs below retain earlier
-checkpoint scopes; no fold, recursor or further grammar expansion is started.
-The canonical queue has one ACTIVE scientific campaign; alias preparation is deferred and unstarted. The first question connects actual returned Tree2 constructor records to the existing lowering theorem; value/fold correspondence is conditional, not already proved.
-Checkpoint 2026-10-01: three fresh Lean-checked lemmas connect exact frame images,
-six supplied constructor readbacks and official replacement to all six actual
-lowered types, with the completed allocation unchanged. The original exact
-returned-observation trial closes INCONCLUSIVE; it has not proved that the full
-checker emits those records. This campaign stays ACTIVE for a newly recorded
-staged output trial, not a fold trial. See the human-readable
-[overview](TREE2_CORRESPONDENCE.md) and
-[checkpoint](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/checkpoint.json).
-The subsequent [staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
-is now COMPLETE (E0 NO_SIGNAL, no mismatch): exact fixed-N2 native output,
-automatic walk fuels and official replacement of its actual six returned records
-are Lean-checked. `fixed_bridge` packages exact official fuel4 lowering,
-constructed native PosDR index3 and the returned-record equation. Fresh four-
-module replay and independent AI source review pass; all printed theorem axioms
-are the standard three. See its
-[checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json).
-The campaign remains the single ACTIVE selection for the owner's expanded
-restricted List-tower endpoint: arbitrary-depth actual output, signature-linked
-inverse value translations and general compatible-algebra fold preservation.
-Those expanded results remain unproved. The owner now prioritizes parked-
-completeness source fit before generalization/folds: the
-[checked blueprint and missing-lemma map](../explorations/runs/EXPLORE-TREE2-COMPLETENESS-FIT-1/report.md)
-make the official acceptance-to-PosDR gap explicit. Assembly checks; that gap is
-not solved. The canonical family conditional has an unused official premise.
-A subsequent [bounded acceptance-driven trial](../explorations/runs/EXPLORE-TREE2-ACCEPTANCE-BRIDGE-1/report.md)
-is COMPLETE: the two node-function schemas (parameter vs recursive domain) are
-classified by actual official positivity acceptance; that evidence excludes the
-negative domain before native PosDR4/success is constructed with pure Core16.
-Positive official acceptance is witnessed; all schema/oracle/typing/restoration/
-guard/budget obligations are discharged. Fresh3-module replay and independent
-review pass with standard-three axioms. This supplies a finite half(A) instance,
-not the general unproved converter. The earlier exact-output proof is preserved.
-No value/fold trial or external action has started. Production lowering/recursor
-fidelity stays an explicit boundary.
+Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
+The existing [source-preparation plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md)
+is restored READY and unstarted. The canonical queue has zero ACTIVE campaigns
+and one READY item. This disposition does not execute that successor, launch
+a checker or build, or authorize upstream outreach. The original
+[Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all closed trial
+reports remain historical evidence.
 
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.
 The restricted Tree2/List-tower proof and its unchanged historical closure are published. Queue and summary restoration does not reattest current-tree strict closure.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
-The alias source/fixture preparation is DEFERRED and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
+The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
 The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. That cleanup is complete. The owner's later explicit instruction authorizes normal validated milestone publication to lab main; this supersedes the earlier local-only Tree2 publication boundary. Upstream messages, contributions and privileged security setting changes remain unauthorized.
 
 The closure-automation successor completed its full-suite and refresh gates.
