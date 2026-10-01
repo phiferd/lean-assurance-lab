@@ -3308,7 +3308,13 @@ checker emits those records. This campaign stays ACTIVE for a newly recorded
 staged output trial, not a fold trial. See the human-readable
 [overview](TREE2_CORRESPONDENCE.md) and
 [checkpoint](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/checkpoint.json).
-No further run has started at this checkpoint.
+A subsequent [staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
+is OPEN: four fixed-N=2 actual inner execution equations now check through
+nestFields, nestCtors, nestFrame and nestContNew. Fresh replay and independent
+source review pass. The inner caller, outer frame and full root observation
+remain to be composed; see its
+[checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json).
+No fold trial or external action has started.
 
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.

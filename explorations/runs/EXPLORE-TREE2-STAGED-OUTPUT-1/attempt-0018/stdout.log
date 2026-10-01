@@ -1,0 +1,122 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Execution.lean:195:24: error(lean.unknownIdentifier): Unknown identifier `ite_bind`
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Execution.lean:191:16: error: unsolved goals
+case cons
+ctx : NestCtx
+ops : CheckerOps CheckM
+env : Env
+rec : Expr → List NestHole → Nat → Nat → Expr → NestState → CheckM ⋯
+prog : List NestHole
+hi : Nat
+us : List Level
+ds : List Expr
+names : List Name
+holes : List Expr
+ys xs : List (ConstantVal × Nat)
+ih :
+  ∀ (st : NestState),
+    nestCtors ctx ops env rec prog hi us ds names holes (xs ++ ys) st = do
+      let __x ← nestCtors ctx ops env rec prog hi us ds names holes xs st
+      match __x with
+        | (os, st') => do
+          let __x ← nestCtors ctx ops env rec prog hi us ds names holes ys st'
+          match __x with
+            | ⋯ => ⋯
+st : NestState
+cv : ConstantVal
+nf : Nat
+⊢ (if Name.nodup cv.levelParams = true then do
+      let crest ←
+        unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams ⋯ us ⋯))
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+      let ty ← ops.inferType env hi crest
+      let _ ← ops.ensureSort env hi ty
+      let __x ←
+        nestFields (rec crest) prog hi
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+            nf 0 crest st
+      if ⋯.any ⋯ = true then do
+          throw ⋯
+          if ⋯ then ⋯ else ⋯
+        else
+          if ⋯ = true then do
+            let x ← ⋯
+            let x_1 ← ⋯
+            ⋯
+          else do
+            ⋯
+            let x ← ⋯
+            let x_1 ← ⋯
+            ⋯
+    else do
+      throw
+          (CheckError.invalid
+            "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+      let crest ←
+        unwrapOr (nestCrest names us ds holes (Expr.instantiateLevelParams ⋯ us ⋯))
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+      let ty ← ops.inferType env hi crest
+      let _ ← ops.ensureSort env hi ty
+      let __x ←
+        nestFields (rec crest) prog hi
+            (CheckError.invalid
+              "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+            nf 0 crest st
+      if ⋯.any ⋯ = true then do
+          throw ⋯
+          if ⋯ then ⋯ else ⋯
+        else
+          if ⋯ = true then do
+            let x ← ⋯
+            let x_1 ← ⋯
+            ⋯
+          else do
+            ⋯
+            let x ← ⋯
+            let x_1 ← ⋯
+            ⋯) =
+    do
+    let __x ←
+      if Name.nodup cv.levelParams = true then do
+          let crest ←
+            unwrapOr (nestCrest names us ds holes ⋯)
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if ⋯ = true then do
+              ⋯
+              ⋯
+            else if ⋯ then ⋯ else ⋯
+        else do
+          throw
+              (CheckError.invalid
+                "nested positivity: invalid nested inductive datatype, its constructor has a duplicate universe level parameter (official: duplicate universe level parameter)")
+          let crest ←
+            unwrapOr (nestCrest names us ds holes ⋯)
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind the parameters (official: ill-formed constructor)")
+          let ty ← ops.inferType env hi crest
+          let _ ← ops.ensureSort env hi ty
+          let __x ←
+            nestFields (rec crest) prog hi
+                (CheckError.invalid
+                  "nested positivity: invalid nested inductive datatype, its constructor type does not bind its fields (official: ill-formed constructor)")
+                nf 0 crest st
+          if ⋯ = true then do
+              ⋯
+              ⋯
+            else if ⋯ then ⋯ else ⋯
+    let __x_1 ← nestCtors ctx ops env rec prog hi us ds names holes ys __x.snd
+    pure (__x.fst ++ __x_1.fst, __x_1.snd)
+'_private.Tree2Execution.0.Tree2Execution.inner_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.nil_ctor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.cons_ctor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Execution.inner_ctors' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

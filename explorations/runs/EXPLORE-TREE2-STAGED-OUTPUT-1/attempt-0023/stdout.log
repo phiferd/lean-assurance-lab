@@ -1,0 +1,33 @@
+/Users/danphifer/Documents/Codex/2026-09-30/task-4/tree2-computation/Tree2Execution.lean:259:1: error: Tactic `rfl` failed: The left-hand side
+  do
+    let st' ←
+      Except.ok
+          { active := { active := [⋯, ⋯], ctorNfs := ns }.active, ctorNfs := (⋯.ctorNfs.push innerNil).push innerCons }
+    pure
+        (NestFieldKind.nested false,
+          { keys := nestAcceptGroup [Level.zero, ⋯] [X, ⋯] [⋯, ⋯] st'.keys, active := [towerKey ⋯],
+            ctorNfs := st'.ctorNfs })
+is not definitionally equal to the right-hand side
+  Except.ok
+    (NestFieldKind.nested false,
+      { keys := #[towerKey ⋯], active := [towerKey 1], ctorNfs := (ns.push innerNil).push innerCons })
+
+f : Nat
+ns : Array NestCtorNf
+hw : nestWalkStack (Cn 2) [holeAt 1] [X] = []
+hm : nestFrameMates (Cn 2) Ln = []
+hk : ([X].all fun x => decide (x.fvarB ≤ ⋯.hiAt ⋯)) = true
+⊢ (do
+      let st' ←
+        Except.ok { active := { active := ⋯, ctorNfs := ns }.active, ctorNfs := (⋯.push innerNil).push innerCons }
+      pure
+          (NestFieldKind.nested false, { keys := nestAcceptGroup ⋯ ⋯ ⋯ ⋯, active := [⋯, ⋯], ctorNfs := st'.ctorNfs })) =
+    Except.ok
+      (NestFieldKind.nested false,
+        { keys := #[⋯, ⋯], active := [towerKey ⋯], ctorNfs := (ns.push innerNil).push innerCons })
+'_private.Tree2Execution.0.Tree2Execution.inner_fields' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.nil_ctor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.cons_ctor' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Execution.inner_ctors' depends on axioms: [propext, Classical.choice, Quot.sound]
+'Tree2Execution.inner_frame' depends on axioms: [propext, Classical.choice, Quot.sound]
+'_private.Tree2Execution.0.Tree2Execution.inner_new' depends on axioms: [propext, sorryAx, Classical.choice, Quot.sound]

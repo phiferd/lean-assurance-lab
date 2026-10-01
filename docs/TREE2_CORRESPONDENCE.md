@@ -128,6 +128,54 @@ Existing general recorded-constructor and recursor laws are reusable, but their
 well-scoped environment, derivation and stage hypotheses must be discharged.
 They are not automatically supplied by an existential successful walk.
 
+## Staged execution checkpoint: fixed Tree2
+
+The [new staged trial](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/plan.md)
+now connects supplied expressions to actual execution for the **inner** List
+frame. This continuation fixes N=2 and verified pure Core fuel 7; unlike the
+original representation package, it is not an all-N returned-output theorem.
+
+[Tree2Execution.lean](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/Tree2Execution.lean)
+contains four checked public statements:
+
+- `inner_fields` executes the actual two-field telescope, returning recursive
+  Tree and in-progress inner self kinds with exact walked field/result types.
+- `inner_ctors` executes both actual List constructors for any initial state
+  and natural fuel excess. It returns their exact kinds and walked types,
+  appending exactly the inner nil and cons records to the existing prefix.
+- `inner_frame` runs the actual frame's key typing and constructor lookup,
+  then emits that exact two-record update. The progress stack is empty here.
+- `inner_new` starts at actual `nestContNew`, with the fixed inner key and S
+  as its supplied former. It preserves the active outer key, emits the two
+  inner records and caches exactly the inner key. It does not yet prove that
+  enclosing `nestPos` reaches this helper call.
+
+These execution statements have no emitted-telescope, acceptance, PosDR or
+successful-Core-operation premise. They use the exact environment and proved
+finite Core facts. Independent AI source review accepted their restricted,
+non-circular scope. A fresh compile passed in 1.466 seconds with sampled peak
+RSS 1.415 GB, with all historical cache hashes reverified and cleanup complete.
+All four public statements and the private nil/cons dependencies report only
+`propext`, `Classical.choice`, and `Quot.sound`.
+
+The proof avoids the previous expansion problem by preserving original checker
+calls and using monad laws, then separate finite typing, guard and readback
+facts. Twenty-four retained revisions cost 481.799 seconds in aggregate;
+seven hit RSS safety limits, and every process was cleaned up. These counts are
+observations, not a stopping budget. Rejected proofs are not accepted evidence.
+
+The staged trial remains OPEN and the single Tree2 campaign ACTIVE. The exact
+remaining path is the inner caller, outer frame/constructors, root leaf/node
+composition, and actual automatic walk fuels. Only then can we identify all
+returned keys, kinds, normals and six records. No source-model mismatch has
+been observed. Fold work remains conditional and unstarted.
+
+See the [checkpoint](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/checkpoint.json),
+[axiom output](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-replay/compile-stdout.log)
+and [independent review](../explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/independent-review.md).
+The earlier delivered Library overview remains version 0; this local update
+has not been uploaded or published.
+
 ## Trust and remaining gaps
 
 The historical axiom reports list only Lean's standard `propext`,
@@ -192,8 +240,8 @@ proofs. Safety cleanup succeeded for all attempts. A failed replay with a
 relative path is retained alongside the corrected replay. This is observational
 cost accounting, not an attempt budget or a reason to end the active campaign.
 
-The next step is a newly recorded staged output trial: expose one container/frame
-boundary at a time and immediately rewrite its exact Core and field-walk facts.
+The staged output trial described above exposes one container/frame
+boundary at a time and rewrites its exact Core and field-walk facts.
 Broad `cbv` reduction expanded environments before certificate matching and
 proved unsuitable here. Conditional value/fold work has not begun. The canonical
 queue keeps this one scientific campaign ACTIVE; alias work remains deferred.
@@ -216,3 +264,10 @@ python3 explorations/runs/EXPLORE-TREE2-OBSERVATION-1/replay.py \
 [The pilot archive](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/) retains exact
 sources, commands, receipts and the [machine-readable checkpoint](../explorations/runs/EXPLORE-TREE2-OBSERVATION-1/checkpoint.json).
 All continuation code and notes are local pending separate publication approval.
+
+To replay the execution checkpoint with the same verified compiler/cache, use
+`explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/replay.py` with source
+`explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/sources/Tree2Execution.lean` and
+a fresh nonexistent destination. This exact invocation was verified with
+`--destination explorations/runs/EXPLORE-TREE2-STAGED-OUTPUT-1/fresh-replay`;
+the other flags are the compiler/cache paths in the command above.
