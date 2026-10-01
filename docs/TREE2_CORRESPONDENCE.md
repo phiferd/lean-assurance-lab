@@ -6,9 +6,13 @@ agreement about constructor structure can expose an error that another accepted
 example would miss. It is not yet an agreement about values or computation.
 The depth-two continuation proves the exact returned structure and its
 constructor-type lowering. The newest result covers every List depth for a
-restricted function field: official acceptance excludes a Tree function domain
-and yields constructed native positivity. Its positive branch is proved for
-every depth. General domain grammars and value/fold goals remain open.
+restricted function field. The domain can now be any finite nondependent
+function type built from alpha and Tree alpha. Structural induction proves
+that actual official acceptance excludes every Tree occurrence in that domain
+and supplies the native occurrence-free and typing facts needed to construct
+positivity. The positive branch is proved for every admitted domain and depth.
+Containers inside domains, arbitrary derivation reconstruction and value/fold
+goals remain open. See the [structural domain report](../explorations/runs/EXPLORE-TREE2-DOMAIN-GRAMMAR-1/report.md).
 
 This is local AI-authored research for human review. The owner authorized lab publication of the continuation on 2026-10-01;
 upstream submissions and community messages remain unauthorized. There is no unsupported claim that this theorem is novel research or

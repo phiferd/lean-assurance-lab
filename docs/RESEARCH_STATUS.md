@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `EXPLORE-TREE2-DOMAIN-GRAMMAR-1`: Lean checked a structural acceptance bridge
+  for every finite parameter/self/arrow domain and every List depth. Actual
+  acceptance supplies occurrence freedom; independent substitution and typing
+  proofs construct native positivity at the computed Core bound. Fresh six-module
+  replay and independent noncircularity review pass with standard three axioms.
+  This is enough for a focused human maintainer target-fit inquiry about parked
+  completeness; no message or posting-ready draft was created. No further
+  grammar expansion or fold trial starts here. See the [report](../explorations/runs/EXPLORE-TREE2-DOMAIN-GRAMMAR-1/report.md).
+
 - `EXPLORE-TREE2-ARROW-TOWER-1`: Lean checked a nonvacuous restricted completeness
   family for every List depth, including zero. Actual official acceptance excludes
   the negative function domain and yields exact lowering, constructed native
@@ -3316,6 +3325,13 @@ The owner selected one Tree2 scientific continuation campaign on 2026-10-01.
 Selected next item: `E0-TREE2-COMPUTATION-PILOT-1`.
 ACTIVE under its [prospective plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md).
 The canonical queue retains zero READY items.
+Current checkpoint 2026-10-01: the all-depth two-domain theorem was published
+with passing CI, followed by a checked structural parameter/self/arrow domain
+conversion class. The new class supplies occurrence preservation, exact typing
+and a nonvacuous acceptance-to-PosDR bridge; independent review recommends a
+focused human maintainer target-fit assessment before expanding the grammar.
+The same single campaign remains ACTIVE. The paragraphs below retain earlier
+checkpoint scopes; no fold, recursor or further grammar expansion is started.
 The canonical queue has one ACTIVE scientific campaign; alias preparation is deferred and unstarted. The first question connects actual returned Tree2 constructor records to the existing lowering theorem; value/fold correspondence is conditional, not already proved.
 Checkpoint 2026-10-01: three fresh Lean-checked lemmas connect exact frame images,
 six supplied constructor readbacks and official replacement to all six actual
@@ -3357,7 +3373,7 @@ The real Nanoda screen and separate whole-module retry are COMPLETE; the origina
 The restricted Tree2/List-tower proof and its unchanged historical closure are published. Queue and summary restoration does not reattest current-tree strict closure.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
 The alias source/fixture preparation is DEFERRED and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
-The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. That cleanup is complete. The separately authorized Tree2 continuation remains local; no new Git publication, external message or privileged security setting change is authorized.
+The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. That cleanup is complete. The owner's later explicit instruction authorizes normal validated milestone publication to lab main; this supersedes the earlier local-only Tree2 publication boundary. Upstream messages, contributions and privileged security setting changes remain unauthorized.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
