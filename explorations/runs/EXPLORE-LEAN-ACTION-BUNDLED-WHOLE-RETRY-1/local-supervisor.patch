@@ -1,0 +1,49 @@
+--- lib/resource_envelope_supervisor.py
++++ run-local/local_supervisor.py
+@@ -110,7 +110,7 @@
+ 
+ 
+ def run_direct(*, argv: list[str], cwd: Path, env: dict[str, str],
+-               stdin_bytes: bytes | None, timeout_seconds: float,
++               stdin_bytes: bytes | None, timeout_seconds: float | None,
+                memory_ceiling_bytes: int, sample_interval_seconds: float,
+                max_trace_gap_seconds: float, cleanup_seconds: float,
+                ps: str = "/bin/ps", ps_timeout_seconds: float = 0.5,
+@@ -121,7 +121,7 @@
+     preserve the receipt/raw bytes and pause on any monitoring or cleanup fault.
+     """
+     if (not argv or not Path(argv[0]).is_file() or not Path(ps).is_file()
+-            or timeout_seconds <= 0 or memory_ceiling_bytes <= 0
++            or (timeout_seconds is not None and timeout_seconds <= 0) or memory_ceiling_bytes <= 0
+             or sample_interval_seconds <= 0 or max_trace_gap_seconds <= 0
+             or cleanup_seconds <= 0 or ps_timeout_seconds <= 0
+             or output_cap_bytes <= 0):
+@@ -212,7 +212,7 @@
+         try:
+             while not done.is_set() and not reaped.is_set():
+                 sample_started_ns = time.monotonic_ns()
+-                if (sample_started_ns - started_ns) / 1e9 >= timeout_seconds:
++                if timeout_seconds is not None and (sample_started_ns - started_ns) / 1e9 >= timeout_seconds:
+                     if reaped.wait(0.02):
+                         return
+                     request_stop("OBSERVED_TIME_LIMIT")
+@@ -239,7 +239,7 @@
+                     if group_rss > memory_ceiling_bytes and not reaped.is_set():
+                         request_stop("OBSERVED_MEMORY_LIMIT")
+                         return
+-                if not reaped.is_set() and (sample_ended_ns - started_ns) / 1e9 >= timeout_seconds:
++                if timeout_seconds is not None and not reaped.is_set() and (sample_ended_ns - started_ns) / 1e9 >= timeout_seconds:
+                     if reaped.wait(0.02):
+                         return
+                     request_stop("OBSERVED_TIME_LIMIT")
+@@ -293,8 +293,8 @@
+     reaper.start()
+     for thread in threads:
+         thread.start()
+-    remaining = max(0.0, timeout_seconds - (time.monotonic_ns() - started_ns) / 1e9)
+-    reaper.join(timeout=remaining + cleanup_seconds + 2 * ps_timeout_seconds)
++    remaining = None if timeout_seconds is None else max(0.0, timeout_seconds - (time.monotonic_ns() - started_ns) / 1e9)
++    reaper.join(timeout=None if remaining is None else remaining + cleanup_seconds + 2 * ps_timeout_seconds)
+     if reaper.is_alive():
+         request_stop("UNBOUNDED_REAP")
+         # Bounded fallback if the monitor could not terminate the target.

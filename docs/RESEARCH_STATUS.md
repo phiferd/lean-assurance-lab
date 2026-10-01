@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-09-30
+Last updated: 2026-10-01
 
 ## How Status Is Tracked
 
@@ -57,6 +57,35 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1` closes `NO_SIGNAL` for the exact
+  whole-module input retained by `E0-LEAN-ACTION-BUNDLED-REAL-1`.
+  **What did we find?** The retry accepted 59,349 declarations in 28.691 seconds,
+  with no type-checking error. Its missing pretty-printer destination produced
+  the expected diagnostic. The original five declaration-selected controls
+  behaved as expected, but its whole-module call timed out and remains
+  historically `INCONCLUSIVE`. Both histories, including the failed retry
+  launcher, are preserved. **Is it interesting?** Yes, modestly: the exact
+  previously missing verdict is now available; it establishes no checker
+  correctness, general conformance, workflow execution or host-security claim.
+  **Does it require more work?** No further run follows from this result. The
+  separate alias preparation remains READY and unstarted. See the
+  [original screen](../explorations/runs/EXPLORE-LEAN-ACTION-BUNDLED-REAL-1/summary.md)
+  and [whole-module retry](../explorations/runs/EXPLORE-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1/summary.md).
+
+- `TREE2-CONFIRMED-INTEGRATION-1` completes the restricted constructor
+  representation correspondence and its historical repository closure.
+  **What did we find?** Lean checked the fixed List-tower representation package,
+  including Tree2, and a fresh replay compiled all 108 modules. The proof source
+  and validation archives survived publication unchanged. The successful
+  strict closure binds frozen `bcb3fe4` inputs; this later history restoration
+  makes no fresh current-tree closure claim. **Is it interesting?** Yes: it
+  connects independently specified simplified-model representations rather than
+  supplying another acceptance example. It does not prove a datatype/fold
+  correspondence, returned-observation identity or production-kernel correctness.
+  **Does it require more work?** No further science starts in this reconciliation.
+  See the [research archive](../results/research/tree2-confirmed-integration-1/)
+  and [historical closure archive](../results/workflow-validation/tree2-confirmed-integration-1/).
 
 - `E0-SEMANTIC-ASSURANCE-SCREENING-1` completes six E0 NO_SIGNAL screens.
   **What did we find?** Forty final checker cells contain 34 accepts and six
@@ -3271,10 +3300,11 @@ The canonical queue retains one READY item, selected and unstarted.
 Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
 The canonical queue retains one READY item and zero ACTIVE items.
 Lean-action regression preparation has26 fresh reviewed shell/model controls and two internal technical evidence/patch packages. Earlier AI-authored comment drafts are historical only and NOT FOR POSTING. Any later communication must be human-authored and follow the public target policies, including AI disclosure/manual review for contributions. Its local completion is conditional on the exact strict full-payload and ordered closure receipt at results/workflow-validation/lean-action-regression-1; it is not published.
-Actual checker parity, YAML workflow execution and host-security effects remain untested.
+The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.
+The restricted Tree2/List-tower proof and its unchanged historical closure are published. Queue and summary restoration does not reattest current-tree strict closure.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
 The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
-No external message, main push or privileged security setting change is authorized.
+The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. No new scientific run, external message or privileged security setting change follows.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
