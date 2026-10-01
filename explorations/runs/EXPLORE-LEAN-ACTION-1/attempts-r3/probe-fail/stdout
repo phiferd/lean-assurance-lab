@@ -1,0 +1,5 @@
+::group::lake check Output
+Checking the project with `lake check`
+Using the sandbox at COMPARATOR_BWRAP=/Users/danphifer/Documents/Codex/2026-09-30/task-3/lab/explorations/runs/EXPLORE-LEAN-ACTION-1/attempts-r3/probe-fail/bin/bwrap
+::endgroup::
+::error::`lake check` cannot start its sandbox, so nothing was checked: `/Users/danphifer/Documents/Codex/2026-09-30/task-3/lab/explorations/runs/EXPLORE-LEAN-ACTION-1/attempts-r3/probe-fail/bin/bwrap --ro-bind / / true` fails with "bwrap: uid map denied". This runner restricts the unprivileged user namespaces bubblewrap needs, as GitHub-hosted runners do. Grant them before calling lean-action, either with an AppArmor profile permitting `userns` for /Users/danphifer/Documents/Codex/2026-09-30/task-3/lab/explorations/runs/EXPLORE-LEAN-ACTION-1/attempts-r3/probe-fail/bin/bwrap, or with `sudo sysctl -w kernel.apparmor_restrict_unprivileged_userns=0`. See "Independent kernel checks with \`lake check\`" in the lean-action README.

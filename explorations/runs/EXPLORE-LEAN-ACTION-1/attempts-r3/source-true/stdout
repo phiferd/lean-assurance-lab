@@ -1,0 +1,32 @@
+::group::nanoda Output
+Checking environment with nanoda external type checker
+::warning::`nanoda` is deprecated; use `lake-check: paranoid` instead, which runs nanoda together with every other checker bundled with the toolchain. It has no equivalent of `nanoda-allow-sorry: true`, because `lake check` permits only the standard axioms, so projects that carry a `sorry` should stay on this input for now.
+This toolchain bundles no nanoda; building it and lean4export from source
+Checking for Rust installation...
+Rust already installed: cargo MOCK; no Rust build
+Cloning and building lean4export...
+Cloning and building nanoda_lib...
+Detecting module name...
+Detected module name: Foo
+Exporting Foo...
+Export file size:       16 bytes
+Export file lines:        1 lines
+Creating nanoda configuration...
+Note: sorryAx axiom is permitted
+Config file contents:
+{
+    "export_file_path": "_nanoda_export.txt",
+    "use_stdin": false,
+    "permitted_axioms": ["propext", "Classical.choice", "Quot.sound", "Lean.trustCompiler", "sorryAx"],
+    "unpermitted_axiom_hard_error": false,
+    "nat_extension": true,
+    "string_extension": true,
+    "print_success_message": true
+}
+
+Running nanoda type checker...
+MOCK checker invoked; no semantic validation
+nanoda check completed successfully
+::endgroup::
+Cleaning up temporary files...
+

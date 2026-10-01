@@ -1,0 +1,9 @@
+# Prepare fresh lean-action regression confirmation
+
+What did we find? E0 controlled fallback exposes a PR192 no-source-build test that passes after cleanup, and PR191 source guards a different policy pathname from its write destination. Real axiom-policy parity is unobserved. Is it interesting? Yes, as narrowly reusable test/setup controls. Does it require more work? Prepare fresh E1 regression expectations and safely intercepted fixtures; this selection is READY and unstarted.
+
+Source/test preparation only. Reverify PR192209c085 and PR191686ffeb before adopting their observations. Independent review must establish the pass/fail oracle, filesystem model and intercepted privileged-operation boundary before any fresh confirmation launch. New CONFIRM identities, exact manifests and fresh processes are required. E0 output cannot fill confirmatory result fields.
+
+Question1: can a minimal durable route observation or intercepted clone/build sentinel pass bundled dispatch and reject a successful fallback even after cleanup? Cover dual-binary and one-binary-missing routes without real downloads/builds. Question2: does the planned guard refuse an existing policy at the exact write destination /etc/apparmor.d/lean-action-bwrap? Cover absent/existing conventional and destination policies in a safe fixture root; no actual sudo, AppArmor, sysctl or setuid operation.
+
+Produce a concrete test-only design and safe command-interception plan or a characterized duplication/source/authority boundary. No shared runner change, checker launch or broad build is authorized by this preparation selection. Any implementation/confirmation needs separately frozen E1 gates. No external issue, PR, review, publication or host-security change is authorized. Exact real axiom behavior remains deferred until a supported pinned runner exists; do not acquire a large toolchain. Preserve PR15373 preparation DEFERRED and unstarted.

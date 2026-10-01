@@ -3266,11 +3266,14 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-LEAN-ACTION-1`.
-The canonical queue retains zero READY items and one ACTIVE item.
-Owner-selected lean-action E0 campaign under [the bounded plan](research/E0_LEAN_ACTION_1_PLAN.md).
-`LEAN-ETA-ALIAS-PILOT-PREPARATION-1` is DEFERRED and unstarted; its original source-only scope is preserved.
-No publication or privileged security changes are authorized.
+Selected next item: `LEAN-ACTION-REGRESSION-PREPARATION-1`.
+The canonical queue retains one READY item and zero ACTIVE items.
+Lean-action campaign closes E0 SIGNAL:13 completed mocked shell controls; matching configurations and expected exit/reporting behavior; cleanup defeats PR192 no-source-build assertion; PR191 policy guard/write path mismatch is source-only.
+Actual checker axiom parity remains INCONCLUSIVE without exact4.35.0-rc2.
+[Scoped finding and raw attempts](../explorations/runs/EXPLORE-LEAN-ACTION-1/summary.md).
+Fresh regression preparation is READY and unstarted under [the plan](research/LEAN_ACTION_REGRESSION_PREPARATION_1_PLAN.md).
+`LEAN-ETA-ALIAS-PILOT-PREPARATION-1` remains DEFERRED and unstarted; its scope is unchanged.
+No publication, upstream message or privileged security change occurred.
 
 The closure-automation successor completed its full-suite and refresh gates.
 Its source-only comparison selected the now-completed
