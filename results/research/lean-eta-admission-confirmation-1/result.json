@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "experiment_id": "CONFIRM-LEAN-ETA-ADMISSION-1",
+  "evidence_class": "E1",
+  "outcome": "CONFIRMED_PR_HEAD_ADMISSION_REGRESSION",
+  "question": "Does checked trust-zero declaration admission accept the alias-domain invalid theorem only at PR15373 head while the explicit control and both exact-parent cells reject?",
+  "normative_oracle": "All four invalid theorem declarations must reject.",
+  "observed_matrix": [
+    {
+      "cell": "head-alias",
+      "revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+      "stored_domain": "FnAlias",
+      "outcome": "ACCEPT",
+      "receipt_sha256": "9a1cd8ffde54a9832d7ea42871fe4d38814317226199431a497e38c9e473b453",
+      "stdout_sha256": "d241671b7a0f702a8bc94f274144b86bd55d18df974fde2e2791a201c1e8e94c"
+    },
+    {
+      "cell": "head-explicit",
+      "revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+      "stored_domain": "Bool -> Box",
+      "outcome": "REJECT",
+      "exception_kind": "declTypeMismatch",
+      "receipt_sha256": "c0f4642892f99dd47ce411facd5bdbd62daac8f4f64e3c3f3619f2c2cbf3dea6",
+      "stdout_sha256": "c7a1c26216efa1c1759ee3c2910730c4b03d2c56a5da8d2d72ffbc5cf7720752"
+    },
+    {
+      "cell": "parent-alias",
+      "revision": "2c2bdd9630a7a6c51d7620d5efefcdba104f38f3",
+      "stored_domain": "FnAlias",
+      "outcome": "REJECT",
+      "exception_kind": "declTypeMismatch",
+      "receipt_sha256": "90161dbe0c4a47bf4ea4fc169b2319441c7acdcd6b632995b956700131a4fc65",
+      "stdout_sha256": "8795e179a368d43626bddeddc3ddfe9001a915a69d5ed69b5af2065121854ad2"
+    },
+    {
+      "cell": "parent-explicit",
+      "revision": "2c2bdd9630a7a6c51d7620d5efefcdba104f38f3",
+      "stored_domain": "Bool -> Box",
+      "outcome": "REJECT",
+      "exception_kind": "declTypeMismatch",
+      "receipt_sha256": "8f2274f0bd3bfa8c72b202d1e9892708e2575085e589d1f72c7e252745669faa",
+      "stdout_sha256": "55a24481dd89e70d8df0042f222d1154731a03e4a567214b3e735f959693e7b2"
+    }
+  ],
+  "controls": {
+    "fresh_processes": 4,
+    "trust_level": 0,
+    "checked_add_decl": true,
+    "explicit_negative_rejected_at_both_revisions": true,
+    "all_cleanup_complete": true,
+    "accounting_faults": 0,
+    "monitoring_faults": 0
+  },
+  "bindings": {
+    "source_manifest_sha256": "bc04c10c994aeca89918b4e219d0ec1cc120aa3c1458fced3be287e886934b3f",
+    "launch_manifest_sha256": "5eb9bd135d2c53042adc7ca47ff18254e329e0b0e6c2cd7389c779a08add9077",
+    "expected_sha256": "7cf0b9fcc5acd8675de25ba84ee585c1f00ce5ae71f2622d4e4e6f143d5d37aa",
+    "daybreak_review_sha256": "c805f5fc765759da846c2b6dc58ec28e80a4a9ca2c39fe26bcd124a818dbca16",
+    "activation_commit": "9c4c090fe0295311005c00434e88a14e188a1cd2",
+    "activation_ci_run": 37065106662
+  },
+  "interpretation": "The exact PR15373 head admits the invalid alias-domain theorem while its exact parent and both syntactically explicit controls reject. Within this matched source-build comparison, the observed behavior is associated with the head change.",
+  "root_cause_hypothesis": "The added partial-constructor eta path checks type equality but opens arguments only while the saved t_type is syntactically a Pi. A reducible alias can therefore leave zero opened binders and zero constructor arguments to compare before the function returns true.",
+  "claim_limits": [
+    "Only exact PR15373 head 015d54649bcaaa0861f355b59761ce308e629fbb and parent 2c2bdd9630a7a6c51d7620d5efefcdba104f38f3 were tested.",
+    "No released Lean version or current master was runtime-tested.",
+    "No derivation of False, broader exploit, severity score or public reachability was tested.",
+    "The root-cause explanation is source-supported but remains a hypothesis until a fix is separately validated."
+  ],
+  "external_action": "NOT_AUTHORIZED"
+}

@@ -21,8 +21,10 @@ class LeanEtaAdmissionConfirmationReplayTests(unittest.TestCase):
             result = replay.replay(checkout)
             self.assertEqual(result, {
                 "status": "PASS",
-                "receipts": 27,
+                "receipts": 31,
                 "successful_preparation_receipts": 12,
+                "scientific_cells": 4,
+                "outcome": "CONFIRMED_PR_HEAD_ADMISSION_REGRESSION",
                 "fixture_sources": 5,
                 "generated_oleans": 4,
                 "host_launches": 0,

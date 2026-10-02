@@ -47,8 +47,8 @@ def replay(root: Path) -> dict[str, object]:
 
     attempts = base / "attempts"
     receipt_paths = sorted(attempts.glob("*/receipt.json"))
-    if len(receipt_paths) != 27:
-        raise ReplayError("prelaunch receipt inventory differs")
+    if len(receipt_paths) != 31:
+        raise ReplayError("receipt inventory differs")
     for receipt_path in receipt_paths:
         receipt = _json(receipt_path)
         command = _json(receipt_path.with_name("command.json"))
@@ -81,10 +81,32 @@ def replay(root: Path) -> dict[str, object]:
     for name, marker in identities.items():
         if marker.encode() not in (attempts / name / "stdout.log").read_bytes():
             raise ReplayError(f"runtime identity missing: {name}")
+    cells = {
+        "head-alias": ("addDeclCore=ACCEPT", None),
+        "head-explicit": ("addDeclCore=REJECT", "exception.kind=declTypeMismatch"),
+        "parent-alias": ("addDeclCore=REJECT", "exception.kind=declTypeMismatch"),
+        "parent-explicit": ("addDeclCore=REJECT", "exception.kind=declTypeMismatch"),
+    }
+    result = _json(base / "result.json")
+    observed = {row.get("cell"): row for row in result.get("observed_matrix", [])}
+    if result.get("outcome") != "CONFIRMED_PR_HEAD_ADMISSION_REGRESSION":
+        raise ReplayError("scientific classification differs")
+    for name, markers in cells.items():
+        data = (attempts / name / "stdout.log").read_text()
+        if any(marker is not None and marker not in data for marker in markers):
+            raise ReplayError(f"scientific outcome differs: {name}")
+        receipt_path = attempts / name / "receipt.json"
+        row = observed.get(name, {})
+        if row.get("receipt_sha256") != _sha(receipt_path):
+            raise ReplayError(f"result receipt binding differs: {name}")
+        if row.get("stdout_sha256") != _sha(receipt_path.with_name("stdout.log")):
+            raise ReplayError(f"result stdout binding differs: {name}")
     return {
         "status": "PASS",
         "receipts": len(receipt_paths),
         "successful_preparation_receipts": len(successful),
+        "scientific_cells": len(cells),
+        "outcome": result["outcome"],
         "fixture_sources": len(launch["fixture_sources"]),
         "generated_oleans": len(launch["generated_oleans"]),
         "host_launches": 0,

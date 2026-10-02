@@ -1,0 +1,35 @@
+cell=alias-negative revision=2c2bdd9630a7a6c51d7620d5efefcdba104f38f3 trustLevel=0
+cell=alias-negative storedType.raw=Lean.Expr.const `FnAlias []
+cell=alias-negative declarationType.raw=Lean.Expr.forallE
+  `f
+  (Lean.Expr.const `FnAlias [])
+  (Lean.Expr.app
+    (Lean.Expr.app
+      (Lean.Expr.app (Lean.Expr.const `Eq [Lean.Level.succ (Lean.Level.zero)]) (Lean.Expr.const `FnAlias []))
+      (Lean.Expr.bvar 0))
+    (Lean.Expr.const `Box.mk []))
+  (Lean.BinderInfo.default)
+cell=alias-negative declarationValue.raw=Lean.Expr.lam
+  `f
+  (Lean.Expr.const `FnAlias [])
+  (Lean.Expr.app
+    (Lean.Expr.app (Lean.Expr.const `Eq.refl [Lean.Level.succ (Lean.Level.zero)]) (Lean.Expr.const `FnAlias []))
+    (Lean.Expr.bvar 0))
+  (Lean.BinderInfo.default)
+cell=alias-negative Kernel.check(type)=Lean.Expr.sort (Lean.Level.zero)
+cell=alias-negative Kernel.check(value)=Lean.Expr.forallE
+  `f
+  (Lean.Expr.const `FnAlias [])
+  (Lean.Expr.app
+    (Lean.Expr.app
+      (Lean.Expr.app (Lean.Expr.const `Eq [Lean.Level.succ (Lean.Level.zero)]) (Lean.Expr.const `FnAlias []))
+      (Lean.Expr.bvar 0))
+    (Lean.Expr.bvar 0))
+  (Lean.BinderInfo.default)
+cell=alias-negative exception.kind=declTypeMismatch
+cell=alias-negative exception.message=(kernel) declaration type mismatch, 'EtaAdmissionConfirmation.aliasInvalid' has type
+  ∀ (f : FnAlias), f = f
+but it is expected to have type
+  ∀ (f : FnAlias), f = Box.mk
+cell=alias-negative addDeclCore=REJECT
+classification-input aliasAccepted=false

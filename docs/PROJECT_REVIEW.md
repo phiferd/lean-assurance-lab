@@ -20,19 +20,24 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete CONFIRM-LEAN-ETA-ADMISSION-1: Confirm PR15373 checked declaration admission; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | PAUSED: no executable item | Supply and authorize one independent transfer input to resume the canonical queue; separately approve the exact private disclosure draft and maintainer destination before any eta-admission external contact. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CONFIRM-LEAN-ETA-ADMISSION-1**.
+**Queue execution is PAUSED; no executable item is selected.**
+
+**Blocker:** No local READY or ACTIVE work remains. The next canonical queue item requires an independently curated transfer input and owner designation; the completed eta-admission package separately requires explicit human approval before any external disclosure.
+
+**Required decision:** Supply and authorize one independent transfer input to resume the canonical queue; separately approve the exact private disclosure draft and maintainer destination before any eta-admission external contact.
+
+Selected blocked decision: **TRANSFER-HOLDOUT-INTAKE-1**. Resolve the recorded blocker and update the canonical queue before execution.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
 | Rank | Item | Status |
 |---|---|---|
-| 13 | CONFIRM-LEAN-ETA-ADMISSION-1: Confirm PR15373 checked declaration admission | ACTIVE |
 | 14 | BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations | PLANNED |
 | 31 | ARENA-THEOREM-CONTROL-1: Assess a useful theorem accept companion | PLANNED |
 | 50 | CVC-4: Connect the contract to real validation behavior | PLANNED |
@@ -40,22 +45,6 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 69 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 | 82 | E0-LAZYLEAN-DATA-RECURSOR-1: Screen data recursors without the singleton proof shortcut | DEFERRED |
 | 97 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | DEFERRED |
-
-### 13. CONFIRM-LEAN-ETA-ADMISSION-1: Confirm PR15373 checked declaration admission
-
-**Target:** Exact PR15373 head and exact parent, two closed theorem negatives each
-
-Independently review and freshly execute the fixed alias/explicit admission pair at the PR head and parent under trust level zero.
-
-**Why this rank:** Owner directed publication-ready completion after the direct declaration-admission signal. Daybreak Blue passed immutable checkpoint edb92569 after verifying that all three prior runtime-custody blockers were resolved; execute exactly the frozen four cells.
-
-**Completion:** Four valid fresh head/parent observations with bounded classification and portable reporting inputs, or an exact reviewer, parent-runner, input-integrity or supervision blocker.
-
-**Stop:** Stop after the fixed four cells or a genuine unavailable prerequisite; no False derivation, wider version matrix, exploit work or upstream communication.
-
-**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
-
-**Boundary:** ACTIVE: PLANNED under docs/research/CONFIRM_LEAN_ETA_ADMISSION_1_PLAN.md; require a Daybreak Blue independent review, frozen fresh fixture and expectations, exact parent runner/build identity and immutable launch manifest before ACTIVE or any scientific cell.
 
 ### 14. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
@@ -210,6 +199,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1. Selected next item: CONFIRM-LEAN-ETA-ADMISSION-1 (ACTIVE).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1, CONFIRM-LEAN-ETA-ADMISSION-1. Selected next item: TRANSFER-HOLDOUT-INTAKE-1 (WAITING).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

@@ -1,0 +1,45 @@
+cell=explicit-negative revision=2c2bdd9630a7a6c51d7620d5efefcdba104f38f3 trustLevel=0
+cell=explicit-negative storedType.raw=Lean.Expr.forallE
+  `_
+  (Lean.Expr.const `Bool [])
+  (Lean.Expr.const `Box [])
+  (Lean.BinderInfo.default)
+cell=explicit-negative declarationType.raw=Lean.Expr.forallE
+  `f
+  (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default))
+  (Lean.Expr.app
+    (Lean.Expr.app
+      (Lean.Expr.app
+        (Lean.Expr.const `Eq [Lean.Level.succ (Lean.Level.zero)])
+        (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default)))
+      (Lean.Expr.bvar 0))
+    (Lean.Expr.const `Box.mk []))
+  (Lean.BinderInfo.default)
+cell=explicit-negative declarationValue.raw=Lean.Expr.lam
+  `f
+  (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default))
+  (Lean.Expr.app
+    (Lean.Expr.app
+      (Lean.Expr.const `Eq.refl [Lean.Level.succ (Lean.Level.zero)])
+      (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default)))
+    (Lean.Expr.bvar 0))
+  (Lean.BinderInfo.default)
+cell=explicit-negative Kernel.check(type)=Lean.Expr.sort (Lean.Level.zero)
+cell=explicit-negative Kernel.check(value)=Lean.Expr.forallE
+  `f
+  (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default))
+  (Lean.Expr.app
+    (Lean.Expr.app
+      (Lean.Expr.app
+        (Lean.Expr.const `Eq [Lean.Level.succ (Lean.Level.zero)])
+        (Lean.Expr.forallE `_ (Lean.Expr.const `Bool []) (Lean.Expr.const `Box []) (Lean.BinderInfo.default)))
+      (Lean.Expr.bvar 0))
+    (Lean.Expr.bvar 0))
+  (Lean.BinderInfo.default)
+cell=explicit-negative exception.kind=declTypeMismatch
+cell=explicit-negative exception.message=(kernel) declaration type mismatch, 'EtaAdmissionConfirmation.explicitInvalid' has type
+  ∀ (f : Bool → Box), f = f
+but it is expected to have type
+  ∀ (f : Bool → Box), f = Box.mk
+cell=explicit-negative addDeclCore=REJECT
+classification-input explicitAccepted=false

@@ -3387,9 +3387,9 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `CONFIRM-LEAN-ETA-ADMISSION-1`.
-Queue handoff: EXECUTABLE.
-The canonical queue retains zero READY items because the sole selected item is ACTIVE.
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+Queue handoff: PAUSED.
+The canonical queue retains zero READY items.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3406,9 +3406,16 @@ four-job method; both independently compiled runner-neutral fixtures and now
 self-report their exact commits. The retained first identities exposed and the
 repair record explains a detached-worktree CMake githash defect. E1 remains
 `ACTIVE` after Daybreak Blue passed immutable checkpoint `edb92569` and
-authorized exactly the frozen four cells. No confirmation cell has started. Read-only
-source inspection found the new partial-constructor loop only at the unchanged
-draft-PR head; runtime causation remains unconfirmed.
+authorized exactly the frozen four cells. All four cells then completed: the exact
+PR head accepted the alias-domain invalid theorem and rejected its explicit-domain
+control, while the exact parent rejected both with `declTypeMismatch`. This confirms
+an exact-head checked trust-zero admission regression in the bounded comparison.
+The [result](../results/research/lean-eta-admission-confirmation-1/result.json),
+[report](../results/research/lean-eta-admission-confirmation-1/report.md), private
+disclosure draft, proposed regression and action recommendation are retained as a
+publication-ready private package. No upstream contact occurred. External disclosure
+requires explicit human approval of the exact private destination and draft; current
+master, releases, broader exploitability, severity and a fix remain untested.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
@@ -3579,7 +3586,7 @@ no external action is recommended now.
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
-| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | ACTIVE; Daybreak-passed four-cell confirmation snapshot |
+| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | COMPLETE, SUCCESS; exact-head checked-admission regression confirmed |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
