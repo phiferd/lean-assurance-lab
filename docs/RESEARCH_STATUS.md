@@ -3354,23 +3354,25 @@ not evidence about Lean eta behavior. The explicit stop rule forbids a source
 build or alternate infrastructure route in this campaign. See the
 [retained report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/report.md).
 
-The linked `E0-LEAN-ETA-ALIAS-PILOT-RETRY-1` then closed
-`BOUNDED_UNRESOLVED`. It resolved the predecessor's image, artifact and
-emulation uncertainty: the exact `linux/amd64` image was acquired, the official
-archive matched its size and digest, no-mount amd64 emulation passed, and the
-official runner was invoked in the 4 GiB container. That invocation exposed
-fixture compatibility errors before any case ran. A minimal repair preserves
-the expressions, assertions, case order and oracle, but could not be replayed:
-two supervised transfers hit sandbox denial of the `/bin/ps` sampler and the
-direct fallback was denied Docker socket access. Zero of four scientific cases
-executed, so there is still no Meta or kernel result. No broader permission,
-settings change, retry, publication or upstream action follows. See the
-[retry report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/report.md).
+The linked `E0-LEAN-ETA-ALIAS-PILOT-RETRY-1` completed with E0 `SIGNAL` after
+the normal sandbox approval mechanism was clarified for the exact task-created
+container. The one repaired four-case replay exited 0. Explicit arbitrary
+function rejection was `Meta=false, Kernel=false`; both constructor controls
+were `true,true`. The preserved-alias arbitrary-function negative was
+`Meta=false, Kernel=true`, contrary to the independent correctness oracle and
+consistent with the prereviewed alias-sensitive branch risk. The repair changed
+only exception rendering and reserved local names; raw expressions, alias
+identity, assertions, order and expectations stayed fixed. Terminal inspection
+recorded an exited non-OOM container with code 0; the exact container was then
+removed and lookup by full ID returned `No such object`. This is a one-fixture
+PR15373 signal, not whole-validator, exploitability, current-main or general
+kernel evidence. The earlier append-only INCONCLUSIVE finish remains historical
+at the pre-approval capability boundary. No publication or upstream action
+occurred. See the [authorized recovery report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/authorized-recovery-report.md).
 Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
 Queue handoff: PAUSED.
 The selected item remains DEFERRED rather than executable; resumption requires
-an owner decision to start that bounded audit or explicit future authority to
-restore Docker daemon access for the retained eta fixture.
+an owner decision to start that bounded audit.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 

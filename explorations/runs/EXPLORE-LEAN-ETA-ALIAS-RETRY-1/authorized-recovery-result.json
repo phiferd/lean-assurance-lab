@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "kind": "POST_CLOSURE_AUTHORIZED_RECOVERY",
+  "campaign": "E0-LEAN-ETA-ALIAS-PILOT-RETRY-1",
+  "experiment": "EXPLORE-LEAN-ETA-ALIAS-RETRY-1",
+  "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+  "authorization": "The parent clarified that the earlier no-escalation instruction was overbroad and authorized the normal supported approval mechanism for the exact existing task-created container only.",
+  "container": {
+    "id": "18fe339de630eab354330e554e654608cbb95c868143f8d195fe3a6dd4a71644",
+    "name": "lean-eta-alias-science-20261002",
+    "image_id": "sha256:6232b38791000e3818b58d8847b5a8f5612d606929e01156dd8febc423e0f2ef",
+    "image": "ubuntu:24.04",
+    "platform": "linux/amd64",
+    "memory_bytes": 4294967296,
+    "mounts": [],
+    "privileged": false,
+    "command": ["/toolchain/bin/lean", "/work/prospective-cases.lean"]
+  },
+  "fixture": {
+    "path": "prospective-cases-r2.lean",
+    "sha256": "f3a586214ab3bc003d93315d32a27d0296418e4f1cc23b6ad89f98b592ca53b6",
+    "repair": "Compatibility-only exception rendering and reserved local-name changes; expressions, raw-shape assertions, kernel-before-Meta order, case labels and oracle unchanged."
+  },
+  "observations": [
+    {"case": "explicit-negative", "expected": false, "meta": false, "kernel": false, "matches_frozen_oracle": true},
+    {"case": "alias-negative", "expected": false, "meta": false, "kernel": true, "matches_frozen_oracle": false},
+    {"case": "explicit-constructor-positive", "expected": true, "meta": true, "kernel": true, "matches_frozen_oracle": true},
+    {"case": "alias-constructor-positive", "expected": true, "meta": true, "kernel": true, "matches_frozen_oracle": true}
+  ],
+  "run": {
+    "receipt": "attempts/scientific-run-r2/receipt.json",
+    "stdout": "attempts/scientific-run-r2/stdout.log",
+    "stderr": "attempts/scientific-run-r2/stderr.log",
+    "exit_code": 0,
+    "elapsed_seconds": 5.721579041,
+    "maximum_sampled_group_rss_bytes": 83165184,
+    "child_peak_rss_bytes": 49610752,
+    "cleanup_complete": true,
+    "monitor_errors": []
+  },
+  "terminal_state": {
+    "status": "exited",
+    "running": false,
+    "oom_killed": false,
+    "exit_code": 0,
+    "receipt": "attempts/scientific-container-terminal-inspect/receipt.json"
+  },
+  "container_cleanup": {
+    "remove_receipt": "attempts/scientific-container-remove/receipt.json",
+    "removed": true,
+    "post_remove_lookup": "Error: No such object: 18fe339de630eab354330e554e654608cbb95c868143f8d195fe3a6dd4a71644"
+  },
+  "outcome": "SIGNAL",
+  "signal_count": 1,
+  "measurement_complete": true,
+  "scientific_conclusion": "For the exact PR15373 runner and retained raw fixture, Kernel.isDefEq accepted the arbitrary unvalued function against Box.mk when its stored local type remained the reducible FnAlias constant, while Meta.isDefEq rejected it. The explicit-type negative and both constructor controls behaved as expected.",
+  "limitations": "One four-case raw-Expr fixture at one PR revision. This does not establish C++ kernel correctness, whole-validator acceptance, exploitability, general alias behavior, generated recursor correctness or current-main behavior. No external report or publication occurred."
+}
