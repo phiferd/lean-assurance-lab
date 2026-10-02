@@ -4,7 +4,7 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-10-01**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-10-02**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
@@ -18,7 +18,7 @@ Ledger updated: **2026-10-01**. Upstream states are dated observations, not a li
 |---|---|---|---|---|
 | [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
 | [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-30 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
-| [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-09-23 | no activity; not reported | Await maintainer feedback on Kiota PR#11. Investigate feedback locally; any later external modification requires exact authorization. |
+| [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-10-02 | no activity; not reported | PR#11 remains open and is incorporated in maintainer draft PR#12. Retain the prepared CLI-verdict regression for maintainer review; any external modification requires exact authorization. |
 
 ## Local drafts
 
