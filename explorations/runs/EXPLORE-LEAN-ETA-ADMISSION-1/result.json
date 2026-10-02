@@ -1,0 +1,70 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "exploration_id": "EXPLORE-LEAN-ETA-ADMISSION-1",
+  "outcome": "SIGNAL",
+  "target": {
+    "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+    "lean_version": "4.36.0-pre",
+    "platform": "x86_64-unknown-linux-gnu",
+    "archive_bytes": 759812626,
+    "archive_sha256": "73cbeca7d35f92bf4e67c36ca4f15fe37d8b3bc8e3ec58b560c13f905185e17d",
+    "lean_binary_sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00"
+  },
+  "controls": {
+    "processes": "separate fresh Lean processes",
+    "trust_level": 0,
+    "metavariables": false,
+    "sorry": false,
+    "added_axioms": false,
+    "unchecked_insertion": false,
+    "skip_kernel_tc": false
+  },
+  "inputs": {
+    "support_source_sha256": "409eb85f75a5a14dc174fae59e779b16346f5da0002e1121cb3330713f900004",
+    "support_olean_sha256": "6fa2b9d62c3c6337efc56ce6240bd6b25b556b6c63c5ba350b64ea854d304190",
+    "harness_source_sha256": "e9ff99593f966c4e1a8ddf37b0a21e96eb72e3e69b0d722e80e802f76dbc9dd7",
+    "harness_olean_sha256": "49c34b7f5fdc4f18f9e4d029d9e9f7444086b268d66f0271e8167fa647c83ee0",
+    "alias_cell_sha256": "fc4f7d8ce42169c0bb731deb51169aed340335a10e7af82e47a75e3c6f7a1dde",
+    "explicit_cell_sha256": "686eb6d7856084ae2128835e479b6ffbef5ac26b8416f111ff3aaee138a2b773"
+  },
+  "cells": [
+    {
+      "id": "alias-negative",
+      "stored_domain_shape": "Expr.const FnAlias []",
+      "declaration": "forall f : FnAlias, f = Box.mk",
+      "value": "fun f : FnAlias => Eq.refl f",
+      "expected": "REJECT",
+      "observed": "ACCEPT",
+      "signal": true,
+      "receipt_sha256": "77c5e70156502ef1620a58f72ec1d720df9ec540aa2e546572265a6729b59b5f"
+    },
+    {
+      "id": "explicit-negative",
+      "stored_domain_shape": "Expr.forallE Bool Box",
+      "declaration": "forall f : Bool -> Box, f = Box.mk",
+      "value": "fun f : Bool -> Box => Eq.refl f",
+      "expected": "REJECT",
+      "observed": "REJECT",
+      "signal": false,
+      "receipt_sha256": "73b36f7e36fc880ac543e83aac712e8e3ee332443a2aa37af5274ee2fea55b02"
+    }
+  ],
+  "classification": "At this exact official PR15373 artifact, the minimal alias-sensitive discrepancy reaches checked theorem declaration admission while the syntactically explicit negative control rejects.",
+  "limitations": "This E0 result covers one alias and one explicit control at one PR artifact. It does not establish PR causation, behavior on current main or a release, broader exploitability, a derivation of False, whole-validator behavior, or general kernel correctness.",
+  "attempts": [
+    "archive-download",
+    "archive-extract",
+    "support-build-1",
+    "support-build-2",
+    "support-build-3",
+    "harness-build-1",
+    "harness-build-2",
+    "scientific-run-1",
+    "scientific-run-2",
+    "scientific-run-3",
+    "scientific-run-4",
+    "alias-cell-run",
+    "explicit-cell-run"
+  ]
+}

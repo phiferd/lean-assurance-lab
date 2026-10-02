@@ -373,4 +373,4 @@ Existing-CLI drafts and supported receipt counts reproduce 40/48/3/8; all non-sk
 
 ## PR15373 declaration admission successor — 2026-10-02
 
-Owner selects `E0-LEAN-ETA-ADMISSION-1` under [docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md](E0_LEAN_ETA_ADMISSION_1_PLAN.md) for exactly two checked admission cells at the verified PR artifact; memory audit remains deferred. No other science or upstream action is selected.
+Owner selected `E0-LEAN-ETA-ADMISSION-1` under [docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md](E0_LEAN_ETA_ADMISSION_1_PLAN.md) for exactly two checked admission cells at the verified PR artifact. It closed E0 SIGNAL: the alias-domain invalid theorem was admitted at trust zero while the explicit control rejected. The result remains scoped to one PR artifact and needs separate E1 confirmation before a stronger claim. The memory audit remains deferred; no upstream action is selected.

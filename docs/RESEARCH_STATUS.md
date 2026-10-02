@@ -3378,9 +3378,19 @@ lookup. This strengthens the result to a reproducible pinned-artifact API
 disagreement. It still does not establish PR causation or production declaration
 acceptance because no exact parent binary or declaration-level check was used.
 See the [fresh confirmation report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-report.md).
-Owner selected `E0-LEAN-ETA-ADMISSION-1` ACTIVE on 2026-10-02: exactly two native Linux checked declaration admission cells under [docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md](research/E0_LEAN_ETA_ADMISSION_1_PLAN.md). The memory audit remains DEFERRED.
-Selected next item: `E0-LEAN-ETA-ADMISSION-1`.
-Queue handoff: EXECUTABLE.
+`E0-LEAN-ETA-ADMISSION-1` completed with E0 `SIGNAL` on 2026-10-02.
+At exact official PR15373 commit `015d5464`, a trust-zero checked
+`Kernel.Environment.addDeclCore` accepted the closed alias-domain invalid
+theorem while the separately launched explicit `Bool → Box` control rejected.
+Raw shapes confirm that only the accepted cell retained `FnAlias`. This resolves
+the minimal API-to-admission question at that one artifact; it does not establish
+PR causation, current-main or release behavior, a derivation of `False`, broader
+exploitability or general kernel correctness. No upstream action occurred. See
+the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
+Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+Queue handoff: PAUSED.
+The memory audit remains DEFERRED and must not auto-start. A stronger admission
+claim requires a separately planned E1 confirmation and owner selection.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
