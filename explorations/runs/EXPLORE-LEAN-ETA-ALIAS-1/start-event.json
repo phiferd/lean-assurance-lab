@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-LEAN-ETA-ALIAS-1",
+  "data": {
+    "campaign": "E0-LEAN-ETA-ALIAS-PILOT-1",
+    "question": "At Lean PR15373, do the Meta and kernel definitional-equality procedures both reject an arbitrary unvalued function against unapplied Box.mk when its stored type is explicit Bool to Box or retained reducible FnAlias, while accepting the corresponding constructor eta controls?",
+    "sources": [
+      {
+        "name": "leanprover/lean4 PR15373",
+        "revision": "015d54649bcaaa0861f355b59761ce308e629fbb"
+      },
+      {
+        "name": "lean-assurance-lab",
+        "revision": "a78f7b856ab3a5cb3dfb39ae632f332404a879c1"
+      }
+    ],
+    "versions": "Official lean4-pr-releases pr-release-15373 Linux archive, 759812626 bytes, sha256 73cbeca7d35f92bf4e67c36ca4f15fe37d8b3bc8e3ec58b560c13f905185e17d; Docker CLI 20.10.14 on arm64 macOS; linux/amd64 container limited to 4 GiB.",
+    "commands": "Start the already-installed Docker Desktop VM under explicit approval. Supervise the artifact download and one docker run command. Verify archive and extracted runner identities; run prospective-cases.lean exactly once with the official runner; preserve raw streams, receipt, container inspection and cleanup. Stop rather than build or change platform infrastructure if this route fails.",
+    "inputs": [
+      "docs/research/E0_LEAN_ETA_ALIAS_PILOT_1_PLAN.md",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/plan.md",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/preflight.json",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/run-supervised.py",
+      "results/research/lean-eta-alias-pilot-preparation-1/prospective-cases.lean",
+      "results/research/lean-eta-alias-pilot-preparation-1/independent-expected-outcome-review.md",
+      "results/research/lean-eta-alias-pilot-preparation-1/capability-decision-2026-10-02.md",
+      "lib/resource_envelope_supervisor.py"
+    ],
+    "input_sha256": {
+      "docs/research/E0_LEAN_ETA_ALIAS_PILOT_1_PLAN.md": "7e385ea27d469ef27c7c75b467612c6ce5aa58a80e02cd760e36ffe452ffe328",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/plan.md": "5031efb6242653ccdd9295a958cd1a39f67496f954b55458e18d5edd938aa698",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/preflight.json": "d75236966e4a66083d4878b8780137cb648cd3effbfae52869b296201aef005a",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/run-supervised.py": "c129a289009286ee6843acac651d7b778d2807904cf232ff3b3599aa4f3fd350",
+      "results/research/lean-eta-alias-pilot-preparation-1/prospective-cases.lean": "2c2907bb0525af6921791aa26ee2f4ba06dfe7687d4e95efef336a167a65dd45",
+      "results/research/lean-eta-alias-pilot-preparation-1/independent-expected-outcome-review.md": "87340cd7bf7471e5533e5c77762bcd3e8055a1d598ee4a6f05327b8cac9b421d",
+      "results/research/lean-eta-alias-pilot-preparation-1/capability-decision-2026-10-02.md": "67f741f8e53d1e9d4d40c979d44a88181a877a2f53b5a0f2af06ddf9cdaa0c94",
+      "lib/resource_envelope_supervisor.py": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"
+    },
+    "sample": "Exactly four comparisons over zero-parameter nonrecursive Box: explicit and alias arbitrary-function negatives, plus explicit and alias-context constructor eta positives; Meta and kernel observed separately.",
+    "planned_runs": 1,
+    "controls": "Frozen false/false negative and true/true positive oracle; alias type exactly .const FnAlias []; unvalued cdecl; Box.mk zero term arguments; distinct nonlambda negative heads; kernel observed before Meta; official artifact digest and source pin; 4 GiB container ceiling; post-run container absence; no source build or broader cases."
+  }
+}

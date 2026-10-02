@@ -3343,11 +3343,16 @@ The earlier claim about a missing general bridge described pinned main only;
 it did not establish absence from upstream's preserved branch.
 No further grammar, output, value/fold or completeness expansion is selected.
 
-Selected next item: `LEAN-ETA-ALIAS-PILOT-PREPARATION-1`.
-The existing [source-preparation plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md)
-is restored READY and unstarted. The canonical queue retains one READY item
-and has zero ACTIVE campaigns. This disposition does not execute that successor, launch
-a checker or build, or authorize upstream outreach. The original
+`LEAN-ETA-ALIAS-PILOT-PREPARATION-1` completed its source, duplicate,
+fixture-shape, independent-oracle and exact-runner capability review on
+2026-10-02. The canonical queue now selects
+`E0-LEAN-ETA-ALIAS-PILOT-1` as the sole ACTIVE campaign under the
+[bounded four-case plan](research/E0_LEAN_ETA_ALIAS_PILOT_1_PLAN.md).
+Selected next item: `E0-LEAN-ETA-ALIAS-PILOT-1`.
+The owner explicitly authorized starting the installed Docker Desktop VM,
+downloading the checksum-pinned official PR15373 Linux toolchain and running
+the four fixed Meta/kernel cases. No source build, broader eta campaign,
+security-setting change, PR #41 change or upstream outreach is authorized. The original
 [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all closed trial
 reports remain historical evidence.
 
@@ -3372,7 +3377,7 @@ Lean-action regression preparation has26 fresh reviewed shell/model controls and
 The real Nanoda screen and separate whole-module retry are COMPLETE; the original timeout remains historical INCONCLUSIVE, while the exact retry is E0 NO_SIGNAL with 59,349 declarations accepted. General checker parity, YAML workflow execution and host-security effects remain untested.
 The restricted Tree2/List-tower proof and its unchanged historical closure are published. Queue and summary restoration does not reattest current-tree strict closure.
 [Bounded package](../results/research/lean-action-regression-preparation-1/report.md) and [local E2 closure plan](../results/research/lean-action-regression-preparation-1/closure/e2-plan.md).
-The alias source/fixture preparation is READY and unstarted under its unchanged [plan](research/LEAN_ETA_ALIAS_PILOT_PREPARATION_1_PLAN.md). No alias experiment or parent fvar-reuse investigation started here.
+The alias source/fixture preparation later completed and the exact four-case E0 screen is now ACTIVE under its separate plan. No parent fvar-reuse investigation or larger eta campaign started here.
 The owner authorized restoring these omitted records, refreshing planning views and pushing that cleanup on 2026-10-01. That cleanup is complete. The owner's later explicit instruction authorizes normal validated milestone publication to lab main; this supersedes the earlier local-only Tree2 publication boundary. Upstream messages, contributions and privileged security setting changes remain unauthorized.
 
 The closure-automation successor completed its full-suite and refresh gates.
