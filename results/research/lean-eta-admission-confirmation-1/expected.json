@@ -1,0 +1,37 @@
+{
+  "schema_version": 1,
+  "question": "Does checked trust-zero declaration admission accept the alias-domain invalid theorem only at PR15373 head while the explicit control and both exact-parent cells reject?",
+  "normative_oracle": {
+    "head_alias": "REJECT",
+    "head_explicit": "REJECT",
+    "parent_alias": "REJECT",
+    "parent_explicit": "REJECT"
+  },
+  "diagnostic_prediction": {
+    "head_alias": "ACCEPT",
+    "head_explicit": "REJECT",
+    "parent_alias": "REJECT",
+    "parent_explicit": "REJECT"
+  },
+  "semantic_rejection_exceptions": [
+    "declTypeMismatch",
+    "funExpected",
+    "typeExpected",
+    "letTypeMismatch",
+    "exprTypeMismatch",
+    "appTypeMismatch",
+    "invalidProj",
+    "thmTypeIsNotProp"
+  ],
+  "infrastructure_exceptions_never_count_as_reject": [
+    "unknownConstant",
+    "alreadyDeclared",
+    "declHasMVars",
+    "declHasFVars",
+    "other",
+    "deterministicTimeout",
+    "excessiveMemory",
+    "deepRecursion",
+    "interrupted"
+  ]
+}

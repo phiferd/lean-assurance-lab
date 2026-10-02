@@ -3387,18 +3387,22 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+Selected next item: `CONFIRM-LEAN-ETA-ADMISSION-1`.
 Queue handoff: PAUSED.
-The memory audit remains DEFERRED and must not auto-start. A stronger admission
-claim requires a separately planned E1 confirmation and owner selection.
-The owner authorized that E1 preparation on 2026-10-02. The resulting
-`CONFIRM-LEAN-ETA-ADMISSION-1` plan is `PLANNED`, not executable: it requires an
-independent Daybreak Blue review and frozen exact-parent runtime inputs before
-activation. Daybreak Blue is not exposed to subagents in the current cloud
-workspace, so no parent build or confirmation cell started. Read-only source
-inspection found the new partial-constructor loop only at the unchanged draft-PR
-head; the exact parent and observed current `master` source files match each
-other. Runtime causation remains unconfirmed.
+The memory audit remains DEFERRED and must not auto-start. The owner directed
+publication-ready completion of the separately planned E1 confirmation. An
+inherited Daybreak Blue reviewer conditionally passed its four-cell design and
+required matched source builds, explicit checked admission, exact exception
+classification, stored-declaration verification and immutable launch inputs.
+Those controls are now frozen. Exact head and parent Release runners were built
+from content-addressed Git trees with the same GCC 14.2/CMake 4.1.2, GMP-off,
+four-job method; both independently compiled runner-neutral fixtures and now
+self-report their exact commits. The retained first identities exposed and the
+repair record explains a detached-worktree CMake githash defect. E1 remains
+`WAITING`, not executable, until a final Daybreak Blue review passes the
+committed fixture and manifests. No confirmation cell has started. Read-only
+source inspection found the new partial-constructor loop only at the unchanged
+draft-PR head; runtime causation remains unconfirmed.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
@@ -3569,8 +3573,9 @@ no external action is recommended now.
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
-| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
+| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | WAITING; final Daybreak review of committed launch inputs required |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |
