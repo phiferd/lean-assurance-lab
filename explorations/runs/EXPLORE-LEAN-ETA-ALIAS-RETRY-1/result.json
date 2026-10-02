@@ -1,0 +1,40 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "id": "EXPLORE-LEAN-ETA-ALIAS-RETRY-1",
+  "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+  "planned_scientific_cases": 4,
+  "completed_scientific_cases": 0,
+  "meta_observations": 0,
+  "kernel_observations": 0,
+  "capability_progress": {
+    "image": "ubuntu:24.04 linux/amd64 acquired and identity retained",
+    "official_archive": "759812626 bytes; sha256 73cbeca7d35f92bf4e67c36ca4f15fe37d8b3bc8e3ec58b560c13f905185e17d",
+    "emulation": "A no-mount linux/amd64 /bin/true probe completed successfully under the 4 GiB limit.",
+    "runner": "The official x86-64 runner was copied into a no-mount container and invoked successfully enough to elaborate the fixture.",
+    "measurement": "The original fixture failed to elaborate before case execution; its minimal compatibility repair was not transferable after Docker daemon access became unavailable."
+  },
+  "capability_gate": {
+    "status": "FAILED",
+    "stage": "repaired-fixture transfer and replay",
+    "result": "capability-blocker.json",
+    "reason": "The supervised transfer path was denied /bin/ps sampling and the direct path was denied /var/run/docker.sock access; requesting broader permissions was explicitly out of scope."
+  },
+  "attempt_accounting": {
+    "retained_receipts": 14,
+    "successful_receipts": 7,
+    "failed_receipts": 7,
+    "aggregate_receipt_elapsed_seconds": 314.15950570596084,
+    "maximum_sampled_group_rss_bytes": 93257728,
+    "scientific_runner_invocations": 1,
+    "completed_scientific_runs": 0,
+    "monitor_fault_receipts": 3
+  },
+  "outcome": "INCONCLUSIVE",
+  "signal_count": 0,
+  "measurement_complete": false,
+  "engineering_failures_unresolved": true,
+  "observation": "The retry resolved the predecessor's image, artifact and emulation uncertainties, and the official runner was actually invoked. That invocation exposed only exact-runner fixture syntax/API incompatibilities and executed zero cases. A narrowly repaired fixture was retained, but current sandbox policy blocked both supervised and direct transfer to the stopped container.",
+  "limitations": "No Meta.isDefEq or Kernel.isDefEq result was observed. This does not support or refute the four-case oracle, PR15373 behavior, preserved-alias eta behavior, Meta/kernel agreement or a Lean defect. The retained stopped container could not be finally inspected or removed after daemon access became unavailable.",
+  "recommended_action": "Close this retry without semantic inference. Retain the verified image/toolchain path, repaired fixture and exact blocker. Do not retry, request permissions, alter Docker settings, broaden cases or publish from this campaign."
+}

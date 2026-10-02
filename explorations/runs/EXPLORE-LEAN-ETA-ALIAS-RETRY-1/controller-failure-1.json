@@ -1,0 +1,8 @@
+{
+  "schema_version": 1,
+  "stage": "observed public-image pull controller",
+  "scientific_measurement": false,
+  "failure": "macOS ps emitted fractional CPU seconds (00:00.04), but the observer parser required an integer final field",
+  "effect": "The observer exited before its first sample and created no attempt directory. The pull child also exited; a process-table check found no retry observer or pull, image inspection found no ubuntu:24.04 image, and the matching image-event query returned no event.",
+  "repair": "Retain the frozen original observer and use a small r2 launcher that overrides only CPU-time parsing to accept fractional seconds."
+}

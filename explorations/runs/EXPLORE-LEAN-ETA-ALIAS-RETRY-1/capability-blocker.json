@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "stage": "repaired-fixture transfer to the existing scientific container",
+  "status": "BLOCKED",
+  "scientific_cases_completed": 0,
+  "observations": [
+    "Two fresh resource-supervised docker cp attempts were terminated before transfer because the supervisor's /bin/ps sampler received EPERM.",
+    "A direct docker cp fallback then received EPERM connecting to /var/run/docker.sock.",
+    "The repaired fixture therefore did not replace the original fixture in the existing stopped container, and no repaired scientific replay occurred."
+  ],
+  "safe_repair_boundary": "The owner prohibited seeking new permissions or changing Docker, network, credential or security settings. No escalation was requested.",
+  "semantic_interpretation": "None. The sole runner invocation reached Lean but failed while elaborating the original fixture, before any of the four cases executed.",
+  "cleanup": "The exact ephemeral container lean-eta-alias-science-20261002 was last observed stopped with exit code 1. Current daemon access was unavailable, so final inspection and removal could not be performed.",
+  "evidence": [
+    "attempts/scientific-run/receipt.json",
+    "attempts/scientific-run/stdout.log",
+    "attempts/scientific-container-copy-fixture-r2/receipt.json",
+    "attempts/scientific-container-copy-fixture-r3/receipt.json",
+    "direct-docker-copy-blocker.json",
+    "fixture-repair-1.json",
+    "prospective-cases-r2.lean"
+  ]
+}

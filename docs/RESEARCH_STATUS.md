@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-01
+Last updated: 2026-10-02
 
 ## How Status Is Tracked
 
@@ -3354,9 +3354,23 @@ not evidence about Lean eta behavior. The explicit stop rule forbids a source
 build or alternate infrastructure route in this campaign. See the
 [retained report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/report.md).
 
-No remaining item has a satisfied scientific entry gate. The queue is paused;
-its mechanically selected deferred decision item remains closed to execution.
+The linked `E0-LEAN-ETA-ALIAS-PILOT-RETRY-1` then closed
+`BOUNDED_UNRESOLVED`. It resolved the predecessor's image, artifact and
+emulation uncertainty: the exact `linux/amd64` image was acquired, the official
+archive matched its size and digest, no-mount amd64 emulation passed, and the
+official runner was invoked in the 4 GiB container. That invocation exposed
+fixture compatibility errors before any case ran. A minimal repair preserves
+the expressions, assertions, case order and oracle, but could not be replayed:
+two supervised transfers hit sandbox denial of the `/bin/ps` sampler and the
+direct fallback was denied Docker socket access. Zero of four scientific cases
+executed, so there is still no Meta or kernel result. No broader permission,
+settings change, retry, publication or upstream action follows. See the
+[retry report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/report.md).
 Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+Queue handoff: PAUSED.
+The selected item remains DEFERRED rather than executable; resumption requires
+an owner decision to start that bounded audit or explicit future authority to
+restore Docker daemon access for the retained eta fixture.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
@@ -3674,11 +3688,10 @@ source requests include one failed web open. No scientific launch or new export
 occurred. The pair uses its bound variable and adjusts the enclosing declaration
 type; checking, conditional reduction and raw import remain distinct contracts.
 
-Queue handoff: PAUSED.
-
-The canonical queue selects `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` READY and
-unstarted. Closure reliability is complete subject to its exact ordered receipt;
-the memory audit remains deferred after project-wide comparison. The resource matrix is COMPLETE with 24 scientific checks and 12
+The earlier executable handoff to `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` is
+historical and was subsequently completed. Closure reliability is complete
+subject to its exact ordered receipt; the memory audit remains deferred after
+project-wide comparison. The resource matrix is COMPLETE with 24 scientific checks and 12
 baselines ACCEPTED. The 18 Nanoda runs have zero sampled RSS points, so sampled
 group peaks remain unknown. The configured 10 ms target cadence does not
 establish actual cadence or the cause of missing samples; wait4 child-accounting
