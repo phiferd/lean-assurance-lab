@@ -374,3 +374,5 @@ Existing-CLI drafts and supported receipt counts reproduce 40/48/3/8; all non-sk
 ## PR15373 declaration admission successor — 2026-10-02
 
 Owner selected `E0-LEAN-ETA-ADMISSION-1` under [docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md](E0_LEAN_ETA_ADMISSION_1_PLAN.md) for exactly two checked admission cells at the verified PR artifact. It closed E0 SIGNAL: the alias-domain invalid theorem was admitted at trust zero while the explicit control rejected. The result remains scoped to one PR artifact and needs separate E1 confirmation before a stronger claim. The memory audit remains deferred; no upstream action is selected.
+
+Owner authorization on 2026-10-02 permits preparation of [the bounded E1 confirmation](CONFIRM_LEAN_ETA_ADMISSION_1_PLAN.md). It remains PLANNED because the required Daybreak Blue independent reviewer is unavailable to this workspace and the exact-parent runtime input is not frozen. Source-only history preflight supports the hypothesis but supplies no parent execution. Do not activate the memory audit, build the parent, run confirmation cells or contact upstream until the E1 entry gates pass.
