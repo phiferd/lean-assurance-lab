@@ -3389,6 +3389,7 @@ exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
 Selected next item: `CONFIRM-LEAN-ETA-ADMISSION-1`.
 Queue handoff: EXECUTABLE.
+The canonical queue retains zero READY items because the sole selected item is ACTIVE.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
