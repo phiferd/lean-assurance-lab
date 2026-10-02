@@ -49,6 +49,27 @@ class PortfolioHistoricalSnapshotTests(unittest.TestCase):
         with self.assertRaisesRegex(ValueError, "selection is not executable"):
             history._compare_queue(old, current)
 
+    def test_valid_paused_queue_does_not_require_executable_selection(self):
+        old = {"items": [
+            {"id": "old", "status": "COMPLETE", "priority": 1,
+             "closure": {"outcome": "SUCCESS"}},
+        ]}
+        current = {
+            "selected_item": "blocked",
+            "handoff": {"status": "PAUSED"},
+            "items": [
+                {"id": "old", "status": "COMPLETE", "priority": 9,
+                 "closure": {"outcome": "SUCCESS"}},
+                {"id": "blocked", "status": "DEFERRED", "priority": 1},
+            ],
+        }
+        history._compare_queue(old, current)
+
+        damaged = copy.deepcopy(current)
+        damaged["items"][0]["closure"]["outcome"] = "NO_GO"
+        with self.assertRaisesRegex(ValueError, "completed predecessor queue record changed"):
+            history._compare_queue(old, damaged)
+
     def test_payload_cannot_replace_tracked_content(self):
         with tempfile.TemporaryDirectory() as temporary:
             root, snapshot = Path(temporary, "root"), Path(temporary, "snapshot")

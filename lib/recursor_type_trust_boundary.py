@@ -499,7 +499,7 @@ def _validate_final_state(root: Path) -> None:
         if token not in status:
             raise BoundaryError(f"research status omits {token}")
 
-    current_queue = load_queue(root, require_ready=True)
+    current_queue = load_queue(root, require_ready=False)
     current_items = current_queue.get("items")
     current_by_id = ({row.get("id"): row for row in current_items if isinstance(row, dict)}
                      if isinstance(current_items, list) else {})
@@ -507,8 +507,18 @@ def _validate_final_state(root: Path) -> None:
     current_design = current_by_id.get(SUCCESSOR)
     current_repair = current_by_id.get("KIOTA-RECURSOR-TYPE-REPAIR-1")
     selected = current_by_id.get(current_queue.get("selected_item"))
+    handoff = current_queue.get("handoff", {}).get("status")
+    selection_valid = (
+        handoff == "EXECUTABLE"
+        and isinstance(selected, dict)
+        and selected.get("status") in {"READY", "ACTIVE"}
+    ) or (
+        handoff == "PAUSED"
+        and isinstance(selected, dict)
+        and selected.get("status") == "DEFERRED"
+    )
     if (current_queue.get("schema_version") != 4
-            or current_queue.get("handoff", {}).get("status") != "EXECUTABLE"
+            or not selection_valid
             or not isinstance(current_item, dict)
             or current_item.get("status") != "COMPLETE"
             or current_item.get("closure") != item.get("closure")
@@ -518,8 +528,7 @@ def _validate_final_state(root: Path) -> None:
             or not isinstance(current_repair, dict)
             or current_repair.get("status") != "COMPLETE"
             or current_repair.get("closure", {}).get("outcome") != "SUCCESS"
-            or not isinstance(selected, dict)
-            or selected.get("status") not in {"READY", "ACTIVE"}):
+            ):
         raise BoundaryError("current queue does not preserve and advance the historical successor")
 
 

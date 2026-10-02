@@ -98,11 +98,15 @@ class RecursorTypeTrustBoundaryTests(unittest.TestCase):
         self.assertEqual(historical_successor["budget"], None)
         self.assertFalse(any(row["status"] == "ACTIVE" for row in historical["items"]))
 
-        current = boundary.load_queue(boundary.ROOT, require_ready=True)
+        current = boundary.load_queue(boundary.ROOT, require_ready=False)
         current_by_id = {row["id"]: row for row in current["items"]}
         self.assertEqual(current_by_id[boundary.SUCCESSOR]["status"], "COMPLETE")
         self.assertEqual(current_by_id["KIOTA-RECURSOR-TYPE-REPAIR-1"]["status"], "COMPLETE")
-        self.assertIn(current_by_id[current["selected_item"]]["status"], {"READY", "ACTIVE"})
+        selected_status = current_by_id[current["selected_item"]]["status"]
+        if current["handoff"]["status"] == "PAUSED":
+            self.assertEqual(selected_status, "DEFERRED")
+        else:
+            self.assertIn(selected_status, {"READY", "ACTIVE"})
 
 
 if __name__ == "__main__":

@@ -19,9 +19,29 @@ from lib.research_queue_v4 import load_queue
 CLOSURE = legacy.CLOSURE
 MODULES = legacy.MODULES
 _compare_bytes = legacy._compare_bytes
-_compare_queue = legacy._compare_queue
 _attach_payloads = legacy._attach_payloads
 _snapshot = legacy._snapshot
+
+
+def _compare_queue(old, current):
+    """Preserve completed history while allowing a valid paused handoff."""
+
+    by_id = {row["id"]: row for row in current["items"]}
+    for previous in old["items"]:
+        if previous["status"] != "COMPLETE":
+            continue
+        actual = by_id.get(previous["id"])
+        omit_priority = lambda row: {
+            key: value for key, value in row.items() if key != "priority"
+        }
+        if actual is None or omit_priority(actual) != omit_priority(previous):
+            raise ValueError("completed predecessor queue record changed: " + previous["id"])
+    selected = by_id.get(current["selected_item"])
+    if selected is None:
+        raise ValueError("current portfolio selection is missing")
+    if (current.get("handoff", {}).get("status") != "PAUSED"
+            and selected["status"] not in {"READY", "ACTIVE"}):
+        raise ValueError("current portfolio selection is not executable")
 
 
 def validate_live_transition(root):
@@ -36,8 +56,8 @@ def validate_live_transition(root):
             raise ValueError("frozen portfolio input missing or linked: " + path)
         legacy._compare_bytes(path, current.read_bytes(), legacy._bytes(root, path))
     old = json.loads(legacy._bytes(root, "config/research-queue.json"))
-    current = load_queue(root, require_ready=True)
-    legacy._compare_queue(old, current)
+    current = load_queue(root, require_ready=False)
+    _compare_queue(old, current)
     return {"status": "PASS", "historical_commit": CLOSURE,
             "preserved_paths": len(paths), "selected_item": current["selected_item"],
             "historical_modules": sorted(MODULES)}
