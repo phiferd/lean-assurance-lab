@@ -1,0 +1,17 @@
+/toolchain/bin/lean: OK
+/toolchain/lib/lean/libleanshared.so: OK
+/work/prospective-cases-confirmation.lean: OK
+revision=015d54649bcaaa0861f355b59761ce308e629fbb
+explicit-negative lhs Kernel.check type=Bool → Box
+explicit-negative rhs Kernel.check type=Bool → Box
+explicit-negative: expected=false meta=false kernel=false storedType=Bool → Box lhs=f rhs=Box.mk
+alias-negative lhs Kernel.check type=FnAlias
+alias-negative rhs Kernel.check type=Bool → Box
+alias-negative: expected=false meta=false kernel=true storedType=FnAlias lhs=f rhs=Box.mk
+explicit-constructor-positive lhs Kernel.check type=Bool → Box
+explicit-constructor-positive rhs Kernel.check type=Bool → Box
+explicit-constructor-positive: expected=true meta=true kernel=true storedType=Bool →
+  Box lhs=fun b => { val := b } rhs=Box.mk
+alias-constructor-positive lhs Kernel.check type=Bool → Box
+alias-constructor-positive rhs Kernel.check type=Bool → Box
+alias-constructor-positive: expected=true meta=true kernel=true storedType=FnAlias lhs=fun b => { val := b } rhs=Box.mk

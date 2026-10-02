@@ -1,0 +1,34 @@
+{
+  "schema_version": 1,
+  "kind": "POST_CLOSURE_PINNED_ARTIFACT_CONFIRMATION",
+  "question": "Does one fresh process on the retained exact PR15373 toolchain reproduce the four-case matrix after Kernel.check validates and reports both operands?",
+  "container_name": "lean-eta-alias-confirm-20261002",
+  "container_image": "ubuntu:24.04",
+  "container_image_id": "sha256:6232b38791000e3818b58d8847b5a8f5612d606929e01156dd8febc423e0f2ef",
+  "platform": "linux/amd64",
+  "memory_bytes": 4294967296,
+  "mounts": [],
+  "fixture": {
+    "path": "prospective-cases-confirmation.lean",
+    "sha256": "cfbcbca96f208169dd6a514be00fd9dc323e5fa6998cfcb6efef1e8068d28f76",
+    "scientific_change": "None: the same four expressions and comparisons; added revision logging, Kernel.check operand-type observations and shape assertions only."
+  },
+  "toolchain": {
+    "revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+    "lean_sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00",
+    "libleanshared_sha256": "060d3748f8792f02b0943695d1e83d5253ac343f3371bd3c56617b5308d1a289"
+  },
+  "container_command": [
+    "/bin/sh",
+    "-c",
+    "printf 'db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00  /toolchain/bin/lean\\n060d3748f8792f02b0943695d1e83d5253ac343f3371bd3c56617b5308d1a289  /toolchain/lib/lean/libleanshared.so\\ncfbcbca96f208169dd6a514be00fd9dc323e5fa6998cfcb6efef1e8068d28f76  /work/prospective-cases-confirmation.lean\\n' | sha256sum -c - && exec /toolchain/bin/lean /work/prospective-cases-confirmation.lean"
+  ],
+  "planned_scientific_runs": 1,
+  "stop_conditions": [
+    "Container identity, image, command, mounts or 4 GiB limit differs from this preflight.",
+    "Any in-container hash or revision differs from the retained binding.",
+    "Kernel.check errors or an operand-type assertion fails.",
+    "Any raw-shape assertion fails."
+  ],
+  "prohibited": "No parent acquisition, build, new image, additional expression family, production declaration witness, publication, push or upstream communication."
+}

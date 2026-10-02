@@ -3369,6 +3369,15 @@ PR15373 signal, not whole-validator, exploitability, current-main or general
 kernel evidence. The earlier append-only INCONCLUSIVE finish remains historical
 at the pre-approval capability boundary. No publication or upstream action
 occurred. See the [authorized recovery report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/authorized-recovery-report.md).
+One subsequent fresh-process confirmation passed all in-container identity gates
+and reproduced the same matrix. `Kernel.check` reported the disputed left
+operand as `FnAlias` and the constructor as `Bool → Box`; `Kernel.isDefEq`
+again returned true only for that alias-negative case while Meta returned false.
+The exact confirmation container exited 0, was removed, and is absent by full-ID
+lookup. This strengthens the result to a reproducible pinned-artifact API
+disagreement. It still does not establish PR causation or production declaration
+acceptance because no exact parent binary or declaration-level check was used.
+See the [fresh confirmation report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-report.md).
 Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
 Queue handoff: PAUSED.
 The selected item remains DEFERRED rather than executable; resumption requires

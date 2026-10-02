@@ -1,0 +1,65 @@
+{
+  "schema_version": 1,
+  "kind": "PINNED_ARTIFACT_FRESH_CONFIRMATION",
+  "campaign": "E0-LEAN-ETA-ALIAS-PILOT-RETRY-1",
+  "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+  "fixture": {
+    "path": "prospective-cases-confirmation.lean",
+    "sha256": "cfbcbca96f208169dd6a514be00fd9dc323e5fa6998cfcb6efef1e8068d28f76",
+    "relation_to_original": "The same four expressions, comparison orientation, raw-shape assertions, call order and oracle; added revision logging and Kernel.check operand-type observations/assertions only."
+  },
+  "provenance": {
+    "in_container_checks": [
+      {"path": "/toolchain/bin/lean", "sha256": "db7f559d05795e7af52e42bc966c90240a39dcb9712161c54c97afa546e20c00", "status": "OK"},
+      {"path": "/toolchain/lib/lean/libleanshared.so", "sha256": "060d3748f8792f02b0943695d1e83d5253ac343f3371bd3c56617b5308d1a289", "status": "OK"},
+      {"path": "/work/prospective-cases-confirmation.lean", "sha256": "cfbcbca96f208169dd6a514be00fd9dc323e5fa6998cfcb6efef1e8068d28f76", "status": "OK"}
+    ],
+    "reported_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+    "image_id": "sha256:6232b38791000e3818b58d8847b5a8f5612d606929e01156dd8febc423e0f2ef",
+    "platform": "linux/amd64",
+    "memory_bytes": 4294967296,
+    "mounts": []
+  },
+  "kernel_check_types": [
+    {"case": "explicit-negative", "lhs": "Bool → Box", "rhs": "Bool → Box"},
+    {"case": "alias-negative", "lhs": "FnAlias", "rhs": "Bool → Box"},
+    {"case": "explicit-constructor-positive", "lhs": "Bool → Box", "rhs": "Bool → Box"},
+    {"case": "alias-constructor-positive", "lhs": "Bool → Box", "rhs": "Bool → Box"}
+  ],
+  "observations": [
+    {"case": "explicit-negative", "expected": false, "meta": false, "kernel": false, "matches_first_run": true},
+    {"case": "alias-negative", "expected": false, "meta": false, "kernel": true, "matches_first_run": true},
+    {"case": "explicit-constructor-positive", "expected": true, "meta": true, "kernel": true, "matches_first_run": true},
+    {"case": "alias-constructor-positive", "expected": true, "meta": true, "kernel": true, "matches_first_run": true}
+  ],
+  "run": {
+    "receipt": "attempts/confirmation-scientific-run/receipt.json",
+    "stdout": "attempts/confirmation-scientific-run/stdout.log",
+    "stderr": "attempts/confirmation-scientific-run/stderr.log",
+    "exit_code": 0,
+    "elapsed_seconds": 18.198942083,
+    "maximum_sampled_group_rss_bytes": 82935808,
+    "child_peak_rss_bytes": 49397760,
+    "cleanup_complete": true,
+    "monitor_errors": []
+  },
+  "container_cleanup": {
+    "container_id": "244dfd82c577a359596037161f312e459e5502f5d9eaf66b12e6aca8ebab0159",
+    "terminal_status": "exited",
+    "terminal_exit_code": 0,
+    "oom_killed": false,
+    "remove_receipt": "attempts/confirmation-container-remove/receipt.json",
+    "removed": true,
+    "post_remove_lookup": "Error: No such object: 244dfd82c577a359596037161f312e459e5502f5d9eaf66b12e6aca8ebab0159"
+  },
+  "engineering_attempts": {
+    "never_started_setup_container": "1120708c605ba9b1d2dd70ff57b12d0db61da0064df3fceff2e32ca8df793963",
+    "reason_replaced": "Its command printed hashes but did not fail closed on mismatch; it was never started and was removed before scientific execution.",
+    "first_fixture_copy_failure": "The fresh image lacked /work; the failed copy executed no scientific process. The retained run directory was then copied to create /work, and the in-container fixture hash gate passed."
+  },
+  "outcome": "CONFIRMED_SIGNAL",
+  "signal_count": 1,
+  "measurement_complete": true,
+  "conclusion": "A fresh, identity-gated process on the exact pinned PR15373 artifact reproduced the preserved-alias API disagreement. Kernel.check confirmed that the disputed left operand retained type FnAlias while the right constructor had type Bool → Box. Kernel.isDefEq returned true only for that alias-negative case; Meta returned false and all three controls repeated exactly.",
+  "limitations": "No exact parent binary was available, so this does not establish that PR15373 introduced the behavior. No production declaration was checked. This remains a pinned-artifact Kernel.isDefEq API disagreement, not a production soundness, exploitability, current-main or general-alias claim."
+}
