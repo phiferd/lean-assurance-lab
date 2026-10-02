@@ -37,7 +37,17 @@ Build both head and parent from their exact source revisions with the same froze
 4. Commit the plan, independent review, fixture, expected matrix, runner identities, supervisor and launch manifest before executing a scientific cell. Validate an immutable input snapshot under the completed snapshot/reuse closure controls.
 5. Use the existing process supervisor with per-process memory, output, trace-gap and cleanup controls. Freeze practical per-cell timeout and memory ceilings. Preserve every launch, including build and fixture failures. Pause on monitoring, accounting or cleanup faults; repair within this item without changing the four-cell question.
 
-The inherited workspace model is Daybreak Blue. Its initial independent review on 2026-10-02 conditionally passed the bounded design and identified the controls now incorporated above. The item remains `PLANNED` until exact source bytes, matched runner builds, the runner-neutral fixture and immutable launch manifest receive its final review.
+The inherited workspace model is Daybreak Blue. Its initial independent review
+on 2026-10-02 conditionally passed the bounded design. Its first final review of
+checkpoint `b71712a9` failed closed because the launcher did not enforce the
+recorded shared-library identities and the worktree githash repair was not a
+retained deterministic operation. Those findings are preserved in
+`results/research/lean-eta-admission-confirmation-1/daybreak-final-review-b71712a9.md`.
+The repair now validates the injected `libuv`, `libleanshared` and every resolved
+dependency immediately before launch; records dependencies under the exact
+launch environment; retains a guarded exact-header repair; and rebuilds both
+runners and both runner-specific fixture pairs. The item remains `PLANNED`
+until a new final review passes the repaired committed snapshot.
 
 ## Outcome rules
 

@@ -44,9 +44,9 @@ def identity(revision: str) -> dict[str, str]:
     }
 
 
-def resolved_ldd(binary: Path) -> list[dict[str, str]]:
+def resolved_ldd(binary: Path, env: dict[str, str]) -> list[dict[str, str]]:
     records: list[dict[str, str]] = []
-    for line in output(["ldd", str(binary)]).splitlines():
+    for line in output(["ldd", str(binary)], env=env).splitlines():
         match = re.search(r"=>\s+(/\S+)\s+\(", line)
         if match is None:
             match = re.match(r"\s*(/\S+)\s+\(", line)
@@ -77,7 +77,7 @@ def runner(label: str, tree: Path, revision: str) -> dict[str, object]:
         "lean_binary": {"path": str(lean), "sha256": sha256(lean)},
         "lean_version": output([str(lean), "--version"], env=env),
         "libleanshared": {"path": str(shared), "sha256": sha256(shared)},
-        "dynamic_dependencies": resolved_ldd(lean),
+        "dynamic_dependencies": resolved_ldd(lean, env),
     }
 
 
@@ -116,27 +116,34 @@ def main() -> None:
             "libuv_shared_sha256": sha256(Path("/workspace/shared/lean-deps/lib/libuv.so.1.0.0")),
             "environment": {
                 "CMAKE_PREFIX_PATH": "/workspace/shared/lean-deps",
+                "LD_LIBRARY_PATH": "/workspace/shared/lean-deps/lib",
                 "PKG_CONFIG_PATH": "/workspace/shared/lean-deps/lib/pkgconfig",
                 "USE_GMP": "OFF",
             },
             "identity_repair": {
-                "reason": "Lean's bundled CMake helper reads the common-repository HEAD for a detached Git worktree, so the first completed binaries self-reported ref: refs/heads/master. The generated stage1 githash.h in each isolated build was replaced with that worktree's already-frozen 40-byte commit and the lean and leanshared targets were rebuilt identically.",
+                "reason": "Lean's bundled CMake helper reads the common-repository HEAD for a detached Git worktree, so the first completed binaries self-reported ref: refs/heads/master. The retained deterministic repair script required the exact generated header bytes, replaced only that value with the worktree's already-frozen 40-byte commit, and the lean and leanshared targets were rebuilt identically.",
                 "head_githash": HEAD_REV,
+                "head_header_sha256": sha256(HEAD_TREE / "build/release/stage1/githash.h"),
                 "parent_githash": PARENT_REV,
+                "parent_header_sha256": sha256(PARENT_TREE / "build/release/stage1/githash.h"),
+                "script": str((HERE / "repair-runtime-identity.py").relative_to(ROOT)),
+                "script_sha256": sha256(HERE / "repair-runtime-identity.py"),
                 "targets": ["lean", "leanshared"],
             },
         },
         "successful_preparation_receipts": receipt_hashes([
             "head-build-3",
             "parent-build-1",
-            "head-identity-repair-2",
-            "parent-identity-repair-2",
-            "head-identity-2",
-            "parent-identity-2",
-            "head-support-build-1",
-            "parent-support-build-1",
-            "head-harness-build-1",
-            "parent-harness-build-1",
+            "head-githash-repair-2",
+            "parent-githash-repair-2",
+            "head-identity-repair-3",
+            "parent-identity-repair-3",
+            "head-identity-3",
+            "parent-identity-3",
+            "head-support-build-2",
+            "parent-support-build-2",
+            "head-harness-build-2",
+            "parent-harness-build-2",
         ]),
         "retained_failed_preparation_attempts": [
             "head-build-1",
@@ -144,7 +151,9 @@ def main() -> None:
             "head-identity-1",
             "parent-identity-1",
             "head-identity-repair-1",
-            "parent-identity-repair-1"
+            "parent-identity-repair-1",
+            "head-githash-repair-1",
+            "parent-githash-repair-1"
         ],
     }
     (HERE / "source-manifest.json").write_text(
@@ -160,6 +169,12 @@ def main() -> None:
         "fixture_sources": relative_hashes(fixture_sources),
         "generated_oleans": relative_hashes(generated),
         "cell_runner_sha256": sha256(HERE / "run-cell.py"),
+        "runtime_injected_dependencies": [
+            {
+                "path": "/workspace/shared/lean-deps/lib/libuv.so.1.0.0",
+                "sha256": sha256(Path("/workspace/shared/lean-deps/lib/libuv.so.1.0.0")),
+            }
+        ],
         "runners": {
             "head": runner("head", HEAD_TREE, HEAD_REV),
             "parent": runner("parent", PARENT_TREE, PARENT_REV),

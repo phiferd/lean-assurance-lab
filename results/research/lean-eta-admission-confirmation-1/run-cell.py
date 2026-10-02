@@ -40,6 +40,14 @@ def main() -> int:
     runner = manifest["runners"][runner_key]
     if str(lean) != runner["lean_binary"]["path"] or sha256(lean) != runner["lean_binary"]["sha256"]:
         raise SystemExit("runner identity mismatch")
+    if sha256(Path(runner["libleanshared"]["path"])) != runner["libleanshared"]["sha256"]:
+        raise SystemExit("libleanshared identity mismatch")
+    for dependency in runner["dynamic_dependencies"]:
+        if sha256(Path(dependency["path"])) != dependency["sha256"]:
+            raise SystemExit(f"dynamic dependency mismatch: {dependency['path']}")
+    for dependency in manifest["runtime_injected_dependencies"]:
+        if sha256(Path(dependency["path"])) != dependency["sha256"]:
+            raise SystemExit(f"injected runtime dependency mismatch: {dependency['path']}")
     for relative, digest in manifest["fixture_sources"].items():
         if sha256(ROOT / relative) != digest:
             raise SystemExit(f"fixture source mismatch: {relative}")
@@ -55,7 +63,7 @@ def main() -> int:
     runner_lib = lean.parents[1] / "lib/lean"
     env = dict(os.environ)
     env["LEAN_PATH"] = os.pathsep.join([str(prepared), str(HERE / "fixture"), str(runner_lib)])
-    local_uv = "/workspace/shared/lean-deps/lib"
+    local_uv = str(Path(manifest["runtime_injected_dependencies"][0]["path"]).parent)
     env["LD_LIBRARY_PATH"] = os.pathsep.join(
         [local_uv, str(lean.parents[1] / "lib"), env.get("LD_LIBRARY_PATH", "")]
     ).rstrip(os.pathsep)

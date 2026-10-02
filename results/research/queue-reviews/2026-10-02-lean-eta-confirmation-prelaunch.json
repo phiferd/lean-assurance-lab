@@ -5,8 +5,8 @@
   "reviewed_at": "2026-10-02",
   "stopped_item": "E0-LEAN-ETA-ADMISSION-1",
   "selected_item": "CONFIRM-LEAN-ETA-ADMISSION-1",
-  "queue_sha256": "89dbe57ed785b78b3221152b2d721c16714300be13b04f3ae776618fc2d130ed",
-  "decision": "Prioritize the owner-directed bounded E1 confirmation. Matched exact head/parent builds, source bytes, runner-neutral fixtures and immutable launch inputs are frozen after the initial inherited Daybreak Blue review. Keep the queue paused only for the required final Daybreak review of those committed inputs; if it passes without input changes, activate and execute exactly four cells. Preserve the deferred memory audit and prohibit unrelated expansion or upstream communication.",
+  "queue_sha256": "dcb2bdb6f566438bbf98d4c20c2f494f959ca29daa571c51c408e4e0a5a97fa7",
+  "decision": "Prioritize the owner-directed bounded E1 confirmation. The first final Daybreak Blue review failed closed at b71712a9; its runtime-library and identity-repair blockers are preserved and repaired in regenerated matched inputs. Keep the queue paused for a new final review of the repaired committed snapshot; if it passes without input changes, activate and execute exactly four cells. Preserve the deferred memory audit and prohibit unrelated expansion or upstream communication.",
   "categories": [
     {
       "category": "METHODS_AND_FRONTIERS",
@@ -43,7 +43,7 @@
     },
     {
       "category": "LOCAL_BLOCKER_REMOVAL",
-      "assessment": "All local E1 preparation blockers are removed except the plan-required final independent Daybreak review of the committed immutable inputs. The selected memory audit remains owner-deferred, and build-mode work lacks a bound source site.",
+      "assessment": "The first final E1 review's concrete launch-custody blockers are repaired locally; the remaining gate is a new independent Daybreak review of the repaired committed immutable inputs. The selected memory audit remains owner-deferred, and build-mode work lacks a bound source site.",
       "candidate_ids": [
         "CONFIRM-LEAN-ETA-ADMISSION-1",
         "RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1",
@@ -55,17 +55,18 @@
     {
       "item_id": "CONFIRM-LEAN-ETA-ADMISSION-1",
       "disposition": "BLOCKED",
-      "rationale": "The highest-value local item has frozen matched runners and launch inputs, but its plan requires a final inherited Daybreak Blue review before activation.",
+      "rationale": "The highest-value local item has repaired matched runners and launch inputs, but its plan requires a new inherited Daybreak Blue review before activation.",
       "evidence_refs": [
         "docs/research/CONFIRM_LEAN_ETA_ADMISSION_1_PLAN.md",
         "results/research/lean-eta-admission-confirmation-1/daybreak-initial-review.md",
+        "results/research/lean-eta-admission-confirmation-1/daybreak-final-review-b71712a9.md",
         "results/research/lean-eta-admission-confirmation-1/source-manifest.json",
         "results/research/lean-eta-admission-confirmation-1/launch-manifest.json"
       ],
       "blockers": [
         {
           "kind": "SCIENTIFIC_GATE",
-          "reason": "Commit the frozen input checkpoint and obtain a final Daybreak Blue pass over its exact source, fixture, runner and launch manifests; any input-changing correction requires regeneration and re-review.",
+          "reason": "Commit the repaired frozen input checkpoint and obtain a new Daybreak Blue pass over its exact source, fixture, runner, dependency and launch manifests; any input-changing correction requires regeneration and re-review.",
           "evidence_refs": [
             "docs/research/CONFIRM_LEAN_ETA_ADMISSION_1_PLAN.md",
             "results/research/lean-eta-admission-confirmation-1/launch-manifest.json"
@@ -150,7 +151,7 @@
     },
     {
       "path": "docs/research/CONFIRM_LEAN_ETA_ADMISSION_1_PLAN.md",
-      "sha256": "a939ad18aa873b384b601f92a04c2c6bc5035f8ccc75026fe1d02ff578366305"
+      "sha256": "365f150f8fbd12828381ed888a8635971736b09186172616514af8df3d66b4d0"
     },
     {
       "path": "results/research/lean-eta-admission-confirmation-1/source-history-preflight.json",
@@ -161,12 +162,16 @@
       "sha256": "2a09af0f46d4512678f124016d36f1cf5e665d6105c820659dfd6e324204f196"
     },
     {
+      "path": "results/research/lean-eta-admission-confirmation-1/daybreak-final-review-b71712a9.md",
+      "sha256": "78c8a0766c0efd4ad355fd9658e0fafd46ab8d830ba11210a82a38c9f5f60ece"
+    },
+    {
       "path": "results/research/lean-eta-admission-confirmation-1/source-manifest.json",
-      "sha256": "1b3499a579f68e2778667de1efa4f038e5c3b47e89eafcf6af7bd7ff336b5996"
+      "sha256": "bc04c10c994aeca89918b4e219d0ec1cc120aa3c1458fced3be287e886934b3f"
     },
     {
       "path": "results/research/lean-eta-admission-confirmation-1/launch-manifest.json",
-      "sha256": "dce77940e07e4e1720b48893bf9a0c0bc104009694c45e0f54274b5d72586ca4"
+      "sha256": "5eb9bd135d2c53042adc7ca47ff18254e329e0b0e6c2cd7389c779a08add9077"
     },
     {
       "path": "results/research/lean-eta-admission-confirmation-1/expected.json",

@@ -20,7 +20,7 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | PAUSED: no executable item | Complete the final inherited Daybreak Blue review of the committed source, fixture, runner and launch manifests; activate CONFIRM-LEAN-ETA-ADMISSION-1 only if that review passes without input-changing repairs. |
+| Highest-value scoped work and replaceable strategy | PAUSED: no executable item | Complete a new inherited Daybreak Blue review of the repaired committed source, fixture, runner, dependency and launch manifests; activate CONFIRM-LEAN-ETA-ADMISSION-1 only if that review passes without input-changing repairs. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
@@ -28,9 +28,9 @@ Evidence for each assessment is recorded in the canonical JSON alongside exact i
 
 **Queue execution is PAUSED; no executable item is selected.**
 
-**Blocker:** The initial inherited Daybreak Blue review conditionally passed the bounded design, and matched exact head/parent builds plus immutable fixture and launch inputs are now frozen. The plan still requires a final Daybreak Blue review of those committed inputs before activation.
+**Blocker:** The first final Daybreak Blue review failed closed at b71712a9. Its three blockers are repaired through launch-time dependency validation, exact-environment dependency records and a retained guarded githash operation followed by matched rebuilds; the regenerated committed snapshot still requires a new final review.
 
-**Required decision:** Complete the final inherited Daybreak Blue review of the committed source, fixture, runner and launch manifests; activate CONFIRM-LEAN-ETA-ADMISSION-1 only if that review passes without input-changing repairs.
+**Required decision:** Complete a new inherited Daybreak Blue review of the repaired committed source, fixture, runner, dependency and launch manifests; activate CONFIRM-LEAN-ETA-ADMISSION-1 only if that review passes without input-changing repairs.
 
 Selected blocked decision: **CONFIRM-LEAN-ETA-ADMISSION-1**. Resolve the recorded blocker and update the canonical queue before execution.
 
@@ -53,7 +53,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 
 Independently review and freshly execute the fixed alias/explicit admission pair at the PR head and parent under trust level zero.
 
-**Why this rank:** Owner directed publication-ready completion after the direct declaration-admission signal. The inherited Daybreak Blue reviewer conditionally passed the design; exact matched head/parent builds, runner-neutral fixtures and immutable launch inputs are now frozen pending the required final review.
+**Why this rank:** Owner directed publication-ready completion after the direct declaration-admission signal. The first final Daybreak Blue review failed closed at b71712a9; its runtime-library and identity-repair findings are now incorporated into regenerated matched head/parent inputs pending a new final review.
 
 **Completion:** Four valid fresh head/parent observations with bounded classification and portable reporting inputs, or an exact reviewer, parent-runner, input-integrity or supervision blocker.
 

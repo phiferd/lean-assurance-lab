@@ -5,14 +5,19 @@
     "configure": "cmake --preset release -DUSE_GMP=OFF",
     "environment": {
       "CMAKE_PREFIX_PATH": "/workspace/shared/lean-deps",
+      "LD_LIBRARY_PATH": "/workspace/shared/lean-deps/lib",
       "PKG_CONFIG_PATH": "/workspace/shared/lean-deps/lib/pkgconfig",
       "USE_GMP": "OFF"
     },
     "gcc_version": "gcc (Debian 14.2.0-19) 14.2.0",
     "identity_repair": {
       "head_githash": "015d54649bcaaa0861f355b59761ce308e629fbb",
+      "head_header_sha256": "9410411a6406b478cec20bb26a63208378c779f13e9eea5c189a6172fd0184f6",
       "parent_githash": "2c2bdd9630a7a6c51d7620d5efefcdba104f38f3",
-      "reason": "Lean's bundled CMake helper reads the common-repository HEAD for a detached Git worktree, so the first completed binaries self-reported ref: refs/heads/master. The generated stage1 githash.h in each isolated build was replaced with that worktree's already-frozen 40-byte commit and the lean and leanshared targets were rebuilt identically.",
+      "parent_header_sha256": "8728af44a458f597b8c2e3c7e4af5e3a0da6cd7a11c0b273287e28073ff4ccda",
+      "reason": "Lean's bundled CMake helper reads the common-repository HEAD for a detached Git worktree, so the first completed binaries self-reported ref: refs/heads/master. The retained deterministic repair script required the exact generated header bytes, replaced only that value with the worktree's already-frozen 40-byte commit, and the lean and leanshared targets were rebuilt identically.",
+      "script": "results/research/lean-eta-admission-confirmation-1/repair-runtime-identity.py",
+      "script_sha256": "2dae7841178fb84d407c202ce0c3c47c51365c5c6b11dec8afd332e8bbc353a9",
       "targets": [
         "lean",
         "leanshared"
@@ -44,19 +49,23 @@
     "head-identity-1",
     "parent-identity-1",
     "head-identity-repair-1",
-    "parent-identity-repair-1"
+    "parent-identity-repair-1",
+    "head-githash-repair-1",
+    "parent-githash-repair-1"
   ],
   "schema_version": 1,
   "successful_preparation_receipts": {
     "head-build-3": "a96d99c7a8cbe47e170cfe74233c55b877f2e5ebe9da5e18049876b721911ae2",
-    "head-harness-build-1": "dfcb0027fb6b6a0a44739b3f2721f2962c5738675c5584ce76d2401f3e2c2f1d",
-    "head-identity-2": "c44c0f93c0819d1704bd0bb305b8ef2925b4b582b29d8a968714240eb1a208b7",
-    "head-identity-repair-2": "e940b24a48c71e767d3abf0a76bdeb9823c000858a714f8e96d7a95321d9f707",
-    "head-support-build-1": "d0b75aae6050805974bca8d5ced971470e117d9f8f8bc8ac5d6dd4a6ce363a67",
+    "head-githash-repair-2": "10626fa8d7a859a10af341dbaec34d34103756d54c5b2f9d8f128af7bde9c137",
+    "head-harness-build-2": "a2859ceefb5998941de7f98e3ae61e116746cde023fb6db525388cfefb366e52",
+    "head-identity-3": "a4773a80e387be79fc739fd08c84fde4553d4829ad6fe0279839951a7a6c1c5f",
+    "head-identity-repair-3": "420fc28e04c6b07ffc106d13fdcbb6bdaee7ba187662957f03542dd9295e33db",
+    "head-support-build-2": "bb45e0d7036544a402f1475cc4aad34748fa7a40f88435723571dc4cd8a44f73",
     "parent-build-1": "ea84f4e7d27a29809d252f32370e38fd785495587702cb3eaf0ff77d27eb0c13",
-    "parent-harness-build-1": "7d53be8b4fdd7f0e3d0a5a784ac99bfbb4e00f870797903550eb8142289910b3",
-    "parent-identity-2": "58ebe3ae40bfdc66d096f07825232e72d0f9fda8dee9bc7f51e04f10487e6ba3",
-    "parent-identity-repair-2": "6edfb8febf4ae6c5b1fbf5e1c0ad1a724ae5fe2107d0aabb9679e4d297c525e5",
-    "parent-support-build-1": "d3f062884422baff83c8af0082a2b3eea7f187ad903ccbdff6592180c2da5f30"
+    "parent-githash-repair-2": "6cabb4fbb3bbd8a2b5b0c1f3a25729360a87593e5da3aee2f7c86adcea08d93a",
+    "parent-harness-build-2": "c53917d7b49fbdf6ef64bd6d54f50ce1ef276270264de30ffb1bc2562975ffd3",
+    "parent-identity-3": "b0900e97cce46c0530f765f56471e89dabd32ebb8fc29c46da402eb0c967cf7b",
+    "parent-identity-repair-3": "5281cd6434e4572900408e62bd45a80eb4006b6bad67a85835c15cb2fb9e9c4a",
+    "parent-support-build-2": "a2a78d85b37a61d2955baaa5ab5aef7d1ffec8d6135d4ec6d7f81a5580d1d415"
   }
 }

@@ -23,6 +23,7 @@ from lib import real_proof_slices_replay
 from lib import evidence_replay_portability
 from lib import binder_model_replay
 from lib import resource_envelope_replay
+from lib import lean_eta_admission_confirmation_replay
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -107,6 +108,26 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
             raw.write_bytes(raw.read_bytes() + b"\n")
             with self.assertRaises(binder_model_replay.ReplayError):
                 binder_model_replay.replay(checkout)
+
+    def test_lean_eta_admission_confirmation_replay_without_original_checkout_or_host_tools(self):
+        with tempfile.TemporaryDirectory() as directory:
+            checkout = Path(directory) / "foreign-checkout"
+            destination = checkout / lean_eta_admission_confirmation_replay.REL
+            destination.parent.mkdir(parents=True)
+            shutil.copytree(ROOT / lean_eta_admission_confirmation_replay.REL, destination)
+            result = lean_eta_admission_confirmation_replay.replay(checkout)
+            self.assertEqual(result, {
+                "status": "PASS",
+                "receipts": 27,
+                "successful_preparation_receipts": 12,
+                "fixture_sources": 5,
+                "generated_oleans": 4,
+                "host_launches": 0,
+            })
+            raw = destination / "attempts/head-build-3/stdout.log"
+            raw.write_bytes(raw.read_bytes() + b"tamper")
+            with self.assertRaises(lean_eta_admission_confirmation_replay.ReplayError):
+                lean_eta_admission_confirmation_replay.replay(checkout)
 
     def test_lazy_replay_does_not_require_original_checkout_path(self):
         with tempfile.TemporaryDirectory() as directory:
