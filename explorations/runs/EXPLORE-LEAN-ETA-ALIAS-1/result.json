@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "id": "EXPLORE-LEAN-ETA-ALIAS-1",
+  "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+  "planned_scientific_cases": 4,
+  "completed_scientific_cases": 0,
+  "meta_observations": 0,
+  "kernel_observations": 0,
+  "capability_gate": {
+    "status": "FAILED",
+    "stage": "linux/amd64 base-image acquisition",
+    "result": "capability-result.json",
+    "receipt": "attempts/docker-pull/receipt.json",
+    "reason": "The sole allowed ubuntu:24.04 pull emitted no stdout or stderr and reached the supervised 900 second limit."
+  },
+  "attempt_accounting": {
+    "supervised_setup_attempts": 1,
+    "completed_scientific_runs": 0,
+    "elapsed_seconds": 900.103165417,
+    "sample_count": 871,
+    "maximum_sampled_group_rss_bytes": 93093888,
+    "resource_interruptions": 1,
+    "cleanup_complete": true
+  },
+  "outcome": "INCONCLUSIVE",
+  "signal_count": 0,
+  "measurement_complete": false,
+  "engineering_failures_unresolved": true,
+  "observation": "Docker Desktop became healthy, but the one authorized linux/amd64 Ubuntu base-image pull stalled until the declared supervisor timeout. The supervisor reaped and cleaned the process group; no image, toolchain, scientific container or four-case output exists.",
+  "limitations": "This is a capability boundary, not a semantic result. It does not test Lean PR15373, retained aliases, partial-constructor eta, Meta.isDefEq, Kernel.isDefEq, runner emulation, or the frozen four-case oracle. Empty pull streams do not identify whether registry, network, credential-helper, daemon or platform resolution caused the stall.",
+  "recommended_action": "Do not infer a Lean result and do not expand to source builds or alternate infrastructure. Retain the frozen fixture and independent oracle. Any retry requires a separately authorized, evidence-bound exact-runner capability route."
+}

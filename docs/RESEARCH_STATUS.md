@@ -3345,16 +3345,20 @@ No further grammar, output, value/fold or completeness expansion is selected.
 
 `LEAN-ETA-ALIAS-PILOT-PREPARATION-1` completed its source, duplicate,
 fixture-shape, independent-oracle and exact-runner capability review on
-2026-10-02. The canonical queue now selects
-`E0-LEAN-ETA-ALIAS-PILOT-1` as the sole ACTIVE campaign under the
-[bounded four-case plan](research/E0_LEAN_ETA_ALIAS_PILOT_1_PLAN.md).
-Selected next item: `E0-LEAN-ETA-ALIAS-PILOT-1`.
-The owner explicitly authorized starting the installed Docker Desktop VM,
-downloading the checksum-pinned official PR15373 Linux toolchain and running
-the four fixed Meta/kernel cases. No source build, broader eta campaign,
-security-setting change, PR #41 change or upstream outreach is authorized. The original
-[Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all closed trial
-reports remain historical evidence.
+2026-10-02. `E0-LEAN-ETA-ALIAS-PILOT-1` then closed `INCONCLUSIVE`: Docker
+Desktop became healthy, but the sole allowed `linux/amd64` base-image pull
+emitted no output and reached its supervised 900.103-second limit. Cleanup was
+complete, but no image, official PR15373 runner, scientific container or one of
+the four fixed Meta/kernel observations exists. This is a capability boundary,
+not evidence about Lean eta behavior. The explicit stop rule forbids a source
+build or alternate infrastructure route in this campaign. See the
+[retained report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-1/report.md).
+
+No remaining item has a satisfied scientific entry gate. The queue is paused;
+its mechanically selected deferred decision item remains closed to execution.
+Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
+The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
+closed trial reports remain historical evidence.
 
 On 2026-10-01 the owner explicitly selected `E0-NANODA-CONGRUENCE-FAULT-PILOT-1`
 as the sole ACTIVE campaign after the Tree2 stop. It screens one current-Nanoda
@@ -3670,7 +3674,7 @@ source requests include one failed web open. No scientific launch or new export
 occurred. The pair uses its bound variable and adjusts the enclosing declaration
 type; checking, conditional reduction and raw import remain distinct contracts.
 
-Queue handoff: EXECUTABLE.
+Queue handoff: PAUSED.
 
 The canonical queue selects `E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1` READY and
 unstarted. Closure reliability is complete subject to its exact ordered receipt;
