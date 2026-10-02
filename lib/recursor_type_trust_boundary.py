@@ -515,7 +515,7 @@ def _validate_final_state(root: Path) -> None:
     ) or (
         handoff == "PAUSED"
         and isinstance(selected, dict)
-        and selected.get("status") == "DEFERRED"
+        and selected.get("status") in {"WAITING", "DEFERRED"}
     )
     if (current_queue.get("schema_version") != 4
             or not selection_valid

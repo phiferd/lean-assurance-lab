@@ -3388,7 +3388,7 @@ PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
 Selected next item: `CONFIRM-LEAN-ETA-ADMISSION-1`.
-Queue handoff: PAUSED.
+Queue handoff: EXECUTABLE.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3404,8 +3404,8 @@ from content-addressed Git trees with the same GCC 14.2/CMake 4.1.2, GMP-off,
 four-job method; both independently compiled runner-neutral fixtures and now
 self-report their exact commits. The retained first identities exposed and the
 repair record explains a detached-worktree CMake githash defect. E1 remains
-`WAITING`, not executable, until a new final Daybreak Blue review passes the
-repaired committed fixture and manifests. No confirmation cell has started. Read-only
+`ACTIVE` after Daybreak Blue passed immutable checkpoint `edb92569` and
+authorized exactly the frozen four cells. No confirmation cell has started. Read-only
 source inspection found the new partial-constructor loop only at the unchanged
 draft-PR head; runtime causation remains unconfirmed.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
@@ -3578,7 +3578,7 @@ no external action is recommended now.
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
-| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | WAITING; final Daybreak review of committed launch inputs required |
+| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | ACTIVE; Daybreak-passed four-cell confirmation snapshot |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |

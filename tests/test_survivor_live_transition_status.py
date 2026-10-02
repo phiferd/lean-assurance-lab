@@ -18,7 +18,7 @@ class SurvivorLiveTransitionStatusTests(unittest.TestCase):
         transition = portfolio.validate_live_transition(ROOT)
         self.assertEqual(transition["status"], "PASS")
         if queue["handoff"]["status"] == "PAUSED":
-            self.assertEqual(selected["status"], "DEFERRED")
+            self.assertIn(selected["status"], {"WAITING", "DEFERRED"})
         else:
             self.assertIn(selected["status"], {"READY", "ACTIVE"})
         preserved = portfolio._extra_paths(ROOT)

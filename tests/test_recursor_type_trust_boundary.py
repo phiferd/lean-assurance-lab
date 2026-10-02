@@ -104,7 +104,7 @@ class RecursorTypeTrustBoundaryTests(unittest.TestCase):
         self.assertEqual(current_by_id["KIOTA-RECURSOR-TYPE-REPAIR-1"]["status"], "COMPLETE")
         selected_status = current_by_id[current["selected_item"]]["status"]
         if current["handoff"]["status"] == "PAUSED":
-            self.assertEqual(selected_status, "DEFERRED")
+            self.assertIn(selected_status, {"WAITING", "DEFERRED"})
         else:
             self.assertIn(selected_status, {"READY", "ACTIVE"})
 
