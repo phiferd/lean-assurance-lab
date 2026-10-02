@@ -1,0 +1,65 @@
+From 6be42fd28e5dffcf2d2a8cb2a46e008648a1f4c4 Mon Sep 17 00:00:00 2001
+From: Dan Phifer <dan.phifer@gmail.com>
+Date: Fri, 2 Oct 2026 23:11:57 +0000
+Subject: [PATCH] fix: report input open errors without panicking
+
+---
+ src/main.rs           |  5 ++++-
+ tests/cli_verdicts.rs | 20 ++++++++++++++++++++
+ 2 files changed, 24 insertions(+), 1 deletion(-)
+
+diff --git a/src/main.rs b/src/main.rs
+index 7cce361..5afc306 100644
+--- a/src/main.rs
++++ b/src/main.rs
+@@ -72,7 +72,10 @@ fn main() {
+                     let stdin = std::io::stdin();
+                     p.run(BufReader::new(stdin.lock()))
+                 } else {
+-                    let file = std::fs::File::open(path.unwrap()).expect("open input");
++                    let path = path.as_deref().unwrap();
++                    let file = std::fs::File::open(path).map_err(|error| {
++                        tc::TcError::Other(format!("open input `{path}`: {error}"))
++                    })?;
+                     p.run(BufReader::new(file))
+                 }
+             });
+diff --git a/tests/cli_verdicts.rs b/tests/cli_verdicts.rs
+index 7cccb68..5195334 100644
+--- a/tests/cli_verdicts.rs
++++ b/tests/cli_verdicts.rs
+@@ -1,4 +1,5 @@
+ use std::io::Write;
++use std::path::PathBuf;
+ use std::process::{Command, Output, Stdio};
+ 
+ fn run(input: &[u8], max_decl: Option<&str>) -> Output {
+@@ -34,6 +35,25 @@ fn parse_error_is_not_a_proof_rejection() {
+     assert!(String::from_utf8_lossy(&output.stderr).contains("ERROR: json parse:"));
+ }
+ 
++#[test]
++fn missing_input_reports_path_without_panicking() {
++    let path = PathBuf::from(env!("CARGO_MANIFEST_DIR"))
++        .join("tests/fixtures/does-not-exist.ndjson");
++    assert!(!path.exists(), "missing-input fixture unexpectedly exists");
++    let output = Command::new(env!("CARGO_BIN_EXE_kiota"))
++        .arg(&path)
++        .output()
++        .expect("run checker");
++    let stderr = String::from_utf8_lossy(&output.stderr);
++    assert_eq!(output.status.code(), Some(3), "{output:?}");
++    assert!(
++        stderr.contains(&format!("ERROR: open input `{}`:", path.display())),
++        "{output:?}"
++    );
++    assert!(!stderr.contains("panicked at"), "{output:?}");
++    assert!(!stderr.contains("panic during checking"), "{output:?}");
++}
++
+ #[test]
+ fn valid_proof_still_accepts() {
+     let output = run(include_bytes!("fixtures/067_eqRec.accept.ndjson"), None);
+-- 
+2.52.0
+
