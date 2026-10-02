@@ -370,3 +370,7 @@ Source-only triage is E0 INCONCLUSIVE about original build provenance. Candidate
 ## Local helper and eta preparation — 2026-09-30
 
 Existing-CLI drafts and supported receipt counts reproduce 40/48/3/8; all non-skipped current/historical tests passed across the full invocation plus unchanged host supervisor retry; the initial sandbox-only failure and missing-payload skips remain retained. Select LEAN-ETA-ALIAS-PILOT-PREPARATION-1 READY and unstarted, with four prospective cases, preserved-alias/duplicate/runner stop gates and no large build or checker launch. Source-only triage remains inconclusive about original build provenance; no defect claimed.
+
+## PR15373 declaration admission successor — 2026-10-02
+
+Owner selects `E0-LEAN-ETA-ADMISSION-1` under [docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md](E0_LEAN_ETA_ADMISSION_1_PLAN.md) for exactly two checked admission cells at the verified PR artifact; memory audit remains deferred. No other science or upstream action is selected.

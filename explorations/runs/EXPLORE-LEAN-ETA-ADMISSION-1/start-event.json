@@ -1,0 +1,32 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-LEAN-ETA-ADMISSION-1",
+  "data": {
+    "campaign": "E0-LEAN-ETA-ADMISSION-1",
+    "question": "Does the confirmed PR15373 alias-sensitive API discrepancy reach checked admission of the fixed invalid theorem pair?",
+    "sources": [
+      {
+        "name": "leanprover/lean4 PR15373",
+        "revision": "015d54649bcaaa0861f355b59761ce308e629fbb"
+      },
+      {
+        "name": "lab before successor",
+        "revision": "b2dd0d78bd2c21a6f0a8a1c6e94faa2e894f1caf"
+      }
+    ],
+    "versions": "Native Linux amd64; exact official PR archive 759812626 bytes, SHA256 73cbeca7d35f92bf4e67c36ca4f15fe37d8b3bc8e3ec58b560c13f905185e17d. Verify runtime githash before cells.",
+    "commands": "Use explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/run-observed.py for official download, extraction/version smoke and the two-cell fixture; retain input hashes before each attempt.",
+    "inputs": [
+      "docs/research/E0_LEAN_ETA_ADMISSION_1_PLAN.md",
+      "explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/run-observed.py",
+      "lib/resource_envelope_supervisor.py",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/prospective-cases-confirmation.lean",
+      "explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-result.json"
+    ],
+    "sample": "Two closed theorem negatives only: forall f:FnAlias, f=Box.mk with Eq.refl f, and explicit Bool->Box counterpart.",
+    "planned_runs": 1,
+    "controls": "Both should reject. Fresh trust-level-zero environments; raw shape/inferred-type/closedness checks; no sorry/metavariables/added axioms/unchecked insertion/skipKernelTC; exact artifact; 4 GiB supervised process group; no current release substitute."
+  }
+}
