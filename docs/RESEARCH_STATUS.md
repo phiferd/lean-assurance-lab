@@ -3387,9 +3387,9 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1`.
-Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item.
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+Queue handoff: PAUSED.
+The canonical queue has no READY or ACTIVE item.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3426,13 +3426,27 @@ shared-target attempt and one sandbox monitor failure remain retained; the
 repaired 376-process execution has distinct binaries and complete supervision.
 See the [E0 summary](../explorations/runs/EXPLORE-TEST-EFFECTIVENESS-1/summary.md).
 
-`E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` is ACTIVE under
-[its E0 plan](research/E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md). It asks
-whether the same compact non-Collatz sample transfers to two real historical
-fault/fix pairs using already bound binaries. Box/FnAlias remains with the
-owner's separate agent. Memory accounting remains DEFERRED without a concrete
-measurement dependency. No PR, confirmation or external action follows from
-this handoff.
+`E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` is COMPLETE with `SUCCESS` for its
+bounded screen. **What did we find?** The unchanged 90-file compact sample did
+not distinguish the affected and fixed official Lean binaries. It produced two
+Nanoda differences, but both exact fixed diagnostics and the retained source
+diff trace them to a separate, already-known conservative possibly-Prop
+projection policy rather than the target projection-structure identity fix.
+All 360 supervised executions completed without a compatibility, timeout or
+cleanup boundary. **Is it interesting?** Yes, negatively: the sample's useful
+seeded-fault coverage did not transfer to either target historical fault, and
+causal review prevented two unrelated verdict changes from being counted as
+target coverage. **Does it require more work?** No result-driven confirmation,
+PR or external action follows. See the [campaign summary](../explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/campaign-summary.md)
+and [diagnostic review](../explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/diagnostic-review.json).
+
+`TRANSFER-HOLDOUT-INTAKE-1` is selected WAITING and unstarted. The queue is
+PAUSED because no independently curated fresh input/custody package or concrete
+new functioning target evidence has been supplied. The memory audit remains
+DEFERRED without a decision that depends on its historical accounting question,
+and build-mode work remains PLANNED: its three-profile premise is not distinct,
+while a narrower two-profile question lacks a named property and valid fixture.
+Box/FnAlias remains with the owner's separate agent.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 

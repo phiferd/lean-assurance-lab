@@ -408,3 +408,26 @@ the unchanged 90-file compact selection is locally available. Bind one
 prospective trial per historical fault before observation. Any signal requires
 source/diagnostic review before a PR recommendation; no signal closes this
 fixed screen without an external action.
+
+## Historical-fault transfer screen closure — 2026-10-03
+
+**What did we find?** The fixed 90-file sample produced no official Lean
+affected/fixed difference. Two Nanoda inputs changed from accept to reject, but
+both fixed diagnostics are `infer_proj prop`; the retained revision diff places
+that rejection in a separate possibly-Prop projection-policy change rather than
+the target `def_eq_proj` projection-identity fix. All 360 supervised executions
+completed, with 180 comparable affected/fixed observations and no compatibility,
+timeout or cleanup boundary.
+
+**Is it interesting?** Yes, negatively. The sample did not demonstrate transfer
+to either target historical fault. The source review also prevents an unrelated
+known profile difference from being mislabeled as historical-fault coverage.
+
+**Does it require more work?** No campaign-driven confirmation, PR or external
+action follows. Close `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` with `SUCCESS` for
+the bounded screen and select `TRANSFER-HOLDOUT-INTAKE-1` WAITING and unstarted.
+The queue is PAUSED until an independently curated fresh input/custody package
+or concrete new functioning target evidence is supplied and authorized for
+intake. Memory accounting remains deferred without a decision dependency, and
+build-mode work remains planned after its three-profile premise was rejected;
+a narrower two-profile question still lacks a named property and valid fixture.

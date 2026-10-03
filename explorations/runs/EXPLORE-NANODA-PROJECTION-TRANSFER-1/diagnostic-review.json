@@ -1,0 +1,77 @@
+{
+  "binary_pair": {
+    "affected_binary_sha256": "24452c7bc81b5dab60e65661b32de16cb805e82143b5ae18c20953c958c8b9ef",
+    "affected_revision": "ddfac2bf5a7b56cb46e141494427ff3dd55963c7",
+    "fixed_binary_sha256": "55a3686145143e1ca4403848659163cb6b67c07f6b6a7807916cbbc4be96bc41",
+    "fixed_revision": "6ae1f0cd962f081f6c423454c5da729d841236a7"
+  },
+  "classification": "UNRELATED_KNOWN_PROFILE_SIGNAL",
+  "decision": "Preserve the two E0 signals and their exact diagnostics, but do not promote, confirm or prepare a PR. The campaign found no target-attributable transfer for either historical fault in the fixed sample.",
+  "external_action_recommendation": "NO_ACTION",
+  "limitations": "The historical Nanoda pair contains multiple source changes, so differing verdicts require diagnostic/source qualification. This review identifies the branch emitting the exact observed rejection; it does not claim whole-program dynamic tracing, general semantic correctness or equivalence outside these inputs.",
+  "matched_controls": [
+    {
+      "affected_outcome": "ACCEPT",
+      "fixed_outcome": "ACCEPT",
+      "path": "corpus/generated/projection-maybe-prop-control.ndjson",
+      "sha256": "2022bdf30010a4662f3bc7997049375f03ed223a2ca4cd6a0b94166794ca5a37"
+    },
+    {
+      "affected_outcome": "REJECT",
+      "fixed_outcome": "REJECT",
+      "path": "corpus/generated/projection-definite-prop-data.ndjson",
+      "sha256": "1dbc013754ba41dae8c0449252708027e7f59fd8523d0896f2c8aae65d942b29"
+    }
+  ],
+  "observed_signals": [
+    {
+      "affected": {
+        "attempt": "explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/attempts/affected-079",
+        "outcome": "ACCEPT"
+      },
+      "fixed": {
+        "attempt": "explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/attempts/fixed-079",
+        "diagnostic": "infer_proj prop at src/tc.rs:456:27",
+        "outcome": "REJECT",
+        "stderr_sha256": "3ef2080e9a4384f00fb460ea78943170c243daeab77fb62594a1c74c1cfd3d0d"
+      },
+      "path": "corpus/generated/projection-maybe-prop-past.ndjson",
+      "sha256": "f5293856199b9b3eb82b3abb4bcb06121807cf9c828a049cfcc9c2f022002e38"
+    },
+    {
+      "affected": {
+        "attempt": "explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/attempts/affected-080",
+        "outcome": "ACCEPT"
+      },
+      "fixed": {
+        "attempt": "explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/attempts/fixed-080",
+        "diagnostic": "infer_proj prop at src/tc.rs:471:21",
+        "outcome": "REJECT",
+        "stderr_sha256": "338809df168d6a3f7cc54d0b2ae340833a724d5e31f710604fdb8c8ea7600919"
+      },
+      "path": "corpus/generated/projection-maybe-prop.ndjson",
+      "sha256": "b454eb79be1a89d37eea09a670a8fc38d30fd0b3215c57d130ab4c984d531894"
+    }
+  ],
+  "prior_characterization": {
+    "action_register": "results/action-recommendations/current.json",
+    "action_register_sha256": "213809780595966639986a8775af1749661471c8ed2ce15161b15f68b2c184d8",
+    "matrix": "results/investigations/nanoda-projection-typing-contract-matrix.json",
+    "matrix_observation": "Official Lean and Kiota accept both possibly-Prop cases; Nanoda and Lean4Lean reject both. All implementations reject the definite-Prop data case, and all accept the matched control.",
+    "matrix_sha256": "4600a95cb351a2cbc7dfcfbeff8068a935f4f4b65ac6c98418f7425f4693e3ac",
+    "rationale": "Arena PRs #167 and #171 explain and permit the conservative possibly-Prop profile with outcome either.",
+    "record_id": "possibly-prop-projection-overrejection",
+    "recorded_disposition": "NO_EXTERNAL_ACTION"
+  },
+  "review_scope": "Causal qualification of the two differing verdicts; E0 only.",
+  "schema_version": 1,
+  "source_review": {
+    "causal_assessment": "Both raw differences are attributable to the separate possibly-Prop projection policy present in the same historical revision interval. The observations do not demonstrate that either input exercises or detects the target def_eq_proj identity fault.",
+    "observed_rejection_branch": "The fixed revision changes infer_proj from is_proposition(structure_ty) to may_be_prop(structure_ty), and the exact fixed diagnostics are the panic emitted by this branch.",
+    "retained_diff": "explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/nanoda-ddfac2b-to-6ae1f0c-tc.diff",
+    "retained_diff_sha256": "f4878536bf8e78f348e2f393ee14063418fdae4847dda629278f6668fe79b726",
+    "target_fault_branch": "The historical projection-structure identity fix is a separate def_eq_proj change that adds equality of projection ty_name fields."
+  },
+  "target_transfer_observed": false,
+  "trial_id": "EXPLORE-NANODA-PROJECTION-TRANSFER-1"
+}
