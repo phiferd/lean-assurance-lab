@@ -3378,13 +3378,49 @@ lookup. This strengthens the result to a reproducible pinned-artifact API
 disagreement. It still does not establish PR causation or production declaration
 acceptance because no exact parent binary or declaration-level check was used.
 See the [fresh confirmation report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-report.md).
+`E0-LEAN-ETA-ADMISSION-1` completed with E0 `SIGNAL` on 2026-10-02.
+At exact official PR15373 commit `015d5464`, a trust-zero checked
+`Kernel.Environment.addDeclCore` accepted the closed alias-domain invalid
+theorem while the separately launched explicit `Bool → Box` control rejected.
+Raw shapes confirm that only the accepted cell retained `FnAlias`. This resolves
+the minimal API-to-admission question at that one artifact; it does not establish
+PR causation, current-main or release behavior, a derivation of `False`, broader
+exploitability or general kernel correctness. No upstream action occurred. See
+the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
 Selected next item: `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1`.
 Queue handoff: EXECUTABLE.
-The three-case test-effectiveness campaign is complete. Nanoda's unchanged
-44-test suite missed all three seeded omissions. The fixed 90-file compact Lab
-sample detected the declaration-type fault with three cases; the separately
-retained targeted pair detected the congruence fault. The lambda omission
-changed no final verdict, consistent with its prior public-entrypoint
+The canonical queue retains one READY item.
+The memory audit remains DEFERRED and must not auto-start. The owner directed
+publication-ready completion of the separately planned E1 confirmation. An
+inherited Daybreak Blue reviewer conditionally passed its four-cell design and
+required matched source builds, explicit checked admission, exact exception
+classification, stored-declaration verification and immutable launch inputs.
+Those controls are now frozen. The first final review of checkpoint `b71712a9`
+failed closed on missing launch-time shared-library enforcement and an
+unretained githash-header mutation; no scientific cell ran. The repair now
+retains the exact guarded header operation, validates the injected `libuv`,
+`libleanshared` and every resolved dependency, and rebuilds both runners and
+runner-specific `.olean` files through the recorded path. Exact head and parent Release runners were built
+from content-addressed Git trees with the same GCC 14.2/CMake 4.1.2, GMP-off,
+four-job method; both independently compiled runner-neutral fixtures and now
+self-report their exact commits. The retained first identities exposed and the
+repair record explains a detached-worktree CMake githash defect. E1 remains
+`ACTIVE` after Daybreak Blue passed immutable checkpoint `edb92569` and
+authorized exactly the frozen four cells. All four cells then completed: the exact
+PR head accepted the alias-domain invalid theorem and rejected its explicit-domain
+control, while the exact parent rejected both with `declTypeMismatch`. This confirms
+an exact-head checked trust-zero admission regression in the bounded comparison.
+The [result](../results/research/lean-eta-admission-confirmation-1/result.json),
+[report](../results/research/lean-eta-admission-confirmation-1/report.md), private
+disclosure draft, proposed regression and action recommendation are retained as a
+publication-ready private package. No upstream contact occurred. External disclosure
+requires explicit human approval of the exact private destination and draft; current
+master, releases, broader exploitability, severity and a fix remain untested.
+The three-case test-effectiveness campaign then completed on 2026-10-03.
+Nanoda's unchanged 44-test suite missed all three seeded omissions. The fixed
+90-file compact Lab sample detected the declaration-type fault with three cases;
+the separately retained targeted pair detected the congruence fault. The lambda
+omission changed no final verdict, consistent with its prior public-entrypoint
 equivalence classification, so it is not a third coverage gap. The invalid
 shared-target attempt and one sandbox monitor failure remain retained; the
 repaired 376-process execution has distinct binaries and complete supervision.
@@ -3567,8 +3603,9 @@ no external action is recommended now.
 | 10 | `RESOURCE-ENVELOPE-PILOT-1` | COMPLETE, SUCCESS; 24 scientific checks and 12 baselines ACCEPTED; 18 Nanoda sampled peaks unknown |
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
-| 13 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
+| 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | COMPLETE, SUCCESS; exact-head checked-admission regression confirmed |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
 | 68 | `CHILD-PANIC-CONFIRMATION-1` | COMPLETE, SUCCESS |

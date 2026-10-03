@@ -1,0 +1,156 @@
+{
+  "cell_runner_sha256": "aaa85c3848569576265121b36b49878d7a2d9bbe9d4078d98e21363bd3d54f84",
+  "cell_supervision": {
+    "cleanup_seconds": 10,
+    "max_trace_gap_seconds": 5,
+    "memory_ceiling_bytes": 4294967296,
+    "output_cap_bytes": 20971520,
+    "sample_interval_seconds": 1,
+    "timeout_seconds": 600
+  },
+  "evidence_class": "E1",
+  "expected_sha256": "7cf0b9fcc5acd8675de25ba84ee585c1f00ce5ae71f2622d4e4e6f143d5d37aa",
+  "experiment_id": "CONFIRM-LEAN-ETA-ADMISSION-1",
+  "fixture_sources": {
+    "results/research/lean-eta-admission-confirmation-1/fixture/EtaAdmissionHarness.lean": "e9be98496ad189f129c1d623de6c36b36ccd060f8efa4650a957826f2e505b43",
+    "results/research/lean-eta-admission-confirmation-1/fixture/EtaAdmissionSupport.lean": "409eb85f75a5a14dc174fae59e779b16346f5da0002e1121cb3330713f900004",
+    "results/research/lean-eta-admission-confirmation-1/fixture/RevisionIdentity.lean": "b18972eb9243ca7b7190cfcd6c39a69ea003d677d43d115631d9d1f401d28eb3",
+    "results/research/lean-eta-admission-confirmation-1/fixture/alias-cell.lean": "d046d0438003dd8b26ad65e92f98d785c6b7c80b5f3a62c819c2f127eb070d40",
+    "results/research/lean-eta-admission-confirmation-1/fixture/explicit-cell.lean": "863f19ac53d11c340963b70d730c14ecc05c0f2f3911e41ceec6c3a9eaaeae32"
+  },
+  "generated_oleans": {
+    "results/research/lean-eta-admission-confirmation-1/prepared/head/EtaAdmissionHarness.olean": "7b8d302e6be8e122c3abb36bfdf1c9131477e2bdf5ce83617988e55f1beb54ef",
+    "results/research/lean-eta-admission-confirmation-1/prepared/head/EtaAdmissionSupport.olean": "d99d382993520821377a1e4d147f99fc9685c34b7893e5e1862f36e090d28393",
+    "results/research/lean-eta-admission-confirmation-1/prepared/parent/EtaAdmissionHarness.olean": "03fe274350d039299d42150b0b05370346c0354f7d332b53e253be525acc77da",
+    "results/research/lean-eta-admission-confirmation-1/prepared/parent/EtaAdmissionSupport.olean": "58ec480cfffc946c086a01165d361c8191fbccc453147f12f52a0b27822e9baa"
+  },
+  "launch_invariants": [
+    "fresh process per cell",
+    "trust level zero via -t 0",
+    "compile source independently under each runner",
+    "no generated olean crosses runner directories",
+    "explicit doCheck true",
+    "semantic Kernel.Exception only may count as REJECT",
+    "accepted declaration stored type and value equal submitted expressions"
+  ],
+  "matrix": [
+    {
+      "cell": "alias-cell.lean",
+      "id": "head-alias",
+      "runner": "head"
+    },
+    {
+      "cell": "explicit-cell.lean",
+      "id": "head-explicit",
+      "runner": "head"
+    },
+    {
+      "cell": "alias-cell.lean",
+      "id": "parent-alias",
+      "runner": "parent"
+    },
+    {
+      "cell": "explicit-cell.lean",
+      "id": "parent-explicit",
+      "runner": "parent"
+    }
+  ],
+  "runners": {
+    "head": {
+      "dynamic_dependencies": [
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+        },
+        {
+          "path": "/workspace/shared/lean-deps/lib/libuv.so.1.0.0",
+          "sha256": "6b3239fe76d2467688a35e994b91b2de1a46ad3f22d54a81cc3eaa5199132807"
+        },
+        {
+          "path": "/workspace/shared/lean4-pr15373-head/build/release/stage1/lib/lean/libleanshared.so",
+          "sha256": "8856422e8a13d855961098f0db3ac2934acd53848f87dcd8c99e717fe3be4a35"
+        }
+      ],
+      "label": "head",
+      "lean_binary": {
+        "path": "/workspace/shared/lean4-pr15373-head/build/release/stage1/bin/lean",
+        "sha256": "58f5314139decb62a38fa7c08d5c8e6917a512c265d00b9f265ee5279e4c76cd"
+      },
+      "lean_version": "Lean (version 4.36.0-pre, commit 015d54649bcaaa0861f355b59761ce308e629fbb, Release)",
+      "libleanshared": {
+        "path": "/workspace/shared/lean4-pr15373-head/build/release/stage1/lib/lean/libleanshared.so",
+        "sha256": "8856422e8a13d855961098f0db3ac2934acd53848f87dcd8c99e717fe3be4a35"
+      },
+      "source_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+      "source_tree": "dd91da76e0566d2516f3fcde2bf5fb271ebc6bb2"
+    },
+    "parent": {
+      "dynamic_dependencies": [
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+          "sha256": "438c546d8e8cc48496bf3a95f753051afd9db66a629a74e31a9ded71586b56e0"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+          "sha256": "fa430b8f298f817a266046af84a77533185ad6fc4406c7d3787b5a0a0c207826"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+          "sha256": "30c61ab012a4241bed033725a09b61f5fdd3bb7df95ee852d0b096520524c7af"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+          "sha256": "6d567d53e895273ca14a1f9dc164fc6c8d39aed2f60aa46a733c2784228915f3"
+        },
+        {
+          "path": "/usr/lib/x86_64-linux-gnu/libstdc++.so.6.0.33",
+          "sha256": "972bb2a18b71140dab0240f8a1f68ab3fb1d56bcd4c4f824a91b70888faf5a00"
+        },
+        {
+          "path": "/workspace/shared/lean-deps/lib/libuv.so.1.0.0",
+          "sha256": "6b3239fe76d2467688a35e994b91b2de1a46ad3f22d54a81cc3eaa5199132807"
+        },
+        {
+          "path": "/workspace/shared/lean4-pr15373-parent/build/release/stage1/lib/lean/libleanshared.so",
+          "sha256": "83c9964864a3f17a68c75f9145c7703395e5684e4493ffff135289d95182640c"
+        }
+      ],
+      "label": "parent",
+      "lean_binary": {
+        "path": "/workspace/shared/lean4-pr15373-parent/build/release/stage1/bin/lean",
+        "sha256": "58f5314139decb62a38fa7c08d5c8e6917a512c265d00b9f265ee5279e4c76cd"
+      },
+      "lean_version": "Lean (version 4.36.0-pre, commit 2c2bdd9630a7a6c51d7620d5efefcdba104f38f3, Release)",
+      "libleanshared": {
+        "path": "/workspace/shared/lean4-pr15373-parent/build/release/stage1/lib/lean/libleanshared.so",
+        "sha256": "83c9964864a3f17a68c75f9145c7703395e5684e4493ffff135289d95182640c"
+      },
+      "source_revision": "2c2bdd9630a7a6c51d7620d5efefcdba104f38f3",
+      "source_tree": "54de1c86d2d5ccf2026dcd82afb8490408eea63b"
+    }
+  },
+  "runtime_injected_dependencies": [
+    {
+      "path": "/workspace/shared/lean-deps/lib/libuv.so.1.0.0",
+      "sha256": "6b3239fe76d2467688a35e994b91b2de1a46ad3f22d54a81cc3eaa5199132807"
+    }
+  ],
+  "schema_version": 1,
+  "source_manifest_sha256": "bc04c10c994aeca89918b4e219d0ec1cc120aa3c1458fced3be287e886934b3f"
+}

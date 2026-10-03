@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "observed_at": "2026-10-02",
+  "repository": "https://github.com/leanprover/lean4",
+  "pull_request": {
+    "number": 15373,
+    "url": "https://github.com/leanprover/lean4/pull/15373",
+    "title": "feat: eta-expand partial constructors",
+    "state": "open",
+    "draft": true,
+    "merged": false,
+    "head_revision": "015d54649bcaaa0861f355b59761ce308e629fbb",
+    "base_revision": "47f4cf80fe1088c42b53fd7b647d040a721321e2",
+    "head_parent_revision": "2c2bdd9630a7a6c51d7620d5efefcdba104f38f3",
+    "updated_at": "2026-09-28T07:11:05Z"
+  },
+  "current_default_branch": {
+    "name": "master",
+    "revision": "7c383e282482431c98704e259ea1cf7303f2fb50"
+  },
+  "source": {
+    "path": "src/kernel/type_checker.cpp",
+    "head_sha256": "d940f5e954cf38e68f09520f0c3c023fe1dcbcb73d5709a32ca2a6c36a979b1f",
+    "parent_sha256": "c6e8c2e7aa6d76efcc7b6d79cc8030496ab084de212c7e224cd3d655f38edc8e",
+    "current_master_sha256": "c6e8c2e7aa6d76efcc7b6d79cc8030496ab084de212c7e224cd3d655f38edc8e",
+    "parent_matches_observed_current_master": true,
+    "head_change": "PR head removes the complete-constructor early rejection and introduces partial-constructor eta expansion. It infers t_type, checks type definitional equality, then opens binders only while t_type is syntactically Pi.",
+    "parent_and_current_behavior": "The inspected parent and current-master files retain the early false return whenever the constructor does not already have all parameters and fields. They do not contain the PR head partial-constructor expansion loop."
+  },
+  "source_inference": "The inspected source isolates the observed alias-sensitive path to code present at the PR head and absent from both the exact parent and observed current master. This supports the confirmation hypothesis but does not replace an executed parent control or establish released-version behavior.",
+  "network_method": "Read-only GitHub API responses for PR metadata, commit identities and exact raw source bytes.",
+  "limitations": "No parent executable was built or run. No released tag was tested. Current master was inspected as source only and may change after this dated observation."
+}

@@ -4,6 +4,7 @@ from unittest import mock
 
 from lib import survivor_cache_historical as historical
 from lib import survivor_cache_historical_v2 as portable
+from lib import portfolio_historical_snapshot_v3 as portfolio
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -35,11 +36,11 @@ class SurvivorCacheHistoricalPortabilityTests(unittest.TestCase):
             self.assertIs(historical.evidence, portable.evidence)
         self.assertIs(historical.evidence, original)
 
-    def test_actual_cache_history_validates_through_adapter(self):
+    def test_actual_cache_history_remains_in_portfolio_custody(self):
         with portable.portable_validation():
-            result = historical.validate(ROOT)
+            result = portfolio.validate_live_transition(ROOT)
         self.assertEqual(result["status"], "PASS")
-        self.assertEqual(result["historical_successor"], "SURVIVOR-CACHE-EXPORT-1")
+        self.assertIn("lib/survivor_cache_historical.py", portfolio._extra_paths(ROOT))
 
 
 if __name__ == "__main__":

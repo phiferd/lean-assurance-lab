@@ -1,0 +1,36 @@
+{
+  "schema_version": 1,
+  "generated_at": "2026-10-02T00:00:00Z",
+  "policy": "docs/INVESTIGATION_SOP.md",
+  "findings": [
+    {
+      "id": "LEAN-ETA-ADMISSION-PR15373",
+      "summary": "Exact PR #15373 head accepted one invalid theorem through checked trust-zero declaration admission; its exact parent and the explicit-domain controls rejected it.",
+      "disposition": "ACTION_RECOMMENDED",
+      "evidence": [
+        {"path": "results/research/lean-eta-admission-confirmation-1/result.json", "sha256": "8d2ebca34eb4b0efc0b49b6a5d3f346b8416bada6bee1ee40d4532df28251656"},
+        {"path": "results/research/lean-eta-admission-confirmation-1/report.md", "sha256": "09f85f2e79d8f1b972e7f50006ee8ab413662c7882fc479b8d159f703c637f5a"},
+        {"path": "results/research/lean-eta-admission-confirmation-1/private-disclosure-draft.md", "sha256": "457d146f6fd0ba50189f93e3bb6086876e6b07f5a302f87033cbf4003e0035ae"},
+        {"path": "results/research/lean-eta-admission-confirmation-1/proposed-regression.lean", "sha256": "04824480d7588f25acbdadbd2522cf2e487d9980f7c0766d10d4b76d126e3a1e"}
+      ],
+      "recommendations": [
+        {
+          "id": "DISCLOSE-LEAN-ETA-ADMISSION-1",
+          "action": "RESPONSIBLE_DISCLOSURE",
+          "target": "Lean maintainers through an agreed private security channel, referencing draft PR #15373",
+          "priority": "HIGH",
+          "rationale": "The exact matched comparison demonstrates checked trust-zero admission of an invalid theorem at the PR head; private coordination should precede public technical disclosure.",
+          "prerequisites": [
+            "Human approval of the exact disclosure draft and destination",
+            "Maintainer coordination on disclosure timing and public regression placement",
+            "Preserve the stated boundary that current master and released versions were not runtime-tested"
+          ],
+          "external_action": true,
+          "human_gate": {"required": true, "status": "REVIEW_REQUIRED"},
+          "execution_status": "NOT_STARTED",
+          "external_reference": "https://github.com/leanprover/lean4/pull/15373"
+        }
+      ]
+    }
+  ]
+}

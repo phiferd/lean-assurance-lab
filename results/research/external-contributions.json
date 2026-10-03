@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "record_type": "EXTERNAL_CONTRIBUTION_LEDGER",
-  "updated_on": "2026-10-01",
+  "updated_on": "2026-10-03",
   "scope": "Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.",
   "status_policy": {
     "upstream_states_are_dated_observations": true,
@@ -500,7 +500,7 @@
         "url": "https://github.com/sankalpsthakur/kiota/pull/11",
         "state": "OPEN",
         "is_draft": false,
-        "observed_on": "2026-09-23",
+        "observed_on": "2026-10-02",
         "created_at": "2026-09-23T11:20:42Z",
         "updated_at": "2026-09-23T11:20:42Z",
         "merged_at": null,
@@ -531,11 +531,13 @@
         "results/research/kiota-recursor-pr-submission-2026-09-23/preparation.json",
         "results/research/kiota-recursor-pr-submission-2026-09-23/submission.json",
         "results/research/kiota-recursor-pr-submission-2026-09-23/published-pr.json",
-        "results/research/kiota-recursor-pr-submission-2026-09-23/published-files.json"
+        "results/research/kiota-recursor-pr-submission-2026-09-23/published-files.json",
+        "results/research/kiota-pr12-cli-contract-2026-10-02/report.md",
+        "results/research/kiota-pr12-cli-contract-2026-10-02/kiota-pr12-recursor-cli-contract.patch"
       ],
       "next_step": {
         "disposition": "AWAIT_REVIEW",
-        "summary": "Await maintainer feedback on Kiota PR#11. Investigate feedback locally; any later external modification requires exact authorization.",
+        "summary": "PR#11 remains open and is incorporated in maintainer draft PR#12. Retain the prepared CLI-verdict regression for maintainer review; any external modification requires exact authorization.",
         "reassess_not_before": null,
         "requires_fresh_preflight": true,
         "requires_human_authorization": true
@@ -545,7 +547,90 @@
         "Read-only preflight observed main at 9fa2c297 and one open draft PR #10 about universe substitution cache identity and CLI verdicts, with disjoint changed files. Two open non-PR issues concern self-reference and universe ownership. No apparent duplicate was found among these open items; closed history, review threads and discussions were not exhaustively searched.",
         "No maintainer acceptance or capacity commitment is inferred from repository activity. No external write or submission occurred.",
         "2026-09-23: owner requested PR submission; fresh preflight still matches tested9fa2c297 with only PR#10 open. Prepared exact local commit774ce05. Automatic approval review rejected required fork creation pending separate explicit authorization; no fork or PR created.",
-        "2026-09-23: owner explicitly approved fork creation and submission after the approval gate. Created phiferd/kiota and opened Kiota PR#11 with exact reviewed commit774ce05 and body; PR is ready for review and mergeable, with no checks reported at observation."
+        "2026-09-23: owner explicitly approved fork creation and submission after the approval gate. Created phiferd/kiota and opened Kiota PR#11 with exact reviewed commit774ce05 and body; PR is ready for review and mergeable, with no checks reported at observation.",
+        "2026-10-02 read-only refresh: PR#11 remains at 774ce05 with no discussion or review activity. Maintainer draft PR#12 at 5c5351a incorporates that exact commit through merge ada249b and refines its error-verdict mapping. Ordinary PR12 CI passes; known Arena resource/availability failures are not reclassified here. A local one-test patch at f037564 covers the missing recursor-rejection CLI contract; no upstream write occurred."
+      ]
+    },
+    {
+      "id": "KIOTA-PR12-RECURSOR-CLI-CONTRACT-PR",
+      "target_repository": "sankalpsthakur/kiota",
+      "channel": "PULL_REQUEST",
+      "title": "test: cover recursor rejection CLI verdict",
+      "research_items": [
+        "KIOTA-RECURSOR-PR-REFINEMENT-1"
+      ],
+      "lifecycle": "EXTERNAL",
+      "upstream": {
+        "number": 13,
+        "url": "https://github.com/sankalpsthakur/kiota/pull/13",
+        "state": "OPEN",
+        "is_draft": true,
+        "observed_on": "2026-10-02",
+        "created_at": "2026-10-02T23:04:48Z",
+        "updated_at": "2026-10-02T23:04:48Z",
+        "merged_at": null,
+        "head_revision": "f0375647ebac180c27898b5df7b8116ec7c7ca5d",
+        "base_revision": "5c5351a7e2ec74ce3142e32b53aff11b8340448a",
+        "mergeability": "MERGEABLE",
+        "review_state": "NO_ACTIVITY",
+        "checks_state": "NOT_REPORTED"
+      },
+      "submission_material": null,
+      "evidence_refs": [
+        "results/research/kiota-pr12-cli-contract-2026-10-02/report.md",
+        "results/research/kiota-pr12-cli-contract-2026-10-02/kiota-pr12-recursor-cli-contract.patch"
+      ],
+      "next_step": {
+        "disposition": "AWAIT_REVIEW",
+        "summary": "Await maintainer review of the draft stacked on PR#12. Any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization.",
+        "reassess_not_before": null,
+        "requires_fresh_preflight": true,
+        "requires_human_authorization": true
+      },
+      "notes": [
+        "2026-10-02: owner explicitly authorized creating the reviewed test PR. Fresh preflight found PR#12 open at exact head 5c5351a7 with no duplicate test PR. Draft PR#13 was opened against PR#12's maintainer branch so its actual diff is one commit, one file and 16 added test lines.",
+        "The PR body discloses AI assistance, states that current code already behaves correctly, reports the 193-test local ordinary suite accurately, and links the lab assessment. GitHub reported no checks for the exact head at observation; absence of checks is not a passing result."
+      ]
+    },
+    {
+      "id": "KIOTA-CLI-INPUT-ERROR-PR",
+      "target_repository": "sankalpsthakur/kiota",
+      "channel": "PULL_REQUEST",
+      "title": "fix: report input open errors without panicking",
+      "research_items": [
+        "KIOTA-RECURSOR-PR-REFINEMENT-1"
+      ],
+      "lifecycle": "EXTERNAL",
+      "upstream": {
+        "number": 14,
+        "url": "https://github.com/sankalpsthakur/kiota/pull/14",
+        "state": "OPEN",
+        "is_draft": true,
+        "observed_on": "2026-10-03",
+        "created_at": "2026-10-03T11:15:24Z",
+        "updated_at": "2026-10-03T11:16:22Z",
+        "merged_at": null,
+        "head_revision": "6be42fd28e5dffcf2d2a8cb2a46e008648a1f4c4",
+        "base_revision": "5c5351a7e2ec74ce3142e32b53aff11b8340448a",
+        "mergeability": "MERGEABLE",
+        "review_state": "NO_ACTIVITY",
+        "checks_state": "NOT_REPORTED"
+      },
+      "submission_material": null,
+      "evidence_refs": [
+        "results/research/kiota-cli-input-error-2026-10-02/report.md",
+        "results/research/kiota-cli-input-error-2026-10-02/kiota-cli-input-error.patch"
+      ],
+      "next_step": {
+        "disposition": "AWAIT_REVIEW",
+        "summary": "Await maintainer review of the modest draft stacked on PR#12. Do not pursue further small CLI polish; any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization.",
+        "reassess_not_before": null,
+        "requires_fresh_preflight": true,
+        "requires_human_authorization": true
+      },
+      "notes": [
+        "2026-10-03: owner explicitly authorized this second draft despite judging it low value. Fresh preflight found PR#12 open at exact head 5c5351a7 with no duplicate input-open fix; draft PR#14 contains the exact reviewed commit 6be42fd2, two files, 24 additions and one deletion.",
+        "The PR body presents the change as a modest usability improvement, documents exit-3 and proof-verdict preservation, reports 193 passing local ordinary tests, states limits and AI assistance, and links the lab evidence. GitHub reported no checks for the exact head at observation; absence of checks is not a passing result. No further small polish project was started."
       ]
     },
     {

@@ -31,6 +31,9 @@ def blob_bytes(blob):
 
 
 def ready_count_from_status(active):
+    if ("Queue execution is PAUSED; no executable item is selected." in active
+            or "Queue handoff: PAUSED." in active):
+        return 0
     match = re.search(r"canonical queue retains (\w+) READY items?\b", active)
     words = {
         "zero": 0, "one": 1, "two": 2, "three": 3, "four": 4,
@@ -83,6 +86,9 @@ class ArenaLetRegressionErratumTests(unittest.TestCase):
                         "unrelated prose"):
             with self.subTest(invalid=invalid), self.assertRaises(ValueError):
                 ready_count_from_status(invalid)
+        self.assertEqual(ready_count_from_status(
+            "Queue execution is PAUSED; no executable item is selected."), 0)
+        self.assertEqual(ready_count_from_status("Queue handoff: PAUSED."), 0)
 
     def test_repair_record_binds_successors_without_scientific_change(self):
         repair = json.loads(REPAIR.read_text(encoding="utf-8"))
@@ -97,7 +103,7 @@ class ArenaLetRegressionErratumTests(unittest.TestCase):
             )
         queue = json.loads(committed_bytes(FIRST_REPAIR_COMMIT, "config/research-queue.json"))
         self.assertEqual(queue["selected_item"], "NANODA-CACHE-REGRESSION-1")
-        subprocess.run([QUEUE_VALIDATOR, "--require-ready"], cwd=ROOT, check=True, capture_output=True)
+        subprocess.run([QUEUE_VALIDATOR], cwd=ROOT, check=True, capture_output=True)
         self.assertFalse(repair["scientific_effect"]["arena_closure_outcome_changed"])
         self.assertFalse(repair["scientific_effect"]["catalog_or_authority_changed"])
         self.assertFalse(repair["scientific_effect"]["scientific_inputs_changed"])
@@ -137,7 +143,7 @@ class ArenaLetRegressionErratumTests(unittest.TestCase):
         self.assertEqual(sha256(data), test_binding["sha256"])
         queue = json.loads(committed_bytes(SECOND_REPAIR_COMMIT, "config/research-queue.json"))
         self.assertEqual(queue["selected_item"], "NANODA-CACHE-REGRESSION-1")
-        subprocess.run([QUEUE_VALIDATOR, "--require-ready"], cwd=ROOT, check=True, capture_output=True)
+        subprocess.run([QUEUE_VALIDATOR], cwd=ROOT, check=True, capture_output=True)
         self.assertFalse(repair["scientific_effect"]["arena_closure_outcome_changed"])
         self.assertFalse(repair["scientific_effect"]["scientific_inputs_changed"])
 
