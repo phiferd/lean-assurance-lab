@@ -3378,14 +3378,25 @@ lookup. This strengthens the result to a reproducible pinned-artifact API
 disagreement. It still does not establish PR causation or production declaration
 acceptance because no exact parent binary or declaration-level check was used.
 See the [fresh confirmation report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-report.md).
-Selected next item: `E0-TEST-EFFECTIVENESS-CAMPAIGN-1`.
+Selected next item: `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1`.
 Queue handoff: EXECUTABLE.
-The owner selected the three-case test-effectiveness campaign on 2026-10-03.
-It is ACTIVE under [its E0 plan](research/E0_TEST_EFFECTIVENESS_CAMPAIGN_1_PLAN.md):
-compare upstream tests and fixed compact Lab cases against three isolated
-semantic faults. Box/FnAlias belongs to a separate agent. Memory accounting
-remains DEFERRED without a concrete measurement dependency. The preceding
-2026-10-02 paused handoff is superseded; frozen eta results remain unchanged.
+The three-case test-effectiveness campaign is complete. Nanoda's unchanged
+44-test suite missed all three seeded omissions. The fixed 90-file compact Lab
+sample detected the declaration-type fault with three cases; the separately
+retained targeted pair detected the congruence fault. The lambda omission
+changed no final verdict, consistent with its prior public-entrypoint
+equivalence classification, so it is not a third coverage gap. The invalid
+shared-target attempt and one sandbox monitor failure remain retained; the
+repaired 376-process execution has distinct binaries and complete supervision.
+See the [E0 summary](../explorations/runs/EXPLORE-TEST-EFFECTIVENESS-1/summary.md).
+
+Select `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` READY and unstarted under
+[its E0 plan](research/E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md). It asks
+whether the same compact non-Collatz sample transfers to two real historical
+fault/fix pairs using already bound binaries. Box/FnAlias remains with the
+owner's separate agent. Memory accounting remains DEFERRED without a concrete
+measurement dependency. No PR, confirmation or external action follows from
+this handoff.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 

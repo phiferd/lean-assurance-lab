@@ -379,3 +379,17 @@ faults on one pinned Nanoda revision against upstream library tests and retained
 compact Lab inputs. This is motivated by the 44-test congruence miss, not by PR
 count. Box/FnAlias remains with the owner's other agent. Memory accounting stays
 deferred; no upstream write or assurance claim is selected.
+
+## Three-case test-effectiveness handoff — 2026-10-03
+
+What did we find? Nanoda's 44-test suite missed three seeded omissions. The
+fixed 90-file compact Lab sample detected the declaration-type fault; a
+separate targeted pair detected the congruence fault. The lambda omission is
+already classified equivalent at the public declaration boundary and produced
+no verdict difference. Is it interesting? Yes: it distinguishes two concrete
+coverage gaps from one non-consequential omission. Does it require more work?
+No PR or confirmation follows. Select
+`E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` READY and unstarted under
+[its plan](E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md) to test the same
+compact non-Collatz inputs against two real historical fault/fix pairs. Keep
+Box/FnAlias separate and the memory audit deferred.

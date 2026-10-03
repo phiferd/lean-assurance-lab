@@ -1,0 +1,11 @@
+--- a/src/tc.rs
++++ b/src/tc.rs
+@@ -628,7 +628,7 @@
+         while let Lambda { binder_name, binder_style, binder_type, body, .. } = self.ctx.read_expr(e) {
+             let binder_type = self.ctx.inst(binder_type, locals.as_slice());
+             if let Check = flag {
+-                self.infer_sort_of(binder_type, flag);
++                // Seeded benchmark fault: omit lambda binder-sort check.
+             }
+ 
+             let local = self.ctx.mk_dbj_level(binder_name, binder_style, binder_type);
