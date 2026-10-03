@@ -431,3 +431,14 @@ or concrete new functioning target evidence is supplied and authorized for
 intake. Memory accounting remains deferred without a decision dependency, and
 build-mode work remains planned after its three-profile premise was rejected;
 a narrower two-profile question still lacks a named property and valid fixture.
+
+## Nanoda projection-identity regression activation — 2026-10-03
+
+The prior transfer screen answered only whether an existing general corpus
+detected the historical fault. It did not answer whether a new focused
+regression can protect the repaired branch. `E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1`
+is ACTIVE under [its E0 plan](E0_NANODA_PROJECTION_IDENTITY_REGRESSION_1_PLAN.md).
+Target current Nanoda `3a240721`; require a public `TypeChecker::def_eq` path,
+fixed/mutant sensitivity and a passing fixed full suite before recommending a
+small test-only PR. Official Lean is excluded because Arena already retains a
+direct nested-unused-parameter regression. No upstream write is authorized.

@@ -3387,9 +3387,9 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
-Queue handoff: PAUSED.
-The canonical queue has no READY or ACTIVE item.
+Selected next item: `E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1`.
+Queue handoff: EXECUTABLE.
+The canonical queue has one ACTIVE item.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3447,6 +3447,18 @@ DEFERRED without a decision that depends on its historical accounting question,
 and build-mode work remains PLANNED: its three-profile premise is not distinct,
 while a narrower two-profile question lacks a named property and valid fixture.
 Box/FnAlias remains with the owner's separate agent.
+
+The prior conclusion that no result-driven work followed was too narrow. It
+applied to transfer from the fixed compact corpus, not to construction of a new
+fault-specific regression. Arena already has a direct regression for official
+Lean's nested-unused-parameter fault. Current Nanoda `3a240721` still has the
+historical projection-name guard but no direct test in its source inventory.
+`E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1` is therefore ACTIVE under its
+[E0 plan](research/E0_NANODA_PROJECTION_IDENTITY_REGRESSION_1_PLAN.md). It will
+attempt one small public-`def_eq` test and require exact historical-mutant
+sensitivity plus a passing fixed full suite before recommending a PR. No
+upstream action is authorized.
+
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
