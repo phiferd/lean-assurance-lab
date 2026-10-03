@@ -1,0 +1,31 @@
+{
+  "recorded_at": "2026-10-03T16:24:00Z",
+  "authorization": {
+    "authorized_at": "2026-10-03T16:21:00Z",
+    "scope": "Create a concise draft upstream PR for the reviewed issue 17 fix, explicitly dependent on PR 38."
+  },
+  "target": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "issue": "https://github.com/ammkrn/nanoda_lib/issues/17",
+    "dependency_pr": "https://github.com/ammkrn/nanoda_lib/pull/38",
+    "dependency_state": "OPEN",
+    "dependency_head": "86060d51a69e91445bbae6b6b1366c12e05e67f0",
+    "dependency_mergeable": true
+  },
+  "contribution": {
+    "repository": "https://github.com/phiferd/nanoda_lib.git",
+    "branch": "fix/quoted-declaration-names-pr38",
+    "head": "a3e17bf3d0f30a66384967929fba0d5c33d1e765",
+    "review_range": "86060d51a69e91445bbae6b6b1366c12e05e67f0..a3e17bf3d0f30a66384967929fba0d5c33d1e765",
+    "branch_url": "https://github.com/phiferd/nanoda_lib/tree/fix/quoted-declaration-names-pr38",
+    "force_push": false
+  },
+  "pull_request": {
+    "created": false,
+    "draft_requested": true,
+    "title": "Draft: fix quoted declaration names (depends on #38)",
+    "error": "GraphQL: Resource not accessible by integration (createPullRequest)",
+    "retry_via_alternate_route": false
+  },
+  "intended_body": "Depends on #38 (`86060d5`); please review only the final commit, `a3e17bf`.\n\nAddresses #17. `pp_declars` flattened name components, so valid quoted names could be missed or printed with the wrong boundaries. This compares requested names component-wise and escapes each printed component independently, while preserving anonymous-name syntax.\n\nTwo focused regressions fail on unchanged #38 and pass here; all 60 tests pass.\n\n[Lean Assurance Lab report](https://github.com/phiferd/lean-assurance-lab/blob/9474e63ecbd3d82511a2064af69ace91a1c1ac67/results/research/nanoda-quoted-name-contract-2026-10-03/report.md)\n\nAI assistance: Codex helped prepare the patch, tests, and description."
+}
