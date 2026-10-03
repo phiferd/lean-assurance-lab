@@ -442,3 +442,16 @@ Target current Nanoda `3a240721`; require a public `TypeChecker::def_eq` path,
 fixed/mutant sensitivity and a passing fixed full suite before recommending a
 small test-only PR. Official Lean is excluded because Arena already retains a
 direct nested-unused-parameter regression. No upstream write is authorized.
+
+## Nanoda projection-identity regression closure — 2026-10-03
+
+**What did we find?** The public-`def_eq` regression passes on current Nanoda,
+fails at the intended assertion under the exact one-conjunct historical mutant,
+and the fixed full suite passes 45/45. No equivalent direct current test or open
+test PR was found. **Is it interesting?** Yes: it converts the known historical
+coverage gap into a small test-only candidate with demonstrated fault
+sensitivity. It is not a current checker-defect or security result. **Does it
+require more work?** Recommend one Nanoda test-only PR using the retained patch
+and narrow historical-coverage wording. No upstream action occurred. Close the
+E0 item and restore `TRANSFER-HOLDOUT-INTAKE-1` WAITING and unstarted; the queue
+remains PAUSED on its previously recorded independent-input requirement.

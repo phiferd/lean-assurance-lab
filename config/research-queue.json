@@ -3,7 +3,7 @@
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
   "updated_at": "2026-10-03",
-  "selected_item": "E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1",
+  "selected_item": "TRANSFER-HOLDOUT-INTAKE-1",
   "execution_policy": {
     "engineering_failures": "REPAIR_AND_CONTINUE",
     "attempt_caps": "NONE",
@@ -4301,7 +4301,7 @@
       "completion": "A maintainable public-def_eq regression that passes current fixed source, fails under the exact historical omission and passes the fixed full suite, or a precise duplicate/semantic/capability boundary supporting no action.",
       "stop_condition": "The fixed test/mutant/full-suite question is answered, owner stop, invalidated source/input, or required capability unavailable after feasible repair. Process controls are nonterminal; no upstream write, checker fix, Box/FnAlias work or assurance promotion.",
       "kind": "EXPERIMENT",
-      "status": "ACTIVE",
+      "status": "COMPLETE",
       "depends_on": [
         "E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1"
       ],
@@ -4314,18 +4314,32 @@
         "external/lean-kernel-arena/tests/nested-unused-param.lean"
       ],
       "issue_urls": [],
-      "closure": null,
+      "closure": {
+        "outcome": "SUCCESS",
+        "evidence_refs": [
+          "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/result.json",
+          "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/summary.md",
+          "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/regression.patch",
+          "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/historical-mutant.patch",
+          "explorations/ledger.jsonl"
+        ],
+        "recommendation": "Recommend one small Nanoda test-only PR using the retained regression patch. Frame it as direct coverage for the projection-name guard added by historical PR #23; fixed focused and 45-test full-suite runs pass, while the exact one-conjunct mutant fails at the target assertion. Do not claim a current defect or security issue. No upstream action occurred."
+      },
       "blocked_reason": ""
     }
   ],
   "handoff": {
-    "status": "EXECUTABLE",
-    "reason": "",
-    "required_decision": "",
-    "evidence_refs": []
+    "status": "PAUSED",
+    "reason": "The projection-identity investigation is complete with a concrete PR recommendation and no remaining local research step. The selected transfer intake still lacks an independently curated fresh input/custody package or concrete new functioning target; the memory and build-mode alternatives remain without decision-relevant gates.",
+    "required_decision": "Supply one owner-designated independent input package or concrete new functioning target and separately authorize the fixed metadata-only intake; or select another named bounded direction. The recommended Nanoda PR remains a separate external action requiring exact human authorization.",
+    "evidence_refs": [
+      "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/summary.md",
+      "results/research/alt-transfer-2026-09-08/result.json",
+      "results/research/build-mode-conformance-feasibility-2026-10-03/report.md"
+    ]
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-10-03-nanoda-projection-identity-entry.json",
-    "sha256": "1361a349430af23d4112076853ec82d5ae69651cb74c7f3cfc940cda9a52f4de"
+    "path": "results/research/queue-reviews/2026-10-03-nanoda-projection-identity-closure.json",
+    "sha256": "e08700b349155be719c4bb9476fb6b4c6cab6ec2c08f5959afd8a64d1603480a"
   }
 }

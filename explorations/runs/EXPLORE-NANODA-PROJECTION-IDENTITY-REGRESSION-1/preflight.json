@@ -1,0 +1,58 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "trial_id": "EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1",
+  "campaign": "E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1",
+  "source": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+    "branch": "master",
+    "clean_before_candidate": true
+  },
+  "historical_fix": {
+    "commit": "404660cc2fbf04d8040d25a15ddd55b6b15c8e5e",
+    "property": "def_eq_proj requires equal projection type names before recursively comparing matching-index structures",
+    "mutant": "Remove only the ty_name_l == ty_name_r conjunct from current src/tc.rs."
+  },
+  "duplicate_check": {
+    "source_inventory": "No projection-identity test found in current src/tests.rs, src/tests/* or test_resources/*.",
+    "github_pull_requests": [
+      {
+        "number": 23,
+        "state": "MERGED",
+        "title": "chore: implement upstream safety checks",
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/23"
+      },
+      {
+        "number": 8,
+        "state": "MERGED",
+        "title": "Soundness bug: infer_proj allows projecting data from Prop",
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/8"
+      }
+    ],
+    "open_projection_pr_found": false,
+    "github_issues": [
+      {
+        "number": 35,
+        "state": "CLOSED",
+        "title": "infer_proj rejects valid field projections from structures whose sort has abstract universe parameters",
+        "url": "https://github.com/ammkrn/nanoda_lib/issues/35"
+      }
+    ],
+    "equivalent_issue_found": false
+  },
+  "test_design": {
+    "entrypoint": "TypeChecker::def_eq",
+    "fixture": "test_resources/ProjectionIdentity/export, a 3.1.0 export containing the two-field PProd structure",
+    "target": "Same index and same nonreducing well-typed local structure, distinct projection type names => false",
+    "controls": [
+      "Same type name/index/structure => true",
+      "Same type name/structure but distinct valid indices => false"
+    ]
+  },
+  "planned_runs": [
+    "focused fixed test",
+    "focused exact-mutant test",
+    "full fixed cargo test suite"
+  ]
+}

@@ -1,0 +1,79 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "trial_id": "EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1",
+  "campaign": "E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1",
+  "outcome": "SIGNAL",
+  "source_revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+  "historical_fix_commit": "404660cc2fbf04d8040d25a15ddd55b6b15c8e5e",
+  "duplicate_review": {
+    "direct_current_source_test_found": false,
+    "open_equivalent_pull_request_found": false,
+    "existing_fix_pull_request": "https://github.com/ammkrn/nanoda_lib/pull/23",
+    "official_lean_parallel_action": "NO_ACTION_EXISTING_ARENA_REGRESSION"
+  },
+  "candidate": {
+    "patch": "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/regression.patch",
+    "patch_sha256": "0acaa0b020f84f43d8f2f445f7e09f7a2b2267df3345bc6655fe16ca92080489",
+    "files": [
+      "src/tests/util.rs",
+      "test_resources/ProjectionIdentity/config.json",
+      "test_resources/ProjectionIdentity/export"
+    ],
+    "production_source_changes": 0,
+    "entrypoint": "TypeChecker::def_eq",
+    "target_assertion": "Same valid index and nonreducing well-typed structure with distinct projection type names compare unequal.",
+    "controls": [
+      "Same type name/index/structure compares equal.",
+      "Same type name/structure with distinct valid indices compares unequal."
+    ]
+  },
+  "mutant": {
+    "patch": "explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/historical-mutant.patch",
+    "patch_sha256": "6228c6339ebb23f165d8c028edc3bd181d7e4c930fcfffe5cd66e17508503ce2",
+    "change": "Remove only ty_name_l == ty_name_r from def_eq_proj."
+  },
+  "observations": [
+    {
+      "attempt": "fixed-focused-r3",
+      "valid": true,
+      "exit_code": 0,
+      "tests": "1 passed; 0 failed",
+      "interpretation": "Candidate passes current fixed source."
+    },
+    {
+      "attempt": "mutant-focused",
+      "valid": true,
+      "exit_code": 101,
+      "tests": "0 passed; 1 failed",
+      "failure": "assertion failed: !tc.def_eq(left, other_type)",
+      "interpretation": "Candidate detects the exact historical omission after its two controls pass."
+    },
+    {
+      "attempt": "fixed-full-suite",
+      "valid": true,
+      "exit_code": 0,
+      "tests": "45 passed; 0 failed; 8 doctests ignored",
+      "interpretation": "Current full suite remains green with the added regression."
+    }
+  ],
+  "invalid_attempts": [
+    {
+      "attempt": "fixed-focused",
+      "reason": "Sandbox denied /bin/ps; supervisor killed the process before a test observation."
+    },
+    {
+      "attempt": "fixed-focused-r2",
+      "reason": "Unqualified exact Rust test filter ran zero tests; exit 0 is not evidence."
+    }
+  ],
+  "supervision": {
+    "valid_attempts": 3,
+    "all_valid_cleanup_complete": true,
+    "valid_elapsed_seconds": 6.529704667,
+    "maximum_valid_child_peak_rss_bytes": 368443392
+  },
+  "classification": "The candidate is a small, fault-sensitive test-only contribution. This is not evidence of a current Nanoda defect or a general projection-semantics claim.",
+  "recommendation": "Recommend one Nanoda test-only PR using regression.patch, titled along the lines of \u201ctest: cover projection type names in def_eq\u201d. The PR should describe this as coverage for the historical guard from PR #23 and include the fixed/mutant/full-suite evidence. Do not characterize it as a current bug or security fix.",
+  "external_action": "NONE"
+}

@@ -1,0 +1,13 @@
+diff --git a/src/tc.rs b/src/tc.rs
+index 27eaaac..54b413f 100644
+--- a/src/tc.rs
++++ b/src/tc.rs
+@@ -905,7 +905,7 @@ impl<'x, 't: 'x, 'p: 't> TypeChecker<'x, 't, 'p> {
+             (
+                 Proj { ty_name: ty_name_l, idx: idx_l, structure: structure_l, .. },
+                 Proj { ty_name: ty_name_r, idx: idx_r, structure: structure_r, .. }
+-            ) => ty_name_l == ty_name_r && idx_l == idx_r && self.def_eq(structure_l, structure_r),
++            ) => idx_l == idx_r && self.def_eq(structure_l, structure_r),
+             _ => false,
+         }
+     }

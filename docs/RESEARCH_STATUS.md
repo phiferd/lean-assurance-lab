@@ -3387,9 +3387,9 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1`.
-Queue handoff: EXECUTABLE.
-The canonical queue has one ACTIVE item.
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+Queue handoff: PAUSED.
+The canonical queue has no READY or ACTIVE item.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3459,6 +3459,19 @@ attempt one small public-`def_eq` test and require exact historical-mutant
 sensitivity plus a passing fixed full suite before recommending a PR. No
 upstream action is authorized.
 
+`E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1` is COMPLETE with E0 `SIGNAL`.
+**What did we find?** A new test through public `TypeChecker::def_eq` passes on
+current Nanoda `3a240721`, fails at the intended assertion when only the
+historical projection-name conjunct is removed, and leaves the fixed full suite
+passing 45/45. Current source and GitHub duplicate review found no equivalent
+direct test. **Is it interesting?** Yes. This turns the earlier general-corpus
+miss into a small regression that detects the exact historical omission without
+changing production code; it does not establish a current defect or security
+issue. **Does it require more work?** Recommend one test-only Nanoda PR using
+the retained patch, described narrowly as coverage for historical PR #23.
+Submission is a separate external action and did not occur. Official Lean needs
+no parallel case because Arena already retains its direct regression. See the
+[E0 summary](../explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/summary.md).
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 
