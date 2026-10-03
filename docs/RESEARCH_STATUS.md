@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-02
+Last updated: 2026-10-03
 
 ## How Status Is Tracked
 
@@ -3378,10 +3378,14 @@ lookup. This strengthens the result to a reproducible pinned-artifact API
 disagreement. It still does not establish PR causation or production declaration
 acceptance because no exact parent binary or declaration-level check was used.
 See the [fresh confirmation report](../explorations/runs/EXPLORE-LEAN-ETA-ALIAS-RETRY-1/fresh-confirmation-report.md).
-Selected next item: `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1`.
-Queue handoff: PAUSED.
-The selected item remains DEFERRED rather than executable; resumption requires
-an owner decision to start that bounded audit.
+Selected next item: `E0-TEST-EFFECTIVENESS-CAMPAIGN-1`.
+Queue handoff: EXECUTABLE.
+The owner selected the three-case test-effectiveness campaign on 2026-10-03.
+It is ACTIVE under [its E0 plan](research/E0_TEST_EFFECTIVENESS_CAMPAIGN_1_PLAN.md):
+compare upstream tests and fixed compact Lab cases against three isolated
+semantic faults. Box/FnAlias belongs to a separate agent. Memory accounting
+remains DEFERRED without a concrete measurement dependency. The preceding
+2026-10-02 paused handoff is superseded; frozen eta results remain unchanged.
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all
 closed trial reports remain historical evidence.
 

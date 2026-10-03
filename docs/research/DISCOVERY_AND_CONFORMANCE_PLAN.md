@@ -370,3 +370,12 @@ Source-only triage is E0 INCONCLUSIVE about original build provenance. Candidate
 ## Local helper and eta preparation — 2026-09-30
 
 Existing-CLI drafts and supported receipt counts reproduce 40/48/3/8; all non-skipped current/historical tests passed across the full invocation plus unchanged host supervisor retry; the initial sandbox-only failure and missing-payload skips remain retained. Select LEAN-ETA-ALIAS-PILOT-PREPARATION-1 READY and unstarted, with four prospective cases, preserved-alias/duplicate/runner stop gates and no large build or checker launch. Source-only triage remains inconclusive about original build provenance; no defect claimed.
+
+## Owner-selected test-effectiveness campaign — 2026-10-03
+
+Select E0-TEST-EFFECTIVENESS-CAMPAIGN-1 ACTIVE under its
+[E0 plan](E0_TEST_EFFECTIVENESS_CAMPAIGN_1_PLAN.md). Compare three fixed guard
+faults on one pinned Nanoda revision against upstream library tests and retained
+compact Lab inputs. This is motivated by the 44-test congruence miss, not by PR
+count. Box/FnAlias remains with the owner's other agent. Memory accounting stays
+deferred; no upstream write or assurance claim is selected.
