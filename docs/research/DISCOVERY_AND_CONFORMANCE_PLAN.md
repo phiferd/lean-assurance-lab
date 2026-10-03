@@ -398,3 +398,13 @@ No PR or confirmation follows. Select
 [its plan](E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md) to test the same
 compact non-Collatz inputs against two real historical fault/fix pairs. Keep
 Box/FnAlias separate and the memory audit deferred.
+
+## Historical-fault transfer screen activation — 2026-10-03
+
+`E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` is ACTIVE under its
+[E0 plan](E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md). The four exact
+affected/fixed binaries match the frozen Collatz-retrospective identities and
+the unchanged 90-file compact selection is locally available. Bind one
+prospective trial per historical fault before observation. Any signal requires
+source/diagnostic review before a PR recommendation; no signal closes this
+fixed screen without an external action.

@@ -3426,7 +3426,7 @@ shared-target attempt and one sandbox monitor failure remain retained; the
 repaired 376-process execution has distinct binaries and complete supervision.
 See the [E0 summary](../explorations/runs/EXPLORE-TEST-EFFECTIVENESS-1/summary.md).
 
-Select `E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` READY and unstarted under
+`E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1` is ACTIVE under
 [its E0 plan](research/E0_HISTORICAL_FAULT_TRANSFER_SCREEN_1_PLAN.md). It asks
 whether the same compact non-Collatz sample transfers to two real historical
 fault/fix pairs using already bound binaries. Box/FnAlias remains with the
