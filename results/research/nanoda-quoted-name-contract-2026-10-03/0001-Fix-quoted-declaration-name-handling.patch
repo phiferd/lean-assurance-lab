@@ -1,0 +1,320 @@
+From a3e17bf3d0f30a66384967929fba0d5c33d1e765 Mon Sep 17 00:00:00 2001
+From: Dan Phifer <dan.phifer@gmail.com>
+Date: Sat, 3 Oct 2026 15:56:00 +0000
+Subject: [PATCH] Fix quoted declaration name handling
+
+---
+ src/name.rs           | 32 +++++++++++++++++-
+ src/parser.rs         | 10 +++---
+ src/pretty_printer.rs | 68 +++++++------------------------------
+ src/tests/name.rs     | 78 ++++++++++++++++++++++++++++++++++++++++++-
+ src/util.rs           |  4 ++-
+ 5 files changed, 129 insertions(+), 63 deletions(-)
+
+diff --git a/src/name.rs b/src/name.rs
+index b47a88e..bec5e9d 100644
+--- a/src/name.rs
++++ b/src/name.rs
+@@ -27,6 +27,36 @@ impl<'a> Name<'a> {
+ }
+ 
+ impl<'x, 't: 'x, 'p: 't> TcCtx<'t, 'p> {
++    pub(crate) fn name_components(&self, n: NamePtr<'t>) -> Vec<NameComponent> {
++        match self.read_name(n) {
++            Anon => Vec::new(),
++            Str(pfx, sfx, _) => {
++                let mut components = self.name_components(pfx);
++                components.push(NameComponent::Str(self.read_string(sfx).to_string()));
++                components
++            }
++            Num(pfx, sfx, _) => {
++                let mut components = self.name_components(pfx);
++                components.push(NameComponent::Num(sfx));
++                components
++            }
++        }
++    }
++
++    pub(crate) fn name_from_components(&mut self, components: &[NameComponent]) -> NamePtr<'t> {
++        let mut out = self.anonymous();
++        for component in components {
++            out = match component {
++                NameComponent::Str(s) => {
++                    let s = self.alloc_string(CowStr::Owned(s.clone()));
++                    self.str(out, s)
++                }
++                NameComponent::Num(n) => self.num(out, *n),
++            };
++        }
++        out
++    }
++
+     pub(crate) fn get_pfx(&self, mut n: NamePtr<'t>) -> NamePtr<'t> {
+         let anonymous = self.anonymous();
+         loop {
+@@ -122,7 +152,7 @@ fn is_id(s: &str) -> bool {
+ 
+ /// A name component. Outside the export file's name table, a name is a `Vec<NameComponent>` in
+ /// source order, e.g. `Quot.sound` is `[Str("Quot"), Str("sound")]`.
+-#[derive(Debug, Clone, PartialEq, Eq)]
++#[derive(Debug, Clone, PartialEq, Eq, Hash)]
+ pub(crate) enum NameComponent {
+     Str(String),
+     Num(u64),
+diff --git a/src/parser.rs b/src/parser.rs
+index b0ba960..0d5dc0c 100644
+--- a/src/parser.rs
++++ b/src/parser.rs
+@@ -389,6 +389,9 @@ pub(crate) fn parse_export_file<'p, R: BufRead>(
+     config: Config,
+ 
+ ) -> Result<(crate::util::ExportFile<'p>, Vec<String>), Box<dyn Error>> {
++    if let Some(name) = config.pp_declars.iter().flatten().find(|name| parse_name(name).is_none()) {
++        return Err(Box::from(format!("invalid name in pp_declars: {:?}", name)))
++    }
+     let mut parser = Parser::new(buf_reader, config);
+     let mut line_buffer = String::new();
+ 
+@@ -407,13 +410,12 @@ pub(crate) fn parse_export_file<'p, R: BufRead>(
+     // in the export file.
+     if parser.config.unknown_pp_declar_hard_error {
+         if let Some(pp_declars) = parser.config.pp_declars.as_ref() {
+-            let mut pp_declar_names = pp_declars.iter().map(|s| s.as_str()).collect::<crate::util::FxHashSet<&str>>();
++            let mut pp_declar_names = pp_declars.iter().filter_map(|s| parse_name(s)).collect::<crate::util::FxHashSet<_>>();
+             for declar_name in parser.declars.keys() {
+-                let n = parser.name_to_string(*declar_name);
+-                pp_declar_names.remove(n.as_str());
++                pp_declar_names.remove(&parser.name_components(*declar_name));
+             }
+             if pp_declar_names.len() > 0 {
+-                let list = pp_declar_names.into_iter().collect::<Vec<&str>>();
++                let list = pp_declar_names.into_iter().map(|n| format_name(&n)).collect::<Vec<_>>();
+                 return Err(Box::from(format!("these pp_declars were not found in the exported environment: {:#?}", list)))
+             }
+         }
+diff --git a/src/pretty_printer.rs b/src/pretty_printer.rs
+index 8505f20..c1ccbb0 100644
+--- a/src/pretty_printer.rs
++++ b/src/pretty_printer.rs
+@@ -2,8 +2,8 @@ use crate::env::Declar;
+ use crate::expr::{BinderStyle, Expr::*, FVarId};
+ use crate::hash64;
+ use crate::level::Level;
+-use crate::name::{is_id_first, is_id_rest, Name};
+-use crate::util::{ExportFile, ExprPtr, LevelPtr, LevelsPtr, NamePtr, StringPtr, TcCtx};
++use crate::name::Name;
++use crate::util::{ExportFile, ExprPtr, LevelPtr, LevelsPtr, NamePtr, TcCtx};
+ use serde::Deserialize;
+ use std::error::Error;
+ use std::rc::Rc;
+@@ -307,6 +307,7 @@ impl<'a> ParsedBinder<'a> {
+     fn is_lambda(&self) -> bool { !self.is_pi }
+ }
+ 
++use crate::name::{format_name, parse_name};
+ use crate::util::PpDestination;
+ impl<'p> ExportFile<'p> {
+     // Need to get better information about escaping/use of double french quotes.
+@@ -317,8 +318,12 @@ impl<'p> ExportFile<'p> {
+                 let mut pp_declars = Vec::new();
+                 if let Some(pp_declar_strings) = self.config.pp_declars.as_ref() {
+                     for declar_name in pp_declar_strings.iter() {
+-                        let n = ctx.name_from_str(declar_name);
+-                        pp_declars.push((declar_name.clone(), n));
++                        if let Some(components) = parse_name(declar_name) {
++                            let n = ctx.name_from_components(&components);
++                            pp_declars.push((declar_name.clone(), n));
++                        } else {
++                            errs.push(Box::<dyn Error>::from(format!("invalid name in pp_declars: {:?}", declar_name)));
++                        }
+                     }
+                 }
+                 if self.config.print_axioms {
+@@ -362,29 +367,6 @@ impl<'x, 't, 'p> PrettyPrinter<'x, 't, 'p> {
+ 
+     pub(crate) fn options(&self) -> &PpOptions { &self.ctx.export_file.config.pp_options }
+ 
+-    /// Returns `true` if this string segment of a name can be displayed
+-    /// without needing to escape; if the characters are lexically correct,
+-    /// or if the issue is `_@` which accompanies hygienic names.
+-    fn ok_str(&self, s: StringPtr<'t>) -> bool {
+-        let s = self.ctx.read_string(s);
+-        (s.chars().take(1).all(is_id_first) && s.chars().skip(1).all(is_id_rest)) || s == "_@"
+-    }
+-
+-    // If a name ends up being anonymous in a position that otherwise should require an identifier,
+-    // it's printed as an empty escape sequence `«»`.
+-    //
+-    // If a name uses characters that otherwise should not be valid, it's escaped with double
+-    // french quotes.
+-    fn should_be_escaped(&self, n: NamePtr<'t>) -> bool { n == self.ctx.anonymous() || self.should_be_escaped_aux(n) }
+-
+-    fn should_be_escaped_aux(&self, n: NamePtr<'t>) -> bool {
+-        match self.ctx.read_name(n) {
+-            Name::Anon => false,
+-            Name::Str(pfx, sfx, _) => !self.ok_str(sfx) || self.should_be_escaped_aux(pfx),
+-            Name::Num(pfx, ..) => self.should_be_escaped_aux(pfx),
+-        }
+-    }
+-
+     fn mk_parsed_binder(
+         &self,
+         is_pi: bool,
+@@ -520,39 +502,13 @@ impl<'x, 't, 'p> PrettyPrinter<'x, 't, 'p> {
+     /// FIXME: We need to come back and update this when we have more "official" information 
+     /// from upstream about how quoting interacts with elements like hygienic identifiers
+     fn pp_name_safe(&self, n: NamePtr<'t>) -> DocPtr {
+-        let doc = self.name_to_string(n).as_str().into();
+-        if self.should_be_escaped(n) {
+-            DocPtr::from("«").concat(doc).concat(DocPtr::from("»"))
++        if n == self.ctx.anonymous() {
++            DocPtr::from("«»")
+         } else {
+-            doc
++            format_name(&self.ctx.name_components(n)).as_str().into()
+         }
+     }
+     
+-    /// Create a string from a name `n`, leaving the dot-separator in the output string.\
+-    ///
+-    /// Example: name_to_string(`Foo.Bar.Baz`) == "Foo.Bar.Baz"
+-    fn name_to_string(&self, n: NamePtr<'t>) -> String {
+-        match self.ctx.read_name(n) {
+-            Name::Anon => String::new(),
+-            Name::Str(pfx, sfx, _) => {
+-                let mut out = self.name_to_string(pfx);
+-                if !out.is_empty() {
+-                    out.push('.');
+-                }
+-                out.push_str(self.ctx.read_string(sfx).as_ref());
+-                out
+-            }
+-            Name::Num(pfx, sfx, _) => {
+-                let mut out = self.name_to_string(pfx);
+-                if !out.is_empty() {
+-                    out.push('.');
+-                }
+-                out.push_str(format!("{}", sfx).as_str());
+-                out
+-            }
+-        }
+-    }
+-
+     fn pp_level(&self, lvl: LevelPtr<'t>) -> Parenable {
+         use Level::*;
+         match self.ctx.read_level(lvl) {
+diff --git a/src/tests/name.rs b/src/tests/name.rs
+index 9eb9fd8..fc1c143 100644
+--- a/src/tests/name.rs
++++ b/src/tests/name.rs
+@@ -1,7 +1,12 @@
+ use crate::name::{format_name, is_id_first, is_id_rest, parse_name, NameComponent};
++use crate::parser::parse_export_file;
++use crate::pretty_printer::PpOptions;
+ use crate::tests::util::test_ctx;
+-use std::error::Error;
++use crate::util::{Config, PpDestination};
+ use std::borrow::Cow;
++use std::error::Error;
++use std::fs::File;
++use std::io::{BufWriter, Cursor};
+ 
+ #[test]
+ fn pfx_test_anon() -> Result<(), Box<dyn Error>> {
+@@ -138,3 +143,74 @@ fn format_name_round_trips() {
+         assert_eq!(parse_name(&format_name(&name)), Some(name));
+     }
+ }
++
++#[test]
++fn context_names_preserve_quoted_component_boundaries() -> Result<(), Box<dyn Error>> {
++    test_ctx(None, |ctx| {
++        for source in ["A", "«b c»", "A.«b c»", "A.«b.c»"] {
++            let components = parse_name(source).unwrap();
++            let name = ctx.name_from_components(&components);
++            assert_eq!(ctx.name_components(name), components, "input: {source}");
++            assert_eq!(format_name(&ctx.name_components(name)), source, "input: {source}");
++        }
++    })
++}
++
++fn quoted_name_config(pp_declars: Vec<String>) -> Config {
++    let names = ["A", "«b c»", "A.«b c»", "A.«b.c»"].map(str::to_string).to_vec();
++    Config {
++        export_file_path: None,
++        use_stdin: true,
++        permitted_axioms: Some(names),
++        unpermitted_axiom_hard_error: true,
++        num_threads: 1,
++        nat_extension: false,
++        string_extension: false,
++        pp_declars: Some(pp_declars),
++        unknown_pp_declar_hard_error: true,
++        pp_options: PpOptions::default(),
++        pp_output_path: None,
++        pp_to_stdout: false,
++        print_success_message: false,
++        print_axioms: false,
++        unsafe_permit_all_axioms: false,
++    }
++}
++
++const QUOTED_NAME_EXPORT: &str = concat!(
++    "{\"meta\":{\"exporter\":{\"name\":\"lean4export\",\"version\":\"3.1.0\"},\"format\":{\"version\":\"3.1.0\"},\"lean\":{\"githash\":\"470d5ce1400764999581fd26d5d72b00d990b0f4\",\"version\":\"4.35.0-rc3\"}}}\n",
++    "{\"in\":1,\"str\":{\"pre\":0,\"str\":\"A\"}}\n",
++    "{\"in\":2,\"str\":{\"pre\":0,\"str\":\"b c\"}}\n",
++    "{\"in\":3,\"str\":{\"pre\":1,\"str\":\"b c\"}}\n",
++    "{\"in\":4,\"str\":{\"pre\":1,\"str\":\"b.c\"}}\n",
++    "{\"ie\":0,\"sort\":0}\n",
++    "{\"axiom\":{\"isUnsafe\":false,\"levelParams\":[],\"name\":1,\"type\":0}}\n",
++    "{\"axiom\":{\"isUnsafe\":false,\"levelParams\":[],\"name\":2,\"type\":0}}\n",
++    "{\"axiom\":{\"isUnsafe\":false,\"levelParams\":[],\"name\":3,\"type\":0}}\n",
++    "{\"axiom\":{\"isUnsafe\":false,\"levelParams\":[],\"name\":4,\"type\":0}}\n",
++);
++
++#[test]
++fn pp_declars_select_quoted_names_by_components() {
++    let requested = ["A", "«b c»", "A.«b c»", "A.«b.c»"].map(str::to_string).to_vec();
++    let (export, _) = parse_export_file(Cursor::new(QUOTED_NAME_EXPORT), quoted_name_config(requested)).unwrap();
++    let path = std::env::temp_dir().join(format!("nanoda-quoted-names-{}.txt", std::process::id()));
++    let file = File::create(&path).unwrap();
++    let mut destination = PpDestination::File(BufWriter::new(file));
++    assert!(export.pp_selected_declars(Some(&mut destination)).is_empty());
++    drop(destination);
++    let output = std::fs::read_to_string(&path).unwrap();
++    std::fs::remove_file(path).unwrap();
++    for name in ["A", "«b c»", "A.«b c»", "A.«b.c»"] {
++        assert!(output.contains(&format!("axiom {name} : Prop")), "missing {name:?} in {output:?}");
++    }
++}
++
++#[test]
++fn pp_declars_reject_flattened_non_identifier_alias() {
++    let result = parse_export_file(Cursor::new(QUOTED_NAME_EXPORT), quoted_name_config(vec!["A.b c".to_string()]));
++    match result {
++        Err(error) => assert_eq!(error.to_string(), "invalid name in pp_declars: \"A.b c\""),
++        Ok(_) => panic!("flattened non-identifier alias was accepted"),
++    }
++}
+diff --git a/src/util.rs b/src/util.rs
+index 9b9975e..393be27 100644
+--- a/src/util.rs
++++ b/src/util.rs
+@@ -956,6 +956,9 @@ impl TryFrom<&Path> for Config {
+                 if let Some(name) = config.permitted_axioms.iter().flatten().find(|name| parse_name(name).is_none()) {
+                     return Err(Box::from(format!("invalid name in permitted_axioms: {:?}", name)))
+                 }
++                if let Some(name) = config.pp_declars.iter().flatten().find(|name| parse_name(name).is_none()) {
++                    return Err(Box::from(format!("invalid name in pp_declars: {:?}", name)))
++                }
+                 Ok(config)
+             }
+         }
+@@ -1017,4 +1020,3 @@ struct ExitStatus {
+     tc_err: Option<String>,
+     pp_err: Option<String>
+ }
+-
+-- 
+2.52.0
+
