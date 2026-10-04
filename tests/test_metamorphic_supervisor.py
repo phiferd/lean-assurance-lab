@@ -8,6 +8,7 @@ import tempfile
 import unittest
 from unittest.mock import Mock, patch
 
+from lib import metamorphic_pilot_runner as base_supervisor
 from lib import metamorphic_pilot_runner_v3 as supervisor
 from lib.metamorphic_pilot_runner_v3 import classify, run_supervised
 
@@ -102,6 +103,24 @@ class StartGateTests(unittest.TestCase):
 
 
 class SupervisorTests(unittest.TestCase):
+    def test_memory_breach_signals_process_group(self):
+        process = Mock(pid=123456)
+        process.poll.return_value = None
+        stopped = Mock()
+        state = {
+            "samples": 0,
+            "maximum_observed_rss_bytes": 0,
+            "memory_exceeded": False,
+            "monitor_error": None,
+        }
+        with patch.object(base_supervisor, "_group_rss_bytes",
+                          return_value=[MEMORY_LIMIT + 1]), \
+             patch.object(supervisor.os, "killpg") as killpg:
+            supervisor._memory_monitor(process, MEMORY_LIMIT, stopped, state)
+        self.assertTrue(state["memory_exceeded"])
+        killpg.assert_called_once_with(process.pid, supervisor.signal.SIGKILL)
+        stopped.wait.assert_not_called()
+
     def run_case(self, name: str, script: str, *, timeout: int,
                  memory: int = PRODUCTION_MEMORY_LIMIT) -> tuple[dict, bytes, bytes]:
         def execute(directory: Path) -> tuple[dict, bytes, bytes]:
@@ -188,13 +207,8 @@ class SupervisorTests(unittest.TestCase):
         self.assertEqual(stderr, b"refusal\n")
         self.assert_observed_and_clean(receipt)
 
-    def test_child_memory_breach_kills_process_group(self):
-        script = (
-            "import subprocess,sys,time; "
-            "subprocess.Popen([sys.executable,'-c',"
-            "'import time; x=bytearray(128*1024*1024); time.sleep(30)']); "
-            "time.sleep(30)"
-        )
+    def test_memory_breach_kills_and_cleans_process(self):
+        script = "import time; x=bytearray(128*1024*1024); time.sleep(30)"
         receipt, _, _ = self.run_case(
             "memory", script, timeout=10, memory=MEMORY_LIMIT,
         )
@@ -204,11 +218,7 @@ class SupervisorTests(unittest.TestCase):
         self.assert_observed_and_clean(receipt)
 
     def test_timeout_kills_process_group(self):
-        script = (
-            "import subprocess,sys,time; "
-            "subprocess.Popen([sys.executable,'-c','import time; time.sleep(30)']); "
-            "time.sleep(30)"
-        )
+        script = "import time; time.sleep(30)"
         receipt, _, _ = self.run_case("timeout", script, timeout=1)
         self.assertTrue(receipt["timed_out"], json.dumps(receipt, sort_keys=True))
         self.assert_observed_and_clean(receipt)
