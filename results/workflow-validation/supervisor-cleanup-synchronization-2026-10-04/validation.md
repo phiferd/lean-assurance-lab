@@ -47,3 +47,19 @@ skips, all outside this patch:
 
 These failures are retained rather than hidden or attributed to this test-only
 change. Exact pushed-commit CI remains the authoritative clean-run gate.
+
+## Clean-checkout queue input repair
+
+The first exact-commit CI run failed before discovery because completed queue
+record `E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1` references
+`external/lean-kernel-arena/tests/nested-unused-param.lean`. The file is tracked
+upstream at pinned Arena revision `f0fe3b379dbce91537417b529140d0ca250f271c`,
+was introduced by upstream commit `289d09c61e478a99fa49c9758746bd4587b337b3`,
+and has SHA-256 `0d155c36d761b81a73f61d9ff260d2312626ff7a6396f310fb97a94d09bd53d7`.
+It is not generated and is absent from the current Arena default branch
+(`master`).
+
+The CI setup now downloads only that exact pinned source file and verifies its
+hash. It intentionally does not create an Arena Git checkout, so optional tests
+for fully materialized checker profiles remain skipped. No queue record, frozen
+hash, experiment result, or launch semantic changes.

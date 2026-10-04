@@ -22,6 +22,14 @@ jobs:
           cache: pip
           cache-dependency-path: requirements-dev.txt
       - run: python -m pip install --requirement requirements-dev.txt
+      - name: Materialize pinned queue source evidence
+        run: |
+          mkdir -p external/lean-kernel-arena/tests
+          curl --fail --location --silent --show-error \
+            https://raw.githubusercontent.com/leanprover/lean-kernel-arena/f0fe3b379dbce91537417b529140d0ca250f271c/tests/nested-unused-param.lean \
+            --output external/lean-kernel-arena/tests/nested-unused-param.lean
+          echo "0d155c36d761b81a73f61d9ff260d2312626ff7a6396f310fb97a94d09bd53d7  external/lean-kernel-arena/tests/nested-unused-param.lean" \
+            | sha256sum --check --strict
       - name: Select validation lane
         id: lane
         env:
