@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-03
+Last updated: 2026-10-04
 
 ## How Status Is Tracked
 
@@ -3467,9 +3467,11 @@ passing 45/45. Current source and GitHub duplicate review found no equivalent
 direct test. **Is it interesting?** Yes. This turns the earlier general-corpus
 miss into a small regression that detects the exact historical omission without
 changing production code; it does not establish a current defect or security
-issue. **Does it require more work?** Recommend one test-only Nanoda PR using
-the retained patch, described narrowly as coverage for historical PR #23.
-Submission is a separate external action and did not occur. Official Lean needs
+issue. **Does it require more work?** The owner authorized the recommended
+test-only submission, and [Nanoda draft PR #43](https://github.com/ammkrn/nanoda_lib/pull/43)
+now carries the exact validated regression as coverage for historical PR #23.
+No further local research follows; the draft awaits maintainer review, and any
+later external action requires fresh exact authorization. Official Lean needs
 no parallel case because Arena already retains its direct regression. See the
 [E0 summary](../explorations/runs/EXPLORE-NANODA-PROJECTION-IDENTITY-REGRESSION-1/summary.md).
 The original [Tree2 plan](research/TREE2_COMPUTATION_PILOT_1_PLAN.md) and all

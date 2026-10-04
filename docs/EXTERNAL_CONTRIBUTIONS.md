@@ -4,11 +4,11 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-10-03**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-10-04**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
-- Awaiting upstream: **5**
+- Awaiting upstream: **6**
 - Local drafts: **8**
 - Merged: **4**
 
@@ -21,6 +21,7 @@ Ledger updated: **2026-10-03**. Upstream states are dated observations, not a li
 | [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-10-02 | no activity; not reported | PR#11 remains open and is incorporated in maintainer draft PR#12. Retain the prepared CLI-verdict regression for maintainer review; any external modification requires exact authorization. |
 | [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-02 | no activity; not reported | Await maintainer review of the draft stacked on PR#12. Any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
 | [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-03 | no activity; not reported | Await maintainer review of the modest draft stacked on PR#12. Do not pursue further small CLI polish; any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
+| [test: cover projection type names in def_eq](https://github.com/ammkrn/nanoda_lib/pull/43) | `ammkrn/nanoda_lib` | 2026-10-04 | unknown; not reported | Await maintainer review of the draft. Any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
 
 ## Local drafts
 
