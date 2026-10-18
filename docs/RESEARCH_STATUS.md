@@ -3335,6 +3335,7 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `E0-COMPARATOR-CONSUMER-SCREEN-1`.
 Queue handoff: EXECUTABLE.
+The canonical queue retains one READY item and no ACTIVE item.
 
 The 2026-10-18 owner-approved planning update selects one lightweight consumer
 screen READY and unstarted under [its E0 plan](research/E0_COMPARATOR_CONSUMER_SCREEN_1_PLAN.md).
