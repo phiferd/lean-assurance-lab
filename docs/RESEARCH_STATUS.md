@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-04
+Last updated: 2026-10-18
 
 ## How Status Is Tracked
 
@@ -3333,6 +3333,28 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
+Selected next item: `E0-COMPARATOR-CONSUMER-SCREEN-1`.
+Queue handoff: EXECUTABLE.
+
+The 2026-10-18 owner-approved planning update selects one lightweight consumer
+screen READY and unstarted under [its E0 plan](research/E0_COMPARATOR_CONSUMER_SCREEN_1_PLAN.md).
+Test the actual Comparator workflow on one OpenAI-math formal endpoint with a
+clean baseline and four local checking/identity/receipt fault scenarios. The
+purpose is to learn whether success corresponds to the intended artifact and
+completed requested checks. No experiment or historical-execution claim exists
+yet. Reuse existing tools and a single E0 record; do not build another receipt
+framework or require expensive confirmation machinery before screening.
+
+Kernel/validator conformance and verification-pipeline integrity remain the
+focus; mathematical-meaning fidelity stays a separate deferred direction.
+Independent transfer intake remains WAITING on its unchanged input/custody and
+authorization gates. Build-mode conformance remains PLANNED with the rejected
+three-profile premise explicitly retained; a narrower comparison needs a named
+property and suitable fixture. Agent retrieval needs an actual witness bottleneck
+before selection, and memory accounting still lacks a decision dependency.
+The [current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-18)
+supersedes earlier next-item and pause wording below without changing results.
+
 The Tree2 continuation is stopped as of 2026-10-01.
 `E0-TREE2-COMPUTATION-PILOT-1` is COMPLETE with a NEGATIVE usefulness outcome:
 the checked restricted model proofs are preserved, but no concrete downstream
@@ -3387,9 +3409,9 @@ the minimal API-to-admission question at that one artifact; it does not establis
 PR causation, current-main or release behavior, a derivation of `False`, broader
 exploitability or general kernel correctness. No upstream action occurred. See
 the [report](../explorations/runs/EXPLORE-LEAN-ETA-ADMISSION-1/report.md).
-Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
-Queue handoff: PAUSED.
-The canonical queue has no READY or ACTIVE item.
+At the 2026-10-04 handoff, transfer intake was selected WAITING and the queue
+was PAUSED with no READY or ACTIVE item; the 2026-10-18 selection supersedes
+that operational state while retaining the intake's blockers.
 The memory audit remains DEFERRED and must not auto-start. The owner directed
 publication-ready completion of the separately planned E1 confirmation. An
 inherited Daybreak Blue reviewer conditionally passed its four-cell design and
@@ -3440,8 +3462,8 @@ target coverage. **Does it require more work?** No result-driven confirmation,
 PR or external action follows. See the [campaign summary](../explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/campaign-summary.md)
 and [diagnostic review](../explorations/runs/EXPLORE-NANODA-PROJECTION-TRANSFER-1/diagnostic-review.json).
 
-`TRANSFER-HOLDOUT-INTAKE-1` is selected WAITING and unstarted. The queue is
-PAUSED because no independently curated fresh input/custody package or concrete
+At the 2026-10-04 handoff, `TRANSFER-HOLDOUT-INTAKE-1` was selected WAITING and
+unstarted. The queue was PAUSED because no independently curated fresh input/custody package or concrete
 new functioning target evidence has been supplied. The memory audit remains
 DEFERRED without a decision that depends on its historical accounting question,
 and build-mode work remains PLANNED: its three-profile premise is not distinct,
@@ -3645,7 +3667,8 @@ no external action is recommended now.
 | 11 | `E0-LAZYLEAN-SEMANTIC-EXTENSION-1` | COMPLETE, NO_SIGNAL; eight ACCEPT cells with delta/iota demand |
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
 | 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | COMPLETE, SUCCESS; exact-head checked-admission regression confirmed |
-| 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED |
+| 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED; three-profile premise rejected; narrower property/fixture missing |
+| 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | READY; one endpoint, baseline and four fault scenarios; unstarted |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
