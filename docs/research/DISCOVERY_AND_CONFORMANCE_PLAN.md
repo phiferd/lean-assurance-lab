@@ -6,46 +6,47 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-18
+## Current selection — 2026-10-19
 
-Select `E0-COMPARATOR-CONSUMER-SCREEN-1` READY and unstarted under its
-[short E0 plan](E0_COMPARATOR_CONSUMER_SCREEN_1_PLAN.md). Investigate one real
-OpenAI-math endpoint through the pinned Comparator workflow, with a clean
-baseline and four controlled checking/identity/receipt failures. Reuse the
-existing sentinel, slicer and supervision; first observe what the actual
-consumer claims and checks. One endpoint is sufficient for this first screen.
-No new framework, benchmark program or whole-release replay is selected.
+`E0-COMPARATOR-CONSUMER-SCREEN-1` is COMPLETE with one bounded E0 integration
+signal. The clean endpoint passed actual Lean/Nanoda checking; the added local
+check passed it and rejected all four fixed controls. Native success relies on
+trusted configuration/executable choices, and Comparator has no receipt-reuse
+interface. Retain the adapter for LAL's future exact checking receipts; no
+upstream defect report, automatic E1 confirmation or larger release replay follows.
+The [result and cost](../../explorations/runs/EXPLORE-COMPARATOR-CONSUMER-1/summary.md)
+retain all interrupted attempts. Most elapsed work was setup and execution,
+including an emulated build and dependency-cache transfer; no shared framework
+or expensive semantic formalization was added.
+
+Select `E0-SYMBOLIC-UNIVERSE-SCREEN-1` READY and unstarted under its
+[short plan](E0_SYMBOLIC_UNIVERSE_SCREEN_1_PLAN.md): six tiny standalone cases on
+two checkers, with named universe parameters and max/imax rule demands. The
+completed positive-term generator used closed numeric levels; its result does
+not settle these controlled symbolic obligations. Existing large proofs may
+exercise such operations, so this is targeted rule coverage, not a claim that
+universes have never been checked. Reuse retained tools and write simple
+source-derived expectations before observation. No Mathlib build or new formal
+model is a prerequisite to learning from this small screen.
 
 Keep three claims distinct: K is enforcement of formal kernel/validator rules;
-P is whether the intended object and requested checks were actually processed;
-S is whether the formal statement captures intended mathematics. K and P remain
-the current focus. These labels guide interpretation, not a new schema or
-pooled assurance score. The selected P screen supplies no K correctness or S
-fidelity claim. Existing conformance uses of "semantic" concern formal rules.
-
+P is whether the intended object and requested checks were processed; S is
+whether the formal statement captures intended mathematics. K and P remain the
+focus; these are interpretation labels, not a new schema or pooled score.
 Independent kernel-fault transfer remains a high-value K objective, WAITING on
 its unchanged supplied-input/custody and separate intake-authorization gates.
 Do not reopen the completed historical screen or repeat an unbounded search.
-Build-mode conformance remains PLANNED, but the retained three-profile Nanoda
-premise was rejected by the [feasibility assessment](../../results/research/build-mode-conformance-feasibility-2026-10-03/report.md).
-Any narrower or different-target proposal needs distinct supported profiles,
-a named observable property and a suitable fixture before promotion.
+Build-mode conformance stays PLANNED after its retained three-profile premise
+was rejected; any revised comparison needs supported profiles, a named property
+and a fixture. Memory accounting has no current decision dependency. Extra
+agent retrieval remains conditional on a real bottleneck; fidelity stays deferred.
+No new upstream evidence or authorization appeared at this closure.
 
-Extra agent retrieval is conditional on a real witness-generation bottleneck;
-semantic-fidelity review is a separate deferred direction. Neither warrants a
-new queue item, benchmark or literature campaign now. Existing memory, theorem
-and CVC work retain their decision/prerequisite gates; dated upstream records
-are not refreshed by this selection. Known published examples are integration
-cases, not independent fault holdouts. Informative negatives can merit later
-confirmation just as attributable signals can.
-
-Use the established lightweight E0 path: one record and raw attempts, one short
-result table, one campaign-level decision. No per-case model review, separate
-launch manifest hierarchy, assurance regeneration or full replay solely for
-screening. Shared tooling changes keep their tests; E1/E2 gates apply only when
-that stronger work is separately selected. The owner requested this planning
-update only; no experiment ran. Earlier dated selections below are history and
-do not override this section or the canonical queue.
+Use the lightweight E0 path: one start/finish record, raw attempts, one small
+result table and one campaign-level selection. No per-case model reviews,
+manifest hierarchy, assurance regeneration or full replay solely for E0 closure.
+Shared tooling edits keep applicable tests. This handoff selects the successor
+without starting it; earlier dated selections below are historical context.
 
 ## Objective and selection
 

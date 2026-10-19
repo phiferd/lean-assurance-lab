@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-18
+Last updated: 2026-10-19
 
 ## How Status Is Tracked
 
@@ -3333,28 +3333,33 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-COMPARATOR-CONSUMER-SCREEN-1`.
+Selected next item: `E0-SYMBOLIC-UNIVERSE-SCREEN-1`.
 Queue handoff: EXECUTABLE.
 The canonical queue retains one READY item and no ACTIVE item.
 
-The 2026-10-18 owner-approved planning update selects one lightweight consumer
-screen READY and unstarted under [its E0 plan](research/E0_COMPARATOR_CONSUMER_SCREEN_1_PLAN.md).
-Test the actual Comparator workflow on one OpenAI-math formal endpoint with a
-clean baseline and four local checking/identity/receipt fault scenarios. The
-purpose is to learn whether success corresponds to the intended artifact and
-completed requested checks. No experiment or historical-execution claim exists
-yet. Reuse existing tools and a single E0 record; do not build another receipt
-framework or require expensive confirmation machinery before screening.
+The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
+Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
+four controlled checking/identity/freshness failures. This is E0 integration
+evidence at trusted configuration/executable boundaries, not a kernel defect or
+a claim about published historical runs. No upstream action, automatic confirmation
+or broader replay follows. See the [bounded result](../explorations/runs/EXPLORE-COMPARATOR-CONSUMER-1/summary.md).
+
+Select the [six-case symbolic-universe screen](research/E0_SYMBOLIC_UNIVERSE_SCREEN_1_PLAN.md)
+READY and unstarted. The existing valid-term pilot covered closed numeric levels;
+the next small K investigation targets controlled named-parameter, max and imax
+obligations using standalone declarations. Fixture preparation belongs inside
+that item, with rule-based expectations and identities before observation.
+No large formal model, Mathlib build or new harness is required first.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
 Independent transfer intake remains WAITING on its unchanged input/custody and
-authorization gates. Build-mode conformance remains PLANNED with the rejected
-three-profile premise explicitly retained; a narrower comparison needs a named
-property and suitable fixture. Agent retrieval needs an actual witness bottleneck
-before selection, and memory accounting still lacks a decision dependency.
-The [current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-18)
-supersedes earlier next-item and pause wording below without changing results.
+authorization gates. Build-mode conformance remains PLANNED with its rejected
+three-profile premise retained; a narrower comparison still needs a property
+and suitable fixture. Agent retrieval requires a concrete witness bottleneck;
+memory accounting still lacks a named decision dependency. The
+[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-19)
+supersedes earlier next-item and pause wording without changing their evidence.
 
 The Tree2 continuation is stopped as of 2026-10-01.
 `E0-TREE2-COMPUTATION-PILOT-1` is COMPLETE with a NEGATIVE usefulness outcome:
@@ -3669,7 +3674,8 @@ no external action is recommended now.
 | 12 | `SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1` | COMPLETE, SUCCESS; final ordered closure prebound |
 | 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | COMPLETE, SUCCESS; exact-head checked-admission regression confirmed |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED; three-profile premise rejected; narrower property/fixture missing |
-| 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | READY; one endpoint, baseline and four fault scenarios; unstarted |
+| 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | COMPLETE, E0 SIGNAL; baseline passes added check, four controls fail |
+| 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | READY and unstarted; six standalone universe cases, two checkers |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
