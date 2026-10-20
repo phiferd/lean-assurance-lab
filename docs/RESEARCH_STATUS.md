@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `E0-SYMBOLIC-UNIVERSE-SCREEN-1` closes `NO_SIGNAL`: Lean and Nanoda accepted
+  all six valid symbolic-universe cases, twelve checks total. Actual parsed
+  declarations retained named parameters, symbolic max and dependent Pi/imax.
+  This adds a small local corpus beyond numeric-level coverage; it is no
+  correctness or invalid-input detection claim. One setup failure was repaired
+  offline and retained. No upstream action or automatic confirmation follows.
+  The separate three-boundary rejection screen is READY and unstarted. See the
+  [result](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md).
+
 - `TREE2-UTILITY-DISPOSITION-1`: no existing published lemma was shown to
   discharge a remaining upstream completeness premise. The preserved upstream
   branch already has general occurrence, substitution and restoration proofs.
@@ -3333,9 +3342,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-SYMBOLIC-UNIVERSE-SCREEN-1`.
+Selected next item: `E0-SYMBOLIC-UNIVERSE-REJECTION-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one READY item and zero ACTIVE items.
 
 The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
 Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
@@ -3344,12 +3353,14 @@ evidence at trusted configuration/executable boundaries, not a kernel defect or
 a claim about published historical runs. No upstream action, automatic confirmation
 or broader replay follows. See the [bounded result](../explorations/runs/EXPLORE-COMPARATOR-CONSUMER-1/summary.md).
 
-Select the [six-case symbolic-universe screen](research/E0_SYMBOLIC_UNIVERSE_SCREEN_1_PLAN.md)
-READY and unstarted. The existing valid-term pilot covered closed numeric levels;
-the next small K investigation targets controlled named-parameter, max and imax
-obligations using standalone declarations. Fixture preparation belongs inside
-that item, with rule-based expectations and identities before observation.
-No large formal model, Mathlib build or new harness is required first.
+The [six-case symbolic-universe screen](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
+is COMPLETE: all twelve calls accepted, with preserved symbolic parameters and
+max/imax expressions. Retain its six tiny fixtures; no checker defect or broad
+correctness claim follows. Select the [three-boundary rejection screen](research/E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md)
+READY and unstarted. It pairs three invalid declarations with unchanged valid
+controls to measure rejection behavior missing from the positive-only sample.
+Reuse the tiny raw encoder/importer and cached profiles; no new framework,
+large formal model or Mathlib build is required. Stop this handoff before execution.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3675,7 +3686,8 @@ no external action is recommended now.
 | 13 | `CONFIRM-LEAN-ETA-ADMISSION-1` | COMPLETE, SUCCESS; exact-head checked-admission regression confirmed |
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED; three-profile premise rejected; narrower property/fixture missing |
 | 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | COMPLETE, E0 SIGNAL; baseline passes added check, four controls fail |
-| 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | READY and unstarted; six standalone universe cases, two checkers |
+| 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | COMPLETE; twelve accepts, six tiny symbolic cases retained |
+| 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | READY; three invalid/valid pairs, two checkers; unstarted |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

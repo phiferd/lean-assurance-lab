@@ -1,0 +1,88 @@
+[
+  {
+    "id": "P1",
+    "declaration": "LAL_P1",
+    "params": [
+      "u"
+    ],
+    "type": "(sort (succ u))",
+    "value": "(sort u)",
+    "expected": "ACCEPT",
+    "reason": "Sort u has type Sort (succ u), with u explicitly declared.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P1.ndjson",
+    "sha256": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
+    "structural_audit": "PASS"
+  },
+  {
+    "id": "P2",
+    "declaration": "LAL_P2",
+    "params": [
+      "u"
+    ],
+    "type": "(sort (succ u))",
+    "value": "(letE X (sort (succ u)) (sort u) (bvar 0))",
+    "expected": "ACCEPT",
+    "reason": "The let-bound X has type Sort (succ u); zeta reduction returns Sort u.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P2.ndjson",
+    "sha256": "9644315b0823645f540be2a1872dd1d7ba920c72acedce146f4d479c4cf3b88e",
+    "structural_audit": "PASS"
+  },
+  {
+    "id": "M1",
+    "declaration": "LAL_M1",
+    "params": [
+      "u",
+      "v"
+    ],
+    "type": "(sort (max (succ u) (succ v)))",
+    "value": "(sort (max u v))",
+    "expected": "ACCEPT",
+    "reason": "Sort(max u v) infers Sort(succ(max u v)); successor distributes over max.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M1.ndjson",
+    "sha256": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
+    "structural_audit": "PASS"
+  },
+  {
+    "id": "M2",
+    "declaration": "LAL_M2",
+    "params": [
+      "u",
+      "v"
+    ],
+    "type": "(sort (succ (max v u)))",
+    "value": "(sort (max u v))",
+    "expected": "ACCEPT",
+    "reason": "Same value; max commutes, so succ(max v u) equals succ(max u v).",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M2.ndjson",
+    "sha256": "524e22fb3a7e71776b3366dd78bbd1e45a42ee01a74238e5c1d9ca0405a65832",
+    "structural_audit": "PASS"
+  },
+  {
+    "id": "I1",
+    "declaration": "LAL_I1",
+    "params": [
+      "u"
+    ],
+    "type": "(sort (imax (succ u) u))",
+    "value": "(forallE X (sort u) (bvar 0))",
+    "expected": "ACCEPT",
+    "reason": "Pi X:Sort u, X has domain sort succ u and codomain sort u; Pi formation yields imax(succ u,u).",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I1.ndjson",
+    "sha256": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
+    "structural_audit": "PASS"
+  },
+  {
+    "id": "I2",
+    "declaration": "LAL_I2",
+    "params": [
+      "u"
+    ],
+    "type": "(sort (imax (max (succ u) (succ 0)) u))",
+    "value": "(forallE X (sort u) (bvar 0))",
+    "expected": "ACCEPT",
+    "reason": "Same Pi; max(succ u,1)=succ u. The raw imax right operand remains the parameter u; no claim of demanding a particular imax case-split branch.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I2.ndjson",
+    "sha256": "eaafd57a106c8a7a432677fbd2d1542666cffc95b56676afd6250d07eb79f4c5",
+    "structural_audit": "PASS"
+  }
+]

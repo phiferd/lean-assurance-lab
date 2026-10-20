@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "argv": [
+    "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+    "-c",
+    "import subprocess; cid=\"580ee65b7ba85f7e16898abdc16f3e5add59caf63a83c03fda765097209b16a4\"; p=\"explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/\"; subprocess.run([\"docker\",\"cp\",p+\"Replay.lean\",cid+\":/universe-tools/Replay.lean\"],check=True); subprocess.run([\"docker\",\"cp\",p+\"inputs/.\",cid+\":/universe-in/\"],check=True); subprocess.run([\"docker\",\"exec\",\"--user\",\"checker\",\"--workdir\",\"/opt/comparator\",\"--env\",\"PATH=/opt/lean-fast/bin:/opt/bin:/usr/bin:/bin\",cid,\"timeout\",\"--kill-after=10\",\"90\",\"lake\",\"env\",\"lean\",\"/universe-tools/Replay.lean\"],check=True)"
+  ],
+  "cwd": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab",
+  "pid": 64217,
+  "pgid": 64217,
+  "started_monotonic_ns": 1972569813322041,
+  "launched_monotonic_ns": 1972569814470125,
+  "reaped_monotonic_ns": 1972570275412083,
+  "cleaned_monotonic_ns": 1972570297869125,
+  "drained_monotonic_ns": 1972570297891041,
+  "elapsed_seconds": 0.462090042,
+  "launch_seconds": 0.001148084,
+  "cleanup_seconds": 0.022457042,
+  "drain_after_reap_seconds": 0.022478958,
+  "wait_status": 256,
+  "exit_code": 1,
+  "accounting_error": null,
+  "reap_complete": true,
+  "fallback_waitpid_status": null,
+  "child_ru_maxrss_raw": 49709056,
+  "child_ru_maxrss_unit": "bytes",
+  "child_peak_rss_bytes": 49709056,
+  "child_user_cpu_seconds": 0.15409899999999999,
+  "child_system_cpu_seconds": 0.06668199999999999,
+  "samples": [
+    {
+      "monotonic_ns": 1972569836978416,
+      "collection_started_monotonic_ns": 1972569814667458,
+      "collection_ended_monotonic_ns": 1972569836978416,
+      "collection_seconds": 0.022310958,
+      "elapsed_seconds": 0.023656375,
+      "group_rss_bytes": 1736704,
+      "members": [
+        {
+          "pid": 64217,
+          "rss_bytes": 1736704,
+          "state": "Rs"
+        }
+      ]
+    }
+  ],
+  "sample_count": 1,
+  "maximum_sampled_group_rss_bytes": 1736704,
+  "maximum_trace_gap_seconds": 0.438433667,
+  "trace_gap_fault": false,
+  "monitor_errors": [],
+  "pipe_errors": [],
+  "cleanup_complete": true,
+  "cleanup_errors": [],
+  "stop_reason": null,
+  "signal_events": [],
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 815,
+  "stderr_sha256": "25854209d0309a6ca3e1fa97317ff9b3b850e99725633103614fae5458c16491",
+  "stdin_bytes": null,
+  "stdin_sha256": null,
+  "limits": {
+    "timeout_seconds": 120.0,
+    "memory_ceiling_bytes": 4294967296,
+    "sample_interval_seconds": 1,
+    "max_trace_gap_seconds": 5,
+    "cleanup_seconds": 10,
+    "ps_timeout_seconds": 0.5,
+    "output_cap_bytes": 20971520
+  }
+}

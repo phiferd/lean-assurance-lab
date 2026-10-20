@@ -1,0 +1,53 @@
+{
+  "evidence_class": "E0",
+  "base_commit": "f1ad38c22735c0b2b9490d045574984e7c12e68d",
+  "sources": [
+    {
+      "name": "leanprover/lean4",
+      "revision": "5045d0056413266e57c625dcd7c365b10e377c52",
+      "version": "4.34.1",
+      "retained": [
+        "sources/type_checker.cpp",
+        "sources/level.cpp"
+      ],
+      "rules": "Sort inference; named-parameter validation; let inference; Pi inference with imax; sort conversion by normalized level equivalence."
+    },
+    {
+      "name": "leanprover/lean4export",
+      "revision": "076e8e57707e813375e8f9da8bf989799ace9680",
+      "retained": [
+        "sources/Parse.lean"
+      ],
+      "rules": "Raw Level.param/max/imax constructors; no elaborator or exporter normalization."
+    },
+    {
+      "name": "ammkrn/nanoda_lib",
+      "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+      "local_source": "external/comparator-screen-nanoda",
+      "rules": "parser.rs 619-633 raw levels; tc.rs infer_sort/infer_pi/def_eq_sort; level.rs simplify/combining and symbolic comparison. No source changes."
+    }
+  ],
+  "observed_sha256": {
+    "/opt/lean-fast/bin/lean": "79fb1d26fa5a39385d59fdc48a711a14b0710ca6480271acce99b4d177cea085",
+    "/opt/nanoda/target/release/nanoda_bin": "5e99b44c8b371ca1aedbc1a609a391ca5ac61b834b14fa60871298affb23d962",
+    "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean": "c264ea4ad5e30bd90cd03a1b48d944c4a7317e53b483b99c04df8c3a6882f133",
+    "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+    "/universe-tools/Replay.lean": "a853a9eaa429bae7c14d2486f5df60a9dd916ee70688aa380e608f8c1bd73aa4",
+    "/universe-in/P1.ndjson": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
+    "/universe-in/P2.ndjson": "9644315b0823645f540be2a1872dd1d7ba920c72acedce146f4d479c4cf3b88e",
+    "/universe-in/M1.ndjson": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
+    "/universe-in/M2.ndjson": "524e22fb3a7e71776b3366dd78bbd1e45a42ee01a74238e5c1d9ca0405a65832",
+    "/universe-in/I1.ndjson": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
+    "/universe-in/I2.ndjson": "eaafd57a106c8a7a432677fbd2d1542666cffc95b56676afd6250d07eb79f4c5",
+    "/opt/lean-fast/lib/lean/libleanshared.so": "62108c3204c29d8532efd7101df65b391a1098da2de1ff9a4d0be3765fe2a67c",
+    "/opt/lean-fast/lib/lean/libleanrt.a": "8a723a1b2184700434d1fe4375fdb030a1404ef436286fd6ace6365d1b473b07"
+  },
+  "container": "580ee65b7ba85f7e16898abdc16f3e5add59caf63a83c03fda765097209b16a4",
+  "execution": "Existing ARM64 Ubuntu20.04 task container; network interfaces {}; non-root checker UID1001; standalone inputs outside proof-producing workspace. No Mathlib build or production checker changes.",
+  "official": "Replay.lean imports retained compiled Export.Parse, prints raw parsed type/value, replays the one-definition map in a fresh empty kernel environment at trust0.",
+  "nanoda": "One thread, no axioms permitted, selected declaration pretty-printed to stdout, completion count required.",
+  "demand": "Compare actual official parser output exactly to cases.json before treating its verdict as qualified. Nanoda raw constructors are source-bound and both checkers consume byte-identical files verified before and after execution. No runtime branch-coverage instrumentation: I2 tests preserved imax and equivalent max operand; no claim of forcing a particular imax case-split branch.",
+  "controls": "Six positive source-derived expectations in three equivalent pairs. No intentionally invalid declaration, known fault, negative-control detection rate or independent holdout. M1/M2 require nonidentical symbolic max conversion; I1/I2 require Pi universe inference with parameter-right imax. Future negative controls require a separately selected item.",
+  "process_controls": "Outer supervised matrix300s; each guest timeout120s with kill-after10s; supervisor host-client memory4GiB, sample1s,maxgap5s,cleanup10s, outputcap20MiB. Existing container memory12GiB,cpu4,pids512,no-new-privileges; VM RAM~7.7GiB. Controls are nonterminal; diagnose/repair any failures without altering the frozen six cases. HostCLI RSS is not guest checker memory.",
+  "preparation_repair": "importer-preflight Lake tried dependency URL reconciliation and was denied write permission, before any scientific check. importer-preflight-r2 uses lean directly with the compiled parser LEAN_PATH; pass. No dependency fetched or changed."
+}

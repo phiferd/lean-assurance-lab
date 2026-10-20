@@ -1,0 +1,53 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-SYMBOLIC-UNIVERSE-1",
+  "data": {
+    "campaign": "E0-SYMBOLIC-UNIVERSE-SCREEN-1",
+    "question": "Do pinned official Lean and Nanoda both accept six source-derived declarations that retain named universe parameters, symbolic max conversions and dependent Pi/imax formation?",
+    "sources": [
+      {
+        "name": "leanprover/lean4",
+        "revision": "5045d0056413266e57c625dcd7c365b10e377c52"
+      },
+      {
+        "name": "leanprover/lean4export",
+        "revision": "076e8e57707e813375e8f9da8bf989799ace9680"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+      }
+    ],
+    "versions": "Lean4.34.1 ARM64; Nanoda3a24072; NDJSON3.1.0; compiled parser076e8e5; exact binary/library hashes in protocol.json.",
+    "commands": "run_process.py matrix 300 python3 run_matrix.py; six cases x (lean --run Replay.lean INPUT; nanoda_bin CONFIG). Exact argv retained per cell; time/memory/cleanup controls in protocol.json.",
+    "inputs": [
+      "docs/research/E0_SYMBOLIC_UNIVERSE_SCREEN_1_PLAN.md",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/protocol.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/cases.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/generate.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/Replay.lean",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/run_matrix.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/run_process.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/type_checker.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/level.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/Parse.lean",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I2.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/I2.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M2.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/M2.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P2.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/inputs/P2.ndjson"
+    ],
+    "sample": "Exactly P1/P2 named parameter with let control; M1/M2 successor/max distribution and commutation; I1/I2 Pi/imax and equivalent max operand. All six expected ACCEPT before observation.",
+    "planned_runs": 12,
+    "controls": "Six positive source-derived expectations in three equivalent pairs. No intentionally invalid declaration, known fault, negative-control detection rate or independent holdout. M1/M2 require nonidentical symbolic max conversion; I1/I2 require Pi universe inference with parameter-right imax. Future negative controls require a separately selected item. Compare actual official parser output exactly to cases.json before treating its verdict as qualified. Nanoda raw constructors are source-bound and both checkers consume byte-identical files verified before and after execution. No runtime branch-coverage instrumentation: I2 tests preserved imax and equivalent max operand; no claim of forcing a particular imax case-split branch."
+  }
+}

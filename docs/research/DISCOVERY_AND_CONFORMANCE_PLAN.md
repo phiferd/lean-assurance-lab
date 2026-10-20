@@ -8,45 +8,41 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current selection — 2026-10-19
 
-`E0-COMPARATOR-CONSUMER-SCREEN-1` is COMPLETE with one bounded E0 integration
-signal. The clean endpoint passed actual Lean/Nanoda checking; the added local
-check passed it and rejected all four fixed controls. Native success relies on
-trusted configuration/executable choices, and Comparator has no receipt-reuse
-interface. Retain the adapter for LAL's future exact checking receipts; no
-upstream defect report, automatic E1 confirmation or larger release replay follows.
-The [result and cost](../../explorations/runs/EXPLORE-COMPARATOR-CONSUMER-1/summary.md)
-retain all interrupted attempts. Most elapsed work was setup and execution,
-including an emulated build and dependency-cache transfer; no shared framework
-or expensive semantic formalization was added.
+`E0-SYMBOLIC-UNIVERSE-SCREEN-1` is COMPLETE with E0 `NO_SIGNAL`: Lean and
+Nanoda accepted all six valid cases, twelve completed checks. Actual parsed
+objects retained named parameters, max and Pi/imax. Keep the six tiny fixtures
+as a local conformance corpus; no checker defect, automatic confirmation or
+external action follows. The [result](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
+retains one repaired offline setup failure. The twelve Docker invocations total
+5.299 seconds; no Mathlib build or new formal model was needed.
 
-Select `E0-SYMBOLIC-UNIVERSE-SCREEN-1` READY and unstarted under its
-[short plan](E0_SYMBOLIC_UNIVERSE_SCREEN_1_PLAN.md): six tiny standalone cases on
-two checkers, with named universe parameters and max/imax rule demands. The
-completed positive-term generator used closed numeric levels; its result does
-not settle these controlled symbolic obligations. Existing large proofs may
-exercise such operations, so this is targeted rule coverage, not a claim that
-universes have never been checked. Reuse retained tools and write simple
-source-derived expectations before observation. No Mathlib build or new formal
-model is a prerequisite to learning from this small screen.
+Select `E0-SYMBOLIC-UNIVERSE-REJECTION-1` READY and unstarted under its
+[short plan](E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md). The completed sample
+measured only valid-input acceptance. Three invalid/valid pairs will test an
+undeclared parameter, an incorrectly lowered max level, and replacing imax by
+max at the universe-zero boundary. Reuse unchanged positive controls and the
+small raw importer/encoder. Source-derived expectations and six exact files
+must precede observation; preparation belongs inside the next item. This is
+new rejection evidence, not confirmation of an observed discrepancy.
 
-Keep three claims distinct: K is enforcement of formal kernel/validator rules;
-P is whether the intended object and requested checks were processed; S is
-whether the formal statement captures intended mathematics. K and P remain the
-focus; these are interpretation labels, not a new schema or pooled score.
-Independent kernel-fault transfer remains a high-value K objective, WAITING on
-its unchanged supplied-input/custody and separate intake-authorization gates.
-Do not reopen the completed historical screen or repeat an unbounded search.
-Build-mode conformance stays PLANNED after its retained three-profile premise
-was rejected; any revised comparison needs supported profiles, a named property
-and a fixture. Memory accounting has no current decision dependency. Extra
-agent retrieval remains conditional on a real bottleneck; fidelity stays deferred.
-No new upstream evidence or authorization appeared at this closure.
+Keep K (formal-rule enforcement), P (intended-object/check execution), and S
+(informal/formal mathematical meaning) separate. K and P remain the focus;
+these labels add no schema or pooled score. The completed Comparator screen
+retains its local integration adapter; no larger release replay follows.
+Independent kernel-fault transfer remains high-value but WAITING on its unchanged
+supplied-input/custody and separate intake-authorization gates. Do not reopen
+its closed historical screen or repeat an unbounded search. Build-mode
+conformance remains PLANNED after its three-profile premise was rejected;
+a revised comparison needs supported profiles, a property and a valid fixture.
+Memory accounting has no current decision dependency. Agent retrieval requires
+a demonstrated witness bottleneck; semantic fidelity remains separately deferred.
+No new upstream evidence or external authorization appeared at this closure.
 
-Use the lightweight E0 path: one start/finish record, raw attempts, one small
-result table and one campaign-level selection. No per-case model reviews,
-manifest hierarchy, assurance regeneration or full replay solely for E0 closure.
-Shared tooling edits keep applicable tests. This handoff selects the successor
-without starting it; earlier dated selections below are historical context.
+Use one E0 start/finish record, retained raw attempts, one small result table and
+one campaign-level successor selection. No per-case model reviews, manifest
+hierarchy, assurance regeneration or full replay solely for E0 completion.
+Shared tooling edits retain applicable tests. This handoff selects the successor
+without starting it; earlier dated selections below retain historical context.
 
 ## Objective and selection
 
