@@ -1,0 +1,68 @@
+{
+  "evidence_class": "E0",
+  "base_commit": "061ffa690f6a220dcadb95bb83c5d136e8751667",
+  "sources": [
+    {
+      "name": "leanprover/lean4",
+      "revision": "5045d0056413266e57c625dcd7c365b10e377c52",
+      "version": "4.34.1",
+      "retained": [
+        "sources/type_checker.cpp",
+        "sources/level.cpp"
+      ],
+      "rules": "Sort inference; named-parameter validation; let inference; Pi inference with imax; sort conversion by normalized level equivalence."
+    },
+    {
+      "name": "leanprover/lean4export",
+      "revision": "076e8e57707e813375e8f9da8bf989799ace9680",
+      "retained": [
+        "sources/Parse.lean"
+      ],
+      "rules": "Raw Level.param/max/imax constructors; no elaborator or exporter normalization."
+    },
+    {
+      "name": "ammkrn/nanoda_lib",
+      "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7",
+      "local_source": "external/comparator-screen-nanoda",
+      "rules": "parser.rs 619-633 raw levels; tc.rs infer_sort/infer_pi/def_eq_sort; level.rs simplify/combining and symbolic comparison. No source changes."
+    }
+  ],
+  "container": "580ee65b7ba85f7e16898abdc16f3e5add59caf63a83c03fda765097209b16a4",
+  "observed_sha256": {
+    "/opt/lean-fast/bin/lean": "79fb1d26fa5a39385d59fdc48a711a14b0710ca6480271acce99b4d177cea085",
+    "/opt/nanoda/target/release/nanoda_bin": "5e99b44c8b371ca1aedbc1a609a391ca5ac61b834b14fa60871298affb23d962",
+    "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean": "c264ea4ad5e30bd90cd03a1b48d944c4a7317e53b483b99c04df8c3a6882f133",
+    "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+    "/opt/lean-fast/lib/lean/libleanshared.so": "62108c3204c29d8532efd7101df65b391a1098da2de1ff9a4d0be3765fe2a67c",
+    "/opt/lean-fast/lib/lean/libleanrt.a": "8a723a1b2184700434d1fe4375fdb030a1404ef436286fd6ace6365d1b473b07",
+    "/universe-rejection-in/I1-invalid.json": "43d43bf4cd2060406aaf0a436730123324d74fd89988a829d08299dd30211c1f",
+    "/universe-rejection-in/I1-invalid.ndjson": "1757a2887c12a23d999e7545463260ed60978b80341e55ec252be18599ff1f28",
+    "/universe-rejection-in/I1.json": "3990e829c5804d6d9918fddd4923e3c208da4b89a091a55dfb68a75c7306d20c",
+    "/universe-rejection-in/I1.ndjson": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
+    "/universe-rejection-in/M1-invalid.json": "80a04604df48172f5b5f8e49e1f0ca001bb4b6db1e0b70f13e1448e62b1fd809",
+    "/universe-rejection-in/M1-invalid.ndjson": "2be119819fe648e4e5582b7ec7a41cfa5a309b3b9640b3b45017ddbed41ea474",
+    "/universe-rejection-in/M1.json": "61140b3057b7dca3e6ce7bfbd725363f0a555ed2257d27c6e35fb08dc8e6c533",
+    "/universe-rejection-in/M1.ndjson": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
+    "/universe-rejection-in/P1-invalid.json": "48f7dc66be5c9bed09c555f4f92999f231bdcc660101ce4298c3aedd002d6b1e",
+    "/universe-rejection-in/P1-invalid.ndjson": "a40f442b7bb174d8f96e3f836fbd20a5c845766af4aac91863c73839bdc0b3ff",
+    "/universe-rejection-in/P1.json": "3da60ec9933891713bcab051f3fe10cf427c1c2a1201596b4b9e939327900a1c",
+    "/universe-rejection-in/P1.ndjson": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
+    "/universe-rejection-tools/Replay.lean": "a853a9eaa429bae7c14d2486f5df60a9dd916ee70688aa380e608f8c1bd73aa4",
+    "/opt/nanoda/src/tc.rs": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+    "/opt/nanoda/src/level.rs": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf",
+    "/opt/nanoda/src/parser.rs": "51c0208cbb07660a3af5b26f54eeda012e2c983567aed779f1b8acacf5c14ada",
+    "/opt/nanoda/src/main.rs": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a",
+    "/opt/nanoda/src/env.rs": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01"
+  },
+  "execution": "Existing ARM64 Ubuntu20.04 task container; network interfaces {}; non-root checker UID1001; standalone inputs outside proof-producing workspace. No Mathlib build or production checker changes.",
+  "official": "Replay.lean imports retained compiled Export.Parse, prints raw parsed type/value, replays the one-definition map in a fresh empty kernel environment at trust0.",
+  "nanoda": "One thread, no axioms permitted, selected declaration pretty-printed to stdout, completion count required.",
+  "sample": "Exactly three unchanged P1/M1/I1 controls and their three prescribed one-row invalid variants; two checkers, twelve initial cells. Six NDJSON files and all expectations bound in cases.json before observation.",
+  "expectations": "P1-invalid omits the used universe parameter; M1-invalid ascribes Sort(max u v) to Sort(max u v), whose inferred type has successor; I1-invalid replaces imax with max, invalid when u=0. Both validators expected to reject each invalid case and accept each control.",
+  "classification": "Acceptance requires explicit successful declaration completion. Official parser name/params/type/value output must exactly match cases.json, then explicit unknown-universe or declaration-type mismatch is checker rejection. Nanoda parser preserves raw parameters and level constructors by source inspection. Its all_uparams_defined assertion (tc.rs:554) and def_eq assertion (tc.rs:955) are expected checker-rejection panics; these are recorded separately from unrelated diagnostic crashes. A panic/exit alone does not establish rejection. Parser errors, unsupported results, timeouts and unclassified crashes remain separate incomplete observations. Any unexpected accept/reject needs source attribution; no automatic confirmation.",
+  "demand": "Unchanged raw importer prints actual parsed forms before checking; missing parameter list and changed max expressions must survive. Nanoda consumes byte-identical files and source-bound raw constructors; rejected cases have no post-check pretty output. No runtime Nanoda AST trace or branch instrumentation is claimed.",
+  "process_controls": "Outer supervised matrix300s; each guest timeout120s with kill-after10s; supervisor host-client memory4GiB, sample1s,maxgap5s,cleanup10s, outputcap20MiB. Existing container memory12GiB,cpu4,pids512,no-new-privileges; VM RAM~7.7GiB. Controls are nonterminal; diagnose/repair any failures without altering the frozen six cases. HostCLI RSS is not guest checker memory.",
+  "signal_rule": "Any source-qualified unexpected checker behavior is SIGNAL; all six expected accepts and six source-qualified expected rejections with complete demand/control observations is NO_SIGNAL. Missing/unclassified observations are INCONCLUSIVE until feasible in-scope repairs are exhausted.",
+  "boundaries": "No new framework, production checker edit, full assurance replay, automatic confirmation, Box/FnAlias, Tree2, independent-transfer search, memory audit, held Boolean search, other repository modification or external contact. No general soundness, fault-detection-rate or independent-holdout inference.",
+  "identity_check": "All pinned binary/library/parser hashes exactly match predecessor; retained Nanoda source hashes match container; control bytes unchanged; staging hashes checked. Setup supervised with complete cleanup."
+}

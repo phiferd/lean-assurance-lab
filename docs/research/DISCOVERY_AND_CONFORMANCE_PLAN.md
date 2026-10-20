@@ -6,43 +6,36 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-19
+## Current selection — 2026-10-20
 
-`E0-SYMBOLIC-UNIVERSE-SCREEN-1` is COMPLETE with E0 `NO_SIGNAL`: Lean and
-Nanoda accepted all six valid cases, twelve completed checks. Actual parsed
-objects retained named parameters, max and Pi/imax. Keep the six tiny fixtures
-as a local conformance corpus; no checker defect, automatic confirmation or
-external action follows. The [result](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
-retains one repaired offline setup failure. The twelve Docker invocations total
-5.299 seconds; no Mathlib build or new formal model was needed.
+Both symbolic-universe screens are COMPLETE with E0 NO_SIGNAL. The first
+accepted twelve positive calls; the [rejection screen](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md)
+accepted six controls and rejected six invalid cases in twelve fresh calls.
+The three expected Nanoda assertion panics retain their exact source attribution.
+This is modestly useful local boundary coverage, not soundness or a detection-rate
+claim. Retain the tiny corpus; no checker fix, confirmation or external action
+follows. The cached profiles and existing supervisor sufficed; no large build,
+new framework, shared-tooling change or full assurance replay ran.
 
-Select `E0-SYMBOLIC-UNIVERSE-REJECTION-1` READY and unstarted under its
-[short plan](E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md). The completed sample
-measured only valid-input acceptance. Three invalid/valid pairs will test an
-undeclared parameter, an incorrectly lowered max level, and replacing imax by
-max at the universe-zero boundary. Reuse unchanged positive controls and the
-small raw importer/encoder. Source-derived expectations and six exact files
-must precede observation; preparation belongs inside the next item. This is
-new rejection evidence, not confirmation of an observed discrepancy.
+No new experiment is selected. `TRANSFER-HOLDOUT-INTAKE-1` remains WAITING
+and unstarted; the queue is PAUSED because no currently authorized READY item
+passes its gates. Intake requires a supplied independent input/custody package,
+owner designation and separate metadata-intake authorization. Build-mode requires
+a useful property, distinct supported profiles and valid fixture after its rejected
+three-profile premise. Theorem-control needs a distinct asymmetric refusal-risk
+preflight; original CVC-4/CVC-5 prerequisites remain unmet. Existing completed
+recursor coverage makes the deferred standalone recursor item duplicative.
+Memory accounting remains deferred without a named decision dependency.
 
-Keep K (formal-rule enforcement), P (intended-object/check execution), and S
-(informal/formal mathematical meaning) separate. K and P remain the focus;
-these labels add no schema or pooled score. The completed Comparator screen
-retains its local integration adapter; no larger release replay follows.
-Independent kernel-fault transfer remains high-value but WAITING on its unchanged
-supplied-input/custody and separate intake-authorization gates. Do not reopen
-its closed historical screen or repeat an unbounded search. Build-mode
-conformance remains PLANNED after its three-profile premise was rejected;
-a revised comparison needs supported profiles, a property and a valid fixture.
-Memory accounting has no current decision dependency. Agent retrieval requires
-a demonstrated witness bottleneck; semantic fidelity remains separately deferred.
-No new upstream evidence or external authorization appeared at this closure.
-
-Use one E0 start/finish record, retained raw attempts, one small result table and
-one campaign-level successor selection. No per-case model reviews, manifest
-hierarchy, assurance regeneration or full replay solely for E0 completion.
-Shared tooling edits retain applicable tests. This handoff selects the successor
-without starting it; earlier dated selections below retain historical context.
+These are specific remaining gates, not an inference that all useful research
+is exhausted. Supply the missing evidence or separately select justified bounded
+work before another launch. Preserve the user's exclusions for Box/FnAlias,
+Tree2, independent-transfer searches, memory audits and held Boolean construction.
+K (formal-rule enforcement) and P (intended-object/check execution) remain the
+frontier; informal/formal mathematical-meaning fidelity stays separate.
+No fresh upstream-state claim, maintainer contact or assurance promotion occurs.
+This single campaign handoff uses the E0 ledger/queue/view checks; historical
+selections below retain their evidence and context.
 
 ## Objective and selection
 

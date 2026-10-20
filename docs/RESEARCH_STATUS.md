@@ -58,6 +58,13 @@ research directions.
 
 ## Attempted
 
+- `E0-SYMBOLIC-UNIVERSE-REJECTION-1` completes with E0 `NO_SIGNAL`.
+  Both checkers accepted the three unchanged controls and rejected all three
+  invalid variants, six accepts and six expected rejections. Yes, this is modestly
+  useful local boundary coverage; it is not a fault-detection rate or soundness
+  claim. Retain the exact pairs; no checker fix, confirmation or external action
+  follows. No new experiment starts. See the [result](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md).
+
 - `E0-SYMBOLIC-UNIVERSE-SCREEN-1` closes `NO_SIGNAL`: Lean and Nanoda accepted
   all six valid symbolic-universe cases, twelve checks total. Actual parsed
   declarations retained named parameters, symbolic max and dependent Pi/imax.
@@ -3342,9 +3349,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-SYMBOLIC-UNIVERSE-REJECTION-1`.
-Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and zero ACTIVE items.
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+Queue handoff: PAUSED.
+The canonical queue retains zero READY items and zero ACTIVE items.
 
 The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
 Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
@@ -3353,14 +3360,21 @@ evidence at trusted configuration/executable boundaries, not a kernel defect or
 a claim about published historical runs. No upstream action, automatic confirmation
 or broader replay follows. See the [bounded result](../explorations/runs/EXPLORE-COMPARATOR-CONSUMER-1/summary.md).
 
-The [six-case symbolic-universe screen](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
-is COMPLETE: all twelve calls accepted, with preserved symbolic parameters and
-max/imax expressions. Retain its six tiny fixtures; no checker defect or broad
-correctness claim follows. Select the [three-boundary rejection screen](research/E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md)
-READY and unstarted. It pairs three invalid declarations with unchanged valid
-controls to measure rejection behavior missing from the positive-only sample.
-Reuse the tiny raw encoder/importer and cached profiles; no new framework,
-large formal model or Mathlib build is required. Stop this handoff before execution.
+The [positive symbolic-universe screen](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
+and the [three-boundary rejection screen](../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md)
+are COMPLETE with E0 NO_SIGNAL. The rejection screen produced six accepts and
+six expected rejections on twelve fresh calls. Its three Nanoda assertion
+panics are source-attributed checker rejections, not unrelated diagnostic
+crashes. Retain the tiny local corpus; no defect, broad correctness claim,
+automatic confirmation or external action follows.
+
+No follow-on experiment is manufactured. The existing transfer intake remains
+WAITING and unstarted on independent input/custody and separate authorization.
+The queue is PAUSED with no READY item. Build-mode still lacks its narrower
+property/fixture, theorem-control lacks distinct refusal-risk evidence, and
+original CVC-4/CVC-5 prerequisites remain unmet. The deferred memory and duplicate
+recursor items do not remove these gates. Supply concrete prerequisite evidence
+or separately select a justified bounded item before any next launch.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3369,7 +3383,7 @@ authorization gates. Build-mode conformance remains PLANNED with its rejected
 three-profile premise retained; a narrower comparison still needs a property
 and suitable fixture. Agent retrieval requires a concrete witness bottleneck;
 memory accounting still lacks a named decision dependency. The
-[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-19)
+[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-20)
 supersedes earlier next-item and pause wording without changing their evidence.
 
 The Tree2 continuation is stopped as of 2026-10-01.
@@ -3687,7 +3701,7 @@ no external action is recommended now.
 | 14 | `BUILD-MODE-CONFORMANCE-PILOT-1` | PLANNED; three-profile premise rejected; narrower property/fixture missing |
 | 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | COMPLETE, E0 SIGNAL; baseline passes added check, four controls fail |
 | 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | COMPLETE; twelve accepts, six tiny symbolic cases retained |
-| 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | READY; three invalid/valid pairs, two checkers; unstarted |
+| 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | COMPLETE; six accepts, six expected rejections; E0 NO_SIGNAL |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

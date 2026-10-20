@@ -1,0 +1,62 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1",
+  "data": {
+    "campaign": "E0-SYMBOLIC-UNIVERSE-REJECTION-1",
+    "question": "Do pinned official Lean and Nanoda reject the three prescribed symbolic-universe boundary violations while accepting each unchanged valid control?",
+    "sources": [
+      {
+        "name": "leanprover/lean4",
+        "revision": "5045d0056413266e57c625dcd7c365b10e377c52"
+      },
+      {
+        "name": "leanprover/lean4export",
+        "revision": "076e8e57707e813375e8f9da8bf989799ace9680"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+      }
+    ],
+    "versions": "Lean 4.34.1 ARM64; Nanoda 3a240721; raw parser 076e8e5; exact binary/library/source hashes retained in protocol.json.",
+    "commands": "run_process.py matrix 300 python3 run_matrix.py; six cases x (lean --run Replay.lean INPUT; nanoda_bin CONFIG). Exact argv and raw output retained per cell.",
+    "inputs": [
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/protocol.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/cases.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/generate.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/Replay.lean",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/run_matrix.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/run_process.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/input-review.md",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1-invalid.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1-invalid.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1-invalid.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1-invalid.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1-invalid.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1-invalid.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1.json",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/LICENSE",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/env.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/level.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/main.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/parser.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/tc.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/type_checker.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/level.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/Parse.lean",
+      "docs/research/E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md",
+      "lib/metamorphic_ndjson_audit.py",
+      "lib/resource_envelope_supervisor.py"
+    ],
+    "sample": "Exactly three unchanged P1/M1/I1 controls and their three prescribed one-row invalid variants; two checkers, twelve initial cells. Six NDJSON files and all expectations bound in cases.json before observation.",
+    "planned_runs": 12,
+    "controls": "Acceptance requires explicit successful declaration completion. Official parser name/params/type/value output must exactly match cases.json, then explicit unknown-universe or declaration-type mismatch is checker rejection. Nanoda parser preserves raw parameters and level constructors by source inspection. Its all_uparams_defined assertion (tc.rs:554) and def_eq assertion (tc.rs:955) are expected checker-rejection panics; these are recorded separately from unrelated diagnostic crashes. A panic/exit alone does not establish rejection. Parser errors, unsupported results, timeouts and unclassified crashes remain separate incomplete observations. Any unexpected accept/reject needs source attribution; no automatic confirmation. Unchanged raw importer prints actual parsed forms before checking; missing parameter list and changed max expressions must survive. Nanoda consumes byte-identical files and source-bound raw constructors; rejected cases have no post-check pretty output. No runtime Nanoda AST trace or branch instrumentation is claimed."
+  }
+}
