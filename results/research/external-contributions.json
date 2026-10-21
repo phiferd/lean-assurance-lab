@@ -1,7 +1,7 @@
 {
   "schema_version": 1,
   "record_type": "EXTERNAL_CONTRIBUTION_LEDGER",
-  "updated_on": "2026-10-04",
+  "updated_on": "2026-10-21",
   "scope": "Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.",
   "status_policy": {
     "upstream_states_are_dated_observations": true,
@@ -739,6 +739,37 @@
         "2026-10-04: the owner explicitly authorized drafting this PR. Fresh preflight found upstream master unchanged at 3a240721 and no duplicate projection-identity PR. Draft PR #43 contains the exact reviewed test-only commit 3f17311b.",
         "The focused regression and all 45 library tests passed; eight existing doc tests were ignored. Exact mutation sensitivity was established in the completed E0 experiment. The contribution does not claim a current Nanoda defect.",
         "GitHub reported the draft mergeable and no checks at the dated observation. Absence of reported checks is not a CI pass."
+      ]
+    },
+    {
+      "id": "ARENA-UNDECLARED-UNIVERSE-PARAMETER-CANDIDATE-1",
+      "target_repository": "leanprover/lean-kernel-arena",
+      "channel": "PULL_REQUEST",
+      "title": "test: reject an undeclared used universe parameter",
+      "research_items": [
+        "E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1",
+        "E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1"
+      ],
+      "lifecycle": "LOCAL_DRAFT",
+      "upstream": null,
+      "submission_material": "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch",
+      "evidence_refs": [
+        "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/result.json",
+        "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/summary.md",
+        "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/discovery/result.json",
+        "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-checker-configs.json"
+      ],
+      "next_step": {
+        "disposition": "REASSESS",
+        "summary": "Complete the selected current-configured Nanoda compatibility check, then reassess contribution readiness under applicable gates. Any submission requires fresh duplicate/target preflight and exact human authorization; no upstream action has occurred.",
+        "reassess_not_before": null,
+        "requires_fresh_preflight": true,
+        "requires_human_authorization": true
+      },
+      "notes": [
+        "2026-10-21: prepared one two-file data-only patch against Arena master 8bbe253405b7e6a0b741381ecdf3eae0293d61ba under tests/other. Current metadata/discovery passed; the retained Lean4.34.1 and Nanoda3a240721 each rejected the candidate for the expected guard and accepted the unchanged valid control.",
+        "E0 local integration only: no current checker defect, confirmation or E2 submission-readiness claim. Current Arena pins Nanoda e0d76f5 with different stack/stdin/thread settings, not exercised in this item. The selected narrow compatibility successor remains unstarted.",
+        "Current-target preflight retained zero open PRs and no omitted used parameter among 277 committed export-declaration occurrences; generated/external content is excluded. No new upstream branch, PR, issue or contact."
       ]
     }
   ]

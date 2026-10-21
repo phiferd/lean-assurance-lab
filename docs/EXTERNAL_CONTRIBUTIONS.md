@@ -4,12 +4,12 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-10-04**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-10-21**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
 - Awaiting upstream: **6**
-- Local drafts: **8**
+- Local drafts: **9**
 - Merged: **4**
 
 ## Awaiting upstream
@@ -35,6 +35,7 @@ Ledger updated: **2026-10-04**. Upstream states are dated observations, not a li
 | [Historical draft: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Preserved historical draft; superseded for submission by KIOTA-RECURSOR-TYPE-REFINED-PR-DRAFT. |
 | [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/closure/pr192-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/closure/pr191-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
+| [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | — | Complete the selected current-configured Nanoda compatibility check, then reassess contribution readiness under applicable gates. Any submission requires fresh duplicate/target preflight and exact human authorization; no upstream action has occurred. |
 
 ## Merged
 
