@@ -6,43 +6,45 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-19
+## Current selection — 2026-10-21
 
-`E0-SYMBOLIC-UNIVERSE-SCREEN-1` is COMPLETE with E0 `NO_SIGNAL`: Lean and
-Nanoda accepted all six valid cases, twelve completed checks. Actual parsed
-objects retained named parameters, max and Pi/imax. Keep the six tiny fixtures
-as a local conformance corpus; no checker defect, automatic confirmation or
-external action follows. The [result](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/summary.md)
-retains one repaired offline setup failure. The twelve Docker invocations total
-5.299 seconds; no Mathlib build or new formal model was needed.
+`E0-SYMBOLIC-UNIVERSE-REJECTION-1` is COMPLETE with E0 `NO_SIGNAL`: each
+validator accepted the three controls and rejected three invalid declarations,
+twelve expected outcomes. Nanoda rejects through its parameter/type-equality
+assertions; these are source-attributed and kept distinct from unexpected
+crashes. Together with the preceding screen, retain six valid fixtures and
+three single-record invalid variants as a local corpus. No checker defect,
+automatic confirmation or external action follows. See the
+[result](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md).
+One stopped-daemon setup failure was repaired and retained; no rebuild,
+Mathlib, new framework or formal model was needed.
 
-Select `E0-SYMBOLIC-UNIVERSE-REJECTION-1` READY and unstarted under its
-[short plan](E0_SYMBOLIC_UNIVERSE_REJECTION_1_PLAN.md). The completed sample
-measured only valid-input acceptance. Three invalid/valid pairs will test an
-undeclared parameter, an incorrectly lowered max level, and replacing imax by
-max at the universe-zero boundary. Reuse unchanged positive controls and the
-small raw importer/encoder. Source-derived expectations and six exact files
-must precede observation; preparation belongs inside the next item. This is
-new rejection evidence, not confirmation of an observed discrepancy.
+Select `E0-UNIVERSE-CORPUS-REUSE-1` READY and unstarted under its
+[source-only plan](E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md). Before expanding the
+universe sequence, compare exactly these nine fixtures with pinned Nanoda and
+Lean Kernel Arena tests. Deliver a small source-to-fixture map and a minimal
+useful subset/consumer recommendation, or retain locally without a contribution
+or further expansion. Similar words alone do not establish equivalent coverage;
+absence from a partial inventory does not establish a gap. This is a concrete
+reuse decision, with no checker build, mutant, new fixture or external write.
 
-Keep K (formal-rule enforcement), P (intended-object/check execution), and S
-(informal/formal mathematical meaning) separate. K and P remain the focus;
-these labels add no schema or pooled score. The completed Comparator screen
-retains its local integration adapter; no larger release replay follows.
-Independent kernel-fault transfer remains high-value but WAITING on its unchanged
-supplied-input/custody and separate intake-authorization gates. Do not reopen
-its closed historical screen or repeat an unbounded search. Build-mode
-conformance remains PLANNED after its three-profile premise was rejected;
-a revised comparison needs supported profiles, a property and a valid fixture.
-Memory accounting has no current decision dependency. Agent retrieval requires
-a demonstrated witness bottleneck; semantic fidelity remains separately deferred.
-No new upstream evidence or external authorization appeared at this closure.
+K (formal-rule enforcement) and P (intended-object/check execution) remain the
+focus; S (informal/formal mathematical meaning) stays separately deferred.
+The completed Comparator integration adapter remains local; no larger release
+replay follows. Independent transfer remains high-value but WAITING on supplied
+independent inputs/custody and its separate intake authorization. Do not reopen
+the historical screen or repeat an unbounded search. Build-mode remains PLANNED
+after its three-profile premise was rejected; a revised comparison needs a
+supported property and fixture. Memory accounting lacks a current decision
+consumer. No new upstream evidence or authorization appeared. Historical
+CVC/theorem gates remain; the standalone data-recursor item was already folded
+into the completed semantic campaign and must not be rerun separately.
 
-Use one E0 start/finish record, retained raw attempts, one small result table and
-one campaign-level successor selection. No per-case model reviews, manifest
-hierarchy, assurance regeneration or full replay solely for E0 completion.
-Shared tooling edits retain applicable tests. This handoff selects the successor
-without starting it; earlier dated selections below retain historical context.
+Keep the lightweight E0 path: one start/finish, raw observations, one small
+result and one campaign-level selection. No new receipt hierarchy, repeated
+model reviews, full assurance replay or formalization prerequisite. Shared
+code changes retain their applicable tests. This handoff selects the successor
+without starting it; earlier dated selections below remain historical context.
 
 ## Objective and selection
 
