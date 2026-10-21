@@ -12,24 +12,20 @@
     "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1.ndjson",
     "sha256": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
     "structural_audit": "PASS",
-    "pair": "P1",
-    "control_sha256": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
-    "changed_records": 0
+    "pair": "P1"
   },
   {
-    "id": "Pbad",
+    "id": "P1-invalid",
     "declaration": "LAL_P1",
     "params": [],
     "type": "(sort (succ u))",
     "value": "(sort u)",
     "expected": "REJECT",
-    "reason": "The type and value still use u, but u is absent from levelParams. Both validators require every used universe parameter to be declared.",
-    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/Pbad.ndjson",
+    "reason": "Sort u uses u but the declaration owns no universe parameter; Lean checks parameter membership during sort inference.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/P1-invalid.ndjson",
     "sha256": "a40f442b7bb174d8f96e3f836fbd20a5c845766af4aac91863c73839bdc0b3ff",
     "structural_audit": "PASS",
-    "pair": "P1",
-    "control_sha256": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
-    "changed_records": 1
+    "pair": "P1"
   },
   {
     "id": "M1",
@@ -45,12 +41,10 @@
     "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1.ndjson",
     "sha256": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
     "structural_audit": "PASS",
-    "pair": "M1",
-    "control_sha256": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
-    "changed_records": 0
+    "pair": "M1"
   },
   {
-    "id": "Mbad",
+    "id": "M1-invalid",
     "declaration": "LAL_M1",
     "params": [
       "u",
@@ -59,13 +53,11 @@
     "type": "(sort (max u v))",
     "value": "(sort (max u v))",
     "expected": "REJECT",
-    "reason": "Sort(max u v) has type Sort(succ(max u v)), not Sort(max u v). At u=v=0 the levels are 1 and 0. Noncumulative sort conversion must reject this lower ascription.",
-    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/Mbad.ndjson",
+    "reason": "Sort(max u v) infers Sort(succ(max u v)), which is not Sort(max u v); at u=v=0 these levels are 1 and 0.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/M1-invalid.ndjson",
     "sha256": "2be119819fe648e4e5582b7ec7a41cfa5a309b3b9640b3b45017ddbed41ea474",
     "structural_audit": "PASS",
-    "pair": "M1",
-    "control_sha256": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
-    "changed_records": 1
+    "pair": "M1"
   },
   {
     "id": "I1",
@@ -80,12 +72,10 @@
     "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1.ndjson",
     "sha256": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
     "structural_audit": "PASS",
-    "pair": "I1",
-    "control_sha256": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
-    "changed_records": 0
+    "pair": "I1"
   },
   {
-    "id": "Ibad",
+    "id": "I1-invalid",
     "declaration": "LAL_I1",
     "params": [
       "u"
@@ -93,12 +83,10 @@
     "type": "(sort (max (succ u) u))",
     "value": "(forallE X (sort u) (bvar 0))",
     "expected": "REJECT",
-    "reason": "Pi X:Sort u, X infers Sort(imax(succ u,u)). At u=0 this is Sort0, whereas the max replacement is Sort1. The two symbolic levels are not equivalent.",
-    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/Ibad.ndjson",
+    "reason": "Pi X:Sort u, X infers Sort(imax(succ u,u)); at u=0 this is Sort 0, whereas max(succ u,u)=1. The symbolic types cannot be definitionally equal.",
+    "path": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/inputs/I1-invalid.ndjson",
     "sha256": "1757a2887c12a23d999e7545463260ed60978b80341e55ec252be18599ff1f28",
     "structural_audit": "PASS",
-    "pair": "I1",
-    "control_sha256": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
-    "changed_records": 1
+    "pair": "I1"
   }
 ]

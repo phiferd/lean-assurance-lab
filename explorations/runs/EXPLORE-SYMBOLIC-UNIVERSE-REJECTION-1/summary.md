@@ -1,82 +1,64 @@
-# Three universe rejection boundaries
+Both checkers accepted all three valid controls and rejected all three invalid
+variants: six accepts and six expected rejections in twelve fresh calls. The
+fixed E0 screen closes **NO_SIGNAL**. No unexpected acceptance, parser failure,
+unsupported input, diagnostic crash or timeout was observed.
 
-Lean and Nanoda each accepted the three valid controls and rejected all three
-invalid declarations: twelve expected outcomes, with no disagreement. The
-invalid cases omitted a used universe parameter, lowered a declared sort level,
-or replaced the dependent-function universe operation `imax` with `max`.
-Nanoda's three rejections used explicit assertion panics, which remain visible
-in the results rather than being described as clean exit-code rejections.
+Yes, this is modestly useful: it adds three concrete rejection boundaries to
+the earlier positive-only symbolic-universe sample. Agreement on these tiny
+cases does not establish soundness, a fault-detection rate or behavior outside
+the two pinned profiles.
 
-This is useful modest coverage of nearby invalid inputs, complementing the
-earlier all-positive screen. It found no checker defect. It does not measure a
-general fault-detection rate, all universe identities, or kernel correctness.
+Retain the exact three invalid/valid pairs as a normal-priority local boundary
+corpus. No checker fix, confirmation experiment or external action follows from
+this result. No further experiment starts here. The campaign handoff assesses
+the existing queue separately; it must not invent a follow-on experiment.
 
-Retain the three small invalid variants with their existing controls as a
-normal-priority local corpus. No production change, upstream action or automatic
-confirmation follows. The separately selected, unstarted successor assesses
-whether the accumulated cases add useful coverage beyond existing Nanoda/Arena
-tests before proposing more cases or a contribution.
+| Input | Expected | Official Lean 4.34.1 | Nanoda `3a240721` |
+| --- | --- | --- | --- |
+| P1 valid: declared universe parameter | Accept | Accept | Accept |
+| P1 invalid: used parameter omitted | Reject | Undefined universe parameter | Expected checker assertion at `tc.rs:554` |
+| M1 valid: successor/max sort level | Accept | Accept | Accept |
+| M1 invalid: sort level lowered | Reject | Declaration type mismatch | Expected checker assertion at `tc.rs:955` |
+| I1 valid: Pi universe uses imax | Accept | Accept | Accept |
+| I1 invalid: imax replaced by max | Reject | Declaration type mismatch | Expected checker assertion at `tc.rs:955` |
 
-| Case | Expected | Lean 4.34.1 | Nanoda `3a24072` |
-|---|---|---|---|
-| P1 | ACCEPT | ACCEPT | ACCEPT |
-| Pbad: omit the used parameter `u` | REJECT | Undefined-universe error | Parameter-guard assertion |
-| M1 | ACCEPT | ACCEPT | ACCEPT |
-| Mbad: lower the declared maximum level | REJECT | Declaration-type mismatch | Type-equality assertion |
-| I1 | ACCEPT | ACCEPT | ACCEPT |
-| Ibad: substitute `max` for `imax` | REJECT | Declaration-type mismatch | Type-equality assertion |
+Nanoda implements these rejections with Rust assertion panics. All three
+diagnostics match the prospectively reviewed semantic check and source line;
+they are recorded as `EXPECTED_CHECKER_ASSERTION_PANIC`, not hidden or treated
+as unrelated diagnostic crashes. A nonzero exit alone was not used as a verdict.
+Lean's raw parsed output exactly matches each frozen declaration, including
+the empty universe-parameter list and both altered sort expressions. Nanoda
+preservation is supported by its exact parser source and byte-identical input,
+not by a runtime AST dump: it checks before pretty-printing.
 
-The P1/M1/I1 control files are byte-identical to the preceding screen. Each
-invalid twin changes exactly one NDJSON record. For Pbad, every use of `u`
-remains while its declaration parameter list is empty. For Mbad, `Sort(max u v)`
-is incorrectly assigned type `Sort(max u v)` instead of
-`Sort(succ(max u v))`; at `u=v=0` the levels differ by one. For Ibad, the Pi
-`forall (X : Sort u), X` infers `Sort(imax(succ u) u)`; at `u=0` that level is
-zero, while `max(succ u) u` is one. These are prospective source-derived
-arguments, not labels inferred from checker agreement. The zero substitutions
-explain invalidity; no extra instantiated cases were run.
+The controls are unchanged predecessor bytes. Each invalid input changes one
+JSON row. The [input review](input-review.md), [protocol](protocol.json) and
+[cases](cases.json) were bound in the prospective E0 start before the matrix.
+The unchanged importer, encoder conventions, structural auditor, cached parser,
+official Lean and Nanoda binaries, and resource supervisor were reused. The
+analysis checks the exact twelve raw outputs, original input bindings,
+before/after runtime and input hashes, and complete supervisor receipts.
+No production checker or shared tooling was changed.
 
-The six exact files, expected outcomes and tool identities were recorded in
-one E0 start before checker observation. The unchanged raw Lean adapter printed
-the parsed parameter list, type and value before fresh empty-environment
-kernel replay at trust level zero. All six prints match the recorded cases
-exactly, including the rejected declarations. Nanoda's current parser source
-hash matches its pinned raw-constructor implementation; the expected errors
-occur in its checking code, not its parser. Both validators consumed the same
-files, whose guest hashes were verified before and after checking.
+The twelve checker invocations took 5.285233 aggregate host-observed seconds.
+Ten supervised setup, matrix and cleanup operations took 19.081053 receipt
+seconds, including the ten-second container stop. All completed without a
+monitor error, timeout or unresolved cleanup. The guest process listing had
+no remaining checker process before stopping; the reused container was returned
+to stopped state, non-OOM, with exit 137 from stopping its `sleep infinity`.
+That container exit is not a scientific checker result. No scientific retry,
+large build or full assurance replay ran. Host CLI memory observations do not
+measure guest checker peak memory. Task-level token and monetary cost are
+unavailable.
 
-Lean's invalid calls exited 1 with the intended undefined-parameter or
-declaration-type-mismatch diagnostic. Nanoda exited 101 at `tc.rs:554` for
-`all_uparams_defined`, and `tc.rs:955` for `assert_def_eq`. These are its
-source-attributed rejection mechanisms. An unrelated panic or generic nonzero
-exit would not have qualified. There were three expected assertion exits, zero
-unexpected crashes, zero unsupported inputs and zero scientific retries. No
-runtime branch-coverage or independent-fault holdout claim is made.
+An initial broad container-configuration read was denied because it could
+expose environment secrets. A narrower approved command/mount inspection
+resolved reuse eligibility without reading environment variables. Two local
+queue preflight failures exposed a missing ignored historical fixture in the
+isolated checkout and a stale READY table row; copying the already retained
+fixture and updating the ACTIVE row resolved them before the ledger start.
+Neither failure launched a scientific checker.
 
-The initial preparation attempt found Docker's daemon stopped. Starting Docker
-Desktop restored the existing cached profile; both attempts are retained.
-No toolchain build, dependency download, Mathlib build, new general harness,
-shared tooling change, formal model or full assurance replay was needed.
-Cleanup found only the idle container init, then stopped it: PID zero,
-`OOMKilled=false`, network map empty. Its intentional idle-init stop exited
-137 after all checker processes had finished; this is separate from their
-recorded exits.
-
-The twelve recorded Docker checker invocations total **10.053 seconds**,
-including launch overhead and a cold first Lean call. Six supervised
-preparation/matrix/cleanup attempts total **15.219 seconds**, with one repaired
-preparation failure. These are process durations, excluding model work and
-document editing. Task-level token/cost totals are unavailable. No delegate or
-model call ran in the execution/analysis loops. Host CLI supervision does not
-measure guest checker peak memory.
-
-The canonical result is [result.json](result.json). Exact cases and arguments
-are in [cases.json](cases.json), and source/binary identities, controls and
-prospective rejection classification are in [protocol.json](protocol.json).
-All twelve command records, raw streams and elapsed times are under
-[observations](observations/); preparation and cleanup attempts remain under
-[attempts](attempts/). `analyze.py` rechecks the retained evidence without
-launching validators. `generate.py` recreates the exact three controls and
-single-record invalid variants; `run_matrix.py` retains the execution recipe.
-The raw replay adapter, official source excerpts and cached-profile build
-provenance are reused unchanged from `EXPLORE-SYMBOLIC-UNIVERSE-1`.
+Raw output and upstream sources retain their original whitespace. The local
+`.gitattributes` exempts only four copied source files and the `PARAMS ` raw
+output from formatting checks; it changes no evidence bytes or semantic checks.

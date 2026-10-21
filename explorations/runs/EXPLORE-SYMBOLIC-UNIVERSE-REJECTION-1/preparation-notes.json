@@ -1,0 +1,24 @@
+{
+  "scope": "Administrative preflight outcomes before the prospective start; no scientific checker launched by these actions. Messages below are retained command/review diagnostics, not independent scientific evidence.",
+  "actions": [
+    {
+      "action": "Inspect whole Docker Config of retained container",
+      "status": "DENIED_NOT_EXECUTED",
+      "reason": "The full Docker Config inspection is broader than needed and may expose container environment secrets; inspect only mounts and command without dumping all configuration.",
+      "resolution": "Approved narrowed inspection of command, entrypoint and mounts; read-only mounts, sleep infinity command."
+    },
+    {
+      "action": "scripts/validate-research-queue, first isolated-checkout attempt",
+      "status": "FAILED",
+      "diagnostic": "FAIL: items[99].evidence_refs[4] is missing or escapes the repository: external/lean-kernel-arena/tests/nested-unused-param.lean",
+      "resolution": "Copied the already retained ignored fixture from current local LAL checkout, without modifying another repository."
+    },
+    {
+      "action": "scripts/validate-research-queue, second attempt",
+      "status": "FAILED",
+      "diagnostic": "FAIL: current status table disagrees with queue: E0-SYMBOLIC-UNIVERSE-REJECTION-1",
+      "resolution": "Changed the stale table entry from READY to ACTIVE, rebound the entry review, and the next validation returned PASS."
+    }
+  ],
+  "remaining_blockers": []
+}

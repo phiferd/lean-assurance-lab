@@ -1,4 +1,4 @@
-"""Run exactly the six frozen rejection/control cases on two cached, unmodified validators."""
+"""Run exactly the six frozen cases on two cached, unmodified validators."""
 import hashlib
 import json
 from pathlib import Path
@@ -17,10 +17,10 @@ for case in cases:
     assert hashlib.sha256(path.read_bytes()).hexdigest() == case["sha256"]
     guest = "/universe-rejection-in/" + path.name
     for checker in ("lean", "nanoda"):
-        argv = ["docker", "exec", "--user", "checker", "--workdir", "/universe-out",
+        argv = ["docker", "exec", "--user", "checker", "--workdir", "/universe-rejection-out",
             "--env", "LEAN_PATH=/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean", CID,
             "timeout", "--kill-after=10", "120"]
-        argv += (["/opt/lean-fast/bin/lean", "--run", "/universe-tools/Replay.lean", guest]
+        argv += (["/opt/lean-fast/bin/lean", "--run", "/universe-rejection-tools/Replay.lean", guest]
                  if checker == "lean" else ["/opt/nanoda/target/release/nanoda_bin", "/universe-rejection-in/" + ident + ".json"])
         start = time.monotonic()
         result = subprocess.run(argv, stdout=subprocess.PIPE, stderr=subprocess.PIPE)

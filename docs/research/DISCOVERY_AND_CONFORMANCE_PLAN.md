@@ -6,45 +6,36 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-21
+## Current selection — 2026-10-20
 
-`E0-SYMBOLIC-UNIVERSE-REJECTION-1` is COMPLETE with E0 `NO_SIGNAL`: each
-validator accepted the three controls and rejected three invalid declarations,
-twelve expected outcomes. Nanoda rejects through its parameter/type-equality
-assertions; these are source-attributed and kept distinct from unexpected
-crashes. Together with the preceding screen, retain six valid fixtures and
-three single-record invalid variants as a local corpus. No checker defect,
-automatic confirmation or external action follows. See the
-[result](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md).
-One stopped-daemon setup failure was repaired and retained; no rebuild,
-Mathlib, new framework or formal model was needed.
+Both symbolic-universe screens are COMPLETE with E0 NO_SIGNAL. The first
+accepted twelve positive calls; the [rejection screen](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md)
+accepted six controls and rejected six invalid cases in twelve fresh calls.
+The three expected Nanoda assertion panics retain their exact source attribution.
+This is modestly useful local boundary coverage, not soundness or a detection-rate
+claim. Retain the tiny corpus; no checker fix, confirmation or external action
+follows. The cached profiles and existing supervisor sufficed; no large build,
+new framework, shared-tooling change or full assurance replay ran.
 
-Select `E0-UNIVERSE-CORPUS-REUSE-1` READY and unstarted under its
-[source-only plan](E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md). Before expanding the
-universe sequence, compare exactly these nine fixtures with pinned Nanoda and
-Lean Kernel Arena tests. Deliver a small source-to-fixture map and a minimal
-useful subset/consumer recommendation, or retain locally without a contribution
-or further expansion. Similar words alone do not establish equivalent coverage;
-absence from a partial inventory does not establish a gap. This is a concrete
-reuse decision, with no checker build, mutant, new fixture or external write.
+No new experiment is selected. `TRANSFER-HOLDOUT-INTAKE-1` remains WAITING
+and unstarted; the queue is PAUSED because no currently authorized READY item
+passes its gates. Intake requires a supplied independent input/custody package,
+owner designation and separate metadata-intake authorization. Build-mode requires
+a useful property, distinct supported profiles and valid fixture after its rejected
+three-profile premise. Theorem-control needs a distinct asymmetric refusal-risk
+preflight; original CVC-4/CVC-5 prerequisites remain unmet. Existing completed
+recursor coverage makes the deferred standalone recursor item duplicative.
+Memory accounting remains deferred without a named decision dependency.
 
+These are specific remaining gates, not an inference that all useful research
+is exhausted. Supply the missing evidence or separately select justified bounded
+work before another launch. Preserve the user's exclusions for Box/FnAlias,
+Tree2, independent-transfer searches, memory audits and held Boolean construction.
 K (formal-rule enforcement) and P (intended-object/check execution) remain the
-focus; S (informal/formal mathematical meaning) stays separately deferred.
-The completed Comparator integration adapter remains local; no larger release
-replay follows. Independent transfer remains high-value but WAITING on supplied
-independent inputs/custody and its separate intake authorization. Do not reopen
-the historical screen or repeat an unbounded search. Build-mode remains PLANNED
-after its three-profile premise was rejected; a revised comparison needs a
-supported property and fixture. Memory accounting lacks a current decision
-consumer. No new upstream evidence or authorization appeared. Historical
-CVC/theorem gates remain; the standalone data-recursor item was already folded
-into the completed semantic campaign and must not be rerun separately.
-
-Keep the lightweight E0 path: one start/finish, raw observations, one small
-result and one campaign-level selection. No new receipt hierarchy, repeated
-model reviews, full assurance replay or formalization prerequisite. Shared
-code changes retain their applicable tests. This handoff selects the successor
-without starting it; earlier dated selections below remain historical context.
+frontier; informal/formal mathematical-meaning fidelity stays separate.
+No fresh upstream-state claim, maintainer contact or assurance promotion occurs.
+This single campaign handoff uses the E0 ledger/queue/view checks; historical
+selections below retain their evidence and context.
 
 ## Objective and selection
 

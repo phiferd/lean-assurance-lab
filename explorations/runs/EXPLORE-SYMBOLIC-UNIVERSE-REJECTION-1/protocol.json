@@ -1,7 +1,6 @@
 {
   "evidence_class": "E0",
   "base_commit": "061ffa690f6a220dcadb95bb83c5d136e8751667",
-  "reused_profile": "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/protocol.json",
   "sources": [
     {
       "name": "leanprover/lean4",
@@ -28,38 +27,42 @@
       "rules": "parser.rs 619-633 raw levels; tc.rs infer_sort/infer_pi/def_eq_sort; level.rs simplify/combining and symbolic comparison. No source changes."
     }
   ],
-  "observed_tool_sha256": {
-    "/opt/lean-fast/bin/lean": "79fb1d26fa5a39385d59fdc48a711a14b0710ca6480271acce99b4d177cea085",
-    "/opt/lean-fast/lib/lean/libleanshared.so": "62108c3204c29d8532efd7101df65b391a1098da2de1ff9a4d0be3765fe2a67c",
-    "/opt/nanoda/target/release/nanoda_bin": "5e99b44c8b371ca1aedbc1a609a391ca5ac61b834b14fa60871298affb23d962",
-    "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
-    "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean": "c264ea4ad5e30bd90cd03a1b48d944c4a7317e53b483b99c04df8c3a6882f133",
-    "/universe-tools/Replay.lean": "a853a9eaa429bae7c14d2486f5df60a9dd916ee70688aa380e608f8c1bd73aa4",
-    "/opt/nanoda/src/tc.rs": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
-    "/opt/nanoda/src/parser.rs": "51c0208cbb07660a3af5b26f54eeda012e2c983567aed779f1b8acacf5c14ada",
-    "/opt/nanoda/src/level.rs": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf"
-  },
-  "observed_staged_sha256": {
-    "/universe-rejection-in/P1.ndjson": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
-    "/universe-rejection-in/P1.json": "3da60ec9933891713bcab051f3fe10cf427c1c2a1201596b4b9e939327900a1c",
-    "/universe-rejection-in/Pbad.ndjson": "a40f442b7bb174d8f96e3f836fbd20a5c845766af4aac91863c73839bdc0b3ff",
-    "/universe-rejection-in/Pbad.json": "ea3b62a5057f6d3068604a2277f7dea46eabfe8ecc763bafa8e516e25f284bbd",
-    "/universe-rejection-in/M1.ndjson": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
-    "/universe-rejection-in/M1.json": "61140b3057b7dca3e6ce7bfbd725363f0a555ed2257d27c6e35fb08dc8e6c533",
-    "/universe-rejection-in/Mbad.ndjson": "2be119819fe648e4e5582b7ec7a41cfa5a309b3b9640b3b45017ddbed41ea474",
-    "/universe-rejection-in/Mbad.json": "455f50c42be04d818544dd729a65494059c83396e779fa0d761b8c3a96aaa909",
-    "/universe-rejection-in/I1.ndjson": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
-    "/universe-rejection-in/I1.json": "3990e829c5804d6d9918fddd4923e3c208da4b89a091a55dfb68a75c7306d20c",
-    "/universe-rejection-in/Ibad.ndjson": "1757a2887c12a23d999e7545463260ed60978b80341e55ec252be18599ff1f28",
-    "/universe-rejection-in/Ibad.json": "d0665cf29c2bf60a61ad125a9a002ff50c662c2441d4834fb8f045754af498d9"
-  },
   "container": "580ee65b7ba85f7e16898abdc16f3e5add59caf63a83c03fda765097209b16a4",
-  "expectations": "P1/M1/I1 are byte-identical valid controls. Pbad omits the used u parameter; Mbad lowers the declared universe level by one; Ibad replaces imax by max and is wrong at u=0. Exact source-derived arguments, prospective outcomes and altered-record counts are in cases.json.",
-  "rules": "Official type_checker.cpp check_level, infer_sort, infer_pi, and sort-level equivalence; level.cpp mk_imax returns zero when rhs is zero. Nanoda tc.rs infer_sort checks all_uparams_defined (line554), infer_pi folds imax, assert_def_eq (line955) requires inferred/ascribed types to match; level.rs compares symbolic levels. Pbad must fail its parameter guard, Mbad/Ibad must fail type conversion.",
-  "demand": "Reuse raw Replay.lean: print parsed params, type and value before empty-environment trust0 kernel replay; require exact equality to cases.json for every case, including rejected ones. Nanoda parser directly inserts raw param/max/imax levels (source bound by observed hashes); error attribution must reach the intended checker guard. Both consume exactly the same input bytes verified before and after.",
-  "classification": "Exit status alone is insufficient. Official REJECT requires the expected undefined-universe or declaration-type-mismatch diagnostic after exact parsed-object prints. Nanoda uses assertion panics for invalid inputs: classify an expected all_uparams_defined assertion from infer_sort or def_eq assertion from assert_def_eq as REJECT_VIA_ASSERTION, preserving the nonzero code and panic text. Distinguish these intentional rejection paths from parser/unsupported failures, timeouts, unrelated diagnostic panics and crashes. Valid controls require exit0 and explicit one-declaration completion, with no stderr. Any unknown failure is diagnosed/repaired within this item, never silently mapped to REJECT.",
+  "observed_sha256": {
+    "/opt/lean-fast/bin/lean": "79fb1d26fa5a39385d59fdc48a711a14b0710ca6480271acce99b4d177cea085",
+    "/opt/nanoda/target/release/nanoda_bin": "5e99b44c8b371ca1aedbc1a609a391ca5ac61b834b14fa60871298affb23d962",
+    "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean": "c264ea4ad5e30bd90cd03a1b48d944c4a7317e53b483b99c04df8c3a6882f133",
+    "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286",
+    "/opt/lean-fast/lib/lean/libleanshared.so": "62108c3204c29d8532efd7101df65b391a1098da2de1ff9a4d0be3765fe2a67c",
+    "/opt/lean-fast/lib/lean/libleanrt.a": "8a723a1b2184700434d1fe4375fdb030a1404ef436286fd6ace6365d1b473b07",
+    "/universe-rejection-in/I1-invalid.json": "43d43bf4cd2060406aaf0a436730123324d74fd89988a829d08299dd30211c1f",
+    "/universe-rejection-in/I1-invalid.ndjson": "1757a2887c12a23d999e7545463260ed60978b80341e55ec252be18599ff1f28",
+    "/universe-rejection-in/I1.json": "3990e829c5804d6d9918fddd4923e3c208da4b89a091a55dfb68a75c7306d20c",
+    "/universe-rejection-in/I1.ndjson": "f2898774d9adc7c80e0e9b7c3655c112dc92ffc96f5689cdbfdd0bc9abc7ade7",
+    "/universe-rejection-in/M1-invalid.json": "80a04604df48172f5b5f8e49e1f0ca001bb4b6db1e0b70f13e1448e62b1fd809",
+    "/universe-rejection-in/M1-invalid.ndjson": "2be119819fe648e4e5582b7ec7a41cfa5a309b3b9640b3b45017ddbed41ea474",
+    "/universe-rejection-in/M1.json": "61140b3057b7dca3e6ce7bfbd725363f0a555ed2257d27c6e35fb08dc8e6c533",
+    "/universe-rejection-in/M1.ndjson": "446d4e9dec08591f8b73a30c2dcd9444d4e917c6b509adb68550717a7a645f53",
+    "/universe-rejection-in/P1-invalid.json": "48f7dc66be5c9bed09c555f4f92999f231bdcc660101ce4298c3aedd002d6b1e",
+    "/universe-rejection-in/P1-invalid.ndjson": "a40f442b7bb174d8f96e3f836fbd20a5c845766af4aac91863c73839bdc0b3ff",
+    "/universe-rejection-in/P1.json": "3da60ec9933891713bcab051f3fe10cf427c1c2a1201596b4b9e939327900a1c",
+    "/universe-rejection-in/P1.ndjson": "93b0b732350da9d12b2ee5db4854b8edbf3f13940a617f689af367ec04457f90",
+    "/universe-rejection-tools/Replay.lean": "a853a9eaa429bae7c14d2486f5df60a9dd916ee70688aa380e608f8c1bd73aa4",
+    "/opt/nanoda/src/tc.rs": "59d8a7d5b4481a9038031fabe819d3e2384f2dd68eb343805fa946e3499b3fda",
+    "/opt/nanoda/src/level.rs": "aaf68c6bb4af87fc026f8560df90c5576abb86e8c59c530aa671465912a998bf",
+    "/opt/nanoda/src/parser.rs": "51c0208cbb07660a3af5b26f54eeda012e2c983567aed779f1b8acacf5c14ada",
+    "/opt/nanoda/src/main.rs": "245ceaef34e8925cacaa3c5b99ce096a8c744710ce1f9184423e5a0333e8b35a",
+    "/opt/nanoda/src/env.rs": "52c1593f0e08c4e7b9b9f8a97e48bfdde1d449253bf0c3e4967321b46dbece01"
+  },
+  "execution": "Existing ARM64 Ubuntu20.04 task container; network interfaces {}; non-root checker UID1001; standalone inputs outside proof-producing workspace. No Mathlib build or production checker changes.",
+  "official": "Replay.lean imports retained compiled Export.Parse, prints raw parsed type/value, replays the one-definition map in a fresh empty kernel environment at trust0.",
+  "nanoda": "One thread, no axioms permitted, selected declaration pretty-printed to stdout, completion count required.",
+  "sample": "Exactly three unchanged P1/M1/I1 controls and their three prescribed one-row invalid variants; two checkers, twelve initial cells. Six NDJSON files and all expectations bound in cases.json before observation.",
+  "expectations": "P1-invalid omits the used universe parameter; M1-invalid ascribes Sort(max u v) to Sort(max u v), whose inferred type has successor; I1-invalid replaces imax with max, invalid when u=0. Both validators expected to reject each invalid case and accept each control.",
+  "classification": "Acceptance requires explicit successful declaration completion. Official parser name/params/type/value output must exactly match cases.json, then explicit unknown-universe or declaration-type mismatch is checker rejection. Nanoda parser preserves raw parameters and level constructors by source inspection. Its all_uparams_defined assertion (tc.rs:554) and def_eq assertion (tc.rs:955) are expected checker-rejection panics; these are recorded separately from unrelated diagnostic crashes. A panic/exit alone does not establish rejection. Parser errors, unsupported results, timeouts and unclassified crashes remain separate incomplete observations. Any unexpected accept/reject needs source attribution; no automatic confirmation.",
+  "demand": "Unchanged raw importer prints actual parsed forms before checking; missing parameter list and changed max expressions must survive. Nanoda consumes byte-identical files and source-bound raw constructors; rejected cases have no post-check pretty output. No runtime Nanoda AST trace or branch instrumentation is claimed.",
   "process_controls": "Outer supervised matrix300s; each guest timeout120s with kill-after10s; supervisor host-client memory4GiB, sample1s,maxgap5s,cleanup10s, outputcap20MiB. Existing container memory12GiB,cpu4,pids512,no-new-privileges; VM RAM~7.7GiB. Controls are nonterminal; diagnose/repair any failures without altering the frozen six cases. HostCLI RSS is not guest checker memory.",
-  "execution": "Same offline ARM64 container and cached Lean4.34.1/Nanoda/parser; non-root UID1001. Direct lean with compiled parser LEAN_PATH, no Lake resolution, no Mathlib or source build. One outer supervised matrix; individual guest120s timeout/kill-after10s; no fixed attempt budget.",
-  "preparation_repair": "Initial docker start failed because the daemon was stopped. Starting Docker Desktop restored the same cached profile; initial failure and successful retry retained. No checker observations occurred during preparation.",
-  "limitations": "Three constructed invalid/valid pairs at two pinned revisions; no independent fault holdout, detection rate, global soundness or branch-coverage claim. No model calls in launch/analysis loops; no delegation this item."
+  "signal_rule": "Any source-qualified unexpected checker behavior is SIGNAL; all six expected accepts and six source-qualified expected rejections with complete demand/control observations is NO_SIGNAL. Missing/unclassified observations are INCONCLUSIVE until feasible in-scope repairs are exhausted.",
+  "boundaries": "No new framework, production checker edit, full assurance replay, automatic confirmation, Box/FnAlias, Tree2, independent-transfer search, memory audit, held Boolean search, other repository modification or external contact. No general soundness, fault-detection-rate or independent-holdout inference.",
+  "identity_check": "All pinned binary/library/parser hashes exactly match predecessor; retained Nanoda source hashes match container; control bytes unchanged; staging hashes checked. Setup supervised with complete cleanup."
 }

@@ -1,5 +1,4 @@
-"""Retain three byte-identical controls; change one field in each invalid twin."""
-import copy
+"""Derive exactly three invalid variants; preserve valid controls byte-for-byte."""
 import hashlib
 import json
 from pathlib import Path
@@ -10,48 +9,55 @@ ROOT = HERE.parents[2]
 sys.path.insert(0, str(ROOT))
 from lib.metamorphic_ndjson_audit import decode
 
-OLD = HERE.parent / "EXPLORE-SYMBOLIC-UNIVERSE-1"
-inputs = HERE / "inputs"
-inputs.mkdir(exist_ok=True)
-cases = []
-for control in json.loads((OLD / "cases.json").read_text()):
-    ident = control["id"]
-    if ident not in ("P1", "M1", "I1"): continue
-    original = (OLD / "inputs" / (ident + ".ndjson")).read_bytes()
-    assert hashlib.sha256(original).hexdigest() == control["sha256"]
-    for invalid in (False, True):
-        case = copy.deepcopy(control)
-        case["id"] = ident[0] + "bad" if invalid else ident
-        case["pair"] = ident
-        case["expected"] = "REJECT" if invalid else "ACCEPT"
-        rows = [json.loads(line) for line in original.splitlines()]
-        before = copy.deepcopy(rows)
-        if invalid:
-            if ident == "P1":
-                rows[-1]["def"]["levelParams"] = []
-                case["params"] = []
-                case["reason"] = "The type and value still use u, but u is absent from levelParams. Both validators require every used universe parameter to be declared."
-            elif ident == "M1":
-                rows[-1]["def"]["type"] = rows[-1]["def"]["value"]
-                case["type"] = "(sort (max u v))"
-                case["reason"] = "Sort(max u v) has type Sort(succ(max u v)), not Sort(max u v). At u=v=0 the levels are 1 and 0. Noncumulative sort conversion must reject this lower ascription."
-            else:
-                node = next(r for r in rows if "imax" in r)
-                node["max"] = node.pop("imax")
-                case["type"] = "(sort (max (succ u) u))"
-                case["reason"] = "Pi X:Sort u, X infers Sort(imax(succ u,u)). At u=0 this is Sort0, whereas the max replacement is Sort1. The two symbolic levels are not equivalent."
-            assert sum(a != b for a, b in zip(rows, before)) == 1
-            raw = ("\n".join(json.dumps(r, separators=(",", ":")) for r in rows) + "\n").encode()
+OLD = HERE.with_name("EXPLORE-SYMBOLIC-UNIVERSE-1")
+old_cases = {c["id"]: c for c in json.loads((OLD / "cases.json").read_text())}
+reasons = {
+    "P1": "Sort u uses u but the declaration owns no universe parameter; Lean checks parameter membership during sort inference.",
+    "M1": "Sort(max u v) infers Sort(succ(max u v)), which is not Sort(max u v); at u=v=0 these levels are 1 and 0.",
+    "I1": "Pi X:Sort u, X infers Sort(imax(succ u,u)); at u=0 this is Sort 0, whereas max(succ u,u)=1. The symbolic types cannot be definitionally equal.",
+}
+
+def main():
+    (HERE / "inputs").mkdir(exist_ok=True)
+    cases = []
+    for base in ("P1", "M1", "I1"):
+        control = (OLD / "inputs" / f"{base}.ndjson").read_bytes()
+        assert hashlib.sha256(control).hexdigest() == old_cases[base]["sha256"]
+        rows = [json.loads(line) for line in control.splitlines()]
+        declaration = rows[-1]["def"]
+        if base == "P1":
+            declaration["levelParams"] = []
+        elif base == "M1":
+            declaration["type"] = declaration["value"]
         else:
-            raw = original
-        assert len(decode(raw).declarations) == 1
-        path = inputs / (case["id"] + ".ndjson")
-        path.write_bytes(raw)
-        cfg = json.loads((OLD / "inputs" / (ident + ".json")).read_text())
-        cfg["export_file_path"] = "/universe-rejection-in/" + path.name
-        (inputs / (case["id"] + ".json")).write_text(json.dumps(cfg, indent=2) + "\n")
-        case.update(path=str(path.relative_to(ROOT)), sha256=hashlib.sha256(raw).hexdigest(),
-                    control_sha256=control["sha256"], changed_records=int(invalid))
-        cases.append(case)
-(HERE / "cases.json").write_text(json.dumps(cases, indent=2) + "\n")
-print("Six exact files structurally audited; three byte-identical controls, three single-record alterations; no checker invoked.")
+            type_row = next(r for r in rows if r.get("ie") == declaration["type"])
+            level_row = next(r for r in rows if r.get("il") == type_row["sort"])
+            level_row["max"] = level_row.pop("imax")
+        invalid = ("\n".join(json.dumps(r, separators=(",", ":")) for r in rows) + "\n").encode()
+        original_rows = [json.loads(line) for line in control.splitlines()]
+        assert sum(a != b for a, b in zip(original_rows, rows)) == 1
+        for suffix, raw in (("", control), ("-invalid", invalid)):
+            ident = base + suffix
+            assert len(decode(raw).declarations) == 1
+            case = dict(old_cases[base])
+            case.update(id=ident, pair=base, expected="REJECT" if suffix else "ACCEPT",
+                        path=str((HERE / "inputs" / f"{ident}.ndjson").relative_to(ROOT)),
+                        sha256=hashlib.sha256(raw).hexdigest())
+            if suffix:
+                case["reason"] = reasons[base]
+                if base == "P1":
+                    case["params"] = []
+                if base == "M1":
+                    case["type"] = "(sort (max u v))"
+                if base == "I1":
+                    case["type"] = "(sort (max (succ u) u))"
+            (HERE / "inputs" / f"{ident}.ndjson").write_bytes(raw)
+            config = json.loads((OLD / "inputs" / f"{base}.json").read_text())
+            config["export_file_path"] = f"/universe-rejection-in/{ident}.ndjson"
+            (HERE / "inputs" / f"{ident}.json").write_text(json.dumps(config, indent=2) + "\n")
+            cases.append(case)
+    (HERE / "cases.json").write_text(json.dumps(cases, indent=2) + "\n")
+    print("Six cases structurally audited; controls unchanged, one JSON row changed per invalid candidate. No checker invoked.")
+
+if __name__ == "__main__":
+    main()
