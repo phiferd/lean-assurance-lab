@@ -6,36 +6,30 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-20
+## Current selection — 2026-10-21
 
-Both symbolic-universe screens are COMPLETE with E0 NO_SIGNAL. The first
-accepted twelve positive calls; the [rejection screen](../../explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/summary.md)
-accepted six controls and rejected six invalid cases in twelve fresh calls.
-The three expected Nanoda assertion panics retain their exact source attribution.
-This is modestly useful local boundary coverage, not soundness or a detection-rate
-claim. Retain the tiny corpus; no checker fix, confirmation or external action
-follows. The cached profiles and existing supervisor sufficed; no large build,
-new framework, shared-tooling change or full assurance replay ran.
+The two symbolic-universe screens are COMPLETE with expected behavior. Retain
+six valid fixtures and three invalid variants; no defect or confirmation follows.
+The owner now selects `E0-UNIVERSE-CORPUS-REUSE-1` ACTIVE under its
+[source-only plan](E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md). Compare exactly those
+nine cases with existing pinned Nanoda and Arena tests before adding examples
+or preparing a contribution. Produce one source map and a concrete minimal
+reuse or no-contribution decision. No checker build, proof, mutant, new fixture,
+framework or formal model is required. Snapshot-specific coverage is distinct
+from full generated-library coverage; keyword matches are only search leads.
 
-No new experiment is selected. `TRANSFER-HOLDOUT-INTAKE-1` remains WAITING
-and unstarted; the queue is PAUSED because no currently authorized READY item
-passes its gates. Intake requires a supplied independent input/custody package,
-owner designation and separate metadata-intake authorization. Build-mode requires
-a useful property, distinct supported profiles and valid fixture after its rejected
-three-profile premise. Theorem-control needs a distinct asymmetric refusal-risk
-preflight; original CVC-4/CVC-5 prerequisites remain unmet. Existing completed
-recursor coverage makes the deferred standalone recursor item duplicative.
-Memory accounting remains deferred without a named decision dependency.
+Independent transfer remains WAITING on supplied independent inputs/custody
+and separate intake authorization. The formerly blocked queue handoff does not
+preclude this owner-selected local assessment. Build-mode's supported property/
+fixture gate, theorem-control's distinct refusal-risk gate, original CVC
+prerequisites, deferred memory audit and completed duplicate recursor work remain
+unchanged. Preserve the owner's exclusions and external-action requirements.
 
-These are specific remaining gates, not an inference that all useful research
-is exhausted. Supply the missing evidence or separately select justified bounded
-work before another launch. Preserve the user's exclusions for Box/FnAlias,
-Tree2, independent-transfer searches, memory audits and held Boolean construction.
-K (formal-rule enforcement) and P (intended-object/check execution) remain the
-frontier; informal/formal mathematical-meaning fidelity stays separate.
-No fresh upstream-state claim, maintainer contact or assurance promotion occurs.
-This single campaign handoff uses the E0 ledger/queue/view checks; historical
-selections below retain their evidence and context.
+Use the lightweight E0 path: one source comparison, one start/finish record,
+retained observations and one campaign-level successor selection. Generate only
+the existing planning views; no full assurance regeneration or repeated review.
+Complete this assessment and stop before starting its selected successor.
+Earlier dated selections below remain historical context.
 
 ## Objective and selection
 

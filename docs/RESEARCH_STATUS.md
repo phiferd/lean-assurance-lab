@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-19
+Last updated: 2026-10-21
 
 ## How Status Is Tracked
 
@@ -3349,9 +3349,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
-Queue handoff: PAUSED.
-The canonical queue retains zero READY items and zero ACTIVE items.
+Selected next item: `E0-UNIVERSE-CORPUS-REUSE-1`.
+Queue handoff: EXECUTABLE.
+The canonical queue retains zero READY items and one ACTIVE item.
 
 The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
 Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
@@ -3368,13 +3368,12 @@ panics are source-attributed checker rejections, not unrelated diagnostic
 crashes. Retain the tiny local corpus; no defect, broad correctness claim,
 automatic confirmation or external action follows.
 
-No follow-on experiment is manufactured. The existing transfer intake remains
-WAITING and unstarted on independent input/custody and separate authorization.
-The queue is PAUSED with no READY item. Build-mode still lacks its narrower
-property/fixture, theorem-control lacks distinct refusal-risk evidence, and
-original CVC-4/CVC-5 prerequisites remain unmet. The deferred memory and duplicate
-recursor items do not remove these gates. Supply concrete prerequisite evidence
-or separately select a justified bounded item before any next launch.
+The owner selected the [source-only corpus reuse assessment](research/E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md)
+ACTIVE: compare the nine unique universe fixtures with existing pinned Nanoda
+and Arena tests, then recommend a minimal useful subset or no contribution.
+No checker build, new case or experiment expansion is part of this assessment.
+Independent transfer remains WAITING on its unchanged input/custody and intake
+authorization gates; that blocker does not prevent this local reuse decision.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3383,7 +3382,7 @@ authorization gates. Build-mode conformance remains PLANNED with its rejected
 three-profile premise retained; a narrower comparison still needs a property
 and suitable fixture. Agent retrieval requires a concrete witness bottleneck;
 memory accounting still lacks a named decision dependency. The
-[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-20)
+[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-21)
 supersedes earlier next-item and pause wording without changing their evidence.
 
 The Tree2 continuation is stopped as of 2026-10-01.
@@ -3702,6 +3701,7 @@ no external action is recommended now.
 | 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | COMPLETE, E0 SIGNAL; baseline passes added check, four controls fail |
 | 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | COMPLETE; twelve accepts, six tiny symbolic cases retained |
 | 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | COMPLETE; six accepts, six expected rejections; E0 NO_SIGNAL |
+| 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | ACTIVE; nine-fixture source-only reuse assessment |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
