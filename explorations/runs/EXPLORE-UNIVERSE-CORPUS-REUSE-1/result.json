@@ -1,0 +1,51 @@
+{
+  "evidence_class": "E0",
+  "outcome": "SIGNAL",
+  "completed_runs": 1,
+  "signal_count": 1,
+  "measurement_complete": true,
+  "engineering_failures_unresolved": false,
+  "unique_fixtures": 9,
+  "literal_fixture_duplicates": 0,
+  "equivalent_source_contracts": 1,
+  "related_source_cases": 7,
+  "supported_targeted_gaps": 1,
+  "upstream_export_files": 13,
+  "upstream_declaration_occurrences": 260,
+  "missing_parameter_occurrences": 0,
+  "unresolved_static_references": 0,
+  "snapshot_counts": {
+    "nanoda": {
+      "tracked_files": 31,
+      "inspected_files": 27,
+      "inspected_bytes": 419230
+    },
+    "arena": {
+      "tracked_files": 194,
+      "inspected_files": 121,
+      "inspected_bytes": 655007
+    }
+  },
+  "source_archives": {
+    "nanoda": "65bf207afc0539e81d5dda8d44c49456ed7583c17ceb60f46aa514ff89487c22",
+    "arena": "26c9d8c038f79bb5fa2322cca16aeca7d030d0beeddef832e6978f46cc272457"
+  },
+  "timed_inventory_seconds": 2.3089787919961964,
+  "checker_builds": 0,
+  "checker_runs": 0,
+  "mutant_runs": 0,
+  "model_cost": "Task token/monetary accounting unavailable. No delegates or model calls in deterministic inventory/walk loops.",
+  "limitation": "A source-reuse signal, not a current checker defect or runtime fault-sensitivity result. Exact source contracts and related behavior are distinct. External/generated library exports and runtime elaboration/export normalization were not evaluated.",
+  "recommendation": {
+    "priority": "NORMAL",
+    "target": "leanprover/lean-kernel-arena",
+    "action": "Prepare and locally validate one standalone undeclared-universe-parameter rejection case with YAML metadata. Base it on the retained P1-invalid declaration; reuse P1 as an unchanged valid control. Do not submit the other eight cases or prepare a parallel Nanoda PR.",
+    "insertion_point": [
+      "tests/undeclared-universe-parameter.ndjson",
+      "tests/undeclared-universe-parameter.yaml"
+    ],
+    "prerequisites": "Separately select local integration work; check current target duplication and supported pinned harness/profile identities; freeze exact candidate/control bytes before fresh local reproduction. External submission needs exact-target human authorization.",
+    "reason": "Distinct parameter-membership guard is absent from the inspected test contracts/committed raw exports. Arena shares one case across validators, whereas existing duplicate-parameter and constant-instantiation-arity tests do not exercise this omission."
+  },
+  "next_item": "E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1"
+}

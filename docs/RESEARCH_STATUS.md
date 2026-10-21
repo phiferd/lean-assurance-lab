@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `E0-UNIVERSE-CORPUS-REUSE-1` completes a source-only nine-fixture comparison.
+  One missing-used-parameter rejection case merits a shared Arena regression;
+  max commutation already has an equivalent source contract, and seven cases
+  have related coverage without a demonstrated contribution need. The static
+  walk found no omitted used parameter in 260 committed export-declaration
+  occurrences. No checker, build or mutant ran; no current defect is claimed.
+  Prepare only the one named local integration next; it is READY and unstarted.
+  See the [source map and recommendation](../explorations/runs/EXPLORE-UNIVERSE-CORPUS-REUSE-1/summary.md).
+
 - `E0-SYMBOLIC-UNIVERSE-REJECTION-1` completes with E0 `NO_SIGNAL`.
   Both checkers accepted the three unchanged controls and rejected all three
   invalid variants, six accepts and six expected rejections. Yes, this is modestly
@@ -3349,9 +3358,9 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-UNIVERSE-CORPUS-REUSE-1`.
+Selected next item: `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains zero READY items and one ACTIVE item.
+The canonical queue retains one READY item and zero ACTIVE items.
 
 The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
 Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
@@ -3368,12 +3377,18 @@ panics are source-attributed checker rejections, not unrelated diagnostic
 crashes. Retain the tiny local corpus; no defect, broad correctness claim,
 automatic confirmation or external action follows.
 
-The owner selected the [source-only corpus reuse assessment](research/E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md)
-ACTIVE: compare the nine unique universe fixtures with existing pinned Nanoda
-and Arena tests, then recommend a minimal useful subset or no contribution.
-No checker build, new case or experiment expansion is part of this assessment.
-Independent transfer remains WAITING on its unchanged input/custody and intake
-authorization gates; that blocker does not prevent this local reuse decision.
+The [source-only corpus reuse assessment](../explorations/runs/EXPLORE-UNIVERSE-CORPUS-REUSE-1/summary.md)
+is COMPLETE. It recommends one Arena rejection case for a used universe
+parameter omitted from the declaration's parameter list. Existing duplicate-
+parameter and constant-instantiation-arity cases test different rules. One of
+our cases already has an equivalent Arena source contract; retain the other
+seven locally without claiming they are all equivalent or worth submitting.
+Select the [minimal guard integration](research/E0_ARENA_UNIVERSE_GUARD_INTEGRATION_1_PLAN.md)
+READY and unstarted: one data-only testcase/YAML, existing positive control,
+metadata/discovery check and four fresh known-case checker calls. No Mathlib,
+new framework or whole tutorial build is needed. External submission remains
+subject to exact-target authorization. Independent transfer stays WAITING;
+its blocker does not prevent this concrete local integration.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3701,7 +3716,8 @@ no external action is recommended now.
 | 101 | `E0-COMPARATOR-CONSUMER-SCREEN-1` | COMPLETE, E0 SIGNAL; baseline passes added check, four controls fail |
 | 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | COMPLETE; twelve accepts, six tiny symbolic cases retained |
 | 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | COMPLETE; six accepts, six expected rejections; E0 NO_SIGNAL |
-| 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | ACTIVE; nine-fixture source-only reuse assessment |
+| 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | COMPLETE; one useful shared-test gap, no checker runs |
+| 105 | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` | READY; one local Arena rejection case; unstarted |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

@@ -8,27 +8,36 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current selection — 2026-10-21
 
-The two symbolic-universe screens are COMPLETE with expected behavior. Retain
-six valid fixtures and three invalid variants; no defect or confirmation follows.
-The owner now selects `E0-UNIVERSE-CORPUS-REUSE-1` ACTIVE under its
-[source-only plan](E0_UNIVERSE_CORPUS_REUSE_1_PLAN.md). Compare exactly those
-nine cases with existing pinned Nanoda and Arena tests before adding examples
-or preparing a contribution. Produce one source map and a concrete minimal
-reuse or no-contribution decision. No checker build, proof, mutant, new fixture,
-framework or formal model is required. Snapshot-specific coverage is distinct
-from full generated-library coverage; keyword matches are only search leads.
+`E0-UNIVERSE-CORPUS-REUSE-1` is COMPLETE with a narrow source-reuse SIGNAL.
+Of nine fixtures, M2 has an equivalent Arena source contract; seven have
+related coverage without a demonstrated need for another upstream example.
+P1-invalid supplies a distinct missing-used-parameter rejection contract absent
+from the inspected snapshot tests. The static walk covered 260 committed
+export-declaration occurrences; complete external/generated library contents
+and runtime exported tutorial bytes were not assessed. No checker/build/mutant
+ran and no current kernel defect is claimed. See the
+[source map](../../explorations/runs/EXPLORE-UNIVERSE-CORPUS-REUSE-1/summary.md).
 
-Independent transfer remains WAITING on supplied independent inputs/custody
-and separate intake authorization. The formerly blocked queue handoff does not
-preclude this owner-selected local assessment. Build-mode's supported property/
-fixture gate, theorem-control's distinct refusal-risk gate, original CVC
-prerequisites, deferred memory audit and completed duplicate recursor work remain
-unchanged. Preserve the owner's exclusions and external-action requirements.
+Select `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` READY and unstarted under its
+[short plan](E0_ARENA_UNIVERSE_GUARD_INTEGRATION_1_PLAN.md). Prepare only one
+shared Arena rejection testcase/YAML, reusing the known missing-parameter input
+and existing positive control. Recheck target duplication, metadata/discovery
+and compatible cached profiles, then four fresh local known-case calls. No
+Mathlib, whole tutorial build, new checker/framework, broad mutation campaign
+or nine-case contribution package. Record any prepared candidate in the existing
+external-contribution ledger. Submission requires exact-target human approval.
 
-Use the lightweight E0 path: one source comparison, one start/finish record,
-retained observations and one campaign-level successor selection. Generate only
-the existing planning views; no full assurance regeneration or repeated review.
-Complete this assessment and stop before starting its selected successor.
+Independent transfer remains WAITING on supplied independent inputs/custody and
+separate intake authorization. It does not block this result-driven local work.
+Build-mode, theorem-control, original CVC, memory and duplicate recursor gates
+remain unchanged. Preserve the owner's exclusions and K/P focus; semantic
+fidelity stays separately deferred. No live upstream adoption claim is made.
+
+Keep one start/finish, retained raw evidence, scoped recommendation and one
+campaign-level successor selection. Use the existing lightweight E0 ledger,
+diff and planning-handoff path; no assurance regeneration or routine independent
+closure review solely for this assessment. Shared tooling changes retain their
+applicable tests. This handoff stops before starting the selected successor.
 Earlier dated selections below remain historical context.
 
 ## Objective and selection

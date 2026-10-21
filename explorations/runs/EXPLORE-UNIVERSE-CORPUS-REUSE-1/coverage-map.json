@@ -1,0 +1,263 @@
+[
+  {
+    "fixture": "P1",
+    "obligation": "Declared named parameter and Sort/successor typing",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 107,
+        "end_line": 126
+      },
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 148,
+        "end_line": 158
+      },
+      {
+        "source": "nanoda",
+        "path": "test_resources/ProjFromProp/export",
+        "start_line": 2,
+        "end_line": 26
+      }
+    ],
+    "assessment": "Arena has named-universe definitions and raw symbolic sort declarations; Nanoda ships parameterized inductive exports. These exercise parameter use, but do not establish a separate minimal imported-definition P1 contract.",
+    "action": "Retain as the local positive control for the missing-parameter candidate."
+  },
+  {
+    "fixture": "P2",
+    "obligation": "Named-universe let typing and zeta reduction",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 215,
+        "end_line": 251
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/pretty_printer.rs",
+        "start_line": 5,
+        "end_line": 24
+      }
+    ],
+    "assessment": "Arena explicitly checks let typing/reduction at closed levels. Nanoda pretty-printer tests render binders without checking declarations. The exact named-level let combination is not demonstrated by those tests.",
+    "action": "Retain locally; the additional interaction alone does not justify another upstream case now."
+  },
+  {
+    "fixture": "M1",
+    "obligation": "Successor distribution through a symbolic maximum",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 134,
+        "end_line": 173
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 83,
+        "end_line": 106
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 161,
+        "end_line": 185
+      }
+    ],
+    "assessment": "Arena checks symbolic max commutation/association/idempotence/absorption; Nanoda checks offset monotonicity and closed successor/max equality. None is identified as the exact two-sided symbolic distribution assertion.",
+    "action": "Retain locally; avoid presenting neighboring tests as exact distribution coverage or claiming a demonstrated regression risk."
+  },
+  {
+    "fixture": "M2",
+    "obligation": "Symbolic max commutation under successor",
+    "classification": "EQUIVALENT_SOURCE_CONTRACT",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 134,
+        "end_line": 137
+      },
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial/Meta.lean",
+        "start_line": 59,
+        "end_line": 60
+      },
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial/TestCaseEnv.lean",
+        "start_line": 26,
+        "end_line": 49
+      }
+    ],
+    "assessment": "Arena levelMaxComm states the same Sort(max u v) value and Sort(max v u+1) type, modulo declaration spelling. Its good_def registration supplies expected acceptance. This is source-contract overlap, not a runtime export/branch-coverage claim.",
+    "action": "Do not contribute another max-commutation example."
+  },
+  {
+    "fixture": "I1",
+    "obligation": "Dependent Pi formation with parameter-right imax",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 23,
+        "end_line": 27
+      },
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 122,
+        "end_line": 132
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 17,
+        "end_line": 26
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 135,
+        "end_line": 157
+      }
+    ],
+    "assessment": "Arena has dependent Pi, closed Pi/imax examples and symbolic imax identities. Nanoda tests imax zero and equality with max for provably positive right operands. These are related rules; the exact general Pi X:Sort u, X declaration is not demonstrated.",
+    "action": "Retain as a local small Pi/imax control; no additional upstream example recommended now."
+  },
+  {
+    "fixture": "I2",
+    "obligation": "Pi/imax with a redundant symbolic max operand",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 122,
+        "end_line": 173
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 17,
+        "end_line": 26
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 135,
+        "end_line": 185
+      }
+    ],
+    "assessment": "Existing imax and max identities overlap components, but none is identified as the exact max(succ u,1) operand under parameter-right imax. This study does not establish that adding this combination detects a missed defect.",
+    "action": "Retain locally; no extra normalization campaign or upstream case."
+  },
+  {
+    "fixture": "P1-invalid",
+    "obligation": "Used universe parameter omitted from the owning declaration",
+    "classification": "SUPPORTED_TARGETED_GAP",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 112,
+        "end_line": 120
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/util.rs",
+        "start_line": 82,
+        "end_line": 102
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tc.rs",
+        "start_line": 552,
+        "end_line": 557
+      },
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial/Meta.lean",
+        "start_line": 8,
+        "end_line": 18
+      }
+    ],
+    "assessment": "Arena tests duplicate parameter ownership, a different predicate from declaring every used parameter. The static walk finds no omitted used parameter in 260 committed export-declaration occurrences; reviewed raw Lean declarations and Nanoda tests do not add this negative. Nanoda infer_sort has an explicit all_uparams_defined guard. Scope is the inspected snapshots, not every external/generated corpus.",
+    "action": "Recommend one static Arena reject testcase, tests/undeclared-universe-parameter.ndjson plus its YAML, derived from this already observed invalid fixture. Reuse P1 locally as the positive control."
+  },
+  {
+    "fixture": "M1-invalid",
+    "obligation": "Reject a Sort assigned its own rather than successor level",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 17,
+        "end_line": 21
+      },
+      {
+        "source": "arena",
+        "path": "tests/level-imax-leq.yaml",
+        "start_line": 1,
+        "end_line": 14
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 39,
+        "end_line": 53
+      }
+    ],
+    "assessment": "Arena has an explicit Sort-type mismatch and an imax successor-offset rejection; Nanoda tests successor ordering around symbolic imax. They address neighboring mismatch/level rules, not the exact lowered-max declaration.",
+    "action": "Retain locally; no second upstream negative recommended without a distinct demonstrated need."
+  },
+  {
+    "fixture": "I1-invalid",
+    "obligation": "Reject replacing imax by max at the zero boundary",
+    "classification": "RELATED_SOURCE_COVERAGE",
+    "evidence": [
+      {
+        "source": "arena",
+        "path": "tutorial/Tutorial.lean",
+        "start_line": 122,
+        "end_line": 132
+      },
+      {
+        "source": "arena",
+        "path": "tests/level-imax-normalization.yaml",
+        "start_line": 1,
+        "end_line": 14
+      },
+      {
+        "source": "arena",
+        "path": "tests/level-imax-leq.yaml",
+        "start_line": 1,
+        "end_line": 14
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 17,
+        "end_line": 26
+      },
+      {
+        "source": "nanoda",
+        "path": "src/tests/level.rs",
+        "start_line": 135,
+        "end_line": 157
+      }
+    ],
+    "assessment": "Arena has two explicit imax zero/successor regressions; Nanoda checks imax with zero and equivalence to max when rhs is positive. Those do not establish the exact Pi ascription comparison, and helper coverage is not declaration coverage.",
+    "action": "Retain locally; do not duplicate the existing imax regression theme solely because this spelling differs."
+  }
+]
