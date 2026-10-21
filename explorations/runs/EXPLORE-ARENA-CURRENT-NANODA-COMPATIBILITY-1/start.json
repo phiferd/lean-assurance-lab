@@ -1,0 +1,51 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1",
+  "data": {
+    "campaign": "E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1",
+    "question": "Do the two unchanged known inputs retain attributable expected outcomes with Arena-configured Nanoda e0d76f5, its256MiB stack patch, four threads and stdin?",
+    "sources": [
+      {
+        "name": "leanprover/lean-kernel-arena",
+        "revision": "8bbe253405b7e6a0b741381ecdf3eae0293d61ba"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "e0d76f5ec30bba244023466875b4845a57fd3ea5"
+      }
+    ],
+    "versions": "Exact Arena YAML/source and Nanoda source archive; cached rustc1.99.0 b940084d7/cargo1.99.0 5f94df478 inside network-none retained Linux ARM64 container. Fresh release build with locked dependency identities and binary/runtime manifest required before checker calls.",
+    "commands": "Stage bound archive/scripts/inputs, run original build recipe offline with --locked, record actual hashes and applied patch, run instrumented status-preserving Arena stdin wrapper twice. run_process.py retains all argv/streams/resource receipts.",
+    "inputs": [
+      "docs/research/E0_ARENA_CURRENT_NANODA_COMPATIBILITY_1_PLAN.md",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/Cargo.lock",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/Cargo.toml",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/arena-revision.txt",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/arena-run.sh",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/arena-source.tar",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/build.sh",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/cases.json",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/input-review.md",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/inputs/candidate.ndjson",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/inputs/control.ndjson",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/instrumented-run.sh",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/nanoda-source.tar",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/nanoda.yaml",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/preflight.py",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/protocol.json",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/run_process.py",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/src__level.rs",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/src__lib.rs",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/src__main.rs",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/src__tc.rs",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/src__util.rs",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/stage-build.py",
+      "explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/wrapper-instrumentation.patch"
+    ],
+    "sample": "Candidate plus unchanged P1 valid control, one configured Nanoda, two initial calls.",
+    "planned_runs": 2,
+    "controls": "input-review.md and cases.json bind expected member-guard rejection and completed control acceptance; exact staged hashes and source/configuration/binary identity gate before launch. Unexpected setup/parser/guard failures require repair rather than semantic-negative classification."
+  }
+}

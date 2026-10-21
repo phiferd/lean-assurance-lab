@@ -58,6 +58,14 @@ research directions.
 
 ## Attempted
 
+- `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` completes with E0 NO_SIGNAL
+  for unexpected validity behavior. The configured Nanoda rejects the missing
+  parameter and accepts the control; a logging-only replay explicitly reports
+  one checked declaration and a separate pretty-printer warning. This resolves
+  the shared candidate's current-profile gap, not a correctness claim. Next is
+  the separate unstarted contribution confirmation; existing gates/approval apply.
+  See the [result](../explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/summary.md).
+
 - `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` completes with E0 NO_SIGNAL for
   unexpected behavior. Arena discovers and copies the one-case patch; both
   validators reject the omitted parameter and accept the valid control (four
@@ -3367,7 +3375,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`.
+Selected next item: `CONFIRM-ARENA-UNIVERSE-GUARD-1`.
 Queue handoff: EXECUTABLE.
 The canonical queue retains one READY item and zero ACTIVE items.
 
@@ -3399,11 +3407,18 @@ reason, and both accept the valid control. Four final observations, two excluded
 missing-file launches and all repaired setup failures are retained. No unexpected
 validator behavior or current defect is claimed. The candidate remains local;
 external contribution gates and exact-target submission authorization apply.
-Select [current Nanoda compatibility](research/E0_ARENA_CURRENT_NANODA_COMPATIBILITY_1_PLAN.md)
-READY and unstarted: Arena configures a newer Nanoda revision plus four-thread/
-stdin/stack settings not tested in the retained-profile run. Resolve only that
-specific consumer boundary using the same two inputs. No further family or
-framework starts here. Independent transfer remains WAITING on its own inputs.
+The [current Nanoda compatibility check](../explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/summary.md)
+is COMPLETE with E0 NO_SIGNAL for unexpected validity behavior. The configured
+four-thread/stdin build rejects the candidate at the parameter guard and accepts
+the control. One logging-only replay confirms one checked declaration with no
+typechecking errors and a separate pretty-printer warning. Three checker calls,
+one offline build and all setup/audit repairs are retained. The candidate remains
+local; no broader correctness or submission-readiness claim follows.
+Select [contribution confirmation](research/CONFIRM_ARENA_UNIVERSE_GUARD_1_PLAN.md)
+READY for preparation, unstarted. Independently review this fixed contract and
+obtain four fresh E1 cells before applying the existing contribution gates.
+No new model, case family or framework. Independent transfer remains WAITING
+on its own inputs; exact-target submission authorization still applies.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3733,7 +3748,8 @@ no external action is recommended now.
 | 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | COMPLETE; six accepts, six expected rejections; E0 NO_SIGNAL |
 | 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | COMPLETE; one useful shared-test gap, no checker runs |
 | 105 | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` | COMPLETE; local candidate, four expected outcomes |
-| 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | READY and unstarted; exact configured consumer profile |
+| 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | COMPLETE; two configured cells plus logging-only control |
+| 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | READY for preparation; independent contract review and fresh E1 replay |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

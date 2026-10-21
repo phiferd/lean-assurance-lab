@@ -8,23 +8,20 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current selection — 2026-10-21
 
-`E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` is COMPLETE. One two-file local
-Arena candidate passes current metadata/discovery. Both retained validators
-reject the omitted universe parameter for the expected reason and accept the
-unchanged valid control: four usable observations, E0 NO_SIGNAL for unexpected
-behavior. All setup failures and two excluded missing-file calls are preserved.
-This modest shared-test asset is not a checker defect, whole-kernel guarantee,
-confirmed contribution or upstream adoption. See the
-[result](../../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/summary.md).
+`E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` is COMPLETE. Arena's pinned
+Nanoda build/settings reject the candidate at the intended parameter guard and
+accept the unchanged control. One logging-only replay confirms completed checking
+and preserves a separate pretty-printer warning: three calls and one offline
+build, E0 NO_SIGNAL for unexpected validity behavior. All setup/audit repairs
+remain retained. See the
+[result](../../explorations/runs/EXPLORE-ARENA-CURRENT-NANODA-COMPATIBILITY-1/summary.md).
 
-Select `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` READY and unstarted under its
-[short plan](E0_ARENA_CURRENT_NANODA_COMPATIBILITY_1_PLAN.md). Current Arena pins
-Nanoda e0d76f5 with a stack-size patch, stdin and four threads, whereas the
-completed screen used retained Nanoda 3a240721 with one thread. Test only that
-concrete consumer boundary, reusing the same candidate and control, before
-considering submission. No additional case family, framework, Mathlib or whole
-Arena matrix. Applicable contribution gates and exact-target human approval
-remain necessary; no external action is authorized or performed.
+Select `CONFIRM-ARENA-UNIVERSE-GUARD-1` READY for preparation and unstarted under
+[its plan](CONFIRM_ARENA_UNIVERSE_GUARD_1_PLAN.md). The useful local two-file asset
+now warrants a separately frozen E1 contract: one bounded independent rule/patch
+review and four fresh known-case cells. No formal model, new case family or
+framework. E0 evidence is not confirmation; applicable contribution/E2 gates and
+exact-target human approval still govern any submission. No external write.
 
 Independent transfer remains WAITING on supplied independent inputs/custody and
 separate intake authorization. It does not block this result-driven local work.
