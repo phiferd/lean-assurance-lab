@@ -1,0 +1,10 @@
+description: |
+  A definition uses universe parameter `u` in its type and value but omits it
+  from its `levelParams` list. The value is `Sort u`, its declared type is
+  `Sort (u + 1)`, and `levelParams` is empty, so a checker must reject the
+  undeclared parameter. Adding `u` to the list makes the declaration valid.
+
+  This checks parameter membership, separately from duplicate parameters or
+  the number of universe arguments supplied to a constant.
+file: tests/other/undeclared-universe-parameter.ndjson
+outcome: reject

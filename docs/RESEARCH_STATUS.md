@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` completes with E0 NO_SIGNAL for
+  unexpected behavior. Arena discovers and copies the one-case patch; both
+  validators reject the omitted parameter and accept the valid control (four
+  usable observations). This is a useful local shared-test candidate, not a
+  defect or correctness claim. All setup failures and two excluded missing-file
+  launches remain retained. Next is the separate, unstarted current-Nanoda
+  compatibility item; submission still requires its own gates and authorization.
+  See the [result](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/summary.md).
+
 - `E0-UNIVERSE-CORPUS-REUSE-1` completes a source-only nine-fixture comparison.
   One missing-used-parameter rejection case merits a shared Arena regression;
   max commutation already has an equivalent source contract, and seven cases
@@ -3358,7 +3367,7 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`.
+Selected next item: `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`.
 Queue handoff: EXECUTABLE.
 The canonical queue retains one READY item and zero ACTIVE items.
 
@@ -3383,12 +3392,18 @@ parameter omitted from the declaration's parameter list. Existing duplicate-
 parameter and constant-instantiation-arity cases test different rules. One of
 our cases already has an equivalent Arena source contract; retain the other
 seven locally without claiming they are all equivalent or worth submitting.
-Select the [minimal guard integration](research/E0_ARENA_UNIVERSE_GUARD_INTEGRATION_1_PLAN.md)
-READY and unstarted: one data-only testcase/YAML, existing positive control,
-metadata/discovery check and four fresh known-case checker calls. No Mathlib,
-new framework or whole tutorial build is needed. External submission remains
-subject to exact-target authorization. Independent transfer stays WAITING;
-its blocker does not prevent this concrete local integration.
+The [minimal guard integration](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/summary.md)
+is COMPLETE: current Arena metadata/discovery preserves the single two-file
+candidate, both retained validators reject the missing parameter for the intended
+reason, and both accept the valid control. Four final observations, two excluded
+missing-file launches and all repaired setup failures are retained. No unexpected
+validator behavior or current defect is claimed. The candidate remains local;
+external contribution gates and exact-target submission authorization apply.
+Select [current Nanoda compatibility](research/E0_ARENA_CURRENT_NANODA_COMPATIBILITY_1_PLAN.md)
+READY and unstarted: Arena configures a newer Nanoda revision plus four-thread/
+stdin/stack settings not tested in the retained-profile run. Resolve only that
+specific consumer boundary using the same two inputs. No further family or
+framework starts here. Independent transfer remains WAITING on its own inputs.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3717,7 +3732,8 @@ no external action is recommended now.
 | 102 | `E0-SYMBOLIC-UNIVERSE-SCREEN-1` | COMPLETE; twelve accepts, six tiny symbolic cases retained |
 | 103 | `E0-SYMBOLIC-UNIVERSE-REJECTION-1` | COMPLETE; six accepts, six expected rejections; E0 NO_SIGNAL |
 | 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | COMPLETE; one useful shared-test gap, no checker runs |
-| 105 | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` | READY; one local Arena rejection case; unstarted |
+| 105 | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` | COMPLETE; local candidate, four expected outcomes |
+| 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | READY and unstarted; exact configured consumer profile |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

@@ -8,24 +8,23 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current selection — 2026-10-21
 
-`E0-UNIVERSE-CORPUS-REUSE-1` is COMPLETE with a narrow source-reuse SIGNAL.
-Of nine fixtures, M2 has an equivalent Arena source contract; seven have
-related coverage without a demonstrated need for another upstream example.
-P1-invalid supplies a distinct missing-used-parameter rejection contract absent
-from the inspected snapshot tests. The static walk covered 260 committed
-export-declaration occurrences; complete external/generated library contents
-and runtime exported tutorial bytes were not assessed. No checker/build/mutant
-ran and no current kernel defect is claimed. See the
-[source map](../../explorations/runs/EXPLORE-UNIVERSE-CORPUS-REUSE-1/summary.md).
+`E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` is COMPLETE. One two-file local
+Arena candidate passes current metadata/discovery. Both retained validators
+reject the omitted universe parameter for the expected reason and accept the
+unchanged valid control: four usable observations, E0 NO_SIGNAL for unexpected
+behavior. All setup failures and two excluded missing-file calls are preserved.
+This modest shared-test asset is not a checker defect, whole-kernel guarantee,
+confirmed contribution or upstream adoption. See the
+[result](../../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/summary.md).
 
-Select `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` READY and unstarted under its
-[short plan](E0_ARENA_UNIVERSE_GUARD_INTEGRATION_1_PLAN.md). Prepare only one
-shared Arena rejection testcase/YAML, reusing the known missing-parameter input
-and existing positive control. Recheck target duplication, metadata/discovery
-and compatible cached profiles, then four fresh local known-case calls. No
-Mathlib, whole tutorial build, new checker/framework, broad mutation campaign
-or nine-case contribution package. Record any prepared candidate in the existing
-external-contribution ledger. Submission requires exact-target human approval.
+Select `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` READY and unstarted under its
+[short plan](E0_ARENA_CURRENT_NANODA_COMPATIBILITY_1_PLAN.md). Current Arena pins
+Nanoda e0d76f5 with a stack-size patch, stdin and four threads, whereas the
+completed screen used retained Nanoda 3a240721 with one thread. Test only that
+concrete consumer boundary, reusing the same candidate and control, before
+considering submission. No additional case family, framework, Mathlib or whole
+Arena matrix. Applicable contribution gates and exact-target human approval
+remain necessary; no external action is authorized or performed.
 
 Independent transfer remains WAITING on supplied independent inputs/custody and
 separate intake authorization. It does not block this result-driven local work.

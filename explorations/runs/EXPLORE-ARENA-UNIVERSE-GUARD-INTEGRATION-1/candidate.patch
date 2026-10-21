@@ -1,0 +1,30 @@
+diff --git a/tests/other/undeclared-universe-parameter.ndjson b/tests/other/undeclared-universe-parameter.ndjson
+new file mode 100644
+index 0000000000000000000000000000000000000000..16518005cc7e04cc69533c8b82e92d8e053f0df1
+--- /dev/null
++++ b/tests/other/undeclared-universe-parameter.ndjson
+@@ -0,0 +1,8 @@
++{"meta":{"exporter":{"name":"LAL hand-encoded rule cases","version":"1"},"format":{"version":"3.1.0"},"lean":{"version":"4.34.1","githash":"5045d0056413266e57c625dcd7c365b10e377c52"}}}
++{"in":1,"str":{"pre":0,"str":"LAL_P1"}}
++{"in":2,"str":{"pre":0,"str":"u"}}
++{"il":1,"param":2}
++{"il":2,"succ":1}
++{"ie":0,"sort":2}
++{"ie":1,"sort":1}
++{"def":{"name":1,"levelParams":[],"type":0,"value":1,"hints":"opaque","safety":"safe","all":[1]}}
+diff --git a/tests/other/undeclared-universe-parameter.yaml b/tests/other/undeclared-universe-parameter.yaml
+new file mode 100644
+index 0000000000000000000000000000000000000000..d9d4c20b172b6a6310557d3d5756782e8c590a69
+--- /dev/null
++++ b/tests/other/undeclared-universe-parameter.yaml
+@@ -0,0 +1,10 @@
++description: |
++  A definition uses universe parameter `u` in its type and value but omits it
++  from its `levelParams` list. The value is `Sort u`, its declared type is
++  `Sort (u + 1)`, and `levelParams` is empty, so a checker must reject the
++  undeclared parameter. Adding `u` to the list makes the declaration valid.
++
++  This checks parameter membership, separately from duplicate parameters or
++  the number of universe arguments supplied to a constant.
++file: tests/other/undeclared-universe-parameter.ndjson
++outcome: reject

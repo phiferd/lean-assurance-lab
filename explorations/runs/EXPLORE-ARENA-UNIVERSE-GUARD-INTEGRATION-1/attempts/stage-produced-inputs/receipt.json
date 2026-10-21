@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "argv": [
+    "/Library/Frameworks/Python.framework/Versions/3.10/bin/python3",
+    "-c",
+    "import pathlib,subprocess,hashlib,json; p=pathlib.Path(\"explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1\"); c=\"580ee65b7ba85f7e16898abdc16f3e5add59caf63a83c03fda765097209b16a4\"; assert hashlib.sha256((p/\"discovery/candidate.ndjson\").read_bytes()).hexdigest()==json.loads((p/\"cases.json\").read_text())[0][\"sha256\"]; subprocess.run([\"docker\",\"cp\",str(p/\"discovery/candidate.ndjson\"),c+\":/arena-universe-guard-in/candidate.ndjson\"],check=True); subprocess.run([\"docker\",\"cp\",str(p/\"inputs/control.ndjson\"),c+\":/arena-universe-guard-in/control.ndjson\"],check=True); [subprocess.run([\"docker\",\"cp\",str(p/\"inputs\"/(i+\".json\")),c+\":/arena-universe-guard-in/\"+i+\".json\"],check=True) for i in (\"candidate\",\"control\")]; subprocess.run([\"docker\",\"exec\",c,\"sha256sum\",\"/arena-universe-guard-in/candidate.ndjson\",\"/arena-universe-guard-in/control.ndjson\",\"/arena-universe-guard-in/candidate.json\",\"/arena-universe-guard-in/control.json\"],check=True)"
+  ],
+  "cwd": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab",
+  "pid": 17363,
+  "pgid": 17363,
+  "started_monotonic_ns": 37004917934583,
+  "launched_monotonic_ns": 37004919028666,
+  "reaped_monotonic_ns": 37004948350458,
+  "cleaned_monotonic_ns": 37004963254000,
+  "drained_monotonic_ns": 37004963264000,
+  "elapsed_seconds": 0.030415875,
+  "launch_seconds": 0.001094083,
+  "cleanup_seconds": 0.014903542,
+  "drain_after_reap_seconds": 0.014913542,
+  "wait_status": 256,
+  "exit_code": 1,
+  "accounting_error": null,
+  "reap_complete": true,
+  "fallback_waitpid_status": null,
+  "child_ru_maxrss_raw": 12582912,
+  "child_ru_maxrss_unit": "bytes",
+  "child_peak_rss_bytes": 12582912,
+  "child_user_cpu_seconds": 0.020444999999999998,
+  "child_system_cpu_seconds": 0.006396,
+  "samples": [
+    {
+      "monotonic_ns": 37004935879125,
+      "collection_started_monotonic_ns": 37004919187500,
+      "collection_ended_monotonic_ns": 37004935879125,
+      "collection_seconds": 0.016691625,
+      "elapsed_seconds": 0.017944542,
+      "group_rss_bytes": 1753088,
+      "members": [
+        {
+          "pid": 17363,
+          "rss_bytes": 1753088,
+          "state": "Rs"
+        }
+      ]
+    }
+  ],
+  "sample_count": 1,
+  "maximum_sampled_group_rss_bytes": 1753088,
+  "maximum_trace_gap_seconds": 0.017944542,
+  "trace_gap_fault": false,
+  "monitor_errors": [],
+  "pipe_errors": [],
+  "cleanup_complete": true,
+  "cleanup_errors": [],
+  "stop_reason": null,
+  "signal_events": [],
+  "stdout_bytes": 0,
+  "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "stderr_bytes": 546,
+  "stderr_sha256": "d7a0df1f7943c89b458399e7b02b18126e39a65efcf7232f09adb3f9bf4a6064",
+  "stdin_bytes": null,
+  "stdin_sha256": null,
+  "limits": {
+    "timeout_seconds": 120.0,
+    "memory_ceiling_bytes": 4294967296,
+    "sample_interval_seconds": 1,
+    "max_trace_gap_seconds": 5,
+    "cleanup_seconds": 10,
+    "ps_timeout_seconds": 0.5,
+    "output_cap_bytes": 20971520
+  }
+}

@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1",
+  "data": {
+    "campaign": "E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1",
+    "question": "Does one data-only missing-universe-parameter testcase integrate with current Arena metadata/discovery and preserve attributable reject/valid-control outcomes on two retained validators?",
+    "sources": [
+      {
+        "name": "leanprover/lean-kernel-arena",
+        "revision": "8bbe253405b7e6a0b741381ecdf3eae0293d61ba"
+      },
+      {
+        "name": "leanprover/lean4",
+        "revision": "5045d0056413266e57c625dcd7c365b10e377c52"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+      },
+      {
+        "name": "leanprover/lean4export",
+        "revision": "076e8e57707e813375e8f9da8bf989799ace9680"
+      }
+    ],
+    "versions": "Retained offline ARM64 container, UID1001, Lean4.34.1 commit5045d0056413266e57c625dcd7c365b10e377c52, Nanoda3a2407216ee84a75f9e1aead6803d0578be06ae7, compiled lean4export076e8e57707e813375e8f9da8bf989799ace9680 and unchanged raw Replay.lean. Actual tool hashes revalidated. No builds.",
+    "commands": "Exact target lka.py loader/create_test static-file path via discover.py; copy verified produced artifact and control to offline container; run_process.py matrix300 python3 run_matrix.py for four raw checker calls. All argv, exits and streams retained.",
+    "inputs": [
+      "docs/research/E0_ARENA_UNIVERSE_GUARD_INTEGRATION_1_PLAN.md",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/protocol.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.yaml",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/cases.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/prepare.py",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/discover.py",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/run_matrix.py",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/run_process.py",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-revision.txt",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-inventory.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-ownership.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/parameter-source-leads.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-sources.tar.gz",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/target-checker-configs.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/open-prs.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/workspace-path.txt",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/inputs/candidate.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/inputs/candidate.ndjson",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/inputs/control.json",
+      "explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/inputs/control.ndjson",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/Replay.lean"
+    ],
+    "sample": "One candidate copied byte-identically from P1-invalid plus unchanged P1 control, two checkers, four calls. Known-case local integration, not independent fault evidence.",
+    "planned_runs": 4,
+    "controls": "Candidate REJECT for omitted u; control ACCEPT with u declared. Exact type Sort(succ u) and value Sort u shared. Raw importer prints must match both cases before trust0 replay. Nanoda candidate must reach all_uparams_defined assertion in tc.rs:554, not generic failure. After this start, execute the exact target lka.py loader/discovery and create_test static-file path in detached local checkout. Validate its own schema and verify output stats/name/reject/sha256 and copied NDJSON against frozen candidate bytes. Feed produced bytes to checkers only after that equality gate. Current official Arena config is Lean4.34.1. Its current Nanoda config pins e0d76f5, unlike this retained 3a24072 binary; no claim to have run that newer build or the whole Arena checker matrix. Current Nanoda wrapper normalizes any nonzero/non-decline failure to rejection; preserve raw101 and verify its semantic assertion before calling this observed rejection."
+  }
+}
