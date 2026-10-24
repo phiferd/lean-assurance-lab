@@ -40,7 +40,8 @@ class ExternalContributionTests(unittest.TestCase):
             row["upstream"]["state"] if row["upstream"] else row["lifecycle"]
             for row in ledger["contributions"]
         }
-        self.assertEqual(states, {"OPEN", "MERGED", "LOCAL_DRAFT"})
+        self.assertLessEqual({"OPEN", "MERGED", "LOCAL_DRAFT"}, states)
+        self.assertLessEqual(states, {"OPEN", "MERGED", "CLOSED", "LOCAL_DRAFT"})
         cache = next(
             row
             for row in ledger["contributions"]
@@ -66,6 +67,22 @@ class ExternalContributionTests(unittest.TestCase):
         ledger = external_contributions.load_and_validate()
         self.assertFalse(ledger["status_policy"]["network_refresh_is_automatic"])
         self.assertIn("performs no network requests", external_contributions.render(ledger))
+
+    def test_report_on_merged_upstream_pr_does_not_count_as_lab_pr(self):
+        ledger = external_contributions.load_and_validate()
+        merged = copy.deepcopy(next(row for row in ledger["contributions"]
+                                    if row["channel"] == "PULL_REQUEST"
+                                    and row["upstream"]
+                                    and row["upstream"]["state"] == "MERGED"))
+        report = copy.deepcopy(merged)
+        report.update(id="REPORT", channel="COMMENT", title="Lab report on upstream repair")
+        ledger["contributions"] = [merged, report]
+        rendered = external_contributions.render(ledger)
+        self.assertIn("Merged pull requests: **1**", rendered)
+        self.assertIn("Published reports/comments: **1**", rendered)
+        merged_section = rendered.split("## Merged pull requests\n", 1)[1].split("## Published reports", 1)[0]
+        self.assertNotIn(report["title"], merged_section)
+        self.assertIn(report["title"], rendered.split("## Published reports and comments\n", 1)[1])
 
     def test_all_convention_named_pull_request_drafts_are_indexed(self):
         ledger = external_contributions.load_and_validate()

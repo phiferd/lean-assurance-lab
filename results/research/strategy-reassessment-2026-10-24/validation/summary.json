@@ -1,0 +1,71 @@
+{
+  "schema_version": 1,
+  "status": "PASS_WITH_RETAINED_INITIAL_FAILURES",
+  "scientific_launches": 0,
+  "full_payload_command": "scripts/run-unit-tests --require-full-payload",
+  "initial_command_exit_code": 1,
+  "current_tests": 1678,
+  "current_initial_failures": 1,
+  "current_initial_errors": 4,
+  "publication_history_tests": 73,
+  "publication_history_passed": true,
+  "portfolio_history_tests": 14,
+  "portfolio_history_passed": true,
+  "repair": "The host /bin/ps preflight passed outside the sandbox. All tests in the two affected process-control modules then passed unchanged with normal host visibility; no source or gate was weakened.",
+  "focused_reruns": [
+    {
+      "command": "python3 -m unittest discover -s tests -p test_cvc_process.py",
+      "tests": 6,
+      "exit_code": 0
+    },
+    {
+      "command": "python3 -m unittest discover -s tests -p test_metamorphic_supervisor.py",
+      "tests": 8,
+      "exit_code": 0
+    }
+  ],
+  "limits": [
+    "The initial full-payload command failed; this is a composite validation with retained failure and focused rerun evidence, not a claim that the first run passed.",
+    "The cause of the CVC INTERRUPTED-versus-TIMED_OUT outcome was not isolated; the unchanged host-access rerun passed.",
+    "Foreign-checkout portability cannot pass in the original evidence-production directory; local mode passed and the exact delivered CI run must check the foreign checkout."
+  ],
+  "refresh": {
+    "status": "PASS",
+    "commands": 14,
+    "record": "results/research/strategy-reassessment-2026-10-24/validation/refresh/result.json"
+  },
+  "logs": [
+    {
+      "path": "results/research/strategy-reassessment-2026-10-24/validation/full-suite-sandbox.log.gz",
+      "uncompressed_bytes": 230661,
+      "uncompressed_sha256": "912e815600c0ca0891fcd8417e7bb9c00012f4d81d87884eb9f406b142233344"
+    },
+    {
+      "path": "results/research/strategy-reassessment-2026-10-24/validation/portable-foreign-local-rejection.log.gz",
+      "uncompressed_bytes": 516,
+      "uncompressed_sha256": "a97c151ed1ef4ff585af9078fe91f9015613e1c8ee2ae94415d569037739a951"
+    },
+    {
+      "path": "results/research/strategy-reassessment-2026-10-24/validation/portable-local.log.gz",
+      "uncompressed_bytes": 2265,
+      "uncompressed_sha256": "b033befe280d85b83a7d17ae003a87439352b990cf2825bc9357f79dd6e7af05"
+    },
+    {
+      "path": "results/research/strategy-reassessment-2026-10-24/validation/cvc-process-host.log.gz",
+      "uncompressed_bytes": 104,
+      "uncompressed_sha256": "7788603be9bee9ca0e6267063942adcf25b83d63251c90bcd97468b1d664ddfa"
+    },
+    {
+      "path": "results/research/strategy-reassessment-2026-10-24/validation/metamorphic-supervisor-host.log.gz",
+      "uncompressed_bytes": 106,
+      "uncompressed_sha256": "6bc7366913fb247cf9538787f5b1ebe297bd75f51ecf59e0f53b1735a2d19555"
+    }
+  ],
+  "final_checks": {
+    "queue_require_ready": "PASS",
+    "external_view": "PASS",
+    "project_review": "PASS",
+    "artifact_current": "PASS",
+    "diff_check": "PASS"
+  }
+}

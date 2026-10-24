@@ -91,13 +91,18 @@ def external_label(row: dict) -> str:
 
 def render(ledger: dict) -> str:
     rows = ledger["contributions"]
-    open_rows = [row for row in rows if row["upstream"] and row["upstream"]["state"] == "OPEN"]
+    open_rows = [row for row in rows if row["channel"] == "PULL_REQUEST"
+                 and row["upstream"] and row["upstream"]["state"] == "OPEN"]
     draft_rows = [row for row in rows if row["lifecycle"] == "LOCAL_DRAFT"]
-    merged_rows = [row for row in rows if row["upstream"] and row["upstream"]["state"] == "MERGED"]
+    merged_rows = [row for row in rows if row["channel"] == "PULL_REQUEST"
+                   and row["upstream"] and row["upstream"]["state"] == "MERGED"]
+    report_rows = [row for row in rows if row["channel"] != "PULL_REQUEST"
+                   and row["upstream"]]
     other_rows = [
         row
         for row in rows
-        if row not in open_rows and row not in draft_rows and row not in merged_rows
+        if row not in open_rows and row not in draft_rows
+        and row not in merged_rows and row not in report_rows
     ]
 
     lines = [
@@ -113,9 +118,10 @@ def render(ledger: dict) -> str:
         "",
         "## At a glance",
         "",
-        f"- Awaiting upstream: **{len(open_rows)}**",
+        f"- Open pull requests: **{len(open_rows)}**",
         f"- Local drafts: **{len(draft_rows)}**",
-        f"- Merged: **{len(merged_rows)}**",
+        f"- Merged pull requests: **{len(merged_rows)}**",
+        f"- Published reports/comments: **{len(report_rows)}**",
         "",
     ]
 
@@ -156,7 +162,7 @@ def render(ledger: dict) -> str:
 
     if merged_rows:
         lines += [
-            "## Merged",
+            "## Merged pull requests",
             "",
             "| Contribution | Repository | Merged | Evidence |",
             "|---|---|---|---|",
@@ -166,6 +172,21 @@ def render(ledger: dict) -> str:
             lines.append(
                 f"| {external_label(row)} | `{row['target_repository']}` | "
                 f"{row['upstream']['merged_at']} | {evidence} |"
+            )
+        lines.append("")
+
+    if report_rows:
+        lines += [
+            "## Published reports and comments", "",
+            "These entries track Lab reports on upstream work, not Lab-authored pull requests.", "",
+            "| Report | Observed | Linked upstream state | Next step |",
+            "|---|---|---|---|",
+        ]
+        for row in report_rows:
+            upstream = row["upstream"]
+            lines.append(
+                f"| {external_label(row)} | {upstream['observed_on']} | "
+                f"{upstream['state'].lower()} | {row['next_step']['summary']} |"
             )
         lines.append("")
 

@@ -6,7 +6,32 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-21
+## Current selection — 2026-10-24
+
+Upstream merged the Lean repair and two reported Nanoda recursor fixes, but the
+Lab has not replayed the merged Lean witness. Yes, this verification gap and the
+historical fault mechanisms have higher expected information value than another
+confirmation of expected universe rejection. First select
+`LEAN-ETA-MERGED-REPLAY-1` READY for preparation under
+[its plan](LEAN_ETA_MERGED_REPLAY_1_PLAN.md), unstarted. The exact merged target
+and original reviewed negative pair already exist; fresh launch gates remain.
+
+`E0-RECURSOR-HISTORICAL-GAP-1` and `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` are PLANNED
+under the [prospective method/transfer plan](RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md).
+Freeze earlier assets before screening known faults; do not claim blind discovery
+or use witness-informed detectors as historical capability. New checker diversity
+does not waive independent holdout custody. `CONFIRM-ARENA-UNIVERSE-GUARD-1` is
+DEFERRED and unstarted pending current source coverage and concrete consumer
+benefit. No claim of redundancy, maintainer demand or current compatibility.
+
+The [dated reassessment](../../results/research/strategy-reassessment-2026-10-24/report.md)
+corrects contribution states and upstream identities. This is maintenance and
+selection, with no E0 trial, new tooling or assurance milestone. Use affected
+generation/queue checks and applicable repository tests; do not create fictitious
+screen evidence. Stop before starting the selected replay. Earlier selections
+remain dated historical context and do not authorize current execution.
+
+## Prior selection — 2026-10-21
 
 `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` is COMPLETE. Arena's pinned
 Nanoda build/settings reject the candidate at the intended parameter guard and

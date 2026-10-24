@@ -1,0 +1,17 @@
+{
+  "observations": [
+    {
+      "command": "python3 -m unittest tests.test_external_contributions tests.test_project_review_contribution_observations tests.test_research_queue_v4",
+      "exit_code": 1,
+      "failure": "Three ModuleNotFoundError errors: tests is not an importable package. No tests ran.",
+      "repair": "Use unittest discover or the canonical scripts/run-unit-tests runner.",
+      "affected_recheck": "python3 -m unittest discover -s tests -p test_external_contributions.py: six tests passed."
+    },
+    {
+      "command": "scripts/artifact-status --require-current",
+      "exit_code": 1,
+      "failure": "Current derived graph was stale before regeneration; no semantic result inferred.",
+      "repair": "Run the canonical refresh dependency chain after final source changes."
+    }
+  ]
+}

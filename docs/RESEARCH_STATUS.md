@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-21
+Last updated: 2026-10-24
 
 ## How Status Is Tracked
 
@@ -57,6 +57,14 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `STRATEGY-REASSESSMENT-2026-10-24` corrects two outdated contribution states
+  and indexes three previously omitted published contributions. Upstream confirms
+  the Lean repair and two Nanoda recursor fixes merged; no local witness was
+  replayed. Yes, this changes priorities toward concrete incorrect-acceptance
+  boundaries. The merged-Lean replay is READY and unstarted; the historical
+  recursor audit and new-checker transfer are PLANNED, and universe confirmation
+  is DEFERRED. See the [assessment](../results/research/strategy-reassessment-2026-10-24/report.md).
 
 - `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` completes with E0 NO_SIGNAL
   for unexpected validity behavior. The configured Nanoda rejects the missing
@@ -3375,9 +3383,21 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `CONFIRM-ARENA-UNIVERSE-GUARD-1`.
+Selected next item: `LEAN-ETA-MERGED-REPLAY-1`.
 Queue handoff: EXECUTABLE.
 The canonical queue retains one READY item and zero ACTIVE items.
+
+The October 24 reassessment confirms merged upstream repairs and corrects the
+contribution index; no new checker result is claimed. This is interesting
+because the original Lean acceptance witness still lacks a post-merge replay,
+and two independent Nanoda recursor reports offer stronger method tests.
+Select the [merged-Lean replay](research/LEAN_ETA_MERGED_REPLAY_1_PLAN.md) READY
+for preparation and unstarted. Then reconsider the
+[historical recursor audit and new-checker transfer](research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md),
+both PLANNED. Universe confirmation is DEFERRED until a current coverage and
+consumer-value assessment justifies further E1 work. Existing holdout and
+milestone gates remain unchanged. The [dated assessment](../results/research/strategy-reassessment-2026-10-24/report.md)
+distinguishes independently reported faults from a blind test of our methods.
 
 The one-endpoint Comparator screen is COMPLETE: the actual clean endpoint passed
 Lean and Nanoda, and the added LAL check passed that baseline while rejecting all
@@ -3414,11 +3434,9 @@ the control. One logging-only replay confirms one checked declaration with no
 typechecking errors and a separate pretty-printer warning. Three checker calls,
 one offline build and all setup/audit repairs are retained. The candidate remains
 local; no broader correctness or submission-readiness claim follows.
-Select [contribution confirmation](research/CONFIRM_ARENA_UNIVERSE_GUARD_1_PLAN.md)
-READY for preparation, unstarted. Independently review this fixed contract and
-obtain four fresh E1 cells before applying the existing contribution gates.
-No new model, case family or framework. Independent transfer remains WAITING
-on its own inputs; exact-target submission authorization still applies.
+The October 21 selection of contribution confirmation is superseded by the
+October 24 reassessment. Its plan and candidate remain preserved, DEFERRED and
+unstarted; no E1 execution or external submission follows from the E0 result.
 
 Kernel/validator conformance and verification-pipeline integrity remain the
 focus; mathematical-meaning fidelity stays a separate deferred direction.
@@ -3427,7 +3445,7 @@ authorization gates. Build-mode conformance remains PLANNED with its rejected
 three-profile premise retained; a narrower comparison still needs a property
 and suitable fixture. Agent retrieval requires a concrete witness bottleneck;
 memory accounting still lacks a named decision dependency. The
-[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-21)
+[current frontier selection](research/DISCOVERY_AND_CONFORMANCE_PLAN.md#current-selection--2026-10-24)
 supersedes earlier next-item and pause wording without changing their evidence.
 
 The Tree2 continuation is stopped as of 2026-10-01.
@@ -3749,7 +3767,11 @@ no external action is recommended now.
 | 104 | `E0-UNIVERSE-CORPUS-REUSE-1` | COMPLETE; one useful shared-test gap, no checker runs |
 | 105 | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1` | COMPLETE; local candidate, four expected outcomes |
 | 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | COMPLETE; two configured cells plus logging-only control |
-| 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | READY for preparation; independent contract review and fresh E1 replay |
+| 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | DEFERRED; current coverage and consumer benefit must justify E1 |
+| 108 | `STRATEGY-REASSESSMENT-2026-10-24` | COMPLETE; corrected adoption and priority records |
+| 109 | `LEAN-ETA-MERGED-REPLAY-1` | READY for preparation; no fresh replay yet |
+| 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and faulty/fixed targets |
+| 111 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

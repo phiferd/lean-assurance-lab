@@ -4,24 +4,24 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-10-21**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-10-24**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
-- Awaiting upstream: **6**
+- Open pull requests: **5**
 - Local drafts: **9**
-- Merged: **4**
+- Merged pull requests: **5**
+- Published reports/comments: **1**
 
 ## Awaiting upstream
 
 | Contribution | Repository | Observed | Review/checks | Next step |
 |---|---|---|---|---|
-| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-09-19 | no activity; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
-| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-09-30 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
-| [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-10-02 | no activity; not reported | PR#11 remains open and is incorporated in maintainer draft PR#12. Retain the prepared CLI-verdict regression for maintainer review; any external modification requires exact authorization. |
-| [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-02 | no activity; not reported | Await maintainer review of the draft stacked on PR#12. Any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
-| [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-03 | no activity; not reported | Await maintainer review of the modest draft stacked on PR#12. Do not pursue further small CLI polish; any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
-| [test: cover projection type names in def_eq](https://github.com/ammkrn/nanoda_lib/pull/43) | `ammkrn/nanoda_lib` | 2026-10-04 | unknown; not reported | Await maintainer review of the draft. Any later PR modification, comment, ready-for-review transition, rebase, or other external action requires exact authorization. |
+| [Test declaration checking for omitted and zero thread counts](https://github.com/ammkrn/nanoda_lib/pull/32) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await maintainer review; do not file a duplicate issue or pull request. |
+| [test: make native literal hash assertions non-vacuous](https://github.com/ammkrn/nanoda_lib/pull/33) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await maintainer review before proposing another independent Nanoda contribution. |
+| [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
+| [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
+| [Fix/quoted declaration names](https://github.com/ammkrn/nanoda_lib/pull/42) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await review; open PR #38 is an external dependency by another contributor. Any rebase or update requires exact authorization. |
 
 ## Local drafts
 
@@ -35,9 +35,9 @@ Ledger updated: **2026-10-21**. Upstream states are dated observations, not a li
 | [Historical draft: reconstruct imported inductive recursor types](../results/action-recommendations/drafts/kiota-recursor-type-reconstruction-pr.md) | `sankalpsthakur/kiota` | `KIOTA-RECURSOR-TYPE-REPAIR-1` | — | Preserved historical draft; superseded for submission by KIOTA-RECURSOR-TYPE-REFINED-PR-DRAFT. |
 | [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/closure/pr192-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/closure/pr191-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
-| [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`, `CONFIRM-ARENA-UNIVERSE-GUARD-1` | — | Current-configured Nanoda compatibility is complete. The selected CONFIRM-ARENA-UNIVERSE-GUARD-1 remains READY for preparation: independent contract/patch review and four fresh E1 cells. Apply existing contribution gates before submission; require fresh target/duplicate preflight and exact human authorization. No external write. |
+| [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`, `CONFIRM-ARENA-UNIVERSE-GUARD-1` | — | Confirmation is DEFERRED and unstarted after the October 24 reassessment. Reopen only after current source coverage and a concrete consumer benefit justify further E1 work; preserve the candidate. Any submission requires its existing gates and exact authorization. |
 
-## Merged
+## Merged pull requests
 
 | Contribution | Repository | Merged | Evidence |
 |---|---|---|---|
@@ -45,6 +45,20 @@ Ledger updated: **2026-10-21**. Upstream states are dated observations, not a li
 | [Add reducible-argument positivity corner case](https://github.com/leanprover/lean-kernel-arena/pull/181) | `leanprover/lean-kernel-arena` | 2026-09-06T04:56:34Z | [record](../results/investigations/corpus-integration-2026-09-05/external-actions.json) |
 | [Add proof-parameter order characterization pair](https://github.com/leanprover/lean-kernel-arena/pull/182) | `leanprover/lean-kernel-arena` | 2026-09-05T21:37:44Z | [record](../results/investigations/corpus-integration-2026-09-05/external-actions.json) |
 | [Add a let annotation/substitution corner case](https://github.com/leanprover/lean-kernel-arena/pull/206) | `leanprover/lean-kernel-arena` | 2026-09-14T12:27:45Z | [record](../results/research/arena-let-policy-followup-1/report.md) |
+| [fix: reconstruct imported inductive recursor types](https://github.com/sankalpsthakur/kiota/pull/11) | `sankalpsthakur/kiota` | 2026-10-07T01:45:21Z | [record](../docs/research/KIOTA_RECURSOR_PR_REFINEMENT_1_PLAN.md) |
+
+## Published reports and comments
+
+These entries track Lab reports on upstream work, not Lab-authored pull requests.
+
+| Report | Observed | Linked upstream state | Next step |
+|---|---|---|---|
+| [Reported alias-domain admission regression in Lean PR #15373](https://github.com/leanprover/lean4/pull/15373) | 2026-10-24 | merged | The Lab report was acknowledged and its parent PR merged October 20. Run the separately selected local merged-revision replay; no new upstream communication is selected. |
+
+## Other dispositions
+
+- `NANODA-PR-43`: Closed without merge on 2026-10-10; retain the local regression. Comments raised clarity concerns. Do not reopen or resubmit automatically.
+- `NANODA-PR-41`: Closed without merge on 2026-10-10. Retain the test and improve plain-language explanations; do not reopen or resubmit automatically.
 
 ## Maintenance contract
 

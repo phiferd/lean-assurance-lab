@@ -20,13 +20,13 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete CONFIRM-ARENA-UNIVERSE-GUARD-1: Confirm one shared universe-parameter rejection testcase; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete LEAN-ETA-MERGED-REPLAY-1: Replay the original admission witness on merged Lean; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **CONFIRM-ARENA-UNIVERSE-GUARD-1**.
+Selected next item: **LEAN-ETA-MERGED-REPLAY-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -39,7 +39,10 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 69 | TRANSFER-HOLDOUT-INTAKE-1: Audit a supplied independent transfer input package | WAITING |
 | 82 | E0-LAZYLEAN-DATA-RECURSOR-1: Screen data recursors without the singleton proof shortcut | DEFERRED |
 | 97 | RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1: Audit short-process memory accounting | DEFERRED |
-| 107 | CONFIRM-ARENA-UNIVERSE-GUARD-1: Confirm one shared universe-parameter rejection testcase | READY |
+| 107 | CONFIRM-ARENA-UNIVERSE-GUARD-1: Confirm one shared universe-parameter rejection testcase | DEFERRED |
+| 109 | LEAN-ETA-MERGED-REPLAY-1: Replay the original admission witness on merged Lean | READY |
+| 110 | E0-RECURSOR-HISTORICAL-GAP-1: Measure pre-disclosure coverage of two historical recursor faults | PLANNED |
+| 111 | E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir | PLANNED |
 
 ### 14. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
@@ -159,7 +162,7 @@ Read-only audit of receipt labels and raw/normalized wait4 fields, supervisor so
 
 Independently review the fixed contract/patch, freeze a separate E1 protocol, then execute four fresh known-case cells and apply the existing contribution gates to the scoped recommendation.
 
-**Why this rank:** The two E0 integrations now resolve metadata and current-profile feasibility. A bounded independent review/fresh replay for this named shared asset has more concrete utility than new toy cases, a duplicate framework or another blocked holdout search.
+**Why this rank:** Expected information gain from another known-case replay is lower than the merged Lean verification gap and historical recursor-method audit. Preserve the useful local candidate without launching E1.
 
 **Completion:** Independently reviewed fixed testcase contract, four fresh attributed cells, retained minimal patch and a concrete gated contribution recommendation, or an evidence-bound no-go after feasible repair.
 
@@ -167,7 +170,55 @@ Independently review the fixed contract/patch, freeze a separate E1 protocol, th
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY for preparation under docs/research/CONFIRM_ARENA_UNIVERSE_GUARD_1_PLAN.md. Independent rule/patch expectations and exact separate E1 input/source/tooling/configuration protocol must pass before fresh launches. E0 rows are never confirmation cells.
+**Boundary:** DEFERRED: DEFERRED and unstarted. Current coverage/consumer-value assessment and explicit canonical reselection precede the unchanged independent contract and fresh E1 launch gates.
+
+### 109. LEAN-ETA-MERGED-REPLAY-1: Replay the original admission witness on merged Lean
+
+**Target:** Lean merge 7632b2cf35e51ec5d92d9cdd86296a8481dcb01e and preserved alias/explicit negatives plus valid controls
+
+Bind exact merged runtime and separate E1 inputs, then freshly replay the original witness and controls.
+
+**Why this rank:** Highest-value feasible next item: exact merged target and independently reviewed witness already exist.
+
+**Completion:** Fresh scoped repair verdict, raw attempts, dated reader companion and updated tracking.
+
+**Stop:** Answer the fixed question, owner stop, invalidated scientific input, or required authority/capability unavailable after feasible repair. No attempt caps or external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** READY: READY for preparation under docs/research/LEAN_ETA_MERGED_REPLAY_1_PLAN.md; fresh immutable protocol/runtime identities and any required changed-input review must pass before launch.
+
+### 110. E0-RECURSOR-HISTORICAL-GAP-1: Measure pre-disclosure coverage of two historical recursor faults
+
+**Target:** Nanoda #60/#63 and #64/#65; unchanged pre-disclosure Lab assets at 3a116a7
+
+Freeze earlier detector inventory and selection rules, bind faulty/fixed versions, and screen each fault without importing published witness bytes.
+
+**Why this rank:** Preferred research direction after the bounded Lean replay; direct false acceptance matters more than more expected universe outcomes.
+
+**Completion:** Two source-attributed frozen-asset dispositions with raw evidence and one gap/generalization recommendation, without blind-holdout or detection-rate claims.
+
+**Stop:** Answer the fixed question, owner stop, invalidated scientific input, or required authority/capability unavailable after feasible repair. No attempt caps or external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md; canonical selection, exact pre-disclosure inventory, compatible source/runtime profiles, expectations, exposure record and E0 registration precede execution.
+
+### 111. E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir
+
+**Target:** Pinned Arena Pestka/Kefir configurations and a separately selected imported-recursor invariant
+
+Check supported fragment and source reuse, then freeze invalid/valid pairs with an independent semantic oracle before a bounded E0 screen.
+
+**Why this rank:** Promising after the historical audit selects a nonduplicate boundary; new integrations alone do not satisfy holdout custody.
+
+**Completion:** One bounded transfer result or explicit unsupported boundary; existing holdout intake remains separate.
+
+**Stop:** Answer the fixed question, owner stop, invalidated scientific input, or required authority/capability unavailable after feasible repair. No attempt caps or external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md; require concrete new boundary, working pinned recipes, independent expected-result evidence and canonical selection before launch.
 
 ## Autonomous workflow
 
@@ -210,6 +261,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1, CONFIRM-LEAN-ETA-ADMISSION-1, E0-TEST-EFFECTIVENESS-CAMPAIGN-1, E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1, E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1, E0-COMPARATOR-CONSUMER-SCREEN-1, E0-SYMBOLIC-UNIVERSE-SCREEN-1, E0-SYMBOLIC-UNIVERSE-REJECTION-1, E0-UNIVERSE-CORPUS-REUSE-1, E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1, E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1. Selected next item: CONFIRM-ARENA-UNIVERSE-GUARD-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1, CONFIRM-LEAN-ETA-ADMISSION-1, E0-TEST-EFFECTIVENESS-CAMPAIGN-1, E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1, E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1, E0-COMPARATOR-CONSUMER-SCREEN-1, E0-SYMBOLIC-UNIVERSE-SCREEN-1, E0-SYMBOLIC-UNIVERSE-REJECTION-1, E0-UNIVERSE-CORPUS-REUSE-1, E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1, E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1, STRATEGY-REASSESSMENT-2026-10-24. Selected next item: LEAN-ETA-MERGED-REPLAY-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.
