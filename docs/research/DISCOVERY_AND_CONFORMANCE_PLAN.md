@@ -16,11 +16,14 @@ confirmation of expected universe rejection. First select
 [its plan](LEAN_ETA_MERGED_REPLAY_1_PLAN.md), unstarted. The exact merged target
 and original reviewed negative pair already exist; fresh launch gates remain.
 
-`E0-RECURSOR-HISTORICAL-GAP-1` and `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` are PLANNED
-under the [prospective method/transfer plan](RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md).
-Freeze earlier assets before screening known faults; do not claim blind discovery
-or use witness-informed detectors as historical capability. New checker diversity
-does not waive independent holdout custody. `CONFIRM-ARENA-UNIVERSE-GUARD-1` is
+The [dated historical companion](../../results/research/strategy-reassessment-2026-10-24/recursor-history-companion.md)
+finds earlier imported-metadata mutations but no demonstrated field-count or
+placement coverage. Under the [defensive successor plan](RECURSOR_TRUST_BOUNDARY_PLAN_2026_10_24.md),
+`E0-RECURSOR-HISTORICAL-GAP-1`, `E0-RECURSOR-BOUNDARY-MUTATION-1` and
+`E0-NEW-CHECKER-RECURSOR-TRANSFER-1` are PLANNED. First measure unchanged earlier
+capability; then keep informed defensive development separate from historical
+credit; finally select one distinct supported cross-checker boundary. New checker
+diversity does not waive independent holdout custody. `CONFIRM-ARENA-UNIVERSE-GUARD-1` is
 DEFERRED and unstarted pending current source coverage and concrete consumer
 benefit. No claim of redundancy, maintainer demand or current compatibility.
 

@@ -42,7 +42,8 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 107 | CONFIRM-ARENA-UNIVERSE-GUARD-1: Confirm one shared universe-parameter rejection testcase | DEFERRED |
 | 109 | LEAN-ETA-MERGED-REPLAY-1: Replay the original admission witness on merged Lean | READY |
 | 110 | E0-RECURSOR-HISTORICAL-GAP-1: Measure pre-disclosure coverage of two historical recursor faults | PLANNED |
-| 111 | E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir | PLANNED |
+| 111 | E0-RECURSOR-BOUNDARY-MUTATION-1: Develop defensive imported-metadata validation cases | PLANNED |
+| 112 | E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir | PLANNED |
 
 ### 14. BUILD-MODE-CONFORMANCE-PILOT-1: Compare checking behavior across build configurations
 
@@ -192,7 +193,7 @@ Bind exact merged runtime and separate E1 inputs, then freshly replay the origin
 
 **Target:** Nanoda #60/#63 and #64/#65; unchanged pre-disclosure Lab assets at 3a116a7
 
-Freeze earlier detector inventory and selection rules, bind faulty/fixed versions, and screen each fault without importing published witness bytes.
+Freeze earlier validation inventory and selection rules, bind pre-repair/repaired versions, and measure defensive regression coverage without importing published reproduction inputs.
 
 **Why this rank:** Preferred research direction after the bounded Lean replay; direct false acceptance matters more than more expected universe outcomes.
 
@@ -202,9 +203,25 @@ Freeze earlier detector inventory and selection rules, bind faulty/fixed version
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md; canonical selection, exact pre-disclosure inventory, compatible source/runtime profiles, expectations, exposure record and E0 registration precede execution.
+**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_TRUST_BOUNDARY_PLAN_2026_10_24.md; canonical selection, exact pre-disclosure inventory, compatible source/runtime profiles, expectations, exposure record and E0 registration precede execution.
 
-### 111. E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir
+### 111. E0-RECURSOR-BOUNDARY-MUTATION-1: Develop defensive imported-metadata validation cases
+
+**Target:** Pinned pre-repair and repaired Nanoda revisions with valid historical export seeds
+
+Freeze source-grounded metadata-integrity transformations and verify that expected rejection is independently justified and restored by the repairs.
+
+**Why this rank:** The historical inventory must first distinguish earlier capability from gaps; informed defensive development then tests the general trust-boundary hypothesis before wider transfer.
+
+**Completion:** One bounded pre-repair/repaired validation result with retained attempts, source-attributed coverage and no claim of blind or independent discovery.
+
+**Stop:** Answer the fixed defensive validation question, owner stop, invalidated scientific input, or required authority/capability unavailable after feasible repair. No attempt caps or external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_TRUST_BOUNDARY_PLAN_2026_10_24.md; require canonical selection, a pinned source inventory, frozen transformations and seeds, independently justified expectations, valid controls and E0 registration before execution.
+
+### 112. E0-NEW-CHECKER-RECURSOR-TRANSFER-1: Screen one new semantic boundary with Pestka and Kefir
 
 **Target:** Pinned Arena Pestka/Kefir configurations and a separately selected imported-recursor invariant
 
@@ -218,7 +235,7 @@ Check supported fragment and source reuse, then freeze invalid/valid pairs with 
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md; require concrete new boundary, working pinned recipes, independent expected-result evidence and canonical selection before launch.
+**Boundary:** PLANNED: PLANNED under docs/research/RECURSOR_TRUST_BOUNDARY_PLAN_2026_10_24.md; require concrete new boundary, working pinned recipes, independent expected-result evidence and canonical selection before launch.
 
 ## Autonomous workflow
 

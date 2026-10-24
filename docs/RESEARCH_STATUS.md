@@ -3393,8 +3393,13 @@ because the original Lean acceptance witness still lacks a post-merge replay,
 and two independent Nanoda recursor reports offer stronger method tests.
 Select the [merged-Lean replay](research/LEAN_ETA_MERGED_REPLAY_1_PLAN.md) READY
 for preparation and unstarted. Then reconsider the
-[historical recursor audit and new-checker transfer](research/RECURSOR_HISTORICAL_GAP_AND_TRANSFER_PLAN.md),
-both PLANNED. Universe confirmation is DEFERRED until a current coverage and
+[defensive recursor work](research/RECURSOR_TRUST_BOUNDARY_PLAN_2026_10_24.md):
+historical capability, informed metadata-integrity validation and one distinct
+cross-checker transfer are PLANNED and separate. A
+[dated companion](../results/research/strategy-reassessment-2026-10-24/recursor-history-companion.md)
+records that earlier work already mutated several imported fields, while no
+reviewed record demonstrates field-count or declaration-placement coverage.
+Universe confirmation is DEFERRED until a current coverage and
 consumer-value assessment justifies further E1 work. Existing holdout and
 milestone gates remain unchanged. The [dated assessment](../results/research/strategy-reassessment-2026-10-24/report.md)
 distinguishes independently reported faults from a blind test of our methods.
@@ -3770,8 +3775,9 @@ no external action is recommended now.
 | 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | DEFERRED; current coverage and consumer benefit must justify E1 |
 | 108 | `STRATEGY-REASSESSMENT-2026-10-24` | COMPLETE; corrected adoption and priority records |
 | 109 | `LEAN-ETA-MERGED-REPLAY-1` | READY for preparation; no fresh replay yet |
-| 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and faulty/fixed targets |
-| 111 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
+| 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and pre-repair/repaired targets |
+| 111 | `E0-RECURSOR-BOUNDARY-MUTATION-1` | PLANNED; develop source-grounded defensive validation cases |
+| 112 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
