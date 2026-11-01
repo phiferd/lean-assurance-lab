@@ -1,0 +1,21 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-KEFIR-RECURSOR-TRANSFER-1",
+  "data": {
+    "campaign": "E0-NEW-CHECKER-RECURSOR-TRANSFER-1",
+    "question": "Does exact-source Kefir protect a restored auxiliary recursor's rule-to-constructor ownership relation while accepting an unchanged nested export and an independent whole-block reorder?",
+    "sources": [
+      {"name":"lean-assurance-lab","revision":"cc7835f58749ea42cb964ca251c78b44eb81cf85"},
+      {"name":"lean-kernel-arena","revision":"87190f9c4f956a42553e37c78a2a7a9a4f4709e9"},
+      {"name":"kefir","revision":"e05e1b0d731b1677c32ee6a777ec66877c61287b"}
+    ],
+    "versions": "Kefir 0.1.0 exact-source native release build; rustc 1.99.0; lean4export input format 3.1.0",
+    "commands": "python3 explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/run-trial.py; the runner verifies frozen hashes, supplies each file through Kefir's IN contract, applies 30s/4GiB process limits, and retains JSON verdicts and receipts.",
+    "inputs": ["explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/protocol.json","explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/source-review.json","explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixture-audit.json"],
+    "sample": "Three fixed cells on one exact checker: unchanged control, valid whole-block reorder, and a one-record restored-rule constructor-association candidate.",
+    "planned_runs": 3,
+    "controls": "Both valid files must accept. The candidate changes only LALNest.rec_1 rules[0].ctor from LALWrap.mk to unrelated earlier LALMarker.mark. Attributed reject is coverage signal; decline is inconclusive; acceptance requires source evidence of safe reconstruction before any soundness interpretation."
+  }
+}

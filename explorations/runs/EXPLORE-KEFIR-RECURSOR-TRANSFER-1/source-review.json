@@ -1,0 +1,17 @@
+{
+  "schema_version": 1,
+  "arena_revision": "87190f9c4f956a42553e37c78a2a7a9a4f4709e9",
+  "kefir_revision": "e05e1b0d731b1677c32ee6a777ec66877c61287b",
+  "supported_format": "lean4export 3.1.0",
+  "supported_fragment": "The unchanged and valid-reorder 335-record nested-inductive exports completed setup smoke checks with outcome accept and ten checked declarations. These smoke checks are not scientific cells.",
+  "selected_boundary": "A restored auxiliary recursor rule must retain the constructor association of the previously validated container family. The candidate changes only LALNest.rec_1 rule constructor from LALWrap.mk to the earlier, unrelated LALMarker.mark.",
+  "source_obligation": "source/nested.rs lines 151-168 loads the prior family, requires equal rule count, and compares each known constructor and field count with the restored rule before commit.",
+  "safe_reconstruction_contract": "Kefir documents that it re-derives inductive types and recursors rather than trusting the export. Candidate acceptance would require source-attributed proof that the serialized mismatch is ignored and the downstream theorem is checked against safely reconstructed metadata; checker agreement alone would not establish this.",
+  "arena_overlap_review": {
+    "scope": "The 170 test definitions at the pinned Arena revision were searched for recursor, nested recursor, rule constructor and constructor ownership descriptions.",
+    "related_cases": ["bugs/nat-rec-rules", "bugs/nested-rec-rule-nfields", "bugs/orphan-rec", "other/extra-rec", "other/orphan-ctor"],
+    "exact_case_found": false,
+    "limit": "This is a narrow checked-in test-definition review, not a global literature absence claim."
+  },
+  "pestka_disposition": "Not launched. One supported checker is sufficient for the bounded question; Kefir has the clearer source-level restored-recursion association obligation and machine-readable verdicts."
+}

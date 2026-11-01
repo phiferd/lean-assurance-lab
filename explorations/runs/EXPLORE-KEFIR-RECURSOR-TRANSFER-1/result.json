@@ -1,0 +1,27 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "item_id": "E0-NEW-CHECKER-RECURSOR-TRANSFER-1",
+  "outcome": "INCONCLUSIVE",
+  "scientific_cells": 3,
+  "controls_passed": 2,
+  "candidate": {
+    "outcome": "decline",
+    "code": "support.semantic",
+    "exit_code": 2,
+    "checked_declarations": 2,
+    "location": {"record": 119, "declaration": 3},
+    "timed_out": false
+  },
+  "finding": "Kefir accepted both valid controls and declined the malformed restored-recursor constructor-association case at the exact changed inductive record. This is safe non-acceptance, but Kefir explicitly defines decline as making no proof-validity claim, so the experiment does not establish semantic rejection or a checker defect.",
+  "source_interpretation": "The pinned source checks restored recursor rules against prior constructor associations before commit. The observed support.semantic decline at record 119 is consistent with that path, but the public verdict does not attribute the decline to a semantic rejection rule.",
+  "semantic_oracle": "LALNest.rec_1 must associate its restored rule with LALWrap.mk. The candidate names unrelated LALMarker.mark while retaining the downstream LALWrap.mk iota equality theorem. Rejection or explicitly evidenced safe reconstruction would answer the transfer question; decline remains inconclusive.",
+  "limitations": [
+    "One exact Kefir revision and three fixed format-3.1.0 files were tested; Pestka was not launched.",
+    "The candidate was informed by prior recursor work and provides no independent discovery credit.",
+    "No claim is made that support.semantic is equivalent to semantic rejection.",
+    "The checked-in Arena inventory review was narrow and does not prove global novelty.",
+    "No production checker source was changed."
+  ],
+  "publication": "BLOCKED_BY_EXISTING_GATE_8_PAYLOAD_ABSENCE"
+}

@@ -1,0 +1,23 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "item_id": "E0-RECURSOR-BOUNDARY-MUTATION-1",
+  "outcome": "SIGNAL",
+  "scientific_cells": 6,
+  "controls_passed": 4,
+  "candidate": {
+    "faulty_revision": {"exit_code": 0, "observation": "Checked 24 declarations with no typechecker errors"},
+    "repaired_revision": {"exit_code": 1, "observation": "invalid inductive block at line 119: recursor 17 must list exactly the block's types without duplicates"}
+  },
+  "finding": "The informed cross-block transformation exposed the repaired block-ownership guard. The pre-repair checker admitted the misplaced restored auxiliary recursor and the downstream iota equality theorem; the repaired checker rejected the candidate at the independently predicted ownership relation. Both checkers accepted the unchanged export and the relationship-preserving whole-block reorder.",
+  "semantic_oracle": "The candidate's LALMarker block contains LALNest.rec_1 whose all list names LALNest, while the block's only type is LALMarker. The unchanged controls keep every recursor's all list equal to its block type set. The exported LALNest.auxConsumer_iota theorem uses LALNest.rec_1 on LALWrap.mk and closes by rfl to 11.",
+  "fixture_audit": "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixture-audit.json",
+  "limitations": [
+    "This is informed prospective defensive validation against a known repaired target, not historical or independent discovery.",
+    "The binaries were newly built from the exact source revisions; they are not claimed to be byte-identical historical executables.",
+    "Accepted cells reported one pretty-printer axioms warning after successful type checking.",
+    "Pre-registration setup smoke runs are excluded from the scientific result and disclosed in protocol.json.",
+    "The result establishes this bounded ownership and downstream-consumer case, not general checker soundness."
+  ],
+  "publication": "BLOCKED_BY_EXISTING_GATE_8_PAYLOAD_ABSENCE"
+}

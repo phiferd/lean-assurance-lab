@@ -1,0 +1,22 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-NANODA-RECURSOR-BOUNDARY-1",
+  "data": {
+    "campaign": "E0-RECURSOR-BOUNDARY-MUTATION-1",
+    "question": "Does an informed cross-block restored-recursor placement transformation expose the Nanoda #64 validation gap while an unchanged control and relationship-preserving whole-block reorder remain valid, with a downstream iota equality consumer?",
+    "sources": [
+      {"name":"lean-assurance-lab","revision":"eb254f49771c6a3220ff70af803d65957184f0ee"},
+      {"name":"nanoda faulty #64","revision":"8199c74c8166dc1fff1be3b4bd144cb725268628"},
+      {"name":"nanoda repaired #64","revision":"a3ef25a863f689d339277090588599dceb741149"},
+      {"name":"lean4export","revision":"6f4e21dd70c3c11d7fbd07d39e3192792c657448"}
+    ],
+    "versions": "Lean 4.29.1 f72c35b3; lean4export 3.1.0; rustc 1.99.0; newly rebuilt exact-source binaries, not historical binary bytes",
+    "commands": "python3 explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/run-trial.py; the runner verifies all frozen hashes, applies 30s/2GiB limits, and records exact argv, outputs and receipts for six cells.",
+    "inputs": ["explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/protocol.json","explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/control.ndjson","explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/valid-reorder.ndjson","explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/cross-block-candidate.ndjson"],
+    "sample": "Six fixed cells: three fixtures on the exact faulty and repaired source revisions. This is informed prospective assurance, not historical discovery.",
+    "planned_runs": 6,
+    "controls": "Both versions must accept the unchanged export and whole-block reorder. Signal requires faulty acceptance of the candidate, repaired rejection specifically at block ownership, and the retained exported iota theorem in every accepted file. Crashes, timeouts, build failures or control failures are inconclusive."
+  }
+}

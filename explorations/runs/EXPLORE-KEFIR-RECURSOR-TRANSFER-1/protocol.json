@@ -1,0 +1,25 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "item_id": "E0-NEW-CHECKER-RECURSOR-TRANSFER-1",
+  "trial_id": "EXPLORE-KEFIR-RECURSOR-TRANSFER-1",
+  "scope": "One prospective Kefir transfer cell plus two valid controls; no Pestka launch, whole-Arena run, production checker change or discovery claim.",
+  "binary": "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/kefir.bin",
+  "input_sha256": {
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/control.ndjson": "af3074a613e7ac17a426dc3a62bff37a429bb0611e0a6040eac3811acee13497",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/valid-reorder.ndjson": "3780e39dff1d0fc64715d7b1c972cbffccef7e7102da7ecd6f1178d74e21a2d9",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/rule-owner-candidate.ndjson": "146054194b5df15912841bc658cccde0ba716eacdd6154298de47ddbbb4ccf2d",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/kefir.bin": "e2f6e2fddacb423c9b78bc746e41f130102495bd7b22834cb9167697776a0d41",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/source/arena-kefir.yaml": "fd7a13a9ef3edc85f91259b2af7e024cc675f751d4e1ffc3aa205e71e55d2e47",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/source/kefir-README.md": "40ac2deb2cf76a9d166fc00bbf3a07b9a563041a0a56eaf4d9e2de574163c785",
+    "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/source/nested.rs": "7d3fe37487545162fe3c285561b9673a42af045c2fa0f7b061e8ed1ec1334996"
+  },
+  "cells": [
+    {"id":"kefir-control","input":"explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/control.ndjson","expected":"ACCEPT"},
+    {"id":"kefir-valid-reorder","input":"explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/valid-reorder.ndjson","expected":"ACCEPT"},
+    {"id":"kefir-rule-owner-candidate","input":"explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/rule-owner-candidate.ndjson","expected":"REJECT_ASSOCIATION_OR_SAFE_RECONSTRUCTION; DECLINE_INCONCLUSIVE"}
+  ],
+  "timeout_seconds": 30,
+  "memory_limit_bytes": 4294967296,
+  "pre_registration_engineering_runs": "Exact-build and CLI setup smoke runs used only the prior completed cross-block fixtures. The newly selected rule-owner candidate has not been passed to Kefir before this registration."
+}

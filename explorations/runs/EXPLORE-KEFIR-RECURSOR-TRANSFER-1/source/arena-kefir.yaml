@@ -1,0 +1,15 @@
+description: |
+  **K**ernel **E**nforcing **F**ormal **I**nference **R**ules — an independent
+  external proof checker for Lean 4, in Rust. It checks every type and proof
+  itself and re-derives inductive types and recursors rather than taking them
+  from the export. Checking runs under fixed resource budgets: running out of
+  budget, or reaching a construct kefir does not support yet, declines and never
+  decides. Single-threaded; the goal is to stay on the Pareto frontier of
+  instructions and peak memory.
+version: "e05e1b0"
+url: https://github.com/DmitryKorolev/kefir
+ref: main
+rev: e05e1b0d731b1677c32ee6a777ec66877c61287b
+build: RUSTFLAGS="-C target-cpu=native" cargo build --release --locked
+run: ./target/release/kefir --axiom-policy=allow-all-declared-axioms
+threads: 1

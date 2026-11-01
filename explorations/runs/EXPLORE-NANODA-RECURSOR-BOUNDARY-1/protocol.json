@@ -1,0 +1,33 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "item_id": "E0-RECURSOR-BOUNDARY-MUTATION-1",
+  "trial_id": "EXPLORE-NANODA-RECURSOR-BOUNDARY-1",
+  "scope": "Informed prospective defensive validation; knowledge of Nanoda #64 is declared and no independent discovery claim is made.",
+  "faulty_commit": "8199c74c8166dc1fff1be3b4bd144cb725268628",
+  "repaired_commit": "a3ef25a863f689d339277090588599dceb741149",
+  "seed": "A distinct valid LALWrap/LALNest source derived from the retained preexisting seed, extended before the frozen trial with an independent LALMarker block and an exported theorem whose proof is the iota reduction of LALNest.rec_1.",
+  "transformation": "Move the independent marker block as a whole to immediately follow LALNest (valid-reorder); then, for the candidate only, move LALNest.rec_1 from the LALNest block into that marker block without changing any recursor field or other record.",
+  "independent_oracle": "Every recursor in an inductive record must list exactly that record's type names. The candidate places LALNest.rec_1 with all=[LALNest] in the LALMarker block while the block type set is [LALMarker], so checked admission must reject it. The unchanged control and whole-block reorder preserve ownership. LALNest.auxConsumer_iota depends on LALNest.rec_1 and proves its mk rule reduces to 11 by rfl, making the installed recursor observable to a downstream equality judgment.",
+  "pre_registration_engineering_runs": "Fixture and checker smoke runs occurred while repairing launch setup. They are excluded from the scientific result; the exact frozen cells below are rerun after the ledger start and retained separately.",
+  "config": "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/config.json",
+  "input_sha256": {
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/control.ndjson": "af3074a613e7ac17a426dc3a62bff37a429bb0611e0a6040eac3811acee13497",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/valid-reorder.ndjson": "3780e39dff1d0fc64715d7b1c972cbffccef7e7102da7ecd6f1178d74e21a2d9",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/cross-block-candidate.ndjson": "77349e85fd0d850d5ad6fc95df5ff2295bea3a081b3e32d41fe8da29c22cac60",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/seed.lean": "7a7dc55762a8f9e71cf60a2c2f25a71722e20094ca116d67d797384127868823",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/config.json": "d88a3dd64e882cbed2e56bd5807db717c1cffa3b268f94141b57f964a18a2693",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fault64.bin": "3c304a6773dae14d0f99843641f9bd31532e7d7a062d4afe9550a07257dfa0af",
+    "explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fix64.bin": "07a94d69faadd9c05cb8f5ee37ddd3f549d0a7e3b2361ffdf54df94c25d74da9"
+  },
+  "cells": [
+    {"id":"fault64-control","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fault64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/control.ndjson","expected":"ACCEPT"},
+    {"id":"fault64-valid-reorder","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fault64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/valid-reorder.ndjson","expected":"ACCEPT"},
+    {"id":"fault64-candidate","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fault64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/cross-block-candidate.ndjson","expected":"ACCEPT_UNSOUND_BLOCK_OWNERSHIP"},
+    {"id":"fix64-control","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fix64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/control.ndjson","expected":"ACCEPT"},
+    {"id":"fix64-valid-reorder","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fix64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/valid-reorder.ndjson","expected":"ACCEPT"},
+    {"id":"fix64-candidate","binary":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/nanoda-fix64.bin","input":"explorations/runs/EXPLORE-NANODA-RECURSOR-BOUNDARY-1/fixtures/cross-block-candidate.ndjson","expected":"REJECT_BLOCK_OWNERSHIP"}
+  ],
+  "timeout_seconds": 30,
+  "memory_limit_bytes": 2147483648
+}
