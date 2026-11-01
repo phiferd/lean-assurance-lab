@@ -1,0 +1,81 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "outcome": "NO_SIGNAL",
+  "signal_count": 0,
+  "completed_runs": 3,
+  "measurement_complete": true,
+  "engineering_failures_unresolved": false,
+  "checker_revision": "d584d4bee7114aa34e456bb3b80cb74f906c62b2",
+  "finding": "Pestka accepts both valid controls and semantically rejects the invalid recursor constructor association.",
+  "source_attribution": "indadd.av recsMatch rejects invalid recursor when sameRec/sameRules differs; the independently audited fixture changes only the constructor association.",
+  "limitations": "Known-informed single-case transfer, original default core and one worker only. No independent discovery, general soundness, next-core or full historical replay claim.",
+  "cells": [
+    {
+      "id": "pestka-control",
+      "argv": [
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1/pestka.bin",
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/control.ndjson",
+        "1"
+      ],
+      "cwd": "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1",
+      "input": "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/control.ndjson",
+      "input_sha256": "af3074a613e7ac17a426dc3a62bff37a429bb0611e0a6040eac3811acee13497",
+      "binary_sha256": "a0da80c8c56b42c2465cd918e600856a71f8053baeb2bdb11ef650c208564950",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.010200311000517104,
+      "stdout_sha256": "467c20db043a1e51c7175aa663f512941dfe4cc38424d372178b16af05223ad1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 120,
+      "stderr_bytes": 0,
+      "verdict": "accept",
+      "last_line": "accepted",
+      "cleanup_complete": true
+    },
+    {
+      "id": "pestka-valid-reorder",
+      "argv": [
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1/pestka.bin",
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/valid-reorder.ndjson",
+        "1"
+      ],
+      "cwd": "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1",
+      "input": "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/valid-reorder.ndjson",
+      "input_sha256": "3780e39dff1d0fc64715d7b1c972cbffccef7e7102da7ecd6f1178d74e21a2d9",
+      "binary_sha256": "a0da80c8c56b42c2465cd918e600856a71f8053baeb2bdb11ef650c208564950",
+      "exit_code": 0,
+      "timed_out": false,
+      "elapsed_seconds": 0.009356209000543458,
+      "stdout_sha256": "467c20db043a1e51c7175aa663f512941dfe4cc38424d372178b16af05223ad1",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 120,
+      "stderr_bytes": 0,
+      "verdict": "accept",
+      "last_line": "accepted",
+      "cleanup_complete": true
+    },
+    {
+      "id": "pestka-rule-owner-candidate",
+      "argv": [
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1/pestka.bin",
+        "/workspace/lal-pestka-run/explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/rule-owner-candidate.ndjson",
+        "1"
+      ],
+      "cwd": "/workspace/lal-pestka-run/explorations/runs/EXPLORE-PESTKA-RECURSOR-RULE-OWNER-1",
+      "input": "explorations/runs/EXPLORE-KEFIR-RECURSOR-TRANSFER-1/fixtures/rule-owner-candidate.ndjson",
+      "input_sha256": "146054194b5df15912841bc658cccde0ba716eacdd6154298de47ddbbb4ccf2d",
+      "binary_sha256": "a0da80c8c56b42c2465cd918e600856a71f8053baeb2bdb11ef650c208564950",
+      "exit_code": 1,
+      "timed_out": false,
+      "elapsed_seconds": 0.008867455000654445,
+      "stdout_sha256": "71150f86c4aab2481c405b85165b5edcb3861bde2ae0a2f777b05e07f5d0aaa6",
+      "stderr_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "stdout_bytes": 119,
+      "stderr_bytes": 0,
+      "verdict": "reject",
+      "last_line": "rejected: LALNest: invalid recursor 'LALNest.rec_1'",
+      "cleanup_complete": true
+    }
+  ]
+}

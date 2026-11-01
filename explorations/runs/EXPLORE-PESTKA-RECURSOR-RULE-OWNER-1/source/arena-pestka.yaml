@@ -1,0 +1,30 @@
+description: |
+  **Pestka** is a type checker for Lean 4 exports written in
+  [Aver](https://github.com/jasisz/aver), a statically typed language
+  designed for AI to write and humans to review, which compiles to Rust.
+  It implements Lean's type theory on its own (universe levels,
+  definitional equality, inductive types with their recursors, quotients,
+  and the Nat and String literal extensions), following the reference
+  kernel's algorithm. It was written by an AI agent under human guidance.
+
+  Declarations are checked in file order on one worker thread. What the
+  worker finds is kept from one declaration to the next: the results of
+  inference, checking, reduction and comparison, for open terms as well as
+  closed ones. A free variable is its type and value and how many
+  variables of the same type and value are open where its binder is
+  opened, so a binder opened again, in the same declaration or a later
+  one, gets the same variable, and so does a binder of the same type in
+  another theorem; what was found about the terms under it holds again.
+
+  The build clones Aver at the commit the repository pins in
+  `.aver-version` and compiles both with Cargo.
+url: https://github.com/jasisz/pestka
+ref: main
+rev: d584d4bee7114aa34e456bb3b80cb74f906c62b2
+build: |
+  git clone https://github.com/jasisz/aver .aver-src
+  git -C .aver-src checkout "$(cat .aver-version)"
+  cargo install --path .aver-src aver-lang --locked --root "$PWD/.aver"
+  AVER="$PWD/.aver/bin/aver" bin/build
+run: .build/target/release/main "$IN" 1
+threads: 1
