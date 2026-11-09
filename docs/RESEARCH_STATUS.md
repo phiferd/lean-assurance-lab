@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` completes with E0 NO_SIGNAL. Pinned
+  Lean 4.34.1 and Nanoda `3a240721` each accepted two valid ordinary
+  definitions and rejected two malformed Pi-codomain definitions: four
+  accepts and four expected rejections in eight supervised checker cells.
+  Yes, this adds narrow checked-formation coverage; no candidate defect or
+  result-driven E1 follows. The next separate item is a source-level audit of
+  other semantic-comparison entry paths, READY and unstarted. See the
+  [raw result](../explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/summary.md).
+
 - `FRESH-IMPORT-ADMISSION-TARGET-1` completes SUCCESS as a source-only intake.
   Current Lean and Nanoda checked-import paths require a Pi codomain to infer
   a sort before an ordinary definition's final type comparison. The inspected
@@ -3401,13 +3410,18 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
+Selected next item: `CHECKED-COMPARISON-REACHABILITY-AUDIT-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains one ACTIVE item and no READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
-The Pi-codomain E0 campaign is ACTIVE under its fixed four-input plan.
-No scientific trial or checker case has run at this entry checkpoint. Exact
-input and runtime hashes, a separate raw audit and E0 start precede launch.
+The [Pi-codomain E0 result](../explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/summary.md)
+is NO_SIGNAL for its four-input sample. Both pinned checkers accepted the two
+controls and rejected the two negatives at checked Pi formation; no unexpected
+acceptance was observed. This result does not justify a repair or E1
+confirmation. A broader [checked-comparison source audit](research/CHECKED_COMPARISON_REACHABILITY_AUDIT_1_PLAN.md)
+is selected READY and unstarted to locate a different representable path with
+an independent oracle. The original merged-Lean replay and historical
+recursor audit remain WAITING for their unavailable original evidence.
 
 The [fresh admission source review](../results/research/fresh-import-admission-target-1/report.md)
 found a distinct, small Pi-codomain formation question in current checked
@@ -3850,7 +3864,8 @@ no external action is recommended now.
 | 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, six accepts and six expected rejections |
 | 115 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | COMPLETE, BOUNDED_UNRESOLVED; original evidence custody characterized, no scientific replay |
 | 116 | `FRESH-IMPORT-ADMISSION-TARGET-1` | COMPLETE, SUCCESS; source-only Pi-codomain target selected, no checker launch |
-| 109 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | ACTIVE; four paired raw inputs, eight planned checker cells; prelaunch |
+| 117 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, four accepts and four expected rejections |
+| 109 | `CHECKED-COMPARISON-REACHABILITY-AUDIT-1` | READY; source-to-operand map of other checked ordinary-import comparisons; unstarted |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

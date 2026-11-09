@@ -1,0 +1,55 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-PI-CODOMAIN-ADMISSION-1",
+  "data": {
+    "campaign": "E0-PI-CODOMAIN-ADMISSION-SCREEN-1",
+    "question": "Do checked ordinary Lean and Nanoda definitions reject a Pi whose well-typed codomain does not infer a sort, before the final value/type semantic comparison, in declared-type and value placements?",
+    "sources": [
+      {
+        "name": "leanprover/lean4",
+        "revision": "5045d0056413266e57c625dcd7c365b10e377c52"
+      },
+      {
+        "name": "leanprover/lean4export",
+        "revision": "076e8e57707e813375e8f9da8bf989799ace9680"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+      }
+    ],
+    "versions": "Lean 4.34.1 ARM64; Nanoda 3a240721; lean4export 076e8e5; raw 3.1.0. Exact container, source, binary, importer, runner, input and configuration hashes in protocol.json. Current Lean/Nanoda tips reviewed 2026-11-09 with no material drift in relevant source blobs; executable profiles are older pinned revisions.",
+    "commands": "python3 explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/run_matrix.py; stages four fixed input/config pairs and Replay.lean, verifies guest hashes, then four pairs x (docker exec checker timeout 120 lean --run Replay.lean NDJSON; docker exec checker timeout 120 nanoda_bin CONFIG), one run_direct supervised host process per setup/cell/post. Exact argv and raw output per attempt.",
+    "inputs": [
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/protocol.json",
+      "docs/research/E0_PI_CODOMAIN_ADMISSION_SCREEN_1_PLAN.md",
+      "lib/metamorphic_ndjson_audit.py",
+      "lib/resource_envelope_supervisor.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/type_checker.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/Parse.lean",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/tc.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/parser.rs",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/cases.json",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/generate.py",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/audit.py",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/Replay.lean",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/run_matrix.py",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/input-review.md",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/prelaunch/runtime-sha256.txt",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/prelaunch/container.txt",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.ndjson",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.json",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.ndjson",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.json",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.ndjson",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.json",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.ndjson",
+      "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.json"
+    ],
+    "sample": "A/B paired control and negative; four closed sort-only one-definition raw inputs, two checker profiles, eight planned cells. A negative has invalid ascribed Pi codomain; B negative has invalid value Pi codomain. No new case or version sweep.",
+    "planned_runs": 8,
+    "controls": "A/B controls must be attributable accepted ordinary definitions; both negatives must parse with intact Pi codomain F and reject at checked Pi formation or header check. Official importer prints parsed type/value before trust-0 replay. Nanoda parser shape is supported by pinned source and byte-identical inputs. An accepted negative with passing paired control and complete supervision is candidate SIGNAL, never confirmed defect. Parser refusal, unrelated crash, missing attribution, timeout or cleanup failure is incomplete and preserved."
+  }
+}

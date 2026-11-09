@@ -8,6 +8,20 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current handoff — 2026-11-09
 
+The [Pi-codomain E0 screen](../../explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/summary.md)
+closed NO_SIGNAL: pinned Lean and Nanoda each accepted two valid controls and
+rejected two non-type-codomain negatives, eight attributable cells total.
+The result supplies a narrow local boundary corpus but no candidate defect or
+result-driven confirmation. To seek a different error path without repeating
+small rule screens, select `CHECKED-COMPARISON-REACHABILITY-AUDIT-1` READY and
+unstarted under [its source-only plan](CHECKED_COMPARISON_REACHABILITY_AUDIT_1_PLAN.md).
+It will map actual semantic-comparison operands and preceding typing checks
+across ordinary imports before any separate new E0 proposal. The reported
+merged-Lean and historical recursor records remain WAITING for original
+evidence; no duplicate run or assurance milestone follows.
+
+## Prior handoff — 2026-11-09
+
 The [fresh admission source review](../../results/research/fresh-import-admission-target-1/report.md)
 compared current Lean and Nanoda checked ordinary-definition paths with local
 and Arena coverage. Pi codomain sorthood is a distinct reachable four-input
@@ -18,7 +32,7 @@ Select `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` READY and unstarted under
 raw-input audit and E0 registration gates precede any launch. Original
 merged-Lean and historical recursor evidence remains WAITING; do not rerun it.
 
-## Prior handoff — 2026-11-09
+## Earlier handoff — 2026-11-09
 
 The [evidence reconciliation](../../results/research/november-evidence-reconciliation-1/report.md)
 found a reported unpublished cloud checkpoint but could not inspect its
