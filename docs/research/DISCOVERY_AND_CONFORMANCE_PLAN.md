@@ -8,6 +8,20 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current handoff — 2026-11-09
 
+The [evidence reconciliation](../../results/research/november-evidence-reconciliation-1/report.md)
+found a reported unpublished cloud checkpoint but could not inspect its
+original Git bundle, raw results or final validation from this checkout. The
+merged-Lean replay and historical recursor audit are WAITING for verified
+original evidence; neither is labeled complete or repeated. The public
+recursor pilots remain separate bounded findings. Select
+`FRESH-IMPORT-ADMISSION-TARGET-1` READY and unstarted under
+[its source-only plan](FRESH_IMPORT_ADMISSION_TARGET_1_PLAN.md): compare distinct
+checked-import paths and corpus coverage before authorizing any new scientific
+screen. The E0 expression-precondition result remains NO_SIGNAL for its fixed
+sample. No assurance milestone or external action follows from this handoff.
+
+## Prior handoff — 2026-11-09
+
 The [expression-precondition E0 result](../../explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/summary.md)
 observed three accepted controls and three expected rejections on each of the
 two pinned checkers. No candidate defect or result-driven confirmation follows

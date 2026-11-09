@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `NOVEMBER-EVIDENCE-RECONCILIATION-1` closes BOUNDED_UNRESOLVED. The public
+  repository does not contain the original merged-Lean replay or historical
+  Nanoda audit records; an unpublished cloud checkpoint is reported but its
+  Git bundle and raw outputs were unavailable here. This is interesting
+  because repeating either sample would risk duplicate work and claiming
+  completion would outrun the evidence. Recover and validate the original
+  bundle before changing their completion outcomes. No checker run or
+  external write occurred. See the [dated custody report](../results/research/november-evidence-reconciliation-1/report.md).
+
 - `STRATEGY-REASSESSMENT-2026-10-24` corrects two outdated contribution states
   and indexes three previously omitted published contributions. Upstream confirms
   the Lean repair and two Nanoda recursor fixes merged; no local witness was
@@ -3383,9 +3392,20 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `NOVEMBER-EVIDENCE-RECONCILIATION-1`.
+Selected next item: `FRESH-IMPORT-ADMISSION-TARGET-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains two READY items and no ACTIVE item.
+The canonical queue retains one READY item and no ACTIVE item.
+
+The [November evidence reconciliation](../results/research/november-evidence-reconciliation-1/report.md)
+found pointers to an unpublished original checkpoint, but not its Git objects,
+raw checker outputs or final validation. It launched zero scientific cases.
+The merged-Lean replay and historical recursor audit therefore remain without
+verified COMPLETE outcomes and are WAITING for original evidence custody; the
+three published recursor pilots do not substitute for them. This unresolved
+custody matters, but it does not block separate source-only local work. Select
+[one fresh admission target intake](research/FRESH_IMPORT_ADMISSION_TARGET_1_PLAN.md)
+READY and unstarted to compare distinct reachable validation paths and public
+corpus coverage. Do not repeat the reported experiments.
 
 The [expression-precondition E0 result](../explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/summary.md)
 has closed NO_SIGNAL: in twelve supervised cells, both pinned checkers accepted
@@ -3800,12 +3820,13 @@ no external action is recommended now.
 | 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | COMPLETE; two configured cells plus logging-only control |
 | 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | DEFERRED; current coverage and consumer benefit must justify E1 |
 | 108 | `STRATEGY-REASSESSMENT-2026-10-24` | COMPLETE; corrected adoption and priority records |
-| 114 | `LEAN-ETA-MERGED-REPLAY-1` | READY provisionally; owner reports completion, original durable replay evidence pending reconciliation |
-| 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and pre-repair/repaired targets |
+| 114 | `LEAN-ETA-MERGED-REPLAY-1` | WAITING; original unpublished replay and validation evidence unavailable, no duplicate run |
+| 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | WAITING; original unpublished inventory and trial records unavailable, no duplicate audit |
 | 111 | `E0-RECURSOR-BOUNDARY-MUTATION-1` | PLANNED; develop source-grounded defensive validation cases |
 | 112 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
 | 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, six accepts and six expected rejections |
-| 109 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | READY; original merged-Lean replay and recursor audit evidence to locate, no checker replay |
+| 115 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | COMPLETE, BOUNDED_UNRESOLVED; original evidence custody characterized, no scientific replay |
+| 109 | `FRESH-IMPORT-ADMISSION-TARGET-1` | READY; distinct source-only validation-target intake, no checker launch |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
