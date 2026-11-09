@@ -3383,11 +3383,24 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `E0-EXPRESSION-PRECONDITION-SCREEN-1`.
+Selected next item: `NOVEMBER-EVIDENCE-RECONCILIATION-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and one ACTIVE item.
+The canonical queue retains two READY items and no ACTIVE item.
 
-The November 9 owner direction selected a fresh six-input, two-checker E0 screen
+The [expression-precondition E0 result](../explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/summary.md)
+has closed NO_SIGNAL: in twelve supervised cells, both pinned checkers accepted
+the three controls and rejected the three ill-typed ignored-argument negatives.
+The raw Lean replay identified application type mismatches; Nanoda raised its
+checked equality assertion on each negative. This is a useful bounded corpus,
+not a general correctness claim, and no result-driven confirmation follows.
+The owner reports that the merged-Lean replay and historical recursor audit
+were completed, but this repository currently lacks their bound result
+artifacts. Select the [evidence reconciliation](research/NOVEMBER_EVIDENCE_RECONCILIATION_1_PLAN.md)
+READY and unstarted to locate and validate those records without rerunning
+either scientific sample. Their queue statuses remain unchanged pending that
+evidence review.
+
+At the prior November 9 entry, the owner direction selected a fresh six-input, two-checker E0 screen
 of application typing before semantic comparison under
 [its plan](research/E0_EXPRESSION_PRECONDITION_SCREEN_1_PLAN.md). The
 [dated scope review](../results/research/expression-precondition-screen-scope-2026-11-09/report.md)
@@ -3787,11 +3800,12 @@ no external action is recommended now.
 | 106 | `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1` | COMPLETE; two configured cells plus logging-only control |
 | 107 | `CONFIRM-ARENA-UNIVERSE-GUARD-1` | DEFERRED; current coverage and consumer benefit must justify E1 |
 | 108 | `STRATEGY-REASSESSMENT-2026-10-24` | COMPLETE; corrected adoption and priority records |
-| 109 | `LEAN-ETA-MERGED-REPLAY-1` | READY for preparation; no fresh replay yet |
+| 114 | `LEAN-ETA-MERGED-REPLAY-1` | READY provisionally; owner reports completion, original durable replay evidence pending reconciliation |
 | 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and pre-repair/repaired targets |
 | 111 | `E0-RECURSOR-BOUNDARY-MUTATION-1` | PLANNED; develop source-grounded defensive validation cases |
 | 112 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
-| 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | ACTIVE; six sort-only inputs, two checker profiles; no trial started at selection |
+| 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, six accepts and six expected rejections |
+| 109 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | READY; original merged-Lean replay and recursor audit evidence to locate, no checker replay |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

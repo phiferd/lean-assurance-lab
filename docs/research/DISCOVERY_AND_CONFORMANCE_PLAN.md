@@ -6,7 +6,20 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-11-09
+## Current handoff — 2026-11-09
+
+The [expression-precondition E0 result](../../explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/summary.md)
+observed three accepted controls and three expected rejections on each of the
+two pinned checkers. No candidate defect or result-driven confirmation follows
+from these twelve cells. The owner reports that the merged-Lean replay and
+historical recursor audit were completed, but the current queue lacks their
+durable result bindings. Select `NOVEMBER-EVIDENCE-RECONCILIATION-1` READY and
+unstarted under [its plan](NOVEMBER_EVIDENCE_RECONCILIATION_1_PLAN.md) to find
+and validate the original evidence without repeating either experiment.
+Their existing queue statuses remain unchanged until that review establishes
+the actual historical results.
+
+## Prior selection — 2026-11-09
 
 The owner directed a prospective cross-checker investigation of whether
 imported expressions can reach semantic comparison before typing preconditions
