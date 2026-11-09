@@ -6,7 +6,22 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current handoff — 2026-11-09
+## Current handoff — 2026-11-09 (checked-comparison audit)
+
+The [source-to-operand audit](../../results/research/checked-comparison-reachability-audit-1/report.md)
+found explicit checked inference or formation before each inspected ordinary
+declaration comparison. A non-function application head and non-type lambda
+annotation have valid paper controls, but neither gives a source-supported
+bypass; the binder neighborhood also has retained public-entry probes. This is
+a bounded negative source result, not a runtime verdict or proof of safety.
+No new E0 is selected. Project-wide review found no useful READY local item:
+the resource receipt audit remains owner-deferred without a measurement
+dependency, build-mode lacks a fixed property, and the original merged-Lean
+and recursor records remain inaccessible. The queue handoff is PAUSED with
+`TRANSFER-HOLDOUT-INTAKE-1` as its required-input decision item, not an active
+intake. No successor work starts here.
+
+## Prior handoff — 2026-11-09 (Pi-codomain screen)
 
 The [Pi-codomain E0 screen](../../explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/summary.md)
 closed NO_SIGNAL: pinned Lean and Nanoda each accepted two valid controls and

@@ -15,8 +15,14 @@ admission paths and adjacent public tests, then either select one genuinely
 new, independently justified prospect for a separate E0 campaign or record
 that no such prospect cleared the gates. No checker cell starts in this item.
 
-Item: `CHECKED-COMPARISON-REACHABILITY-AUDIT-1`, READY and unstarted.
+Item: `CHECKED-COMPARISON-REACHABILITY-AUDIT-1`, COMPLETE on 2026-11-09.
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`.
+
+The [dated source-to-operand audit](../../results/research/checked-comparison-reachability-audit-1/report.md)
+closed with a bounded negative selection: no inspected candidate justified a
+separate E0 on the current source and retained coverage. No checker cell ran.
+This result does not certify the implementations. The canonical queue records
+the separate project-wide handoff.
 
 Trace current official Lean and Nanoda ordinary axiom, definition, theorem and
 opaque checked-import paths from parsing through any definitional equality or

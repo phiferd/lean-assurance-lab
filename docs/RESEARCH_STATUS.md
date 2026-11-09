@@ -3410,9 +3410,23 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `CHECKED-COMPARISON-REACHABILITY-AUDIT-1`.
-Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and no ACTIVE item.
+Selected next item: `TRANSFER-HOLDOUT-INTAKE-1`.
+Queue handoff: PAUSED.
+The canonical queue has no READY or ACTIVE item. The selected decision item
+remains WAITING for a fresh independently curated input and owner-designated
+intake authority; it has not started.
+
+The [checked-comparison source audit](../results/research/checked-comparison-reachability-audit-1/report.md)
+found explicit checked inference or formation before the inspected ordinary
+declaration comparisons. Its two fresh paper candidates have valid controls,
+but no inspected path supplied a distinct source-supported bypass; the lambda
+binder neighborhood has retained public-entry probes. This is a bounded
+negative source result without current checker execution. No E0 or repair
+follows. Project-wide selection found no useful local READY item: the resource
+memory audit remains deferred for want of an upcoming measurement dependency,
+build-mode has no fixed property, and the original merged-Lean and recursor
+evidence remains unavailable. Resume only when a concrete eligible input or
+other separately justified local successor clears its exact gates.
 
 The [Pi-codomain E0 result](../explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/summary.md)
 is NO_SIGNAL for its four-input sample. Both pinned checkers accepted the two
@@ -3865,7 +3879,7 @@ no external action is recommended now.
 | 115 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | COMPLETE, BOUNDED_UNRESOLVED; original evidence custody characterized, no scientific replay |
 | 116 | `FRESH-IMPORT-ADMISSION-TARGET-1` | COMPLETE, SUCCESS; source-only Pi-codomain target selected, no checker launch |
 | 117 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, four accepts and four expected rejections |
-| 109 | `CHECKED-COMPARISON-REACHABILITY-AUDIT-1` | READY; source-to-operand map of other checked ordinary-import comparisons; unstarted |
+| 109 | `CHECKED-COMPARISON-REACHABILITY-AUDIT-1` | COMPLETE, NEGATIVE; bounded source result, no separate E0 or checker launch |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
