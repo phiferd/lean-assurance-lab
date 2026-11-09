@@ -13,7 +13,8 @@ paired controls. An unexpected acceptance could be a candidate defect.
 checker profiles, then register a separate E0 trial before any launch. Close
 with retained raw outcomes and a campaign handoff; stop before the next item.
 
-Evidence class: E0. Campaign: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
+Evidence class: E0
+Campaign: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`. This plan is READY and unstarted.
 
 ## Fixed question and four-input sample
