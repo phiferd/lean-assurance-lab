@@ -8,6 +8,18 @@ the external contribution portfolio, not a new assurance milestone.
 
 ## Current handoff — 2026-11-09
 
+The [fresh admission source review](../../results/research/fresh-import-admission-target-1/report.md)
+compared current Lean and Nanoda checked ordinary-definition paths with local
+and Arena coverage. Pi codomain sorthood is a distinct reachable four-input
+question; constant-level arity and let checks have closer prior coverage.
+This is a source-only selection with no checker observation or defect claim.
+Select `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` READY and unstarted under
+[its fixed plan](E0_PI_CODOMAIN_ADMISSION_SCREEN_1_PLAN.md). Exact runtime,
+raw-input audit and E0 registration gates precede any launch. Original
+merged-Lean and historical recursor evidence remains WAITING; do not rerun it.
+
+## Prior handoff — 2026-11-09
+
 The [evidence reconciliation](../../results/research/november-evidence-reconciliation-1/report.md)
 found a reported unpublished cloud checkpoint but could not inspect its
 original Git bundle, raw results or final validation from this checkout. The

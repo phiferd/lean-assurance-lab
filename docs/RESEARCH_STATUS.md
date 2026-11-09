@@ -58,6 +58,15 @@ research directions.
 
 ## Attempted
 
+- `FRESH-IMPORT-ADMISSION-TARGET-1` completes SUCCESS as a source-only intake.
+  Current Lean and Nanoda checked-import paths require a Pi codomain to infer
+  a sort before an ordinary definition's final type comparison. The inspected
+  cases do not include the proposed paired negative/control raw import in
+  both declared-type and value positions; no checker case ran, so behavior is
+  unknown. Yes, this is a distinct small screen candidate, not a defect or
+  semantic authority claim. The separate four-input E0 screen is selected
+  READY and unstarted. See the [dated source/corpus map](../results/research/fresh-import-admission-target-1/report.md).
+
 - `NOVEMBER-EVIDENCE-RECONCILIATION-1` closes BOUNDED_UNRESOLVED. The public
   repository does not contain the original merged-Lean replay or historical
   Nanoda audit records; an unpublished cloud checkpoint is reported but its
@@ -3392,9 +3401,19 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `FRESH-IMPORT-ADMISSION-TARGET-1`.
+Selected next item: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
 Queue handoff: EXECUTABLE.
 The canonical queue retains one READY item and no ACTIVE item.
+
+The [fresh admission source review](../results/research/fresh-import-admission-target-1/report.md)
+found a distinct, small Pi-codomain formation question in current checked
+ordinary-definition paths. No checker result or defect has been established.
+Select the [four-input E0 campaign](research/E0_PI_CODOMAIN_ADMISSION_SCREEN_1_PLAN.md)
+READY and unstarted. Its raw input, exact executable and launch gates remain
+to be completed before any scientific cell. The source review compared
+constant-level arity and let annotation validation, but those have closer
+prior public coverage. The owner-reported merged-Lean replay and historical
+recursor audit remain WAITING for original evidence and are not rerun.
 
 The [November evidence reconciliation](../results/research/november-evidence-reconciliation-1/report.md)
 found pointers to an unpublished original checkpoint, but not its Git objects,
@@ -3826,7 +3845,8 @@ no external action is recommended now.
 | 112 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
 | 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, six accepts and six expected rejections |
 | 115 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | COMPLETE, BOUNDED_UNRESOLVED; original evidence custody characterized, no scientific replay |
-| 109 | `FRESH-IMPORT-ADMISSION-TARGET-1` | READY; distinct source-only validation-target intake, no checker launch |
+| 116 | `FRESH-IMPORT-ADMISSION-TARGET-1` | COMPLETE, SUCCESS; source-only Pi-codomain target selected, no checker launch |
+| 109 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | READY; four paired raw inputs, eight planned checker cells; unstarted |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
