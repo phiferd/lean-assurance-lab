@@ -3403,7 +3403,11 @@ preserved. The exact accepted authority and entry state remain bound in
 
 Selected next item: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
+
+The Pi-codomain E0 campaign is ACTIVE under its fixed four-input plan.
+No scientific trial or checker case has run at this entry checkpoint. Exact
+input and runtime hashes, a separate raw audit and E0 start precede launch.
 
 The [fresh admission source review](../results/research/fresh-import-admission-target-1/report.md)
 found a distinct, small Pi-codomain formation question in current checked
@@ -3846,7 +3850,7 @@ no external action is recommended now.
 | 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | COMPLETE; E0 NO_SIGNAL, six accepts and six expected rejections |
 | 115 | `NOVEMBER-EVIDENCE-RECONCILIATION-1` | COMPLETE, BOUNDED_UNRESOLVED; original evidence custody characterized, no scientific replay |
 | 116 | `FRESH-IMPORT-ADMISSION-TARGET-1` | COMPLETE, SUCCESS; source-only Pi-codomain target selected, no checker launch |
-| 109 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | READY; four paired raw inputs, eight planned checker cells; unstarted |
+| 109 | `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` | ACTIVE; four paired raw inputs, eight planned checker cells; prelaunch |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |

@@ -15,7 +15,8 @@ with retained raw outcomes and a campaign handoff; stop before the next item.
 
 Evidence class: E0
 Campaign: `E0-PI-CODOMAIN-ADMISSION-SCREEN-1`.
-Frontier: `F-DISCOVERY-AND-CONFORMANCE`. This plan is READY and unstarted.
+Frontier: `F-DISCOVERY-AND-CONFORMANCE`. This campaign is ACTIVE; no E0 trial
+has started at this entry checkpoint.
 
 ## Fixed question and four-input sample
 
