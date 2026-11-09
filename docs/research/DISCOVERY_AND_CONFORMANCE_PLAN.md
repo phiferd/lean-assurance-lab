@@ -6,7 +6,28 @@ Frontier: `F-DISCOVERY-AND-CONFORMANCE`. The constitution, Active status and
 canonical queue control execution. This is an explicit strategy successor to
 the external contribution portfolio, not a new assurance milestone.
 
-## Current selection — 2026-10-24
+## Current selection — 2026-11-09
+
+The owner directed a prospective cross-checker investigation of whether
+imported expressions can reach semantic comparison before typing preconditions
+are established, and explicitly excluded repeating the merged-Lean witness or
+historical recursor audit. The [source and input-scope assessment](../../results/research/expression-precondition-screen-scope-2026-11-09/report.md)
+defines a small ignored-argument boundary. A read-only November 9 review found
+the same relevant checked and unchecked paths at current Lean and Nanoda source
+tips. The existing isolated Lean 4.34.1/Nanoda checker container remains present
+but stopped; its exact runtime and source bindings remain launch gates.
+
+Select `E0-EXPRESSION-PRECONDITION-SCREEN-1` ACTIVE under
+[its fixed plan](E0_EXPRESSION_PRECONDITION_SCREEN_1_PLAN.md). Its six closed,
+sort-only expressions preserve the three placements from the scope assessment
+without needing the unavailable Nat environment. The campaign has not started
+an E0 trial or launched a checker at this selection. `LEAN-ETA-MERGED-REPLAY-1`
+remains READY and unstarted in the durable queue: no local post-merge replay
+evidence has been recorded, so this redirection does not relabel it complete.
+Historical recursor items remain PLANNED with their original scientific gates.
+Do not execute either alternative in this campaign.
+
+## Prior selection — 2026-10-24
 
 Upstream merged the Lean repair and two reported Nanoda recursor fixes, but the
 Lab has not replayed the merged Lean witness. Yes, this verification gap and the

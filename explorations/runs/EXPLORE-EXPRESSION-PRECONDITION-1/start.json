@@ -1,0 +1,57 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-EXPRESSION-PRECONDITION-1",
+  "data": {
+    "campaign": "E0-EXPRESSION-PRECONDITION-SCREEN-1",
+    "question": "Do pinned official Lean and Nanoda establish typing of an ignored application argument before accepting an ordinary imported definition when the application appears in its value, declared type, or binder domain?",
+    "sources": [
+      {
+        "name": "leanprover/lean4",
+        "revision": "5045d0056413266e57c625dcd7c365b10e377c52"
+      },
+      {
+        "name": "leanprover/lean4export",
+        "revision": "076e8e57707e813375e8f9da8bf989799ace9680"
+      },
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+      }
+    ],
+    "versions": "Lean 4.34.1 ARM64; Nanoda 3a240721; lean4export 076e8e5; raw format 3.1.0. Exact binary, parser, runner and input hashes in protocol.json. Current upstream source read-only review dated 2026-11-09; pinned runtimes unchanged.",
+    "commands": "python3 explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/run_matrix.py; stages the six frozen input/config pairs and Replay.lean, checks guest hashes, then six pairs x (docker exec checker timeout 120 lean --run Replay.lean NDJSON; docker exec checker timeout 120 nanoda_bin CONFIG), one run_direct supervised host process per setup/cell/post check. Exact argv and raw output per attempt.",
+    "inputs": [
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/protocol.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/cases.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/generate.py",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/audit.py",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/Replay.lean",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/run_matrix.py",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/input-review.md",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.ndjson",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.ndjson",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.ndjson",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.ndjson",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.ndjson",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.json",
+      "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.ndjson",
+      "docs/research/E0_EXPRESSION_PRECONDITION_SCREEN_1_PLAN.md",
+      "lib/metamorphic_ndjson_audit.py",
+      "lib/resource_envelope_supervisor.py",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/type_checker.cpp",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-1/sources/Parse.lean",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/tc.rs",
+      "explorations/runs/EXPLORE-SYMBOLIC-UNIVERSE-REJECTION-1/sources/parser.rs"
+    ],
+    "sample": "Exactly V/T/B matched valid-control and one-argument-invalid negative pairs, closed sort-only definitions; six raw inputs, two checkers, twelve planned cells. Negative argument Sort 1 has type Sort 2 but function domain is Sort 1; beta erases argument. No Nat import, eta replay, recursor audit, version sweep or additional case family.",
+    "planned_runs": 12,
+    "controls": "Each control must be attributable accepted ordinary definition; each negative must preserve the bad application and be source-attributed rejected for type checking. Official raw importer prints parsed structure before checked trust-0 replay. Nanoda parser shape supported by retained source and byte-identical input. Unexpected accepted negative with passing control and complete supervision is candidate SIGNAL, never confirmed defect. Parser refusal, unrelated panic, missing attribution, timeout or supervision failure is incomplete. Preserve all attempts and diagnose engineering failures."
+  }
+}

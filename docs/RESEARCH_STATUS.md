@@ -1,6 +1,6 @@
 # Research Status
 
-Last updated: 2026-10-24
+Last updated: 2026-11-09
 
 ## How Status Is Tracked
 
@@ -3383,11 +3383,24 @@ preserved. The exact accepted authority and entry state remain bound in
    This explicitly succeeds the contribution portfolio; it crosses no assurance
    milestone and preserves its completed work and external-action gates.
 
-Selected next item: `LEAN-ETA-MERGED-REPLAY-1`.
+Selected next item: `E0-EXPRESSION-PRECONDITION-SCREEN-1`.
 Queue handoff: EXECUTABLE.
-The canonical queue retains one READY item and zero ACTIVE items.
+The canonical queue retains one READY item and one ACTIVE item.
 
-The October 24 reassessment confirms merged upstream repairs and corrects the
+The November 9 owner direction selected a fresh six-input, two-checker E0 screen
+of application typing before semantic comparison under
+[its plan](research/E0_EXPRESSION_PRECONDITION_SCREEN_1_PLAN.md). The
+[dated scope review](../results/research/expression-precondition-screen-scope-2026-11-09/report.md)
+found a concrete ignored-argument boundary but ran no checker. Its Nat sketch
+cannot use the retained empty-environment replay; the active plan binds six
+closed sort-only expressions with the same three placements and no axiom.
+This is interesting as a small public-input screen for an unknown defect, not
+evidence of one. Raw input, exact runtime and ledger-start gates remain before
+observation. The prior merged-Lean replay stays READY and unstarted because no
+durable post-merge result is present; the historical recursor audit stays
+PLANNED. Neither is repeated or relabeled by this selection.
+
+The earlier October 24 reassessment confirms merged upstream repairs and corrects the
 contribution index; no new checker result is claimed. This is interesting
 because the original Lean acceptance witness still lacks a post-merge replay,
 and two independent Nanoda recursor reports offer stronger method tests.
@@ -3778,6 +3791,7 @@ no external action is recommended now.
 | 110 | `E0-RECURSOR-HISTORICAL-GAP-1` | PLANNED; freeze pre-disclosure assets and pre-repair/repaired targets |
 | 111 | `E0-RECURSOR-BOUNDARY-MUTATION-1` | PLANNED; develop source-grounded defensive validation cases |
 | 112 | `E0-NEW-CHECKER-RECURSOR-TRANSFER-1` | PLANNED; select a distinct boundary and pinned working recipes |
+| 113 | `E0-EXPRESSION-PRECONDITION-SCREEN-1` | ACTIVE; six sort-only inputs, two checker profiles; no trial started at selection |
 | 97 | `RESOURCE-SHORT-PROCESS-MEMORY-AUDIT-1` | DEFERRED; reopen only for a named measurement dependency |
 | 12 | `SURVIVOR-THREAD-ONE-DETERMINISM-1` | COMPLETE, SUCCESS |
 | 65 | `SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1` | COMPLETE, BOUNDED_UNRESOLVED |
