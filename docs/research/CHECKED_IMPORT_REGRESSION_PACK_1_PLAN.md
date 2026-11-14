@@ -1,15 +1,17 @@
 # Integrate the confirmed checked import regression package
 
-The proposed consumer is the Lab's manual checker-profile upgrade check. Its
-value would be a single command that exposes a changed verdict or missing
-checking operation on ten known inputs. Confirmation is still pending, so this
-integration is PLANNED and unstarted; no fresh compatibility result is claimed.
+The ten-case confirmation completed successfully, but no concrete consumer need
+or incremental regression value was demonstrated for an additional command or
+packaging layer. This integration is therefore DEFERRED and unstarted. Preserve
+the confirmation evidence unchanged and reconsider this plan only when a
+concrete use justifies it; no fresh compatibility result is claimed here.
 
 Item: `CHECKED-IMPORT-REGRESSION-PACK-1`.
 Evidence class: E2, bounded local regression integration.
-Dependency: `CONFIRM-CHECKED-IMPORT-CASES-1` must close SUCCESS and its current
-consumer/maintenance review must still support this package. No automatic
-promotion from E0, E1, a green test or this plan.
+Dependency: `CONFIRM-CHECKED-IMPORT-CASES-1` closed SUCCESS, but its result does
+not itself establish consumer value. Explicit canonical reselection after a
+concrete use is identified remains required. No automatic promotion from E0,
+E1, a green test or this plan.
 
 ## Fixed consumer contract
 

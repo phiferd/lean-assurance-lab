@@ -73,8 +73,9 @@ research directions.
   unresolved cell. Yes, this supplies a reproducible manual-upgrade-check basis;
   it is not a fresh holdout, current-tip result, defect, soundness proof or
   semantic authority claim. A 3.7 GB immutable ARM64 image and ignored 851 MiB
-  archive replace the old-container dependency. Select the separate E2
-  integration item READY and unstarted. See the
+  archive replace the old-container dependency. No concrete consumer need or
+  incremental regression value justifies additional integration, distribution
+  or usability work, so the separate E2 package is DEFERRED. See the
   [confirmation report](../results/research/confirm-checked-import-cases-1/report.md).
 
 - `STRATEGY-REASSESSMENT-2026-11-14` reviews the unchanged constitution and
@@ -4101,9 +4102,10 @@ its selection does not launch it or any scientific pilot.
 
 The ten November boundary inputs now have separately reviewed, attributable E1
 confirmation and replay on two exact historical profiles. No unexpected checker
-behavior was found. Yes, their immediate result-driven value is a fail-closed
-manual checker-upgrade command; a separate case-disposition companion can still
-explain older assurance claims without checker execution.
+behavior was found. Yes, this is bounded reproducible evidence, but no concrete
+consumer need or incremental regression value justifies another integration
+layer. The separate case-disposition companion remains available without
+checker execution.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
    and explain their limits under
@@ -4112,19 +4114,20 @@ explain older assurance claims without checker execution.
    supersedes the paused handoff without changing the constitution or any
    completed result.
 
-Selected next item: `CHECKED-IMPORT-REGRESSION-PACK-1`.
+Selected next item: `ASSURANCE-CLAIM-DISPOSITION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items and no ACTIVE item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `CHECKED-IMPORT-REGRESSION-PACK-1` | READY | One manual checker-upgrade command reusing the confirmed ten cases, with controls for missing, changed, substituted, unattributable and stale evidence. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
-| 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| 1 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| 2 | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
-Confirmation closed on 2026-11-14; integration and the companion remain
-unstarted. The integration must independently review its E2 acceptance contract
-and fail-closed controls before shared use. Known cases do not become independent
+Confirmation closed on 2026-11-14; the deferred integration and READY companion
+remain unstarted. A concrete use and canonical reselection must precede any E2
+work; its independent acceptance and fail-closed gates remain preserved in the
+plan. Known cases do not become independent
 holdouts. Missing original eta/recursor evidence and independent transfer custody
 remain WAITING; no duplicate experiment is authorized. Other owner deferrals,
 CVC prerequisites and milestone gates remain unchanged.
@@ -4132,7 +4135,7 @@ CVC prerequisites and milestone gates remain unchanged.
 The November 14 read-only check confirms Nanoda #41/#43 remain closed without
 merge and retains the clarity feedback. Other upstream entries keep their dated
 observations. No upstream contact, PR revision or submission is selected.
-The selected integration is a separate item; selecting it does not start it.
+The available companion is a separate item; keeping it READY does not start it.
 
 ### Waiting
 
