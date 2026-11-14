@@ -69,7 +69,7 @@ def input_hashes(root, start):
 def validate(root, raw):
     schema = read_json((ROOT / 'schemas/exploration-event.schema.json').read_text())
     validator = Draft202012Validator(schema, format_checker=FormatChecker())
-    states, confirmations = {}, set()
+    states, confirmations = {}, {}
     for line in raw.splitlines():
         row = read_json(line)
         validator.validate(row)
@@ -102,9 +102,10 @@ def validate(root, raw):
             if 'finish' not in state or 'promote' in state:
                 raise ValueError('promotion requires one closed, not previously promoted exploration')
             target = data['confirmation_id']
-            if target in confirmations:
-                raise ValueError('confirmation identity must be new')
-            confirmations.add(target)
+            signature = (data['hypothesis'], data['reason'])
+            if target in confirmations and confirmations[target] != signature:
+                raise ValueError('composite confirmation links must preserve one hypothesis and reason')
+            confirmations[target] = signature
             state['promote'] = row
         state['at'] = stamp
     for state in states.values():
@@ -154,6 +155,35 @@ def authorize_start(root, event):
         raise ValueError('campaign needs an explicit E0 plan in its queue evidence')
 
 
+def authorize_existing_confirmation(root, event, queue):
+    """Allow a promotion link to the selected ACTIVE E1 item it explicitly binds.
+
+    Queue selection may precede ledger repair for a composite confirmation. The
+    active work record must name every source E0 identity, so an unrelated trial
+    cannot attach itself to an existing confirmation.
+    """
+    target = event['data']['confirmation_id']
+    matches = [item for item in queue.get('items', []) if item.get('id') == target]
+    if not matches:
+        raise ValueError('composite confirmation requires the selected ACTIVE E1 item')
+    if len(matches) != 1:
+        raise ValueError('confirmation identity is ambiguous in research queue')
+    item = matches[0]
+    if (queue.get('selected_item') != target or item.get('status') != 'ACTIVE'
+            or item.get('kind') != 'EXPERIMENT'):
+        raise ValueError('existing confirmation must be the selected ACTIVE experiment')
+    plans = [p for p in item.get('evidence_refs', [])
+             if p.endswith('.md') and '\nEvidence class: E1' in local_file(root, p).read_text()]
+    records = [p for p in item.get('evidence_refs', []) if p.endswith('work-record.json')]
+    if not plans or len(records) != 1:
+        raise ValueError('existing confirmation needs an E1 plan and one work record')
+    record = read_json(local_file(root, records[0]).read_text())
+    sources = {row.get('id') for row in record.get('derived_from', []) if isinstance(row, dict)}
+    if (record.get('item_id') != target or record.get('status') != 'ACTIVE'
+            or event['id'] not in sources):
+        raise ValueError('active confirmation work record does not bind this E0 source')
+
+
 def append(root, event):
     ledger = local_file(root, LEDGER)
     with ledger.open('r+b') as stream:
@@ -173,8 +203,12 @@ def append(root, event):
             authorize_start(root, event)
         if event['event'] == 'promote':
             queue = read_json((root / 'config/research-queue.json').read_text())
-            if any(i['id'] == event['data']['confirmation_id'] for i in queue['items']):
-                raise ValueError('confirmation ID already exists in research queue')
+            target = event['data']['confirmation_id']
+            already_linked = any(
+                state.get('promote', {}).get('data', {}).get('confirmation_id') == target
+                for state in validate(root, raw).values())
+            if already_linked or any(item.get('id') == target for item in queue.get('items', [])):
+                authorize_existing_confirmation(root, event, queue)
         stream.write(encoded)
         stream.flush()
         os.fsync(stream.fileno())
@@ -186,24 +220,28 @@ def summary(states):
                      for s in states.values())
     return {'evidence_class': 'E0', 'started': len(states),
             **{key: counts[key] for key in ('OPEN', 'NO_SIGNAL', 'SIGNAL', 'INCONCLUSIVE')},
-            'confirmation_proposals': sum('promote' in s for s in states.values()),
+            'confirmation_proposals': len({s['promote']['data']['confirmation_id']
+                                           for s in states.values() if 'promote' in s}),
             'unavailable_input_payloads': sorted({p for s in states.values()
                                                    for p in s.get('unavailable_inputs', [])}),
             'claim': 'Exploratory observations only; proposals are not confirmed discrepancies.'}
 
 
 def proposal(states, confirmation_id):
-    for ident, state in states.items():
-        event = state.get('promote', {}).get('data', {})
-        if event.get('confirmation_id') == confirmation_id:
-            return {'id': confirmation_id, 'evidence_class': 'E1', 'status': 'PLANNED',
-                    'derived_from': ident, 'hypothesis': event['hypothesis'],
-                    'reason': event['reason'], 'execution_authorized': False,
-                    'required': ['Separate queue selection and protocol',
-                                 'Frozen inputs and independent expected-result review',
-                                 'Fresh controlled execution and required validation'],
-                    'nonclaim': 'E0 outputs cannot serve as confirmation results; reused cases are not fresh holdouts.'}
-    raise ValueError('no such confirmation proposal')
+    linked = [(ident, state['promote']['data']) for ident, state in states.items()
+              if state.get('promote', {}).get('data', {}).get('confirmation_id') == confirmation_id]
+    if not linked:
+        raise ValueError('no such confirmation proposal')
+    event = linked[0][1]
+    sources = [ident for ident, _ in linked]
+    return {'id': confirmation_id, 'evidence_class': 'E1', 'status': 'PLANNED',
+            'derived_from': sources[0] if len(sources) == 1 else sources,
+            'hypothesis': event['hypothesis'], 'reason': event['reason'],
+            'execution_authorized': False,
+            'required': ['Separate queue selection and protocol',
+                         'Frozen inputs and independent expected-result review',
+                         'Fresh controlled execution and required validation'],
+            'nonclaim': 'E0 outputs cannot serve as confirmation results; reused cases are not fresh holdouts.'}
 
 
 def validation_lane(root, base):

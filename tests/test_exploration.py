@@ -195,6 +195,56 @@ class ExplorationTests(unittest.TestCase):
             else:
                 self.append(row)
 
+    def test_selected_active_composite_confirmation_links_two_sources(self):
+        self.append(self.start)
+        self.append(self.finish)
+        second_start = copy.deepcopy(self.start)
+        second_start['id'] = 'EXPLORE-SECOND-1'
+        second_finish = copy.deepcopy(self.finish)
+        second_finish['id'] = second_start['id']
+        self.append(second_start)
+        self.append(second_finish)
+        (self.root / 'confirm.md').write_text('# Confirm\n\nEvidence class: E1\n')
+        (self.root / 'work-record.json').write_text(json.dumps({
+            'item_id': 'CONFIRM-TEST-1', 'status': 'ACTIVE',
+            'derived_from': [{'id': self.start['id']}, {'id': second_start['id']}],
+        }))
+        (self.root / 'config/research-queue.json').write_text(json.dumps({
+            'selected_item': 'CONFIRM-TEST-1',
+            'items': [{
+                'id': 'CONFIRM-TEST-1', 'status': 'ACTIVE', 'kind': 'EXPERIMENT',
+                'evidence_refs': ['confirm.md', 'work-record.json'],
+            }],
+        }))
+        self.append(self.promote)
+        second_promote = copy.deepcopy(self.promote)
+        second_promote['id'] = second_start['id']
+        self.append(second_promote)
+        result = e.proposal(self.states(), 'CONFIRM-TEST-1')
+        self.assertEqual(result['derived_from'], [self.start['id'], second_start['id']])
+        self.assertEqual(e.summary(self.states())['confirmation_proposals'], 1)
+
+    def test_composite_confirmation_rejects_changed_hypothesis(self):
+        self.append(self.start)
+        self.append(self.finish)
+        second_start = copy.deepcopy(self.start)
+        second_start['id'] = 'EXPLORE-SECOND-1'
+        second_finish = copy.deepcopy(self.finish)
+        second_finish['id'] = second_start['id']
+        self.append(second_start)
+        self.append(second_finish)
+        first = copy.deepcopy(self.promote)
+        second = copy.deepcopy(self.promote)
+        second['id'] = second_start['id']
+        second['data']['hypothesis'] = 'A different hypothesis must not share an identity'
+        # Exercise ledger validation directly; queue authorization is orthogonal.
+        first['at'] = '2099-01-01T00:00:00+00:00'
+        second['at'] = '2099-01-01T00:00:01+00:00'
+        raw = (self.root / e.LEDGER).read_bytes()
+        raw += (json.dumps(first) + '\n' + json.dumps(second) + '\n').encode()
+        with self.assertRaisesRegex(ValueError, 'one hypothesis'):
+            e.validate(self.root, raw)
+
     def test_duplicate_json_and_partial_append_rejected(self):
         with self.assertRaises(ValueError):
             e.read_json('{"evidence_class":"E0","evidence_class":"E1"}')

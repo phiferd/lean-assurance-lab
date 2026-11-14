@@ -112,6 +112,12 @@ would make an E0 sampled-memory question INCONCLUSIVE, even with 24 accepts.
 Do not claim that short duration caused the missing samples without evidence.
 
 Promotion appends a link to a **new** `CONFIRM-*` identity, hypothesis and reason.
+When one confirmation has a fixed composite sample from multiple closed E0
+trials, each source trial may link to the same confirmation identity only with
+the identical hypothesis and reason. If queue selection occurred before those
+links were recorded, the command accepts the existing identity only when it is
+the selected ACTIVE E1 experiment and its committed work record explicitly
+binds every linked E0 source. This repair path does not authorize execution.
 The `proposal` command renders an E1 PLANNED proposal, never an executable or
 completed result. It must enter the normal queue with a separate plan and pass
 its entry, oracle and launch gates. E0 raw output cannot fill E1 result fields.
