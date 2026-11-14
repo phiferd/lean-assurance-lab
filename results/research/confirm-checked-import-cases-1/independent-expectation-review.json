@@ -1,0 +1,124 @@
+{
+  "schema_version": 1,
+  "item_id": "CONFIRM-CHECKED-IMPORT-CASES-1",
+  "evidence_class": "E1",
+  "reviewed_at": "2026-11-14",
+  "review_scope": [
+    "ten unchanged raw import cases",
+    "five metamorphic pair relationships",
+    "expected verdicts and checked declaration identities",
+    "rejection attribution requirements",
+    "manual checker-profile upgrade consumer contract"
+  ],
+  "method": "A separate agent re-derived the expectations from the raw syntax, typing rules and pinned source paths without using prior checker agreement as semantic authority.",
+  "independence_limit": "This review is independently derived but corroborative, not blinded. Mandatory RESEARCH_STATUS and the retained cases/input reviews disclose prior outcomes or expected fields, and a broad source search surfaced two prior outcome snippets before the review scope was tightened.",
+  "notation": {
+    "S0": "Sort 0",
+    "S1": "Sort 1",
+    "S2": "Sort 2",
+    "F": "fun (_ : S1) => S0",
+    "G": "forall (_ : S1), S1",
+    "N": "forall (_ : S1), F"
+  },
+  "cases": [
+    {
+      "id": "expression/V-control",
+      "pair": "expression/V",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_V",
+      "reason": "The application argument S0 has the required domain type S1."
+    },
+    {
+      "id": "expression/V-negative",
+      "pair": "expression/V",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_V",
+      "attribution": "application domain comparison in the definition value",
+      "reason": "The argument S1 has type S2 rather than the required S1; beta reduction cannot waive application typing."
+    },
+    {
+      "id": "expression/T-control",
+      "pair": "expression/T",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_T",
+      "reason": "The well-typed declared-type application reduces to S1, matching the value's inferred type."
+    },
+    {
+      "id": "expression/T-negative",
+      "pair": "expression/T",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_T",
+      "attribution": "application domain comparison in the declared type",
+      "reason": "The declared-type application supplies S1 : S2 where the function domain requires S1."
+    },
+    {
+      "id": "expression/B-control",
+      "pair": "expression/B",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_B",
+      "reason": "The Pi binder-domain application is well typed and reduces to S1."
+    },
+    {
+      "id": "expression/B-negative",
+      "pair": "expression/B",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_B",
+      "attribution": "application domain comparison in a declared Pi binder domain",
+      "reason": "The binder-domain application supplies S1 : S2 where S1 is required."
+    },
+    {
+      "id": "pi/A-control",
+      "pair": "pi/A",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_A",
+      "reason": "F has type G."
+    },
+    {
+      "id": "pi/A-negative",
+      "pair": "pi/A",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_A",
+      "attribution": "declared-type Pi codomain sort inference",
+      "reason": "N is malformed because codomain F infers G, a Pi expression rather than a sort.",
+      "ambiguity": "If Pi-codomain validation were skipped, a later value/type mismatch could still reject this case. Generic rejection is unresolved; the diagnostic must identify declared-type Pi formation."
+    },
+    {
+      "id": "pi/B-control",
+      "pair": "pi/B",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_B",
+      "reason": "G has type S2."
+    },
+    {
+      "id": "pi/B-negative",
+      "pair": "pi/B",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_B",
+      "attribution": "definition-value Pi codomain sort inference",
+      "reason": "Inference of value N must reject because codomain F does not infer a sort."
+    }
+  ],
+  "pairing_review": {
+    "expression": "Each pair changes one application argument reference from S0 to S1 and covers value, declared-type and binder-domain placement.",
+    "pi": "Each pair replaces codomain S1 with the same closed term F and covers declared-type and value placement; decoded trees, not NDJSON line counts, define the mutation.",
+    "identity_requirement": "Family-qualified case ID, input hash, decoded type/value tree and declaration name are all required because both families contain B-control/B-negative names and pair members share declaration names."
+  },
+  "consumer_contract": {
+    "decision": "JUSTIFIED_IF_CONFIRMED_AND_REPLAYED",
+    "use": "bounded manual smoke test for omitted application-argument checking and Pi-codomain sort checking during checker profile upgrades",
+    "nonclaims": [
+      "not a fresh holdout",
+      "not defect discovery",
+      "not general checker correctness",
+      "not current-tip behavior",
+      "not default-CI authorization"
+    ]
+  },
+  "required_classification_controls": [
+    "Missing cells, empty output, parser failures, timeouts, unrelated panics and absent checked identity are unresolved rather than semantic rejection.",
+    "Nanoda rejection requires the pinned domain-comparison or infer_sort_of site, not a generic panic.",
+    "Control acceptance requires one-declaration input plus complete checking and the expected declaration identity.",
+    "Changed profiles require fresh source/runtime/configuration identities and do not inherit this result."
+  ],
+  "verdict": "PASS_WITH_DISCLOSED_NONBLINDNESS_AND_PI_A_ATTRIBUTION_GUARD"
+}

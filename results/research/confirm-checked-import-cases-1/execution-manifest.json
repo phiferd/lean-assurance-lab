@@ -1,0 +1,731 @@
+{
+  "schema_version": 1,
+  "item_id": "CONFIRM-CHECKED-IMPORT-CASES-1",
+  "evidence_class": "E1",
+  "frozen_at": "2026-11-14",
+  "question": "Do ten unchanged known checked-import cases produce their independently derived verdicts and checked identities on two exact historical profiles in both an initial run and a fresh replay?",
+  "consumer": "Lean Assurance Lab manual checker-profile upgrade check",
+  "nonclaims": [
+    "not discovery",
+    "not a fresh holdout",
+    "not general correctness",
+    "not current-tip behavior"
+  ],
+  "source_revisions": {
+    "lean4": "5045d0056413266e57c625dcd7c365b10e377c52",
+    "lean4export": "076e8e57707e813375e8f9da8bf989799ace9680",
+    "nanoda": "3a2407216ee84a75f9e1aead6803d0578be06ae7"
+  },
+  "runtime": {
+    "image_id": "sha256:1a144bf428c8c7dd7ed1df886273b77ca331079cb17ebfb9712e1ea2ea643b73",
+    "image_tag": "lean-assurance-lab/checked-import-runtime:2026-11-14",
+    "platform": "linux/arm64",
+    "image_size_bytes": 3838283731,
+    "archive": {
+      "path": "external/runtime-images/checked-import-runtime-2026-11-14.tar.zst",
+      "size_bytes": 892351532,
+      "sha256": "eae9bd60f3dafd5213c58f662d45a2b7591268eb1b6801f37a31556b87ae4f2c"
+    },
+    "pinned_file_sha256": {
+      "/opt/lean-fast/bin/lean": "79fb1d26fa5a39385d59fdc48a711a14b0710ca6480271acce99b4d177cea085",
+      "/opt/nanoda/target/release/nanoda_bin": "5e99b44c8b371ca1aedbc1a609a391ca5ac61b834b14fa60871298affb23d962",
+      "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean": "c264ea4ad5e30bd90cd03a1b48d944c4a7317e53b483b99c04df8c3a6882f133",
+      "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean": "1f943b5cc776eece6d528937b976509c8bd57d10bc69a39b1c119bfb6d664286"
+    },
+    "lean_path": "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean",
+    "container_limits": {
+      "memory": "12g",
+      "memory_swap": "12g",
+      "cpus": "4",
+      "pids_limit": "512",
+      "network": "none",
+      "security_opt": "no-new-privileges",
+      "read_only": true,
+      "tmpfs": "/tmp:rw,noexec,nosuid,size=64m"
+    }
+  },
+  "supervision": {
+    "timeout_seconds": 145,
+    "memory_ceiling_bytes": 4294967296,
+    "sample_interval_seconds": 0.5,
+    "max_trace_gap_seconds": 5,
+    "cleanup_seconds": 10,
+    "output_cap_bytes": 20971520
+  },
+  "phases": [
+    "initial",
+    "replay"
+  ],
+  "cells_per_phase": 20,
+  "total_required_cells": 40,
+  "cases": [
+    {
+      "ordinal": 1,
+      "id": "expression/V-control/lean",
+      "family": "expression",
+      "source_case_id": "V-control",
+      "pair": "expression/V",
+      "checker": "lean",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_V",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.ndjson",
+        "sha256": "be990d17be3a8f6742c1613c36809008034a5d42ccc6bc2d8d0eb0951a10a63e"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.json",
+        "sha256": "fb47c30a530789c216e99bbd82708161b45d71272d03f6b4a6a179d41aca5743"
+      },
+      "parsed_tree": {
+        "type": "(sort (succ 0))",
+        "value": "(app (lam _ (sort (succ 0)) (sort 0)) (sort 0))"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 2,
+      "id": "expression/V-control/nanoda",
+      "family": "expression",
+      "source_case_id": "V-control",
+      "pair": "expression/V",
+      "checker": "nanoda",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_V",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.ndjson",
+        "sha256": "be990d17be3a8f6742c1613c36809008034a5d42ccc6bc2d8d0eb0951a10a63e"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.json",
+        "sha256": "fb47c30a530789c216e99bbd82708161b45d71272d03f6b4a6a179d41aca5743"
+      },
+      "parsed_tree": {
+        "type": "(sort (succ 0))",
+        "value": "(app (lam _ (sort (succ 0)) (sort 0)) (sort 0))"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 3,
+      "id": "expression/V-negative/lean",
+      "family": "expression",
+      "source_case_id": "V-negative",
+      "pair": "expression/V",
+      "checker": "lean",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_V",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.ndjson",
+        "sha256": "d7a404b5150dd973555918db460afb01a19cee59ea7236edeb2879854b274ea6"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.json",
+        "sha256": "3d3013886cabab5fe6c5d9fa68e3207110aedb4998e29a01a2c59e7ed04ca15d"
+      },
+      "parsed_tree": {
+        "type": "(sort (succ 0))",
+        "value": "(app (lam _ (sort (succ 0)) (sort 0)) (sort (succ 0)))"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 4,
+      "id": "expression/V-negative/nanoda",
+      "family": "expression",
+      "source_case_id": "V-negative",
+      "pair": "expression/V",
+      "checker": "nanoda",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_V",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.ndjson",
+        "sha256": "d7a404b5150dd973555918db460afb01a19cee59ea7236edeb2879854b274ea6"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.json",
+        "sha256": "3d3013886cabab5fe6c5d9fa68e3207110aedb4998e29a01a2c59e7ed04ca15d"
+      },
+      "parsed_tree": {
+        "type": "(sort (succ 0))",
+        "value": "(app (lam _ (sort (succ 0)) (sort 0)) (sort (succ 0)))"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 5,
+      "id": "expression/T-control/lean",
+      "family": "expression",
+      "source_case_id": "T-control",
+      "pair": "expression/T",
+      "checker": "lean",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_T",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.ndjson",
+        "sha256": "db3e82a3cfb36e3bf2ced7e8a0b8686b3c83e66dfed20a133bbea32b602e445d"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.json",
+        "sha256": "99163ea2d2f541e910e56eac884f4321a178a993fc534508fe7211d11f34725b"
+      },
+      "parsed_tree": {
+        "type": "(app (lam _ (sort (succ 0)) (sort (succ 0))) (sort 0))",
+        "value": "(sort 0)"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 6,
+      "id": "expression/T-control/nanoda",
+      "family": "expression",
+      "source_case_id": "T-control",
+      "pair": "expression/T",
+      "checker": "nanoda",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_T",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.ndjson",
+        "sha256": "db3e82a3cfb36e3bf2ced7e8a0b8686b3c83e66dfed20a133bbea32b602e445d"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.json",
+        "sha256": "99163ea2d2f541e910e56eac884f4321a178a993fc534508fe7211d11f34725b"
+      },
+      "parsed_tree": {
+        "type": "(app (lam _ (sort (succ 0)) (sort (succ 0))) (sort 0))",
+        "value": "(sort 0)"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 7,
+      "id": "expression/T-negative/lean",
+      "family": "expression",
+      "source_case_id": "T-negative",
+      "pair": "expression/T",
+      "checker": "lean",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_T",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.ndjson",
+        "sha256": "6fb04729b0c18b281495f2a6e666d9f436f5977f9030ee8697f2bc2ff17fd09b"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.json",
+        "sha256": "eaa3dab1691a395baba103ff000152f2df4b62df8ee276f77c471d4fb7566f53"
+      },
+      "parsed_tree": {
+        "type": "(app (lam _ (sort (succ 0)) (sort (succ 0))) (sort (succ 0)))",
+        "value": "(sort 0)"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 8,
+      "id": "expression/T-negative/nanoda",
+      "family": "expression",
+      "source_case_id": "T-negative",
+      "pair": "expression/T",
+      "checker": "nanoda",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_T",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.ndjson",
+        "sha256": "6fb04729b0c18b281495f2a6e666d9f436f5977f9030ee8697f2bc2ff17fd09b"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.json",
+        "sha256": "eaa3dab1691a395baba103ff000152f2df4b62df8ee276f77c471d4fb7566f53"
+      },
+      "parsed_tree": {
+        "type": "(app (lam _ (sort (succ 0)) (sort (succ 0))) (sort (succ 0)))",
+        "value": "(sort 0)"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 9,
+      "id": "expression/B-control/lean",
+      "family": "expression",
+      "source_case_id": "B-control",
+      "pair": "expression/B",
+      "checker": "lean",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.ndjson",
+        "sha256": "01abfa9b6b1ce96b72d7e1c193d77b2f360bc9a14e147029fed3d20d78a38c68"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.json",
+        "sha256": "92d8998cdd2af9c10ecdfc0b8774cc946ee03ba8e4aace3c4bd93084105aefb5"
+      },
+      "parsed_tree": {
+        "type": "(forallE x (app (lam _ (sort (succ 0)) (sort (succ 0))) (sort 0)) (sort (succ 0)))",
+        "value": "(lam x (sort (succ 0)) (sort 0))"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 10,
+      "id": "expression/B-control/nanoda",
+      "family": "expression",
+      "source_case_id": "B-control",
+      "pair": "expression/B",
+      "checker": "nanoda",
+      "expected": "ACCEPT",
+      "declaration": "LAL_EXPR_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.ndjson",
+        "sha256": "01abfa9b6b1ce96b72d7e1c193d77b2f360bc9a14e147029fed3d20d78a38c68"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.json",
+        "sha256": "92d8998cdd2af9c10ecdfc0b8774cc946ee03ba8e4aace3c4bd93084105aefb5"
+      },
+      "parsed_tree": {
+        "type": "(forallE x (app (lam _ (sort (succ 0)) (sort (succ 0))) (sort 0)) (sort (succ 0)))",
+        "value": "(lam x (sort (succ 0)) (sort 0))"
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 11,
+      "id": "expression/B-negative/lean",
+      "family": "expression",
+      "source_case_id": "B-negative",
+      "pair": "expression/B",
+      "checker": "lean",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.ndjson",
+        "sha256": "f26c854e79802bd174e773adef4d7386ce6bb39c9fc3e692de0c09835fdd01d3"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.json",
+        "sha256": "d22215a80f974c84d9321133e2c44f9829603366c55a00c51a73d59c239d9b3d"
+      },
+      "parsed_tree": {
+        "type": "(forallE x (app (lam _ (sort (succ 0)) (sort (succ 0))) (sort (succ 0))) (sort (succ 0)))",
+        "value": "(lam x (sort (succ 0)) (sort 0))"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 12,
+      "id": "expression/B-negative/nanoda",
+      "family": "expression",
+      "source_case_id": "B-negative",
+      "pair": "expression/B",
+      "checker": "nanoda",
+      "expected": "REJECT",
+      "declaration": "LAL_EXPR_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.ndjson",
+        "sha256": "f26c854e79802bd174e773adef4d7386ce6bb39c9fc3e692de0c09835fdd01d3"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.json",
+        "sha256": "d22215a80f974c84d9321133e2c44f9829603366c55a00c51a73d59c239d9b3d"
+      },
+      "parsed_tree": {
+        "type": "(forallE x (app (lam _ (sort (succ 0)) (sort (succ 0))) (sort (succ 0))) (sort (succ 0)))",
+        "value": "(lam x (sort (succ 0)) (sort 0))"
+      },
+      "attribution_required": "application domain comparison"
+    },
+    {
+      "ordinal": 13,
+      "id": "pi/A-control/lean",
+      "family": "pi",
+      "source_case_id": "A-control",
+      "pair": "pi/A",
+      "checker": "lean",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_A",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.ndjson",
+        "sha256": "43937043ea6cedf2c55fab7f630b406619c34113f6a9b11bda41272373dadad5"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.json",
+        "sha256": "f2e4f1371e59c9c65a157f7cd41551420ce67d17369f81ccabab9cee3ccfdf65"
+      },
+      "parsed_tree": {
+        "type": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            1
+          ]
+        ],
+        "value": [
+          "lam",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            0
+          ]
+        ]
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 14,
+      "id": "pi/A-control/nanoda",
+      "family": "pi",
+      "source_case_id": "A-control",
+      "pair": "pi/A",
+      "checker": "nanoda",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_A",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.ndjson",
+        "sha256": "43937043ea6cedf2c55fab7f630b406619c34113f6a9b11bda41272373dadad5"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.json",
+        "sha256": "f2e4f1371e59c9c65a157f7cd41551420ce67d17369f81ccabab9cee3ccfdf65"
+      },
+      "parsed_tree": {
+        "type": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            1
+          ]
+        ],
+        "value": [
+          "lam",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            0
+          ]
+        ]
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 15,
+      "id": "pi/A-negative/lean",
+      "family": "pi",
+      "source_case_id": "A-negative",
+      "pair": "pi/A",
+      "checker": "lean",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_A",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.ndjson",
+        "sha256": "802d6f62526323fe6f6fae5b94b2c30032e728b66cb55e1f3ced5ff53c96d22e"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.json",
+        "sha256": "725ad9c59a417910cd6e10dbf011ea7cd63e1525847acfaf9f6024da9e4873d6"
+      },
+      "parsed_tree": {
+        "type": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "lam",
+            [
+              "sort",
+              1
+            ],
+            [
+              "sort",
+              0
+            ]
+          ]
+        ],
+        "value": [
+          "lam",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            0
+          ]
+        ]
+      },
+      "attribution_required": "Pi codomain sort inference"
+    },
+    {
+      "ordinal": 16,
+      "id": "pi/A-negative/nanoda",
+      "family": "pi",
+      "source_case_id": "A-negative",
+      "pair": "pi/A",
+      "checker": "nanoda",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_A",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.ndjson",
+        "sha256": "802d6f62526323fe6f6fae5b94b2c30032e728b66cb55e1f3ced5ff53c96d22e"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.json",
+        "sha256": "725ad9c59a417910cd6e10dbf011ea7cd63e1525847acfaf9f6024da9e4873d6"
+      },
+      "parsed_tree": {
+        "type": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "lam",
+            [
+              "sort",
+              1
+            ],
+            [
+              "sort",
+              0
+            ]
+          ]
+        ],
+        "value": [
+          "lam",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            0
+          ]
+        ]
+      },
+      "attribution_required": "Pi codomain sort inference"
+    },
+    {
+      "ordinal": 17,
+      "id": "pi/B-control/lean",
+      "family": "pi",
+      "source_case_id": "B-control",
+      "pair": "pi/B",
+      "checker": "lean",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.ndjson",
+        "sha256": "42ec0e7c78e6cb1f889256dcfeba0ab1c6754f77d271f422f8235600db9ee643"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.json",
+        "sha256": "1e245a3e4eabab30c18cef011b730eaa160cd9ba52575d8992e3955e3d3cf3d5"
+      },
+      "parsed_tree": {
+        "type": [
+          "sort",
+          2
+        ],
+        "value": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            1
+          ]
+        ]
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 18,
+      "id": "pi/B-control/nanoda",
+      "family": "pi",
+      "source_case_id": "B-control",
+      "pair": "pi/B",
+      "checker": "nanoda",
+      "expected": "ACCEPT",
+      "declaration": "LAL_PI_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.ndjson",
+        "sha256": "42ec0e7c78e6cb1f889256dcfeba0ab1c6754f77d271f422f8235600db9ee643"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.json",
+        "sha256": "1e245a3e4eabab30c18cef011b730eaa160cd9ba52575d8992e3955e3d3cf3d5"
+      },
+      "parsed_tree": {
+        "type": [
+          "sort",
+          2
+        ],
+        "value": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "sort",
+            1
+          ]
+        ]
+      },
+      "attribution_required": "complete checked declaration identity"
+    },
+    {
+      "ordinal": 19,
+      "id": "pi/B-negative/lean",
+      "family": "pi",
+      "source_case_id": "B-negative",
+      "pair": "pi/B",
+      "checker": "lean",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.ndjson",
+        "sha256": "dab6e3f6f07316480e131b37679fb2038518f5eb32d9d43f1438ae0267b9ff6a"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.json",
+        "sha256": "47b1e8705b037f918bcdb785d1c9424872656c55174560c579a3f1ecda4dcc0c"
+      },
+      "parsed_tree": {
+        "type": [
+          "sort",
+          2
+        ],
+        "value": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "lam",
+            [
+              "sort",
+              1
+            ],
+            [
+              "sort",
+              0
+            ]
+          ]
+        ]
+      },
+      "attribution_required": "Pi codomain sort inference"
+    },
+    {
+      "ordinal": 20,
+      "id": "pi/B-negative/nanoda",
+      "family": "pi",
+      "source_case_id": "B-negative",
+      "pair": "pi/B",
+      "checker": "nanoda",
+      "expected": "REJECT",
+      "declaration": "LAL_PI_B",
+      "input": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.ndjson",
+        "sha256": "dab6e3f6f07316480e131b37679fb2038518f5eb32d9d43f1438ae0267b9ff6a"
+      },
+      "config": {
+        "path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.json",
+        "sha256": "47b1e8705b037f918bcdb785d1c9424872656c55174560c579a3f1ecda4dcc0c"
+      },
+      "parsed_tree": {
+        "type": [
+          "sort",
+          2
+        ],
+        "value": [
+          "forallE",
+          [
+            "sort",
+            1
+          ],
+          [
+            "lam",
+            [
+              "sort",
+              1
+            ],
+            [
+              "sort",
+              0
+            ]
+          ]
+        ]
+      },
+      "attribution_required": "Pi codomain sort inference"
+    }
+  ],
+  "file_sha256": {
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/Replay.lean": "9af0ec59607a9688ff5b00c9a024656e79deba8235ada7397731826dd7508969",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/analyze.py": "6074ab3b9401e668e14b6a1056ca4e83863f58c8a77fc0965fae26ffac943437",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/cases.json": "858df9d7bbe3219b4c00a6819bdfdc26f139fac89a74970800c1692bdf9e579e",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/input-review.md": "931dbea5320618e295a9478c1f927138791b2e4822a9de082519b42090361dd1",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.json": "92d8998cdd2af9c10ecdfc0b8774cc946ee03ba8e4aace3c4bd93084105aefb5",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-control.ndjson": "01abfa9b6b1ce96b72d7e1c193d77b2f360bc9a14e147029fed3d20d78a38c68",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.json": "d22215a80f974c84d9321133e2c44f9829603366c55a00c51a73d59c239d9b3d",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/B-negative.ndjson": "f26c854e79802bd174e773adef4d7386ce6bb39c9fc3e692de0c09835fdd01d3",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.json": "99163ea2d2f541e910e56eac884f4321a178a993fc534508fe7211d11f34725b",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-control.ndjson": "db3e82a3cfb36e3bf2ced7e8a0b8686b3c83e66dfed20a133bbea32b602e445d",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.json": "eaa3dab1691a395baba103ff000152f2df4b62df8ee276f77c471d4fb7566f53",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/T-negative.ndjson": "6fb04729b0c18b281495f2a6e666d9f436f5977f9030ee8697f2bc2ff17fd09b",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.json": "fb47c30a530789c216e99bbd82708161b45d71272d03f6b4a6a179d41aca5743",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-control.ndjson": "be990d17be3a8f6742c1613c36809008034a5d42ccc6bc2d8d0eb0951a10a63e",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.json": "3d3013886cabab5fe6c5d9fa68e3207110aedb4998e29a01a2c59e7ed04ca15d",
+    "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/inputs/V-negative.ndjson": "d7a404b5150dd973555918db460afb01a19cee59ea7236edeb2879854b274ea6",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/analyze.py": "8ca17e721e3876674a9b5579e77d6639dcfd6de1dad0e7a8b618d1b03bce20b9",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/cases.json": "488b26c541ad3c2a2fca7afc0710d3bfb526fed505985f333758a87ab205e225",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/input-review.md": "9060fcdb9900b8b0885ad2475b71bf1f4963930be5b8336faf4ec53c94e22084",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.json": "f2e4f1371e59c9c65a157f7cd41551420ce67d17369f81ccabab9cee3ccfdf65",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-control.ndjson": "43937043ea6cedf2c55fab7f630b406619c34113f6a9b11bda41272373dadad5",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.json": "725ad9c59a417910cd6e10dbf011ea7cd63e1525847acfaf9f6024da9e4873d6",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/A-negative.ndjson": "802d6f62526323fe6f6fae5b94b2c30032e728b66cb55e1f3ced5ff53c96d22e",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.json": "1e245a3e4eabab30c18cef011b730eaa160cd9ba52575d8992e3955e3d3cf3d5",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-control.ndjson": "42ec0e7c78e6cb1f889256dcfeba0ab1c6754f77d271f422f8235600db9ee643",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.json": "47b1e8705b037f918bcdb785d1c9424872656c55174560c579a3f1ecda4dcc0c",
+    "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs/B-negative.ndjson": "dab6e3f6f07316480e131b37679fb2038518f5eb32d9d43f1438ae0267b9ff6a",
+    "lib/resource_envelope_supervisor.py": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539",
+    "results/research/confirm-checked-import-cases-1/analyze.py": "8c5bdd43d9707bc186a9f9dac52a2869e8becaa1dd8a74de4e0037e4826e09c9",
+    "results/research/confirm-checked-import-cases-1/compare_replay.py": "4feb60fa1213a033d490d29823d4ad78d5d83880e85d3aa63617b05a33458233",
+    "results/research/confirm-checked-import-cases-1/confirmation_common.py": "9b9018fb5c2b2cc1cd848f65db2b1cb4c78c542ad2f33f728fb9d02373ba2e70",
+    "results/research/confirm-checked-import-cases-1/freeze_manifest.py": "0493db7efda9485e3b543a9adf5b42bf584f11bb193edc62221c3a82c477f288",
+    "results/research/confirm-checked-import-cases-1/independent-expectation-review.json": "7ab7793cc4f310987b9360515925718647a64bddb374153c378cbb989eedb3e1",
+    "results/research/confirm-checked-import-cases-1/preflight-r2/result.json": "25009e61499db1d2e539c4be98407e81593eb0d784c126f70e718af2e34e6bd9",
+    "results/research/confirm-checked-import-cases-1/preflight-repair.json": "e92d5716d5ae29c95aeafa0a55e34dc33d0b29d849fd02f0940007237c1bd562",
+    "results/research/confirm-checked-import-cases-1/preflight.py": "de76791d87d6795a015b24d87c7330e993e42eac79160095fdee1a370ce8d84c",
+    "results/research/confirm-checked-import-cases-1/run_confirmation.py": "261556623f91ad27a35e262bcd5a1c04e16e8d5f73968b472df2a62464b6913d",
+    "results/research/confirm-checked-import-cases-1/runtime-recovery.md": "c4b4b3e80027feef7af9fb4e1226ba360530a44229a312dc5557e791183bc026",
+    "tests/test_confirm_checked_import_cases.py": "4054afffa457b49ff20b8e7be0ef62396969069d383b4169767df2ec5be2b7d1"
+  },
+  "classification": {
+    "accept": "zero exit plus exact parsed declaration identity and complete checked-definition success",
+    "reject": "expected nonzero exit plus the pinned boundary-specific diagnostic site",
+    "unresolved": "missing/empty/parser/timeout/unrelated panic/identity or supervision failure",
+    "pi_a_guard": "generic rejection is unresolved unless declared-type Pi codomain sort inference is identified"
+  },
+  "freshness": "Each cell is a separately named fresh container created from the exact image and removed after execution; replay uses new names and receipts."
+}

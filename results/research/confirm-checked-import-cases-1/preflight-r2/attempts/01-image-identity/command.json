@@ -1,0 +1,31 @@
+{
+  "argv": [
+    "/usr/local/bin/docker",
+    "run",
+    "--rm",
+    "--name",
+    "lal-cic-preflight-identity",
+    "--network",
+    "none",
+    "--read-only",
+    "--tmpfs",
+    "/tmp:rw,noexec,nosuid,size=64m",
+    "--memory",
+    "12g",
+    "--memory-swap",
+    "12g",
+    "--cpus",
+    "4",
+    "--pids-limit",
+    "512",
+    "--security-opt",
+    "no-new-privileges",
+    "sha256:1a144bf428c8c7dd7ed1df886273b77ca331079cb17ebfb9712e1ea2ea643b73",
+    "sha256sum",
+    "/opt/lean-fast/bin/lean",
+    "/opt/nanoda/target/release/nanoda_bin",
+    "/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean/Export/Parse.olean",
+    "/opt/comparator/.lake/packages/lean4export/Export/Parse.lean"
+  ],
+  "timeout_seconds": 60
+}
