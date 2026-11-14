@@ -1,0 +1,100 @@
+{
+  "observed_on": "2026-11-14",
+  "source_tool": "github.fetch_pr_comments",
+  "response": {
+    "comments": [
+      {
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/41#issuecomment-6098247544",
+        "body": "The intent and impact of this PR are insufficiently clear.",
+        "user": {
+          "login": "ammkrn",
+          "name": "ammkrn",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/46387933?v=4",
+          "id": 46387933
+        },
+        "id": 6098247544,
+        "pull_request_review_id": null,
+        "in_reply_to_id": null,
+        "created_at": "2026-10-10T13:58:37Z",
+        "updated_at": "2026-10-10T13:58:37Z",
+        "review": null,
+        "side": null,
+        "line": null,
+        "start_line": null,
+        "path": null,
+        "body_html": "<p dir=\"auto\">The intent and impact of this PR are insufficiently clear.</p>"
+      },
+      {
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/41#issuecomment-6100009162",
+        "body": "Both this issue and #43 use mutation testing to detect places in the code where the tests would fail to capture certain types of regressions. \r\n\r\n### A short background on mutation testing\r\n\r\nConsider a simple function:\r\n\r\n```\r\nfunction add(a, b) {\r\n   return a + b\r\n}\r\n```\r\n\r\nthe code is obviously logically correct (ignoring issues like overflow). However, the question I'm trying to answer is \"if a bug were introduced in this code, would the existing test suite catch it?\". Note that code coverage doesn't really address the fundamental problem. e.g. consider this test:\r\n\r\n\r\n```\r\ntest_add() {\r\n  assert add(0, 0) == 0\r\n}\r\n```\r\n\r\nThe code is 100% covered and the tests pass, but it would not detect the following bug:\r\n\r\n```\r\nfunction add(a, b) {\r\n   return a - b  // subtracts instead of adds\r\n}\r\n```\r\n\r\nMutation testing holds the tests fixed and then injects bugs into the code. If the existing tests still pass, it indicates that some existing behavior is not asserted by the tests (these theoretical bugs are referred to as \"mutants\"). \r\n\r\nIn both PRs, I introduced a real bug locally and then found that the existing test suite still passed. #43 actually shows the the bug fixed by https://github.com/ammkrn/nanoda_lib/pull/23 would go undetected if it were re-introduced.\r\n\r\nLet me know if you would prefer not to have similar PRs submitted, or if your concern was specifically about these cases. Also, apologies if the descriptions were not clear enough.",
+        "user": {
+          "login": "phiferd",
+          "name": "phiferd",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+          "id": 25631
+        },
+        "id": 6100009162,
+        "pull_request_review_id": null,
+        "in_reply_to_id": null,
+        "created_at": "2026-10-10T17:03:13Z",
+        "updated_at": "2026-10-10T17:03:13Z",
+        "review": null,
+        "side": null,
+        "line": null,
+        "start_line": null,
+        "path": null,
+        "body_html": "<p dir=\"auto\">Both this issue and <a class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"5699679740\" data-permission-text=\"Title is private\" data-url=\"https://github.com/ammkrn/nanoda_lib/issues/43\" data-hovercard-type=\"pull_request\" data-hovercard-url=\"/ammkrn/nanoda_lib/pull/43/hovercard\" href=\"https://github.com/ammkrn/nanoda_lib/pull/43\">#43</a> use mutation testing to detect places in the code where the tests would fail to capture certain types of regressions.</p>\n<h3 dir=\"auto\">A short background on mutation testing</h3>\n<p dir=\"auto\">Consider a simple function:</p>\n<div class=\"snippet-clipboard-content notranslate position-relative overflow-auto\" data-snippet-clipboard-copy-content=\"function add(a, b) {\n   return a + b\n}\"><pre class=\"notranslate\"><code class=\"notranslate\">function add(a, b) {\n   return a + b\n}\n</code></pre></div>\n<p dir=\"auto\">the code is obviously logically correct (ignoring issues like overflow). However, the question I'm trying to answer is \"if a bug were introduced in this code, would the existing test suite catch it?\". Note that code coverage doesn't really address the fundamental problem. e.g. consider this test:</p>\n<div class=\"snippet-clipboard-content notranslate position-relative overflow-auto\" data-snippet-clipboard-copy-content=\"test_add() {\n  assert add(0, 0) == 0\n}\"><pre class=\"notranslate\"><code class=\"notranslate\">test_add() {\n  assert add(0, 0) == 0\n}\n</code></pre></div>\n<p dir=\"auto\">The code is 100% covered and the tests pass, but it would not detect the following bug:</p>\n<div class=\"snippet-clipboard-content notranslate position-relative overflow-auto\" data-snippet-clipboard-copy-content=\"function add(a, b) {\n   return a - b  // subtracts instead of adds\n}\"><pre class=\"notranslate\"><code class=\"notranslate\">function add(a, b) {\n   return a - b  // subtracts instead of adds\n}\n</code></pre></div>\n<p dir=\"auto\">Mutation testing holds the tests fixed and then injects bugs into the code. If the existing tests still pass, it indicates that some existing behavior is not asserted by the tests (these theoretical bugs are referred to as \"mutants\").</p>\n<p dir=\"auto\">In both PRs, I introduced a real bug locally and then found that the existing test suite still passed. <a class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"5699679740\" data-permission-text=\"Title is private\" data-url=\"https://github.com/ammkrn/nanoda_lib/issues/43\" data-hovercard-type=\"pull_request\" data-hovercard-url=\"/ammkrn/nanoda_lib/pull/43/hovercard\" href=\"https://github.com/ammkrn/nanoda_lib/pull/43\">#43</a> actually shows the the bug fixed by <a class=\"issue-link js-issue-link\" data-error-text=\"Failed to load title\" data-id=\"5039971058\" data-permission-text=\"Title is private\" data-url=\"https://github.com/ammkrn/nanoda_lib/issues/23\" data-hovercard-type=\"pull_request\" data-hovercard-url=\"/ammkrn/nanoda_lib/pull/23/hovercard\" href=\"https://github.com/ammkrn/nanoda_lib/pull/23\">#23</a> would go undetected if it were re-introduced.</p>\n<p dir=\"auto\">Let me know if you would prefer not to have similar PRs submitted, or if your concern was specifically about these cases. Also, apologies if the descriptions were not clear enough.</p>"
+      },
+      {
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/41#issuecomment-6100907062",
+        "body": "I'm not against this in principle, but the contents of the linked report are totally unintelligible (to me).",
+        "user": {
+          "login": "ammkrn",
+          "name": "ammkrn",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/46387933?v=4",
+          "id": 46387933
+        },
+        "id": 6100907062,
+        "pull_request_review_id": null,
+        "in_reply_to_id": null,
+        "created_at": "2026-10-10T18:41:16Z",
+        "updated_at": "2026-10-10T18:41:16Z",
+        "review": null,
+        "side": null,
+        "line": null,
+        "start_line": null,
+        "path": null,
+        "body_html": "<p dir=\"auto\">I'm not against this in principle, but the contents of the linked report are totally unintelligible (to me).</p>"
+      },
+      {
+        "url": "https://github.com/ammkrn/nanoda_lib/pull/41#issuecomment-6101565016",
+        "body": "Agreed -- the report could have been more direct. Here's a better description (I hope):\r\n\r\nWhen [this diff](https://github.com/phiferd/lean-assurance-lab/blob/a78f7b856ab3a5cb3dfb39ae632f332404a879c1/explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/fault.patch) is applied, all 44 existing tests pass. \r\n\r\nThe new regression test fails with that mutation applied and passes with the original code. ",
+        "user": {
+          "login": "phiferd",
+          "name": "phiferd",
+          "email": null,
+          "avatar_url": "https://avatars.githubusercontent.com/u/25631?v=4",
+          "id": 25631
+        },
+        "id": 6101565016,
+        "pull_request_review_id": null,
+        "in_reply_to_id": null,
+        "created_at": "2026-10-10T19:54:24Z",
+        "updated_at": "2026-10-10T19:54:24Z",
+        "review": null,
+        "side": null,
+        "line": null,
+        "start_line": null,
+        "path": null,
+        "body_html": "<p dir=\"auto\">Agreed -- the report could have been more direct. Here's a better description (I hope):</p>\n<p dir=\"auto\">When <a href=\"https://github.com/phiferd/lean-assurance-lab/blob/a78f7b856ab3a5cb3dfb39ae632f332404a879c1/explorations/runs/EXPLORE-NANODA-CONGRUENCE-FAULT-1/fault.patch\">this diff</a> is applied, all 44 existing tests pass.</p>\n<p dir=\"auto\">The new regression test fails with that mutation applied and passes with the original code.</p>"
+      }
+    ],
+    "url": "https://github.com/ammkrn/nanoda_lib/pull/41",
+    "title": "ammkrn/nanoda_lib PR #41 comments",
+    "display_url": "https://github.com/ammkrn/nanoda_lib/pull/41",
+    "display_title": "ammkrn/nanoda_lib PR #41 comments"
+  }
+}

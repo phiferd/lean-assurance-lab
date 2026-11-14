@@ -1,6 +1,12 @@
 # Research Status
 
-Last updated: 2026-11-09
+Last updated: 2026-11-14
+
+The constitutional review identified useful work in the ten retained November
+test inputs and in explaining older assurance cases. Yes, these can improve
+reuse and visibility while missing historical evidence remains unresolved.
+Next is separate confirmation for a small checker-upgrade regression package;
+the plan is updated, and the selected experiment has not started.
 
 ## How Status Is Tracked
 
@@ -57,6 +63,14 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `STRATEGY-REASSESSMENT-2026-11-14` reviews the unchanged constitution and
+  replaces the paused handoff with concrete consumer work. Ten existing inputs
+  motivate separate confirmation and a small checker-upgrade regression package;
+  an assurance-case companion is an independent READY alternative. Yes, this
+  prioritizes reuse and visibility alongside discovery. No checker ran and no
+  missing historical result was relabeled. See the
+  [assessment](../results/research/strategy-reassessment-2026-11-14/report.md).
 
 - `E0-PI-CODOMAIN-ADMISSION-SCREEN-1` completes with E0 NO_SIGNAL. Pinned
   Lean 4.34.1 and Nanoda `3a240721` each accepted two valid ordinary
@@ -3402,7 +3416,10 @@ remain unchanged. Existing Lean/Arena waiting triggers and Kiota deferrals are
 preserved. The exact accepted authority and entry state remain bound in
 [work-record.json](../results/research/alt-transfer-2026-09-08/work-record.json).
 
-### Active
+### Earlier discovery handoffs
+
+The following dated handoffs are historical context. Their next-item and pause
+wording is superseded by the Active section below; their evidence is unchanged.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` — explore fresh public-input behavior and build
    reusable shared conformance assets under
@@ -4066,6 +4083,44 @@ the resource-envelope matrix was selected READY and unstarted; it has since
 completed with a reviewed finite result. That memory audit is now deferred. The current READY successor is
 [closure reliability](research/WORKFLOW_CLOSURE_RELIABILITY_1_PLAN.md);
 its selection does not launch it or any scientific pilot.
+
+### Active
+
+The ten November boundary inputs are reusable, but their observations remain
+exploratory and their runners depend on an old task container. The recent
+negative source audit did not exhaust useful local work. Yes, a small regression
+package can help a Lab maintainer check a checker upgrade, and a separate
+case-disposition companion can explain older assurance claims. First confirm the
+fixed cases under new gates; no scientific experiment ran in this reassessment.
+
+1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
+   and explain their limits under
+   [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
+   The [constitutional review](../results/research/strategy-reassessment-2026-11-14/report.md)
+   supersedes the paused handoff without changing the constitution or any
+   completed result.
+
+Selected next item: `CONFIRM-CHECKED-IMPORT-CASES-1`.
+Queue handoff: EXECUTABLE.
+
+The canonical queue retains two READY items; neither has started.
+
+| Order | Item | State | Concrete output |
+| --- | --- | --- | --- |
+| 1 | `CONFIRM-CHECKED-IMPORT-CASES-1` | READY | Separate E1 confirmation of the ten existing inputs on two exact profiles, fresh evidence, reviewed expectations and portable recipes. [Plan](research/CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md). |
+| 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| 3 | `CHECKED-IMPORT-REGRESSION-PACK-1` | PLANNED | One manual checker-upgrade command with the confirmed cases and controls for omitted or misidentified checking; requires confirmation SUCCESS and separate E2 integration gates. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
+
+All three are unstarted. Confirmation is selected for preparation, not licensed
+to launch before its exact scientific/runtime gates. Known cases do not become
+independent holdouts. Missing original eta/recursor evidence and independent
+transfer custody remain WAITING; no duplicate experiment is authorized. Other
+owner deferrals, CVC prerequisites and milestone gates remain unchanged.
+
+The November 14 read-only check confirms Nanoda #41/#43 remain closed without
+merge and retains the clarity feedback. Other upstream entries keep their dated
+observations. No upstream contact, PR revision or submission is selected.
+The planning update ends here; implementation and execution are separate work.
 
 ### Waiting
 

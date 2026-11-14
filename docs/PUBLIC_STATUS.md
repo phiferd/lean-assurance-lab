@@ -6,7 +6,7 @@ This page is generated from `results/assurance/current.json` by
 New to Lean, proof kernels, or mutation testing? Start with
 [Why Test a Proof Kernel?](INTRODUCTION.md).
 
-Snapshot SHA-256: `7758360608e859b5ac9f0c69c123edd6a30049a065ab25a70e7881199b26fdf2`
+Snapshot SHA-256: `d47581833bb6bae326772758092930b74ba1c24713bdddb1ff65e879d90d6080`
 
 ## Current Gate: FAIL
 
