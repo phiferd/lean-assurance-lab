@@ -2,11 +2,12 @@
 
 Last updated: 2026-11-14
 
-The constitutional review identified useful work in the ten retained November
-test inputs and in explaining older assurance cases. Yes, these can improve
-reuse and visibility while missing historical evidence remains unresolved.
-Next is separate confirmation for a small checker-upgrade regression package;
-the plan is updated, and the selected experiment has not started.
+The ten retained November cases now have separate E1 confirmation and a fresh
+replay: 40 attributable cells produced 20 valid-control accepts and 20 expected
+typing-precondition rejects, with no unexpected behavior. Yes, this supports a
+small manual checker-upgrade regression package, not a correctness or discovery
+claim. Next is the separately gated E2 integration; the assurance-case reader
+companion remains an independent READY alternative.
 
 ## How Status Is Tracked
 
@@ -63,6 +64,18 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `CONFIRM-CHECKED-IMPORT-CASES-1` completes SUCCESS. The ten unchanged known
+  inputs ran on pinned Lean 4.34.1 and Nanoda `3a240721` in 20 fresh initial
+  cells and 20 distinct replay cells. All five controls accepted on both
+  profiles in both phases, and all five negatives received their expected
+  boundary-specific rejection: 20 accepts, 20 rejects and no unexpected or
+  unresolved cell. Yes, this supplies a reproducible manual-upgrade-check basis;
+  it is not a fresh holdout, current-tip result, defect, soundness proof or
+  semantic authority claim. A 3.7 GB immutable ARM64 image and ignored 851 MiB
+  archive replace the old-container dependency. Select the separate E2
+  integration item READY and unstarted. See the
+  [confirmation report](../results/research/confirm-checked-import-cases-1/report.md).
 
 - `STRATEGY-REASSESSMENT-2026-11-14` reviews the unchanged constitution and
   replaces the paused handoff with concrete consumer work. Ten existing inputs
@@ -4086,12 +4099,11 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The ten November boundary inputs are reusable, but their observations remain
-exploratory and their runners depend on an old task container. The recent
-negative source audit did not exhaust useful local work. Yes, a small regression
-package can help a Lab maintainer check a checker upgrade, and a separate
-case-disposition companion can explain older assurance claims. First confirm the
-fixed cases under new gates; no scientific experiment ran in this reassessment.
+The ten November boundary inputs now have separately reviewed, attributable E1
+confirmation and replay on two exact historical profiles. No unexpected checker
+behavior was found. Yes, their immediate result-driven value is a fail-closed
+manual checker-upgrade command; a separate case-disposition companion can still
+explain older assurance claims without checker execution.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
    and explain their limits under
@@ -4100,28 +4112,27 @@ fixed cases under new gates; no scientific experiment ran in this reassessment.
    supersedes the paused handoff without changing the constitution or any
    completed result.
 
-Selected next item: `CONFIRM-CHECKED-IMPORT-CASES-1`.
+Selected next item: `CHECKED-IMPORT-REGRESSION-PACK-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue has one ACTIVE item and one additional READY item.
+The canonical queue has two READY items and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `CONFIRM-CHECKED-IMPORT-CASES-1` | ACTIVE | Separate E1 confirmation of the ten existing inputs on two exact profiles, fresh evidence, reviewed expectations and portable recipes. [Plan](research/CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md). |
+| 1 | `CHECKED-IMPORT-REGRESSION-PACK-1` | READY | One manual checker-upgrade command reusing the confirmed ten cases, with controls for missing, changed, substituted, unattributable and stale evidence. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 | 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
-| 3 | `CHECKED-IMPORT-REGRESSION-PACK-1` | PLANNED | One manual checker-upgrade command with the confirmed cases and controls for omitted or misidentified checking; requires confirmation SUCCESS and separate E2 integration gates. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
-Confirmation preparation started on 2026-11-14; the companion and integration
-remain unstarted. Confirmation is not licensed to launch before its exact
-scientific/runtime gates. Known cases do not become
-independent holdouts. Missing original eta/recursor evidence and independent
-transfer custody remain WAITING; no duplicate experiment is authorized. Other
-owner deferrals, CVC prerequisites and milestone gates remain unchanged.
+Confirmation closed on 2026-11-14; integration and the companion remain
+unstarted. The integration must independently review its E2 acceptance contract
+and fail-closed controls before shared use. Known cases do not become independent
+holdouts. Missing original eta/recursor evidence and independent transfer custody
+remain WAITING; no duplicate experiment is authorized. Other owner deferrals,
+CVC prerequisites and milestone gates remain unchanged.
 
 The November 14 read-only check confirms Nanoda #41/#43 remain closed without
 merge and retains the clarity feedback. Other upstream entries keep their dated
 observations. No upstream contact, PR revision or submission is selected.
-The planning update ends here; implementation and execution are separate work.
+The selected integration is a separate item; selecting it does not start it.
 
 ### Waiting
 
