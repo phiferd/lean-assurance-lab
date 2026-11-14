@@ -5,7 +5,9 @@ exploratory and their runners depend on a particular local container. Yes, they
 can serve a concrete purpose: help a Lab developer detect a change in ordinary
 declaration checking when updating a Lean or Nanoda executable. First confirm
 the exact cases under a separate protocol; then consider the separately gated
-regression integration. This item is READY for preparation and unstarted.
+regression integration. This item is ACTIVE for preparation as of 2026-11-14.
+Scientific execution remains gated by the committed manifest, independent
+expectation review, portable runtime identities and process-control preflight.
 
 Item: `CONFIRM-CHECKED-IMPORT-CASES-1`.
 Evidence class: E1. Consumer: the Lab's manual checker-profile upgrade check.

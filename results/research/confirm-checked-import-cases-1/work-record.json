@@ -1,0 +1,56 @@
+{
+  "schema_version": 1,
+  "item_id": "CONFIRM-CHECKED-IMPORT-CASES-1",
+  "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
+  "evidence_class": "E1",
+  "status": "ACTIVE",
+  "started_at": "2026-11-14",
+  "authorization": "The owner directed: Ok, do the work; the active goal then expanded to complete all work in the queue.",
+  "base_commit": "059035a865399759ae8db41fcde3f083f4b1c690",
+  "plan": {
+    "path": "docs/research/CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md",
+    "sha256": "0b482a2147b58f9816cfa6013dcdde4bb2fff94afe7df99e640e0452bc74f6f6"
+  },
+  "consumer": "Lean Assurance Lab manual checker-profile upgrade check",
+  "derived_from": [
+    {
+      "id": "EXPLORE-EXPRESSION-PRECONDITION-1",
+      "outcome": "NO_SIGNAL",
+      "cases": {"path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/cases.json", "sha256": "858df9d7bbe3219b4c00a6819bdfdc26f139fac89a74970800c1692bdf9e579e"}
+    },
+    {
+      "id": "EXPLORE-PI-CODOMAIN-ADMISSION-1",
+      "outcome": "NO_SIGNAL",
+      "cases": {"path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/cases.json", "sha256": "488b26c541ad3c2a2fca7afc0710d3bfb526fed505985f333758a87ab205e225"}
+    }
+  ],
+  "fixed_scope": {
+    "cases": 10,
+    "controls": 5,
+    "negatives": 5,
+    "profiles": [
+      "official Lean 4.34.1 ARM64 at source 5045d0056413266e57c625dcd7c365b10e377c52",
+      "Nanoda 3a2407216ee84a75f9e1aead6803d0578be06ae7"
+    ],
+    "initial_cells": 20,
+    "required_replay_cells": 20,
+    "input_policy": "Reuse the ten retained raw inputs unchanged; no variants, seeds, checker families, Mathlib inputs, eta witnesses or recursor cases.",
+    "result_policy": "Fresh E1 evidence only; E0 outputs cannot populate confirmation cells. ACCEPT requires intended declaration identity; REJECT requires attribution to the fixed typing boundary."
+  },
+  "retained_tooling": {
+    "lean_importer": {"path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/Replay.lean", "sha256": "9af0ec59607a9688ff5b00c9a024656e79deba8235ada7397731826dd7508969"},
+    "expression_analyzer": {"path": "explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/analyze.py", "sha256": "6074ab3b9401e668e14b6a1056ca4e83863f58c8a77fc0965fae26ffac943437"},
+    "pi_analyzer": {"path": "explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/analyze.py", "sha256": "8ca17e721e3876674a9b5579e77d6639dcfd6de1dad0e7a8b618d1b03bce20b9"},
+    "supervisor": {"path": "lib/resource_envelope_supervisor.py", "sha256": "591e8910a739ac96d24428ab1e25988798bb07d4a50e975c47a08f280aff3539"}
+  },
+  "launch_gate": {
+    "promotion_links_recorded": false,
+    "independent_expectation_review_complete": false,
+    "portable_runtime_recipe_complete": false,
+    "execution_manifest_committed": false,
+    "process_control_preflight_passed": false,
+    "launch_authorized": false
+  },
+  "external_actions": 0,
+  "next_item_started": false
+}

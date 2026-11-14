@@ -4103,16 +4103,17 @@ fixed cases under new gates; no scientific experiment ran in this reassessment.
 Selected next item: `CONFIRM-CHECKED-IMPORT-CASES-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items; neither has started.
+The canonical queue has one ACTIVE item and one additional READY item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `CONFIRM-CHECKED-IMPORT-CASES-1` | READY | Separate E1 confirmation of the ten existing inputs on two exact profiles, fresh evidence, reviewed expectations and portable recipes. [Plan](research/CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md). |
+| 1 | `CONFIRM-CHECKED-IMPORT-CASES-1` | ACTIVE | Separate E1 confirmation of the ten existing inputs on two exact profiles, fresh evidence, reviewed expectations and portable recipes. [Plan](research/CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md). |
 | 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
 | 3 | `CHECKED-IMPORT-REGRESSION-PACK-1` | PLANNED | One manual checker-upgrade command with the confirmed cases and controls for omitted or misidentified checking; requires confirmation SUCCESS and separate E2 integration gates. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
-All three are unstarted. Confirmation is selected for preparation, not licensed
-to launch before its exact scientific/runtime gates. Known cases do not become
+Confirmation preparation started on 2026-11-14; the companion and integration
+remain unstarted. Confirmation is not licensed to launch before its exact
+scientific/runtime gates. Known cases do not become
 independent holdouts. Missing original eta/recursor evidence and independent
 transfer custody remain WAITING; no duplicate experiment is authorized. Other
 owner deferrals, CVC prerequisites and milestone gates remain unchanged.
