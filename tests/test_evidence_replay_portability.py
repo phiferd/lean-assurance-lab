@@ -23,7 +23,6 @@ from lib import real_proof_slices_replay
 from lib import evidence_replay_portability
 from lib import binder_model_replay
 from lib import resource_envelope_replay
-from lib import checked_import_confirmation_replay
 
 
 ROOT = Path(__file__).resolve().parents[1]
@@ -82,26 +81,6 @@ class EvidenceReplayPortabilityTests(unittest.TestCase):
             raw.write_bytes(raw.read_bytes() + b"tamper")
             with self.assertRaises(resource_envelope_replay.ReplayError):
                 resource_envelope_replay.replay(checkout)
-
-    def test_checked_import_confirmation_replay_without_original_checkout_or_host_tools(self):
-        with tempfile.TemporaryDirectory() as directory:
-            checkout = Path(directory) / "foreign-checkout"
-            source = ROOT / checked_import_confirmation_replay.BASE
-            destination = checkout / checked_import_confirmation_replay.BASE
-            destination.parent.mkdir(parents=True)
-            shutil.copytree(source, destination)
-            with patch.object(subprocess, "Popen", side_effect=AssertionError("host process launch")), \
-                 patch.object(subprocess, "run", side_effect=AssertionError("host process launch")):
-                result = checked_import_confirmation_replay.replay(checkout)
-            self.assertEqual(result, {
-                "status": "PASS", "process_receipts": 91,
-                "scientific_cells": 40, "reproduced_cell_identities": 20,
-                "host_launches": 0,
-            })
-            raw = destination / "initial/attempts/cell-01-expression-v-control-lean/stdout.log"
-            raw.write_bytes(raw.read_bytes() + b"tamper")
-            with self.assertRaises(checked_import_confirmation_replay.ReplayError):
-                checked_import_confirmation_replay.replay(checkout)
 
     def test_binder_model_replay_without_original_checkout_or_host_tools(self):
         with tempfile.TemporaryDirectory() as directory:
