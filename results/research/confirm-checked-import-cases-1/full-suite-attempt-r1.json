@@ -1,0 +1,30 @@
+{
+  "schema_version": 1,
+  "item_id": "CONFIRM-CHECKED-IMPORT-CASES-1",
+  "attempt": "r1",
+  "command": "scripts/run-unit-tests",
+  "status": "REPAIR_REQUIRED",
+  "tests_run": 1685,
+  "failures": 1,
+  "errors": 4,
+  "skipped": 3,
+  "elapsed_seconds": 445.491,
+  "observations": [
+    {
+      "test": "test_arena_let_regression_erratum.ArenaLetRegressionErratumTests.test_status_ready_count_matches_the_canonical_queue",
+      "classification": "STATUS_GRAMMAR_REPAIR",
+      "detail": "The generated status used 'has two READY items'; the validator requires 'retains two READY items'."
+    },
+    {
+      "test": "test_cvc_prep.ProcessTests.test_real_timeout_kills_process_group",
+      "classification": "FOCUSED_RERUN_REQUIRED",
+      "detail": "The timeout cleanup path raised PermissionError from os.killpg; later supervisor timeout tests in the same suite passed."
+    },
+    {
+      "test": "test_evidence_replay_inventory.EvidenceReplayInventoryTests",
+      "classification": "PORTABLE_REPLAY_REGISTRATION_REQUIRED",
+      "detail": "Three inventory checks rejected the unregistered CONFIRM-CHECKED-IMPORT-CASES-1 receipt family."
+    }
+  ],
+  "scientific_result_changed": false
+}

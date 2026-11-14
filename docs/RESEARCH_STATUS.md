@@ -4115,7 +4115,7 @@ explain older assurance claims without checker execution.
 Selected next item: `CHECKED-IMPORT-REGRESSION-PACK-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue has two READY items and no ACTIVE item.
+The canonical queue retains two READY items and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |

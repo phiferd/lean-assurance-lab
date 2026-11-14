@@ -94,7 +94,10 @@ def replay(root: Path) -> dict[str, Any]:
     if len(set(receipt_paths)) != len(receipt_paths):
         raise ReplayError("duplicate process receipt path")
     discovered: set[Path] = set()
+    separately_registered_closure = base / "final-closure-2026-09-29-r2"
     for candidate in base.rglob("*.json"):
+        if candidate.is_relative_to(separately_registered_closure):
+            continue
         value = _load(candidate)
         def visit(item: Any) -> bool:
             if type(item) is dict:
