@@ -1,0 +1,147 @@
+{
+  "schema_version": 1,
+  "argv": [
+    "/usr/local/bin/docker",
+    "run",
+    "--rm",
+    "--name",
+    "lal-cic-i-15-pi-a-negative-lean",
+    "--network",
+    "none",
+    "--read-only",
+    "--tmpfs",
+    "/tmp:rw,noexec,nosuid,size=64m",
+    "--memory",
+    "12g",
+    "--memory-swap",
+    "12g",
+    "--cpus",
+    "4",
+    "--pids-limit",
+    "512",
+    "--security-opt",
+    "no-new-privileges",
+    "--user",
+    "1001:1001",
+    "--workdir",
+    "/pi-in",
+    "--env",
+    "LEAN_PATH=/opt/comparator/.lake/packages/lean4export/.lake/build/lib/lean",
+    "--mount",
+    "type=bind,src=/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/explorations/runs/EXPLORE-PI-CODOMAIN-ADMISSION-1/inputs,dst=/pi-in,readonly",
+    "--mount",
+    "type=bind,src=/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/explorations/runs/EXPLORE-EXPRESSION-PRECONDITION-1/Replay.lean,dst=/Replay.lean,readonly",
+    "sha256:1a144bf428c8c7dd7ed1df886273b77ca331079cb17ebfb9712e1ea2ea643b73",
+    "timeout",
+    "--kill-after=10",
+    "120",
+    "/opt/lean-fast/bin/lean",
+    "--run",
+    "/Replay.lean",
+    "/pi-in/A-negative.ndjson"
+  ],
+  "cwd": "/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab",
+  "pid": 19162,
+  "pgid": 19162,
+  "started_monotonic_ns": 841392426216666,
+  "launched_monotonic_ns": 841392427597958,
+  "reaped_monotonic_ns": 841393676053083,
+  "cleaned_monotonic_ns": 841393696312416,
+  "drained_monotonic_ns": 841393696336583,
+  "elapsed_seconds": 1.249836417,
+  "launch_seconds": 0.001381292,
+  "cleanup_seconds": 0.020259333,
+  "drain_after_reap_seconds": 0.0202835,
+  "wait_status": 256,
+  "exit_code": 1,
+  "accounting_error": null,
+  "reap_complete": true,
+  "fallback_waitpid_status": null,
+  "child_ru_maxrss_raw": 48922624,
+  "child_ru_maxrss_unit": "bytes",
+  "child_peak_rss_bytes": 48922624,
+  "child_user_cpu_seconds": 0.047001,
+  "child_system_cpu_seconds": 0.020642999999999998,
+  "samples": [
+    {
+      "monotonic_ns": 841392448013250,
+      "collection_started_monotonic_ns": 841392427800541,
+      "collection_ended_monotonic_ns": 841392448013250,
+      "collection_seconds": 0.020212709,
+      "elapsed_seconds": 0.021796584,
+      "group_rss_bytes": 6275072,
+      "members": [
+        {
+          "pid": 19162,
+          "rss_bytes": 6275072,
+          "state": "Rs"
+        }
+      ]
+    },
+    {
+      "monotonic_ns": 841392978528958,
+      "collection_started_monotonic_ns": 841392958081708,
+      "collection_ended_monotonic_ns": 841392978528958,
+      "collection_seconds": 0.02044725,
+      "elapsed_seconds": 0.552312292,
+      "group_rss_bytes": 82771968,
+      "members": [
+        {
+          "pid": 19162,
+          "rss_bytes": 48398336,
+          "state": "Ss"
+        },
+        {
+          "pid": 19165,
+          "rss_bytes": 34373632,
+          "state": "S"
+        }
+      ]
+    },
+    {
+      "monotonic_ns": 841393502920708,
+      "collection_started_monotonic_ns": 841393480471666,
+      "collection_ended_monotonic_ns": 841393502920708,
+      "collection_seconds": 0.022449042,
+      "elapsed_seconds": 1.076704042,
+      "group_rss_bytes": 82771968,
+      "members": [
+        {
+          "pid": 19162,
+          "rss_bytes": 48398336,
+          "state": "Ss"
+        },
+        {
+          "pid": 19165,
+          "rss_bytes": 34373632,
+          "state": "S"
+        }
+      ]
+    }
+  ],
+  "sample_count": 3,
+  "maximum_sampled_group_rss_bytes": 82771968,
+  "maximum_trace_gap_seconds": 0.530515708,
+  "trace_gap_fault": false,
+  "monitor_errors": [],
+  "pipe_errors": [],
+  "cleanup_complete": true,
+  "cleanup_errors": [],
+  "stop_reason": null,
+  "signal_events": [],
+  "stdout_bytes": 127,
+  "stdout_sha256": "dd4b09e7516969f7ff3eea037169cde9c5b7a28fa2d914d71f5bd64a6b57d62a",
+  "stderr_bytes": 99,
+  "stderr_sha256": "26f7ebfa1957099acf2e56bb8385244f8055767c9acd9f73b5ec749af1b0a38f",
+  "stdin_bytes": null,
+  "stdin_sha256": null,
+  "limits": {
+    "timeout_seconds": 145,
+    "memory_ceiling_bytes": 4294967296,
+    "sample_interval_seconds": 0.5,
+    "max_trace_gap_seconds": 5,
+    "cleanup_seconds": 10,
+    "ps_timeout_seconds": 0.5,
+    "output_cap_bytes": 20971520
+  }
+}

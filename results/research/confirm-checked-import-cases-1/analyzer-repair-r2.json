@@ -1,0 +1,28 @@
+{
+  "schema_version": 1,
+  "item_id": "CONFIRM-CHECKED-IMPORT-CASES-1",
+  "date": "2026-11-14",
+  "classification": "OUTPUT_CLASSIFIER_REPAIR",
+  "scientific_inputs_changed": false,
+  "scientific_cells_rerun": false,
+  "frozen_execution_manifest": {
+    "path": "results/research/confirm-checked-import-cases-1/execution-manifest.json",
+    "sha256": "6707f2a66c2280221ff456b70ea70aef282408a93d45e57ee369b23c78fcba68"
+  },
+  "failed_analyzer": {
+    "path": "results/research/confirm-checked-import-cases-1/analyze.py",
+    "sha256": "8c5bdd43d9707bc186a9f9dac52a2869e8becaa1dd8a74de4e0037e4826e09c9",
+    "failure": "Docker container inspect returned exit 1 and the expected absence diagnostic but also emitted an empty JSON array plus newline on stdout; the analyzer incorrectly required zero stdout bytes."
+  },
+  "replacement_analyzer": {
+    "path": "results/research/confirm-checked-import-cases-1/analyze_r2.py",
+    "sha256": "b807220d47403c817c5778ce41d0b1ced98cdd13a3479ee2094f55a0667737ed",
+    "scope": "Accept only empty stdout or the Docker empty-array spelling while retaining exit-1 and explicit no-such-container/object requirements; reuse the frozen checker-output classifier unchanged."
+  },
+  "regression_test": {
+    "path": "tests/test_confirm_checked_import_analyze_r2.py",
+    "sha256": "ca0422765bb028beaa1ee85ebde33bafa3749bf8342c8e73b5057d8f40e97f1b"
+  },
+  "raw_evidence": "results/research/confirm-checked-import-cases-1/initial/attempts/",
+  "status": "READY_TO_CLASSIFY"
+}
