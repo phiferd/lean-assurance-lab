@@ -8,7 +8,7 @@ Yes, a focused source comparison is worth doing if it decides which uncertainty
 merits an experiment. Compare the two mechanisms below, recommend at most one
 separate experiment, and stop; a supported decision to pursue neither is valid.
 
-Item: `SEMANTIC-BOUNDARY-SELECTION-1`, ACTIVE as of 2026-11-14.
+Item: `SEMANTIC-BOUNDARY-SELECTION-1`, COMPLETE as of 2026-11-14.
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`. This is a source-only selection item,
 not an E0 campaign or authorization to run either proposed experiment.
 
@@ -18,6 +18,14 @@ It pins the current Nanoda, ocaml4lean and Arena revisions, the affected and
 repaired predecessor revisions, relevant Git blobs and published coverage.
 Activation authorizes only this bounded source comparison; no build, witness,
 checker cell or successor has started.
+
+The completed [source report](../../results/research/semantic-boundary-selection-1/report.md)
+selects neither mechanism for execution. Nanoda's inspected recursor path has
+the validation-to-execution edges needed by the published consequential cases;
+its residual rule-only universe-closure premise has no distinct consumed effect.
+The affected ocaml4lean cache optimization is a known, publicly covered defect
+that current source fully reverts. No checker ran. The separate assurance
+disposition companion is selected READY and remains unstarted.
 
 ## Decision and scope
 

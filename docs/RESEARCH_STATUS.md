@@ -4101,11 +4101,12 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The completed ten-case confirmation found no unexpected behavior; no concrete
-consumer need justifies another packaging layer. The worthwhile next decision
-is whether recursor validation or context-dependent caching has a distinct,
-reachable mechanism that merits an experiment. Select one source-only comparison
-to answer that question, with the disposition companion available second.
+The completed source comparison selected neither recursor nor context-cache
+execution. Nanoda's inspected current path directly checks and reconstructs the
+published consequential recursor cases; the residual rule-universe closure
+premise has no distinct consumed effect. The affected ocaml4lean cache path is a
+known public defect that current source fully reverts. No checker ran. The
+separate assurance disposition companion is now the READY queue item.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
    and explain their limits under
@@ -4114,26 +4115,26 @@ to answer that question, with the disposition companion available second.
    and package deferral, then prioritizes meaningful semantic uncertainty. The
    constitution and all completed scientific results remain unchanged.
 
-Selected next item: `SEMANTIC-BOUNDARY-SELECTION-1`.
+Selected next item: `ASSURANCE-CLAIM-DISPOSITION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item and one separate READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `SEMANTIC-BOUNDARY-SELECTION-1` | ACTIVE | Compare recursor validation with the executed rule after reconstruction/universe substitution, and cache judgments with their binder contexts/lifetimes. Recommend at most one source-grounded experiment or explain why neither qualifies. No checker launch. [Plan](research/SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
-| 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| Completed | `SEMANTIC-BOUNDARY-SELECTION-1` | COMPLETE | Neither inspected mechanism selected; exact source traces and bounded residual are in the [report](../results/research/semantic-boundary-selection-1/report.md). |
+| 1 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
 Confirmation closed on 2026-11-14; its inputs, results and runtime custody remain
-preserved. The source assessment is ACTIVE under its exact source lock; the
-deferred integration and READY companion remain unstarted. Do not add
+preserved. The source assessment is complete, the deferred integration remains
+unstarted, and the READY companion is selected but not started. Do not add
 confirmation, cases, distribution or usability work
 for this corpus without demonstrated concrete use and canonical reselection;
-the existing E2 gates still apply. The source assessment may select one separate
-prospective experiment, but does not authorize its launch. Its report and future
-E0 reports use the frontier plan's short research-value paragraph without a new
-schema or gate. Known published witnesses remain prior exposure. Missing
+the existing E2 gates still apply. The source assessment selected no separate
+prospective experiment. Its report and future E0 reports use the frontier plan's
+short research-value paragraph without a new schema or gate. Known published
+witnesses remain prior exposure. Missing
 original eta/recursor evidence and independent transfer custody stay WAITING;
 the older recursor plans keep their dependencies. Other owner deferrals, CVC
 prerequisites and milestone gates remain unchanged.

@@ -1,13 +1,12 @@
 # Discovery and conformance frontier
 
-The ten known checked-import cases completed confirmation and replay with no
-unexpected behavior in forty outcomes. No demonstrated consumer need or
-incremental regression value justifies further packaging. These outcomes are
-not a new semantic finding; the earlier Lean #15373 development-regression
-discovery remains a genuine independent result. Yes, there is a worthwhile next
-decision: determine whether recursor validation or context-dependent caching
-offers a distinct, consequential source-grounded experiment. Select that
-source-only comparison next; no investigation starts with this queue update.
+The source comparison found no execution-worthy candidate in the two inspected
+paths. Nanoda's current recursor path checks imported rules and compares them
+with reconstructed, universe-aligned rules before reduction consumes them; a
+residual rule-only universe-closure premise has no distinct downstream effect.
+The affected ocaml4lean context-cache optimization is a known public defect that
+was fully reverted. No checker ran and no previously unknown defect was found.
+The assurance disposition companion is the next separate READY item.
 
 ## Current strategy as of 2026-11-14
 
@@ -21,26 +20,25 @@ distribution, fresh-environment usability work or further confirmation.
 This owner-directed successor to the
 [earlier reassessment](../../results/research/strategy-reassessment-2026-11-14/report.md)
 preserves its completed confirmation and the worker's package deferral. It
-changes the selected next item from the assurance companion to
-`SEMANTIC-BOUNDARY-SELECTION-1`, READY and unstarted under
-[its plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). The constitution is unchanged.
-The new item compares exactly two research mechanisms and recommends at most
-one separate experiment, or explains why neither merits execution. It does not
-reopen the historical recursor audit or repeat the ordinary-import screens.
+selected `SEMANTIC-BOUNDARY-SELECTION-1`, which is now complete under
+[its plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md) and
+[source report](../../results/research/semantic-boundary-selection-1/report.md).
+It selected no separate experiment and did not reopen the historical recursor
+audit or repeat the ordinary-import screens. The constitution is unchanged.
 
 ### Near-term priorities
 
 | Order | Work and consumer | Decisive output and promotion condition |
 | --- | --- | --- |
-| 1 | `SEMANTIC-BOUNDARY-SELECTION-1`, READY; next experiment decision | Trace recursor validation to the rule consumed after reconstruction/universe substitution, and cache judgments to their binder contexts and lifetimes. Select one consequential, independently justified new mechanism or a supported decision to pursue neither. No checker launch. [Plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
-| 2 | `ASSURANCE-CLAIM-DISPOSITION-1`, READY; readers of public assurance status | Account mechanically for the snapshot's fifteen semantic and one parse-behavior cases, distinguishing older observations, later source/adoption evidence, fresh replay and unknown current behavior. Preserve the old gate and missing custody. [Plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| Completed | `SEMANTIC-BOUNDARY-SELECTION-1`; next experiment decision | Selected neither inspected mechanism. The report preserves exact source traces, the residual recursor premise and the known reverted cache defect without a checker launch. [Report](../../results/research/semantic-boundary-selection-1/report.md). |
+| 1 | `ASSURANCE-CLAIM-DISPOSITION-1`, READY; readers of public assurance status | Account mechanically for the snapshot's fifteen semantic and one parse-behavior cases, distinguishing older observations, later source/adoption evidence, fresh replay and unknown current behavior. Preserve the old gate and missing custody. [Plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies the work, with canonical reselection and the existing E2 integration gates. [Plan](CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
 These orders rank unfinished work, not historical accomplishments. Select only
 one ACTIVE item. The companion is an independent alternative, not a prerequisite
 for semantic research. Confirmation SUCCESS alone does not promote the deferred
 package. Finish the selected item, select its successor and stop when the request
-is for one item. This update stops at queue delivery; both READY items remain
+is for one item. This update stops at queue delivery; the READY companion remains
 unstarted.
 
 ### Discovery and reuse decisions
