@@ -2,12 +2,13 @@
 
 Last updated: 2026-11-14
 
-The ten retained November cases now have separate E1 confirmation and a fresh
-replay: 40 attributable cells produced 20 valid-control accepts and 20 expected
-typing-precondition rejects, with no unexpected behavior. Yes, this supports a
-small manual checker-upgrade regression package, not a correctness or discovery
-claim. Next is the separately gated E2 integration; the assurance-case reader
-companion remains an independent READY alternative.
+The ten known checked-import cases completed confirmation and replay with no
+unexpected behavior in 40 outcomes. No demonstrated consumer need or incremental
+regression value justifies further packaging. These outcomes add no new semantic
+finding. A source-grounded comparison of recursor validation and context-dependent
+caching is worth doing to choose one consequential experiment, or reject both
+leads. That comparison is selected next and remains unstarted; the small
+assurance-case disposition companion stays READY as an independent alternative.
 
 ## How Status Is Tracked
 
@@ -4100,37 +4101,41 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The ten November boundary inputs now have separately reviewed, attributable E1
-confirmation and replay on two exact historical profiles. No unexpected checker
-behavior was found. Yes, this is bounded reproducible evidence, but no concrete
-consumer need or incremental regression value justifies another integration
-layer. The separate case-disposition companion remains available without
-checker execution.
+The completed ten-case confirmation found no unexpected behavior; no concrete
+consumer need justifies another packaging layer. The worthwhile next decision
+is whether recursor validation or context-dependent caching has a distinct,
+reachable mechanism that merits an experiment. Select one source-only comparison
+to answer that question, with the disposition companion available second.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
    and explain their limits under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
-   The [constitutional review](../results/research/strategy-reassessment-2026-11-14/report.md)
-   supersedes the paused handoff without changing the constitution or any
-   completed result.
+   The owner-directed November 14 successor preserves the completed confirmation
+   and package deferral, then prioritizes meaningful semantic uncertainty. The
+   constitution and all completed scientific results remain unchanged.
 
-Selected next item: `ASSURANCE-CLAIM-DISPOSITION-1`.
+Selected next item: `SEMANTIC-BOUNDARY-SELECTION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains two READY items and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
-| 2 | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
+| 1 | `SEMANTIC-BOUNDARY-SELECTION-1` | READY | Compare recursor validation with the executed rule after reconstruction/universe substitution, and cache judgments with their binder contexts/lifetimes. Recommend at most one source-grounded experiment or explain why neither qualifies. No checker launch. [Plan](research/SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
+| 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
+| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
-Confirmation closed on 2026-11-14; the deferred integration and READY companion
-remain unstarted. A concrete use and canonical reselection must precede any E2
-work; its independent acceptance and fail-closed gates remain preserved in the
-plan. Known cases do not become independent
-holdouts. Missing original eta/recursor evidence and independent transfer custody
-remain WAITING; no duplicate experiment is authorized. Other owner deferrals,
-CVC prerequisites and milestone gates remain unchanged.
+Confirmation closed on 2026-11-14; its inputs, results and runtime custody remain
+preserved. The new source assessment, deferred integration and READY companion
+remain unstarted. Do not add confirmation, cases, distribution or usability work
+for this corpus without demonstrated concrete use and canonical reselection;
+the existing E2 gates still apply. The source assessment may select one separate
+prospective experiment, but does not authorize its launch. Its report and future
+E0 reports use the frontier plan's short research-value paragraph without a new
+schema or gate. Known published witnesses remain prior exposure. Missing
+original eta/recursor evidence and independent transfer custody stay WAITING;
+the older recursor plans keep their dependencies. Other owner deferrals, CVC
+prerequisites and milestone gates remain unchanged.
 
 The November 14 read-only check confirms Nanoda #41/#43 remain closed without
 merge and retains the clarity feedback. Other upstream entries keep their dated

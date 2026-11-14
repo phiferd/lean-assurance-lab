@@ -1,58 +1,63 @@
 # Discovery and conformance frontier
 
-The project has reusable tests and tools whose value depends on another person
-being able to run and understand them. The latest source audit found no new
-bypass in its bounded paths; missing historical evidence still limits other
-claims. Yes, useful local work remains. The next work is separate confirmation
-of ten existing inputs for a small checker-upgrade regression package, with a
-public claim-disposition companion available as an independent alternative.
-No scientific experiment starts with this planning update.
+The ten known checked-import cases completed confirmation and replay with no
+unexpected behavior in forty outcomes. No demonstrated consumer need or
+incremental regression value justifies further packaging. These outcomes are
+not a new semantic finding; the earlier Lean #15373 development-regression
+discovery remains a genuine independent result. Yes, there is a worthwhile next
+decision: determine whether recursor validation or context-dependent caching
+offers a distinct, consequential source-grounded experiment. Select that
+source-only comparison next; no investigation starts with this queue update.
 
 ## Current strategy as of 2026-11-14
 
-Optimize useful, reproducible assurance for a named consumer. Under
-`F-DISCOVERY-AND-CONFORMANCE`, discovery, shared tests and visibility are means
-to the constitutional goal. A candidate should state who can use its output,
-what decision or behavior it improves, the independent basis for its expected
-result, what would falsify its premise, and the smallest maintained artifact
-needed. A negative discovery result may justify retaining a useful test; it
-does not automatically justify confirmation or imply that all local work ends.
+A successful research cycle resolves a meaningful semantic uncertainty or
+produces an assurance capability someone can actually use. Reproducible custody
+supports a result; it does not by itself justify turning every negative screen
+into a product. Naming a hypothetical upgrade maintainer is not evidence of
+demand. Preserve completed evidence without automatically funding integration,
+distribution, fresh-environment usability work or further confirmation.
 
-The [constitutional reassessment](../../results/research/strategy-reassessment-2026-11-14/report.md)
-replaces the previous PAUSED handoff. The constitution is unchanged. Select
-`CONFIRM-CHECKED-IMPORT-CASES-1` READY for preparation and unstarted under
-[its plan](CONFIRM_CHECKED_IMPORT_CASES_1_PLAN.md). The consumer is a Lab
-developer updating a checker executable or configuration. Its fixed ten inputs
-are five valid/invalid pairs from the November screens, with twenty initial
-fresh cells on two exact profiles. A separate E1 (fresh confirmation) protocol, independent
-expectation review, exact runtime identities and launch controls precede
-execution. Existing E0 results remain exploratory known-case observations.
+This owner-directed successor to the
+[earlier reassessment](../../results/research/strategy-reassessment-2026-11-14/report.md)
+preserves its completed confirmation and the worker's package deferral. It
+changes the selected next item from the assurance companion to
+`SEMANTIC-BOUNDARY-SELECTION-1`, READY and unstarted under
+[its plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). The constitution is unchanged.
+The new item compares exactly two research mechanisms and recommends at most
+one separate experiment, or explains why neither merits execution. It does not
+reopen the historical recursor audit or repeat the ordinary-import screens.
 
 ### Near-term priorities
 
 | Order | Work and consumer | Decisive output and promotion condition |
 | --- | --- | --- |
-| 1 | `CONFIRM-CHECKED-IMPORT-CASES-1`, READY; Lab checker-upgrade maintainer | Confirm the exact ten cases with fresh attributable outcomes and reproducible recipes. Unresolved cells remain visible. Integration requires successful confirmation and reviewed consumer value. |
+| 1 | `SEMANTIC-BOUNDARY-SELECTION-1`, READY; next experiment decision | Trace recursor validation to the rule consumed after reconstruction/universe substitution, and cache judgments to their binder contexts and lifetimes. Select one consequential, independently justified new mechanism or a supported decision to pursue neither. No checker launch. [Plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
 | 2 | `ASSURANCE-CLAIM-DISPOSITION-1`, READY; readers of public assurance status | Account mechanically for the snapshot's fifteen semantic and one parse-behavior cases, distinguishing older observations, later source/adoption evidence, fresh replay and unknown current behavior. Preserve the old gate and missing custody. [Plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
-| 3 | `CHECKED-IMPORT-REGRESSION-PACK-1`, PLANNED; the same upgrade maintainer | One supported command and ten-case manifest, with missing-check, changed-input/executable and stale-result controls. Separate E2 (shared assurance integration) review and replay gates apply. [Plan](CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
+| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies the work, with canonical reselection and the existing E2 integration gates. [Plan](CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
 These orders rank unfinished work, not historical accomplishments. Select only
-one ACTIVE item. The visibility companion is independent of confirmation; the
-integration depends on confirmation SUCCESS. A successful confirmation may
-justify promoting integration ahead of the companion at the next recorded
-project-wide review. Finish the selected item, select its successor and stop
-when the request is for one item. This reassessment stops at the updated plan.
+one ACTIVE item. The companion is an independent alternative, not a prerequisite
+for semantic research. Confirmation SUCCESS alone does not promote the deferred
+package. Finish the selected item, select its successor and stop when the request
+is for one item. This update stops at queue delivery; both READY items remain
+unstarted.
 
 ### Discovery and reuse decisions
 
-Keep targeted discovery available for a concrete reachable semantic mechanism
-with a valid control, independent expectation and a demonstrated coverage or
-consumer gap. Compare a new proposal with maintaining the existing corpus and
-following substantive upstream feedback. Source/reuse preparation can occur
-inside the selected scoped item; lack of a prebuilt fixture is not by itself a
-reason to pause. New-checker recursor and defensive metadata work remain
-PLANNED until their distinct boundary, exposure and supported-runtime gates
-are established. Do not repeat the exhausted ordinary-import paper candidates.
+Select by information gained and consequence: a reachable semantic mechanism,
+independent expected result, valid control and a specific gap in existing
+coverage. Arena #350 and #345 motivate comparison; their published witnesses are
+prior exposure, not prospective discoveries, and neither establishes current
+failure of an untested profile. The new source-only plan records their exact
+upstream references and limits. Trace actual data and control flow before
+proposing an experiment. A source invariant may explain a useful negative
+result in the inspected paths; passing examples alone cannot establish it.
+
+The older defensive metadata and new-checker transfer items remain PLANNED with
+their historical dependencies. This new informed comparison does not discharge
+those dependencies or supply independent holdout custody. Do not repeat the
+exhausted ordinary-import candidates or the missing historical experiments.
 
 Reuse the existing supervisor, raw-input analyzers, positive-term corpus and
 checked-object receipt logic before building new infrastructure. The prior
@@ -61,9 +66,14 @@ needs a different concrete consumer gap. A broader generator, model, corpus,
 or checker family needs a scoped current literature/source comparison and a
 reason that the small existing asset is insufficient.
 
-Each closure must name a consumer-facing outcome: reproducible changed
-behavior, a maintained regression, a characterized limit, a clearer disposition
-of uncertainty, or a justified stop. A future contribution explains the
+At the end of each future E0 experiment, add a short research-value paragraph to
+its existing report: what uncertainty was resolved; what decision changes;
+whether a reusable artifact has an identifiable consumer; and whether further
+work on the topic would add material information. Keep execution status separate
+from research value. If the answers are little, none, no and probably not, stop
+that line at campaign handoff. This adds no schema, approval gate, per-trial
+reranking or extra replay. Engineering failures still require repair within the
+active item; they are not scientific negatives. A future contribution explains the
 protected behavior, plausible regression and exact observed effect in plain
 language. Current duplicate and maintainer-fit review precedes new drafts.
 Nanoda #41/#43 remain closed without merge in the November 14 observation;
@@ -81,17 +91,19 @@ the rejected build-mode premise, original CVC dependencies and other explicit
 deferrals remain. No assurance milestone, authority promotion or frozen result
 is changed by this strategy.
 
-Reconsider priority when a package proves unusable after feasible repair,
-current source shows it is redundant, a maintainer supplies a concrete need,
-a distinct consequential mechanism is established, or original missing evidence
-arrives. Record actual setup/replay effort and usefulness feedback. Do not scale
-from all-accept counts, checker agreement, mutation scores or completed-item
-counts alone. Preserve failed attempts and unknowns.
+Reconsider the package only for a demonstrated concrete use with incremental
+value, not a desire to finish its workflow. Retain the confirmed inputs, raw
+outputs, runtime identities/archive and documented custody limits; do not add
+cases, replay runs or a distribution/usability campaign for this corpus now.
+Reassess the wider queue when a distinct consequential mechanism, substantive
+maintainer need or original missing evidence changes the decision. Do not scale
+from verdict counts, checker agreement, mutation scores or completed-item counts
+alone. Preserve failed attempts and unknowns.
 
 For this documentation/planning revision, use queue/status agreement, affected
-generation and diff checks under `RESEARCH_WORKFLOW.md`; retain the full-payload
-preflight limitation and available-suite result explicitly. It makes no new
-scientific or assurance claim. The separate experiments and integration retain
+generation and diff checks under `RESEARCH_WORKFLOW.md`. It makes no new
+scientific or assurance claim and does not rerun the completed confirmation.
+The separate experiments and integration retain
 their required independent review, full closure and historical/milestone gates.
 
 ## Earlier selections and results
