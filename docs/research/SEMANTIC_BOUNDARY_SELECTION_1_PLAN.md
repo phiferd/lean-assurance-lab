@@ -8,9 +8,16 @@ Yes, a focused source comparison is worth doing if it decides which uncertainty
 merits an experiment. Compare the two mechanisms below, recommend at most one
 separate experiment, and stop; a supported decision to pursue neither is valid.
 
-Item: `SEMANTIC-BOUNDARY-SELECTION-1`, READY and unstarted as of 2026-11-14.
+Item: `SEMANTIC-BOUNDARY-SELECTION-1`, ACTIVE as of 2026-11-14.
 Frontier: `F-DISCOVERY-AND-CONFORMANCE`. This is a source-only selection item,
 not an E0 campaign or authorization to run either proposed experiment.
+
+The activation source lock is
+[`results/research/semantic-boundary-selection-1/source-inventory.json`](../../results/research/semantic-boundary-selection-1/source-inventory.json).
+It pins the current Nanoda, ocaml4lean and Arena revisions, the affected and
+repaired predecessor revisions, relevant Git blobs and published coverage.
+Activation authorizes only this bounded source comparison; no build, witness,
+checker cell or successor has started.
 
 ## Decision and scope
 

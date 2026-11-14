@@ -4117,17 +4117,18 @@ to answer that question, with the disposition companion available second.
 Selected next item: `SEMANTIC-BOUNDARY-SELECTION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items and no ACTIVE item.
+The canonical queue retains one ACTIVE item and one separate READY item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| 1 | `SEMANTIC-BOUNDARY-SELECTION-1` | READY | Compare recursor validation with the executed rule after reconstruction/universe substitution, and cache judgments with their binder contexts/lifetimes. Recommend at most one source-grounded experiment or explain why neither qualifies. No checker launch. [Plan](research/SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
+| 1 | `SEMANTIC-BOUNDARY-SELECTION-1` | ACTIVE | Compare recursor validation with the executed rule after reconstruction/universe substitution, and cache judgments with their binder contexts/lifetimes. Recommend at most one source-grounded experiment or explain why neither qualifies. No checker launch. [Plan](research/SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md). |
 | 2 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
 
 Confirmation closed on 2026-11-14; its inputs, results and runtime custody remain
-preserved. The new source assessment, deferred integration and READY companion
-remain unstarted. Do not add confirmation, cases, distribution or usability work
+preserved. The source assessment is ACTIVE under its exact source lock; the
+deferred integration and READY companion remain unstarted. Do not add
+confirmation, cases, distribution or usability work
 for this corpus without demonstrated concrete use and canonical reselection;
 the existing E2 gates still apply. The source assessment may select one separate
 prospective experiment, but does not authorize its launch. Its report and future

@@ -1,0 +1,80 @@
+{
+  "schema_version": 1,
+  "item_id": "SEMANTIC-BOUNDARY-SELECTION-1",
+  "status": "ACTIVE",
+  "observed_at": "2026-11-14",
+  "scope": "Source-only comparison of one Nanoda recursor validation-to-reduction path and one ocaml4lean context-dependent inference-cache path; no build, witness generation, checker launch or external write.",
+  "sources": [
+    {
+      "source_id": "nanoda-current",
+      "repository": "https://github.com/ammkrn/nanoda_lib.git",
+      "commit": "0da9f98feadd3a0a2ef4b3dbcf52a298a6fef929",
+      "commit_date": "2026-11-07T15:22:28-06:00",
+      "role": "Current recursor validation, reconstruction and reduction implementation; also the merge commit for repair PR #84.",
+      "files": [
+        {"path": "src/parser.rs", "git_blob": "7fef4c4c1f82d00f95f168dee8b722a189453294", "relevant_lines": "920-945"},
+        {"path": "src/env.rs", "git_blob": "dcded64b0bb94fc077bcbfa63e1aa736bf820cab", "relevant_lines": "137-164"},
+        {"path": "src/inductive.rs", "git_blob": "01a6f7cd483e871f6aec52657510d33cefbfb996", "relevant_lines": "34-148,1260-1435,1634-1824"},
+        {"path": "src/tc.rs", "git_blob": "d1a9f94274ed22f63ed7e2d63348269c18d2eca3", "relevant_lines": "245-254,1108-1139"}
+      ]
+    },
+    {
+      "source_id": "nanoda-pre-pr84",
+      "repository": "https://github.com/ammkrn/nanoda_lib.git",
+      "commit": "8de7e0c4ed3052745a7f8725164efd9e76d84c56",
+      "commit_date": "2026-10-29T16:39:55-07:00",
+      "role": "Immediate first parent used only to identify the repaired validation edges; it is published prior exposure, not a prospective target.",
+      "files": [
+        {"path": "src/inductive.rs", "git_blob": "33de378722daba71c437da25e88039a60bd8af45", "relevant_lines": "32-103,1699-1744"}
+      ]
+    },
+    {
+      "source_id": "ocaml4lean-pr7",
+      "repository": "https://github.com/yoonwoojeong/ocaml4lean.git",
+      "commit": "bd0f7797052760aa9705bc863aa1072732115b63",
+      "commit_date": "2026-11-09T07:50:59Z",
+      "role": "Affected open-term DAG inference implementation from PR #7.",
+      "files": [
+        {"path": "src/tc.ml", "git_blob": "d365da70e24d150cf1aeaf6da07ce876b8499ab1", "relevant_lines": "40-125,225-400"},
+        {"path": "src/expr.ml", "git_blob": "ef3eac665edbd9d24b047a2fb035ce4d740680f2", "relevant_lines": "1-85"}
+      ]
+    },
+    {
+      "source_id": "ocaml4lean-current-revert",
+      "repository": "https://github.com/yoonwoojeong/ocaml4lean.git",
+      "commit": "8ef7ebc0f65fc396486e1b45c269e05038be51b5",
+      "commit_date": "2026-11-10T20:53:25+09:00",
+      "role": "Current main; PR #8 reverted PR #7 in full.",
+      "files": [
+        {"path": "src/tc.ml", "git_blob": "b51678f21b502fc749eac37b9147004bb6852158", "relevant_lines": "40-300"},
+        {"path": "src/expr.ml", "git_blob": "beffffc9c94bce78f0b4ce69f8f05f41e983ba46", "relevant_lines": "1-120"}
+      ]
+    },
+    {
+      "source_id": "arena-current",
+      "repository": "https://github.com/leanprover/lean-kernel-arena.git",
+      "commit": "6de4317e0e4c7c34d4c474fda1628a8dc64b34ee",
+      "commit_date": "2026-11-14T00:39:12Z",
+      "role": "Current public regression coverage after merged PRs #345 and #350.",
+      "files": [
+        {"path": "tests/bugs/open-term-cache-context.lean", "git_blob": "3cff4856630c023cc7b59d740616c38e9fd5273c"},
+        {"path": "tests/bugs/open-term-cache-context.yaml", "git_blob": "f1c9852af9c838e92df61e05543eebebe3cd54ec"},
+        {"path": "tests/bugs/rec-rule-proof-irrel.yaml", "git_blob": "924914db4608b3dea74a9d3af0eabe92309a08fe"},
+        {"path": "tests/bugs/rec-rule-proof-irrel-nested.yaml", "git_blob": "28fbf39e418aa987b09952a1979c774e13e0447d"},
+        {"path": "tests/bugs/rec-type-proof-irrel.yaml", "git_blob": "b967805ba01da6052abe926b2a7e230ec3c1dab1"},
+        {"path": "tests/bugs/rec-rule-wrong-arg.yaml", "git_blob": "83e114278aa0f1124291004254074bb9edba94bd"}
+      ]
+    }
+  ],
+  "public_exposure": [
+    {"url": "https://github.com/leanprover/lean-kernel-arena/pull/345", "merge_commit": "bb886a2769ed4f66c050bc7ac6a897ff8018b0c2", "disposition": "Published exact open-term cache witness and stated ocaml4lean PR #7 acceptance; current Arena coverage retains it."},
+    {"url": "https://github.com/leanprover/lean-kernel-arena/pull/350", "merge_commit": "6c2d82164f1a2b1ac94aee62290fe78a3c3853fb", "disposition": "Published four forged recursor rule/type regressions, including nested auxiliary reconstruction and wrong arguments."},
+    {"url": "https://github.com/ammkrn/nanoda_lib/pull/84", "merge_commit": "0da9f98feadd3a0a2ef4b3dbcf52a298a6fef929", "disposition": "Published repair adding imported rule-value checking and restored recursor universe alignment."},
+    {"url": "https://github.com/yoonwoojeong/ocaml4lean/pull/7", "merge_commit": "0a46977e1e81d4b3a37398aec7fcb28c5b646394", "revert_commit": "8ef7ebc0f65fc396486e1b45c269e05038be51b5", "disposition": "Published affected optimization, merged and then fully reverted."}
+  ],
+  "limits": [
+    "The inventory establishes source identity and prior exposure only; it records no fresh runtime observation.",
+    "Published witnesses may be analyzed as calibration evidence but are not fresh prospective cases.",
+    "The missing historical recursor audit and merged-Lean replay remain unchanged and out of scope."
+  ]
+}
