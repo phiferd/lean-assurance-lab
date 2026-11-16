@@ -1,45 +1,43 @@
 # Discovery and conformance frontier
 
-The source comparison found no execution-worthy candidate in the two inspected
-paths. Nanoda's current recursor path checks imported rules and compares them
-with reconstructed, universe-aligned rules before reduction consumes them; a
-residual rule-only universe-closure premise has no distinct downstream effect.
-The affected ocaml4lean context-cache optimization is a known public defect that
-was fully reverted. No checker ran and no previously unknown defect was found.
-The assurance disposition companion is the next separate READY item.
+The owner-directed source inquiry found a distinct current Nanoda hypothesis.
+Nested recursor comparison maps an imported declared universe to the universe
+chosen by reconstruction; that map may capture an undeclared universe already
+present only in a rule. Runtime substitution follows the declared vector and may
+therefore leave the captured name in the rule consumed by reduction. No input or
+checker run exists yet. Select a two-input E0 screen of the predicted ill-typed
+reduct. A public current rpylean repair opportunity remains the lower-information
+fallback.
 
-## Current strategy as of 2026-11-14
+## Current strategy as of 2026-11-16
 
 A successful research cycle resolves a meaningful semantic uncertainty or
-produces an assurance capability someone can actually use. Reproducible custody
-supports a result; it does not by itself justify turning every negative screen
-into a product. Naming a hypothetical upgrade maintainer is not evidence of
-demand. Preserve completed evidence without automatically funding integration,
-distribution, fresh-environment usability work or further confirmation.
+produces an assurance capability someone can actually use. Evidence custody
+supports research; it does not by itself justify a package or comprehensive
+retrospective companion. Both remain DEFERRED without demonstrated concrete use.
 
-This owner-directed successor to the
-[earlier reassessment](../../results/research/strategy-reassessment-2026-11-14/report.md)
-preserves its completed confirmation and the worker's package deferral. It
-selected `SEMANTIC-BOUNDARY-SELECTION-1`, which is now complete under
-[its plan](SEMANTIC_BOUNDARY_SELECTION_1_PLAN.md) and
-[source report](../../results/research/semantic-boundary-selection-1/report.md).
-It selected no separate experiment and did not reopen the historical recursor
-audit or repeat the ordinary-import screens. The constitution is unchanged.
+`CURRENT-SEMANTIC-OPPORTUNITY-1` is complete under its
+[source-only plan](CURRENT_SEMANTIC_OPPORTUNITY_1_PLAN.md) and
+[report](../../results/research/current-semantic-opportunity-1/report.md).
+Select `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` READY and unstarted under
+[its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). Its fixed
+question compares an honest alpha-renamed nested recursor with one rule-only
+undeclared-universe candidate, then observes both admission and the neutral
+one-step reduct. E0 can establish a candidate signal, not a confirmed defect.
 
-### Near-term priorities
-
-| Order | Work and consumer | Decisive output and promotion condition |
+| Order | Item | Decision and boundary |
 | --- | --- | --- |
-| Completed | `SEMANTIC-BOUNDARY-SELECTION-1`; next experiment decision | Selected neither inspected mechanism. The report preserves exact source traces, the residual recursor premise and the known reverted cache defect without a checker launch. [Report](../../results/research/semantic-boundary-selection-1/report.md). |
-| 1 | `ASSURANCE-CLAIM-DISPOSITION-1`, READY; readers of public assurance status | Account mechanically for the snapshot's fifteen semantic and one parse-behavior cases, distinguishing older observations, later source/adoption evidence, fresh replay and unknown current behavior. Preserve the old gate and missing custody. [Plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
-| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies the work, with canonical reselection and the existing E2 integration gates. [Plan](CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
+| Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
+| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, READY | Retain exact control/candidate bytes, supervise both observations, and account independently for the reduct's type. Stop at E0 classification and handoff. |
+| Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
+| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |
 
-These orders rank unfinished work, not historical accomplishments. Select only
-one ACTIVE item. The companion is an independent alternative, not a prerequisite
-for semantic research. Confirmation SUCCESS alone does not promote the deferred
-package. Finish the selected item, select its successor and stop when the request
-is for one item. This update stops at queue delivery; the READY companion remains
-unstarted.
+The completed source comparisons, confirmation and earlier results are preserved.
+Do not repeat missing historical experiments or silently discharge their old
+dependencies. The candidate is independently derived from current source but
+informed by published recursor repairs; scope any novelty claim to the specific
+name-capture mechanism. Select a scoped successor at campaign handoff and stop
+before executing it.
 
 ### Discovery and reuse decisions
 

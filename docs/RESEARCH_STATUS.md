@@ -1,14 +1,13 @@
 # Research Status
 
-Last updated: 2026-11-14
+Last updated: 2026-11-16
 
-The ten known checked-import cases completed confirmation and replay with no
-unexpected behavior in 40 outcomes. No demonstrated consumer need or incremental
-regression value justifies further packaging. These outcomes add no new semantic
-finding. A source-grounded comparison of recursor validation and context-dependent
-caching is worth doing to choose one consequential experiment, or reject both
-leads. That comparison is selected next and remains unstarted; the small
-assurance-case disposition companion stays READY as an independent alternative.
+Current Nanoda source supports a new nested-recursor universe-capture hypothesis:
+validation may rename an imported declaration universe onto an undeclared rule
+universe, while runtime substitution leaves that universe in the consumed rule.
+No input or checker run exists yet, so this is not an observed defect. Yes, its
+predicted ill-typed reduct is consequential. Run one two-input E0 screen next;
+the assurance companion and checked-import package remain DEFERRED.
 
 ## How Status Is Tracked
 
@@ -65,6 +64,17 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `CURRENT-SEMANTIC-OPPORTUNITY-1` completes SUCCESS as a source-only
+  investigation. Current Nanoda nested-recursor alignment may capture a
+  rule-only undeclared universe: the malformed and honest rules can compare
+  equal after alignment, while runtime substitution leaves the undeclared name
+  in the consumed rule. No input or checker ran, so admission and the predicted
+  ill-typed reduct remain unknown. Yes, this is a distinct consequential
+  hypothesis; select the fixed two-input E0 screen READY and unstarted. Current
+  rpylean also retains the public wrong-argument validation gap and is a useful
+  repair fallback, but reproducing it would not be independent discovery. See
+  the [source report](../results/research/current-semantic-opportunity-1/report.md).
 
 - `CONFIRM-CHECKED-IMPORT-CASES-1` completes SUCCESS. The ten unchanged known
   inputs ran on pinned Lean 4.34.1 and Nanoda `3a240721` in 20 fresh initial
@@ -4101,48 +4111,32 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The completed source comparison selected neither recursor nor context-cache
-execution. Nanoda's inspected current path directly checks and reconstructs the
-published consequential recursor cases; the residual rule-universe closure
-premise has no distinct consumed effect. The affected ocaml4lean cache path is a
-known public defect that current source fully reverts. No checker ran. The
-separate assurance disposition companion is now the READY queue item.
+The source inquiry found one distinct current Nanoda hypothesis and a separate
+known rpylean repair opportunity. The Nanoda candidate has higher information
+value: non-injective universe alignment may make a nested rule compare equal
+before reduction exposes an ill-typed recursive application. No input was
+generated or run. Select its exact E0 screen and stop before launch.
 
-1. `F-DISCOVERY-AND-CONFORMANCE` — produce useful, reproducible semantic tests
-   and explain their limits under
+1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
-   The owner-directed November 14 successor preserves the completed confirmation
-   and package deferral, then prioritizes meaningful semantic uncertainty. The
-   constitution and all completed scientific results remain unchanged.
 
-Selected next item: `ASSURANCE-CLAIM-DISPOSITION-1`.
+Selected next item: `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
-| Completed | `SEMANTIC-BOUNDARY-SELECTION-1` | COMPLETE | Neither inspected mechanism selected; exact source traces and bounded residual are in the [report](../results/research/semantic-boundary-selection-1/report.md). |
-| 1 | `ASSURANCE-CLAIM-DISPOSITION-1` | READY | A complete dated companion for the fifteen semantic and one parse-behavior cases in the snapshot; original observations, later dispositions and unknown current behavior remain distinct. [Plan](research/ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md). |
-| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. Reconsider only when a concrete use justifies it. [Plan](research/CHECKED_IMPORT_REGRESSION_PACK_1_PLAN.md). |
+| Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
+| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | READY | One alpha-renamed valid control and one recursive-rule candidate, with admission and independently checked one-step reduct observations. [Plan](research/E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). |
+| Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
+| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 
-Confirmation closed on 2026-11-14; its inputs, results and runtime custody remain
-preserved. The source assessment is complete, the deferred integration remains
-unstarted, and the READY companion is selected but not started. Do not add
-confirmation, cases, distribution or usability work
-for this corpus without demonstrated concrete use and canonical reselection;
-the existing E2 gates still apply. The source assessment selected no separate
-prospective experiment. Its report and future E0 reports use the frontier plan's
-short research-value paragraph without a new schema or gate. Known published
-witnesses remain prior exposure. Missing
-original eta/recursor evidence and independent transfer custody stay WAITING;
-the older recursor plans keep their dependencies. Other owner deferrals, CVC
-prerequisites and milestone gates remain unchanged.
-
-The November 14 read-only check confirms Nanoda #41/#43 remain closed without
-merge and retains the clarity feedback. Other upstream entries keep their dated
-observations. No upstream contact, PR revision or submission is selected.
-The available companion is a separate item; keeping it READY does not start it.
+Arena #350's rpylean result remains prior exposure, not independent discovery.
+The selected Nanoda mechanism differs from the reviewed published cases but is
+only a source-derived hypothesis until execution. Missing original eta/recursor
+records and independent transfer custody stay WAITING; older recursor plans keep
+their dependencies. No upstream write, historical replay or milestone is selected.
 
 ### Waiting
 
