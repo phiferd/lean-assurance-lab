@@ -10,7 +10,7 @@ screen because it predicts failure of type preservation in current Nanoda and
 differs from the published recursor witnesses. Prepare the exact control and
 candidate, run the bounded screen, classify it, select a successor and stop.
 
-Item: `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, READY and unstarted.
+Item: `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, ACTIVE as of 2026-11-16.
 Target: Nanoda `0da9f98feadd3a0a2ef4b3dbcf52a298a6fef929` and its exact supported
 runtime. Source basis: the
 [current opportunity report](../../results/research/current-semantic-opportunity-1/report.md).

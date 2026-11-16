@@ -4111,11 +4111,11 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The source inquiry found one distinct current Nanoda hypothesis and a separate
-known rpylean repair opportunity. The Nanoda candidate has higher information
-value: non-injective universe alignment may make a nested rule compare equal
-before reduction exposes an ill-typed recursive application. No input was
-generated or run. Select its exact E0 screen and stop before launch.
+The selected Nanoda universe-capture screen is ACTIVE. It will retain one valid
+alpha-renamed nested-recursor control and one rule-only undeclared-universe
+candidate, then observe admission and independently account for the neutral
+one-step reduct. No checker has run for this item yet, so the hypothesis remains
+unobserved rather than a defect claim.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
@@ -4123,12 +4123,12 @@ generated or run. Select its exact E0 screen and stop before launch.
 Selected next item: `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and no ACTIVE item.
+The canonical queue retains one ACTIVE item and no READY item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
-| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | READY | One alpha-renamed valid control and one recursive-rule candidate, with admission and independently checked one-step reduct observations. [Plan](research/E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). |
+| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | ACTIVE | One alpha-renamed valid control and one recursive-rule candidate, with admission and independently checked one-step reduct observations. [Plan](research/E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 

@@ -19,7 +19,7 @@ retrospective companion. Both remain DEFERRED without demonstrated concrete use.
 `CURRENT-SEMANTIC-OPPORTUNITY-1` is complete under its
 [source-only plan](CURRENT_SEMANTIC_OPPORTUNITY_1_PLAN.md) and
 [report](../../results/research/current-semantic-opportunity-1/report.md).
-Select `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` READY and unstarted under
+`E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` is ACTIVE under
 [its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). Its fixed
 question compares an honest alpha-renamed nested recursor with one rule-only
 undeclared-universe candidate, then observes both admission and the neutral
@@ -28,7 +28,7 @@ one-step reduct. E0 can establish a candidate signal, not a confirmed defect.
 | Order | Item | Decision and boundary |
 | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
-| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, READY | Retain exact control/candidate bytes, supervise both observations, and account independently for the reduct's type. Stop at E0 classification and handoff. |
+| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, ACTIVE | Retain exact control/candidate bytes, supervise both observations, and account independently for the reduct's type. Stop at E0 classification and handoff. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |
 
