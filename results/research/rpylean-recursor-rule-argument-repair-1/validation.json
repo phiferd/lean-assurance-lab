@@ -1,0 +1,102 @@
+{
+  "schema_version": 1,
+  "item_id": "RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1",
+  "recorded_on": "2026-11-16",
+  "candidate": {
+    "arena_commit": "6c2d82164f1a2b1ac94aee62290fe78a3c3853fb",
+    "lean_toolchain": "leanprover/lean4:v4.34.1",
+    "lean4export_commit": "df81913eee5519d5a88ae5b0fd701b5298cc29ab",
+    "ndjson_path": "results/research/rpylean-recursor-rule-argument-repair-1/rec-rule-wrong-arg.ndjson",
+    "ndjson_sha256": "cf3b02e4dc0c8a3adcf912f09e81a2e467c7cc667b5c5c545b50ad03760eccc9",
+    "bytes": 21042,
+    "lines": 363
+  },
+  "runtime": {
+    "rpylean_base_commit": "b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb",
+    "pypy_commit": "56fab96ff7e75f063547c1625dfed01adc396aa1",
+    "pypy": "Python 2.7.18 / PyPy 8.0.1",
+    "just": "1.59.0",
+    "uv": "0.13.8",
+    "host": "macOS 15.8.3 arm64"
+  },
+  "attempts": [
+    {
+      "id": "BASELINE-DIRECT-REGRESSION",
+      "tree": "base source plus prospective tests only",
+      "command": "just test tests/test_environment.py::TestRecursorRuleShape::test_rule_wrong_constructor_argument_rejected tests/test_environment.py::TestRecursorRuleShape::test_dependent_one_field_rule_accepted tests/test_environment.py::TestRecursorRuleShape::test_direct_recursive_rule_accepted",
+      "outcome": "EXPECTED_FAIL",
+      "detail": "The wrong-argument assertion failed because rpylean returned no error; both honest controls passed (1 failed, 2 passed)."
+    },
+    {
+      "id": "BASELINE-ARENA-END-TO-END",
+      "tree": "unmodified b581f0f",
+      "command": "just rpylean check <frozen rec-rule-wrong-arg.ndjson>",
+      "outcome": "ACCEPTED_UNSOUND_CANDIDATE",
+      "detail": "Exit 0; 27/27 declarations checked."
+    },
+    {
+      "id": "REPAIRED-FOCUSED",
+      "tree": "patch 44b2778c2511d17c9e7b813bad6f0b49a881a2717dc5e648b0b53d0636746757",
+      "command": "just test tests/test_environment.py::TestRecursorRuleShape",
+      "outcome": "PASS",
+      "detail": "12 passed, including wrong-argument and missing-IH rejection, honest dependent/direct-recursive acceptance, and the independent-review forged-binder regression."
+    },
+    {
+      "id": "REPAIRED-FULL-UPSTREAM-CI-DISCOVERY",
+      "tree": "patched",
+      "command": "LKA_TESTS_DIR=/private/tmp/rpylean-no-arena-fixtures just test",
+      "outcome": "PASS",
+      "detail": "815 passed, 1 skipped, 1 pre-existing xfailed; this matches upstream CI without an unrelated sibling Arena checkout."
+    },
+    {
+      "id": "LOCAL-SIBLING-ARENA-DISCOVERY",
+      "tree": "patched and separately confirmed on unmodified baseline",
+      "command": "just test",
+      "outcome": "PRE_EXISTING_FAILURE",
+      "detail": "835 passed, 1 xfailed, 1 failed: top-level rec-missing-ih is accepted. The same focused case fails on an unmodified b581f0f checkout, so it is not caused by this patch."
+    },
+    {
+      "id": "RPYTHON-TRANSLATION",
+      "tree": "patched",
+      "command": "just translate",
+      "outcome": "PASS_AFTER_REPAIR",
+      "detail": "The first attempt exposed an RPython dynamic-varargs incompatibility in Telescope(*binders); the retained source replaces it with an explicit reverse loop. Final post-review translation completed in 76.1 seconds."
+    },
+    {
+      "id": "TRANSLATED-SUITE",
+      "tree": "patched translated binary",
+      "command": "just test-translated",
+      "outcome": "PASS",
+      "detail": "9 passed in 17.80 seconds outside the sandbox. An earlier sandboxed attempt failed only because a denied sysctl probe prefixed stderr; the unrestricted rerun passed."
+    },
+    {
+      "id": "INDEPENDENT-REVIEW-REPAIR",
+      "tree": "first implementation then retained corrected patch",
+      "command": "read-only semantic review plus focused regressions",
+      "outcome": "PASS_AFTER_REPAIR",
+      "detail": "Review found that reusing imported rule binder types allowed a proof-irrelevance bypass. The retained patch independently assembles the expected telescope from the recursor declaration and constructor, adds the forged-minor-binder regression and a missing-IH rejection, and passes all final checks."
+    },
+    {
+      "id": "REPAIRED-ARENA-END-TO-END",
+      "tree": "patched translated binary",
+      "command": "./rpylean-c check <frozen rec-rule-wrong-arg.ndjson>",
+      "outcome": "REJECTED_UNSOUND_CANDIDATE",
+      "detail": "Exit 1 with W.rec rule not definitionally equal to the constructor-derived minor application; 27/27 declarations processed."
+    },
+    {
+      "id": "LAB-CLOSURE-SUITE-1",
+      "tree": "Lean Assurance Lab closure candidate",
+      "command": "scripts/run-unit-tests",
+      "outcome": "ENVIRONMENT_AND_PAYLOAD_FAILURE",
+      "detail": "The current suite ran 1686 tests with 4 errors and 3 skips: all four errors were PermissionError [Errno 1] for /bin/ps inside the sandbox. The 73-test frozen publication-study suite had one failure because one ignored exploratory NDJSON duplicate made the live Arena materialization differ from its frozen 226-file Gate-7 digest. The 14-test historical checkpoint suite passed. No scientific or tracked input failed."
+    },
+    {
+      "id": "LAB-CLOSURE-SUITE-2",
+      "tree": "unchanged Lean Assurance Lab closure candidate with exact frozen Arena payload",
+      "command": "scripts/run-unit-tests (host process inspection enabled)",
+      "outcome": "PASS",
+      "detail": "The current suite passed 1686 tests with 3 documented missing-host-payload skips; the frozen publication-study suite passed 73 tests; the historical checkpoint suite passed 14 tests. The exploratory duplicate remains frozen at explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/base.ndjson and was removed only from the ignored live Gate-8 materialization."
+    }
+  ],
+  "external_writes": 0
+}

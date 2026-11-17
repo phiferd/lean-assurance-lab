@@ -19,7 +19,7 @@ retrospective companion. Both remain DEFERRED without demonstrated concrete use.
 [summary](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md).
 The standalone `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` is DEFERRED:
 its known-case reproduction is now the baseline inside
-`RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, READY and unstarted under
+`RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` completed under
 [its plan](RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md). The selected item
 must derive the expected minor application from checked constructor/recursor
 metadata, preserve valid dependent and recursive controls, define unsupported
@@ -29,7 +29,8 @@ shapes, and deliver a tested local patch and PR draft without submission.
 | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | Valid control accepted and candidate rejected at semantic definitional equality; bounded `NO_SIGNAL`, no confirmation. |
-| 1 | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, READY | Use the public case as failing baseline, implement the smallest semantically justified argument check, add a direct regression, run upstream tests, and retain a reviewable patch and PR draft. No external write. |
+| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, COMPLETE | Exact Arena #350 before/after evidence, bounded derived-rule repair, honest controls, upstream/translated tests and local draft retained; no external write. |
+| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`, READY | Attribute the distinct current acceptance of the static public `rec-missing-ih` export through parser, validation and reduction source with fresh controls; do not implement or replay the historical audit. |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | Standalone reproduction would add little; its baseline is part of the repair item. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |

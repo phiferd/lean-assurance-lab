@@ -7,7 +7,7 @@ check, but the Lab has not run the current revision. Yes, this is useful work if
 it ends in a reviewable checker repair and durable regression. Reproduction is
 only the baseline, not the deliverable.
 
-Item: `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, READY and unstarted.
+Item: `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, COMPLETE on 2026-11-16.
 Target: rpylean `b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb`.
 Consumer: an rpylean maintainer deciding whether to adopt the local patch.
 

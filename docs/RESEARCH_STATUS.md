@@ -2,12 +2,14 @@
 
 Last updated: 2026-11-16
 
-The Nanoda universe-capture screen closed `NO_SIGNAL`. Current rpylean still has
-a source-acknowledged recursor-rule argument gap with a published false-proof
-consequence. Reproducing that public case alone would add little. Yes, repairing
-the checker would be useful: select a bounded local argument-validation repair,
-direct regression and review packet READY and unstarted. No external submission
-is authorized; the assurance companion and checked-import package stay DEFERRED.
+The bounded rpylean repair is complete: pinned current source accepted Arena
+#350's exact 27-declaration false-proof export, while the retained patch rejects
+it and preserves the tested honest ordinary-recursion controls. Yes, this is a
+useful current repair for a public defect, but it does not establish coverage of
+complex recursors and no external submission is authorized. The next separate
+item is a READY, unstarted source attribution of rpylean's pre-existing
+`rec-missing-ih` acceptance; the assurance companion and checked-import package
+stay DEFERRED.
 
 ## How Status Is Tracked
 
@@ -4121,17 +4123,19 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-No item is ACTIVE. The selected rpylean repair is READY and unstarted. Arena
-#350 already supplies the semantic consequence, so reproduction is only its
-failing baseline. The useful output is a constructor-derived argument check,
-fault-sensitive direct regression, upstream test evidence and a reviewable local
-patch. Unsupported recursor shapes must remain explicit. No external write is
-authorized.
+No item is ACTIVE. The rpylean rule-argument repair completed with a bounded
+constructor-derived check, direct regression, exact Arena #350 before/after
+evidence, honest dependent and direct-recursive controls, RPython translation,
+upstream tests and a local unsubmitted pull-request draft. Parameterized,
+indexed, mutual, nested, multiple-motive and higher-order recursive rules remain
+outside its claim. The selected READY successor is a source-only attribution of
+the separately reproduced public `rec-missing-ih` acceptance; it is unstarted
+and authorizes no checker change or external write.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`.
+Selected next item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item and no ACTIVE item.
@@ -4140,14 +4144,16 @@ The canonical queue retains one READY item and no ACTIVE item.
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
-| 1 | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | READY | Reproduce the public case as a baseline, implement a semantically derived argument check for the smallest justified supported fragment, add direct regression coverage, and retain a tested patch and PR draft. [Plan](research/RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md). |
+| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Patch and PR draft retained locally, not submitted. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
+| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | READY | Attribute the separately reproduced static `rec-missing-ih` acceptance through current parser, validation and reduction source with fresh valid controls; no implementation or historical replay. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | Standalone reproduction has insufficient value; the selected repair owns its baseline. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 
 Arena #350's rpylean result remains prior exposure, not independent discovery.
-The selected item may prepare a local patch and submission draft, but cannot
-contact rpylean or submit anything without exact owner approval. Missing original
+The retained patch and submission draft cannot be submitted without exact owner
+approval. The selected source investigation likewise cannot change rpylean or
+contact upstream. Missing original
 eta/recursor records and independent transfer custody stay WAITING; older
 recursor plans keep their dependencies. No historical replay or milestone is
 selected.
