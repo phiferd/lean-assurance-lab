@@ -6,8 +6,9 @@ The bounded rpylean repair is complete: pinned current source accepted Arena
 #350's exact 27-declaration false-proof export, while the retained patch rejects
 it and preserves the tested honest ordinary-recursion controls. Yes, this is a
 useful current repair for a public defect, but it does not establish coverage of
-complex recursors and no external submission is authorized. The next separate
-item is a READY, unstarted source attribution of rpylean's pre-existing
+complex recursors. The owner subsequently authorized submission, and the repair
+is now open as `Julian/rpylean#36`, awaiting maintainer review. The next separate
+item remains a READY, unstarted source attribution of rpylean's pre-existing
 `rec-missing-ih` acceptance; the assurance companion and checked-import package
 stay DEFERRED.
 
@@ -4144,7 +4145,7 @@ The canonical queue retains one READY item and no ACTIVE item.
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
-| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Patch and PR draft retained locally, not submitted. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
+| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17; OPEN and awaiting review. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
 | 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | READY | Attribute the separately reproduced static `rec-missing-ih` acceptance through current parser, validation and reduction source with fresh valid controls; no implementation or historical replay. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | Standalone reproduction has insufficient value; the selected repair owns its baseline. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |

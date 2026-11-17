@@ -8,8 +8,8 @@ Ledger updated: **2026-11-16**. Upstream states are dated observations, not a li
 
 ## At a glance
 
-- Open pull requests: **5**
-- Local drafts: **10**
+- Open pull requests: **6**
+- Local drafts: **9**
 - Merged pull requests: **5**
 - Published reports/comments: **1**
 
@@ -22,6 +22,7 @@ Ledger updated: **2026-11-16**. Upstream states are dated observations, not a li
 | [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [Fix/quoted declaration names](https://github.com/ammkrn/nanoda_lib/pull/42) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await review; open PR #38 is an external dependency by another contributor. Any rebase or update requires exact authorization. |
+| [Reject malformed ordinary recursor rules](https://github.com/Julian/rpylean/pull/36) | `Julian/rpylean` | 2026-11-17 | no activity; not reported | Await maintainer review of rpylean PR #36; do not file a duplicate issue or pull request. |
 
 ## Local drafts
 
@@ -36,7 +37,6 @@ Ledger updated: **2026-11-16**. Upstream states are dated observations, not a li
 | [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/closure/pr192-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/closure/pr191-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`, `CONFIRM-ARENA-UNIVERSE-GUARD-1` | — | Confirmation is DEFERRED and unstarted after the October 24 reassessment. Reopen only after current source coverage and a concrete consumer benefit justify further E1 work; preserve the candidate. Any submission requires its existing gates and exact authorization. |
-| [Validate complete ordinary recursor-rule applications](../results/research/rpylean-recursor-rule-argument-repair-1/rpylean-recursor-rule-argument-repair-pr.md) | `Julian/rpylean` | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | — | Retain the tested local patch and draft. Submit only if the owner explicitly authorizes this exact rpylean pull request. |
 
 ## Merged pull requests
 
