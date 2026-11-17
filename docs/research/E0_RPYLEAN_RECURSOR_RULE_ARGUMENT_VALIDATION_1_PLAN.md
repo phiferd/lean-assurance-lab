@@ -1,5 +1,11 @@
 # Screen current rpylean recursor-rule argument validation
 
+> **Superseded 2026-11-16.** This standalone E0 is DEFERRED because reproducing
+> the published failure without repairing it has insufficient incremental
+> value. `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` now owns the exact
+> candidate/control run as its failing-before baseline. The original protocol
+> is preserved below and is not independently authorized for launch.
+
 Evidence class: E0
 
 The current source review found that rpylean checks whether an imported

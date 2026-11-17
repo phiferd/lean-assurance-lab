@@ -20,13 +20,13 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1: Repair rpylean recursor-rule argument validation; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
 ## Recommended order
 
-Selected next item: **E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1**.
+Selected next item: **RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1**.
 
 Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING and DEFERRED entries are not executable merely because they appear here.
 
@@ -46,7 +46,8 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 120 | E0-LAZYLEAN-DATA-RECURSOR-1: Screen data recursors without the singleton proof shortcut | DEFERRED |
 | 121 | CHECKED-IMPORT-REGRESSION-PACK-1: Integrate a small confirmed checker-upgrade regression package | DEFERRED |
 | 122 | ASSURANCE-CLAIM-DISPOSITION-1: Explain the disposition of every published assurance case | DEFERRED |
-| 124 | E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation | READY |
+| 124 | RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1: Repair rpylean recursor-rule argument validation | READY |
+| 125 | E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation | DEFERRED |
 
 ### 51. E0-RECURSOR-BOUNDARY-MUTATION-1: Develop defensive imported-metadata validation cases
 
@@ -272,13 +273,29 @@ Produce a mechanically complete case-disposition inventory and generated dated r
 
 **Boundary:** DEFERRED: DEFERRED. Reconsider only for a concrete reader decision or misleading claim that requires complete case reconciliation, with canonical reselection before work.
 
-### 124. E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation
+### 124. RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1: Repair rpylean recursor-rule argument validation
+
+**Target:** rpylean b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb and Arena #350's public rec-rule-wrong-arg case, with honest dependent and recursive controls
+
+Reproduce the known case as a failing baseline, derive and implement full minor-application argument validation for the smallest semantically justified supported fragment, add a direct regression, run focused and full upstream tests, and retain a reviewable local patch and PR draft without submitting it.
+
+**Why this rank:** Highest-value feasible work after reassessment. The semantic consequence and oracle are already public, current source still exposes the gap, and no open repair issue or pull request was found. A repair adds durable value; reproduction alone does not.
+
+**Completion:** Failing-before and passing-after evidence for the public candidate; passing honest dependent/recursive controls and upstream tests; exact retained patch and source identities; supported-shape note; prepared external-contribution ledger row and *-pr.md draft. No external submission.
+
+**Stop:** Complete the bounded safe repair and review packet, owner stop, invalidated source/input, required authority/input unavailable, or capability unavailable after feasible repair. If a partial validator would be unsound or break valid supported inputs, retain the precise design boundary rather than weakening the semantic obligation. No attempt caps or external writes.
+
+**Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
+
+**Boundary:** READY: READY and unstarted under docs/research/RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md. Bind exact source/runtime and public candidate/control before edits; map supported recursor shapes and preserve unsupported boundaries. Local patch preparation is authorized, but no external write is authorized.
+
+### 125. E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation
 
 **Target:** rpylean b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb with Arena #350's public wrong-argument recursor rule and its unchanged honest control
 
 Bind exact current source/runtime and public bytes, audit ordinary harness discovery, then prospectively supervise one valid control and the exact wrong-argument candidate with an independent dependent-typing consequence.
 
-**Why this rank:** Highest-value feasible separate successor after the Nanoda screen closed NO_SIGNAL. Current source and a public consumed consequence identify a small maintainer decision; historical recursor replay, broader packaging and assurance companion work would add less decision value or violate explicit deferrals.
+**Why this rank:** Owner-directed deferral after project-wide reassessment: reproduction is useful only as the failing baseline inside the selected repair item, not as an independent research endpoint.
 
 **Completion:** One closed E0 trial with attributable control/candidate verdicts, exact current identities, independent consequence and harness-discovery observations, all repaired attempts retained, and a research-value handoff. Describe any signal only as current reproduction of a public defect.
 
@@ -286,7 +303,7 @@ Bind exact current source/runtime and public bytes, audit ordinary harness disco
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** READY: READY and unstarted under docs/research/E0_RPYLEAN_RECURSOR_RULE_ARGUMENT_VALIDATION_1_PLAN.md. Before the E0 start bind exact current source/runtime, byte-identical public candidate and honest control, deterministic pair and harness-discovery audits, independent dependent-typing expectation, commands and supervised custody.
+**Boundary:** DEFERRED: DEFERRED and unstarted. Reconsider only if the repair item cannot establish the current baseline within its own fixed scope and a separate exploratory question becomes necessary; require canonical reselection before execution.
 
 ## Autonomous workflow
 
@@ -329,6 +346,6 @@ Use `scripts/refresh-current-state` for routine assurance refresh and `scripts/b
 - A schema-backed external-contribution ledger and generated human view consolidate project pull requests and prepared PR candidates without treating dated observations as live state.
 - One fail-fast scripts/refresh-current-state command replaces repeated model-mediated assurance-refresh steps and retains logs.
 - The operating guide records script-first work, focused-then-required validation, selective cheaper delegation, and exception-based model review.
-- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1, CONFIRM-LEAN-ETA-ADMISSION-1, E0-TEST-EFFECTIVENESS-CAMPAIGN-1, E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1, E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1, E0-COMPARATOR-CONSUMER-SCREEN-1, E0-SYMBOLIC-UNIVERSE-SCREEN-1, E0-SYMBOLIC-UNIVERSE-REJECTION-1, E0-UNIVERSE-CORPUS-REUSE-1, E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1, E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1, STRATEGY-REASSESSMENT-2026-10-24, E0-EXPRESSION-PRECONDITION-SCREEN-1, NOVEMBER-EVIDENCE-RECONCILIATION-1, FRESH-IMPORT-ADMISSION-TARGET-1, E0-PI-CODOMAIN-ADMISSION-SCREEN-1, CHECKED-COMPARISON-REACHABILITY-AUDIT-1, CONFIRM-CHECKED-IMPORT-CASES-1, SEMANTIC-BOUNDARY-SELECTION-1, CURRENT-SEMANTIC-OPPORTUNITY-1, E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1. Selected next item: E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1 (READY).
+- The active plan and ranked queue are current. Completed queue items: METAMORPHIC-REPRESENTATION-PILOT-2, PIPELINE-COMPLETENESS-PILOT-2, VALID-DEPENDENT-TERM-PILOT-1, ACCEPTANCE-IMPACT-PILOT-1, TRUST-ASSUMPTION-PIPELINE-PILOT-1, LAZY-REDUCTION-CONFORMANCE-PILOT-1, STATEFUL-VALIDATION-PILOT-1, REAL-PROOF-SLICES-PILOT-1, BINDER-MODEL-PILOT-1, RESOURCE-ENVELOPE-PILOT-1, E0-LAZYLEAN-SEMANTIC-EXTENSION-1, SNAPSHOT-REUSE-CLOSURE-RELIABILITY-1, SURVIVOR-THREAD-ONE-DETERMINISM-1, ARENA-LET-POLICY-FOLLOWUP-1, NANODA-TEST-NONVACUITY-1, ARENA-LET-REGRESSION-1, NANODA-CACHE-REGRESSION-1, SEMANTIC-LET-CONTRACT-1, HSBM-PILOT-1, NANODA-NAT-DISPATCH-REGRESSION-1, NANODA-DEFEQ-CACHE-1, ARENA-INDUCTIVE-ISOLATION-1, SEMANTIC-IMPORT-CONTRACT-1, NANODA-NESTED-REGRESSION-1, NANODA-NESTED-TEST-1, NANODA-NATIVE-CONFIG-BOUNDARY-1, NANODA-STRING-RECONSTRUCTION-TEST-1, KIOTA-CTOR-INDEX-COVERAGE-1, CONTRIBUTION-PORTFOLIO-REVIEW-1, CVC-1, CVC-2, OPS-UPSTREAM-1, ALT-PAYLOADS, CVC-PREP-1, CVC-PREP-2, CVC-RUNNER-1, CVC-RUNNER-2, CVC-3, CVC-AXIOMS-1, CVC-CONDITIONAL-1, CVC-3-CONDITIONAL, CVC-A7-REPAIR-1, CVC-4-CONDITIONAL, CVC-4-ADAPTER-REVIEW, CVC-4-OWNERSHIP-1, CVC-5-CONDITIONAL, ALT-SURVIVORS, SURVIVOR-LET-REUSE-1, SURVIVOR-LET-ASSOCIATION-1, ALT-TRANSFER, SOURCE-PROVENANCE-INTAKE-1, SURVIVOR-CACHE-1, SURVIVOR-CACHE-EXPORT-1, SURVIVOR-UNIVERSE-DIFF-1, SURVIVOR-UNIVERSE-EQUIVALENCE-1, SURVIVOR-FVAR-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REACHABILITY-1, SURVIVOR-THREAD-CONFIG-REGRESSION-1, NANODA-ZERO-THREAD-UPSTREAM-READINESS-1, SURVIVOR-CACHE-PREDICATE-TRANSFER-1, KIOTA-CTOR-INDEX-TEST-1, METAMORPHIC-REPRESENTATION-PILOT-1, SURVIVOR-THREAD-ONE-CHILD-PANIC-REGRESSION-1, SOURCE-LOCK-COMPLETENESS-AUDIT-1, CHILD-PANIC-CONFIRMATION-1, PIPELINE-COMPLETENESS-PILOT-1, RECURSOR-TYPE-TRUST-BOUNDARY-1, KIOTA-RECURSOR-TYPE-DESIGN-1, KIOTA-RECURSOR-TYPE-REPAIR-1, KIOTA-RECURSOR-PR-REFINEMENT-1, WORKFLOW-CLOSURE-AUTOMATION-1, EXPLORATORY-EXPERIMENT-PROTOCOL-1, WORKFLOW-CLOSURE-RELIABILITY-1, E0-NANODA-SEMANTIC-DIVERSITY-SCREEN-1, E0-LAZYLEAN-COMPOSED-REDUCTION-1, E0-SEMANTIC-ASSURANCE-SCREENING-1, E0-LEAN4LEAN-DIAGNOSTIC-PANIC-TRIAGE-1, EXPLORATION-BOOKKEEPING-HELPER-1, LEAN-ETA-ALIAS-PILOT-PREPARATION-1, E0-LEAN-ETA-ALIAS-PILOT-1, E0-LEAN-ACTION-1, LEAN-ACTION-REGRESSION-PREPARATION-1, E0-LEAN-ACTION-BUNDLED-REAL-1, TREE2-CONFIRMED-INTEGRATION-1, E0-LEAN-ACTION-BUNDLED-WHOLE-RETRY-1, E0-TREE2-COMPUTATION-PILOT-1, E0-NANODA-CONGRUENCE-FAULT-PILOT-1, E0-LEAN-ETA-ALIAS-PILOT-RETRY-1, E0-LEAN-ETA-ADMISSION-1, CONFIRM-LEAN-ETA-ADMISSION-1, E0-TEST-EFFECTIVENESS-CAMPAIGN-1, E0-HISTORICAL-FAULT-TRANSFER-SCREEN-1, E0-NANODA-PROJECTION-IDENTITY-REGRESSION-1, E0-COMPARATOR-CONSUMER-SCREEN-1, E0-SYMBOLIC-UNIVERSE-SCREEN-1, E0-SYMBOLIC-UNIVERSE-REJECTION-1, E0-UNIVERSE-CORPUS-REUSE-1, E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1, E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1, STRATEGY-REASSESSMENT-2026-10-24, E0-EXPRESSION-PRECONDITION-SCREEN-1, NOVEMBER-EVIDENCE-RECONCILIATION-1, FRESH-IMPORT-ADMISSION-TARGET-1, E0-PI-CODOMAIN-ADMISSION-SCREEN-1, CHECKED-COMPARISON-REACHABILITY-AUDIT-1, CONFIRM-CHECKED-IMPORT-CASES-1, SEMANTIC-BOUNDARY-SELECTION-1, CURRENT-SEMANTIC-OPPORTUNITY-1, E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1. Selected next item: RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1 (READY).
 
 This generated review does not launch a campaign. Upstream observations come from the canonical external-contribution ledger and remain dated, input-bound snapshots rather than a live status guarantee. Earlier action rows retain their historical scope. The full evidence bindings, exact targets and prerequisites are in the canonical JSON.

@@ -1,11 +1,11 @@
 # Discovery and conformance frontier
 
-The completed Nanoda screen found no admission signal: exact Nanoda accepted the
-valid nested-recursor control and rejected the undeclared-universe candidate at
-declaration definitional equality. No confirmation follows. Select the separate
-current rpylean wrong-argument screen READY and unstarted because exact source
-and a public consumed consequence identify one bounded repair decision. This is
-not fresh discovery and does not repeat the historical recursor audit.
+The completed Nanoda screen found no admission signal. Current rpylean source
+still records a recursor-rule argument-validation gap, and Arena #350 supplies
+its public false-proof consequence. A second review found that reproduction
+alone has little incremental value. Select a bounded local checker repair and
+direct regression instead. This is informed implementation work, not fresh
+discovery or historical replay, and it authorizes no external submission.
 
 ## Current strategy as of 2026-11-16
 
@@ -17,24 +17,27 @@ retrospective companion. Both remain DEFERRED without demonstrated concrete use.
 `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` is complete `NO_SIGNAL` under
 [its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md) and
 [summary](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md).
-`E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` is READY under
-[its separate plan](E0_RPYLEAN_RECURSOR_RULE_ARGUMENT_VALIDATION_1_PLAN.md).
-It must bind current source/runtime, the byte-identical public candidate, an
-honest control, independent typing consequence and harness-discovery audit
-before prospective registration or execution.
+The standalone `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` is DEFERRED:
+its known-case reproduction is now the baseline inside
+`RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, READY and unstarted under
+[its plan](RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md). The selected item
+must derive the expected minor application from checked constructor/recursor
+metadata, preserve valid dependent and recursive controls, define unsupported
+shapes, and deliver a tested local patch and PR draft without submission.
 
 | Order | Item | Decision and boundary |
 | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | Valid control accepted and candidate rejected at semantic definitional equality; bounded `NO_SIGNAL`, no confirmation. |
-| 1 | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1`, READY | Prospectively reproduce or refute the public wrong-argument case on exact current rpylean and separately audit harness discovery. No novelty or historical credit. |
+| 1 | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, READY | Use the public case as failing baseline, implement the smallest semantically justified argument check, add a direct regression, run upstream tests, and retain a reviewable patch and PR draft. No external write. |
+| Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | Standalone reproduction would add little; its baseline is part of the repair item. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |
 
 The completed source comparisons, Nanoda screen, confirmation and earlier
 results are preserved. Do not repeat missing historical experiments or silently
-discharge their old dependencies. The rpylean witness is explicitly public and
-may establish only current reproduction and repair readiness. Stop before
+discharge their old dependencies. The rpylean witness is explicitly public; the
+new value must come from changed validation and regression evidence. Stop before
 executing the READY successor.
 
 ### Discovery and reuse decisions

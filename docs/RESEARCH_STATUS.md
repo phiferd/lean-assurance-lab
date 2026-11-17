@@ -2,13 +2,12 @@
 
 Last updated: 2026-11-16
 
-The Nanoda nested-recursor universe-capture screen closed `NO_SIGNAL`: the exact
-checker accepted its valid control and rejected the undeclared-universe
-candidate at declaration definitional equality. This is a useful bounded
-negative, not a general correctness result. No confirmation or package follows.
-Select the separate current rpylean wrong-argument repair-readiness screen READY
-and unstarted; the assurance companion and checked-import package remain
-DEFERRED.
+The Nanoda universe-capture screen closed `NO_SIGNAL`. Current rpylean still has
+a source-acknowledged recursor-rule argument gap with a published false-proof
+consequence. Reproducing that public case alone would add little. Yes, repairing
+the checker would be useful: select a bounded local argument-validation repair,
+direct regression and review packet READY and unstarted. No external submission
+is authorized; the assurance companion and checked-import package stay DEFERRED.
 
 ## How Status Is Tracked
 
@@ -4122,33 +4121,36 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-No item is ACTIVE. The selected rpylean screen is READY and unstarted. It will
-ask whether current source still admits Arena #350's public recursor rule with
-the correct minor-premise head but a wrong dependent argument, and whether the
-ordinary harness omits the nested bug fixture. This is repair-readiness work,
-not fresh discovery or a historical recursor replay.
+No item is ACTIVE. The selected rpylean repair is READY and unstarted. Arena
+#350 already supplies the semantic consequence, so reproduction is only its
+failing baseline. The useful output is a constructor-derived argument check,
+fault-sensitive direct regression, upstream test evidence and a reviewable local
+patch. Unsupported recursor shapes must remain explicit. No external write is
+authorized.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1`.
+Selected next item: `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains no ACTIVE item and one READY item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
-| 1 | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | READY | Bind current rpylean, the public wrong-argument candidate and honest control, independent dependent-typing consequence, and harness-discovery audit before any E0 start. [Plan](research/E0_RPYLEAN_RECURSOR_RULE_ARGUMENT_VALIDATION_1_PLAN.md). |
+| 1 | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | READY | Reproduce the public case as a baseline, implement a semantically derived argument check for the smallest justified supported fragment, add direct regression coverage, and retain a tested patch and PR draft. [Plan](research/RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md). |
+| Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | Standalone reproduction has insufficient value; the selected repair owns its baseline. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 
 Arena #350's rpylean result remains prior exposure, not independent discovery.
-The selected screen may reproduce current repair need but cannot earn novelty
-credit. Missing original eta/recursor records and independent transfer custody
-stay WAITING; older recursor plans keep their dependencies. No upstream write,
-historical replay or milestone is selected.
+The selected item may prepare a local patch and submission draft, but cannot
+contact rpylean or submit anything without exact owner approval. Missing original
+eta/recursor records and independent transfer custody stay WAITING; older
+recursor plans keep their dependencies. No historical replay or milestone is
+selected.
 
 ### Waiting
 
