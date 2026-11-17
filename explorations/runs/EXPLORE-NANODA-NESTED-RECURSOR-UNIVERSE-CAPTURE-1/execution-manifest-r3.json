@@ -1,0 +1,45 @@
+{
+  "schema_version": 1,
+  "campaign": "E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1",
+  "revision": 3,
+  "status": "FROZEN_BEFORE_RELAUNCH",
+  "reason": "Revision 2 passed structural-DAG checks but exposed the earlier generator's omitted name shift in a pre-existing Level.param row: source universe u_1 had become a reference to Eq. Revision 3 changes that exact shared row from param 21 to param 22, proves every declaration universe has an earlier matching Level.param, and retains the same one-pointer scientific pair difference.",
+  "prior_attempt": {
+    "result": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/result-r2.json",
+    "sha256": "53046f51636dc7b058e608430fc1df124b226eae1e74cedfb084814c9567fd9c",
+    "classification": "ENGINEERING_FAILURE_REPAIRED",
+    "failure": "Both revision-2 cells panicked in parser get_uparams_ptr because the shifted source parameter had no matching Level.param."
+  },
+  "scientific_runs": [
+    {
+      "order": 1,
+      "role": "control",
+      "input": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/control-r3.ndjson",
+      "sha256": "f35ee5914fdb5cc8e94cb19420425b625f1e152559874a3066d9f3cb70cc51f8",
+      "expected": "ACCEPT"
+    },
+    {
+      "order": 2,
+      "role": "candidate",
+      "input": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/candidate-r3.ndjson",
+      "sha256": "f420ff7ae33685623ecf8abd42ee93b176c9198ae654df1a404bf4f077940e0d",
+      "expected": "UNKNOWN"
+    }
+  ],
+  "identities": [
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/prepare-r3.py", "sha256": "3583debc0cd138ba9defa8000268ad994f88f4fd65c041b13091b59fc163e8fd"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/run-r3.py", "sha256": "8a0f6296e5e1189c95d9603d908d8517885a0785f209e97ebf8ad8aaca82d430"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/fixture-audit-r3.json", "sha256": "a453df26d64bcbc40b87ba595fe0f27be10c9a7540adab8bf94097b4fb612865"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/control-r3.ndjson", "sha256": "f35ee5914fdb5cc8e94cb19420425b625f1e152559874a3066d9f3cb70cc51f8"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/candidate-r3.ndjson", "sha256": "f420ff7ae33685623ecf8abd42ee93b176c9198ae654df1a404bf4f077940e0d"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/result-r2.json", "sha256": "53046f51636dc7b058e608430fc1df124b226eae1e74cedfb084814c9567fd9c"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/nanoda.bin", "sha256": "0f35bc15480fc092829a14c1f5ceea6d3d05c4ceb2f20ff564a0d38679c9d20d"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/config.json", "sha256": "640751dc34c6e38d3dff3228950be43ab18c6518af3ac9186406a97d3c0d63ec"},
+    {"path": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/independent-reduct-result.json", "sha256": "97c4e43912f6070c8430a7704c96a82e438785801a7b5d69f5f98f3161c66e73"}
+  ],
+  "classification": {
+    "SIGNAL": "The valid control accepts, the candidate accepts, and the frozen independent reduct check rejects the predicted free-u reduct.",
+    "NO_SIGNAL": "The valid control accepts and the candidate is rejected in semantic checking.",
+    "INCONCLUSIVE": "The valid control fails, the repair audit fails, the candidate does not reach an attributable semantic result, or supervision fails."
+  }
+}

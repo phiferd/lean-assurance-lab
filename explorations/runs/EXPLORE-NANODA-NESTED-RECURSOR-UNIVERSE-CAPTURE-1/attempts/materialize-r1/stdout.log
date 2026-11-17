@@ -1,0 +1,69 @@
+Creating test: lal-nested-recursor-universe-capture-control (type: leanfile)
+  Copied /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/tests/lal-nested-recursor-universe-capture-control.lean to /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/Test.lean
+  Copied lean-toolchain from tests/ to src directory
+  Created trivial lakefile
+  Building module Test...
+  stdout: ✖ [2/3] Building Test (5.3s)
+          trace: .> LEAN_PATH=/Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/.lake/build/lib/lean /Users/danphifer/.elan/toolchains/leanprover--lean4---v4.29.1/bin/lean /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/Test.lean -o /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/.lake/build/lib/lean/Test.olean -i /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/.lake/build/lib/lean/Test.ilean -c /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/.lake/build/ir/Test.c --setup /Users/danphifer/Documents/ChatGPT/LeanAssuranceLab/external/lean-kernel-arena/_build/tests/work/lal-nested-recursor-universe-capture-control/src/.lake/build/ir/Test.setup.json --json
+          error: Test.lean:16:53: Application type mismatch: The argument
+            node
+          has type
+            (children : LALWrap LALNest) → motive_2 children → motive_1 (LALNest.node children)
+          but is expected to have type
+            LALWrap LALNest
+          in the application
+            rec_1 ?m.8 ?m.9 node
+          error: Test.lean:16:35: Type mismatch
+            motive_1
+          has type
+            LALNest → Type
+          of sort `Type 1` but is expected to have type
+            (children : LALWrap LALNest) →
+              (((value : LALNest) → motive_1 value → motive_2 (LALWrap.mk value)) → (x : LALWrap LALNest) → motive_2 x) →
+                ?m.6 (LALNest.node children)
+          of sort `Type`
+          error: Test.lean:16:44: Type mismatch
+            motive_2
+          has type
+            LALWrap LALNest → Type
+          of sort `Type 1` but is expected to have type
+            (value : LALNest) →
+              ?m.6 value → ((value : LALNest) → motive_1 value → motive_2 (LALWrap.mk value)) → (x : LALWrap LALNest) → motive_2 x
+          of sort `Type`
+          error: Test.lean:15:34: Application type mismatch: The argument
+            node
+          has type
+            (children : LALWrap LALNest) → motive_2 children → motive_1 (LALNest.node children)
+          but is expected to have type
+            LALNest
+          in the application
+            rec ?m.15 ?m.16 node
+          error: Test.lean:15:16: Type mismatch
+            motive_1
+          has type
+            LALNest → Type
+          of sort `Type 1` but is expected to have type
+            (children : LALWrap LALNest) →
+              ?m.14 children → ((value : LALNest) → motive_1 value → motive_2 (LALWrap.mk value)) → (x : LALNest) → motive_1 x
+          of sort `Type`
+          error: Test.lean:15:25: Type mismatch
+            motive_2
+          has type
+            LALWrap LALNest → Type
+          of sort `Type 1` but is expected to have type
+            (value : LALNest) →
+              (((value : LALNest) → motive_1 value → motive_2 (LALWrap.mk value)) → (x : LALNest) → motive_1 x) →
+                ?m.14 (LALWrap.mk value)
+          of sort `Type`
+          error: Test.lean:9:8: (kernel) declaration has metavariables 'LALNest.mainConsumer_iota'
+          error: Lean exited with code 1
+          Some required targets logged failures:
+          - Test
+          
+  stderr: info: test: no previous manifest, creating one from scratch
+          info: toolchain not updated; already up-to-date
+          error: build failed
+          
+  Build failed
+
+Results: 0 succeeded, 1 failed

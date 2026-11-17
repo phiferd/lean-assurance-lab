@@ -2,12 +2,13 @@
 
 Last updated: 2026-11-16
 
-Current Nanoda source supports a new nested-recursor universe-capture hypothesis:
-validation may rename an imported declaration universe onto an undeclared rule
-universe, while runtime substitution leaves that universe in the consumed rule.
-No input or checker run exists yet, so this is not an observed defect. Yes, its
-predicted ill-typed reduct is consequential. Run one two-input E0 screen next;
-the assurance companion and checked-import package remain DEFERRED.
+The Nanoda nested-recursor universe-capture screen closed `NO_SIGNAL`: the exact
+checker accepted its valid control and rejected the undeclared-universe
+candidate at declaration definitional equality. This is a useful bounded
+negative, not a general correctness result. No confirmation or package follows.
+Select the separate current rpylean wrong-argument repair-readiness screen READY
+and unstarted; the assurance companion and checked-import package remain
+DEFERRED.
 
 ## How Status Is Tracked
 
@@ -64,6 +65,16 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` closes `NO_SIGNAL`.
+  After two retained fixture repairs, exact Nanoda accepted the valid nested-
+  recursor control and rejected the rule-only undeclared-universe candidate at
+  `src/tc.rs:988` during definitional equality. Official Lean independently
+  accepted the explicit level-1 control reduct and rejected the predicted
+  free-universe candidate reduct. This tests one constructed nested inductive
+  on one revision; it is no general soundness or cross-checker claim. No E1,
+  defect report, package or upstream action follows. See the
+  [summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md).
 
 - `CURRENT-SEMANTIC-OPPORTUNITY-1` completes SUCCESS as a source-only
   investigation. Current Nanoda nested-recursor alignment may capture a
@@ -4111,32 +4122,33 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The selected Nanoda universe-capture screen is ACTIVE. It will retain one valid
-alpha-renamed nested-recursor control and one rule-only undeclared-universe
-candidate, then observe admission and independently account for the neutral
-one-step reduct. No checker has run for this item yet, so the hypothesis remains
-unobserved rather than a defect claim.
+No item is ACTIVE. The selected rpylean screen is READY and unstarted. It will
+ask whether current source still admits Arena #350's public recursor rule with
+the correct minor-premise head but a wrong dependent argument, and whether the
+ordinary harness omits the nested bug fixture. This is repair-readiness work,
+not fresh discovery or a historical recursor replay.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`.
+Selected next item: `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one ACTIVE item and no READY item.
+The canonical queue retains no ACTIVE item and one READY item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
-| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | ACTIVE | One alpha-renamed valid control and one recursive-rule candidate, with admission and independently checked one-step reduct observations. [Plan](research/E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). |
+| Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
+| 1 | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | READY | Bind current rpylean, the public wrong-argument candidate and honest control, independent dependent-typing consequence, and harness-discovery audit before any E0 start. [Plan](research/E0_RPYLEAN_RECURSOR_RULE_ARGUMENT_VALIDATION_1_PLAN.md). |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 
 Arena #350's rpylean result remains prior exposure, not independent discovery.
-The selected Nanoda mechanism differs from the reviewed published cases but is
-only a source-derived hypothesis until execution. Missing original eta/recursor
-records and independent transfer custody stay WAITING; older recursor plans keep
-their dependencies. No upstream write, historical replay or milestone is selected.
+The selected screen may reproduce current repair need but cannot earn novelty
+credit. Missing original eta/recursor records and independent transfer custody
+stay WAITING; older recursor plans keep their dependencies. No upstream write,
+historical replay or milestone is selected.
 
 ### Waiting
 

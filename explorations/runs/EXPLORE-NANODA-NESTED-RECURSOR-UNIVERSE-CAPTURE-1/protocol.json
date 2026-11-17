@@ -1,0 +1,72 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "id": "EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1",
+  "campaign": "E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1",
+  "question": "Does Nanoda admit the exact nested-recursor candidate and thereby expose the independently rejected free-universe reduct, while accepting the valid alpha-renamed control?",
+  "scientific_runs": [
+    {
+      "order": 1,
+      "role": "control",
+      "input": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/control.ndjson",
+      "sha256": "3c37451cb80d305842ae20896a02cbca3b74b169c69e817cd04cf92bcfc2f5d2",
+      "expected": "ACCEPT"
+    },
+    {
+      "order": 2,
+      "role": "candidate",
+      "input": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/candidate.ndjson",
+      "sha256": "0854cdc1fab6f315453d25eb09659704f365dbb6f99d798c41ca0323b83c5e99",
+      "expected": "UNKNOWN"
+    }
+  ],
+  "checker": {
+    "repository": "https://github.com/ammkrn/nanoda_lib.git",
+    "commit": "0da9f98feadd3a0a2ef4b3dbcf52a298a6fef929",
+    "binary": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/nanoda.bin",
+    "binary_sha256": "0f35bc15480fc092829a14c1f5ceea6d3d05c4ceb2f20ff564a0d38679c9d20d",
+    "config": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/config.json",
+    "config_sha256": "640751dc34c6e38d3dff3228950be43ab18c6518af3ac9186406a97d3c0d63ec",
+    "argv": [
+      "nanoda.bin",
+      "config.json"
+    ],
+    "input_transport": "stdin"
+  },
+  "supervision": {
+    "timeout_seconds": 30,
+    "memory_ceiling_bytes": 2147483648,
+    "sample_interval_seconds": 0.1,
+    "max_trace_gap_seconds": 5,
+    "cleanup_seconds": 5,
+    "output_cap_bytes": 20971520
+  },
+  "fixture_gate": {
+    "audit": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/fixture-audit.json",
+    "control_rule_universe": "v",
+    "candidate_rule_universe": "u",
+    "owning_recursor_universes": [
+      "v"
+    ],
+    "genuinely_nested": true,
+    "observer_universes": [],
+    "pair_difference": "/143/inductive/recs/1/rules/0/rhs"
+  },
+  "independent_reduct_gate": {
+    "result": "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/independent-reduct-result.json",
+    "control": "ACCEPT",
+    "candidate": "REJECT_EXPECTED_UNIVERSE_MISMATCH",
+    "checker": "official Lean elaborator and kernel",
+    "separate_from_admission_input": true
+  },
+  "classification": {
+    "SIGNAL": "Control accepts, candidate accepts, and the frozen independent reduct check establishes the predicted free-universe mismatch.",
+    "NO_SIGNAL": "Control accepts and the candidate reaches semantic checking but is rejected, or an accepted candidate is source-explained as type-preserving.",
+    "INCONCLUSIVE": "Control fails, the fixture gate is not met, candidate failure cannot be attributed to the intended semantic check, reduct typing is unavailable, or supervision remains faulty."
+  },
+  "nonclaims": [
+    "E0 is not confirmation of a Nanoda defect or general unsoundness.",
+    "The observation does not demonstrate a proof of False or transfer to another checker.",
+    "The independent reduct check is not a second admission run and Nanoda is not instrumented to dump the reduct."
+  ]
+}

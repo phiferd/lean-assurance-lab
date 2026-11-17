@@ -1,13 +1,11 @@
 # Discovery and conformance frontier
 
-The owner-directed source inquiry found a distinct current Nanoda hypothesis.
-Nested recursor comparison maps an imported declared universe to the universe
-chosen by reconstruction; that map may capture an undeclared universe already
-present only in a rule. Runtime substitution follows the declared vector and may
-therefore leave the captured name in the rule consumed by reduction. No input or
-checker run exists yet. Select a two-input E0 screen of the predicted ill-typed
-reduct. A public current rpylean repair opportunity remains the lower-information
-fallback.
+The completed Nanoda screen found no admission signal: exact Nanoda accepted the
+valid nested-recursor control and rejected the undeclared-universe candidate at
+declaration definitional equality. No confirmation follows. Select the separate
+current rpylean wrong-argument screen READY and unstarted because exact source
+and a public consumed consequence identify one bounded repair decision. This is
+not fresh discovery and does not repeat the historical recursor audit.
 
 ## Current strategy as of 2026-11-16
 
@@ -16,28 +14,28 @@ produces an assurance capability someone can actually use. Evidence custody
 supports research; it does not by itself justify a package or comprehensive
 retrospective companion. Both remain DEFERRED without demonstrated concrete use.
 
-`CURRENT-SEMANTIC-OPPORTUNITY-1` is complete under its
-[source-only plan](CURRENT_SEMANTIC_OPPORTUNITY_1_PLAN.md) and
-[report](../../results/research/current-semantic-opportunity-1/report.md).
-`E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` is ACTIVE under
-[its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md). Its fixed
-question compares an honest alpha-renamed nested recursor with one rule-only
-undeclared-universe candidate, then observes both admission and the neutral
-one-step reduct. E0 can establish a candidate signal, not a confirmed defect.
+`E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` is complete `NO_SIGNAL` under
+[its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md) and
+[summary](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md).
+`E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` is READY under
+[its separate plan](E0_RPYLEAN_RECURSOR_RULE_ARGUMENT_VALIDATION_1_PLAN.md).
+It must bind current source/runtime, the byte-identical public candidate, an
+honest control, independent typing consequence and harness-discovery audit
+before prospective registration or execution.
 
 | Order | Item | Decision and boundary |
 | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
-| 1 | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1`, ACTIVE | Retain exact control/candidate bytes, supervise both observations, and account independently for the reduct's type. Stop at E0 classification and handoff. |
+| Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | Valid control accepted and candidate rejected at semantic definitional equality; bounded `NO_SIGNAL`, no confirmation. |
+| 1 | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1`, READY | Prospectively reproduce or refute the public wrong-argument case on exact current rpylean and separately audit harness discovery. No novelty or historical credit. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |
 
-The completed source comparisons, confirmation and earlier results are preserved.
-Do not repeat missing historical experiments or silently discharge their old
-dependencies. The candidate is independently derived from current source but
-informed by published recursor repairs; scope any novelty claim to the specific
-name-capture mechanism. Select a scoped successor at campaign handoff and stop
-before executing it.
+The completed source comparisons, Nanoda screen, confirmation and earlier
+results are preserved. Do not repeat missing historical experiments or silently
+discharge their old dependencies. The rpylean witness is explicitly public and
+may establish only current reproduction and repair readiness. Stop before
+executing the READY successor.
 
 ### Discovery and reuse decisions
 

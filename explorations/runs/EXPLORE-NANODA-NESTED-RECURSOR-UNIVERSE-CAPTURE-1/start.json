@@ -1,0 +1,50 @@
+{
+  "schema_version": 1,
+  "evidence_class": "E0",
+  "event": "start",
+  "id": "EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1",
+  "at": "2026-11-16T00:00:00Z",
+  "data": {
+    "campaign": "E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1",
+    "question": "Does current Nanoda accept an imported nested recursor whose owning declaration uses elimination universe v but whose recursive rule uses reconstruction universe u, and does the independently checked neutral reduct expose the predicted type mismatch?",
+    "sources": [
+      {
+        "name": "ammkrn/nanoda_lib",
+        "revision": "0da9f98feadd3a0a2ef4b3dbcf52a298a6fef929"
+      },
+      {
+        "name": "leanprover/lean4export Arena exporter fixture",
+        "revision": "37f7525b732808a49b746dc6999d53c3717db124"
+      },
+      {
+        "name": "leanprover/lean4 independent reduct checker",
+        "revision": "611c117bfaf7b7ae1cfcf246ce6fba31e8f509e9"
+      }
+    ],
+    "versions": "Nanoda exact source commit 0da9f98 with retained release binary; Arena exporter 37f7525; Lean 4.36.0 commit 611c117; exact hashes and toolchains in protocol.json, materialization.json, nanoda-build.json, and independent-reduct-result.json.",
+    "commands": "python3 run.py; two direct supervised Nanoda invocations in fixed control-then-candidate order, each nanoda.bin config.json with the exact NDJSON on stdin.",
+    "inputs": [
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/protocol.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/start.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/run.py",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/prepare.py",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/fixture-source.lean",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/fixture-audit.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/control.ndjson",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/inputs/candidate.ndjson",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/independent-control.lean",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/independent-candidate.lean",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/independent-reduct-result.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/nanoda.bin",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/config.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/nanoda-source.tar",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/nanoda-build.json",
+      "explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/materialization.json",
+      "docs/research/E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md",
+      "lib/resource_envelope_supervisor.py"
+    ],
+    "sample": "Exactly one valid alpha-renamed control and one candidate differing only at the frozen recursive rule root; one exact Nanoda revision; two planned admission runs. Independent Lean reduct typing was completed before launch and is not counted as a Nanoda scientific run.",
+    "planned_runs": 2,
+    "controls": "The genuinely nested target has numNested=1. The owning recursor declares only v; the control rule uses v; the candidate rule uses fresh u; the observer declares no universes and keeps motives, minors, and children neutral. A deterministic audit binds the only pair difference. Official Lean accepts the explicit level-1 control reduct and rejects the corresponding free-u candidate reduct. Nanoda acceptance requires exit 0 under complete supervision. Parser/adapter failures, unattributed nonzero exits, timeouts, monitoring faults, or a failed control are inconclusive, not candidate rejection or signal."
+  }
+}
