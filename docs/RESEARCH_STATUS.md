@@ -2,19 +2,20 @@
 
 Last updated: 2026-11-18
 
-**What did we find?** On Julian’s published checker revision, both disputed
-Arena files were rejected and the valid proof-parameter example passed.
-All three matched the predictions recorded before execution. The reason for
-acceptance on the historical checker remains unverified.
+**What did we find?** Four checker commands in Lean Kernel Arena convert any
+nonzero exit into the code for rejection. In the Lab’s separate rpylean runs,
+startup failures and genuine proof rejections returned that same code.
+Whether Arena has credited an operational failure as a correct rejection is open.
 
-**Is it interesting?** Yes. The checker reported an invalid recursive occurrence
-in a constructor field for one file and a mismatched induction rule for the
-other. This establishes the observed behavior for the exact files on the
-untranslated checker.
+**Is it interesting?** Yes. The published counts tell Lean users which invalid
+inputs checkers detect. The saved run logs can show how much evidence supports
+that interpretation across four integrations.
 
-**Does it require more work?** The three-case question is closed. No repeat
-repair or PR submission is warranted. The separate next item will assess
-whether Arena can adopt a released rpylean version containing the change. [Verification](../results/research/rpylean-published-three-case-verification-1/report.md)
+**Does it require more work?** Audit the rejections Arena counted as correct
+for those four integrations in its November 18 publication. Give maintainers
+specific rows that need a change or a bounded reason to keep the current
+labels. The release update for rpylean remains a separate maintenance option.
+[Audit plan](research/ARENA_REJECTION_EVIDENCE_1_PLAN.md)
 
 ## How Status Is Tracked
 
@@ -4136,13 +4137,13 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The published-revision verification is complete. The release-pin assessment
-for Arena is READY and unstarted.
+The audit of published Arena rejection evidence is READY and unstarted. The
+rpylean verification is complete and its release assessment is deferred.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `ARENA-RPYLEAN-RELEASE-PIN-1`.
+Selected next item: `ARENA-REJECTION-EVIDENCE-1`.
 Queue handoff: EXECUTABLE.
 
 The canonical queue retains one READY item and no ACTIVE item.
@@ -4154,7 +4155,8 @@ The canonical queue retains one READY item and no ACTIVE item.
 | Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17. Julian closed the PR unmerged on 2026-11-18 after publishing his own implementation. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
 | Completed | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | COMPLETE | The original directory override and the patched root-relative case passed. The full upstream suite had 816 passes and one expected failure. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md). |
 | Completed | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | COMPLETE | All three exact cases matched on the published revision. [Verification](../results/research/rpylean-published-three-case-verification-1/report.md). |
-| 1 | `ARENA-RPYLEAN-RELEASE-PIN-1` | READY | Decide whether Arena can use a released repair. [Plan](research/ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md). |
+| 1 | `ARENA-REJECTION-EVIDENCE-1` | READY | Determine what the original logs establish for the credited rejections across four checker integrations. [Plan](research/ARENA_REJECTION_EVIDENCE_1_PLAN.md). |
+| Deferred | `ARENA-RPYLEAN-RELEASE-PIN-1` | DEFERRED | Reconsider for a concrete release adoption decision. [Plan](research/ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | The completed repair already includes the baseline observation. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |

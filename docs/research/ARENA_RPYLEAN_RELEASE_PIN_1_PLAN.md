@@ -9,9 +9,10 @@ release or Arena update already exists remains open.
 maintainers to update checker releases manually. Updating a stale pin could
 change the verdicts users see for real cases.
 
-**Does it require more work?** Check the newest appropriate published release,
-its ancestry, Arena’s current descriptor and pending updates. This item is
-READY and unstarted. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md)
+**Does it require more work?** Keep the release assessment as deferred
+maintenance. Reconsider it when Arena or rpylean needs an adoption decision
+on a specific release. The Lab selected an audit of the evidence for published
+rejections across four checker integrations first. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md)
 · [Arena’s release-update instructions](https://github.com/leanprover/lean-kernel-arena/blob/ef915093da536931892f1bfdaffb2a2d59529fe7/README.md#L220)
 
 ## Decision and stopping conditions

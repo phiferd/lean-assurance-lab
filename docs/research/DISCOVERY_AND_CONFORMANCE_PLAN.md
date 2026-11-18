@@ -2,19 +2,20 @@
 
 ## Research priorities as of 2026-11-18
 
-**What did we find?** On Julian’s published checker revision, both disputed
-Arena files were rejected and the valid proof-parameter example passed.
-All three matched the predictions recorded before execution. The reason for
-acceptance on the historical checker remains unverified.
+**What did we find?** Four checker commands in Lean Kernel Arena convert any
+nonzero exit into the code for rejection. In the Lab’s separate rpylean runs,
+startup failures and genuine proof rejections returned that same code.
+Whether Arena has credited an operational failure as a correct rejection is open.
 
-**Is it interesting?** Yes. The checker reported an invalid recursive occurrence
-in a constructor field for one file and a mismatched induction rule for the
-other. This establishes the observed behavior for the exact files on the
-untranslated checker.
+**Is it interesting?** Yes. The published counts tell Lean users which invalid
+inputs checkers detect. The saved run logs can show how much evidence supports
+that interpretation across four integrations.
 
-**Does it require more work?** The three-case question is closed. No repeat
-repair or PR submission is warranted. The separate next item will assess
-whether Arena can adopt a released rpylean version containing the change. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md)
+**Does it require more work?** Audit the rejections Arena counted as correct
+for those four integrations in its November 18 publication. Give maintainers
+specific rows that need a change or a bounded reason to keep the current
+labels. The release update for rpylean remains a separate maintenance option.
+[Audit plan](ARENA_REJECTION_EVIDENCE_1_PLAN.md)
 
 ### Why this order
 
@@ -30,10 +31,24 @@ They give no estimate of future adoption. [Constitution](../../CONSTITUTION.md)
 | --- | --- | --- |
 | Completed · Shared tests in rpylean development | The earlier local comparison established one root-relative passing test. A later upstream commit added grouped discovery independently. | Assess current upstream collection before reconsidering the historical local patch. [Upstream collector](https://github.com/Julian/rpylean/commit/377a7abbb95d2cee5db9a9f5bc25767544f95bc2) |
 | Completed · Published rpylean change | The checker rejected both disputed files and accepted the valid control. | No duplicate local repair follows. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md) |
-| 1 · Arena’s rpylean release pin | Arena maintainers can act on a dated release and descriptor check. | Stop for a duplicate or absent eligible release. Otherwise check the translated release before preparing a local pin candidate. [Plan](ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md) |
+| 1 · Evidence for Arena rejections | Users and maintainers can trace credited rejections to the recorded checker behavior across four integrations. The dated publication contains the original output and job identities. | A demonstrated mismatch warrants a scoped correction. Missing evidence calls for a specific change in what the runner records. [Audit plan](ARENA_REJECTION_EVIDENCE_1_PLAN.md) |
+| Deferred · Arena’s rpylean release pin | One descriptor update could bring two known cases up to date. | Reconsider for a concrete release adoption decision. [Plan](ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md) |
 | Upstream maintenance | Julian closed PR #36 unmerged after publishing his own branch. The published revision rejects the exact submitted case. He welcomes reports of distinct gaps. | A demonstrated remaining gap on a published revision can justify a new maintenance recommendation. [Closing comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690) |
 | Checked-import package and public assurance companion | The ten confirmed inputs already support a manual check on two pinned profiles. A comprehensive companion would reconcile 15 semantic cases and one parse case. Neither currently has a named decision requiring the extra work. | Reconsider for a specific checker upgrade the existing evidence cannot assess, or a reader decision that depends on a particular claim. Correct stale instructions directly. [Confirmation](../../results/research/confirm-checked-import-cases-1/report.md) · [Assurance companion plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md) |
 | Independent semantics and transfer | The previous nested-recursion screen resolved its fixed candidate. Broader transfer and historical work have separate evidence requirements. Another speculative screen would consume effort before there is a distinct question. | Reconsider for an independently justified expectation and a new coverage gap, or when original historical records or independently curated inputs become available. [Screen result](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md) · [Custody review](../../results/research/november-evidence-reconciliation-1/report.md) |
+
+Two other empirical questions could yield useful shared tests. Arena records a
+decline on the full Cedar library for the con-leche checker. A dependency-complete
+export of Cedar’s policy-slicing theorem could show whether its original proof
+fits that checker’s axiom policy. The Lab’s earlier Cedar slices covered four
+generated size lemmas. Separately, the November 18 publication names a mathlib
+theorem in nanoclo-fortran’s type-mismatch diagnostic. Isolating it could yield
+a smaller regression if the discrepancy persists and depends on that theorem.
+Both require new extraction and execution. The Arena reporting question
+can change how existing results are interpreted across four integrations using
+evidence already in hand. [Cedar run](https://arena.lean-lang.org/run/con-leche/cedar/)
+· [Earlier real-proof slices](../../results/research/real-proof-slices-pilot-1/report.md)
+· [November 18 publication](../../results/research/arena-publications/2026-11-18-results.json.gz)
 
 At handoff, report the existing behavior, the observable change for the named
 user, and the limit of the result. A new fixture, report or patch earns more
