@@ -1,0 +1,99 @@
+{
+  "experiment": "RPYLEAN-PUBLISHED-THREE-CASE-VERIFICATION-1",
+  "parent_item": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+  "registered_at": "2026-11-18T19:08:46.716174+00:00",
+  "lab_base": "de1fa7c8f53f934a0b478e83081d207afd6ab072",
+  "authorization": "Owner selected exactly the two unchanged Arena regression files and one unchanged valid control, on the cited published revision. This is a separate prospective verification.",
+  "question": "Does this published checker reject the two disputed files and accept the valid control?",
+  "controller_sha256": "d3782370a1f830be486b3bbac829e1d35124e6aad97c56be36c762d7f8c4698b",
+  "checker": {
+    "repository": "Julian/rpylean",
+    "commit": "a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+    "archive_url": "https://codeload.github.com/Julian/rpylean/tar.gz/a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+    "archive_sha256": "62b062b4d1690cb7268398540cbb43f8a1d2beb16771a1d966a2d4e7049cfaec",
+    "arguments": [
+      "-m",
+      "rpylean",
+      "check",
+      "--max-fail",
+      "1"
+    ]
+  },
+  "runtime": {
+    "profile": "untranslated",
+    "interpreter": "PyPy 8.0.1 / Python 2.7.18",
+    "executable_sha256": "fbd8e42d20b0e6f7a512b9b686d10177cfbbc85c2d6a48070535ef4203c8f9c1",
+    "rpython_repository": "pypy/pypy",
+    "rpython_commit": "56fab96ff7e75f063547c1625dfed01adc396aa1"
+  },
+  "repositories": {
+    "arena": "leanprover/lean-kernel-arena",
+    "lab": "phiferd/lean-assurance-lab"
+  },
+  "cases": [
+    {
+      "id": "rec-missing-ih",
+      "arena_case": "bugs/rec-missing-ih",
+      "expected": "reject",
+      "input": {
+        "repository": "arena",
+        "commit": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+        "path": "tests/bugs/rec-missing-ih.ndjson",
+        "bytes": 296514,
+        "sha256": "8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73"
+      },
+      "expectation_source": {
+        "repository": "arena",
+        "commit": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+        "path": "tests/bugs/rec-missing-ih.yaml",
+        "bytes": 3803,
+        "sha256": "1cfb9e7b228f2b84ff7fa31f96953e026fa10d12feab8a9b3ffe429aef30f77e"
+      }
+    },
+    {
+      "id": "rec-rule-wrong-arg",
+      "arena_case": "bugs/rec-rule-wrong-arg",
+      "expected": "reject",
+      "input": {
+        "repository": "lab",
+        "commit": "de1fa7c8f53f934a0b478e83081d207afd6ab072",
+        "path": "results/research/rpylean-recursor-rule-argument-repair-1/rec-rule-wrong-arg.ndjson",
+        "bytes": 21042,
+        "sha256": "cf3b02e4dc0c8a3adcf912f09e81a2e467c7cc667b5c5c545b50ad03760eccc9"
+      },
+      "expectation_source": {
+        "repository": "arena",
+        "commit": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+        "path": "tests/bugs/rec-rule-wrong-arg.yaml",
+        "bytes": 844,
+        "sha256": "53b7f491f5656c4e95e134b83213999af63e697c23569855f2fb74ee1f7ec046"
+      }
+    },
+    {
+      "id": "proof-param-ok",
+      "arena_case": "corner-cases/proof-param-ok",
+      "expected": "accept",
+      "input": {
+        "repository": "arena",
+        "commit": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+        "path": "tests/corner-cases/proof-param-ok.ndjson",
+        "bytes": 2961,
+        "sha256": "7f9b3c07a64b441f8dd0f7dd2912274241fdb17118953fb089f796fdd1590af4"
+      },
+      "expectation_source": {
+        "repository": "arena",
+        "commit": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+        "path": "tests/corner-cases/proof-param-ok.yaml",
+        "bytes": 169,
+        "sha256": "53ff164d5881a504c6792b5a5573f4c83abdf8bfc7dadcd39cbbccf8e0a01554"
+      }
+    }
+  ],
+  "timeout_seconds_per_process": 120,
+  "decision_rule": {
+    "accept": "Exit 0 with a complete nonempty declaration summary, no checker error, and a matching input digest.",
+    "reject": "Exit 1 with a semantic type-checking diagnostic on the supplied file, a nonempty declaration summary, and a matching input digest.",
+    "inconclusive": "Missing files, usage failures, parse or runtime errors, timeouts and skips cannot establish either semantic verdict. Preserve and diagnose engineering failures.",
+    "scope": "Close the behavior question if both negatives are rejected semantically and the control passes. Record the first reported diagnostic; the historical cause and other checker revisions are separate questions."
+  }
+}
