@@ -1,0 +1,118 @@
+{
+  "experiment": "RPYLEAN-PUBLISHED-THREE-CASE-VERIFICATION-1",
+  "parent_item": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+  "status": "COMPLETE",
+  "registered_commit": "f5ac2a82f465d880b9fc2714813e4e2ad11ed505",
+  "tooling_repair_commit": "c5542ae139d477b7f7de2f29efd891d9adfda26e",
+  "input_lock_sha256": "ba1c0bed823a596dbf97b3ef59ce4996728dd2b73e9d3eff261a4edd89803ed8",
+  "tooling_repair_sha256": "ccd7d2a115a1371bebd29a602fdfdd26a73cfc65eaa1fcf5e6975b6faa7ee82b",
+  "checker_revision": "a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+  "profile": "untranslated",
+  "cases": [
+    {
+      "case": "bugs/rec-missing-ih",
+      "expected": "reject",
+      "observed": "reject",
+      "matches_expected": true,
+      "sha256": "8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73",
+      "exit_code": 1,
+      "checked_at_summary": 151,
+      "seen_at_summary": 151,
+      "semantic_diagnostic": "field #3 of Native64TwoHashOwner.step has an invalid occurrence of the types being declared",
+      "stdout": "attempt-2/rec-missing-ih/stdout.txt",
+      "stderr": "attempt-2/rec-missing-ih/stderr.txt",
+      "receipt": "attempt-2/rec-missing-ih/receipt.json"
+    },
+    {
+      "case": "bugs/rec-rule-wrong-arg",
+      "expected": "reject",
+      "observed": "reject",
+      "matches_expected": true,
+      "sha256": "cf3b02e4dc0c8a3adcf912f09e81a2e467c7cc667b5c5c545b50ad03760eccc9",
+      "exit_code": 1,
+      "checked_at_summary": 21,
+      "seen_at_summary": 21,
+      "semantic_diagnostic": "rule for W.mk is not the one its inductive gives rise to",
+      "stdout": "attempt-2/rec-rule-wrong-arg/stdout.txt",
+      "stderr": "attempt-2/rec-rule-wrong-arg/stderr.txt",
+      "receipt": "attempt-2/rec-rule-wrong-arg/receipt.json"
+    },
+    {
+      "case": "corner-cases/proof-param-ok",
+      "expected": "accept",
+      "observed": "accept",
+      "matches_expected": true,
+      "sha256": "7f9b3c07a64b441f8dd0f7dd2912274241fdb17118953fb089f796fdd1590af4",
+      "exit_code": 0,
+      "checked_at_summary": 3,
+      "seen_at_summary": 3,
+      "semantic_diagnostic": null,
+      "stdout": "attempt-2/proof-param-ok/stdout.txt",
+      "stderr": "attempt-2/proof-param-ok/stderr.txt",
+      "receipt": "attempt-2/proof-param-ok/receipt.json"
+    }
+  ],
+  "attempts": [
+    {
+      "id": "attempt-1",
+      "processes": [
+        {
+          "id": "rec-missing-ih",
+          "receipt": "attempt-1/rec-missing-ih/receipt.json",
+          "elapsed_seconds": 0.1503,
+          "exit_code": 1,
+          "disposition": "STARTUP_FAILURE"
+        },
+        {
+          "id": "rec-rule-wrong-arg",
+          "receipt": "attempt-1/rec-rule-wrong-arg/receipt.json",
+          "elapsed_seconds": 0.0481,
+          "exit_code": 1,
+          "disposition": "STARTUP_FAILURE"
+        },
+        {
+          "id": "proof-param-ok",
+          "receipt": "attempt-1/proof-param-ok/receipt.json",
+          "elapsed_seconds": 0.0478,
+          "exit_code": 1,
+          "disposition": "STARTUP_FAILURE"
+        }
+      ]
+    },
+    {
+      "id": "attempt-2",
+      "processes": [
+        {
+          "id": "rec-missing-ih",
+          "receipt": "attempt-2/rec-missing-ih/receipt.json",
+          "elapsed_seconds": 4.9526,
+          "exit_code": 1,
+          "disposition": "CHECKER_VERDICT"
+        },
+        {
+          "id": "rec-rule-wrong-arg",
+          "receipt": "attempt-2/rec-rule-wrong-arg/receipt.json",
+          "elapsed_seconds": 3.7242,
+          "exit_code": 1,
+          "disposition": "CHECKER_VERDICT"
+        },
+        {
+          "id": "proof-param-ok",
+          "receipt": "attempt-2/proof-param-ok/receipt.json",
+          "elapsed_seconds": 3.4528,
+          "exit_code": 0,
+          "disposition": "CHECKER_VERDICT"
+        }
+      ]
+    }
+  ],
+  "usage": {
+    "process_launches_for_scientific_files": 6,
+    "startup_failures": 3,
+    "completed_verdicts": 3,
+    "elapsed_process_seconds": 12.3758,
+    "complete_model_usage": "unavailable"
+  },
+  "interpretation": "All three preregistered verdicts matched. The fixed version reported a constructor-field occurrence error on rec-missing-ih and a derived-rule mismatch on the PR case. These observations support the published explanation of the new checker. The historical acceptance mechanism remains unverified.",
+  "recommendation": "Close the case-specific behavior question. No duplicate checker patch, PR resubmission, or historical replay is warranted. Assess the separately scoped Arena release pin only after handoff."
+}

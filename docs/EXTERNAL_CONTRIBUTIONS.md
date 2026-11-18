@@ -60,7 +60,7 @@ These entries track Lab reports on upstream work, not Lab-authored pull requests
 
 - `NANODA-PR-43`: Closed without merge on 2026-10-10; retain the local regression. Comments raised clarity concerns. Do not reopen or resubmit automatically.
 - `NANODA-PR-41`: Closed without merge on 2026-10-10. Retain the test and improve plain-language explanations; do not reopen or resubmit automatically.
-- `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-DRAFT`: Julian closed PR #36 without merging it on 2026-11-18. He reported publishing his own work and believes it covers the submitted case. Equivalent behavior remains unverified. No further action on the PR is needed. [Maintainer comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690)
+- `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-DRAFT`: Julian closed PR #36 unmerged. Local verification on his published a31ca02a revision rejected the exact submitted Arena file. No further action on this PR is needed. [Maintainer comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690)
 
 ## Maintenance contract
 

@@ -2,19 +2,19 @@
 
 ## Research priorities as of 2026-11-18
 
-**What did we find?** Provisional. Julian closed PR #36 unmerged after publishing
-his own implementation. On the cited commit, 80 environment tests passed and
-one had its expected failure. The Lab found no case-specific verdict for
-either disputed Arena file on that commit.
+**What did we find?** On Julian’s published checker revision, both disputed
+Arena files were rejected and the valid proof-parameter example passed.
+All three matched the predictions recorded before execution. The reason for
+acceptance on the historical checker remains unverified.
 
-**Is it interesting?** Yes. The published checker derives induction rules
-from each type and its constructors. Julian attributes the earlier acceptance
-to a missing restriction on recursion in constructor fields. The new code
-checks those fields. The cause in the historical run remains unverified.
+**Is it interesting?** Yes. The checker reported an invalid recursive occurrence
+in a constructor field for one file and a mismatched induction rule for the
+other. This establishes the observed behavior for the exact files on the
+untranslated checker.
 
-**Does it require more work?** Yes. Keep the published revision first. Look for
-a result tied to the exact checker and file before resuming work on older
-source. The active source review preserves the original experiment boundaries. [Upstream review](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md)
+**Does it require more work?** The three-case question is closed. No repeat
+repair or PR submission is warranted. The separate next item will assess
+whether Arena can adopt a released rpylean version containing the change. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md)
 
 ### Why this order
 
@@ -29,8 +29,9 @@ They give no estimate of future adoption. [Constitution](../../CONSTITUTION.md)
 | Priority | Who can use the result and what decision it supports | What would change the priority |
 | --- | --- | --- |
 | Completed · Shared tests in rpylean development | The earlier local comparison established one root-relative passing test. A later upstream commit added grouped discovery independently. | Assess current upstream collection before reconsidering the historical local patch. [Upstream collector](https://github.com/Julian/rpylean/commit/377a7abbb95d2cee5db9a9f5bc25767544f95bc2) |
-| 1 · Check the published rpylean change | The cited revision implements broader validation. Its environment suite passed with one expected failure. The cited and later CI revisions have different code and test coverage. | Obtain a revision- and file-specific verdict before deciding whether additional work on the older source would benefit a maintainer. [Upstream review](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md) |
-| Upstream maintenance | Julian closed PR #36 unmerged after publishing his own branch. He believes it covers the PR example and welcomes reports of distinct gaps. | A demonstrated remaining gap on a published revision can justify a new maintenance recommendation. [Closing comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690) |
+| Completed · Published rpylean change | The checker rejected both disputed files and accepted the valid control. | No duplicate local repair follows. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md) |
+| 1 · Arena’s rpylean release pin | Arena maintainers can act on a dated release and descriptor check. | Stop for a duplicate or absent eligible release. Otherwise check the translated release before preparing a local pin candidate. [Plan](ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md) |
+| Upstream maintenance | Julian closed PR #36 unmerged after publishing his own branch. The published revision rejects the exact submitted case. He welcomes reports of distinct gaps. | A demonstrated remaining gap on a published revision can justify a new maintenance recommendation. [Closing comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690) |
 | Checked-import package and public assurance companion | The ten confirmed inputs already support a manual check on two pinned profiles. A comprehensive companion would reconcile 15 semantic cases and one parse case. Neither currently has a named decision requiring the extra work. | Reconsider for a specific checker upgrade the existing evidence cannot assess, or a reader decision that depends on a particular claim. Correct stale instructions directly. [Confirmation](../../results/research/confirm-checked-import-cases-1/report.md) · [Assurance companion plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md) |
 | Independent semantics and transfer | The previous nested-recursion screen resolved its fixed candidate. Broader transfer and historical work have separate evidence requirements. Another speculative screen would consume effort before there is a distinct question. | Reconsider for an independently justified expectation and a new coverage gap, or when original historical records or independently curated inputs become available. [Screen result](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md) · [Custody review](../../results/research/november-evidence-reconciliation-1/report.md) |
 

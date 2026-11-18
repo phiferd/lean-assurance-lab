@@ -153,6 +153,8 @@ def validate_registration(root: Path, groups, registry):
                            if family == "tree2-confirmed-integration-1"
                            else "test_evidence_replay_portability_checked_import."
                            if family == "confirm-checked-import-cases-1"
+                           else "test_evidence_replay_portability_rpylean."
+                           if family == "rpylean-published-three-case-verification-1"
                            else "test_evidence_replay_portability.")
         if family not in BASELINE_FAMILIES and portable is None:
             raise ValueError(f"new receipt family needs a portability test: {family}")

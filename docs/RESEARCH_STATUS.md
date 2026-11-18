@@ -2,19 +2,19 @@
 
 Last updated: 2026-11-18
 
-**What did we find?** Provisional. Julian closed PR #36 unmerged after publishing
-his own implementation. On the cited commit, 80 environment tests passed and
-one had its expected failure. The Lab found no case-specific verdict for
-either disputed Arena file on that commit.
+**What did we find?** On Julian’s published checker revision, both disputed
+Arena files were rejected and the valid proof-parameter example passed.
+All three matched the predictions recorded before execution. The reason for
+acceptance on the historical checker remains unverified.
 
-**Is it interesting?** Yes. The published checker derives induction rules
-from each type and its constructors. Julian attributes the earlier acceptance
-to a missing restriction on recursion in constructor fields. The new code
-checks those fields. The cause in the historical run remains unverified.
+**Is it interesting?** Yes. The checker reported an invalid recursive occurrence
+in a constructor field for one file and a mismatched induction rule for the
+other. This establishes the observed behavior for the exact files on the
+untranslated checker.
 
-**Does it require more work?** Yes. Keep the published revision first. Look for
-a result tied to the exact checker and file before resuming work on older
-source. The active source review preserves the original experiment boundaries. [Upstream review](../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md)
+**Does it require more work?** The three-case question is closed. No repeat
+repair or PR submission is warranted. The separate next item will assess
+whether Arena can adopt a released rpylean version containing the change. [Verification](../results/research/rpylean-published-three-case-verification-1/report.md)
 
 ## How Status Is Tracked
 
@@ -71,6 +71,12 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `2026-11-18 / rpylean published revision, three Arena files`: The fixed
+  source rejected both disputed exports and accepted the valid control. The
+  separately retained import failures produced no verdicts. The behavior
+  question closed. A release-pin assessment for Arena is READY and unstarted.
+  [Verification](../results/research/rpylean-published-three-case-verification-1/report.md)
 
 - `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` completed. The fixed valid case passes both the original directory-specific invocation and the patched root-relative invocation. The patch and five collector checks are available locally. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md).
 
@@ -4130,16 +4136,16 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The investigation remains ACTIVE. Evidence on Julian’s published change takes
-priority over the historical source question.
+The published-revision verification is complete. The release-pin assessment
+for Arena is READY and unstarted.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`.
+Selected next item: `ARENA-RPYLEAN-RELEASE-PIN-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains zero READY items and one ACTIVE item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
@@ -4147,7 +4153,8 @@ The canonical queue retains zero READY items and one ACTIVE item.
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
 | Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17. Julian closed the PR unmerged on 2026-11-18 after publishing his own implementation. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
 | Completed | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | COMPLETE | The original directory override and the patched root-relative case passed. The full upstream suite had 816 passes and one expected failure. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md). |
-| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | ACTIVE | Check the published repair first. The environment tests pass with one expected failure. A case-specific verdict and an independent cause remain open. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
+| Completed | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | COMPLETE | All three exact cases matched on the published revision. [Verification](../results/research/rpylean-published-three-case-verification-1/report.md). |
+| 1 | `ARENA-RPYLEAN-RELEASE-PIN-1` | READY | Decide whether Arena can use a released repair. [Plan](research/ARENA_RPYLEAN_RELEASE_PIN_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | The completed repair already includes the baseline observation. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |

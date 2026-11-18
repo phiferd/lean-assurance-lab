@@ -1,41 +1,26 @@
-# Check the published rpylean change against the Arena disagreement
+# Published rpylean change verified on three Arena files
 
-**What did we find?** Provisional. Julian closed PR #36 unmerged after publishing
-his own implementation. On the cited commit, 80 environment tests passed and
-one had its expected failure. The Lab found no case-specific verdict for
-either disputed Arena file on that commit.
+**What did we find?** On Julian’s published checker revision, both disputed
+Arena files were rejected and the valid proof-parameter example passed.
+All three matched the predictions recorded before execution. The reason for
+acceptance on the historical checker remains unverified.
 
-**Is it interesting?** Yes. The published checker derives induction rules
-from each type and its constructors. Julian attributes the earlier acceptance
-to a missing restriction on recursion in constructor fields. The new code
-checks those fields. The cause in the historical run remains unverified.
+**Is it interesting?** Yes. The checker reported an invalid recursive occurrence
+in a constructor field for one file and a mismatched induction rule for the
+other. This establishes the observed behavior for the exact files on the
+untranslated checker.
 
-**Does it require more work?** Yes. Keep the published revision first. Look for
-a result tied to the exact checker and file before resuming work on older
-source. The active source review preserves the original experiment boundaries. [Upstream review](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md)
+**Does it require more work?** The three-case question is closed. No repeat
+repair or PR submission is warranted. The separate next item will assess
+whether Arena can adopt a released rpylean version containing the change. [Verification](../../results/research/rpylean-published-three-case-verification-1/report.md)
 
-Item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`, ACTIVE from 2026-11-18. [Bound inputs](../../results/research/rpylean-recursor-missing-ih-investigation-1/work-record.json).
+Item `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` completed on 2026-11-18. The source-only review and its historical inputs retain their original scope. The separately preregistered experiment settled the published-version question. The result supplies no remaining maintenance reason to pursue historical attribution.
 
-## Published change first
+[Source review](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md) · [Prospective experiment](../../results/research/rpylean-published-three-case-verification-1/inputs.json)
 
-The owner redirected the active investigation on November 18. The primary
-revision is `a31ca02a158b9aabeb040b9984c21b1f4c8e3216`. Its parent is
-`0ddcb018356e4ae59a0e37a395b3c7601b1fd68b`. Check the new defensive rules
-and the independent evidence for each named case. Track the PR example and
-`rec-missing-ih` separately. An ordinary passing unit test, a verdict on a
-different revision, and a maintainer explanation answer different questions.
-[Revision and tests](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-inputs.json) · [Evidence](../../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.json)
+The following was the original source question. It is retained for provenance.
 
-The source and unit-test review is complete. A case-specific result still
-needs the exact checker revision, file digest, observed outcome and expected
-outcome. Seek existing records first. A fresh scientific comparison of the
-published checker requires its own prospectively bound experiment, including
-a valid comparison input and recorded checker diagnostics. A correct rejection
-settles the outcome for that case. Identifying the deciding check needs its
-own evidence. Resume historical attribution only for a remaining maintenance
-question after assessing the published behavior.
-
-## Historical question and inputs, on hold
+## Original historical question and scope
 
 Explain why rpylean `b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb` accepts the
 Arena static export `tests/rec-missing-ih.ndjson` (SHA-256
