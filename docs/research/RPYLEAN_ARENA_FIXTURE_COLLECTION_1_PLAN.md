@@ -10,8 +10,8 @@ Arena checkout and still miss that example. Arena's own published configuration
 names a different checker revision. A developer deciding whether to keep a
 local change needs evidence from the working copy they actually intend to ship.
 
-**Does it require more work?** Yes. Select `RPYLEAN-ARENA-FIXTURE-COLLECTION-1`
-READY and unstarted. Deliver a small local change to the existing test collector
+**Does it require more work?** Yes. The owner activated `RPYLEAN-ARENA-FIXTURE-COLLECTION-1`
+on November 17 for the fixed comparison below. Deliver a small local change to the existing test collector
 if it demonstrably makes the shared example usable. The beneficiary is the
 rpylean developer running `just test`.
 

@@ -12,8 +12,7 @@ still miss that case when testing a local change.
 
 **Does it require more work?** Yes. The revised plan selects the existing valid
 case for a local test-collector improvement. The separate investigation of
-rpylean's previously observed disagreement ranks second. Both are READY and
-unstarted. The earlier bounded checker repair is open for review with six
+rpylean's previously observed disagreement ranks second. The collector item is ACTIVE and the second investigation is READY. The earlier bounded checker repair is open for review with six
 successful checks as observed on November 17. [Frontier plan](research/DISCOVERY_AND_CONFORMANCE_PLAN.md)
 · [Source inventory and PR observation](../results/research/strategy-reassessment-2026-11-17/source-observations.json)
 
@@ -4129,7 +4128,7 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-No item is ACTIVE. The first priority is making a community-maintained valid
+The collector item is ACTIVE. The first priority is making a community-maintained valid
 example usable in rpylean's local test suite. The second is a source-only
 question about the separate public disagreement seen in the completed repair
 study. That repair covered ordinary rules, with honest dependent and
@@ -4142,14 +4141,14 @@ measured fragment.
 Selected next item: `RPYLEAN-ARENA-FIXTURE-COLLECTION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains two READY items and no ACTIVE item.
+The canonical queue retains one READY item and one ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
 | Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17; OPEN and awaiting review. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
-| 1 | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | READY | Make the existing valid proof-parameter case selectable through rpylean's ordinary test entry point. Show exactly what ran, the observed verdict and how a missing selected input is reported. [Plan](research/RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md). |
+| 1 | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | ACTIVE | Make the existing valid proof-parameter case selectable through rpylean's ordinary test entry point. Show exactly what ran, the observed verdict and how a missing selected input is reported. [Plan](research/RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md). |
 | 2 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | READY | Attribute the separately reproduced static `rec-missing-ih` acceptance through current parser, validation and reduction source with fresh valid controls; no implementation or historical replay. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | The completed repair already includes the baseline observation. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |

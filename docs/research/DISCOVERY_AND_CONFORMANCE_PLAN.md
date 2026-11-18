@@ -18,7 +18,7 @@ corpus root, check its declared expectation, and show whether it ran or skipped.
 `corner-cases/proof-param-ok`, selectable by its full name from rpylean's
 normal test entry point. Measure the original and proposed behavior on the
 same bytes. Keep the separate question about a previously observed rpylean
-disagreement READY in second place. Both items are unstarted.
+disagreement READY in second place. The collector item is ACTIVE. The source investigation is READY and unstarted.
 [Selected work and stop conditions](RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md)
 
 ### Why this order
