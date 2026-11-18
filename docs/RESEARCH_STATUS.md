@@ -2,19 +2,20 @@
 
 Last updated: 2026-11-17
 
-**What did we find?** The rpylean test collector searches the top level of the
-Arena corpus. Of 113 test descriptions, 103 are nested, including a valid
-proof-parameter example the Lab contributed. Its verdict on the November 17
-rpylean revision remains unmeasured in this review.
+**What did we find?** rpylean accepted all three declarations in Arena's valid
+proof-parameter example. Its original suite missed the case from Arena's test
+root and passed it from the case directory. With the local collector change,
+the full case name selected one passing test from the root. This result covers
+one shared example on the pinned checker.
 
-**Is it interesting?** Yes. A developer can supply the shared corpus and
-still miss that case when testing a local change.
+**Is it interesting?** Yes. The maintainer can now see the expected case run
+in the ordinary suite. Selecting it without its export yields a named failure,
+and an absent optional checkout yields a visible skip.
 
-**Does it require more work?** Yes. The revised plan selects the existing valid
-case for a local test-collector improvement. The separate investigation of
-rpylean's previously observed disagreement ranks second. The collector item is ACTIVE and the second investigation is READY. The earlier bounded checker repair is open for review with six
-successful checks as observed on November 17. [Frontier plan](research/DISCOVERY_AND_CONFORMANCE_PLAN.md)
-· [Source inventory and PR observation](../results/research/strategy-reassessment-2026-11-17/source-observations.json)
+**Does it require more work?** The collector item is complete. Use the
+existing directory override for one-off testing and retain the local patch
+for root-based regression coverage. The separate source-only investigation
+of the earlier rpylean disagreement is READY and unstarted. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md)
 
 ## How Status Is Tracked
 
@@ -71,6 +72,8 @@ bounded GitHub Issues beneath them rather than by activating many unrelated
 research directions.
 
 ## Attempted
+
+- `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` completed. The fixed valid case passes both the original directory-specific invocation and the patched root-relative invocation. The patch and five collector checks are available locally. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md).
 
 - `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` closes `NO_SIGNAL`.
   After two retained fixture repairs, exact Nanoda accepted the valid nested-
@@ -4128,28 +4131,25 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The collector item is ACTIVE. The first priority is making a community-maintained valid
-example usable in rpylean's local test suite. The second is a source-only
-question about the separate public disagreement seen in the completed repair
-study. That repair covered ordinary rules, with honest dependent and
-direct-recursive controls. Its results leave complex recursors outside the
-measured fragment.
+No item is ACTIVE. The collector comparison is complete. The remaining READY
+item examines an independently observed rpylean disagreement and can inform a
+separate maintenance decision.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
 
-Selected next item: `RPYLEAN-ARENA-FIXTURE-COLLECTION-1`.
+Selected next item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`.
 Queue handoff: EXECUTABLE.
 
-The canonical queue retains one READY item and one ACTIVE item.
+The canonical queue retains one READY item and no ACTIVE item.
 
 | Order | Item | State | Concrete output |
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
 | Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17; OPEN and awaiting review. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
-| 1 | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | ACTIVE | Make the existing valid proof-parameter case selectable through rpylean's ordinary test entry point. Show exactly what ran, the observed verdict and how a missing selected input is reported. [Plan](research/RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md). |
-| 2 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | READY | Attribute the separately reproduced static `rec-missing-ih` acceptance through current parser, validation and reduction source with fresh valid controls; no implementation or historical replay. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
+| Completed | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | COMPLETE | The original directory override and the patched root-relative case passed. The full upstream suite had 816 passes and one expected failure. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md). |
+| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | READY | Attribute the separately reproduced static `rec-missing-ih` acceptance through current parser, validation and reduction source with fresh valid controls; no implementation or historical replay. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | The completed repair already includes the baseline observation. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |

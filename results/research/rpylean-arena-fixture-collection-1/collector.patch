@@ -1,0 +1,177 @@
+diff --git a/tests/test_lka_arena.py b/tests/test_lka_arena.py
+index e2943ae..65dab75 100644
+--- a/tests/test_lka_arena.py
++++ b/tests/test_lka_arena.py
+@@ -10,6 +10,8 @@ these, or fall back to the conventional sibling location.
+ A test ships either as an export next to its description, or as Lean
+ source the arena builds into an export under ``_build/tests`` (``lka.py
+ build-test NAME``); a built export is picked up from there when present.
++Nested regression IDs keep the Arena directory name, e.g.
++``test_arena_outcome[corner-cases/proof-param-ok[accept]]``.
+ """
+
+ from __future__ import print_function
+@@ -32,37 +34,50 @@ _ARENA = py.path.local(
+ )
+
+
+-_BUILT = _ARENA.dirpath().join("_build", "tests")
++# Small shared regressions included in normal runs with an Arena checkout.
++_NESTED_REGRESSIONS = ("corner-cases/proof-param-ok",)
+
+ #: The corpora, which take minutes and have their own harness.
+ _CORPORA = ["init-prelude", "init", "cedar", "std", "cslib", "mathlib"]
+
+
+-def _arena_cases():
+-    """Pairs of (ndjson path, expected outcome) from the arena ``tests/``."""
+-    if not _ARENA.isdir():
++def _arena_cases(arena, nested=_NESTED_REGRESSIONS):
++    if not arena.isdir():
+         return []
++    built = arena.dirpath().join("_build", "tests")
++    names = [yaml.purebasename for yaml in sorted(arena.listdir("*.yaml"))
++             if yaml.purebasename not in _CORPORA]
+     cases = []
+-    for yaml in sorted(_ARENA.listdir("*.yaml")):
+-        if yaml.purebasename in _CORPORA:
++    for name in names + list(nested):
++        shared = name in nested
++        yaml = arena.join(name + ".yaml")
++        if not yaml.isfile():
++            continue  # Older Arena checkout without this regression.
++        # The Arena fixtures use plain top-level outcome and file fields.
++        fields = {}
++        for line in yaml.readlines():
++            key, _, value = line.partition(":")
++            if key in ("outcome", "file"):
++                fields[key] = value.strip()
++        outcome = fields.get("outcome")
++        outcomes = ("accept", "reject", "either") if shared else ("accept", "reject")
++        if outcome not in outcomes:
+             continue
+-        ndjson = yaml.new(ext=".ndjson")
++        if shared and "file" in fields:
++            ndjson = arena.dirpath().join(fields["file"])
++        else:
++            ndjson = yaml.new(ext=".ndjson")
+         if not ndjson.isfile():
+-            ndjson = _BUILT.join(ndjson.basename)
+-            if not ndjson.isfile():
++            cached = built.join(name + ".ndjson")
++            if cached.isfile():
++                ndjson = cached
++            elif not shared:
+                 continue
+-        outcome = None
+-        for line in yaml.readlines():
+-            line = line.strip()
+-            if line.startswith("outcome:"):
+-                outcome = line.split(":", 1)[1].strip()
+-                break
+-        if outcome in ("accept", "reject"):
+-            cases.append((ndjson, outcome))
++        cases.append((name, ndjson, outcome))
+     return cases
+
+
+-_CASES = _arena_cases()
++_CASES = _arena_cases(_ARENA)
+
+
+ # Tests known to fail today — see commit message / arena yaml description.
+@@ -71,26 +86,85 @@ _XFAIL = {}
+
+
+ def _id(case):
+-    path, outcome = case
+-    return "%s[%s]" % (path.purebasename, outcome)
++    name, path, outcome = case
++    return "%s[%s]" % (name, outcome)
+
+
+ @pytest.mark.skipif(not _CASES,
+                     reason="lean-kernel-arena tests/ not available "
+                            "(set LKA_TESTS_DIR or check it out alongside)")
+-@pytest.mark.parametrize("case", _CASES, ids=_id)
++@pytest.mark.parametrize("case", _CASES, ids=[_id(case) for case in _CASES])
+ def test_arena_outcome(case):
+-    path, outcome = case
+-    if path.purebasename in _XFAIL:
+-        pytest.xfail(_XFAIL[path.purebasename])
++    name, path, outcome = case
++    if name in _XFAIL:
++        pytest.xfail(_XFAIL[name])
++    assert path.isfile(), "missing Arena export for %s: %s or _build/tests/%s.ndjson" % (
++        name, path, name,
++    )
+     try:
+-        environment = from_export(path.open())
++        with path.open() as source:
++            environment = from_export(source)
+     except ExportError:
+         # Loading itself failed — that's also a reject.
+-        assert outcome == "reject"
++        assert outcome in ("reject", "either")
+         return
+     errors = list(environment.type_check(environment.all()))
+     if outcome == "accept":
+         assert not errors, "expected accept but got %d errors" % len(errors)
+-    else:
++    elif outcome == "reject":
+         assert errors, "expected reject but checker accepted clean"
++
++
++def test_collect_arena_paths(tmpdir):
++    arena = tmpdir.ensure("tests", dir=True)
++    arena.join("flat.yaml").write("outcome: accept\n")
++    flat = arena.ensure("flat.ndjson")
++    shared = arena.ensure("corner-cases", dir=True)
++    alt = arena.ensure("other", dir=True)
++    shared.join("same.yaml").write("file: tests/corner-cases/data.ndjson\noutcome: accept\n")
++    shipped = shared.ensure("data.ndjson")
++    alt.join("same.yaml").write("leanfile: tests/other/sample.lean\noutcome: either\n")
++    built = tmpdir.ensure("_build", "tests", "other", "same.ndjson")
++    tmpdir.ensure("_build", "tests", "same.ndjson")  # Wrong basename-only match.
++    arena.join("mathlib.yaml").write("outcome: accept\n")
++    arena.ensure("mathlib.ndjson")
++    nested = ("corner-cases/same", "other/same")
++    assert _arena_cases(arena, nested) == [
++        ("flat", flat, "accept"),
++        (nested[0], shipped, "accept"),
++        (nested[1], built, "either"),
++    ]
++
++
++def test_missing_arena_export(tmpdir):
++    arena = tmpdir.join("tests")
++    assert _arena_cases(arena) == []
++    desc = arena.ensure("corner-cases", "proof-param-ok.yaml")
++    desc.write("file: tests/corner-cases/proof-param-ok.ndjson\noutcome: accept\n")
++    case, = _arena_cases(arena)
++    assert _id(case) == "corner-cases/proof-param-ok[accept]"
++    with pytest.raises(AssertionError, match="missing Arena export for corner-cases/proof-param-ok"):
++        test_arena_outcome(case)
++
++
++def test_single_directory_override(tmpdir):
++    arena = tmpdir.ensure("tests", dir=True)
++    folder = arena.ensure("corner-cases", dir=True)
++    folder.join("sample.yaml").write("file: tests/corner-cases/sample.ndjson\noutcome: accept\n")
++    shipped = folder.ensure("sample.ndjson")
++    case, = _arena_cases(folder)
++    assert case == ("sample", shipped, "accept")
++
++
++@pytest.mark.parametrize("errors", [[], ["ordinary rejection"]])
++def test_either_allows_both_verdicts(tmpdir, monkeypatch, errors):
++    class Environment(object):
++        def all(self):
++            return ["example"]
++
++        def type_check(self, declarations):
++            assert declarations == ["example"]
++            return errors
++
++    monkeypatch.setitem(globals(), "from_export", lambda source: Environment())
++    test_arena_outcome(("example", tmpdir.ensure("example.ndjson"), "either"))

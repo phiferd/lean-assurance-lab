@@ -2,24 +2,20 @@
 
 ## Research priorities as of 2026-11-17
 
-**What did we find?** A valid test the Lab helped add to Lean Kernel Arena
-sits outside the directory searched by rpylean's optional test collector.
-Arena stores 103 of 113 test descriptions in subdirectories. This review
-inspected sources and collection rules. The outcome of the valid test on
-rpylean's November 17 revision is unknown. [Pinned source inventory](../../results/research/strategy-reassessment-2026-11-17/source-observations.json)
+**What did we find?** rpylean accepted all three declarations in Arena's valid
+proof-parameter example. Its original suite missed the case from Arena's test
+root and passed it from the case directory. With the local collector change,
+the full case name selected one passing test from the root. This result covers
+one shared example on the pinned checker.
 
-**Is it interesting?** Yes. Arena tests a published checker revision. A
-developer can also pass the export to a local checker by hand. The opportunity
-is to have the developer's usual test suite find the case from the documented
-corpus root, check its declared expectation, and show whether it ran or skipped.
-[Arena's rpylean registration](https://github.com/leanprover/lean-kernel-arena/blob/ef915093da536931892f1bfdaffb2a2d59529fe7/checkers/rpylean.yaml)
+**Is it interesting?** Yes. The maintainer can now see the expected case run
+in the ordinary suite. Selecting it without its export yields a named failure,
+and an absent optional checkout yields a visible skip.
 
-**Does it require more work?** Yes. First make one existing valid case,
-`corner-cases/proof-param-ok`, selectable by its full name from rpylean's
-normal test entry point. Measure the original and proposed behavior on the
-same bytes. Keep the separate question about a previously observed rpylean
-disagreement READY in second place. The collector item is ACTIVE. The source investigation is READY and unstarted.
-[Selected work and stop conditions](RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md)
+**Does it require more work?** The collector item is complete. Use the
+existing directory override for one-off testing and retain the local patch
+for root-based regression coverage. The separate source-only investigation
+of the earlier rpylean disagreement is READY and unstarted. [Result](../../results/research/rpylean-arena-fixture-collection-1/report.md)
 
 ### Why this order
 
@@ -33,8 +29,8 @@ They give no estimate of future adoption. [Constitution](../../CONSTITUTION.md)
 
 | Priority | Who can use the result and what decision it supports | What would change the priority |
 | --- | --- | --- |
-| 1 · Shared tests in rpylean development | An rpylean maintainer needs to know which shared cases ran against a working copy. The collector, Arena loader and example are available. The effect can be measured locally, including what happens when the requested input is absent. | Compare direct invocation and a one-directory workaround first. If an existing route meets the need, document it and stop. Expand only for demonstrated additional use. [Item plan](RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md) |
-| 2 · Explain the existing rpylean disagreement | The earlier repair study recorded a separate discrepancy on both the original and repaired checker. Its source-only investigation could tell a maintainer whether additional implementation work is warranted. It addresses one known case. | A substantive request concerning this boundary, or an already usable collector, warrants reranking. Keep the previously fixed scope and its option for an inconclusive result. [Item plan](RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md) |
+| Completed · Shared tests in rpylean development | One root-relative case passes. The one-directory workaround also passes. | Retain the local patch. Revisit adoption for an identified need after refreshing duplicate and source evidence. [Result](../../results/research/rpylean-arena-fixture-collection-1/report.md) |
+| 1 · Explain the existing rpylean disagreement | The earlier repair study recorded a separate discrepancy on both the original and repaired checker. Its source-only investigation could tell a maintainer whether additional implementation work is warranted. It addresses one known case. | The collector question is answered. This bounded decision can now proceed independently. Keep the previously fixed scope and its option for an inconclusive result. [Item plan](RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md) |
 | Upstream maintenance | The bounded ordinary-recursion repair is open as rpylean PR #36. On November 17 the six reported checks had passed and there were no comments or reviews. The next decision belongs to the maintainer. | A concrete review request merits local assessment. Adoption and support for more complex rules remain open questions. [Submission record](../../results/research/rpylean-recursor-rule-argument-repair-1/external-submission-record.json) · [Dated check results](../../results/research/strategy-reassessment-2026-11-17/source-observations.json) |
 | Checked-import package and public assurance companion | The ten confirmed inputs already support a manual check on two pinned profiles. A comprehensive companion would reconcile 15 semantic cases and one parse case. Neither currently has a named decision requiring the extra work. | Reconsider for a specific checker upgrade the existing evidence cannot assess, or a reader decision that depends on a particular claim. Correct stale instructions directly. [Confirmation](../../results/research/confirm-checked-import-cases-1/report.md) · [Assurance companion plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md) |
 | Independent semantics and transfer | The previous nested-recursion screen resolved its fixed candidate. Broader transfer and historical work have separate evidence requirements. Another speculative screen would consume effort before there is a distinct question. | Reconsider for an independently justified expectation and a new coverage gap, or when original historical records or independently curated inputs become available. [Screen result](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md) · [Custody review](../../results/research/november-evidence-reconciliation-1/report.md) |

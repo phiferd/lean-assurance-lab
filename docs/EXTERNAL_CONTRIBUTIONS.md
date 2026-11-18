@@ -9,7 +9,7 @@ Ledger updated: **2026-11-17**. Upstream states are dated observations, not a li
 ## At a glance
 
 - Open pull requests: **6**
-- Local drafts: **9**
+- Local drafts: **10**
 - Merged pull requests: **5**
 - Published reports/comments: **1**
 
@@ -37,6 +37,7 @@ Ledger updated: **2026-11-17**. Upstream states are dated observations, not a li
 | [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/closure/pr192-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/closure/pr191-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`, `CONFIRM-ARENA-UNIVERSE-GUARD-1` | — | Confirmation is DEFERRED and unstarted after the October 24 reassessment. Reopen only after current source coverage and a concrete consumer benefit justify further E1 work; preserve the candidate. Any submission requires its existing gates and exact authorization. |
+| [Collect the shared proof-parameter regression from the Arena root](../results/research/rpylean-arena-fixture-collection-1/collector.patch) | `Julian/rpylean` | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | — | Retain the patch locally. The directory override suffices for individual runs. Revisit submission if maintainers want the shared case in normal root-based testing, then refresh source, duplicate and test evidence and seek exact approval. |
 
 ## Merged pull requests
 

@@ -1,0 +1,80 @@
+{
+  "item_id": "RPYLEAN-ARENA-FIXTURE-COLLECTION-1",
+  "outcome": "SUCCESS",
+  "arena_case": "corner-cases/proof-param-ok",
+  "expected": "accept",
+  "inputs": "work-record.json",
+  "root_before": {
+    "selected_id_found": false,
+    "evidence": [
+      1,
+      2
+    ]
+  },
+  "standalone": {
+    "checked": 3,
+    "total": 3,
+    "outcome": "accept",
+    "evidence": [
+      3
+    ]
+  },
+  "subdirectory": {
+    "outcome": "pass",
+    "observed_id": "proof-param-ok[accept]",
+    "before": 5,
+    "after": 20
+  },
+  "root_after": {
+    "outcome": "pass",
+    "observed_id": "corner-cases/proof-param-ok[accept]",
+    "collection": 17,
+    "execution": 21
+  },
+  "missing_selected_export": {
+    "exit": 1,
+    "evidence": 22
+  },
+  "absent_optional_checkout": {
+    "skips": 1,
+    "passes": 5,
+    "evidence": 19
+  },
+  "collector_module": {
+    "passes": 6,
+    "evidence": 18
+  },
+  "upstream_suite": {
+    "passes": 816,
+    "expected_failures": 1,
+    "evidence": 23
+  },
+  "retained_attempts": 23,
+  "elapsed_command_seconds": 21.907,
+  "patch": "collector.patch",
+  "patch_sha256": "58d3cee458fc3d0a03ba19c27d372f267ccdf3a19d99dd8fc9ca4270a9d6ffed",
+  "source_versions": {
+    "ec9b770e59dd1dd27c47b4956ecda96fffba10af7caac2fafd327f723022be56": "baseline",
+    "4f2375737d3ffc6fb50bf865057ecbf80ddae0cf4bc8bbb30fbe91d71d2075bd": "first",
+    "0f78e6f7738fe8f9845d28a82909e65cc49e2ec5752c947ece82d73db804c1b7": "reviewed",
+    "028bb24ca6f67880494b4f1d75c65b0eae43ae4e7e55672a6c778534e4a057d3": "shipping"
+  },
+  "runs_sha256": "ef54dacd444d89d71585521a1094967e06e14005b67d37d53ac5df8e37fcb86e",
+  "scope": "One public valid Arena control on one rpylean revision. Five synthetic regression checks exercise collector behavior. Full upstream tests count as engineering validation.",
+  "recommendation": "Retain the test-only patch locally for developers using the documented Arena root. For this single case on unmodified rpylean, use the tested directory override. Revisit submission when a maintainer needs root-based suite coverage and the change still fits the current source.",
+  "upstream_preflight": {
+    "observed_on": "2026-11-17",
+    "target": "Julian/rpylean",
+    "query": "GET /repos/Julian/rpylean/issues?state=all&per_page=100, titles matching arena|fixture|collector or open entries",
+    "matched": [
+      36
+    ],
+    "open_pr_36": {
+      "head": "e432201b8a511428f5205da788703fa1b28ea9ff",
+      "comments": 0,
+      "reviews": 0,
+      "successful_checks": 6
+    },
+    "limitations": "Title-level read only. No observed request for this collector change."
+  }
+}

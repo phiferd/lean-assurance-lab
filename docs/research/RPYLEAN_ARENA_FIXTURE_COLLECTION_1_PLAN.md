@@ -1,19 +1,21 @@
 # Make shared Arena cases usable in rpylean development
 
-**What did we find?** On November 17, rpylean's optional Arena test collector
-searched only the top-level directory. Arena stores 103 of its 113 test
-descriptions below that directory. One is a 2,961-byte valid example already
-accepted into Arena. Its result on the selected rpylean revision is unknown.
+**What did we find?** rpylean accepted all three declarations in Arena's valid
+proof-parameter example. Its original suite missed the case from Arena's test
+root and passed it from the case directory. With the local collector change,
+the full case name selected one passing test from the root. This result covers
+one shared example on the pinned checker.
 
-**Is it interesting?** Yes. A checker developer can point the test suite at an
-Arena checkout and still miss that example. Arena's own published configuration
-names a different checker revision. A developer deciding whether to keep a
-local change needs evidence from the working copy they actually intend to ship.
+**Is it interesting?** Yes. The maintainer can now see the expected case run
+in the ordinary suite. Selecting it without its export yields a named failure,
+and an absent optional checkout yields a visible skip.
 
-**Does it require more work?** Yes. The owner activated `RPYLEAN-ARENA-FIXTURE-COLLECTION-1`
-on November 17 for the fixed comparison below. Deliver a small local change to the existing test collector
-if it demonstrably makes the shared example usable. The beneficiary is the
-rpylean developer running `just test`.
+**Does it require more work?** The collector item is complete. Use the
+existing directory override for one-off testing and retain the local patch
+for root-based regression coverage. The separate source-only investigation
+of the earlier rpylean disagreement is READY and unstarted. [Result](../../results/research/rpylean-arena-fixture-collection-1/report.md)
+
+The following is the fixed protocol used for this item.
 
 ## Fixed comparison
 
