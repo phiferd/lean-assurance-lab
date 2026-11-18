@@ -1,21 +1,19 @@
 # Discovery and conformance frontier
 
-## Research priorities as of 2026-11-17
+## Research priorities as of 2026-11-18
 
-**What did we find?** rpylean accepted all three declarations in Arena's valid
-proof-parameter example. Its original suite missed the case from Arena's test
-root and passed it from the case directory. With the local collector change,
-the full case name selected one passing test from the root. This result covers
-one shared example on the pinned checker.
+**What did we find?** Provisional. Both retained checker test caches identify
+the Arena case previously reported as accepted. Two Arena archives contain
+the same 296,514-byte file as the current source checkout. The old run did
+not record a digest of its input. The cause of acceptance remains unknown.
 
-**Is it interesting?** Yes. The maintainer can now see the expected case run
-in the ordinary suite. Selecting it without its export yields a named failure,
-and an absent optional checkout yields a visible skip.
+**Is it interesting?** Yes. The named test failure is corroborated on both
+checker revisions. Official Lean accepted three fresh examples of valid
+induction, giving maintainers concrete behavior to preserve.
 
-**Does it require more work?** The collector item is complete. Use the
-existing directory override for one-off testing and retain the local patch
-for root-based regression coverage. The separate source-only investigation
-of the earlier rpylean disagreement is READY and unstarted. [Result](../../results/research/rpylean-arena-fixture-collection-1/report.md)
+**Does it require more work?** Yes. The selected investigation remains active.
+Its required causal trace is incomplete. Retain the existing repair's stated
+support limits. [Provisional report](../../results/research/rpylean-recursor-missing-ih-investigation-1/report.md)
 
 ### Why this order
 

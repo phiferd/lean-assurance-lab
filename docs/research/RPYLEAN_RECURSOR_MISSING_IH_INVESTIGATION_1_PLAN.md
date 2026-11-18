@@ -1,14 +1,18 @@
 # Attribute rpylean's current rec-missing-ih acceptance
 
-The completed bounded rule-argument repair does not reject Arena's separate
-`rec-missing-ih` static export. The unmodified pinned rpylean revision accepts
-the same file, so this is not a regression from the patch. Yes, the mismatch is
-interesting because the Arena oracle is an official Lean repair and the export
-contains parameterized, indexed and K-like recursors outside the completed
-patch's claimed fragment. It needs source attribution before any additional
-checker change; no repair is authorized by this item.
+**What did we find?** Provisional. The earlier study reported that the named
+Arena case was accepted on both the original and repaired checker. The two
+retained test caches corroborate the test name. The exact bytes read during
+the old run and the cause of acceptance remain unresolved.
 
-Item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`, READY and unstarted.
+**Is it interesting?** Yes. The fixed public export and fresh valid examples
+can inform a maintenance decision about legitimate forms of induction beyond
+the existing repair's scope.
+
+**Does it require more work?** Yes. The attribution question is open.
+[Provisional report](../../results/research/rpylean-recursor-missing-ih-investigation-1/report.md)
+
+Item: `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`, ACTIVE from 2026-11-18. [Bound inputs](../../results/research/rpylean-recursor-missing-ih-investigation-1/work-record.json).
 
 ## Fixed question and inputs
 

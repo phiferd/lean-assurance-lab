@@ -1,0 +1,111 @@
+{
+  "item_id": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+  "as_of": "2026-11-18",
+  "status": "PARTIAL",
+  "archives_verified": [
+    {
+      "lock": "results/research/arena-inductive-isolation-1/source-lock.json",
+      "lock_sha256": "5a225968ace054f32cb25416dd44a7943ee13b933535e7585fa14e787984039a",
+      "revision": "83d5e34a2de6f8cd7d0096f93a893179d724d3c9",
+      "archive": "results/research/arena-inductive-isolation-1/arena-source.tar.gz",
+      "archive_sha256": "aaf1dad73e5ad2e4b22ec17165bbbfe2839a9aa4d739a3f2ebefa4730c26f6b0",
+      "files": {
+        "tests/rec-missing-ih.ndjson": {
+          "bytes": 296514,
+          "sha256": "8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73"
+        },
+        "tests/rec-missing-ih.yaml": {
+          "bytes": 3793,
+          "sha256": "11cfdec21c1f7b959bd1f53ff36e90a8247021e37d3fde17a49323ab211ebc42"
+        }
+      }
+    },
+    {
+      "lock": "results/research/arena-let-policy-followup-1/source-lock.json",
+      "lock_sha256": "c2c7f5d4ebc06f047575c047f90ada791d3edbdfa08aa35c4c173946a57cd266",
+      "revision": "fd74e8b84bf4b2a3172b5f6b59ca8679be427ebb",
+      "archive": "results/research/arena-let-policy-followup-1/arena-source.tar.gz",
+      "archive_sha256": "55190fcac4d07f9342bdd32b95f9e8c219821d853ceb100cc132a7747e4b133a",
+      "files": {
+        "tests/rec-missing-ih.ndjson": {
+          "bytes": 296514,
+          "sha256": "8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73"
+        },
+        "tests/rec-missing-ih.yaml": {
+          "bytes": 3793,
+          "sha256": "11cfdec21c1f7b959bd1f53ff36e90a8247021e37d3fde17a49323ab211ebc42"
+        }
+      }
+    }
+  ],
+  "prior_observation": {
+    "path": "results/research/rpylean-recursor-rule-argument-repair-1/validation.json",
+    "sha256": "3335dfdd614c2c29250675f68560c6823436db435735d887a2dc2f02f6582665",
+    "attempt": {
+      "id": "LOCAL-SIBLING-ARENA-DISCOVERY",
+      "tree": "patched and separately confirmed on unmodified baseline",
+      "command": "just test",
+      "outcome": "PRE_EXISTING_FAILURE",
+      "detail": "835 passed, 1 xfailed, 1 failed: top-level rec-missing-ih is accepted. The same focused case fails on an unmodified b581f0f checkout, so it is not caused by this patch."
+    },
+    "rpylean_base_commit": "b581f0f362aca21a2be5d7ecb925bdbb0d3f8dbb"
+  },
+  "local_test_caches": [
+    {
+      "checkout": "external/rpylean-recursor-rule-argument-repair-1-baseline",
+      "file": ".pytest_cache/v/cache/lastfailed",
+      "cache_sha256": "d884900f8e91b42de86a524125b184dc9ddd2d49a61c89b27db9ceaf4fbb1872",
+      "matching_entry": {
+        "tests/test_lka_arena.py::test_arena_outcome[rec-missing-ih[reject]]": true
+      }
+    },
+    {
+      "checkout": "external/rpylean-recursor-rule-argument-repair-1",
+      "file": ".pytest_cache/v/cache/lastfailed",
+      "cache_sha256": "d884900f8e91b42de86a524125b184dc9ddd2d49a61c89b27db9ceaf4fbb1872",
+      "matching_entry": {
+        "tests/test_lka_arena.py::test_arena_outcome[rec-missing-ih[reject]]": true
+      }
+    }
+  ],
+  "historical_input_binding": "The receipt records the case name and the caches retain its expected-rejection test ID. None names and hashes the export opened by that process.",
+  "inventory": {
+    "program": "inventory.py",
+    "program_sha256": "fd1121267810d0764f94373a3f2172e11ae815080f39bc703cdcc74b5723098a",
+    "output": "inventory.json",
+    "output_sha256": "bc6e425bde50286fa7b378777ebff143484c11eff0f832a8423d8c6886c30a74",
+    "method": "Read declaration tags, name references, arities, flags and constructor field counts in export order. No evaluation or rule body interpretation."
+  },
+  "control_source_check": {
+    "file": "ValidControls.lean",
+    "lean_version": "Lean (version 4.34.1, arm64-apple-darwin24.6.0, commit 5045d0056413266e57c625dcd7c365b10e377c52, Release)",
+    "command": [
+      "lean",
+      "results/research/rpylean-recursor-missing-ih-investigation-1/ValidControls.lean"
+    ],
+    "scientific_runs_of_arena_case": 0,
+    "rpylean_control_runs": 0,
+    "attempts": [
+      {
+        "sha256": "3d06f1233cbd25c044acbfa5785d3492d6e1cdff4e12afa672d4bf3fe7c73123",
+        "exit": 1,
+        "elapsed_seconds": 1.53,
+        "initial_definition_in_place_of_final_Trail_total": "def Trail.total (weight : α → Nat) (trail : Trail α) : Nat :=\n  Trail.rec 0 (fun label _ subtotal => weight label + subtotal) trail",
+        "diagnostic": "ValidControls.lean:12:4: error: code generator does not support recursor `ValidControls.Trail.rec` yet, consider using 'match ... with' and/or structural recursion"
+      },
+      {
+        "sha256": "4c2dedf8c47940f7a8d424f76c16109d91e1c1c71d6bf0ec0e916e13717d7ed7",
+        "exit": 0,
+        "elapsed_seconds": 0.2,
+        "diagnostics": []
+      }
+    ]
+  },
+  "remaining": "Fixture-specific causal attribution and the requested source trace are incomplete. The historical run has no exact runtime input receipt.",
+  "maintenance_decision": "Retain the ordinary-rule repair's published support limits. The available evidence does not justify extending it to these forms.",
+  "usage": {
+    "lean_source_compile_attempts": 2,
+    "total_lean_compile_elapsed_seconds": 1.73,
+    "whole_item_model_usage": "unavailable"
+  }
+}
