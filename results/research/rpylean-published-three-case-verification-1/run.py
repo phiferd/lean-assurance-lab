@@ -6,6 +6,7 @@ import json
 import os
 from pathlib import Path
 import platform
+import re
 import subprocess
 import tarfile
 import tempfile
@@ -34,7 +35,9 @@ def main():
     lab = here.parents[2]
     lock = here / "inputs.json"
     spec = json.loads(lock.read_text())
-    checked_file(Path(__file__), spec["controller_sha256"])
+    tooling = json.loads((here / "tooling-v2.json").read_text())
+    checked_file(lock, tooling["inputs_sha256"])
+    checked_file(Path(__file__), tooling["controller_sha256"])
     archive = checked_file(args.archive, spec["checker"]["archive_sha256"])
     exe = checked_file(args.pypy.resolve(), spec["runtime"]["executable_sha256"])
     output = args.output.resolve()
@@ -44,13 +47,13 @@ def main():
         with tarfile.open(archive) as source:
             source.extractall(work, filter="data")
         checker = work / ("rpylean-" + spec["checker"]["commit"])
-        # Only Python modules from this exact RPython tree are on the import path.
+        # Import both the RPython modules and the py package from one pinned tree.
         deps = work / "deps"
         deps.mkdir()
         dep_tar = work / "rpython.tar"
         with dep_tar.open("wb") as stream:
             subprocess.run(["git", "-C", args.pypy_source, "archive",
-                            spec["runtime"]["rpython_commit"], "rpython"],
+                            spec["runtime"]["rpython_commit"], "rpython", "py"],
                            stdout=stream, check=True)
         with tarfile.open(dep_tar) as source:
             source.extractall(deps, filter="data")
@@ -68,6 +71,11 @@ def main():
         env = {"PATH": os.defpath, "HOME": str(work), "TMPDIR": str(work),
                "LC_ALL": "C", "PYTHONPATH": os.pathsep.join(map(str, (checker, deps))),
                "PYTHONDONTWRITEBYTECODE": "1", "PYTHONNOUSERSITE": "1"}
+        probe = subprocess.run([exe, "-m", "rpylean", "--help"], cwd=checker, env=env,
+                               capture_output=True, timeout=spec["timeout_seconds_per_process"])
+        (output / "preflight.txt").write_bytes(probe.stdout + probe.stderr)
+        probe.check_returncode()
+
         for case, path in zip(spec["cases"], inputs):
             checked_file(path, case["input"]["sha256"])
             folder = output / case["id"]
@@ -85,7 +93,11 @@ def main():
                     code = proc.returncode
                 except subprocess.TimeoutExpired:
                     timed_out = True
-            receipt = {"id": case["id"], "inputs_sha256": digest(lock), "started_at": start,
+            diagnostic = (folder / "stderr.txt").read_bytes()
+            summary = re.search(rb"^summary: (\d+)/(\d+) decls checked,", diagnostic, re.M)
+            reached_checker = bool(summary and int(summary[2]) > 0)
+            receipt = {"id": case["id"], "controller_sha256": digest(Path(__file__)),
+                       "checker_summary_present": reached_checker, "inputs_sha256": digest(lock), "started_at": start,
                        "elapsed_seconds": round(time.monotonic() - tick, 4),
                        "host": platform.platform(), "architecture": platform.machine(),
                        "argv": argv, "cwd": str(checker), "environment": env,
@@ -94,7 +106,7 @@ def main():
                        "stdout_sha256": digest(folder / "stdout.txt"),
                        "stderr_sha256": digest(folder / "stderr.txt")}
             (folder / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n")
-            if timed_out or code not in (0, 1) or receipt["input_sha256_after"] != case["input"]["sha256"]:
+            if timed_out or code not in (0, 1) or not reached_checker or receipt["input_sha256_after"] != case["input"]["sha256"]:
                 raise RuntimeError(f"Execution needs review: {case['id']}")
 
 
