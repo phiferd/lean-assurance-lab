@@ -2,8 +2,8 @@
   "schema_version": 4,
   "frontier_id": "F-DISCOVERY-AND-CONFORMANCE",
   "plan": "docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md",
-  "updated_at": "2026-11-16",
-  "selected_item": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+  "updated_at": "2026-11-17",
+  "selected_item": "RPYLEAN-ARENA-FIXTURE-COLLECTION-1",
   "execution_policy": {
     "engineering_failures": "REPAIR_AND_CONTINUE",
     "attempt_caps": "NONE",
@@ -5202,13 +5202,38 @@
       "blocked_reason": ""
     },
     {
-      "id": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+      "id": "RPYLEAN-ARENA-FIXTURE-COLLECTION-1",
       "priority": 126,
+      "title": "Make shared Arena cases selectable in rpylean's test suite",
+      "target": "rpylean 0ddcb018356e4ae59a0e37a395b3c7601b1fd68b test collector and Arena ef915093da536931892f1bfdaffb2a2d59529fe7, using the shipped corner-cases/proof-param-ok control",
+      "action": "Compare the existing normal test entry point with a bounded local collector change on the same valid control. Preserve the Arena relative ID, stated outcome and input identity. Exercise optional-checkout and missing-selected-input behavior.",
+      "expected_value": "An rpylean maintainer can tell whether a shared regression ran on a working copy before adopting a change, using a case already maintained in Arena.",
+      "rank_rationale": "The current collector cannot discover a concrete shipped valid control in a subdirectory. Arena's own checker registration targets a different revision. This bounded integration can serve future checker changes and be tested without adding a corpus or waiting on PR #36.",
+      "entry_gate": "READY and unstarted. The pinned sources, existing PyPy test recipe and exact public control are identified. Bind source/runtime and verify the control bytes before the baseline. Confirm current duplicate and target fit before proposing any upstream action.",
+      "completion": "Reproducible original and final collected IDs and observed control result, a working developer invocation, and focused collector regressions with suite results if a patch is needed. Document coverage limits, setup cost and a use, repair or stop recommendation.",
+      "stop_condition": "Close when the fixed selection and execution question is answered, with an evidenced existing route, tested local change, or explicit unresolved boundary. Keep checker semantics and wider corpus campaigns outside this item. Preserve failed attempts and repair engineering defects within scope.",
+      "kind": "IMPLEMENTATION",
+      "status": "READY",
+      "depends_on": [],
+      "budget": null,
+      "evidence_refs": [
+        "docs/research/RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md",
+        "results/research/strategy-reassessment-2026-11-17/source-observations.json",
+        "results/investigations/corpus-integration-2026-09-05/external-actions.json",
+        "results/research/rpylean-recursor-rule-argument-repair-1/validation.json"
+      ],
+      "issue_urls": [],
+      "closure": null,
+      "blocked_reason": ""
+    },
+    {
+      "id": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+      "priority": 127,
       "title": "Attribute current rpylean acceptance of rec-missing-ih",
       "target": "rpylean b581f0f plus the retained bounded repair, and Lean Kernel Arena's static rec-missing-ih export SHA-256 8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73",
       "action": "Trace the static export's recursor declarations through current parser, validation and reduction; identify the first unsupported or skipped rule shape, bind fresh valid source-derived controls for that shape, and deliver an implementation/no-implementation recommendation without changing checker code.",
       "expected_value": "Turn a separately reproduced public rejection mismatch into an attributable current-source boundary and prevent an unsafe extension of the just-completed ordinary-rule repair.",
-      "rank_rationale": "Highest-value feasible successor. The completed repair's broader local suite exposed one distinct current acceptance on exact public bytes, reproduced on the unmodified base. A source-only attribution with fresh controls is smaller and safer than immediately extending rule derivation, while unrelated packaging and assurance companions still lack consumer need.",
+      "rank_rationale": "Second eligible item. The bounded repair study observed a separate discrepancy on both base and patched rpylean. A source assessment could inform another repair decision. The first priority gives developers a way to use an existing shared example with any local checker change, with a directly observable collection gap and an available valid control.",
       "entry_gate": "READY and unstarted under docs/research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md. Freeze the static export and exact current/repaired source identities before analysis; use source-derived fresh controls; no checker edit, new scientific confirmation, external write, historical audit replay or claim of independent discovery.",
       "completion": "An exact declaration/shape inventory, parser-validation-reduction trace, fresh valid controls, attribution of the acceptance to a specific current gap or explicit inconclusive boundary, and a concrete repair/stop recommendation with unsupported shapes preserved.",
       "stop_condition": "Answer the fixed current-source attribution question, owner stop, invalidated input, unavailable required authority/input, or capability unavailable after feasible source analysis. No attempt caps, checker implementation, external writes, historical replay or assurance milestone advance.",
@@ -5238,7 +5263,7 @@
     "evidence_refs": []
   },
   "strategic_review": {
-    "path": "results/research/queue-reviews/2026-11-16-rpylean-recursor-rule-argument-repair-1-closure.json",
-    "sha256": "b37514785dc306a6d548cfed86615458393157be833c939d88e1bc7b665fb7ce"
+    "path": "results/research/queue-reviews/2026-11-17-shared-arena-coverage.json",
+    "sha256": "5b8c6b7032956c4c287e394a701300e6e9f67de15b9fc1aad475e5a1c4205b41"
   }
 }

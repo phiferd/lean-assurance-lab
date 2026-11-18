@@ -1,45 +1,48 @@
 # Discovery and conformance frontier
 
-The completed Nanoda screen found no admission signal. Current rpylean source
-still records a recursor-rule argument-validation gap, and Arena #350 supplies
-its public false-proof consequence. A second review found that reproduction
-alone has little incremental value. Select a bounded local checker repair and
-direct regression instead. This is informed implementation work, not fresh
-discovery or historical replay, and it authorizes no external submission.
+## Research priorities as of 2026-11-17
 
-## Current strategy as of 2026-11-16
+**What did we find?** A valid test the Lab helped add to Lean Kernel Arena
+sits outside the directory searched by rpylean's optional test collector.
+Arena stores 103 of 113 test descriptions in subdirectories. This review
+inspected sources and collection rules. The outcome of the valid test on
+rpylean's November 17 revision is unknown. [Pinned source inventory](../../results/research/strategy-reassessment-2026-11-17/source-observations.json)
 
-A successful research cycle resolves a meaningful semantic uncertainty or
-produces an assurance capability someone can actually use. Evidence custody
-supports research; it does not by itself justify a package or comprehensive
-retrospective companion. Both remain DEFERRED without demonstrated concrete use.
+**Is it interesting?** Yes. Arena tests a published checker revision. A
+developer can also pass the export to a local checker by hand. The opportunity
+is to have the developer's usual test suite find the case from the documented
+corpus root, check its declared expectation, and show whether it ran or skipped.
+[Arena's rpylean registration](https://github.com/leanprover/lean-kernel-arena/blob/ef915093da536931892f1bfdaffb2a2d59529fe7/checkers/rpylean.yaml)
 
-`E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` is complete `NO_SIGNAL` under
-[its plan](E0_NANODA_NESTED_RECURSOR_UNIVERSE_CAPTURE_1_PLAN.md) and
-[summary](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md).
-The standalone `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` is DEFERRED:
-its known-case reproduction is now the baseline inside
-`RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` completed under
-[its plan](RPYLEAN_RECURSOR_RULE_ARGUMENT_REPAIR_1_PLAN.md). The selected item
-must derive the expected minor application from checked constructor/recursor
-metadata, preserve valid dependent and recursive controls, define unsupported
-shapes, and deliver a tested local patch and PR draft without submission.
+**Does it require more work?** Yes. First make one existing valid case,
+`corner-cases/proof-param-ok`, selectable by its full name from rpylean's
+normal test entry point. Measure the original and proposed behavior on the
+same bytes. Keep the separate question about a previously observed rpylean
+disagreement READY in second place. Both items are unstarted.
+[Selected work and stop conditions](RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md)
 
-| Order | Item | Decision and boundary |
+### Why this order
+
+The constitution asks for shared improvements and reproducible accounts of what
+was checked. The Lab's contribution record includes four merged Arena corpus
+changes and a merged Kiota repair. Two Nanoda test proposals closed without
+merge after reviewers raised clarity concerns. These examples support asking
+who can act on a result, what decision it changes, and how they can verify it.
+They give no estimate of future adoption. [Constitution](../../CONSTITUTION.md)
+· [Dated contribution record](../EXTERNAL_CONTRIBUTIONS.md)
+
+| Priority | Who can use the result and what decision it supports | What would change the priority |
 | --- | --- | --- |
-| Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | Found one new current Nanoda mechanism and one known current rpylean repair opportunity without checker execution. |
-| Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | Valid control accepted and candidate rejected at semantic definitional equality; bounded `NO_SIGNAL`, no confirmation. |
-| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1`, COMPLETE | Exact Arena #350 before/after evidence, bounded derived-rule repair, honest controls, upstream/translated tests and local draft retained; no external write. |
-| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1`, READY | Attribute the distinct current acceptance of the static public `rec-missing-ih` export through parser, validation and reduction source with fresh controls; do not implement or replay the historical audit. |
-| Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | Standalone reproduction would add little; its baseline is part of the repair item. |
-| Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | No demonstrated decision-changing need justifies the full generated companion. Small accuracy corrections remain ordinary maintenance. |
-| Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | No demonstrated consumer need or incremental regression value. Existing E2 gates remain if a concrete use later justifies canonical reselection. |
+| 1 · Shared tests in rpylean development | An rpylean maintainer needs to know which shared cases ran against a working copy. The collector, Arena loader and example are available. The effect can be measured locally, including what happens when the requested input is absent. | Compare direct invocation and a one-directory workaround first. If an existing route meets the need, document it and stop. Expand only for demonstrated additional use. [Item plan](RPYLEAN_ARENA_FIXTURE_COLLECTION_1_PLAN.md) |
+| 2 · Explain the existing rpylean disagreement | The earlier repair study recorded a separate discrepancy on both the original and repaired checker. Its source-only investigation could tell a maintainer whether additional implementation work is warranted. It addresses one known case. | A substantive request concerning this boundary, or an already usable collector, warrants reranking. Keep the previously fixed scope and its option for an inconclusive result. [Item plan](RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md) |
+| Upstream maintenance | The bounded ordinary-recursion repair is open as rpylean PR #36. On November 17 the six reported checks had passed and there were no comments or reviews. The next decision belongs to the maintainer. | A concrete review request merits local assessment. Adoption and support for more complex rules remain open questions. [Submission record](../../results/research/rpylean-recursor-rule-argument-repair-1/external-submission-record.json) · [Dated check results](../../results/research/strategy-reassessment-2026-11-17/source-observations.json) |
+| Checked-import package and public assurance companion | The ten confirmed inputs already support a manual check on two pinned profiles. A comprehensive companion would reconcile 15 semantic cases and one parse case. Neither currently has a named decision requiring the extra work. | Reconsider for a specific checker upgrade the existing evidence cannot assess, or a reader decision that depends on a particular claim. Correct stale instructions directly. [Confirmation](../../results/research/confirm-checked-import-cases-1/report.md) · [Assurance companion plan](ASSURANCE_CLAIM_DISPOSITION_1_PLAN.md) |
+| Independent semantics and transfer | The previous nested-recursion screen resolved its fixed candidate. Broader transfer and historical work have separate evidence requirements. Another speculative screen would consume effort before there is a distinct question. | Reconsider for an independently justified expectation and a new coverage gap, or when original historical records or independently curated inputs become available. [Screen result](../../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md) · [Custody review](../../results/research/november-evidence-reconciliation-1/report.md) |
 
-The completed source comparisons, Nanoda screen, confirmation and earlier
-results are preserved. Do not repeat missing historical experiments or silently
-discharge their old dependencies. The rpylean witness is explicitly public; the
-new value must come from changed validation and regression evidence. Stop before
-executing the READY successor.
+At handoff, report the existing behavior, the observable change for the named
+user, and the limit of the result. A new fixture, report or patch earns more
+work when it changes a checking, maintenance or specification decision. A
+reproducible finding that an existing tool suffices can close the item.
 
 ### Discovery and reuse decisions
 
@@ -47,7 +50,7 @@ Select by information gained and consequence: a reachable semantic mechanism,
 independent expected result, valid control and a specific gap in existing
 coverage. Arena #350 and #345 motivate comparison; their published witnesses are
 prior exposure, not prospective discoveries, and neither establishes current
-failure of an untested profile. The new source-only plan records their exact
+failure of an untested profile. The completed source review records their exact
 upstream references and limits. Trace actual data and control flow before
 proposing an experiment. A source invariant may explain a useful negative
 result in the inspected paths; passing examples alone cannot establish it.

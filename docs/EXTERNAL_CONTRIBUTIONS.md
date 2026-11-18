@@ -4,7 +4,7 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-11-16**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-11-17**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
@@ -22,7 +22,7 @@ Ledger updated: **2026-11-16**. Upstream states are dated observations, not a li
 | [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [Fix/quoted declaration names](https://github.com/ammkrn/nanoda_lib/pull/42) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await review; open PR #38 is an external dependency by another contributor. Any rebase or update requires exact authorization. |
-| [Reject malformed ordinary recursor rules](https://github.com/Julian/rpylean/pull/36) | `Julian/rpylean` | 2026-11-17 | no activity; not reported | Await maintainer review of rpylean PR #36; do not file a duplicate issue or pull request. |
+| [Reject malformed ordinary recursor rules](https://github.com/Julian/rpylean/pull/36) | `Julian/rpylean` | 2026-11-17 | no activity; pass | Await maintainer review of rpylean PR #36; do not file a duplicate issue or pull request. |
 
 ## Local drafts
 
@@ -54,7 +54,7 @@ These entries track Lab reports on upstream work, not Lab-authored pull requests
 
 | Report | Observed | Linked upstream state | Next step |
 |---|---|---|---|
-| [Reported alias-domain admission regression in Lean PR #15373](https://github.com/leanprover/lean4/pull/15373) | 2026-10-24 | merged | The Lab report was acknowledged and its parent PR merged October 20. Run the separately selected local merged-revision replay; no new upstream communication is selected. |
+| [Reported alias-domain admission regression in Lean PR #15373](https://github.com/leanprover/lean4/pull/15373) | 2026-10-24 | merged | Recover and verify the original merged-revision replay records before changing its research status. The local replay item is WAITING for that evidence. |
 
 ## Other dispositions
 
