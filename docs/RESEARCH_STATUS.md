@@ -2,18 +2,19 @@
 
 Last updated: 2026-11-18
 
-**What did we find?** Provisional. Both retained checker test caches identify
-the Arena case previously reported as accepted. Two Arena archives contain
-the same 296,514-byte file as the current source checkout. The old run did
-not record a digest of its input. The cause of acceptance remains unknown.
+**What did we find?** Provisional. Julian closed PR #36 unmerged after publishing
+his own implementation. On the cited commit, 80 environment tests passed and
+one had its expected failure. The Lab found no case-specific verdict for
+either disputed Arena file on that commit.
 
-**Is it interesting?** Yes. The named test failure is corroborated on both
-checker revisions. Official Lean accepted three fresh examples of valid
-induction, giving maintainers concrete behavior to preserve.
+**Is it interesting?** Yes. The published checker derives induction rules
+from each type and its constructors. Julian attributes the earlier acceptance
+to a missing restriction on recursion in constructor fields. The new code
+checks those fields. The cause in the historical run remains unverified.
 
-**Does it require more work?** Yes. The selected investigation remains active.
-Its required causal trace is incomplete. Retain the existing repair's stated
-support limits. [Provisional report](../results/research/rpylean-recursor-missing-ih-investigation-1/report.md)
+**Does it require more work?** Yes. Keep the published revision first. Look for
+a result tied to the exact checker and file before resuming work on older
+source. The active source review preserves the original experiment boundaries. [Upstream review](../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.md)
 
 ## How Status Is Tracked
 
@@ -4129,8 +4130,8 @@ its selection does not launch it or any scientific pilot.
 
 ### Active
 
-The source investigation of the earlier rpylean disagreement is ACTIVE. The
-collector comparison is complete.
+The investigation remains ACTIVE. Evidence on Julian’s published change takes
+priority over the historical source question.
 
 1. `F-DISCOVERY-AND-CONFORMANCE` under
    [docs/research/DISCOVERY_AND_CONFORMANCE_PLAN.md](research/DISCOVERY_AND_CONFORMANCE_PLAN.md).
@@ -4144,15 +4145,15 @@ The canonical queue retains zero READY items and one ACTIVE item.
 | --- | --- | --- | --- |
 | Completed | `CURRENT-SEMANTIC-OPPORTUNITY-1` | COMPLETE | Selected the Nanoda universe-capture experiment; retained current rpylean wrong-argument validation as a known public repair fallback. [Report](../results/research/current-semantic-opportunity-1/report.md). |
 | Completed | `E0-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1` | COMPLETE | Nanoda accepted the valid control and rejected the candidate at declaration definitional equality; bounded `NO_SIGNAL`. [Summary](../explorations/runs/EXPLORE-NANODA-NESTED-RECURSOR-UNIVERSE-CAPTURE-1/summary.md). |
-| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17; OPEN and awaiting review. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
+| Completed | `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-1` | COMPLETE | Exact Arena #350 export accepted before and rejected after; 12 focused tests, 815-test CI-equivalent suite, RPython translation and 9 translated tests pass. Submitted as [rpylean PR #36](https://github.com/Julian/rpylean/pull/36) on 2026-11-17. Julian closed the PR unmerged on 2026-11-18 after publishing his own implementation. [Report](../results/research/rpylean-recursor-rule-argument-repair-1/report.md). |
 | Completed | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | COMPLETE | The original directory override and the patched root-relative case passed. The full upstream suite had 816 passes and one expected failure. [Report](../results/research/rpylean-arena-fixture-collection-1/report.md). |
-| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | ACTIVE | Examine the named case against fixed source and fresh valid controls. The old run records the name of the case and omits the digest of the file it opened. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
+| 1 | `RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1` | ACTIVE | Check the published repair first. The environment tests pass with one expected failure. A case-specific verdict and an independent cause remain open. [Plan](research/RPYLEAN_RECURSOR_MISSING_IH_INVESTIGATION_1_PLAN.md). |
 | Deferred | `E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1` | DEFERRED | The completed repair already includes the baseline observation. |
 | Deferred | `ASSURANCE-CLAIM-DISPOSITION-1` | DEFERRED | Reconsider only for a demonstrated decision-changing reader need; routine accuracy corrections do not require the full companion. |
 | Deferred | `CHECKED-IMPORT-REGRESSION-PACK-1` | DEFERRED | No demonstrated consumer need or incremental regression value. |
 
 The repair's [submission record](../results/research/rpylean-recursor-rule-argument-repair-1/external-submission-record.json)
-documents the owner's approval for rpylean PR #36. It is awaiting review.
+records the authorized submission. The [November 18 observation](../results/research/rpylean-recursor-missing-ih-investigation-1/upstream-review.json) records closure without merge.
 Further external changes require approval for the specific action and target.
 The original eta replay and historical recursor audit await their missing
 records. Independent transfer awaits its own input and custody evidence.

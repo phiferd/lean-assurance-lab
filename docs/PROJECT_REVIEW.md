@@ -20,7 +20,7 @@ The corpus-integration successor packet is **CORPUS_INTEGRATION_EXTERNAL_DECISIO
 | Improve shared assets | Shared corpus contributions and a ranked research portfolio | Prefer small non-duplicative contributions with isolating evidence and a named beneficiary; maintainer feedback supports concise source-level explanations. |
 | Community visibility and participation | Useful entry points; status maintenance needs discipline | Keep contribution packets focused. Read-only connector access is verified; select a working authorized channel and exact preflight for any approved external write. |
 | Concrete recommendations with human control | Aligned | Continue to mechanize preflight and evidence assembly while keeping external publication under exact owner control. |
-| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Attribute current rpylean acceptance of rec-missing-ih; record the result and rerank before the next item. |
+| Highest-value scoped work and replaceable strategy | Explicit ranked research successor | Complete RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Assess the published rpylean change for the rec-missing-ih disagreement; record the result and rerank before the next item. |
 
 Evidence for each assessment is recorded in the canonical JSON alongside exact input bindings.
 
@@ -47,7 +47,7 @@ Status, rank and bounds come from `config/research-queue.json`; PLANNED, WAITING
 | 121 | CHECKED-IMPORT-REGRESSION-PACK-1: Integrate a small confirmed checker-upgrade regression package | DEFERRED |
 | 122 | ASSURANCE-CLAIM-DISPOSITION-1: Explain the disposition of every published assurance case | DEFERRED |
 | 125 | E0-RPYLEAN-RECURSOR-RULE-ARGUMENT-VALIDATION-1: Screen current rpylean recursor-rule argument validation | DEFERRED |
-| 127 | RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Attribute current rpylean acceptance of rec-missing-ih | ACTIVE |
+| 127 | RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Assess the published rpylean change for the rec-missing-ih disagreement | ACTIVE |
 
 ### 51. E0-RECURSOR-BOUNDARY-MUTATION-1: Develop defensive imported-metadata validation cases
 
@@ -289,21 +289,21 @@ Bind exact current source/runtime and public bytes, audit ordinary harness disco
 
 **Boundary:** DEFERRED: DEFERRED and unstarted. Reconsider only if the repair item cannot establish the current baseline within its own fixed scope and a separate exploratory question becomes necessary; require canonical reselection before execution.
 
-### 127. RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Attribute current rpylean acceptance of rec-missing-ih
+### 127. RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1: Assess the published rpylean change for the rec-missing-ih disagreement
 
-**Target:** rpylean b581f0f plus the retained bounded repair, and Lean Kernel Arena's static rec-missing-ih export SHA-256 8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73
+**Target:** Published rpylean a31ca02a158b9aabeb040b9984c21b1f4c8e3216 first, and the source-locked Arena rec-missing-ih export SHA-256 8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73. Preserve the historical pins and distinguish the PR #36 example.
 
-Trace the static export's recursor declarations through current parser, validation and reduction; identify the first unsupported or skipped rule shape, bind fresh valid source-derived controls for that shape, and deliver an implementation/no-implementation recommendation without changing checker code.
+Assess the new checker and dated case-specific evidence before continuing work on older source. Track the checker behavior and the proposed cause separately. Preserve the prior finding, valid controls and implementation limits.
 
-**Why this rank:** Highest eligible remaining item. With the shared collector question resolved, an independently observed disagreement can inform a bounded maintenance decision. Extra collector coverage, the assurance companion and packaging have no demonstrated incremental need.
+**Why this rank:** The maintainer has published an independent implementation. The source review and ordinary tests establish a relevant change. Case-specific evidence now has greater decision value than continued investigation of historical source.
 
-**Completion:** An exact declaration/shape inventory, parser-validation-reduction trace, fresh valid controls, attribution of the acceptance to a specific current gap or explicit inconclusive boundary, and a concrete repair/stop recommendation with unsupported shapes preserved.
+**Completion:** Distinguish the published source change, observed behavior on the exact case, and claimed cause. Establish the case-specific result or document its evidence boundary. Retain the historical attribution criterion for any residual investigation and give a concrete maintenance recommendation.
 
 **Stop:** Answer the fixed current-source attribution question, owner stop, invalidated input, unavailable required authority/input, or capability unavailable after feasible source analysis. No attempt caps, checker implementation, external writes, historical replay or assurance milestone advance.
 
 **Execution:** No attempt/session/build/checker cap. Repair engineering failures and continue within the fixed scientific scope; per-process safety controls are nonterminal.
 
-**Boundary:** ACTIVE: Entered 2026-11-18. The work record binds the exact Arena file, YAML and both checker source revisions. The source-only scope and completion criterion remain in force.
+**Boundary:** ACTIVE: Entered 2026-11-18. Original files and historical checker revisions remain bound in work-record.json. The owner selected a source review of the published commit first. The additional source and upstream unit-test identities are in upstream-inputs.json.
 
 ## Autonomous workflow
 

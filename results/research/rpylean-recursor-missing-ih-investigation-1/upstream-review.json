@@ -1,0 +1,166 @@
+{
+  "schema_version": 1,
+  "item_id": "RPYLEAN-RECURSOR-MISSING-IH-INVESTIGATION-1",
+  "observed_on": "2026-11-18",
+  "scope": "Upstream source review plus unchanged upstream environment unit tests. No Arena scientific launch or run of an older checker.",
+  "inputs": {
+    "path": "results/research/rpylean-recursor-missing-ih-investigation-1/upstream-inputs.json",
+    "sha256": "19b793ca204d7231312e77b263f2f9fb895fe6f9bd2e9ccd166b7544e3f47ba4"
+  },
+  "pull_request": {
+    "url": "https://github.com/Julian/rpylean/pull/36",
+    "closed_at": "2026-11-18T16:59:32Z",
+    "merged_at": null,
+    "head": "e432201b8a511428f5205da788703fa1b28ea9ff",
+    "maintainer_comment": "https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690",
+    "maintainer_summary": "Julian published an older local branch with further cleanup, believes it covers the PR case and welcomes reports of other gaps."
+  },
+  "commit": {
+    "url": "https://github.com/Julian/rpylean/commit/a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+    "sha": "a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+    "parent": "0ddcb018356e4ae59a0e37a395b3c7601b1fd68b",
+    "author_claims": {
+      "pr_case": "The PR closing comment expresses expected overlap. The commit message does not name the separate rec-rule-wrong-arg fixture.",
+      "rec_missing_ih": "The commit explicitly names the case as addressed and attributes its earlier acceptance to insufficient strict-positivity checking of constructor fields. It also describes reconstructing induction rules."
+    },
+    "independent_source_review": [
+      {
+        "observation": "The new module constructs expected induction principles from the inductive block, including checks on how the type may occur in constructor fields.",
+        "source": "https://github.com/Julian/rpylean/blob/a31ca02a158b9aabeb040b9984c21b1f4c8e3216/rpylean/_inductive.py",
+        "symbols": [
+          "_Block.check_constructors",
+          "_Block.check_field",
+          "generate"
+        ]
+      },
+      {
+        "observation": "The checker uses the constructed specification when it checks the declared recursor, including its type and computation rules.",
+        "source": "https://github.com/Julian/rpylean/blob/a31ca02a158b9aabeb040b9984c21b1f4c8e3216/rpylean/objects.py",
+        "symbols": [
+          "W_Recursor.type_check"
+        ]
+      }
+    ]
+  },
+  "unit_test_results": {
+    "profile": "Untranslated PyPy 2.7 on macOS arm64",
+    "working_directory": "Root of the extracted upstream archive in upstream-inputs.json",
+    "focused": {
+      "argv": [
+        "/opt/homebrew/Cellar/pypy/8.0.1/libexec/bin/pypy",
+        "<pypy checkout>/pytest.py",
+        "-p",
+        "no:cacheprovider",
+        "-v",
+        "tests/test_environment.py::TestInductive::test_with_param",
+        "tests/test_environment.py::TestTypeError::test_mutual_block_member_constructors_validate",
+        "tests/test_environment.py::TestRecursorRuleShape::test_well_shaped_rule_accepted"
+      ],
+      "env_overrides": {
+        "PYTHONPATH": "<rpylean>:<pypy>",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYPY_DONT_RUN_SUBPROCESS": "1"
+      },
+      "elapsed_seconds": 0.743,
+      "exit_code": 0,
+      "output": "Warning: cannot find your CPU L2 cache size with sysctl()\n============================= test session starts ==============================\nplatform darwin -- Python 2.7.18[pypy-8.0.1-final], pytest-3.10.1, py-1.11.0, pluggy-0.11.0 -- /opt/homebrew/Cellar/pypy/8.0.1/libexec/bin/pypy\nrootdir: /private/tmp/lal-rpylean-upstream-review-11-18/rpylean-a31ca02a158b9aabeb040b9984c21b1f4c8e3216, inifile:\ncollecting ... collected 3 items\n\ntests/test_environment.py::TestInductive::test_with_param PASSED         [ 33%]\ntests/test_environment.py::TestTypeError::test_mutual_block_member_constructors_validate PASSED [ 66%]\ntests/test_environment.py::TestRecursorRuleShape::test_well_shaped_rule_accepted PASSED [100%]\n\n=========================== 3 passed in 0.35 seconds ===========================\n"
+    },
+    "environment_suite": {
+      "argv": [
+        "/opt/homebrew/Cellar/pypy/8.0.1/libexec/bin/pypy",
+        "<pypy checkout>/pytest.py",
+        "-p",
+        "no:cacheprovider",
+        "-q",
+        "tests/test_environment.py"
+      ],
+      "env_overrides": {
+        "PYTHONPATH": "<rpylean>:<pypy>",
+        "PYTHONDONTWRITEBYTECODE": "1",
+        "PYPY_DONT_RUN_SUBPROCESS": "1"
+      },
+      "elapsed_seconds": 1.224,
+      "exit_code": 0,
+      "output": "Warning: cannot find your CPU L2 cache size with sysctl()\n.............................................................x.......... [ 88%]\n.........                                                                [100%]\n80 passed, 1 xfailed in 1.02 seconds\n"
+    },
+    "unique_environment_tests": 81,
+    "note": "The three focused tests are included in the 81. The full file exercised statements about valid and invalid declarations. Neither run selected an Arena test."
+  },
+  "github_actions": {
+    "exact_commit_runs_returned": 0,
+    "query": "https://api.github.com/repos/Julian/rpylean/actions/runs?head_sha=a31ca02a158b9aabeb040b9984c21b1f4c8e3216",
+    "descendant_commit": "2fbc3f7128e3eaae7cea562097a441e3eed71cbf",
+    "descendant_distance": 7,
+    "comparison": "https://github.com/Julian/rpylean/compare/a31ca02a158b9aabeb040b9984c21b1f4c8e3216...2fbc3f7128e3eaae7cea562097a441e3eed71cbf",
+    "ci_runs": [
+      "https://github.com/Julian/rpylean/actions/runs/44350640878",
+      "https://github.com/Julian/rpylean/actions/runs/44350641056"
+    ],
+    "jobs_per_run": 4,
+    "per_job": {
+      "unit": {
+        "passed": 826,
+        "skipped": 1
+      },
+      "translated": {
+        "passed": 9,
+        "skipped": 1
+      },
+      "skipped_modules": [
+        "tests/test_lka_arena.py",
+        "translated-tests/test_lka_arena.py"
+      ]
+    },
+    "example_job": "https://github.com/Julian/rpylean/actions/runs/44350640878/job/134964990855",
+    "result": "Both published descendant CI runs skipped the optional Arena modules. Neither case has an observed verdict in those jobs.",
+    "collector_followup": "https://github.com/Julian/rpylean/commit/377a7abbb95d2cee5db9a9f5bc25767544f95bc2"
+  },
+  "assessment": {
+    "rec-missing-ih": {
+      "fixture_sha256": "8a240552317ba17d44d175c10531e5f988f55569db5eff734701735ce598fa73",
+      "fixed_commit_fixture_verdict": "UNVERIFIED",
+      "historical_cause": "MAINTAINER_ATTRIBUTION_ONLY",
+      "fixed_source_change": "VERIFIED"
+    },
+    "rec-rule-wrong-arg": {
+      "fixture_sha256": "cf3b02e4dc0c8a3adcf912f09e81a2e467c7cc667b5c5c545b50ad03760eccc9",
+      "fixed_commit_fixture_verdict": "UNVERIFIED",
+      "relationship_to_pr": "MAINTAINER_EXPECTS_OVERLAP"
+    }
+  },
+  "decision": "Keep the upstream commit first. Seek a receipt for the exact Arena case and checker revision before undertaking more work on historical source. A fresh scientific confirmation needs its own prospective record. Do not extend or resubmit PR #36 on present evidence.",
+  "model_usage": "Complete aggregate token usage unavailable.",
+  "public_arena": {
+    "url": "https://arena.lean-lang.org/results.json",
+    "snapshot_sha256": "78f7fc5897df9357f77db123f28ecfee3c6b7acd4fafa9fc98265d556b4a87eb",
+    "snapshot_date": "2026-11-18 00:10:29 UTC",
+    "arena_revision": "ef915093da536931892f1bfdaffb2a2d59529fe7",
+    "publication_run": "https://github.com/leanprover/lean-kernel-arena/actions/runs/44191957413",
+    "checker_revision": "463a3101197fa7db733cc6e2d4f55767ef3b3713",
+    "checker_version": "v2026.9.1",
+    "manifest": "https://github.com/leanprover/lean-kernel-arena/blob/ef915093da536931892f1bfdaffb2a2d59529fe7/checkers/rpylean.yaml",
+    "rows": [
+      {
+        "test": "bugs/rec-missing-ih",
+        "date": "2026-11-14 01:04:10 UTC",
+        "status": "accepted",
+        "correctness": "incorrect",
+        "exit_code": 0,
+        "test_hash": "0a989de258108f84",
+        "checker_hash": "dcfd0900567cd4c9",
+        "github_job_url": "https://github.com/leanprover/lean-kernel-arena/actions/runs/43535627343/job/132264316384"
+      },
+      {
+        "test": "bugs/rec-rule-wrong-arg",
+        "date": "2026-11-14 01:04:10 UTC",
+        "status": "accepted",
+        "correctness": "incorrect",
+        "exit_code": 0,
+        "test_hash": "09f9cd9a6f835fb3",
+        "checker_hash": "dcfd0900567cd4c9",
+        "github_job_url": "https://github.com/leanprover/lean-kernel-arena/actions/runs/43535627343/job/132264316384"
+      }
+    ],
+    "scope": "The two accepted verdicts are from the older published checker. Arena row hashes are Arena identifiers, separate from the SHA-256 of the LAL fixture."
+  }
+}

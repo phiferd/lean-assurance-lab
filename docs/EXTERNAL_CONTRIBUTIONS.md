@@ -4,11 +4,11 @@
 
 Project-originated pull requests and locally prepared pull-request candidates that require disposition tracking. Historical evidence remains authoritative in each entry's evidence references.
 
-Ledger updated: **2026-11-17**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
+Ledger updated: **2026-11-18**. Upstream states are dated observations, not a live-status guarantee. The generator performs no network requests and no external writes.
 
 ## At a glance
 
-- Open pull requests: **6**
+- Open pull requests: **5**
 - Local drafts: **10**
 - Merged pull requests: **5**
 - Published reports/comments: **1**
@@ -22,7 +22,6 @@ Ledger updated: **2026-11-17**. Upstream states are dated observations, not a li
 | [test: cover recursor rejection CLI verdict](https://github.com/sankalpsthakur/kiota/pull/13) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [fix: report input open errors without panicking](https://github.com/sankalpsthakur/kiota/pull/14) | `sankalpsthakur/kiota` | 2026-10-24 | unknown; unknown | PR remains open; the former parent PR is merged. Any rebase, revision, comment or ready-for-review change requires exact authorization. |
 | [Fix/quoted declaration names](https://github.com/ammkrn/nanoda_lib/pull/42) | `ammkrn/nanoda_lib` | 2026-10-24 | unknown; unknown | Await review; open PR #38 is an external dependency by another contributor. Any rebase or update requires exact authorization. |
-| [Reject malformed ordinary recursor rules](https://github.com/Julian/rpylean/pull/36) | `Julian/rpylean` | 2026-11-17 | no activity; pass | Await maintainer review of rpylean PR #36; do not file a duplicate issue or pull request. |
 
 ## Local drafts
 
@@ -37,7 +36,7 @@ Ledger updated: **2026-11-17**. Upstream states are dated observations, not a li
 | [Review lean-action bundled-tool test oracle](../results/research/lean-action-regression-preparation-1/closure/pr192-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [Review lean-action AppArmor policy destination guard](../results/research/lean-action-regression-preparation-1/closure/pr191-final-review.md) | `leanprover/lean-action` | `LEAN-ACTION-REGRESSION-PREPARATION-1` | — | Internal historical draft NOT FOR POSTING. Retain technical findings/patches for human understanding and independent manual review; no AI-authored community comment or automatic patch sharing. Any later contribution must comply with target communication/AI disclosure policies and separate human authorization. |
 | [test: reject an undeclared used universe parameter](../explorations/runs/EXPLORE-ARENA-UNIVERSE-GUARD-INTEGRATION-1/candidate.patch) | `leanprover/lean-kernel-arena` | `E0-ARENA-UNIVERSE-GUARD-INTEGRATION-1`, `E0-ARENA-CURRENT-NANODA-COMPATIBILITY-1`, `CONFIRM-ARENA-UNIVERSE-GUARD-1` | — | Confirmation is DEFERRED and unstarted after the October 24 reassessment. Reopen only after current source coverage and a concrete consumer benefit justify further E1 work; preserve the candidate. Any submission requires its existing gates and exact authorization. |
-| [Collect the shared proof-parameter regression from the Arena root](../results/research/rpylean-arena-fixture-collection-1/collector.patch) | `Julian/rpylean` | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | — | Retain the patch locally. The directory override suffices for individual runs. Revisit submission if maintainers want the shared case in normal root-based testing, then refresh source, duplicate and test evidence and seek exact approval. |
+| [Collect the shared proof-parameter regression from the Arena root](../results/research/rpylean-arena-fixture-collection-1/collector.patch) | `Julian/rpylean` | `RPYLEAN-ARENA-FIXTURE-COLLECTION-1` | — | Retain the local comparison as historical evidence. The published branch now collects grouped fixtures. A new submission would need a distinct observed gap. |
 
 ## Merged pull requests
 
@@ -61,6 +60,7 @@ These entries track Lab reports on upstream work, not Lab-authored pull requests
 
 - `NANODA-PR-43`: Closed without merge on 2026-10-10; retain the local regression. Comments raised clarity concerns. Do not reopen or resubmit automatically.
 - `NANODA-PR-41`: Closed without merge on 2026-10-10. Retain the test and improve plain-language explanations; do not reopen or resubmit automatically.
+- `RPYLEAN-RECURSOR-RULE-ARGUMENT-REPAIR-DRAFT`: Julian closed PR #36 without merging it on 2026-11-18. He reported publishing his own work and believes it covers the submitted case. Equivalent behavior remains unverified. No further action on the PR is needed. [Maintainer comment](https://github.com/Julian/rpylean/pull/36#issuecomment-6985520690)
 
 ## Maintenance contract
 
